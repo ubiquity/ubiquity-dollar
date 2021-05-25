@@ -2,14 +2,14 @@
 
 if [ -f ./contracts/.env ]
 then
-  export $(cat ./contracts/.env | sed 's/#.*//g' | xargs)
+  source ./contracts/.env
 else
   echo "Please add a .env inside the contracts folder."
   exit 1
 fi
 rm -f ./frontend/src/uad-contracts-deployment.json
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
-
+echo $MNEMONIC
 yarn && yarn compile
 kill $(lsof -t -i:8545) || true
 yarn hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/$ALCHEMY_API_KEY --fork-block-number 12150000 --show-accounts --export-all tmp-uad-contracts-deployment.json > ../local.node.log 2>&1 &

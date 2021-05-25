@@ -1,4 +1,8 @@
-# dynamic-uad-ui
+# uad-ui
+
+## Getting Started
+
+### Cloning etc..
 
 after git clone the project make sure to run
 
@@ -6,11 +10,15 @@ after git clone the project make sure to run
 
 You need to create `.env` file inside the contracts folder with at least the `ALCHEMY_API_KEY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
 
+### Running a local node that forks the mainnet
+
 then run `$ yarn start`
 it will create a file inside `frontend/src` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts
 
 it will launch a local node on port **8545** you can check the log in the root file `local.node.log`
 after the node is launched it will build and run the front on port **3000**
+
+### Configure metamask
 
 make sure to switch to the hardhat network on metamask
 
@@ -23,6 +31,8 @@ then run the faucet to get some token on your address. You will need the `UAD_MA
 $ cd contracts
 $ npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager UAD_MANAGER_ADDRESS
 ```
+
+## Coding with typed object that represents the smart contract
 
 to get the types from the smart contracts you can import from `contracts/artifacts/types`
 
