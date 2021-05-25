@@ -7,7 +7,7 @@
 after git clone the project make sure to run
 
 ```bash
-$ git submodule update --init --recursive --remote`
+git submodule update --init --recursive --remote
 ```
 
 You need to create `.env` file inside the contracts folder with at least the `ALCHEMY_API_KEY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
@@ -17,7 +17,7 @@ You need to create `.env` file inside the contracts folder with at least the `AL
 then run
 
 ```bash
-$ yarn start
+yarn start
 ```
 
 it will create a file inside `frontend/src` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts
@@ -35,8 +35,8 @@ make sure to switch to the hardhat network on metamask
 then run the faucet to get some token on your address. You will need the `UAD_MANAGER_ADDRESS` that you can find in the output of the `yarn start`
 
 ```
-$ cd contracts
-$ npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager UAD_MANAGER_ADDRESS
+cd contracts
+npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager UAD_MANAGER_ADDRESS
 ```
 
 ## Coding with typed object that represents the smart contract
