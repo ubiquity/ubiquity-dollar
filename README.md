@@ -6,13 +6,20 @@
 
 after git clone the project make sure to run
 
-`$ git submodule update --init --recursive --remote`
+```bash
+$ git submodule update --init --recursive --remote`
+```
 
 You need to create `.env` file inside the contracts folder with at least the `ALCHEMY_API_KEY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
 
 ### Running a local node that forks the mainnet
 
-then run `$ yarn start`
+then run
+
+```bash
+$ yarn start
+```
+
 it will create a file inside `frontend/src` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts
 
 it will launch a local node on port **8545** you can check the log in the root file `local.node.log`
@@ -36,13 +43,15 @@ $ npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager U
 
 to get the types from the smart contracts you can import from `contracts/artifacts/types`
 
-```
-import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
+```typescript
+import {UbiquityAlgorithmicDollar} from "../artifacts/types/UbiquityAlgorithmicDollar";
 
-const token = (await ethers.getContractAt("UbiquityAlgorithmicDollar", uAD.address)) as UbiquityAlgorithmicDollar;
+const token = (await ethers.getContractAt(
+  "UbiquityAlgorithmicDollar",
+  uAD.address
+)) as UbiquityAlgorithmicDollar;
 
 const [sender] = await ethers.getSigners();
 
 const tx = await token.transfer("0x000000000", 100);
-
 ```
