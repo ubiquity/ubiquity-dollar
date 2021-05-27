@@ -17,7 +17,7 @@ You need to create `.env` file inside the contracts folder with at least the `AL
 then run
 
 ```bash
-yarn start
+yarn install && yarn start
 ```
 
 it will create a file inside `frontend/src` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts
