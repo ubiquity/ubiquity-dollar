@@ -2,8 +2,8 @@
   "license": "MIT",
   "scripts": {
     "prestart": "cd ./frontend/ && yarn install && cd ..",
-    "start": "./hooks/start.sh",
-    "poststart": "cd ./frontend/ && yarn start",
+    "start": "./hooks/start.sh && cd ./frontend/ && yarn start",
+    "start:dev": "./hooks/start.sh",
     "stop": "kill $(lsof -t -i:8545) || true",
     "poststop": "echo 'exited successfully'"
   },
