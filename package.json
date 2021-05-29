@@ -4,6 +4,7 @@
         "preinstall": "git submodule update --init --recursive --remote",
         "prestart": "cd ./frontend/ && yarn install && cd ..",
         "start": "./hooks/start.sh && cd ./frontend/ && yarn start",
+        "predev": "cd ./frontend/ && yarn install && cd ..",
         "dev": "./hooks/start.sh  && cd ./frontend/ && yarn dev",
         "stop": "kill $(lsof -t -i:8545) || true",
         "poststop": "echo 'exited successfully'"

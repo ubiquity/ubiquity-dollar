@@ -4,13 +4,13 @@
      "main": "index.js",
      "license": "MIT",
      "scripts": {
-         "dev": "next dev",
-         "build": "next build",
-         "prestart": "next build",
-         "start": "next start",
-         "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-         "format": "prettier --write . --ignore-path .gitignore",
-         "typechain": "typechain --target ethers-v5 --outDir ./contracts/types './contracts/*.json'"
+         "dev": "yarn next dev",
+         "build": "yarn next build",
+         "prestart": "yarn next build",
+         "start": "yarn next start",
+         "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+         "format": "yarn prettier --write . --ignore-path .gitignore",
+         "typechain": "yarn typechain --target ethers-v5 --outDir ./contracts/types './contracts/*.json'"
      },
      "dependencies": {
          "next": "^10.0.4",
