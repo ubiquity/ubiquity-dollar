@@ -2,12 +2,19 @@
     "license": "MIT",
     "scripts": {
         "preinstall": "git submodule update --init --recursive --remote",
-        "prestart": "cd ./frontend/ && yarn install && cd ..",
-        "start": "./hooks/start.sh && cd ./frontend/ && yarn start",
-        "predev": "cd ./frontend/ && yarn install && cd ..",
+
+        "predev": "run-s install-ui-deps",
+        "prestart": "run-s install-ui-deps",
+
         "dev": "./hooks/start.sh  && cd ./frontend/ && yarn dev",
+        "start": "./hooks/start.sh && cd ./frontend/ && yarn start",
+
         "stop": "kill $(lsof -t -i:8545) || true",
-        "poststop": "echo 'exited successfully'"
+        "poststop": "echo 'exited successfully'",
+
+        "install-ui-deps": "cd ./frontend/ && yarn install && cd .."
+
+
     },
     "dependencies": {
         "nodemon": "^2.0.7",
