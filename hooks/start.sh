@@ -21,4 +21,8 @@ while : ; do
 done
 node ../hooks/process-deployment.js ./tmp-uad-contracts-deployment.json ../frontend/src/uad-contracts-deployment.json
 rm -f ./tmp-uad-contracts-deployment.json
+
+# cd ..
+# cp ./contracts/* ./frontend/contracts # copy artifacts to be accessible by frontend
+
 exit 0

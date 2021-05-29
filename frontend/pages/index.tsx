@@ -1,8 +1,9 @@
 import { FC, useState } from "react";
 import { ethers, BigNumber } from "ethers";
-import { UbiquityAlgorithmicDollar__factory } from "../contracts/types/factories/UbiquityAlgorithmicDollar__factory";
-import { IMetaPool__factory } from "../contracts/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../contracts/types/factories/Bonding__factory";
+// import { UbiquityAlgorithmicDollar__factory } from "../contracts/artifacts/types/factories/UbiquityAlgorithmicDollar__factory";
+import { UbiquityAlgorithmicDollar__factory } from "../src/artifacts/types/factories/UbiquityAlgorithmicDollar__factory"
+import { IMetaPool__factory } from "../src/artifacts/types/factories/IMetaPool__factory";
+import { Bonding__factory } from "../src/artifacts/types/factories/Bonding__factory";
 
 const Index: FC = (): JSX.Element => {
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
