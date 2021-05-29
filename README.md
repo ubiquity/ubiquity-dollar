@@ -12,12 +12,24 @@ git submodule update --init --recursive --remote
 
 You need to create `.env` file inside the contracts folder with at least the `ALCHEMY_API_KEY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
 
+### DEV ONLY Running a local node that forks the mainnet
+
+```
+yarn start:dev
+copy paste contracts/artifact/types inside frontend/contracts
+// run the faucet task see below
+we have to find the address of the ubiquitydollar copy paste the address inside frontend/pages/index.tsx
+cd frontend
+yarn && yarn build && yarn start
+
+```
+
 ### Running a local node that forks the mainnet
 
 then run
 
 ```bash
-yarn start
+yarn install && yarn start
 ```
 
 it will create a file inside `frontend/src` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts

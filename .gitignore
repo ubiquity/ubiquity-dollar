@@ -102,3 +102,5 @@ dist
 
 # TernJS port file
 .tern-port
+
+frontend/src/uad-contracts-deployment.json
