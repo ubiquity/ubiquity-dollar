@@ -12,8 +12,9 @@
         "stop": "kill $(lsof -t -i:8545) || true",
         "poststop": "echo 'exited successfully'",
 
-        "install-ui-deps": "cd ./frontend/ && yarn install && cd .."
+        "install-ui-deps": "cd ./frontend/ && yarn install && cd ..",
 
+        "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec 'yarn dev' --verbose"
 
     },
     "dependencies": {

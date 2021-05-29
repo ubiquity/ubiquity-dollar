@@ -1,9 +1,10 @@
 import { FC, useState } from "react";
 import { ethers, BigNumber } from "ethers";
-// import { UbiquityAlgorithmicDollar__factory } from "../contracts/artifacts/types/factories/UbiquityAlgorithmicDollar__factory";
-import { UbiquityAlgorithmicDollar__factory } from "../src/artifacts/types/factories/UbiquityAlgorithmicDollar__factory"
+
+import { UbiquityAlgorithmicDollar__factory } from "../src/artifacts/types/factories/UbiquityAlgorithmicDollar__factory";
 import { IMetaPool__factory } from "../src/artifacts/types/factories/IMetaPool__factory";
 import { Bonding__factory } from "../src/artifacts/types/factories/Bonding__factory";
+import { BondingShare__factory } from "../contracts/artifacts/types/factories/BondingShare__factory";
 
 const Index: FC = (): JSX.Element => {
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
@@ -88,17 +89,67 @@ const Index: FC = (): JSX.Element => {
     weeks: ethers.BigNumber
   ) {
     if (provider && account) {
-      const TOKEN_ADDR = "0x8a777acb51217cd8d8f5d05d05df334989ea976c";
-      const token = Bonding__factory.connect(TOKEN_ADDR, provider.getSigner());
-      const metapool = IMetaPool__factory.connect(
-        "0x152d13e62952a7c74c536bb3C8b7BD91853F076A",
-        provider.getSigner()
-      );
-      const approveTransaction = metapool.approve(TOKEN_ADDR, lpsAmount);
-      const approveWaiting = (await approveTransaction).wait();
+      const SIGNER = provider.getSigner();
 
-      const depositWaiting = await token.deposit(lpsAmount, weeks);
+      const BONDING_ADDRESS = "0x8a777acb51217cd8d8f5d05d05df334989ea976c";
+      const METAPOOL_ADDRESS = "0x152d13e62952a7c74c536bb3C8b7BD91853F076A";
+      const BONDING_SHARE_ADDRESS =
+        "0x07860015449240D2f20c63AF68b64cB0a2EA91Ee";
+      // (method) Bonding__factory.connect(address: string, signerOrProvider: ethers.Signer | ethers.providers.Provider): Bonding
+      const bondingContract = Bonding__factory.connect(BONDING_ADDRESS, SIGNER);
+      // (method) IMetaPool__factory.connect(address: string, signerOrProvider: ethers.Signer | ethers.providers.Provider): IMetaPool
+      const metapoolContract = IMetaPool__factory.connect(
+        METAPOOL_ADDRESS,
+        SIGNER
+      );
+      // (method) BondingShare__factory.connect(address: string, signerOrProvider: Signer | Provider): BondingShare
+
+      // check approved amount
+
+      // make sure to check balance spendable -- if (lpsAmount) is > spendable then ask approval again
+
+      console.log(account);
+
+      const allowable = (
+        await metapoolContract.allowance(account, BONDING_ADDRESS)
+      ).toString();
+      console.log(allowable);
+      const approveTransaction = await metapoolContract.approve(
+        BONDING_ADDRESS,
+        lpsAmount
+      );
+      const approveWaiting = await approveTransaction.wait();
+
+      console.log(
+        { lpsAmount, weeks }
+        // await bondingContract.deposit()
+      );
+      const depositWaiting = await bondingContract.deposit(lpsAmount, weeks);
       const waiting = await depositWaiting.wait();
+
+      //
+
+      const bondingShareContract = BondingShare__factory.connect(
+        BONDING_SHARE_ADDRESS,
+        (SIGNER as any) as ethers.providers.Provider
+      );
+
+      console.log({ bondingShareContract });
+
+      const addr = await SIGNER.getAddress();
+      console.log({ addr });
+      const ids = await bondingShareContract.holderTokens(addr);
+      console.log({ ids });
+
+      const bondingSharesBalance = await bondingShareContract.balanceOf(
+        addr,
+        ids[0]
+      );
+
+      console.log({ ids, bondingSharesBalance });
+
+      //
+
       // const decimals = await token.decimals();
       // const balance = ethers.utils.formatUnits(rawBalance, decimals);
       // setLPTokenBalance(balance);
