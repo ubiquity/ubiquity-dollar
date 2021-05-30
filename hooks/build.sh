@@ -21,10 +21,10 @@ fi
 rm -f ./frontend/src/uad-contracts-deployment.json
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
 # yarn install
+
 yarn compile
-kill $(lsof -t -i:8545) || true
-yarn hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/$ALCHEMY_API_KEY --fork-block-number 12150000 --show-accounts --export-all tmp-uad-contracts-deployment.json >../local.node.log 2>&1 &
-sleep 10
+
+yarn stop & yarn hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/$ALCHEMY_API_KEY --fork-block-number 12150000 --show-accounts --export-all tmp-uad-contracts-deployment.json >../local.node.log 2>&1 &
 echo "Pausing until uad-contracts-deployment.json exists."
 while :; do
   spinnerSTART

@@ -13,7 +13,7 @@
         "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
         "watch:ui": "cd ./frontend/ && yarn dev",
         "stop": "kill $(lsof -t -i:8545) || true",
-        "poststop": "echo 'exited successfully'"
+        "poststop": "echo 'killed hardhat daemon'"
     },
     "dependencies": {
         "nodemon": "^2.0.7",
@@ -27,8 +27,9 @@
             "**/*/node_modules/**/*"
         ],
         "events": {
-            "config": "yarn stop",
-            "exit": "yarn stop",
+            "config": "",
+            "exit": "",
+            "crash": "yarn stop",
             "restart": "clear && printf '\\033[3J'",
             "start": "clear && printf '\\033[3J'"
         }
