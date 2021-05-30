@@ -1,0 +1,30 @@
+body {
+    background: #f8f8f8;
+    font-family: sans-serif;
+}
+
+button {
+    cursor: pointer
+}
+
+input,
+button {
+    background: #fff;
+    box-shadow: 0 0 48px #00000040;
+    appearance: none;
+    border: none;
+    height: 32px;
+    border-radius: 4px;
+    /* text-indent: 4px; */
+    padding: 0 8px;
+    margin: 8px;
+    opacity: .75;
+    transform: scale(1);
+    transition: .25s all cubic-bezier(0, 1, 1, 1);
+}
+
+input:hover,
+button:hover {
+    transform: scale(.99);
+    opacity: 1;
+}

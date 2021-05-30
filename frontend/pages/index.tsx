@@ -6,16 +6,19 @@ import { IMetaPool__factory } from "../src/artifacts/types/factories/IMetaPool__
 import { Bonding__factory } from "../src/artifacts/types/factories/Bonding__factory";
 import { BondingShare__factory } from "../contracts/artifacts/types/factories/BondingShare__factory";
 
+// import "./styles/index.module.css"
+
 const Index: FC = (): JSX.Element => {
-  const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
-  const [account, setAccount] = useState<string>();
-  const [tokenBalance, setTokenBalance] = useState<string>();
-  const [tokenLPBalance, setLPTokenBalance] = useState<string>();
-  const [tokenBondingBalance, setBondingTokenBalance] = useState<string>();
+
+  const [provider, setProvider] = useState<ethers.providers.Web3Provider>(),
+    [account, setAccount] = useState<string>(),
+    [tokenBalance, setTokenBalance] = useState<string>(),
+    [tokenLPBalance, setLPTokenBalance] = useState<string>(),
+    [tokenBondingBalance, setBondingTokenBalance] = useState<string>();
 
   return (
     <>
-      <button onClick={connect}>Connect</button>
+      <button onClick={connect}>Connect Wallet</button>
       <p>Account: {account}</p>
       <button onClick={getTokenBalance}>Get Token Balance</button>
       <p>Token Balance: {tokenBalance}</p>
@@ -152,9 +155,9 @@ const Index: FC = (): JSX.Element => {
 
       // const decimals = await token.decimals();
       // const balance = ethers.utils.formatUnits(rawBalance, decimals);
-      // setLPTokenBalance(balance);
+      setBondingTokenBalance(bondingSharesBalance.toString());
     } else {
-      console.error(`no provider and account found`);
+      alert(`no provider and account found`);
     }
   }
   function depositBondingTokens() {
@@ -165,7 +168,7 @@ const Index: FC = (): JSX.Element => {
     const weeksValue = weeks?.value;
 
     if (!lpsAmountValue || !weeksValue) {
-      console.error(`missing input value for lp token amount or weeks`);
+      alert(`missing input value for lp token amount or weeks`);
     } else {
       return depositBondingToken(
         BigNumber.from(lpsAmountValue),
@@ -184,9 +187,9 @@ function renderTasklist() {
       <h1>tasklist</h1>
       <ol>
         <li>pending ugov reward</li>
-        <li>bonding shares inputs</li>
-        <li>for weeks and LP token amount</li>
+        <li>bonding shares inputs for weeks and LP token amount</li>
         <li>link to crv.finance</li>
+        <li>convert all wei into ether values</li>
       </ol>
     </>
   );
