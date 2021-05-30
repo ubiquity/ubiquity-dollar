@@ -58,9 +58,8 @@ const Index: FC = (): JSX.Element => {
   }
   async function getLPTokenBalance() {
     if (provider && account) {
-      const ADDRESS = "0x152d13e62952a7c74c536bb3C8b7BD91853F076A";
       const uAD = UbiquityAlgorithmicDollar__factory.connect(
-        ADDRESS,
+        ADDRESS.METAPOOL,
         provider.getSigner()
       );
 
