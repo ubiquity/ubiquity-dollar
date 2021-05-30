@@ -1,19 +1,17 @@
 {
     "license": "MIT",
     "scripts": {
-        "preinstall": "git submodule update --init --recursive --remote",
-
-        "predev": "run-s install-ui-deps",
-        "prestart": "run-s install-ui-deps",
-
-        "dev": "run-p watch:sol watch:ui",
+        "dev": "run-p watch:*",
         "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
 
-        "install-ui-deps": "cd ./frontend/ && yarn install && cd ..",
-
+        "preinstall": "git submodule update --init --recursive --remote",
+        "predev": "run-p install:*",
+        "prestart": "run-p install:*",
+        "postdev": "run-s stop",
+        "install:sol": "cd ./contracts/ && yarn install && cd ..",
+        "install:ui": "cd ./frontend/ && yarn install && cd ..",
         "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
         "watch:ui": "cd ./frontend/ && yarn dev",
-
         "stop": "kill $(lsof -t -i:8545) || true",
         "poststop": "echo 'exited successfully'"
     },
