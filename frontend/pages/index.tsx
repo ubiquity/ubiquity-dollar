@@ -6,10 +6,14 @@ import { IMetaPool__factory } from "../src/artifacts/types/factories/IMetaPool__
 import { Bonding__factory } from "../src/artifacts/types/factories/Bonding__factory";
 import { BondingShare__factory } from "../src/artifacts/types/factories/BondingShare__factory";
 
-// import "./styles/index.module.css"
+const ADDRESS = {
+  UAD: "0x8b01F55C4D57d9678dB76b7082D9270d11616F78",
+  METAPOOL: "0x152d13e62952a7c74c536bb3C8b7BD91853F076A",
+  BONDING: "0x8a777acb51217cd8d8f5d05d05df334989ea976c",
+  BONDING_SHARE: "0x07860015449240D2f20c63AF68b64cB0a2EA91Ee",
+};
 
 const Index: FC = (): JSX.Element => {
-
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>(),
     [account, setAccount] = useState<string>(),
     [tokenBalance, setTokenBalance] = useState<string>(),
@@ -19,7 +23,6 @@ const Index: FC = (): JSX.Element => {
   return (
     <>
       {renderControls()}
-
       {renderTasklist()}
     </>
   );
@@ -41,15 +44,13 @@ const Index: FC = (): JSX.Element => {
 
   async function getTokenBalance() {
     if (provider && account) {
-      const TOKEN_ADDR = "0x8b01F55C4D57d9678dB76b7082D9270d11616F78";
-
-      const token = UbiquityAlgorithmicDollar__factory.connect(
-        TOKEN_ADDR,
+      const uAD = UbiquityAlgorithmicDollar__factory.connect(
+        ADDRESS.UAD,
         provider.getSigner()
       );
 
-      const rawBalance = await token.balanceOf(account);
-      const decimals = await token.decimals();
+      const rawBalance = await uAD.balanceOf(account);
+      const decimals = await uAD.decimals();
 
       const balance = ethers.utils.formatUnits(rawBalance, decimals);
       setTokenBalance(balance);
@@ -57,14 +58,14 @@ const Index: FC = (): JSX.Element => {
   }
   async function getLPTokenBalance() {
     if (provider && account) {
-      const TOKEN_ADDR = "0x152d13e62952a7c74c536bb3C8b7BD91853F076A";
-      const token = UbiquityAlgorithmicDollar__factory.connect(
-        TOKEN_ADDR,
+      const ADDRESS = "0x152d13e62952a7c74c536bb3C8b7BD91853F076A";
+      const uAD = UbiquityAlgorithmicDollar__factory.connect(
+        ADDRESS,
         provider.getSigner()
       );
 
-      const rawBalance = await token.balanceOf(account);
-      const decimals = await token.decimals();
+      const rawBalance = await uAD.balanceOf(account);
+      const decimals = await uAD.decimals();
 
       const balance = ethers.utils.formatUnits(rawBalance, decimals);
       setLPTokenBalance(balance);
@@ -78,19 +79,12 @@ const Index: FC = (): JSX.Element => {
     if (provider && account) {
       const SIGNER = provider.getSigner();
 
-      const BONDING_ADDRESS = "0x8a777acb51217cd8d8f5d05d05df334989ea976c";
-      const METAPOOL_ADDRESS = "0x152d13e62952a7c74c536bb3C8b7BD91853F076A";
-      const BONDING_SHARE_ADDRESS =
-        "0x07860015449240D2f20c63AF68b64cB0a2EA91Ee";
-      // (method) Bonding__factory.connect(address: string, signerOrProvider: ethers.Signer | ethers.providers.Provider): Bonding
-      const bondingContract = Bonding__factory.connect(BONDING_ADDRESS, SIGNER);
-      // (method) IMetaPool__factory.connect(address: string, signerOrProvider: ethers.Signer | ethers.providers.Provider): IMetaPool
-      const metapoolContract = IMetaPool__factory.connect(
-        METAPOOL_ADDRESS,
+      const metapool = IMetaPool__factory.connect(ADDRESS.METAPOOL, SIGNER);
+      const bonding = Bonding__factory.connect(ADDRESS.BONDING, SIGNER);
+      const bondingShare = BondingShare__factory.connect(
+        ADDRESS.BONDING_SHARE,
         SIGNER
       );
-      // (method) BondingShare__factory.connect(address: string, signerOrProvider: Signer | Provider): BondingShare
-
       // check approved amount
 
       // make sure to check balance spendable -- if (lpsAmount) is > spendable then ask approval again
@@ -98,40 +92,30 @@ const Index: FC = (): JSX.Element => {
       console.log(account);
 
       const allowable = (
-        await metapoolContract.allowance(account, BONDING_ADDRESS)
+        await metapool.allowance(account, ADDRESS.BONDING)
       ).toString();
-      console.log(allowable);
-      const approveTransaction = await metapoolContract.approve(
-        BONDING_ADDRESS,
+      console.log({ allowable });
+      const approveTransaction = await metapool.approve(
+        ADDRESS.BONDING,
         lpsAmount
       );
       const approveWaiting = await approveTransaction.wait();
 
-      console.log(
-        { lpsAmount, weeks }
-        // await bondingContract.deposit()
-      );
-      const depositWaiting = await bondingContract.deposit(lpsAmount, weeks);
+      console.log({ lpsAmount, weeks, approveWaiting });
+
+      const depositWaiting = await bonding.deposit(lpsAmount, weeks);
       const waiting = await depositWaiting.wait();
 
-      //
+      console.log({ waiting });
 
-      const bondingShareContract = BondingShare__factory.connect(
-        BONDING_SHARE_ADDRESS,
-        (SIGNER as any) as ethers.providers.Provider
-      );
-
-      console.log({ bondingShareContract });
+      console.log({ bondingShareContract: bondingShare });
 
       const addr = await SIGNER.getAddress();
       console.log({ addr });
-      const ids = await bondingShareContract.holderTokens(addr);
+      const ids = await bondingShare.holderTokens(addr);
       console.log({ ids });
 
-      const bondingSharesBalance = await bondingShareContract.balanceOf(
-        addr,
-        ids[0]
-      );
+      const bondingSharesBalance = await bondingShare.balanceOf(addr, ids[0]);
 
       console.log({ ids, bondingSharesBalance });
 
@@ -145,48 +129,63 @@ const Index: FC = (): JSX.Element => {
     }
   }
   function depositBondingTokens() {
-    // () => {
+    const missing = `missing input value for`;
+    const bignumberErr = `can't parse BigNumber from`;
+
+    let subject = `lp token amount`;
+
     const lpsAmount = document.getElementById("lpsAmount") as HTMLInputElement;
     const lpsAmountValue = lpsAmount?.value;
+    if (!lpsAmountValue) {
+      return alert(`${missing} ${subject}`);
+    }
+    if (BigNumber.isBigNumber(lpsAmountValue)) {
+      return alert(`${bignumberErr} ${subject}`);
+    }
+
+    subject = `weeks lockup amount`;
+
     const weeks = document.getElementById("weeks") as HTMLInputElement;
     const weeksValue = weeks?.value;
-
-    if (!lpsAmountValue || !weeksValue) {
-      alert(`missing input value for lp token amount or weeks`);
-    } else {
-      return depositBondingToken(
-        BigNumber.from(lpsAmountValue),
-        BigNumber.from(weeksValue)
-      );
+    if (!weeksValue) {
+      return alert(`${missing} ${subject}`);
     }
-    // }
+    if (BigNumber.isBigNumber(weeksValue)) {
+      return alert(`${bignumberErr} ${subject}`);
+    }
+
+    return depositBondingToken(
+      BigNumber.from(lpsAmountValue),
+      BigNumber.from(weeksValue)
+    );
   }
 
-function renderControls() {
-  return (<>
+  function renderControls() {
+    return (
+      <>
         <button onClick={connect}>Connect Wallet</button>
-      <p>Account: {account}</p>
-      <button onClick={getTokenBalance}>Get Token Balance</button>
-      <p>Token Balance: {tokenBalance}</p>
-      <button onClick={getLPTokenBalance}>Get LP Token Balance</button>
-      <p>Token Balance: {tokenLPBalance}</p>
-      <input
-        type="text"
-        name="lpsAmount"
-        id="lpsAmount"
-        placeholder="lpsAmount"
-      />
-      <input type="text" name="weeks" id="weeks" placeholder="weeks" />
-      <button onClick={depositBondingTokens}>
-        Deposit Bonding Token Balance
-      </button>
-      <p>Token Balance: {tokenBondingBalance}</p>
-      </>)
-}
+        <p>Account: {account}</p>
+        <button onClick={getTokenBalance}>Get Token Balance</button>
+        <p>Token Balance: {tokenBalance}</p>
+        <button onClick={getLPTokenBalance}>Get LP Token Balance</button>
+        <p>Token Balance: {tokenLPBalance}</p>
+        <input
+          type="number"
+          name="lpsAmount"
+          id="lpsAmount"
+          placeholder="uAD-3CRV LP Tokens"
+        />
+        <input type="number" name="weeks" id="weeks" placeholder="weeks" />
+        <button onClick={depositBondingTokens}>
+          Deposit Bonding Token Balance
+        </button>
+        <p>Token Balance: {tokenBondingBalance}</p>
+      </>
+    );
+  }
 };
 
 export default Index;
-
 
 function renderTasklist() {
   return (
