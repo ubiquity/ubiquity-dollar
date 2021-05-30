@@ -4,7 +4,7 @@ import { ethers, BigNumber } from "ethers";
 import { UbiquityAlgorithmicDollar__factory } from "../src/artifacts/types/factories/UbiquityAlgorithmicDollar__factory";
 import { IMetaPool__factory } from "../src/artifacts/types/factories/IMetaPool__factory";
 import { Bonding__factory } from "../src/artifacts/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../contracts/artifacts/types/factories/BondingShare__factory";
+import { BondingShare__factory } from "../src/artifacts/types/factories/BondingShare__factory";
 
 // import "./styles/index.module.css"
 
@@ -18,23 +18,7 @@ const Index: FC = (): JSX.Element => {
 
   return (
     <>
-      <button onClick={connect}>Connect Wallet</button>
-      <p>Account: {account}</p>
-      <button onClick={getTokenBalance}>Get Token Balance</button>
-      <p>Token Balance: {tokenBalance}</p>
-      <button onClick={getLPTokenBalance}>Get LP Token Balance</button>
-      <p>Token Balance: {tokenLPBalance}</p>
-      <input
-        type="text"
-        name="lpsAmount"
-        id="lpsAmount"
-        placeholder="lpsAmount"
-      />
-      <input type="text" name="weeks" id="weeks" placeholder="weeks" />
-      <button onClick={depositBondingTokens}>
-        Deposit Bonding Token Balance
-      </button>
-      <p>Token Balance: {tokenBondingBalance}</p>
+      {renderControls()}
 
       {renderTasklist()}
     </>
@@ -177,9 +161,32 @@ const Index: FC = (): JSX.Element => {
     }
     // }
   }
+
+function renderControls() {
+  return (<>
+        <button onClick={connect}>Connect Wallet</button>
+      <p>Account: {account}</p>
+      <button onClick={getTokenBalance}>Get Token Balance</button>
+      <p>Token Balance: {tokenBalance}</p>
+      <button onClick={getLPTokenBalance}>Get LP Token Balance</button>
+      <p>Token Balance: {tokenLPBalance}</p>
+      <input
+        type="text"
+        name="lpsAmount"
+        id="lpsAmount"
+        placeholder="lpsAmount"
+      />
+      <input type="text" name="weeks" id="weeks" placeholder="weeks" />
+      <button onClick={depositBondingTokens}>
+        Deposit Bonding Token Balance
+      </button>
+      <p>Token Balance: {tokenBondingBalance}</p>
+      </>)
+}
 };
 
 export default Index;
+
 
 function renderTasklist() {
   return (

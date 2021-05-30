@@ -2,13 +2,13 @@
 
 # SPINNER FUNCTIONS
 
-sp="⠁⠂⠄⡀⢀⠠⠐⠈"
-sc=0
-spin() {
-  printf "\b${sp:sc++:1}"
-  ((sc == ${#sp})) && sc=0
+spinnerChar="⠁⠂⠄⡀⢀⠠⠐⠈"
+spinnerIndex=0
+spinnerSTART() {
+  printf "\b${spinnerChar:spinnerIndex++:1}"
+  ((spinnerIndex == ${#spinnerChar})) && spinnerIndex=0
 }
-endspin() {
+spinnerSTOP() {
   printf "\r%s\n" "$@"
 }
 
@@ -27,11 +27,11 @@ yarn hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/$ALCHEMY_API_KEY -
 sleep 10
 echo "Pausing until uad-contracts-deployment.json exists."
 while :; do
-  spin
+  spinnerSTART
   [[ -f "tmp-uad-contracts-deployment.json" ]] && break
   sleep .06
 done
-endspin
+spinnerSTOP
 
 node ../hooks/process-deployment.js ./tmp-uad-contracts-deployment.json ../frontend/src/uad-contracts-deployment.json
 rm -f ./tmp-uad-contracts-deployment.json
