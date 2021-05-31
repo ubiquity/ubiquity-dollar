@@ -21,8 +21,9 @@ fi
 rm -f ./frontend/src/uad-contracts-deployment.json
 yarn stop # kill blockchain
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
+yarn 
 yarn compile
-yarn hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/$ALCHEMY_API_KEY --fork-block-number 12150000 --show-accounts --export-all tmp-uad-contracts-deployment.json >../local.node.log 2>&1 &
+npx hardhat node --fork https://eth-mainnet.alchemyapi.io/v2/$ALCHEMY_API_KEY --fork-block-number 12150000 --show-accounts --export-all tmp-uad-contracts-deployment.json >../local.node.log 2>&1 &
 echo "Pausing until uad-contracts-deployment.json exists."
 while :; do
   spinnerSTART
@@ -30,11 +31,11 @@ while :; do
   sleep .06
 done
 spinnerSTOP
-
+mkdir -p  ./frontend/src
 node ../hooks/process-deployment.js ./tmp-uad-contracts-deployment.json ../frontend/src/uad-contracts-deployment.json
 rm -f ./tmp-uad-contracts-deployment.json
 
 cd ..
-cp -r ./contracts/artifacts/types/* ./frontend/src/types # copy artifacts to be accessible by frontend
+mkdir -p  ./frontend/src/types && cp -r ./contracts/artifacts/types/* ./frontend/src/types # copy artifacts to be accessible by frontend
 
 exit 0
