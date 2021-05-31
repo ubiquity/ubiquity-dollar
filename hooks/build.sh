@@ -10,8 +10,7 @@ spinnerSTART() {
 }
 spinnerSTOP() {
   printf "\r%s\n" "$@"
-}
-
+} 
 if [ -f ./contracts/.env ]; then
   source ./contracts/.env
 else
@@ -19,6 +18,7 @@ else
   exit 1
 fi
 rm -f ./frontend/src/uad-contracts-deployment.json
+mkdir -p  ./frontend/src
 yarn stop # kill blockchain
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
 yarn 
@@ -31,10 +31,8 @@ while :; do
   sleep .06
 done
 spinnerSTOP
-mkdir -p  ./frontend/src
 node ../hooks/process-deployment.js ./tmp-uad-contracts-deployment.json ../frontend/src/uad-contracts-deployment.json
 rm -f ./tmp-uad-contracts-deployment.json
-
 cd ..
 mkdir -p  ./frontend/src/types && cp -r ./contracts/artifacts/types/* ./frontend/src/types # copy artifacts to be accessible by frontend
 
