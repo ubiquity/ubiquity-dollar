@@ -60,12 +60,7 @@ const Index: FC = (): JSX.Element => {
       manager,
     });
 
-  return (
-    <>
-      {renderControls()}
-      {_renderTasklist()}
-    </>
-  );
+  return <>{renderControls()}</>;
 };
 
 export default Index;
