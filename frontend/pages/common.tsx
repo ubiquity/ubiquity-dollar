@@ -5,7 +5,7 @@ import { Bonding__factory } from "../src/artifacts/types/factories/Bonding__fact
 import { BondingShare__factory } from "../src/artifacts/types/factories/BondingShare__factory";
 import { ADDRESS } from "./index";
 
-export function renderTasklist() {
+export function _renderTasklist() {
   return (
     <>
       <h1>tasklist</h1>

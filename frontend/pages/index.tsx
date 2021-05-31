@@ -7,10 +7,12 @@ import {
   _getTokenBalance,
   _getLPTokenBalance,
   _renderControls,
-  renderTasklist,
+  _renderTasklist,
 } from "./common";
 
 export const ADDRESS = {
+  // these are determined at deployment
+  // FIXME you probably will need to change these until we automate this
   UAD: "0x8b01F55C4D57d9678dB76b7082D9270d11616F78",
   METAPOOL: "0x152d13e62952a7c74c536bb3C8b7BD91853F076A",
   BONDING: "0x8a777acb51217cd8d8f5d05d05df334989ea976c",
@@ -32,6 +34,7 @@ const Index: FC = (): JSX.Element => {
     _depositBondingTokens(provider, account, setBondingTokenBalance);
   const getLPTokenBalance = async () =>
     _getLPTokenBalance(provider, account, setLPTokenBalance);
+
   const renderControls = () =>
     _renderControls({
       connect,
@@ -47,7 +50,7 @@ const Index: FC = (): JSX.Element => {
   return (
     <>
       {renderControls()}
-      {renderTasklist()}
+      {_renderTasklist()}
     </>
   );
 };
