@@ -79,10 +79,13 @@ export async function _connect(setProvider, setAccount): Promise<void> {
 export async function _getCurveTokenBalance(
   provider,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager,
   setCurveTokenBalance
 ): Promise<void> {
-  if (provider && account && manager) {
+  if (provider && account) {
+    const manager = UbiquityAlgorithmicDollarManager__factory.connect(
+      ADDRESS.MANAGER,
+      provider
+    );
     const TOKEN_ADDR = await manager.curve3PoolTokenAddress();
     const token = ERC20__factory.connect(TOKEN_ADDR, provider);
 
@@ -122,11 +125,15 @@ export async function _getTokenBalance(
 export async function _getLPTokenBalance(
   provider,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager,
   setLPTokenBalance
 ): Promise<void> {
   if (provider && account) {
+    const manager = UbiquityAlgorithmicDollarManager__factory.connect(
+      ADDRESS.MANAGER,
+      provider
+    );
     const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
+
     const metapool = IMetaPool__factory.connect(TOKEN_ADDR, provider);
     const rawBalance = await metapool.balanceOf(account);
     const decimals = await metapool.decimals();
@@ -141,13 +148,16 @@ async function __depositBondingToken(
   weeks: ethers.BigNumber,
   provider,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager,
   setBondingSharesBalance
 ) {
   if (provider && account) {
     const SIGNER = provider.getSigner();
+    const manager = UbiquityAlgorithmicDollarManager__factory.connect(
+      ADDRESS.MANAGER,
+      provider
+    );
     const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
-    const metapool = IMetaPool__factory.connect(TOKEN_ADDR, provider);
+    const metapool = IMetaPool__factory.connect(TOKEN_ADDR, SIGNER);
     const bonding = Bonding__factory.connect(ADDRESS.BONDING, SIGNER);
     const bondingShare = BondingShare__factory.connect(
       ADDRESS.BONDING_SHARE,
@@ -242,6 +252,7 @@ async function __depositBondingToken(
 export function _renderControls({
   connect,
   account,
+  provider,
   getTokenBalance,
   tokenBalance,
   getLPTokenBalance,
@@ -251,12 +262,10 @@ export function _renderControls({
   setCurveTokenBalance,
   getCurveTokenBalance,
   curveTokenBalance,
-  setManager,
-  manager,
 }) {
-  connect();
   return (
     <>
+      <button onClick={connect}>Connect Wallet</button>
       <p>Account: {account}</p>
       <button onClick={getTokenBalance}>Get uAD Token Balance</button>
       <p>uAD Balance: {tokenBalance}</p>

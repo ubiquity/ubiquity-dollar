@@ -8,10 +8,11 @@ import {
   _getTokenBalance,
   _getLPTokenBalance,
   _renderControls,
-  renderTasklist,
   _getCurveTokenBalance,
+  _renderTasklist,
 } from "./common";
 import { UbiquityAlgorithmicDollarManager } from "../src/contracts/types";
+import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
@@ -21,8 +22,9 @@ export const ADDRESS = {
 };
 
 const Index: FC = (): JSX.Element => {
-  const [provider, setProvider] = useState<ethers.providers.Web3Provider>(),
-    [account, setAccount] = useState<string>();
+  console.log("---render");
+  const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
+  const [account, setAccount] = useState<string>();
   const [tokenBalance, setTokenBalance] = useState<string>();
   const [tokenLPBalance, setLPTokenBalance] = useState<string>();
   const [curveTokenBalance, setCurveTokenBalance] = useState<string>();
@@ -30,19 +32,28 @@ const Index: FC = (): JSX.Element => {
     tokenBondingSharesBalance,
     setBondingSharesBalance,
   ] = useState<string>();
-  const [manager, setManager] = useState<UbiquityAlgorithmicDollarManager>();
+  //const [manager, setManager] = useState<UbiquityAlgorithmicDollarManager>();
 
-  const connect = async () => _connect(setProvider, setAccount);
+  const connect = async (): Promise<void> => _connect(setProvider, setAccount);
+
   // const depositBondingToken = async () => _depositBondingToken();
   const getTokenBalance = async () =>
     _getTokenBalance(provider, account ?? "", setTokenBalance);
   const depositBondingTokens = () =>
     _depositBondingTokens(provider, account, setBondingSharesBalance);
+
   const getLPTokenBalance = async () =>
-    _getLPTokenBalance(provider, account, setLPTokenBalance);
+    _getLPTokenBalance(provider, account ?? "", setLPTokenBalance);
 
   const getCurveTokenBalance = async () =>
-    _getCurveTokenBalance(provider, account, setCurveTokenBalance);
+    _getCurveTokenBalance(provider, account ?? "", setCurveTokenBalance);
+  /* if (provider)
+    setManager(
+      UbiquityAlgorithmicDollarManager__factory.connect(
+        ADDRESS.MANAGER,
+        provider
+      )
+    ); */
   const renderControls = () =>
     _renderControls({
       connect,
@@ -56,11 +67,16 @@ const Index: FC = (): JSX.Element => {
       setCurveTokenBalance,
       getCurveTokenBalance,
       curveTokenBalance,
-      setManager,
-      manager,
+      // setManager,
+      //  manager,
     });
 
-  return <>{renderControls()}</>;
+  return (
+    <>
+      {renderControls()}
+      {_renderTasklist()}
+    </>
+  );
 };
 
 export default Index;
