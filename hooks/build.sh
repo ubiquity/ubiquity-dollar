@@ -35,6 +35,6 @@ node ../hooks/process-deployment.js ./tmp-uad-contracts-deployment.json ../front
 rm -f ./tmp-uad-contracts-deployment.json
 
 cd ..
-cp -r ./contracts/* ./frontend/contracts # copy artifacts to be accessible by frontend
+cp -r ./contracts/artifacts/types/* ./frontend/src/types # copy artifacts to be accessible by frontend
 
 exit 0
