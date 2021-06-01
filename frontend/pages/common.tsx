@@ -181,6 +181,8 @@ async function __depositBondingToken(
           approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei"))
         )}`
       );
+      const allowance2 = await metapool.allowance(account, ADDRESS.BONDING);
+      console.log("allowance2", ethers.utils.formatEther(allowance2));
     }
 
     console.log({ lpsAmount, weeks });
@@ -204,8 +206,8 @@ async function __depositBondingToken(
     console.log(`
       ids of bonding shares
       length:${ids.length}
-      0:${ids[0]}
-      1:${ids[1]}
+      0:${ids[0]} balance:${await bondingShare.balanceOf(addr, ids[0])} 
+   
       `);
 
     const bondingSharesBalance = await bondingShare.balanceOf(addr, ids[0]);
@@ -215,13 +217,19 @@ async function __depositBondingToken(
     //
     let balance = BigNumber.from("0");
     if (ids.length > 1) {
-      ids.forEach(async (id) => {
-        const bondingIDbal = await bondingShare.balanceOf(addr, id);
-        console.log(`
-     bondingIDbal: ${bondingIDbal.toString()} 
-     `);
-
-        balance = balance.add(bondingIDbal);
+      console.log(` 
+      bondingShares ids   1:${ids[1]} balance:${await bondingShare.balanceOf(
+        addr,
+        ids[1]
+      )}
+   
+      `);
+      const balanceOfs = ids.map((id) => {
+        return bondingShare.balanceOf(addr, id);
+      });
+      const balances = Promise.all(balanceOfs);
+      balance = (await balances).reduce((prev, cur) => {
+        return prev.add(cur);
       });
     } else {
       balance = bondingSharesBalance;
@@ -229,7 +237,7 @@ async function __depositBondingToken(
     console.log(`
  balance:${balance.toString()} 
  `);
-    setBondingSharesBalance(balance.toString());
+    setBondingSharesBalance(ethers.utils.formatEther(balance));
     /** */
     /*   const addr = await SIGNER.getAddress();
     console.log({ addr });
