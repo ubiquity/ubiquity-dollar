@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import { ethers } from "ethers";
 import FullDeployment from "../src/uad-contracts-deployment.json";
-
 import {
   _connect,
   _depositBondingTokens,
@@ -20,33 +19,12 @@ export const ADDRESS = {
 };
 
 const Index: FC = (): JSX.Element => {
-  const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
-  const [account, setAccount] = useState<string>();
-  const [tokenBalance, setTokenBalance] = useState<string>();
-  const [tokenLPBalance, setLPTokenBalance] = useState<string>();
-  const [curveTokenBalance, setCurveTokenBalance] = useState<string>();
-  const [
-    tokenBondingSharesBalance,
-    setBondingSharesBalance,
-  ] = useState<string>();
-
-  const connect = async (): Promise<void> => _connect(setProvider, setAccount);
-
-  const getTokenBalance = async () =>
-    _getTokenBalance(provider, account ?? "", setTokenBalance);
-  const depositBondingTokens = () =>
-    _depositBondingTokens(provider, account, setBondingSharesBalance);
-
-  const getLPTokenBalance = async () =>
-    _getLPTokenBalance(provider, account ?? "", setLPTokenBalance);
-
-  const getCurveTokenBalance = async () =>
-    _getCurveTokenBalance(provider, account ?? "", setCurveTokenBalance);
+  // const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
+  // const [account, setAccount] = useState<string>();
 
   const renderControls = () =>
-    _renderControls({
+    _renderControls(/* {
       connect,
-      account,
       getTokenBalance,
       tokenBalance,
       getLPTokenBalance,
@@ -56,7 +34,7 @@ const Index: FC = (): JSX.Element => {
       setCurveTokenBalance,
       getCurveTokenBalance,
       curveTokenBalance,
-    });
+    } */);
 
   return (
     <>

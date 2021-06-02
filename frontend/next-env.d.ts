@@ -7,6 +7,7 @@ declare global {
   interface Window {
     ethereum?: ethers.providers.ExternalProvider;
   }
+  declare type Maybe<T> = T | null;
 }
 
 export {};
