@@ -1,5 +1,5 @@
 import React from "react";
-import { useConnectedContext } from "../context/connected";
+import { useConnectedContext } from "./context/connected";
 
 const Account = () => {
   const { account } = useConnectedContext();

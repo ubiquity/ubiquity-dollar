@@ -1,18 +1,18 @@
 import { ethers, BigNumber } from "ethers";
 
-import { UbiquityAlgorithmicDollar__factory } from "../../src/types/factories/UbiquityAlgorithmicDollar__factory";
-import { IMetaPool__factory } from "../../src/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../../src/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../../src/types/factories/BondingShare__factory";
-import { UbiquityAlgorithmicDollarManager__factory } from "../../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
-import { ERC20__factory } from "../../src/types/factories/ERC20__factory";
+import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
+import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
+import { Bonding__factory } from "../src/types/factories/Bonding__factory";
+import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
+import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
+import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
-import { ADDRESS } from "../index";
-import { useConnectedContext } from "../context/connected";
+import { ADDRESS } from "../pages/index";
+import { useConnectedContext } from "./context/connected";
 import { useEffect, useState } from "react";
-import { Bonding, BondingShare, IMetaPool } from "../../src/types";
-import { Account } from "../utils/types";
+import { Bonding, BondingShare, IMetaPool } from "../src/types";
+import { EthAccount } from "../utils/types";
 
 const ChefUgov = () => {
   const { account, bonding, masterChef, uGov } = useConnectedContext();

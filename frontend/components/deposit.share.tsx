@@ -1,28 +1,28 @@
 import { ethers, BigNumber } from "ethers";
 
-import { UbiquityAlgorithmicDollar__factory } from "../../src/types/factories/UbiquityAlgorithmicDollar__factory";
-import { IMetaPool__factory } from "../../src/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../../src/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../../src/types/factories/BondingShare__factory";
-import { UbiquityAlgorithmicDollarManager__factory } from "../../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
-import { ERC20__factory } from "../../src/types/factories/ERC20__factory";
+import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
+import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
+import { Bonding__factory } from "../src/types/factories/Bonding__factory";
+import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
+import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
+import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
-import { ADDRESS } from "../index";
-import { useConnectedContext } from "../context/connected";
-import { useEffect, useState } from "react";
-import { Bonding, BondingShare, IMetaPool } from "../../src/types";
-import { Account } from "../utils/types";
+import { ADDRESS } from "../pages/index";
+import { useConnectedContext } from "./context/connected";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Bonding, BondingShare, IMetaPool } from "../src/types";
+import { EthAccount } from "../utils/types";
 
 async function __depositBondingToken(
   lpsAmount: ethers.BigNumber,
   weeks: ethers.BigNumber,
-  provider: ethers.providers.Web3Provider,
-  account: Account,
-  setBondingSharesBalance,
+  provider: ethers.providers.Web3Provider | undefined,
+  account: EthAccount,
+  setBondingSharesBalance: Dispatch<SetStateAction<string | undefined>>,
   metapool: IMetaPool,
   bonding: Bonding,
-  bondingShare: bondingShare
+  bondingShare: BondingShare
 ) {
   if (provider && account) {
     // check approved amount
@@ -127,7 +127,7 @@ async function __depositBondingToken(
   }
 }
 async function calculateBondingShareBalance(
-  account: Account,
+  account: EthAccount,
   bondingShare: BondingShare
 ) {
   const addr = account.address;
@@ -167,9 +167,9 @@ balance:${balance.toString()}
   return balance;
 }
 export function _depositBondingTokens(
-  provider,
-  account: Account,
-  setBondingTokenBalance,
+  provider: ethers.providers.Web3Provider | undefined,
+  account: EthAccount,
+  setBondingTokenBalance: Dispatch<SetStateAction<string | undefined>>,
   metapool: IMetaPool,
   bonding: Bonding,
   bondingShare: BondingShare
@@ -231,7 +231,7 @@ const DepositShare = () => {
       try {
         console.log("2useEffect", account, bondingShare);
         const bondingShareBalance = await calculateBondingShareBalance(
-          account as Account,
+          account as EthAccount,
           bondingShare as BondingShare
         );
         console.log("bondingShareBalance", bondingShareBalance);

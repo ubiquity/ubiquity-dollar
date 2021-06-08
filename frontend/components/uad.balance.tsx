@@ -1,21 +1,21 @@
 import { ethers, BigNumber } from "ethers";
 
-import { UbiquityAlgorithmicDollar__factory } from "../../src/types/factories/UbiquityAlgorithmicDollar__factory";
-import { IMetaPool__factory } from "../../src/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../../src/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../../src/types/factories/BondingShare__factory";
-import { UbiquityAlgorithmicDollarManager__factory } from "../../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
-import { ERC20__factory } from "../../src/types/factories/ERC20__factory";
+import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
+import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
+import { Bonding__factory } from "../src/types/factories/Bonding__factory";
+import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
+import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
+import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
-import { ADDRESS } from "../index";
-import { useConnectedContext } from "../context/connected";
-import { useState } from "react";
+import { ADDRESS } from "../pages/index";
+import { useConnectedContext } from "./context/connected";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export async function _getTokenBalance(
-  provider,
+  provider: ethers.providers.Web3Provider | undefined,
   account: string,
-  setTokenBalance
+  setTokenBalance: Dispatch<SetStateAction<string | undefined>>
 ): Promise<void> {
   console.log("_getTokenBalance");
   // console.log("provider", provider);

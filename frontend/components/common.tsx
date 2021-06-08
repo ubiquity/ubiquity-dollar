@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ethers, BigNumber } from "ethers";
 
 import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
@@ -7,16 +8,26 @@ import { BondingShare__factory } from "../src/types/factories/BondingShare__fact
 import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
-import UadBalance from "./components/uad.balance";
-import { ADDRESS } from "./index";
+import UadBalance from "./uad.balance";
+import { ADDRESS } from "../pages/index";
 import { useConnectedContext } from "./context/connected";
-import { useState } from "react";
-import Account from "./components/account";
-import CurveBalance from "./components/curve.balance";
-import CurveLPBalance from "./components/curveLP.balance";
-import DepositShare from "./components/deposit.share";
-import ChefUgov from "./components/chefugov";
-import { MasterChef__factory } from "../src/types";
+import { Dispatch, SetStateAction, useState } from "react";
+import { EthAccount } from "../utils/types";
+import Account from "./account";
+import CurveBalance from "./curve.balance";
+import CurveLPBalance from "./curveLP.balance";
+import DepositShare from "./deposit.share";
+import ChefUgov from "./chefugov";
+import {
+  Bonding,
+  BondingShare,
+  IMetaPool,
+  MasterChef,
+  MasterChef__factory,
+  UbiquityAlgorithmicDollar,
+  UbiquityAutoRedeem,
+  UbiquityGovernance,
+} from "../src/types";
 import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
 import { UbiquityGovernance__factory } from "../src/types/factories/UbiquityGovernance__factory";
 
@@ -35,16 +46,20 @@ export function _renderTasklist() {
 }
 
 export async function _connect(
-  setProvider,
-  setAccount,
-  setManager,
-  setMetapool,
-  setBonding,
-  setBondingShare,
-  setMasterChef,
-  setUAR,
-  setUGOV,
-  setUAD
+  setProvider: Dispatch<
+    SetStateAction<ethers.providers.Web3Provider | undefined>
+  >,
+  setAccount: Dispatch<SetStateAction<EthAccount | undefined>>,
+  setManager: Dispatch<
+    SetStateAction<UbiquityAlgorithmicDollarManager | undefined>
+  >,
+  setMetapool: Dispatch<SetStateAction<IMetaPool | undefined>>,
+  setBonding: Dispatch<SetStateAction<Bonding | undefined>>,
+  setBondingShare: Dispatch<SetStateAction<BondingShare | undefined>>,
+  setMasterChef: Dispatch<SetStateAction<MasterChef | undefined>>,
+  setUAR: Dispatch<SetStateAction<UbiquityAutoRedeem | undefined>>,
+  setUGOV: Dispatch<SetStateAction<UbiquityGovernance | undefined>>,
+  setUAD: Dispatch<SetStateAction<UbiquityAlgorithmicDollar | undefined>>
 ): Promise<void> {
   if (!window.ethereum?.request) {
     alert("MetaMask is not installed!");
@@ -90,9 +105,9 @@ export async function _connect(
 }
 
 export async function _getTokenBalance(
-  provider,
+  provider: ethers.providers.Web3Provider | undefined,
   account: string,
-  setTokenBalance
+  setTokenBalance: Dispatch<SetStateAction<string | undefined>>
 ): Promise<void> {
   console.log("_getTokenBalance");
   // console.log("provider", provider);
@@ -154,15 +169,15 @@ export function _renderControls() {
 
   const getTokenBalance = async () =>
     _getTokenBalance(provider, account ? account.address : "", setTokenBalance);
-  const depositBondingTokens = () =>
-    _depositBondingTokens(provider, account, setBondingSharesBalance);
+  /*   const depositBondingTokens = () =>
+    _depositBondingTokens(provider, account, setBondingSharesBalance); */
 
-  const getCurveTokenBalance = async () =>
+  /*   const getCurveTokenBalance = async () =>
     _getCurveTokenBalance(
       provider,
       account ? account.address : "",
       setCurveTokenBalance
-    );
+    ); */
   return (
     <>
       <button onClick={connect}>Connect Wallet</button>

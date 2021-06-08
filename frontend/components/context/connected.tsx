@@ -17,12 +17,12 @@ import {
 } from "../../src/types";
 import { IMetaPool } from "../../src/types/IMetaPool";
 import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
-import { Account } from "../utils/types";
+import { EthAccount } from "../../utils/types";
 
 export interface IConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | undefined;
   provider: ethers.providers.Web3Provider | undefined;
-  account: Account | undefined;
+  account: EthAccount | undefined;
   metapool: IMetaPool | undefined;
   bonding: Bonding | undefined;
   bondingShare: BondingShare | undefined;
@@ -31,7 +31,7 @@ export interface IConnectedContext {
   uGov: UbiquityGovernance | undefined;
   uAD: UbiquityAlgorithmicDollar | undefined;
 
-  setAccount: Dispatch<SetStateAction<Account | undefined>>;
+  setAccount: Dispatch<SetStateAction<EthAccount | undefined>>;
   setProvider: Dispatch<
     SetStateAction<ethers.providers.Web3Provider | undefined>
   >;
@@ -79,7 +79,7 @@ interface Props {
 export const ConnectedNetwork = (props: Props) => {
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [manager, setManager] = useState<UbiquityAlgorithmicDollarManager>();
-  const [account, setAccount] = useState<Account>();
+  const [account, setAccount] = useState<EthAccount>();
   const [metapool, setMetapool] = useState<IMetaPool>();
   const [bonding, setBonding] = useState<Bonding>();
   const [bondingShare, setBondingShare] = useState<BondingShare>();
