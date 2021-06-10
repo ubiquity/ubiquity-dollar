@@ -17,6 +17,7 @@ import Account from "./account";
 import CurveBalance from "./curve.balance";
 import CurveLPBalance from "./curveLP.balance";
 import DepositShare from "./deposit.share";
+import UarBalance from "./uar.balance";
 import ChefUgov from "./chefugov";
 import {
   Bonding,
@@ -30,6 +31,7 @@ import {
 } from "../src/types";
 import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
 import { UbiquityGovernance__factory } from "../src/types/factories/UbiquityGovernance__factory";
+import TwapPrice from "./twap.price";
 
 export function _renderTasklist() {
   return (
@@ -70,16 +72,19 @@ export async function _connect(
   const accounts = await window.ethereum.request({
     method: "eth_requestAccounts",
   });
-  console.log("accounts", JSON.stringify(accounts));
+  console.log("*-- common accounts", JSON.stringify(accounts));
   setProvider(provider);
   setAccount({ address: accounts[0], balance: 0 });
   const manager = UbiquityAlgorithmicDollarManager__factory.connect(
     ADDRESS.MANAGER,
     provider
   );
+  console.log("*-- common manager", manager.address);
   setManager(manager);
-  const SIGNER = provider?.getSigner();
-
+  console.log("*-- common provider", provider);
+  const SIGNER = provider.getSigner();
+  //const curBalance = await SIGNER.getBalance();
+  //console.log("*-- common SIGNER adr", curBalance, "SIGNER", SIGNER);
   const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
   const metapool = IMetaPool__factory.connect(TOKEN_ADDR, SIGNER);
   const bonding = Bonding__factory.connect(ADDRESS.BONDING, SIGNER);
@@ -91,6 +96,7 @@ export async function _connect(
   setBonding(bonding);
   setBondingShare(bondingShare);
   const masterchefAdr = await manager.masterChefAddress();
+  console.log("*-- common masterchefAdr", masterchefAdr);
   const masterchef = MasterChef__factory.connect(masterchefAdr, SIGNER);
   setMasterChef(masterchef);
   const uarAdr = await manager.autoRedeemTokenAddress();
@@ -180,13 +186,22 @@ export function _renderControls() {
     ); */
   return (
     <>
-      <button onClick={connect}>Connect Wallet</button>
-      <Account />
-      <UadBalance />
-      <CurveBalance />
-      <CurveLPBalance />
-      <DepositShare />
-      <ChefUgov />
+      <div className="column-wrap">
+        <button onClick={connect}>Connect Wallet</button>
+        <Account />
+      </div>
+      <div className="balance">
+        <UadBalance />
+        <CurveBalance />
+        <CurveLPBalance />
+        <UarBalance />
+      </div>
+      <br />
+      <div className="column-wrap">
+        <DepositShare />
+        <ChefUgov />
+        <TwapPrice />
+      </div>
     </>
   );
 }

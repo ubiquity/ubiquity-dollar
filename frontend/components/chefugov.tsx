@@ -51,13 +51,19 @@ const ChefUgov = () => {
       await handleBalance();
     }
   };
+  handleReward();
+  handleBalance();
   return (
     <>
-      <button onClick={handleReward}>Get uGov Rewards</button>
-      <button onClick={handleClaim}>Claim Rewards</button>
-      <p>uGov Rewards Balance: {rewards}</p>
-      <button onClick={handleBalance}>Get uGov Balance</button>
-      <p>uGov Balance: {ugovBalance}</p>
+      <div className="row">
+        <button onClick={handleReward}>Get UBQ Rewards</button>
+        <button onClick={handleClaim}>Claim Rewards</button>
+        <p className="value">Pending Rewards: {rewards} UBQ</p>
+      </div>
+      <div className="row">
+        <button onClick={handleBalance}>Get UBQ Balance</button>
+        <p className="value">{ugovBalance} UBQ</p>
+      </div>
     </>
   );
 };

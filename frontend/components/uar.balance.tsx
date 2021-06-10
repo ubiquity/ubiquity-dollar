@@ -1,11 +1,11 @@
 import { ethers, BigNumber } from "ethers";
 
-import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
+import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
 import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
 import { Bonding__factory } from "../src/types/factories/Bonding__factory";
 import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
 import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import { UbiquityAutoRedeem } from "../src/types/UbiquityAutoRedeem";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
@@ -21,24 +21,24 @@ export async function _getTokenBalance(
   // console.log("provider", provider);
   console.log("account", account);
   if (provider && account) {
-    const uAD = UbiquityAlgorithmicDollar__factory.connect(
-      ADDRESS.UAD,
-      provider.getSigner()
+    const manager = UbiquityAlgorithmicDollarManager__factory.connect(
+      ADDRESS.MANAGER,
+      provider
     );
-    console.log("ADDRESS.UAD", ADDRESS.UAD);
-    //console.log("uAD", uAD);
-    const rawBalance = await uAD.balanceOf(account);
-    console.log("rawBalance", rawBalance);
 
-    const decimals = await uAD.decimals();
-    console.log("decimals", decimals);
-    const balance = ethers.utils.formatUnits(rawBalance, decimals);
+    const uARRedeem = await manager.autoRedeemTokenAddress();
+    const uAR = UbiquityAutoRedeem__factory.connect(uARRedeem, provider);
+    console.log("uARRedeem Address", uARRedeem);
+    //console.log("uAD", uAD);
+    const rawBalance = await uAR.balanceOf(account);
+
+    const balance = ethers.utils.formatEther(rawBalance);
     console.log("balance", balance);
     setTokenBalance(balance);
   }
 }
 
-const UadBalance = () => {
+const UarBalance = () => {
   const { account, provider } = useConnectedContext();
   const [tokenBalance, setTokenBalance] = useState<string>();
   if (!account) {
@@ -52,11 +52,11 @@ const UadBalance = () => {
   return (
     <>
       <div className="column-wrap">
-        <p className="value">{tokenBalance} uAD</p>
-        <button onClick={handleClick}>Get uAD Token Balance</button>
+        <p className="value">{tokenBalance} uAR</p>
+        <button onClick={handleClick}>Get uAR Token Balance</button>
       </div>
     </>
   );
 };
 
-export default UadBalance;
+export default UarBalance;

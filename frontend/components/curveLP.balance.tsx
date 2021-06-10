@@ -46,11 +46,13 @@ const CurveLPBalance = () => {
       account ? account.address : "",
       setLPTokenBalance
     );
-
+  handleClick();
   return (
     <>
-      <button onClick={handleClick}>Get LP Token Balance</button>
-      <p>uAD3CRV-f Balance: {tokenLPBalance}</p>
+      <div className="column-wrap">
+        <p className="value">{tokenLPBalance} uAD3CRV-f</p>
+        <button onClick={handleClick}>Get LP Token Balance</button>
+      </div>
     </>
   );
 };

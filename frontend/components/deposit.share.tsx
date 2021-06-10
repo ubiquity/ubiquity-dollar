@@ -263,19 +263,30 @@ const DepositShare = () => {
       setBondingSharesBalance(ethers.utils.formatEther(balance));
     }
   };
-
+  handleBalance();
   return (
     <>
-      <input
-        type="number"
-        name="lpsAmount"
-        id="lpsAmount"
-        placeholder="uAD-3CRV LP Tokens"
-      />
-      <input type="number" name="weeks" id="weeks" placeholder="weeks" />
-      <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
-      <button onClick={handleBalance}>Get Balance</button>
-      <p>Bonding Shares: {tokenBondingSharesBalance}</p>
+      <div className="row">
+        <button onClick={handleBalance}>Get Bonding Shares</button>
+        <p className="value">{tokenBondingSharesBalance} Bonding Shares</p>
+      </div>
+      <div className="row-wrap">
+        <input
+          type="number"
+          name="lpsAmount"
+          id="lpsAmount"
+          placeholder="uAD-3CRV LP Tokens"
+        />
+        <input type="number" name="weeks" id="weeks" placeholder="weeks" />
+        <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
+      </div>
+      <p>
+        <a href="https://crv.finance/liquidity">
+          Deposit to curve uAD-3CRV pool.
+        </a>
+        <br />
+        Select pool Ubiquity Algorithmic Dollar (uAD3CRV-f-2){" "}
+      </p>
     </>
   );
 };

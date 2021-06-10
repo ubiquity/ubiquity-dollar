@@ -11,50 +11,46 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import { ADDRESS } from "../pages/index";
 import { useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
+import { TWAPOracle, TWAPOracle__factory } from "../src/types";
 
-export async function _getCurveTokenBalance(
+export async function _getTwapPrice(
   provider: ethers.providers.Web3Provider | undefined,
-  account: string,
-  setCurveTokenBalance: Dispatch<SetStateAction<string | undefined>>
+  uadAdr: string,
+  setTwapPrice: Dispatch<SetStateAction<string | undefined>>
 ): Promise<void> {
-  if (provider && account) {
+  if (provider && uadAdr) {
     const manager = UbiquityAlgorithmicDollarManager__factory.connect(
       ADDRESS.MANAGER,
       provider
     );
-    const TOKEN_ADDR = await manager.curve3PoolTokenAddress();
-    const token = ERC20__factory.connect(TOKEN_ADDR, provider);
+    const TWAP_ADDR = await manager.twapOracleAddress();
+    const twap = TWAPOracle__factory.connect(TWAP_ADDR, provider);
 
-    const rawBalance = await token.balanceOf(account);
-    const decimals = await token.decimals();
+    const rawPrice = await twap.consult(uadAdr);
 
-    const balance = ethers.utils.formatUnits(rawBalance, decimals);
-    setCurveTokenBalance(balance);
+    const price = ethers.utils.formatEther(rawPrice);
+    setTwapPrice(price);
   }
 }
 
-const CurveBalance = () => {
-  const { account, provider } = useConnectedContext();
-  const [curveTokenBalance, setCurveTokenBalance] = useState<string>();
-  if (!account) {
+const TwapPrice = () => {
+  const { provider, uAD } = useConnectedContext();
+  const [twapPrice, setTwapPrice] = useState<string>();
+  if (!uAD) {
     return null;
   }
 
   const handleClick = async () =>
-    _getCurveTokenBalance(
-      provider,
-      account ? account.address : "",
-      setCurveTokenBalance
-    );
+    _getTwapPrice(provider, uAD ? uAD.address : "", setTwapPrice);
   handleClick();
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">{curveTokenBalance} 3CRV</p>
-        <button onClick={handleClick}>Get curve Token Balance</button>
+      <div className="row">
+        <button onClick={handleClick}>Get TWAP Price</button>
+        <p className="value">uAD TWAP Price: {twapPrice} $</p>
       </div>
     </>
   );
 };
 
-export default CurveBalance;
+export default TwapPrice;
