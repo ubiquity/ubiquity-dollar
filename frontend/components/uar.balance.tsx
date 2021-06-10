@@ -10,9 +10,9 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
 import { useConnectedContext, Balances } from "./context/connected";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export async function _getTokenBalance(
+async function _getTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
   account: string,
   balances: Balances | undefined,
@@ -28,13 +28,23 @@ export async function _getTokenBalance(
     const uAR = UbiquityAutoRedeem__factory.connect(uARRedeem, provider);
     const rawBalance = await uAR.balanceOf(account);
     if (balances) {
-      setBalances({ ...balances, uar: rawBalance });
+      if (!balances.uar.eq(rawBalance))
+        setBalances({ ...balances, uar: rawBalance });
     }
   }
 }
 
 const UarBalance = () => {
   const { account, provider, balances, setBalances } = useConnectedContext();
+  useEffect(() => {
+    _getTokenBalance(
+      provider,
+      account ? account.address : "",
+      balances,
+      setBalances
+    );
+  }, [balances]);
+
   if (!account) {
     return null;
   }

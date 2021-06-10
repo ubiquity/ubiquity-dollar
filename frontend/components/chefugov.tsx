@@ -1,6 +1,38 @@
 import { ethers } from "ethers";
-import { useConnectedContext } from "./context/connected";
-import { useState } from "react";
+import { Balances, useConnectedContext } from "./context/connected";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { MasterChef, UbiquityGovernance } from "../src/types";
+
+async function _getUBQBalance(
+  account: string,
+  uGov: UbiquityGovernance | undefined,
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+): Promise<void> {
+  if (uGov) {
+    const rawBalance = await uGov?.balanceOf(account);
+    if (balances) {
+      if (!balances.ubq.eq(rawBalance))
+        setBalances({ ...balances, ubq: rawBalance });
+    }
+  }
+}
+
+async function _getUBQReward(
+  account: string,
+  masterChef: MasterChef | undefined,
+  reward: string | undefined,
+  setRewards: Dispatch<SetStateAction<string | undefined>>
+): Promise<void> {
+  if (masterChef && account) {
+    const balance = await masterChef?.pendingUGOV(account);
+    if (balance) {
+      if (!(balance.toString() === reward)) {
+        setRewards(ethers.utils.formatEther(balance));
+      }
+    }
+  }
+}
 
 const ChefUgov = () => {
   const {
@@ -11,27 +43,34 @@ const ChefUgov = () => {
     setBalances,
   } = useConnectedContext();
 
+  useEffect(() => {
+    _getUBQBalance(account ? account.address : "", uGov, balances, setBalances);
+    _getUBQReward(
+      account ? account.address : "",
+      masterChef,
+      rewards,
+      setRewards
+    );
+  }, [balances?.ubq]);
+
   const [rewards, setRewards] = useState<string>();
+
+  const handleBalance = async () => {
+    _getUBQBalance(account ? account.address : "", uGov, balances, setBalances);
+  };
+  const handleReward = async () => {
+    _getUBQReward(
+      account ? account.address : "",
+      masterChef,
+      rewards,
+      setRewards
+    );
+  };
+
   if (!account) {
     return null;
   }
-  const handleBalance = async () => {
-    if (uGov) {
-      const rawBalance = await uGov?.balanceOf(account.address);
-      if (balances) {
-        setBalances({ ...balances, ubq: rawBalance });
-      }
-    }
-  };
 
-  const handleReward = async () => {
-    if (masterChef) {
-      const balance = await masterChef?.pendingUGOV(account.address);
-      if (balance) {
-        setRewards(ethers.utils.formatEther(balance));
-      }
-    }
-  };
   const handleClaim = async () => {
     if (masterChef) {
       await (await masterChef?.getRewards()).wait();

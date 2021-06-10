@@ -10,9 +10,9 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
 import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-export async function _getCurveTokenBalance(
+async function _getCurveTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
   account: string,
   manager: UbiquityAlgorithmicDollarManager | undefined,
@@ -25,7 +25,8 @@ export async function _getCurveTokenBalance(
 
     const rawBalance = await token.balanceOf(account);
     if (balances) {
-      setBalances({ ...balances, crv: rawBalance });
+      if (!balances.crv.eq(rawBalance))
+        setBalances({ ...balances, crv: rawBalance });
     }
   }
 }
@@ -38,6 +39,16 @@ const CurveBalance = () => {
     balances,
     setBalances,
   } = useConnectedContext();
+  useEffect(() => {
+    _getCurveTokenBalance(
+      provider,
+      account ? account.address : "",
+      manager,
+      balances,
+      setBalances
+    );
+  }, [balances]);
+
   if (!account) {
     return null;
   }

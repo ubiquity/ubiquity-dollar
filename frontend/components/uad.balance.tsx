@@ -10,7 +10,7 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
 import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export async function _getTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
@@ -27,7 +27,8 @@ export async function _getTokenBalance(
     );
     const rawBalance = await uAD.balanceOf(account);
     if (balances) {
-      setBalances({ ...balances, uad: rawBalance });
+      if (!balances.uad.eq(rawBalance))
+        setBalances({ ...balances, uad: rawBalance });
     }
   }
 }
@@ -41,6 +42,16 @@ const UadBalance = () => {
     setBalances,
   } = useConnectedContext();
 
+  useEffect(() => {
+    _getTokenBalance(
+      provider,
+      account ? account.address : "",
+      manager,
+      balances,
+      setBalances
+    );
+  }, [balances]);
+
   if (!account) {
     return null;
   }
@@ -53,6 +64,7 @@ const UadBalance = () => {
       balances,
       setBalances
     );
+
   return (
     <>
       <div className="column-wrap">

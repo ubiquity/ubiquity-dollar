@@ -10,7 +10,7 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
 import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export async function _getLPTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
@@ -28,13 +28,22 @@ export async function _getLPTokenBalance(
     const metapool = IMetaPool__factory.connect(TOKEN_ADDR, provider);
     const rawBalance = await metapool.balanceOf(account);
     if (balances) {
-      setBalances({ ...balances, uad3crv: rawBalance });
+      if (!balances.uad3crv.eq(rawBalance))
+        setBalances({ ...balances, uad3crv: rawBalance });
     }
   }
 }
 
 const CurveLPBalance = () => {
   const { account, provider, balances, setBalances } = useConnectedContext();
+  useEffect(() => {
+    _getLPTokenBalance(
+      provider,
+      account ? account.address : "",
+      balances,
+      setBalances
+    );
+  }, [balances?.uad3crv]);
   if (!account) {
     return null;
   }

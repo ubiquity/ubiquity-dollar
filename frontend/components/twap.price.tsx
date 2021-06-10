@@ -10,12 +10,13 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
 import { useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { TWAPOracle, TWAPOracle__factory } from "../src/types";
 
 export async function _getTwapPrice(
   provider: ethers.providers.Web3Provider | undefined,
   uadAdr: string,
+  curTwapPrice: string,
   setTwapPrice: Dispatch<SetStateAction<string | undefined>>
 ): Promise<void> {
   if (provider && uadAdr) {
@@ -29,19 +30,33 @@ export async function _getTwapPrice(
     const rawPrice = await twap.consult(uadAdr);
 
     const price = ethers.utils.formatEther(rawPrice);
-    setTwapPrice(price);
+    if (!(price === curTwapPrice)) setTwapPrice(price);
   }
 }
 
 const TwapPrice = () => {
   const { provider, uAD } = useConnectedContext();
   const [twapPrice, setTwapPrice] = useState<string>();
+  useEffect(() => {
+    _getTwapPrice(
+      provider,
+      uAD ? uAD.address : "",
+      twapPrice ?? "",
+      setTwapPrice
+    );
+  });
+
   if (!uAD) {
     return null;
   }
 
   const handleClick = async () =>
-    _getTwapPrice(provider, uAD ? uAD.address : "", setTwapPrice);
+    _getTwapPrice(
+      provider,
+      uAD ? uAD.address : "",
+      twapPrice ?? "",
+      setTwapPrice
+    );
 
   return (
     <>
