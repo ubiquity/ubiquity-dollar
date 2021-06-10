@@ -96,10 +96,10 @@ export async function _connect(
   const uarAdr = await manager.autoRedeemTokenAddress();
   const uar = UbiquityAutoRedeem__factory.connect(uarAdr, SIGNER);
   setUAR(uar);
-  const uGovAdr = await manager.uGOVTokenAddress();
+  const uGovAdr = await manager.governanceTokenAddress();
   const ugov = UbiquityGovernance__factory.connect(uGovAdr, SIGNER);
   setUGOV(ugov);
-  const uadAdr = await manager.uADTokenAddress();
+  const uadAdr = await manager.dollarTokenAddress();
   const uad = UbiquityAlgorithmicDollar__factory.connect(uadAdr, SIGNER);
   setUAD(uad);
 }

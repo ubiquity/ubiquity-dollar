@@ -36,6 +36,7 @@ const ChefUgov = () => {
   };
 
   const handleReward = async () => {
+    console.log("handleRewdard", masterChef);
     if (masterChef) {
       const balance = await masterChef?.pendingUGOV(account.address);
       if (balance) {
