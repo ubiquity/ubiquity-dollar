@@ -215,7 +215,6 @@ const DepositShare = () => {
       }
     }
   };
-  handleBalance();
   return (
     <>
       <div className="row">

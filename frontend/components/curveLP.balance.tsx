@@ -46,7 +46,6 @@ const CurveLPBalance = () => {
       balances,
       setBalances
     );
-  handleClick();
   return (
     <>
       <div className="column-wrap">

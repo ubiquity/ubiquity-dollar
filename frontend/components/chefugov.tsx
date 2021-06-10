@@ -39,8 +39,7 @@ const ChefUgov = () => {
       await handleBalance();
     }
   };
-  handleReward();
-  handleBalance();
+
   return (
     <>
       <div className="row">

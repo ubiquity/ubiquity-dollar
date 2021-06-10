@@ -53,7 +53,6 @@ const UadBalance = () => {
       balances,
       setBalances
     );
-  handleClick();
   return (
     <>
       <div className="column-wrap">

@@ -50,7 +50,6 @@ const CurveBalance = () => {
       balances,
       setBalances
     );
-  handleClick();
   return (
     <>
       <div className="column-wrap">

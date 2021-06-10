@@ -46,7 +46,6 @@ const UarBalance = () => {
       balances,
       setBalances
     );
-  handleClick();
   return (
     <>
       <div className="column-wrap">

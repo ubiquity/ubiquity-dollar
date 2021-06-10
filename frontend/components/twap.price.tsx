@@ -42,7 +42,7 @@ const TwapPrice = () => {
 
   const handleClick = async () =>
     _getTwapPrice(provider, uAD ? uAD.address : "", setTwapPrice);
-  handleClick();
+
   return (
     <>
       <div className="row">
