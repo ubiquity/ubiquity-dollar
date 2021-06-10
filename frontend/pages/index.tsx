@@ -13,9 +13,7 @@ import {
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
-  UAD: FullDeployment.contracts.UbiquityAlgorithmicDollar.address,
-  BONDING: FullDeployment.contracts.Bonding.address,
-  BONDING_SHARE: FullDeployment.contracts.BondingShare.address,
+  DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
 };
 
 const Index: FC = (): JSX.Element => {

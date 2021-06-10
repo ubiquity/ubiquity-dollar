@@ -9,50 +9,58 @@ import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithm
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
-import { useConnectedContext } from "./context/connected";
+import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
 
 export async function _getTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
   account: string,
-  setTokenBalance: Dispatch<SetStateAction<string | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>
 ): Promise<void> {
-  console.log("_getTokenBalance");
-  // console.log("provider", provider);
-  console.log("account", account);
-  if (provider && account) {
+  if (provider && account && manager) {
+    const uADAddr = await manager.dollarTokenAddress();
     const uAD = UbiquityAlgorithmicDollar__factory.connect(
-      ADDRESS.UAD,
+      uADAddr,
       provider.getSigner()
     );
-    console.log("ADDRESS.UAD", ADDRESS.UAD);
-    //console.log("uAD", uAD);
     const rawBalance = await uAD.balanceOf(account);
-    console.log("rawBalance", rawBalance);
-
-    const decimals = await uAD.decimals();
-    console.log("decimals", decimals);
-    const balance = ethers.utils.formatUnits(rawBalance, decimals);
-    console.log("balance", balance);
-    setTokenBalance(balance);
+    if (balances) {
+      balances.uad = rawBalance;
+      setBalances(balances);
+    }
   }
 }
 
 const UadBalance = () => {
-  const { account, provider } = useConnectedContext();
-  const [tokenBalance, setTokenBalance] = useState<string>();
+  const {
+    account,
+    manager,
+    provider,
+    balances,
+    setBalances,
+  } = useConnectedContext();
+
   if (!account) {
     return null;
   }
 
   const handleClick = async () =>
-    _getTokenBalance(provider, account ? account.address : "", setTokenBalance);
+    _getTokenBalance(
+      provider,
+      account ? account.address : "",
+      manager,
+      balances,
+      setBalances
+    );
   handleClick();
-  console.log("-------", account.address, tokenBalance);
   return (
     <>
       <div className="column-wrap">
-        <p className="value">{tokenBalance} uAD</p>
+        <p className="value">
+          {balances ? ethers.utils.formatEther(balances.uad) : "0.0"} uAD
+        </p>
         <button onClick={handleClick}>Get uAD Token Balance</button>
       </div>
     </>

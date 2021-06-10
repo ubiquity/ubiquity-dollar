@@ -10,7 +10,7 @@ import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithm
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import UadBalance from "./uad.balance";
 import { ADDRESS } from "../pages/index";
-import { useConnectedContext } from "./context/connected";
+import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
 import { EthAccount } from "../utils/types";
 import Account from "./account";
@@ -22,6 +22,8 @@ import ChefUgov from "./chefugov";
 import {
   Bonding,
   BondingShare,
+  DebtCouponManager,
+  DebtCouponManager__factory,
   IMetaPool,
   MasterChef,
   MasterChef__factory,
@@ -32,6 +34,7 @@ import {
 import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
 import { UbiquityGovernance__factory } from "../src/types/factories/UbiquityGovernance__factory";
 import TwapPrice from "./twap.price";
+import UarRedeem from "./uar.redeem";
 
 export function _renderTasklist() {
   return (
@@ -61,7 +64,9 @@ export async function _connect(
   setMasterChef: Dispatch<SetStateAction<MasterChef | undefined>>,
   setUAR: Dispatch<SetStateAction<UbiquityAutoRedeem | undefined>>,
   setUGOV: Dispatch<SetStateAction<UbiquityGovernance | undefined>>,
-  setUAD: Dispatch<SetStateAction<UbiquityAlgorithmicDollar | undefined>>
+  setUAD: Dispatch<SetStateAction<UbiquityAlgorithmicDollar | undefined>>,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
+  setDebtCouponMgr: Dispatch<SetStateAction<DebtCouponManager | undefined>>
 ): Promise<void> {
   if (!window.ethereum?.request) {
     alert("MetaMask is not installed!");
@@ -72,31 +77,27 @@ export async function _connect(
   const accounts = await window.ethereum.request({
     method: "eth_requestAccounts",
   });
-  console.log("*-- common accounts", JSON.stringify(accounts));
   setProvider(provider);
   setAccount({ address: accounts[0], balance: 0 });
   const manager = UbiquityAlgorithmicDollarManager__factory.connect(
     ADDRESS.MANAGER,
     provider
   );
-  console.log("*-- common manager", manager.address);
   setManager(manager);
-  console.log("*-- common provider", provider);
   const SIGNER = provider.getSigner();
-  //const curBalance = await SIGNER.getBalance();
-  //console.log("*-- common SIGNER adr", curBalance, "SIGNER", SIGNER);
   const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
   const metapool = IMetaPool__factory.connect(TOKEN_ADDR, SIGNER);
-  const bonding = Bonding__factory.connect(ADDRESS.BONDING, SIGNER);
+  const BONDING_ADDR = await manager.bondingContractAddress();
+  const bonding = Bonding__factory.connect(BONDING_ADDR, SIGNER);
+  const BONDING_SHARE_ADDR = await manager.bondingShareAddress();
   const bondingShare = BondingShare__factory.connect(
-    ADDRESS.BONDING_SHARE,
+    BONDING_SHARE_ADDR,
     SIGNER
   );
   setMetapool(metapool);
   setBonding(bonding);
   setBondingShare(bondingShare);
   const masterchefAdr = await manager.masterChefAddress();
-  console.log("*-- common masterchefAdr", masterchefAdr);
   const masterchef = MasterChef__factory.connect(masterchefAdr, SIGNER);
   setMasterChef(masterchef);
   const uarAdr = await manager.autoRedeemTokenAddress();
@@ -108,32 +109,19 @@ export async function _connect(
   const uadAdr = await manager.dollarTokenAddress();
   const uad = UbiquityAlgorithmicDollar__factory.connect(uadAdr, SIGNER);
   setUAD(uad);
-}
-
-export async function _getTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
-  account: string,
-  setTokenBalance: Dispatch<SetStateAction<string | undefined>>
-): Promise<void> {
-  console.log("_getTokenBalance");
-  // console.log("provider", provider);
-  console.log("account", account);
-  if (provider && account) {
-    const uAD = UbiquityAlgorithmicDollar__factory.connect(
-      ADDRESS.UAD,
-      provider.getSigner()
-    );
-    console.log("ADDRESS.UAD", ADDRESS.UAD);
-    //console.log("uAD", uAD);
-    const rawBalance = await uAD.balanceOf(account);
-    console.log("rawBalance", rawBalance);
-
-    const decimals = await uAD.decimals();
-    console.log("decimals", decimals);
-    const balance = ethers.utils.formatUnits(rawBalance, decimals);
-    console.log("balance", balance);
-    setTokenBalance(balance);
-  }
+  setBalances({
+    uad: BigNumber.from(0),
+    crv: BigNumber.from(0),
+    uad3crv: BigNumber.from(0),
+    uar: BigNumber.from(0),
+    ubq: BigNumber.from(0),
+    bondingShares: BigNumber.from(0),
+  });
+  const debtCouponMgr = DebtCouponManager__factory.connect(
+    ADDRESS.DEBT_COUPON_MANAGER,
+    SIGNER
+  );
+  setDebtCouponMgr(debtCouponMgr);
 }
 
 export function _renderControls() {
@@ -151,14 +139,11 @@ export function _renderControls() {
     setUAR,
     setUGOV,
     setUAD,
+    setBalances,
+    balances,
+    setDebtCouponMgr,
   } = useConnectedContext();
-  const [tokenBalance, setTokenBalance] = useState<string>();
-  const [tokenLPBalance, setLPTokenBalance] = useState<string>();
-  const [curveTokenBalance, setCurveTokenBalance] = useState<string>();
-  const [
-    tokenBondingSharesBalance,
-    setBondingSharesBalance,
-  ] = useState<string>();
+
   const connect = async (): Promise<void> =>
     _connect(
       setProvider,
@@ -170,20 +155,11 @@ export function _renderControls() {
       setMasterChef,
       setUAR,
       setUGOV,
-      setUAD
+      setUAD,
+      setBalances,
+      setDebtCouponMgr
     );
 
-  const getTokenBalance = async () =>
-    _getTokenBalance(provider, account ? account.address : "", setTokenBalance);
-  /*   const depositBondingTokens = () =>
-    _depositBondingTokens(provider, account, setBondingSharesBalance); */
-
-  /*   const getCurveTokenBalance = async () =>
-    _getCurveTokenBalance(
-      provider,
-      account ? account.address : "",
-      setCurveTokenBalance
-    ); */
   return (
     <>
       <div className="column-wrap">
@@ -201,9 +177,8 @@ export function _renderControls() {
         <DepositShare />
         <ChefUgov />
         <TwapPrice />
+        {balances?.uar.gt(BigNumber.from(0)) ? <UarRedeem /> : ""}
       </div>
     </>
   );
 }
-/* <button onClick={getTokenBalance}>Get uAD Token Balance</button>
-      <p>uAD Balance: {tokenBalance}</p> */

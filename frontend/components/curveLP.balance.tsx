@@ -9,13 +9,14 @@ import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithm
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
-import { useConnectedContext } from "./context/connected";
+import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
 
 export async function _getLPTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
   account: string,
-  setLPTokenBalance: Dispatch<SetStateAction<string | undefined>>
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>
 ): Promise<void> {
   if (provider && account) {
     const manager = UbiquityAlgorithmicDollarManager__factory.connect(
@@ -26,16 +27,15 @@ export async function _getLPTokenBalance(
 
     const metapool = IMetaPool__factory.connect(TOKEN_ADDR, provider);
     const rawBalance = await metapool.balanceOf(account);
-    const decimals = await metapool.decimals();
-
-    const balance = ethers.utils.formatUnits(rawBalance, decimals);
-    setLPTokenBalance(balance);
+    if (balances) {
+      balances.uad3crv = rawBalance;
+      setBalances(balances);
+    }
   }
 }
 
 const CurveLPBalance = () => {
-  const { account, provider } = useConnectedContext();
-  const [tokenLPBalance, setLPTokenBalance] = useState<string>();
+  const { account, provider, balances, setBalances } = useConnectedContext();
   if (!account) {
     return null;
   }
@@ -44,13 +44,17 @@ const CurveLPBalance = () => {
     _getLPTokenBalance(
       provider,
       account ? account.address : "",
-      setLPTokenBalance
+      balances,
+      setBalances
     );
   handleClick();
   return (
     <>
       <div className="column-wrap">
-        <p className="value">{tokenLPBalance} uAD3CRV-f</p>
+        <p className="value">
+          {balances ? ethers.utils.formatEther(balances.uad3crv) : "0.0"}
+          uAD3CRV-f
+        </p>
         <button onClick={handleClick}>Get LP Token Balance</button>
       </div>
     </>

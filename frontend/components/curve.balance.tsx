@@ -9,33 +9,36 @@ import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithm
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
-import { useConnectedContext } from "./context/connected";
+import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
 
 export async function _getCurveTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
   account: string,
-  setCurveTokenBalance: Dispatch<SetStateAction<string | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>
 ): Promise<void> {
-  if (provider && account) {
-    const manager = UbiquityAlgorithmicDollarManager__factory.connect(
-      ADDRESS.MANAGER,
-      provider
-    );
+  if (provider && account && manager) {
     const TOKEN_ADDR = await manager.curve3PoolTokenAddress();
     const token = ERC20__factory.connect(TOKEN_ADDR, provider);
 
     const rawBalance = await token.balanceOf(account);
-    const decimals = await token.decimals();
-
-    const balance = ethers.utils.formatUnits(rawBalance, decimals);
-    setCurveTokenBalance(balance);
+    if (balances) {
+      balances.crv = rawBalance;
+      setBalances(balances);
+    }
   }
 }
 
 const CurveBalance = () => {
-  const { account, provider } = useConnectedContext();
-  const [curveTokenBalance, setCurveTokenBalance] = useState<string>();
+  const {
+    account,
+    provider,
+    manager,
+    balances,
+    setBalances,
+  } = useConnectedContext();
   if (!account) {
     return null;
   }
@@ -44,13 +47,17 @@ const CurveBalance = () => {
     _getCurveTokenBalance(
       provider,
       account ? account.address : "",
-      setCurveTokenBalance
+      manager,
+      balances,
+      setBalances
     );
   handleClick();
   return (
     <>
       <div className="column-wrap">
-        <p className="value">{curveTokenBalance} 3CRV</p>
+        <p className="value">
+          {balances ? ethers.utils.formatEther(balances.crv) : "0.0"} 3CRV
+        </p>
         <button onClick={handleClick}>Get curve Token Balance</button>
       </div>
     </>

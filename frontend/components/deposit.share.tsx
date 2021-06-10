@@ -9,7 +9,7 @@ import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithm
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 
 import { ADDRESS } from "../pages/index";
-import { useConnectedContext } from "./context/connected";
+import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Bonding, BondingShare, IMetaPool } from "../src/types";
 import { EthAccount } from "../utils/types";
@@ -19,26 +19,27 @@ async function __depositBondingToken(
   weeks: ethers.BigNumber,
   provider: ethers.providers.Web3Provider | undefined,
   account: EthAccount,
-  setBondingSharesBalance: Dispatch<SetStateAction<string | undefined>>,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
   metapool: IMetaPool,
   bonding: Bonding,
   bondingShare: BondingShare
 ) {
-  if (provider && account) {
+  if (provider && account && manager) {
     // check approved amount
     // make sure to check balance spendable -- if (lpsAmount) is > spendable then ask approval again
     console.log(account);
     //const SIGNER = await provider.getSigner();
-    const allowance = await metapool.allowance(
-      account.address,
-      ADDRESS.BONDING
-    );
+    const BONDING_ADDR = await manager.bondingContractAddress();
+
+    const allowance = await metapool.allowance(account.address, BONDING_ADDR);
 
     console.log("allowance", ethers.utils.formatEther(allowance));
     console.log("lpsAmount", ethers.utils.formatEther(lpsAmount));
     let approveTransaction;
     if (allowance.lt(lpsAmount)) {
-      approveTransaction = await metapool.approve(ADDRESS.BONDING, lpsAmount);
+      approveTransaction = await metapool.approve(BONDING_ADDR, lpsAmount);
 
       const approveWaiting = await approveTransaction.wait();
       console.log(
@@ -48,80 +49,22 @@ async function __depositBondingToken(
       );
       const allowance2 = await metapool.allowance(
         account.address,
-        ADDRESS.BONDING
+        BONDING_ADDR
       );
       console.log("allowance2", ethers.utils.formatEther(allowance2));
     }
 
-    console.log({ lpsAmount, weeks });
-
     const depositWaiting = await bonding.deposit(lpsAmount, weeks);
-    const waiting = await depositWaiting.wait();
+    await depositWaiting.wait();
 
-    console.log(
-      `deposit gas used with 100 gwei / gas:${ethers.utils.formatEther(
-        waiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei"))
-      )}`
+    const rawBalance = await calculateBondingShareBalance(
+      account,
+      bondingShare
     );
-
-    /**
-     *
-     *
-     */
-    /*     const addr = await SIGNER.getAddress();
-    console.log({ addr });
-    const ids = await bondingShare.holderTokens(addr);
-    console.log(`
-      ids of bonding shares
-      length:${ids.length}
-      0:${ids[0]} balance:${await bondingShare.balanceOf(addr, ids[0])} 
-   
-      `);
-
-    const bondingSharesBalance = await bondingShare.balanceOf(addr, ids[0]);
-
-    console.log({ ids, bondingSharesBalance });
-
-    //
-    let balance = BigNumber.from("0");
-    if (ids.length > 1) {
-      console.log(` 
-      bondingShares ids 1:${ids[1]} balance:${await bondingShare.balanceOf(
-        addr,
-        ids[1]
-      )}
-   
-      `);
-      const balanceOfs = ids.map((id) => {
-        return bondingShare.balanceOf(addr, id);
-      });
-      const balances = Promise.all(balanceOfs);
-      balance = (await balances).reduce((prev, cur) => {
-        return prev.add(cur);
-      });
-    } else {
-      balance = bondingSharesBalance;
+    if (balances) {
+      balances.bondingShares = rawBalance;
+      setBalances(balances);
     }
-    console.log(`
- balance:${balance.toString()} 
- `); */
-
-    const balance = await calculateBondingShareBalance(account, bondingShare);
-    setBondingSharesBalance(ethers.utils.formatEther(balance));
-    /** */
-    /*   const addr = await SIGNER.getAddress();
-    console.log({ addr });
-    const ids = await bondingShare.holderTokens(addr);
-    console.log({ ids });
-
-    const bondingSharesBalance = await bondingShare.balanceOf(addr, ids[0]);
-
-    console.log({ ids, bondingSharesBalance }); */
-
-    //
-    // const decimals = await token.decimals();
-    // const balance = ethers.utils.formatUnits(rawBalance, decimals);
-    //setBondingTokenBalance(bondingSharesBalance.toString());
   } else {
     alert(`no provider and account found`);
   }
@@ -169,7 +112,9 @@ balance:${balance.toString()}
 export function _depositBondingTokens(
   provider: ethers.providers.Web3Provider | undefined,
   account: EthAccount,
-  setBondingTokenBalance: Dispatch<SetStateAction<string | undefined>>,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
   metapool: IMetaPool,
   bonding: Bonding,
   bondingShare: BondingShare
@@ -204,7 +149,9 @@ export function _depositBondingTokens(
     BigNumber.from(weeksValue),
     provider,
     account,
-    setBondingTokenBalance,
+    manager,
+    balances,
+    setBalances,
     metapool,
     bonding,
     bondingShare
@@ -214,17 +161,14 @@ export function _depositBondingTokens(
 const DepositShare = () => {
   const {
     account,
-    provider,
     manager,
+    provider,
     metapool,
     bonding,
     bondingShare,
-    masterChef,
+    balances,
+    setBalances,
   } = useConnectedContext();
-  const [
-    tokenBondingSharesBalance,
-    setBondingSharesBalance,
-  ] = useState<string>();
 
   useEffect(() => {
     const initializeAccount = async () => {
@@ -235,9 +179,12 @@ const DepositShare = () => {
           bondingShare as BondingShare
         );
         console.log("bondingShareBalance", bondingShareBalance);
-        setBondingSharesBalance(ethers.utils.formatEther(bondingShareBalance));
+        if (balances) {
+          balances.bondingShares = bondingShareBalance;
+          setBalances(balances);
+        }
       } catch (error) {
-        setBondingSharesBalance(undefined);
+        console.log(error);
       }
     };
     console.log("useEffect", account, bondingShare);
@@ -252,15 +199,23 @@ const DepositShare = () => {
     _depositBondingTokens(
       provider,
       account,
-      setBondingSharesBalance,
+      manager,
+      balances,
+      setBalances,
       metapool as IMetaPool,
       bonding as Bonding,
       bondingShare as BondingShare
     );
   const handleBalance = async () => {
     if (bondingShare) {
-      const balance = await calculateBondingShareBalance(account, bondingShare);
-      setBondingSharesBalance(ethers.utils.formatEther(balance));
+      const rawBalance = await calculateBondingShareBalance(
+        account,
+        bondingShare
+      );
+      if (balances) {
+        balances.bondingShares = rawBalance;
+        setBalances(balances);
+      }
     }
   };
   handleBalance();
@@ -268,7 +223,10 @@ const DepositShare = () => {
     <>
       <div className="row">
         <button onClick={handleBalance}>Get Bonding Shares</button>
-        <p className="value">{tokenBondingSharesBalance} Bonding Shares</p>
+        <p className="value">
+          {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
+          Bonding Shares
+        </p>
       </div>
       <div className="row-wrap">
         <input
