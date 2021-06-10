@@ -25,8 +25,7 @@ export async function _getCurveTokenBalance(
 
     const rawBalance = await token.balanceOf(account);
     if (balances) {
-      balances.crv = rawBalance;
-      setBalances(balances);
+      setBalances({ ...balances, crv: rawBalance });
     }
   }
 }

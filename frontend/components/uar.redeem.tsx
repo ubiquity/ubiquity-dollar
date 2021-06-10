@@ -55,9 +55,7 @@ const UarRedeem = () => {
     const rawUARBalance = await uAR.balanceOf(account.address);
     const rawUADBalance = await uAD.balanceOf(account.address);
     if (balances) {
-      balances.uar = rawUARBalance;
-      balances.uad = rawUADBalance;
-      setBalances(balances);
+      setBalances({ ...balances, uad: rawUADBalance, uar: rawUARBalance });
     }
   };
 

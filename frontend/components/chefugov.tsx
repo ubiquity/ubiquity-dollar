@@ -19,8 +19,7 @@ const ChefUgov = () => {
     if (uGov) {
       const rawBalance = await uGov?.balanceOf(account.address);
       if (balances) {
-        balances.ubq = rawBalance;
-        setBalances(balances);
+        setBalances({ ...balances, ubq: rawBalance });
       }
     }
   };

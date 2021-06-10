@@ -27,8 +27,7 @@ export async function _getTokenBalance(
     );
     const rawBalance = await uAD.balanceOf(account);
     if (balances) {
-      balances.uad = rawBalance;
-      setBalances(balances);
+      setBalances({ ...balances, uad: rawBalance });
     }
   }
 }
