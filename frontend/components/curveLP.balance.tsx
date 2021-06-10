@@ -28,8 +28,7 @@ export async function _getLPTokenBalance(
     const metapool = IMetaPool__factory.connect(TOKEN_ADDR, provider);
     const rawBalance = await metapool.balanceOf(account);
     if (balances) {
-      balances.uad3crv = rawBalance;
-      setBalances(balances);
+      setBalances({ ...balances, uad3crv: rawBalance });
     }
   }
 }

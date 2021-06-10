@@ -28,8 +28,7 @@ export async function _getTokenBalance(
     const uAR = UbiquityAutoRedeem__factory.connect(uARRedeem, provider);
     const rawBalance = await uAR.balanceOf(account);
     if (balances) {
-      balances.uar = rawBalance;
-      setBalances(balances);
+      setBalances({ ...balances, uar: rawBalance });
     }
   }
 }

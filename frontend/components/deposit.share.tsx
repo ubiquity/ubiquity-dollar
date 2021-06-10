@@ -62,8 +62,7 @@ async function __depositBondingToken(
       bondingShare
     );
     if (balances) {
-      balances.bondingShares = rawBalance;
-      setBalances(balances);
+      setBalances({ ...balances, bondingShares: rawBalance });
     }
   } else {
     alert(`no provider and account found`);
@@ -180,8 +179,7 @@ const DepositShare = () => {
         );
         console.log("bondingShareBalance", bondingShareBalance);
         if (balances) {
-          balances.bondingShares = bondingShareBalance;
-          setBalances(balances);
+          setBalances({ ...balances, bondingShares: bondingShareBalance });
         }
       } catch (error) {
         console.log(error);
@@ -213,8 +211,7 @@ const DepositShare = () => {
         bondingShare
       );
       if (balances) {
-        balances.bondingShares = rawBalance;
-        setBalances(balances);
+        setBalances({ ...balances, bondingShares: rawBalance });
       }
     }
   };

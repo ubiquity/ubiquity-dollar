@@ -19,8 +19,7 @@ const ChefUgov = () => {
     if (uGov) {
       const rawBalance = await uGov?.balanceOf(account.address);
       if (balances) {
-        balances.ubq = rawBalance;
-        setBalances(balances);
+        setBalances({ ...balances, ubq: rawBalance });
       }
     }
   };
@@ -49,11 +48,18 @@ const ChefUgov = () => {
         <button onClick={handleClaim}>Claim Rewards</button>
         <p className="value">Pending Rewards: {rewards} UBQ</p>
       </div>
-      <div className="row">
-        <button onClick={handleBalance}>Get UBQ Balance</button>
-        <p className="value">
-          {balances ? ethers.utils.formatEther(balances.ubq) : "0.0"} UBQ
-        </p>
+      <div className="column-wrap">
+        <div className="row">
+          <button onClick={handleBalance}>Get UBQ Balance</button>
+          <p className="value">
+            {balances ? ethers.utils.formatEther(balances.ubq) : "0.0"} UBQ
+          </p>{" "}
+        </div>
+        <div>
+          <a href="  https://app.sushi.com/add/0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6">
+            Get UBQ on sushiswap.
+          </a>
+        </div>
       </div>
     </>
   );
