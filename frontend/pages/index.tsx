@@ -3,9 +3,6 @@ import { ethers } from "ethers";
 import FullDeployment from "../src/full_deployment.json";
 import {
   _connect,
-  //_depositBondingTokens,
-  _getTokenBalance,
-  //_getLPTokenBalance,
   _renderControls,
   //_getCurveTokenBalance,
   _renderTasklist,
