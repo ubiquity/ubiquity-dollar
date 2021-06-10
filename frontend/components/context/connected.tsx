@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import {
   createContext,
   Dispatch,
@@ -9,6 +9,7 @@ import {
 import {
   Bonding,
   BondingShare,
+  DebtCouponManager,
   MasterChef,
   UbiquityAlgorithmicDollar,
   UbiquityAlgorithmicDollar__factory,
@@ -17,12 +18,22 @@ import {
 } from "../../src/types";
 import { IMetaPool } from "../../src/types/IMetaPool";
 import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
-import { Account } from "../utils/types";
+import { EthAccount } from "../../utils/types";
+
+export interface Balances {
+  uad: BigNumber;
+  crv: BigNumber;
+  uad3crv: BigNumber;
+  uar: BigNumber;
+  ubq: BigNumber;
+  bondingShares: BigNumber;
+  // window: Window & typeof globalThis;
+}
 
 export interface IConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | undefined;
   provider: ethers.providers.Web3Provider | undefined;
-  account: Account | undefined;
+  account: EthAccount | undefined;
   metapool: IMetaPool | undefined;
   bonding: Bonding | undefined;
   bondingShare: BondingShare | undefined;
@@ -30,8 +41,9 @@ export interface IConnectedContext {
   uAR: UbiquityAutoRedeem | undefined;
   uGov: UbiquityGovernance | undefined;
   uAD: UbiquityAlgorithmicDollar | undefined;
-
-  setAccount: Dispatch<SetStateAction<Account | undefined>>;
+  balances: Balances | undefined;
+  debtCouponMgr: DebtCouponManager | undefined;
+  setAccount: Dispatch<SetStateAction<EthAccount | undefined>>;
   setProvider: Dispatch<
     SetStateAction<ethers.providers.Web3Provider | undefined>
   >;
@@ -45,6 +57,8 @@ export interface IConnectedContext {
   setUAR: Dispatch<SetStateAction<UbiquityAutoRedeem | undefined>>;
   setUGOV: Dispatch<SetStateAction<UbiquityGovernance | undefined>>;
   setUAD: Dispatch<SetStateAction<UbiquityAlgorithmicDollar | undefined>>;
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>;
+  setDebtCouponMgr: Dispatch<SetStateAction<DebtCouponManager | undefined>>;
 }
 export const CONNECTED_CONTEXT_DEFAULT_VALUE = {
   manager: undefined,
@@ -67,6 +81,17 @@ export const CONNECTED_CONTEXT_DEFAULT_VALUE = {
   setUGOV: () => {},
   uAD: undefined,
   setUAD: () => {},
+  balances: {
+    uad: BigNumber.from(0),
+    crv: BigNumber.from(0),
+    uad3crv: BigNumber.from(0),
+    uar: BigNumber.from(0),
+    ubq: BigNumber.from(0),
+    bondingShares: BigNumber.from(0),
+  },
+  setBalances: () => {},
+  debtCouponMgr: undefined,
+  setDebtCouponMgr: () => {},
 };
 const ConnectedContext = createContext<IConnectedContext>(
   CONNECTED_CONTEXT_DEFAULT_VALUE
@@ -79,7 +104,7 @@ interface Props {
 export const ConnectedNetwork = (props: Props) => {
   const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   const [manager, setManager] = useState<UbiquityAlgorithmicDollarManager>();
-  const [account, setAccount] = useState<Account>();
+  const [account, setAccount] = useState<EthAccount>();
   const [metapool, setMetapool] = useState<IMetaPool>();
   const [bonding, setBonding] = useState<Bonding>();
   const [bondingShare, setBondingShare] = useState<BondingShare>();
@@ -87,6 +112,8 @@ export const ConnectedNetwork = (props: Props) => {
   const [uAR, setUAR] = useState<UbiquityAutoRedeem>();
   const [uGov, setUGOV] = useState<UbiquityGovernance>();
   const [uAD, setUAD] = useState<UbiquityAlgorithmicDollar>();
+  const [debtCouponMgr, setDebtCouponMgr] = useState<DebtCouponManager>();
+  const [balances, setBalances] = useState<Balances>();
 
   const value = {
     provider,
@@ -109,6 +136,10 @@ export const ConnectedNetwork = (props: Props) => {
     setUGOV,
     uAD,
     setUAD,
+    balances,
+    setBalances,
+    debtCouponMgr,
+    setDebtCouponMgr,
   };
 
   return (

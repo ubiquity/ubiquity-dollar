@@ -1,21 +1,19 @@
 import { FC, useState } from "react";
 import { ethers } from "ethers";
-import FullDeployment from "../src/uad-contracts-deployment.json";
+import FullDeployment from "../src/full_deployment.json";
 import {
   _connect,
-  _depositBondingTokens,
+  //_depositBondingTokens,
   _getTokenBalance,
-  _getLPTokenBalance,
+  //_getLPTokenBalance,
   _renderControls,
-  _getCurveTokenBalance,
+  //_getCurveTokenBalance,
   _renderTasklist,
-} from "./common";
+} from "../components/common";
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
-  UAD: FullDeployment.contracts.UbiquityAlgorithmicDollar.address,
-  BONDING: FullDeployment.contracts.Bonding.address,
-  BONDING_SHARE: FullDeployment.contracts.BondingShare.address,
+  DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
 };
 
 const Index: FC = (): JSX.Element => {

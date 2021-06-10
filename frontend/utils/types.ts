@@ -1,4 +1,4 @@
-export interface Account {
+export interface EthAccount {
   balance: number;
   address: string;
 }
