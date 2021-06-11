@@ -4,11 +4,11 @@ import { Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
 import {
   DebtCouponManager__factory,
-  UbiquityAutoRedeem__factory,
+  UbiquityAlgorithmicDollar__factory,
 } from "../src/types";
 import { ADDRESS } from "../pages";
 
-const UarRedeem = () => {
+const DebtCouponDeposit = () => {
   const {
     account,
     manager,
@@ -18,28 +18,22 @@ const UarRedeem = () => {
   } = useConnectedContext();
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
-  if (!account || !manager || !balances) {
+  if (!account || !balances) {
     return null;
   }
-  if (balances.uar.lte(BigNumber.from(0))) {
+  if (balances.uad.lte(BigNumber.from(0))) {
     return null;
   }
   const redeem = async (
     amount: BigNumber,
     setBalances: Dispatch<SetStateAction<Balances | undefined>>
   ) => {
-    const SIGNER = provider?.getSigner();
-
-    if (SIGNER) {
-      const debtCouponMgr = DebtCouponManager__factory.connect(
-        ADDRESS.DEBT_COUPON_MANAGER,
-        SIGNER
+    if (provider && account && manager) {
+      const uAD = UbiquityAlgorithmicDollar__factory.connect(
+        await manager.dollarTokenAddress(),
+        provider.getSigner()
       );
-      const uarAdr = await manager.autoRedeemTokenAddress();
-      const uAR = UbiquityAutoRedeem__factory.connect(uarAdr, SIGNER);
-      const uadAdr = await manager.dollarTokenAddress();
-      const uAD = UbiquityAutoRedeem__factory.connect(uadAdr, SIGNER);
-      const allowance = await uAR.allowance(
+      const allowance = await uAD.allowance(
         account.address,
         ADDRESS.DEBT_COUPON_MANAGER
       );
@@ -51,7 +45,7 @@ const UarRedeem = () => {
       );
       if (allowance.lt(amount)) {
         // first approve
-        const approveTransaction = await uAR.approve(
+        const approveTransaction = await uAD.approve(
           ADDRESS.DEBT_COUPON_MANAGER,
           amount
         );
@@ -64,40 +58,50 @@ const UarRedeem = () => {
         );
       }
 
-      const allowance2 = await uAR.allowance(
+      const allowance2 = await uAD.allowance(
         account.address,
         ADDRESS.DEBT_COUPON_MANAGER
       );
       console.log("allowance2", ethers.utils.formatEther(allowance2));
       // redeem uAD
-      const redeemWaiting = await debtCouponMgr.burnAutoRedeemTokensForDollars(
+
+      const debtCouponMgr = DebtCouponManager__factory.connect(
+        ADDRESS.DEBT_COUPON_MANAGER,
+        provider.getSigner()
+      );
+      const redeemWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(
         amount
       );
       await redeemWaiting.wait();
 
       // fetch new uar and uad balance
-      const rawUARBalance = await uAR.balanceOf(account.address);
+      setBalances({
+        ...balances,
+        uad: BigNumber.from(0),
+        debtCoupon: BigNumber.from(0),
+      });
+      /*  const rawUARBalance = await debtCoupon.balanceOf(account.address);
       const rawUADBalance = await uAD.balanceOf(account.address);
       if (balances) {
         setBalances({ ...balances, uad: rawUADBalance, uar: rawUARBalance });
-      }
+      } */
     }
   };
-  const handleRedeem = async () => {
+  const handleBurn = async () => {
     setErrMsg("");
     setIsLoading(true);
-    const uarAmount = document.getElementById("uarAmount") as HTMLInputElement;
-    const uarAmountValue = uarAmount?.value;
-    if (!uarAmountValue) {
-      console.log("uarAmountValue", uarAmountValue);
+    const uadAmount = document.getElementById("uadAmount") as HTMLInputElement;
+    const uadAmountValue = uadAmount?.value;
+    if (!uadAmountValue) {
+      console.log("uadAmountValue", uadAmountValue);
       setErrMsg("amount not valid");
     } else {
-      const amount = ethers.utils.parseEther(uarAmountValue);
+      const amount = ethers.utils.parseEther(uadAmountValue);
       if (BigNumber.isBigNumber(amount)) {
         if (amount.gt(BigNumber.from(0))) {
           await redeem(amount, setBalances);
         } else {
-          setErrMsg("uAR Amount should be greater than 0");
+          setErrMsg("uAD Amount should be greater than 0");
         }
       } else {
         setErrMsg("amount not valid");
@@ -113,11 +117,11 @@ const UarRedeem = () => {
       <div className="row">
         <input
           type="number"
-          name="uarAmount"
-          id="uarAmount"
-          placeholder="uAR amount"
+          name="uadAmount"
+          id="uadAmount"
+          placeholder="uAD amount"
         />
-        <button onClick={handleRedeem}>Redeem uAR for uAD</button>
+        <button onClick={handleBurn}>Burn uAD for uDebt</button>
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
@@ -127,4 +131,4 @@ const UarRedeem = () => {
   );
 };
 
-export default UarRedeem;
+export default DebtCouponDeposit;

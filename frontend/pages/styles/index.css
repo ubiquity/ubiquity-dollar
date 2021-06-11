@@ -33,3 +33,9 @@ button:hover {
   font-weight: bolder;
   color: red;
 }
+
+.info {
+  font-weight: lighter;
+  color: grey;
+  margin-left: 10px;
+}

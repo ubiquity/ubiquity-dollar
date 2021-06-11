@@ -3,38 +3,27 @@ import { ethers, BigNumber } from "ethers";
 
 import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
 import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../src/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
 import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import UadBalance from "./uad.balance";
 import { ADDRESS } from "../pages/index";
 import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { EthAccount } from "../utils/types";
 import Account from "./account";
 import CurveBalance from "./curve.balance";
 import CurveLPBalance from "./curveLP.balance";
+import DepositShareBalance from "./deposit.share.balance";
 import DepositShare from "./deposit.share";
 import UarBalance from "./uar.balance";
 import ChefUgov from "./chefugov";
-import {
-  Bonding,
-  BondingShare,
-  DebtCouponManager,
-  DebtCouponManager__factory,
-  IMetaPool,
-  MasterChef,
-  MasterChef__factory,
-  UbiquityAlgorithmicDollar,
-  UbiquityAutoRedeem,
-  UbiquityGovernance,
-} from "../src/types";
+import { TWAPOracle__factory } from "../src/types";
 import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
 import { UbiquityGovernance__factory } from "../src/types/factories/UbiquityGovernance__factory";
 import TwapPrice from "./twap.price";
 import UarRedeem from "./uar.redeem";
+import DebtCouponDeposit from "./debtCoupon.deposit";
 
 export function _renderTasklist() {
   return (
@@ -58,15 +47,8 @@ export async function _connect(
   setManager: Dispatch<
     SetStateAction<UbiquityAlgorithmicDollarManager | undefined>
   >,
-  setMetapool: Dispatch<SetStateAction<IMetaPool | undefined>>,
-  setBonding: Dispatch<SetStateAction<Bonding | undefined>>,
-  setBondingShare: Dispatch<SetStateAction<BondingShare | undefined>>,
-  setMasterChef: Dispatch<SetStateAction<MasterChef | undefined>>,
-  setUAR: Dispatch<SetStateAction<UbiquityAutoRedeem | undefined>>,
-  setUGOV: Dispatch<SetStateAction<UbiquityGovernance | undefined>>,
-  setUAD: Dispatch<SetStateAction<UbiquityAlgorithmicDollar | undefined>>,
   setBalances: Dispatch<SetStateAction<Balances | undefined>>,
-  setDebtCouponMgr: Dispatch<SetStateAction<DebtCouponManager | undefined>>
+  setTwapPrice: Dispatch<SetStateAction<BigNumber | undefined>>
 ): Promise<void> {
   if (!window.ethereum?.request) {
     alert("MetaMask is not installed!");
@@ -87,78 +69,47 @@ export async function _connect(
   const SIGNER = provider.getSigner();
   const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
   const metapool = IMetaPool__factory.connect(TOKEN_ADDR, SIGNER);
-  const BONDING_ADDR = await manager.bondingContractAddress();
-  const bonding = Bonding__factory.connect(BONDING_ADDR, SIGNER);
-  const BONDING_SHARE_ADDR = await manager.bondingShareAddress();
-  const bondingShare = BondingShare__factory.connect(
-    BONDING_SHARE_ADDR,
-    SIGNER
-  );
-  setMetapool(metapool);
-  setBonding(bonding);
-  setBondingShare(bondingShare);
-  const masterchefAdr = await manager.masterChefAddress();
-  const masterchef = MasterChef__factory.connect(masterchefAdr, SIGNER);
-  setMasterChef(masterchef);
+
   const uarAdr = await manager.autoRedeemTokenAddress();
   const uar = UbiquityAutoRedeem__factory.connect(uarAdr, SIGNER);
-  setUAR(uar);
+  //  setUAR(uar);
   const uGovAdr = await manager.governanceTokenAddress();
   const ugov = UbiquityGovernance__factory.connect(uGovAdr, SIGNER);
-  setUGOV(ugov);
+  //  setUGOV(ugov);
   const uadAdr = await manager.dollarTokenAddress();
   const uad = UbiquityAlgorithmicDollar__factory.connect(uadAdr, SIGNER);
-  setUAD(uad);
+  // setUAD(uad);
+  const CRV_TOKEN_ADDR = await manager.curve3PoolTokenAddress();
+  const crvToken = ERC20__factory.connect(CRV_TOKEN_ADDR, provider);
+
   setBalances({
-    uad: BigNumber.from(0),
-    crv: BigNumber.from(0),
-    uad3crv: BigNumber.from(0),
-    uar: BigNumber.from(0),
-    ubq: BigNumber.from(0),
+    uad: await uad.balanceOf(accounts[0]),
+    crv: await crvToken.balanceOf(accounts[0]),
+    uad3crv: await metapool.balanceOf(accounts[0]),
+    uar: await uar.balanceOf(accounts[0]),
+    ubq: await ugov.balanceOf(accounts[0]),
     bondingShares: BigNumber.from(0),
   });
-  const debtCouponMgr = DebtCouponManager__factory.connect(
-    ADDRESS.DEBT_COUPON_MANAGER,
-    SIGNER
-  );
-  setDebtCouponMgr(debtCouponMgr);
+
+  const TWAP_ADDR = await manager.twapOracleAddress();
+  const twap = TWAPOracle__factory.connect(TWAP_ADDR, provider);
+  const twapPrice = await twap.consult(uadAdr);
+  setTwapPrice(twapPrice);
 }
 
 export function _renderControls() {
   const {
-    account,
-    provider,
-    manager,
     setProvider,
     setAccount,
     setManager,
-    setMetapool,
-    setBonding,
-    setBondingShare,
-    setMasterChef,
-    setUAR,
-    setUGOV,
-    setUAD,
     setBalances,
     balances,
-    setDebtCouponMgr,
+    twapPrice,
+    setTwapPrice,
   } = useConnectedContext();
 
   const connect = async (): Promise<void> =>
-    _connect(
-      setProvider,
-      setAccount,
-      setManager,
-      setMetapool,
-      setBonding,
-      setBondingShare,
-      setMasterChef,
-      setUAR,
-      setUGOV,
-      setUAD,
-      setBalances,
-      setDebtCouponMgr
-    );
+    _connect(setProvider, setAccount, setManager, setBalances, setTwapPrice);
 
   return (
     <>
@@ -174,10 +125,21 @@ export function _renderControls() {
       </div>
       <br />
       <div className="column-wrap">
+        <DepositShareBalance />
         <DepositShare />
         <ChefUgov />
         <TwapPrice />
-        {balances?.uar.gt(BigNumber.from(0)) ? <UarRedeem /> : ""}
+        {balances?.uar.gt(BigNumber.from(0)) &&
+        twapPrice?.gte(ethers.utils.parseEther("1")) ? (
+          <UarRedeem />
+        ) : (
+          ""
+        )}
+        {twapPrice?.lte(ethers.utils.parseEther("1")) ? (
+          <DebtCouponDeposit />
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

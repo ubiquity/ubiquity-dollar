@@ -2,30 +2,37 @@ import { ethers, BigNumber } from "ethers";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Bonding, BondingShare, IMetaPool } from "../src/types";
+import {
+  Bonding,
+  BondingShare,
+  Bonding__factory,
+  IMetaPool,
+  IMetaPool__factory,
+  IUbiquityFormulas__factory,
+} from "../src/types";
 import { EthAccount } from "../utils/types";
 import Image from "next/image";
 
-async function __depositBondingToken(
+async function _allowAndDepositBondingToken(
   lpsAmount: ethers.BigNumber,
   weeks: ethers.BigNumber,
   provider: ethers.providers.Web3Provider | undefined,
   account: EthAccount,
   manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
-  metapool: IMetaPool,
-  bonding: Bonding,
-  bondingShare: BondingShare,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>
 ) {
   if (provider && account && manager) {
     // check approved amount
     // make sure to check balance spendable -- if (lpsAmount) is > spendable then ask approval again
-    console.log(account);
-    //const SIGNER = await provider.getSigner();
+    //console.log(account);
+    const SIGNER = await provider.getSigner();
     const BONDING_ADDR = await manager.bondingContractAddress();
 
+    const metapool = IMetaPool__factory.connect(
+      await manager.stableSwapMetaPoolAddress(),
+      SIGNER
+    );
+    const bonding = Bonding__factory.connect(BONDING_ADDR, SIGNER);
     const allowance = await metapool.allowance(account.address, BONDING_ADDR);
 
     console.log("allowance", ethers.utils.formatEther(allowance));
@@ -49,67 +56,20 @@ async function __depositBondingToken(
 
     const depositWaiting = await bonding.deposit(lpsAmount, weeks);
     await depositWaiting.wait();
-
-    const rawBalance = await calculateBondingShareBalance(
-      account.address,
-      bondingShare
-    );
-    if (balances) {
-      if (!balances.bondingShares.eq(rawBalance))
-        setBalances({ ...balances, bondingShares: rawBalance });
-    }
   } else {
     setErrMsg(`no provider and account found`);
   }
 }
-async function calculateBondingShareBalance(
-  addr: string,
-  bondingShare: BondingShare
-) {
-  console.log({ addr });
-  const ids = await bondingShare.holderTokens(addr);
 
-  let bondingSharesBalance = BigNumber.from("0");
-  if (ids && ids.length > 0) {
-    bondingSharesBalance = await bondingShare.balanceOf(addr, ids[0]);
-  }
-
-  console.log({ ids, bondingSharesBalance });
-
-  //
-  let balance = BigNumber.from("0");
-  if (ids.length > 1) {
-    console.log(` 
-    bondingShares ids 1:${ids[1]} balance:${await bondingShare.balanceOf(
-      addr,
-      ids[1]
-    )}
- 
-    `);
-    const balanceOfs = ids.map((id) => {
-      return bondingShare.balanceOf(addr, id);
-    });
-    const balances = Promise.all(balanceOfs);
-    balance = (await balances).reduce((prev, cur) => {
-      return prev.add(cur);
-    });
-  } else {
-    balance = bondingSharesBalance;
-  }
-
-  return balance;
-}
 async function _depositBondingTokens(
   provider: ethers.providers.Web3Provider | undefined,
   account: EthAccount,
   manager: UbiquityAlgorithmicDollarManager | undefined,
   balances: Balances | undefined,
   setBalances: Dispatch<SetStateAction<Balances | undefined>>,
-  metapool: IMetaPool,
-  bonding: Bonding,
-  bondingShare: BondingShare,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>,
-  setIsLoading: Dispatch<SetStateAction<boolean | undefined>>
+  setIsLoading: Dispatch<SetStateAction<boolean | undefined>>,
+  setPercentage: Dispatch<SetStateAction<string | undefined>>
 ) {
   setErrMsg("");
   setIsLoading(true);
@@ -161,60 +121,59 @@ async function _depositBondingTokens(
     return;
   }
 
-  await __depositBondingToken(
+  await _allowAndDepositBondingToken(
     amount,
     BigNumber.from(weeksValue),
     provider,
     account,
     manager,
-    balances,
-    setBalances,
-    metapool,
-    bonding,
-    bondingShare,
     setErrMsg
   );
+  // trigger bondingShare calculation
+  if (balances) {
+    setBalances({ ...balances, bondingShares: BigNumber.from(0) });
+  }
   setIsLoading(false);
 }
-async function _bondingShareBalance(
-  account: string,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
-  bondingShare: BondingShare | undefined
+
+async function _expectedShares(
+  lpAmount: BigNumber,
+  weeks: BigNumber,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  provider: ethers.providers.Web3Provider | undefined,
+  setExpectedShares: Dispatch<SetStateAction<BigNumber | undefined>>
 ) {
-  if (bondingShare) {
-    const rawBalance = await calculateBondingShareBalance(
-      account,
-      bondingShare
+  if (manager && provider) {
+    const formulaAdr = await manager.formulasAddress();
+    const SIGNER = provider.getSigner();
+    const formula = IUbiquityFormulas__factory.connect(formulaAdr, SIGNER);
+    const bondingAdr = await manager.bondingContractAddress();
+    const bonding = Bonding__factory.connect(bondingAdr, SIGNER);
+    const bondingDiscountMultiplier = await bonding.bondingDiscountMultiplier();
+    const expectedShares = await formula.durationMultiply(
+      lpAmount,
+      weeks,
+      bondingDiscountMultiplier
     );
-    if (balances) {
-      if (!balances.bondingShares.eq(rawBalance))
-        setBalances({ ...balances, bondingShares: rawBalance });
-    }
+
+    setExpectedShares(expectedShares);
   }
 }
+
 const DepositShare = () => {
   const {
     account,
     manager,
     provider,
-    metapool,
-    bonding,
-    bondingShare,
     balances,
     setBalances,
   } = useConnectedContext();
-  useEffect(() => {
-    _bondingShareBalance(
-      account ? account.address : "",
-      balances,
-      setBalances,
-      bondingShare
-    );
-  }, [balances]);
+
+  const [bondingSharePercentage, setPercentage] = useState<string>();
 
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
+  const [expectedShares, setExpectedShares] = useState<BigNumber>();
   if (!account) {
     return null;
   }
@@ -227,44 +186,92 @@ const DepositShare = () => {
       manager,
       balances,
       setBalances,
-      metapool as IMetaPool,
-      bonding as Bonding,
-      bondingShare as BondingShare,
       setErrMsg,
-      setIsLoading
+      setIsLoading,
+      setPercentage
     );
   };
-  const handleBalance = async () => {
-    _bondingShareBalance(
-      account ? account.address : "",
-      balances,
-      setBalances,
-      bondingShare
-    );
+  const handleInputWeeks = async () => {
+    setErrMsg("");
+    setIsLoading(true);
+    const missing = `missing input value for`;
+    const bignumberErr = `can't parse BigNumber from`;
+
+    let subject = `lp token amount`;
+    const lpsAmount = document.getElementById("lpsAmount") as HTMLInputElement;
+    const lpsAmountValue = lpsAmount?.value;
+    if (!lpsAmountValue) {
+      setErrMsg(`${missing} ${subject}`);
+      setIsLoading(false);
+      return;
+    }
+    if (BigNumber.isBigNumber(lpsAmountValue)) {
+      setErrMsg(`${bignumberErr} ${subject}`);
+      setIsLoading(false);
+      return;
+    }
+    const amount = ethers.utils.parseEther(lpsAmountValue);
+    if (!amount.gt(BigNumber.from(0))) {
+      setErrMsg(`${subject} should be greater than 0`);
+      setIsLoading(false);
+      return;
+    }
+
+    subject = `weeks lockup amount`;
+
+    const weeks = document.getElementById("weeks") as HTMLInputElement;
+    const weeksValue = weeks?.value;
+    if (!weeksValue) {
+      setErrMsg(`${missing} ${subject}`);
+      setIsLoading(false);
+      return;
+    }
+    if (BigNumber.isBigNumber(weeksValue)) {
+      setErrMsg(`${bignumberErr} ${subject}`);
+      setIsLoading(false);
+      return;
+    }
+    const weeksAmount = BigNumber.from(weeksValue);
+    if (
+      !weeksAmount.gt(BigNumber.from(0)) ||
+      !weeksAmount.lte(BigNumber.from(208))
+    ) {
+      setErrMsg(`${subject} should be between 1 and 208`);
+      setIsLoading(false);
+      return;
+    }
+
+    _expectedShares(amount, weeksAmount, manager, provider, setExpectedShares);
+    setIsLoading(false);
   };
   return (
     <>
-      <div className="row">
-        <button onClick={handleBalance}>Get Bonding Shares</button>
-        <p className="value">
-          {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
-          Bonding Shares
-        </p>
-      </div>
       <div className="row-wrap">
         <input
           type="number"
           name="lpsAmount"
           id="lpsAmount"
+          onInput={handleInputWeeks}
           placeholder="uAD-3CRV LP Tokens"
         />
-        <input type="number" name="weeks" id="weeks" placeholder="weeks" />
+        <input
+          type="number"
+          name="weeks"
+          id="weeks"
+          onInput={handleInputWeeks}
+          placeholder="weeks"
+        />
         <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
         <p className="error">{errMsg}</p>
       </div>
+      {expectedShares && (
+        <p className="info">
+          expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
+        </p>
+      )}
       <p>
         <a href="https://crv.finance/liquidity">
           Deposit to curve uAD-3CRV pool.

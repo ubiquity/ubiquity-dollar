@@ -1,16 +1,9 @@
-import { ethers, BigNumber } from "ethers";
+import { ethers } from "ethers";
 
-import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
-import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../src/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
-import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
-
-import { ADDRESS } from "../pages/index";
 import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 async function _getCurveTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,
