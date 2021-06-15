@@ -1,16 +1,10 @@
-import { ethers, BigNumber } from "ethers";
+import { ethers } from "ethers";
 
 import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
-import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
-import { Bonding__factory } from "../src/types/factories/Bonding__factory";
-import { BondingShare__factory } from "../src/types/factories/BondingShare__factory";
 import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { UbiquityAutoRedeem } from "../src/types/UbiquityAutoRedeem";
-import { ERC20__factory } from "../src/types/factories/ERC20__factory";
-
 import { ADDRESS } from "../pages/index";
 import { useConnectedContext, Balances } from "./context/connected";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 async function _getTokenBalance(
   provider: ethers.providers.Web3Provider | undefined,

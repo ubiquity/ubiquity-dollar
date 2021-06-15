@@ -1252,7 +1252,7 @@
           ]
         },
         "DebtCoupon": {
-          "address": "0xAd7cceAB6d1633B1760A38650Ad12632B2C7a831",
+          "address": "0xcEFAF85110536eC6F78B0B71624BfA584B6fABa1",
           "abi": [
             {
               "inputs": [
@@ -1338,6 +1338,19 @@
                 }
               ],
               "name": "MintedCoupons",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "account",
+                  "type": "address"
+                }
+              ],
+              "name": "Paused",
               "type": "event"
             },
             {
@@ -1434,25 +1447,30 @@
               "type": "event"
             },
             {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "account",
+                  "type": "address"
+                }
+              ],
+              "name": "Unpaused",
+              "type": "event"
+            },
+            {
               "inputs": [
                 {
                   "internalType": "address",
                   "name": "account",
                   "type": "address"
                 },
-                {
-                  "internalType": "uint256",
-                  "name": "id",
-                  "type": "uint256"
-                }
+                {"internalType": "uint256", "name": "id", "type": "uint256"}
               ],
               "name": "balanceOf",
               "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
+                {"internalType": "uint256", "name": "", "type": "uint256"}
               ],
               "stateMutability": "view",
               "type": "function"
@@ -1472,13 +1490,47 @@
               ],
               "name": "balanceOfBatch",
               "outputs": [
+                {"internalType": "uint256[]", "name": "", "type": "uint256[]"}
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "account",
+                  "type": "address"
+                },
+                {"internalType": "uint256", "name": "id", "type": "uint256"},
+                {"internalType": "uint256", "name": "value", "type": "uint256"}
+              ],
+              "name": "burn",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "account",
+                  "type": "address"
+                },
                 {
                   "internalType": "uint256[]",
-                  "name": "",
+                  "name": "ids",
+                  "type": "uint256[]"
+                },
+                {
+                  "internalType": "uint256[]",
+                  "name": "values",
                   "type": "uint256[]"
                 }
               ],
-              "stateMutability": "view",
+              "name": "burnBatch",
+              "outputs": [],
+              "stateMutability": "nonpayable",
               "type": "function"
             },
             {
@@ -1508,11 +1560,18 @@
               "inputs": [],
               "name": "getTotalOutstandingDebt",
               "outputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
+                {"internalType": "uint256", "name": "", "type": "uint256"}
+              ],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {"internalType": "address", "name": "holder", "type": "address"}
+              ],
+              "name": "holderTokens",
+              "outputs": [
+                {"internalType": "uint256[]", "name": "", "type": "uint256[]"}
               ],
               "stateMutability": "view",
               "type": "function"
@@ -1531,13 +1590,7 @@
                 }
               ],
               "name": "isApprovedForAll",
-              "outputs": [
-                {
-                  "internalType": "bool",
-                  "name": "",
-                  "type": "bool"
-                }
-              ],
+              "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
               "stateMutability": "view",
               "type": "function"
             },
@@ -1552,6 +1605,42 @@
                 }
               ],
               "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {"internalType": "address", "name": "to", "type": "address"},
+                {"internalType": "uint256", "name": "id", "type": "uint256"},
+                {
+                  "internalType": "uint256",
+                  "name": "amount",
+                  "type": "uint256"
+                },
+                {"internalType": "bytes", "name": "data", "type": "bytes"}
+              ],
+              "name": "mint",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {"internalType": "address", "name": "to", "type": "address"},
+                {
+                  "internalType": "uint256[]",
+                  "name": "ids",
+                  "type": "uint256[]"
+                },
+                {
+                  "internalType": "uint256[]",
+                  "name": "amounts",
+                  "type": "uint256[]"
+                },
+                {"internalType": "bytes", "name": "data", "type": "bytes"}
+              ],
+              "name": "mintBatch",
+              "outputs": [],
+              "stateMutability": "nonpayable",
               "type": "function"
             },
             {
@@ -1578,17 +1667,23 @@
               "type": "function"
             },
             {
+              "inputs": [],
+              "name": "pause",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "paused",
+              "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
               "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "from",
-                  "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "to",
-                  "type": "address"
-                },
+                {"internalType": "address", "name": "from", "type": "address"},
+                {"internalType": "address", "name": "to", "type": "address"},
                 {
                   "internalType": "uint256[]",
                   "name": "ids",
@@ -1599,11 +1694,7 @@
                   "name": "amounts",
                   "type": "uint256[]"
                 },
-                {
-                  "internalType": "bytes",
-                  "name": "data",
-                  "type": "bytes"
-                }
+                {"internalType": "bytes", "name": "data", "type": "bytes"}
               ],
               "name": "safeBatchTransferFrom",
               "outputs": [],
@@ -1612,31 +1703,15 @@
             },
             {
               "inputs": [
-                {
-                  "internalType": "address",
-                  "name": "from",
-                  "type": "address"
-                },
-                {
-                  "internalType": "address",
-                  "name": "to",
-                  "type": "address"
-                },
-                {
-                  "internalType": "uint256",
-                  "name": "id",
-                  "type": "uint256"
-                },
+                {"internalType": "address", "name": "from", "type": "address"},
+                {"internalType": "address", "name": "to", "type": "address"},
+                {"internalType": "uint256", "name": "id", "type": "uint256"},
                 {
                   "internalType": "uint256",
                   "name": "amount",
                   "type": "uint256"
                 },
-                {
-                  "internalType": "bytes",
-                  "name": "data",
-                  "type": "bytes"
-                }
+                {"internalType": "bytes", "name": "data", "type": "bytes"}
               ],
               "name": "safeTransferFrom",
               "outputs": [],
@@ -1650,11 +1725,7 @@
                   "name": "operator",
                   "type": "address"
                 },
-                {
-                  "internalType": "bool",
-                  "name": "approved",
-                  "type": "bool"
-                }
+                {"internalType": "bool", "name": "approved", "type": "bool"}
               ],
               "name": "setApprovalForAll",
               "outputs": [],
@@ -1670,14 +1741,24 @@
                 }
               ],
               "name": "supportsInterface",
+              "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+              "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "totalSupply",
               "outputs": [
-                {
-                  "internalType": "bool",
-                  "name": "",
-                  "type": "bool"
-                }
+                {"internalType": "uint256", "name": "", "type": "uint256"}
               ],
               "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [],
+              "name": "unpause",
+              "outputs": [],
+              "stateMutability": "nonpayable",
               "type": "function"
             },
             {
@@ -1689,19 +1770,11 @@
             },
             {
               "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "",
-                  "type": "uint256"
-                }
+                {"internalType": "uint256", "name": "", "type": "uint256"}
               ],
               "name": "uri",
               "outputs": [
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                }
+                {"internalType": "string", "name": "", "type": "string"}
               ],
               "stateMutability": "view",
               "type": "function"

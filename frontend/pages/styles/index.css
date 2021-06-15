@@ -33,3 +33,16 @@ button:hover {
   font-weight: bolder;
   color: red;
 }
+
+.info {
+  font-weight: lighter;
+  color: grey;
+  margin-left: 10px;
+}
+
+.dropdown {
+  position: relative;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  padding: 2px 6px;
+}

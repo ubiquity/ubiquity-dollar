@@ -1,15 +1,25 @@
 import { ethers } from "ethers";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { MasterChef, UbiquityGovernance } from "../src/types";
+import {
+  MasterChef__factory,
+  UbiquityAlgorithmicDollarManager,
+  UbiquityGovernance__factory,
+} from "../src/types";
 
 async function _getUBQBalance(
   account: string,
-  uGov: UbiquityGovernance | undefined,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  provider: ethers.providers.Web3Provider | undefined,
   balances: Balances | undefined,
   setBalances: Dispatch<SetStateAction<Balances | undefined>>
 ): Promise<void> {
-  if (uGov) {
+  const SIGNER = provider?.getSigner();
+  if (SIGNER && manager) {
+    const uGov = UbiquityGovernance__factory.connect(
+      await manager.governanceTokenAddress(),
+      SIGNER
+    );
     const rawBalance = await uGov?.balanceOf(account);
     if (balances) {
       if (!balances.ubq.eq(rawBalance))
@@ -20,11 +30,18 @@ async function _getUBQBalance(
 
 async function _getUBQReward(
   account: string,
-  masterChef: MasterChef | undefined,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  provider: ethers.providers.Web3Provider | undefined,
   reward: string | undefined,
   setRewards: Dispatch<SetStateAction<string | undefined>>
 ): Promise<void> {
-  if (masterChef && account) {
+  const SIGNER = provider?.getSigner();
+
+  if (SIGNER && manager && account) {
+    const masterChef = MasterChef__factory.connect(
+      await manager.masterChefAddress(),
+      SIGNER
+    );
     const balance = await masterChef?.pendingUGOV(account);
     if (balance) {
       if (!(balance.toString() === reward)) {
@@ -34,20 +51,50 @@ async function _getUBQReward(
   }
 }
 
+async function _claimReward(
+  account: string,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  provider: ethers.providers.Web3Provider | undefined,
+  rewards: string | undefined,
+  setRewards: Dispatch<SetStateAction<string | undefined>>,
+  balances: Balances | undefined,
+  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+): Promise<void> {
+  const SIGNER = provider?.getSigner();
+
+  if (SIGNER && manager && account) {
+    const masterChef = MasterChef__factory.connect(
+      await manager.masterChefAddress(),
+      SIGNER
+    );
+
+    await (await masterChef?.getRewards()).wait();
+    await _getUBQReward(account, manager, provider, rewards, setRewards);
+    await _getUBQBalance(account, manager, provider, balances, setBalances);
+  }
+}
+
 const ChefUgov = () => {
   const {
     account,
-    masterChef,
-    uGov,
+    manager,
+    provider,
     balances,
     setBalances,
   } = useConnectedContext();
 
   useEffect(() => {
-    _getUBQBalance(account ? account.address : "", uGov, balances, setBalances);
+    _getUBQBalance(
+      account ? account.address : "",
+      manager,
+      provider,
+      balances,
+      setBalances
+    );
     _getUBQReward(
       account ? account.address : "",
-      masterChef,
+      manager,
+      provider,
       rewards,
       setRewards
     );
@@ -56,12 +103,19 @@ const ChefUgov = () => {
   const [rewards, setRewards] = useState<string>();
 
   const handleBalance = async () => {
-    _getUBQBalance(account ? account.address : "", uGov, balances, setBalances);
+    _getUBQBalance(
+      account ? account.address : "",
+      manager,
+      provider,
+      balances,
+      setBalances
+    );
   };
   const handleReward = async () => {
     _getUBQReward(
       account ? account.address : "",
-      masterChef,
+      manager,
+      provider,
       rewards,
       setRewards
     );
@@ -72,11 +126,15 @@ const ChefUgov = () => {
   }
 
   const handleClaim = async () => {
-    if (masterChef) {
-      await (await masterChef?.getRewards()).wait();
-      await handleReward();
-      await handleBalance();
-    }
+    _claimReward(
+      account ? account.address : "",
+      manager,
+      provider,
+      rewards,
+      setRewards,
+      balances,
+      setBalances
+    );
   };
 
   return (
