@@ -1,7 +1,7 @@
 {
     "license": "MIT",
     "scripts": {
-        "build-debugging": "nodemon --exec hooks/restart.sh",
+        "build-debugging": "export ENV=prod && nodemon --exec hooks/restart.sh",
         "bendev": "./hooks/build.sh &&  cd ./frontend/ && yarn dev",
         "dev": "run-p watch:*",
         "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
