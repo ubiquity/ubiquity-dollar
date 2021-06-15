@@ -7,7 +7,7 @@ yarn
 echo "--- 1 ---"
 yarn add hardhat
 echo "--- 2 ---"
-yes | yarn hardhat compile
+yes | TS_NODE_TRANSPILE_ONLY=1 yarn hardhat compile
 echo "--- 3 ---"
 mkdir -p frontend/src/types
 echo "--- 4 ---"
