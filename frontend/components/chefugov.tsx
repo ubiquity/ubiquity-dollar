@@ -43,10 +43,6 @@ async function _getUBQReward(
       SIGNER
     );
     const balance = await masterChef?.pendingUGOV(account);
-    const x = await masterChef?.pendingUGOV(
-      "0xa1C7bd2e48f7f3922e201705f3491C841135F483"
-    );
-    console.log("--------xxxx", ethers.utils.formatEther(x));
     if (balance) {
       if (!(balance.toString() === reward)) {
         setRewards(ethers.utils.formatEther(balance));
