@@ -4,9 +4,30 @@ import { Dispatch, SetStateAction, useState } from "react";
 import Image from "next/image";
 import {
   DebtCouponManager__factory,
+  ICouponsForDollarsCalculator__factory,
+  UbiquityAlgorithmicDollarManager,
   UbiquityAlgorithmicDollar__factory,
 } from "../src/types";
 import { ADDRESS } from "../pages";
+
+async function _expectedDebtCoupon(
+  amount: BigNumber,
+  manager: UbiquityAlgorithmicDollarManager | undefined,
+  provider: ethers.providers.Web3Provider | undefined,
+  setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
+) {
+  if (manager && provider) {
+    const formulaAdr = await manager.couponCalculatorAddress();
+    const SIGNER = provider.getSigner();
+    const couponCalculator = ICouponsForDollarsCalculator__factory.connect(
+      formulaAdr,
+      SIGNER
+    );
+    const expectedDebtCoupon = await couponCalculator.getCouponAmount(amount);
+    console.log("expectedDebtCoupon", expectedDebtCoupon.toString());
+    setExpectedDebtCoupon(expectedDebtCoupon);
+  }
+}
 
 const DebtCouponDeposit = () => {
   const {
@@ -18,13 +39,15 @@ const DebtCouponDeposit = () => {
   } = useConnectedContext();
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
+  const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
+
   if (!account || !balances) {
     return null;
   }
   if (balances.uad.lte(BigNumber.from(0))) {
     return null;
   }
-  const redeem = async (
+  const depositDollarForDebtCoupons = async (
     amount: BigNumber,
     setBalances: Dispatch<SetStateAction<Balances | undefined>>
   ) => {
@@ -63,16 +86,16 @@ const DebtCouponDeposit = () => {
         ADDRESS.DEBT_COUPON_MANAGER
       );
       console.log("allowance2", ethers.utils.formatEther(allowance2));
-      // redeem uAD
+      // depositDollarForDebtCoupons uAD
 
       const debtCouponMgr = DebtCouponManager__factory.connect(
         ADDRESS.DEBT_COUPON_MANAGER,
         provider.getSigner()
       );
-      const redeemWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(
+      const depositDollarForDebtCouponsWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(
         amount
       );
-      await redeemWaiting.wait();
+      await depositDollarForDebtCouponsWaiting.wait();
 
       // fetch new uar and uad balance
       setBalances({
@@ -87,6 +110,7 @@ const DebtCouponDeposit = () => {
       } */
     }
   };
+
   const handleBurn = async () => {
     setErrMsg("");
     setIsLoading(true);
@@ -99,7 +123,7 @@ const DebtCouponDeposit = () => {
       const amount = ethers.utils.parseEther(uadAmountValue);
       if (BigNumber.isBigNumber(amount)) {
         if (amount.gt(BigNumber.from(0))) {
-          await redeem(amount, setBalances);
+          await depositDollarForDebtCoupons(amount, setBalances);
         } else {
           setErrMsg("uAD Amount should be greater than 0");
         }
@@ -112,6 +136,36 @@ const DebtCouponDeposit = () => {
     setIsLoading(false);
   };
 
+  const handleInputUAD = async () => {
+    setErrMsg("");
+    setIsLoading(true);
+    const missing = `missing input value for`;
+    const bignumberErr = `can't parse BigNumber from`;
+
+    const subject = `uAD amount`;
+    const amountEl = document.getElementById("uadAmount") as HTMLInputElement;
+    const amountValue = amountEl?.value;
+    if (!amountValue) {
+      setErrMsg(`${missing} ${subject}`);
+      setIsLoading(false);
+      return;
+    }
+    if (BigNumber.isBigNumber(amountValue)) {
+      setErrMsg(`${bignumberErr} ${subject}`);
+      setIsLoading(false);
+      return;
+    }
+    const amount = ethers.utils.parseEther(amountValue);
+    if (!amount.gt(BigNumber.from(0))) {
+      setErrMsg(`${subject} should be greater than 0`);
+      setIsLoading(false);
+      return;
+    }
+
+    _expectedDebtCoupon(amount, manager, provider, setExpectedDebtCoupon);
+    setIsLoading(false);
+  };
+
   return (
     <>
       <div className="row">
@@ -120,6 +174,7 @@ const DebtCouponDeposit = () => {
           name="uadAmount"
           id="uadAmount"
           placeholder="uAD amount"
+          onInput={handleInputUAD}
         />
         <button onClick={handleBurn}>Burn uAD for uDebt</button>
         {isLoading && (
@@ -127,6 +182,11 @@ const DebtCouponDeposit = () => {
         )}
         <p className="error">{errMsg}</p>
       </div>
+      {expectedDebtCoupon && (
+        <p className="info">
+          expected uDebt {ethers.utils.formatEther(expectedDebtCoupon)}
+        </p>
+      )}
     </>
   );
 };

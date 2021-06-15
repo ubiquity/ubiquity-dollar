@@ -18,12 +18,18 @@ import DepositShareBalance from "./deposit.share.balance";
 import DepositShare from "./deposit.share";
 import UarBalance from "./uar.balance";
 import ChefUgov from "./chefugov";
-import { TWAPOracle__factory } from "../src/types";
+import {
+  ERC1155Ubiquity,
+  ERC1155Ubiquity__factory,
+  TWAPOracle__factory,
+} from "../src/types";
 import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
 import { UbiquityGovernance__factory } from "../src/types/factories/UbiquityGovernance__factory";
 import TwapPrice from "./twap.price";
 import UarRedeem from "./uar.redeem";
 import DebtCouponDeposit from "./debtCoupon.deposit";
+import DebtCouponBalance from "./debtCoupon.balance";
+import DebtCouponRedeem from "./debtCoupon.redeem";
 
 export function _renderTasklist() {
   return (
@@ -37,6 +43,24 @@ export function _renderTasklist() {
       </ol>
     </>
   );
+}
+async function erc1155BalanceOf(
+  addr: string,
+  erc1155UbiquityCtr: ERC1155Ubiquity
+): Promise<BigNumber> {
+  const treasuryIds = await erc1155UbiquityCtr.holderTokens(addr);
+
+  const balanceOfs = treasuryIds.map((id) => {
+    return erc1155UbiquityCtr.balanceOf(addr, id);
+  });
+  const balances = await Promise.all(balanceOfs);
+  let fullBalance = BigNumber.from(0);
+  if (balances.length > 0) {
+    fullBalance = balances.reduce((prev, cur) => {
+      return prev.add(cur);
+    });
+  }
+  return fullBalance;
 }
 
 export async function _connect(
@@ -82,13 +106,26 @@ export async function _connect(
   const CRV_TOKEN_ADDR = await manager.curve3PoolTokenAddress();
   const crvToken = ERC20__factory.connect(CRV_TOKEN_ADDR, provider);
 
+  const BONDING_TOKEN_ADDR = await manager.bondingShareAddress();
+  const bondingToken = ERC1155Ubiquity__factory.connect(
+    BONDING_TOKEN_ADDR,
+    provider
+  );
+
+  const DEBT_COUPON_TOKEN_ADDR = await manager.debtCouponAddress();
+  const debtCouponToken = ERC1155Ubiquity__factory.connect(
+    DEBT_COUPON_TOKEN_ADDR,
+    provider
+  );
+
   setBalances({
     uad: await uad.balanceOf(accounts[0]),
     crv: await crvToken.balanceOf(accounts[0]),
     uad3crv: await metapool.balanceOf(accounts[0]),
     uar: await uar.balanceOf(accounts[0]),
     ubq: await ugov.balanceOf(accounts[0]),
-    bondingShares: BigNumber.from(0),
+    debtCoupon: await erc1155BalanceOf(accounts[0], debtCouponToken),
+    bondingShares: await erc1155BalanceOf(accounts[0], bondingToken),
   });
 
   const TWAP_ADDR = await manager.twapOracleAddress();
@@ -121,11 +158,14 @@ export function _renderControls() {
         <UadBalance />
         <CurveBalance />
         <CurveLPBalance />
+        <DepositShareBalance />
+      </div>
+      <div className="balance">
         <UarBalance />
+        <DebtCouponBalance />
       </div>
       <br />
       <div className="column-wrap">
-        <DepositShareBalance />
         <DepositShare />
         <ChefUgov />
         <TwapPrice />
@@ -140,6 +180,7 @@ export function _renderControls() {
         ) : (
           ""
         )}
+        {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
       </div>
     </>
   );

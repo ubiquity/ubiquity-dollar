@@ -1,50 +1,25 @@
 import { ethers, BigNumber } from "ethers";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  BondingShare,
-  BondingShare__factory,
-  DebtCoupon,
-  DebtCoupon__factory,
-} from "../src/types";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { DebtCoupon, DebtCoupon__factory } from "../src/types";
 
 async function calculateDebtCouponBalance(
   addr: string,
   debtCoupon: DebtCoupon
 ) {
-  //console.log({ addr });
   const ids = await debtCoupon.holderTokens(addr);
-
-  let bondingSharesBalance = BigNumber.from("0");
-  if (ids && ids.length > 0) {
-    bondingSharesBalance = await debtCoupon.balanceOf(addr, ids[0]);
-  }
-
-  // console.log({ ids, bondingSharesBalance });
-
-  //
-  let balance = BigNumber.from("0");
-  if (ids.length > 1) {
-    /*  console.log(` 
-    bondingShares ids 1:${ids[1]} balance:${await bondingShare.balanceOf(
-      addr,
-      ids[1]
-    )}
- 
-    `); */
-    const balanceOfs = ids.map((id) => {
-      return bondingShare.balanceOf(addr, id);
-    });
-    const balances = Promise.all(balanceOfs);
-    balance = (await balances).reduce((prev, cur) => {
+  const balanceOfs = ids.map((id) => {
+    return debtCoupon.balanceOf(addr, id);
+  });
+  const balances = await Promise.all(balanceOfs);
+  let fullBalance = BigNumber.from(0);
+  if (balances.length > 0) {
+    fullBalance = balances.reduce((prev, cur) => {
       return prev.add(cur);
     });
-  } else {
-    balance = bondingSharesBalance;
   }
-
-  return balance;
+  return fullBalance;
 }
 async function _debtCouponBalance(
   account: string,
@@ -62,8 +37,8 @@ async function _debtCouponBalance(
     if (debtCoupon) {
       const rawBalance = await calculateDebtCouponBalance(account, debtCoupon);
       if (balances) {
-        if (!balances.bondingShares.eq(rawBalance))
-          setBalances({ ...balances, bondingShares: rawBalance });
+        if (!balances.debtCoupon.eq(rawBalance))
+          setBalances({ ...balances, debtCoupon: rawBalance });
       }
     }
   }
@@ -103,12 +78,12 @@ const DebtCouponBalance = () => {
   };
   return (
     <>
-      <div className="row">
-        <button onClick={handleBalance}>Get DebtCoupon</button>
+      <div className="column-wrap">
         <p className="value">
           {balances ? ethers.utils.formatEther(balances.debtCoupon) : "0.0"}{" "}
-          DebtCoupon
+          uDebt
         </p>
+        <button onClick={handleBalance}>Get uDebt</button>
       </div>
     </>
   );

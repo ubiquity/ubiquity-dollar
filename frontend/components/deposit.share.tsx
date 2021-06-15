@@ -68,8 +68,8 @@ async function _depositBondingTokens(
   balances: Balances | undefined,
   setBalances: Dispatch<SetStateAction<Balances | undefined>>,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>,
-  setIsLoading: Dispatch<SetStateAction<boolean | undefined>>,
-  setPercentage: Dispatch<SetStateAction<string | undefined>>
+  setIsLoading: Dispatch<SetStateAction<boolean | undefined>>
+  // setPercentage: Dispatch<SetStateAction<string | undefined>>
 ) {
   setErrMsg("");
   setIsLoading(true);
@@ -169,7 +169,7 @@ const DepositShare = () => {
     setBalances,
   } = useConnectedContext();
 
-  const [bondingSharePercentage, setPercentage] = useState<string>();
+  //const [bondingSharePercentage, setPercentage] = useState<string>();
 
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
@@ -187,8 +187,8 @@ const DepositShare = () => {
       balances,
       setBalances,
       setErrMsg,
-      setIsLoading,
-      setPercentage
+      setIsLoading
+      // setPercentage
     );
   };
   const handleInputWeeks = async () => {

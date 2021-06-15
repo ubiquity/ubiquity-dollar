@@ -61,6 +61,7 @@ async function _bondingShareBalance(
         account,
         bondingShare
       );
+      console.log("##rawBalance:", rawBalance.toString());
       if (balances) {
         if (!balances.bondingShares.eq(rawBalance))
           setBalances({ ...balances, bondingShares: rawBalance });
@@ -118,18 +119,18 @@ const DepositShareBalance = () => {
   };
   return (
     <>
-      <div className="row">
-        <button onClick={handleBalance}>Get Bonding Shares</button>
+      <div className="column-wrap">
         <p className="value">
           {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
           Bonding Shares
         </p>
+        {bondingSharePercentage && (
+          <p className="info">
+            you share represents {bondingSharePercentage} of the pool
+          </p>
+        )}
+        <button onClick={handleBalance}>Get Bonding Shares</button>
       </div>
-      {bondingSharePercentage && (
-        <p className="info">
-          you share represents {bondingSharePercentage} of the pool
-        </p>
-      )}
     </>
   );
 };
