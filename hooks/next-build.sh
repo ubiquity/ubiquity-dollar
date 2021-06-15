@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export TS_NODE_TRANSPILE_ONLY=1;
+
 
 cd contracts/
 echo "--- 0 ---"
@@ -8,7 +8,7 @@ yarn
 echo "--- 1 ---"
 yarn add hardhat
 echo "--- 2 ---"
-yarn hardhat compile
+TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile
 echo "--- 3 ---"
 mkdir -p frontend/src/types
 echo "--- 4 ---"
