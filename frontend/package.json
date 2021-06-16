@@ -4,10 +4,10 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "dev": "yarn && yarn next dev",
+        "dev": "yarn && next dev",
         "build": "../hooks/next-build.sh",
-        "prestart": "yarn next build",
-        "start": "yarn next start",
+        "prestart": "next build",
+        "start": "next start",
         "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write . --ignore-path .gitignore"
     },
