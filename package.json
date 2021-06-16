@@ -14,6 +14,7 @@
         "build": "hooks/next-build.sh"
     },
     "deprecated-scripts": {
+        "setup-build-debugging": "git clone --branch feature/build-vercel https://github.com/pavlovcik/uad-ui-launch.git",
         "build-debugging": "nodemon --exec hooks/restart.sh",
         "bendev": "# ./hooks/build.sh &&  cd ./frontend/ && yarn dev",
         "poststop": "echo 'killed hardhat daemon'",
