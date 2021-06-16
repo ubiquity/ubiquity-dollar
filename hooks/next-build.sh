@@ -16,7 +16,7 @@ cd ../frontend/
 echo "✅ --- 6 ---"
 yarn
 echo "✅ --- 7 ---"
-yarn next build
+next build
 echo "✅ --- 8 ---"
 # yarn next start
 echo "✅ --- 9 ---"
