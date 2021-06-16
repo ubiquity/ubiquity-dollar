@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "yarn && next dev",
         "build": "../hooks/next-build.sh",
-        "prestart": "next build",
+        "prod-build": "next build",
         "start": "next start",
         "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
         "format": "yarn prettier --write . --ignore-path .gitignore"
