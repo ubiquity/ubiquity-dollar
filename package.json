@@ -1,6 +1,9 @@
 {
     "license": "MIT",
     "scripts": {
+        "build": "hooks/next-build.sh",
+        "setup-build-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
+        "build-debugging": "nodemon --exec hooks/restart.sh",
         "dev": "run-p watch:*",
         "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
         "preinstall": "git submodule update --init --recursive --remote",
@@ -10,10 +13,7 @@
         "install:ui": "cd ./frontend/ && yarn install && cd ..",
         "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
         "watch:ui": "cd ./frontend/ && yarn dev",
-        "stop": "kill $(lsof -t -i:8545) || true",
-        "build": "hooks/next-build.sh",
-        "setup-build-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
-        "build-debugging": "nodemon --exec hooks/restart.sh"
+        "stop": "kill $(lsof -t -i:8545) || true"
     },
     "deprecated-scripts": {
         "bendev": "# ./hooks/build.sh &&  cd ./frontend/ && yarn dev",
