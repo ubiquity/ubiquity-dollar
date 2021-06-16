@@ -18,7 +18,7 @@ pwd
 cp -r ./artifacts/types $(pwd)/src/
 echo "✅ --- 5 ---"
 pwd
-cd $(pwd)/
+cd $(pwd)/../frontend/
 echo "✅ --- 6 ---"
 pwd
 yarn
