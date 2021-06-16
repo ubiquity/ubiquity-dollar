@@ -11,11 +11,11 @@
         "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
         "watch:ui": "cd ./frontend/ && yarn dev",
         "stop": "kill $(lsof -t -i:8545) || true",
-        "build": "hooks/next-build.sh"
+        "build": "hooks/next-build.sh",
+        "setup-build-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
+        "build-debugging": "nodemon --exec hooks/restart.sh"
     },
     "deprecated-scripts": {
-        "setup-build-debugging": "git clone --branch feature/build-vercel https://github.com/pavlovcik/uad-ui-launch.git",
-        "build-debugging": "nodemon --exec hooks/restart.sh",
         "bendev": "# ./hooks/build.sh &&  cd ./frontend/ && yarn dev",
         "poststop": "echo 'killed hardhat daemon'",
         "postdev": "run-s stop"
