@@ -15,7 +15,7 @@ pwd
 # mkdir -p ../frontend/src/
 echo "✅ --- 4 ---"
 pwd
-cp -r ./artifacts/types $(pwd)/src/
+cp -r $(pwd)/artifacts/types $(pwd)/src/
 echo "✅ --- 5 ---"
 pwd
 cd $(pwd)/../frontend/
