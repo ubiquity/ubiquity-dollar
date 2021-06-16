@@ -1,7 +1,7 @@
 {
     "license": "MIT",
     "scripts": {
-        "build": "hooks/next-build.sh",
+        "build": "./hooks/next-build.sh",
         "setup-build-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
         "build-debugging": "nodemon --exec hooks/restart.sh",
         "dev": "run-p watch:*",
