@@ -25,6 +25,7 @@ yarn
 echo "✅ --- 7 ---"
 pwd
 next build
+yarn run prestart
 echo "✅ --- 8 ---"
 pwd
 # yarn next start
