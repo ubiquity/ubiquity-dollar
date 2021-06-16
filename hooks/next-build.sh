@@ -17,6 +17,6 @@ echo "✅ --- 6 ---"
 yarn
 echo "✅ --- 7 ---"
 yarn next build
-echo "--- 8 ---"
+echo "✅ --- 8 ---"
 yarn next start
-echo "--- 9 ---"
+echo "✅ --- 9 ---"

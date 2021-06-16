@@ -10,7 +10,8 @@
         "install:ui": "cd ./frontend/ && yarn install && cd ..",
         "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
         "watch:ui": "cd ./frontend/ && yarn dev",
-        "stop": "kill $(lsof -t -i:8545) || true"
+        "stop": "kill $(lsof -t -i:8545) || true",
+        "build": "hooks/next-build.sh"
     },
     "deprecated-scripts": {
         "build-debugging": "nodemon --exec hooks/restart.sh",
