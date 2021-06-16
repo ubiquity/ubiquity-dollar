@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd contracts/
+cd $(pwd)/../contracts/
 echo "✅ --- 0 ---"
 pwd
 yarn
@@ -15,10 +15,10 @@ pwd
 # mkdir -p ../frontend/src/
 echo "✅ --- 4 ---"
 pwd
-cp -r artifacts/types ../frontend/src/
+cp -r ./artifacts/types $(pwd)/src/
 echo "✅ --- 5 ---"
 pwd
-cd ../frontend/
+cd $(pwd)/
 echo "✅ --- 6 ---"
 pwd
 yarn
