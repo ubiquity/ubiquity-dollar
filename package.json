@@ -1,20 +1,22 @@
 {
     "license": "MIT",
     "scripts": {
-        "build-debugging": "nodemon --exec hooks/restart.sh",
-        "bendev": "./hooks/build.sh &&  cd ./frontend/ && yarn dev",
         "dev": "run-p watch:*",
         "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
         "preinstall": "git submodule update --init --recursive --remote",
         "predev": "run-p install:*",
         "prestart": "run-p install:*",
-        "postdev": "run-s stop",
         "install:sol": "cd ./contracts/ && yarn install && cd ..",
         "install:ui": "cd ./frontend/ && yarn install && cd ..",
         "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
         "watch:ui": "cd ./frontend/ && yarn dev",
-        "stop": "kill $(lsof -t -i:8545) || true",
-        "poststop": "echo 'killed hardhat daemon'"
+        "stop": "kill $(lsof -t -i:8545) || true"
+    },
+    "deprecated-scripts": {
+        "build-debugging": "nodemon --exec hooks/restart.sh",
+        "bendev": "# ./hooks/build.sh &&  cd ./frontend/ && yarn dev",
+        "poststop": "echo 'killed hardhat daemon'",
+        "postdev": "run-s stop"
     },
     "dependencies": {
         "nodemon": "^2.0.7",
