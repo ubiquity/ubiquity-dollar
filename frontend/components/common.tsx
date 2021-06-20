@@ -165,12 +165,13 @@ export function _renderControls() {
         <TwapPrice />
 
         <UadBalance />
-        <CurveBalance />
-        <CurveLPBalance />
+
 
         <UarBalance />
         <DebtCouponBalance />
         <UbqBalance />
+        <CurveBalance />
+        <CurveLPBalance />
         <DepositShareBalance />
 
         <DepositShare />

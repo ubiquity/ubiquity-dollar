@@ -174,12 +174,15 @@ span {
     vertical-align: middle;
 }
 
+img,
 svg {
-    fill: #ffffff80;
+    /* fill: #ffffff80; */
+    fill: #00ffffff;
     height: 24px;
     margin-right: 8px;
 }
 
+img,
 svg:hover {
-    fill: #00ffffff;
+    /* fill: #00ffffff; */
 }
