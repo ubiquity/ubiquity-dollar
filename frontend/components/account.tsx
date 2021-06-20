@@ -10,7 +10,7 @@ const Account = () => {
 
   return (
     <>
-      <div className="item">
+      <div>
         <p>Account: {account?.address}</p>
         <p>
           <a href="https://crv.finance">Swap uAD to DAI/USDC/USDT.</a>

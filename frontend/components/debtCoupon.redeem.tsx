@@ -155,7 +155,7 @@ const DebtCouponRedeem = () => {
 
   return (
     <>
-      <div className="row">
+      <div>
         <Dropdown
           arrowClosed={<span className="arrow-closed" />}
           arrowOpen={<span className="arrow-open" />}
@@ -175,7 +175,7 @@ const DebtCouponRedeem = () => {
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
-        <p className="error">{errMsg}</p>
+        <p>{errMsg}</p>
       </div>
     </>
   );

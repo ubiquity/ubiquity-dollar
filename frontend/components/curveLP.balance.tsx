@@ -52,8 +52,8 @@ const CurveLPBalance = () => {
     );
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">
+      <div>
+        <p>
           {balances ? ethers.utils.formatEther(balances.uad3crv) : "0.0"}{" "}
           uAD3CRV-f
         </p>

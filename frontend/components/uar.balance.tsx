@@ -52,8 +52,8 @@ const UarBalance = () => {
     );
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">
+      <div>
+        <p>
           {balances ? ethers.utils.formatEther(balances.uar) : "0.0"} uAR
         </p>
         <button onClick={handleClick}>Get uAR Token Balance</button>

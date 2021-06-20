@@ -56,8 +56,8 @@ const CurveBalance = () => {
     );
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">
+      <div>
+        <p>
           {balances ? ethers.utils.formatEther(balances.crv) : "0.0"} 3CRV
         </p>
         <button onClick={handleClick}>Get curve Token Balance</button>

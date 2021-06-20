@@ -168,7 +168,7 @@ const DebtCouponDeposit = () => {
 
   return (
     <>
-      <div className="row">
+      <div>
         <input
           type="number"
           name="uadAmount"
@@ -180,10 +180,10 @@ const DebtCouponDeposit = () => {
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
-        <p className="error">{errMsg}</p>
+        <p>{errMsg}</p>
       </div>
       {expectedDebtCoupon && (
-        <p className="info">
+        <p>
           expected uDebt {ethers.utils.formatEther(expectedDebtCoupon)}
         </p>
       )}

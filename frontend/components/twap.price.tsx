@@ -41,9 +41,9 @@ const TwapPrice = () => {
 
   return (
     <>
-      <div className="row">
+      <div>
         <button onClick={handleClick}>Get TWAP Price</button>
-        <p className="value">
+        <p>
           uAD TWAP Price: {twapPrice && ethers.utils.formatEther(twapPrice)} $
         </p>
       </div>

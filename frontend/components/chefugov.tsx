@@ -139,15 +139,15 @@ const ChefUgov = () => {
 
   return (
     <>
-      <div className="row">
+      <div>
         <button onClick={handleReward}>Get UBQ Rewards</button>
         <button onClick={handleClaim}>Claim Rewards</button>
-        <p className="value">Pending Rewards: {rewards} UBQ</p>
+        <p>Pending Rewards: {rewards} UBQ</p>
       </div>
-      <div className="column-wrap">
-        <div className="row">
+      <div>
+        <div>
           <button onClick={handleBalance}>Get UBQ Balance</button>
-          <p className="value">
+          <p>
             {balances ? ethers.utils.formatEther(balances.ubq) : "0.0"} UBQ
           </p>{" "}
         </div>

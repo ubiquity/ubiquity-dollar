@@ -246,7 +246,7 @@ const DepositShare = () => {
   };
   return (
     <>
-      <div className="row-wrap">
+      <div>
         <input
           type="number"
           name="lpsAmount"
@@ -265,10 +265,10 @@ const DepositShare = () => {
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
-        <p className="error">{errMsg}</p>
+        <p>{errMsg}</p>
       </div>
       {expectedShares && (
-        <p className="info">
+        <p>
           expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
         </p>
       )}

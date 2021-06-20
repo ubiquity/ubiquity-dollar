@@ -150,22 +150,22 @@ export function _renderControls() {
 
   return (
     <>
-      <div className="column-wrap">
+      <div>
         <button onClick={connect}>Connect Wallet</button>
         <Account />
       </div>
-      <div className="balance">
+      <div>
         <UadBalance />
         <CurveBalance />
         <CurveLPBalance />
         <DepositShareBalance />
       </div>
-      <div className="balance">
+      <div>
         <UarBalance />
         <DebtCouponBalance />
       </div>
       <br />
-      <div className="column-wrap">
+      <div>
         <DepositShare />
         <ChefUgov />
         <TwapPrice />

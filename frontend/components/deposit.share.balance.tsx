@@ -21,12 +21,12 @@ async function calculateBondingShareBalance(
   //
   let balance = BigNumber.from("0");
   if (ids.length > 1) {
-    /*  console.log(` 
+    /*  console.log(`
     bondingShares ids 1:${ids[1]} balance:${await bondingShare.balanceOf(
       addr,
       ids[1]
     )}
- 
+
     `); */
     const balanceOfs = ids.map((id) => {
       return bondingShare.balanceOf(addr, id);
@@ -119,13 +119,13 @@ const DepositShareBalance = () => {
   };
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">
+      <div>
+        <p>
           {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
           Bonding Shares
         </p>
         {bondingSharePercentage && (
-          <p className="info">
+          <p>
             you share represents {bondingSharePercentage} of the pool
           </p>
         )}

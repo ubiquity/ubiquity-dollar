@@ -78,8 +78,8 @@ const DebtCouponBalance = () => {
   };
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">
+      <div>
+        <p>
           {balances ? ethers.utils.formatEther(balances.debtCoupon) : "0.0"}{" "}
           uDebt
         </p>
