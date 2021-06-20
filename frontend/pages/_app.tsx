@@ -15,11 +15,7 @@ export default function MyApp({
   return (
     <ConnectedNetwork>
       <>
-        <header>
-          <div id="logo">
-            <span>Ubiquity Dollar</span>
-          </div>
-        </header>
+
         <Component {...pageProps} />
       </>
     </ConnectedNetwork>

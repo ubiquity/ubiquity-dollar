@@ -8,6 +8,10 @@ header {
     padding: 8px;
 }
 
+header>div {
+    display: inline-block;
+}
+
 #logo {
     background-image: var(--ubiquity-logo-white);
     background-repeat: no-repeat;
@@ -46,8 +50,15 @@ body {
     font-weight: 100;
 }
 
+button:disabled,
+input[type="button"]:disabled {
+    pointer-events: none;
+    opacity: 0;
+}
+
 input,
-button {
+button,
+input[type="button"] {
     font-weight: 100;
     font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
     background: #fff;
@@ -64,7 +75,8 @@ button {
     transition: 0.25s all cubic-bezier(0, 1, 1, 1);
 }
 
-button {
+button,
+input[type="button"] {
     cursor: pointer;
     padding: 8px 16px;
     background-color: #ffffff00;
@@ -73,16 +85,18 @@ button {
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 12px;
-    font-weight: initial
+    font-weight: initial;
 }
 
-button:hover {
+button:hover,
+input[type="button"]:hover {
     border: 1px solid #ffffff00;
     background-color: #ffffff40;
 }
 
 input:hover,
-button:hover {
+button:hover,
+input[type="button"]:hover {
     /* transform: scale(0.99); */
     opacity: 1;
 }

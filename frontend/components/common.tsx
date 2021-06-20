@@ -31,19 +31,6 @@ import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponBalance from "./debtCoupon.balance";
 import DebtCouponRedeem from "./debtCoupon.redeem";
 
-export function _renderTasklist() {
-  return (
-    <>
-      <h1>tasklist</h1>
-      <ol>
-        <li>pending ugov reward</li>
-        <li>bonding shares inputs for weeks and LP token amount</li>
-        <li>link to crv.to</li>
-        <li>convert all wei into ether values</li>
-      </ol>
-    </>
-  );
-}
 async function erc1155BalanceOf(
   addr: string,
   erc1155UbiquityCtr: ERC1155Ubiquity
@@ -145,27 +132,45 @@ export function _renderControls() {
     setTwapPrice,
   } = useConnectedContext();
 
-  const connect = async (): Promise<void> =>
-    _connect(setProvider, setAccount, setManager, setBalances, setTwapPrice);
+  const connect = async (el: React.BaseSyntheticEvent): Promise<void> => {
+    const button = el.target as HTMLButtonElement;
+
+    button.disabled=true;
+    return _connect(
+      setProvider,
+      setAccount,
+      setManager,
+      setBalances,
+      setTwapPrice
+    );
+  };
 
   return (
     <>
       <div id="common">
-        <button onClick={connect}>Connect Wallet</button>
+        <header>
+          <div id="logo">
+            <span>Ubiquity Dollar</span>
+          </div>
+          <div>
+            <input
+              type="button"
+              value="Connect Wallet"
+              onClick={(el) => connect(el)}
+            />
+            {/* <button onClick={connect}>Connect Wallet</button> */}
+          </div>
+        </header>
         <Account />
-      </div>
-      <div>
+
         <UadBalance />
         <CurveBalance />
         <CurveLPBalance />
         <DepositShareBalance />
-      </div>
-      <div>
+
         <UarBalance />
         <DebtCouponBalance />
-      </div>
-      <br />
-      <div>
+
         <DepositShare />
         <ChefUgov />
         <TwapPrice />
