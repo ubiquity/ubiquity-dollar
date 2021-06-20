@@ -55,6 +55,7 @@ header>div {
 }
 
 #balances p,
+#markets aside,
 #inventory aside,
 #chefugov aside,
 #twap-price aside {
@@ -131,6 +132,8 @@ button:disabled,
 input[type="button"]:disabled {
     pointer-events: none;
     opacity: 0.125;
+    background-color: transparent;
+    color: #fff;
 }
 
 input,
@@ -236,4 +239,22 @@ svg:hover {
 #claimer {
     /* background-image: var(--ubiquity-logo-black); */
     /* height: 48px */
+}
+
+#markets>div>div {
+    width: 50%;
+    display: inline-block;
+}
+
+#markets aside {
+    margin: 16px auto
+}
+
+input[value*="Connect"] {
+    background-color: #00ffffff;
+    color: #000
+}
+
+input[value*="Connect"]:hover {
+    background-color: #00ffffff;
 }
