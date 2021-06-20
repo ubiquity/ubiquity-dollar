@@ -23,7 +23,7 @@ header>div {
 }
 
 #common>div::before {
-    content: attr(id);
+    /* content: attr(id); */
     position: absolute;
     right: 0;
     text-transform: uppercase;
@@ -65,12 +65,23 @@ header>div {
     font-weight: initial;
 }
 
+#account {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffffff40
+}
+
+#common>#links {
+    display: block;
+}
+
 body {
     background: rgb(7, 6, 26);
     font-family: sans-serif;
     color: #fff;
     font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
     font-weight: 100;
+    text-align: center;
 }
 
 button:disabled,

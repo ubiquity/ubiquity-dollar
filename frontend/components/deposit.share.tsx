@@ -248,40 +248,33 @@ const DepositShare = () => {
     <>
       <div id="deposit-share">
 
-      <div>
-          <a href="https://crv.to/pool">
-            <input type="button" value="Deposit Liquidity" />
-          </a>
-          <span>(Search "uAD")</span>
+        <div>
+          <input
+            type="number"
+            name="lpsAmount"
+            id="lpsAmount"
+            onInput={handleInputWeeks}
+            placeholder="uAD-3CRV LP Tokens"
+          />
+          <input
+            type="number"
+            name="weeks"
+            id="weeks"
+            onInput={handleInputWeeks}
+            placeholder="weeks"
+          />
+          <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
+          {isLoading && (
+            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          )}
+          <p>{errMsg}</p>
+
+          {expectedShares && (
+            <p>
+              expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
+            </p>
+          )}
         </div>
-<div>
-        <input
-          type="number"
-          name="lpsAmount"
-          id="lpsAmount"
-          onInput={handleInputWeeks}
-          placeholder="uAD-3CRV LP Tokens"
-        />
-        <input
-          type="number"
-          name="weeks"
-          id="weeks"
-          onInput={handleInputWeeks}
-          placeholder="weeks"
-        />
-        <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
-        {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
-        )}
-        <p>{errMsg}</p>
-
-        {expectedShares && (
-          <p>
-            expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
-          </p>
-        )}
-
-</div>
       </div>
     </>
   );

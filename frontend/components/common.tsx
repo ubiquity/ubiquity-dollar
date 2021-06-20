@@ -29,6 +29,7 @@ import TwapPrice from "./twap.price";
 import UarRedeem from "./uar.redeem";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponBalance from "./debtCoupon.balance";
+import UbqBalance from "./ubq.balance";
 import DebtCouponRedeem from "./debtCoupon.redeem";
 
 async function erc1155BalanceOf(
@@ -158,13 +159,8 @@ export function _renderControls() {
               onClick={(el) => connect(el)}
             />
           </div>
-        <Account />
+          <Account />
         </header>
-        <div>
-          <a href="https://crv.to">
-            <input type="button" value="Swap uAD" />
-          </a>
-        </div>
 
         <UadBalance />
         <CurveBalance />
@@ -172,6 +168,7 @@ export function _renderControls() {
 
         <UarBalance />
         <DebtCouponBalance />
+        <UbqBalance />
         <DepositShareBalance />
 
         <DepositShare />
@@ -189,6 +186,27 @@ export function _renderControls() {
           ""
         )}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
+        <div id="links">
+          <div>
+            <a href="https://crv.to/pool">
+              <input type="button" value="Deposit" />
+            </a>
+          </div>
+          <div>
+            <a href="https://crv.to">
+              <input type="button" value="Swap" />
+            </a>
+          </div>
+
+          <p>Search "uAD" on Curve</p>
+
+          <div>
+            <a href="https://app.sushi.com/swap?inputCurrency=0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0&outputCurrency=0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6">
+              <input type="button" value="Get UBQ" />
+            </a>
+          </div>
+
+        </div>
       </div>
     </>
   );
