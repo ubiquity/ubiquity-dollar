@@ -130,7 +130,10 @@ export function _renderControls() {
     balances,
     twapPrice,
     setTwapPrice,
+    account
   } = useConnectedContext();
+
+
 
   const connect = async (el: React.BaseSyntheticEvent): Promise<void> => {
     const button = el.target as HTMLButtonElement;
@@ -167,17 +170,22 @@ export function _renderControls() {
           <Account />
         </header>
 
-        <div id="balances">
-          <UadBalance />
-          <UarBalance />
-          <DebtCouponBalance />
-          <UbqBalance />
-          <CurveBalance />
-          <CurveLPBalance />
-          <p>My Inventory</p>
-        </div>
-        <TwapPrice />
-
+        {balances && (
+          <>
+            <div id="inventory">
+              <UadBalance />
+              <UarBalance />
+              <DebtCouponBalance />
+              <UbqBalance />
+              <CurveBalance />
+              <CurveLPBalance />
+              <p>
+                <aside>My Inventory</aside>
+              </p>
+            </div>
+            <TwapPrice />
+          </>
+        )}
 
         <ChefUgov />
         <DepositShare />

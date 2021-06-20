@@ -28,8 +28,11 @@ header>div {
 }
 
 #account p,
+#account aside,
 #chefugov p,
-#twap-price p {
+#chefugov aside,
+#twap-price p,
+#twap-price aside {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -46,10 +49,13 @@ header>div {
 }
 
 #chefugov p {
-    /* font-size: 20px */
+    background: linear-gradient(to right, #00ffffff, #ffffff00);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 #balances p,
+#inventory aside,
 #chefugov aside,
 #twap-price aside {
     -webkit-text-fill-color: initial;
@@ -229,5 +235,5 @@ svg:hover {
 
 #claimer {
     /* background-image: var(--ubiquity-logo-black); */
-    height: 48px
+    /* height: 48px */
 }
