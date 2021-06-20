@@ -18,13 +18,18 @@ header>div {
 }
 
 #common>div {
-    display: block;
-    margin: 24px auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 24px;
     padding: 8px 16px;
     background-color: #ffffff10;
     /* vertical-align: top; */
     border-radius: 4px;
     position: relative;
+}
+
+#debt-coupon-deposit {
+    min-height: 124px;
 }
 
 #account p,
@@ -40,6 +45,7 @@ header>div {
 
 #twap-price p,
 #chefugov p {
+    font-weight: normal;
     background: linear-gradient(to right, #ffffffff, #ffffff00);
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -120,8 +126,7 @@ header>div {
 }
 
 body {
-    background: rgb(7, 6, 26);
-    font-family: sans-serif;
+    background: #06061a;
     color: #fff;
     font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
     font-weight: 100;
@@ -246,8 +251,8 @@ svg:hover {
     display: inline-block;
 }
 
-#markets aside {
-    margin: 16px auto
+#markets>div {
+    margin: 24px auto
 }
 
 input[value*="Connect"] {
@@ -257,4 +262,11 @@ input[value*="Connect"] {
 
 input[value*="Connect"]:hover {
     background-color: #00ffffff;
+}
+
+#common>#twap-price,
+#common>#chefugov {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

@@ -48,7 +48,7 @@ const TwapPrice = () => {
 
           ${twapPrice && ethers.utils.formatEther(twapPrice)}
         </p>
-        <p><aside>Time Weighted Average Price</aside></p>
+        <aside>Time Weighted Average Price</aside>
       </div>
     </>
   );

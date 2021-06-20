@@ -168,24 +168,10 @@ export function _renderControls() {
           <Account />
         </header>
 
-        {balances && (
-          <>
-            <div id="inventory">
-              <UadBalance />
-              <UarBalance />
-              <DebtCouponBalance />
-              <UbqBalance />
-              <CurveBalance />
-              <CurveLPBalance />
-              <p>
-                <aside>My Inventory</aside>
-              </p>
-            </div>
             <TwapPrice />
-          </>
-        )}
+            <ChefUgov />
 
-        <ChefUgov />
+
         <DepositShare />
         {balances?.uar.gt(BigNumber.from(0)) &&
         twapPrice?.gte(ethers.utils.parseEther("1")) ? (
@@ -200,9 +186,24 @@ export function _renderControls() {
         )}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
 
+
+        {balances && (
+          <>
+            <div id="inventory">
+              <UadBalance />
+              <UarBalance />
+              <DebtCouponBalance />
+              <UbqBalance />
+              <CurveBalance />
+              <CurveLPBalance />
+                <aside>My Inventory</aside>
+            </div>
+          </>
+        )}
+
         <div id="markets">
           <div>
-            <aside>Primary Markets</aside>
+            <aside> Primary Markets</aside>
           </div>
           <div>
           <div id="uad-market">
