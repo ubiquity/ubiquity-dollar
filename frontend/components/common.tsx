@@ -150,7 +150,7 @@ export function _renderControls() {
 
   return (
     <>
-      <div>
+      <div id="common">
         <button onClick={connect}>Connect Wallet</button>
         <Account />
       </div>

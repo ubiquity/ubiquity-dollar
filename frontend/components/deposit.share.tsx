@@ -246,7 +246,7 @@ const DepositShare = () => {
   };
   return (
     <>
-      <div>
+      <div id="deposit-share">
         <input
           type="number"
           name="lpsAmount"

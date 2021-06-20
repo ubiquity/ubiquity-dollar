@@ -155,7 +155,7 @@ const DebtCouponRedeem = () => {
 
   return (
     <>
-      <div>
+      <div id="debt-coupon-redeem">
         <Dropdown
           arrowClosed={<span className="arrow-closed" />}
           arrowOpen={<span className="arrow-open" />}

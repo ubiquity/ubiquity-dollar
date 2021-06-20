@@ -168,7 +168,7 @@ const DebtCouponDeposit = () => {
 
   return (
     <>
-      <div>
+      <div id="debt-coupon-deposit">
         <input
           type="number"
           name="uadAmount"

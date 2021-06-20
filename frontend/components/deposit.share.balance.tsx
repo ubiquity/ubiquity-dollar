@@ -119,7 +119,7 @@ const DepositShareBalance = () => {
   };
   return (
     <>
-      <div>
+      <div id="deposit-share-balance">
         <p>
           {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
           Bonding Shares

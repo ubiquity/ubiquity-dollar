@@ -110,7 +110,7 @@ const UarRedeem = () => {
 
   return (
     <>
-      <div>
+      <div id="uar-redeem">
         <input
           type="number"
           name="uarAmount"

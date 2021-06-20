@@ -52,7 +52,7 @@ const UarBalance = () => {
     );
   return (
     <>
-      <div>
+      <div id="uar-balance">
         <p>
           {balances ? ethers.utils.formatEther(balances.uar) : "0.0"} uAR
         </p>

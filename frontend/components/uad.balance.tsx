@@ -60,7 +60,7 @@ const UadBalance = () => {
 
   return (
     <>
-      <div>
+      <div id="uad-balance">
         <p>
           {balances ? ethers.utils.formatEther(balances.uad) : "0.0"} uAD
         </p>

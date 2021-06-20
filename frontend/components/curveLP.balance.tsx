@@ -52,7 +52,7 @@ const CurveLPBalance = () => {
     );
   return (
     <>
-      <div>
+      <div id="curve-lp-balance">
         <p>
           {balances ? ethers.utils.formatEther(balances.uad3crv) : "0.0"}{" "}
           uAD3CRV-f

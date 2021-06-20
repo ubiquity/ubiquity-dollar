@@ -139,7 +139,7 @@ const ChefUgov = () => {
 
   return (
     <>
-      <div>
+      <div id="chefugov">
         {/* <button onClick={handleReward}>Get UBQ Rewards</button> */}
         <button onClick={handleClaim}>Claim Rewards</button>
         <p>Pending Rewards: {rewards} UBQ</p>

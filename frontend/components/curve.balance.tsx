@@ -56,7 +56,7 @@ const CurveBalance = () => {
     );
   return (
     <>
-      <div>
+      <div id="curve-balance">
         <p>
           {balances ? ethers.utils.formatEther(balances.crv) : "0.0"} 3CRV
         </p>

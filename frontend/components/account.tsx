@@ -10,8 +10,8 @@ const Account = () => {
 
   return (
     <>
-      <div>
-        <p>Account: {account?.address}</p>
+      <div id="account">
+        <p>{account?.address}</p>
         <p>
           <a href="https://crv.to">Swap uAD to DAI/USDC/USDT.</a>
           <br />
