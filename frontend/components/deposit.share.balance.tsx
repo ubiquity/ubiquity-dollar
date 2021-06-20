@@ -120,19 +120,24 @@ const DepositShareBalance = () => {
   return (
     <>
       <div id="deposit-share-balance">
-<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="none" d="M0 0h20v20H0z"/><path d="M10 2s-6.5 5.16-6.5 9.5a6.5 6.5 0 1 0 13 0C16.5 7.16 10 2 10 2zm0 14.5c-2.76 0-5-2.24-5-5 0-2.47 3.1-5.8 5-7.53 1.9 1.73 5 5.05 5 7.53 0 2.76-2.24 5-5 5zm-2.97-4.57c.24 1.66 1.79 2.77 3.4 2.54a.5.5 0 0 1 .57.49c0 .28-.2.47-.42.5a4.013 4.013 0 0 1-4.54-3.39c-.04-.3.19-.57.5-.57.25 0 .46.18.49.43z"/></svg></span>
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path fill="none" d="M0 0h20v20H0z" />
+            <path d="M10 2s-6.5 5.16-6.5 9.5a6.5 6.5 0 1 0 13 0C16.5 7.16 10 2 10 2zm0 14.5c-2.76 0-5-2.24-5-5 0-2.47 3.1-5.8 5-7.53 1.9 1.73 5 5.05 5 7.53 0 2.76-2.24 5-5 5zm-2.97-4.57c.24 1.66 1.79 2.77 3.4 2.54a.5.5 0 0 1 .57.49c0 .28-.2.47-.42.5a4.013 4.013 0 0 1-4.54-3.39c-.04-.3.19-.57.5-.57.25 0 .46.18.49.43z" />
+          </svg>
+        </span>
 
-{/*
+        {/*
         <span>
           {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
           Bonding Shares
         </span> */}
 
         {bondingSharePercentage && (
-          <span>
-            {bondingSharePercentage}
-             {/* ownership of pool. */}
-          </span>
+          <>
+            <span>{bondingSharePercentage}</span>
+            <span> pool ownership.</span>
+          </>
         )}
         {/* <button onClick={handleBalance}>Get Bonding Shares</button> */}
       </div>

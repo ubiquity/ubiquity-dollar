@@ -36,22 +36,30 @@ header>div {
 }
 
 #twap-price p {
+    background: linear-gradient(to right, #ffffffff, #ffffff00);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-size: 32px;
+    max-width: 75%;
+    margin: 16px auto;
 }
 
 #chefugov p {
     font-size: 20px
 }
 
+#balances p,
 #chefugov aside,
 #twap-price aside {
+    -webkit-text-fill-color: initial;
     text-transform: uppercase;
     letter-spacing: 2px;
     font-size: 16px;
 }
 
-#common>div[id*="balance"] {
+#common div[id*="balance"] {
     display: inline-block;
+    margin: 8px 16px;
 }
 
 #common>div::before {
@@ -199,4 +207,26 @@ svg {
 img,
 svg:hover {
     /* fill: #00ffffff; */
+}
+
+img,
+svg {
+    /* fill: #ffffff80; */
+    fill: #00ffffbf;
+    height: 24px;
+    margin-right: 8px;
+}
+
+img,
+svg:hover {
+    /* fill: #00ffffff; */
+}
+
+#chefugov {
+    /* background-size: 48px; */
+}
+
+#claimer {
+    /* background-image: var(--ubiquity-logo-black); */
+    height: 48px
 }

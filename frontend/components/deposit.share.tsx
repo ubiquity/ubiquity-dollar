@@ -12,6 +12,7 @@ import {
 } from "../src/types";
 import { EthAccount } from "../utils/types";
 import Image from "next/image";
+import DepositShareBalance from "./deposit.share.balance";
 
 async function _allowAndDepositBondingToken(
   lpsAmount: ethers.BigNumber,
@@ -249,6 +250,7 @@ const DepositShare = () => {
       <div id="deposit-share">
 
         <div>
+
           <input
             type="number"
             name="lpsAmount"
@@ -276,6 +278,9 @@ const DepositShare = () => {
               expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
             </p>
           )}
+
+<DepositShareBalance />
+
         </div>
       </div>
     </>
