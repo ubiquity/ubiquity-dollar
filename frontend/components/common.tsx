@@ -162,6 +162,8 @@ export function _renderControls() {
           <Account />
         </header>
 
+        <TwapPrice />
+
         <UadBalance />
         <CurveBalance />
         <CurveLPBalance />
@@ -173,7 +175,6 @@ export function _renderControls() {
 
         <DepositShare />
         <ChefUgov />
-        <TwapPrice />
         {balances?.uar.gt(BigNumber.from(0)) &&
         twapPrice?.gte(ethers.utils.parseEther("1")) ? (
           <UarRedeem />

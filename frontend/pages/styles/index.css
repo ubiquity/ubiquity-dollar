@@ -19,10 +19,27 @@ header>div {
     background-color: #ffffff10;
     /* vertical-align: top; */
     border-radius: 4px;
-    position: relative
+    position: relative;
 }
 
-#common>div[id*=balance] {
+#twap-price {
+    /* text-overflow: ellipsis; */
+}
+
+#twap-price p {
+    font-size: 32px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#twap-price aside {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 16px;
+}
+
+#common>div[id*="balance"] {
     display: inline-block;
 }
 
@@ -33,7 +50,7 @@ header>div {
     text-transform: uppercase;
     text-align: right;
     font-weight: 900;
-    opacity: .125;
+    opacity: 0.125;
     padding: 0 8px;
     /* height: 100%; */
     /* transform: translateY(50%); */
@@ -72,7 +89,7 @@ header>div {
 #account {
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #ffffff40
+    color: #ffffff40;
 }
 
 body {
@@ -164,5 +181,5 @@ svg {
 }
 
 svg:hover {
-    fill: #ffffffff;
+    fill: #00ffffff;
 }

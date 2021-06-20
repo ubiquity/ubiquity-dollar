@@ -44,8 +44,9 @@ const TwapPrice = () => {
       <div id="twap-price">
         {/* <button onClick={handleClick}>Get TWAP Price</button> */}
         <p>
-          uAD TWAP Price: ${twapPrice && ethers.utils.formatEther(twapPrice)}
+          ${twapPrice && ethers.utils.formatEther(twapPrice)}
         </p>
+        <p><aside>Time Weighted Average Price</aside></p>
       </div>
     </>
   );
