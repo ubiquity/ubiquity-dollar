@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import "./styles/index.css";
+import './styles/proxima.css'
 
 import { ConnectedNetwork } from "../components/context/connected";
 type MyComponentProps = React.PropsWithChildren<{
