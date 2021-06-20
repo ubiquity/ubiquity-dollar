@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import "./styles/index.css";
-import './styles/proxima.css'
+import "./styles/proxima.css";
 
 import { ConnectedNetwork } from "../components/context/connected";
 type MyComponentProps = React.PropsWithChildren<{
@@ -15,7 +15,11 @@ export default function MyApp({
   return (
     <ConnectedNetwork>
       <>
-        <h1>Ubiquity Dollar</h1>
+        <header>
+          <div id="logo">
+            <span>Ubiquity Dollar</span>
+          </div>
+        </header>
         <Component {...pageProps} />
       </>
     </ConnectedNetwork>
