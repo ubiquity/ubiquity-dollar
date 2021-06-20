@@ -19,7 +19,7 @@ header>div {
 
 #common>div {
     display: block;
-    margin: 8px;
+    margin: 24px auto;
     padding: 8px 16px;
     background-color: #ffffff10;
     /* vertical-align: top; */
@@ -35,7 +35,8 @@ header>div {
     text-overflow: ellipsis;
 }
 
-#twap-price p {
+#twap-price p,
+#chefugov p {
     background: linear-gradient(to right, #ffffffff, #ffffff00);
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -45,7 +46,7 @@ header>div {
 }
 
 #chefugov p {
-    font-size: 20px
+    /* font-size: 20px */
 }
 
 #balances p,

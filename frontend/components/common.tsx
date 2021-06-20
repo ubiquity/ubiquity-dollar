@@ -167,10 +167,19 @@ export function _renderControls() {
           <Account />
         </header>
 
+        <div id="balances">
+          <UadBalance />
+          <UarBalance />
+          <DebtCouponBalance />
+          <UbqBalance />
+          <CurveBalance />
+          <CurveLPBalance />
+          <p>My Inventory</p>
+        </div>
         <TwapPrice />
+
+
         <ChefUgov />
-
-
         <DepositShare />
         {balances?.uar.gt(BigNumber.from(0)) &&
         twapPrice?.gte(ethers.utils.parseEther("1")) ? (
@@ -184,15 +193,7 @@ export function _renderControls() {
           ""
         )}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
-        <div id="balances">
-          <UadBalance />
-          <UarBalance />
-          <DebtCouponBalance />
-          <UbqBalance />
-          <CurveBalance />
-          <CurveLPBalance />
-          <p>My Inventory</p>
-        </div>
+
         <div id="links">
           <div>
             <a href="https://crv.to/pool">
