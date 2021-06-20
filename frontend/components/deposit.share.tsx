@@ -273,7 +273,7 @@ const DepositShare = () => {
         </p>
       )}
       <p>
-        <a href="https://crv.finance/liquidity">
+        <a href="https://crv.to/pool">
           Deposit to curve uAD-3CRV pool.
         </a>
         <br />

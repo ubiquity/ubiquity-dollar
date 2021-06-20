@@ -9,10 +9,10 @@ header {
 }
 
 #logo {
-    background-image: var(--ubiquity-logo-cyan);
+    background-image: var(--ubiquity-logo-white);
     background-repeat: no-repeat;
     background-size: contain;
-    color: #00ffff;
+    color: #fff;
     opacity: 0.5;
     /* height: 24px; */
     font-size: 14px;
@@ -21,11 +21,13 @@ header {
 
 #logo:hover {
     opacity: 1;
+    filter: drop-shadow(0 0 16px #fff);
+    background-image: var(--ubiquity-logo-cyan);
+    color: #0ff;
 }
 
 #logo>span {
     user-select: none;
-    height: 16px;
     width: auto;
     text-align: right;
     display: inline-block;
@@ -64,6 +66,15 @@ button {
 
 button {
     cursor: pointer;
+    padding: 8px 12px;
+    background-color: #ffffff00;
+    border: 1px solid #ffffff40;
+    color: #fff;
+}
+
+button:hover {
+    border: 1px solid #ffffff00;
+    background-color: #ffffff40;
 }
 
 input:hover,

@@ -38,7 +38,7 @@ export function _renderTasklist() {
       <ol>
         <li>pending ugov reward</li>
         <li>bonding shares inputs for weeks and LP token amount</li>
-        <li>link to crv.finance</li>
+        <li>link to crv.to</li>
         <li>convert all wei into ether values</li>
       </ol>
     </>

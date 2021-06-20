@@ -13,7 +13,7 @@ const Account = () => {
       <div>
         <p>Account: {account?.address}</p>
         <p>
-          <a href="https://crv.finance">Swap uAD to DAI/USDC/USDT.</a>
+          <a href="https://crv.to">Swap uAD to DAI/USDC/USDT.</a>
           <br />
           Select pool Ubiquity Algorithmic Dollar (uAD3CRV-f-2)
         </p>
