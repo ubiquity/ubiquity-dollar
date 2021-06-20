@@ -120,14 +120,16 @@ const DepositShareBalance = () => {
   return (
     <>
       <div id="deposit-share-balance">
-        <p>
+{/*
+        <span>
           {balances ? ethers.utils.formatEther(balances.bondingShares) : "0.0"}{" "}
           Bonding Shares
-        </p>
+        </span> */}
+
         {bondingSharePercentage && (
-          <p>
+          <span>
             {bondingSharePercentage} ownership of pool.
-          </p>
+          </span>
         )}
         {/* <button onClick={handleBalance}>Get Bonding Shares</button> */}
       </div>

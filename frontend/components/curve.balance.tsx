@@ -57,9 +57,9 @@ const CurveBalance = () => {
   return (
     <>
       <div id="curve-balance">
-        <p>
+        <span>
           {balances ? ethers.utils.formatEther(balances.crv) : "0.0"} 3CRV
-        </p>
+        </span>
         {/* <button onClick={handleClick}>Get curve Token Balance</button> */}
       </div>
     </>

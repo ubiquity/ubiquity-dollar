@@ -13,13 +13,17 @@ header>div {
 }
 
 #common>div {
-    display: inline-block;
+    display: block;
     margin: 8px;
     padding: 8px 16px;
     background-color: #ffffff10;
-    vertical-align: top;
+    /* vertical-align: top; */
     border-radius: 4px;
     position: relative
+}
+
+#common>div[id*=balance] {
+    display: inline-block;
 }
 
 #common>div::before {
@@ -69,10 +73,6 @@ header>div {
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #ffffff40
-}
-
-#common>#links {
-    display: block;
 }
 
 body {
@@ -151,4 +151,18 @@ input[type="button"]:hover {
     background-color: #f9f9f9;
     min-width: 160px;
     padding: 2px 6px;
+}
+
+span {
+    vertical-align: middle;
+}
+
+svg {
+    fill: #ffffff80;
+    height: 24px;
+    margin-right: 8px;
+}
+
+svg:hover {
+    fill: #ffffffff;
 }
