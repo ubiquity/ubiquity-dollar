@@ -129,7 +129,7 @@ body {
     background: #06061a;
     color: #fff;
     font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
-    font-weight: 100;
+    /* font-weight: 100; */
     text-align: center;
 }
 
