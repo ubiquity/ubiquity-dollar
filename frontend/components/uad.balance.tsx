@@ -64,7 +64,7 @@ const UadBalance = () => {
         <p>
           {balances ? ethers.utils.formatEther(balances.uad) : "0.0"} uAD
         </p>
-        <button onClick={handleClick}>Get uAD Token Balance</button>
+        {/* <button onClick={handleClick}>Get uAD Token Balance</button> */}
       </div>
     </>
   );

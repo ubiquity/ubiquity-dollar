@@ -66,10 +66,14 @@ button {
 
 button {
     cursor: pointer;
-    padding: 8px 12px;
+    padding: 8px 16px;
     background-color: #ffffff00;
     border: 1px solid #ffffff40;
     color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: initial
 }
 
 button:hover {

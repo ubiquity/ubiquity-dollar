@@ -56,7 +56,7 @@ const UarBalance = () => {
         <p>
           {balances ? ethers.utils.formatEther(balances.uar) : "0.0"} uAR
         </p>
-        <button onClick={handleClick}>Get uAR Token Balance</button>
+        {/* <button onClick={handleClick}>Get uAR Token Balance</button> */}
       </div>
     </>
   );

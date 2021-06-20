@@ -83,7 +83,7 @@ const DebtCouponBalance = () => {
           {balances ? ethers.utils.formatEther(balances.debtCoupon) : "0.0"}{" "}
           uDebt
         </p>
-        <button onClick={handleBalance}>Get uDebt</button>
+        {/* <button onClick={handleBalance}>Get uDebt</button> */}
       </div>
     </>
   );

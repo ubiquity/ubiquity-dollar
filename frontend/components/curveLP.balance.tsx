@@ -57,7 +57,7 @@ const CurveLPBalance = () => {
           {balances ? ethers.utils.formatEther(balances.uad3crv) : "0.0"}{" "}
           uAD3CRV-f
         </p>
-        <button onClick={handleClick}>Get LP Token Balance</button>
+        {/* <button onClick={handleClick}>Get LP Token Balance</button> */}
       </div>
     </>
   );

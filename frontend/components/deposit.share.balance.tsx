@@ -129,7 +129,7 @@ const DepositShareBalance = () => {
             you share represents {bondingSharePercentage} of the pool
           </p>
         )}
-        <button onClick={handleBalance}>Get Bonding Shares</button>
+        {/* <button onClick={handleBalance}>Get Bonding Shares</button> */}
       </div>
     </>
   );
