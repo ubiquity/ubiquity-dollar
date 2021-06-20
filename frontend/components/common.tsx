@@ -151,21 +151,26 @@ export function _renderControls() {
         <header>
           <div id="logo">
             <span>Ubiquity Dollar</span>
+            <span>|</span>
+            <span>Staking Dashboard</span>
+            <span></span>
           </div>
           <div>
-            <input
-              type="button"
-              value="Connect Wallet"
-              onClick={(el) => connect(el)}
-            />
+            <span>
+              <input
+                type="button"
+                value="Connect Wallet"
+                onClick={(el) => connect(el)}
+              />
+            </span>
           </div>
+
           <Account />
         </header>
 
         <TwapPrice />
 
         <UadBalance />
-
 
         <UarBalance />
         <DebtCouponBalance />
@@ -207,7 +212,6 @@ export function _renderControls() {
               <input type="button" value="Get UBQ" />
             </a>
           </div>
-
         </div>
       </div>
     </>

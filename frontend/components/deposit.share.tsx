@@ -261,9 +261,11 @@ const DepositShare = () => {
             name="weeks"
             id="weeks"
             onInput={handleInputWeeks}
-            placeholder="weeks"
+            placeholder="Weeks (1-208)"
+            min="1"
+            max="208"
           />
-          <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
+          <button onClick={handleDeposit}>Stake LP</button>
           {isLoading && (
             <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
           )}

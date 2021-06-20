@@ -12,6 +12,11 @@ header>div {
     display: inline-block;
 }
 
+#account {
+    display: block;
+    width: auto
+}
+
 #common>div {
     display: block;
     margin: 8px;
@@ -22,17 +27,23 @@ header>div {
     position: relative;
 }
 
-#twap-price {
-    /* text-overflow: ellipsis; */
-}
-
+#account p,
+#chefugov p,
 #twap-price p {
-    font-size: 32px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
+#twap-price p {
+    font-size: 32px;
+}
+
+#chefugov p {
+    font-size: 20px
+}
+
+#chefugov aside,
 #twap-price aside {
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -104,7 +115,7 @@ body {
 button:disabled,
 input[type="button"]:disabled {
     pointer-events: none;
-    opacity: 0;
+    opacity: 0.125;
 }
 
 input,
@@ -124,14 +135,15 @@ input[type="button"] {
     opacity: 0.75;
     /* transform: scale(1); */
     transition: 0.25s all cubic-bezier(0, 1, 1, 1);
+    min-width: 128px;
 }
 
 button,
 input[type="button"] {
-    cursor: pointer;
-    padding: 8px 16px;
     background-color: #ffffff00;
     border: 1px solid #ffffff40;
+    cursor: pointer;
+    padding: 8px 16px;
     color: #fff;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -150,6 +162,8 @@ button:hover,
 input[type="button"]:hover {
     /* transform: scale(0.99); */
     opacity: 1;
+    filter: drop-shadow(0 0 16px #fff);
+    /* color: #0ff; */
 }
 
 .error {
@@ -177,7 +191,7 @@ span {
 img,
 svg {
     /* fill: #ffffff80; */
-    fill: #00ffffff;
+    fill: #00ffffbf;
     height: 24px;
     margin-right: 8px;
 }
