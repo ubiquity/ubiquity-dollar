@@ -134,8 +134,7 @@ export function _renderControls() {
 
   const connect = async (el: React.BaseSyntheticEvent): Promise<void> => {
     const button = el.target as HTMLButtonElement;
-
-    button.disabled=true;
+    button.disabled = true;
     return _connect(
       setProvider,
       setAccount,
@@ -158,18 +157,22 @@ export function _renderControls() {
               value="Connect Wallet"
               onClick={(el) => connect(el)}
             />
-            {/* <button onClick={connect}>Connect Wallet</button> */}
           </div>
-        </header>
         <Account />
+        </header>
+        <div>
+          <a href="https://crv.to">
+            <input type="button" value="Swap uAD" />
+          </a>
+        </div>
 
         <UadBalance />
         <CurveBalance />
         <CurveLPBalance />
-        <DepositShareBalance />
 
         <UarBalance />
         <DebtCouponBalance />
+        <DepositShareBalance />
 
         <DepositShare />
         <ChefUgov />

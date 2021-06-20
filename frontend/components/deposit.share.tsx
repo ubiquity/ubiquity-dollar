@@ -247,6 +247,14 @@ const DepositShare = () => {
   return (
     <>
       <div id="deposit-share">
+
+      <div>
+          <a href="https://crv.to/pool">
+            <input type="button" value="Deposit Liquidity" />
+          </a>
+          <span>(Search "uAD")</span>
+        </div>
+<div>
         <input
           type="number"
           name="lpsAmount"
@@ -266,19 +274,15 @@ const DepositShare = () => {
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
         <p>{errMsg}</p>
+
+        {expectedShares && (
+          <p>
+            expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
+          </p>
+        )}
+
+</div>
       </div>
-      {expectedShares && (
-        <p>
-          expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
-        </p>
-      )}
-      <p>
-        <a href="https://crv.to/pool">
-          Deposit to curve uAD-3CRV pool.
-        </a>
-        <br />
-        Select pool Ubiquity Algorithmic Dollar (uAD3CRV-f-2){" "}
-      </p>
     </>
   );
 };

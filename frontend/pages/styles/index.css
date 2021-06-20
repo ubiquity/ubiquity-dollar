@@ -12,6 +12,29 @@ header>div {
     display: inline-block;
 }
 
+#common>div {
+    display: inline-block;
+    margin: 8px;
+    padding: 8px 16px;
+    background-color: #ffffff10;
+    vertical-align: top;
+    border-radius: 4px;
+    position: relative
+}
+
+#common>div::before {
+    content: attr(id);
+    position: absolute;
+    right: 0;
+    text-transform: uppercase;
+    text-align: right;
+    font-weight: 900;
+    opacity: .125;
+    padding: 0 8px;
+    /* height: 100%; */
+    /* transform: translateY(50%); */
+}
+
 #logo {
     background-image: var(--ubiquity-logo-white);
     background-repeat: no-repeat;

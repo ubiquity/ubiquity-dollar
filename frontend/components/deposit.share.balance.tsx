@@ -73,7 +73,7 @@ async function _bondingShareBalance(
         const percentageStr = ethers.utils.formatEther(percentage);
 
         setPercentage(
-          percentageStr.slice(0, percentageStr.indexOf(".") + 6) + " %"
+          percentageStr.slice(0, percentageStr.indexOf(".") + 4) + "%"
         );
       }
     }
@@ -126,7 +126,7 @@ const DepositShareBalance = () => {
         </p>
         {bondingSharePercentage && (
           <p>
-            you share represents {bondingSharePercentage} of the pool
+            {bondingSharePercentage} ownership of pool.
           </p>
         )}
         {/* <button onClick={handleBalance}>Get Bonding Shares</button> */}
