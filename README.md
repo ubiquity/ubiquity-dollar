@@ -1,7 +1,5 @@
 # uad-ui
 
-This repo will be outdated until active development is complete.
-
 Personal fork being updated because Vercel offers personal plans for free https://github.com/pavlovcik/uad-ui-launch
 
 ## Getting Started
