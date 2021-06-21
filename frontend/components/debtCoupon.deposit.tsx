@@ -168,7 +168,7 @@ const DebtCouponDeposit = () => {
 
   return (
     <>
-      <div className="row">
+      <div id="debt-coupon-deposit">
         <input
           type="number"
           name="uadAmount"
@@ -176,15 +176,15 @@ const DebtCouponDeposit = () => {
           placeholder="uAD amount"
           onInput={handleInputUAD}
         />
-        <button onClick={handleBurn}>Burn uAD for uDebt</button>
+        <button onClick={handleBurn}>Burn uAD for uDEBT</button>
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
         )}
-        <p className="error">{errMsg}</p>
+        <p>{errMsg}</p>
       </div>
       {expectedDebtCoupon && (
-        <p className="info">
-          expected uDebt {ethers.utils.formatEther(expectedDebtCoupon)}
+        <p>
+          expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}
         </p>
       )}
     </>

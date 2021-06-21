@@ -1,40 +1,49 @@
 {
-  "license": "MIT",
-  "scripts": {
-    "bendev": "./hooks/build.sh &&  cd ./frontend/ && yarn dev",
-    "dev": "run-p watch:*",
-    "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
-    "preinstall": "git submodule update --init --recursive --remote",
-    "predev": "run-p install:*",
-    "prestart": "run-p install:*",
-    "postdev": "run-s stop",
-    "install:sol": "cd ./contracts/ && yarn install && cd ..",
-    "install:ui": "cd ./frontend/ && yarn install && cd ..",
-    "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
-    "watch:ui": "cd ./frontend/ && yarn dev",
-    "stop": "kill $(lsof -t -i:8545) || true",
-    "poststop": "echo 'killed hardhat daemon'"
-  },
-  "dependencies": {
-    "nodemon": "^2.0.7",
-    "npm-run-all": "^4.1.5"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "**/*/cache/",
-      "**/*/artifacts/",
-      "**/*/frontend/",
-      "**/*/node_modules/**/*"
-    ],
-    "events": {
-      "config": "",
-      "exit": "",
-      "crash": "yarn stop",
-      "restart": "clear && printf '\\033[3J'",
-      "start": "clear && printf '\\033[3J'"
+    "license": "MIT",
+    "scripts": {
+        "build": "./hooks/next-build.sh",
+        "setup-build-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
+        "build-debugging": "nodemon --exec hooks/restart.sh",
+        "dev": "run-p watch:*",
+        "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
+        "preinstall": "git submodule update --init --recursive --remote",
+        "predev": "run-p install:*",
+        "prestart": "run-p install:*",
+        "install:sol": "cd ./contracts/ && yarn install && cd ..",
+        "install:ui": "cd ./frontend/ && yarn install && cd ..",
+        "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
+        "watch:ui": "cd ./frontend/ && yarn dev",
+        "stop": "kill $(lsof -t -i:8545) || true"
+    },
+    "deprecated-scripts": {
+        "bendev": "# ./hooks/build.sh &&  cd ./frontend/ && yarn dev",
+        "poststop": "echo 'killed hardhat daemon'",
+        "postdev": "run-s stop"
+    },
+    "dependencies": {
+        "hardhat": "^2.3.3",
+        "next": "^11.0.0",
+        "nodemon": "^2.0.7",
+        "npm-run-all": "^4.1.5",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "**/*/cache/",
+            "**/*/artifacts/",
+            "**/*/frontend/",
+            "**/*/node_modules/**/*"
+        ],
+        "events": {
+            "config": "",
+            "exit": "",
+            "crash": "yarn stop",
+            "restart": "clear && printf '\\033[3J'",
+            "start": "clear && printf '\\033[3J'"
+        }
+    },
+    "devDependencies": {
+        "@types/node": "^15.0.2"
     }
-  },
-  "devDependencies": {
-    "@types/node": "^15.0.2"
-  }
 }

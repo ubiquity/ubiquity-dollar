@@ -78,12 +78,19 @@ const DebtCouponBalance = () => {
   };
   return (
     <>
-      <div className="column-wrap">
-        <p className="value">
-          {balances ? ethers.utils.formatEther(balances.debtCoupon) : "0.0"}{" "}
-          uDebt
-        </p>
-        <button onClick={handleBalance}>Get uDebt</button>
+      <div id="debt-coupon-balance">
+        <div>
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 85.45">
+              <path d="M75 31.81v30.41a3.72 3.72 0 0 1-1.68 3.11l-.18.12L39.36 85a3.75 3.75 0 0 1-3.52.11l-.2-.11L1.86 65.45a3.73 3.73 0 0 1-1.85-3V44.66L11 51l.35.2a31.49 31.49 0 0 0 30.75-.09l.44-.26zM68 17l5.12 3A3.72 3.72 0 0 1 75 23v.13L38.76 44.34l-.33.19a24 24 0 0 1-23.31.15l-.4-.22L0 36V25.76l11 6.32.35.2a31.49 31.49 0 0 0 30.75-.09l.45-.26zM37.5 0a3.75 3.75 0 0 1 1.64.38l.22.12 21.19 12.23L38.8 25.46l-.33.19a24 24 0 0 1-23.31.15l-.4-.22-11.32-6.49L35.64.5a3.64 3.64 0 0 1 1.62-.5z" />
+            </svg>
+          </span>
+          <span>
+            {balances ? ethers.utils.formatEther(balances.debtCoupon) : "0.0"}{" "}
+            uDEBT
+          </span>
+        </div>
+        {/* <button onClick={handleBalance}>Get uDEBT</button> */}
       </div>
     </>
   );

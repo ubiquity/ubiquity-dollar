@@ -1,12 +1,8 @@
-import { FC, useState } from "react";
-import { ethers } from "ethers";
-import FullDeployment from "../src/full_deployment.json";
+import { FC } from "react";
 import {
-  _connect,
-  _renderControls,
-  //_getCurveTokenBalance,
-  _renderTasklist,
+  _renderControls
 } from "../components/common";
+import FullDeployment from "../src/full_deployment.json";
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
@@ -18,23 +14,11 @@ const Index: FC = (): JSX.Element => {
   // const [account, setAccount] = useState<string>();
 
   const renderControls = () =>
-    _renderControls(/* {
-      connect,
-      getTokenBalance,
-      tokenBalance,
-      getLPTokenBalance,
-      tokenLPBalance,
-      depositBondingTokens,
-      tokenBondingSharesBalance,
-      setCurveTokenBalance,
-      getCurveTokenBalance,
-      curveTokenBalance,
-    } */);
+    _renderControls();
 
   return (
     <>
       {renderControls()}
-      {/* {_renderTasklist()} */}
     </>
   );
 };

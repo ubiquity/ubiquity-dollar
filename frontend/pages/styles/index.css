@@ -1,48 +1,272 @@
-body {
-  background: #f8f8f8;
-  font-family: sans-serif;
+:root {
+    --ubiquity-logo-black: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 91.57 104.19'%3E%3Cpath d='M43.28.67 2.5 24.22A5 5 0 0 0 0 28.55v47.09A5 5 0 0 0 2.5 80l40.78 23.55a5 5 0 0 0 5 0L89.07 80a5 5 0 0 0 2.5-4.33V28.55a5 5 0 0 0-2.5-4.33L48.28.67a5 5 0 0 0-5 0zm36.31 25a2 2 0 0 1 0 3.46l-6 3.48c-2.72 1.57-4.11 4.09-5.34 6.3-.18.33-.36.66-.55 1-3 5.24-4.4 10.74-5.64 15.6C59.71 64.76 58 70.1 50.19 72.09a17.76 17.76 0 0 1-8.81 0c-7.81-2-9.53-7.33-11.89-16.59-1.24-4.86-2.64-10.36-5.65-15.6l-.54-1c-1.23-2.21-2.62-4.73-5.34-6.3l-6-3.47a2 2 0 0 1 0-3.47L43.28 7.6a5 5 0 0 1 5 0zM43.28 96.59 8.5 76.51A5 5 0 0 1 6 72.18v-36.1a2 2 0 0 1 3-1.73l6 3.46c1.29.74 2.13 2.25 3.09 4l.6 1c2.59 4.54 3.84 9.41 5 14.11 2.25 8.84 4.58 18 16.25 20.93a23.85 23.85 0 0 0 11.71 0C63.3 75 65.63 65.82 67.89 57c1.2-4.7 2.44-9.57 5-14.1l.59-1.06c1-1.76 1.81-3.27 3.1-4l5.94-3.45a2 2 0 0 1 3 1.73v36.1a5 5 0 0 1-2.5 4.33L48.28 96.59a5 5 0 0 1-5 0z' /%3E%3C/svg%3E");
+    --ubiquity-logo-white: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 91.57 104.19'%3E%3Cpath d='M43.28.67 2.5 24.22A5 5 0 0 0 0 28.55v47.09A5 5 0 0 0 2.5 80l40.78 23.55a5 5 0 0 0 5 0L89.07 80a5 5 0 0 0 2.5-4.33V28.55a5 5 0 0 0-2.5-4.33L48.28.67a5 5 0 0 0-5 0zm36.31 25a2 2 0 0 1 0 3.46l-6 3.48c-2.72 1.57-4.11 4.09-5.34 6.3-.18.33-.36.66-.55 1-3 5.24-4.4 10.74-5.64 15.6C59.71 64.76 58 70.1 50.19 72.09a17.76 17.76 0 0 1-8.81 0c-7.81-2-9.53-7.33-11.89-16.59-1.24-4.86-2.64-10.36-5.65-15.6l-.54-1c-1.23-2.21-2.62-4.73-5.34-6.3l-6-3.47a2 2 0 0 1 0-3.47L43.28 7.6a5 5 0 0 1 5 0zM43.28 96.59 8.5 76.51A5 5 0 0 1 6 72.18v-36.1a2 2 0 0 1 3-1.73l6 3.46c1.29.74 2.13 2.25 3.09 4l.6 1c2.59 4.54 3.84 9.41 5 14.11 2.25 8.84 4.58 18 16.25 20.93a23.85 23.85 0 0 0 11.71 0C63.3 75 65.63 65.82 67.89 57c1.2-4.7 2.44-9.57 5-14.1l.59-1.06c1-1.76 1.81-3.27 3.1-4l5.94-3.45a2 2 0 0 1 3 1.73v36.1a5 5 0 0 1-2.5 4.33L48.28 96.59a5 5 0 0 1-5 0z' fill='%23FFF' /%3E%3C/svg%3E");
+    --ubiquity-logo-cyan: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 91.57 104.19'%3E%3Cpath d='M43.28.67 2.5 24.22A5 5 0 0 0 0 28.55v47.09A5 5 0 0 0 2.5 80l40.78 23.55a5 5 0 0 0 5 0L89.07 80a5 5 0 0 0 2.5-4.33V28.55a5 5 0 0 0-2.5-4.33L48.28.67a5 5 0 0 0-5 0zm36.31 25a2 2 0 0 1 0 3.46l-6 3.48c-2.72 1.57-4.11 4.09-5.34 6.3-.18.33-.36.66-.55 1-3 5.24-4.4 10.74-5.64 15.6C59.71 64.76 58 70.1 50.19 72.09a17.76 17.76 0 0 1-8.81 0c-7.81-2-9.53-7.33-11.89-16.59-1.24-4.86-2.64-10.36-5.65-15.6l-.54-1c-1.23-2.21-2.62-4.73-5.34-6.3l-6-3.47a2 2 0 0 1 0-3.47L43.28 7.6a5 5 0 0 1 5 0zM43.28 96.59 8.5 76.51A5 5 0 0 1 6 72.18v-36.1a2 2 0 0 1 3-1.73l6 3.46c1.29.74 2.13 2.25 3.09 4l.6 1c2.59 4.54 3.84 9.41 5 14.11 2.25 8.84 4.58 18 16.25 20.93a23.85 23.85 0 0 0 11.71 0C63.3 75 65.63 65.82 67.89 57c1.2-4.7 2.44-9.57 5-14.1l.59-1.06c1-1.76 1.81-3.27 3.1-4l5.94-3.45a2 2 0 0 1 3 1.73v36.1a5 5 0 0 1-2.5 4.33L48.28 96.59a5 5 0 0 1-5 0z' fill='%230FF'  /%3E%3C/svg%3E");
 }
 
-button {
-  cursor: pointer;
+header {
+    padding: 8px;
+}
+
+header>div {
+    display: inline-block;
+}
+
+#account {
+    display: block;
+    width: auto
+}
+
+#common>div {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 24px;
+    padding: 8px 16px;
+    background-color: #ffffff10;
+    /* vertical-align: top; */
+    border-radius: 4px;
+    position: relative;
+}
+
+#debt-coupon-deposit {
+    min-height: 124px;
+}
+
+#account p,
+#account aside,
+#chefugov p,
+#chefugov aside,
+#twap-price p,
+#twap-price aside {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#twap-price p,
+#chefugov p {
+    font-weight: normal;
+    background: linear-gradient(to right, #ffffffff, #ffffff00);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 32px;
+    max-width: 75%;
+    margin: 16px auto;
+}
+
+#chefugov p {
+    background: linear-gradient(to right, #00ffffff, #ffffff00);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+#balances p,
+#markets aside,
+#inventory aside,
+#chefugov aside,
+#twap-price aside {
+    -webkit-text-fill-color: initial;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 16px;
+}
+
+#common div[id*="balance"] {
+    display: inline-block;
+    margin: 8px 16px;
+}
+
+#common>div::before {
+    /* content: attr(id); */
+    position: absolute;
+    right: 0;
+    text-transform: uppercase;
+    text-align: right;
+    font-weight: 900;
+    opacity: 0.125;
+    padding: 0 8px;
+    /* height: 100%; */
+    /* transform: translateY(50%); */
+}
+
+#logo {
+    background-image: var(--ubiquity-logo-white);
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: #fff;
+    opacity: 0.5;
+    /* height: 24px; */
+    font-size: 14px;
+    padding: 4px 6px;
+}
+
+#logo:hover {
+    opacity: 1;
+    filter: drop-shadow(0 0 16px #fff);
+    background-image: var(--ubiquity-logo-cyan);
+    color: #0ff;
+}
+
+#logo>span {
+    user-select: none;
+    width: auto;
+    text-align: right;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    padding-left: 26px;
+    text-rendering: optimizeLegibility;
+    font-weight: initial;
+}
+
+#account {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #ffffff40;
+}
+
+body {
+    background: #06061a;
+    color: #fff;
+    font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
+    /* font-weight: 100; */
+    text-align: center;
+}
+
+button:disabled,
+input[type="button"]:disabled {
+    pointer-events: none;
+    opacity: 0.125;
+    background-color: transparent;
+    color: #fff;
 }
 
 input,
-button {
-  background: #fff;
-  box-shadow: 0 0 48px #00000040;
-  appearance: none;
-  border: none;
-  height: 32px;
-  border-radius: 4px;
-  /* text-indent: 4px; */
-  padding: 0 8px;
-  margin: 8px;
-  opacity: 0.75;
-  transform: scale(1);
-  transition: 0.25s all cubic-bezier(0, 1, 1, 1);
+button,
+input[type="button"] {
+    font-weight: 100;
+    font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
+    background: #fff;
+    box-shadow: 0 0 48px #00000040;
+    appearance: none;
+    border: none;
+    height: 32px;
+    border-radius: 4px;
+    /* text-indent: 4px; */
+    padding: 0 8px;
+    margin: 8px;
+    opacity: 0.75;
+    /* transform: scale(1); */
+    transition: 0.25s all cubic-bezier(0, 1, 1, 1);
+    min-width: 128px;
+}
+
+button,
+input[type="button"] {
+    background-color: #ffffff00;
+    border: 1px solid #ffffff40;
+    cursor: pointer;
+    padding: 8px 16px;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 12px;
+    font-weight: initial;
+}
+
+button:hover,
+input[type="button"]:hover {
+    border: 1px solid #ffffff00;
+    background-color: #ffffff40;
 }
 
 input:hover,
-button:hover {
-  transform: scale(0.99);
-  opacity: 1;
+button:hover,
+input[type="button"]:hover {
+    /* transform: scale(0.99); */
+    opacity: 1;
+    filter: drop-shadow(0 0 16px #fff);
+    /* color: #0ff; */
 }
 
 .error {
-  font-weight: bolder;
-  color: red;
+    font-weight: bolder;
+    color: red;
 }
 
 .info {
-  font-weight: lighter;
-  color: grey;
-  margin-left: 10px;
+    font-weight: lighter;
+    color: grey;
+    margin-left: 10px;
 }
 
 .dropdown {
-  position: relative;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  padding: 2px 6px;
+    position: relative;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    padding: 2px 6px;
+}
+
+span {
+    vertical-align: middle;
+}
+
+img,
+svg {
+    /* fill: #ffffff80; */
+    fill: #00ffffbf;
+    height: 24px;
+    margin-right: 8px;
+}
+
+img,
+svg:hover {
+    /* fill: #00ffffff; */
+}
+
+img,
+svg {
+    /* fill: #ffffff80; */
+    fill: #00ffffbf;
+    height: 24px;
+    margin-right: 8px;
+}
+
+img,
+svg:hover {
+    /* fill: #00ffffff; */
+}
+
+#chefugov {
+    /* background-size: 48px; */
+}
+
+#claimer {
+    /* background-image: var(--ubiquity-logo-black); */
+    /* height: 48px */
+}
+
+#markets>div>div {
+    width: 50%;
+    display: inline-block;
+}
+
+#markets>div {
+    margin: 24px auto
+}
+
+input[value*="Connect"] {
+    background-color: #00ffffff;
+    color: #000
+}
+
+input[value*="Connect"]:hover {
+    background-color: #00ffffff;
+}
+
+#common>#twap-price,
+#common>#chefugov {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

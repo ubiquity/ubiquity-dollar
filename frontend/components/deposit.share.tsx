@@ -12,6 +12,7 @@ import {
 } from "../src/types";
 import { EthAccount } from "../utils/types";
 import Image from "next/image";
+import DepositShareBalance from "./deposit.share.balance";
 
 async function _allowAndDepositBondingToken(
   lpsAmount: ethers.BigNumber,
@@ -246,39 +247,42 @@ const DepositShare = () => {
   };
   return (
     <>
-      <div className="row-wrap">
-        <input
-          type="number"
-          name="lpsAmount"
-          id="lpsAmount"
-          onInput={handleInputWeeks}
-          placeholder="uAD-3CRV LP Tokens"
-        />
-        <input
-          type="number"
-          name="weeks"
-          id="weeks"
-          onInput={handleInputWeeks}
-          placeholder="weeks"
-        />
-        <button onClick={handleDeposit}>Deposit Bonding Token Balance</button>
-        {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
-        )}
-        <p className="error">{errMsg}</p>
+      <div id="deposit-share">
+
+        <div>
+
+          <input
+            type="number"
+            name="lpsAmount"
+            id="lpsAmount"
+            onInput={handleInputWeeks}
+            placeholder="uAD-3CRV LP Tokens"
+          />
+          <input
+            type="number"
+            name="weeks"
+            id="weeks"
+            onInput={handleInputWeeks}
+            placeholder="Weeks (1-208)"
+            min="1"
+            max="208"
+          />
+          <button onClick={handleDeposit}>Stake LP</button>
+          {isLoading && (
+            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          )}
+          <p>{errMsg}</p>
+
+          {expectedShares && (
+            <p>
+              expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
+            </p>
+          )}
+
+<DepositShareBalance />
+
+        </div>
       </div>
-      {expectedShares && (
-        <p className="info">
-          expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
-        </p>
-      )}
-      <p>
-        <a href="https://crv.finance/liquidity">
-          Deposit to curve uAD-3CRV pool.
-        </a>
-        <br />
-        Select pool Ubiquity Algorithmic Dollar (uAD3CRV-f-2){" "}
-      </p>
     </>
   );
 };
