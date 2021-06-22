@@ -144,18 +144,17 @@ const DepositShareRedeem = () => {
 
       const isAllowed2 = await bondingShare.isApprovedForAll(
         account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
+        bondingAdr
       );
       console.log("isAllowed2", isAllowed2);
 
       const bonding = Bonding__factory.connect(
-        bondingShareAdr,
+        bondingAdr,
         provider.getSigner()
       );
-      const redeemWaiting = await bonding.withdraw(
-        amount,
-        BigNumber.from(debtId)
-      );
+      console.log("amount", amount.toString());
+      console.log("debtId", BigNumber.from(debtId).toString());
+      const redeemWaiting = await bonding.withdraw(amount, debtId);
       await redeemWaiting.wait();
 
       // fetch new uar and uad balance
