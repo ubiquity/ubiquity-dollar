@@ -6,6 +6,7 @@
 
 header {
     padding: 8px;
+    background-color: #000000
 }
 
 header>div {
@@ -68,9 +69,10 @@ div[id^="inventory-"] aside,
 #twap-price aside {
     -webkit-text-fill-color: initial;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 16px;
+    letter-spacing: 3px;
+    font-size: 14px;
     color: #ffffff80;
+    text-rendering: optimizeLegibility;
 }
 
 #common div[id$="balance"] {
@@ -134,6 +136,7 @@ body {
     font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
     /* font-weight: 100; */
     text-align: center;
+    margin: 0
 }
 
 div#background {
