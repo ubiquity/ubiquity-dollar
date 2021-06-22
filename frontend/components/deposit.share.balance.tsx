@@ -73,7 +73,8 @@ async function _bondingShareBalance(
         const percentageStr = ethers.utils.formatEther(percentage);
 
         setPercentage(
-          percentageStr.slice(0, percentageStr.indexOf(".") + 4) + "%"
+          `${percentageStr}%`
+          // percentageStr.slice(0, percentageStr.indexOf(".") + 4) + "%"
         );
       }
     }
