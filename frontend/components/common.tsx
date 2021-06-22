@@ -250,7 +250,7 @@ export function _renderControls() {
               <UbqBalance />
               <CurveBalance />
               <CurveLPBalance />
-                <aside>My Inventory</aside>
+              <aside>My Ubiquity Inventory</aside>
             </div>
           </>
         )}
@@ -264,7 +264,8 @@ export function _renderControls() {
               <UbqBalance />
               <CurveBalance />
               <CurveLPBalance />
-                <aside>My Inventory</aside>
+
+                <aside>My Ubiquity Inventory</aside>
             </div>
           </>
         )}

@@ -155,7 +155,8 @@ div#background {
 }
 
 button:disabled,
-input[type="button"]:disabled {
+input[type="button"]:disabled,
+:disabled {
     pointer-events: none;
     opacity: 0.125;
     background-color: transparent;
