@@ -35,7 +35,7 @@ const _getDebtIds = async (
       debtIds === undefined ||
       debtIds.length !== ids.length ||
       debtIds
-        .map((cur, i) => ids[i].eq(BigNumber.from(cur.id)))
+        .map((cur, i) => ids[i].eq(BigNumber.from((cur as Option).id)))
         .filter((p) => p === false).length > 0
     ) {
       const sharesToRedeem: InputValue[] = [];
@@ -209,8 +209,10 @@ const DepositShareRedeem = () => {
           className="dropdown"
           options={debtIds ?? []}
           onChange={(opt) => {
-            setDebtId(opt.id.toString() as string);
-            setDebtAmount(ethers.utils.formatEther(opt.value));
+            if (opt && opt.id && opt.value) {
+              setDebtId(opt.id.toString() as string);
+              setDebtAmount(ethers.utils.formatEther(opt.value as BigNumber));
+            }
           }}
         />
 
