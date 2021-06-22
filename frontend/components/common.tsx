@@ -147,6 +147,7 @@ export function _renderControls() {
 
   return (
     <>
+      <div id="background"></div>
       <div id="common">
         <header>
           <div id="logo">
@@ -187,19 +188,7 @@ export function _renderControls() {
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
 
 
-        {balances && (
-          <>
-            <div id="inventory">
-              <UadBalance />
-              <UarBalance />
-              <DebtCouponBalance />
-              <UbqBalance />
-              <CurveBalance />
-              <CurveLPBalance />
-                <aside>My Inventory</aside>
-            </div>
-          </>
-        )}
+
 
         <div id="markets">
           <div>
@@ -251,6 +240,36 @@ export function _renderControls() {
           </div>
           </div>
         </div>
+
+        {balances && (
+          <>
+            <div id="inventory-bottom">
+              <UadBalance />
+              <UarBalance />
+              <DebtCouponBalance />
+              <UbqBalance />
+              <CurveBalance />
+              <CurveLPBalance />
+              <aside>My Ubiquity Inventory</aside>
+            </div>
+          </>
+        )}
+
+        {balances && (
+          <>
+            <div id="inventory-top">
+              <UadBalance />
+              <UarBalance />
+              <DebtCouponBalance />
+              <UbqBalance />
+              <CurveBalance />
+              <CurveLPBalance />
+
+                <aside>My Ubiquity Inventory</aside>
+            </div>
+          </>
+        )}
+
       </div>
     </>
   );

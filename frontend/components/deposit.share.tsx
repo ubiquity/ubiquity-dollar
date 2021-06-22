@@ -248,10 +248,10 @@ const DepositShare = () => {
   return (
     <>
       <div id="deposit-share">
-
+        <p>bonding share deposits are temporarily overallocated: announcement coming soon.</p>
         <div>
-
           <input
+          disabled
             type="number"
             name="lpsAmount"
             id="lpsAmount"
@@ -259,6 +259,7 @@ const DepositShare = () => {
             placeholder="uAD-3CRV LP Tokens"
           />
           <input
+          disabled
             type="number"
             name="weeks"
             id="weeks"
@@ -267,7 +268,7 @@ const DepositShare = () => {
             min="1"
             max="208"
           />
-          <button onClick={handleDeposit}>Stake LP</button>
+          <button disabled onClick={handleDeposit}>Stake LP</button>
           {isLoading && (
             <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
           )}
@@ -279,8 +280,7 @@ const DepositShare = () => {
             </p>
           )}
 
-<DepositShareBalance />
-
+          <DepositShareBalance />
         </div>
       </div>
     </>
