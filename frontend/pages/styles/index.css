@@ -75,10 +75,12 @@ div[id^="inventory-"] aside,
     text-rendering: optimizeLegibility;
 }
 
-#common div[id$="balance"] {
+#inventory-top>div>div {
     display: inline-block;
     margin: 8px 16px;
+    height: 24px;
     /* float: left; */
+    /* background: red; */
 }
 
 #common>div::before {
@@ -306,11 +308,6 @@ input[value*="Connect"]:hover {
     height: 48px;
 }
 
-#common>#inventory-bottom {
-    position: relative;
-    visibility: hidden;
-}
-
 div[id^="inventory-"] aside {
     margin: 8px auto;
     display: inline-block;
@@ -332,4 +329,41 @@ div[id^="inventory-"]>div {
     width: 1440px;
     display: inline-block;
     height: 48px;
+    vertical-align: middle;
+}
+
+div[id^="inventory-"] figure {
+    /* background: green; */
+    display: inline-block;
+    height: 4px;
+    width: 4px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    border: 2px solid #ffffff80;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-radius: 1px;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-fill-mode: none;
+    animation-play-state: running;
+    animation-name: inventory-chevron;
+    transform: rotate(45deg);
+}
+
+@keyframes inventory-chevron {
+    0% {
+        transform: rotate(45deg) translateX(0px) translateY(0px);
+    }
+    50% {
+        transform: rotate(45deg) translateX(50%) translateY(-50%);
+    }
+    100% {
+        transform: rotate(45deg) translateX(0px) translateY(0px);
+    }
 }

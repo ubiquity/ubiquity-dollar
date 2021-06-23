@@ -250,7 +250,10 @@ export function _renderControls() {
           <>
             <div id="inventory-top">
               <div>
+                <div>
                 <aside>My Ubiquity Inventory</aside>
+                <figure></figure>
+                </div>
                 <UadBalance />
                 <UarBalance />
                 <DebtCouponBalance />
