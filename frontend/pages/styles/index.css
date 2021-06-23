@@ -6,7 +6,7 @@
 
 header {
     padding: 8px;
-    background-color: #000000
+    background-color: #000000;
 }
 
 header>div {
@@ -76,9 +76,9 @@ div[id^="inventory-"] aside,
 }
 
 #common div[id$="balance"] {
-    /* display: inline-block; */
+    display: inline-block;
     margin: 8px 16px;
-    float: left;
+    /* float: left; */
 }
 
 #common>div::before {
@@ -136,7 +136,7 @@ body {
     font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
     /* font-weight: 100; */
     text-align: center;
-    margin: 0
+    margin: 0;
 }
 
 div#background {
@@ -303,6 +303,7 @@ input[value*="Connect"]:hover {
     left: 0;
     bottom: 0;
     padding: 8px 0;
+    height: 48px;
 }
 
 #common>#inventory-bottom {
@@ -312,11 +313,23 @@ input[value*="Connect"]:hover {
 
 div[id^="inventory-"] aside {
     margin: 8px auto;
-    display: block;
-    float: right;
+    display: inline-block;
+    /* float: right; */
     margin: 8px 16px;
 }
 
 div[id^="inventory-"] svg {
     fill: #ffffff80;
+}
+
+div[id^="inventory-"] {
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient( to right, #00000000 0%, #000000ff 12.5%, #000000ff 87.5%, #00000000 100%);
+}
+
+div[id^="inventory-"]>div {
+    width: 1440px;
+    display: inline-block;
+    height: 48px;
 }
