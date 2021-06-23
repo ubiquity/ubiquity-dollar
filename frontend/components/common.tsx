@@ -146,7 +146,7 @@ export function _renderControls() {
 
   return (
     <>
-      <div id="background"><video src="https://dao.ubq.fi/hero.mp4" autoPlay loop playsinline></video></div>
+      <div id="background"><video src="https://dao.ubq.fi/hero.mp4" autoPlay loop playsInline></video></div>
       <div id="common">
         <header>
           <div id="logo">
