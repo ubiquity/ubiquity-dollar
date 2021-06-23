@@ -5,7 +5,7 @@ import { ADDRESS } from "../pages/index";
 import {
   ERC1155Ubiquity,
   ERC1155Ubiquity__factory,
-  TWAPOracle__factory
+  TWAPOracle__factory,
 } from "../src/types";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
@@ -29,7 +29,6 @@ import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
-
 
 async function erc1155BalanceOf(
   addr: string,
@@ -147,7 +146,7 @@ export function _renderControls() {
 
   return (
     <>
-      <div id="background"></div>
+      <div id="background"><video src="https://dao.ubq.fi/hero.mp4" autoPlay loop></video></div>
       <div id="common">
         <header>
           <div id="logo">
@@ -204,13 +203,13 @@ export function _renderControls() {
                 <span>uAD</span>
               </div>
               <div>
-                <a target="_blank" href="https://crv.to/pool">
-                  <input type="button" value="Deposit" />
+                <a target="_blank" href="https://crv.to">
+                  <input type="button" value="Swap" />
                 </a>
               </div>
               <div>
-                <a target="_blank" href="https://crv.to">
-                  <input type="button" value="Swap" />
+                <a target="_blank" href="https://crv.to/pool">
+                  <input type="button" value="Deposit" />
                 </a>
               </div>
             </div>
@@ -229,17 +228,17 @@ export function _renderControls() {
               <div>
                 <a
                   target="_blank"
-                  href="https://app.sushi.com/add/0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"
+                  href="https://app.sushi.com/swap?inputCurrency=0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0&outputCurrency=0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"
                 >
-                  <input type="button" value="Deposit" />
+                  <input type="button" value="Swap" />
                 </a>
               </div>
               <div>
                 <a
                   target="_blank"
-                  href="https://app.sushi.com/swap?inputCurrency=0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0&outputCurrency=0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"
+                  href="https://app.sushi.com/add/0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"
                 >
-                  <input type="button" value="Swap" />
+                  <input type="button" value="Deposit" />
                 </a>
               </div>
             </div>
@@ -251,8 +250,8 @@ export function _renderControls() {
             <div id="inventory-top">
               <div>
                 <div>
-                <aside>My Ubiquity Inventory</aside>
-                <figure></figure>
+                  <aside>My Ubiquity Inventory</aside>
+                  <figure></figure>
                 </div>
                 <UadBalance />
                 <UarBalance />

@@ -7,6 +7,7 @@
 header {
     padding: 8px;
     background-color: #000000;
+    border: 1px solid #ffffff10;
 }
 
 header>div {
@@ -23,11 +24,15 @@ header>div {
     vertical-align: top;
     margin: 24px;
     padding: 8px 16px;
-    background-color: #00000080;
+    /* background-color: #00000080; */
+    /* background-color: #06061a; */
+    /* background-color: #000; */
     /* vertical-align: top; */
     border-radius: 4px;
     position: relative;
-    box-shadow: 0 0 48px #ffffff10;
+    /* box-shadow: 0 0 96px #00ffff20; */
+    border: 1px solid #ffffff10;
+    backdrop-filter: blur(24px);
 }
 
 #debt-coupon-deposit {
@@ -299,13 +304,13 @@ input[value*="Connect"]:hover {
     margin: 0;
     width: 100%;
     display: block;
-    -webkit-backdrop-filter: saturate(180%) blur(48px);
-    backdrop-filter: saturate(180%) blur(48px);
+    backdrop-filter: blur(8px);
     position: fixed;
     left: 0;
     bottom: 0;
     padding: 8px 0;
     height: 48px;
+    border-top: 1px solid #ffffff10;
 }
 
 div[id^="inventory-"] aside {
@@ -330,6 +335,7 @@ div[id^="inventory-"]>div {
     display: inline-block;
     height: 48px;
     vertical-align: middle;
+    text-align: left;
 }
 
 div[id^="inventory-"] figure {
@@ -366,4 +372,9 @@ div[id^="inventory-"] figure {
     100% {
         transform: rotate(45deg) translateX(0px) translateY(0px);
     }
+}
+
+body video {
+    opacity: 0.5;
+    filter: grayscale(0.125)
 }
