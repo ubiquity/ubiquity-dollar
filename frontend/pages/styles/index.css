@@ -6,8 +6,9 @@
 
 header {
     padding: 8px;
-    background-color: #000000;
+    /* background-color: #000000; */
     border: 1px solid #ffffff10;
+    backdrop-filter: blur(24px);
 }
 
 header>div {
@@ -308,7 +309,7 @@ input[value*="Connect"]:hover {
     position: fixed;
     left: 0;
     bottom: 0;
-    padding: 8px 0;
+    padding: 4px 0;
     height: 48px;
     border-top: 1px solid #ffffff10;
 }
