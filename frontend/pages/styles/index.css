@@ -398,3 +398,7 @@ body video {
     height: 100vh;
     object-fit: cover;
 }
+
+a:-webkit-any-link {
+    color: #fff;
+}
