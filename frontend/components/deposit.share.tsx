@@ -248,7 +248,7 @@ const DepositShare = () => {
   return (
     <>
       <div id="deposit-share">
-        <p>bonding share deposits are temporarily overallocated: announcement coming soon.</p>
+        <p>⚠️ Deposits are temporarily suspended. Read more <a href="https://dao.ubq.fi/23-june-2021">here</a>. ⚠️</p>
         <div>
           <input
           disabled

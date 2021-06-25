@@ -146,7 +146,16 @@ export function _renderControls() {
 
   return (
     <>
-      <div id="background"><video src="https://dao.ubq.fi/hero.mp4" autoPlay loop playsInline></video></div>
+      <div id="background">
+        <video
+          src="ubiquity-one-fifth-speed-trimmed-compressed.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+        ></video>
+        <div id="grid"></div>
+      </div>
       <div id="common">
         <header>
           <div id="logo">
