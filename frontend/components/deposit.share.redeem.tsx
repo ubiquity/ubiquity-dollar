@@ -12,6 +12,8 @@ import { ADDRESS } from "../pages";
 import { InputValue, Option } from "react-dropdown-now/dist/types";
 import { EthAccount } from "../utils/types";
 
+
+
 export default DepositShareRedeem;
 
 function DepositShareRedeem(): JSX.Element | null {
@@ -251,20 +253,19 @@ async function managerProviderAndBlockNumber(
   ) {
     const sharesToRedeem: InputValue[] = [];
     for (let index = 0; index < ids.length; index++) {
-      const el = ids[index];
+      const id = ids[index];
       const bigBlockNum = BigNumber.from(blockNum);
-
-      const balance = await bondingShare.balanceOf(account, el);
-      const label = `id:${el.toString()} amount:${ethers.utils.formatEther(
+      const balance = await bondingShare.balanceOf(account, id);
+      const label = `id:${id.toString()} amount:${ethers.utils.formatEther(
         balance
       )}`;
       let shareOption: Option = {
-        id: el.toString(),
+        id: id.toString(),
         value: balance,
         label,
         className: "option",
       };
-      if (el.gt(bigBlockNum)) {
+      if (id.gt(bigBlockNum)) {
         shareOption = { ...shareOption, className: "disable-option" };
       }
       sharesToRedeem.push(shareOption);
