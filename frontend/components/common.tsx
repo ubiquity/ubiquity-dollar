@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BigNumber, ethers } from "ethers";
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { ADDRESS } from "../pages/index";
 import {
   ERC1155Ubiquity,
   ERC1155Ubiquity__factory,
-  TWAPOracle__factory,
+  TWAPOracle__factory
 } from "../src/types";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
@@ -24,6 +24,7 @@ import DebtCouponBalance from "./debtCoupon.balance";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponRedeem from "./debtCoupon.redeem";
 import DepositShare from "./deposit.share";
+import DepositShareRedeem from "./deposit.share.redeem";
 import TwapPrice from "./twap.price";
 import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
@@ -193,6 +194,24 @@ export function _renderControls() {
           ""
         )}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
+        {balances?.bondingShares.gt(BigNumber.from(0)) ? (
+          <DepositShareRedeem />
+        ) : (
+          ""
+        )}
+        {balances && (
+          <>
+            <div id="inventory">
+              <UadBalance />
+              <UarBalance />
+              <DebtCouponBalance />
+              <UbqBalance />
+              <CurveBalance />
+              <CurveLPBalance />
+              <aside>My Inventory</aside>
+            </div>
+          </>
+        )}
 
         <div id="markets">
           <div>
