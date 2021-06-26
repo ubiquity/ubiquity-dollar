@@ -269,7 +269,7 @@ export function _renderControls() {
             <div id="inventory-top">
               <div>
                 <div>
-                  <aside>{PROD || "My Ubiquity Inventory"} </aside>
+                  <aside>My Ubiquity Inventory</aside>
                   <figure></figure>
                 </div>
                 <UadBalance />
