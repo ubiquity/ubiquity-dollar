@@ -217,10 +217,13 @@ input[type="button"]:hover {
 
 .dropdown {
     position: relative;
-    background-color: #f9f9f9;
-    color: black;
-    min-width: 160px;
-    padding: 2px 6px;
+    border: 1px solid #ffffff40;
+    border-radius: 4px;
+    padding: 8px;
+    /* background-color: #f9f9f9; */
+    /* color: black; */
+    /* min-width: 160px; */
+    /* padding: 2px 6px; */
 }
 
 .disable-option {
