@@ -5,7 +5,7 @@ import { ADDRESS } from "../pages/index";
 import {
   ERC1155Ubiquity,
   ERC1155Ubiquity__factory,
-  TWAPOracle__factory
+  TWAPOracle__factory,
 } from "../src/types";
 import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
@@ -30,6 +30,8 @@ import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
+
+const PROD = process.env.NODE_ENV == "production";
 
 async function erc1155BalanceOf(
   addr: string,
@@ -148,13 +150,15 @@ export function _renderControls() {
   return (
     <>
       <div id="background">
-        <video
-          src="ubiquity-one-fifth-speed-trimmed-compressed.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        ></video>
+        {PROD && (
+          <video
+            src="ubiquity-one-fifth-speed-trimmed-compressed.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          ></video>
+        )}
         <div id="grid"></div>
       </div>
       <div id="common">
@@ -198,19 +202,6 @@ export function _renderControls() {
           <DepositShareRedeem />
         ) : (
           ""
-        )}
-        {balances && (
-          <>
-            <div id="inventory">
-              <UadBalance />
-              <UarBalance />
-              <DebtCouponBalance />
-              <UbqBalance />
-              <CurveBalance />
-              <CurveLPBalance />
-              <aside>My Inventory</aside>
-            </div>
-          </>
         )}
 
         <div id="markets">
@@ -278,7 +269,7 @@ export function _renderControls() {
             <div id="inventory-top">
               <div>
                 <div>
-                  <aside>My Ubiquity Inventory</aside>
+                  <aside>{PROD || "My Ubiquity Inventory"} </aside>
                   <figure></figure>
                 </div>
                 <UadBalance />
