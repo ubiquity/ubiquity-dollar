@@ -1,17 +1,13 @@
-import { ethers, BigNumber } from "ethers";
-import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
-import { Balances, useConnectedContext } from "./context/connected";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  Bonding,
-  BondingShare,
-  Bonding__factory,
-  IMetaPool,
-  IMetaPool__factory,
-  IUbiquityFormulas__factory,
-} from "../src/types";
-import { EthAccount } from "../utils/types";
+import { BigNumber, ethers } from "ethers";
 import Image from "next/image";
+import { Dispatch, SetStateAction, useState } from "react";
+import {
+  Bonding__factory, IMetaPool__factory,
+  IUbiquityFormulas__factory
+} from "../src/types";
+import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import { EthAccount } from "../utils/types";
+import { Balances, useConnectedContext } from "./context/connected";
 import DepositShareBalance from "./deposit.share.balance";
 
 async function _allowAndDepositBondingToken(
@@ -114,10 +110,10 @@ async function _depositBondingTokens(
   }
   const weeksAmount = BigNumber.from(weeksValue);
   if (
-    !weeksAmount.gt(BigNumber.from(0)) ||
+    !weeksAmount.gt(BigNumber.from(3)) ||
     !weeksAmount.lte(BigNumber.from(208))
   ) {
-    setErrMsg(`${subject} should be between 1 and 208`);
+    setErrMsg(`${subject} should be between 4 and 208`);
     setIsLoading(false);
     return;
   }
@@ -248,10 +244,8 @@ const DepositShare = () => {
   return (
     <>
       <div id="deposit-share">
-        <p>⚠️ Deposits are temporarily suspended. Read why <a href="https://dao.ubq.fi/23-june-2021">here</a>. ⚠️</p>
         <div>
           <input
-          disabled
             type="number"
             name="lpsAmount"
             id="lpsAmount"
@@ -259,25 +253,22 @@ const DepositShare = () => {
             placeholder="uAD-3CRV LP Tokens"
           />
           <input
-          disabled
             type="number"
             name="weeks"
             id="weeks"
             onInput={handleInputWeeks}
-            placeholder="Weeks (1-208)"
-            min="1"
+            placeholder="Weeks (4-208)"
+            min="4"
             max="208"
           />
-          <button disabled onClick={handleDeposit}>Stake LP</button>
+          <button  onClick={handleDeposit}>Stake LP</button>
           {isLoading && (
             <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
           )}
           <p>{errMsg}</p>
 
           {expectedShares && (
-            <p>
-              expected bonding shares {ethers.utils.formatEther(expectedShares)}{" "}
-            </p>
+            <p>Expected bonding shares {ethers.utils.formatEther(expectedShares)}</p>
           )}
 
           <DepositShareBalance />

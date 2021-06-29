@@ -86,7 +86,7 @@ const DebtCouponBalance = () => {
             </svg>
           </span>
           <span>
-            {balances ? ethers.utils.formatEther(balances.debtCoupon) : "0.0"}{" "}
+            {balances ? `${parseFloat(ethers.utils.formatEther(balances.debtCoupon)).toFixed(2)}` : "0.00"}{" "}
             uDEBT
           </span>
         </div>

@@ -147,6 +147,7 @@ body {
     margin: 0;
 }
 
+.rdn-control-placeholder :disabled,
 button:disabled,
 input[type="button"]:disabled,
 :disabled {
@@ -156,6 +157,8 @@ input[type="button"]:disabled,
     color: #fff;
 }
 
+.rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option,
+.rdn-control-placeholder.dropdown,
 input,
 button,
 input[type="button"] {
@@ -176,6 +179,13 @@ input[type="button"] {
     min-width: 128px;
 }
 
+.rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option,
+.rdn-control-placeholder.dropdown {
+    height: auto
+}
+
+.rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option,
+.rdn-control-placeholder.dropdown,
 button,
 input[type="button"] {
     background-color: #ffffff00;
@@ -189,12 +199,16 @@ input[type="button"] {
     font-weight: initial;
 }
 
+.rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option:hover,
+.rdn-control-placeholder.dropdown:hover,
 button:hover,
 input[type="button"]:hover {
     border: 1px solid #ffffff00;
     background-color: #ffffff40;
 }
 
+.rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option:hover,
+.rdn-control-placeholder.dropdown:hover,
 input:hover,
 button:hover,
 input[type="button"]:hover {
@@ -205,33 +219,29 @@ input[type="button"]:hover {
 }
 
 .error {
-    font-weight: bolder;
+    /* font-weight: bolder; */
     color: red;
 }
 
 .info {
-    font-weight: lighter;
-    color: grey;
-    margin-left: 10px;
+    /* font-weight: lighter; */
+    color: #808080;
+    /* margin-left: 10px; */
 }
 
-.dropdown {
-    position: relative;
-    border: 1px solid #ffffff40;
-    border-radius: 4px;
-    padding: 8px;
-    /* background-color: #f9f9f9; */
-    /* color: black; */
-    /* min-width: 160px; */
-    /* padding: 2px 6px; */
-}
+.dropdown {}
 
 .disable-option {
-    color: grey;
+    color: #808080;
+    cursor: not-allowed;
+    padding: 8px;
+    /* pointer-events: none; */
 }
 
 .option {
-    color: black;
+    /* color: black; */
+    cursor: pointer;
+    padding: 8px;
 }
 
 span {
@@ -337,7 +347,6 @@ div[id^="inventory-"]>div {
 }
 
 div[id^="inventory-"] figure {
-    /* background: green; */
     display: inline-block;
     height: 4px;
     width: 4px;
@@ -413,4 +422,8 @@ body video {
 
 a:-webkit-any-link {
     color: #fff;
+}
+
+#debt-coupon-redeem .rdn-control-arrow.dropdown {
+    display: none
 }

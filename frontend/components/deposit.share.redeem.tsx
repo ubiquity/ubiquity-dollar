@@ -1,18 +1,15 @@
 import { BigNumber, ethers } from "ethers";
-import { Balances, useConnectedContext } from "./context/connected";
+import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
-import Image from "next/image";
+import { InputValue, Option } from "react-dropdown-now/dist/types";
 import {
   BondingShare__factory,
   Bonding__factory,
-  UbiquityAlgorithmicDollarManager,
+  UbiquityAlgorithmicDollarManager
 } from "../src/types";
-import { ADDRESS } from "../pages";
-import { InputValue, Option } from "react-dropdown-now/dist/types";
 import { EthAccount } from "../utils/types";
-
-
+import { Balances, useConnectedContext } from "./context/connected";
 
 export default DepositShareRedeem;
 
@@ -68,9 +65,9 @@ function DepositShareRedeem(): JSX.Element | null {
     <>
       <div id="debt-coupon-redeem">
         <Dropdown
-          // arrowClosed={<span className="arrow-closed" />}
-          // arrowOpen={<span className="arrow-open" />}
-          placeholder="Select an option"
+          arrowClosed={<span className="arrow-closed" />}
+          arrowOpen={<span className="arrow-open" />}
+          placeholder="Select a deposit"
           className="dropdown"
           options={debtIds ?? []}
           onChange={(opt) => {
@@ -88,7 +85,7 @@ function DepositShareRedeem(): JSX.Element | null {
           placeholder="bonding share amount"
           value={debtAmount}
         />
-        <button onClick={handleRedeem}>redeem Bonding Shares</button>
+        <button onClick={handleRedeem}>Withdraw LP Tokens</button>
 
         {isLoading && (
           <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
@@ -119,17 +116,17 @@ function handleRedeemCurry(
     const udebtAmountValue = udebtAmount?.value;
     if (!udebtAmountValue) {
       // console.log("bshareAmount", udebtAmountValue);
-      setErrMsg("amount not valid");
+      setErrMsg("Invalid withdraw amount");
     } else {
       const amount = ethers.utils.parseEther(udebtAmountValue);
       if (BigNumber.isBigNumber(amount)) {
         if (amount.gt(BigNumber.from(0))) {
           await redeemBondingShare(debtId, amount, setBalances);
         } else {
-          setErrMsg("amount should be greater than 0");
+          setErrMsg("Amount should be greater than 0");
         }
       } else {
-        setErrMsg("amount not valid");
+        setErrMsg("Invalid Amount");
         setIsLoading(false);
         return;
       }
@@ -256,9 +253,18 @@ async function managerProviderAndBlockNumber(
       const id = ids[index];
       const bigBlockNum = BigNumber.from(blockNum);
       const balance = await bondingShare.balanceOf(account, id);
-      const label = `id:${id.toString()} amount:${ethers.utils.formatEther(
-        balance
-      )}`;
+      const totalBondingShares = await bondingShare.totalSupply();
+      const percent =
+        parseInt(balance.toString()) / parseInt(totalBondingShares.toString());
+      console.log({
+        balance: balance.toString(),
+        totalBondingShares: totalBondingShares.toString(),
+        percent,
+      });
+      const humanReadableBondingShares = parseFloat(
+        ethers.utils.formatEther(balance)
+      ).toFixed(0);
+      const label = `~${humanReadableBondingShares} bonding shares`;
       let shareOption: Option = {
         id: id.toString(),
         value: balance,
@@ -266,7 +272,11 @@ async function managerProviderAndBlockNumber(
         className: "option",
       };
       if (id.gt(bigBlockNum)) {
-        shareOption = { ...shareOption, className: "disable-option" };
+        shareOption = {
+          ...shareOption,
+          className: "disable-option",
+          disabled: true,
+        };
       }
       sharesToRedeem.push(shareOption);
     }

@@ -59,7 +59,7 @@ const UarBalance = () => {
           </span>
           {/* <button onClick={handleBalance}>Get UBQ Balance</button> */}
           <span>
-            {balances ? ethers.utils.formatEther(balances.ubq) : "0.0"} UBQ
+            {balances ? `${parseFloat(ethers.utils.formatEther(balances.ubq)).toFixed(2)}` : "0.00"} UBQ
           </span>{" "}
         </div>
 

@@ -60,7 +60,7 @@ const UarBalance = () => {
             </svg>
           </span>
           <span>
-            {balances ? ethers.utils.formatEther(balances.uar) : "0.0"} uAR
+            {balances ? `${parseFloat(ethers.utils.formatEther(balances.uar)).toFixed(2)}` : "0.00"} uAR
           </span>
         </div>
         {/* <button onClick={handleClick}>Get uAR Token Balance</button> */}
