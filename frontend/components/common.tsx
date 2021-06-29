@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BigNumber, ethers } from "ethers";
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { ADDRESS } from "../pages/index";
 import {
   ERC1155Ubiquity,
@@ -24,11 +24,14 @@ import DebtCouponBalance from "./debtCoupon.balance";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponRedeem from "./debtCoupon.redeem";
 import DepositShare from "./deposit.share";
+import DepositShareRedeem from "./deposit.share.redeem";
 import TwapPrice from "./twap.price";
 import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
+
+const PROD = process.env.NODE_ENV == "production";
 
 async function erc1155BalanceOf(
   addr: string,
@@ -147,13 +150,15 @@ export function _renderControls() {
   return (
     <>
       <div id="background">
-        <video
-          src="ubiquity-one-fifth-speed-trimmed-compressed.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-        ></video>
+        {PROD && (
+          <video
+            src="ubiquity-one-fifth-speed-trimmed-compressed.mp4"
+            autoPlay
+            muted
+            loop
+            playsInline
+          ></video>
+        )}
         <div id="grid"></div>
       </div>
       <div id="common">
@@ -193,6 +198,11 @@ export function _renderControls() {
           ""
         )}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
+        {balances?.bondingShares.gt(BigNumber.from(0)) ? (
+          <DepositShareRedeem />
+        ) : (
+          ""
+        )}
 
         <div id="markets">
           <div>
