@@ -85,6 +85,7 @@ div[id^="inventory-"] aside,
     display: inline-block;
     margin: 8px 16px;
     height: 24px;
+    vertical-align: middle;
     /* float: left; */
     /* background: red; */
 }
@@ -430,4 +431,14 @@ a:-webkit-any-link {
 
 #debt-coupon-redeem>p {
     padding: 0 12px;
+}
+
+[id^="inventory-"] [id$="-balance"] {
+    /* max-width: 145px; */
+    /* background-color: red; */
+    max-width: 194px;
+    /* background-color: red; */
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

@@ -261,7 +261,7 @@ const DepositShare = () => {
             min="4"
             max="208"
           />
-          <button  onClick={handleDeposit}>Stake LP</button>
+          <button  onClick={handleDeposit}>Stake LP Tokens</button>
           {isLoading && (
             <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
           )}
