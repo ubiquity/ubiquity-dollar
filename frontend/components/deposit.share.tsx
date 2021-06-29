@@ -22,7 +22,7 @@ async function _allowAndDepositBondingToken(
     // check approved amount
     // make sure to check balance spendable -- if (lpsAmount) is > spendable then ask approval again
     //console.log(account);
-    const SIGNER = await provider.getSigner();
+    const SIGNER = provider.getSigner();
     const BONDING_ADDR = await manager.bondingContractAddress();
 
     const metapool = IMetaPool__factory.connect(
@@ -73,7 +73,7 @@ async function _depositBondingTokens(
   const missing = `missing input value for`;
   const bignumberErr = `can't parse BigNumber from`;
 
-  let subject = `lp token amount`;
+  let subject = `LP tokens amount`;
 
   const lpsAmount = document.getElementById("lpsAmount") as HTMLInputElement;
   const lpsAmountValue = lpsAmount?.value;
@@ -194,7 +194,7 @@ const DepositShare = () => {
     const missing = `missing input value for`;
     const bignumberErr = `can't parse BigNumber from`;
 
-    let subject = `lp token amount`;
+    let subject = `LP tokens amount`;
     const lpsAmount = document.getElementById("lpsAmount") as HTMLInputElement;
     const lpsAmountValue = lpsAmount?.value;
     if (!lpsAmountValue) {
@@ -230,10 +230,10 @@ const DepositShare = () => {
     }
     const weeksAmount = BigNumber.from(weeksValue);
     if (
-      !weeksAmount.gt(BigNumber.from(0)) ||
+      !weeksAmount.gt(BigNumber.from(3)) ||
       !weeksAmount.lte(BigNumber.from(208))
     ) {
-      setErrMsg(`${subject} should be between 1 and 208`);
+      setErrMsg(`${subject} should be between 4 and 208`);
       setIsLoading(false);
       return;
     }

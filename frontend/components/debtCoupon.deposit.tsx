@@ -139,7 +139,7 @@ const DebtCouponDeposit = () => {
   const handleInputUAD = async () => {
     setErrMsg("");
     setIsLoading(true);
-    const missing = `missing input value for`;
+    const missing = `Missing input value for`;
     const bignumberErr = `can't parse BigNumber from`;
 
     const subject = `uAD amount`;

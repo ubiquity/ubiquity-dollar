@@ -427,3 +427,7 @@ a:-webkit-any-link {
 #debt-coupon-redeem .rdn-control-arrow.dropdown {
     display: none
 }
+
+#debt-coupon-redeem>p {
+    padding: 0 12px;
+}
