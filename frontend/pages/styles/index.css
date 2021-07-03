@@ -182,7 +182,7 @@ input[type="button"] {
 
 .rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option,
 .rdn-control-placeholder.dropdown {
-    height: auto
+    height: auto;
 }
 
 .rdn-drop.dropdown.is-open>div.option.rdn-drop-menu-option,
@@ -344,7 +344,7 @@ div[id^="inventory-"]>div {
     display: inline-block;
     height: 48px;
     vertical-align: middle;
-    text-align: left;
+    text-align: center;
 }
 
 div[id^="inventory-"] figure {
@@ -426,7 +426,7 @@ a:-webkit-any-link {
 }
 
 #debt-coupon-redeem .rdn-control-arrow.dropdown {
-    display: none
+    display: none;
 }
 
 #debt-coupon-redeem>p {
@@ -441,4 +441,8 @@ a:-webkit-any-link {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+[id^="inventory-"] [id$="-balance"] a {
+    text-decoration: none;
 }
