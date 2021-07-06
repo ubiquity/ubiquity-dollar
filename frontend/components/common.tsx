@@ -1,19 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BigNumber, ethers } from "ethers";
-import React, { Dispatch, SetStateAction } from "react";
-import { ADDRESS } from "../pages/index";
-import {
-  ERC1155Ubiquity,
-  ERC1155Ubiquity__factory,
-  TWAPOracle__factory,
-} from "../src/types";
-import { ERC20__factory } from "../src/types/factories/ERC20__factory";
-import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
-import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/UbiquityAlgorithmicDollar__factory";
-import { UbiquityAutoRedeem__factory } from "../src/types/factories/UbiquityAutoRedeem__factory";
-import { UbiquityGovernance__factory } from "../src/types/factories/UbiquityGovernance__factory";
-import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import React, { useState, useEffect } from "react";
+import { ERC1155Ubiquity } from "../src/types";
+
 import { EthAccount } from "../utils/types";
 import Account from "./account";
 import ChefUgov from "./chefugov";
@@ -26,10 +15,12 @@ import DebtCouponRedeem from "./debtCoupon.redeem";
 import DepositShare from "./deposit.share";
 import DepositShareRedeem from "./deposit.share.redeem";
 import TwapPrice from "./twap.price";
+import PriceMonitor from "./price.monitor";
 import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
+import { connectedContracts, Contracts } from "../src/contracts";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -52,75 +43,44 @@ async function erc1155BalanceOf(
   return fullBalance;
 }
 
-export async function _connect(
-  setProvider: Dispatch<
-    SetStateAction<ethers.providers.Web3Provider | undefined>
-  >,
-  setAccount: Dispatch<SetStateAction<EthAccount | undefined>>,
-  setManager: Dispatch<
-    SetStateAction<UbiquityAlgorithmicDollarManager | undefined>
-  >,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
-  setTwapPrice: Dispatch<SetStateAction<BigNumber | undefined>>
-): Promise<void> {
-  if (!window.ethereum?.request) {
+// Load the account balances in a single parallel operation
+async function accountBalances(
+  account: EthAccount,
+  contracts: Contracts
+): Promise<Balances> {
+  const [
+    uad,
+    crv,
+    uad3crv,
+    uar,
+    ubq,
+    debtCoupon,
+    bondingShares,
+  ] = await Promise.all([
+    contracts.uad.balanceOf(account.address),
+    contracts.crvToken.balanceOf(account.address),
+    contracts.metaPool.balanceOf(account.address),
+    contracts.uar.balanceOf(account.address),
+    contracts.ugov.balanceOf(account.address),
+    erc1155BalanceOf(account.address, contracts.debtCouponToken),
+    erc1155BalanceOf(account.address, contracts.bondingToken),
+  ]);
+  return { uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares };
+}
+
+async function fetchAccount(): Promise<EthAccount | null> {
+  if (window.ethereum?.request) {
+    return {
+      address: ((await window.ethereum.request({
+        method: "eth_requestAccounts",
+      })) as string[])[0],
+      balance: 0,
+    };
+  } else {
     alert("MetaMask is not installed!");
-    return;
+    console.error("MetaMask is not installed, cannot connect wallet");
+    return null;
   }
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const accounts = await window.ethereum.request({
-    method: "eth_requestAccounts",
-  });
-  setProvider(provider);
-  setAccount({ address: accounts[0], balance: 0 });
-  const manager = UbiquityAlgorithmicDollarManager__factory.connect(
-    ADDRESS.MANAGER,
-    provider
-  );
-  setManager(manager);
-  const SIGNER = provider.getSigner();
-  const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
-  const metapool = IMetaPool__factory.connect(TOKEN_ADDR, SIGNER);
-
-  const uarAdr = await manager.autoRedeemTokenAddress();
-  const uar = UbiquityAutoRedeem__factory.connect(uarAdr, SIGNER);
-  //  setUAR(uar);
-  const uGovAdr = await manager.governanceTokenAddress();
-  const ugov = UbiquityGovernance__factory.connect(uGovAdr, SIGNER);
-  //  setUGOV(ugov);
-  const uadAdr = await manager.dollarTokenAddress();
-  const uad = UbiquityAlgorithmicDollar__factory.connect(uadAdr, SIGNER);
-  // setUAD(uad);
-  const CRV_TOKEN_ADDR = await manager.curve3PoolTokenAddress();
-  const crvToken = ERC20__factory.connect(CRV_TOKEN_ADDR, provider);
-
-  const BONDING_TOKEN_ADDR = await manager.bondingShareAddress();
-  const bondingToken = ERC1155Ubiquity__factory.connect(
-    BONDING_TOKEN_ADDR,
-    provider
-  );
-
-  const DEBT_COUPON_TOKEN_ADDR = await manager.debtCouponAddress();
-  const debtCouponToken = ERC1155Ubiquity__factory.connect(
-    DEBT_COUPON_TOKEN_ADDR,
-    provider
-  );
-
-  setBalances({
-    uad: await uad.balanceOf(accounts[0]),
-    crv: await crvToken.balanceOf(accounts[0]),
-    uad3crv: await metapool.balanceOf(accounts[0]),
-    uar: await uar.balanceOf(accounts[0]),
-    ubq: await ugov.balanceOf(accounts[0]),
-    debtCoupon: await erc1155BalanceOf(accounts[0], debtCouponToken),
-    bondingShares: await erc1155BalanceOf(accounts[0], bondingToken),
-  });
-
-  const TWAP_ADDR = await manager.twapOracleAddress();
-  const twap = TWAPOracle__factory.connect(TWAP_ADDR, provider);
-  const twapPrice = await twap.consult(uadAdr);
-  setTwapPrice(twapPrice);
 }
 
 export function _renderControls() {
@@ -129,22 +89,36 @@ export function _renderControls() {
     setAccount,
     setManager,
     setBalances,
-    balances,
-    twapPrice,
+    setContracts,
     setTwapPrice,
     account,
+    contracts,
+    balances,
+    twapPrice,
   } = useConnectedContext();
+  const [connecting, setConnecting] = useState(false);
+
+  useEffect(() => {
+    (async function () {
+      const { provider, contracts } = await connectedContracts();
+      setProvider(provider);
+      setContracts(contracts);
+      setManager(contracts.manager);
+      setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      if (contracts && account) {
+        setBalances(await accountBalances(account, contracts));
+      }
+    })();
+  }, [account, contracts]);
 
   const connect = async (el: React.BaseSyntheticEvent): Promise<void> => {
-    const button = el.target as HTMLButtonElement;
-    button.disabled = true;
-    return _connect(
-      setProvider,
-      setAccount,
-      setManager,
-      setBalances,
-      setTwapPrice
-    );
+    setConnecting(true);
+    setAccount(await fetchAccount());
   };
 
   return (
@@ -174,6 +148,7 @@ export function _renderControls() {
               <input
                 type="button"
                 value="Connect Wallet"
+                disabled={connecting}
                 onClick={(el) => connect(el)}
               />
             </span>
@@ -182,7 +157,7 @@ export function _renderControls() {
           <Account />
         </header>
 
-        <TwapPrice />
+        {account && <TwapPrice />}
         <ChefUgov />
 
         <DepositShare />
@@ -263,6 +238,8 @@ export function _renderControls() {
             </div>
           </div>
         </div>
+
+        <PriceMonitor />
 
         {balances && (
           <>

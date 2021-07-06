@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import "./styles/utility.css";
 import "./styles/index.css";
 import "./styles/proxima.css";
 
@@ -15,7 +16,6 @@ export default function MyApp({
   return (
     <ConnectedNetwork>
       <>
-
         <Component {...pageProps} />
       </>
     </ConnectedNetwork>

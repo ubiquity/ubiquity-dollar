@@ -9,6 +9,7 @@ import {
 
 import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../../utils/types";
+import { Contracts } from "../../src/contracts";
 
 export interface Balances {
   uad: BigNumber;
@@ -18,71 +19,92 @@ export interface Balances {
   ubq: BigNumber;
   bondingShares: BigNumber;
   debtCoupon: BigNumber;
-  // window: Window & typeof globalThis;
 }
 
 export interface IConnectedContext {
-  manager: UbiquityAlgorithmicDollarManager | undefined;
-  provider: ethers.providers.Web3Provider | undefined;
-  account: EthAccount | undefined;
-  setAccount: Dispatch<SetStateAction<EthAccount | undefined>>;
-  setProvider: Dispatch<
-    SetStateAction<ethers.providers.Web3Provider | undefined>
-  >;
-  setManager: Dispatch<
-    SetStateAction<UbiquityAlgorithmicDollarManager | undefined>
-  >;
-  balances: Balances | undefined;
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>;
-  twapPrice: BigNumber | undefined;
-  setTwapPrice: Dispatch<SetStateAction<BigNumber | undefined>>;
+  manager: UbiquityAlgorithmicDollarManager | null;
+  provider: ethers.providers.Web3Provider | null;
+  account: EthAccount | null;
+  setAccount: Dispatch<SetStateAction<EthAccount | null>>;
+  setProvider: Dispatch<SetStateAction<ethers.providers.Web3Provider | null>>;
+  setManager: Dispatch<SetStateAction<UbiquityAlgorithmicDollarManager | null>>;
+  balances: Balances | null;
+  setBalances: Dispatch<SetStateAction<Balances | null>>;
+  twapPrice: BigNumber | null;
+  setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
+  contracts: Contracts | null;
+  setContracts: Dispatch<SetStateAction<Contracts | null>>;
 }
-export const CONNECTED_CONTEXT_DEFAULT_VALUE = {
-  manager: undefined,
-  setManager: () => {},
-  provider: undefined,
-  account: undefined,
-  setProvider: () => {},
-  setAccount: () => {},
-  balances: {
-    uad: BigNumber.from(0),
-    crv: BigNumber.from(0),
-    uad3crv: BigNumber.from(0),
-    uar: BigNumber.from(0),
-    ubq: BigNumber.from(0),
-    bondingShares: BigNumber.from(0),
-    debtCoupon: BigNumber.from(0),
-  },
-  setBalances: () => {},
-  twapPrice: undefined,
-  setTwapPrice: () => {},
-};
+// export const CONNECTED_CONTEXT_DEFAULT_VALUE = {
+//   manager: undefined,
+//   setManager: () => {},
+//   provider: undefined,
+//   setProvider: () => {},
+//   account: undefined,
+//   setAccount: () => {},
+//   balances: {
+//     uad: BigNumber.from(0),
+//     crv: BigNumber.from(0),
+//     uad3crv: BigNumber.from(0),
+//     uar: BigNumber.from(0),
+//     ubq: BigNumber.from(0),
+//     bondingShares: BigNumber.from(0),
+//     debtCoupon: BigNumber.from(0),
+//   },
+//   setBalances: () => {},
+//   twapPrice: undefined,
+//   setTwapPrice: () => {},
+//   contracts: undefined,
+//   setContracts: () => {},
+// };
+
+// const emptyBalances = {
+//   uad: BigNumber.from(0),
+//   crv: BigNumber.from(0),
+//   uad3crv: BigNumber.from(0),
+//   uar: BigNumber.from(0),
+//   ubq: BigNumber.from(0),
+//   bondingShares: BigNumber.from(0),
+//   debtCoupon: BigNumber.from(0),
+// }
+
+// We can cast it safely here because we are actually setting the value on ConnectedNetwork
 const ConnectedContext = createContext<IConnectedContext>(
-  CONNECTED_CONTEXT_DEFAULT_VALUE
+  {} as IConnectedContext
 );
+
 interface Props {
   children: React.ReactNode;
   // window: Window & typeof globalThis;
 }
 
-export const ConnectedNetwork = (props: Props) => {
-  const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
-  const [manager, setManager] = useState<UbiquityAlgorithmicDollarManager>();
-  const [account, setAccount] = useState<EthAccount>();
-  const [balances, setBalances] = useState<Balances>();
-  const [twapPrice, setTwapPrice] = useState<BigNumber>();
-
-  const value = {
+export const ConnectedNetwork = (props: Props): JSX.Element => {
+  const [
     provider,
+    setProvider,
+  ] = useState<ethers.providers.Web3Provider | null>(null);
+  const [
+    manager,
+    setManager,
+  ] = useState<UbiquityAlgorithmicDollarManager | null>(null);
+  const [account, setAccount] = useState<EthAccount | null>(null);
+  const [balances, setBalances] = useState<Balances | null>(null);
+  const [twapPrice, setTwapPrice] = useState<BigNumber | null>(null);
+  const [contracts, setContracts] = useState<Contracts | null>(null);
+
+  const value: IConnectedContext = {
+    provider,
+    setProvider,
     manager,
     setManager,
     account,
     setAccount,
-    setProvider,
     balances,
     setBalances,
     twapPrice,
     setTwapPrice,
+    contracts,
+    setContracts,
   };
 
   return (
