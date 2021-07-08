@@ -97,6 +97,9 @@ const PriceMonitor = (props: PriceMonitorProps) => {
         {priceInfoView("uAD", "USDC", formatMwei(props.uadUsdc))}
         {priceInfoView("uAD", "DAI", formatEther(props.uadDai))}
         {priceInfoView("uAD", "USDT", formatMwei(props.uadUsdt))}
+        <div className="text-center uppercase my-4 tracking-widest text-xs">
+          Time Weighted Average
+        </div>
         {priceInfoView("uAD", "3CRV", formatEther(props.uadCrv))}
         {priceInfoView("3CRV", "uAD", formatEther(props.crvUad))}
       </div>
