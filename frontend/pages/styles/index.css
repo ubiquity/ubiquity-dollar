@@ -442,3 +442,8 @@ a:-webkit-any-link {
     overflow: hidden;
     white-space: nowrap;
 }
+
+
+.bg-blur {
+    backdrop-filter: blur(24px);
+}

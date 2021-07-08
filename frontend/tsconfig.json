@@ -20,6 +20,7 @@
   },
   "include": [
     "next-env.d.ts",
+    "windi-attributify.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],

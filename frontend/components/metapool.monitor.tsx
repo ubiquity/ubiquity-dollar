@@ -67,7 +67,7 @@ const fetchPrices = async ({
   };
 };
 
-const PriceMonitorContainer = () => {
+const MetapoolMonitorContainer = () => {
   const { contracts } = useConnectedContext();
   const [priceMonitorProps, setPriceMonitorProps] = useState<State>(null);
 
@@ -79,10 +79,10 @@ const PriceMonitorContainer = () => {
     }
   }, [contracts]);
 
-  return priceMonitorProps && <PriceMonitor {...priceMonitorProps} />;
+  return priceMonitorProps && <MetapoolMonitor {...priceMonitorProps} />;
 };
 
-const PriceMonitor = (props: PriceMonitorProps) => {
+const MetapoolMonitor = (props: PriceMonitorProps) => {
   return (
     <div
       border="1 solid white/10"
@@ -90,7 +90,7 @@ const PriceMonitor = (props: PriceMonitorProps) => {
       className="!block !mx-0 !py-8 tracking-wide bg-blur rounded-md"
     >
       <div className="text-center uppercase mb-8 tracking-widest text-sm">
-        Price monitor
+        Metapool monitor
       </div>
       <div className="max-w-screen-md mx-auto mb-4">
         {priceInfoView("DAI", "USDT", formatMwei(props.daiUsdt))}
@@ -128,4 +128,4 @@ const priceInfoView = (from: string, to: string, value: string) => (
   </div>
 );
 
-export default PriceMonitorContainer;
+export default MetapoolMonitorContainer;

@@ -6,7 +6,11 @@ import { ERC1155Ubiquity } from "../src/types";
 import { EthAccount } from "../utils/types";
 import Account from "./account";
 import ChefUgov from "./chefugov";
-import { Balances, useConnectedContext } from "./context/connected";
+import {
+  Balances,
+  useConnectedContext,
+  useConnectedContracts,
+} from "./context/connected";
 import CurveBalance from "./curve.balance";
 import CurveLPBalance from "./curveLP.balance";
 import DebtCouponBalance from "./debtCoupon.balance";
@@ -15,12 +19,11 @@ import DebtCouponRedeem from "./debtCoupon.redeem";
 import DepositShare from "./deposit.share";
 import DepositShareRedeem from "./deposit.share.redeem";
 import TwapPrice from "./twap.price";
-import PriceMonitor from "./price.monitor";
 import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
-import { connectedContracts, Contracts } from "../src/contracts";
+import { Contracts } from "../src/contracts";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -85,11 +88,8 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 export function _renderControls() {
   const {
-    setProvider,
     setAccount,
-    setManager,
     setBalances,
-    setContracts,
     setTwapPrice,
     account,
     contracts,
@@ -97,16 +97,15 @@ export function _renderControls() {
     twapPrice,
   } = useConnectedContext();
   const [connecting, setConnecting] = useState(false);
+  useConnectedContracts();
 
   useEffect(() => {
     (async function () {
-      const { provider, contracts } = await connectedContracts();
-      setProvider(provider);
-      setContracts(contracts);
-      setManager(contracts.manager);
-      setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
+      if (contracts) {
+        setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
+      }
     })();
-  }, []);
+  }, [contracts]);
 
   useEffect(() => {
     (async function () {
@@ -238,8 +237,6 @@ export function _renderControls() {
             </div>
           </div>
         </div>
-
-        <PriceMonitor />
 
         {balances && (
           <>

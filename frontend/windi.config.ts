@@ -8,4 +8,11 @@ export default defineConfig({
   },
   attributify: true,
   shortcuts: {},
+  theme: {
+    extend: {
+      letterSpacing: {
+        widest: ".2em",
+      },
+    },
+  },
 });

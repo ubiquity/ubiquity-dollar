@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import "windi.css";
 import "./styles/index.css";
 import "./styles/proxima.css";
+import "windi.css";
 
 import { ConnectedNetwork } from "../components/context/connected";
 type MyComponentProps = React.PropsWithChildren<{

@@ -5,11 +5,12 @@ import {
   SetStateAction,
   useContext,
   useState,
+  useEffect,
 } from "react";
 
 import { UbiquityAlgorithmicDollarManager } from "../../src/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../../utils/types";
-import { Contracts } from "../../src/contracts";
+import { connectedContracts, Contracts } from "../../src/contracts";
 
 export interface Balances {
   uad: BigNumber;
@@ -84,3 +85,23 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
 
 export const useConnectedContext = (): IConnectedContext =>
   useContext(ConnectedContext);
+
+export function useConnectedContracts(): void {
+  const {
+    provider,
+    setProvider,
+    setContracts,
+    setManager,
+  } = useConnectedContext();
+
+  useEffect(() => {
+    (async function () {
+      if (!provider) {
+        const { provider, contracts } = await connectedContracts();
+        setProvider(provider);
+        setContracts(contracts);
+        setManager(contracts.manager);
+      }
+    })();
+  }, []);
+}
