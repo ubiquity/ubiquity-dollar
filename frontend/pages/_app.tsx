@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import "./styles/utility.css";
+import "windi.css";
 import "./styles/index.css";
 import "./styles/proxima.css";
 
