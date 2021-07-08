@@ -6,11 +6,11 @@ import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
 export async function _getTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account && manager) {
     const uADAddr = await manager.dollarTokenAddress();
@@ -68,7 +68,12 @@ const UadBalance = () => {
             </svg>
           </span>
           <span>
-            {balances ? `${parseFloat(ethers.utils.formatEther(balances.uad)).toFixed(2)}` : "0.00"} uAD
+            {balances
+              ? `${parseFloat(ethers.utils.formatEther(balances.uad)).toFixed(
+                  2
+                )}`
+              : "0.00"}{" "}
+            uAD
           </span>
         </div>
         {/* <button onClick={handleClick}>Get uAD Token Balance</button> */}

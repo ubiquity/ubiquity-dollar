@@ -6,11 +6,11 @@ import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
 async function _getCurveTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account && manager) {
     const TOKEN_ADDR = await manager.curve3PoolTokenAddress();
@@ -64,7 +64,10 @@ const CurveBalance = () => {
           />
         </span>
         <span>
-          {balances ? `${parseFloat(ethers.utils.formatEther(balances.crv)).toFixed(2)}` : "0.00"} 3CRV
+          {balances
+            ? `${parseFloat(ethers.utils.formatEther(balances.crv)).toFixed(2)}`
+            : "0.00"}{" "}
+          3CRV
         </span>
         {/* <button onClick={handleClick}>Get curve Token Balance</button> */}
       </div>

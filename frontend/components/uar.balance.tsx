@@ -7,10 +7,10 @@ import { useConnectedContext, Balances } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
 async function _getTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account) {
     const manager = UbiquityAlgorithmicDollarManager__factory.connect(
@@ -60,7 +60,12 @@ const UarBalance = () => {
             </svg>
           </span>
           <span>
-            {balances ? `${parseFloat(ethers.utils.formatEther(balances.uar)).toFixed(2)}` : "0.00"} uAR
+            {balances
+              ? `${parseFloat(ethers.utils.formatEther(balances.uar)).toFixed(
+                  2
+                )}`
+              : "0.00"}{" "}
+            uAR
           </span>
         </div>
         {/* <button onClick={handleClick}>Get uAR Token Balance</button> */}

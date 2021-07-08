@@ -23,10 +23,10 @@ async function calculateDebtCouponBalance(
 }
 async function _debtCouponBalance(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ) {
   if (manager && provider) {
     const debtCoupon = DebtCoupon__factory.connect(
@@ -86,7 +86,11 @@ const DebtCouponBalance = () => {
             </svg>
           </span>
           <span>
-            {balances ? `${parseFloat(ethers.utils.formatEther(balances.debtCoupon)).toFixed(2)}` : "0.00"}{" "}
+            {balances
+              ? `${parseFloat(
+                  ethers.utils.formatEther(balances.debtCoupon)
+                ).toFixed(2)}`
+              : "0.00"}{" "}
             uDEBT
           </span>
         </div>

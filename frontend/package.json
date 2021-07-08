@@ -9,7 +9,9 @@
         "prod-build": "next build",
         "start": "next start",
         "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
-        "format": "yarn prettier --write . --ignore-path .gitignore"
+        "format": "yarn prettier --write . --ignore-path .gitignore",
+        "ts": "tsc --noEmit --incremental",
+        "ts:watch": "yarn ts --watch"
     },
     "dependencies": {
         "next": "^10.2.3",

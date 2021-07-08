@@ -14,8 +14,8 @@ import { ADDRESS } from "../pages";
 
 const _getDebtIds = async (
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   debtIds: BigNumber[] | undefined,
   setDebtIds: Dispatch<SetStateAction<BigNumber[] | undefined>>
 ) => {
@@ -68,7 +68,7 @@ const DebtCouponRedeem = () => {
   const redeemDebtForDollar = async (
     debtId: string | undefined,
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => {
     console.log("debtId", debtId);
     if (provider && account && manager && debtId) {

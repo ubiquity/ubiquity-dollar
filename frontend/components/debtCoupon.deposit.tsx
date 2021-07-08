@@ -12,8 +12,8 @@ import { ADDRESS } from "../pages";
 
 async function _expectedDebtCoupon(
   amount: BigNumber,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
 ) {
   if (manager && provider) {
@@ -49,7 +49,7 @@ const DebtCouponDeposit = () => {
   }
   const depositDollarForDebtCoupons = async (
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => {
     if (provider && account && manager) {
       const uAD = UbiquityAlgorithmicDollar__factory.connect(
@@ -183,9 +183,7 @@ const DebtCouponDeposit = () => {
         <p>{errMsg}</p>
       </div>
       {expectedDebtCoupon && (
-        <p>
-          expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}
-        </p>
+        <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>
       )}
     </>
   );

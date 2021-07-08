@@ -26,7 +26,7 @@ const UarRedeem = () => {
   }
   const redeem = async (
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => {
     const SIGNER = provider?.getSigner();
 

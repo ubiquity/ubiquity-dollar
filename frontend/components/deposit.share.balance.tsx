@@ -43,10 +43,10 @@ async function calculateBondingShareBalance(
 }
 async function _bondingShareBalance(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>,
   setPercentage: Dispatch<SetStateAction<string | undefined>>
 ) {
   if (manager && provider) {
