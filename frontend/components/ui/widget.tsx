@@ -29,7 +29,7 @@ export const Address = (props: {
   title: string;
 }): JSX.Element => (
   <a
-    className="block text-center break-words text-xs mb-4 -mt-2 !text-white/50"
+    className="block text-center break-words text-xs mb-4 -mt-2 !text-white/30"
     target="_blank"
     title={props.title}
     href={`https://etherscan.io/address/${props.address}`}
