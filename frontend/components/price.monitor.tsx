@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import { ADDRESS, Contracts } from "../src/contracts";
 import { useConnectedContext } from "./context/connected";
 import { formatEther, formatMwei } from "../utils/format";
+import * as widget from "./ui/widget";
 
 type State = null | PriceMonitorProps;
 type PriceMonitorProps = {
-  daiUsdt: BigNumber;
-  uadUsdc: BigNumber;
-  uadDai: BigNumber;
-  uadUsdt: BigNumber;
-  uadCrv: BigNumber;
-  crvUad: BigNumber;
-  dollarToBeMinted: BigNumber | null;
+  daiUsdt: number;
+  uadUsdc: number;
+  uadDai: number;
+  uadUsdt: number;
+  uadCrv: number;
+  crvUad: number;
+  dollarToBeMinted: number | null;
 };
 
 const fetchPrices = async ({
@@ -55,15 +56,15 @@ const fetchPrices = async ({
   ]);
 
   return {
-    daiUsdt,
-    uadUsdc,
-    uadDai,
-    uadUsdt,
-    uadCrv,
-    crvUad,
+    daiUsdt: +formatMwei(daiUsdt),
+    uadUsdc: +formatMwei(uadUsdc),
+    uadDai: +formatEther(uadDai),
+    uadUsdt: +formatEther(uadUsdt),
+    uadCrv: +formatEther(uadCrv),
+    crvUad: +formatEther(crvUad),
     dollarToBeMinted: uadCrv.gt(ethers.utils.parseEther("1"))
-      ? await dollarMintCalc.getDollarsToMint()
-      : null,
+      ? +formatEther(await dollarMintCalc.getDollarsToMint())
+      : 1043,
   };
 };
 
@@ -84,51 +85,30 @@ const PriceMonitorContainer = () => {
 
 const PriceMonitor = (props: PriceMonitorProps) => {
   return (
-    <div
-      border="1 solid white/10"
-      text="white/50"
-      className="!block !mx-0 !py-8 tracking-wide bg-blur rounded-md"
-    >
-      <div className="text-center uppercase mb-8 tracking-widest text-sm">
-        Price monitor
+    <widget.Container>
+      <widget.Title text="Price monitor" />
+      <widget.PriceExchange from="DAI" to="USDT" value={props.daiUsdt} />
+      <widget.PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
+      <widget.PriceExchange from="uAD" to="DAI" value={props.uadDai} />
+      <widget.PriceExchange from="uAD" to="USDT" value={props.uadUsdt} />
+      <widget.SubTitle text="Time Weighted Average" />
+      <widget.PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
+      <widget.PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
+      <div className="text-center mt-4">
+        {props.dollarToBeMinted ? (
+          <>
+            Dollars to be minted
+            <div>
+              {props.dollarToBeMinted}{" "}
+              <span className="text-white text-opacity-75"> uAD</span>
+            </div>
+          </>
+        ) : (
+          "No minting needed"
+        )}
       </div>
-      <div className="max-w-screen-md mx-auto mb-4">
-        {priceInfoView("DAI", "USDT", formatMwei(props.daiUsdt))}
-        {priceInfoView("uAD", "USDC", formatMwei(props.uadUsdc))}
-        {priceInfoView("uAD", "DAI", formatEther(props.uadDai))}
-        {priceInfoView("uAD", "USDT", formatMwei(props.uadUsdt))}
-        <div className="text-center uppercase my-4 tracking-widest text-xs">
-          Time Weighted Average
-        </div>
-        {priceInfoView("uAD", "3CRV", formatEther(props.uadCrv))}
-        {priceInfoView("3CRV", "uAD", formatEther(props.crvUad))}
-      </div>
-      {props.dollarToBeMinted ? (
-        <div className="text-center">
-          Dollars to be minted
-          <div>
-            {formatEther(props.dollarToBeMinted)}{" "}
-            <span className="text-white text-opacity-75"> uAD</span>
-          </div>
-        </div>
-      ) : (
-        "No minting needed"
-      )}
-    </div>
+    </widget.Container>
   );
 };
-
-const priceInfoView = (from: string, to: string, value: string) => (
-  <div className="flex">
-    <span className="w-1/2 text-right">
-      1 <span className="text-white text-opacity-75">{from}</span>
-    </span>
-    <span className="w-8 -mt-1 text-center">⇄</span>
-    <span className="w-1/2 flex-grow text-left">
-      {value.toString()}{" "}
-      <span className="text-white text-opacity-75">{to}</span>
-    </span>
-  </div>
-);
 
 export default PriceMonitorContainer;

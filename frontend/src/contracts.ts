@@ -20,6 +20,10 @@ import {
   ERC20__factory,
   ERC1155Ubiquity,
   ERC1155Ubiquity__factory,
+  DebtCoupon,
+  DebtCoupon__factory,
+  DebtCouponManager,
+  DebtCouponManager__factory,
 } from "./types";
 import namedAccounts from "./named_accounts.json";
 import FullDeployment from "./full_deployment.json";
@@ -45,7 +49,8 @@ const contracts = {
   ugov: UbiquityGovernance__factory.connect,
   crvToken: ERC20__factory.connect,
   bondingToken: ERC1155Ubiquity__factory.connect,
-  debtCouponToken: ERC1155Ubiquity__factory.connect,
+  debtCouponToken: DebtCoupon__factory.connect,
+  DebtCouponManager: DebtCouponManager__factory.connect,
 };
 
 // 2
@@ -60,7 +65,8 @@ export type Contracts = {
   ugov: UbiquityGovernance;
   crvToken: ERC20;
   bondingToken: ERC1155Ubiquity;
-  debtCouponToken: ERC1155Ubiquity;
+  debtCouponToken: DebtCoupon;
+  debtCouponManager: DebtCouponManager;
 };
 
 // 3
@@ -76,6 +82,7 @@ type ContractsAdresses = {
   crvToken: string;
   bondingToken: string;
   debtCouponToken: string;
+  debtCouponManager: string;
 };
 
 // Load all contract addresses on parallel
@@ -116,6 +123,7 @@ async function contractsAddresses(
     crvToken,
     bondingToken,
     debtCouponToken,
+    debtCouponManager: ADDRESS.DEBT_COUPON_MANAGER,
   };
 }
 
@@ -150,6 +158,10 @@ export async function connectedContracts(): Promise<{
       bondingToken: contracts.bondingToken(addr.bondingToken, provider),
       debtCouponToken: contracts.debtCouponToken(
         addr.debtCouponToken,
+        provider
+      ),
+      debtCouponManager: contracts.DebtCouponManager(
+        addr.debtCouponManager,
         provider
       ),
     },

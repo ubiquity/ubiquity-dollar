@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useConnectedContext } from "./context/connected";
 import { formatEther } from "../utils/format";
+import * as widget from "./ui/widget";
 
 type State = null | MetapoolMonitorProps;
 type MetapoolMonitorProps = {
@@ -38,40 +39,13 @@ const MetapoolMonitorContainer = () => {
 
 const MetapoolMonitor = (props: MetapoolMonitorProps) => {
   return (
-    <div
-      border="1 solid white/10"
-      text="white/50"
-      className="!block !mx-0 !py-8 px-4 tracking-wide bg-blur rounded-md"
-    >
-      <div className="text-center uppercase mb-2 tracking-widest text-sm">
-        Metapool monitor
-      </div>
-      <div className="text-center break-words text-xs mb-8">
-        {props.metaPoolAddress}
-      </div>
-      <div className="mb-8">
-        <div className="flex">
-          <div className="text-white/75 w-1/2">uAD Balance</div>
-          <div>
-            <span className="text-white/75">$ </span>
-            {props.uadBalance}
-          </div>
-        </div>
-        <div className="flex">
-          <div className="text-white/75 w-1/2">CRV Balance</div>
-          <div>
-            <span className="text-white/75">$ </span> {props.crvBalance}
-          </div>
-        </div>
-        <div className="flex">
-          <div className="text-white/75 w-1/2">Spot Price</div>
-          <div>
-            <span className="text-white/75">$ </span>
-            {props.spotPrice}
-          </div>
-        </div>
-      </div>
-    </div>
+    <widget.Container>
+      <widget.Title text="Metapool monitor" />
+      <widget.Address title="Metapool" address={props.metaPoolAddress} />
+      <widget.Balance title="uAD Balance" unit="$" balance={props.uadBalance} />
+      <widget.Balance title="CRV Balance" unit="$" balance={props.crvBalance} />
+      <widget.Balance title="Spot Price" unit="$" balance={props.spotPrice} />
+    </widget.Container>
   );
 };
 
