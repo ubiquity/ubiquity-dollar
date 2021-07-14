@@ -3191,10 +3191,10 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-windicss-webpack-plugin@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/windicss-webpack-plugin/-/windicss-webpack-plugin-1.2.5.tgz#66abe27ac17bfd8507c2f69f7798cca72f44f9d7"
-  integrity sha512-RhNHwyecTrq71Q4seAJxLFierPE+lvbYroR97iRPII1jEsV60c5KOf/4KdlRmuQHREK/An0pMKuAUbJa7DB7Cw==
+windicss-webpack-plugin@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/windicss-webpack-plugin/-/windicss-webpack-plugin-1.3.0.tgz#820247c6674480dd87dce8f2dde248a163ebfa09"
+  integrity sha512-blpGIYVuOVINx63F8ZRr63KYpm1VjyJJ1FXy8eudD19CAZwAi3nU6UEmMxgBVDJgWHle1C6zxuNTI+pL9q1RIA==
   dependencies:
     "@windicss/plugin-utils" "1.2.0"
     debug "^4.3.1"
@@ -3204,10 +3204,15 @@ windicss-webpack-plugin@^1.2.5:
     webpack-virtual-modules "^0.4.3"
     windicss "3.1.4"
 
-windicss@3.1.4, windicss@^3.1.3, windicss@^3.1.4:
+windicss@3.1.4, windicss@^3.1.3:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/windicss/-/windicss-3.1.4.tgz#557eaf8e3c08064a309ccb5d887c82c4bce25069"
   integrity sha512-3RBcANxdOy/n4dLVT8+0X409sGI+piO06ARbQ8RncxGuYgdw5Ip3hrhGIYajH67lV+tHc7xNVGxj73amOC9N0g==
+
+windicss@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/windicss/-/windicss-3.1.5.tgz#e9b6d6adcbc6f6c6e33e6625a3e5923b328f3137"
+  integrity sha512-sGi2YiN6Bp/vWJS0jlpJhMmh7O2TBQ+yTbL6oqoRXz32q1VKELOUMfF+5pdtVL5uoVnfKf4gOUQs2XKNgU30Lw==
 
 word-wrap@^1.2.3:
   version "1.2.3"
