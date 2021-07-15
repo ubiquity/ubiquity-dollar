@@ -130,7 +130,7 @@ const DepositShareBalance = () => {
 
         {/*
         <span>
-          {balances ? `${parseFloat(ethers.utils.formatEther(balances.bondingShares)).toFixed(2)}` : "0.00"}{" "}
+          {balances ? `${parseInt(ethers.utils.formatEther(balances.bondingShares))}` : "0"}{" "}
           Bonding Shares
         </span> */}
 
