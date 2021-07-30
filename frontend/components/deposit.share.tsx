@@ -2,8 +2,9 @@ import { BigNumber, ethers } from "ethers";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
-  Bonding__factory, IMetaPool__factory,
-  IUbiquityFormulas__factory
+  Bonding__factory,
+  IMetaPool__factory,
+  IUbiquityFormulas__factory,
 } from "../src/types";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../utils/types";
@@ -244,6 +245,7 @@ const DepositShare = () => {
   return (
     <>
       <div id="deposit-share">
+        98888888888888888888888888888888888888888888
         <div>
           <input
             type="number"
@@ -261,14 +263,16 @@ const DepositShare = () => {
             min="4"
             max="208"
           />
-          <button  onClick={handleDeposit}>Stake LP Tokens</button>
+          <button onClick={handleDeposit}>Stake LP Tokens</button>
           {isLoading && (
             <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
           )}
           <p>{errMsg}</p>
 
           {expectedShares && (
-            <p>Expected bonding shares {ethers.utils.formatEther(expectedShares)}</p>
+            <p>
+              Expected bonding shares {ethers.utils.formatEther(expectedShares)}
+            </p>
           )}
 
           <DepositShareBalance />
