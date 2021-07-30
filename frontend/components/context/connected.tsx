@@ -17,6 +17,7 @@ export interface Balances {
   uar: BigNumber;
   ubq: BigNumber;
   bondingShares: BigNumber;
+  bondingSharesLP: BigNumber;
   debtCoupon: BigNumber;
   // window: Window & typeof globalThis;
 }
@@ -51,6 +52,7 @@ export const CONNECTED_CONTEXT_DEFAULT_VALUE = {
     uar: BigNumber.from(0),
     ubq: BigNumber.from(0),
     bondingShares: BigNumber.from(0),
+    bondingSharesLP: BigNumber.from(0),
     debtCoupon: BigNumber.from(0),
   },
   setBalances: () => {},

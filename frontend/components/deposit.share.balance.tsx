@@ -2,34 +2,34 @@ import { ethers, BigNumber } from "ethers";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { BondingShare, BondingShare__factory } from "../src/types";
+import {
+  BondingShareV2,
+  MasterChefV2,
+  MasterChefV2__factory,
+  BondingShareV2__factory,
+} from "../src/types";
 
+// get all the shares (aka rights to get UBQ rewards) linked to bondingShares owned by an address
 async function calculateBondingShareBalance(
   addr: string,
-  bondingShare: BondingShare
+  bondingShare: BondingShareV2,
+  masterchef: MasterChefV2
 ) {
-  //console.log({ addr });
   const ids = await bondingShare.holderTokens(addr);
 
   let bondingSharesBalance = BigNumber.from("0");
+
   if (ids && ids.length > 0) {
-    bondingSharesBalance = await bondingShare.balanceOf(addr, ids[0]);
+    bondingSharesBalance = await (
+      await masterchef.getBondingShareInfo(ids[0])
+    )[0];
   }
 
-  // console.log({ ids, bondingSharesBalance });
-
-  //
   let balance = BigNumber.from("0");
   if (ids.length > 1) {
-    /*  console.log(`
-    bondingShares ids 1:${ids[1]} balance:${await bondingShare.balanceOf(
-      addr,
-      ids[1]
-    )}
-
-    `); */
-    const balanceOfs = ids.map((id) => {
-      return bondingShare.balanceOf(addr, id);
+    const balanceOfs = ids.map(async (id) => {
+      const res = await masterchef.getBondingShareInfo(id);
+      return res[0];
     });
     const balances = Promise.all(balanceOfs);
     balance = (await balances).reduce((prev, cur) => {
@@ -37,6 +37,34 @@ async function calculateBondingShareBalance(
     });
   } else {
     balance = bondingSharesBalance;
+  }
+
+  return balance;
+}
+// get all the LP tokens  (aka  uAD3CRV-f) linked to bondingShares owned by an address
+async function calculateBondingShareLPBalance(
+  addr: string,
+  bondingShare: BondingShareV2
+) {
+  const ids = await bondingShare.holderTokens(addr);
+  let bondingSharesLPBalance = BigNumber.from("0");
+  if (ids && ids.length > 0) {
+    bondingSharesLPBalance = await (await bondingShare.getBond(ids[0]))
+      .lpAmount;
+  }
+
+  let balance = BigNumber.from("0");
+  if (ids.length > 1) {
+    const balanceOfs = ids.map(async (id) => {
+      const res = await bondingShare.getBond(id);
+      return res.lpAmount;
+    });
+    const balances = Promise.all(balanceOfs);
+    balance = (await balances).reduce((prev, cur) => {
+      return prev.add(cur);
+    });
+  } else {
+    balance = bondingSharesLPBalance;
   }
 
   return balance;
@@ -51,23 +79,32 @@ async function _bondingShareBalance(
 ) {
   if (manager && provider) {
     const bondingShareAdr = await manager.bondingShareAddress();
-    const bondingShare = BondingShare__factory.connect(
+    const bondingShare = BondingShareV2__factory.connect(
       bondingShareAdr,
       provider
     );
-
+    const masterchefAdr = await manager.masterChefAddress();
+    const masterchef = MasterChefV2__factory.connect(masterchefAdr, provider);
     if (bondingShare) {
-      const rawBalance = await calculateBondingShareBalance(
+      const rawShareBalance = await calculateBondingShareBalance(
+        account,
+        bondingShare,
+        masterchef
+      );
+      console.log("##rawShare Balance:", rawShareBalance.toString());
+      const rawShareLPBalance = await calculateBondingShareLPBalance(
         account,
         bondingShare
       );
-      console.log("##rawBalance:", rawBalance.toString());
+      console.log("##rawShareLP Balance:", rawShareLPBalance.toString());
       if (balances) {
-        if (!balances.bondingShares.eq(rawBalance))
-          setBalances({ ...balances, bondingShares: rawBalance });
+        if (!balances.bondingShares.eq(rawShareBalance))
+          setBalances({ ...balances, bondingShares: rawShareBalance });
+        if (!balances.bondingSharesLP.eq(rawShareLPBalance))
+          setBalances({ ...balances, bondingSharesLP: rawShareLPBalance });
         const totalShareSupply = await bondingShare.totalSupply();
 
-        const percentage = rawBalance
+        const percentage = rawShareBalance
           .mul(ethers.utils.parseEther("100"))
           .div(totalShareSupply);
         const percentageStr = ethers.utils.formatEther(percentage);
@@ -128,11 +165,12 @@ const DepositShareBalance = () => {
           </svg>
         </span>
 
-        {/*
         <span>
-          {balances ? `${parseInt(ethers.utils.formatEther(balances.bondingShares))}` : "0"}{" "}
-          Bonding Shares
-        </span> */}
+          {balances
+            ? `${parseInt(ethers.utils.formatEther(balances.bondingSharesLP))}`
+            : "0"}{" "}
+          LP locked in Bonding Shares
+        </span>
 
         {bondingSharePercentage && (
           <>
