@@ -5,6 +5,7 @@ import { ERC1155Ubiquity } from "../src/types";
 
 import { EthAccount } from "../utils/types";
 import Account from "./account";
+import BondingMigrate from "./bonding.migrate";
 import ChefUgov from "./chefugov";
 import {
   Balances,
@@ -84,6 +85,62 @@ async function fetchAccount(): Promise<EthAccount | null> {
     console.error("MetaMask is not installed, cannot connect wallet");
     return null;
   }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts",
+  });
+  setProvider(provider);
+  setAccount({ address: accounts[0], balance: 0 });
+  const manager = UbiquityAlgorithmicDollarManager__factory.connect(
+    ADDRESS.MANAGER,
+    provider
+  );
+  setManager(manager);
+  const SIGNER = provider.getSigner();
+  const TOKEN_ADDR = await manager.stableSwapMetaPoolAddress();
+  const metapool = IMetaPool__factory.connect(TOKEN_ADDR, SIGNER);
+
+  const uarAdr = await manager.autoRedeemTokenAddress();
+  const uar = UbiquityAutoRedeem__factory.connect(uarAdr, SIGNER);
+  //  setUAR(uar);
+  const uGovAdr = await manager.governanceTokenAddress();
+  const ugov = UbiquityGovernance__factory.connect(uGovAdr, SIGNER);
+  //  setUGOV(ugov);
+  const uadAdr = await manager.dollarTokenAddress();
+  const uad = UbiquityAlgorithmicDollar__factory.connect(uadAdr, SIGNER);
+  // setUAD(uad);
+  const CRV_TOKEN_ADDR = await manager.curve3PoolTokenAddress();
+  const crvToken = ERC20__factory.connect(CRV_TOKEN_ADDR, provider);
+
+  const BONDING_TOKEN_ADDR = await manager.bondingShareAddress();
+  const bondingToken = ERC1155Ubiquity__factory.connect(
+    BONDING_TOKEN_ADDR,
+    provider
+  );
+
+  const DEBT_COUPON_TOKEN_ADDR = await manager.debtCouponAddress();
+  const debtCouponToken = ERC1155Ubiquity__factory.connect(
+    DEBT_COUPON_TOKEN_ADDR,
+    provider
+  );
+
+  setBalances({
+    uad: await uad.balanceOf(accounts[0]),
+    crv: await crvToken.balanceOf(accounts[0]),
+    uad3crv: await metapool.balanceOf(accounts[0]),
+    uar: await uar.balanceOf(accounts[0]),
+    ubq: await ugov.balanceOf(accounts[0]),
+    debtCoupon: await erc1155BalanceOf(accounts[0], debtCouponToken),
+    bondingShares: await erc1155BalanceOf(accounts[0], bondingToken),
+    bondingSharesLP: BigNumber.from(0),
+  });
+
+  const TWAP_ADDR = await manager.twapOracleAddress();
+  const twap = TWAPOracle__factory.connect(TWAP_ADDR, provider);
+  const twapPrice = await twap.consult(uadAdr);
+  setTwapPrice(twapPrice);
+
 }
 
 export function _renderControls() {
@@ -158,7 +215,7 @@ export function _renderControls() {
 
         {account && <TwapPrice />}
         <ChefUgov />
-
+        <BondingMigrate />
         <DepositShare />
         {balances?.uar.gt(BigNumber.from(0)) &&
         twapPrice?.gte(ethers.utils.parseEther("1")) ? (
