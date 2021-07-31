@@ -116,6 +116,7 @@ export async function _connect(
     ubq: await ugov.balanceOf(accounts[0]),
     debtCoupon: await erc1155BalanceOf(accounts[0], debtCouponToken),
     bondingShares: await erc1155BalanceOf(accounts[0], bondingToken),
+    bondingSharesLP: BigNumber.from(0),
   });
 
   const TWAP_ADDR = await manager.twapOracleAddress();

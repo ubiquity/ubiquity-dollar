@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { BondingV2__factory } from "../src/types";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../utils/types";
@@ -63,7 +63,21 @@ const BondingMigrate = () => {
 
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
-  if (!account) {
+  const [migrateId, setMigrateId] = useState<BigNumber>();
+
+  useEffect(() => {
+    (async function () {
+      if (provider && account && manager) {
+        const SIGNER = provider.getSigner();
+        const BONDING_ADDR = await manager.bondingContractAddress();
+        const bonding = BondingV2__factory.connect(BONDING_ADDR, SIGNER);
+        // setMigrateId(await bonding.toMigrateId(account.address));
+        setMigrateId(BigNumber.from(1));
+      }
+    })();
+  }, [account, manager, provider]);
+
+  if (!account || !migrateId || migrateId.eq(0)) {
     return null;
   }
 
@@ -89,7 +103,7 @@ const BondingMigrate = () => {
           {isLoading && (
             <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
           )}
-          <p>{errMsg}</p>
+          {errMsg ? <p>{errMsg}</p> : null}
         </div>
       </div>
     </>

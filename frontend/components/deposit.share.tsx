@@ -245,7 +245,6 @@ const DepositShare = () => {
   return (
     <>
       <div id="deposit-share">
-        98888888888888888888888888888888888888888888
         <div>
           <input
             type="number"
