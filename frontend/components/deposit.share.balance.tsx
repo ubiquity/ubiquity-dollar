@@ -103,17 +103,18 @@ async function _bondingShareBalance(
           setBalances({ ...balances, bondingShares: rawShareBalance });
         if (!balances.bondingSharesLP.eq(rawShareLPBalance))
           setBalances({ ...balances, bondingSharesLP: rawShareLPBalance });
-        const totalShareSupply = await bondingShare.totalSupply();
+        const totalShareSupply = await masterchef.totalShares();
+        if (totalShareSupply.gt(BigNumber.from(0))) {
+          const percentage = rawShareBalance
+            .mul(ethers.utils.parseEther("100"))
+            .div(totalShareSupply);
+          const percentageStr = ethers.utils.formatEther(percentage);
 
-        const percentage = rawShareBalance
-          .mul(ethers.utils.parseEther("100"))
-          .div(totalShareSupply);
-        const percentageStr = ethers.utils.formatEther(percentage);
-
-        setPercentage(
-          `${percentageStr}%`
-          // percentageStr.slice(0, percentageStr.indexOf(".") + 4) + "%"
-        );
+          setPercentage(
+            `${percentageStr}%`
+            // percentageStr.slice(0, percentageStr.indexOf(".") + 4) + "%"
+          );
+        }
       }
     }
   }
