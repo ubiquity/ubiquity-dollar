@@ -52,11 +52,15 @@ async function _getUBQReward(
     const bondingShareIds = await bondingShare.holderTokens(account);
     // TODO there can be several Ids so we should be able to select one
 
-    const balance = await masterChef?.pendingUGOV(bondingShareIds[0]);
-    if (balance) {
-      if (!(balance.toString() === reward)) {
-        setRewards(ethers.utils.formatEther(balance));
+    if (bondingShareIds.length) {
+      const balance = await masterChef?.pendingUGOV(bondingShareIds[0]);
+      if (balance) {
+        if (!(balance.toString() === reward)) {
+          setRewards(ethers.utils.formatEther(balance));
+        }
       }
+    } else {
+      setRewards(ethers.BigNumber.from(0).toString());
     }
   }
 }
@@ -84,7 +88,9 @@ async function _claimReward(
     );
     const bondingShareIds = await bondingShare.holderTokens(account);
     // TODO there can be several Ids so we should be able to select one
-    await (await masterChef?.getRewards(bondingShareIds[0])).wait();
+    if (bondingShareIds.length) {
+      await (await masterChef?.getRewards(bondingShareIds[0])).wait();
+    }
     await _getUBQReward(account, manager, provider, rewards, setRewards);
     await _getUBQBalance(account, manager, provider, balances, setBalances);
   }
@@ -138,6 +144,11 @@ const ChefUgov = () => {
     );
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(handleReward, 8e4);
+    return () => clearInterval(intervalId);
+  }, []);
+
   if (!account) {
     return null;
   }
@@ -153,8 +164,6 @@ const ChefUgov = () => {
       setBalances
     );
   };
-
-  setInterval(handleReward, 8e4);
 
   return (
     <>
