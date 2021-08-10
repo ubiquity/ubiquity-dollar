@@ -67,15 +67,6 @@ const DebtCouponBalance = () => {
     return null;
   }
 
-  const handleBalance = async () => {
-    _debtCouponBalance(
-      account ? account.address : "",
-      manager,
-      provider,
-      balances,
-      setBalances
-    );
-  };
   return (
     <>
       <div id="debt-coupon-balance">
@@ -92,7 +83,6 @@ const DebtCouponBalance = () => {
             uDEBT
           </span>
         </div>
-        {/* <button onClick={handleBalance}>Get uDEBT</button> */}
       </div>
     </>
   );

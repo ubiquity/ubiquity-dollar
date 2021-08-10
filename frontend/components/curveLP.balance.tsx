@@ -43,13 +43,6 @@ const CurveLPBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getLPTokenBalance(
-      provider,
-      account ? account.address : "",
-      balances,
-      setBalances
-    );
   return (
     <>
       <div id="curve-lp-balance">
@@ -72,7 +65,6 @@ const CurveLPBalance = () => {
                 : "0"}{" "}
               uAD3CRV-f
             </span>
-            {/* <button onClick={handleClick}>Get LP Token Balance</button> */}
           </div>
         </a>
       </div>

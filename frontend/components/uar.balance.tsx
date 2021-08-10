@@ -43,13 +43,6 @@ const UarBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getTokenBalance(
-      provider,
-      account ? account.address : "",
-      balances,
-      setBalances
-    );
   return (
     <>
       <div id="uar-balance">
@@ -73,7 +66,6 @@ const UarBalance = () => {
             </span>
           </div>
         </a>
-        {/* <button onClick={handleClick}>Get uAR Token Balance</button> */}
       </div>
     </>
   );

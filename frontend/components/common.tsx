@@ -158,7 +158,7 @@ export function _renderControls() {
                 type="button"
                 value="Connect Wallet"
                 disabled={connecting}
-                onClick={(el) => connect(el)}
+                onClick={() => connect()}
               />
             </span>
           </div>

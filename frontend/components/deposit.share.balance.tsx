@@ -147,16 +147,6 @@ const DepositShareBalance = () => {
     return null;
   }
 
-  const handleBalance = async () => {
-    _bondingShareBalance(
-      account ? account.address : "",
-      manager,
-      provider,
-      balances,
-      setBalances,
-      setPercentage
-    );
-  };
   return (
     <>
       <div id="deposit-share-balance">
@@ -184,8 +174,6 @@ const DepositShareBalance = () => {
             Loading LP locked in Bonding Shares...
           </>
         )}
-
-        {/* <button onClick={handleBalance}>Get Bonding Shares</button> */}
       </div>
     </>
   );

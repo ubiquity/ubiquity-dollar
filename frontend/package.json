@@ -8,7 +8,7 @@
         "build": "../hooks/next-build.sh",
         "prod-build": "next build",
         "start": "next start",
-        "lint": "yarn eslint . --ext .js,.jsx,.ts,.tsx",
+        "lint": "yarn eslint . --ext .ts,.tsx",
         "format": "yarn prettier --write . --ignore-path .gitignore",
         "ts": "tsc --noEmit --incremental",
         "ts:watch": "yarn ts --watch"

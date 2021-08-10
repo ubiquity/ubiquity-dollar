@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
-  BondingShareV2,
   BondingShareV2__factory,
   MasterChefV2__factory,
   UbiquityAlgorithmicDollarManager,
@@ -106,25 +105,13 @@ const ChefUgov = () => {
   } = useConnectedContext();
 
   useEffect(() => {
-    _getUBQBalance(
-      account ? account.address : "",
-      manager,
-      provider,
-      balances,
-      setBalances
-    );
-    _getUBQReward(
-      account ? account.address : "",
-      manager,
-      provider,
-      rewards,
-      setRewards
-    );
+    handleBalance();
+    handleReward();
   }, [balances?.ubq]);
 
   const [rewards, setRewards] = useState<string>();
 
-  const handleBalance = async () => {
+  const handleBalance = () => {
     _getUBQBalance(
       account ? account.address : "",
       manager,
@@ -133,7 +120,8 @@ const ChefUgov = () => {
       setBalances
     );
   };
-  const handleReward = async () => {
+
+  const handleReward = () => {
     console.log(`handling reward`);
     _getUBQReward(
       account ? account.address : "",
@@ -153,7 +141,7 @@ const ChefUgov = () => {
     return null;
   }
 
-  const handleClaim = async () => {
+  const handleClaim = () => {
     _claimReward(
       account ? account.address : "",
       manager,
@@ -165,12 +153,9 @@ const ChefUgov = () => {
     );
   };
 
-  setInterval(handleReward, 8e4);
-
   return (
     <>
       <div id="chefugov">
-        {/* <button onClick={handleReward}>Get Ubiquity Rewards</button> */}
         <p>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91.57 104.19">

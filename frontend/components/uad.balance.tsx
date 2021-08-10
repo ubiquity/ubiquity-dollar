@@ -50,15 +50,6 @@ const UadBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getTokenBalance(
-      provider,
-      account ? account.address : "",
-      manager,
-      balances,
-      setBalances
-    );
-
   return (
     <>
       <div id="uad-balance">
@@ -81,7 +72,6 @@ const UadBalance = () => {
               uAD
             </span>
           </div>
-          {/* <button onClick={handleClick}>Get uAD Token Balance</button> */}
         </a>
       </div>
     </>

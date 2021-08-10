@@ -1,14 +1,12 @@
 import { BigNumber, ethers } from "ethers";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Dropdown, Selection } from "react-dropdown-now";
+import { Dropdown } from "react-dropdown-now";
 import Image from "next/image";
 import {
   DebtCouponManager__factory,
   DebtCoupon__factory,
-  ICouponsForDollarsCalculator__factory,
   UbiquityAlgorithmicDollarManager,
-  UbiquityAlgorithmicDollar__factory,
 } from "../src/types";
 import { ADDRESS } from "../pages";
 

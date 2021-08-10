@@ -47,14 +47,6 @@ const CurveBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getCurveTokenBalance(
-      provider,
-      account ? account.address : "",
-      manager,
-      balances,
-      setBalances
-    );
   return (
     <>
       <div id="curve-balance">
@@ -77,8 +69,6 @@ const CurveBalance = () => {
                 : "0"}{" "}
               3CRV
             </span>
-
-            {/* <button onClick={handleClick}>Get curve Token Balance</button> */}
           </div>
         </a>
       </div>
