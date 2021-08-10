@@ -38,36 +38,12 @@ export interface IConnectedContext {
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
 }
 
-// We can cast it safely here because we are actually setting the value on ConnectedNetwork
-export const CONNECTED_CONTEXT_DEFAULT_VALUE = {
-  manager: undefined,
-  setManager: () => {},
-  provider: undefined,
-  account: undefined,
-  setProvider: () => {},
-  setAccount: () => {},
-  balances: {
-    uad: BigNumber.from(0),
-    crv: BigNumber.from(0),
-    uad3crv: BigNumber.from(0),
-    uar: BigNumber.from(0),
-    ubq: BigNumber.from(0),
-    bondingShares: BigNumber.from(0),
-    bondingSharesLP: BigNumber.from(0),
-    debtCoupon: BigNumber.from(0),
-  },
-  setBalances: () => {},
-  twapPrice: undefined,
-  setTwapPrice: () => {},
-};
-
 const ConnectedContext = createContext<IConnectedContext>(
   {} as IConnectedContext
 );
 
 interface Props {
   children: React.ReactNode;
-  // window: Window & typeof globalThis;
 }
 
 export const ConnectedNetwork = (props: Props): JSX.Element => {
