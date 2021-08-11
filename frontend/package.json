@@ -14,7 +14,7 @@
     "ts:watch": "yarn ts --watch"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --cache --fix"
+    "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
   },
   "dependencies": {
     "next": "^10.2.3",
@@ -31,6 +31,7 @@
     "eslint": "^7.16.0",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-tsc": "^2.0.0",
     "ethers": "^5.0.31",
     "lint-staged": ">=10",
     "prettier": "2.2.1",
