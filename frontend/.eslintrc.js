@@ -3,7 +3,7 @@
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "prettier"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -11,5 +11,6 @@ module.exports = {
   ],
   rules: {
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "prettier/prettier": "error",
   },
 };
