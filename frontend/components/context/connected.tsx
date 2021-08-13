@@ -23,7 +23,7 @@ export interface Balances {
   debtCoupon: BigNumber;
 }
 
-export interface IConnectedContext {
+export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;
   provider: ethers.providers.Web3Provider | null;
   account: EthAccount | null;
@@ -38,8 +38,8 @@ export interface IConnectedContext {
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
 }
 
-const ConnectedContext = createContext<IConnectedContext>(
-  {} as IConnectedContext
+const ConnectedContext = createContext<ConnectedContext>(
+  {} as ConnectedContext
 );
 
 interface Props {
@@ -60,7 +60,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<BigNumber | null>(null);
   const [contracts, setContracts] = useState<Contracts | null>(null);
 
-  const value: IConnectedContext = {
+  const value: ConnectedContext = {
     provider,
     setProvider,
     manager,
@@ -82,7 +82,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
   );
 };
 
-export const useConnectedContext = (): IConnectedContext =>
+export const useConnectedContext = (): ConnectedContext =>
   useContext(ConnectedContext);
 
 export function useConnectedContracts(): void {
