@@ -7,10 +7,10 @@ import { Balances, useConnectedContext } from "./context/connected";
 
 let TOKEN_ADDR: string;
 async function _getTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account) {
     const manager = UbiquityAlgorithmicDollarManager__factory.connect(
@@ -43,13 +43,6 @@ const UarBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getTokenBalance(
-      provider,
-      account ? account.address : "",
-      balances,
-      setBalances
-    );
   return (
     <>
       <div id="uar-balance">
@@ -73,7 +66,6 @@ const UarBalance = () => {
             </span>
           </div>
         </a>
-        {/* <button onClick={handleClick}>Get uAR Token Balance</button> */}
       </div>
     </>
   );

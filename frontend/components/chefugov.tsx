@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
-  BondingShareV2,
   BondingShareV2__factory,
   MasterChefV2__factory,
   UbiquityAlgorithmicDollarManager,
@@ -11,10 +10,10 @@ import {
 
 async function _getUBQBalance(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   const SIGNER = provider?.getSigner();
   if (SIGNER && manager) {
@@ -32,8 +31,8 @@ async function _getUBQBalance(
 
 async function _getUBQReward(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   reward: string | undefined,
   setRewards: Dispatch<SetStateAction<string | undefined>>
 ): Promise<void> {
@@ -67,12 +66,12 @@ async function _getUBQReward(
 
 async function _claimReward(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   rewards: string | undefined,
   setRewards: Dispatch<SetStateAction<string | undefined>>,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   const SIGNER = provider?.getSigner();
 
@@ -106,25 +105,13 @@ const ChefUgov = () => {
   } = useConnectedContext();
 
   useEffect(() => {
-    _getUBQBalance(
-      account ? account.address : "",
-      manager,
-      provider,
-      balances,
-      setBalances
-    );
-    _getUBQReward(
-      account ? account.address : "",
-      manager,
-      provider,
-      rewards,
-      setRewards
-    );
+    handleBalance();
+    handleReward();
   }, [balances?.ubq]);
 
   const [rewards, setRewards] = useState<string>();
 
-  const handleBalance = async () => {
+  const handleBalance = () => {
     _getUBQBalance(
       account ? account.address : "",
       manager,
@@ -133,7 +120,8 @@ const ChefUgov = () => {
       setBalances
     );
   };
-  const handleReward = async () => {
+
+  const handleReward = () => {
     console.log(`handling reward`);
     _getUBQReward(
       account ? account.address : "",
@@ -153,7 +141,7 @@ const ChefUgov = () => {
     return null;
   }
 
-  const handleClaim = async () => {
+  const handleClaim = () => {
     _claimReward(
       account ? account.address : "",
       manager,
@@ -168,7 +156,6 @@ const ChefUgov = () => {
   return (
     <>
       <div id="chefugov">
-        {/* <button onClick={handleReward}>Get Ubiquity Rewards</button> */}
         <p>
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 91.57 104.19">

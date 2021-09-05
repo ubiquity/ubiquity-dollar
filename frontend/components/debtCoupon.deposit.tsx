@@ -1,19 +1,18 @@
 import { BigNumber, ethers } from "ethers";
-import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
-import Image from "next/image";
+import { ADDRESS } from "../pages";
 import {
   DebtCouponManager__factory,
   ICouponsForDollarsCalculator__factory,
   UbiquityAlgorithmicDollarManager,
   UbiquityAlgorithmicDollar__factory,
 } from "../src/types";
-import { ADDRESS } from "../pages";
+import { Balances, useConnectedContext } from "./context/connected";
 
 async function _expectedDebtCoupon(
   amount: BigNumber,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
 ) {
   if (manager && provider) {
@@ -49,7 +48,7 @@ const DebtCouponDeposit = () => {
   }
   const depositDollarForDebtCoupons = async (
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => {
     if (provider && account && manager) {
       const uAD = UbiquityAlgorithmicDollar__factory.connect(
@@ -173,19 +172,22 @@ const DebtCouponDeposit = () => {
           type="number"
           name="uadAmount"
           id="uadAmount"
-          placeholder="uAD amount"
+          placeholder="uAD Amount"
           onInput={handleInputUAD}
         />
         <button onClick={handleBurn}>Burn uAD for uDEBT</button>
         {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         )}
         <p>{errMsg}</p>
       </div>
       {expectedDebtCoupon && (
-        <p>
-          expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}
-        </p>
+        <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>
       )}
     </>
   );

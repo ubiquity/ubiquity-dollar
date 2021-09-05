@@ -5,15 +5,13 @@ import { IMetaPool__factory } from "../src/types/factories/IMetaPool__factory";
 import { UbiquityAlgorithmicDollarManager__factory } from "../src/types/factories/UbiquityAlgorithmicDollarManager__factory";
 import { Balances, useConnectedContext } from "./context/connected";
 
-
-
 let TOKEN_ADDR: string;
 
 export async function _getLPTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account) {
     const manager = UbiquityAlgorithmicDollarManager__factory.connect(
@@ -45,13 +43,6 @@ const CurveLPBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getLPTokenBalance(
-      provider,
-      account ? account.address : "",
-      balances,
-      setBalances
-    );
   return (
     <>
       <div id="curve-lp-balance">
@@ -74,7 +65,6 @@ const CurveLPBalance = () => {
                 : "0"}{" "}
               uAD3CRV-f
             </span>
-            {/* <button onClick={handleClick}>Get LP Token Balance</button> */}
           </div>
         </a>
       </div>

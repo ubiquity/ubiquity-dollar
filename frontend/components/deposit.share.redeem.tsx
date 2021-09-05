@@ -1,12 +1,11 @@
 import { BigNumber, ethers } from "ethers";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
 import { InputValue, Option } from "react-dropdown-now/dist/types";
 import {
   BondingShare__factory,
   Bonding__factory,
-  UbiquityAlgorithmicDollarManager
+  UbiquityAlgorithmicDollarManager,
 } from "../src/types";
 import { EthAccount } from "../utils/types";
 import { Balances, useConnectedContext } from "./context/connected";
@@ -64,16 +63,15 @@ function DepositShareRedeem(): JSX.Element | null {
   return (
     <>
       <div id="debt-coupon-redeem">
-      <p>You will not receive your full principle from deposits until we finish Bonding V2. Read more <a href="https://dao.ubq.fi/28-june-2021" target="_blank">here</a>.</p>
         <Dropdown
           arrowClosed={<span className="arrow-closed" />}
           arrowOpen={<span className="arrow-open" />}
-          placeholder="Select a deposit"
+          placeholder="Select Deposit"
           className="dropdown"
           options={debtIds ?? []}
           onChange={(opt) => {
             if (opt && opt.id && opt.value) {
-              setDebtId(opt.id.toString() as string);
+              setDebtId(opt.id);
               setDebtAmount(ethers.utils.formatEther(opt.value as BigNumber));
             }
           }}
@@ -83,13 +81,18 @@ function DepositShareRedeem(): JSX.Element | null {
           type="number"
           name="bshareAmount"
           id="bshareAmount"
-          placeholder="bonding share amount"
+          placeholder="Bonding Shares Amount"
           value={debtAmount}
         />
         <button onClick={handleRedeem}>Withdraw LP Tokens</button>
 
         {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         )}
         <p>{errMsg}</p>
       </div>
@@ -103,10 +106,10 @@ function handleRedeemCurry(
   redeemBondingShare: (
     debtId: string | undefined,
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => Promise<void>,
   debtId: string | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ) {
   return async () => {
     setErrMsg("");
@@ -137,15 +140,15 @@ function handleRedeemCurry(
 }
 
 function redeemBondingShareCurry(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: EthAccount,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
   balances: Balances
 ) {
   return async (
     debtId: string | undefined,
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => {
     // console.log("debtId", debtId);
     if (provider && account && manager && debtId) {
@@ -173,7 +176,7 @@ async function providerAccountManagerAndDebtId(
   account: EthAccount,
   amount: BigNumber,
   debtId: string,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
+  setBalances: Dispatch<SetStateAction<Balances | null>>,
   balances: Balances
 ) {
   const bondingShareAdr = await manager.bondingShareAddress();
@@ -288,8 +291,8 @@ async function managerProviderAndBlockNumber(
 
 async function _getDebtIds(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   debtIds: InputValue[] | undefined,
   setDebtIds: Dispatch<SetStateAction<InputValue[] | undefined>>,
   blockNum: number | undefined
@@ -306,7 +309,7 @@ async function _getDebtIds(
   }
 }
 async function getBlockNumber(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   setBlockNumber: Dispatch<SetStateAction<number | undefined>>
 ) {
   let blockNumber = 0;

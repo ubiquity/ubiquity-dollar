@@ -7,9 +7,9 @@ import { EthAccount } from "../utils/types";
 import { Balances, useConnectedContext } from "./context/connected";
 
 async function _migrate(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: EthAccount,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>
 ) {
   if (provider && account && manager) {
@@ -31,11 +31,11 @@ async function _migrate(
 }
 
 async function _migrateBond(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: EthAccount,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>,
   setIsLoading: Dispatch<SetStateAction<boolean | undefined>>
   // setPercentage: Dispatch<SetStateAction<string | undefined>>
@@ -100,7 +100,12 @@ const BondingMigrate = () => {
         <div>
           <button onClick={handleMigration}>Migrate</button>
           {isLoading && (
-            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           )}
           {errMsg ? <p>{errMsg}</p> : null}
         </div>

@@ -12,7 +12,6 @@ const Account = () => {
     <>
       <div id="account">
         <p>{account?.address}</p>
-
       </div>
     </>
   );

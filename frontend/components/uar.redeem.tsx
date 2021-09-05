@@ -1,12 +1,11 @@
 import { BigNumber, ethers } from "ethers";
-import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
-import Image from "next/image";
+import { ADDRESS } from "../pages";
 import {
   DebtCouponManager__factory,
   UbiquityAutoRedeem__factory,
 } from "../src/types";
-import { ADDRESS } from "../pages";
+import { Balances, useConnectedContext } from "./context/connected";
 
 const UarRedeem = () => {
   const {
@@ -26,7 +25,7 @@ const UarRedeem = () => {
   }
   const redeem = async (
     amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | undefined>>
+    setBalances: Dispatch<SetStateAction<Balances | null>>
   ) => {
     const SIGNER = provider?.getSigner();
 
@@ -115,11 +114,16 @@ const UarRedeem = () => {
           type="number"
           name="uarAmount"
           id="uarAmount"
-          placeholder="uAR amount"
+          placeholder="uAR Amount"
         />
         <button onClick={handleRedeem}>Redeem uAR for uAD</button>
         {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         )}
         <p>{errMsg}</p>
       </div>

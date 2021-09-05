@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from "ethers";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   Bonding__factory,
@@ -14,9 +13,9 @@ import DepositShareBalance from "./deposit.share.balance";
 async function _allowAndDepositBondingToken(
   lpsAmount: ethers.BigNumber,
   weeks: ethers.BigNumber,
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: EthAccount,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>
 ) {
   if (provider && account && manager) {
@@ -60,11 +59,11 @@ async function _allowAndDepositBondingToken(
 }
 
 async function _depositBondingTokens(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: EthAccount,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>,
   setErrMsg: Dispatch<SetStateAction<string | undefined>>,
   setIsLoading: Dispatch<SetStateAction<boolean | undefined>>
   // setPercentage: Dispatch<SetStateAction<string | undefined>>
@@ -111,10 +110,10 @@ async function _depositBondingTokens(
   }
   const weeksAmount = BigNumber.from(weeksValue);
   if (
-    !weeksAmount.gt(BigNumber.from(3)) ||
+    !weeksAmount.gte(BigNumber.from(1)) ||
     !weeksAmount.lte(BigNumber.from(208))
   ) {
-    setErrMsg(`${subject} should be between 4 and 208`);
+    setErrMsg(`${subject} should be between 1 and 208`);
     setIsLoading(false);
     return;
   }
@@ -137,8 +136,8 @@ async function _depositBondingTokens(
 async function _expectedShares(
   lpAmount: BigNumber,
   weeks: BigNumber,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
   setExpectedShares: Dispatch<SetStateAction<BigNumber | undefined>>
 ) {
   if (manager && provider) {
@@ -231,10 +230,10 @@ const DepositShare = () => {
     }
     const weeksAmount = BigNumber.from(weeksValue);
     if (
-      !weeksAmount.gt(BigNumber.from(3)) ||
+      !weeksAmount.gte(BigNumber.from(1)) ||
       !weeksAmount.lte(BigNumber.from(208))
     ) {
-      setErrMsg(`${subject} should be between 4 and 208`);
+      setErrMsg(`${subject} should be between 1 and 208`);
       setIsLoading(false);
       return;
     }
@@ -258,13 +257,18 @@ const DepositShare = () => {
             name="weeks"
             id="weeks"
             onInput={handleInputWeeks}
-            placeholder="Weeks (4-208)"
-            min="4"
+            placeholder="Weeks (1-208)"
+            min="1"
             max="208"
           />
           <button onClick={handleDeposit}>Stake LP Tokens</button>
           {isLoading && (
-            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           )}
           <p>{errMsg}</p>
 

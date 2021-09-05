@@ -23,10 +23,10 @@ async function calculateDebtCouponBalance(
 }
 async function _debtCouponBalance(
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  provider: ethers.providers.Web3Provider | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ) {
   if (manager && provider) {
     const debtCoupon = DebtCoupon__factory.connect(
@@ -67,15 +67,6 @@ const DebtCouponBalance = () => {
     return null;
   }
 
-  const handleBalance = async () => {
-    _debtCouponBalance(
-      account ? account.address : "",
-      manager,
-      provider,
-      balances,
-      setBalances
-    );
-  };
   return (
     <>
       <div id="debt-coupon-balance">
@@ -86,11 +77,12 @@ const DebtCouponBalance = () => {
             </svg>
           </span>
           <span>
-            {balances ? `${parseInt(ethers.utils.formatEther(balances.debtCoupon))}` : "0"}{" "}
+            {balances
+              ? `${parseInt(ethers.utils.formatEther(balances.debtCoupon))}`
+              : "0"}{" "}
             uDEBT
           </span>
         </div>
-        {/* <button onClick={handleBalance}>Get uDEBT</button> */}
       </div>
     </>
   );

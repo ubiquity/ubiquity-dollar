@@ -1,7 +1,5 @@
 import { FC } from "react";
-import {
-  _renderControls
-} from "../components/common";
+import { _renderControls } from "../components/common";
 import FullDeployment from "../src/full_deployment.json";
 
 export const ADDRESS = {
@@ -13,14 +11,9 @@ const Index: FC = (): JSX.Element => {
   // const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
   // const [account, setAccount] = useState<string>();
 
-  const renderControls = () =>
-    _renderControls();
+  const renderControls = () => _renderControls();
 
-  return (
-    <>
-      {renderControls()}
-    </>
-  );
+  return <>{renderControls()}</>;
 };
 
 export default Index;

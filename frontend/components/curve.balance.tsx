@@ -4,15 +4,14 @@ import { ERC20__factory } from "../src/types/factories/ERC20__factory";
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { Balances, useConnectedContext } from "./context/connected";
 
-
 let TOKEN_ADDR: string;
 
 async function _getCurveTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account && manager) {
     TOKEN_ADDR = await manager.curve3PoolTokenAddress();
@@ -48,14 +47,6 @@ const CurveBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getCurveTokenBalance(
-      provider,
-      account ? account.address : "",
-      manager,
-      balances,
-      setBalances
-    );
   return (
     <>
       <div id="curve-balance">
@@ -78,8 +69,6 @@ const CurveBalance = () => {
                 : "0"}{" "}
               3CRV
             </span>
-
-            {/* <button onClick={handleClick}>Get curve Token Balance</button> */}
           </div>
         </a>
       </div>

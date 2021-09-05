@@ -4,15 +4,14 @@ import { UbiquityAlgorithmicDollar__factory } from "../src/types/factories/Ubiqu
 import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
 import { Balances, useConnectedContext } from "./context/connected";
 
-
 let TOKEN_ADDR: string;
 
 export async function _getTokenBalance(
-  provider: ethers.providers.Web3Provider | undefined,
+  provider: ethers.providers.Web3Provider | null,
   account: string,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  balances: Balances | undefined,
-  setBalances: Dispatch<SetStateAction<Balances | undefined>>
+  manager: UbiquityAlgorithmicDollarManager | null,
+  balances: Balances | null,
+  setBalances: Dispatch<SetStateAction<Balances | null>>
 ): Promise<void> {
   if (provider && account && manager) {
     TOKEN_ADDR = await manager.dollarTokenAddress();
@@ -51,15 +50,6 @@ const UadBalance = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getTokenBalance(
-      provider,
-      account ? account.address : "",
-      manager,
-      balances,
-      setBalances
-    );
-
   return (
     <>
       <div id="uad-balance">
@@ -82,7 +72,6 @@ const UadBalance = () => {
               uAD
             </span>
           </div>
-          {/* <button onClick={handleClick}>Get uAD Token Balance</button> */}
         </a>
       </div>
     </>

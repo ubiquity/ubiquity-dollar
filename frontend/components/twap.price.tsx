@@ -8,10 +8,10 @@ import {
 } from "../src/types";
 
 export async function _getTwapPrice(
-  provider: ethers.providers.Web3Provider | undefined,
-  manager: UbiquityAlgorithmicDollarManager | undefined,
-  twapPrice: BigNumber | undefined,
-  setTwapPrice: Dispatch<SetStateAction<BigNumber | undefined>>
+  provider: ethers.providers.Web3Provider | null,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  twapPrice: BigNumber | null,
+  setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>
 ): Promise<void> {
   if (provider && manager) {
     const uadAdr = await manager.dollarTokenAddress();
@@ -36,18 +36,10 @@ const TwapPrice = () => {
     return null;
   }
 
-  const handleClick = async () =>
-    _getTwapPrice(provider, manager, twapPrice, setTwapPrice);
-
   return (
     <>
       <div id="twap-price">
-        {/* <button onClick={handleClick}>Get TWAP Price</button> */}
-
-        <p>
-
-          ${twapPrice && ethers.utils.formatEther(twapPrice)}
-        </p>
+        <p>${twapPrice && ethers.utils.formatEther(twapPrice)}</p>
         <aside>Time Weighted Average Price</aside>
       </div>
     </>
