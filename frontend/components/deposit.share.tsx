@@ -111,10 +111,10 @@ async function _depositBondingTokens(
   }
   const weeksAmount = BigNumber.from(weeksValue);
   if (
-    !weeksAmount.gt(BigNumber.from(3)) ||
+    !weeksAmount.gte(BigNumber.from(1)) ||
     !weeksAmount.lte(BigNumber.from(208))
   ) {
-    setErrMsg(`${subject} should be between 4 and 208`);
+    setErrMsg(`${subject} should be between 1 and 208`);
     setIsLoading(false);
     return;
   }
@@ -231,10 +231,10 @@ const DepositShare = () => {
     }
     const weeksAmount = BigNumber.from(weeksValue);
     if (
-      !weeksAmount.gt(BigNumber.from(3)) ||
+      !weeksAmount.gte(BigNumber.from(1)) ||
       !weeksAmount.lte(BigNumber.from(208))
     ) {
-      setErrMsg(`${subject} should be between 4 and 208`);
+      setErrMsg(`${subject} should be between 1 and 208`);
       setIsLoading(false);
       return;
     }
@@ -258,8 +258,8 @@ const DepositShare = () => {
             name="weeks"
             id="weeks"
             onInput={handleInputWeeks}
-            placeholder="Weeks (4-208)"
-            min="4"
+            placeholder="Weeks (1-208)"
+            min="1"
             max="208"
           />
           <button onClick={handleDeposit}>Stake LP Tokens</button>

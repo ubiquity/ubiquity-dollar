@@ -45,7 +45,7 @@
         }
     },
     "devDependencies": {
-        "@types/node": "^15.0.2",
+        "@types/node": "^16.7.10",
         "husky": "^7.0.1"
     }
 }
