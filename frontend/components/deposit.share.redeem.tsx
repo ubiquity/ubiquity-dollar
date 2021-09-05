@@ -64,14 +64,6 @@ function DepositShareRedeem(): JSX.Element | null {
   return (
     <>
       <div id="debt-coupon-redeem">
-        <p>
-          You will not receive your full principle from deposits until we finish
-          Bonding V2. Read more{" "}
-          <a href="https://dao.ubq.fi/28-june-2021" target="_blank">
-            here
-          </a>
-          .
-        </p>
         <Dropdown
           arrowClosed={<span className="arrow-closed" />}
           arrowOpen={<span className="arrow-open" />}
@@ -80,7 +72,7 @@ function DepositShareRedeem(): JSX.Element | null {
           options={debtIds ?? []}
           onChange={(opt) => {
             if (opt && opt.id && opt.value) {
-              setDebtId(opt.id.toString() as string);
+              setDebtId(opt.id);
               setDebtAmount(ethers.utils.formatEther(opt.value as BigNumber));
             }
           }}
