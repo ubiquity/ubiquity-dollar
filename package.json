@@ -1,39 +1,38 @@
 {
+    "name": "@ubiquity/dollar-ui",
     "license": "MIT",
     "scripts": {
-        "build": "./hooks/next-build.sh",
-        "setup-build-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
-        "build-debugging": "nodemon --exec hooks/restart.sh",
+        "build": "build-scripts/ui.sh",
+        "watch": "run-p watch:*",
+        "watch:ui": "next dev",
+        "stop": "kill $(lsof -t -i:8545) || true",
+        "prestart": "run-p install:*",
+        "prepare": "husky install",
+        "lint": "run-s lint:*",
+        "lint:prettier": "prettier --write . --ignore-path .gitignore",
+        "lint:eslint": "yarn eslint . --ext .ts,.tsx",
         "dev": "run-p watch:*",
-        "start": "./hooks/build.sh && cd ./frontend/ && yarn start",
+        "css:watch": "yarn tailwindcss -o pages/styles/tailwind.css --watch",
+        "css:build": "yarn tailwindcss -o pages/styles/tailwind.css",
+        "build:vercel": "build-scripts/build-vercel.sh"
+    },
+    "_unused-scripts": {
         "preinstall": "git submodule update --init --recursive --remote",
         "predev": "run-p install:*",
-        "prestart": "run-p install:*",
-        "install:sol": "cd ./contracts/ && yarn install && cd ..",
-        "install:ui": "cd ./frontend/ && yarn install && cd ..",
-        "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec './hooks/build.sh' --verbose",
-        "watch:ui": "cd ./frontend/ && yarn dev",
-        "stop": "kill $(lsof -t -i:8545) || true",
-        "prepare": "husky install"
+        "install:sol": "cd contracts/ && yarn && cd ..",
+        "start": "yarn build:sol && next start",
+        "build:sol": "build-scripts/build.sh",
+        "watch:sol": "nodemon --watch 'contracts/**/*' -e sol --exec 'build-scripts/build.sh' --verbose",
+        "_prebuild-debugging": "git clone https://github.com/pavlovcik/uad-ui-launch.git",
+        "_build-debugging": "nodemon --exec build-scripts/build-vercel-debugging.sh"
     },
-    "deprecated-scripts": {
-        "bendev": "# ./hooks/build.sh &&  cd ./frontend/ && yarn dev",
-        "poststop": "echo 'killed hardhat daemon'",
-        "postdev": "run-s stop"
-    },
-    "dependencies": {
-        "hardhat": "^2.5.0",
-        "next": "^11.0.0",
-        "nodemon": "^2.0.7",
-        "npm-run-all": "^4.1.5",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2"
+    "lint-staged": {
+        "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
     },
     "nodemonConfig": {
         "ignore": [
             "**/*/cache/",
             "**/*/artifacts/",
-            "**/*/frontend/",
             "**/*/node_modules/**/*"
         ],
         "events": {
@@ -46,6 +45,27 @@
     },
     "devDependencies": {
         "@types/node": "^16.7.10",
-        "husky": "^7.0.1"
+        "@types/react": "^17.0.19",
+        "@typescript-eslint/eslint-plugin": "^4.11.1",
+        "@typescript-eslint/parser": "^4.11.1",
+        "eslint": "^7.16.0",
+        "eslint-config-prettier": "^7.1.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-tsc": "^2.0.0",
+        "ethers": "^5.0.31",
+        "husky": "^7.0.1",
+        "lint-staged": ">=10",
+        "prettier": "2.2.1",
+        "react-dropdown-now": "^6.0.1",
+        "tailwindcss": "^2.2.9",
+        "typescript": "^4.3.2"
+    },
+    "dependencies": {
+        "hardhat": "^2.5.0",
+        "next": "^11.0.0",
+        "nodemon": "^2.0.7",
+        "npm-run-all": "^4.1.5",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
     }
 }
