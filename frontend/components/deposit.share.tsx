@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from "ethers";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 import {
   Bonding__factory,
@@ -264,7 +263,12 @@ const DepositShare = () => {
           />
           <button onClick={handleDeposit}>Stake LP Tokens</button>
           {isLoading && (
-            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           )}
           <p>{errMsg}</p>
 

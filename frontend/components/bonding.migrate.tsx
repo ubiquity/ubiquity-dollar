@@ -100,7 +100,12 @@ const BondingMigrate = () => {
         <div>
           <button onClick={handleMigration}>Migrate</button>
           {isLoading && (
-            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           )}
           {errMsg ? <p>{errMsg}</p> : null}
         </div>

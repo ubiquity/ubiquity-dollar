@@ -1,14 +1,13 @@
 import { BigNumber, ethers } from "ethers";
-import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
-import Image from "next/image";
+import { ADDRESS } from "../pages";
 import {
   DebtCouponManager__factory,
   DebtCoupon__factory,
   UbiquityAlgorithmicDollarManager,
 } from "../src/types";
-import { ADDRESS } from "../pages";
+import { Balances, useConnectedContext } from "./context/connected";
 
 const _getDebtIds = async (
   account: string,
@@ -167,11 +166,16 @@ const DebtCouponRedeem = () => {
           type="number"
           name="udebtAmount"
           id="udebtAmount"
-          placeholder="uDebt amount"
+          placeholder="uDebt Amount"
         />
         <button onClick={handleRedeem}>Burn uDebt for uAD</button>
         {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         )}
         <p>{errMsg}</p>
       </div>

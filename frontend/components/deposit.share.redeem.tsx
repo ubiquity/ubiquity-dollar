@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from "ethers";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
 import { InputValue, Option } from "react-dropdown-now/dist/types";
@@ -67,7 +66,7 @@ function DepositShareRedeem(): JSX.Element | null {
         <Dropdown
           arrowClosed={<span className="arrow-closed" />}
           arrowOpen={<span className="arrow-open" />}
-          placeholder="Select a deposit"
+          placeholder="Select Deposit"
           className="dropdown"
           options={debtIds ?? []}
           onChange={(opt) => {
@@ -82,13 +81,18 @@ function DepositShareRedeem(): JSX.Element | null {
           type="number"
           name="bshareAmount"
           id="bshareAmount"
-          placeholder="bonding share amount"
+          placeholder="Bonding Shares Amount"
           value={debtAmount}
         />
         <button onClick={handleRedeem}>Withdraw LP Tokens</button>
 
         {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         )}
         <p>{errMsg}</p>
       </div>

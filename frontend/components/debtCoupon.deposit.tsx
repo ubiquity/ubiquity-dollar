@@ -1,14 +1,13 @@
 import { BigNumber, ethers } from "ethers";
-import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useState } from "react";
-import Image from "next/image";
+import { ADDRESS } from "../pages";
 import {
   DebtCouponManager__factory,
   ICouponsForDollarsCalculator__factory,
   UbiquityAlgorithmicDollarManager,
   UbiquityAlgorithmicDollar__factory,
 } from "../src/types";
-import { ADDRESS } from "../pages";
+import { Balances, useConnectedContext } from "./context/connected";
 
 async function _expectedDebtCoupon(
   amount: BigNumber,
@@ -173,12 +172,17 @@ const DebtCouponDeposit = () => {
           type="number"
           name="uadAmount"
           id="uadAmount"
-          placeholder="uAD amount"
+          placeholder="uAD Amount"
           onInput={handleInputUAD}
         />
         <button onClick={handleBurn}>Burn uAD for uDEBT</button>
         {isLoading && (
-          <Image src="/loadanim.gif" alt="loading" width="64" height="64" />
+          <div className="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         )}
         <p>{errMsg}</p>
       </div>

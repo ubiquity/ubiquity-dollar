@@ -26,7 +26,7 @@ import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
 import { Contracts } from "../src/contracts";
 
-const PROD = process.env.NODE_ENV == "production";
+const PROD = true; //  process.env.NODE_ENV == "production";
 
 async function erc1155BalanceOf(
   addr: string,

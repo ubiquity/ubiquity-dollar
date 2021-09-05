@@ -1,14 +1,13 @@
-import { ethers, BigNumber } from "ethers";
-import Image from "next/image";
-import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
-import { Balances, useConnectedContext } from "./context/connected";
+import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   BondingShareV2,
+  BondingShareV2__factory,
   MasterChefV2,
   MasterChefV2__factory,
-  BondingShareV2__factory,
 } from "../src/types";
+import { UbiquityAlgorithmicDollarManager } from "../src/types/UbiquityAlgorithmicDollarManager";
+import { Balances, useConnectedContext } from "./context/connected";
 
 // get all the shares (aka rights to get UBQ rewards) linked to bondingShares owned by an address
 async function calculateBondingShareBalance(
@@ -170,7 +169,12 @@ const DepositShareBalance = () => {
           </>
         ) : (
           <>
-            <Image src="/loadanim.gif" alt="loading" width="64" height="64" />{" "}
+            <div className="lds-ring">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>{" "}
             Loading LP locked in Bonding Shares...
           </>
         )}
