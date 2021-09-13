@@ -2,11 +2,7 @@ import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
 import { ADDRESS } from "../pages";
-import {
-  DebtCouponManager__factory,
-  DebtCoupon__factory,
-  UbiquityAlgorithmicDollarManager,
-} from "../contracts/artifacts/types";
+import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
 import { Balances, useConnectedContext } from "./context/connected";
 
 const _getDebtIds = async (
@@ -17,39 +13,19 @@ const _getDebtIds = async (
   setDebtIds: Dispatch<SetStateAction<BigNumber[] | undefined>>
 ) => {
   if (manager && provider) {
-    const debtCoupon = DebtCoupon__factory.connect(
-      await manager.debtCouponAddress(),
-      provider.getSigner()
-    );
+    const debtCoupon = DebtCoupon__factory.connect(await manager.debtCouponAddress(), provider.getSigner());
     const ids = await debtCoupon.holderTokens(account);
-    if (
-      debtIds === undefined ||
-      debtIds.length !== ids.length ||
-      debtIds.map((cur, i) => ids[i].eq(cur)).filter((p) => p === false)
-        .length > 0
-    )
+    if (debtIds === undefined || debtIds.length !== ids.length || debtIds.map((cur, i) => ids[i].eq(cur)).filter((p) => p === false).length > 0)
       setDebtIds(ids);
   }
 };
 
 const DebtCouponRedeem = () => {
-  const {
-    account,
-    manager,
-    provider,
-    balances,
-    setBalances,
-  } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances } = useConnectedContext();
   const [debtIds, setDebtIds] = useState<BigNumber[]>();
   useEffect(() => {
     console.log("DebtCouponRedeem  ");
-    _getDebtIds(
-      account ? account.address : "",
-      manager,
-      provider,
-      debtIds,
-      setDebtIds
-    );
+    _getDebtIds(account ? account.address : "", manager, provider, debtIds, setDebtIds);
   });
 
   const [errMsg, setErrMsg] = useState<string>();
@@ -62,51 +38,27 @@ const DebtCouponRedeem = () => {
   if (balances.uad.lte(BigNumber.from(0))) {
     return null;
   }
-  const redeemDebtForDollar = async (
-    debtId: string | undefined,
-    amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | null>>
-  ) => {
+  const redeemDebtForDollar = async (debtId: string | undefined, amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
     console.log("debtId", debtId);
     if (provider && account && manager && debtId) {
-      const debtCoupon = DebtCoupon__factory.connect(
-        await manager.debtCouponAddress(),
-        provider.getSigner()
-      );
-      const isAllowed = await debtCoupon.isApprovedForAll(
-        account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
-      );
+      const debtCoupon = DebtCoupon__factory.connect(await manager.debtCouponAddress(), provider.getSigner());
+      const isAllowed = await debtCoupon.isApprovedForAll(account.address, ADDRESS.DEBT_COUPON_MANAGER);
       console.log("isAllowed", isAllowed);
       if (!isAllowed) {
         // first approve
-        const approveTransaction = await debtCoupon.setApprovalForAll(
-          ADDRESS.DEBT_COUPON_MANAGER,
-          true
-        );
+        const approveTransaction = await debtCoupon.setApprovalForAll(ADDRESS.DEBT_COUPON_MANAGER, true);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
-          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(
-            approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei"))
-          )}`
+          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`
         );
       }
 
-      const isAllowed2 = await debtCoupon.isApprovedForAll(
-        account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
-      );
+      const isAllowed2 = await debtCoupon.isApprovedForAll(account.address, ADDRESS.DEBT_COUPON_MANAGER);
       console.log("isAllowed2", isAllowed2);
 
-      const debtCouponMgr = DebtCouponManager__factory.connect(
-        ADDRESS.DEBT_COUPON_MANAGER,
-        provider.getSigner()
-      );
-      const redeemCouponsWaiting = await debtCouponMgr.redeemCoupons(
-        BigNumber.from(debtId),
-        amount
-      );
+      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner());
+      const redeemCouponsWaiting = await debtCouponMgr.redeemCoupons(BigNumber.from(debtId), amount);
       await redeemCouponsWaiting.wait();
 
       // fetch new uar and uad balance
@@ -126,9 +78,7 @@ const DebtCouponRedeem = () => {
   const handleRedeem = async () => {
     setErrMsg("");
     setIsLoading(true);
-    const udebtAmount = document.getElementById(
-      "udebtAmount"
-    ) as HTMLInputElement;
+    const udebtAmount = document.getElementById("udebtAmount") as HTMLInputElement;
     const udebtAmountValue = udebtAmount?.value;
     if (!udebtAmountValue) {
       console.log("udebtAmountValue", udebtAmountValue);
@@ -162,12 +112,7 @@ const DebtCouponRedeem = () => {
           onChange={(value) => setDebtId(value.value as string)}
         />
 
-        <input
-          type="number"
-          name="udebtAmount"
-          id="udebtAmount"
-          placeholder="uDebt Amount"
-        />
+        <input type="number" name="udebtAmount" id="udebtAmount" placeholder="uDebt Amount" />
         <button onClick={handleRedeem}>Burn uDebt for uAD</button>
         {isLoading && (
           <div className="lds-ring">

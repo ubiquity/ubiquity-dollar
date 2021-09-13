@@ -8,9 +8,9 @@ const path = require("path");
 const deployment = require(path.resolve(args[0]));
 
 try {
-    const localhost = deployment[31337].localhost;
+  const localhost = deployment[31337].localhost;
 
-    console.log(`
+  console.log(`
      🦄🦄🦄
      ******UAD_MANAGER_ADDRESS: ${localhost.contracts.UbiquityAlgorithmicDollarManager.address}
      ⚡⚡⚡
@@ -18,10 +18,10 @@ try {
      build complete
      `);
 
-    fs.writeFileSync(path.resolve(args[1]), JSON.stringify(localhost));
+  fs.writeFileSync(path.resolve(args[1]), JSON.stringify(localhost));
 } catch (e) {
-    console.error(e);
-    process.exit(1);
+  console.error(e);
+  process.exit(1);
 }
 
 process.exit(0);

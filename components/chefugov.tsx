@@ -1,12 +1,7 @@
 import { ethers } from "ethers";
 import { Balances, useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  BondingShareV2__factory,
-  MasterChefV2__factory,
-  UbiquityAlgorithmicDollarManager,
-  UbiquityGovernance__factory,
-} from "../contracts/artifacts/types";
+import { BondingShareV2__factory, MasterChefV2__factory, UbiquityAlgorithmicDollarManager, UbiquityGovernance__factory } from "../contracts/artifacts/types";
 
 async function _getUBQBalance(
   account: string,
@@ -17,14 +12,10 @@ async function _getUBQBalance(
 ): Promise<void> {
   const SIGNER = provider?.getSigner();
   if (SIGNER && manager) {
-    const uGov = UbiquityGovernance__factory.connect(
-      await manager.governanceTokenAddress(),
-      SIGNER
-    );
+    const uGov = UbiquityGovernance__factory.connect(await manager.governanceTokenAddress(), SIGNER);
     const rawBalance = await uGov?.balanceOf(account);
     if (balances) {
-      if (!balances.ubq.eq(rawBalance))
-        setBalances({ ...balances, ubq: rawBalance });
+      if (!balances.ubq.eq(rawBalance)) setBalances({ ...balances, ubq: rawBalance });
     }
   }
 }
@@ -39,15 +30,9 @@ async function _getUBQReward(
   const SIGNER = provider?.getSigner();
 
   if (SIGNER && manager && account) {
-    const masterChef = MasterChefV2__factory.connect(
-      await manager.masterChefAddress(),
-      SIGNER
-    );
+    const masterChef = MasterChefV2__factory.connect(await manager.masterChefAddress(), SIGNER);
     const bondingShareAdr = await manager.bondingShareAddress();
-    const bondingShare = BondingShareV2__factory.connect(
-      bondingShareAdr,
-      SIGNER
-    );
+    const bondingShare = BondingShareV2__factory.connect(bondingShareAdr, SIGNER);
     const bondingShareIds = await bondingShare.holderTokens(account);
     // TODO there can be several Ids so we should be able to select one
 
@@ -76,15 +61,9 @@ async function _claimReward(
   const SIGNER = provider?.getSigner();
 
   if (SIGNER && manager && account) {
-    const masterChef = MasterChefV2__factory.connect(
-      await manager.masterChefAddress(),
-      SIGNER
-    );
+    const masterChef = MasterChefV2__factory.connect(await manager.masterChefAddress(), SIGNER);
     const bondingShareAdr = await manager.bondingShareAddress();
-    const bondingShare = BondingShareV2__factory.connect(
-      bondingShareAdr,
-      SIGNER
-    );
+    const bondingShare = BondingShareV2__factory.connect(bondingShareAdr, SIGNER);
     const bondingShareIds = await bondingShare.holderTokens(account);
     // TODO there can be several Ids so we should be able to select one
     if (bondingShareIds.length) {
@@ -96,13 +75,7 @@ async function _claimReward(
 }
 
 const ChefUgov = () => {
-  const {
-    account,
-    manager,
-    provider,
-    balances,
-    setBalances,
-  } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances } = useConnectedContext();
 
   useEffect(() => {
     handleBalance();
@@ -112,24 +85,12 @@ const ChefUgov = () => {
   const [rewards, setRewards] = useState<string>();
 
   const handleBalance = () => {
-    _getUBQBalance(
-      account ? account.address : "",
-      manager,
-      provider,
-      balances,
-      setBalances
-    );
+    _getUBQBalance(account ? account.address : "", manager, provider, balances, setBalances);
   };
 
   const handleReward = () => {
     console.log(`handling reward`);
-    _getUBQReward(
-      account ? account.address : "",
-      manager,
-      provider,
-      rewards,
-      setRewards
-    );
+    _getUBQReward(account ? account.address : "", manager, provider, rewards, setRewards);
   };
 
   useEffect(() => {
@@ -142,15 +103,7 @@ const ChefUgov = () => {
   }
 
   const handleClaim = () => {
-    _claimReward(
-      account ? account.address : "",
-      manager,
-      provider,
-      rewards,
-      setRewards,
-      balances,
-      setBalances
-    );
+    _claimReward(account ? account.address : "", manager, provider, rewards, setRewards, balances, setBalances);
   };
 
   return (

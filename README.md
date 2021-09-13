@@ -58,12 +58,9 @@ npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager UAD
 to get the types from the smart contracts you can import from `contracts/artifacts/types`
 
 ```typescript
-import {UbiquityAlgorithmicDollar} from "../artifacts/types/UbiquityAlgorithmicDollar";
+import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 
-const token = (await ethers.getContractAt(
-  "UbiquityAlgorithmicDollar",
-  uAD.address
-)) as UbiquityAlgorithmicDollar;
+const token = (await ethers.getContractAt("UbiquityAlgorithmicDollar", uAD.address)) as UbiquityAlgorithmicDollar;
 
 const [sender] = await ethers.getSigners();
 

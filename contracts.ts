@@ -86,21 +86,9 @@ type ContractsAddresses = {
 };
 
 // Load all contract addresses on parallel
-async function contractsAddresses(
-  manager: UbiquityAlgorithmicDollarManager
-): Promise<ContractsAddresses> {
+async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Promise<ContractsAddresses> {
   // 4
-  const [
-    uad,
-    metaPool,
-    twapOracle,
-    dollarMintCalc,
-    uar,
-    ugov,
-    crvToken,
-    bondingToken,
-    debtCouponToken,
-  ] = await Promise.all([
+  const [uad, metaPool, twapOracle, dollarMintCalc, uar, ugov, crvToken, bondingToken, debtCouponToken] = await Promise.all([
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
     manager.twapOracleAddress(),
@@ -156,14 +144,8 @@ export async function connectedContracts(): Promise<{
       ugov: contracts.ugov(addr.ugov, provider),
       crvToken: contracts.crvToken(addr.crvToken, provider),
       bondingToken: contracts.bondingToken(addr.bondingToken, provider),
-      debtCouponToken: contracts.debtCouponToken(
-        addr.debtCouponToken,
-        provider
-      ),
-      debtCouponManager: contracts.DebtCouponManager(
-        addr.debtCouponManager,
-        provider
-      ),
+      debtCouponToken: contracts.debtCouponToken(addr.debtCouponToken, provider),
+      debtCouponManager: contracts.DebtCouponManager(addr.debtCouponManager, provider),
     },
   };
 }

@@ -41,21 +41,10 @@ const TokenMonitor = (props: TokenMonitorProps) => {
     <widget.Container className="col-span-2">
       <widget.Title text="Token monitor" />
       <widget.SubTitle text="Debt Coupon" />
-      <widget.Address
-        title="Debt Coupon Manager"
-        address={props.debtCouponManagerAddress}
-      />
+      <widget.Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />
       <widget.Address title="Debt Coupon" address={props.debtCouponAddress} />
-      <widget.Balance
-        title="Total Outstanding"
-        unit="uDebt"
-        balance={props.totalOutstandingDebt}
-      />
-      <widget.Balance
-        title="Total Redeemable"
-        unit="uDebt"
-        balance={props.totalRedeemable}
-      />
+      <widget.Balance title="Total Outstanding" unit="uDebt" balance={props.totalOutstandingDebt} />
+      <widget.Balance title="Total Redeemable" unit="uDebt" balance={props.totalRedeemable} />
     </widget.Container>
   );
 };

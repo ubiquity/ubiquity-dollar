@@ -1,10 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useState } from "react";
-import {
-  Bonding__factory,
-  IMetaPool__factory,
-  IUbiquityFormulas__factory,
-} from "../contracts/artifacts/types";
+import { Bonding__factory, IMetaPool__factory, IUbiquityFormulas__factory } from "../contracts/artifacts/types";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "./common/types";
 import { Balances, useConnectedContext } from "./context/connected";
@@ -25,10 +21,7 @@ async function _allowAndDepositBondingToken(
     const SIGNER = provider.getSigner();
     const BONDING_ADDR = await manager.bondingContractAddress();
 
-    const metapool = IMetaPool__factory.connect(
-      await manager.stableSwapMetaPoolAddress(),
-      SIGNER
-    );
+    const metapool = IMetaPool__factory.connect(await manager.stableSwapMetaPoolAddress(), SIGNER);
     const bonding = Bonding__factory.connect(BONDING_ADDR, SIGNER);
     const allowance = await metapool.allowance(account.address, BONDING_ADDR);
 
@@ -40,14 +33,9 @@ async function _allowAndDepositBondingToken(
 
       const approveWaiting = await approveTransaction.wait();
       console.log(
-        `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(
-          approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei"))
-        )}`
+        `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`
       );
-      const allowance2 = await metapool.allowance(
-        account.address,
-        BONDING_ADDR
-      );
+      const allowance2 = await metapool.allowance(account.address, BONDING_ADDR);
       console.log("allowance2", ethers.utils.formatEther(allowance2));
     }
 
@@ -109,23 +97,13 @@ async function _depositBondingTokens(
     return;
   }
   const weeksAmount = BigNumber.from(weeksValue);
-  if (
-    !weeksAmount.gte(BigNumber.from(1)) ||
-    !weeksAmount.lte(BigNumber.from(208))
-  ) {
+  if (!weeksAmount.gte(BigNumber.from(1)) || !weeksAmount.lte(BigNumber.from(208))) {
     setErrMsg(`${subject} should be between 1 and 208`);
     setIsLoading(false);
     return;
   }
 
-  await _allowAndDepositBondingToken(
-    amount,
-    BigNumber.from(weeksValue),
-    provider,
-    account,
-    manager,
-    setErrMsg
-  );
+  await _allowAndDepositBondingToken(amount, BigNumber.from(weeksValue), provider, account, manager, setErrMsg);
   // trigger bondingShare calculation
   if (balances) {
     setBalances({ ...balances, bondingShares: BigNumber.from(0) });
@@ -147,24 +125,14 @@ async function _expectedShares(
     const bondingAdr = await manager.bondingContractAddress();
     const bonding = Bonding__factory.connect(bondingAdr, SIGNER);
     const bondingDiscountMultiplier = await bonding.bondingDiscountMultiplier();
-    const expectedShares = await formula.durationMultiply(
-      lpAmount,
-      weeks,
-      bondingDiscountMultiplier
-    );
+    const expectedShares = await formula.durationMultiply(lpAmount, weeks, bondingDiscountMultiplier);
 
     setExpectedShares(expectedShares);
   }
 }
 
 const DepositShare = () => {
-  const {
-    account,
-    manager,
-    provider,
-    balances,
-    setBalances,
-  } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances } = useConnectedContext();
 
   //const [bondingSharePercentage, setPercentage] = useState<string>();
 
@@ -229,10 +197,7 @@ const DepositShare = () => {
       return;
     }
     const weeksAmount = BigNumber.from(weeksValue);
-    if (
-      !weeksAmount.gte(BigNumber.from(1)) ||
-      !weeksAmount.lte(BigNumber.from(208))
-    ) {
+    if (!weeksAmount.gte(BigNumber.from(1)) || !weeksAmount.lte(BigNumber.from(208))) {
       setErrMsg(`${subject} should be between 1 and 208`);
       setIsLoading(false);
       return;
@@ -245,22 +210,8 @@ const DepositShare = () => {
     <>
       <div id="deposit-share">
         <div>
-          <input
-            type="number"
-            name="lpsAmount"
-            id="lpsAmount"
-            onInput={handleInputWeeks}
-            placeholder="uAD-3CRV LP Tokens"
-          />
-          <input
-            type="number"
-            name="weeks"
-            id="weeks"
-            onInput={handleInputWeeks}
-            placeholder="Weeks (1-208)"
-            min="1"
-            max="208"
-          />
+          <input type="number" name="lpsAmount" id="lpsAmount" onInput={handleInputWeeks} placeholder="uAD-3CRV LP Tokens" />
+          <input type="number" name="weeks" id="weeks" onInput={handleInputWeeks} placeholder="Weeks (1-208)" min="1" max="208" />
           <button onClick={handleDeposit}>Stake LP Tokens</button>
           {isLoading && (
             <div className="lds-ring">
@@ -272,11 +223,7 @@ const DepositShare = () => {
           )}
           <p>{errMsg}</p>
 
-          {expectedShares && (
-            <p>
-              Expected bonding shares {ethers.utils.formatEther(expectedShares)}
-            </p>
-          )}
+          {expectedShares && <p>Expected bonding shares {ethers.utils.formatEther(expectedShares)}</p>}
 
           <DepositShareBalance />
         </div>

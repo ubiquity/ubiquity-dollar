@@ -19,37 +19,17 @@ type PriceMonitorProps = {
   dollarToBeMinted: number | null;
 };
 
-const fetchPrices = async ({
-  uad,
-  curvePool,
-  metaPool,
-  twapOracle,
-  dollarMintCalc,
-}: Contracts): Promise<PriceMonitorProps> => {
+const fetchPrices = async ({ uad, curvePool, metaPool, twapOracle, dollarMintCalc }: Contracts): Promise<PriceMonitorProps> => {
   const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
     curvePool.get_coin_indices(metaPool.address, ADDRESS.DAI, ADDRESS.USDT),
     curvePool.get_coin_indices(metaPool.address, uad.address, ADDRESS.USDC),
   ]);
 
-  const metaPoolGet = async (
-    i1: BigNumber,
-    i2: BigNumber
-  ): Promise<BigNumber> => {
-    return await metaPool["get_dy_underlying(int128,int128,uint256)"](
-      i1,
-      i2,
-      ethers.utils.parseEther("1")
-    );
+  const metaPoolGet = async (i1: BigNumber, i2: BigNumber): Promise<BigNumber> => {
+    return await metaPool["get_dy_underlying(int128,int128,uint256)"](i1, i2, ethers.utils.parseEther("1"));
   };
 
-  const [
-    daiUsdt,
-    uadUsdc,
-    uadDai,
-    uadUsdt,
-    uadCrv,
-    crvUad,
-  ] = await Promise.all([
+  const [daiUsdt, uadUsdc, uadDai, uadUsdt, uadCrv, crvUad] = await Promise.all([
     metaPoolGet(daiIndex, usdtIndex),
     metaPoolGet(uadIndex, usdcIndex),
     metaPoolGet(uadIndex, daiIndex),
@@ -68,9 +48,7 @@ const fetchPrices = async ({
     uadCrv: +formatEther(uadCrv),
     crvUad: +formatEther(crvUad),
     dollarMintCalcAddress: dollarMintCalc.address,
-    dollarToBeMinted: uadCrv.gt(ethers.utils.parseEther("1"))
-      ? +formatEther(await dollarMintCalc.getDollarsToMint())
-      : null,
+    dollarToBeMinted: uadCrv.gt(ethers.utils.parseEther("1")) ? +formatEther(await dollarMintCalc.getDollarsToMint()) : null,
   };
 };
 
@@ -103,16 +81,11 @@ const PriceMonitor = (props: PriceMonitorProps) => {
       <widget.PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
       <widget.PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
       <widget.SubTitle text="Dollar Minting" />
-      <widget.Address
-        title="Dollar Minting Calculator"
-        address={props.dollarMintCalcAddress}
-      />
+      <widget.Address title="Dollar Minting Calculator" address={props.dollarMintCalcAddress} />
       <div className="text-center mt-4">
         {props.dollarToBeMinted ? (
           <div>
-            {props.dollarToBeMinted}{" "}
-            <span className="text-white text-opacity-75"> uAD</span> to be
-            minted
+            {props.dollarToBeMinted} <span className="text-white text-opacity-75"> uAD</span> to be minted
           </div>
         ) : (
           "No minting needed"

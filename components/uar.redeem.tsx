@@ -1,20 +1,11 @@
 import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ADDRESS } from "../pages";
-import {
-  DebtCouponManager__factory,
-  UbiquityAutoRedeem__factory,
-} from "../contracts/artifacts/types";
+import { DebtCouponManager__factory, UbiquityAutoRedeem__factory } from "../contracts/artifacts/types";
 import { Balances, useConnectedContext } from "./context/connected";
 
 const UarRedeem = () => {
-  const {
-    account,
-    manager,
-    provider,
-    balances,
-    setBalances,
-  } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances } = useConnectedContext();
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
   if (!account || !manager || !balances) {
@@ -23,55 +14,31 @@ const UarRedeem = () => {
   if (balances.uar.lte(BigNumber.from(0))) {
     return null;
   }
-  const redeem = async (
-    amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | null>>
-  ) => {
+  const redeem = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
     const SIGNER = provider?.getSigner();
 
     if (SIGNER) {
-      const debtCouponMgr = DebtCouponManager__factory.connect(
-        ADDRESS.DEBT_COUPON_MANAGER,
-        SIGNER
-      );
+      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, SIGNER);
       const uarAdr = await manager.autoRedeemTokenAddress();
       const uAR = UbiquityAutoRedeem__factory.connect(uarAdr, SIGNER);
       const uadAdr = await manager.dollarTokenAddress();
       const uAD = UbiquityAutoRedeem__factory.connect(uadAdr, SIGNER);
-      const allowance = await uAR.allowance(
-        account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
-      );
-      console.log(
-        "allowance",
-        ethers.utils.formatEther(allowance),
-        "amount",
-        ethers.utils.formatEther(amount)
-      );
+      const allowance = await uAR.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
       if (allowance.lt(amount)) {
         // first approve
-        const approveTransaction = await uAR.approve(
-          ADDRESS.DEBT_COUPON_MANAGER,
-          amount
-        );
+        const approveTransaction = await uAR.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
-          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(
-            approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei"))
-          )}`
+          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`
         );
       }
 
-      const allowance2 = await uAR.allowance(
-        account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
-      );
+      const allowance2 = await uAR.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
       console.log("allowance2", ethers.utils.formatEther(allowance2));
       // redeem uAD
-      const redeemWaiting = await debtCouponMgr.burnAutoRedeemTokensForDollars(
-        amount
-      );
+      const redeemWaiting = await debtCouponMgr.burnAutoRedeemTokensForDollars(amount);
       await redeemWaiting.wait();
 
       // fetch new uar and uad balance
@@ -110,12 +77,7 @@ const UarRedeem = () => {
   return (
     <>
       <div id="uar-redeem">
-        <input
-          type="number"
-          name="uarAmount"
-          id="uarAmount"
-          placeholder="uAR Amount"
-        />
+        <input type="number" name="uarAmount" id="uarAmount" placeholder="uAR Amount" />
         <button onClick={handleRedeem}>Redeem uAR for uAD</button>
         {isLoading && (
           <div className="lds-ring">

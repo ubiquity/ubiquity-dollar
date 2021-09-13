@@ -18,10 +18,7 @@ async function _expectedDebtCoupon(
   if (manager && provider) {
     const formulaAdr = await manager.couponCalculatorAddress();
     const SIGNER = provider.getSigner();
-    const couponCalculator = ICouponsForDollarsCalculator__factory.connect(
-      formulaAdr,
-      SIGNER
-    );
+    const couponCalculator = ICouponsForDollarsCalculator__factory.connect(formulaAdr, SIGNER);
     const expectedDebtCoupon = await couponCalculator.getCouponAmount(amount);
     console.log("expectedDebtCoupon", expectedDebtCoupon.toString());
     setExpectedDebtCoupon(expectedDebtCoupon);
@@ -29,13 +26,7 @@ async function _expectedDebtCoupon(
 }
 
 const DebtCouponDeposit = () => {
-  const {
-    account,
-    manager,
-    provider,
-    balances,
-    setBalances,
-  } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances } = useConnectedContext();
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
   const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
@@ -46,54 +37,27 @@ const DebtCouponDeposit = () => {
   if (balances.uad.lte(BigNumber.from(0))) {
     return null;
   }
-  const depositDollarForDebtCoupons = async (
-    amount: BigNumber,
-    setBalances: Dispatch<SetStateAction<Balances | null>>
-  ) => {
+  const depositDollarForDebtCoupons = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
     if (provider && account && manager) {
-      const uAD = UbiquityAlgorithmicDollar__factory.connect(
-        await manager.dollarTokenAddress(),
-        provider.getSigner()
-      );
-      const allowance = await uAD.allowance(
-        account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
-      );
-      console.log(
-        "allowance",
-        ethers.utils.formatEther(allowance),
-        "amount",
-        ethers.utils.formatEther(amount)
-      );
+      const uAD = UbiquityAlgorithmicDollar__factory.connect(await manager.dollarTokenAddress(), provider.getSigner());
+      const allowance = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
       if (allowance.lt(amount)) {
         // first approve
-        const approveTransaction = await uAD.approve(
-          ADDRESS.DEBT_COUPON_MANAGER,
-          amount
-        );
+        const approveTransaction = await uAD.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
-          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(
-            approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei"))
-          )}`
+          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`
         );
       }
 
-      const allowance2 = await uAD.allowance(
-        account.address,
-        ADDRESS.DEBT_COUPON_MANAGER
-      );
+      const allowance2 = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
       console.log("allowance2", ethers.utils.formatEther(allowance2));
       // depositDollarForDebtCoupons uAD
 
-      const debtCouponMgr = DebtCouponManager__factory.connect(
-        ADDRESS.DEBT_COUPON_MANAGER,
-        provider.getSigner()
-      );
-      const depositDollarForDebtCouponsWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(
-        amount
-      );
+      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner());
+      const depositDollarForDebtCouponsWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(amount);
       await depositDollarForDebtCouponsWaiting.wait();
 
       // fetch new uar and uad balance
@@ -168,13 +132,7 @@ const DebtCouponDeposit = () => {
   return (
     <>
       <div id="debt-coupon-deposit">
-        <input
-          type="number"
-          name="uadAmount"
-          id="uadAmount"
-          placeholder="uAD Amount"
-          onInput={handleInputUAD}
-        />
+        <input type="number" name="uadAmount" id="uadAmount" placeholder="uAD Amount" onInput={handleInputUAD} />
         <button onClick={handleBurn}>Burn uAD for uDEBT</button>
         {isLoading && (
           <div className="lds-ring">
@@ -186,9 +144,7 @@ const DebtCouponDeposit = () => {
         )}
         <p>{errMsg}</p>
       </div>
-      {expectedDebtCoupon && (
-        <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>
-      )}
+      {expectedDebtCoupon && <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>}
     </>
   );
 };

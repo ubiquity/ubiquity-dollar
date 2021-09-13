@@ -53,13 +53,7 @@ async function _migrateBond(
 }
 
 const BondingMigrate = () => {
-  const {
-    account,
-    manager,
-    provider,
-    balances,
-    setBalances,
-  } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances } = useConnectedContext();
 
   const [errMsg, setErrMsg] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>();
