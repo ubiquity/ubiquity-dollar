@@ -6,7 +6,7 @@ import "./styles/tailwind.css";
 import { ConnectedNetwork } from "../components/context/connected";
 import { AppProps } from "next/app";
 
-export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <ConnectedNetwork>
       <>
