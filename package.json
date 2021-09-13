@@ -2,17 +2,21 @@
   "name": "@ubiquity/dollar-ui",
   "license": "MIT",
   "scripts": {
+    "prestart": "run-s build",
+    "start": "run-s _cdroot next:build next:start",
+    "predev": "run-s build",
+    "dev": "run-s _cdroot next:dev",
     "_cdroot": "./build-scripts/cd-to-project-root.sh",
-    "predev": "run-s _cdroot ./build-scripts/run-local.sh",
-    "dev": "next dev",
-    "prestart": "run-s _cdroot",
-    "start": "build-scripts/run-vercel.sh",
-    "prepare": "husky install",
+    "build": "./build-scripts/build.sh",
     "format": "run-s format:*",
     "format:prettier": "prettier --write . --ignore-path .gitignore",
     "format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "css:build": "tailwindcss -o pages/styles/tailwind.css",
-    "css:watch": "run-s css:build --watch"
+    "css:watch": "tailwindcss -o pages/styles/tailwind.css --watch",
+    "next:dev": "next dev",
+    "next:build": "next build",
+    "next:start": "next dev",
+    "prepare": "husky install"
   },
   "_unused-scripts": {
     "stop": "kill $(lsof -t -i:8545) || true"
