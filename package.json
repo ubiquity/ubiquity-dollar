@@ -15,7 +15,7 @@
     "css:watch": "tailwindcss -o pages/styles/tailwind.css --watch",
     "next:dev": "next dev",
     "next:build": "next build",
-    "next:start": "next dev",
+    "next:start": "next start",
     "prepare": "husky install"
   },
   "_unused-scripts": {
