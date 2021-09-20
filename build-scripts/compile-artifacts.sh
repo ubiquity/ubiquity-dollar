@@ -1,11 +1,11 @@
 #!/bin/bash
 git submodule update --init --recursive --remote
-cd ./contracts
+cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
 
 UP=../
 DEPLOYMENT_ARTIFACT=fixtures/full-deployment.json
 
-yarn
+yarn install
 yarn build
 
 rm -f $UP$DEPLOYMENT_ARTIFACT
