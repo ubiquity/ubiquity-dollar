@@ -2,10 +2,8 @@
   "name": "@ubiquity/dollar-ui",
   "license": "MIT",
   "scripts": {
-    "prestart": "run-s build",
     "start": "run-s _cdroot next:build next:start",
-    "predev": "run-s build",
-    "dev": "run-s _cdroot next:dev",
+    "dev": "run-s build _cdroot next:dev",
     "_cdroot": "./build-scripts/cd-to-project-root.sh",
     "build": "./build-scripts/build.sh",
     "format": "run-s format:*",
