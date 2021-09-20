@@ -1,0 +1,5 @@
+/contracts
+/node_modules
+/fixtures
+/.next
+/pages/styles/tailwind.css

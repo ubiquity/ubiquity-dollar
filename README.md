@@ -34,7 +34,7 @@ then run
 yarn install && yarn start
 ```
 
-it will create a file inside `frontend/src` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts
+it will create a file inside `frontend` called **uad-contracts-deployment.json** where you can find all the address of the deployed contracts
 
 it will launch a local node on port **8545** you can check the log in the root file `local.node.log`
 after the node is launched it will build and run the front on port **3000**
@@ -58,12 +58,9 @@ npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager UAD
 to get the types from the smart contracts you can import from `contracts/artifacts/types`
 
 ```typescript
-import {UbiquityAlgorithmicDollar} from "../artifacts/types/UbiquityAlgorithmicDollar";
+import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 
-const token = (await ethers.getContractAt(
-  "UbiquityAlgorithmicDollar",
-  uAD.address
-)) as UbiquityAlgorithmicDollar;
+const token = (await ethers.getContractAt("UbiquityAlgorithmicDollar", uAD.address)) as UbiquityAlgorithmicDollar;
 
 const [sender] = await ethers.getSigners();
 
