@@ -29,7 +29,7 @@ _.seed
 \*.tsbuildinfo
 bower_components
 build/Release
-contracts/artifacts/\*
+/contracts
 coverage
 dist
 jspm_packages

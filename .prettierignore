@@ -1,1 +1,5 @@
-# currently loads .gitignore file in place of this
+/contracts
+/node_modules
+/fixtures
+/.next
+/pages/styles/tailwind.css

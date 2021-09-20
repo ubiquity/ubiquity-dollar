@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from "ethers";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { BondingV2__factory } from "../contracts/artifacts/types";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
