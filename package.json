@@ -9,7 +9,7 @@
     "_cdroot": "./build-scripts/cd-to-project-root.sh",
     "build": "./build-scripts/build.sh",
     "format": "run-s format:*",
-    "format:prettier": "prettier --write . --ignore-path .gitignore",
+    "format:prettier": "prettier --write .",
     "format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "css:build": "tailwindcss -o pages/styles/tailwind.css",
     "css:watch": "tailwindcss -o pages/styles/tailwind.css --watch",
