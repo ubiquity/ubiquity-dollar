@@ -5,6 +5,7 @@
     "start": "run-s _cdroot solidity:build next:build next:start",
     "dev": "run-s _cdroot solidity:build next:dev",
     "_cdroot": "./build-scripts/cd-to-project-root.sh",
+    "build": "run-s solidity:build next:build",
     "solidity:build": "./build-scripts/compile-artifacts.sh",
     "format": "run-s format:*",
     "format:prettier": "prettier --write .",
