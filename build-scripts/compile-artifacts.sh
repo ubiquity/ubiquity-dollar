@@ -1,5 +1,6 @@
 #!/bin/bash
-cd ./contracts || git submodule update --init --recursive --remote && cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?" # pull in uad-contracts
+git submodule update --init --recursive --remote
+cd ./contracts
 
 UP=../
 DEPLOYMENT_ARTIFACT=fixtures/full-deployment.json
