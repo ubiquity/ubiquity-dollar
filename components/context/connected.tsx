@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { createContext, Dispatch, SetStateAction, useContext, useState, useEffect } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useState, useEffect, useCallback } from "react";
 
 import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../common/types";
@@ -62,8 +62,9 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
 
   useEffect(() => {
     (async function () {
-      console.log("CONNECTING CONTRACTS!");
+      console.time("Connecting contracts");
       const { provider, contracts } = await connectedContracts();
+      console.timeEnd("Connecting contracts");
       (window as any).contracts = contracts;
       (window as any).account = await provider.getSigner().getAddress();
       (window as any).provider = provider;
@@ -79,34 +80,6 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
 
 export const useConnectedContext = (): ConnectedContext => useContext(ConnectedContext);
 
-// export function useInitializeContextContracts(): void {
-//   const { provider, account, contracts, setProvider, setContracts, setManager } = useConnectedContext();
-
-//   useEffect(() => {
-//     (async function () {
-//       if (!provider) {
-//         console.log("CONNECTING CONTRACTS!");
-//         const { provider, contracts } = await connectedContracts();
-//         (window as any).contracts = contracts;
-//         (window as any).account = await provider.getSigner().getAddress();
-
-//         setProvider(provider);
-//         setContracts(contracts);
-//         setManager(contracts.manager);
-//       }
-//     })();
-//   }, []);
-
-//   // useEffect(() => {
-//   //   if (account && contracts) {
-//   //     for (let k in contracts) {
-
-//   //     }
-//   //     contracts.manager.connect(account.address);
-//   //   }
-//   // }, [account, contracts])
-// }
-
 type ContractsCallback = ({ contracts, provider }: { contracts: Contracts; provider: ethers.providers.Web3Provider }) => Promise<void>;
 export function useConnectedContracts(callback: ContractsCallback): void {
   const { provider, account, contracts } = useConnectedContext();
@@ -120,16 +93,14 @@ export function useConnectedContracts(callback: ContractsCallback): void {
   }, [provider, contracts]);
 }
 
-type ConctractsWithAccountCallback = ({
-  contracts,
-  provider,
-  account,
-}: {
+type ContractsProviderAccount = {
   contracts: Contracts;
   provider: ethers.providers.Web3Provider;
   account: EthAccount;
-}) => Promise<void>;
-export function useConnectedContractsWithAccount(callback: ConctractsWithAccountCallback): void {
+};
+
+type ContractsWithAccountCallback = (data: ContractsProviderAccount) => Promise<void>;
+export function useConnectedContractsWithAccount(callback: ContractsWithAccountCallback): void {
   const { provider, account, contracts } = useConnectedContext();
 
   useEffect(() => {
@@ -139,4 +110,17 @@ export function useConnectedContractsWithAccount(callback: ConctractsWithAccount
       })();
     }
   }, [provider, account, contracts]);
+}
+
+export function useContractsCallback<T>(cb: (data: ContractsProviderAccount, payload: T) => void): (payload: T) => void {
+  const { provider, account, contracts } = useConnectedContext();
+
+  return useCallback(
+    (payload: T) => {
+      if (provider && account && contracts) {
+        cb({ contracts, provider, account }, payload);
+      }
+    },
+    [provider, contracts, account]
+  );
 }

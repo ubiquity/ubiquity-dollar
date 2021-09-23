@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
-import { memo, useState, useCallback } from "react";
-import { useConnectedContractsWithAccount } from "./context/connected";
+import { memo, useState } from "react";
+import { useConnectedContractsWithAccount, useContractsCallback } from "./context/connected";
 import { formatEther, formatMwei } from "./common/format";
 import * as widget from "./ui/widget";
 
@@ -24,7 +24,7 @@ type Model = {
   totalShares: BigNumber;
 };
 
-type Actions = { onWithdrawLp: (id: number, amount: null | number) => void; onClaimUbq: (id: number) => void };
+type Actions = { onWithdrawLp: (payload: { id: number; amount: null | number }) => void; onClaimUbq: (id: number) => void };
 
 export const BondingSharesExplorerContainer = () => {
   const [model, setModel] = useState<Model | null>(null);
@@ -66,12 +66,13 @@ export const BondingSharesExplorerContainer = () => {
   });
 
   const actions: Actions = {
-    onWithdrawLp: useCallback((id: number, amount: null | number): void => {
+    onWithdrawLp: useContractsCallback(({ contracts }, { id, amount }) => {
       console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
-    }, []),
-    onClaimUbq: useCallback((id: number): void => {
+    }),
+
+    onClaimUbq: useContractsCallback(({ contracts }, id) => {
       console.log(`Claiming rewards from ${id}`);
-    }, []),
+    }),
   };
 
   return <BondingSharesExplorer model={model} actions={actions} />;
@@ -144,7 +145,7 @@ export const BondingSharesExplorerListing = ({ shares, totalShares, onWithdrawLp
                         value={withdrawAmounts[id] || ""}
                         onChange={(ev) => onWithdrawAmountChange(id, ev.target.value)}
                       />
-                      <button onClick={() => onWithdrawLp(id, parseFloat(withdrawAmounts[id]) || null)}>Withdraw</button>
+                      <button onClick={() => onWithdrawLp({ id, amount: parseFloat(withdrawAmounts[id]) || null })}>Withdraw</button>
                     </>
                   ) : (
                     <span>{weeksLeft}w</span>
