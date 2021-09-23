@@ -1,7 +1,7 @@
 export const Container = (props: React.PropsWithChildren<{ className?: string }>): JSX.Element => (
   <div
     className={`
-      !block !mx-0 !py-8 px-4 rounded-md
+      !block !py-8 px-4 rounded-md
       text-white/50 tracking-wide
       border-1 border-solid border-white/10
       bg-blur ${props.className || ""}`}

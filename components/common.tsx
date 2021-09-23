@@ -20,9 +20,10 @@ import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
+import BondingSharesExplorer from "./BondingSharesExplorer";
 import { Contracts } from "../contracts";
 
-const PROD = true; //  process.env.NODE_ENV == "production";
+const PROD = process.env.NODE_ENV == "production";
 
 async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: ERC1155Ubiquity): Promise<BigNumber> {
   const treasuryIds = await erc1155UbiquityCtr.holderTokens(addr);
@@ -49,7 +50,7 @@ async function accountBalances(account: EthAccount, contracts: Contracts): Promi
     contracts.uar.balanceOf(account.address),
     contracts.ugov.balanceOf(account.address),
     erc1155BalanceOf(account.address, contracts.debtCouponToken),
-    erc1155BalanceOf(account.address, contracts.bondingToken),
+    erc1155BalanceOf(account.address, (contracts.bondingToken as unknown) as ERC1155Ubiquity),
   ]);
   return {
     uad,
@@ -81,7 +82,6 @@ async function fetchAccount(): Promise<EthAccount | null> {
 export function _renderControls() {
   const { setAccount, setBalances, setTwapPrice, account, contracts, balances, twapPrice } = useConnectedContext();
   const [connecting, setConnecting] = useState(false);
-  useConnectedContracts();
 
   useEffect(() => {
     (async function () {
@@ -103,6 +103,10 @@ export function _renderControls() {
     setConnecting(true);
     setAccount(await fetchAccount());
   };
+
+  // useEffect(() => {
+  //   connect();
+  // }, []);
 
   return (
     <>
@@ -131,6 +135,7 @@ export function _renderControls() {
         <ChefUgov />
         <BondingMigrate />
         <DepositShare />
+        <BondingSharesExplorer />
         {balances?.uar.gt(BigNumber.from(0)) && twapPrice?.gte(ethers.utils.parseEther("1")) ? <UarRedeem /> : ""}
         {twapPrice?.lte(ethers.utils.parseEther("1")) ? <DebtCouponDeposit /> : ""}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
