@@ -4,7 +4,6 @@ import { Bonding__factory, IMetaPool__factory, IUbiquityFormulas__factory } from
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "./common/types";
 import { Balances, useConnectedContext } from "./context/connected";
-import DepositShareBalance from "./deposit.share.balance";
 
 async function _allowAndDepositBondingToken(
   lpsAmount: ethers.BigNumber,
@@ -131,7 +130,7 @@ async function _expectedShares(
   }
 }
 
-const DepositShare = () => {
+const DepositShare = ({ onStakeDone }: { onStakeDone: () => void }) => {
   const { account, manager, provider, balances, setBalances } = useConnectedContext();
 
   //const [bondingSharePercentage, setPercentage] = useState<string>();
@@ -145,7 +144,7 @@ const DepositShare = () => {
 
   const handleDeposit = async () => {
     console.log("loading", isLoading);
-    _depositBondingTokens(
+    await _depositBondingTokens(
       provider,
       account,
       manager,
@@ -155,6 +154,7 @@ const DepositShare = () => {
       setIsLoading
       // setPercentage
     );
+    onStakeDone();
   };
   const handleInputWeeks = async () => {
     setErrMsg("");
@@ -224,8 +224,6 @@ const DepositShare = () => {
           <p>{errMsg}</p>
 
           {expectedShares && <p>Expected bonding shares {ethers.utils.formatEther(expectedShares)}</p>}
-
-          <DepositShareBalance />
         </div>
       </div>
     </>

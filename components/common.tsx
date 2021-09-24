@@ -6,15 +6,12 @@ import { ERC1155Ubiquity } from "../contracts/artifacts/types";
 import { EthAccount } from "./common/types";
 import Account from "./account";
 import BondingMigrate from "./bonding.migrate";
-import ChefUgov from "./chefugov";
 import { Balances, useConnectedContext } from "./context/connected";
 import CurveBalance from "./curve.balance";
 import CurveLPBalance from "./curveLP.balance";
 import DebtCouponBalance from "./debtCoupon.balance";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponRedeem from "./debtCoupon.redeem";
-import DepositShare from "./deposit.share";
-import DepositShareRedeem from "./deposit.share.redeem";
 import TwapPrice from "./twap.price";
 import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
@@ -135,7 +132,6 @@ export function _renderControls() {
 
         {account && <TwapPrice />}
         <BondingMigrate />
-        <DepositShare />
         {account && <BondingSharesExplorer />}
         {balances?.uar.gt(BigNumber.from(0)) && twapPrice?.gte(ethers.utils.parseEther("1")) ? <UarRedeem /> : ""}
         {twapPrice?.lte(ethers.utils.parseEther("1")) ? <DebtCouponDeposit /> : ""}

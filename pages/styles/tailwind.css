@@ -75,12 +75,12 @@
   margin-bottom: 0.5rem
 }
 
-.mr-2 {
-  margin-right: 0.5rem
-}
-
 .mt-4 {
   margin-top: 1rem
+}
+
+.mr-2 {
+  margin-right: 0.5rem
 }
 
 .-mt-2 {
@@ -324,14 +324,14 @@
   letter-spacing: .2em
 }
 
-.text-accent {
-  --tw-text-opacity: 1;
-  color: rgba(0, 255, 255, var(--tw-text-opacity))
-}
-
 .text-white {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity))
+}
+
+.text-accent {
+  --tw-text-opacity: 1;
+  color: rgba(0, 255, 255, var(--tw-text-opacity))
 }
 
 .text-white\/50 {

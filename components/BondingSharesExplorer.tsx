@@ -5,6 +5,7 @@ import { formatEther } from "./common/format";
 import { useAsyncInit, performTransaction } from "./common/utils";
 import * as widget from "./ui/widget";
 import { UBQIcon, LiquidIcon } from "./ui/icons";
+import DepositShare from "./deposit.share";
 
 type ShareData = {
   id: number;
@@ -27,7 +28,11 @@ type Model = {
   transacting: boolean;
 };
 
-type Actions = { onWithdrawLp: (payload: { id: number; amount: null | number }) => void; onClaimUbq: (id: number) => void };
+type Actions = {
+  onWithdrawLp: (payload: { id: number; amount: null | number }) => void;
+  onClaimUbq: (id: number) => void;
+  onStake: (payload: { amount: number; weeks: number }) => void;
+};
 
 export const BondingSharesExplorerContainer = ({ contracts, provider, account, signer }: UserContext) => {
   const [model, setModel] = useState<Model | null>(null);
@@ -109,13 +114,21 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
       },
       [model, contracts, signer]
     ),
+
+    onStake: useCallback(
+      async ({ amount, weeks }) => {
+        if (!model || model.transacting) return;
+        // TODO: Move the staking calls from DepositShare to here
+        fetchSharesInformation();
+      },
+      [model, contracts, signer]
+    ),
   };
 
   return <BondingSharesExplorer model={model} actions={actions} />;
 };
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
-  console.log("Rendering BondingSharesExplorer", model);
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={model?.transacting}>
       <widget.Title text="Liquidity Tokens Staking" />
@@ -124,7 +137,7 @@ export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | 
   );
 });
 
-export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq }: Model & Actions) => {
+export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake }: Model & Actions) => {
   const totalUserShares = shares.reduce((sum, val) => {
     return sum.add(val.sharesBalance);
   }, BigNumber.from(0));
@@ -141,6 +154,8 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
 
   return (
     <div className="flex flex-col relative">
+      {/* TODO: Clean up the DepositShare component, integrate into this one */}
+      <DepositShare onStakeDone={() => onStake({ amount: 0, weeks: 0 })} />
       <table className="border border-solid border-white border-opacity-10 border-collapse mb-4">
         <thead>
           <tr className="border-0 border-b border-solid border-white border-opacity-10 h-12">
@@ -184,7 +199,8 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   );
 };
 
-const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawLp, onClaimUbq }: ShareData & Actions) => {
+type BondingShareRowProps = ShareData & { onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
+const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
   const [withdrawAmount, setWithdrawAmount] = useState("");
 
   return (
