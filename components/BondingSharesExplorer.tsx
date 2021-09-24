@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
-import { memo, useState } from "react";
-import { useConnectedContractsWithAccount, useContractsCallback } from "./context/connected";
+import { memo, useState, useCallback } from "react";
+import { useConnectedContractsWithAccount, useConnectedContext, ConnectedContractsKit } from "./context/connected";
 import { formatEther, formatMwei } from "./common/format";
 import * as widget from "./ui/widget";
 
@@ -22,57 +22,108 @@ type ShareData = {
 type Model = {
   shares: ShareData[];
   totalShares: BigNumber;
+  transacting: boolean;
 };
 
 type Actions = { onWithdrawLp: (payload: { id: number; amount: null | number }) => void; onClaimUbq: (id: number) => void };
 
+async function fetchSharesInformation({ contracts, provider, account }: ConnectedContractsKit): Promise<{ shares: ShareData[]; totalShares: BigNumber }> {
+  console.time("BondingShareExplorerContainer contract loading");
+  const currentBlock = await provider.getBlockNumber();
+  const blockCountInAWeek = +(await contracts.bonding.blockCountInAWeek()).toString();
+  const totalShares = await contracts.masterChef.totalShares();
+  const bondingShareIds = await contracts.bondingToken.holderTokens(account.address);
+
+  const shares: ShareData[] = [];
+  await Promise.all(
+    bondingShareIds.map(async (id) => {
+      const [ugov, bond, bondingShareInfo, tokenBalance] = await Promise.all([
+        contracts.masterChef.pendingUGOV(id),
+        contracts.bondingToken.getBond(id),
+        contracts.masterChef.getBondingShareInfo(id),
+        contracts.bondingToken.balanceOf(account.address, id),
+      ]);
+
+      const endBlock = +bond.endBlock.toString();
+      const blocksLeft = endBlock - currentBlock;
+      const weeksLeft = Math.round((blocksLeft / blockCountInAWeek) * 100) / 100;
+
+      // If this is 0 it means the share ERC1155 token was transferred to another account
+      if (+tokenBalance.toString() > 0) {
+        shares.push({ id: +id.toString(), ugov, bond, sharesBalance: bondingShareInfo[0], weeksLeft });
+      }
+    })
+  );
+
+  console.timeEnd("BondingShareExplorerContainer contract loading");
+  return { shares: shares.sort((a, b) => a.id - b.id), totalShares };
+}
+
+function logGas(txDone: ethers.ContractReceipt) {
+  console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);
+}
+
 export const BondingSharesExplorerContainer = () => {
   const [model, setModel] = useState<Model | null>(null);
+  const { contracts, provider, account, signer } = useConnectedContext();
 
-  useConnectedContractsWithAccount(async ({ contracts, provider, account }) => {
-    console.time("BondingShareExplorerContainer contract loading");
-    const currentBlock = await provider.getBlockNumber();
-    const blockCountInAWeek = +(await contracts.bonding.blockCountInAWeek()).toString();
-    const totalSharesSupply = await contracts.masterChef.totalShares();
-    const bondingShareIds = await contracts.bondingToken.holderTokens(account.address);
-
-    const shares: ShareData[] = [];
-    await Promise.all(
-      bondingShareIds.map(async (id) => {
-        const [ugov, bond, bondingShareInfo, tokenBalance] = await Promise.all([
-          contracts.masterChef.pendingUGOV(id),
-          contracts.bondingToken.getBond(id),
-          contracts.masterChef.getBondingShareInfo(id),
-          contracts.bondingToken.balanceOf(account.address, id),
-        ]);
-
-        const endBlock = +bond.endBlock.toString();
-        const blocksLeft = endBlock - currentBlock;
-        const weeksLeft = Math.round((blocksLeft / blockCountInAWeek) * 100) / 100;
-
-        // If this is 0 it means the share ERC1155 token was transferred to another account
-        if (+tokenBalance.toString() > 0) {
-          shares.push({ id: +id.toString(), ugov, bond, sharesBalance: bondingShareInfo[0], weeksLeft });
-        }
-      })
-    );
-
-    console.timeEnd("BondingShareExplorerContainer contract loading");
-
+  useConnectedContractsWithAccount(async (connectedContractsKit) => {
     setModel({
-      shares,
-      totalShares: totalSharesSupply,
+      transacting: false,
+      ...(await fetchSharesInformation(connectedContractsKit)),
     });
   });
 
-  const actions: Actions = {
-    onWithdrawLp: useContractsCallback(({ contracts }, { id, amount }) => {
-      console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
-    }),
+  function allLpAmount(id: number): BigNumber {
+    if (!model) throw new Error("No model");
+    const lpAmount = model.shares.find((s) => s.id === id)?.bond?.lpAmount;
+    if (!lpAmount) throw new Error("Could not find share in model");
+    return lpAmount;
+  }
 
-    onClaimUbq: useContractsCallback(({ contracts }, id) => {
-      console.log(`Claiming rewards from ${id}`);
-    }),
+  const actions: Actions = {
+    onWithdrawLp: useCallback(
+      async ({ id, amount }) => {
+        console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
+        if (model && contracts && provider && account && signer) {
+          setModel({ ...model, transacting: true });
+          const isAllowed = await contracts.bondingToken.isApprovedForAll(account.address, contracts.bonding.address);
+          if (!isAllowed) {
+            // Allow bonding contract to control account share
+            const tx = await contracts.bondingToken.connect(signer).setApprovalForAll(contracts.bonding.address, true);
+            const txR = await tx.wait();
+            logGas(txR);
+          }
+
+          const bigNumberAmount = amount ? ethers.utils.parseEther(amount.toString()) : allLpAmount(id);
+          const tx = await contracts.bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id));
+          const txR = await tx.wait();
+          logGas(txR);
+          setModel({ transacting: false, ...(await fetchSharesInformation({ contracts, provider, account, signer })) });
+        }
+      },
+      [model, contracts, signer]
+    ),
+
+    onClaimUbq: useCallback(
+      async (id) => {
+        if (model && contracts && provider && account && signer && !model.transacting) {
+          setModel({ ...model, transacting: true });
+          console.log(`Claiming UBQ rewards from ${id}`);
+
+          try {
+            const tx = await contracts.masterChef.connect(signer).getRewards(BigNumber.from(id));
+            const txR = await tx.wait();
+            logGas(txR);
+          } catch (e) {
+            console.log("ERROR Transacting!", e);
+          }
+
+          setModel({ transacting: false, ...(await fetchSharesInformation({ contracts, provider, account, signer })) });
+        }
+      },
+      [model, contracts, signer]
+    ),
   };
 
   return <BondingSharesExplorer model={model} actions={actions} />;
@@ -81,9 +132,9 @@ export const BondingSharesExplorerContainer = () => {
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   console.log("Rendering BondingSharesExplorer", model);
   return (
-    <widget.Container className="max-w-screen-md !mx-auto">
+    <widget.Container className="max-w-screen-md !mx-auto relative" transacting={model?.transacting}>
       <widget.Title text="Liquidity Tokens Staking" />
-      {model ? <BondingSharesExplorerListing {...model} {...actions} /> : <div>Loading existing shares information...</div>}
+      {model ? <BondingSharesExplorerListing {...model} {...actions} /> : <widget.Loading text="Loading existing shares information" />}
     </widget.Container>
   );
 });
@@ -111,7 +162,7 @@ export const BondingSharesExplorerListing = ({ shares, totalShares, onWithdrawLp
   const poolPercentage = formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative">
       <table className="border border-solid border-white border-opacity-10 border-collapse mb-4">
         <thead>
           <tr className="border-0 border-b border-solid border-white border-opacity-10 h-12">

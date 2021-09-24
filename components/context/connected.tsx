@@ -18,11 +18,13 @@ export interface Balances {
 
 export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;
+  setManager: Dispatch<SetStateAction<UbiquityAlgorithmicDollarManager | null>>;
   provider: ethers.providers.Web3Provider | null;
+  setProvider: Dispatch<SetStateAction<ethers.providers.Web3Provider | null>>;
   account: EthAccount | null;
   setAccount: Dispatch<SetStateAction<EthAccount | null>>;
-  setProvider: Dispatch<SetStateAction<ethers.providers.Web3Provider | null>>;
-  setManager: Dispatch<SetStateAction<UbiquityAlgorithmicDollarManager | null>>;
+  signer: ethers.providers.JsonRpcSigner | null;
+  setSigner: Dispatch<SetStateAction<ethers.providers.JsonRpcSigner | null>>;
   balances: Balances | null;
   setBalances: Dispatch<SetStateAction<Balances | null>>;
   twapPrice: BigNumber | null;
@@ -39,6 +41,7 @@ interface Props {
 
 export const ConnectedNetwork = (props: Props): JSX.Element => {
   const [provider, setProvider] = useState<ethers.providers.Web3Provider | null>(null);
+  const [signer, setSigner] = useState<ethers.providers.JsonRpcSigner | null>(null);
   const [manager, setManager] = useState<UbiquityAlgorithmicDollarManager | null>(null);
   const [account, setAccount] = useState<EthAccount | null>(null);
   const [balances, setBalances] = useState<Balances | null>(null);
@@ -48,6 +51,8 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
   const value: ConnectedContext = {
     provider,
     setProvider,
+    signer,
+    setSigner,
     manager,
     setManager,
     account,
@@ -64,11 +69,14 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
     (async function () {
       console.time("Connecting contracts");
       const { provider, contracts } = await connectedContracts();
+      const signer = await provider.getSigner();
       console.timeEnd("Connecting contracts");
       (window as any).contracts = contracts;
+      (window as any).signer = signer;
       (window as any).account = await provider.getSigner().getAddress();
       (window as any).provider = provider;
 
+      setSigner(signer);
       setProvider(provider);
       setContracts(contracts);
       setManager(contracts.manager);
@@ -80,7 +88,12 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
 
 export const useConnectedContext = (): ConnectedContext => useContext(ConnectedContext);
 
-type ContractsCallback = ({ contracts, provider }: { contracts: Contracts; provider: ethers.providers.Web3Provider }) => Promise<void>;
+export type UnconnectedContractsKit = {
+  contracts: Contracts;
+  provider: ethers.providers.Web3Provider;
+};
+
+type ContractsCallback = ({ contracts, provider }: UnconnectedContractsKit) => Promise<void>;
 export function useConnectedContracts(callback: ContractsCallback): void {
   const { provider, account, contracts } = useConnectedContext();
 
@@ -93,32 +106,33 @@ export function useConnectedContracts(callback: ContractsCallback): void {
   }, [provider, contracts]);
 }
 
-type ContractsProviderAccount = {
+export type ConnectedContractsKit = {
   contracts: Contracts;
   provider: ethers.providers.Web3Provider;
   account: EthAccount;
+  signer: ethers.providers.JsonRpcSigner;
 };
 
-type ContractsWithAccountCallback = (data: ContractsProviderAccount) => Promise<void>;
+type ContractsWithAccountCallback = (data: ConnectedContractsKit) => Promise<void>;
 export function useConnectedContractsWithAccount(callback: ContractsWithAccountCallback): void {
-  const { provider, account, contracts } = useConnectedContext();
+  const { provider, account, signer, contracts } = useConnectedContext();
 
   useEffect(() => {
-    if (provider && account && contracts) {
+    if (provider && account && signer && contracts) {
       (async function () {
-        callback({ contracts, provider, account });
+        callback({ contracts, provider, account, signer });
       })();
     }
   }, [provider, account, contracts]);
 }
 
-export function useContractsCallback<T>(cb: (data: ContractsProviderAccount, payload: T) => void): (payload: T) => void {
-  const { provider, account, contracts } = useConnectedContext();
+export function useContractsCallback<T>(cb: (data: ConnectedContractsKit, payload: T) => void): (payload: T) => void {
+  const { provider, account, contracts, signer } = useConnectedContext();
 
   return useCallback(
     (payload: T) => {
-      if (provider && account && contracts) {
-        cb({ contracts, provider, account }, payload);
+      if (provider && account && signer && contracts) {
+        cb({ contracts, provider, account, signer }, payload);
       }
     },
     [provider, contracts, account]

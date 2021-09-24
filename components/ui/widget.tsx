@@ -1,4 +1,4 @@
-export const Container = (props: React.PropsWithChildren<{ className?: string }>): JSX.Element => (
+export const Container = (props: React.PropsWithChildren<{ className?: string; transacting?: boolean }>): JSX.Element => (
   <div
     className={`
       !block !py-8 px-4 rounded-md
@@ -6,6 +6,7 @@ export const Container = (props: React.PropsWithChildren<{ className?: string }>
       border-1 border-solid border-white/10
       bg-blur ${props.className || ""}`}
   >
+    {props.transacting ? <Transacting /> : null}
     {props.children}
   </div>
 );
@@ -44,5 +45,27 @@ export const PriceExchange = (props: { from: string; to: string; value: number }
     <span className="w-1/2 flex-grow text-left">
       {props.value.toString()} <span className="text-white text-opacity-75">{props.to}</span>
     </span>
+  </div>
+);
+
+export const Loading = (props: { text: string }): JSX.Element => (
+  <div className="h-20 flex items-center justify-center text-lg text-white text-opacity-25">
+    <span className="mr-4">{props.text}</span>
+    <span className="scale-150">{Spinner}</span>
+  </div>
+);
+
+export const Transacting = (): JSX.Element => (
+  <div className="border-accent border bg-accent bg-opacity-10 border-solid absolute top-0 right-0 mr-4 mt-4 rounded-full py-1 px-2 text-accent">
+    Transacting {Spinner}
+  </div>
+);
+
+export const Spinner = (
+  <div className="lds-ring relative top-[2px]">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
   </div>
 );

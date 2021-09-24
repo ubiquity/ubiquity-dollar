@@ -104,9 +104,11 @@ export function _renderControls() {
     setAccount(await fetchAccount());
   };
 
-  // useEffect(() => {
-  //   connect();
-  // }, []);
+  if (!PROD) {
+    useEffect(() => {
+      connect();
+    }, []);
+  }
 
   return (
     <>
@@ -132,14 +134,12 @@ export function _renderControls() {
         </header>
 
         {account && <TwapPrice />}
-        <ChefUgov />
         <BondingMigrate />
         <DepositShare />
-        <BondingSharesExplorer />
+        {account && <BondingSharesExplorer />}
         {balances?.uar.gt(BigNumber.from(0)) && twapPrice?.gte(ethers.utils.parseEther("1")) ? <UarRedeem /> : ""}
         {twapPrice?.lte(ethers.utils.parseEther("1")) ? <DebtCouponDeposit /> : ""}
         {balances?.debtCoupon.gt(BigNumber.from(0)) ? <DebtCouponRedeem /> : ""}
-        {balances?.bondingShares.gt(BigNumber.from(0)) ? <DepositShareRedeem /> : ""}
 
         <div id="markets">
           <div>
