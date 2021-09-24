@@ -188,16 +188,18 @@ export const BondingSharesExplorerListing = ({ shares, totalShares, onWithdrawLp
                 <td className="text-white">{formatEther(lpBalance)}</td>
                 <td>
                   {weeksLeft <= 0 ? (
-                    <>
-                      <input
-                        type="text"
-                        placeholder="All"
-                        className="!min-w-0 !w-10"
-                        value={withdrawAmounts[id] || ""}
-                        onChange={(ev) => onWithdrawAmountChange(id, ev.target.value)}
-                      />
-                      <button onClick={() => onWithdrawLp({ id, amount: parseFloat(withdrawAmounts[id]) || null })}>Withdraw</button>
-                    </>
+                    bond.lpAmount.gt(0) ? (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="All"
+                          className="!min-w-0 !w-10"
+                          value={withdrawAmounts[id] || ""}
+                          onChange={(ev) => onWithdrawAmountChange(id, ev.target.value)}
+                        />
+                        <button onClick={() => onWithdrawLp({ id, amount: parseFloat(withdrawAmounts[id]) || null })}>Withdraw</button>
+                      </>
+                    ) : null
                   ) : (
                     <span>{weeksLeft}w</span>
                   )}
