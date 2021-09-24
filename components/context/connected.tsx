@@ -88,53 +88,39 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
 
 export const useConnectedContext = (): ConnectedContext => useContext(ConnectedContext);
 
-export type UnconnectedContractsKit = {
+export type AnonContext = {
   contracts: Contracts;
   provider: ethers.providers.Web3Provider;
 };
 
-type ContractsCallback = ({ contracts, provider }: UnconnectedContractsKit) => Promise<void>;
-export function useConnectedContracts(callback: ContractsCallback): void {
-  const { provider, account, contracts } = useConnectedContext();
-
-  useEffect(() => {
-    if (provider && account && contracts) {
-      (async function () {
-        callback({ contracts, provider });
-      })();
-    }
-  }, [provider, contracts]);
-}
-
-export type ConnectedContractsKit = {
+export type UserContext = {
   contracts: Contracts;
   provider: ethers.providers.Web3Provider;
   account: EthAccount;
   signer: ethers.providers.JsonRpcSigner;
 };
 
-type ContractsWithAccountCallback = (data: ConnectedContractsKit) => Promise<void>;
-export function useConnectedContractsWithAccount(callback: ContractsWithAccountCallback): void {
+export function useUserContractsContext(): UserContext | null {
   const { provider, account, signer, contracts } = useConnectedContext();
-
-  useEffect(() => {
-    if (provider && account && signer && contracts) {
-      (async function () {
-        callback({ contracts, provider, account, signer });
-      })();
-    }
-  }, [provider, account, contracts]);
+  if (provider && account && signer && contracts) {
+    return { provider, account, signer, contracts };
+  } else {
+    return null;
+  }
 }
 
-export function useContractsCallback<T>(cb: (data: ConnectedContractsKit, payload: T) => void): (payload: T) => void {
-  const { provider, account, contracts, signer } = useConnectedContext();
+export function useAnonContractsContext(): AnonContext | null {
+  const { provider, contracts } = useConnectedContext();
+  if (provider && contracts) {
+    return { provider, contracts };
+  } else {
+    return null;
+  }
+}
 
-  return useCallback(
-    (payload: T) => {
-      if (provider && account && signer && contracts) {
-        cb({ contracts, provider, account, signer }, payload);
-      }
-    },
-    [provider, contracts, account]
-  );
+export function connectedWithUserContext(El: (params: UserContext) => JSX.Element) {
+  return () => {
+    const context = useUserContractsContext();
+    return context ? <El {...context} /> : null;
+  };
 }

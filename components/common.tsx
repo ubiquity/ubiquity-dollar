@@ -7,7 +7,7 @@ import { EthAccount } from "./common/types";
 import Account from "./account";
 import BondingMigrate from "./bonding.migrate";
 import ChefUgov from "./chefugov";
-import { Balances, useConnectedContext, useConnectedContracts } from "./context/connected";
+import { Balances, useConnectedContext } from "./context/connected";
 import CurveBalance from "./curve.balance";
 import CurveLPBalance from "./curveLP.balance";
 import DebtCouponBalance from "./debtCoupon.balance";
