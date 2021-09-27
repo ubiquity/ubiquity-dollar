@@ -71,10 +71,9 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
       const { provider, contracts } = await connectedContracts();
       const signer = await provider.getSigner();
       console.timeEnd("Connecting contracts");
-      (window as any).contracts = contracts;
-      (window as any).signer = signer;
-      (window as any).account = await provider.getSigner().getAddress();
-      (window as any).provider = provider;
+      // (window as any).contracts = contracts;
+      // (window as any).signer = signer;
+      // (window as any).provider = provider;
 
       setSigner(signer);
       setProvider(provider);
