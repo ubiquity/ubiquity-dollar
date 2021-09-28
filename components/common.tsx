@@ -18,6 +18,7 @@ import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
+import YieldFarming from "./YieldFarming";
 import { Contracts } from "../contracts";
 
 const PROD = process.env.NODE_ENV == "production";
@@ -132,6 +133,7 @@ export function _renderControls() {
 
         {account && <TwapPrice />}
         <BondingMigrate />
+        {account && <YieldFarming />}
         {account && <BondingSharesExplorer />}
         {balances?.uar.gt(BigNumber.from(0)) && twapPrice?.gte(ethers.utils.parseEther("1")) ? <UarRedeem /> : ""}
         {twapPrice?.lte(ethers.utils.parseEther("1")) ? <DebtCouponDeposit /> : ""}
