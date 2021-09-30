@@ -9,6 +9,9 @@ module.exports = {
       letterSpacing: {
         widest: ".2em",
       },
+      colors: {
+        accent: "#00ffff",
+      },
     },
   },
 };

@@ -24,6 +24,18 @@ import {
   DebtCoupon__factory,
   DebtCouponManager,
   DebtCouponManager__factory,
+  BondingV2,
+  BondingV2__factory,
+  MasterChefV2,
+  MasterChefV2__factory,
+  BondingShareV2,
+  BondingShareV2__factory,
+  SushiSwapPool,
+  SushiSwapPool__factory,
+  IUniswapV2Pair,
+  IUniswapV2Pair__factory,
+  UbiquityFormulas,
+  UbiquityFormulas__factory,
 } from "./contracts/artifacts/types";
 import namedAccounts from "./fixtures/named-accounts.json";
 import FullDeployment from "./fixtures/full-deployment.json";
@@ -48,9 +60,14 @@ const contracts = {
   uar: UbiquityAutoRedeem__factory.connect,
   ugov: UbiquityGovernance__factory.connect,
   crvToken: ERC20__factory.connect,
-  bondingToken: ERC1155Ubiquity__factory.connect,
+  bondingToken: BondingShareV2__factory.connect,
   debtCouponToken: DebtCoupon__factory.connect,
-  DebtCouponManager: DebtCouponManager__factory.connect,
+  debtCouponManager: DebtCouponManager__factory.connect,
+  bonding: BondingV2__factory.connect,
+  masterChef: MasterChefV2__factory.connect,
+  sushiSwapPool: SushiSwapPool__factory.connect,
+  ugovUadPair: IUniswapV2Pair__factory.connect,
+  ubiquityFormulas: UbiquityFormulas__factory.connect,
 };
 
 // 2
@@ -64,9 +81,14 @@ export type Contracts = {
   uar: UbiquityAutoRedeem;
   ugov: UbiquityGovernance;
   crvToken: ERC20;
-  bondingToken: ERC1155Ubiquity;
+  bondingToken: BondingShareV2;
   debtCouponToken: DebtCoupon;
   debtCouponManager: DebtCouponManager;
+  bonding: BondingV2;
+  masterChef: MasterChefV2;
+  sushiSwapPool: SushiSwapPool;
+  ugovUadPair: IUniswapV2Pair;
+  ubiquityFormulas: UbiquityFormulas;
 };
 
 // 3
@@ -83,12 +105,30 @@ type ContractsAddresses = {
   bondingToken: string;
   debtCouponToken: string;
   debtCouponManager: string;
+  bonding: string;
+  masterChef: string;
+  sushiSwapPool: string;
+  ubiquityFormulas: string;
 };
 
 // Load all contract addresses on parallel
 async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Promise<ContractsAddresses> {
   // 4
-  const [uad, metaPool, twapOracle, dollarMintCalc, uar, ugov, crvToken, bondingToken, debtCouponToken] = await Promise.all([
+  const [
+    uad,
+    metaPool,
+    twapOracle,
+    dollarMintCalc,
+    uar,
+    ugov,
+    crvToken,
+    bondingToken,
+    debtCouponToken,
+    bonding,
+    masterChef,
+    sushiSwapPool,
+    ubiquityFormulas,
+  ] = await Promise.all([
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
     manager.twapOracleAddress(),
@@ -98,6 +138,10 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     manager.curve3PoolTokenAddress(),
     manager.bondingShareAddress(),
     manager.debtCouponAddress(),
+    manager.bondingContractAddress(),
+    manager.masterChefAddress(),
+    manager.sushiSwapPoolAddress(),
+    manager.formulasAddress(),
   ]);
   return {
     manager: manager.address,
@@ -112,6 +156,10 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     bondingToken,
     debtCouponToken,
     debtCouponManager: ADDRESS.DEBT_COUPON_MANAGER,
+    bonding,
+    masterChef,
+    sushiSwapPool,
+    ubiquityFormulas,
   };
 }
 
@@ -130,6 +178,11 @@ export async function connectedContracts(): Promise<{
   const manager = contracts.manager(ADDRESS.MANAGER, provider);
   const addr = await contractsAddresses(manager);
 
+  // const signer = provider.getSigner();
+
+  const sushiSwapPool = contracts.sushiSwapPool(addr.sushiSwapPool, provider);
+  const ugovUadPair = contracts.ugovUadPair(await sushiSwapPool.pair(), provider);
+
   // 5
   return {
     provider,
@@ -145,7 +198,12 @@ export async function connectedContracts(): Promise<{
       crvToken: contracts.crvToken(addr.crvToken, provider),
       bondingToken: contracts.bondingToken(addr.bondingToken, provider),
       debtCouponToken: contracts.debtCouponToken(addr.debtCouponToken, provider),
-      debtCouponManager: contracts.DebtCouponManager(addr.debtCouponManager, provider),
+      debtCouponManager: contracts.debtCouponManager(addr.debtCouponManager, provider),
+      bonding: contracts.bonding(addr.bonding, provider),
+      masterChef: contracts.masterChef(addr.masterChef, provider),
+      sushiSwapPool,
+      ugovUadPair,
+      ubiquityFormulas: contracts.ubiquityFormulas(addr.ubiquityFormulas, provider),
     },
   };
 }
