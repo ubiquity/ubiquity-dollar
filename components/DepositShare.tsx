@@ -106,13 +106,21 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
     (async function () {
       if (prefetched && amount && weeks) {
         setExpectedShares(await calculateExpectedShares(contracts, prefetched, amount, weeks));
-        setCurrentApy(await calculateApyForWeeks(contracts, prefetched, parseInt(weeks)));
       } else {
         setExpectedShares(null);
-        setCurrentApy(null);
       }
     })();
   }, [prefetched, amount, weeks]);
+
+  useEffect(() => {
+    (async function () {
+      if (prefetched && weeks) {
+        setCurrentApy(await calculateApyForWeeks(contracts, prefetched, parseInt(weeks)));
+      } else {
+        setCurrentApy(null);
+      }
+    })();
+  }, [prefetched, weeks]);
 
   const noInputYet = !amount || !weeks;
 

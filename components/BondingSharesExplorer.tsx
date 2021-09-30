@@ -209,7 +209,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           {LiquidIcon}
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
-        <div className="mb-2">{poolPercentage}% pool ownership.</div>
+        <div className="mb-2">{poolPercentage}% pool ownership</div>
       </div>
     </div>
   );
