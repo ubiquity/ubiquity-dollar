@@ -67,7 +67,7 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
   function validateAmount(): string | null {
     if (amount) {
       const amountBig = ethers.utils.parseEther(amount);
-      if (amountBig.gt(maxLp)) return `You don't have enough ${maxLp} uAD-3CRV tokens`;
+      if (amountBig.gt(maxLp)) return `You don't have enough uAD-3CRV tokens`;
     }
     return null;
   }

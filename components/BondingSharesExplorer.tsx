@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { memo, useState, useCallback } from "react";
-import { connectedWithUserContext, UserContext } from "./context/connected";
+import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import { formatEther } from "./common/format";
 import { useAsyncInit, performTransaction } from "./common/utils";
 import * as widget from "./ui/widget";
@@ -40,6 +40,7 @@ const LP_TO_USD = 1 / USD_TO_LP;
 
 export const BondingSharesExplorerContainer = ({ contracts, provider, account, signer }: UserContext) => {
   const [model, setModel] = useState<Model | null>(null);
+  const { refreshBalances } = useConnectedContext();
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {
@@ -103,6 +104,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         await performTransaction(contracts.bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
 
         fetchSharesInformation();
+        refreshBalances();
       },
       [model, contracts, signer]
     ),
@@ -116,6 +118,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         await performTransaction(contracts.masterChef.connect(signer).getRewards(BigNumber.from(id)));
 
         fetchSharesInformation();
+        refreshBalances();
       },
       [model, contracts, signer]
     ),
@@ -136,6 +139,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         await performTransaction(contracts.bonding.connect(signer).deposit(amount, weeks));
 
         fetchSharesInformation();
+        refreshBalances();
       },
       [model, contracts, signer]
     ),
@@ -168,7 +172,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
 
   const poolPercentage = formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
 
-  const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) && ugov.gt(0));
+  const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) || ugov.gt(0));
 
   return (
     <div className="flex flex-col relative">
