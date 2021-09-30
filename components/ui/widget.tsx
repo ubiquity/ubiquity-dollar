@@ -57,7 +57,7 @@ export const Loading = (props: { text: string }): JSX.Element => (
 
 export const Transacting = (): JSX.Element => (
   <div className="border-accent border bg-accent bg-opacity-10 border-solid absolute top-0 right-0 mr-4 mt-4 rounded-full py-1 px-2 text-accent">
-    Transacting {Spinner}
+    Processing {Spinner}
   </div>
 );
 
