@@ -32,7 +32,7 @@ type Model = {
 type Actions = {
   onWithdrawLp: (payload: { id: number; amount: null | number }) => void;
   onClaimUbq: (id: number) => void;
-  onStake: (payload: { amount: number; weeks: number }) => void;
+  onStake: (payload: { amount: BigNumber; weeks: BigNumber }) => void;
 };
 
 const USD_TO_LP = 0.75;
@@ -125,17 +125,15 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         if (!model || model.processing) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         setModel({ ...model, processing: true });
-        const bigWeeks = BigNumber.from(weeks.toString());
-        const bigAmount = ethers.utils.parseEther(amount.toString());
         const allowance = await contracts.metaPool.allowance(account.address, contracts.bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
-        console.log("lpsAmount", ethers.utils.formatEther(bigAmount));
-        if (allowance.lt(bigAmount)) {
-          await performTransaction(contracts.metaPool.connect(signer).approve(contracts.bonding.address, bigAmount));
+        console.log("lpsAmount", ethers.utils.formatEther(amount));
+        if (allowance.lt(amount)) {
+          await performTransaction(contracts.metaPool.connect(signer).approve(contracts.bonding.address, amount));
           const allowance2 = await contracts.metaPool.allowance(account.address, contracts.bonding.address);
           console.log("allowance2", ethers.utils.formatEther(allowance2));
         }
-        await performTransaction(contracts.bonding.connect(signer).deposit(bigAmount, bigWeeks));
+        await performTransaction(contracts.bonding.connect(signer).deposit(amount, weeks));
 
         fetchSharesInformation();
       },
@@ -170,22 +168,23 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
 
   const poolPercentage = formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
 
+  const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) && ugov.gt(0));
+
   return (
     <div className="flex flex-col relative">
-      <DepositShare onStake={onStake} disabled={processing} maxLp={+ethers.utils.formatEther(walletLpBalance)} />
+      <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
       <table className="border border-solid border-white border-opacity-10 border-collapse mb-4">
         <thead>
-          <tr className="border-0 border-b border-solid border-white border-opacity-10 h-12">
-            <th>ID</th>
+          <tr className="border-0 border-b border-solid border-white border-opacity-10 h-12 uppercase">
+            <th>Deposit (Approx.)</th>
             <th>Pending Reward</th>
-            <th>Deposit</th>
-            <th>Unlock time</th>
-            <th></th>
+            <th>Unlock Time</th>
+            <th>Action</th>
           </tr>
         </thead>
-        {shares.length > 0 ? (
+        {filteredShares.length > 0 ? (
           <tbody>
-            {shares.map((share) => (
+            {filteredShares.map((share) => (
               <BondingShareRow key={share.id} {...share} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
             ))}
           </tbody>
@@ -232,29 +231,26 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
   }
 
   return (
-    <tr key={id} className="h-12">
-      <td className="pl-2">{id.toString()}</td>
+    <tr key={id} className="h-12" title={id.toString()}>
+      <td className="text-white" title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}>
+        ${Math.round(usdAmount * 100) / 100}
+      </td>
       <td>
         <div className="text-accent whitespace-nowrap">
           {UBQIcon} <span>{formatEther(ugov)}</span>
         </div>
       </td>
-      <td className="text-white" title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}>
-        ${Math.round(usdAmount * 100) / 100}
-      </td>
+      <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
       <td>
-        {weeksLeft <= 0 ? (
-          bond.lpAmount.gt(0) ? (
-            <>
-              <input type="text" placeholder="All" className="!min-w-0 !w-10" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} />
-              <button onClick={onClickWithdraw}>Withdraw</button>
-            </>
-          ) : null
-        ) : (
-          <span>{weeksLeft}w</span>
-        )}
+        {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
+          <>
+            {/* <input type="text" placeholder="All" className="!min-w-0 !w-10" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
+            <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
+          </>
+        ) : ugov.gt(0) ? (
+          <button onClick={() => onClaimUbq(+id.toString())}>Claim reward</button>
+        ) : null}
       </td>
-      <td>{ugov.gt(0) ? <button onClick={() => onClaimUbq(+id.toString())}>Claim</button> : null}</td>
     </tr>
   );
 };

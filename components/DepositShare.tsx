@@ -42,32 +42,34 @@ async function calculateApyForWeeks(contracts: Contracts, prefetch: PrefetchedCo
   return Math.round(yearlyYield * 100) / 100;
 }
 
-async function calculateExpectedShares(contracts: Contracts, prefetch: PrefetchedConstants, amount: string, weeks: string): Promise<number> {
-  const { bondingDiscountMultiplier } = prefetch;
-  const weeksBig = BigNumber.from(weeks);
-  const amountBig = ethers.utils.parseEther(amount);
-  const expectedShares = await contracts.ubiquityFormulas.durationMultiply(amountBig, weeksBig, bondingDiscountMultiplier);
-  const expectedSharesNum = +ethers.utils.formatEther(expectedShares);
-  return Math.round(expectedSharesNum * 10000) / 10000;
-}
+// async function calculateExpectedShares(contracts: Contracts, prefetch: PrefetchedConstants, amount: string, weeks: string): Promise<number> {
+//   const { bondingDiscountMultiplier } = prefetch;
+//   const weeksBig = BigNumber.from(weeks);
+//   const amountBig = ethers.utils.parseEther(amount);
+//   const expectedShares = await contracts.ubiquityFormulas.durationMultiply(amountBig, weeksBig, bondingDiscountMultiplier);
+//   const expectedSharesNum = +ethers.utils.formatEther(expectedShares);
+//   return Math.round(expectedSharesNum * 10000) / 10000;
+// }
 
 type DepositShareProps = {
-  onStake: ({ amount, weeks }: { amount: number; weeks: number }) => void;
+  onStake: ({ amount, weeks }: { amount: BigNumber; weeks: BigNumber }) => void;
   disabled: boolean;
-  maxLp: number;
+  maxLp: BigNumber;
 } & UserContext;
 
 const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps) => {
   const [amount, setAmount] = useState("");
   const [weeks, setWeeks] = useState("");
-  const [expectedShares, setExpectedShares] = useState<null | number>(null);
   const [currentApy, setCurrentApy] = useState<number | null>(null);
   const [prefetched, setPrefetched] = useState<PrefetchedConstants | null>(null);
   const [apyBounds, setApyBounds] = useState<[number, number] | null>(null);
 
-  function validateAmount() {
-    const amountNum = parseFloat(amount);
-    if (amountNum > maxLp) return `You don't have enough ${maxLp} uAD-3CRV tokens`;
+  function validateAmount(): string | null {
+    if (amount) {
+      const amountBig = ethers.utils.parseEther(amount);
+      if (amountBig.gt(maxLp)) return `You don't have enough ${maxLp} uAD-3CRV tokens`;
+    }
+    return null;
   }
 
   const error = validateAmount();
@@ -82,11 +84,11 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
   };
 
   const onClickStake = () => {
-    onStake({ amount: parseFloat(amount), weeks: parseInt(weeks) });
+    onStake({ amount: ethers.utils.parseEther(amount), weeks: BigNumber.from(weeks) });
   };
 
   const onClickMax = () => {
-    setAmount(maxLp.toString());
+    setAmount(ethers.utils.formatEther(maxLp));
     setWeeks(MAX_WEEKS.toString());
   };
 
@@ -101,16 +103,6 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
       setApyBounds([minApy, maxApy]);
     })();
   }, []);
-
-  useEffect(() => {
-    (async function () {
-      if (prefetched && amount && weeks) {
-        setExpectedShares(await calculateExpectedShares(contracts, prefetched, amount, weeks));
-      } else {
-        setExpectedShares(null);
-      }
-    })();
-  }, [prefetched, amount, weeks]);
 
   useEffect(() => {
     (async function () {
@@ -130,7 +122,7 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
         APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[0]}% - ${apyBounds[1]}%` : "..."}
       </div>
       <div className="mb-4 flex justify-center">
-        <input type="number" value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
+        <input type="number" lang="en" value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
 
         <input
           type="number"
@@ -148,7 +140,6 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
           Stake LP Tokens
         </button>
       </div>
-      {expectedShares && <p>Expected bonding shares {expectedShares}</p>}
       {error && <p>{error}</p>}
     </div>
   );
