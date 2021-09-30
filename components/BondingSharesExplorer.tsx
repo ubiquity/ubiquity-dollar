@@ -35,6 +35,9 @@ type Actions = {
   onStake: (payload: { amount: number; weeks: number }) => void;
 };
 
+const USD_TO_LP = 0.75;
+const LP_TO_USD = 1 / USD_TO_LP;
+
 export const BondingSharesExplorerContainer = ({ contracts, provider, account, signer }: UserContext) => {
   const [model, setModel] = useState<Model | null>(null);
 
@@ -143,8 +146,6 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
   return <BondingSharesExplorer model={model} actions={actions} />;
 };
 
-const LP_TO_USD = 1 / 0.75;
-
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={model?.processing}>
@@ -221,6 +222,15 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
   const numLpAmount = +formatEther(bond.lpAmount);
   const usdAmount = numLpAmount * LP_TO_USD;
 
+  function onClickWithdraw() {
+    const parsedUsdAmount = parseFloat(withdrawAmount);
+    if (parsedUsdAmount) {
+      onWithdrawLp({ id, amount: parsedUsdAmount * USD_TO_LP });
+    } else {
+      onWithdrawLp({ id, amount: null });
+    }
+  }
+
   return (
     <tr key={id} className="h-12">
       <td className="pl-2">{id.toString()}</td>
@@ -229,7 +239,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
           {UBQIcon} <span>{formatEther(ugov)}</span>
         </div>
       </td>
-      <td className="text-white" title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)}`}>
+      <td className="text-white" title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}>
         ${Math.round(usdAmount * 100) / 100}
       </td>
       <td>
@@ -237,7 +247,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
           bond.lpAmount.gt(0) ? (
             <>
               <input type="text" placeholder="All" className="!min-w-0 !w-10" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} />
-              <button onClick={() => onWithdrawLp({ id, amount: parseFloat(withdrawAmount) || null })}>Withdraw</button>
+              <button onClick={onClickWithdraw}>Withdraw</button>
             </>
           ) : null
         ) : (
