@@ -20,6 +20,7 @@ import UbqBalance from "./ubq.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import { Contracts } from "../contracts";
+import { UADIcon } from "./ui/icons";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -146,11 +147,7 @@ export function _renderControls() {
           <div>
             <div id="uad-market">
               <div>
-                <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 85.45">
-                    <path d="m30.13 57.62.35.2L58.31 74 39.36 85a3.75 3.75 0 0 1-3.52.11l-.2-.11L1.86 65.45a3.73 3.73 0 0 1-1.85-3v-6a33 33 0 0 1 30.12 1.17zM9.18 15.77l29.4 17.1.38.22A40.49 40.49 0 0 0 75 35v27.22a3.72 3.72 0 0 1-1.68 3.11l-.18.12-7.34 4.24-31.55-18.35A40.47 40.47 0 0 0 0 48.32v-25.1a3.75 3.75 0 0 1 1.68-3.11l.18-.11zM37.5 0a3.75 3.75 0 0 1 1.64.38l.22.12L73.14 20A3.72 3.72 0 0 1 75 23v3.68a33 33 0 0 1-32.2 0l-.45-.26-25.69-14.97L35.64.5a3.64 3.64 0 0 1 1.62-.5z" />
-                  </svg>
-                </span>
+                {UADIcon}
                 <span>uAD</span>
               </div>
               <div>

@@ -57,6 +57,10 @@
   grid-column: span 2 / span 2
 }
 
+.m-0 {
+  margin: 0px
+}
+
 .\!mx-auto {
   margin-left: auto !important;
   margin-right: auto !important
@@ -65,6 +69,11 @@
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem
+}
+
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem
 }
 
 .mb-4 {
@@ -93,6 +102,22 @@
 
 .mr-4 {
   margin-right: 1rem
+}
+
+.mb-8 {
+  margin-bottom: 2rem
+}
+
+.mt-2 {
+  margin-top: 0.5rem
+}
+
+.mt-8 {
+  margin-top: 2rem
+}
+
+.box-border {
+  box-sizing: border-box
 }
 
 .\!block {
@@ -139,6 +164,10 @@
   width: 2.5rem !important
 }
 
+.w-full {
+  width: 100%
+}
+
 .w-1\/2 {
   width: 50%
 }
@@ -149,6 +178,22 @@
 
 .w-screen {
   width: 100vw
+}
+
+.w-4\/5 {
+  width: 80%
+}
+
+.w-5\/12 {
+  width: 41.666667%
+}
+
+.w-10\/12 {
+  width: 83.333333%
+}
+
+.w-11\/12 {
+  width: 91.666667%
 }
 
 .\!min-w-0 {
@@ -181,8 +226,20 @@
   align-items: center
 }
 
+.justify-end {
+  justify-content: flex-end
+}
+
 .justify-center {
   justify-content: center
+}
+
+.justify-between {
+  justify-content: space-between
+}
+
+.justify-evenly {
+  justify-content: space-evenly
 }
 
 .gap-4 {
@@ -277,8 +334,25 @@
   padding-right: 0.5rem
 }
 
+.px-0 {
+  padding-left: 0px;
+  padding-right: 0px
+}
+
 .pl-2 {
   padding-left: 0.5rem
+}
+
+.pl-1 {
+  padding-left: 0.25rem
+}
+
+.pl-8 {
+  padding-left: 2rem
+}
+
+.pl-4 {
+  padding-left: 1rem
 }
 
 .text-left {
@@ -310,6 +384,15 @@
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem
+}
+
+.font-bold {
+  font-weight: 700
 }
 
 .uppercase {
