@@ -200,6 +200,10 @@
   min-width: 0px !important
 }
 
+.min-w-0 {
+  min-width: 0px
+}
+
 .max-w-screen-md {
   max-width: 768px
 }
@@ -391,6 +395,11 @@
   line-height: 2rem
 }
 
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem
+}
+
 .font-bold {
   font-weight: 700
 }
@@ -435,6 +444,10 @@
 
 .text-opacity-25 {
   --tw-text-opacity: 0.25
+}
+
+.opacity-75 {
+  opacity: 0.75
 }
 
 .filter {

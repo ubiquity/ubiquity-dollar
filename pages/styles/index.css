@@ -8,7 +8,7 @@ header {
   padding: 8px;
   /* background-color: #000000; */
   border: 1px solid #ffffff10;
-  /* backdrop-filter: blur(24px); */
+  backdrop-filter: blur(24px);
 }
 
 header > div {
@@ -33,7 +33,7 @@ header > div {
   position: relative;
   /* box-shadow: 0 0 96px #00ffff20; */
   border: 1px solid #ffffff10;
-  /* backdrop-filter: blur(24px); */
+  backdrop-filter: blur(24px);
   min-width: 33vw;
 }
 
@@ -83,12 +83,10 @@ div[id^="inventory-"] aside,
 }
 
 #inventory-top > div > div {
-  /* display: inline-block; */
-  /* margin: 8px 16px; */
-  padding: 3px 8px 0px 8px;
-  /* margin-top: 3px; */
-  /* height: 24px; */
-  /* vertical-align: middle; */
+  display: inline-block;
+  margin: 8px 16px;
+  height: 24px;
+  vertical-align: middle;
   /* float: left; */
   /* background: red; */
 }
@@ -298,11 +296,9 @@ input[value*="Connect"]:hover {
 
 #common > div[id^="inventory-"] {
   margin: 0;
-  box-sizing: border-box;
   width: 100%;
   display: block;
-  /* backdrop-filter: blur(8px); */
-  background: rgba(6, 6, 26, 0.75);
+  backdrop-filter: blur(8px);
   position: fixed;
   left: 0;
   bottom: 0;
@@ -323,21 +319,17 @@ div[id^="inventory-"] svg {
 }
 
 div[id^="inventory-"] {
-  overflow: auto;
+  overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  /* -webkit-mask-image: linear-gradient(to right, #00000000 0%, #000000ff 12.5%, #000000ff 87.5%, #00000000 100%); */
+  -webkit-mask-image: linear-gradient(to right, #00000000 0%, #000000ff 12.5%, #000000ff 87.5%, #00000000 100%);
 }
 
 div[id^="inventory-"] > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* width: 1440px; */
-  /* display: inline-block; */
-  /* height: 48px; */
-  /* vertical-align: middle; */
-  /* text-align: center; */
+  width: 1440px;
+  display: inline-block;
+  height: 48px;
+  vertical-align: middle;
+  text-align: center;
 }
 
 div[id^="inventory-"] figure {
@@ -359,7 +351,7 @@ div[id^="inventory-"] figure {
   animation-direction: normal;
   animation-fill-mode: none;
   animation-play-state: running;
-  /* animation-name: inventory-chevron; */
+  animation-name: inventory-chevron;
   transform: rotate(45deg);
 }
 
@@ -390,8 +382,8 @@ div#grid {
   text-align: center;
   width: 100vw;
   height: 100vh;
-  /* -webkit-mask-image: radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 1) 100%); */
-  /* background-image: url(//ubq.fi/image/grid-1.png); */
+  -webkit-mask-image: radial-gradient(rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 1) 100%);
+  background-image: url(//ubq.fi/image/grid-1.png);
   background-repeat: repeat;
   /* background-color: rgba(0, 0, 0, 0.5); */
   /* z-index: -1; */
@@ -437,7 +429,7 @@ a:-webkit-any-link {
 }
 
 .bg-blur {
-  /* backdrop-filter: blur(24px); */
+  backdrop-filter: blur(24px);
 }
 [id^="inventory-"] [id$="-balance"] a {
   text-decoration: none;

@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BigNumber, ethers } from "ethers";
 import React, { useState, useEffect } from "react";
-import { ERC1155Ubiquity } from "../contracts/artifacts/types";
 
 import { EthAccount } from "./common/types";
 import Account from "./account";
 import BondingMigrate from "./bonding.migrate";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
 import CurveBalance from "./curve.balance";
 import CurveLPBalance from "./curveLP.balance";
 import DebtCouponBalance from "./debtCoupon.balance";
@@ -24,45 +23,6 @@ import { UADIcon } from "./ui/icons";
 
 const PROD = process.env.NODE_ENV == "production";
 
-async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: ERC1155Ubiquity): Promise<BigNumber> {
-  const treasuryIds = await erc1155UbiquityCtr.holderTokens(addr);
-
-  const balanceOfs = treasuryIds.map((id) => {
-    return erc1155UbiquityCtr.balanceOf(addr, id);
-  });
-  const balances = await Promise.all(balanceOfs);
-  let fullBalance = BigNumber.from(0);
-  if (balances.length > 0) {
-    fullBalance = balances.reduce((prev, cur) => {
-      return prev.add(cur);
-    });
-  }
-  return fullBalance;
-}
-
-// Load the account balances in a single parallel operation
-async function accountBalances(account: EthAccount, contracts: Contracts): Promise<Balances> {
-  const [uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares] = await Promise.all([
-    contracts.uad.balanceOf(account.address),
-    contracts.crvToken.balanceOf(account.address),
-    contracts.metaPool.balanceOf(account.address),
-    contracts.uar.balanceOf(account.address),
-    contracts.ugov.balanceOf(account.address),
-    erc1155BalanceOf(account.address, contracts.debtCouponToken),
-    erc1155BalanceOf(account.address, (contracts.bondingToken as unknown) as ERC1155Ubiquity),
-  ]);
-  return {
-    uad,
-    crv,
-    uad3crv,
-    uar,
-    ubq,
-    debtCoupon,
-    bondingShares,
-    bondingSharesLP: BigNumber.from(0),
-  };
-}
-
 async function fetchAccount(): Promise<EthAccount | null> {
   if (window.ethereum?.request) {
     return {
@@ -79,24 +39,8 @@ async function fetchAccount(): Promise<EthAccount | null> {
 }
 
 export function _renderControls() {
-  const { setAccount, setBalances, setTwapPrice, account, contracts, balances, twapPrice } = useConnectedContext();
+  const { setAccount, account, balances, twapPrice } = useConnectedContext();
   const [connecting, setConnecting] = useState(false);
-
-  useEffect(() => {
-    (async function () {
-      if (contracts) {
-        setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
-      }
-    })();
-  }, [contracts]);
-
-  useEffect(() => {
-    (async function () {
-      if (contracts && account) {
-        setBalances(await accountBalances(account, contracts));
-      }
-    })();
-  }, [account, contracts]);
 
   const connect = async (): Promise<void> => {
     setConnecting(true);

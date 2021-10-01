@@ -1,9 +1,12 @@
 import { BigNumber, ethers } from "ethers";
-import { createContext, Dispatch, SetStateAction, useContext, useState, useEffect, useCallback } from "react";
+import { createContext, Dispatch, SetStateAction, useContext, useState, useEffect } from "react";
 
 import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../common/types";
 import { connectedContracts, Contracts } from "../../contracts";
+import { accountBalances, logBondingUbqInfo } from "../common/contractsShortcuts";
+
+const PROD = process.env.NODE_ENV == "production";
 
 export interface Balances {
   uad: BigNumber;
@@ -12,7 +15,6 @@ export interface Balances {
   uar: BigNumber;
   ubq: BigNumber;
   bondingShares: BigNumber;
-  bondingSharesLP: BigNumber;
   debtCoupon: BigNumber;
 }
 
@@ -31,6 +33,7 @@ export interface ConnectedContext {
   setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
   contracts: Contracts | null;
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
+  refreshBalances: () => void;
 }
 
 const ConnectedContext = createContext<ConnectedContext>({} as ConnectedContext);
@@ -48,6 +51,12 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<BigNumber | null>(null);
   const [contracts, setContracts] = useState<Contracts | null>(null);
 
+  async function refreshBalances() {
+    if (account && contracts) {
+      setBalances(await accountBalances(account, contracts));
+    }
+  }
+
   const value: ConnectedContext = {
     provider,
     setProvider,
@@ -63,6 +72,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
     setTwapPrice,
     contracts,
     setContracts,
+    refreshBalances,
   };
 
   useEffect(() => {
@@ -71,16 +81,18 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
       const { provider, contracts } = await connectedContracts();
       const signer = await provider.getSigner();
       console.timeEnd("Connecting contracts");
-      // (window as any).contracts = contracts;
-      // (window as any).signer = signer;
-      // (window as any).provider = provider;
-
+      if (!PROD) logBondingUbqInfo(contracts);
       setSigner(signer);
       setProvider(provider);
       setContracts(contracts);
       setManager(contracts.manager);
+      setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
     })();
   }, []);
+
+  useEffect(() => {
+    refreshBalances();
+  }, [account, contracts]);
 
   return <ConnectedContext.Provider value={value}>{props.children}</ConnectedContext.Provider>;
 };
@@ -117,9 +129,9 @@ export function useAnonContractsContext(): AnonContext | null {
   }
 }
 
-export function connectedWithUserContext(El: (params: UserContext) => JSX.Element) {
-  return () => {
+export function connectedWithUserContext<T>(El: (params: UserContext & T) => JSX.Element) {
+  return (otherParams: T) => {
     const context = useUserContractsContext();
-    return context ? <El {...context} /> : null;
+    return context ? <El {...context} {...otherParams} /> : null;
   };
 }
