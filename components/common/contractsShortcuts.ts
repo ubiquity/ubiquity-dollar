@@ -36,6 +36,28 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
   };
 }
 
+export type YieldProxyData = {
+  depositFee: number;
+  maxYieldMultiplier: number;
+  maxUbq: number;
+  maxUad: number;
+};
+
+export async function loadYieldProxyData(contracts: Contracts): Promise<YieldProxyData> {
+  const [bonusYield, bonusYieldMax, fees, feesMax] = (
+    await Promise.all([contracts.yieldProxy.bonusYield(), contracts.yieldProxy.bonusYieldMax(), contracts.yieldProxy.fees(), contracts.yieldProxy.feesMax()])
+  ).map(toNum);
+  const ubqStakeMax = toEtherNum(await contracts.yieldProxy.UBQRateMax());
+
+  const maxFeesPct = fees / feesMax;
+  const maxBonusYieldPct = bonusYield / bonusYieldMax;
+
+  console.log("Max bonus yield", maxBonusYieldPct);
+  console.log("Fees Max", maxFeesPct);
+  console.log("UBQ Stake Max", ubqStakeMax);
+  return { depositFee: maxFeesPct, maxYieldMultiplier: maxBonusYieldPct, maxUbq: ubqStakeMax, maxUad: 0.5 };
+}
+
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();
 

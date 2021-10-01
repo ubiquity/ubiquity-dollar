@@ -1,13 +1,27 @@
-import { memo } from "react";
-import { connectedWithUserContext } from "./context/connected";
+import { memo, useEffect, useState } from "react";
+import { connectedWithUserContext, UserContext } from "./context/connected";
 import * as widget from "./ui/widget";
 import { WarningIcon, HelpIcon } from "./ui/icons";
+import { loadYieldProxyData, YieldProxyData } from "./common/contractsShortcuts";
 
-export const YieldFarmingContainer = () => {
-  return <YieldFarming />;
+export const YieldFarmingContainer = ({ contracts }: UserContext) => {
+  const [yieldProxyData, setYieldProxyData] = useState<YieldProxyData | null>(null);
+
+  useEffect(() => {
+    (async function () {
+      setYieldProxyData(await loadYieldProxyData(contracts));
+    })();
+  }, []);
+
+  return <YieldFarming usdcApy={{ min: 0.1418, max: 0.2707 }} yieldProxyData={yieldProxyData} />;
 };
 
-export const YieldFarming = memo(() => {
+type YieldFarmingProps = {
+  usdcApy: { min: number; max: number };
+  yieldProxyData: YieldProxyData | null;
+};
+
+export const YieldFarming = memo(({ usdcApy, yieldProxyData }: YieldFarmingProps) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Boosted yield farming" />

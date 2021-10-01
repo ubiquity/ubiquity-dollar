@@ -18,8 +18,6 @@ import {
   UbiquityGovernance__factory,
   ERC20,
   ERC20__factory,
-  ERC1155Ubiquity,
-  ERC1155Ubiquity__factory,
   DebtCoupon,
   DebtCoupon__factory,
   DebtCouponManager,
@@ -36,6 +34,8 @@ import {
   IUniswapV2Pair__factory,
   UbiquityFormulas,
   UbiquityFormulas__factory,
+  YieldProxy,
+  YieldProxy__factory,
 } from "./contracts/artifacts/types";
 import namedAccounts from "./fixtures/named-accounts.json";
 import FullDeployment from "./fixtures/full-deployment.json";
@@ -43,6 +43,7 @@ import FullDeployment from "./fixtures/full-deployment.json";
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
   DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
+  YIELD_PROXY: "0x45379687D28B5CaDf738067Da1058eA9801d9897",
   ...namedAccounts,
 };
 
@@ -68,6 +69,7 @@ const contracts = {
   sushiSwapPool: SushiSwapPool__factory.connect,
   ugovUadPair: IUniswapV2Pair__factory.connect,
   ubiquityFormulas: UbiquityFormulas__factory.connect,
+  yieldProxy: YieldProxy__factory.connect,
 };
 
 // 2
@@ -89,6 +91,7 @@ export type Contracts = {
   sushiSwapPool: SushiSwapPool;
   ugovUadPair: IUniswapV2Pair;
   ubiquityFormulas: UbiquityFormulas;
+  yieldProxy: YieldProxy;
 };
 
 // 3
@@ -204,6 +207,7 @@ export async function connectedContracts(): Promise<{
       sushiSwapPool,
       ugovUadPair,
       ubiquityFormulas: contracts.ubiquityFormulas(addr.ubiquityFormulas, provider),
+      yieldProxy: contracts.yieldProxy(ADDRESS.YIELD_PROXY, provider),
     },
   };
 }
