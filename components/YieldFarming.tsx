@@ -1,11 +1,19 @@
 import { memo, useEffect, useState } from "react";
-import { connectedWithUserContext, UserContext } from "./context/connected";
+import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import * as widget from "./ui/widget";
 import { WarningIcon, HelpIcon } from "./ui/icons";
-import { loadYieldProxyData, YieldProxyData } from "./common/contractsShortcuts";
+import { loadYieldProxyData, YieldProxyData, ensureERC20Allowance } from "./common/contractsShortcuts";
+import { BigNumber, ethers } from "ethers";
+import { performTransaction } from "./common/utils";
 
-export const YieldFarmingContainer = ({ contracts }: UserContext) => {
+type Actions = {
+  onDeposit: (payload: { usdc: string; ubq: string; uad: string }) => void;
+};
+
+export const YieldFarmingContainer = ({ contracts, account, signer }: UserContext) => {
   const [yieldProxyData, setYieldProxyData] = useState<YieldProxyData | null>(null);
+  const { refreshBalances } = useConnectedContext();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     (async function () {
@@ -13,15 +21,41 @@ export const YieldFarmingContainer = ({ contracts }: UserContext) => {
     })();
   }, []);
 
-  return <YieldFarming usdcApy={{ min: 0.1418, max: 0.2707 }} yieldProxyData={yieldProxyData} />;
+  const actions: Actions = {
+    onDeposit: async ({ usdc, ubq, uad }) => {
+      setIsProcessing(true);
+      const bigUsdc = ethers.utils.parseUnits(usdc, 6);
+      const bigUbq = ethers.utils.parseUnits(ubq, 18);
+      const bigUad = ethers.utils.parseUnits(uad, 18);
+      console.log(`Depositing: USDC ${usdc} | UBQ ${ubq} | uAD ${uad}`);
+      if (
+        (await ensureERC20Allowance("USDC", contracts.usdc, bigUsdc, signer, contracts.yieldProxy.address, 6)) &&
+        (await ensureERC20Allowance("UBQ", contracts.ugov, bigUbq, signer, contracts.yieldProxy.address)) &&
+        (await ensureERC20Allowance("uAD", contracts.uad, bigUad, signer, contracts.yieldProxy.address)) &&
+        (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
+      ) {
+        refreshBalances();
+      } else {
+        // TODO: Show transaction error
+      }
+      setIsProcessing(false);
+    },
+  };
+
+  return <YieldFarming onDeposit={actions.onDeposit} usdcApy={{ min: 0.1418, max: 0.2707 }} yieldProxyData={yieldProxyData} />;
 };
 
 type YieldFarmingProps = {
   usdcApy: { min: number; max: number };
   yieldProxyData: YieldProxyData | null;
+  onDeposit: Actions["onDeposit"];
 };
 
-export const YieldFarming = memo(({ usdcApy, yieldProxyData }: YieldFarmingProps) => {
+export const YieldFarming = memo(({ usdcApy, yieldProxyData, onDeposit }: YieldFarmingProps) => {
+  function onClickDeposit() {
+    onDeposit({ usdc: "100", ubq: "500", uad: "40" }); // TODO: Use real values from the UI
+  }
+
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Boosted yield farming" />
@@ -109,7 +143,9 @@ export const YieldFarming = memo(({ usdcApy, yieldProxyData }: YieldFarmingProps
           </div>
         </div>
       </div>
-      <button className="w-full flex justify-center m-0 mt-8">Deposit</button>
+      <button onClick={onClickDeposit} className="w-full flex justify-center m-0 mt-8">
+        Deposit
+      </button>
     </widget.Container>
   );
 });

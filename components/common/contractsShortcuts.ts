@@ -1,8 +1,9 @@
 import { ethers, BigNumber } from "ethers";
 import { Contracts } from "../../contracts";
-import { ERC1155Ubiquity } from "../../contracts/artifacts/types";
+import { ERC1155Ubiquity, ERC20 } from "../../contracts/artifacts/types";
 import { erc1155BalanceOf } from "./utils";
 import { EthAccount } from "./types";
+import { performTransaction } from "./utils";
 
 export interface Balances {
   uad: BigNumber;
@@ -56,6 +57,28 @@ export async function loadYieldProxyData(contracts: Contracts): Promise<YieldPro
   console.log("Fees Max", maxFeesPct);
   console.log("UBQ Stake Max", ubqStakeMax);
   return { depositFee: maxFeesPct, maxYieldMultiplier: maxBonusYieldPct, maxUbq: ubqStakeMax, maxUad: 0.5 };
+}
+
+export async function ensureERC20Allowance(
+  logName: string,
+  contract: ERC20,
+  amount: BigNumber,
+  signer: ethers.providers.JsonRpcSigner,
+  spender: string,
+  decimals = 18
+): Promise<boolean> {
+  const signerAddress = await signer.getAddress();
+  const allowance1 = await contract.allowance(signerAddress, spender);
+  console.log(`Current ${logName} allowance: ${ethers.utils.formatUnits(allowance1, decimals)} | Requesting: ${ethers.utils.formatUnits(amount, decimals)}`);
+  if (allowance1.lt(amount)) {
+    if (!(await performTransaction(contract.connect(signer).approve(spender, amount)))) {
+      return false;
+    }
+    const allowance2 = await contract.allowance(signerAddress, spender);
+    console.log(`New ${logName} allowance: `, ethers.utils.formatUnits(allowance2, decimals));
+  }
+
+  return true;
 }
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
