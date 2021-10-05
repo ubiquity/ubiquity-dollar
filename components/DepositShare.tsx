@@ -2,12 +2,7 @@ import { ChangeEvent, useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import { connectedWithUserContext, UserContext } from "./context/connected";
 import { Contracts } from "../contracts";
-
-const constrainNumber = (num: number, min: number, max: number): number => {
-  if (num < min) return min;
-  else if (num > max) return max;
-  else return num;
-};
+import { constrainNumber } from "./common/utils";
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();

@@ -41,3 +41,9 @@ export async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: ERC1155
   }
   return fullBalance;
 }
+
+export const constrainNumber = (num: number, min: number, max: number): number => {
+  if (num < min) return min;
+  else if (num > max) return max;
+  else return num;
+};

@@ -53,7 +53,8 @@ export type YieldProxyData = {
   bonusYieldMax: BigNumber;
   bonusYieldBase: BigNumber; // bonusYield % = bonusYieldBase / bonusYieldMax
   bonusYieldBasePct: number; // bonusYieldBase / bonusYieldMax
-  bonusYieldUadMax: number; // Hardcoded at 0.5 of main amount // If uAD = this => bonusYield = bonusYieldMax
+  bonusYieldMaxPct: number; // bonusYieldBase / bonusYieldMax
+  bonusYieldUadMaxPct: number; // Hardcoded at 0.5 of main amount // If uAD = this => bonusYield = bonusYieldMax
   jarRatio: BigNumber;
 };
 
@@ -80,7 +81,8 @@ export async function loadYieldProxyData(contracts: Contracts): Promise<YieldPro
     bonusYieldMax,
     bonusYieldBase,
     bonusYieldBasePct: bonusYieldBase.toNumber() / bonusYieldMax.toNumber(),
-    bonusYieldUadMax: 0.5,
+    bonusYieldMaxPct: 1,
+    bonusYieldUadMaxPct: 0.5,
     jarRatio: simulatedNewJarRatio,
   };
   if (debug) {
@@ -88,7 +90,7 @@ export async function loadYieldProxyData(contracts: Contracts): Promise<YieldPro
     console.log(`  .depositFeeBasePct: ${di.depositFeeBasePct * 100}%`);
     console.log(`  .depositFeeUbqMax: if UBQ = ${ethers.utils.formatEther(di.depositFeeUbqMax)} => fee = 0%`);
     console.log(`  .bonusYieldBasePct: ${di.bonusYieldBasePct * 100}%`);
-    console.log(`  .bonusYieldUadMax: if uAD = ${di.bonusYieldBasePct * 100}% of ${di.token.toUpperCase()} amount => bonusYield = 100%`);
+    console.log(`  .bonusYieldUadMaxPct: if uAD = ${di.bonusYieldUadMaxPct * 100}% of ${di.token.toUpperCase()} amount => bonusYield = 100%`);
     console.log(`  .jarRatio ${ethers.utils.formatEther(jarRatio)}`);
     if (isDev) {
       console.log(`  .jarRatio (SIMULATED) ${ethers.utils.formatEther(di.jarRatio)}`);
@@ -97,7 +99,7 @@ export async function loadYieldProxyData(contracts: Contracts): Promise<YieldPro
   return di;
 }
 
-type YieldProxyDepositInfo = {
+export type YieldProxyDepositInfo = {
   amount: BigNumber;
   uad: BigNumber;
   ubq: BigNumber;

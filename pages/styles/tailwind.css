@@ -179,6 +179,10 @@
   width: 83.333333%
 }
 
+.w-2\/12 {
+  width: 16.666667%
+}
+
 .w-8 {
   width: 2rem
 }
@@ -403,9 +407,9 @@
   color: rgba(0, 255, 255, var(--tw-text-opacity))
 }
 
-.text-red-300 {
+.text-red-500 {
   --tw-text-opacity: 1;
-  color: rgba(252, 165, 165, var(--tw-text-opacity))
+  color: rgba(239, 68, 68, var(--tw-text-opacity))
 }
 
 .text-white\/50 {
@@ -420,16 +424,6 @@
   color: rgba(255, 255, 255, 0.75)
 }
 
-.text-red-600 {
-  --tw-text-opacity: 1;
-  color: rgba(220, 38, 38, var(--tw-text-opacity))
-}
-
-.text-red-500 {
-  --tw-text-opacity: 1;
-  color: rgba(239, 68, 68, var(--tw-text-opacity))
-}
-
 .text-opacity-75 {
   --tw-text-opacity: 0.75
 }
@@ -442,8 +436,26 @@
   opacity: 0.75
 }
 
+.opacity-50 {
+  opacity: 0.5
+}
+
 .filter {
   filter: var(--tw-filter)
+}
+
+.disabled\:bg-white:disabled {
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity))
+}
+
+.disabled\:text-black:disabled {
+  --tw-text-opacity: 1;
+  color: rgba(0, 0, 0, var(--tw-text-opacity))
+}
+
+.disabled\:opacity-25:disabled {
+  opacity: 0.25
 }
 
 @media (min-width: 640px) {
