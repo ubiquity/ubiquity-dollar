@@ -36,6 +36,8 @@ import {
   UbiquityFormulas__factory,
   YieldProxy,
   YieldProxy__factory,
+  IJar,
+  IJar__factory,
 } from "./contracts/artifacts/types";
 import namedAccounts from "./fixtures/named-accounts.json";
 import FullDeployment from "./fixtures/full-deployment.json";
@@ -71,6 +73,7 @@ const contracts = {
   ubiquityFormulas: UbiquityFormulas__factory.connect,
   yieldProxy: YieldProxy__factory.connect,
   usdc: ERC20__factory.connect,
+  jarUsdc: IJar__factory.connect,
 };
 
 // 2
@@ -89,6 +92,7 @@ export type Contracts = {
   ugovUadPair: IUniswapV2Pair;
   curvePool: ICurveFactory;
   metaPool: IMetaPool;
+  jarUsdc: IJar;
 
   // ERC20
   uad: UbiquityAlgorithmicDollar;
@@ -198,6 +202,7 @@ export async function connectedContracts(): Promise<{
       yieldProxy: contracts.yieldProxy(ADDRESS.YIELD_PROXY, provider),
       usdc: contracts.usdc(ADDRESS.USDC, provider),
       debtCouponManager: contracts.debtCouponManager(ADDRESS.DEBT_COUPON_MANAGER, provider),
+      jarUsdc: contracts.jarUsdc(ADDRESS.jarUSDCAddr, provider),
 
       // Dynamic-address contracts
       uad: contracts.uad(addr.uad, provider),

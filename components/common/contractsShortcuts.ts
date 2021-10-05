@@ -5,6 +5,9 @@ import { erc1155BalanceOf } from "./utils";
 import { EthAccount } from "./types";
 import { performTransaction } from "./utils";
 
+const isDev = process.env.NODE_ENV == "development";
+const debug = isDev;
+
 export interface Balances {
   uad: BigNumber;
   crv: BigNumber;
@@ -37,26 +40,118 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
   };
 }
 
+const YP_TOKEN = "usdc";
+const YP_DECIMALS = 6;
+
 export type YieldProxyData = {
-  depositFee: number;
-  maxYieldMultiplier: number;
-  maxUbq: number;
-  maxUad: number;
+  token: typeof YP_TOKEN;
+  decimals: typeof YP_DECIMALS;
+  depositFeeMax: BigNumber;
+  depositFeeBase: BigNumber; // depositFee % = depositFeeBase / depositFeeMax
+  depositFeeBasePct: number; // depositFeeBase / depositFeeMax
+  depositFeeUbqMax: BigNumber; // If UBQ = this => depositFee = 0%
+  bonusYieldMax: BigNumber;
+  bonusYieldBase: BigNumber; // bonusYield % = bonusYieldBase / bonusYieldMax
+  bonusYieldBasePct: number; // bonusYieldBase / bonusYieldMax
+  bonusYieldUadMax: number; // Hardcoded at 0.5 of main amount // If uAD = this => bonusYield = bonusYieldMax
+  jarRatio: BigNumber;
 };
 
 export async function loadYieldProxyData(contracts: Contracts): Promise<YieldProxyData> {
-  const [bonusYield, bonusYieldMax, fees, feesMax] = (
-    await Promise.all([contracts.yieldProxy.bonusYield(), contracts.yieldProxy.bonusYieldMax(), contracts.yieldProxy.fees(), contracts.yieldProxy.feesMax()])
-  ).map(toNum);
-  const ubqStakeMax = toEtherNum(await contracts.yieldProxy.UBQRateMax());
+  const [bonusYieldBase, bonusYieldMax, depositFeeBase, depositFeeMax] = await Promise.all([
+    contracts.yieldProxy.bonusYield(),
+    contracts.yieldProxy.bonusYieldMax(),
+    contracts.yieldProxy.fees(),
+    contracts.yieldProxy.feesMax(),
+  ]);
+  const depositFeeUbqMax = await contracts.yieldProxy.UBQRateMax();
 
-  const maxFeesPct = fees / feesMax;
-  const maxBonusYieldPct = bonusYield / bonusYieldMax;
+  const jarRatio = await contracts.jarUsdc.getRatio();
 
-  console.log("Max bonus yield", maxBonusYieldPct);
-  console.log("Fees Max", maxFeesPct);
-  console.log("UBQ Stake Max", ubqStakeMax);
-  return { depositFee: maxFeesPct, maxYieldMultiplier: maxBonusYieldPct, maxUbq: ubqStakeMax, maxUad: 0.5 };
+  const simulatedNewJarRatio = isDev ? jarRatio.mul(BigNumber.from(107)).div(BigNumber.from(100)) : jarRatio;
+
+  const di: YieldProxyData = {
+    token: YP_TOKEN,
+    decimals: YP_DECIMALS,
+    depositFeeMax,
+    depositFeeBase,
+    depositFeeBasePct: depositFeeBase.toNumber() / depositFeeMax.toNumber(),
+    depositFeeUbqMax,
+    bonusYieldMax,
+    bonusYieldBase,
+    bonusYieldBasePct: bonusYieldBase.toNumber() / bonusYieldMax.toNumber(),
+    bonusYieldUadMax: 0.5,
+    jarRatio: simulatedNewJarRatio,
+  };
+  if (debug) {
+    console.log(`YieldProxy ${di.token.toUpperCase()} (${di.decimals} decimals)`);
+    console.log(`  .depositFeeBasePct: ${di.depositFeeBasePct * 100}%`);
+    console.log(`  .depositFeeUbqMax: if UBQ = ${ethers.utils.formatEther(di.depositFeeUbqMax)} => fee = 0%`);
+    console.log(`  .bonusYieldBasePct: ${di.bonusYieldBasePct * 100}%`);
+    console.log(`  .bonusYieldUadMax: if uAD = ${di.bonusYieldBasePct * 100}% of ${di.token.toUpperCase()} amount => bonusYield = 100%`);
+    console.log(`  .jarRatio ${ethers.utils.formatEther(jarRatio)}`);
+    if (isDev) {
+      console.log(`  .jarRatio (SIMULATED) ${ethers.utils.formatEther(di.jarRatio)}`);
+    }
+  }
+  return di;
+}
+
+type YieldProxyDepositInfo = {
+  amount: BigNumber;
+  uad: BigNumber;
+  ubq: BigNumber;
+  jarYieldAmount: BigNumber;
+  bonusYieldAmount: BigNumber;
+  feeAmount: BigNumber;
+  newAmount: BigNumber;
+  uar: BigNumber;
+  currentYieldPct: number;
+};
+
+export async function loadYieldProxyDepositInfo(yp: YieldProxyData, contracts: Contracts, address: string): Promise<YieldProxyDepositInfo | null> {
+  const di = await (async () => {
+    const [amount, shares, uadAmount, ubqAmount, fee, ratio, bonusYield] = await contracts.yieldProxy.getInfo(address);
+    return { amount, shares, uadAmount, ubqAmount, fee, ratio, bonusYield };
+  })();
+
+  if (di.amount.eq(0)) {
+    return null;
+  }
+
+  const amountIn18 = yp.decimals < 18 ? di.amount.mul(Math.pow(10, 18 - yp.decimals)) : di.amount;
+  const feeIn18 = yp.decimals < 18 ? di.fee.mul(Math.pow(10, 18 - yp.decimals)) : di.fee;
+
+  const jarYieldAmount = amountIn18.mul(yp.jarRatio).div(di.ratio).sub(amountIn18);
+  const bonusYieldAmount = jarYieldAmount.gt(0) ? jarYieldAmount.mul(di.bonusYield).div(yp.bonusYieldMax) : BigNumber.from(0);
+  const currentYieldPct = toEtherNum(amountIn18.add(jarYieldAmount).add(bonusYieldAmount)) / toEtherNum(amountIn18) - 1;
+
+  const depositInfo: YieldProxyDepositInfo = {
+    amount: di.amount,
+    newAmount: di.amount.sub(di.fee),
+    uad: di.uadAmount,
+    ubq: di.ubqAmount,
+    jarYieldAmount,
+    bonusYieldAmount,
+    feeAmount: feeIn18,
+    uar: jarYieldAmount.add(bonusYieldAmount).add(feeIn18),
+    currentYieldPct,
+  };
+
+  if (debug) {
+    console.log(`YieldProxyDeposit ${yp.token.toUpperCase()} (${yp.decimals} decimals)`);
+    console.log(`  .amount: `, ethers.utils.formatUnits(depositInfo.amount, yp.decimals));
+    console.log(`  .newAmount:`, ethers.utils.formatUnits(depositInfo.newAmount, yp.decimals));
+    console.log("  .uad:", ethers.utils.formatEther(depositInfo.uad));
+    console.log("  .ubq:", ethers.utils.formatEther(depositInfo.ubq));
+    console.log("  .jarYieldAmount:", ethers.utils.formatEther(jarYieldAmount));
+    console.log("  .bonusYieldAmount:", ethers.utils.formatEther(bonusYieldAmount));
+    console.log("  .feeAmount:", ethers.utils.formatEther(depositInfo.feeAmount));
+    console.log("  .uar:", ethers.utils.formatEther(depositInfo.uar));
+    console.log(`  .currentYieldPct: ${depositInfo.currentYieldPct * 100}%`);
+  }
+
+  return depositInfo;
 }
 
 export async function ensureERC20Allowance(
