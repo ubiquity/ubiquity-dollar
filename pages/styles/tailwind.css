@@ -403,6 +403,11 @@
   color: rgba(0, 255, 255, var(--tw-text-opacity))
 }
 
+.text-red-300 {
+  --tw-text-opacity: 1;
+  color: rgba(252, 165, 165, var(--tw-text-opacity))
+}
+
 .text-white\/50 {
   color: rgba(255, 255, 255, 0.5)
 }
@@ -413,6 +418,16 @@
 
 .text-white\/75 {
   color: rgba(255, 255, 255, 0.75)
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgba(220, 38, 38, var(--tw-text-opacity))
+}
+
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgba(239, 68, 68, var(--tw-text-opacity))
 }
 
 .text-opacity-75 {
