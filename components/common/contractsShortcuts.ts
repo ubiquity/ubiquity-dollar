@@ -104,8 +104,11 @@ export type YieldProxyDepositInfo = {
   uad: BigNumber;
   ubq: BigNumber;
   jarYieldAmount: BigNumber;
+  bonusYieldExtraPct: number;
+  bonusYieldTotalPct: number;
   bonusYieldAmount: BigNumber;
   feeAmount: BigNumber;
+  feePct: number;
   newAmount: BigNumber;
   uar: BigNumber;
   currentYieldPct: number;
@@ -127,18 +130,28 @@ export async function loadYieldProxyDepositInfo(yp: YieldProxyData, contracts: C
   const jarYieldAmount = amountIn18.mul(yp.jarRatio).div(di.ratio).sub(amountIn18);
   const bonusYieldAmount = jarYieldAmount.gt(0) ? jarYieldAmount.mul(di.bonusYield).div(yp.bonusYieldMax) : BigNumber.from(0);
   const currentYieldPct = toEtherNum(amountIn18.add(jarYieldAmount).add(bonusYieldAmount)) / toEtherNum(amountIn18) - 1;
+  const feePct = yp.depositFeeBasePct - toEtherNum(di.ubqAmount.mul(ethers.utils.parseEther("100")).div(yp.depositFeeUbqMax)) / 100;
 
+  // console.log("FEEEEE", toEtherNum(di.fee.div(yp.depositFeeMax)), toEtherNum(yp.depositFeeMax));
   const depositInfo: YieldProxyDepositInfo = {
     amount: di.amount,
     newAmount: di.amount.sub(di.fee),
     uad: di.uadAmount,
     ubq: di.ubqAmount,
     jarYieldAmount,
+    bonusYieldExtraPct: toEtherNum(di.bonusYield) / toEtherNum(yp.bonusYieldMax) - yp.bonusYieldBasePct,
+    bonusYieldTotalPct: toEtherNum(di.bonusYield) / toEtherNum(yp.bonusYieldMax),
     bonusYieldAmount,
     feeAmount: feeIn18,
+    feePct: feePct,
     uar: jarYieldAmount.add(bonusYieldAmount).add(feeIn18),
     currentYieldPct,
   };
+
+  // yp.depositFeeBasePct
+  // console.log("BASE", yp.depositFeeBasePct);
+  // console.log("AMOUNT", toEtherNum(di.ubqAmount.mul(ethers.utils.parseEther("100")).div(yp.depositFeeUbqMax)) / 100);
+  // console.log("FEEEE", ethers.utils.formatEther(di.ubqAmount.mul(ethers.utils.parseEther("100")).div(yp.depositFeeUbqMax).mul(yp.depositFeeMax)));
 
   if (debug) {
     console.log(`YieldProxyDeposit ${yp.token.toUpperCase()} (${yp.decimals} decimals)`);

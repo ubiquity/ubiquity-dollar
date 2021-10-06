@@ -69,6 +69,10 @@ type YieldFarmingSubcontainerProps = {
   actions: Actions;
 };
 
+const fm = (n: BigNumber, d = 18) => +ethers.utils.formatUnits(n, d);
+const USDC_JAR_APY = { min: 14.18, max: 27.07 };
+const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
+
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing }: YieldFarmingSubcontainerProps) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={isProcessing}>
@@ -85,32 +89,32 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
       {yieldProxyData ? (
         depositInfo ? (
           <YieldFarmindWithdraw
-            token="USDC"
-            amount={2000}
-            newAmount={1874}
-            yieldPct={0.07}
-            yieldAmount={140}
-            uad={800}
-            uadMax={1000}
-            uadBasePct={0.5}
-            uadBonusPct={0.4}
-            uadBonusAmount={50.4}
-            ubq={9000}
-            ubqMax={10000}
-            feePct={0.063}
-            feePctMax={0.07}
-            feeAmount={126}
-            uar={316.4}
-            uarApyMin={26.94}
-            uarApyMax={51.43}
-            uarCurrentYieldPct={13.3}
+            token={yieldProxyData.token.toUpperCase()}
+            amount={fm(depositInfo.amount, yieldProxyData.decimals)}
+            newAmount={fm(depositInfo.newAmount, yieldProxyData.decimals)}
+            yieldPct={depositInfo.currentYieldPct}
+            yieldAmount={fm(depositInfo.jarYieldAmount)}
+            uad={fm(depositInfo.uad)}
+            uadMax={yieldProxyData.bonusYieldUadMaxPct * +fm(depositInfo.amount, yieldProxyData.decimals)}
+            uadBasePct={yieldProxyData.bonusYieldBasePct}
+            uadBonusPct={depositInfo.bonusYieldExtraPct}
+            uadBonusAmount={fm(depositInfo.bonusYieldAmount)}
+            ubq={fm(depositInfo.ubq)}
+            ubqMax={fm(yieldProxyData.depositFeeUbqMax)}
+            feePct={depositInfo.feePct}
+            feePctMax={yieldProxyData.depositFeeBasePct}
+            feeAmount={fm(depositInfo.feeAmount)}
+            uar={fm(depositInfo.uar)}
+            uarApyMin={USDC_JAR_APY.min + depositInfo.bonusYieldTotalPct * USDC_JAR_APY.min}
+            uarApyMax={USDC_JAR_APY.max + depositInfo.bonusYieldTotalPct * USDC_JAR_APY.max}
+            uarCurrentYieldPct={depositInfo.currentYieldPct}
             onWithdraw={actions.onWithdraw}
             disable={isProcessing}
           />
         ) : (
           <YieldFarmingDeposit
-            tvl={{ usdc: 1.2, ubq: 2.5, uad: 0.6 }}
-            usdcApy={{ min: 14.18, max: 27.07 }}
+            tvl={TVL}
+            usdcApy={USDC_JAR_APY}
             maxUbqAmount={+ethers.utils.formatEther(yieldProxyData.depositFeeUbqMax)}
             maxUadPct={yieldProxyData.bonusYieldUadMaxPct}
             baseYieldBonusPct={yieldProxyData.bonusYieldBasePct}
@@ -178,6 +182,7 @@ export const YieldFarmindWithdraw = memo(
     onWithdraw,
   }: YieldFarmingWithdrawProps) => {
     const f = (n: number) => (Math.round(n * 100) / 100).toLocaleString();
+    console.log(feePct, f(feePct * 100));
 
     return (
       <>
@@ -191,10 +196,10 @@ export const YieldFarmindWithdraw = memo(
           <DepositItem val={`${f(uadBonusAmount)} uAR`} text="Bonus Yield" />
           <DepositItem val={f(ubq)} fadeVal={` / ${f(ubqMax)}`} text="UBQ" />
           <DepositItem val={`${f(feePct * 100)}%`} fadeVal={` / ${f(feePctMax * 100)}%`} text="Deposit Fee" />
-          <DepositItem val={f(feeAmount)} text={`Converted from ${token}`} />
+          <DepositItem val={`${f(feeAmount)} uAR`} text={`Converted from ${token}`} />
           <DepositItem val={f(uar)} text="uAR" />
           <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
-          <DepositItem val={`${f(uarCurrentYieldPct)}%`} text="Current Yield" />
+          <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
         <button onClick={onWithdraw} disabled={disable} className="w-full flex justify-center m-0 mt-8">
           Withdraw
