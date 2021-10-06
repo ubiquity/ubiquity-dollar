@@ -322,6 +322,10 @@ export const YieldFarmingDeposit = memo(
       setUad(max);
     };
 
+    const setMaxUsdc = () => {
+      setUsdc(balance.usdc);
+    };
+
     useEffect(() => {
       const errors: string[] = [];
       const noFunds = (token: string) => `You don't have enough ${token.toUpperCase()} funds`;
@@ -339,24 +343,31 @@ export const YieldFarmingDeposit = memo(
           <div className="w-5/12">
             <div className="flex justify-between">
               <span className="font-bold">USDC</span>
-              <span>
+              {/* <span>
                 <span>TVL</span>
                 <span className="pl-4">{tvl.usdc}M</span>
-              </span>
+              </span> */}
             </div>
             <div className="text-left mb-2">
               <span>
                 {usdcApy.min.toFixed(2)}% - {usdcApy.max.toFixed(2)}%
               </span>
               <span className="pl-2">APY</span>
-              <span className="pl-2">{HelpIcon}</span>
+              {/* <span className="pl-2">{HelpIcon}</span> */}
             </div>
             <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
+            <div className="flex justify-end mt-2">
+              <span className="flex-grow opacity-50 text-left">Balance: {balance.usdc}</span>
+              <span className="text-accent cursor-pointer" onClick={setMaxUsdc}>
+                Max
+              </span>
+            </div>
           </div>
           <div className="w-1/2">
             <div className="text-3xl text-accent font-bold">{Math.round(maxApy() * 100) / 100}%</div>
             <div>
-              Max APY in uAR<span className="pl-2">{HelpIcon}</span>
+              Max APY in uAR
+              {/* <span className="pl-2">{HelpIcon}</span> */}
             </div>
           </div>
         </div>
@@ -365,10 +376,10 @@ export const YieldFarmingDeposit = memo(
           <div className="w-5/12">
             <div className="flex justify-between">
               <span className="font-bold">UBQ</span>
-              <span>
+              {/* <span>
                 <span>TVL</span>
                 <span className="pl-4">{tvl.ubq}M</span>
-              </span>
+              </span> */}
             </div>
             <div className="text-left w-10/12 mb-2">
               <span>Minimizes deposit fee</span>
@@ -400,14 +411,14 @@ export const YieldFarmingDeposit = memo(
           <div className="w-5/12">
             <div className="flex justify-between">
               <span className="font-bold">uAD</span>
-              <span className="pl-4">
+              {/* <span className="pl-4">
                 <span>TVL</span>
                 <span className="pl-4">{tvl.uad}M</span>
-              </span>
+              </span> */}
             </div>
             <div className="text-left  w-10/12 mb-2">
               <span>Multiples yield up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span>
-              <span className="pl-2">{HelpIcon}</span>
+              {/* <span className="pl-2">{HelpIcon}</span> */}
             </div>
             <div className="flex justify-between items-center">
               <input
@@ -425,6 +436,7 @@ export const YieldFarmingDeposit = memo(
               </div>
             </div>
             <div className="w-10/12 flex justify-end mt-2">
+              <span className="flex-grow opacity-50 text-left">Balance: {balance.uad}</span>
               <span className="text-accent cursor-pointer" onClick={setMaxUad}>
                 Max
               </span>
