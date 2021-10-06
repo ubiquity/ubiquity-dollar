@@ -79,16 +79,16 @@
   margin-bottom: 0.5rem
 }
 
+.mt-8 {
+  margin-top: 2rem
+}
+
 .mb-8 {
   margin-bottom: 2rem
 }
 
 .mt-2 {
   margin-top: 0.5rem
-}
-
-.mt-8 {
-  margin-top: 2rem
 }
 
 .mt-4 {
@@ -109,6 +109,10 @@
 
 .mr-4 {
   margin-right: 1rem
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem
 }
 
 .box-border {
@@ -163,12 +167,12 @@
   width: 5rem
 }
 
-.w-5\/12 {
-  width: 41.666667%
-}
-
 .w-full {
   width: 100%
+}
+
+.w-5\/12 {
+  width: 41.666667%
 }
 
 .w-1\/2 {
@@ -221,6 +225,10 @@
   cursor: pointer
 }
 
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+}
+
 .flex-col {
   flex-direction: column
 }
@@ -247,6 +255,18 @@
 
 .gap-4 {
   gap: 1rem
+}
+
+.gap-1 {
+  gap: 0.25rem
+}
+
+.gap-2 {
+  gap: 0.5rem
+}
+
+.gap-y-4 {
+  row-gap: 1rem
 }
 
 .whitespace-nowrap {

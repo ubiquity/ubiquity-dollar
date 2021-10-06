@@ -71,7 +71,28 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
       </div>
       {depositInfo && yieldProxyData ? (
         depositInfo ? (
-          <div>Already deposited</div>
+          <YieldFarmindWithdraw
+            token="USDC"
+            amount={2000}
+            newAmount={1874}
+            yieldPct={0.07}
+            yieldAmount={140}
+            uad={800}
+            uadMax={1000}
+            uadBasePct={0.5}
+            uadBonusPct={0.4}
+            uadBonusAmount={50.4}
+            ubq={9000}
+            ubqMax={10000}
+            feePct={0.063}
+            feePctMax={0.07}
+            feeAmount={126}
+            uar={316.4}
+            uarApyMin={26.94}
+            uarApyMax={51.43}
+            uarCurrentYieldPct={13.3}
+            onWithdraw={() => console.log("WITHDRAWING!")}
+          />
         ) : (
           <YieldFarmingDeposit
             tvl={{ usdc: 1.2, ubq: 2.5, uad: 0.6 }}
@@ -92,6 +113,94 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
     </widget.Container>
   );
 };
+
+type YieldFarmingWithdrawProps = {
+  token: string;
+  amount: number;
+  newAmount: number;
+  yieldPct: number;
+  yieldAmount: number;
+  uad: number;
+  uadMax: number;
+  uadBasePct: number;
+  uadBonusPct: number;
+  uadBonusAmount: number;
+  ubq: number;
+  ubqMax: number;
+  feePct: number;
+  feePctMax: number;
+  feeAmount: number;
+  uar: number;
+  uarApyMin: number;
+  uarApyMax: number;
+  uarCurrentYieldPct: number;
+  onWithdraw: () => void;
+};
+
+export const YieldFarmindWithdraw = memo(
+  ({
+    token,
+    amount,
+    newAmount,
+    yieldPct,
+    yieldAmount,
+    uad,
+    uadMax,
+    uadBasePct,
+    uadBonusPct,
+    uadBonusAmount,
+    ubq,
+    ubqMax,
+    feePct,
+    feePctMax,
+    feeAmount,
+    uar,
+    uarApyMin,
+    uarApyMax,
+    uarCurrentYieldPct,
+    onWithdraw,
+  }: YieldFarmingWithdrawProps) => {
+    const f = (n: number) => (Math.round(n * 100) / 100).toLocaleString();
+
+    return (
+      <>
+        <widget.SubTitle text="Current Deposit" />
+        <div className="grid grid-cols-3 gap-y-4">
+          <DepositItem val={f(newAmount)} fadeVal={` (${f(amount)})`} text={token} />
+          <DepositItem val={`${f(yieldPct * 100)}%`} text="Yield %" />
+          <DepositItem val={`${f(yieldAmount)} uAR`} text="Yield" />
+          <DepositItem val={f(uad)} fadeVal={` / ${f(uadMax)}`} text="uAD" />
+          <DepositItem val={`${f(uadBasePct * 100)}% + ${f(uadBonusPct * 100)}%`} text="Yield Multiplier" />
+          <DepositItem val={`${f(uadBonusAmount)} uAR`} text="Bonus Yield" />
+          <DepositItem val={f(ubq)} fadeVal={` / ${f(ubqMax)}`} text="UBQ" />
+          <DepositItem val={`${f(feePct * 100)}%`} fadeVal={` / ${f(feePctMax * 100)}%`} text="Deposit Fee" />
+          <DepositItem val={f(feeAmount)} text={`Converted from ${token}`} />
+          <DepositItem val={f(uar)} text="uAR" />
+          <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
+          <DepositItem val={`${f(uarCurrentYieldPct)}%`} text="Current Yield" />
+        </div>
+        <button onClick={onWithdraw} className="w-full flex justify-center m-0 mt-8">
+          Withdraw
+        </button>
+      </>
+    );
+  }
+);
+
+type DepositItemProps = {
+  val: number | string;
+  fadeVal?: number | string;
+  text: string;
+};
+const DepositItem = ({ val, fadeVal, text }: DepositItemProps) => (
+  <div className="flex flex-col justify-center">
+    <div className="mb-1 text-lg font-bold">
+      {val}
+      {fadeVal ? <span className="opacity-50">{fadeVal}</span> : null}
+    </div>
+    <div className="text-sm">{text}</div>
+  </div>
+);
 
 type YieldFarmingDepositProps = {
   tvl: { usdc: number; ubq: number; uad: number };
@@ -203,7 +312,7 @@ export const YieldFarmingDeposit = memo(
 
     return (
       <>
-        <widget.SubTitle text="Deposit" />
+        <widget.SubTitle text="New Deposit" />
         <div className="flex justify-between items-center mb-8">
           <div className="w-5/12">
             <div className="flex justify-between">
