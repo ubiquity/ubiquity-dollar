@@ -151,7 +151,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={model?.processing}>
-      <widget.Title text="Liquidity Tokens Staking" />
+      <widget.Title text="Liquidity Mining" />
       {model ? <BondingSharesInformation {...model} {...actions} /> : <widget.Loading text="Loading existing shares information" />}
     </widget.Container>
   );
@@ -177,9 +177,9 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   return (
     <div className="flex flex-col relative">
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
-      <table className="border border-solid border-white border-opacity-10 border-collapse mb-4">
+      <table>
         <thead>
-          <tr className="border-0 border-b border-solid border-white border-opacity-10 h-12 uppercase">
+          <tr>
             <th>Deposit (Approx.)</th>
             <th>Pending Reward</th>
             <th>Unlock Time</th>
@@ -202,7 +202,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           </tbody>
         )}
       </table>
-      <div className="text-white">
+      <div id="rewards-summary">
         <div className="mb-2 ">
           {UBQIcon}
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
