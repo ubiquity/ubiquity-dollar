@@ -33,7 +33,7 @@ export interface ConnectedContext {
   setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
   contracts: Contracts | null;
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
-  refreshBalances: () => void;
+  refreshBalances: () => Promise<void>;
 }
 
 const ConnectedContext = createContext<ConnectedContext>({} as ConnectedContext);
@@ -81,7 +81,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
       const { provider, contracts } = await connectedContracts();
       const signer = await provider.getSigner();
       console.timeEnd("Connecting contracts");
-      if (!PROD) logBondingUbqInfo(contracts);
+      // if (!PROD) logBondingUbqInfo(contracts);
       setSigner(signer);
       setProvider(provider);
       setContracts(contracts);

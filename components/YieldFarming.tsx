@@ -8,6 +8,7 @@ import { performTransaction, constrainNumber } from "./common/utils";
 
 type Actions = {
   onDeposit: (payload: { usdc: number; ubq: number; uad: number }) => void;
+  onWithdraw: () => void;
 };
 
 export const YieldFarmingContainer = ({ contracts, account, signer }: UserContext) => {
@@ -16,12 +17,16 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
   const { refreshBalances } = useConnectedContext();
   const [isProcessing, setIsProcessing] = useState(false);
 
+  async function refreshYieldProxyData() {
+    const ypd = await loadYieldProxyData(contracts);
+    const di = await loadYieldProxyDepositInfo(ypd, contracts, account.address);
+    setYieldProxyData(ypd);
+    setDepositInfo(di);
+  }
+
   useEffect(() => {
     (async function () {
-      const ypd = await loadYieldProxyData(contracts);
-      const di = await loadYieldProxyDepositInfo(ypd, contracts, account.address);
-      setYieldProxyData(ypd);
-      setDepositInfo(di);
+      refreshYieldProxyData();
     })();
   }, []);
 
@@ -38,10 +43,18 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
         (await ensureERC20Allowance("uAD", contracts.uad, bigUad, signer, contracts.yieldProxy.address)) &&
         (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
       ) {
-        refreshBalances();
+        await refreshYieldProxyData();
+        await refreshBalances();
       } else {
         // TODO: Show transaction error
       }
+      setIsProcessing(false);
+    },
+    onWithdraw: async () => {
+      setIsProcessing(true);
+      await performTransaction(contracts.yieldProxy.connect(signer).withdrawAll());
+      await refreshYieldProxyData();
+      await refreshBalances();
       setIsProcessing(false);
     },
   };
@@ -69,7 +82,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
           </a>
         </p>
       </div>
-      {depositInfo && yieldProxyData ? (
+      {yieldProxyData ? (
         depositInfo ? (
           <YieldFarmindWithdraw
             token="USDC"
@@ -91,7 +104,8 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
             uarApyMin={26.94}
             uarApyMax={51.43}
             uarCurrentYieldPct={13.3}
-            onWithdraw={() => console.log("WITHDRAWING!")}
+            onWithdraw={actions.onWithdraw}
+            disable={isProcessing}
           />
         ) : (
           <YieldFarmingDeposit
@@ -105,6 +119,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
             minDepositFeePct={0}
             balance={{ usdc: 200, ubq: 150, uad: 300 }}
             onDeposit={actions.onDeposit}
+            disable={isProcessing}
           />
         )
       ) : (
@@ -134,6 +149,7 @@ type YieldFarmingWithdrawProps = {
   uarApyMin: number;
   uarApyMax: number;
   uarCurrentYieldPct: number;
+  disable: boolean;
   onWithdraw: () => void;
 };
 
@@ -158,6 +174,7 @@ export const YieldFarmindWithdraw = memo(
     uarApyMin,
     uarApyMax,
     uarCurrentYieldPct,
+    disable,
     onWithdraw,
   }: YieldFarmingWithdrawProps) => {
     const f = (n: number) => (Math.round(n * 100) / 100).toLocaleString();
@@ -179,7 +196,7 @@ export const YieldFarmindWithdraw = memo(
           <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
           <DepositItem val={`${f(uarCurrentYieldPct)}%`} text="Current Yield" />
         </div>
-        <button onClick={onWithdraw} className="w-full flex justify-center m-0 mt-8">
+        <button onClick={onWithdraw} disabled={disable} className="w-full flex justify-center m-0 mt-8">
           Withdraw
         </button>
       </>
@@ -212,7 +229,7 @@ type YieldFarmingDepositProps = {
   minDepositFeePct: number; // 0
   maxUbqAmount: number; // 10000
   maxUadPct: number; // 0.5
-
+  disable: boolean;
   onDeposit: Actions["onDeposit"];
 };
 
@@ -227,6 +244,7 @@ export const YieldFarmingDeposit = memo(
     baseDepositFeePct,
     minDepositFeePct,
     balance,
+    disable,
     onDeposit,
   }: YieldFarmingDepositProps) => {
     const [usdc, setUsdc] = useState<number>(0);
@@ -278,7 +296,6 @@ export const YieldFarmingDeposit = memo(
     };
 
     const uadBoost = () => {
-      console.log(uad, maxUadPct, usdc);
       const pct = usdc ? uad / (maxUadPct * usdc) : 0;
       return baseYieldBonusPct + (maxYieldBonusPct - baseYieldBonusPct) * pct;
     };
@@ -420,7 +437,7 @@ export const YieldFarmingDeposit = memo(
               ))}
             </div>
           ) : null}
-          <button onClick={deposit} disabled={!canDeposit()} className="w-full flex justify-center m-0 mt-8">
+          <button onClick={deposit} disabled={!canDeposit() || disable} className="w-full flex justify-center m-0 mt-8">
             Deposit
           </button>
         </>
