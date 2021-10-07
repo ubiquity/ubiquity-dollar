@@ -6,16 +6,19 @@ import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, Y
 import { BigNumber, ethers } from "ethers";
 import { performTransaction, constrainNumber } from "./common/utils";
 
+type Balance = { usdc: number; ubq: number; uad: number };
+
 type Actions = {
-  onDeposit: (payload: { usdc: number; ubq: number; uad: number }) => void;
+  onDeposit: (payload: Balance) => void;
   onWithdraw: () => void;
 };
 
 export const YieldFarmingContainer = ({ contracts, account, signer }: UserContext) => {
   const [yieldProxyData, setYieldProxyData] = useState<YieldProxyData | null>(null);
   const [depositInfo, setDepositInfo] = useState<YieldProxyDepositInfo | null>(null);
-  const { refreshBalances } = useConnectedContext();
+  const { refreshBalances, balances } = useConnectedContext();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [balance, setBalance] = useState<Balance | null>(null);
 
   async function refreshYieldProxyData() {
     const ypd = await loadYieldProxyData(contracts);
@@ -23,6 +26,17 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
     setYieldProxyData(ypd);
     setDepositInfo(di);
   }
+
+  useEffect(() => {
+    if (balances && contracts && account) {
+      contracts.usdc.balanceOf(account.address).then((bigUsdc) => {
+        const usdc = parseFloat(ethers.utils.formatUnits(bigUsdc, 6));
+        const ubq = parseFloat(ethers.utils.formatEther(balances.ubq));
+        const uad = parseFloat(ethers.utils.formatEther(balances.uad));
+        setBalance({ usdc, ubq, uad });
+      });
+    }
+  }, [balances, contracts, account]);
 
   useEffect(() => {
     (async function () {
@@ -59,7 +73,7 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
     },
   };
 
-  return <YieldFarmingSubcontainer yieldProxyData={yieldProxyData} depositInfo={depositInfo} isProcessing={isProcessing} actions={actions} />;
+  return <YieldFarmingSubcontainer yieldProxyData={yieldProxyData} depositInfo={depositInfo} isProcessing={isProcessing} actions={actions} balance={balance} />;
 };
 
 type YieldFarmingSubcontainerProps = {
@@ -67,13 +81,14 @@ type YieldFarmingSubcontainerProps = {
   depositInfo: YieldProxyDepositInfo | null;
   isProcessing: boolean;
   actions: Actions;
+  balance: Balance | null;
 };
 
 const fm = (n: BigNumber, d = 18) => +ethers.utils.formatUnits(n, d);
 const USDC_JAR_APY = { min: 14.18, max: 27.07 };
 const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
-export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing }: YieldFarmingSubcontainerProps) => {
+export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={isProcessing}>
       <widget.Title text="Boosted yield farming" />
@@ -111,7 +126,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
             onWithdraw={actions.onWithdraw}
             disable={isProcessing}
           />
-        ) : (
+        ) : balance ? (
           <YieldFarmingDeposit
             tvl={TVL}
             usdcApy={USDC_JAR_APY}
@@ -121,11 +136,11 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
             maxYieldBonusPct={yieldProxyData.bonusYieldMaxPct}
             baseDepositFeePct={yieldProxyData.depositFeeBasePct}
             minDepositFeePct={0}
-            balance={{ usdc: 200, ubq: 150, uad: 300 }}
+            balance={balance}
             onDeposit={actions.onDeposit}
             disable={isProcessing}
           />
-        )
+        ) : null
       ) : (
         "Loading..."
       )}
@@ -225,8 +240,8 @@ const DepositItem = ({ val, fadeVal, text }: DepositItemProps) => (
 );
 
 type YieldFarmingDepositProps = {
-  tvl: { usdc: number; ubq: number; uad: number };
-  balance: { usdc: number; ubq: number; uad: number };
+  tvl: Balance;
+  balance: Balance;
   usdcApy: { min: number; max: number };
   baseYieldBonusPct: number; // 0.5
   maxYieldBonusPct: number; // 1
@@ -245,7 +260,7 @@ export const YieldFarmingDeposit = memo(
     maxUadPct,
     baseYieldBonusPct,
     maxYieldBonusPct,
-    tvl,
+    // tvl,
     baseDepositFeePct,
     minDepositFeePct,
     balance,
