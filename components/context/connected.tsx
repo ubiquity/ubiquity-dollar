@@ -4,19 +4,9 @@ import { createContext, Dispatch, SetStateAction, useContext, useState, useEffec
 import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "../common/types";
 import { connectedContracts, Contracts } from "../../contracts";
-import { accountBalances, logBondingUbqInfo } from "../common/contractsShortcuts";
+import { accountBalances, logBondingUbqInfo, Balances } from "../common/contractsShortcuts";
 
 const PROD = process.env.NODE_ENV == "production";
-
-export interface Balances {
-  uad: BigNumber;
-  crv: BigNumber;
-  uad3crv: BigNumber;
-  uar: BigNumber;
-  ubq: BigNumber;
-  bondingShares: BigNumber;
-  debtCoupon: BigNumber;
-}
 
 export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;

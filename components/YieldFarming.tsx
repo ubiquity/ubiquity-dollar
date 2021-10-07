@@ -18,7 +18,6 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
   const [depositInfo, setDepositInfo] = useState<YieldProxyDepositInfo | null>(null);
   const { refreshBalances, balances } = useConnectedContext();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [balance, setBalance] = useState<Balance | null>(null);
 
   async function refreshYieldProxyData() {
     const ypd = await loadYieldProxyData(contracts);
@@ -26,17 +25,6 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
     setYieldProxyData(ypd);
     setDepositInfo(di);
   }
-
-  useEffect(() => {
-    if (balances && contracts && account) {
-      contracts.usdc.balanceOf(account.address).then((bigUsdc) => {
-        const usdc = parseFloat(ethers.utils.formatUnits(bigUsdc, 6));
-        const ubq = parseFloat(ethers.utils.formatEther(balances.ubq));
-        const uad = parseFloat(ethers.utils.formatEther(balances.uad));
-        setBalance({ usdc, ubq, uad });
-      });
-    }
-  }, [balances, contracts, account]);
 
   useEffect(() => {
     (async function () {
@@ -73,7 +61,21 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
     },
   };
 
-  return <YieldFarmingSubcontainer yieldProxyData={yieldProxyData} depositInfo={depositInfo} isProcessing={isProcessing} actions={actions} balance={balance} />;
+  const parsedBalances = balances && {
+    usdc: +ethers.utils.formatUnits(balances.usdc, 6),
+    ubq: +ethers.utils.formatEther(balances.ubq),
+    uad: +ethers.utils.formatEther(balances.uad),
+  };
+
+  return (
+    <YieldFarmingSubcontainer
+      yieldProxyData={yieldProxyData}
+      depositInfo={depositInfo}
+      isProcessing={isProcessing}
+      actions={actions}
+      balance={parsedBalances}
+    />
+  );
 };
 
 type YieldFarmingSubcontainerProps = {
@@ -140,7 +142,9 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
             onDeposit={actions.onDeposit}
             disable={isProcessing}
           />
-        ) : null
+        ) : (
+          "Loading..."
+        )
       ) : (
         "Loading..."
       )}
@@ -172,6 +176,8 @@ type YieldFarmingWithdrawProps = {
   onWithdraw: () => void;
 };
 
+const f = (n: number) => (Math.round(n * 100) / 100).toLocaleString();
+
 export const YieldFarmindWithdraw = memo(
   ({
     token,
@@ -196,9 +202,6 @@ export const YieldFarmindWithdraw = memo(
     disable,
     onWithdraw,
   }: YieldFarmingWithdrawProps) => {
-    const f = (n: number) => (Math.round(n * 100) / 100).toLocaleString();
-    console.log(feePct, f(feePct * 100));
-
     return (
       <>
         <widget.SubTitle text="Current Deposit" />
@@ -372,7 +375,7 @@ export const YieldFarmingDeposit = memo(
             </div>
             <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
             <div className="flex justify-end mt-2">
-              <span className="flex-grow opacity-50 text-left">Balance: {balance.usdc}</span>
+              <span className="flex-grow opacity-50 text-left">Balance: {f(balance.usdc)}</span>
               <span className="text-accent cursor-pointer" onClick={setMaxUsdc}>
                 Max
               </span>
@@ -417,7 +420,7 @@ export const YieldFarmingDeposit = memo(
               </div>
             </div>
             <div className="w-10/12 flex justify-end mt-2">
-              <span className="flex-grow opacity-50 text-left">Balance: {balance.ubq}</span>
+              <span className="flex-grow opacity-50 text-left">Balance: {f(balance.ubq)}</span>
               <span className="text-accent cursor-pointer" onClick={setMaxUbq}>
                 Max
               </span>
@@ -451,7 +454,7 @@ export const YieldFarmingDeposit = memo(
               </div>
             </div>
             <div className="w-10/12 flex justify-end mt-2">
-              <span className="flex-grow opacity-50 text-left">Balance: {balance.uad}</span>
+              <span className="flex-grow opacity-50 text-left">Balance: {f(balance.uad)}</span>
               <span className="text-accent cursor-pointer" onClick={setMaxUad}>
                 Max
               </span>

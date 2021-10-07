@@ -16,11 +16,12 @@ export interface Balances {
   ubq: BigNumber;
   bondingShares: BigNumber;
   debtCoupon: BigNumber;
+  usdc: BigNumber;
 }
 
 // Load the account balances in a single parallel operation
 export async function accountBalances(account: EthAccount, contracts: Contracts): Promise<Balances> {
-  const [uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares] = await Promise.all([
+  const [uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares, usdc] = await Promise.all([
     contracts.uad.balanceOf(account.address),
     contracts.crvToken.balanceOf(account.address),
     contracts.metaPool.balanceOf(account.address),
@@ -28,6 +29,7 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
     contracts.ugov.balanceOf(account.address),
     erc1155BalanceOf(account.address, contracts.debtCouponToken),
     erc1155BalanceOf(account.address, (contracts.bondingToken as unknown) as ERC1155Ubiquity),
+    contracts.usdc.balanceOf(account.address),
   ]);
   return {
     uad,
@@ -37,6 +39,7 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
     ubq,
     debtCoupon,
     bondingShares,
+    usdc,
   };
 }
 
@@ -69,7 +72,7 @@ export async function loadYieldProxyData(contracts: Contracts): Promise<YieldPro
 
   const jarRatio = await contracts.jarUsdc.getRatio();
 
-  const simulatedNewJarRatio = isDev ? jarRatio.mul(BigNumber.from(107)).div(BigNumber.from(100)) : jarRatio;
+  const simulatedNewJarRatio = jarRatio; // isDev ? jarRatio.mul(BigNumber.from(107)).div(BigNumber.from(100)) : jarRatio;
 
   const di: YieldProxyData = {
     token: YP_TOKEN,
@@ -130,9 +133,8 @@ export async function loadYieldProxyDepositInfo(yp: YieldProxyData, contracts: C
   const jarYieldAmount = amountIn18.mul(yp.jarRatio).div(di.ratio).sub(amountIn18);
   const bonusYieldAmount = jarYieldAmount.gt(0) ? jarYieldAmount.mul(di.bonusYield).div(yp.bonusYieldMax) : BigNumber.from(0);
   const currentYieldPct = toEtherNum(amountIn18.add(jarYieldAmount).add(bonusYieldAmount)) / toEtherNum(amountIn18) - 1;
-  const feePct = yp.depositFeeBasePct - toEtherNum(di.ubqAmount.mul(ethers.utils.parseEther("100")).div(yp.depositFeeUbqMax)) / 100;
+  const feePct = yp.depositFeeBasePct - (toEtherNum(di.ubqAmount) / toEtherNum(yp.depositFeeUbqMax)) * yp.depositFeeBasePct;
 
-  // console.log("FEEEEE", toEtherNum(di.fee.div(yp.depositFeeMax)), toEtherNum(yp.depositFeeMax));
   const depositInfo: YieldProxyDepositInfo = {
     amount: di.amount,
     newAmount: di.amount.sub(di.fee),
@@ -147,11 +149,6 @@ export async function loadYieldProxyDepositInfo(yp: YieldProxyData, contracts: C
     uar: jarYieldAmount.add(bonusYieldAmount).add(feeIn18),
     currentYieldPct,
   };
-
-  // yp.depositFeeBasePct
-  // console.log("BASE", yp.depositFeeBasePct);
-  // console.log("AMOUNT", toEtherNum(di.ubqAmount.mul(ethers.utils.parseEther("100")).div(yp.depositFeeUbqMax)) / 100);
-  // console.log("FEEEE", ethers.utils.formatEther(di.ubqAmount.mul(ethers.utils.parseEther("100")).div(yp.depositFeeUbqMax).mul(yp.depositFeeMax)));
 
   if (debug) {
     console.log(`YieldProxyDeposit ${yp.token.toUpperCase()} (${yp.decimals} decimals)`);
