@@ -87,7 +87,7 @@ type YieldFarmingSubcontainerProps = {
 };
 
 const fm = (n: BigNumber, d = 18) => +ethers.utils.formatUnits(n, d);
-const USDC_JAR_APY = { min: 14.18, max: 27.07 };
+const USDC_JAR_APY = { min: 10.1, max: 19.65 };
 const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
