@@ -1,4 +1,5 @@
-import { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
+import Tippy from "@tippyjs/react";
 import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import * as widget from "./ui/widget";
 import { WarningIcon, HelpIcon } from "./ui/icons";
@@ -77,6 +78,18 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
     />
   );
 };
+
+export const Tooltip = ({ content, children }: { content: string; children: React.ReactElement }) => (
+  <Tippy
+    content={
+      <div className="px-4 border border-white/10 border-solid bg-accent rounded-md" style={{ background: "#051f31" }}>
+        <p className="text-center text-white/50">{content}</p>
+      </div>
+    }
+  >
+    {children}
+  </Tippy>
+);
 
 type YieldFarmingSubcontainerProps = {
   yieldProxyData: YieldProxyData | null;
@@ -371,7 +384,9 @@ export const YieldFarmingDeposit = memo(
                 {usdcApy.min.toFixed(2)}% - {usdcApy.max.toFixed(2)}%
               </span>
               <span className="pl-2">APY</span>
-              {/* <span className="pl-2">{HelpIcon}</span> */}
+              <Tooltip content="This is the APY from the Pickle Finance USDC jar">
+                <span className="pl-2">{HelpIcon}</span>
+              </Tooltip>
             </div>
             <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
             <div className="flex justify-end mt-2">
@@ -385,7 +400,9 @@ export const YieldFarmingDeposit = memo(
             <div className="text-3xl text-accent font-bold">{Math.round(maxApy() * 100) / 100}%</div>
             <div>
               Max APY in uAR
-              {/* <span className="pl-2">{HelpIcon}</span> */}
+              <Tooltip content="All the rewards are multiplied and given in uAR">
+                <span className="pl-2">{HelpIcon}</span>
+              </Tooltip>
             </div>
           </div>
         </div>
@@ -401,9 +418,9 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="text-left w-10/12 mb-2">
               <span>Minimizes deposit fee</span>
-              <span className="pl-2" title="The deposit fee gets converted to uAR when you withdraw">
-                {HelpIcon}
-              </span>
+              <Tooltip content="The deposit fee gets converted to uAR when you withdraw">
+                <span className="pl-2">{HelpIcon}</span>
+              </Tooltip>
             </div>
             <div className="flex justify-between items-center">
               <input
@@ -436,7 +453,9 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="text-left  w-10/12 mb-2">
               <span>Multiples yield up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span>
-              {/* <span className="pl-2">{HelpIcon}</span> */}
+              <Tooltip content="Match 50% of the USDC deposit and you get an extra 50% boost">
+                <span className="pl-1">{HelpIcon}</span>
+              </Tooltip>
             </div>
             <div className="flex justify-between items-center">
               <input

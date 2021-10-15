@@ -71,16 +71,20 @@
   margin-bottom: 1rem
 }
 
-.mb-4 {
-  margin-bottom: 1rem
-}
-
 .mb-2 {
   margin-bottom: 0.5rem
 }
 
+.mb-4 {
+  margin-bottom: 1rem
+}
+
 .mt-8 {
   margin-top: 2rem
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem
 }
 
 .mb-8 {
@@ -109,10 +113,6 @@
 
 .mr-4 {
   margin-right: 1rem
-}
-
-.mb-1 {
-  margin-bottom: 0.25rem
 }
 
 .box-border {
@@ -211,10 +211,6 @@
   flex-grow: 1
 }
 
-.border-collapse {
-  border-collapse: collapse
-}
-
 .scale-150 {
   --tw-scale-x: 1.5;
   --tw-scale-y: 1.5;
@@ -257,14 +253,6 @@
   gap: 1rem
 }
 
-.gap-1 {
-  gap: 0.25rem
-}
-
-.gap-2 {
-  gap: 0.5rem
-}
-
 .gap-y-4 {
   row-gap: 1rem
 }
@@ -289,21 +277,8 @@
   border-width: 1px
 }
 
-.border-0 {
-  border-width: 0px
-}
-
-.border-b {
-  border-bottom-width: 1px
-}
-
 .border-solid {
   border-style: solid
-}
-
-.border-white {
-  --tw-border-opacity: 1;
-  border-color: rgba(255, 255, 255, var(--tw-border-opacity))
 }
 
 .border-white\/10 {
@@ -313,10 +288,6 @@
 .border-accent {
   --tw-border-opacity: 1;
   border-color: rgba(0, 255, 255, var(--tw-border-opacity))
-}
-
-.border-opacity-10 {
-  --tw-border-opacity: 0.1
 }
 
 .bg-accent {
@@ -365,6 +336,10 @@
   padding-left: 0.5rem
 }
 
+.pl-1 {
+  padding-left: 0.25rem
+}
+
 .text-left {
   text-align: left
 }
@@ -386,9 +361,9 @@
   line-height: 2.25rem
 }
 
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem
 }
 
 .text-sm {
@@ -396,9 +371,9 @@
   line-height: 1.25rem
 }
 
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem
 }
 
 .font-bold {
@@ -417,14 +392,14 @@
   letter-spacing: .2em
 }
 
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgba(255, 255, 255, var(--tw-text-opacity))
-}
-
 .text-accent {
   --tw-text-opacity: 1;
   color: rgba(0, 255, 255, var(--tw-text-opacity))
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity))
 }
 
 .text-red-500 {
