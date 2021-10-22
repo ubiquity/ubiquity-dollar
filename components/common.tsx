@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 
 import { EthAccount } from "./common/types";
 import Account from "./account";
+import Network from "./network";
 import BondingMigrate from "./bonding.migrate";
 import { useConnectedContext } from "./context/connected";
 import CurveBalance from "./curve.balance";
@@ -72,7 +73,7 @@ export function _renderControls() {
               <input type="button" value="Connect Wallet" disabled={connecting} onClick={() => connect()} />
             </span>
           </div>
-
+          <Network />
           <Account />
         </header>
 

@@ -308,14 +308,14 @@
   padding-bottom: 1rem
 }
 
-.\!py-8 {
-  padding-top: 2rem !important;
-  padding-bottom: 2rem !important
-}
-
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem
+}
+
+.\!py-8 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important
 }
 
 .py-1 {
@@ -402,13 +402,13 @@
   color: rgba(255, 255, 255, var(--tw-text-opacity))
 }
 
+.text-white\/50 {
+  color: rgba(255, 255, 255, 0.5)
+}
+
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgba(239, 68, 68, var(--tw-text-opacity))
-}
-
-.text-white\/50 {
-  color: rgba(255, 255, 255, 0.5)
 }
 
 .\!text-white\/30 {
