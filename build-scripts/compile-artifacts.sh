@@ -1,5 +1,5 @@
 #!/bin/bash
-git submodule update --init --recursive --remote
+git submodule update --init --recursive --remote --verbose
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
 
 UP=../
