@@ -5,8 +5,6 @@ import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/type
 import { accountBalances, Balances } from "../common/contracts-shortcuts";
 import { EthAccount } from "../common/types";
 
-const PROD = process.env.NODE_ENV == "production";
-
 export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;
   setManager: Dispatch<SetStateAction<UbiquityAlgorithmicDollarManager | null>>;
@@ -70,7 +68,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
       const { provider, contracts } = await connectedContracts();
       const signer = provider.getSigner();
       console.timeEnd("Connecting contracts");
-      // if (!PROD) logBondingUbqInfo(contracts);
+      // logBondingUbqInfo(contracts);
       setSigner(signer);
       setProvider(provider);
       setContracts(contracts);

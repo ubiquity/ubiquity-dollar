@@ -19,7 +19,6 @@ import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
-import { Contracts } from "../contracts";
 import { UADIcon } from "./ui/icons";
 
 const PROD = process.env.NODE_ENV == "production";
