@@ -1,5 +1,5 @@
 #!/bin/bash
-git submodule update --init --recursive --remote --verbose
+git clone --recurse-submodules -j8 https://github.com/ubiquity/uad-contracts.git contracts
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
 
 UP=../
