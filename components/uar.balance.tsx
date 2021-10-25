@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { ADDRESS } from "../pages/index";
 import { UbiquityAlgorithmicDollarManager__factory } from "../contracts/artifacts/types/factories/UbiquityAlgorithmicDollarManager__factory";
 import { UbiquityAutoRedeem__factory } from "../contracts/artifacts/types/factories/UbiquityAutoRedeem__factory";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
 
 let TOKEN_ADDR: string;
 async function _getTokenBalance(
@@ -18,6 +19,8 @@ async function _getTokenBalance(
     TOKEN_ADDR = await manager.autoRedeemTokenAddress();
     const uAR = UbiquityAutoRedeem__factory.connect(TOKEN_ADDR, provider);
     const rawBalance = await uAR.balanceOf(account);
+    const uarBalance = document.getElementById("uar-balance");
+    uarBalance?.querySelector("a")?.setAttribute("href", `https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account}` : ""}`);
     if (balances) {
       if (!balances.uar.eq(rawBalance)) setBalances({ ...balances, uar: rawBalance });
     }
@@ -37,7 +40,7 @@ const UarBalance = () => {
   return (
     <>
       <div id="uar-balance">
-        <a target="_blank" href={`https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account.address}` : ""}`}>
+        <a target="_blank">
           <div>
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 85.45">

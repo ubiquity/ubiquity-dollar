@@ -140,10 +140,10 @@ export function _renderControls() {
                   <aside>My Ubiquity Inventory</aside>
                   <figure></figure>
                 </div>
+                <UbqBalance />
                 <UadBalance />
                 <UarBalance />
                 <DebtCouponBalance />
-                <UbqBalance />
                 <CurveBalance />
                 <CurveLPBalance />
               </div>

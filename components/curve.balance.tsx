@@ -2,7 +2,8 @@ import { ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { ERC20__factory } from "../contracts/artifacts/types/factories/ERC20__factory";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
-import { Balances, useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
+import { useConnectedContext } from "./context/connected";
 
 let TOKEN_ADDR: string;
 
@@ -18,6 +19,10 @@ async function _getCurveTokenBalance(
     const token = ERC20__factory.connect(TOKEN_ADDR, provider);
 
     const rawBalance = await token.balanceOf(account);
+
+    const curveBalance = document.getElementById("curve-balance");
+    curveBalance?.querySelector("a")?.setAttribute("href", `https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account}` : ""}`);
+
     if (balances) {
       if (!balances.crv.eq(rawBalance)) setBalances({ ...balances, crv: rawBalance });
     }
@@ -37,7 +42,7 @@ const CurveBalance = () => {
   return (
     <>
       <div id="curve-balance">
-        <a target="_blank" href={`https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account.address}` : ""}`}>
+        <a target="_blank">
           <div>
             <span>
               <img

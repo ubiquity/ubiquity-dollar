@@ -2,7 +2,8 @@ import { ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { UbiquityAlgorithmicDollar__factory } from "../contracts/artifacts/types/factories/UbiquityAlgorithmicDollar__factory";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
-import { Balances, useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
+import { useConnectedContext } from "./context/connected";
 
 let TOKEN_ADDR: string;
 
@@ -17,6 +18,10 @@ export async function _getTokenBalance(
     TOKEN_ADDR = await manager.dollarTokenAddress();
     const uAD = UbiquityAlgorithmicDollar__factory.connect(TOKEN_ADDR, provider.getSigner());
     const rawBalance = await uAD.balanceOf(account);
+
+    const uadBalance = document.getElementById("uad-balance");
+    uadBalance?.querySelector("a")?.setAttribute("href", `https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account}` : ""}`);
+
     if (balances) {
       if (!balances.uad.eq(rawBalance)) setBalances({ ...balances, uad: rawBalance });
     }
@@ -37,7 +42,7 @@ const UadBalance = () => {
   return (
     <>
       <div id="uad-balance">
-        <a target="_blank" href={`https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account.address}` : ""}`}>
+        <a target="_blank">
           <div>
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131.66 150">

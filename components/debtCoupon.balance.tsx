@@ -1,8 +1,9 @@
 import { ethers, BigNumber } from "ethers";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { DebtCoupon, DebtCoupon__factory } from "../contracts/artifacts/types";
+import { Balances } from "./common/contracts-shortcuts";
 
 async function calculateDebtCouponBalance(addr: string, debtCoupon: DebtCoupon) {
   const ids = await debtCoupon.holderTokens(addr);

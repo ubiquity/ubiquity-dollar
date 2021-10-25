@@ -15,15 +15,18 @@ async function _getTokenBalance(
 ): Promise<void> {
   if (provider && account) {
     const manager = UbiquityAlgorithmicDollarManager__factory.connect(ADDRESS.MANAGER, provider);
-    // console.log({
-    //   "manager.governanceTokenAddress": await manager.governanceTokenAddress(),
-    // });
     TOKEN_ADDR = await manager.governanceTokenAddress();
     const uarAddress = await manager.autoRedeemTokenAddress();
     const uAR = UbiquityAutoRedeem__factory.connect(uarAddress, provider);
     const rawBalance = await uAR.balanceOf(account);
+
+    const ubqBalance = document.getElementById("ubq-balance");
+    ubqBalance?.querySelector("a")?.setAttribute("href", `https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account}` : ""}`);
+
     if (balances) {
-      if (!balances.uar.eq(rawBalance)) setBalances({ ...balances, uar: rawBalance });
+      if (!balances.uar.eq(rawBalance)) {
+        setBalances({ ...balances, uar: rawBalance });
+      }
     }
   }
 }
@@ -41,7 +44,7 @@ const UarBalance = () => {
   return (
     <>
       <div id="ubq-balance">
-        <a target="_blank" href={`https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account.address}` : ""}`}>
+        <a target="_blank">
           <div>
             <span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 151">

@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import { ADDRESS } from "../pages/index";
 import { IMetaPool__factory } from "../contracts/artifacts/types/factories/IMetaPool__factory";
 import { UbiquityAlgorithmicDollarManager__factory } from "../contracts/artifacts/types/factories/UbiquityAlgorithmicDollarManager__factory";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
 
 let TOKEN_ADDR: string;
 
@@ -19,6 +20,10 @@ export async function _getLPTokenBalance(
 
     const metapool = IMetaPool__factory.connect(TOKEN_ADDR, provider);
     const rawBalance = await metapool.balanceOf(account);
+
+    const curveLpBalance = document.getElementById("curve-lp-balance");
+    curveLpBalance?.querySelector("a")?.setAttribute("href", `https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account}` : ""}`);
+
     if (balances) {
       if (!balances.uad3crv.eq(rawBalance)) setBalances({ ...balances, uad3crv: rawBalance });
     }
@@ -37,7 +42,7 @@ const CurveLPBalance = () => {
   return (
     <>
       <div id="curve-lp-balance">
-        <a target="_blank" href={`https://etherscan.io/token/${TOKEN_ADDR}${account ? `?a=${account.address}` : ""}`}>
+        <a target="_blank">
           <div>
             <span>
               <img
