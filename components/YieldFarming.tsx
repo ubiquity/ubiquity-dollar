@@ -3,7 +3,7 @@ import Tippy from "@tippyjs/react";
 import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import * as widget from "./ui/widget";
 import { WarningIcon, HelpIcon } from "./ui/icons";
-import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "./common/contractsShortcuts";
+import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "./common/contracts-shortcuts";
 import { BigNumber, ethers } from "ethers";
 import { performTransaction, constrainNumber } from "./common/utils";
 

@@ -4,7 +4,7 @@ import { ADDRESS } from "../pages/index";
 import { UbiquityAlgorithmicDollarManager__factory } from "../contracts/artifacts/types/factories/UbiquityAlgorithmicDollarManager__factory";
 import { UbiquityAutoRedeem__factory } from "../contracts/artifacts/types/factories/UbiquityAutoRedeem__factory";
 import { useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contractsShortcuts";
+import { Balances } from "./common/contracts-shortcuts";
 
 let TOKEN_ADDR: string;
 async function _getTokenBalance(

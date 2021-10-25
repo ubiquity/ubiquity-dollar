@@ -1,10 +1,9 @@
 import { BigNumber, ethers } from "ethers";
-import { createContext, Dispatch, SetStateAction, useContext, useState, useEffect } from "react";
-
-import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
-import { EthAccount } from "../common/types";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { connectedContracts, Contracts } from "../../contracts";
-import { accountBalances, logBondingUbqInfo, Balances } from "../common/contractsShortcuts";
+import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
+import { accountBalances, Balances } from "../common/contracts-shortcuts";
+import { EthAccount } from "../common/types";
 
 const PROD = process.env.NODE_ENV == "production";
 

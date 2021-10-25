@@ -8,7 +8,7 @@ import {
   UbiquityAlgorithmicDollar__factory,
 } from "../contracts/artifacts/types";
 import { useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contractsShortcuts";
+import { Balances } from "./common/contracts-shortcuts";
 
 async function _expectedDebtCoupon(
   amount: BigNumber,

@@ -4,7 +4,7 @@ import { Dropdown } from "react-dropdown-now";
 import { ADDRESS } from "../pages";
 import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
 import { useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contractsShortcuts";
+import { Balances } from "./common/contracts-shortcuts";
 
 const _getDebtIds = async (
   account: string,
