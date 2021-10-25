@@ -82,7 +82,7 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
 export const Tooltip = ({ content, children }: { content: string; children: React.ReactElement }) => (
   <Tippy
     content={
-      <div className="px-4 border border-white/10 border-solid bg-accent rounded-md" style={{ background: "#051f31" }}>
+      <div className="px-4 border border-white/10 border-solid rounded-md" style={{ backdropFilter: "blur(8px)" }}>
         <p className="text-center text-white/50">{content}</p>
       </div>
     }
