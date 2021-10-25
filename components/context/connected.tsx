@@ -69,7 +69,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
     (async function () {
       console.time("Connecting contracts");
       const { provider, contracts } = await connectedContracts();
-      const signer = await provider.getSigner();
+      const signer = provider.getSigner();
       console.timeEnd("Connecting contracts");
       // if (!PROD) logBondingUbqInfo(contracts);
       setSigner(signer);
@@ -77,7 +77,11 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
       setContracts(contracts);
       setManager(contracts.manager);
       setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
-    })();
+    })().catch((e) => {
+      console.error({ e });
+      // TODO: specific error handling
+      alert("Dapp failed to load, make sure that you are connected to mainnet");
+    });
   }, []);
 
   useEffect(() => {

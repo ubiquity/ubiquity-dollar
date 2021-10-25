@@ -17,7 +17,7 @@ const Network = () => {
     return null;
   }
 
-  return (
+  return network === "Mainnet" ? null : (
     <div>
       <span className="text-accent text-sm">{network}</span>
     </div>

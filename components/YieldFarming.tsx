@@ -106,11 +106,11 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={isProcessing}>
-      <widget.Title text="Boosted yield farming" />
-      <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid bg-accent bg-opacity-10 rounded-md mb-4">
+      <widget.Title text="Boosted yield farming (Beta)" />
+      <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
         <div className="w-20">{WarningIcon}</div>
         <p className="text-left flex-grow">
-          uAR is 1:1 redeemable for uAD when our TWAP goes above 1.00.{" "}
+          <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
           <a target="_blank" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
             Learn more &raquo;
           </a>
@@ -359,7 +359,7 @@ export const YieldFarmingDeposit = memo(
 
     useEffect(() => {
       const errors: string[] = [];
-      const noFunds = (token: string) => `You don't have enough ${token.toUpperCase()} funds`;
+      const noFunds = (token: string) => `You don't have enough ${token.toUpperCase()}.`;
       if (usdc > balance.usdc) errors.push(noFunds("usdc"));
       if (ubq > balance.ubq) errors.push(noFunds("ubq"));
       if (uad > balance.uad) errors.push(noFunds("uad"));
@@ -391,9 +391,7 @@ export const YieldFarmingDeposit = memo(
             <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
             <div className="flex justify-end mt-2">
               <span className="flex-grow opacity-50 text-left">Balance: {f(balance.usdc)}</span>
-              <span className="text-accent cursor-pointer" onClick={setMaxUsdc}>
-                Max
-              </span>
+              <button onClick={setMaxUsdc}>Max</button>
             </div>
           </div>
           <div className="w-1/2">
@@ -438,9 +436,7 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="w-10/12 flex justify-end mt-2">
               <span className="flex-grow opacity-50 text-left">Balance: {f(balance.ubq)}</span>
-              <span className="text-accent cursor-pointer" onClick={setMaxUbq}>
-                Max
-              </span>
+              <button onClick={setMaxUbq}>Max</button>
             </div>
           </div>
           <div className="w-5/12">
@@ -474,9 +470,7 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="w-10/12 flex justify-end mt-2">
               <span className="flex-grow opacity-50 text-left">Balance: {f(balance.uad)}</span>
-              <span className="text-accent cursor-pointer" onClick={setMaxUad}>
-                Max
-              </span>
+              <button onClick={setMaxUad}>Max</button>
             </div>
           </div>
         </div>

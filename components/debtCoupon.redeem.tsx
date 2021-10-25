@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
 import { ADDRESS } from "../pages";
 import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contractsShortcuts";
 
 const _getDebtIds = async (
   account: string,
@@ -89,7 +90,7 @@ const DebtCouponRedeem = () => {
         if (amount.gt(BigNumber.from(0))) {
           await redeemDebtForDollar(debtId, amount, setBalances);
         } else {
-          setErrMsg("uDebt Amount should be greater than 0");
+          setErrMsg("uDEBT Amount should be greater than 0");
         }
       } else {
         setErrMsg("amount not valid");
@@ -112,8 +113,8 @@ const DebtCouponRedeem = () => {
           onChange={(value) => setDebtId(value.value as string)}
         />
 
-        <input type="number" name="udebtAmount" id="udebtAmount" placeholder="uDebt Amount" />
-        <button onClick={handleRedeem}>Burn uDebt for uAD</button>
+        <input type="number" name="udebtAmount" id="udebtAmount" placeholder="uDEBT Amount" />
+        <button onClick={handleRedeem}>Redeem uDEBT for uAD</button>
         {isLoading && (
           <div className="lds-ring">
             <div></div>

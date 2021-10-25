@@ -7,7 +7,8 @@ import {
   UbiquityAlgorithmicDollarManager,
   UbiquityAlgorithmicDollar__factory,
 } from "../contracts/artifacts/types";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contractsShortcuts";
 
 async function _expectedDebtCoupon(
   amount: BigNumber,
@@ -133,7 +134,7 @@ const DebtCouponDeposit = () => {
     <>
       <div id="debt-coupon-deposit">
         <input type="number" name="uadAmount" id="uadAmount" placeholder="uAD Amount" onInput={handleInputUAD} />
-        <button onClick={handleBurn}>Burn uAD for uDEBT</button>
+        <button onClick={handleBurn}>Redeem uAD for uDEBT</button>
         {isLoading && (
           <div className="lds-ring">
             <div></div>
