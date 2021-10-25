@@ -45,7 +45,6 @@ import FullDeployment from "./fixtures/full-deployment.json";
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
   DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
-  YIELD_PROXY: "0x45379687D28B5CaDf738067Da1058eA9801d9897",
   ...namedAccounts,
 };
 
@@ -199,7 +198,7 @@ export async function connectedContracts(): Promise<{
       // Static-address contracts
       manager,
       curvePool: contracts.curvePool(ADDRESS.curveFactory, provider),
-      yieldProxy: contracts.yieldProxy(ADDRESS.YIELD_PROXY, provider),
+      yieldProxy: contracts.yieldProxy(namedAccounts.yieldProxy, provider),
       usdc: contracts.usdc(ADDRESS.USDC, provider),
       debtCouponManager: contracts.debtCouponManager(ADDRESS.DEBT_COUPON_MANAGER, provider),
       jarUsdc: contracts.jarUsdc(ADDRESS.jarUSDCAddr, provider),
