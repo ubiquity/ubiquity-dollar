@@ -106,7 +106,18 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative" transacting={isProcessing}>
-      <widget.Title text="Boosted yield farming (Beta)" />
+      <widget.Title text="Boosted Yield Farming (Beta)" />
+
+      <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
+        <div className="w-20">{WarningIcon}</div>
+        <p className="text-left flex-grow">
+          <span>Article explaining this coming soon!</span>
+          {/* <a target="_blank" href="https://medium.com/ubiquity-dao/"> */}
+          {/* Learn more &raquo; */}
+          {/* </a> */}
+        </p>
+      </div>
+
       <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
         <div className="w-20">{WarningIcon}</div>
         <p className="text-left flex-grow">
