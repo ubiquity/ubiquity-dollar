@@ -2,11 +2,10 @@ import React, { memo, useEffect, useState } from "react";
 import Tippy from "@tippyjs/react";
 import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import * as widget from "./ui/widget";
-import { WarningIcon, HelpIcon } from "./ui/icons";
 import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "./common/contracts-shortcuts";
 import { BigNumber, ethers } from "ethers";
 import { performTransaction, constrainNumber } from "./common/utils";
-
+import icons from "./ui/icons";
 type Balance = { usdc: number; ubq: number; uad: number };
 
 type Actions = {
@@ -109,17 +108,14 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
       <widget.Title text="Boosted Yield Farming (Beta)" />
 
       <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
-        <div className="w-20">{WarningIcon}</div>
+        <div className="w-20">{icons.svgs.warning}</div>
         <p className="text-left flex-grow">
-          <span>Article explaining this coming soon!</span>
-          {/* <a target="_blank" href="https://medium.com/ubiquity-dao/"> */}
-          {/* Learn more &raquo; */}
-          {/* </a> */}
+          <span>Explainer article coming soon!</span>
         </p>
       </div>
 
       <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
-        <div className="w-20">{WarningIcon}</div>
+        <div className="w-20">{icons.svgs.warning}</div>
         <p className="text-left flex-grow">
           <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
           <a target="_blank" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
@@ -382,7 +378,8 @@ export const YieldFarmingDeposit = memo(
       <>
         <widget.SubTitle text="New Deposit" />
         <div className="flex justify-between items-center mb-8">
-          <div className="w-5/12">
+          {/* TODO: ICON */}
+          <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">USDC</span>
               {/* <span>
@@ -396,7 +393,7 @@ export const YieldFarmingDeposit = memo(
               </span>
               <span className="pl-2">APY</span>
               <Tooltip content="This is the APY from the Pickle Finance USDC jar">
-                <span className="pl-2">{HelpIcon}</span>
+                <span className="pl-2">{icons.svgs.help}</span>
               </Tooltip>
             </div>
             <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
@@ -409,15 +406,15 @@ export const YieldFarmingDeposit = memo(
             <div className="text-3xl text-accent font-bold">{Math.round(maxApy() * 100) / 100}%</div>
             <div>
               Max APY in uAR
-              <Tooltip content="All the rewards are multiplied and given in uAR">
-                <span className="pl-2">{HelpIcon}</span>
+              <Tooltip content="All the rewards are multiplied and provided in uAR">
+                <span className="pl-2">{icons.svgs.help}</span>
               </Tooltip>
             </div>
           </div>
         </div>
         <widget.SubTitle text="Boosters" />
         <div className="flex justify-between items-center mb-4">
-          <div className="w-5/12">
+          <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">UBQ</span>
               {/* <span>
@@ -428,7 +425,7 @@ export const YieldFarmingDeposit = memo(
             <div className="text-left w-10/12 mb-2">
               <span>Minimizes deposit fee</span>
               <Tooltip content="The deposit fee gets converted to uAR when you withdraw">
-                <span className="pl-2">{HelpIcon}</span>
+                <span className="pl-2">{icons.svgs.help}</span>
               </Tooltip>
             </div>
             <div className="flex justify-between items-center">
@@ -450,7 +447,8 @@ export const YieldFarmingDeposit = memo(
               <button onClick={setMaxUbq}>Max</button>
             </div>
           </div>
-          <div className="w-5/12">
+
+          <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">uAD</span>
               {/* <span className="pl-4">
@@ -459,9 +457,10 @@ export const YieldFarmingDeposit = memo(
               </span> */}
             </div>
             <div className="text-left  w-10/12 mb-2">
-              <span>Multiples yield up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span>
+              <span>Boosts yield</span>
+              {/* <span>up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span> */}
               <Tooltip content="Match 50% of the USDC deposit and you get an extra 50% boost">
-                <span className="pl-1">{HelpIcon}</span>
+                <span className="pl-1">{icons.svgs.help}</span>
               </Tooltip>
             </div>
             <div className="flex justify-between items-center">

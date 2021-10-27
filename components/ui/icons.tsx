@@ -1,39 +1,39 @@
-export const UBQIcon = (
-  <span className="align-middle">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 151">
+import React from "react";
+
+const strings = {
+  usdc: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" style="fill:#2775ca"/><path d="M9.8 20.3c0 .3-.2.4-.5.4C5.6 19.5 3 16.1 3 12.1s2.6-7.4 6.3-8.6c.3-.1.5.1.5.4v.7c0 .2-.1.4-.3.5-2.9 1.1-4.9 3.8-4.9 7s2.1 6 4.9 7c.2.1.3.3.3.5v.7z"/><path d="M12.8 17.8c0 .2-.2.4-.4.4h-.8c-.2 0-.4-.2-.4-.4v-1.2c-1.6-.2-2.4-1.1-2.7-2.4 0-.2.1-.4.3-.4h.9c.2 0 .3.1.4.3.2.7.6 1.3 1.9 1.3 1 0 1.7-.5 1.7-1.3s-.4-1.1-1.8-1.3c-2.1-.3-3.1-.9-3.1-2.6 0-1.3 1-2.3 2.4-2.5V6.5c0-.2.2-.4.4-.4h.8c.2 0 .4.2.4.4v1.2c1.2.2 2 .9 2.2 2 0 .2-.1.4-.3.4h-.8c-.2 0-.3-.1-.4-.3-.2-.7-.7-1-1.6-1-1 0-1.5.5-1.5 1.2s.3 1.1 1.8 1.3c2.1.3 3.1.9 3.1 2.6 0 1.3-1 2.4-2.5 2.7v1.2z"/><path class="st1" d="M14.7 20.7c-.3.1-.5-.1-.5-.4v-.7c0-.2.1-.4.3-.5 2.9-1.1 4.9-3.8 4.9-7s-2.1-6-4.9-7c-.2-.1-.3-.3-.3-.5v-.7c0-.3.2-.4.5-.4 3.6 1.2 6.3 4.6 6.3 8.6s-2.6 7.4-6.3 8.6z"/></svg>`,
+  ubq: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 151">
       <path d="M132 41.1c0-2.3-1.3-4.5-3.3-5.7L69.4 1.2c-1-.6-2.1-.9-3.3-.9-1.1 0-2.3.3-3.3.9L3.6 35.4c-2 1.2-3.3 3.3-3.3 5.7v68.5c0 2.3 1.3 4.5 3.3 5.7l59.3 34.2c2 1.2 4.5 1.2 6.5 0l59.3-34.2c2-1.2 3.3-3.3 3.3-5.7V41.1zm-11.9 62.5c0 2.7-1.4 5.2-3.7 6.5l-46.6 27.5c-1.1.7-2.4 1-3.7 1s-2.5-.3-3.7-1l-46.6-27.5c-2.3-1.3-3.7-3.8-3.7-6.5V54.1c0-1.2.6-2.4 1.7-3 1.1-.6 2.3-.6 3.4 0l8 4.7c1.9 1.1 3 3.3 4.4 5.8.3.5.5 1 .8 1.4 3.5 6.3 5.2 13 6.8 19.5 3 11.9 6 24.2 21.3 28.2 5 1.3 10.4 1.3 15.4 0 15.2-4 18.3-16.3 21.3-28.2C96.8 76 98.5 69.3 102 63c.3-.5.5-1 .8-1.4 1.3-2.5 2.5-4.6 4.4-5.8l8-4.7c1-.6 2.3-.6 3.4 0s1.7 1.7 1.7 3v49.5zM62.6 13.7c2.2-1.3 4.9-1.3 7.1 0L110 37.6c1 .6 1.6 1 1.6 2.2 0 1.2-.6 1.9-1.6 2.5l-7.7 4.6c-3.4 2-5.1 5.2-6.6 8.1l-.1.2c-.2.4-.4.7-.6 1.1-3.8 6.8-6.6 14-8.2 20.4C83.6 89.1 82.4 97.3 72 100c-1.9.5-3.9.7-5.8.7-2 0-3.9-.3-5.8-.7C50 97.3 48.7 89.1 45.6 76.6 44 70.2 41.2 63 37.4 56.2c-.2-.3-.4-.7-.6-1l-.1-.3c-1.5-2.8-3.3-6.1-6.6-8.1l-7.7-4.6c-1-.6-1.6-1.3-1.6-2.5s.6-1.6 1.6-2.2l40.2-23.8z" />
-    </svg>
-  </span>
-);
-
-export const LiquidIcon = (
-  <span className="align-middle">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="h-6 mr-2">
+    </svg>`,
+  liquidity: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="h-6 mr-2">
       <path d="M10 2s-6.5 5.16-6.5 9.5a6.5 6.5 0 1 0 13 0C16.5 7.16 10 2 10 2zm0 14.5c-2.76 0-5-2.24-5-5 0-2.47 3.1-5.8 5-7.53 1.9 1.73 5 5.05 5 7.53 0 2.76-2.24 5-5 5zm-2.97-4.57c.24 1.66 1.79 2.77 3.4 2.54a.5.5 0 0 1 .57.49c0 .28-.2.47-.42.5a4.013 4.013 0 0 1-4.54-3.39c-.04-.3.19-.57.5-.57.25 0 .46.18.49.43z" />
-    </svg>
-  </span>
-);
-
-export const UADIcon = (
-  <span className="align-middle">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131.66 150">
+    </svg>`,
+  uad: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 131.66 150">
       <path d="m54.5 97.23.51.29L95.45 121l-27.54 16a5.44 5.44 0 0 1-5.11.16l-.29-.16-49.1-28.35a5.42 5.42 0 0 1-2.69-4.36v-8.7a48.08 48.08 0 0 1 43.78 1.7zm-30.45-60.7 42.73 24.8.55.32a59 59 0 0 0 52.38 2.77v39.48a5.4 5.4 0 0 1-2.44 4.51l-.26.18-10.67 6.14-45.85-26.61a58.92 58.92 0 0 0-49.78-4.38v-36.4a5.42 5.42 0 0 1 2.44-4.51l.26-.16zm41.16-22.87a5.43 5.43 0 0 1 2.38.55l.32.17L117 42.67a5.4 5.4 0 0 1 2.7 4.35v5.33a48 48 0 0 1-46.8 0l-.64-.35-37.34-21.73 27.59-15.89a5.25 5.25 0 0 1 2.35-.72zm66.45 27.11a6.54 6.54 0 0 0-3.27-5.66L69.1.87a6.58 6.58 0 0 0-6.54 0L3.27 35.11A6.54 6.54 0 0 0 0 40.77v68.46a6.57 6.57 0 0 0 3.27 5.67l59.29 34.23a6.58 6.58 0 0 0 6.54 0l59.29-34.23a6.57 6.57 0 0 0 3.27-5.67z" />
-    </svg>
-  </span>
-);
-
-export const WarningIcon = (
-  <span className="align-middle">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    </svg>`,
+  warning: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
-    </svg>
-  </span>
-);
-
-export const HelpIcon = (
-  <span className="align-middle">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    </svg>`,
+  help: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
-    </svg>
-  </span>
-);
+    </svg>`,
+} as Record<string, string>;
+
+// type LibraryKeys = keyof typeof library;
+// FIXME couldn't set the type to LibraryKeys
+const svgs = {} as { [key: string]: React.ReactElement };
+const stringsCyan = {} as Record<string, string>;
+const stringsWhite = {} as Record<string, string>;
+
+Object.entries(strings).forEach(([iconName, svgString]) => {
+  const element = <span className="align-middle" dangerouslySetInnerHTML={{ __html: svgString }} />;
+  svgs[iconName] = element;
+  const output = svgString.replace(/>\n+.*</gim, "><"); // remove newlines
+  strings[iconName] = output;
+  const cyan = output.replace("<path", `<path fill-opacity="0.125" fill="cyan"`); // add cyan fill
+  stringsCyan[iconName] = cyan;
+
+  const white = output.replace("<path", `<path fill-opacity="0.125" fill="white"`); // add white fill
+  stringsWhite[iconName] = white;
+});
+export default { strings, stringsCyan, stringsWhite, svgs };
