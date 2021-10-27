@@ -62,13 +62,16 @@ export type YieldProxyData = {
 };
 
 export async function loadYieldProxyData(contracts: Contracts): Promise<YieldProxyData> {
-  const [bonusYieldBase, bonusYieldMax, depositFeeBase, depositFeeMax] = await Promise.all([
+  const [bonusYieldBase, bonusYieldMax, depositFeeBase, depositFeeMax, ubqRate, ubqRateMax] = await Promise.all([
     contracts.yieldProxy.bonusYield(),
     contracts.yieldProxy.BONUS_YIELD_MAX(),
     contracts.yieldProxy.fees(),
     contracts.yieldProxy.FEES_MAX(),
+    contracts.yieldProxy.ubqRate(),
+    contracts.yieldProxy.UBQ_RATE_MAX(),
   ]);
-  const depositFeeUbq = await contracts.yieldProxy.ubqRate();
+
+  const depositFeeUbqMax = ethers.utils.parseEther("100").mul(ubqRateMax).div(ubqRate);
 
   const jarRatio = await contracts.jarUsdc.getRatio();
 
@@ -80,7 +83,7 @@ export async function loadYieldProxyData(contracts: Contracts): Promise<YieldPro
     depositFeeMax,
     depositFeeBase,
     depositFeeBasePct: depositFeeBase.toNumber() / depositFeeMax.toNumber(),
-    depositFeeUbqMax: depositFeeUbq,
+    depositFeeUbqMax,
     bonusYieldMax,
     bonusYieldBase,
     bonusYieldBasePct: bonusYieldBase.toNumber() / bonusYieldMax.toNumber(),
