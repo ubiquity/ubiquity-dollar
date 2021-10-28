@@ -26,10 +26,11 @@ async function _expectedDebtCoupon(
   }
 }
 
+const DEBT_COUPON_DEPOSIT_TRANSACTION = "DEBT_COUPON_DEPOSIT_TRANSACTION";
+
 const DebtCouponDeposit = () => {
-  const { account, manager, provider, balances, setBalances } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances, updateActiveTransaction } = useConnectedContext();
   const [errMsg, setErrMsg] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>();
   const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
 
   if (!account || !balances) {
@@ -77,7 +78,7 @@ const DebtCouponDeposit = () => {
 
   const handleBurn = async () => {
     setErrMsg("");
-    setIsLoading(true);
+    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: true });
     const uadAmount = document.getElementById("uadAmount") as HTMLInputElement;
     const uadAmountValue = uadAmount?.value;
     if (!uadAmountValue) {
@@ -93,16 +94,16 @@ const DebtCouponDeposit = () => {
         }
       } else {
         setErrMsg("amount not valid");
-        setIsLoading(false);
+        updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
         return;
       }
     }
-    setIsLoading(false);
+    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
   };
 
   const handleInputUAD = async () => {
     setErrMsg("");
-    setIsLoading(true);
+    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: true });
     const missing = `Missing input value for`;
     const bignumberErr = `can't parse BigNumber from`;
 
@@ -111,23 +112,23 @@ const DebtCouponDeposit = () => {
     const amountValue = amountEl?.value;
     if (!amountValue) {
       setErrMsg(`${missing} ${subject}`);
-      setIsLoading(false);
+      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
       return;
     }
     if (BigNumber.isBigNumber(amountValue)) {
       setErrMsg(`${bignumberErr} ${subject}`);
-      setIsLoading(false);
+      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
       return;
     }
     const amount = ethers.utils.parseEther(amountValue);
     if (!amount.gt(BigNumber.from(0))) {
       setErrMsg(`${subject} should be greater than 0`);
-      setIsLoading(false);
+      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
       return;
     }
 
     _expectedDebtCoupon(amount, manager, provider, setExpectedDebtCoupon);
-    setIsLoading(false);
+    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
   };
 
   return (
@@ -135,14 +136,6 @@ const DebtCouponDeposit = () => {
       <div id="debt-coupon-deposit">
         <input type="number" name="uadAmount" id="uadAmount" placeholder="uAD Amount" onInput={handleInputUAD} />
         <button onClick={handleBurn}>Redeem uAD for uDEBT</button>
-        {isLoading && (
-          <div className="lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        )}
         <p>{errMsg}</p>
       </div>
       {expectedDebtCoupon && <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>}

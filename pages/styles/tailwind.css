@@ -95,6 +95,10 @@
   margin-top: 0.5rem
 }
 
+.mr-4 {
+  margin-right: 1rem
+}
+
 .mt-4 {
   margin-top: 1rem
 }
@@ -111,8 +115,8 @@
   margin-top: -0.25rem
 }
 
-.mr-4 {
-  margin-right: 1rem
+.mt-1 {
+  margin-top: 0.25rem
 }
 
 .box-border {
@@ -141,10 +145,6 @@
 
 .h-12 {
   height: 3rem
-}
-
-.h-4 {
-  height: 1rem
 }
 
 .h-6 {
@@ -215,10 +215,6 @@
   --tw-scale-x: 1.5;
   --tw-scale-y: 1.5;
   transform: var(--tw-transform)
-}
-
-.cursor-pointer {
-  cursor: pointer
 }
 
 .grid-cols-3 {
@@ -433,6 +429,11 @@
 
 .opacity-50 {
   opacity: 0.5
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-filter)
 }
 
 .filter {

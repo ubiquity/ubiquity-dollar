@@ -20,10 +20,9 @@ import UbqBalance from "./ubq.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
+import { Transacting } from "./ui/widget";
 
 const PROD = process.env.NODE_ENV == "production";
-// const ADMIN_WALLET = "0xefc0e701a824943b469a694ac564aa1eff7ab7dd";
-const ADMIN_WALLET = "0x0";
 
 async function fetchAccount(): Promise<EthAccount | null> {
   if (window.ethereum?.request) {
@@ -42,8 +41,7 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 export function _renderControls() {
   const context = useConnectedContext();
-  const { setAccount, account, balances, twapPrice } = context;
-
+  const { setAccount, account, balances, twapPrice, activeTransactions } = context;
   const [connecting, setConnecting] = useState(false);
 
   const connect = async (): Promise<void> => {
@@ -85,6 +83,9 @@ export function _renderControls() {
             </span>
           </div>
           <Network />
+          <div className="absolute top-0 right-0 mr-4 mt-4">
+            {activeTransactions ? activeTransactions.map((transaction) => <Transacting transaction={transaction} />) : null}
+          </div>
           <Account />
         </header>
 
