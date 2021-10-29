@@ -226,7 +226,7 @@ export async function logBondingUbqInfo(contracts: Contracts) {
   console.log("USD Minted per day", usdPerDay);
   console.log("USD Minted per week", usdPerWeek);
   console.log("USD Minted per year", usdPerYear);
-  const usdAsLp = 0.75;
+  const usdAsLp = 0.7562534324;
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
 
   const bondingDiscountMultiplier = await contracts.bonding.bondingDiscountMultiplier();

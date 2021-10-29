@@ -28,7 +28,7 @@ async function prefetchConstants(contracts: Contracts): Promise<PrefetchedConsta
 async function calculateApyForWeeks(contracts: Contracts, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
   const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
-  const usdAsLp = 0.75; // TODO: Get this number from the Curve contract
+  const usdAsLp = 0.7562534324; // TODO: Get this number from the Curve contract
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
   const weeks = BigNumber.from(weeksNum.toString());
   const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
