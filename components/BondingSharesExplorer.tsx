@@ -4,7 +4,7 @@ import { connectedWithUserContext, useConnectedContext, UserContext } from "./co
 import { formatEther } from "./common/format";
 import { useAsyncInit, performTransaction } from "./common/utils";
 import * as widget from "./ui/widget";
-import { UBQIcon, LiquidIcon } from "./ui/icons";
+import icons from "./ui/icons";
 import DepositShare from "./DepositShare";
 
 type ShareData = {
@@ -204,12 +204,12 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
       </table>
       <div id="rewards-summary">
         <div className="mb-2 ">
-          {UBQIcon}
+          {icons.svgs.ubq}
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
           pending UBQ rewards
         </div>
         <div className="mb-2">
-          {LiquidIcon}
+          {icons.svgs.lp}
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
         <div className="mb-2">{poolPercentage}% pool ownership</div>
@@ -241,7 +241,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
       </td>
       <td>
         <div className="text-accent whitespace-nowrap">
-          {UBQIcon} <span>{formatEther(ugov)}</span>
+          {icons.svgs.ubq} <span>{formatEther(ugov)}</span>
         </div>
       </td>
       <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>

@@ -1,22 +1,9 @@
 import { BigNumber, ethers } from "ethers";
-import { createContext, Dispatch, SetStateAction, useContext, useState, useEffect } from "react";
-
-import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
-import { EthAccount } from "../common/types";
+import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { connectedContracts, Contracts } from "../../contracts";
-import { accountBalances, logBondingUbqInfo } from "../common/contractsShortcuts";
-
-const PROD = process.env.NODE_ENV == "production";
-
-export interface Balances {
-  uad: BigNumber;
-  crv: BigNumber;
-  uad3crv: BigNumber;
-  uar: BigNumber;
-  ubq: BigNumber;
-  bondingShares: BigNumber;
-  debtCoupon: BigNumber;
-}
+import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
+import { accountBalances, Balances } from "../common/contracts-shortcuts";
+import { EthAccount } from "../common/types";
 
 export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;
@@ -33,7 +20,7 @@ export interface ConnectedContext {
   setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
   contracts: Contracts | null;
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
-  refreshBalances: () => void;
+  refreshBalances: () => Promise<void>;
 }
 
 const ConnectedContext = createContext<ConnectedContext>({} as ConnectedContext);
@@ -79,15 +66,19 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
     (async function () {
       console.time("Connecting contracts");
       const { provider, contracts } = await connectedContracts();
-      const signer = await provider.getSigner();
+      const signer = provider.getSigner();
       console.timeEnd("Connecting contracts");
-      if (!PROD) logBondingUbqInfo(contracts);
+      // logBondingUbqInfo(contracts);
       setSigner(signer);
       setProvider(provider);
       setContracts(contracts);
       setManager(contracts.manager);
       setTwapPrice(await contracts.twapOracle.consult(contracts.uad.address));
-    })();
+    })().catch((e) => {
+      console.error({ e });
+      // TODO: specific error handling
+      alert("Dapp failed to load, make sure that you are connected to mainnet");
+    });
   }, []);
 
   useEffect(() => {

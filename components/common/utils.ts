@@ -41,3 +41,34 @@ export async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: ERC1155
   }
   return fullBalance;
 }
+
+export const constrainNumber = (num: number, min: number, max: number): number => {
+  if (num < min) return min;
+  else if (num > max) return max;
+  else return num;
+};
+
+export const getNetworkName = (provider: ethers.providers.Web3Provider): string => {
+  let networkName = "";
+  switch (provider.network.chainId) {
+    case 1:
+      networkName = "Mainnet";
+      break;
+    case 3:
+      networkName = "Ropsten Test Network";
+      break;
+    case 4:
+      networkName = "Rinkeby Test Network";
+      break;
+    case 5:
+      networkName = "Goerli Test Network";
+      break;
+    case 42:
+      networkName = "Kovan Test Network";
+      break;
+    default:
+      networkName = "Unknown";
+      break;
+  }
+  return networkName;
+};

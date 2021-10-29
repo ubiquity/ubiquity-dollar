@@ -18,8 +18,6 @@ import {
   UbiquityGovernance__factory,
   ERC20,
   ERC20__factory,
-  ERC1155Ubiquity,
-  ERC1155Ubiquity__factory,
   DebtCoupon,
   DebtCoupon__factory,
   DebtCouponManager,
@@ -36,6 +34,10 @@ import {
   IUniswapV2Pair__factory,
   UbiquityFormulas,
   UbiquityFormulas__factory,
+  YieldProxy,
+  YieldProxy__factory,
+  IJar,
+  IJar__factory,
 } from "./contracts/artifacts/types";
 import namedAccounts from "./fixtures/named-accounts.json";
 import FullDeployment from "./fixtures/full-deployment.json";
@@ -68,34 +70,44 @@ const contracts = {
   sushiSwapPool: SushiSwapPool__factory.connect,
   ugovUadPair: IUniswapV2Pair__factory.connect,
   ubiquityFormulas: UbiquityFormulas__factory.connect,
+  yieldProxy: YieldProxy__factory.connect,
+  usdc: ERC20__factory.connect,
+  jarUsdc: IJar__factory.connect,
 };
 
 // 2
 export type Contracts = {
   manager: UbiquityAlgorithmicDollarManager;
-  uad: UbiquityAlgorithmicDollar;
-  curvePool: ICurveFactory;
-  metaPool: IMetaPool;
+  debtCouponManager: DebtCouponManager;
+  yieldProxy: YieldProxy;
   twapOracle: TWAPOracle;
   dollarMintCalc: DollarMintingCalculator;
-  uar: UbiquityAutoRedeem;
-  ugov: UbiquityGovernance;
-  crvToken: ERC20;
-  bondingToken: BondingShareV2;
-  debtCouponToken: DebtCoupon;
-  debtCouponManager: DebtCouponManager;
   bonding: BondingV2;
   masterChef: MasterChefV2;
   sushiSwapPool: SushiSwapPool;
-  ugovUadPair: IUniswapV2Pair;
   ubiquityFormulas: UbiquityFormulas;
+
+  // Third-party
+  ugovUadPair: IUniswapV2Pair;
+  curvePool: ICurveFactory;
+  metaPool: IMetaPool;
+  jarUsdc: IJar;
+
+  // ERC20
+  uad: UbiquityAlgorithmicDollar;
+  uar: UbiquityAutoRedeem;
+  ugov: UbiquityGovernance;
+  crvToken: ERC20;
+  usdc: ERC20;
+
+  // ERC1155
+  debtCouponToken: DebtCoupon;
+  bondingToken: BondingShareV2;
 };
 
 // 3
-type ContractsAddresses = {
-  manager: string;
+type ManagerAddresses = {
   uad: string;
-  curvePool: string;
   metaPool: string;
   twapOracle: string;
   dollarMintCalc: string;
@@ -104,7 +116,6 @@ type ContractsAddresses = {
   crvToken: string;
   bondingToken: string;
   debtCouponToken: string;
-  debtCouponManager: string;
   bonding: string;
   masterChef: string;
   sushiSwapPool: string;
@@ -112,7 +123,7 @@ type ContractsAddresses = {
 };
 
 // Load all contract addresses on parallel
-async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Promise<ContractsAddresses> {
+async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Promise<ManagerAddresses> {
   // 4
   const [
     uad,
@@ -144,9 +155,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     manager.formulasAddress(),
   ]);
   return {
-    manager: manager.address,
     uad,
-    curvePool: ADDRESS.curveFactory,
     metaPool,
     twapOracle,
     dollarMintCalc,
@@ -155,7 +164,6 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     crvToken,
     bondingToken,
     debtCouponToken,
-    debtCouponManager: ADDRESS.DEBT_COUPON_MANAGER,
     bonding,
     masterChef,
     sushiSwapPool,
@@ -187,9 +195,16 @@ export async function connectedContracts(): Promise<{
   return {
     provider,
     contracts: {
+      // Static-address contracts
       manager,
+      curvePool: contracts.curvePool(ADDRESS.curveFactory, provider),
+      yieldProxy: contracts.yieldProxy(namedAccounts.yieldProxy, provider),
+      usdc: contracts.usdc(ADDRESS.USDC, provider),
+      debtCouponManager: contracts.debtCouponManager(ADDRESS.DEBT_COUPON_MANAGER, provider),
+      jarUsdc: contracts.jarUsdc(ADDRESS.jarUSDCAddr, provider),
+
+      // Dynamic-address contracts
       uad: contracts.uad(addr.uad, provider),
-      curvePool: contracts.curvePool(addr.curvePool, provider),
       metaPool: contracts.metaPool(addr.metaPool, provider),
       twapOracle: contracts.twapOracle(addr.twapOracle, provider),
       dollarMintCalc: contracts.dollarMintCalc(addr.dollarMintCalc, provider),
@@ -198,7 +213,6 @@ export async function connectedContracts(): Promise<{
       crvToken: contracts.crvToken(addr.crvToken, provider),
       bondingToken: contracts.bondingToken(addr.bondingToken, provider),
       debtCouponToken: contracts.debtCouponToken(addr.debtCouponToken, provider),
-      debtCouponManager: contracts.debtCouponManager(addr.debtCouponManager, provider),
       bonding: contracts.bonding(addr.bonding, provider),
       masterChef: contracts.masterChef(addr.masterChef, provider),
       sushiSwapPool,
