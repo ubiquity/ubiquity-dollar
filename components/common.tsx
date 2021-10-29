@@ -22,8 +22,6 @@ import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
 
 const PROD = process.env.NODE_ENV == "production";
-// const ADMIN_WALLET = "0xefc0e701a824943b469a694ac564aa1eff7ab7dd";
-const ADMIN_WALLET = "0x0";
 
 async function fetchAccount(): Promise<EthAccount | null> {
   if (window.ethereum?.request) {
