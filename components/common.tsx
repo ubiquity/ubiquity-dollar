@@ -17,6 +17,7 @@ import UadBalance from "./uad.balance";
 import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
+import UsdcBalance from "./usdc.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
@@ -142,7 +143,7 @@ export function _renderControls() {
             <div id="inventory-top">
               <div>
                 <div>
-                  <aside>My Ubiquity Inventory</aside>
+                  <aside>My Inventory</aside>
                   <figure></figure>
                 </div>
                 <UbqBalance />
@@ -151,6 +152,7 @@ export function _renderControls() {
                 <DebtCouponBalance />
                 <CurveBalance />
                 <CurveLPBalance />
+                <UsdcBalance />
               </div>
             </div>
           </>

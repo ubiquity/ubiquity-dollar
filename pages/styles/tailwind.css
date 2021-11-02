@@ -143,10 +143,6 @@
   height: 3rem
 }
 
-.h-4 {
-  height: 1rem
-}
-
 .h-6 {
   height: 1.5rem
 }
@@ -215,10 +211,6 @@
   --tw-scale-x: 1.5;
   --tw-scale-y: 1.5;
   transform: var(--tw-transform)
-}
-
-.cursor-pointer {
-  cursor: pointer
 }
 
 .grid-cols-3 {
@@ -433,6 +425,11 @@
 
 .opacity-50 {
   opacity: 0.5
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-filter)
 }
 
 .filter {
