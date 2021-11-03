@@ -7,17 +7,11 @@ import Account from "./account";
 import Network from "./network";
 import BondingMigrate from "./bonding.migrate";
 import { useConnectedContext } from "./context/connected";
-import CurveBalance from "./curve.balance";
-import CurveLPBalance from "./curveLP.balance";
-import DebtCouponBalance from "./debtCoupon.balance";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponRedeem from "./debtCoupon.redeem";
 import TwapPrice from "./twap.price";
-import UadBalance from "./uad.balance";
-import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
-import UbqBalance from "./ubq.balance";
-import UsdcBalance from "./usdc.balance";
+import Inventory from "./inventory";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
@@ -138,25 +132,7 @@ export function _renderControls() {
           </div>
         </div>
 
-        {balances && (
-          <>
-            <div id="inventory-top">
-              <div>
-                <div>
-                  <aside>My Inventory</aside>
-                  <figure></figure>
-                </div>
-                <UbqBalance />
-                <UadBalance />
-                <UarBalance />
-                <DebtCouponBalance />
-                <CurveBalance />
-                <CurveLPBalance />
-                <UsdcBalance />
-              </div>
-            </div>
-          </>
-        )}
+        {balances && <Inventory />}
       </div>
     </>
   );

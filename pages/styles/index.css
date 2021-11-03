@@ -117,9 +117,14 @@ table {
   margin: 12px auto;
 }
 
+#inventory-top {
+  display: flex !important;
+  justify-content: center;
+}
+
 #inventory-top > div > div {
   display: inline-block;
-  margin: 8px 16px;
+  margin: 4px;
   height: 24px;
   vertical-align: middle;
   /* float: left; */
@@ -366,8 +371,8 @@ div[id^="inventory-"] {
 }
 
 div[id^="inventory-"] > div {
-  width: 1440px;
-  display: inline-block;
+  /* width: 1440px; */
+  /* display: inline-block; */
   height: 48px;
   vertical-align: middle;
   text-align: center;
