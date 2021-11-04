@@ -84,7 +84,7 @@ export function _renderControls() {
           </div>
           <Network />
           <div className="absolute top-0 right-0 mr-4 mt-4">
-            {activeTransactions ? activeTransactions.map((transaction) => <Transacting transaction={transaction} />) : null}
+            {activeTransactions ? activeTransactions.map((transaction, index) => <Transacting key={transaction.id + index} transaction={transaction} />) : null}
           </div>
           <Account />
         </header>

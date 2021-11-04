@@ -78,7 +78,8 @@ const DebtCouponDeposit = () => {
 
   const handleBurn = async () => {
     setErrMsg("");
-    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: true });
+    const title = "Burning uAD...";
+    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, title, active: true });
     const uadAmount = document.getElementById("uadAmount") as HTMLInputElement;
     const uadAmountValue = uadAmount?.value;
     if (!uadAmountValue) {
@@ -103,7 +104,8 @@ const DebtCouponDeposit = () => {
 
   const handleInputUAD = async () => {
     setErrMsg("");
-    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: true });
+    const title = "Input uAD...";
+    updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, title, active: true });
     const missing = `Missing input value for`;
     const bignumberErr = `can't parse BigNumber from`;
 

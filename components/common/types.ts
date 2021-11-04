@@ -6,4 +6,5 @@ export interface EthAccount {
 export interface Transaction {
   id: string;
   active: boolean;
+  title?: string;
 }

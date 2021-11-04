@@ -60,7 +60,11 @@ export const Transacting = (props: { transaction: Transaction }): JSX.Element | 
   if (!props.transaction.active) {
     return null;
   }
-  return <div className="border-accent border bg-accent bg-opacity-10 border-solid mt-1 rounded-full py-1 px-2 text-accent">Processing {Spinner}</div>;
+  return (
+    <div className="border-accent border bg-accent bg-opacity-10 border-solid mt-1 rounded-full py-1 px-2 text-accent">
+      {props.transaction.title} {Spinner}
+    </div>
+  );
 };
 
 export const Spinner = (
