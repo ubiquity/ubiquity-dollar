@@ -43,7 +43,7 @@ const CurveBalance = () => {
     <>
       <div id="curve-balance">
         <a target="_blank">
-          <div>
+          <div className="inline-flex items-center text-white">
             <span>
               <img
                 alt=""
