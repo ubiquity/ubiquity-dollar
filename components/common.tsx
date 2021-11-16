@@ -83,7 +83,7 @@ export function _renderControls() {
             </span>
           </div>
           <Network />
-          <div className="absolute top-0 right-0 mr-4 mt-4">
+          <div className="fixed top-0 right-0 mr-4 mt-4 pointer-events-none">
             {activeTransactions ? activeTransactions.map((transaction, index) => <Transacting key={transaction.id + index} transaction={transaction} />) : null}
           </div>
           <Account />
