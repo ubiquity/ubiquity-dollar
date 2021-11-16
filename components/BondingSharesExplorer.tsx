@@ -37,10 +37,11 @@ type Actions = {
 
 const USD_TO_LP = 0.75;
 const LP_TO_USD = 1 / USD_TO_LP;
+const BONDING_SHARE_TRANSACTION = "BONDING_SHARE_TRANSACTION";
 
 export const BondingSharesExplorerContainer = ({ contracts, provider, account, signer }: UserContext) => {
   const [model, setModel] = useState<Model | null>(null);
-  const { refreshBalances } = useConnectedContext();
+  const { refreshBalances, updateActiveTransaction } = useConnectedContext();
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {
@@ -76,6 +77,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 
     console.timeEnd("BondingShareExplorerContainer contract loading");
     setModel({ processing: false, shares: sortedShares, totalShares, walletLpBalance });
+    updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, active: false });
   }
 
   function allLpAmount(id: number): BigNumber {
@@ -90,7 +92,9 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
       async ({ id, amount }) => {
         if (!model || model.processing) return;
         console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
+        const title = `Withdrawing LP...`;
         setModel({ ...model, processing: true });
+        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
 
         const isAllowed = await contracts.bondingToken.isApprovedForAll(account.address, contracts.bonding.address);
         if (!isAllowed) {
@@ -114,6 +118,8 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         if (!model || model.processing) return;
         console.log(`Claiming UBQ rewards from ${id}`);
         setModel({ ...model, processing: true });
+        const title = "Claiming UBQ...";
+        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
 
         await performTransaction(contracts.masterChef.connect(signer).getRewards(BigNumber.from(id)));
 
@@ -128,6 +134,8 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         if (!model || model.processing) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         setModel({ ...model, processing: true });
+        const title = `Staking...`;
+        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
         const allowance = await contracts.metaPool.allowance(account.address, contracts.bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
         console.log("lpsAmount", ethers.utils.formatEther(amount));

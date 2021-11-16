@@ -1,3 +1,5 @@
+import { Transaction } from "../common/types";
+
 export const Container = (props: React.PropsWithChildren<{ className?: string; transacting?: boolean }>): JSX.Element => (
   <div
     className={`
@@ -6,7 +8,6 @@ export const Container = (props: React.PropsWithChildren<{ className?: string; t
       border-1 border-solid border-white/10
       bg-blur ${props.className || ""}`}
   >
-    {props.transacting ? <Transacting /> : null}
     {props.children}
   </div>
 );
@@ -55,11 +56,16 @@ export const Loading = (props: { text: string }): JSX.Element => (
   </div>
 );
 
-export const Transacting = (): JSX.Element => (
-  <div className="border-accent border bg-accent bg-opacity-10 border-solid absolute top-0 right-0 mr-4 mt-4 rounded-full py-1 px-2 text-accent">
-    Processing {Spinner}
-  </div>
-);
+export const Transacting = (props: { transaction: Transaction }): JSX.Element | null => {
+  if (!props.transaction.active) {
+    return null;
+  }
+  return (
+    <div className="border-accent border bg-accent bg-opacity-10 border-solid mt-1 rounded-full py-1 px-2 text-accent">
+      {props.transaction.title} {Spinner}
+    </div>
+  );
+};
 
 export const Spinner = (
   <div className="lds-ring relative top-[2px]">

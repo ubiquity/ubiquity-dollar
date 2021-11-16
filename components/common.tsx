@@ -20,6 +20,7 @@ import UbqBalance from "./ubq.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
+import { Transacting } from "./ui/widget";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -40,8 +41,7 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 export function _renderControls() {
   const context = useConnectedContext();
-  const { setAccount, account, balances, twapPrice } = context;
-
+  const { setAccount, account, balances, twapPrice, activeTransactions } = context;
   const [connecting, setConnecting] = useState(false);
 
   const connect = async (): Promise<void> => {
@@ -83,6 +83,9 @@ export function _renderControls() {
             </span>
           </div>
           <Network />
+          <div className="fixed top-0 right-0 mr-4 mt-4 pointer-events-none">
+            {activeTransactions ? activeTransactions.map((transaction, index) => <Transacting key={transaction.id + index} transaction={transaction} />) : null}
+          </div>
           <Account />
         </header>
 

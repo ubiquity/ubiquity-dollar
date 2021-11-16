@@ -13,10 +13,13 @@ type Actions = {
   onWithdraw: () => void;
 };
 
+const DEPOSIT_TRANSACTION = "DEPOSIT_TRANSACTION";
+const WITHDRAW_TRANSACTION = "WITHDRAW_TRANSACTION";
+
 export const YieldFarmingContainer = ({ contracts, account, signer }: UserContext) => {
   const [yieldProxyData, setYieldProxyData] = useState<YieldProxyData | null>(null);
   const [depositInfo, setDepositInfo] = useState<YieldProxyDepositInfo | null>(null);
-  const { refreshBalances, balances } = useConnectedContext();
+  const { refreshBalances, balances, updateActiveTransaction } = useConnectedContext();
   const [isProcessing, setIsProcessing] = useState(false);
 
   async function refreshYieldProxyData() {
@@ -35,6 +38,8 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
   const actions: Actions = {
     onDeposit: async ({ usdc, ubq, uad }) => {
       setIsProcessing(true);
+      const title = "Depositing...";
+      updateActiveTransaction({ id: DEPOSIT_TRANSACTION, title, active: true });
       const bigUsdc = ethers.utils.parseUnits(String(usdc), 6);
       const bigUbq = ethers.utils.parseUnits(String(ubq), 18);
       const bigUad = ethers.utils.parseUnits(String(uad), 18);
@@ -51,12 +56,16 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
         // TODO: Show transaction error
       }
       setIsProcessing(false);
+      updateActiveTransaction({ id: DEPOSIT_TRANSACTION, title, active: false });
     },
     onWithdraw: async () => {
       setIsProcessing(true);
+      const title = "Withdrawing...";
+      updateActiveTransaction({ id: WITHDRAW_TRANSACTION, title, active: true });
       await performTransaction(contracts.yieldProxy.connect(signer).withdrawAll());
       await refreshYieldProxyData();
       await refreshBalances();
+      updateActiveTransaction({ id: WITHDRAW_TRANSACTION, title, active: false });
       setIsProcessing(false);
     },
   };
