@@ -19,6 +19,7 @@ import UarRedeem from "./uar.redeem";
 import UbqBalance from "./ubq.balance";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
+import DebtCoupon from "./DebtCoupon";
 import icons from "./ui/icons";
 import { Transacting } from "./ui/widget";
 
@@ -89,6 +90,7 @@ export function _renderControls() {
           <Account />
         </header>
 
+        {account && <DebtCoupon />}
         {account && <TwapPrice />}
         <BondingMigrate />
         {account && <YieldFarming />}
