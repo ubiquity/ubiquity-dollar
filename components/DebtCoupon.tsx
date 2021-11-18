@@ -7,8 +7,8 @@ export const DebtCoupon = () => {
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Debt Coupon" />
-      <div className="w-full flex h-8 rounded-md border border-white border-solid">
-        <div className="w-5/12 flex justify-end border-0 border-r border-white border-solid">
+      <div className="w-full flex h-8 rounded-md border border-white/10 border-solid">
+        <div className="w-5/12 flex justify-end border-0 border-r border-white/10 border-solid">
           <span className="pr-2 self-center">$0.974</span>
         </div>
         <div className="w-7/12 flex justify-center">
@@ -22,7 +22,7 @@ export const DebtCoupon = () => {
         <span>Pump Cycle</span>
       </div>
       <div className="flex justify-center pb-4">
-        <div className="w-2/4 px-8 border-0 border-r border-white border-solid">
+        <div className="w-2/4 px-8 border-0 border-r border-white/10 border-solid">
           <span>Fungible (uAR)</span>
           <table className="w-full">
             <tbody>
@@ -72,7 +72,7 @@ export const DebtCoupon = () => {
           <a href="">Learn more</a>
         </div>
       </div>
-      <div className="inline-flex">
+      <div className="inline-flex my-8">
         <span className="self-center">uAD</span>
         <input className="self-center" type="text" />
         <nav className="self-center flex flex-col border-b-2 sm:flex-row">
@@ -113,7 +113,7 @@ export const DebtCoupon = () => {
           <div className="w-1/4 self-center">
             <span>Total debt</span>
           </div>
-          <div className="w-3/4 inline-flex justify-between border rounded-md border-white/10 border-solid">
+          <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
             <div className="w-1/3">
               <div className="pt-2 pb-1">uBOND</div>
               <div className="pt-1 pb-2">10,000</div>
@@ -134,7 +134,7 @@ export const DebtCoupon = () => {
           <div className="w-1/4 self-center">
             <span>Redeemable</span>
           </div>
-          <div className="inline-flex w-3/4 justify-between border rounded-md border-white/10 border-solid">
+          <div className="inline-flex w-3/4 justify-between border rounded-md rounded-t-none border-white/10 border-solid">
             <div className="w-1/3 py-2">10,000</div>
             <div className="w-1/3 py-2">27,000</div>
             <div className="w-1/3 py-2">0</div>
