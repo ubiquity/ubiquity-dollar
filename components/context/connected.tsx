@@ -3,7 +3,7 @@ import { createContext, Dispatch, SetStateAction, useContext, useEffect, useStat
 import { connectedContracts, Contracts } from "../../contracts";
 import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { accountBalances, Balances } from "../common/contracts-shortcuts";
-import { EthAccount } from "../common/types";
+import { EthAccount, Transaction } from "../common/types";
 
 export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;
@@ -20,6 +20,8 @@ export interface ConnectedContext {
   setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
   contracts: Contracts | null;
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
+  activeTransactions: Transaction[] | null;
+  updateActiveTransaction: (transaction: Transaction) => void;
   refreshBalances: () => Promise<void>;
 }
 
@@ -37,11 +39,30 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
   const [balances, setBalances] = useState<Balances | null>(null);
   const [twapPrice, setTwapPrice] = useState<BigNumber | null>(null);
   const [contracts, setContracts] = useState<Contracts | null>(null);
+  const [activeTransactions, setActiveTransactions] = useState<Transaction[] | null>(null);
 
   async function refreshBalances() {
     if (account && contracts) {
       setBalances(await accountBalances(account, contracts));
     }
+  }
+
+  function updateActiveTransaction(transaction: Transaction): void {
+    let updated = false;
+    if (activeTransactions) {
+      updated = activeTransactions.some((existingTransaction, index) => {
+        if (existingTransaction.id === transaction.id) {
+          activeTransactions[index] = { ...activeTransactions[index], ...transaction };
+          return true;
+        }
+      });
+    }
+    if (updated) {
+      setActiveTransactions([...(activeTransactions || [])]);
+    } else {
+      setActiveTransactions([...(activeTransactions || []), transaction]);
+    }
+    console.log(activeTransactions);
   }
 
   const value: ConnectedContext = {
@@ -59,6 +80,8 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
     setTwapPrice,
     contracts,
     setContracts,
+    activeTransactions,
+    updateActiveTransaction,
     refreshBalances,
   };
 
