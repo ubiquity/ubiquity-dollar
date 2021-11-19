@@ -19,7 +19,7 @@ const Inventory = ({ balances, address, contracts }: { balances: Balances; addre
             <Token id="uar-balance" token="UBQ" balance={balances.ubq} accountAddr={address} tokenAddr={contracts.ugov.address} />
             <Token id="curve-balance" token="3CRV" balance={balances.crv} accountAddr={address} tokenAddr={contracts.crvToken.address} />
             <Token id="curve-lp-balance" token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={address} tokenAddr={contracts.metaPool.address} />
-            <Token id="usdc-balance" token="USDC" balance={balances.usdc} accountAddr={address} tokenAddr={contracts.usdc.address} />
+            <Token id="usdc-balance" token="USDC" balance={balances.usdc} accountAddr={address} tokenAddr={contracts.usdc.address} decimals={6} />
           </div>
         </div>
       </div>
@@ -33,12 +33,14 @@ const Token = ({
   token,
   tokenAddr,
   accountAddr,
+  decimals = 18,
 }: {
   id: string;
   balance: BigNumber;
   token: keyof typeof tokenSvg;
   tokenAddr?: string;
   accountAddr?: string;
+  decimals?: number;
 }) => {
   const Svg = tokenSvg[token] || (() => null);
   return (
@@ -47,7 +49,7 @@ const Token = ({
         <div>
           <span>{<Svg />}</span>
           <span>
-            {`${parseInt(ethers.utils.formatEther(balance))}`} {token}
+            {`${parseInt(ethers.utils.formatUnits(balance, decimals))}`} {token}
           </span>
         </div>
       </a>
