@@ -35,7 +35,7 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 export function _renderControls() {
   const context = useConnectedContext();
-  const { setAccount, account, balances, twapPrice } = context;
+  const { setAccount, account, balances, twapPrice, contracts } = context;
 
   const [connecting, setConnecting] = useState(false);
 
@@ -132,7 +132,7 @@ export function _renderControls() {
           </div>
         </div>
 
-        {balances && <Inventory />}
+        {balances && account && contracts && <Inventory balances={balances} address={account.address} contracts={contracts} />}
       </div>
     </>
   );
