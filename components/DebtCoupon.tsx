@@ -1,18 +1,62 @@
 import { BigNumber, ethers } from "ethers";
-import { memo, useState, useCallback } from "react";
+import { memo, useState } from "react";
 import * as widget from "./ui/widget";
-import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
+import { connectedWithUserContext, useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
 
-export const DebtCoupon = () => {
+type Actions = {
+  onRedeem: () => void;
+  onSwap: () => void;
+  onBurn: () => void;
+};
+
+export const DebtCouponContainer = () => {
+  const { balances, twapPrice } = useConnectedContext();
+  const actions: Actions = {
+    onRedeem: () => {
+      console.log("onRedeem");
+    },
+    onSwap: () => {
+      console.log("onSwap");
+    },
+    onBurn: () => {
+      console.log("onBurn");
+    },
+  };
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Debt Coupon" />
+      {balances && <DebtCoupon twapPrice={twapPrice} balances={balances} actions={actions} />}
+    </widget.Container>
+  );
+};
+
+type DebtCouponProps = {
+  twapPrice: BigNumber | null;
+  balances: Balances;
+  actions: Actions;
+};
+
+const DebtCoupon = memo(({ twapPrice, actions }: DebtCouponProps) => {
+  const [cycleStartDate, setCycleStartDate] = useState("3 weeks ago");
+  const [selectedCurrency, selectCurrency] = useState("uar");
+  const handleTabSelect = (tab: string) => {
+    selectCurrency(tab);
+  };
+  const getTwapPrice = () => {
+    if (twapPrice) {
+      return parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(2);
+    }
+    return 0;
+  };
+  return (
+    <>
       <div className="w-full flex h-8 rounded-md border border-white/10 border-solid">
         <div className="w-5/12 flex justify-end border-0 border-r border-white/10 border-solid">
-          <span className="pr-2 self-center">$0.974</span>
+          <span className="pr-2 self-center">${getTwapPrice()}</span>
         </div>
         <div className="w-7/12 flex justify-center">
-          <span className="pr-2 self-center">Pump cycle started 3 weeks ago</span>
+          <span className="pr-2 self-center">Pump cycle started {cycleStartDate}</span>
         </div>
       </div>
       <div className="py-4">
@@ -76,12 +120,26 @@ export const DebtCoupon = () => {
         <span className="self-center">uAD</span>
         <input className="self-center" type="text" />
         <nav className="self-center flex flex-col border-b-2 sm:flex-row">
-          <button className="m-0 rounded-r-none self-center text-gray-600 hover:text-blue-500 focus:outline-none text-blue-500 font-medium border-blue-500">
+          <button
+            className={`m-0 rounded-r-none self-center text-gray-600 hover:text-blue-500 focus:outline-none ${
+              selectedCurrency === "uar" ? "text-blue-500 font-medium border-blue-500" : ""
+            }`}
+            onClick={() => handleTabSelect("uar")}
+          >
             uAR
           </button>
-          <button className="m-0 rounded-l-none self-center text-gray-600 hover:text-blue-500 focus:outline-none">uDEBT</button>
+          <button
+            className={`m-0 rounded-l-none self-center text-gray-600 hover:text-blue-500 focus:outline-none ${
+              selectedCurrency === "udebt" ? "text-blue-500 font-medium border-blue-500" : ""
+            }`}
+            onClick={() => handleTabSelect("udebt")}
+          >
+            uDEBT
+          </button>
         </nav>
-        <button className="self-center">Burn</button>
+        <button onClick={actions.onBurn} className="self-center">
+          Burn
+        </button>
       </div>
       <div className="my-4">
         <span>Price will increase by an estimated of +$0.05</span>
@@ -152,7 +210,7 @@ export const DebtCoupon = () => {
             </div>
             <div className="inline-flex w-7/12 justify-between">
               <input type="text" />
-              <button>Redeem</button>
+              <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
         </div>
@@ -163,7 +221,7 @@ export const DebtCoupon = () => {
             </div>
             <div className="inline-flex w-7/12 justify-between">
               <input type="text" />
-              <button>Redeem</button>
+              <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
         </div>
@@ -174,7 +232,7 @@ export const DebtCoupon = () => {
             </div>
             <div className="inline-flex w-7/12 justify-between">
               <span className="text-center w-1/2 self-center">2120 uDEBT</span>
-              <button>Swap</button>
+              <button onClick={actions.onSwap}>Swap</button>
             </div>
           </div>
         </div>
@@ -195,7 +253,7 @@ export const DebtCoupon = () => {
               <td>3.2 weeks</td>
               <td>800 uAR</td>
               <td>
-                <button>Redeem</button>
+                <button onClick={actions.onRedeem}>Redeem</button>
               </td>
             </tr>
             <tr>
@@ -203,7 +261,7 @@ export const DebtCoupon = () => {
               <td>1.3 weeks</td>
               <td>125 uAR</td>
               <td>
-                <button>Redeem</button>
+                <button onClick={actions.onRedeem}>Redeem</button>
               </td>
             </tr>
             <tr>
@@ -215,8 +273,8 @@ export const DebtCoupon = () => {
           </tbody>
         </table>
       </div>
-    </widget.Container>
+    </>
   );
-};
+});
 
-export default connectedWithUserContext(DebtCoupon);
+export default connectedWithUserContext(DebtCouponContainer);
