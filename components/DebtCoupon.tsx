@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import { memo, useState } from "react";
+import { ChangeEvent, Dispatch, memo, SetStateAction, useState } from "react";
 import * as widget from "./ui/widget";
 import { connectedWithUserContext, useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
@@ -11,7 +11,7 @@ type Actions = {
 };
 
 export const DebtCouponContainer = () => {
-  const { balances, twapPrice } = useConnectedContext();
+  const { balances, twapPrice, setTwapPrice } = useConnectedContext();
   const actions: Actions = {
     onRedeem: () => {
       console.log("onRedeem");
@@ -23,40 +23,53 @@ export const DebtCouponContainer = () => {
       console.log("onBurn");
     },
   };
+
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Debt Coupon" />
-      {balances && <DebtCoupon twapPrice={twapPrice} balances={balances} actions={actions} />}
+      {balances && <DebtCoupon twapPrice={twapPrice} setTwapPrice={setTwapPrice} balances={balances} actions={actions} />}
     </widget.Container>
   );
 };
 
 type DebtCouponProps = {
   twapPrice: BigNumber | null;
+  setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
   balances: Balances;
   actions: Actions;
 };
 
-const DebtCoupon = memo(({ twapPrice, actions }: DebtCouponProps) => {
+const DebtCoupon = memo(({ twapPrice, setTwapPrice, actions }: DebtCouponProps) => {
   const [cycleStartDate, setCycleStartDate] = useState("3 weeks ago");
   const [selectedCurrency, selectCurrency] = useState("uar");
-  const handleTabSelect = (tab: string) => {
-    selectCurrency(tab);
-  };
+
   const getTwapPrice = () => {
     if (twapPrice) {
       return parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(2);
     }
     return 0;
   };
+  const [currentTwapPrice, setCurrentTwapPrice] = useState(getTwapPrice());
+  const handleTabSelect = (tab: string) => {
+    selectCurrency(tab);
+  };
+
+  const handleSlide = (e: ChangeEvent<HTMLInputElement>) => {
+    setCurrentTwapPrice(e.target.value);
+  };
   return (
     <>
-      <div className="w-full flex h-8 rounded-md border border-white/10 border-solid">
-        <div className="w-5/12 flex justify-end border-0 border-r border-white/10 border-solid">
-          <span className="pr-2 self-center">${getTwapPrice()}</span>
+      <div className="w-full flex h-8 rounded-md border border-white/10 border-solid relative">
+        <div className="w-full flex">
+          <div className="w-5/12 flex justify-end border-0 border-r border-white/10 border-solid">
+            <span className="pr-2 self-center">${currentTwapPrice}</span>
+          </div>
+          <div className="w-7/12 flex justify-center">
+            <span className="pr-2 self-center">Pump cycle started {cycleStartDate}</span>
+          </div>
         </div>
-        <div className="w-7/12 flex justify-center">
-          <span className="pr-2 self-center">Pump cycle started {cycleStartDate}</span>
+        <div className="w-full h-full absolute">
+          <input type="range" min={0} max={2} step={0.01} onChange={handleSlide} className="m-0 w-full h-full p-0 bg-transparent" value={currentTwapPrice} />
         </div>
       </div>
       <div className="py-4">
@@ -121,16 +134,16 @@ const DebtCoupon = memo(({ twapPrice, actions }: DebtCouponProps) => {
         <input className="self-center" type="text" />
         <nav className="self-center flex flex-col border-b-2 sm:flex-row">
           <button
-            className={`m-0 rounded-r-none self-center text-gray-600 hover:text-blue-500 focus:outline-none ${
-              selectedCurrency === "uar" ? "text-blue-500 font-medium border-blue-500" : ""
+            className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
+              selectedCurrency === "uar" ? "text-accent font-medium border-accent" : "text-gray-600"
             }`}
             onClick={() => handleTabSelect("uar")}
           >
             uAR
           </button>
           <button
-            className={`m-0 rounded-l-none self-center text-gray-600 hover:text-blue-500 focus:outline-none ${
-              selectedCurrency === "udebt" ? "text-blue-500 font-medium border-blue-500" : ""
+            className={`m-0 rounded-l-none self-center hover:text-accent focus:outline-none ${
+              selectedCurrency === "udebt" ? "text-accent font-medium border-accent" : "text-gray-600"
             }`}
             onClick={() => handleTabSelect("udebt")}
           >
