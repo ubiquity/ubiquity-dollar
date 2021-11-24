@@ -178,6 +178,10 @@
   height: 2rem
 }
 
+.h-full {
+  height: 100%
+}
+
 .h-6 {
   height: 1.5rem
 }
@@ -188,10 +192,6 @@
 
 .h-screen {
   height: 100vh
-}
-
-.h-full {
-  height: 100%
 }
 
 .\!w-10 {
@@ -372,14 +372,13 @@
   border-color: rgba(255, 255, 255, 0.1)
 }
 
-.border-blue-500 {
-  --tw-border-opacity: 1;
-  border-color: rgba(59, 130, 246, var(--tw-border-opacity))
-}
-
 .border-accent {
   --tw-border-opacity: 1;
   border-color: rgba(0, 255, 255, var(--tw-border-opacity))
+}
+
+.bg-transparent {
+  background-color: transparent
 }
 
 .bg-accent {
@@ -387,20 +386,16 @@
   background-color: rgba(0, 255, 255, var(--tw-bg-opacity))
 }
 
-.bg-transparent {
-  background-color: transparent
-}
-
 .bg-opacity-10 {
   --tw-bg-opacity: 0.1
 }
 
-.p-4 {
-  padding: 1rem
-}
-
 .p-0 {
   padding: 0px
+}
+
+.p-4 {
+  padding: 1rem
 }
 
 .py-4 {
@@ -558,11 +553,6 @@
   color: rgba(75, 85, 99, var(--tw-text-opacity))
 }
 
-.text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgba(59, 130, 246, var(--tw-text-opacity))
-}
-
 .text-white\/50 {
   color: rgba(255, 255, 255, 0.5)
 }
@@ -603,11 +593,6 @@
 
 .filter {
   filter: var(--tw-filter)
-}
-
-.hover\:text-blue-500:hover {
-  --tw-text-opacity: 1;
-  color: rgba(59, 130, 246, var(--tw-text-opacity))
 }
 
 .hover\:text-accent:hover {
