@@ -29,10 +29,6 @@
   position: fixed
 }
 
-.absolute {
-  position: absolute
-}
-
 .relative {
   position: relative
 }
@@ -176,10 +172,6 @@
 
 .h-8 {
   height: 2rem
-}
-
-.h-full {
-  height: 100%
 }
 
 .h-6 {
@@ -377,10 +369,6 @@
   border-color: rgba(0, 255, 255, var(--tw-border-opacity))
 }
 
-.bg-transparent {
-  background-color: transparent
-}
-
 .bg-accent {
   --tw-bg-opacity: 1;
   background-color: rgba(0, 255, 255, var(--tw-bg-opacity))
@@ -388,10 +376,6 @@
 
 .bg-opacity-10 {
   --tw-bg-opacity: 0.1
-}
-
-.p-0 {
-  padding: 0px
 }
 
 .p-4 {

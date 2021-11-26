@@ -72,3 +72,24 @@ export const getNetworkName = (provider: ethers.providers.Web3Provider): string 
   }
   return networkName;
 };
+
+export const formatTimeDiff = (diff: number) => {
+  const day = 24 * 60 * 60 * 1000;
+  const hour = 60 * 60 * 1000;
+  const minute = 60 * 1000;
+  const second = 1000;
+  const days = Math.ceil(diff / day);
+  if (days > 1) {
+    return `${days} days`;
+  }
+  const hours = Math.ceil(diff / hour);
+  if (hours > 1) {
+    return `${hours} hours`;
+  }
+  const minutes = Math.ceil(diff / minute);
+  if (minutes > 1) {
+    return `${minutes} minutes`;
+  }
+  const seconds = Math.ceil(diff / second);
+  return `${seconds} seconds`;
+};

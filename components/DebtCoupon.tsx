@@ -3,6 +3,7 @@ import { memo, useEffect, useMemo, useState } from "react";
 import * as widget from "./ui/widget";
 import { connectedWithUserContext, useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
+import { formatTimeDiff } from "./common/utils";
 
 type Actions = {
   onRedeem: () => void;
@@ -24,6 +25,11 @@ export const DebtCouponContainer = () => {
     },
   };
 
+  const priceIncreaseFormula = async (amount: number) => {
+    const formula = 0.001;
+    return amount * formula;
+  };
+
   const cycleStartDate = 1637625600000;
   const uarDeprecationRate = 0.0001;
   const uarCurrentRewardPct = 0.05;
@@ -31,6 +37,10 @@ export const DebtCouponContainer = () => {
   const udebtCurrentRewardPct = 0.05;
   const udebtExpirationTime = 1640217600000;
   const udebtUbqRedemptionRate = 0.25;
+  const uadTotalSupply = 233000;
+  const ubondTotalSupply = 10000;
+  const uarTotalSupply = 30000;
+  const udebtTotalSupply = 12000;
 
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
@@ -47,6 +57,11 @@ export const DebtCouponContainer = () => {
           udebtCurrentRewardPct={udebtCurrentRewardPct}
           udebtExpirationTime={udebtExpirationTime}
           udebtUbqRedemptionRate={udebtUbqRedemptionRate}
+          priceIncreaseFormula={priceIncreaseFormula}
+          uadTotalSupply={uadTotalSupply}
+          ubondTotalSupply={ubondTotalSupply}
+          uarTotalSupply={uarTotalSupply}
+          udebtTotalSupply={udebtTotalSupply}
         />
       )}
     </widget.Container>
@@ -64,6 +79,11 @@ type DebtCouponProps = {
   udebtCurrentRewardPct: number;
   udebtExpirationTime: number;
   udebtUbqRedemptionRate: number;
+  priceIncreaseFormula: (amount: number) => Promise<number>;
+  uadTotalSupply: number;
+  ubondTotalSupply: number;
+  uarTotalSupply: number;
+  udebtTotalSupply: number;
 };
 
 const DebtCoupon = memo(
@@ -77,9 +97,15 @@ const DebtCoupon = memo(
     udebtCurrentRewardPct,
     udebtExpirationTime,
     udebtUbqRedemptionRate,
+    priceIncreaseFormula,
+    uadTotalSupply,
+    ubondTotalSupply,
+    uarTotalSupply,
+    udebtTotalSupply,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
     const [selectedCurrency, selectCurrency] = useState("uar");
+    const [increasedValue, setIncreasedValue] = useState(0);
 
     const handleTabSelect = (tab: string) => {
       selectCurrency(tab);
@@ -90,27 +116,6 @@ const DebtCoupon = memo(
         setFormattedSwapPrice(parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(2));
       }
     }, [twapPrice]);
-
-    const formatTimeDiff = (diff: number) => {
-      const day = 24 * 60 * 60 * 1000;
-      const hour = 60 * 60 * 1000;
-      const minute = 60 * 1000;
-      const second = 1000;
-      const days = Math.ceil(diff / day);
-      if (days > 1) {
-        return `${days} days`;
-      }
-      const hours = Math.ceil(diff / hour);
-      if (hours > 1) {
-        return `${hours} hours`;
-      }
-      const minutes = Math.ceil(diff / minute);
-      if (minutes > 1) {
-        return `${minutes} minutes`;
-      }
-      const seconds = Math.ceil(diff / second);
-      return `${seconds} seconds`;
-    };
 
     const calculatedCycleStartDate = useMemo(() => {
       if (cycleStartDate) {
@@ -125,6 +130,12 @@ const DebtCoupon = memo(
         return formatTimeDiff(diff);
       }
     }, [udebtExpirationTime]);
+
+    useEffect(() => {
+      priceIncreaseFormula(10).then((value) => {
+        setIncreasedValue(value);
+      });
+    });
 
     return (
       <>
@@ -221,7 +232,7 @@ const DebtCoupon = memo(
           </button>
         </div>
         <div className="my-4">
-          <span>Price will increase by an estimated of +$0.05</span>
+          <span>Price will increase by an estimated of +${increasedValue}</span>
         </div>
         <div className="my-4">
           <span>Reward Cycle</span>
@@ -233,7 +244,7 @@ const DebtCoupon = memo(
             </div>
             <div className="w-1/4 text-center self-center">
               <div className="pt-2 pb-1">Total Supply</div>
-              <div className="pt-1 pb-2">233k</div>
+              <div className="pt-1 pb-2">{uadTotalSupply}</div>
             </div>
             <div className="w-1/4 text-center self-center">
               <div className="pt-2 pb-1">Minted</div>
@@ -253,15 +264,15 @@ const DebtCoupon = memo(
             <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
               <div className="w-1/3">
                 <div className="pt-2 pb-1">uBOND</div>
-                <div className="pt-1 pb-2">10,000</div>
+                <div className="pt-1 pb-2">{ubondTotalSupply}</div>
               </div>
               <div className="w-1/3">
                 <div className="pt-2 pb-1">uAR</div>
-                <div className="pt-1 pb-2">30,000</div>
+                <div className="pt-1 pb-2">{uarTotalSupply}</div>
               </div>
               <div className="w-1/3">
                 <div className="pt-2 pb-1">uDEBT</div>
-                <div className="pt-1 pb-2">5,000</div>
+                <div className="pt-1 pb-2">{udebtTotalSupply}</div>
               </div>
             </div>
           </div>

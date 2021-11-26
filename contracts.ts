@@ -103,6 +103,8 @@ export type Contracts = {
   // ERC1155
   debtCouponToken: DebtCoupon;
   bondingToken: BondingShareV2;
+  uDEBT: DebtCoupon;
+  uBOND: BondingShareV2;
 };
 
 // 3
@@ -213,6 +215,8 @@ export async function connectedContracts(): Promise<{
       crvToken: contracts.crvToken(addr.crvToken, provider),
       bondingToken: contracts.bondingToken(addr.bondingToken, provider),
       debtCouponToken: contracts.debtCouponToken(addr.debtCouponToken, provider),
+      uBOND: contracts.bondingToken(addr.bondingToken, provider),
+      uDEBT: contracts.debtCouponToken(addr.debtCouponToken, provider),
       bonding: contracts.bonding(addr.bonding, provider),
       masterChef: contracts.masterChef(addr.masterChef, provider),
       sushiSwapPool,

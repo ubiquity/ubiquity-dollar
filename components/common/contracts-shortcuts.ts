@@ -17,11 +17,13 @@ export interface Balances {
   bondingShares: BigNumber;
   debtCoupon: BigNumber;
   usdc: BigNumber;
+  uBOND: BigNumber;
+  uDEBT: BigNumber;
 }
 
 // Load the account balances in a single parallel operation
 export async function accountBalances(account: EthAccount, contracts: Contracts): Promise<Balances> {
-  const [uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares, usdc] = await Promise.all([
+  const [uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares, usdc, uBOND, uDEBT] = await Promise.all([
     contracts.uad.balanceOf(account.address),
     contracts.crvToken.balanceOf(account.address),
     contracts.metaPool.balanceOf(account.address),
@@ -30,6 +32,8 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
     erc1155BalanceOf(account.address, contracts.debtCouponToken),
     erc1155BalanceOf(account.address, (contracts.bondingToken as unknown) as ERC1155Ubiquity),
     contracts.usdc.balanceOf(account.address),
+    erc1155BalanceOf(account.address, (contracts.uBOND as unknown) as ERC1155Ubiquity), // uBOND
+    erc1155BalanceOf(account.address, contracts.uDEBT), // uDEBT
   ]);
   return {
     uad,
@@ -40,6 +44,8 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
     debtCoupon,
     bondingShares,
     usdc,
+    uBOND,
+    uDEBT,
   };
 }
 
