@@ -1,18 +1,43 @@
 import { BigNumber, ethers } from "ethers";
-import { memo, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 import * as widget from "./ui/widget";
 import { connectedWithUserContext, useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
 import { formatTimeDiff } from "./common/utils";
+import {
+  DebtCouponManager__factory,
+  ICouponsForDollarsCalculator__factory,
+  UbiquityAlgorithmicDollarManager,
+  UbiquityAlgorithmicDollar__factory,
+} from "../contracts/artifacts/types";
+import { ADDRESS } from "../contracts";
 
 type Actions = {
   onRedeem: () => void;
   onSwap: () => void;
-  onBurn: () => void;
+  onBurn: (uadAmount: string, setErrMsg: Dispatch<SetStateAction<string | undefined>>) => void;
 };
 
+async function _expectedDebtCoupon(
+  amount: BigNumber,
+  manager: UbiquityAlgorithmicDollarManager | null,
+  provider: ethers.providers.Web3Provider | null,
+  setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
+) {
+  if (manager && provider) {
+    const formulaAdr = await manager.couponCalculatorAddress();
+    const SIGNER = provider.getSigner();
+    const couponCalculator = ICouponsForDollarsCalculator__factory.connect(formulaAdr, SIGNER);
+    const expectedDebtCoupon = await couponCalculator.getCouponAmount(amount);
+    console.log("expectedDebtCoupon", expectedDebtCoupon.toString());
+    setExpectedDebtCoupon(expectedDebtCoupon);
+  }
+}
+
+const DEBT_COUPON_DEPOSIT_TRANSACTION = "DEBT_COUPON_DEPOSIT_TRANSACTION";
+
 export const DebtCouponContainer = () => {
-  const { balances, twapPrice } = useConnectedContext();
+  const { balances, twapPrice, manager, provider, account, setBalances, updateActiveTransaction } = useConnectedContext();
   const actions: Actions = {
     onRedeem: () => {
       console.log("onRedeem");
@@ -20,9 +45,62 @@ export const DebtCouponContainer = () => {
     onSwap: () => {
       console.log("onSwap");
     },
-    onBurn: () => {
-      console.log("onBurn");
+    onBurn: async (uadAmount, setErrMsg) => {
+      setErrMsg("");
+      const title = "Burning uAD...";
+      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, title, active: true });
+      const uadAmountValue = uadAmount;
+      if (!uadAmountValue) {
+        console.log("uadAmountValue", uadAmountValue);
+        setErrMsg("amount not valid");
+      } else {
+        const amount = ethers.utils.parseEther(uadAmountValue);
+        if (BigNumber.isBigNumber(amount)) {
+          if (amount.gt(BigNumber.from(0))) {
+            await depositDollarForDebtCoupons(amount, setBalances);
+          } else {
+            setErrMsg("uAD Amount should be greater than 0");
+          }
+        } else {
+          setErrMsg("amount not valid");
+          updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
+          return;
+        }
+      }
+      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
     },
+  };
+
+  const depositDollarForDebtCoupons = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
+    if (provider && account && manager && balances) {
+      const uAD = UbiquityAlgorithmicDollar__factory.connect(await manager.dollarTokenAddress(), provider.getSigner());
+      const allowance = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
+      if (allowance.lt(amount)) {
+        // first approve
+        const approveTransaction = await uAD.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
+
+        const approveWaiting = await approveTransaction.wait();
+        console.log(
+          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`
+        );
+      }
+
+      const allowance2 = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      console.log("allowance2", ethers.utils.formatEther(allowance2));
+      // depositDollarForDebtCoupons uAD
+
+      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner());
+      const depositDollarForDebtCouponsWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(amount);
+      await depositDollarForDebtCouponsWaiting.wait();
+
+      // fetch new uar and uad balance
+      setBalances({
+        ...balances,
+        uad: BigNumber.from(0),
+        debtCoupon: BigNumber.from(0),
+      });
+    }
   };
 
   const priceIncreaseFormula = async (amount: number) => {
@@ -62,6 +140,8 @@ export const DebtCouponContainer = () => {
           ubondTotalSupply={ubondTotalSupply}
           uarTotalSupply={uarTotalSupply}
           udebtTotalSupply={udebtTotalSupply}
+          manager={manager}
+          provider={provider}
         />
       )}
     </widget.Container>
@@ -84,6 +164,8 @@ type DebtCouponProps = {
   ubondTotalSupply: number;
   uarTotalSupply: number;
   udebtTotalSupply: number;
+  manager: UbiquityAlgorithmicDollarManager | null;
+  provider: ethers.providers.Web3Provider | null;
 };
 
 const DebtCoupon = memo(
@@ -102,10 +184,15 @@ const DebtCoupon = memo(
     ubondTotalSupply,
     uarTotalSupply,
     udebtTotalSupply,
+    manager,
+    provider,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
-    const [selectedCurrency, selectCurrency] = useState("uar");
+    const [selectedCurrency, selectCurrency] = useState("udebt");
     const [increasedValue, setIncreasedValue] = useState(0);
+    const [errMsg, setErrMsg] = useState<string>();
+    const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
+    const [uadAmount, setUadAmount] = useState("");
 
     const handleTabSelect = (tab: string) => {
       selectCurrency(tab);
@@ -130,6 +217,37 @@ const DebtCoupon = memo(
         return formatTimeDiff(diff);
       }
     }, [udebtExpirationTime]);
+
+    const handleInputUAD = async (e: ChangeEvent) => {
+      setErrMsg("");
+      const title = "Input uAD...";
+      const missing = `Missing input value for`;
+      const bignumberErr = `can't parse BigNumber from`;
+
+      const subject = `uAD amount`;
+      const amountEl = e.target as HTMLInputElement;
+      const amountValue = amountEl?.value;
+      if (!amountValue) {
+        setErrMsg(`${missing} ${subject}`);
+        return;
+      }
+      if (BigNumber.isBigNumber(amountValue)) {
+        setErrMsg(`${bignumberErr} ${subject}`);
+        return;
+      }
+      const amount = ethers.utils.parseEther(amountValue);
+      if (!amount.gt(BigNumber.from(0))) {
+        setErrMsg(`${subject} should be greater than 0`);
+        return;
+      }
+      setUadAmount(amountValue);
+
+      _expectedDebtCoupon(amount, manager, provider, setExpectedDebtCoupon);
+    };
+
+    const handleBurn = () => {
+      actions.onBurn(uadAmount, setErrMsg);
+    };
 
     useEffect(() => {
       priceIncreaseFormula(10).then((value) => {
@@ -208,7 +326,7 @@ const DebtCoupon = memo(
         </div>
         <div className="inline-flex my-8">
           <span className="self-center">uAD</span>
-          <input className="self-center" type="text" />
+          <input className="self-center" type="number" onChange={handleInputUAD} />
           <nav className="self-center flex flex-col border-b-2 sm:flex-row">
             <button
               className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
@@ -227,10 +345,12 @@ const DebtCoupon = memo(
               uDEBT
             </button>
           </nav>
-          <button onClick={actions.onBurn} className="self-center">
+          <button onClick={handleBurn} className="self-center">
             Burn
           </button>
         </div>
+        <p>{errMsg}</p>
+        {expectedDebtCoupon && <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>}
         <div className="my-4">
           <span>Price will increase by an estimated of +${increasedValue}</span>
         </div>
