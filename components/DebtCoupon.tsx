@@ -18,6 +18,16 @@ type Actions = {
   onBurn: (uadAmount: string, setErrMsg: Dispatch<SetStateAction<string | undefined>>) => void;
 };
 
+type Coupon = {
+  amount: number;
+  expiration: number;
+  swap: { amount: number; unit: string };
+};
+
+type Coupons = {
+  uDEBT: Coupon[];
+};
+
 async function _expectedDebtCoupon(
   amount: BigNumber,
   manager: UbiquityAlgorithmicDollarManager | null,
@@ -119,6 +129,13 @@ export const DebtCouponContainer = () => {
   const ubondTotalSupply = 10000;
   const uarTotalSupply = 30000;
   const udebtTotalSupply = 12000;
+  const coupons: Coupons = {
+    uDEBT: [
+      { amount: 1000, expiration: 1640390400000, swap: { amount: 800, unit: "uAR" } },
+      { amount: 500, expiration: 1639526400000, swap: { amount: 125, unit: "uAR" } },
+      { amount: 666, expiration: 1636934400000, swap: { amount: 166.5, unit: "UBQ" } },
+    ],
+  };
 
   return (
     <widget.Container className="max-w-screen-md !mx-auto relative">
@@ -142,6 +159,7 @@ export const DebtCouponContainer = () => {
           udebtTotalSupply={udebtTotalSupply}
           manager={manager}
           provider={provider}
+          coupons={coupons}
         />
       )}
     </widget.Container>
@@ -166,6 +184,7 @@ type DebtCouponProps = {
   udebtTotalSupply: number;
   manager: UbiquityAlgorithmicDollarManager | null;
   provider: ethers.providers.Web3Provider | null;
+  coupons: Coupons | null;
 };
 
 const DebtCoupon = memo(
@@ -186,6 +205,7 @@ const DebtCoupon = memo(
     udebtTotalSupply,
     manager,
     provider,
+    coupons,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
     const [selectedCurrency, selectCurrency] = useState("udebt");
@@ -402,7 +422,7 @@ const DebtCoupon = memo(
             <div className="w-1/4 self-center">
               <span>Redeemable</span>
             </div>
-            <div className="inline-flex w-3/4 justify-between border rounded-md rounded-t-none border-white/10 border-solid">
+            <div className="inline-flex w-3/4 justify-between border border-t-0 rounded-md rounded-t-none border-white/10 border-solid">
               <div className="w-1/3 py-2">10,000</div>
               <div className="w-1/3 py-2">27,000</div>
               <div className="w-1/3 py-2">0</div>
@@ -419,7 +439,7 @@ const DebtCoupon = memo(
                 <span>uBOND 1,000</span>
               </div>
               <div className="inline-flex w-7/12 justify-between">
-                <input type="text" />
+                <input type="number" />
                 <button onClick={actions.onRedeem}>Redeem</button>
               </div>
             </div>
@@ -430,7 +450,7 @@ const DebtCoupon = memo(
                 <span>uAR 3,430 - $2,120</span>
               </div>
               <div className="inline-flex w-7/12 justify-between">
-                <input type="text" />
+                <input type="number" />
                 <button onClick={actions.onRedeem}>Redeem</button>
               </div>
             </div>
@@ -448,44 +468,54 @@ const DebtCoupon = memo(
           </div>
         </div>
         <div className="w-10/12 my-0 mx-auto">
-          <table className="w-full border border-white/10 border-solid border-colapse mt-16">
-            <thead>
-              <tr>
-                <th className="normal-case">uDEBT</th>
-                <th className="normal-case">Expiration</th>
-                <th className="normal-case">Swap</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1,000</td>
-                <td>3.2 weeks</td>
-                <td>800 uAR</td>
-                <td>
-                  <button onClick={actions.onRedeem}>Redeem</button>
-                </td>
-              </tr>
-              <tr>
-                <td>500</td>
-                <td>1.3 weeks</td>
-                <td>125 uAR</td>
-                <td>
-                  <button onClick={actions.onRedeem}>Redeem</button>
-                </td>
-              </tr>
-              <tr>
-                <td className="h-12">666</td>
-                <td>Expired</td>
-                <td>166.5 UBQ</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
+          <CouponTable coupons={coupons} onRedeem={actions.onRedeem} />
         </div>
       </>
     );
   }
 );
+
+type CouponTableProps = {
+  coupons: Coupons | null;
+  onRedeem: Actions["onRedeem"];
+};
+
+export const CouponTable = ({ coupons, onRedeem }: CouponTableProps) => {
+  return (
+    <table className="w-full border border-white/10 border-solid border-colapse mt-16">
+      <thead>
+        <tr>
+          <th className="normal-case">uDEBT</th>
+          <th className="normal-case">Expiration</th>
+          <th className="normal-case">Swap</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {coupons && coupons.uDEBT && coupons.uDEBT.length
+          ? coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} key={index} />)
+          : null}
+      </tbody>
+    </table>
+  );
+};
+
+type CouponRowProps = {
+  coupon: Coupon;
+  onRedeem: Actions["onRedeem"];
+};
+
+export const CouponRow = ({ coupon, onRedeem }: CouponRowProps) => {
+  const timeDiff = coupon.expiration - Date.now();
+
+  return (
+    <tr>
+      <td>{coupon.amount}</td>
+      <td>{formatTimeDiff(Math.abs(timeDiff))}</td>
+      <td>{`${coupon.swap.amount} ${coupon.swap.unit}`}</td>
+      <td className="h-12">{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
+    </tr>
+  );
+};
 
 export default connectedWithUserContext(DebtCouponContainer);

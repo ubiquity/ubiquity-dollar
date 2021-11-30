@@ -305,7 +305,7 @@ export const YieldFarmingDeposit = memo(
     const [errors, setErrors] = useState<string[]>([]);
 
     const deposit: () => void = () => {
-      if (usdc && ubq && uad) {
+      if (canDeposit()) {
         onDeposit({ usdc, ubq, uad });
       }
     };
