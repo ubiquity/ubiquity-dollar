@@ -269,6 +269,8 @@ const DebtCoupon = memo(
       actions.onBurn(uadAmount, setErrMsg);
     };
 
+    const isLessThanOne = () => parseFloat(formattedSwapPrice) <= 1;
+
     useEffect(() => {
       priceIncreaseFormula(10).then((value) => {
         setIncreasedValue(value);
@@ -277,203 +279,237 @@ const DebtCoupon = memo(
 
     return (
       <>
-        <div className="w-full flex h-8 rounded-md border border-white/10 border-solid relative">
-          <div className="w-full flex">
-            <div className="w-5/12 flex justify-end border-0 border-r border-white/10 border-solid">
-              <span className="pr-2 self-center">${formattedSwapPrice}</span>
+        <TwapPriceBar price={formattedSwapPrice} date={calculatedCycleStartDate} />
+        {isLessThanOne() ? (
+          <>
+            <div className="py-8">
+              <span>Pump Cycle</span>
             </div>
-            <div className="w-7/12 flex justify-center">
-              <span className="pr-2 self-center">Pump cycle started {calculatedCycleStartDate} ago</span>
-            </div>
-          </div>
-        </div>
-        <div className="py-4">
-          <span className="text-center">Burn uAD for debt coupons and help pump the price back up</span>
-        </div>
-        <div className="py-8">
-          <span>Pump Cycle</span>
-        </div>
-        <div className="flex justify-center pb-4">
-          <div className="w-2/4 px-8 border-0 border-r border-white/10 border-solid">
-            <span>Fungible (uAR)</span>
-            <table className="w-full">
-              <tbody>
-                <tr>
-                  <td className="pr-4 text-right">Deprecation rate</td>
-                  <td className="pl-4 text-left">{uarDeprecationRate * 100}% / week</td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-right">Current reward %</td>
-                  <td className="pl-4 text-left">{uarCurrentRewardPct * 100}%</td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-right">Expires?</td>
-                  <td className="pl-4 text-left">No</td>
-                </tr>
-              </tbody>
-            </table>
-            <div>
-              <span>Higher priority when redeeming</span>
-            </div>
-            <a href="">Learn more</a>
-          </div>
-          <div className="w-2/4 px-8">
-            <span>Non-fungible (uDEBT)</span>
-            <table className="w-full">
-              <tbody>
-                <tr>
-                  <td className="pr-4 text-right">Deprecation rate</td>
-                  <td className="pl-4 text-left">{udebtDeprecationRate * 100}%</td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-right">Current reward %</td>
-                  <td className="pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-right">Expires?</td>
-                  <td className="pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div>
-              <span>Convertible to fungible</span>
-            </div>
-            <div>
-              <span>Can be redeemed for UBQ at {udebtUbqRedemptionRate * 100}% rate</span>
-            </div>
-            <a href="">Learn more</a>
-          </div>
-        </div>
-        <div className="inline-flex my-8">
-          <span className="self-center">uAD</span>
-          <input className="self-center" type="number" onChange={handleInputUAD} />
-          <nav className="self-center flex flex-col border-b-2 sm:flex-row">
-            <button
-              className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
-                selectedCurrency === "uar" ? "text-accent font-medium border-accent" : "text-gray-600"
-              }`}
-              onClick={() => handleTabSelect("uar")}
-            >
-              uAR
-            </button>
-            <button
-              className={`m-0 rounded-l-none self-center hover:text-accent focus:outline-none ${
-                selectedCurrency === "udebt" ? "text-accent font-medium border-accent" : "text-gray-600"
-              }`}
-              onClick={() => handleTabSelect("udebt")}
-            >
-              uDEBT
-            </button>
-          </nav>
-          <button onClick={handleBurn} className="self-center">
-            Burn
-          </button>
-        </div>
-        <p>{errMsg}</p>
-        {expectedDebtCoupon && <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>}
-        <div className="my-4">
-          <span>Price will increase by an estimated of +${increasedValue}</span>
-        </div>
-        <div className="my-4">
-          <span>Reward Cycle</span>
-        </div>
-        <div className="w-full">
-          <div className="w-10/12 inline-flex justify-between border rounded-md border-white/10 border-solid">
-            <div className="w-1/4 text-center self-center">
-              <span>uAD</span>
-            </div>
-            <div className="w-1/4 text-center self-center">
-              <div className="pt-2 pb-1">Total Supply</div>
-              <div className="pt-1 pb-2">{uadTotalSupply}</div>
-            </div>
-            <div className="w-1/4 text-center self-center">
-              <div className="pt-2 pb-1">Minted</div>
-              <div className="pt-1 pb-2">25k</div>
-            </div>
-            <div className="w-1/4 text-center self-center">
-              <div className="pt-2 pb-1">Mintable</div>
-              <div className="pt-1 pb-2">12k</div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full mt-4">
-          <div className="w-10/12 inline-flex">
-            <div className="w-1/4 self-center">
-              <span>Total debt</span>
-            </div>
-            <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
-              <div className="w-1/3">
-                <div className="pt-2 pb-1">uBOND</div>
-                <div className="pt-1 pb-2">{ubondTotalSupply}</div>
+            <div className="flex justify-center pb-4">
+              <div className="w-2/4 px-8 border-0 border-r border-white/10 border-solid">
+                <span>Fungible (uAR)</span>
+                <table className="w-full">
+                  <tbody>
+                    <tr>
+                      <td className="pr-4 text-right">Deprecation rate</td>
+                      <td className="pl-4 text-left">{uarDeprecationRate * 100}% / week</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4 text-right">Current reward %</td>
+                      <td className="pl-4 text-left">{uarCurrentRewardPct * 100}%</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4 text-right">Expires?</td>
+                      <td className="pl-4 text-left">No</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div>
+                  <span>Higher priority when redeeming</span>
+                </div>
+                <a href="">Learn more</a>
               </div>
-              <div className="w-1/3">
-                <div className="pt-2 pb-1">uAR</div>
-                <div className="pt-1 pb-2">{uarTotalSupply}</div>
-              </div>
-              <div className="w-1/3">
-                <div className="pt-2 pb-1">uDEBT</div>
-                <div className="pt-1 pb-2">{udebtTotalSupply}</div>
+              <div className="w-2/4 px-8">
+                <span>Non-fungible (uDEBT)</span>
+                <table className="w-full">
+                  <tbody>
+                    <tr>
+                      <td className="pr-4 text-right">Deprecation rate</td>
+                      <td className="pl-4 text-left">{udebtDeprecationRate * 100}%</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4 text-right">Current reward %</td>
+                      <td className="pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
+                    </tr>
+                    <tr>
+                      <td className="pr-4 text-right">Expires?</td>
+                      <td className="pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div>
+                  <span>Convertible to fungible</span>
+                </div>
+                <div>
+                  <span>Can be redeemed for UBQ at {udebtUbqRedemptionRate * 100}% rate</span>
+                </div>
+                <a href="">Learn more</a>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="w-full">
-          <div className="w-10/12 inline-flex">
-            <div className="w-1/4 self-center">
-              <span>Redeemable</span>
+            <div className="inline-flex my-8">
+              <span className="self-center">uAD</span>
+              <input className="self-center" type="number" onChange={handleInputUAD} />
+              <nav className="self-center flex flex-col border-b-2 sm:flex-row">
+                <button
+                  className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
+                    selectedCurrency === "uar" ? "text-accent font-medium border-accent" : "text-gray-600"
+                  }`}
+                  onClick={() => handleTabSelect("uar")}
+                >
+                  uAR
+                </button>
+                <button
+                  className={`m-0 rounded-l-none self-center hover:text-accent focus:outline-none ${
+                    selectedCurrency === "udebt" ? "text-accent font-medium border-accent" : "text-gray-600"
+                  }`}
+                  onClick={() => handleTabSelect("udebt")}
+                >
+                  uDEBT
+                </button>
+              </nav>
+              <button onClick={handleBurn} className="self-center">
+                Burn
+              </button>
             </div>
-            <div className="inline-flex w-3/4 justify-between border border-t-0 rounded-md rounded-t-none border-white/10 border-solid">
-              <div className="w-1/3 py-2">10,000</div>
-              <div className="w-1/3 py-2">27,000</div>
-              <div className="w-1/3 py-2">0</div>
+            <p>{errMsg}</p>
+            {expectedDebtCoupon && <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>}
+            <div className="my-4">
+              <span>Price will increase by an estimated of +${increasedValue}</span>
             </div>
-          </div>
-        </div>
-        <div className="py-8">
-          <span>Your Coupons</span>
-        </div>
-        <div className="w-10/12 my-0 mx-auto">
-          <div className="w-full">
-            <div className="inline-flex justify-between w-full">
-              <div className="w-5/12 text-left self-center">
-                <span>uBOND 1,000</span>
-              </div>
-              <div className="inline-flex w-7/12 justify-between">
-                <input type="number" />
-                <button onClick={actions.onRedeem}>Redeem</button>
-              </div>
+          </>
+        ) : (
+          <>
+            <div className="my-4">
+              <span>Reward Cycle</span>
             </div>
-          </div>
-          <div className="w-full">
-            <div className="inline-flex justify-between w-full">
-              <div className="w-5/12 text-left self-center">
-                <span>uAR 3,430 - $2,120</span>
-              </div>
-              <div className="inline-flex w-7/12 justify-between">
-                <input type="number" />
-                <button onClick={actions.onRedeem}>Redeem</button>
+            <div className="w-full">
+              <div className="w-10/12 inline-flex justify-between border rounded-md border-white/10 border-solid">
+                <div className="w-1/4 text-center self-center">
+                  <span>uAD</span>
+                </div>
+                <div className="w-1/4 text-center self-center">
+                  <div className="pt-2 pb-1">Total Supply</div>
+                  <div className="pt-1 pb-2">{uadTotalSupply}</div>
+                </div>
+                <div className="w-1/4 text-center self-center">
+                  <div className="pt-2 pb-1">Minted</div>
+                  <div className="pt-1 pb-2">25k</div>
+                </div>
+                <div className="w-1/4 text-center self-center">
+                  <div className="pt-2 pb-1">Mintable</div>
+                  <div className="pt-1 pb-2">12k</div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="w-full">
-            <div className="inline-flex justify-between w-full">
-              <div className="w-5/12 text-left self-center">
-                <span>Deprecation rate 10% / week</span>
-              </div>
-              <div className="inline-flex w-7/12 justify-between">
-                <span className="text-center w-1/2 self-center">2120 uDEBT</span>
-                <button onClick={actions.onSwap}>Swap</button>
+            <div className="w-full mt-4">
+              <div className="w-10/12 inline-flex">
+                <div className="w-1/4 self-center">
+                  <span>Total debt</span>
+                </div>
+                <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
+                  <div className="w-1/3">
+                    <div className="pt-2 pb-1">uBOND</div>
+                    <div className="pt-1 pb-2">{ubondTotalSupply}</div>
+                  </div>
+                  <div className="w-1/3">
+                    <div className="pt-2 pb-1">uAR</div>
+                    <div className="pt-1 pb-2">{uarTotalSupply}</div>
+                  </div>
+                  <div className="w-1/3">
+                    <div className="pt-2 pb-1">uDEBT</div>
+                    <div className="pt-1 pb-2">{udebtTotalSupply}</div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="w-10/12 my-0 mx-auto">
-          <CouponTable coupons={coupons} onRedeem={actions.onRedeem} />
-        </div>
+            <div className="w-full">
+              <div className="w-10/12 inline-flex">
+                <div className="w-1/4 self-center">
+                  <span>Redeemable</span>
+                </div>
+                <div className="inline-flex w-3/4 justify-between border border-t-0 rounded-md rounded-t-none border-white/10 border-solid">
+                  <div className="w-1/3 py-2">10,000</div>
+                  <div className="w-1/3 py-2">27,000</div>
+                  <div className="w-1/3 py-2">0</div>
+                </div>
+              </div>
+            </div>
+            <div className="py-8">
+              <span>Your Coupons</span>
+            </div>
+            <div className="w-10/12 my-0 mx-auto">
+              <div className="w-full">
+                <div className="inline-flex justify-between w-full">
+                  <div className="w-5/12 text-left self-center">
+                    <span>uBOND 1,000</span>
+                  </div>
+                  <div className="inline-flex w-7/12 justify-between">
+                    <input type="number" />
+                    <button onClick={actions.onRedeem}>Redeem</button>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full">
+                <div className="inline-flex justify-between w-full">
+                  <div className="w-5/12 text-left self-center">
+                    <span>uAR 3,430 - $2,120</span>
+                  </div>
+                  <div className="inline-flex w-7/12 justify-between">
+                    <input type="number" />
+                    <button onClick={actions.onRedeem}>Redeem</button>
+                  </div>
+                </div>
+              </div>
+              <div className="w-full">
+                <div className="inline-flex justify-between w-full">
+                  <div className="w-5/12 text-left self-center">
+                    <span>Deprecation rate 10% / week</span>
+                  </div>
+                  <div className="inline-flex w-7/12 justify-between">
+                    <span className="text-center w-1/2 self-center">2120 uDEBT</span>
+                    <button onClick={actions.onSwap}>Swap</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="w-10/12 my-0 mx-auto">
+              <CouponTable coupons={coupons} onRedeem={actions.onRedeem} />
+            </div>
+          </>
+        )}
       </>
     );
   }
 );
+
+type TwapPriceBarProps = {
+  price: string;
+  date: string | undefined;
+};
+
+export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
+  const calculatedPercent = () => {
+    const parsedPrice = parseFloat(price);
+    let leftBarPercent = (parsedPrice - 1) * 100 + 50;
+    leftBarPercent = leftBarPercent < 20 ? 20 : leftBarPercent > 80 ? 80 : leftBarPercent;
+    return leftBarPercent;
+  };
+
+  const leftPositioned = parseFloat(price) <= 1;
+
+  return (
+    <>
+      <div className="w-full flex h-8 rounded-md border border-white/10 border-solid relative">
+        <div className="w-full flex">
+          <div
+            className={`flex rounded-l-md justify-${leftPositioned ? "end bg-red-600" : "center"} border-0 border-r border-white/10 border-solid`}
+            style={{ width: `${calculatedPercent()}%` }}
+          >
+            {leftPositioned ? <span className="pr-2 self-center">${price}</span> : <span className="pr-2 self-center">Pump cycle started {date} ago</span>}
+          </div>
+          <div className={`flex rounded-r-md justify-${leftPositioned ? "center" : "end bg-green-600"}`} style={{ width: `${100 - calculatedPercent()}%` }}>
+            {leftPositioned ? <span className="pr-2 self-center">Redeeming cycle started {date} ago</span> : <span className="pr-2 self-center">${price}</span>}
+          </div>
+        </div>
+      </div>
+      <div className="py-4">
+        <span className="text-center">
+          {parseFloat(price) <= 1 ? "Burn uAD for debt coupons and help pump the price back up" : "Time to redeem debts coupons and help move the price down"}
+        </span>
+      </div>
+    </>
+  );
+};
 
 type CouponTableProps = {
   coupons: Coupons | null;
