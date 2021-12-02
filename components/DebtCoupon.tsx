@@ -14,7 +14,7 @@ import { ADDRESS } from "../contracts";
 
 type Actions = {
   onRedeem: () => void;
-  onSwap: () => void;
+  onSwap: (amount: number, unit: string) => void;
   onBurn: (uadAmount: string, setErrMsg: Dispatch<SetStateAction<string | undefined>>) => void;
 };
 
@@ -213,6 +213,7 @@ const DebtCoupon = memo(
     const [errMsg, setErrMsg] = useState<string>();
     const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
+    const [uarAmount, setUarAmount] = useState("");
 
     const handleTabSelect = (tab: string) => {
       selectCurrency(tab);
@@ -265,11 +266,22 @@ const DebtCoupon = memo(
       _expectedDebtCoupon(amount, manager, provider, setExpectedDebtCoupon);
     };
 
+    const handleInputUAR = async (e: ChangeEvent) => {
+      const amountEl = e.target as HTMLInputElement;
+      const amountValue = amountEl?.value;
+      setUarAmount(amountValue);
+    };
+
     const handleBurn = () => {
       actions.onBurn(uadAmount, setErrMsg);
     };
 
     const isLessThanOne = () => parseFloat(formattedSwapPrice) <= 1;
+
+    const uarToUdebtFormula = (amount: string) => {
+      const parsedValue = parseFloat(amount);
+      return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
+    };
 
     useEffect(() => {
       priceIncreaseFormula(10).then((value) => {
@@ -280,7 +292,7 @@ const DebtCoupon = memo(
     return (
       <>
         <TwapPriceBar price={formattedSwapPrice} date={calculatedCycleStartDate} />
-        {isLessThanOne() ? (
+        {!isLessThanOne() ? (
           <>
             <div className="py-8">
               <span>Pump Cycle</span>
@@ -445,7 +457,7 @@ const DebtCoupon = memo(
                     <span>uAR 3,430 - $2,120</span>
                   </div>
                   <div className="inline-flex w-7/12 justify-between">
-                    <input type="number" />
+                    <input type="number" value={uarAmount} onChange={handleInputUAR} />
                     <button onClick={actions.onRedeem}>Redeem</button>
                   </div>
                 </div>
@@ -456,14 +468,14 @@ const DebtCoupon = memo(
                     <span>Deprecation rate 10% / week</span>
                   </div>
                   <div className="inline-flex w-7/12 justify-between">
-                    <span className="text-center w-1/2 self-center">2120 uDEBT</span>
-                    <button onClick={actions.onSwap}>Swap</button>
+                    <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount)} uDEBT</span>
+                    <button onClick={() => actions.onSwap(2120, "uDEBT")}>Swap</button>
                   </div>
                 </div>
               </div>
             </div>
             <div className="w-10/12 my-0 mx-auto">
-              <CouponTable coupons={coupons} onRedeem={actions.onRedeem} />
+              <CouponTable coupons={coupons} onRedeem={actions.onRedeem} onSwap={actions.onSwap} />
             </div>
           </>
         )}
@@ -514,9 +526,10 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
 type CouponTableProps = {
   coupons: Coupons | null;
   onRedeem: Actions["onRedeem"];
+  onSwap: Actions["onSwap"];
 };
 
-export const CouponTable = ({ coupons, onRedeem }: CouponTableProps) => {
+export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => {
   return (
     <table className="w-full border border-white/10 border-solid border-colapse mt-16">
       <thead>
@@ -529,7 +542,7 @@ export const CouponTable = ({ coupons, onRedeem }: CouponTableProps) => {
       </thead>
       <tbody>
         {coupons && coupons.uDEBT && coupons.uDEBT.length
-          ? coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} key={index} />)
+          ? coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
           : null}
       </tbody>
     </table>
@@ -539,16 +552,24 @@ export const CouponTable = ({ coupons, onRedeem }: CouponTableProps) => {
 type CouponRowProps = {
   coupon: Coupon;
   onRedeem: Actions["onRedeem"];
+  onSwap: Actions["onSwap"];
 };
 
-export const CouponRow = ({ coupon, onRedeem }: CouponRowProps) => {
+export const CouponRow = ({ coupon, onRedeem, onSwap }: CouponRowProps) => {
   const timeDiff = coupon.expiration - Date.now();
+
+  const handleSwap = () => {
+    onSwap(coupon.swap.amount, coupon.swap.unit);
+  };
 
   return (
     <tr>
       <td>{coupon.amount}</td>
-      <td>{formatTimeDiff(Math.abs(timeDiff))}</td>
-      <td>{`${coupon.swap.amount} ${coupon.swap.unit}`}</td>
+      <td>
+        {formatTimeDiff(Math.abs(timeDiff))}
+        {timeDiff < 0 ? " ago" : ""}
+      </td>
+      <button onClick={handleSwap}>{`${coupon.swap.amount} ${coupon.swap.unit}`}</button>
       <td className="h-12">{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
     </tr>
   );
