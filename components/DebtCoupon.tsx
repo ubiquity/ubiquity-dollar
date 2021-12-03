@@ -3,7 +3,7 @@ import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useSta
 import * as widget from "./ui/widget";
 import { connectedWithUserContext, useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
-import { formatTimeDiff } from "./common/utils";
+import { formatTimeDiff, constrainNumber } from "./common/utils";
 import {
   DebtCouponManager__factory,
   ICouponsForDollarsCalculator__factory,
@@ -26,6 +26,8 @@ type Coupon = {
 
 type Coupons = {
   uDEBT: Coupon[];
+  uBOND: number;
+  uAR: number;
 };
 
 async function _expectedDebtCoupon(
@@ -135,6 +137,8 @@ export const DebtCouponContainer = () => {
       { amount: 500, expiration: 1639526400000, swap: { amount: 125, unit: "uAR" } },
       { amount: 666, expiration: 1636934400000, swap: { amount: 166.5, unit: "UBQ" } },
     ],
+    uBOND: 1000,
+    uAR: 3430,
   };
 
   return (
@@ -214,6 +218,7 @@ const DebtCoupon = memo(
     const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
     const [uarAmount, setUarAmount] = useState("");
+    const [ubondAmount, setUbondAmount] = useState("");
 
     const handleTabSelect = (tab: string) => {
       selectCurrency(tab);
@@ -241,7 +246,6 @@ const DebtCoupon = memo(
 
     const handleInputUAD = async (e: ChangeEvent) => {
       setErrMsg("");
-      const title = "Input uAD...";
       const missing = `Missing input value for`;
       const bignumberErr = `can't parse BigNumber from`;
 
@@ -266,10 +270,33 @@ const DebtCoupon = memo(
       _expectedDebtCoupon(amount, manager, provider, setExpectedDebtCoupon);
     };
 
+    const shouldDisableInput = (type: string) => {
+      if (!coupons) {
+        return true;
+      } else if (type === "uar") {
+        return !coupons.uAR || coupons.uAR <= 0;
+      } else if (type === "ubond") {
+        return !coupons.uBOND || coupons.uBOND <= 0;
+      }
+      return false;
+    };
+
     const handleInputUAR = async (e: ChangeEvent) => {
+      if (!coupons || !coupons.uAR) {
+        return;
+      }
       const amountEl = e.target as HTMLInputElement;
       const amountValue = amountEl?.value;
-      setUarAmount(amountValue);
+      setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
+    };
+
+    const handleInputUBOND = async (e: ChangeEvent) => {
+      if (!coupons || !coupons.uBOND) {
+        return;
+      }
+      const amountEl = e.target as HTMLInputElement;
+      const amountValue = amountEl?.value;
+      setUbondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
     };
 
     const handleBurn = () => {
@@ -292,7 +319,7 @@ const DebtCoupon = memo(
     return (
       <>
         <TwapPriceBar price={formattedSwapPrice} date={calculatedCycleStartDate} />
-        {!isLessThanOne() ? (
+        {isLessThanOne() ? (
           <>
             <div className="py-8">
               <span>Pump Cycle</span>
@@ -391,7 +418,7 @@ const DebtCoupon = memo(
                 </div>
                 <div className="w-1/4 text-center self-center">
                   <div className="pt-2 pb-1">Total Supply</div>
-                  <div className="pt-1 pb-2">{uadTotalSupply}</div>
+                  <div className="pt-1 pb-2">{uadTotalSupply.toLocaleString()}</div>
                 </div>
                 <div className="w-1/4 text-center self-center">
                   <div className="pt-2 pb-1">Minted</div>
@@ -411,15 +438,15 @@ const DebtCoupon = memo(
                 <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
                   <div className="w-1/3">
                     <div className="pt-2 pb-1">uBOND</div>
-                    <div className="pt-1 pb-2">{ubondTotalSupply}</div>
+                    <div className="pt-1 pb-2">{ubondTotalSupply.toLocaleString()}</div>
                   </div>
                   <div className="w-1/3">
                     <div className="pt-2 pb-1">uAR</div>
-                    <div className="pt-1 pb-2">{uarTotalSupply}</div>
+                    <div className="pt-1 pb-2">{uarTotalSupply.toLocaleString()}</div>
                   </div>
                   <div className="w-1/3">
                     <div className="pt-2 pb-1">uDEBT</div>
-                    <div className="pt-1 pb-2">{udebtTotalSupply}</div>
+                    <div className="pt-1 pb-2">{udebtTotalSupply.toLocaleString()}</div>
                   </div>
                 </div>
               </div>
@@ -443,10 +470,10 @@ const DebtCoupon = memo(
               <div className="w-full">
                 <div className="inline-flex justify-between w-full">
                   <div className="w-5/12 text-left self-center">
-                    <span>uBOND 1,000</span>
+                    <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
                   </div>
                   <div className="inline-flex w-7/12 justify-between">
-                    <input type="number" />
+                    <input type="number" value={ubondAmount} disabled={shouldDisableInput("ubond")} onChange={handleInputUBOND} />
                     <button onClick={actions.onRedeem}>Redeem</button>
                   </div>
                 </div>
@@ -454,10 +481,10 @@ const DebtCoupon = memo(
               <div className="w-full">
                 <div className="inline-flex justify-between w-full">
                   <div className="w-5/12 text-left self-center">
-                    <span>uAR 3,430 - $2,120</span>
+                    <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
                   </div>
                   <div className="inline-flex w-7/12 justify-between">
-                    <input type="number" value={uarAmount} onChange={handleInputUAR} />
+                    <input type="number" value={uarAmount} disabled={shouldDisableInput("uar")} onChange={handleInputUAR} />
                     <button onClick={actions.onRedeem}>Redeem</button>
                   </div>
                 </div>
@@ -468,7 +495,7 @@ const DebtCoupon = memo(
                     <span>Deprecation rate 10% / week</span>
                   </div>
                   <div className="inline-flex w-7/12 justify-between">
-                    <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount)} uDEBT</span>
+                    <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
                     <button onClick={() => actions.onSwap(2120, "uDEBT")}>Swap</button>
                   </div>
                 </div>
@@ -507,10 +534,10 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
             className={`flex rounded-l-md justify-${leftPositioned ? "end bg-red-600" : "center"} border-0 border-r border-white/10 border-solid`}
             style={{ width: `${calculatedPercent()}%` }}
           >
-            {leftPositioned ? <span className="pr-2 self-center">${price}</span> : <span className="pr-2 self-center">Pump cycle started {date} ago</span>}
+            {leftPositioned ? <span className="pr-2 self-center">${price}</span> : <span className="pr-2 self-center">Redeeming cycle started {date} ago</span>}
           </div>
           <div className={`flex rounded-r-md justify-${leftPositioned ? "center" : "end bg-green-600"}`} style={{ width: `${100 - calculatedPercent()}%` }}>
-            {leftPositioned ? <span className="pr-2 self-center">Redeeming cycle started {date} ago</span> : <span className="pr-2 self-center">${price}</span>}
+            {leftPositioned ? <span className="pr-2 self-center">Pump cycle started {date} ago</span> : <span className="pr-2 self-center">${price}</span>}
           </div>
         </div>
       </div>
@@ -564,12 +591,12 @@ export const CouponRow = ({ coupon, onRedeem, onSwap }: CouponRowProps) => {
 
   return (
     <tr>
-      <td>{coupon.amount}</td>
+      <td>{coupon.amount.toLocaleString()}</td>
       <td>
         {formatTimeDiff(Math.abs(timeDiff))}
         {timeDiff < 0 ? " ago" : ""}
       </td>
-      <button onClick={handleSwap}>{`${coupon.swap.amount} ${coupon.swap.unit}`}</button>
+      <button onClick={handleSwap}>{`${coupon.swap.amount.toLocaleString()} ${coupon.swap.unit}`}</button>
       <td className="h-12">{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
     </tr>
   );
