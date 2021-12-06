@@ -4,13 +4,8 @@ import * as widget from "./ui/widget";
 import { connectedWithUserContext, useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
 import { formatTimeDiff, constrainNumber } from "./common/utils";
-import {
-  DebtCouponManager__factory,
-  ICouponsForDollarsCalculator__factory,
-  UbiquityAlgorithmicDollarManager,
-  UbiquityAlgorithmicDollar__factory,
-} from "../contracts/artifacts/types";
-import { ADDRESS } from "../contracts";
+import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
+import { ADDRESS, Contracts } from "../contracts";
 
 type Actions = {
   onRedeem: () => void;
@@ -30,17 +25,9 @@ type Coupons = {
   uAR: number;
 };
 
-async function _expectedDebtCoupon(
-  amount: BigNumber,
-  manager: UbiquityAlgorithmicDollarManager | null,
-  provider: ethers.providers.Web3Provider | null,
-  setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
-) {
-  if (manager && provider) {
-    const formulaAdr = await manager.couponCalculatorAddress();
-    const SIGNER = provider.getSigner();
-    const couponCalculator = ICouponsForDollarsCalculator__factory.connect(formulaAdr, SIGNER);
-    const expectedDebtCoupon = await couponCalculator.getCouponAmount(amount);
+async function _expectedDebtCoupon(amount: BigNumber, contracts: Contracts | null, setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>) {
+  if (contracts) {
+    const expectedDebtCoupon = await contracts.coupon.getCouponAmount(amount);
     console.log("expectedDebtCoupon", expectedDebtCoupon.toString());
     setExpectedDebtCoupon(expectedDebtCoupon);
   }
@@ -49,7 +36,7 @@ async function _expectedDebtCoupon(
 const DEBT_COUPON_DEPOSIT_TRANSACTION = "DEBT_COUPON_DEPOSIT_TRANSACTION";
 
 export const DebtCouponContainer = () => {
-  const { balances, twapPrice, manager, provider, account, setBalances, updateActiveTransaction } = useConnectedContext();
+  const { balances, twapPrice, manager, provider, account, contracts, setBalances, updateActiveTransaction } = useConnectedContext();
   const actions: Actions = {
     onRedeem: () => {
       console.log("onRedeem");
@@ -84,13 +71,12 @@ export const DebtCouponContainer = () => {
   };
 
   const depositDollarForDebtCoupons = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
-    if (provider && account && manager && balances) {
-      const uAD = UbiquityAlgorithmicDollar__factory.connect(await manager.dollarTokenAddress(), provider.getSigner());
-      const allowance = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+    if (account && balances && contracts) {
+      const allowance = await contracts.uad.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
       console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
       if (allowance.lt(amount)) {
         // first approve
-        const approveTransaction = await uAD.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
+        const approveTransaction = await contracts.uad.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
@@ -98,12 +84,11 @@ export const DebtCouponContainer = () => {
         );
       }
 
-      const allowance2 = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const allowance2 = await contracts.uad.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
       console.log("allowance2", ethers.utils.formatEther(allowance2));
       // depositDollarForDebtCoupons uAD
 
-      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner());
-      const depositDollarForDebtCouponsWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(amount);
+      const depositDollarForDebtCouponsWaiting = await contracts.debtCouponManager.exchangeDollarsForDebtCoupons(amount);
       await depositDollarForDebtCouponsWaiting.wait();
 
       // fetch new uar and uad balance
@@ -163,6 +148,7 @@ export const DebtCouponContainer = () => {
           udebtTotalSupply={udebtTotalSupply}
           manager={manager}
           provider={provider}
+          contracts={contracts}
           coupons={coupons}
         />
       )}
@@ -188,6 +174,7 @@ type DebtCouponProps = {
   udebtTotalSupply: number;
   manager: UbiquityAlgorithmicDollarManager | null;
   provider: ethers.providers.Web3Provider | null;
+  contracts: Contracts | null;
   coupons: Coupons | null;
 };
 
@@ -207,8 +194,7 @@ const DebtCoupon = memo(
     ubondTotalSupply,
     uarTotalSupply,
     udebtTotalSupply,
-    manager,
-    provider,
+    contracts,
     coupons,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
@@ -267,7 +253,7 @@ const DebtCoupon = memo(
       }
       setUadAmount(amountValue);
 
-      _expectedDebtCoupon(amount, manager, provider, setExpectedDebtCoupon);
+      _expectedDebtCoupon(amount, contracts, setExpectedDebtCoupon);
     };
 
     const shouldDisableInput = (type: string) => {
@@ -596,7 +582,9 @@ export const CouponRow = ({ coupon, onRedeem, onSwap }: CouponRowProps) => {
         {formatTimeDiff(Math.abs(timeDiff))}
         {timeDiff < 0 ? " ago" : ""}
       </td>
-      <button onClick={handleSwap}>{`${coupon.swap.amount.toLocaleString()} ${coupon.swap.unit}`}</button>
+      <td>
+        <button onClick={handleSwap}>{`${coupon.swap.amount.toLocaleString()} ${coupon.swap.unit}`}</button>
+      </td>
       <td className="h-12">{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
     </tr>
   );

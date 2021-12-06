@@ -38,6 +38,8 @@ import {
   YieldProxy__factory,
   IJar,
   IJar__factory,
+  ICouponsForDollarsCalculator,
+  ICouponsForDollarsCalculator__factory,
 } from "./contracts/artifacts/types";
 import namedAccounts from "./fixtures/named-accounts.json";
 import FullDeployment from "./fixtures/full-deployment.json";
@@ -73,6 +75,7 @@ const contracts = {
   yieldProxy: YieldProxy__factory.connect,
   usdc: ERC20__factory.connect,
   jarUsdc: IJar__factory.connect,
+  coupon: ICouponsForDollarsCalculator__factory.connect,
 };
 
 // 2
@@ -105,6 +108,7 @@ export type Contracts = {
   bondingToken: BondingShareV2;
   uDEBT: DebtCoupon;
   uBOND: BondingShareV2;
+  coupon: ICouponsForDollarsCalculator;
 };
 
 // 3
@@ -122,6 +126,7 @@ type ManagerAddresses = {
   masterChef: string;
   sushiSwapPool: string;
   ubiquityFormulas: string;
+  coupon: string;
 };
 
 // Load all contract addresses on parallel
@@ -141,6 +146,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     masterChef,
     sushiSwapPool,
     ubiquityFormulas,
+    coupon,
   ] = await Promise.all([
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
@@ -155,6 +161,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
+    manager.couponCalculatorAddress(),
   ]);
   return {
     uad,
@@ -170,6 +177,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     masterChef,
     sushiSwapPool,
     ubiquityFormulas,
+    coupon,
   };
 }
 
@@ -222,6 +230,7 @@ export async function connectedContracts(): Promise<{
       sushiSwapPool,
       ugovUadPair,
       ubiquityFormulas: contracts.ubiquityFormulas(addr.ubiquityFormulas, provider),
+      coupon: contracts.coupon(addr.coupon, provider),
     },
   };
 }
