@@ -40,6 +40,8 @@ import {
   IJar__factory,
   ICouponsForDollarsCalculator,
   ICouponsForDollarsCalculator__factory,
+  IUARForDollarsCalculator,
+  IUARForDollarsCalculator__factory,
 } from "./contracts/artifacts/types";
 import namedAccounts from "./fixtures/named-accounts.json";
 import FullDeployment from "./fixtures/full-deployment.json";
@@ -76,6 +78,7 @@ const contracts = {
   usdc: ERC20__factory.connect,
   jarUsdc: IJar__factory.connect,
   coupon: ICouponsForDollarsCalculator__factory.connect,
+  uarCalc: IUARForDollarsCalculator__factory.connect,
 };
 
 // 2
@@ -109,6 +112,7 @@ export type Contracts = {
   uDEBT: DebtCoupon;
   uBOND: BondingShareV2;
   coupon: ICouponsForDollarsCalculator;
+  uarCalc: IUARForDollarsCalculator;
 };
 
 // 3
@@ -127,6 +131,7 @@ type ManagerAddresses = {
   sushiSwapPool: string;
   ubiquityFormulas: string;
   coupon: string;
+  uarCalc: string;
 };
 
 // Load all contract addresses on parallel
@@ -147,6 +152,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     sushiSwapPool,
     ubiquityFormulas,
     coupon,
+    uarCalc,
   ] = await Promise.all([
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
@@ -162,6 +168,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
     manager.couponCalculatorAddress(),
+    manager.uarCalculatorAddress(),
   ]);
   return {
     uad,
@@ -178,6 +185,7 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     sushiSwapPool,
     ubiquityFormulas,
     coupon,
+    uarCalc,
   };
 }
 
@@ -214,7 +222,7 @@ export async function connectedContracts(): Promise<{
       jarUsdc: contracts.jarUsdc(ADDRESS.jarUSDCAddr, provider),
 
       // Dynamic-address contracts
-      uad: contracts.uad(addr.uad, provider),
+      uad: contracts.uad(addr.uad, provider.getSigner()),
       metaPool: contracts.metaPool(addr.metaPool, provider),
       twapOracle: contracts.twapOracle(addr.twapOracle, provider),
       dollarMintCalc: contracts.dollarMintCalc(addr.dollarMintCalc, provider),
@@ -231,6 +239,7 @@ export async function connectedContracts(): Promise<{
       ugovUadPair,
       ubiquityFormulas: contracts.ubiquityFormulas(addr.ubiquityFormulas, provider),
       coupon: contracts.coupon(addr.coupon, provider),
+      uarCalc: contracts.uarCalc(addr.uarCalc, provider),
     },
   };
 }

@@ -25,11 +25,26 @@ type Coupons = {
   uAR: number;
 };
 
-async function _expectedDebtCoupon(amount: BigNumber, contracts: Contracts | null, setExpectedDebtCoupon: Dispatch<SetStateAction<BigNumber | undefined>>) {
-  if (contracts) {
-    const expectedDebtCoupon = await contracts.coupon.getCouponAmount(amount);
-    console.log("expectedDebtCoupon", expectedDebtCoupon.toString());
-    setExpectedDebtCoupon(expectedDebtCoupon);
+const uDEBT = "uDEBT";
+const uAR = "uAR";
+
+async function _expectedCoupon(
+  uadAmount: string,
+  contracts: Contracts | null,
+  selectedCurrency: string,
+  setExpectedCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
+) {
+  const amount = ethers.utils.parseEther(uadAmount);
+  if (contracts && amount.gt(BigNumber.from(0))) {
+    if (selectedCurrency === uDEBT) {
+      const expectedCoupon = await contracts.coupon.getCouponAmount(amount);
+      console.log("expectedCoupon", expectedCoupon.toString());
+      setExpectedCoupon(expectedCoupon);
+    } else if (selectedCurrency === uAR) {
+      const expectedCoupon = await contracts.uarCalc.getUARAmount(amount, amount);
+      console.log("expectedCoupon", expectedCoupon.toString());
+      setExpectedCoupon(expectedCoupon);
+    }
   }
 }
 
@@ -198,10 +213,10 @@ const DebtCoupon = memo(
     coupons,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
-    const [selectedCurrency, selectCurrency] = useState("udebt");
+    const [selectedCurrency, selectCurrency] = useState(uDEBT);
     const [increasedValue, setIncreasedValue] = useState(0);
     const [errMsg, setErrMsg] = useState<string>();
-    const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber>();
+    const [expectedCoupon, setExpectedCoupon] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
     const [uarAmount, setUarAmount] = useState("");
     const [ubondAmount, setUbondAmount] = useState("");
@@ -252,8 +267,6 @@ const DebtCoupon = memo(
         return;
       }
       setUadAmount(amountValue);
-
-      _expectedDebtCoupon(amount, contracts, setExpectedDebtCoupon);
     };
 
     const shouldDisableInput = (type: string) => {
@@ -295,6 +308,12 @@ const DebtCoupon = memo(
       const parsedValue = parseFloat(amount);
       return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
     };
+
+    useEffect(() => {
+      if (uadAmount) {
+        _expectedCoupon(uadAmount, contracts, selectedCurrency, setExpectedCoupon);
+      }
+    }, [uadAmount, selectedCurrency]);
 
     useEffect(() => {
       priceIncreaseFormula(10).then((value) => {
@@ -367,17 +386,17 @@ const DebtCoupon = memo(
               <nav className="self-center flex flex-col border-b-2 sm:flex-row">
                 <button
                   className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
-                    selectedCurrency === "uar" ? "text-accent font-medium border-accent" : "text-gray-600"
+                    selectedCurrency === uAR ? "text-accent font-medium border-accent" : "text-gray-600"
                   }`}
-                  onClick={() => handleTabSelect("uar")}
+                  onClick={() => handleTabSelect(uAR)}
                 >
                   uAR
                 </button>
                 <button
                   className={`m-0 rounded-l-none self-center hover:text-accent focus:outline-none ${
-                    selectedCurrency === "udebt" ? "text-accent font-medium border-accent" : "text-gray-600"
+                    selectedCurrency === uDEBT ? "text-accent font-medium border-accent" : "text-gray-600"
                   }`}
-                  onClick={() => handleTabSelect("udebt")}
+                  onClick={() => handleTabSelect(uDEBT)}
                 >
                   uDEBT
                 </button>
@@ -387,7 +406,11 @@ const DebtCoupon = memo(
               </button>
             </div>
             <p>{errMsg}</p>
-            {expectedDebtCoupon && <p>expected uDEBT {ethers.utils.formatEther(expectedDebtCoupon)}</p>}
+            {expectedCoupon && (
+              <p>
+                expected {selectedCurrency} {ethers.utils.formatEther(expectedCoupon)}
+              </p>
+            )}
             <div className="my-4">
               <span>Price will increase by an estimated of +${increasedValue}</span>
             </div>
@@ -482,7 +505,7 @@ const DebtCoupon = memo(
                   </div>
                   <div className="inline-flex w-7/12 justify-between">
                     <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
-                    <button onClick={() => actions.onSwap(2120, "uDEBT")}>Swap</button>
+                    <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
                   </div>
                 </div>
               </div>
