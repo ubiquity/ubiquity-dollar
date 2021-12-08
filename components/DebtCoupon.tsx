@@ -7,6 +7,9 @@ import { formatTimeDiff, constrainNumber } from "./common/utils";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
 import { ADDRESS, Contracts } from "../contracts";
 
+// min 0.9 max 1.1
+// center 1.00$
+
 type Actions = {
   onRedeem: () => void;
   onSwap: (amount: number, unit: string) => void;
@@ -41,7 +44,8 @@ async function _expectedCoupon(
       console.log("expectedCoupon", expectedCoupon.toString());
       setExpectedCoupon(expectedCoupon);
     } else if (selectedCurrency === uAR) {
-      const expectedCoupon = await contracts.uarCalc.getUARAmount(amount, amount);
+      const blockHeight = await contracts.debtCouponManager.blockHeightDebt();
+      const expectedCoupon = await contracts.uarCalc.getUARAmount(amount, blockHeight);
       console.log("expectedCoupon", expectedCoupon.toString());
       setExpectedCoupon(expectedCoupon);
     }
@@ -182,7 +186,6 @@ type DebtCouponProps = {
   udebtCurrentRewardPct: number;
   udebtExpirationTime: number;
   udebtUbqRedemptionRate: number;
-  priceIncreaseFormula: (amount: number) => Promise<number>;
   uadTotalSupply: number;
   ubondTotalSupply: number;
   uarTotalSupply: number;
@@ -191,6 +194,7 @@ type DebtCouponProps = {
   provider: ethers.providers.Web3Provider | null;
   contracts: Contracts | null;
   coupons: Coupons | null;
+  priceIncreaseFormula: (amount: number) => Promise<number>;
 };
 
 const DebtCoupon = memo(
@@ -204,13 +208,13 @@ const DebtCoupon = memo(
     udebtCurrentRewardPct,
     udebtExpirationTime,
     udebtUbqRedemptionRate,
-    priceIncreaseFormula,
     uadTotalSupply,
     ubondTotalSupply,
     uarTotalSupply,
     udebtTotalSupply,
     contracts,
     coupons,
+    priceIncreaseFormula,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
     const [selectedCurrency, selectCurrency] = useState(uDEBT);
@@ -528,8 +532,8 @@ type TwapPriceBarProps = {
 export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
   const calculatedPercent = () => {
     const parsedPrice = parseFloat(price);
-    let leftBarPercent = (parsedPrice - 1) * 100 + 50;
-    leftBarPercent = leftBarPercent < 20 ? 20 : leftBarPercent > 80 ? 80 : leftBarPercent;
+    let leftBarPercent = (parsedPrice - 1) * 100 + 40;
+    leftBarPercent = leftBarPercent < 10 ? 10 : leftBarPercent > 90 ? 90 : leftBarPercent;
     return leftBarPercent;
   };
 
@@ -539,14 +543,20 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
     <>
       <div className="w-full flex h-8 rounded-md border border-white/10 border-solid relative">
         <div className="w-full flex">
+          <div className={`flex rounded-l-md justify-end bg-gray-600 border-0 border-r border-white/10 border-solid`} style={{ width: "10%" }}>
+            <span className="pr-1 self-center">Min $0.9</span>
+          </div>
           <div
-            className={`flex rounded-l-md justify-${leftPositioned ? "end bg-red-600" : "center"} border-0 border-r border-white/10 border-solid`}
+            className={`flex justify-${leftPositioned ? "end" : "center"} border-0 border-r border-white/10 border-solid`}
             style={{ width: `${calculatedPercent()}%` }}
           >
             {leftPositioned ? <span className="pr-2 self-center">${price}</span> : <span className="pr-2 self-center">Redeeming cycle started {date} ago</span>}
           </div>
-          <div className={`flex rounded-r-md justify-${leftPositioned ? "center" : "end bg-green-600"}`} style={{ width: `${100 - calculatedPercent()}%` }}>
-            {leftPositioned ? <span className="pr-2 self-center">Pump cycle started {date} ago</span> : <span className="pr-2 self-center">${price}</span>}
+          <div className={`flex justify-${leftPositioned ? "center" : "start"}`} style={{ width: `${80 - calculatedPercent()}%` }}>
+            {leftPositioned ? <span className="pr-2 self-center">Pump cycle started {date} ago</span> : <span className="pl-2 self-center">${price}</span>}
+          </div>
+          <div className={`flex rounded-r-md justify-start bg-gray-600`} style={{ width: "10%" }}>
+            <span className="pl-1 self-center">Max $1.1</span>
           </div>
         </div>
       </div>

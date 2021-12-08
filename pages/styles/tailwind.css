@@ -276,6 +276,10 @@
   align-items: center
 }
 
+.justify-start {
+  justify-content: flex-start
+}
+
 .justify-end {
   justify-content: flex-end
 }
@@ -298,6 +302,14 @@
 
 .gap-y-4 {
   row-gap: 1rem
+}
+
+.self-start {
+  align-self: flex-start
+}
+
+.self-end {
+  align-self: flex-end
 }
 
 .self-center {
@@ -398,6 +410,16 @@
   background-color: rgba(0, 255, 255, var(--tw-bg-opacity))
 }
 
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(209, 213, 219, var(--tw-bg-opacity))
+}
+
+.bg-gray-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(75, 85, 99, var(--tw-bg-opacity))
+}
+
 .bg-opacity-10 {
   --tw-bg-opacity: 0.1
 }
@@ -484,6 +506,10 @@
 
 .pl-1 {
   padding-left: 0.25rem
+}
+
+.pr-1 {
+  padding-right: 0.25rem
 }
 
 .text-left {

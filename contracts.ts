@@ -218,7 +218,7 @@ export async function connectedContracts(): Promise<{
       curvePool: contracts.curvePool(ADDRESS.curveFactory, provider),
       yieldProxy: contracts.yieldProxy(namedAccounts.yieldProxy, provider),
       usdc: contracts.usdc(ADDRESS.USDC, provider),
-      debtCouponManager: contracts.debtCouponManager(ADDRESS.DEBT_COUPON_MANAGER, provider),
+      debtCouponManager: contracts.debtCouponManager(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner()),
       jarUsdc: contracts.jarUsdc(ADDRESS.jarUSDCAddr, provider),
 
       // Dynamic-address contracts
