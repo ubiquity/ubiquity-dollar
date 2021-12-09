@@ -532,7 +532,7 @@ type TwapPriceBarProps = {
 export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
   const calculatedPercent = () => {
     const parsedPrice = parseFloat(price);
-    let leftBarPercent = (parsedPrice - 1) * 100 + 40;
+    let leftBarPercent = ((parsedPrice - 0.9) * 100 * 0.8) / 0.2;
     leftBarPercent = leftBarPercent < 10 ? 10 : leftBarPercent > 90 ? 90 : leftBarPercent;
     return leftBarPercent;
   };
@@ -543,21 +543,60 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
     <>
       <div className="w-full flex h-8 rounded-md border border-white/10 border-solid relative">
         <div className="w-full flex">
-          <div className={`flex rounded-l-md justify-end bg-gray-600 border-0 border-r border-white/10 border-solid`} style={{ width: "10%" }}>
-            <span className="pr-1 self-center">Min $0.9</span>
-          </div>
+          <div className={`flex rounded-l-md justify-end bg-gray-600 border-0 border-r border-white/10 border-solid`} style={{ width: "10%" }}></div>
+          <hr className="h-full border-r-0 m-0 pt-1" />
           <div
-            className={`flex justify-${leftPositioned ? "end" : "center"} border-0 border-r border-white/10 border-solid`}
-            style={{ width: `${calculatedPercent()}%` }}
+            className={`flex justify-${leftPositioned ? "end border-r-2 border-right-accent" : "center"} border-0 border-r border-white/10 border-solid`}
+            style={{ width: `${leftPositioned ? calculatedPercent() : 40}%` }}
           >
-            {leftPositioned ? <span className="pr-2 self-center">${price}</span> : <span className="pr-2 self-center">Redeeming cycle started {date} ago</span>}
+            {leftPositioned ? (
+              <span className="pr-2 self-center text-accent">${price}</span>
+            ) : (
+              <span className="pr-2 self-center">Redeeming cycle started {date} ago</span>
+            )}
           </div>
-          <div className={`flex justify-${leftPositioned ? "center" : "start"}`} style={{ width: `${80 - calculatedPercent()}%` }}>
-            {leftPositioned ? <span className="pr-2 self-center">Pump cycle started {date} ago</span> : <span className="pl-2 self-center">${price}</span>}
+          {leftPositioned ? (
+            <>
+              <div className={`flex justify-center flex-col border-0 border-r border-white/10 border-solid`} style={{ width: `${40 - calculatedPercent()}%` }}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </div>
+              <hr className="h-full border-r-0 m-0 pt-1" />
+            </>
+          ) : (
+            <>
+              <hr className="h-full border-r-0 m-0 pt-1" />
+              <div
+                className={`flex justify-center flex-col border-0 border-r border-r-2 border-right-accent border-white/10 border-solid`}
+                style={{ width: `${calculatedPercent() - 40}%` }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent -mr-1 self-end" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                </svg>
+              </div>
+            </>
+          )}
+          <div className={`flex justify-${leftPositioned ? "center" : "start"}`} style={{ width: `${leftPositioned ? 40 : 80 - calculatedPercent()}%` }}>
+            {leftPositioned ? (
+              <span className="pr-2 self-center">Pump cycle started {date} ago</span>
+            ) : (
+              <span className="pl-2 self-center text-accent">${price}</span>
+            )}
           </div>
-          <div className={`flex rounded-r-md justify-start bg-gray-600`} style={{ width: "10%" }}>
-            <span className="pl-1 self-center">Max $1.1</span>
-          </div>
+          <hr className="h-full border-r-0 m-0 pt-1" />
+          <div className={`flex rounded-r-md justify-start bg-gray-600`} style={{ width: "10%" }}></div>
+        </div>
+      </div>
+      <div className="w-full flex justify-between mt-4">
+        <div className="w-1/5">
+          <span className="self-center">$0.9</span>
+        </div>
+        <div className="w-1/5">
+          <span className="self-center">$1</span>
+        </div>
+        <div className="w-1/5">
+          <span className="self-center">$1.1</span>
         </div>
       </div>
       <div className="py-4">

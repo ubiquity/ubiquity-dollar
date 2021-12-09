@@ -600,3 +600,11 @@ input[type="range"]::-ms-track {
   border: none;
   background: transparent;
 }
+
+.border-right-accent {
+  border-right-color: #00ffffff !important;
+}
+
+.border-left-accent {
+  border-left-color: #00ffffff !important;
+}
