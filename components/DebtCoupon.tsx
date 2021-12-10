@@ -232,6 +232,7 @@ const DebtCoupon = memo(
     useEffect(() => {
       if (twapPrice) {
         setFormattedSwapPrice(parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(2));
+        // setFormattedSwapPrice("1.06");
       }
     }, [twapPrice]);
 
@@ -330,94 +331,23 @@ const DebtCoupon = memo(
         <TwapPriceBar price={formattedSwapPrice} date={calculatedCycleStartDate} />
         {isLessThanOne() ? (
           <>
-            <div className="py-8">
-              <span>Pump Cycle</span>
-            </div>
-            <div className="flex justify-center pb-4">
-              <div className="w-2/4 px-8 border-0 border-r border-white/10 border-solid">
-                <span>Fungible (uAR)</span>
-                <table className="w-full">
-                  <tbody>
-                    <tr>
-                      <td className="pr-4 text-right">Deprecation rate</td>
-                      <td className="pl-4 text-left">{uarDeprecationRate * 100}% / week</td>
-                    </tr>
-                    <tr>
-                      <td className="pr-4 text-right">Current reward %</td>
-                      <td className="pl-4 text-left">{uarCurrentRewardPct * 100}%</td>
-                    </tr>
-                    <tr>
-                      <td className="pr-4 text-right">Expires?</td>
-                      <td className="pl-4 text-left">No</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div>
-                  <span>Higher priority when redeeming</span>
-                </div>
-                <a href="">Learn more</a>
-              </div>
-              <div className="w-2/4 px-8">
-                <span>Non-fungible (uDEBT)</span>
-                <table className="w-full">
-                  <tbody>
-                    <tr>
-                      <td className="pr-4 text-right">Deprecation rate</td>
-                      <td className="pl-4 text-left">{udebtDeprecationRate * 100}%</td>
-                    </tr>
-                    <tr>
-                      <td className="pr-4 text-right">Current reward %</td>
-                      <td className="pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
-                    </tr>
-                    <tr>
-                      <td className="pr-4 text-right">Expires?</td>
-                      <td className="pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div>
-                  <span>Convertible to fungible</span>
-                </div>
-                <div>
-                  <span>Can be redeemed for UBQ at {udebtUbqRedemptionRate * 100}% rate</span>
-                </div>
-                <a href="">Learn more</a>
-              </div>
-            </div>
-            <div className="inline-flex my-8">
-              <span className="self-center">uAD</span>
-              <input className="self-center" type="number" onChange={handleInputUAD} />
-              <nav className="self-center flex flex-col border-b-2 sm:flex-row">
-                <button
-                  className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
-                    selectedCurrency === uAR ? "text-accent font-medium border-accent" : "text-gray-600"
-                  }`}
-                  onClick={() => handleTabSelect(uAR)}
-                >
-                  uAR
-                </button>
-                <button
-                  className={`m-0 rounded-l-none self-center hover:text-accent focus:outline-none ${
-                    selectedCurrency === uDEBT ? "text-accent font-medium border-accent" : "text-gray-600"
-                  }`}
-                  onClick={() => handleTabSelect(uDEBT)}
-                >
-                  uDEBT
-                </button>
-              </nav>
-              <button onClick={handleBurn} className="self-center">
-                Burn
-              </button>
-            </div>
-            <p>{errMsg}</p>
-            {expectedCoupon && (
-              <p>
-                expected {selectedCurrency} {ethers.utils.formatEther(expectedCoupon)}
-              </p>
-            )}
-            <div className="my-4">
-              <span>Price will increase by an estimated of +${increasedValue}</span>
-            </div>
+            <PumpCycle
+              uarDeprecationRate={uarDeprecationRate}
+              uarCurrentRewardPct={uarCurrentRewardPct}
+              udebtDeprecationRate={udebtDeprecationRate}
+              udebtCurrentRewardPct={udebtCurrentRewardPct}
+              udebtUbqRedemptionRate={udebtUbqRedemptionRate}
+              calculatedUdebtExpirationTime={calculatedUdebtExpirationTime}
+            />
+            <UadBurning
+              handleInputUAD={handleInputUAD}
+              selectedCurrency={selectedCurrency}
+              handleTabSelect={handleTabSelect}
+              handleBurn={handleBurn}
+              errMsg={errMsg}
+              expectedCoupon={expectedCoupon}
+              increasedValue={increasedValue}
+            />
           </>
         ) : (
           <>
@@ -524,6 +454,134 @@ const DebtCoupon = memo(
   }
 );
 
+type UadBurningProps = {
+  handleInputUAD: (e: ChangeEvent) => Promise<void>;
+  selectedCurrency: string;
+  handleTabSelect: (tab: string) => void;
+  handleBurn: () => void;
+  errMsg: string | undefined;
+  expectedCoupon: BigNumber | undefined;
+  increasedValue: number;
+};
+
+export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedCoupon, errMsg }: UadBurningProps) => {
+  return (
+    <>
+      <div className="inline-flex my-8">
+        <span className="self-center">uAD</span>
+        <input className="self-center" type="number" onChange={handleInputUAD} />
+        <nav className="self-center flex flex-col border-b-2 sm:flex-row">
+          <button
+            className={`m-0 rounded-r-none self-center hover:text-accent focus:outline-none ${
+              selectedCurrency === uAR ? "text-accent font-medium border-accent" : "text-gray-600"
+            }`}
+            onClick={() => handleTabSelect(uAR)}
+          >
+            uAR
+          </button>
+          <button
+            className={`m-0 rounded-l-none self-center hover:text-accent focus:outline-none ${
+              selectedCurrency === uDEBT ? "text-accent font-medium border-accent" : "text-gray-600"
+            }`}
+            onClick={() => handleTabSelect(uDEBT)}
+          >
+            uDEBT
+          </button>
+        </nav>
+        <button onClick={handleBurn} className="self-center">
+          Burn
+        </button>
+      </div>
+      <p>{errMsg}</p>
+      {expectedCoupon && (
+        <p>
+          expected {selectedCurrency} {ethers.utils.formatEther(expectedCoupon)}
+        </p>
+      )}
+      <div className="my-4">
+        <span>Price will increase by an estimated of +${increasedValue}</span>
+      </div>
+    </>
+  );
+};
+
+type PumpCycleProps = {
+  uarDeprecationRate: number;
+  uarCurrentRewardPct: number;
+  udebtDeprecationRate: number;
+  udebtCurrentRewardPct: number;
+  udebtUbqRedemptionRate: number;
+  calculatedUdebtExpirationTime: string | undefined;
+};
+
+export const PumpCycle = ({
+  uarDeprecationRate,
+  uarCurrentRewardPct,
+  udebtDeprecationRate,
+  udebtCurrentRewardPct,
+  udebtUbqRedemptionRate,
+  calculatedUdebtExpirationTime,
+}: PumpCycleProps) => {
+  return (
+    <>
+      <div className="py-8">
+        <span>Pump Cycle</span>
+      </div>
+      <div className="flex justify-center pb-4">
+        <div className="w-2/4 px-8 border-0 border-r border-white/10 border-solid">
+          <span>Fungible (uAR)</span>
+          <table className="w-full">
+            <tbody>
+              <tr>
+                <td className="pr-4 text-right">Deprecation rate</td>
+                <td className="pl-4 text-left">{uarDeprecationRate * 100}% / week</td>
+              </tr>
+              <tr>
+                <td className="pr-4 text-right">Current reward %</td>
+                <td className="pl-4 text-left">{uarCurrentRewardPct * 100}%</td>
+              </tr>
+              <tr>
+                <td className="pr-4 text-right">Expires?</td>
+                <td className="pl-4 text-left">No</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <span>Higher priority when redeeming</span>
+          </div>
+          <a href="">Learn more</a>
+        </div>
+        <div className="w-2/4 px-8">
+          <span>Non-fungible (uDEBT)</span>
+          <table className="w-full">
+            <tbody>
+              <tr>
+                <td className="pr-4 text-right">Deprecation rate</td>
+                <td className="pl-4 text-left">{udebtDeprecationRate * 100}%</td>
+              </tr>
+              <tr>
+                <td className="pr-4 text-right">Current reward %</td>
+                <td className="pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
+              </tr>
+              <tr>
+                <td className="pr-4 text-right">Expires?</td>
+                <td className="pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <span>Convertible to fungible</span>
+          </div>
+          <div>
+            <span>Can be redeemed for UBQ at {udebtUbqRedemptionRate * 100}% rate</span>
+          </div>
+          <a href="">Learn more</a>
+        </div>
+      </div>
+    </>
+  );
+};
+
 type TwapPriceBarProps = {
   price: string;
   date: string | undefined;
@@ -550,7 +608,7 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
             style={{ width: `${leftPositioned ? calculatedPercent() : 40}%` }}
           >
             {leftPositioned ? (
-              <span className="pr-2 self-center text-accent">${price}</span>
+              <span className="pr-2 self-center text-accent pt-0.5">${price}</span>
             ) : (
               <span className="pr-2 self-center">Redeeming cycle started {date} ago</span>
             )}
@@ -558,7 +616,7 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
           {leftPositioned ? (
             <>
               <div className={`flex justify-center flex-col border-0 border-r border-white/10 border-solid`} style={{ width: `${40 - calculatedPercent()}%` }}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
@@ -571,7 +629,7 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
                 className={`flex justify-center flex-col border-0 border-r border-r-2 border-right-accent border-white/10 border-solid`}
                 style={{ width: `${calculatedPercent() - 40}%` }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent -mr-1 self-end" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent mr-2 self-end" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                 </svg>
               </div>
@@ -581,7 +639,7 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
             {leftPositioned ? (
               <span className="pr-2 self-center">Pump cycle started {date} ago</span>
             ) : (
-              <span className="pl-2 self-center text-accent">${price}</span>
+              <span className="pl-2 self-center text-accent pt-0.5">${price}</span>
             )}
           </div>
           <hr className="h-full border-r-0 m-0 pt-1" />
