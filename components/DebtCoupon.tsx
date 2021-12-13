@@ -7,9 +7,6 @@ import { formatTimeDiff, constrainNumber } from "./common/utils";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
 import { ADDRESS, Contracts } from "../contracts";
 
-// min 0.9 max 1.1
-// center 1.00$
-
 type Actions = {
   onRedeem: () => void;
   onSwap: (amount: number, unit: string) => void;
@@ -222,8 +219,6 @@ const DebtCoupon = memo(
     const [errMsg, setErrMsg] = useState<string>();
     const [expectedCoupon, setExpectedCoupon] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
-    const [uarAmount, setUarAmount] = useState("");
-    const [ubondAmount, setUbondAmount] = useState("");
 
     const handleTabSelect = (tab: string) => {
       selectCurrency(tab);
@@ -274,45 +269,11 @@ const DebtCoupon = memo(
       setUadAmount(amountValue);
     };
 
-    const shouldDisableInput = (type: string) => {
-      if (!coupons) {
-        return true;
-      } else if (type === "uar") {
-        return !coupons.uAR || coupons.uAR <= 0;
-      } else if (type === "ubond") {
-        return !coupons.uBOND || coupons.uBOND <= 0;
-      }
-      return false;
-    };
-
-    const handleInputUAR = async (e: ChangeEvent) => {
-      if (!coupons || !coupons.uAR) {
-        return;
-      }
-      const amountEl = e.target as HTMLInputElement;
-      const amountValue = amountEl?.value;
-      setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
-    };
-
-    const handleInputUBOND = async (e: ChangeEvent) => {
-      if (!coupons || !coupons.uBOND) {
-        return;
-      }
-      const amountEl = e.target as HTMLInputElement;
-      const amountValue = amountEl?.value;
-      setUbondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
-    };
-
     const handleBurn = () => {
       actions.onBurn(uadAmount, setErrMsg);
     };
 
     const isLessThanOne = () => parseFloat(formattedSwapPrice) <= 1;
-
-    const uarToUdebtFormula = (amount: string) => {
-      const parsedValue = parseFloat(amount);
-      return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
-    };
 
     useEffect(() => {
       if (uadAmount) {
@@ -350,118 +311,207 @@ const DebtCoupon = memo(
             />
           </>
         ) : (
-          <>
-            <div className="my-4">
-              <span>Reward Cycle</span>
-            </div>
-            <div className="w-full">
-              <div className="w-10/12 inline-flex justify-between border rounded-md border-white/10 border-solid">
-                <div className="w-1/4 text-center self-center">
-                  <span>uAD</span>
-                </div>
-                <div className="w-1/4 text-center self-center">
-                  <div className="pt-2 pb-1">Total Supply</div>
-                  <div className="pt-1 pb-2">{uadTotalSupply.toLocaleString()}</div>
-                </div>
-                <div className="w-1/4 text-center self-center">
-                  <div className="pt-2 pb-1">Minted</div>
-                  <div className="pt-1 pb-2">25k</div>
-                </div>
-                <div className="w-1/4 text-center self-center">
-                  <div className="pt-2 pb-1">Mintable</div>
-                  <div className="pt-1 pb-2">12k</div>
-                </div>
-              </div>
-            </div>
-            <div className="w-full mt-4">
-              <div className="w-10/12 inline-flex">
-                <div className="w-1/4 self-center">
-                  <span>Total debt</span>
-                </div>
-                <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
-                  <div className="w-1/3">
-                    <div className="pt-2 pb-1">uBOND</div>
-                    <div className="pt-1 pb-2">{ubondTotalSupply.toLocaleString()}</div>
-                  </div>
-                  <div className="w-1/3">
-                    <div className="pt-2 pb-1">uAR</div>
-                    <div className="pt-1 pb-2">{uarTotalSupply.toLocaleString()}</div>
-                  </div>
-                  <div className="w-1/3">
-                    <div className="pt-2 pb-1">uDEBT</div>
-                    <div className="pt-1 pb-2">{udebtTotalSupply.toLocaleString()}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-full">
-              <div className="w-10/12 inline-flex">
-                <div className="w-1/4 self-center">
-                  <span>Redeemable</span>
-                </div>
-                <div className="inline-flex w-3/4 justify-between border border-t-0 rounded-md rounded-t-none border-white/10 border-solid">
-                  <div className="w-1/3 py-2">10,000</div>
-                  <div className="w-1/3 py-2">27,000</div>
-                  <div className="w-1/3 py-2">0</div>
-                </div>
-              </div>
-            </div>
-            <div className="py-8">
-              <span>Your Coupons</span>
-            </div>
-            <div className="w-10/12 my-0 mx-auto">
-              <div className="w-full">
-                <div className="inline-flex justify-between w-full">
-                  <div className="w-5/12 text-left self-center">
-                    <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
-                  </div>
-                  <div className="inline-flex w-7/12 justify-between">
-                    <input type="number" value={ubondAmount} disabled={shouldDisableInput("ubond")} onChange={handleInputUBOND} />
-                    <button onClick={actions.onRedeem}>Redeem</button>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full">
-                <div className="inline-flex justify-between w-full">
-                  <div className="w-5/12 text-left self-center">
-                    <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
-                  </div>
-                  <div className="inline-flex w-7/12 justify-between">
-                    <input type="number" value={uarAmount} disabled={shouldDisableInput("uar")} onChange={handleInputUAR} />
-                    <button onClick={actions.onRedeem}>Redeem</button>
-                  </div>
-                </div>
-              </div>
-              <div className="w-full">
-                <div className="inline-flex justify-between w-full">
-                  <div className="w-5/12 text-left self-center">
-                    <span>Deprecation rate 10% / week</span>
-                  </div>
-                  <div className="inline-flex w-7/12 justify-between">
-                    <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
-                    <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-10/12 my-0 mx-auto">
-              <CouponTable coupons={coupons} onRedeem={actions.onRedeem} onSwap={actions.onSwap} />
-            </div>
-          </>
+          <Coupons
+            uadTotalSupply={uadTotalSupply}
+            ubondTotalSupply={ubondTotalSupply}
+            uarTotalSupply={uarTotalSupply}
+            udebtTotalSupply={udebtTotalSupply}
+            coupons={coupons}
+            actions={actions}
+          />
         )}
       </>
     );
   }
 );
 
+type CouponsProps = {
+  uadTotalSupply: number;
+  ubondTotalSupply: number;
+  uarTotalSupply: number;
+  udebtTotalSupply: number;
+  coupons: Coupons | null;
+  actions: Actions;
+};
+
+export const Coupons = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupply, udebtTotalSupply, coupons, actions }: CouponsProps) => {
+  return (
+    <>
+      <RewardCycleInfo
+        uadTotalSupply={uadTotalSupply}
+        ubondTotalSupply={ubondTotalSupply}
+        uarTotalSupply={uarTotalSupply}
+        udebtTotalSupply={udebtTotalSupply}
+      />
+      <div className="py-8">
+        <span>Your Coupons</span>
+      </div>
+      <CouponRedeem coupons={coupons} actions={actions} />
+      <CouponTable coupons={coupons} onRedeem={actions.onRedeem} onSwap={actions.onSwap} />
+    </>
+  );
+};
+
+type CouponRedeemProps = {
+  coupons: Coupons | null;
+  actions: Actions;
+};
+
+export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
+  const [uarAmount, setUarAmount] = useState("");
+  const [ubondAmount, setUbondAmount] = useState("");
+  const shouldDisableInput = (type: string) => {
+    if (!coupons) {
+      return true;
+    } else if (type === "uar") {
+      return !coupons.uAR || coupons.uAR <= 0;
+    } else if (type === "ubond") {
+      return !coupons.uBOND || coupons.uBOND <= 0;
+    }
+    return false;
+  };
+
+  const handleInputUAR = async (e: ChangeEvent) => {
+    if (!coupons || !coupons.uAR) {
+      return;
+    }
+    const amountEl = e.target as HTMLInputElement;
+    const amountValue = amountEl?.value;
+    setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
+  };
+
+  const handleInputUBOND = async (e: ChangeEvent) => {
+    if (!coupons || !coupons.uBOND) {
+      return;
+    }
+    const amountEl = e.target as HTMLInputElement;
+    const amountValue = amountEl?.value;
+    setUbondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
+  };
+
+  const uarToUdebtFormula = (amount: string) => {
+    const parsedValue = parseFloat(amount);
+    return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
+  };
+
+  return (
+    <>
+      <div className="w-10/12 my-0 mx-auto">
+        <div className="w-full">
+          <div className="inline-flex justify-between w-full">
+            <div className="w-5/12 text-left self-center">
+              <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
+            </div>
+            <div className="inline-flex w-7/12 justify-between">
+              <input type="number" value={ubondAmount} disabled={shouldDisableInput("ubond")} onChange={handleInputUBOND} />
+              <button onClick={actions.onRedeem}>Redeem</button>
+            </div>
+          </div>
+        </div>
+        <div className="w-full">
+          <div className="inline-flex justify-between w-full">
+            <div className="w-5/12 text-left self-center">
+              <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
+            </div>
+            <div className="inline-flex w-7/12 justify-between">
+              <input type="number" value={uarAmount} disabled={shouldDisableInput("uar")} onChange={handleInputUAR} />
+              <button onClick={actions.onRedeem}>Redeem</button>
+            </div>
+          </div>
+        </div>
+        <div className="w-full">
+          <div className="inline-flex justify-between w-full">
+            <div className="w-5/12 text-left self-center">
+              <span>Deprecation rate 10% / week</span>
+            </div>
+            <div className="inline-flex w-7/12 justify-between">
+              <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
+              <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+type RewardCycleInfoProps = {
+  uadTotalSupply: number;
+  ubondTotalSupply: number;
+  uarTotalSupply: number;
+  udebtTotalSupply: number;
+};
+
+export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupply, udebtTotalSupply }: RewardCycleInfoProps) => {
+  return (
+    <>
+      <div className="my-4">
+        <span>Reward Cycle</span>
+      </div>
+      <div className="w-full">
+        <div className="w-10/12 inline-flex justify-between border rounded-md border-white/10 border-solid">
+          <div className="w-1/4 text-center self-center">
+            <span>uAD</span>
+          </div>
+          <div className="w-1/4 text-center self-center">
+            <div className="pt-2 pb-1">Total Supply</div>
+            <div className="pt-1 pb-2">{uadTotalSupply.toLocaleString()}</div>
+          </div>
+          <div className="w-1/4 text-center self-center">
+            <div className="pt-2 pb-1">Minted</div>
+            <div className="pt-1 pb-2">25k</div>
+          </div>
+          <div className="w-1/4 text-center self-center">
+            <div className="pt-2 pb-1">Mintable</div>
+            <div className="pt-1 pb-2">12k</div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full mt-4">
+        <div className="w-10/12 inline-flex">
+          <div className="w-1/4 self-center">
+            <span>Total debt</span>
+          </div>
+          <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
+            <div className="w-1/3">
+              <div className="pt-2 pb-1">uBOND</div>
+              <div className="pt-1 pb-2">{ubondTotalSupply.toLocaleString()}</div>
+            </div>
+            <div className="w-1/3">
+              <div className="pt-2 pb-1">uAR</div>
+              <div className="pt-1 pb-2">{uarTotalSupply.toLocaleString()}</div>
+            </div>
+            <div className="w-1/3">
+              <div className="pt-2 pb-1">uDEBT</div>
+              <div className="pt-1 pb-2">{udebtTotalSupply.toLocaleString()}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full">
+        <div className="w-10/12 inline-flex">
+          <div className="w-1/4 self-center">
+            <span>Redeemable</span>
+          </div>
+          <div className="inline-flex w-3/4 justify-between border border-t-0 rounded-md rounded-t-none border-white/10 border-solid">
+            <div className="w-1/3 py-2">10,000</div>
+            <div className="w-1/3 py-2">27,000</div>
+            <div className="w-1/3 py-2">0</div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 type UadBurningProps = {
-  handleInputUAD: (e: ChangeEvent) => Promise<void>;
   selectedCurrency: string;
-  handleTabSelect: (tab: string) => void;
-  handleBurn: () => void;
   errMsg: string | undefined;
   expectedCoupon: BigNumber | undefined;
   increasedValue: number;
+  handleInputUAD: (e: ChangeEvent) => Promise<void>;
+  handleTabSelect: (tab: string) => void;
+  handleBurn: () => void;
 };
 
 export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedCoupon, errMsg }: UadBurningProps) => {
@@ -674,21 +724,23 @@ type CouponTableProps = {
 
 export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => {
   return (
-    <table className="w-full border border-white/10 border-solid border-colapse mt-16">
-      <thead>
-        <tr>
-          <th className="normal-case">uDEBT</th>
-          <th className="normal-case">Expiration</th>
-          <th className="normal-case">Swap</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {coupons && coupons.uDEBT && coupons.uDEBT.length
-          ? coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
-          : null}
-      </tbody>
-    </table>
+    <div className="w-10/12 my-0 mx-auto">
+      <table className="w-full border border-white/10 border-solid border-colapse mt-16">
+        <thead>
+          <tr>
+            <th className="normal-case">uDEBT</th>
+            <th className="normal-case">Expiration</th>
+            <th className="normal-case">Swap</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {coupons && coupons.uDEBT && coupons.uDEBT.length
+            ? coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
+            : null}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
