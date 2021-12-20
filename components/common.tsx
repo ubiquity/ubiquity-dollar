@@ -16,6 +16,7 @@ import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
 import { Transacting } from "./ui/widget";
+import Header from "./Header";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -66,24 +67,7 @@ export function _renderControls() {
         <div id="grid"></div>
       </div>
       <div id="common">
-        <header>
-          <div id="logo">
-            <span>Ubiquity Dollar</span>
-            <span>|</span>
-            <span>Dashboard</span>
-            <span></span>
-          </div>
-          <div>
-            <span>
-              <input type="button" value="Connect Wallet" disabled={connecting} onClick={() => connect()} />
-            </span>
-          </div>
-          <Network />
-          <div className="fixed top-0 right-0 mr-4 mt-4 pointer-events-none">
-            {activeTransactions ? activeTransactions.map((transaction, index) => <Transacting key={transaction.id + index} transaction={transaction} />) : null}
-          </div>
-          <Account />
-        </header>
+        <Header section="Dashboard" href="/" />
 
         {account && <TwapPrice />}
         <BondingMigrate />
