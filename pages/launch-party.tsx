@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Header from "../components/Header";
-import Whitelist from "../components/launch-party/Whitelist";
+import Whitelist, { WhitelistStatus } from "../components/launch-party/Whitelist";
 import UbiquiStick from "../components/launch-party/UbiquiStick";
 import BondingPool from "../components/launch-party/BondingPool";
 import Liquidate from "../components/launch-party/Liquidate";
@@ -13,7 +13,7 @@ const Monitor: FC = (): JSX.Element => {
       </div>
       <div className="relative z-20">
         <Header section="Launch Party" href="/launch-party" />
-        <Whitelist />
+        <Whitelist status={"whitelisted"} />
         <UbiquiStick />
         <BondingPool />
         <Liquidate />

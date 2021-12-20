@@ -34,7 +34,9 @@
       "start": "clear && printf '\\033[3J'"
     }
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@svgr/webpack": "^6.1.2"
+  },
   "dependencies": {
     "@tippyjs/react": "^4.2.5",
     "@types/node": "^16.7.10",

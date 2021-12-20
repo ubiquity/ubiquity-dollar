@@ -1,5 +1,5 @@
 const Liquidate = () => {
-  return <div>Liquidate</div>;
+  return <div className="party-container">Liquidate</div>;
 };
 
 export default Liquidate;
