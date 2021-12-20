@@ -38,7 +38,14 @@ const Whitelist = ({ status }: { status: WhitelistStatus }) => {
                 return (
                   <div>
                     <h2 className="m-0 mb-2 tracking-widest uppercase text-base">You are not whitelisted</h2>
-                    <p className="m-0 font-light tracking-wide">In order to participate you need to be on the whitelist</p>
+                    <p className="m-0 mb-4 font-light tracking-wide">In order to participate you need to be on the whitelist</p>
+                    <a
+                      className="btn-primary"
+                      target="_blank"
+                      href="https://twitter.com/intent/tweet?text=%40UbiquityDAO%20I%20want%20to%20be%20whitelisted%20for%20the%20launch%20party%20https%3A%2F%2Fuad.ubq.fi%2Flaunch-party"
+                    >
+                      I want in
+                    </a>
                   </div>
                 );
             }

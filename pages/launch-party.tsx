@@ -13,7 +13,7 @@ const Monitor: FC = (): JSX.Element => {
       </div>
       <div className="relative z-20">
         <Header section="Launch Party" href="/launch-party" />
-        <Whitelist status={"whitelisted"} />
+        <Whitelist status={"not-whitelisted"} />
         <UbiquiStick />
         <BondingPool />
         <Liquidate />
