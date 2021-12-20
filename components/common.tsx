@@ -7,16 +7,11 @@ import Account from "./account";
 import Network from "./network";
 import BondingMigrate from "./bonding.migrate";
 import { useConnectedContext } from "./context/connected";
-import CurveBalance from "./curve.balance";
-import CurveLPBalance from "./curveLP.balance";
-import DebtCouponBalance from "./debtCoupon.balance";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponRedeem from "./debtCoupon.redeem";
 import TwapPrice from "./twap.price";
-import UadBalance from "./uad.balance";
-import UarBalance from "./uar.balance";
 import UarRedeem from "./uar.redeem";
-import UbqBalance from "./ubq.balance";
+import Inventory from "./inventory";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import DebtCoupon from "./DebtCoupon";
@@ -42,7 +37,8 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 export function _renderControls() {
   const context = useConnectedContext();
-  const { setAccount, account, balances, twapPrice, activeTransactions } = context;
+  const { setAccount, account, balances, twapPrice, activeTransactions, contracts } = context;
+
   const [connecting, setConnecting] = useState(false);
 
   const connect = async (): Promise<void> => {
@@ -105,7 +101,7 @@ export function _renderControls() {
           </div>
           <div>
             <div id="uad-market">
-              <div>
+              <div className="inline-flex items-center">
                 {icons.svgs.uad}
                 <span>uAD</span>
               </div>
@@ -121,7 +117,7 @@ export function _renderControls() {
               </div>
             </div>
             <div id="ubq-market">
-              <div>
+              <div className="inline-flex items-center">
                 <span>{icons.svgs.ubq}</span>
                 <span>UBQ</span>
               </div>
@@ -142,24 +138,7 @@ export function _renderControls() {
           </div>
         </div>
 
-        {balances && (
-          <>
-            <div id="inventory-top">
-              <div>
-                <div>
-                  <aside>My Ubiquity Inventory</aside>
-                  <figure></figure>
-                </div>
-                <UbqBalance />
-                <UadBalance />
-                <UarBalance />
-                <DebtCouponBalance />
-                <CurveBalance />
-                <CurveLPBalance />
-              </div>
-            </div>
-          </>
-        )}
+        {balances && account && contracts && <Inventory balances={balances} address={account.address} contracts={contracts} />}
       </div>
     </>
   );

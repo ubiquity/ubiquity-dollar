@@ -127,7 +127,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
         <div className="w-20">{icons.svgs.warning}</div>
         <p className="text-left flex-grow">
           <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
-          <a target="_blank" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
+          <a target="_blank" className="text-white" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
             Learn more &raquo;
           </a>
         </p>

@@ -29,6 +29,10 @@
   position: fixed
 }
 
+.absolute {
+  position: absolute
+}
+
 .relative {
   position: relative
 }
@@ -55,6 +59,10 @@
 
 .col-span-2 {
   grid-column: span 2 / span 2
+}
+
+.col-span-10 {
+  grid-column: span 10 / span 10
 }
 
 .m-0 {
@@ -282,6 +290,14 @@
 
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr))
+}
+
+.grid-cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr))
+}
+
+.grid-cols-7 {
+  grid-template-columns: repeat(7, minmax(0, 1fr))
 }
 
 .flex-col {
