@@ -36,23 +36,21 @@ const Header = ({ section, href }: { section: string; href: string }) => {
     <header className="p-4 backdrop-blur-xl">
       <div className="flex justify-center mx-auto max-w-screen-md">
         <div className="uppercase tracking-widest text-gray-400 flex items-center flex-grow">
-          <a href="/" className="group text-gray-400 hover:text-accent no-underline hover-drop-shadow">
+          <a href="/" className="group text-gray-400 hover:text-accent no-underline hover:drop-shadow-light">
             {<Icon icon="uad" className="align-middle h-7 -mt-2 mr-4 fill-gray-400 group-hover:fill-accent" />}
             <span>Ubiquity Dollar</span>
           </a>
           <span className="mx-4">|</span>
-          <a href={href} className="text-gray-400 hover:text-accent no-underline hover-drop-shadow">
+          <a href={href} className="text-gray-400 hover:text-accent no-underline hover:drop-shadow-light">
             {section}
           </a>
         </div>
         <div>
-          <span>
-            <button disabled={connecting} onClick={() => connect()}>
-              Connect Wallet
-            </button>
-          </span>
+          <button disabled={true} onClick={() => connect()} className="btn-primary">
+            Connect Wallet
+          </button>
         </div>
-        <div className="">
+        <div>
           <Network />
         </div>
         <div className="fixed top-0 right-0 mr-4 mt-4 pointer-events-none">
