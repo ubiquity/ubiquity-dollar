@@ -99,7 +99,7 @@ export function _renderControls() {
           </div>
           <div>
             <div id="uad-market">
-              <div>
+              <div className="inline-flex items-center">
                 {icons.svgs.uad}
                 <span>uAD</span>
               </div>
@@ -115,7 +115,7 @@ export function _renderControls() {
               </div>
             </div>
             <div id="ubq-market">
-              <div>
+              <div className="inline-flex items-center">
                 <span>{icons.svgs.ubq}</span>
                 <span>UBQ</span>
               </div>

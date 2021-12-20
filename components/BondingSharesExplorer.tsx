@@ -211,10 +211,10 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         )}
       </table>
       <div id="rewards-summary">
-        <div className="mb-2 ">
+        <div className="mb-2 inline-flex items-center">
           {icons.svgs.ubq}
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
-          pending UBQ rewards
+          &nbsp;pending UBQ rewards
         </div>
         <div className="mb-2">
           {icons.svgs.lp}
@@ -248,7 +248,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
         ${Math.round(usdAmount * 100) / 100}
       </td>
       <td>
-        <div className="text-accent whitespace-nowrap">
+        <div className="text-accent whitespace-nowrap inline-flex items-center">
           {icons.svgs.ubq} <span>{formatEther(ugov)}</span>
         </div>
       </td>
