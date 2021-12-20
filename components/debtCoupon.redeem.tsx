@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
 import { ADDRESS } from "../pages";
 import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
 
 const _getDebtIds = async (
   account: string,
@@ -20,8 +21,10 @@ const _getDebtIds = async (
   }
 };
 
+const UDEBT_REDEEM_TRANSACTION = "UDEBT_REDEEM_TRANSACTION";
+
 const DebtCouponRedeem = () => {
-  const { account, manager, provider, balances, setBalances } = useConnectedContext();
+  const { account, manager, provider, balances, setBalances, updateActiveTransaction } = useConnectedContext();
   const [debtIds, setDebtIds] = useState<BigNumber[]>();
   useEffect(() => {
     console.log("DebtCouponRedeem  ");
@@ -29,7 +32,6 @@ const DebtCouponRedeem = () => {
   });
 
   const [errMsg, setErrMsg] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>();
   const [debtId, setDebtId] = useState<string>();
 
   if (!account || !balances) {
@@ -77,7 +79,8 @@ const DebtCouponRedeem = () => {
 
   const handleRedeem = async () => {
     setErrMsg("");
-    setIsLoading(true);
+    const title = "Redeeming uDEBT...";
+    updateActiveTransaction({ id: UDEBT_REDEEM_TRANSACTION, title, active: true });
     const udebtAmount = document.getElementById("udebtAmount") as HTMLInputElement;
     const udebtAmountValue = udebtAmount?.value;
     if (!udebtAmountValue) {
@@ -89,15 +92,15 @@ const DebtCouponRedeem = () => {
         if (amount.gt(BigNumber.from(0))) {
           await redeemDebtForDollar(debtId, amount, setBalances);
         } else {
-          setErrMsg("uDebt Amount should be greater than 0");
+          setErrMsg("uDEBT Amount should be greater than 0");
         }
       } else {
         setErrMsg("amount not valid");
-        setIsLoading(false);
+        updateActiveTransaction({ id: UDEBT_REDEEM_TRANSACTION, active: false });
         return;
       }
     }
-    setIsLoading(false);
+    updateActiveTransaction({ id: UDEBT_REDEEM_TRANSACTION, active: false });
   };
 
   return (
@@ -112,16 +115,8 @@ const DebtCouponRedeem = () => {
           onChange={(value) => setDebtId(value.value as string)}
         />
 
-        <input type="number" name="udebtAmount" id="udebtAmount" placeholder="uDebt Amount" />
-        <button onClick={handleRedeem}>Burn uDebt for uAD</button>
-        {isLoading && (
-          <div className="lds-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        )}
+        <input type="number" name="udebtAmount" id="udebtAmount" placeholder="uDEBT Amount" />
+        <button onClick={handleRedeem}>Redeem uDEBT for uAD</button>
         <p>{errMsg}</p>
       </div>
     </>

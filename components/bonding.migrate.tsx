@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { BondingV2__factory } from "../contracts/artifacts/types";
 import { UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
 import { EthAccount } from "./common/types";
-import { Balances, useConnectedContext } from "./context/connected";
+import { useConnectedContext } from "./context/connected";
+import { Balances } from "./common/contracts-shortcuts";
 
 async function _migrate(
   provider: ethers.providers.Web3Provider | null,

@@ -4,7 +4,7 @@ import { connectedWithUserContext, useConnectedContext, UserContext } from "./co
 import { formatEther } from "./common/format";
 import { useAsyncInit, performTransaction } from "./common/utils";
 import * as widget from "./ui/widget";
-import { UBQIcon, LiquidIcon } from "./ui/icons";
+import icons from "./ui/icons";
 import DepositShare from "./DepositShare";
 
 type ShareData = {
@@ -37,10 +37,11 @@ type Actions = {
 
 const USD_TO_LP = 0.75;
 const LP_TO_USD = 1 / USD_TO_LP;
+const BONDING_SHARE_TRANSACTION = "BONDING_SHARE_TRANSACTION";
 
 export const BondingSharesExplorerContainer = ({ contracts, provider, account, signer }: UserContext) => {
   const [model, setModel] = useState<Model | null>(null);
-  const { refreshBalances } = useConnectedContext();
+  const { refreshBalances, updateActiveTransaction } = useConnectedContext();
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {
@@ -76,6 +77,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 
     console.timeEnd("BondingShareExplorerContainer contract loading");
     setModel({ processing: false, shares: sortedShares, totalShares, walletLpBalance });
+    updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, active: false });
   }
 
   function allLpAmount(id: number): BigNumber {
@@ -90,7 +92,9 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
       async ({ id, amount }) => {
         if (!model || model.processing) return;
         console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
+        const title = `Withdrawing LP...`;
         setModel({ ...model, processing: true });
+        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
 
         const isAllowed = await contracts.bondingToken.isApprovedForAll(account.address, contracts.bonding.address);
         if (!isAllowed) {
@@ -114,6 +118,8 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         if (!model || model.processing) return;
         console.log(`Claiming UBQ rewards from ${id}`);
         setModel({ ...model, processing: true });
+        const title = "Claiming UBQ...";
+        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
 
         await performTransaction(contracts.masterChef.connect(signer).getRewards(BigNumber.from(id)));
 
@@ -128,6 +134,8 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         if (!model || model.processing) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         setModel({ ...model, processing: true });
+        const title = `Staking...`;
+        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
         const allowance = await contracts.metaPool.allowance(account.address, contracts.bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
         console.log("lpsAmount", ethers.utils.formatEther(amount));
@@ -204,12 +212,12 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
       </table>
       <div id="rewards-summary">
         <div className="mb-2 ">
-          {UBQIcon}
+          {icons.svgs.ubq}
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
           pending UBQ rewards
         </div>
         <div className="mb-2">
-          {LiquidIcon}
+          {icons.svgs.lp}
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
         <div className="mb-2">{poolPercentage}% pool ownership</div>
@@ -241,7 +249,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
       </td>
       <td>
         <div className="text-accent whitespace-nowrap">
-          {UBQIcon} <span>{formatEther(ugov)}</span>
+          {icons.svgs.ubq} <span>{formatEther(ugov)}</span>
         </div>
       </td>
       <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>

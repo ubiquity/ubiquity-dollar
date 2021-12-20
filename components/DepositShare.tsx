@@ -2,12 +2,7 @@ import { ChangeEvent, useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 import { connectedWithUserContext, UserContext } from "./context/connected";
 import { Contracts } from "../contracts";
-
-const constrainNumber = (num: number, min: number, max: number): number => {
-  if (num < min) return min;
-  else if (num > max) return max;
-  else return num;
-};
+import { constrainNumber } from "./common/utils";
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();
@@ -33,7 +28,7 @@ async function prefetchConstants(contracts: Contracts): Promise<PrefetchedConsta
 async function calculateApyForWeeks(contracts: Contracts, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
   const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
-  const usdAsLp = 0.75; // TODO: Get this number from the Curve contract
+  const usdAsLp = 0.7562534324; // TODO: Get this number from the Curve contract
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
   const weeks = BigNumber.from(weeksNum.toString());
   const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
