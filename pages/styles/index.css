@@ -4,7 +4,7 @@
 
 @layer components {
   .btn-primary {
-    @apply px-4 py-2 transition;
+    @apply px-4 py-2 h-auto transition;
     @apply font-special uppercase text-xs tracking-widest text-white text-opacity-75;
     @apply border border-solid border-white border-opacity-25 rounded;
     @apply no-underline;
@@ -20,7 +20,7 @@
   }
 
   .party-container {
-    @apply px-4 py-8 mb-8 mx-auto max-w-screen-md backdrop-blur-sm bg-white bg-opacity-5 rounded;
+    @apply p-8 mb-8 mx-auto max-w-screen-md backdrop-blur-sm bg-white bg-opacity-5 rounded;
   }
 }
 :root {
