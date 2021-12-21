@@ -1,5 +1,5 @@
 const BondingPool = () => {
-  return <div className="party-container">BondingPool</div>;
+  return <div></div>;
 };
 
 export default BondingPool;

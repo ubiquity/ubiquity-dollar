@@ -2,7 +2,8 @@ import { FC } from "react";
 import Header from "../components/Header";
 import Whitelist, { WhitelistStatus } from "../components/launch-party/Whitelist";
 import UbiquiStick from "../components/launch-party/UbiquiStick";
-import BondingPool from "../components/launch-party/BondingPool";
+import FundingPools from "../components/launch-party/FundingPools";
+import MultiplicationPool from "../components/launch-party/MultiplicationPool";
 import Liquidate from "../components/launch-party/Liquidate";
 
 const Monitor: FC = (): JSX.Element => {
@@ -15,7 +16,8 @@ const Monitor: FC = (): JSX.Element => {
         <Header section="Launch Party" href="/launch-party" />
         <Whitelist status={"not-whitelisted"} />
         <UbiquiStick />
-        <BondingPool />
+        <FundingPools />
+        <MultiplicationPool />
         <Liquidate />
       </div>
     </div>
