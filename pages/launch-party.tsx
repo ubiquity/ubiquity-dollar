@@ -4,6 +4,7 @@ import Whitelist, { WhitelistStatus } from "../components/launch-party/Whitelist
 import UbiquiStick from "../components/launch-party/UbiquiStick";
 import FundingPools from "../components/launch-party/FundingPools";
 import MultiplicationPool from "../components/launch-party/MultiplicationPool";
+import YourBonds from "../components/launch-party/YourBonds";
 import Liquidate from "../components/launch-party/Liquidate";
 
 const Monitor: FC = (): JSX.Element => {
@@ -18,7 +19,8 @@ const Monitor: FC = (): JSX.Element => {
         <UbiquiStick />
         <FundingPools />
         <MultiplicationPool />
-        <Liquidate />
+        <YourBonds />
+        <Liquidate accumulated={3500} />
       </div>
     </div>
   );

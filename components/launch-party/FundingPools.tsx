@@ -1,14 +1,14 @@
 import BondingPool from "./BondingPool";
-import { pools } from "./data/pools";
+import { pools } from "./lib/pools";
+import SectionTitle from "./lib/SectionTitle";
 
 const FundingPools = () => {
   return (
     <div className="party-container">
-      <h2 className="m-0 mb-2 tracking-widest uppercase text-xl">Funding Pools</h2>
-      <p className="m-0 mb-4 font-light tracking-wide">Sell LP, get uAR over the course of 5 days</p>
+      <SectionTitle title="Funding Pools" subtitle="Sell LP, get uAR over the course of 5 days" />
       <div className="grid grid-cols-2 gap-8">
         {pools.map((pool) => (
-          <BondingPool {...pool} />
+          <BondingPool key={pool.token1 + "-" + pool.token2} {...pool} />
         ))}
       </div>
     </div>

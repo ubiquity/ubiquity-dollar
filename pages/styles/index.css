@@ -20,7 +20,12 @@
   }
 
   .party-container {
-    @apply p-8 mb-8 mx-auto max-w-screen-md backdrop-blur-sm bg-white bg-opacity-5 rounded;
+    @apply p-8 mb-8 mx-auto max-w-screen-md rounded;
+    /* @apply backdrop-blur-sm bg-white bg-opacity-5; */
+
+    /* Functionally the same as the blur and
+       the white background but higher performance on scroll */
+    background-color: #131325;
   }
 }
 :root {

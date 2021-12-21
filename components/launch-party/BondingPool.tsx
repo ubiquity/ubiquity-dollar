@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import cx from "classnames";
-import { PoolInfo, PoolData, fetchPoolData } from "./data/pools";
-
-const formatter = new Intl.NumberFormat();
+import { PoolInfo, PoolData, fetchPoolData } from "./lib/pools";
+import { format, round } from "./lib/utils";
 
 const BondingPool = (info: PoolInfo) => {
   const [poolData, setPoolData] = useState<PoolData | null>(null);
@@ -27,7 +26,7 @@ const BondingPool = (info: PoolInfo) => {
           })}
         >
           <div>
-            {poolData ? formatter.format(poolData.apy) : "????"}%{info.logo ? <br /> : " "}
+            {poolData ? format(poolData.apy) : "????"}%{info.logo ? <br /> : " "}
             <span className="font-normal">APY</span>
           </div>
         </div>
@@ -41,7 +40,7 @@ const BondingPool = (info: PoolInfo) => {
       </div>
       <div className="text-sm flex mb-6">
         <div className="flex-grow text-left">
-          You have {poolData ? poolData.poolTokenBalance : "????"} {LPTokenName}
+          You have {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
         </div>
         <a href={info.poolMarketLink} target="_blank">
           Get more
@@ -57,7 +56,7 @@ const TokenInfo = ({ name, liquidity }: { name: string; liquidity: number | unde
     <div className="flex-grow">{name}</div>
     <div className="px-2 py-0 flex items-center border border-solid border-white bg-opacity-50 rounded-full">
       <img src="liquidity.png" className="h-4 mr-2" />
-      <span className="leading-6 text-sm">{liquidity != null ? liquidity : "???"}</span>
+      <span className="leading-6 text-sm">{liquidity != null ? format(round(liquidity)) : "???"}</span>
     </div>
   </div>
 );
