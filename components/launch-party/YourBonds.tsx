@@ -94,7 +94,7 @@ const YourBonds = () => {
                     <div className="text-white text-opacity-50 text-sm">{toTimeInWords((bond.dripped / bond.total) * BONDING_TIME)} left</div>
                   </div>
                 </td>
-                <td className="py-2 px-2">{formatFixed(round(bond.dripped - bond.claimed))}</td>
+                <td className="py-2 px-2">{formatFixed(round(bond.dripped - bond.claimed))} uAR</td>
               </tr>
             ))}
           </tbody>

@@ -9,7 +9,7 @@ const UbiquiStick = () => {
         <Stick amount={4} imgSrc="ubiquistick.png" name="Standard" />
         <Stick amount={0} imgSrc="ubiquistick.png" name="Gold" />
       </div>
-      <button className="btn-primary text-lg mb-8">Mint for 0.5 ETH</button>
+      <button className="btn-primary mb-8">Mint for 0.5 ETH</button>
       <a href="https://opensea.io/">See your Ubiquisticks on OpenSeas</a>
     </div>
   );
