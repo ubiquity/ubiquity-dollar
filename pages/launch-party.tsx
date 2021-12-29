@@ -1,11 +1,5 @@
 import { FC } from "react";
-import Header from "../components/Header";
-import Whitelist, { WhitelistStatus } from "../components/launch-party/Whitelist";
-import UbiquiStick from "../components/launch-party/UbiquiStick";
-import FundingPools from "../components/launch-party/FundingPools";
-import MultiplicationPool from "../components/launch-party/MultiplicationPool";
-import YourBonds from "../components/launch-party/YourBonds";
-import Liquidate from "../components/launch-party/Liquidate";
+import App from "../components/launch-party/App";
 
 const Monitor: FC = (): JSX.Element => {
   return (
@@ -14,13 +8,7 @@ const Monitor: FC = (): JSX.Element => {
         <div id="grid"></div>
       </div>
       <div className="relative z-20">
-        <Header section="Launch Party" href="/launch-party" />
-        <Whitelist status={"not-whitelisted"} />
-        <UbiquiStick />
-        <FundingPools />
-        <MultiplicationPool />
-        <YourBonds />
-        <Liquidate accumulated={3500} />
+        <App />
       </div>
     </div>
   );
