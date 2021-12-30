@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useConnectedContext } from "./context/connected";
 import { EthAccount } from "./common/types";
 import Account from "./account";
 import Network from "./network";
 import { Transacting } from "./ui/widget";
 import { Icon } from "./ui/icons";
+
+const PROD = process.env.NODE_ENV == "production";
 
 async function fetchAccount(): Promise<EthAccount | null> {
   if (window.ethereum?.request) {
@@ -32,6 +34,12 @@ const Header = ({ section, href }: { section: string; href: string }) => {
     setAccount(await fetchAccount());
   };
 
+  if (!PROD) {
+    useEffect(() => {
+      connect();
+    }, []);
+  }
+
   return (
     <header className="p-4 backdrop-blur-xl">
       <div className="flex justify-center mx-auto max-w-screen-md">
@@ -46,7 +54,7 @@ const Header = ({ section, href }: { section: string; href: string }) => {
           </a>
         </div>
         <div>
-          <button disabled={true} onClick={() => connect()} className="btn-primary">
+          <button disabled={connecting} onClick={() => connect()} className="btn-primary">
             Connect Wallet
           </button>
         </div>
