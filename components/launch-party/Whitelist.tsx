@@ -1,7 +1,5 @@
 import Vip from "../ui/vip.svg";
 
-console.log(Vip);
-
 export type WhitelistStatus = "not-connected" | "connected" | "whitelisted" | "not-whitelisted";
 
 const Whitelist = ({ status }: { status: WhitelistStatus }) => {
