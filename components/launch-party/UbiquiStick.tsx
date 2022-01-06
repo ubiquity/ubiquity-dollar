@@ -7,7 +7,8 @@ import { TheUbiquityStick__factory } from "./lib/types";
 import { ownedSticksState, OwnedSticksState, sticksAllowanceState, sticksCountState } from "./lib/states";
 import { formatEther } from "../common/format";
 
-const TheUbiquiStickAddress = "0xaab265cceb890c0e6e09aa6f5ee63b33de649374";
+// const TheUbiquiStickAddress = "0xaab265cceb890c0e6e09aa6f5ee63b33de649374";
+const TheUbiquiStickAddress = "0x45379687D28B5CaDf738067Da1058eA9801d9897";
 
 const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
 
@@ -43,6 +44,10 @@ const UbiquiStick = () => {
     }
   }, [provider, account]);
 
+  function mint() {
+    console.log("MINT UBIQUI STICK");
+  }
+
   const mintButtonEnabled = sticks && allowance && allowance.count > 0;
   const mintButtonText = !account
     ? "Connect your wallet"
@@ -61,7 +66,7 @@ const UbiquiStick = () => {
         <Stick loading={!sticks} amount={sticks?.standard || 0} imgSrc="ubiquistick.jpeg" name="Standard" />
         <Stick loading={!sticks} amount={sticks?.gold || 0} imgSrc="ubiquistick.jpeg" name="Gold" />
       </div>
-      <button className="btn-primary mb-8" disabled={!mintButtonEnabled}>
+      <button className="btn-primary mb-8" disabled={!mintButtonEnabled} onClick={mint}>
         {mintButtonText}
       </button>
       <a href="https://opensea.io/">See your Ubiquisticks on OpenSeas</a>

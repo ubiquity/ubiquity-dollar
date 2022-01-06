@@ -55,6 +55,6 @@ export const isWhitelistedState = selector({
   get: ({ get }) => {
     const allowance = get(sticksAllowanceState);
     const sticksCount = get(sticksCountState);
-    return allowance && sticksCount ? allowance.count > 0 || sticksCount > 0 : null;
+    return allowance && sticksCount !== null && (allowance.count > 0 || sticksCount > 0);
   },
 });

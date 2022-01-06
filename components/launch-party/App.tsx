@@ -23,8 +23,10 @@ const App = () => {
   );
 };
 
-export default () => (
+const RecoilApp = () => (
   <RecoilRoot>
     <App />
   </RecoilRoot>
 );
+
+export default RecoilApp;
