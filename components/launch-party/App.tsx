@@ -1,20 +1,19 @@
+import { RecoilRoot } from "recoil";
 import Header from "../Header";
 import CustomHeader from "./Header";
-import Whitelist, { WhitelistStatus } from "./Whitelist";
+import Whitelist from "./Whitelist";
 import UbiquiStick from "./UbiquiStick";
 import FundingPools from "./FundingPools";
 import MultiplicationPool from "./MultiplicationPool";
 import YourBonds from "./YourBonds";
 import Liquidate from "./Liquidate";
 
-import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil";
-
 const App = () => {
   return (
     <div>
       <Header section="Launch Party" href="/launch-party" />
       <CustomHeader />
-      <Whitelist status={"not-whitelisted"} />
+      <Whitelist />
       <UbiquiStick />
       <FundingPools />
       <MultiplicationPool />
@@ -24,4 +23,8 @@ const App = () => {
   );
 };
 
-export default App;
+export default () => (
+  <RecoilRoot>
+    <App />
+  </RecoilRoot>
+);

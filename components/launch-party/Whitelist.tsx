@@ -1,4 +1,31 @@
+import { useEffect } from "react";
+import { useConnectedContext } from "../context/connected";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { TheUbiquityStickSale__factory } from "./lib/types";
+import { isWhitelistedState, sticksAllowanceState } from "./lib/states";
 import Vip from "../ui/vip.svg";
+
+const SaleContractAddress = "0x035e4568f2738917512e4222a8837ad22d21bb1d";
+
+const WhitelistContainer = () => {
+  const { provider, account } = useConnectedContext();
+  const [sticksAllowance, setSticksAllowance] = useRecoilState(sticksAllowanceState);
+  const isWhiteListed = useRecoilValue(isWhitelistedState);
+
+  useEffect(() => {
+    if (provider && account) {
+      (async () => {
+        const SaleContract = TheUbiquityStickSale__factory.connect(SaleContractAddress, provider);
+        const allowance = await SaleContract.allowance(account.address);
+        setSticksAllowance({ count: allowance.count.toNumber(), price: allowance.price.toNumber() });
+      })();
+    }
+  }, [provider, account]);
+
+  const status = !account ? "not-connected" : sticksAllowance ? (isWhiteListed ? "whitelisted" : "not-whitelisted") : "connected";
+
+  return <Whitelist status={status} />;
+};
 
 export type WhitelistStatus = "not-connected" | "connected" | "whitelisted" | "not-whitelisted";
 
@@ -54,4 +81,4 @@ const Whitelist = ({ status }: { status: WhitelistStatus }) => {
   );
 };
 
-export default Whitelist;
+export default WhitelistContainer;

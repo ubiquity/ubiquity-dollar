@@ -1,47 +1,66 @@
-import { useEffect, useState } from "react";
-import { useUserContractsContext } from "../context/connected";
+import { useEffect } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { useConnectedContext } from "../context/connected";
 import cx from "classnames";
 import SectionTitle from "./lib/SectionTitle";
-import { TheUbiquityStick__factory } from "./lib/types";
+import { TheUbiquityStick__factory, TheUbiquityStickSale__factory } from "./lib/types";
+import { ownedSticksState, OwnedSticksState, sticksAllowanceState, sticksCountState } from "./lib/states";
 
 const TheUbiquiStickAddress = "0xaab265cceb890c0e6e09aa6f5ee63b33de649374";
-const SaleContractAddress = "0xaab265cceb890c0e6e09aa6f5ee63b33de649374";
 
 const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
 
-type Sticks = {
-  standard: number;
-  gold: number;
-};
-
 const UbiquiStick = () => {
-  const [sticks, setSticks] = useState<Sticks | null>(null);
+  const [sticks, setSticks] = useRecoilState(ownedSticksState);
+  const sticksCount = useRecoilValue(sticksCountState);
+  const allowance = useRecoilValue(sticksAllowanceState);
 
-  const userContext = useUserContractsContext();
+  const { provider, account } = useConnectedContext();
 
   useEffect(() => {
-    if (userContext) {
+    if (provider && account) {
       (async () => {
-        const { provider, account } = userContext;
         const accountAddress = mockAccount || account.address;
+        const newSticks: OwnedSticksState = { standard: 0, gold: 0 };
+        // allowance: { count: 0, price: 0 }
+
         const NftContract = TheUbiquityStick__factory.connect(TheUbiquiStickAddress, provider);
         const sticksAmount = (await NftContract.balanceOf(accountAddress)).toNumber();
-        const sticksData: Sticks = { standard: 0, gold: 0 };
         await Promise.all(
           new Array(sticksAmount).fill(0).map(async (_, i) => {
             const id = (await NftContract.tokenOfOwnerByIndex(accountAddress, i)).toNumber();
             const isGold = await NftContract.gold(id);
             if (isGold) {
-              sticksData.gold += 1;
+              newSticks.gold += 1;
             } else {
-              sticksData.standard += 1;
+              newSticks.standard += 1;
             }
           })
         );
-        setSticks(sticksData);
+
+        setSticks(newSticks);
+
+        // const SaleContract = TheUbiquityStickSale__factory.connect(SaleContractAddress, provider);
+        // const allowance = await SaleContract.allowance(accountAddress);
+        // newSticks.allowance.count = allowance.count.toNumber();
+        // newSticks.allowance.price = allowance.price.toNumber();
+
+        // console.log(newSticks);
+        // setSticks(newSticks);
       })();
     }
-  }, [userContext]);
+  }, [provider, account]);
+
+  const mintButtonEnabled = sticks && allowance && allowance.count > 0;
+  const mintButtonText = !account
+    ? "Connect your wallet"
+    : !sticks || !allowance
+    ? "Checking whitelist"
+    : allowance.count === 0 && sticksCount !== 0
+    ? "You reached your minting limit"
+    : allowance.count === 0 && sticksCount === 0
+    ? "You are not whitelisted to mint"
+    : `Mint for ${allowance.price} ETH`;
 
   return (
     <div className="party-container flex flex-col items-center">
@@ -50,7 +69,9 @@ const UbiquiStick = () => {
         <Stick loading={!sticks} amount={sticks?.standard || 0} imgSrc="ubiquistick.jpeg" name="Standard" />
         <Stick loading={!sticks} amount={sticks?.gold || 0} imgSrc="ubiquistick.jpeg" name="Gold" />
       </div>
-      <button className="btn-primary mb-8">Mint for 0.5 ETH</button>
+      <button className="btn-primary mb-8" disabled={!mintButtonEnabled}>
+        {mintButtonText}
+      </button>
       <a href="https://opensea.io/">See your Ubiquisticks on OpenSeas</a>
     </div>
   );
