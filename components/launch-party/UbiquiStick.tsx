@@ -3,8 +3,9 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { useConnectedContext } from "../context/connected";
 import cx from "classnames";
 import SectionTitle from "./lib/SectionTitle";
-import { TheUbiquityStick__factory, TheUbiquityStickSale__factory } from "./lib/types";
+import { TheUbiquityStick__factory } from "./lib/types";
 import { ownedSticksState, OwnedSticksState, sticksAllowanceState, sticksCountState } from "./lib/states";
+import { formatEther } from "../common/format";
 
 const TheUbiquiStickAddress = "0xaab265cceb890c0e6e09aa6f5ee63b33de649374";
 
@@ -22,7 +23,6 @@ const UbiquiStick = () => {
       (async () => {
         const accountAddress = mockAccount || account.address;
         const newSticks: OwnedSticksState = { standard: 0, gold: 0 };
-        // allowance: { count: 0, price: 0 }
 
         const NftContract = TheUbiquityStick__factory.connect(TheUbiquiStickAddress, provider);
         const sticksAmount = (await NftContract.balanceOf(accountAddress)).toNumber();
@@ -39,14 +39,6 @@ const UbiquiStick = () => {
         );
 
         setSticks(newSticks);
-
-        // const SaleContract = TheUbiquityStickSale__factory.connect(SaleContractAddress, provider);
-        // const allowance = await SaleContract.allowance(accountAddress);
-        // newSticks.allowance.count = allowance.count.toNumber();
-        // newSticks.allowance.price = allowance.price.toNumber();
-
-        // console.log(newSticks);
-        // setSticks(newSticks);
       })();
     }
   }, [provider, account]);

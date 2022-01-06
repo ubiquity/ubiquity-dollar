@@ -17,7 +17,7 @@ const WhitelistContainer = () => {
       (async () => {
         const SaleContract = TheUbiquityStickSale__factory.connect(SaleContractAddress, provider);
         const allowance = await SaleContract.allowance(account.address);
-        setSticksAllowance({ count: allowance.count.toNumber(), price: allowance.price.toNumber() });
+        setSticksAllowance({ count: allowance.count.toNumber(), price: +allowance.price.toString() / 1e18 });
       })();
     }
   }, [provider, account]);
