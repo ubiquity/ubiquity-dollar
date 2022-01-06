@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import cx from "classnames";
+import { useRecoilValue } from "recoil";
 import { PoolInfo, PoolData, fetchPoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
+import { isWhitelistedState } from "./lib/states";
 
 const BondingPool = (info: PoolInfo) => {
+  const isWhitelisted = useRecoilValue(isWhitelistedState);
   const [poolData, setPoolData] = useState<PoolData | null>(null);
   useEffect(() => {
     (async () => {
@@ -46,7 +49,9 @@ const BondingPool = (info: PoolInfo) => {
           Get more
         </a>
       </div>
-      <button className="btn-primary m-0">Deposit &amp; Bond</button>
+      <button className="btn-primary m-0" disabled={!isWhitelisted}>
+        Deposit &amp; Bond
+      </button>
     </div>
   );
 };

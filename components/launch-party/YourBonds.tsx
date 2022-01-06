@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { round, formatFixed } from "./lib/utils";
 import SectionTitle from "./lib/SectionTitle";
+import { useRecoilValue } from "recoil";
+import { isWhitelistedState } from "./lib/states";
 
 type Bond = {
   tokenName: string;
@@ -58,6 +60,7 @@ const toTimeInWords = (time: number): string => {
 };
 
 const YourBonds = () => {
+  const isWhitelisted = useRecoilValue(isWhitelistedState);
   const [bonds, setBonds] = useState<Bond[]>(yourBondsMock);
   useEffect(() => {
     const interval = setTimeout(() => {
@@ -102,7 +105,9 @@ const YourBonds = () => {
       </div>
       <div className="text-lg mb-2">Accumulated claimable</div>
       <div className="text-3xl mb-6 text-accent drop-shadow-light">{formatFixed(round(accumulated))} uAR</div>
-      <button className="btn-primary">Claim all</button>
+      <button className="btn-primary" disabled={!isWhitelisted}>
+        Claim all
+      </button>
     </div>
   );
 };
