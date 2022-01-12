@@ -113,7 +113,7 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
-    <widget.Container className="max-w-screen-md !mx-auto relative" transacting={isProcessing}>
+    <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Boosted Yield Farming (Beta)" />
 
       <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">

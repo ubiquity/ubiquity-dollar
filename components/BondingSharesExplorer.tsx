@@ -158,7 +158,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <widget.Container className="max-w-screen-md !mx-auto relative" transacting={model?.processing}>
+    <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Liquidity Mining" />
       {model ? <BondingSharesInformation {...model} {...actions} /> : <widget.Loading text="Loading existing shares information" />}
     </widget.Container>

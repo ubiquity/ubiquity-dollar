@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import cx from "classnames";
-import { useRecoilValue } from "recoil";
 import { PoolInfo, PoolData, fetchPoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
-import { isWhitelistedState } from "./lib/states";
 
-const BondingPool = (info: PoolInfo) => {
-  const isWhitelisted = useRecoilValue(isWhitelistedState);
+const BondingPool = ({ isWhitelisted, ...info }: PoolInfo & { isWhitelisted: boolean }) => {
   const [poolData, setPoolData] = useState<PoolData | null>(null);
   useEffect(() => {
     (async () => {

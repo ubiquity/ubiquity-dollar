@@ -67,7 +67,7 @@ export const getNetworkName = (provider: ethers.providers.Web3Provider): string 
       networkName = "Kovan Test Network";
       break;
     default:
-      networkName = "Unknown";
+      networkName = "Unknown Network";
       break;
   }
   return networkName;

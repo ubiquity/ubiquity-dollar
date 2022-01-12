@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { round, formatFixed } from "./lib/utils";
 import SectionTitle from "./lib/SectionTitle";
-import { useRecoilValue } from "recoil";
-import { isWhitelistedState } from "./lib/states";
 
 type Bond = {
   tokenName: string;
@@ -59,8 +57,7 @@ const toTimeInWords = (time: number): string => {
   return `${days}d ${hours}h ${minutes}m`;
 };
 
-const YourBonds = () => {
-  const isWhitelisted = useRecoilValue(isWhitelistedState);
+const YourBonds = ({ isWhitelisted }: { isWhitelisted: boolean }) => {
   const [bonds, setBonds] = useState<Bond[]>(yourBondsMock);
   useEffect(() => {
     const interval = setTimeout(() => {

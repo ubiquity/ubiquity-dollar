@@ -3,7 +3,7 @@ import { useConnectedContext } from "./context/connected";
 import { EthAccount } from "./common/types";
 import Account from "./account";
 import Network from "./network";
-import { Transacting } from "./ui/widget";
+
 import { Icon } from "./ui/icons";
 
 const PROD = process.env.NODE_ENV == "production";
@@ -25,7 +25,7 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 const Header = ({ section, href }: { section: string; href: string }) => {
   const context = useConnectedContext();
-  const { setAccount, activeTransactions } = context;
+  const { setAccount } = context;
 
   const [connecting, setConnecting] = useState(false);
 
@@ -58,11 +58,8 @@ const Header = ({ section, href }: { section: string; href: string }) => {
             Connect Wallet
           </button>
         </div>
-        <div>
+        <div className="flex items-center">
           <Network />
-        </div>
-        <div className="fixed top-0 right-0 mr-4 mt-4 pointer-events-none">
-          {activeTransactions ? activeTransactions.map((transaction, index) => <Transacting key={transaction.id + index} transaction={transaction} />) : null}
         </div>
       </div>
       <Account />
