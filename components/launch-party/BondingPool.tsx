@@ -5,13 +5,14 @@ import { format, round } from "./lib/utils";
 
 const BondingPool = ({ isWhitelisted, ...info }: PoolInfo & { isWhitelisted: boolean }) => {
   const [poolData, setPoolData] = useState<PoolData | null>(null);
-  useEffect(() => {
-    (async () => {
-      setTimeout(async () => {
-        setPoolData(await fetchPoolData(info));
-      }, 2000);
-    })();
-  }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     setTimeout(async () => {
+  //       setPoolData(await fetchPoolData(info));
+  //     }, 2000);
+  //   })();
+  // }, []);
 
   const LPTokenName = info.token1 + "-" + info.token2;
 
@@ -53,7 +54,7 @@ const BondingPool = ({ isWhitelisted, ...info }: PoolInfo & { isWhitelisted: boo
   );
 };
 
-const TokenInfo = ({ name, liquidity }: { name: string; liquidity: number | undefined }) => (
+const TokenInfo = ({ name, liquidity }: { name: string; liquidity: number | null | undefined }) => (
   <div className="flex items-center">
     <div className="flex-grow">{name}</div>
     <div className="px-2 py-0 flex items-center border border-solid border-white bg-opacity-50 rounded-full">

@@ -15,7 +15,7 @@ import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
-import { pools } from "./lib/pools";
+import { pools, goldenPool } from "./lib/pools";
 
 const App = () => {
   const { provider, account, updateActiveTransaction, activeTransactions } = useConnectedContext();
@@ -38,10 +38,13 @@ const App = () => {
     });
   }, [provider, account]);
 
-  // Data fetching
+  // ███████╗███████╗████████╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗
+  // ██╔════╝██╔════╝╚══██╔══╝██╔════╝██║  ██║██║████╗  ██║██╔════╝
+  // █████╗  █████╗     ██║   ██║     ███████║██║██╔██╗ ██║██║  ███╗
+  // ██╔══╝  ██╔══╝     ██║   ██║     ██╔══██║██║██║╚██╗██║██║   ██║
+  // ██║     ███████╗   ██║   ╚██████╗██║  ██║██║██║ ╚████║╚██████╔╝
+  // ╚═╝     ╚══════╝   ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
 
-  const [sticks, setSticks] = useState<OwnedSticks | null>(null);
-  const [allowance, setAllowance] = useState<SticksAllowance | null>(null);
   const [isSaleContractOwner, setIsSaleContractOwner] = useState<boolean | null>(null);
   const [isSimpleBondOwner, setIsSimpleBondOwner] = useState<boolean>(false);
 
@@ -50,6 +53,9 @@ const App = () => {
     setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === account.address.toLowerCase());
     setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === account.address.toLowerCase());
   }
+
+  const [sticks, setSticks] = useState<OwnedSticks | null>(null);
+  const [allowance, setAllowance] = useState<SticksAllowance | null>(null);
 
   async function refreshUbiquistickData() {
     if (isConnected && contracts) {
@@ -80,10 +86,10 @@ const App = () => {
 
   async function refreshSimpleBondData() {
     if (isConnected && contracts) {
-      // TODO
-      const ratios = await Promise.all(pools.map((pool) => contracts.simpleBond.rewardsRatio(pool.tokenAddress)));
+      const allPools = pools.concat([goldenPool]);
+      const ratios = await Promise.all(allPools.map((pool) => contracts.simpleBond.rewardsRatio(pool.tokenAddress)));
 
-      setTokensRatios(Object.fromEntries(pools.map((pool, i) => [pool.tokenAddress, ratios[i]])));
+      setTokensRatios(Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]])));
     }
   }
 
@@ -93,7 +99,12 @@ const App = () => {
     refreshSimpleBondData();
   }, [contracts]);
 
-  // Contract transactions
+  // ████████╗██████╗  █████╗ ███╗   ██╗███████╗ █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
+  // ╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
+  //    ██║   ██████╔╝███████║██╔██╗ ██║███████╗███████║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
+  //    ██║   ██╔══██╗██╔══██║██║╚██╗██║╚════██║██╔══██║██║        ██║   ██║██║   ██║██║╚██╗██║╚════██║
+  //    ██║   ██║  ██║██║  ██║██║ ╚████║███████║██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
+  //    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
   const contractSetAllowance = async ({ address, count, price }: { address: string; count: string; price: string }) => {
     if (!isConnected || !isLoaded || isTransacting) return;
@@ -130,7 +141,12 @@ const App = () => {
     await refreshSimpleBondData();
   };
 
-  // Derived values
+  // ██████╗ ███████╗██████╗ ██╗██╗   ██╗███████╗██████╗
+  // ██╔══██╗██╔════╝██╔══██╗██║██║   ██║██╔════╝██╔══██╗
+  // ██║  ██║█████╗  ██████╔╝██║██║   ██║█████╗  ██║  ██║
+  // ██║  ██║██╔══╝  ██╔══██╗██║╚██╗ ██╔╝██╔══╝  ██║  ██║
+  // ██████╔╝███████╗██║  ██║██║ ╚████╔╝ ███████╗██████╔╝
+  // ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝  ╚══════╝╚═════╝
 
   const isConnected = !!(provider && account);
   const isLoaded = !!(contracts && sticks && allowance);

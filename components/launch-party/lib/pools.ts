@@ -7,8 +7,8 @@ export type PoolInfo = {
 };
 
 export type PoolData = {
-  liquidity1: number;
-  liquidity2: number;
+  liquidity1: number | null;
+  liquidity2: number | null;
   poolTokenBalance: number;
   apy: number;
 };
@@ -44,13 +44,13 @@ export const pools: PoolInfo[] = [
   },
 ];
 
-export const poolByAddress = (address: string) => pools.find((p) => p.tokenAddress === address);
+export const poolByAddress = (address: string) => pools.find((p) => p.tokenAddress === address) || (address === goldenPool.tokenAddress ? goldenPool : null);
 
 export const goldenPool: PoolInfo = {
   token1: "uAR",
-  token2: "ETH",
+  token2: "uAD",
   poolMarketLink: "https://app.uniswap.org",
-  tokenAddress: "0x0000000000000000000000000000000000000000",
+  tokenAddress: "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
   logo: null,
 };
 
