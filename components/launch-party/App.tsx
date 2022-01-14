@@ -12,8 +12,10 @@ import { Contracts, factories, addresses } from "./lib/contracts";
 import { useConnectedContext } from "../context/connected";
 import { OwnedSticks, SticksAllowance } from "./lib/types/state";
 import AllowanceManager from "./AllowanceManager";
+import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
+import { pools } from "./lib/pools";
 
 const App = () => {
   const { provider, account, updateActiveTransaction, activeTransactions } = useConnectedContext();
@@ -41,6 +43,13 @@ const App = () => {
   const [sticks, setSticks] = useState<OwnedSticks | null>(null);
   const [allowance, setAllowance] = useState<SticksAllowance | null>(null);
   const [isSaleContractOwner, setIsSaleContractOwner] = useState<boolean | null>(null);
+  const [isSimpleBondOwner, setIsSimpleBondOwner] = useState<boolean>(false);
+
+  async function refreshOwnerData() {
+    if (!isConnected || !contracts) return;
+    setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === account.address.toLowerCase());
+    setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === account.address.toLowerCase());
+  }
 
   async function refreshUbiquistickData() {
     if (isConnected && contracts) {
@@ -64,18 +73,28 @@ const App = () => {
 
       const allowance = await contracts.ubiquiStickSale.allowance(account.address);
       setAllowance({ count: +allowance.count.toString(), price: +allowance.price.toString() / 1e18 });
+    }
+  }
 
-      const ownerAddress = await contracts.ubiquiStickSale.owner();
+  const [tokensRatios, setTokensRatios] = useState<{ [token: string]: ethers.BigNumber }>({});
 
-      setIsSaleContractOwner(ownerAddress.toLowerCase() === account.address.toLowerCase());
+  async function refreshSimpleBondData() {
+    if (isConnected && contracts) {
+      // TODO
+      const ratios = await Promise.all(pools.map((pool) => contracts.simpleBond.rewardsRatio(pool.tokenAddress)));
+
+      setTokensRatios(Object.fromEntries(pools.map((pool, i) => [pool.tokenAddress, ratios[i]])));
     }
   }
 
   useEffect(() => {
+    refreshOwnerData();
     refreshUbiquistickData();
+    refreshSimpleBondData();
   }, [contracts]);
 
   // Contract transactions
+
   const contractSetAllowance = async ({ address, count, price }: { address: string; count: string; price: string }) => {
     if (!isConnected || !isLoaded || isTransacting) return;
 
@@ -88,7 +107,7 @@ const App = () => {
     }
   };
 
-  const contractsMintUbiquistick = async () => {
+  const contractMintUbiquistick = async () => {
     if (!isConnected || !isLoaded || isTransacting) return;
 
     updateActiveTransaction({ id: "UBIQUISTICK_MINT", title: "Minting Ubiquistick...", active: true });
@@ -100,6 +119,15 @@ const App = () => {
     );
     updateActiveTransaction({ id: "UBIQUISTICK_MINT", active: false });
     await refreshUbiquistickData();
+  };
+
+  const contractSimpleBondSetReward = async ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => {
+    if (!isConnected || !isLoaded || isTransacting) return;
+
+    updateActiveTransaction({ id: "SIMPLE_BOND_SET_REWARD", title: "Setting reward...", active: true });
+    await performTransaction(contracts.simpleBond.setRewards(token, ratio));
+    updateActiveTransaction({ id: "SIMPLE_BOND_SET_REWARD", active: false });
+    await refreshSimpleBondData();
   };
 
   // Derived values
@@ -116,8 +144,9 @@ const App = () => {
       <TransactionsDisplay />
       <CustomHeader />
       {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
+      {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
       <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />
-      <UbiquiStick isConnected={isConnected} onBuy={contractsMintUbiquistick} sticks={sticks} allowance={allowance} />
+      <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
       <FundingPools isWhitelisted={isWhitelisted} />
       <MultiplicationPool />
       <YourBonds isWhitelisted={isWhitelisted} />

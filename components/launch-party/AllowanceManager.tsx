@@ -13,7 +13,7 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
 
   return (
     <div className="party-container">
-      <SectionTitle title="Allowance management" subtitle="Contract owner tools" />
+      <SectionTitle title="Allowance management" subtitle="" />
       <input placeholder="Address" value={address} onChange={(ev) => setAddress(ev.target.value)} />
       <input placeholder="Count" type="number" value={count} onChange={(ev) => setCount(ev.target.value)} />
       <input placeholder="Price" type="number" value={price} onChange={(ev) => setPrice(ev.target.value)} />

@@ -15,7 +15,7 @@ export const addresses: { [key: string]: Addresses } = {
   "31337": {
     ubiquiStick: "0x45379687D28B5CaDf738067Da1058eA9801d9897",
     ubiquiStickSale: "0x23EEe0f3fD17b25C16C712e90c77A6d165a54d2f",
-    simpleBond: "0xf351c71e7199aD6669B1C6f5f507FabdE4054f04",
+    simpleBond: "0xa997E480A69951efd537ec9C462Bc66b116628aA",
   },
 };
 
