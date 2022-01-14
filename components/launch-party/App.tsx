@@ -32,6 +32,7 @@ const App = () => {
     setContracts({
       ubiquiStick: factories.ubiquiStick(chainAddresses.ubiquiStick, provider).connect(signer),
       ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
+      simpleBond: factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer),
     });
   }, [provider, account]);
 
