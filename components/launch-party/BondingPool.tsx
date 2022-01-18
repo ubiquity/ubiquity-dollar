@@ -1,19 +1,8 @@
-import { useEffect, useState } from "react";
 import cx from "classnames";
-import { PoolInfo, PoolData, fetchPoolData } from "./lib/pools";
+import { PoolInfo, PoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
 
-const BondingPool = ({ isWhitelisted, ...info }: PoolInfo & { isWhitelisted: boolean }) => {
-  const [poolData, setPoolData] = useState<PoolData | null>(null);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     setTimeout(async () => {
-  //       setPoolData(await fetchPoolData(info));
-  //     }, 2000);
-  //   })();
-  // }, []);
-
+const BondingPool = ({ isWhitelisted, poolData, ...info }: PoolInfo & { isWhitelisted: boolean; poolData: PoolData | null }) => {
   const LPTokenName = info.token1 + "-" + info.token2;
 
   return (
@@ -27,7 +16,7 @@ const BondingPool = ({ isWhitelisted, ...info }: PoolInfo & { isWhitelisted: boo
           })}
         >
           <div>
-            {poolData ? format(poolData.apy) : "????"}%{info.logo ? <br /> : " "}
+            {poolData ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
             <span className="font-normal">APY</span>
           </div>
         </div>

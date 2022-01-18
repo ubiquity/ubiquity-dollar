@@ -32,7 +32,7 @@ export const pools: PoolInfo[] = [
     token1: "DAI",
     token2: "uAD",
     poolMarketLink: "https://app.uniswap.org",
-    tokenAddress: "0x0000000000000000000000000000000000000000",
+    tokenAddress: "0x6b175474e89094c44da98b954eedeac495271d0f",
     logo: "dai.png",
   },
   {
@@ -52,16 +52,4 @@ export const goldenPool: PoolInfo = {
   poolMarketLink: "https://app.uniswap.org",
   tokenAddress: "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
   logo: null,
-};
-
-const mockPoolData: { [key: string]: PoolData } = {
-  "UBQ-uAD": { liquidity1: 2000, liquidity2: 3.5, poolTokenBalance: 2323, apy: 2000 },
-  "uAD-uAD": { liquidity1: 2000, liquidity2: 3.5, poolTokenBalance: 2323, apy: 2000 },
-  "DAI-uAD": { liquidity1: 2000, liquidity2: 3.5, poolTokenBalance: 2323, apy: 2000 },
-  "USDC-uAD": { liquidity1: 2500, liquidity2: 4, poolTokenBalance: 0, apy: 1800 },
-  "uAR-uAD": { liquidity1: 50000, liquidity2: 2.2, poolTokenBalance: 3002, apy: 54000 },
-};
-
-export const fetchPoolData = async (pool: PoolInfo): Promise<PoolData> => {
-  return mockPoolData[pool.token1 + "-" + pool.token2];
 };

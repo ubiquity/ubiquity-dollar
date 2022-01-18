@@ -15,11 +15,13 @@ import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
-import { pools, goldenPool } from "./lib/pools";
+import { pools, goldenPool, PoolData } from "./lib/pools";
+import { ERC20, ERC20__factory } from "../../contracts/artifacts/types";
 
 const App = () => {
-  const { provider, account, updateActiveTransaction, activeTransactions } = useConnectedContext();
+  const { provider, account, updateActiveTransaction, activeTransactions, contracts: ubqContracts } = useConnectedContext();
   const [contracts, setContracts] = useState<Contracts | null>(null);
+  const [tokensContracts, setTokensContracts] = useState<ERC20[]>([]);
 
   // Contracts loading
 
@@ -36,6 +38,10 @@ const App = () => {
       ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
       simpleBond: factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer),
     });
+
+    const allPools = pools.concat([goldenPool]);
+
+    setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
   }, [provider, account]);
 
   // ███████╗███████╗████████╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗
@@ -56,9 +62,10 @@ const App = () => {
 
   const [sticks, setSticks] = useState<OwnedSticks | null>(null);
   const [allowance, setAllowance] = useState<SticksAllowance | null>(null);
+  const [vestingTimeInDays, setVestingTimeInDays] = useState<number | null>(null); // Milliseconds
 
   async function refreshUbiquistickData() {
-    if (isConnected && contracts) {
+    if (isConnected && contracts && ubqContracts) {
       const newSticks: OwnedSticks = { standard: 0, gold: 0 };
 
       const sticksAmount = (await contracts.ubiquiStick.balanceOf(account.address)).toNumber();
@@ -79,25 +86,56 @@ const App = () => {
 
       const allowance = await contracts.ubiquiStickSale.allowance(account.address);
       setAllowance({ count: +allowance.count.toString(), price: +allowance.price.toString() / 1e18 });
+
+      const blocksCountInAWeek = (await ubqContracts.bonding.blockCountInAWeek()).toNumber();
+      const vestingBlocks = (await contracts.simpleBond.vestingBlocks()).toNumber();
+      setVestingTimeInDays(vestingBlocks / (blocksCountInAWeek / 7));
     }
   }
 
   const [tokensRatios, setTokensRatios] = useState<{ [token: string]: ethers.BigNumber }>({});
+  const [poolsData, setPoolsData] = useState<{ [token: string]: PoolData }>({});
 
   async function refreshSimpleBondData() {
-    if (isConnected && contracts) {
+    if (isConnected && contracts && vestingTimeInDays !== null) {
       const allPools = pools.concat([goldenPool]);
       const ratios = await Promise.all(allPools.map((pool) => contracts.simpleBond.rewardsRatio(pool.tokenAddress)));
 
       setTokensRatios(Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]])));
+
+      setPoolsData(
+        (
+          await Promise.all(
+            tokensContracts.map((tokenContract) =>
+              Promise.all([
+                tokenContract.address,
+                tokenContract.balanceOf(account.address),
+                tokenContract.decimals(),
+                contracts.simpleBond.rewardsRatio(tokenContract.address),
+              ])
+            )
+          )
+        )
+          .map(([address, balance, decimals, reward]) => [
+            address,
+            +ethers.utils.formatUnits(balance, decimals),
+            (reward.toNumber() / 1_000_000_000 / vestingTimeInDays) * 365 * 100,
+          ])
+          .reduce((acc, [address, poolTokenBalance, apy]) => ({ ...acc, [address]: { poolTokenBalance, apy, liquidity1: 500, liquidity2: 1000 } }), {})
+      );
+
+      // TODO: Get actual liquidity after we use LP contracts instead of regular ERC-20 contracts
     }
   }
 
   useEffect(() => {
     refreshOwnerData();
     refreshUbiquistickData();
-    refreshSimpleBondData();
   }, [contracts]);
+
+  useEffect(() => {
+    refreshSimpleBondData();
+  }, [contracts, vestingTimeInDays]);
 
   // ████████╗██████╗  █████╗ ███╗   ██╗███████╗ █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
   // ╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
@@ -154,6 +192,8 @@ const App = () => {
   const sticksCount = sticks ? sticks.gold + sticks.standard : null;
   const isWhitelisted = !!allowance && sticksCount !== null && (allowance.count > 0 || sticksCount > 0);
 
+  console.log("Pools data", poolsData);
+
   return (
     <div>
       <Header section="Launch Party" href="/launch-party" />
@@ -163,8 +203,8 @@ const App = () => {
       {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
       <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
-      <FundingPools isWhitelisted={isWhitelisted} />
-      <MultiplicationPool />
+      <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} />
+      <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} />
       <YourBonds isWhitelisted={isWhitelisted} />
       <Liquidate accumulated={3500} />
     </div>
