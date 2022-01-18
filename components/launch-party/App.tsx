@@ -101,18 +101,14 @@ const App = () => {
       const allPools = pools.concat([goldenPool]);
       const ratios = await Promise.all(allPools.map((pool) => contracts.simpleBond.rewardsRatio(pool.tokenAddress)));
 
-      setTokensRatios(Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]])));
+      const newTokensRatios = Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]]));
+      setTokensRatios(newTokensRatios);
 
       setPoolsData(
         (
           await Promise.all(
             tokensContracts.map((tokenContract) =>
-              Promise.all([
-                tokenContract.address,
-                tokenContract.balanceOf(account.address),
-                tokenContract.decimals(),
-                contracts.simpleBond.rewardsRatio(tokenContract.address),
-              ])
+              Promise.all([tokenContract.address, tokenContract.balanceOf(account.address), tokenContract.decimals(), newTokensRatios[tokenContract.address]])
             )
           )
         )
