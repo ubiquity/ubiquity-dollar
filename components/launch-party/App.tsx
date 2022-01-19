@@ -233,7 +233,6 @@ const App = () => {
   };
 
   const contractDepositAndBond = async ({ token, amount }: { token: string; amount: number }) => {
-    console.log("DEPOSIT!", token, amount);
     if (!isConnected || !isLoaded || isTransacting || tokensContracts.length === 0) return;
     if (!token || !amount) return;
     const contract = tokensContracts.find((tc) => tc.address === token);
@@ -255,6 +254,14 @@ const App = () => {
     }
 
     updateActiveTransaction({ id: "DEPOSIT_AND_BOND", active: false });
+  };
+
+  const contractClaimAll = async () => {
+    if (!isConnected || !isLoaded || isTransacting) return;
+    updateActiveTransaction({ id: "SIMPLE_BOND_CLAIM_ALL", title: "Claiming all rewards...", active: true });
+    await performTransaction(contracts.simpleBond.claim());
+    updateActiveTransaction({ id: "SIMPLE_BOND_CLAIM_ALL", active: false });
+    refreshSimpleBondData();
   };
 
   // ██████╗ ███████╗██████╗ ██╗██╗   ██╗███████╗██████╗
@@ -281,7 +288,7 @@ const App = () => {
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
       <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
-      <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} />
+      <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} onClaim={contractClaimAll} />
       <Liquidate accumulated={3500} />
     </div>
   );

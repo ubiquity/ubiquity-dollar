@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { round, formatFixed } from "./lib/utils";
 import SectionTitle from "./lib/SectionTitle";
 
@@ -13,54 +12,6 @@ export type BondData = {
   rewardPrice: number;
 };
 
-// type Bond = {
-//   tokenName: string;
-//   total: number;
-//   dripped: number;
-//   claimed: number;
-// };
-
-// const REFRESH_BONDS_INTERVAL = 1000;
-
-// const BONDING_TIME = 1000 * 60 * 60 * 24 * 5;
-
-// const yourBondsMock: Bond[] = [
-//   {
-//     tokenName: "DAI-ETH",
-//     total: 2540,
-//     dripped: 1600,
-//     claimed: 1100,
-//   },
-//   {
-//     tokenName: "USDC-ETH",
-//     total: 3000,
-//     dripped: 1000,
-//     claimed: 0,
-//   },
-//   {
-//     tokenName: "uAR-ETH",
-//     total: 12000,
-//     dripped: 9000,
-//     claimed: 4000,
-//   },
-// ];
-
-// let lastAdvanced = new Date();
-// const mockAdvance = (bonds: Bond[]): Bond[] => {
-//   const currentTime = new Date();
-//   const advanceSpan = +currentTime - +lastAdvanced;
-//   const result = bonds.map((bond) => {
-//     const drippedOverSpan = (advanceSpan / BONDING_TIME) * bond.total;
-//     const dripped = bond.dripped + drippedOverSpan;
-//     return {
-//       ...bond,
-//       dripped: dripped < bond.total ? dripped : bond.total,
-//     };
-//   });
-//   lastAdvanced = currentTime;
-//   return result;
-// };
-
 const toTimeInWords = (time: number): string => {
   const days = Math.floor(time / (1000 * 60 * 60 * 24));
   const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -68,17 +19,10 @@ const toTimeInWords = (time: number): string => {
   return `${days}d ${hours}h ${minutes}m`;
 };
 
-const YourBonds = ({ isWhitelisted, bonds }: { isWhitelisted: boolean; bonds: BondData[] | null }) => {
-  // const [bonds, setBonds] = useState<Bond[]>(yourBondsMock);
-  // useEffect(() => {
-  //   const interval = setTimeout(() => {
-  //     setBonds(mockAdvance(bonds));
-  //   }, REFRESH_BONDS_INTERVAL);
-  //   return () => clearTimeout(interval);
-  // }, [bonds]);
+const YourBonds = ({ isWhitelisted, bonds, onClaim }: { isWhitelisted: boolean; bonds: BondData[] | null; onClaim: () => void }) => {
   if (!bonds) return null;
 
-  const accumulated = bonds.reduce((acc, bond) => acc + bond.claimable + bond.claimed, 0);
+  const accumulated = bonds.reduce((acc, bond) => acc + bond.claimable, 0);
 
   return (
     <div className="party-container">
@@ -116,7 +60,7 @@ const YourBonds = ({ isWhitelisted, bonds }: { isWhitelisted: boolean; bonds: Bo
       </div>
       <div className="text-lg mb-2">Accumulated claimable</div>
       <div className="text-3xl mb-6 text-accent drop-shadow-light">{formatFixed(round(accumulated))} uAR</div>
-      <button className="btn-primary" disabled={!isWhitelisted}>
+      <button className="btn-primary" disabled={!isWhitelisted} onClick={onClaim}>
         Claim all
       </button>
     </div>
