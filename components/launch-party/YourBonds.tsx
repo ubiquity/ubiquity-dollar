@@ -2,53 +2,64 @@ import { useEffect, useState } from "react";
 import { round, formatFixed } from "./lib/utils";
 import SectionTitle from "./lib/SectionTitle";
 
-type Bond = {
+export type BondData = {
   tokenName: string;
-  total: number;
-  dripped: number;
   claimed: number;
+  rewards: number;
+  claimable: number;
+  depositAmount: number;
+  endsAtBlock: number;
+  endsAtDate: Date;
+  rewardPrice: number;
 };
 
-const REFRESH_BONDS_INTERVAL = 1000;
+// type Bond = {
+//   tokenName: string;
+//   total: number;
+//   dripped: number;
+//   claimed: number;
+// };
 
-const BONDING_TIME = 1000 * 60 * 60 * 24 * 5;
+// const REFRESH_BONDS_INTERVAL = 1000;
 
-const yourBondsMock: Bond[] = [
-  {
-    tokenName: "DAI-ETH",
-    total: 2540,
-    dripped: 1600,
-    claimed: 1100,
-  },
-  {
-    tokenName: "USDC-ETH",
-    total: 3000,
-    dripped: 1000,
-    claimed: 0,
-  },
-  {
-    tokenName: "uAR-ETH",
-    total: 12000,
-    dripped: 9000,
-    claimed: 4000,
-  },
-];
+// const BONDING_TIME = 1000 * 60 * 60 * 24 * 5;
 
-let lastAdvanced = new Date();
-const mockAdvance = (bonds: Bond[]): Bond[] => {
-  const currentTime = new Date();
-  const advanceSpan = +currentTime - +lastAdvanced;
-  const result = bonds.map((bond) => {
-    const drippedOverSpan = (advanceSpan / BONDING_TIME) * bond.total;
-    const dripped = bond.dripped + drippedOverSpan;
-    return {
-      ...bond,
-      dripped: dripped < bond.total ? dripped : bond.total,
-    };
-  });
-  lastAdvanced = currentTime;
-  return result;
-};
+// const yourBondsMock: Bond[] = [
+//   {
+//     tokenName: "DAI-ETH",
+//     total: 2540,
+//     dripped: 1600,
+//     claimed: 1100,
+//   },
+//   {
+//     tokenName: "USDC-ETH",
+//     total: 3000,
+//     dripped: 1000,
+//     claimed: 0,
+//   },
+//   {
+//     tokenName: "uAR-ETH",
+//     total: 12000,
+//     dripped: 9000,
+//     claimed: 4000,
+//   },
+// ];
+
+// let lastAdvanced = new Date();
+// const mockAdvance = (bonds: Bond[]): Bond[] => {
+//   const currentTime = new Date();
+//   const advanceSpan = +currentTime - +lastAdvanced;
+//   const result = bonds.map((bond) => {
+//     const drippedOverSpan = (advanceSpan / BONDING_TIME) * bond.total;
+//     const dripped = bond.dripped + drippedOverSpan;
+//     return {
+//       ...bond,
+//       dripped: dripped < bond.total ? dripped : bond.total,
+//     };
+//   });
+//   lastAdvanced = currentTime;
+//   return result;
+// };
 
 const toTimeInWords = (time: number): string => {
   const days = Math.floor(time / (1000 * 60 * 60 * 24));
@@ -57,16 +68,17 @@ const toTimeInWords = (time: number): string => {
   return `${days}d ${hours}h ${minutes}m`;
 };
 
-const YourBonds = ({ isWhitelisted }: { isWhitelisted: boolean }) => {
-  const [bonds, setBonds] = useState<Bond[]>(yourBondsMock);
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      setBonds(mockAdvance(bonds));
-    }, REFRESH_BONDS_INTERVAL);
-    return () => clearTimeout(interval);
-  }, [bonds]);
+const YourBonds = ({ isWhitelisted, bonds }: { isWhitelisted: boolean; bonds: BondData[] | null }) => {
+  // const [bonds, setBonds] = useState<Bond[]>(yourBondsMock);
+  // useEffect(() => {
+  //   const interval = setTimeout(() => {
+  //     setBonds(mockAdvance(bonds));
+  //   }, REFRESH_BONDS_INTERVAL);
+  //   return () => clearTimeout(interval);
+  // }, [bonds]);
+  if (!bonds) return null;
 
-  const accumulated = bonds.reduce((acc, bond) => acc + bond.dripped - bond.claimed, 0);
+  const accumulated = bonds.reduce((acc, bond) => acc + bond.claimable + bond.claimed, 0);
 
   return (
     <div className="party-container">
@@ -81,20 +93,22 @@ const YourBonds = ({ isWhitelisted }: { isWhitelisted: boolean }) => {
             </tr>
           </thead>
           <tbody>
-            {bonds.map((bond) => (
-              <tr key={bond.tokenName}>
+            {bonds.map((bond, i) => (
+              <tr key={i}>
                 <td className="py-2 px-2 whitespace-nowrap border-0 border-r border-solid border-white border-opacity-10">{bond.tokenName}</td>
                 <td className="py-2 px-2 w-full text-left border-0 border-r border-solid border-white border-opacity-10">
                   <div className="flex">
                     <div className="flex-grow">
-                      {formatFixed(round(bond.dripped))}
+                      {formatFixed(round(bond.claimable + bond.claimed))}
                       {" / "}
-                      {formatFixed(round(bond.total))} uAR{" "}
+                      {formatFixed(round(bond.rewards))} uAR{" "}
                     </div>
-                    <div className="text-white text-opacity-50 text-sm">{toTimeInWords((bond.dripped / bond.total) * BONDING_TIME)} left</div>
+                    <div className="text-white text-opacity-50 text-sm" title={`Ends at block: ${bond.endsAtBlock}`}>
+                      {toTimeInWords(+bond.endsAtDate - +new Date())} left
+                    </div>
                   </div>
                 </td>
-                <td className="py-2 px-2">{formatFixed(round(bond.dripped - bond.claimed))} uAR</td>
+                <td className="py-2 px-2">{formatFixed(round(bond.claimable))} uAR</td>
               </tr>
             ))}
           </tbody>

@@ -10,6 +10,7 @@ export type PoolData = {
   liquidity1: number | null;
   liquidity2: number | null;
   poolTokenBalance: number;
+  decimals: number;
   apy: number;
 };
 
@@ -53,3 +54,6 @@ export const goldenPool: PoolInfo = {
   tokenAddress: "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
   logo: null,
 };
+
+export const allPools = pools.concat([goldenPool]);
+export const poolsByToken: { [token: string]: PoolInfo } = allPools.reduce((acc, pool) => ({ ...acc, [pool.tokenAddress]: pool }), {});
