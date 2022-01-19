@@ -1,3 +1,4 @@
+import { ERC20 } from "../../../contracts/artifacts/types";
 import { TheUbiquityStickSale__factory, SimpleBond__factory, SimpleBond, TheUbiquityStickSale, TheUbiquityStick, TheUbiquityStick__factory } from "./types";
 
 type Addresses = {
@@ -23,6 +24,7 @@ export type Contracts = {
   ubiquiStick: TheUbiquityStick;
   ubiquiStickSale: TheUbiquityStickSale;
   simpleBond: SimpleBond;
+  rewardToken: ERC20;
 };
 
 export const factories = {

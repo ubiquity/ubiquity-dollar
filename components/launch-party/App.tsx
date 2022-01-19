@@ -33,16 +33,23 @@ const App = () => {
       return;
     }
 
-    const chainAddresses = addresses[provider.network.chainId];
-    const signer = provider.getSigner();
+    const loadContracts = async () => {
+      const chainAddresses = addresses[provider.network.chainId];
+      const signer = provider.getSigner();
 
-    setContracts({
-      ubiquiStick: factories.ubiquiStick(chainAddresses.ubiquiStick, provider).connect(signer),
-      ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
-      simpleBond: factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer),
-    });
+      const simpleBond = factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer);
 
-    setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
+      setContracts({
+        ubiquiStick: factories.ubiquiStick(chainAddresses.ubiquiStick, provider).connect(signer),
+        ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
+        simpleBond,
+        rewardToken: ERC20__factory.connect(await simpleBond.tokenRewards(), provider).connect(signer),
+      });
+
+      setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
+    };
+
+    loadContracts();
 
     // fetchTokensDecimals();
   }, [provider, account]);
@@ -77,6 +84,7 @@ const App = () => {
   const [vestingTimeInDays, setVestingTimeInDays] = useState<number | null>(null); // Milliseconds
   const [blocksCountInAWeek, setBlocksCountInAWeek] = useState<number | null>(null);
   const [vestingBlocks, setVestingBlocks] = useState<number | null>(null);
+  const [rewardTokenBalance, setRewardTokenBalance] = useState<number | null>(null);
 
   async function refreshUbiquistickData() {
     if (isConnected && contracts && ubqContracts) {
@@ -163,7 +171,6 @@ const App = () => {
         return {
           tokenName: `${pool.token1}-${pool.token2}`,
           claimed: +ethers.utils.formatUnits(claimed, decimals),
-          // progress: 100, // TODO: Read from the contract
           claimable: +ethers.utils.formatUnits(rewardsClaimable, decimals),
           rewards: +ethers.utils.formatUnits(rewards, decimals),
           depositAmount: +ethers.utils.formatUnits(amount, decimals),
@@ -173,11 +180,16 @@ const App = () => {
         };
       });
 
-      console.log(newBondsData);
+      // Get the balance of the reward token
+
+      const newRewardTokenBalance = +ethers.utils.formatUnits(await contracts.rewardToken.balanceOf(account.address), await contracts.rewardToken.decimals());
+
+      // Set all the states
 
       setTokensRatios(newTokensRatios);
       setPoolsData(newPoolsData);
       setBondsData(newBondsData);
+      setRewardTokenBalance(newRewardTokenBalance);
     }
   }
 
@@ -289,7 +301,7 @@ const App = () => {
       <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} onClaim={contractClaimAll} />
-      <Liquidate accumulated={3500} />
+      <Liquidate accumulated={rewardTokenBalance} />
     </div>
   );
 };
