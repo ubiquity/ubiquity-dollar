@@ -17,6 +17,8 @@ import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
 import { pools, goldenPool, PoolData } from "./lib/pools";
 import { ERC20, ERC20__factory } from "../../contracts/artifacts/types";
+import { stringify } from "querystring";
+import { ensureERC20Allowance } from "../common/contracts-shortcuts";
 
 const App = () => {
   const { provider, account, updateActiveTransaction, activeTransactions, contracts: ubqContracts } = useConnectedContext();
@@ -175,6 +177,31 @@ const App = () => {
     await refreshSimpleBondData();
   };
 
+  const contractDepositAndBond = async ({ token, amount }: { token: string; amount: number }) => {
+    console.log("DEPOSIT!", token, amount);
+    if (!isConnected || !isLoaded || isTransacting || tokensContracts.length === 0) return;
+    if (!token || !amount) return;
+    const contract = tokensContracts.find((tc) => tc.address === token);
+    if (!contract) return;
+    updateActiveTransaction({ id: "DEPOSIT_AND_BOND", title: "Depositing...", active: true });
+    const decimals = await contract.decimals();
+    const symbol = await contract.symbol();
+    const bnAmount = ethers.utils.parseUnits(amount.toString(), decimals);
+    const signer = provider.getSigner();
+    if (await ensureERC20Allowance(symbol, contract, bnAmount, signer, contracts.simpleBond.address, decimals)) {
+      if (await performTransaction(contracts.simpleBond.bond(token, bnAmount))) {
+        console.log("Deposit successful!");
+        refreshSimpleBondData();
+      } else {
+        console.log("Deposit failed!");
+      }
+    } else {
+      console.error("Error setting ERC20 allowance");
+    }
+
+    updateActiveTransaction({ id: "DEPOSIT_AND_BOND", active: false });
+  };
+
   // ██████╗ ███████╗██████╗ ██╗██╗   ██╗███████╗██████╗
   // ██╔══██╗██╔════╝██╔══██╗██║██║   ██║██╔════╝██╔══██╗
   // ██║  ██║█████╗  ██████╔╝██║██║   ██║█████╗  ██║  ██║
@@ -188,8 +215,6 @@ const App = () => {
   const sticksCount = sticks ? sticks.gold + sticks.standard : null;
   const isWhitelisted = !!allowance && sticksCount !== null && (allowance.count > 0 || sticksCount > 0);
 
-  console.log("Pools data", poolsData);
-
   return (
     <div>
       <Header section="Launch Party" href="/launch-party" />
@@ -199,8 +224,8 @@ const App = () => {
       {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
       <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
-      <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} />
-      <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} />
+      <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
+      <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <YourBonds isWhitelisted={isWhitelisted} />
       <Liquidate accumulated={3500} />
     </div>

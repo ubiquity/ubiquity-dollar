@@ -1,9 +1,24 @@
 import cx from "classnames";
+import { useState } from "react";
 import { PoolInfo, PoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
 
-const BondingPool = ({ isWhitelisted, poolData, ...info }: PoolInfo & { isWhitelisted: boolean; poolData: PoolData | null }) => {
+type BondingPoolParams = PoolInfo & {
+  isWhitelisted: boolean;
+  poolData: PoolData | null;
+  onDeposit: ({ amount }: { amount: number }) => any;
+};
+
+const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoolParams) => {
   const LPTokenName = info.token1 + "-" + info.token2;
+  const [amount, setAmount] = useState("");
+
+  const onSubmit = () => {
+    onDeposit({ amount: parseFloat(amount) });
+  };
+
+  const parsedAmount = parseFloat(amount);
+  const disableSubmit = !!(!isWhitelisted || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
 
   return (
     <div className="p-6 bg-white bg-opacity-5 rounded">
@@ -26,7 +41,13 @@ const BondingPool = ({ isWhitelisted, poolData, ...info }: PoolInfo & { isWhitel
         <TokenInfo name={info.token2} liquidity={poolData?.liquidity2} />
       </div>
       <div>
-        <input type="number" className="w-full box-border m-0 h-12 px-4 py-4 mb-2" placeholder={`${LPTokenName} token amount`} />
+        <input
+          type="number"
+          value={amount}
+          onChange={(ev) => setAmount(ev.target.value)}
+          className="w-full box-border m-0 h-12 px-4 py-4 mb-2"
+          placeholder={`${LPTokenName} token amount`}
+        />
       </div>
       <div className="text-sm flex mb-6">
         <div className="flex-grow text-left">
@@ -36,7 +57,7 @@ const BondingPool = ({ isWhitelisted, poolData, ...info }: PoolInfo & { isWhitel
           Get more
         </a>
       </div>
-      <button className="btn-primary m-0" disabled={!isWhitelisted}>
+      <button className="btn-primary m-0" disabled={disableSubmit} onClick={onSubmit}>
         Deposit &amp; Bond
       </button>
     </div>
