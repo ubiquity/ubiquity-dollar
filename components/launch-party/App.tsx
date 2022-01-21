@@ -15,9 +15,8 @@ import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
-import { pools, goldenPool, PoolData, PoolInfo, poolsByToken, allPools } from "./lib/pools";
-import { ERC20, ERC20__factory } from "../../contracts/artifacts/types";
-import { stringify } from "querystring";
+import { PoolData, poolsByToken, allPools, UnipoolData } from "./lib/pools";
+import { ERC20, ERC20__factory, IUniswapV3Pool__factory } from "../../contracts/artifacts/types";
 import { ensureERC20Allowance } from "../common/contracts-shortcuts";
 
 const App = () => {
@@ -50,8 +49,6 @@ const App = () => {
     };
 
     loadContracts();
-
-    // fetchTokensDecimals();
   }, [provider, account]);
 
   // ███████╗███████╗████████╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗
@@ -61,14 +58,40 @@ const App = () => {
   // ██║     ███████╗   ██║   ╚██████╗██║  ██║██║██║ ╚████║╚██████╔╝
   // ╚═╝     ╚══════╝   ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
 
-  // async function fetchTokensDecimals() {
-  //   setDecimalsByToken(
-  //     await (await Promise.all(tokensContracts.map(async (tokenContract) => [tokenContract.address, await tokenContract.decimals()]))).reduce(
-  //       (acc, [address, decimals]) => ({ ...acc, [address]: decimals }),
-  //       {}
-  //     )
-  //   );
-  // }
+  async function fetchUniPoolsData(provider: ethers.providers.Web3Provider): Promise<{ [poolAddress: string]: UnipoolData }> {
+    const getUniPoolFullData = async (poolAddress: string): Promise<UnipoolData> => {
+      const pool = IUniswapV3Pool__factory.connect(poolAddress, provider);
+      const t1 = ERC20__factory.connect(await pool.token0(), provider);
+      const t2 = ERC20__factory.connect(await pool.token1(), provider);
+      const d1 = await t1.decimals();
+      const d2 = await t2.decimals();
+      const b1 = await t1.balanceOf(pool.address);
+      const b2 = await t2.balanceOf(pool.address);
+      return {
+        poolAddress,
+        contract1: t1,
+        contract2: t2,
+        token1: t1.address,
+        token2: t2.address,
+        decimal1: d1,
+        decimal2: d2,
+        balance1: b1,
+        balance2: b2,
+        symbol1: await t1.symbol(),
+        symbol2: await t2.symbol(),
+        name1: await t1.name(),
+        name2: await t2.name(),
+      };
+    };
+
+    const newUniPoolsData = (await Promise.all(allPools.map((pool) => getUniPoolFullData(pool.uniV3PoolAddress)))).reduce((acc, unipoolData) => {
+      return { ...acc, [unipoolData.poolAddress]: unipoolData };
+    }, {});
+
+    return newUniPoolsData;
+
+    // console.log();
+  }
 
   const [isSaleContractOwner, setIsSaleContractOwner] = useState<boolean | null>(null);
   const [isSimpleBondOwner, setIsSimpleBondOwner] = useState<boolean>(false);
@@ -127,28 +150,37 @@ const App = () => {
 
       const newTokensRatios = Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]]));
 
+      const newUnipoolFullData = await fetchUniPoolsData(provider);
+
       const newPoolsData: { [token: string]: PoolData } = (
         await Promise.all(
           tokensContracts.map((tokenContract) =>
             Promise.all([tokenContract.address, tokenContract.balanceOf(account.address), tokenContract.decimals(), newTokensRatios[tokenContract.address]])
           )
         )
-      )
-        .map(([address, balance, decimals, reward]) => [
-          address,
-          +ethers.utils.formatUnits(balance, decimals),
-          (reward.toNumber() / 1_000_000_000 / vestingTimeInDays) * 365 * 100,
-          decimals,
-        ])
-        .reduce(
-          (acc, [address, poolTokenBalance, apy, decimals]) => ({
-            ...acc,
-            [address]: { poolTokenBalance, apy, liquidity1: 500, liquidity2: 1000, decimals },
-          }),
-          {}
-        );
+      ).reduce<{ [token: string]: PoolData }>((acc, [address, balance, decimals, reward]) => {
+        const poolTokenBalance = +ethers.utils.formatUnits(balance, decimals);
+        const apy = (reward.toNumber() / 1_000_000_000 / 5) * 365 * 100;
+        const uniPoolData = newUnipoolFullData[poolsByToken[address].uniV3PoolAddress];
+        const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);
+        const liquidity2 = +ethers.utils.formatUnits(uniPoolData.balance2, uniPoolData.decimal2);
 
-      // TODO: Get actual liquidity after we use LP contracts instead of regular ERC-20 contracts
+        acc[address] = {
+          poolTokenBalance,
+          apy,
+          token1: uniPoolData.token1,
+          token2: uniPoolData.token2,
+          liquidity1,
+          liquidity2,
+          symbol1: uniPoolData.symbol1,
+          symbol2: uniPoolData.symbol2,
+          name1: uniPoolData.name1,
+          name2: uniPoolData.name2,
+          decimals,
+        };
+
+        return acc;
+      }, {});
 
       // Get the current bonds data
 
@@ -169,7 +201,7 @@ const App = () => {
         const decimals = newPoolsData[token]?.decimals;
         if (!pool || !decimals) console.error("No pool found for token", token);
         return {
-          tokenName: `${pool.token1}-${pool.token2}`,
+          tokenName: pool.name,
           claimed: +ethers.utils.formatUnits(claimed, decimals),
           claimable: +ethers.utils.formatUnits(rewardsClaimable, decimals),
           rewards: +ethers.utils.formatUnits(rewards, decimals),

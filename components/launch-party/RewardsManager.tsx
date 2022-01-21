@@ -43,7 +43,7 @@ const TokenInfo = ({ token, ratio }: { token: string; ratio: ethers.BigNumber })
   if (!poolInfo) return null;
   return (
     <div>
-      {poolInfo.token1}-{poolInfo.token2} | {token} | {parseInt(ratio.toString()) / 1_000_000_000}
+      {poolInfo.name} | {token} | {parseInt(ratio.toString()) / 1_000_000_000}
     </div>
   );
 };

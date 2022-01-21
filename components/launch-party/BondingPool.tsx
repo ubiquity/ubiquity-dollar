@@ -10,7 +10,7 @@ type BondingPoolParams = PoolInfo & {
 };
 
 const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoolParams) => {
-  const LPTokenName = info.token1 + "-" + info.token2;
+  const LPTokenName = poolData ? poolData.symbol1 + "-" + poolData.symbol2 : "...";
   const [amount, setAmount] = useState("");
 
   const onSubmit = () => {
@@ -37,8 +37,8 @@ const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoo
         </div>
       </div>
       <div className="grid grid-cols-2 gap-6 text-left mb-6">
-        <TokenInfo name={info.token1} liquidity={poolData?.liquidity1} />
-        <TokenInfo name={info.token2} liquidity={poolData?.liquidity2} />
+        <TokenInfo name={poolData?.name1 || ""} symbol={poolData?.symbol1 || ""} liquidity={poolData?.liquidity1} />
+        <TokenInfo name={poolData?.name2 || ""} symbol={poolData?.symbol2 || ""} liquidity={poolData?.liquidity2} />
       </div>
       <div>
         <input
@@ -53,7 +53,7 @@ const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoo
         <div className="flex-grow text-left">
           You have {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
         </div>
-        <a href={info.poolMarketLink} target="_blank">
+        <a href={`https://www.sorbet.finance/#/pools/${info.tokenAddress}`} target="_blank">
           Get more
         </a>
       </div>
@@ -64,9 +64,11 @@ const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoo
   );
 };
 
-const TokenInfo = ({ name, liquidity }: { name: string; liquidity: number | null | undefined }) => (
+const TokenInfo = ({ name, symbol, liquidity }: { name: string; symbol: string; liquidity: number | null | undefined }) => (
   <div className="flex items-center">
-    <div className="flex-grow">{name}</div>
+    <div className="flex-grow" title={name}>
+      {symbol}
+    </div>
     <div className="px-2 py-0 flex items-center border border-solid border-white bg-opacity-50 rounded-full">
       <img src="liquidity.png" className="h-4 mr-2" />
       <span className="leading-6 text-sm">{liquidity != null ? format(round(liquidity)) : "???"}</span>

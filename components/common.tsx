@@ -15,7 +15,6 @@ import Inventory from "./inventory";
 import BondingSharesExplorer from "./BondingSharesExplorer";
 import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
-import { Transacting } from "./ui/widget";
 import Header from "./Header";
 
 const PROD = process.env.NODE_ENV == "production";
