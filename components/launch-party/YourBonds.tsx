@@ -36,31 +36,41 @@ const YourBonds = ({ isWhitelisted, bonds, onClaim }: { isWhitelisted: boolean; 
               <th>Claimable</th>
             </tr>
           </thead>
-          <tbody>
-            {bonds.map((bond, i) => (
-              <tr key={i}>
-                <td className="py-2 px-2 whitespace-nowrap border-0 border-r border-solid border-white border-opacity-10">{bond.tokenName}</td>
-                <td className="py-2 px-2 w-full text-left border-0 border-r border-solid border-white border-opacity-10">
-                  <div className="flex">
-                    <div className="flex-grow">
-                      {formatFixed(round(bond.claimable + bond.claimed))}
-                      {" / "}
-                      {formatFixed(round(bond.rewards))} uAR{" "}
+          {bonds.length > 0 ? (
+            <tbody>
+              {bonds.map((bond, i) => (
+                <tr key={i}>
+                  <td className="py-2 px-2 whitespace-nowrap border-0 border-r border-solid border-white border-opacity-10">{bond.tokenName}</td>
+                  <td className="py-2 px-2 w-full text-left border-0 border-r border-solid border-white border-opacity-10">
+                    <div className="flex">
+                      <div className="flex-grow">
+                        {formatFixed(round(bond.claimable + bond.claimed))}
+                        {" / "}
+                        {formatFixed(round(bond.rewards))} uAR{" "}
+                      </div>
+                      <div className="text-white text-opacity-50 text-sm" title={`Ends at block: ${bond.endsAtBlock}`}>
+                        {toTimeInWords(+bond.endsAtDate - +new Date())} left
+                      </div>
                     </div>
-                    <div className="text-white text-opacity-50 text-sm" title={`Ends at block: ${bond.endsAtBlock}`}>
-                      {toTimeInWords(+bond.endsAtDate - +new Date())} left
-                    </div>
-                  </div>
+                  </td>
+                  <td className="py-2 px-2">{formatFixed(round(bond.claimable))} uAR</td>
+                </tr>
+              ))}
+            </tbody>
+          ) : (
+            <tbody>
+              <tr>
+                <td colSpan={3} className="py-2 text-white text-opacity-50">
+                  You've got no bonds yet
                 </td>
-                <td className="py-2 px-2">{formatFixed(round(bond.claimable))} uAR</td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          )}
         </table>
       </div>
       <div className="text-lg mb-2">Accumulated claimable</div>
       <div className="text-3xl mb-6 text-accent drop-shadow-light">{formatFixed(round(accumulated))} uAR</div>
-      <button className="btn-primary" disabled={!isWhitelisted} onClick={onClaim}>
+      <button className="btn-primary" disabled={!isWhitelisted || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
         Claim all
       </button>
     </div>

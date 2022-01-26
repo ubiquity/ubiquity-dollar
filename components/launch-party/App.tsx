@@ -15,7 +15,7 @@ import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
-import { PoolData, poolsByToken, allPools, UnipoolData } from "./lib/pools";
+import { PoolData, poolsByToken, allPools, UnipoolData, goldenPool } from "./lib/pools";
 import { ERC20, ERC20__factory, IUniswapV3Pool__factory } from "../../contracts/artifacts/types";
 import { ensureERC20Allowance } from "../common/contracts-shortcuts";
 
@@ -333,7 +333,7 @@ const App = () => {
       <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} onClaim={contractClaimAll} />
-      <Liquidate accumulated={rewardTokenBalance} />
+      <Liquidate accumulated={rewardTokenBalance} poolAddress={goldenPool.tokenAddress} />
     </div>
   );
 };
