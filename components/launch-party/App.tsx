@@ -263,16 +263,21 @@ const App = () => {
   //    ██║   ██║  ██║██║  ██║██║ ╚████║███████║██║  ██║╚██████╗   ██║   ██║╚██████╔╝██║ ╚████║███████║
   //    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
-  const contractSetAllowance = async ({ address, count, price }: { address: string; count: string; price: string }) => {
+  const contractSetAllowance = async (data: { address: string; count: string; price: string }[]) => {
     if (!isConnected || !isLoaded || isTransacting) return;
 
-    if (address && count && price) {
-      updateActiveTransaction({ id: "UBIQUISTICK_ALLOWANCE", title: "Setting allowance...", active: true });
-      console.log(utils.parseUnits(count, "wei"));
+    updateActiveTransaction({ id: "UBIQUISTICK_ALLOWANCE", title: "Setting allowance...", active: true });
+    if (data.length > 1) {
+      const addresses = data.map(({ address }) => address);
+      const counts = data.map(({ count }) => utils.parseUnits(count, "wei"));
+      const prices = data.map(({ price }) => utils.parseEther(price));
+      await performTransaction(contracts.ubiquiStickSale.batchSetAllowances(addresses, counts, prices));
+    } else {
+      const { address, count, price } = data[0];
       await performTransaction(contracts.ubiquiStickSale.setAllowance(address, utils.parseUnits(count, "wei"), utils.parseEther(price)));
-      updateActiveTransaction({ id: "UBIQUISTICK_ALLOWANCE", active: false });
-      await refreshUbiquistickData();
     }
+    updateActiveTransaction({ id: "UBIQUISTICK_ALLOWANCE", active: false });
+    await refreshUbiquistickData();
   };
 
   const contractMintUbiquistick = async () => {
