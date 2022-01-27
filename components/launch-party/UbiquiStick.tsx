@@ -37,7 +37,7 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy }: UbiquiStickParam
       <button className="btn-primary mb-8" disabled={!mintButtonEnabled} onClick={onBuy}>
         {mintButtonText}
       </button>
-      <a href="https://opensea.io/">See your Ubiquisticks on OpenSeas</a>
+      <a href="https://opensea.io/collection/the-ubiquistick-v3">See your Ubiquisticks on OpenSeas</a>
     </div>
   );
 };

@@ -15,7 +15,8 @@
     "next:dev": "next dev",
     "next:build": "next build",
     "next:start": "next start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "typechain": "typechain --target=ethers-v5  --out-dir abi/types abi/*.json"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
@@ -40,6 +41,7 @@
   },
   "dependencies": {
     "@tippyjs/react": "^4.2.5",
+    "@typechain/ethers-v5": "^9.0.0",
     "@types/node": "^16.7.10",
     "@types/react": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
@@ -62,6 +64,7 @@
     "react-dom": "^17.0.2",
     "react-dropdown-now": "^6.0.1",
     "tailwindcss": "^3.0.6",
+    "typechain": "^7.0.0",
     "typescript": "^4.3.2"
   }
 }

@@ -1,4 +1,4 @@
-import { round, formatFixed } from "./lib/utils";
+import { round, format, formatFixed } from "./lib/utils";
 import SectionTitle from "./lib/SectionTitle";
 
 export type BondData = {
@@ -19,10 +19,21 @@ const toTimeInWords = (time: number): string => {
   return `${days}d ${hours}h ${minutes}m`;
 };
 
-const YourBonds = ({ isWhitelisted, bonds, onClaim }: { isWhitelisted: boolean; bonds: BondData[] | null; onClaim: () => void }) => {
+const YourBonds = ({
+  isWhitelisted,
+  bonds,
+  onClaim,
+  uarUsdPrice,
+}: {
+  isWhitelisted: boolean;
+  bonds: BondData[] | null;
+  onClaim: () => void;
+  uarUsdPrice: number | null;
+}) => {
   if (!bonds) return null;
 
   const accumulated = bonds.reduce((acc, bond) => acc + bond.claimable, 0);
+  const accumulatedInUsd = uarUsdPrice ? accumulated * uarUsdPrice : null;
 
   return (
     <div className="party-container">
@@ -69,7 +80,10 @@ const YourBonds = ({ isWhitelisted, bonds, onClaim }: { isWhitelisted: boolean; 
         </table>
       </div>
       <div className="text-lg mb-2">Accumulated claimable</div>
-      <div className="text-3xl mb-6 text-accent drop-shadow-light">{formatFixed(round(accumulated))} uAR</div>
+      <div className="text-3xl mb-6 text-accent drop-shadow-light">
+        {format(round(accumulated))} uAR{" "}
+        {accumulatedInUsd !== null ? <span className="text-2xl opacity-50 ml-2 text-white">(${format(round(accumulatedInUsd))})</span> : null}
+      </div>
       <button className="btn-primary" disabled={!isWhitelisted || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
         Claim all
       </button>

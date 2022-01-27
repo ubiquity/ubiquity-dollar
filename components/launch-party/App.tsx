@@ -23,6 +23,7 @@ const App = () => {
   const { provider, account, updateActiveTransaction, activeTransactions, contracts: ubqContracts } = useConnectedContext();
   const [contracts, setContracts] = useState<Contracts | null>(null);
   const [tokensContracts, setTokensContracts] = useState<ERC20[]>([]);
+
   // const [decimalsByToken, setDecimalsByToken] = useState<{ [token: string]: number }>({});
 
   // Contracts loading
@@ -32,23 +33,23 @@ const App = () => {
       return;
     }
 
-    const loadContracts = async () => {
+    (async () => {
       const chainAddresses = addresses[provider.network.chainId];
       const signer = provider.getSigner();
 
       const simpleBond = factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer);
 
-      setContracts({
+      const contracts = {
         ubiquiStick: factories.ubiquiStick(chainAddresses.ubiquiStick, provider).connect(signer),
         ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
         simpleBond,
         rewardToken: ERC20__factory.connect(await simpleBond.tokenRewards(), provider).connect(signer),
-      });
+        chainLink: factories.chainLink(chainAddresses.chainLinkEthUsd, provider),
+      };
+      setContracts(contracts);
 
       setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
-    };
-
-    loadContracts();
+    })();
   }, [provider, account]);
 
   // ███████╗███████╗████████╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗
@@ -234,6 +235,27 @@ const App = () => {
     refreshSimpleBondData();
   }, [contracts, vestingTimeInDays, blocksCountInAWeek, vestingBlocks]);
 
+  const [uarUsdPrice, setUarUsdPrice] = useState<number | null>(null);
+  async function refreshPrices() {
+    if (!contracts || !tokensContracts || !poolsData) return;
+
+    const goldenPoolData = poolsData[goldenPool.tokenAddress];
+
+    if (!goldenPoolData || !goldenPoolData.liquidity1 || !goldenPoolData.liquidity2) return;
+
+    // Assuming golden pool is uAR-ETH
+    // Example: If we have 5 uAR and 100 ETH in the pool, then we take 1 uAR = 20 ETH
+
+    const uarEthPrice = goldenPoolData.liquidity2 / goldenPoolData.liquidity1;
+
+    const [, price] = await contracts.chainLink.latestRoundData();
+    const ethUsdPrice = +ethers.utils.formatUnits(price, "wei") / 1e8;
+    setUarUsdPrice(ethUsdPrice * uarEthPrice);
+  }
+  useEffect(() => {
+    refreshPrices();
+  }, [contracts, tokensContracts, poolsData]);
+
   // ████████╗██████╗  █████╗ ███╗   ██╗███████╗ █████╗  ██████╗████████╗██╗ ██████╗ ███╗   ██╗███████╗
   // ╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔══██╗██╔════╝╚══██╔══╝██║██╔═══██╗████╗  ██║██╔════╝
   //    ██║   ██████╔╝███████║██╔██╗ ██║███████╗███████║██║        ██║   ██║██║   ██║██╔██╗ ██║███████╗
@@ -332,8 +354,8 @@ const App = () => {
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
       <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
-      <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} onClaim={contractClaimAll} />
-      <Liquidate accumulated={rewardTokenBalance} poolAddress={goldenPool.tokenAddress} />
+      <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} onClaim={contractClaimAll} uarUsdPrice={uarUsdPrice} />
+      <Liquidate accumulated={rewardTokenBalance} uarUsdPrice={uarUsdPrice} poolAddress={goldenPool.tokenAddress} />
     </div>
   );
 };
