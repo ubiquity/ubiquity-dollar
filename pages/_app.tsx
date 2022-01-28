@@ -6,6 +6,7 @@ import "./styles/tailwind.css";
 import { ConnectedNetwork } from "../components/context/connected";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Layout from "../components/layout/Layout";
 
 export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Element {
   return (
@@ -35,9 +36,9 @@ export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Elemen
         <meta name="theme-color" content="#06061a" />
       </Head>
       <ConnectedNetwork>
-        <>
+        <Layout>
           <Component {...pageProps} />
-        </>
+        </Layout>
       </ConnectedNetwork>
     </>
   );

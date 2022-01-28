@@ -61,6 +61,10 @@
   margin: 0px
 }
 
+.m-auto {
+  margin: auto
+}
+
 .\!mx-auto {
   margin-left: auto !important;
   margin-right: auto !important
@@ -159,6 +163,18 @@
   height: 100vh
 }
 
+.h-\[50px\] {
+  height: 50px
+}
+
+.h-\[30px\] {
+  height: 30px
+}
+
+.min-h-screen {
+  min-height: 100vh
+}
+
 .\!w-10 {
   width: 2.5rem !important
 }
@@ -195,6 +211,22 @@
   width: 100vw
 }
 
+.w-\[80vw\] {
+  width: 80vw
+}
+
+.w-\[20vw\] {
+  width: 20vw
+}
+
+.w-\[0vw\] {
+  width: 0vw
+}
+
+.w-\[100vw\] {
+  width: 100vw
+}
+
 .\!min-w-0 {
   min-width: 0px !important
 }
@@ -205,6 +237,10 @@
 
 .max-w-screen-md {
   max-width: 768px
+}
+
+.flex-1 {
+  flex: 1 1 0%
 }
 
 .flex-grow {
@@ -253,6 +289,10 @@
   row-gap: 1rem
 }
 
+.overflow-hidden {
+  overflow: hidden
+}
+
 .whitespace-nowrap {
   white-space: nowrap
 }
@@ -291,12 +331,25 @@
   background-color: rgba(0, 255, 255, var(--tw-bg-opacity))
 }
 
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity))
+}
+
 .bg-opacity-10 {
   --tw-bg-opacity: 0.1
 }
 
 .p-4 {
   padding: 1rem
+}
+
+.p-\[20px\] {
+  padding: 20px
+}
+
+.p-\[10px\] {
+  padding: 10px
 }
 
 .py-4 {
