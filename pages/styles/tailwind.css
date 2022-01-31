@@ -29,6 +29,10 @@
   position: fixed
 }
 
+.absolute {
+  position: absolute
+}
+
 .relative {
   position: relative
 }
@@ -43,6 +47,10 @@
 
 .top-\[2px\] {
   top: 2px
+}
+
+.left-0 {
+  left: 0px
 }
 
 .z-10 {
@@ -151,6 +159,14 @@
   height: 3rem
 }
 
+.h-\[50px\] {
+  height: 50px
+}
+
+.h-\[30px\] {
+  height: 30px
+}
+
 .h-6 {
   height: 1.5rem
 }
@@ -161,14 +177,6 @@
 
 .h-screen {
   height: 100vh
-}
-
-.h-\[50px\] {
-  height: 50px
-}
-
-.h-\[30px\] {
-  height: 30px
 }
 
 .min-h-screen {
@@ -203,16 +211,12 @@
   width: 16.666667%
 }
 
-.w-8 {
-  width: 2rem
-}
-
-.w-screen {
-  width: 100vw
-}
-
 .w-\[80vw\] {
   width: 80vw
+}
+
+.w-\[100vw\] {
+  width: 100vw
 }
 
 .w-\[20vw\] {
@@ -223,8 +227,16 @@
   width: 0vw
 }
 
-.w-\[100vw\] {
+.w-8 {
+  width: 2rem
+}
+
+.w-screen {
   width: 100vw
+}
+
+.w-10 {
+  width: 2.5rem
 }
 
 .\!min-w-0 {
@@ -251,6 +263,10 @@
   --tw-scale-x: 1.5;
   --tw-scale-y: 1.5;
   transform: var(--tw-transform)
+}
+
+.cursor-pointer {
+  cursor: pointer
 }
 
 .grid-cols-3 {
@@ -326,14 +342,14 @@
   border-color: rgba(0, 255, 255, var(--tw-border-opacity))
 }
 
-.bg-accent {
-  --tw-bg-opacity: 1;
-  background-color: rgba(0, 255, 255, var(--tw-bg-opacity))
-}
-
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity))
+}
+
+.bg-accent {
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 255, 255, var(--tw-bg-opacity))
 }
 
 .bg-opacity-10 {
@@ -344,12 +360,12 @@
   padding: 1rem
 }
 
-.p-\[20px\] {
-  padding: 20px
-}
-
 .p-\[10px\] {
   padding: 10px
+}
+
+.p-\[20px\] {
+  padding: 20px
 }
 
 .py-4 {
@@ -387,6 +403,10 @@
 
 .pl-1 {
   padding-left: 0.25rem
+}
+
+.pl-\[20px\] {
+  padding-left: 20px
 }
 
 .text-left {
@@ -491,6 +511,34 @@
 
 .filter {
   filter: var(--tw-filter)
+}
+
+.transition {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.delay-500 {
+  transition-delay: 500ms
+}
+
+.delay-150 {
+  transition-delay: 150ms
+}
+
+.delay-1000 {
+  transition-delay: 1000ms
+}
+
+.delay-100 {
+  transition-delay: 100ms
+}
+
+.ease-in-out {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1)
 }
 
 .disabled\:bg-white:disabled {
