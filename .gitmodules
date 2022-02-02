@@ -1,7 +1,8 @@
 [submodule "contracts"]
 	path = contracts
 	url = https://github.com/ubiquity/uad-contracts.git
-    branch = main
+    branch = launch-party
 [submodule "the-ubiquity-stick"]
 	path = the-ubiquity-stick
 	url = https://github.com/ubiquity/the-ubiquity-stick
+		branch = launch-party
