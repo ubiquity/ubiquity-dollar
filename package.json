@@ -16,7 +16,9 @@
     "next:build": "next build",
     "next:start": "next start",
     "prepare": "husky install",
-    "typechain": "typechain --target=ethers-v5  --out-dir abi/types abi/*.json"
+    "typechain": "typechain --target=ethers-v5  --out-dir abi/types abi/*.json",
+    "hardhat:node": "cd the-ubiquity-stick && yarn hardhat node --fork-block-number 13856891",
+    "hardhat:faucet": "cd contracts && yarn node:faucet"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
@@ -52,7 +54,7 @@
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-tsc": "^2.0.0",
-    "ethers": "^5.0.31",
+    "ethers": "^5.5.4",
     "husky": "^7.0.1",
     "lint-staged": ">=10",
     "next": "^11.0.0",
