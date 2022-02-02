@@ -2,11 +2,10 @@
   "name": "@ubiquity/dollar-ui",
   "license": "MIT",
   "scripts": {
-    "start": "run-s _cdroot solidity:build next:build next:start",
-    "dev": "run-s _cdroot solidity:build next:dev",
+    "start": "run-s _cdroot contracts:build next:build next:start",
+    "dev": "run-s _cdroot contracts:build next:dev",
     "_cdroot": "./build-scripts/cd-to-project-root.sh",
-    "build": "run-s solidity:build next:build",
-    "solidity:build": "./build-scripts/compile-artifacts.sh",
+    "build": "run-s contracts:build next:build",
     "format": "run-s format:*",
     "format:prettier": "prettier --write .",
     "format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
@@ -16,9 +15,13 @@
     "next:build": "next build",
     "next:start": "next start",
     "prepare": "husky install",
-    "typechain": "typechain --target=ethers-v5  --out-dir abi/types abi/*.json",
-    "hardhat:node": "cd the-ubiquity-stick && yarn hardhat node --fork-block-number 13856891",
-    "hardhat:faucet": "cd contracts && yarn node:faucet"
+    "contracts:init": "git submodule update --init --recursive --remote && cd contracts && yarn && cd ../the-ubiquity-stick && yarn",
+    "contracts:build": "run-s contracts:build:*",
+    "contracts:build:uad-contracts": "cd contracts && yarn build && yarn hardhat export --export ../fixtures/full-deployment.json --network mainnet",
+    "contracts:build:the-ubiquity-stick": "cd the-ubiquity-stick && yarn build",
+    "contracts:build:typechain": "typechain --target=ethers-v5  --out-dir abi/types abi/*.json",
+    "contracts:node": "cd the-ubiquity-stick && yarn hardhat node --fork-block-number 13856891",
+    "contracts:faucet": "cd contracts && yarn node:faucet"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
