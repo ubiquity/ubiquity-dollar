@@ -43,5 +43,3 @@ systemctl/ \*_/_.DS_Store
 typings
 *.log
 /abi/types/*
-
-deployments/localhost

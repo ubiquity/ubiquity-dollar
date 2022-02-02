@@ -1,6 +1,6 @@
 import cx from "classnames";
 import SectionTitle from "./lib/SectionTitle";
-import { OwnedSticks, SticksAllowance } from "./lib/types/state";
+import { OwnedSticks, SticksAllowance } from "./lib/state";
 
 // const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
 

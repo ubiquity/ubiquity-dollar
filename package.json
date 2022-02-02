@@ -20,7 +20,7 @@
     "contracts:build:uad-contracts": "cd contracts && yarn build && yarn hardhat export --export ../fixtures/full-deployment.json --network mainnet",
     "contracts:build:the-ubiquity-stick": "cd the-ubiquity-stick && yarn build",
     "contracts:build:typechain": "typechain --target=ethers-v5  --out-dir abi/types abi/*.json",
-    "contracts:node": "cd the-ubiquity-stick && yarn hardhat node --fork-block-number 13856891",
+    "contracts:node": "cd the-ubiquity-stick && yarn hardhat node --fork-block-number 14044209 ",
     "contracts:faucet": "cd contracts && yarn node:faucet"
   },
   "lint-staged": {

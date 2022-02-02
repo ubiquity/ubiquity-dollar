@@ -10,7 +10,7 @@ import YourBonds, { BondData } from "./YourBonds";
 import Liquidate from "./Liquidate";
 import { Contracts, factories, addresses } from "./lib/contracts";
 import { useConnectedContext } from "../context/connected";
-import { OwnedSticks, SticksAllowance } from "./lib/types/state";
+import { OwnedSticks, SticksAllowance } from "./lib/state";
 import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
@@ -61,8 +61,9 @@ const App = () => {
   // ╚═╝     ╚══════╝   ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
 
   async function fetchUniPoolsData(provider: ethers.providers.Web3Provider): Promise<{ [poolAddress: string]: UnipoolData }> {
-    const getUniPoolFullData = async (poolAddress: string): Promise<UnipoolData> => {
-      const pool = UniswapV3Pool__factory.connect(poolAddress, provider);
+    const getUniPoolFullData = async (poolAddress: string, isV2: boolean): Promise<UnipoolData> => {
+      const pool = isV2 ? UniswapV2Pair__factory.connect(poolAddress, provider) : UniswapV3Pool__factory.connect(poolAddress, provider);
+      console.log(pool);
       const t1 = ERC20__factory.connect(await pool.token0(), provider);
       const t2 = ERC20__factory.connect(await pool.token1(), provider);
       const d1 = await t1.decimals();
@@ -70,7 +71,7 @@ const App = () => {
       const b1 = await t1.balanceOf(pool.address);
       const b2 = await t2.balanceOf(pool.address);
       return {
-        poolAddress,
+        poolAddress: poolAddress,
         contract1: t1,
         contract2: t2,
         token1: t1.address,
@@ -86,9 +87,12 @@ const App = () => {
       };
     };
 
-    const newUniPoolsData = (await Promise.all(allPools.map((pool) => getUniPoolFullData(pool.uniV3PoolAddress)))).reduce((acc, unipoolData) => {
-      return { ...acc, [unipoolData.poolAddress]: unipoolData };
-    }, {});
+    const newUniPoolsData = (await Promise.all(allPools.map((pool) => getUniPoolFullData(pool.poolAddress, pool.poolAddress === pool.tokenAddress)))).reduce(
+      (acc, unipoolData) => {
+        return { ...acc, [unipoolData.poolAddress]: unipoolData };
+      },
+      {}
+    );
 
     return newUniPoolsData;
 
@@ -100,6 +104,7 @@ const App = () => {
 
   async function refreshOwnerData() {
     if (!isConnected || !contracts) return;
+    console.log("Owner?", (await contracts.ubiquiStickSale.owner()).toLowerCase());
     setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === account.address.toLowerCase());
     setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === account.address.toLowerCase());
   }
@@ -154,6 +159,7 @@ const App = () => {
 
       const newUnipoolFullData = await fetchUniPoolsData(provider);
 
+      console.log("Decimals?");
       const newPoolsData: { [token: string]: PoolData } = (
         await Promise.all(
           tokensContracts.map((tokenContract) =>
@@ -163,7 +169,7 @@ const App = () => {
       ).reduce<{ [token: string]: PoolData }>((acc, [address, balance, decimals, reward]) => {
         const poolTokenBalance = +ethers.utils.formatUnits(balance, decimals);
         const apy = (reward.toNumber() / 1_000_000_000 / 5) * 365 * 100;
-        const uniPoolData = newUnipoolFullData[poolsByToken[address].uniV3PoolAddress];
+        const uniPoolData = newUnipoolFullData[poolsByToken[address].poolAddress];
         const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);
         const liquidity2 = +ethers.utils.formatUnits(uniPoolData.balance2, uniPoolData.decimal2);
 
@@ -183,6 +189,7 @@ const App = () => {
 
         return acc;
       }, {});
+      console.log("Decimals end?");
 
       // Get the current bonds data
 

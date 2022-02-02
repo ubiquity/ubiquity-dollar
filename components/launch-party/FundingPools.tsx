@@ -15,7 +15,7 @@ const FundingPools = ({ isWhitelisted, poolsData, onDeposit }: FundingPoolParams
       <div className="grid grid-cols-2 gap-8">
         {pools.map((pool) => (
           <BondingPool
-            key={pool.token1 + "-" + pool.token2}
+            key={pool.name}
             isWhitelisted={isWhitelisted}
             poolData={poolsData[pool.tokenAddress]}
             onDeposit={({ amount }) => onDeposit({ token: pool.tokenAddress, amount })}
