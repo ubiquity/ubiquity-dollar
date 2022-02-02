@@ -11,4 +11,13 @@ yarn build
 rm -f $UP$DEPLOYMENT_ARTIFACT
 yarn hardhat export --export $UP$DEPLOYMENT_ARTIFACT --network mainnet
 cd $UP || exit 1
+
+cd ./the-ubiquity-stick || echo "ERROR: ./the-ubiquity-stick/ doesn't exist?"
+yarn install
+yarn build
+
+cd $UP || exit 1
+
+yarn typechain
+
 exit 0

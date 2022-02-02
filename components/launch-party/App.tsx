@@ -16,7 +16,8 @@ import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
 import { PoolData, poolsByToken, allPools, UnipoolData, goldenPool } from "./lib/pools";
-import { ERC20, ERC20__factory, IUniswapV3Pool__factory } from "../../contracts/artifacts/types";
+import { ERC20, ERC20__factory } from "../../contracts/artifacts/types";
+import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "../../abi/types";
 import { ensureERC20Allowance } from "../common/contracts-shortcuts";
 
 const App = () => {
@@ -61,7 +62,7 @@ const App = () => {
 
   async function fetchUniPoolsData(provider: ethers.providers.Web3Provider): Promise<{ [poolAddress: string]: UnipoolData }> {
     const getUniPoolFullData = async (poolAddress: string): Promise<UnipoolData> => {
-      const pool = IUniswapV3Pool__factory.connect(poolAddress, provider);
+      const pool = UniswapV3Pool__factory.connect(poolAddress, provider);
       const t1 = ERC20__factory.connect(await pool.token0(), provider);
       const t2 = ERC20__factory.connect(await pool.token1(), provider);
       const d1 = await t1.decimals();
@@ -250,6 +251,8 @@ const App = () => {
 
     const [, price] = await contracts.chainLink.latestRoundData();
     const ethUsdPrice = +ethers.utils.formatUnits(price, "wei") / 1e8;
+
+    console.log("ETH-USD", ethUsdPrice);
     setUarUsdPrice(ethUsdPrice * uarEthPrice);
   }
   useEffect(() => {

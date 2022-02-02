@@ -2,3 +2,6 @@
 	path = contracts
 	url = https://github.com/ubiquity/uad-contracts.git
     branch = main
+[submodule "the-ubiquity-stick"]
+	path = the-ubiquity-stick
+	url = https://github.com/ubiquity/the-ubiquity-stick
