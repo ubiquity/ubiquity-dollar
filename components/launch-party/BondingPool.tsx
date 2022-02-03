@@ -20,6 +20,8 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
   const parsedAmount = parseFloat(amount);
   const disableSubmit = !!(!enabled || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
 
+  const poolUrl = info.tokenAddress === info.poolAddress ? "https://v2.info.uniswap.org/pair/" : "https://www.sorbet.finance/#/pools/";
+
   return (
     <div className="p-6 bg-white bg-opacity-5 rounded">
       <div className="flex mb-6">
@@ -53,7 +55,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
         <div className="flex-grow text-left">
           You have {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
         </div>
-        <a href={`https://www.sorbet.finance/#/pools/${info.tokenAddress}`} target="_blank">
+        <a href={`${poolUrl}${info.tokenAddress}`} target="_blank">
           Get more
         </a>
       </div>

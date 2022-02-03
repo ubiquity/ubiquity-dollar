@@ -11,7 +11,7 @@ const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: num
         {accumulated !== null ? format(round(accumulated)) : "????"} uAR
         {accumulatedInUsd !== null ? <span className="text-2xl opacity-50 ml-2 text-white">(${format(round(accumulatedInUsd))})</span> : null}
       </div>
-      <a className="btn-primary" target="_blank" href={`https://www.sorbet.finance/#/pools/${poolAddress}`}>
+      <a className="btn-primary" target="_blank" href={`https://v2.info.uniswap.org/pair/${poolAddress}`}>
         Exchange for ETH
       </a>
     </div>

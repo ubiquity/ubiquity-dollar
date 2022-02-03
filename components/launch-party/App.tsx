@@ -126,6 +126,7 @@ const App = () => {
         new Array(sticksAmount).fill(0).map(async (_, i) => {
           const id = (await contracts.ubiquiStick.tokenOfOwnerByIndex(account.address, i)).toNumber();
           const isGold = await contracts.ubiquiStick.gold(id);
+          console.log("Stick", id, isGold);
           if (isGold) {
             newSticks.gold += 1;
           } else {
