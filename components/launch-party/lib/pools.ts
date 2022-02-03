@@ -43,13 +43,23 @@ export type PoolData = {
 };
 
 export const pools: PoolInfo[] = [
-  {
-    name: "uAD-USDC",
-    poolAddress: "0x681b4c3af785dacaccc496b9ff04f9c31bce4090",
-    tokenAddress: "0xA9514190cBBaD624c313Ea387a18Fd1dea576cbd",
-    logo: "usdc.png",
-  },
-];
+  "uAD-LUSD",
+  "uAD-OHM",
+  "uAD-MIM",
+  "uAD-UST",
+  "uAD-FRAX",
+  "uAD-FEI",
+  "uAD-DOLA",
+  "uAD-DAI",
+  "uAD-USDC",
+  "uAD-USDT",
+  "uAD-ALUSD",
+].map((name) => ({
+  name,
+  poolAddress: "0x681b4c3af785dacaccc496b9ff04f9c31bce4090",
+  tokenAddress: "0xA9514190cBBaD624c313Ea387a18Fd1dea576cbd",
+  logo: `/tokens-icons/${name.split("-")[1].toLowerCase()}.png`,
+}));
 
 export const poolByAddress = (address: string) => pools.find((p) => p.tokenAddress === address) || (address === goldenPool.tokenAddress ? goldenPool : null);
 
