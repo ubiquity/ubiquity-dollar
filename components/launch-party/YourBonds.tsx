@@ -20,12 +20,12 @@ const toTimeInWords = (time: number): string => {
 };
 
 const YourBonds = ({
-  isWhitelisted,
+  enabled,
   bonds,
   onClaim,
   uarUsdPrice,
 }: {
-  isWhitelisted: boolean;
+  enabled: boolean;
   bonds: BondData[] | null;
   onClaim: () => void;
   uarUsdPrice: number | null;
@@ -84,7 +84,7 @@ const YourBonds = ({
         {format(round(accumulated))} uAR{" "}
         {accumulatedInUsd !== null ? <span className="text-2xl opacity-50 ml-2 text-white">(${format(round(accumulatedInUsd))})</span> : null}
       </div>
-      <button className="btn-primary" disabled={!isWhitelisted || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
+      <button className="btn-primary" disabled={!enabled || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
         Claim all
       </button>
     </div>

@@ -4,12 +4,12 @@ import { PoolInfo, PoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
 
 type BondingPoolParams = PoolInfo & {
-  isWhitelisted: boolean;
+  enabled: boolean;
   poolData: PoolData | null;
   onDeposit: ({ amount }: { amount: number }) => any;
 };
 
-const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoolParams) => {
+const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParams) => {
   const LPTokenName = poolData ? poolData.symbol1 + "-" + poolData.symbol2 : "...";
   const [amount, setAmount] = useState("");
 
@@ -18,7 +18,7 @@ const BondingPool = ({ isWhitelisted, poolData, onDeposit, ...info }: BondingPoo
   };
 
   const parsedAmount = parseFloat(amount);
-  const disableSubmit = !!(!isWhitelisted || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
+  const disableSubmit = !!(!enabled || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
 
   return (
     <div className="p-6 bg-white bg-opacity-5 rounded">

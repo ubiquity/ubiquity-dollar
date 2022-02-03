@@ -20,6 +20,8 @@ import { ERC20, ERC20__factory } from "../../contracts/artifacts/types";
 import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "../../abi/types";
 import { ensureERC20Allowance } from "../common/contracts-shortcuts";
 
+const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
 const App = () => {
   const { provider, account, updateActiveTransaction, activeTransactions, contracts: ubqContracts } = useConnectedContext();
   const [contracts, setContracts] = useState<Contracts | null>(null);
@@ -47,8 +49,8 @@ const App = () => {
         rewardToken: ERC20__factory.connect(await simpleBond.tokenRewards(), provider).connect(signer),
         chainLink: factories.chainLink(chainAddresses.chainLinkEthUsd, provider),
       };
-      setContracts(contracts);
 
+      setContracts(contracts);
       setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
     })();
   }, [provider, account]);
@@ -63,7 +65,6 @@ const App = () => {
   async function fetchUniPoolsData(provider: ethers.providers.Web3Provider): Promise<{ [poolAddress: string]: UnipoolData }> {
     const getUniPoolFullData = async (poolAddress: string, isV2: boolean): Promise<UnipoolData> => {
       const pool = isV2 ? UniswapV2Pair__factory.connect(poolAddress, provider) : UniswapV3Pool__factory.connect(poolAddress, provider);
-      console.log(pool);
       const t1 = ERC20__factory.connect(await pool.token0(), provider);
       const t2 = ERC20__factory.connect(await pool.token1(), provider);
       const d1 = await t1.decimals();
@@ -104,7 +105,6 @@ const App = () => {
 
   async function refreshOwnerData() {
     if (!isConnected || !contracts) return;
-    console.log("Owner?", (await contracts.ubiquiStickSale.owner()).toLowerCase());
     setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === account.address.toLowerCase());
     setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === account.address.toLowerCase());
   }
@@ -150,6 +150,7 @@ const App = () => {
   const [tokensRatios, setTokensRatios] = useState<{ [token: string]: ethers.BigNumber }>({});
   const [poolsData, setPoolsData] = useState<{ [token: string]: PoolData }>({});
   const [bondsData, setBondsData] = useState<BondData[] | null>(null);
+  const [needsStick, setNeedsStick] = useState<boolean>(true);
 
   async function refreshSimpleBondData() {
     if (isConnected && contracts && vestingTimeInDays !== null && blocksCountInAWeek !== null && vestingBlocks !== null) {
@@ -159,7 +160,6 @@ const App = () => {
 
       const newUnipoolFullData = await fetchUniPoolsData(provider);
 
-      console.log("Decimals?");
       const newPoolsData: { [token: string]: PoolData } = (
         await Promise.all(
           tokensContracts.map((tokenContract) =>
@@ -189,7 +189,6 @@ const App = () => {
 
         return acc;
       }, {});
-      console.log("Decimals end?");
 
       // Get the current bonds data
 
@@ -224,6 +223,10 @@ const App = () => {
       // Get the balance of the reward token
 
       const newRewardTokenBalance = +ethers.utils.formatUnits(await contracts.rewardToken.balanceOf(account.address), await contracts.rewardToken.decimals());
+
+      // Get wether the Ubiquistick is still neccesary
+
+      setNeedsStick((await contracts.simpleBond.sticker()) !== ZERO_ADDRESS);
 
       // Set all the states
 
@@ -357,6 +360,7 @@ const App = () => {
   const isTransacting = activeTransactions.some((tx) => tx.active);
   const sticksCount = sticks ? sticks.gold + sticks.standard : null;
   const isWhitelisted = !!allowance && sticksCount !== null && (allowance.count > 0 || sticksCount > 0);
+  const canUsePools = (sticksCount !== null && sticksCount > 0) || !needsStick;
 
   return (
     <div>
@@ -367,9 +371,9 @@ const App = () => {
       {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
       <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
-      <FundingPools isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
-      <MultiplicationPool isWhitelisted={isWhitelisted} poolsData={poolsData} onDeposit={contractDepositAndBond} />
-      <YourBonds isWhitelisted={isWhitelisted} bonds={bondsData} onClaim={contractClaimAll} uarUsdPrice={uarUsdPrice} />
+      <FundingPools enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
+      <MultiplicationPool enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
+      <YourBonds enabled={canUsePools} bonds={bondsData} onClaim={contractClaimAll} uarUsdPrice={uarUsdPrice} />
       <Liquidate accumulated={rewardTokenBalance} uarUsdPrice={uarUsdPrice} poolAddress={goldenPool.tokenAddress} />
     </div>
   );

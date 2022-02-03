@@ -3,12 +3,12 @@ import { PoolData, pools } from "./lib/pools";
 import SectionTitle from "./lib/SectionTitle";
 
 type FundingPoolParams = {
-  isWhitelisted: boolean;
+  enabled: boolean;
   poolsData: { [key: string]: PoolData };
   onDeposit: ({ token, amount }: { token: string; amount: number }) => any;
 };
 
-const FundingPools = ({ isWhitelisted, poolsData, onDeposit }: FundingPoolParams) => {
+const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
   return (
     <div className="party-container">
       <SectionTitle title="Funding Pools" subtitle="Sell LP, get uAR over the course of 5 days" />
@@ -16,7 +16,7 @@ const FundingPools = ({ isWhitelisted, poolsData, onDeposit }: FundingPoolParams
         {pools.map((pool) => (
           <BondingPool
             key={pool.name}
-            isWhitelisted={isWhitelisted}
+            enabled={enabled}
             poolData={poolsData[pool.tokenAddress]}
             onDeposit={({ amount }) => onDeposit({ token: pool.tokenAddress, amount })}
             {...pool}

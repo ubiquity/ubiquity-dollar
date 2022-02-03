@@ -5,6 +5,10 @@ export type PoolInfo = {
   name: string;
   poolAddress: string;
   tokenAddress: string;
+  // If poolAddress === tokenAddress
+  //   pool and token are is UniswapV2
+  // else
+  //   pool is UniswapV3 and token is Gelato
   logo: string | null;
 };
 
@@ -39,27 +43,6 @@ export type PoolData = {
 };
 
 export const pools: PoolInfo[] = [
-  // {
-  //   token1: "UBQ",
-  //   token2: "uAD",
-  //   poolMarketLink: "https://app.uniswap.org",
-  //   tokenAddress: "0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0",
-  //   logo: "ubq.png",
-  // },
-  // {
-  //   token1: "uAD",
-  //   token2: "uAD",
-  //   poolMarketLink: "https://app.uniswap.org",
-  //   tokenAddress: "0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6",
-  //   logo: "ubq.png",
-  // },
-  // {
-  //   token1: "DAI",
-  //   token2: "uAD",
-  //   poolMarketLink: "https://app.uniswap.org",
-  //   tokenAddress: "0x6b175474e89094c44da98b954eedeac495271d0f",
-  //   logo: "dai.png",
-  // },
   {
     name: "uAD-USDC",
     poolAddress: "0x681b4c3af785dacaccc496b9ff04f9c31bce4090",
