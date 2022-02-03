@@ -458,7 +458,7 @@ div#grid {
   /* z-index: -1; */
 }
 
-body video {
+body .bg-video {
   opacity: 0.25;
   filter: grayscale(0.25);
   object-position: center;

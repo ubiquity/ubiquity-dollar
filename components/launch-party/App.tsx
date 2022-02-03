@@ -10,7 +10,7 @@ import YourBonds, { BondData } from "./YourBonds";
 import Liquidate from "./Liquidate";
 import { Contracts, factories, addresses } from "./lib/contracts";
 import { useConnectedContext } from "../context/connected";
-import { OwnedSticks, SticksAllowance } from "./lib/state";
+import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/state";
 import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
@@ -116,32 +116,43 @@ const App = () => {
   const [vestingBlocks, setVestingBlocks] = useState<number | null>(null);
   const [rewardTokenBalance, setRewardTokenBalance] = useState<number | null>(null);
 
+  const [tokenMedia, setTokensMedia] = useState<TokenMedia>({});
+
   async function refreshUbiquistickData() {
     if (isConnected && contracts && ubqContracts) {
-      const newSticks: OwnedSticks = { standard: 0, gold: 0 };
-
+      const newSticks: OwnedSticks = { black: 0, gold: 0, invisible: 0 };
       const sticksAmount = (await contracts.ubiquiStick.balanceOf(account.address)).toNumber();
+      const newTokenMedia: TokenMedia = {};
 
       await Promise.all(
         new Array(sticksAmount).fill(0).map(async (_, i) => {
           const id = (await contracts.ubiquiStick.tokenOfOwnerByIndex(account.address, i)).toNumber();
-          const isGold = await contracts.ubiquiStick.gold(id);
-          console.log("Stick", id, isGold);
-          if (isGold) {
-            newSticks.gold += 1;
-          } else {
-            newSticks.standard += 1;
+          const uri = await contracts.ubiquiStick.tokenURI(id);
+          const data: TokenData = await fetch(uri).then((res) => res.json());
+          newTokenMedia[data.type] = data;
+          switch (data.type) {
+            case "gold":
+              newSticks.gold++;
+              break;
+            case "invisible":
+              newSticks.invisible++;
+              break;
+            default:
+              newSticks.black++;
           }
         })
       );
 
-      setSticks(newSticks);
-
       const allowance = await contracts.ubiquiStickSale.allowance(account.address);
-      setAllowance({ count: +allowance.count.toString(), price: +allowance.price.toString() / 1e18 });
 
       const blocksCountInAWeek = (await ubqContracts.bonding.blockCountInAWeek()).toNumber();
       const vestingBlocks = (await contracts.simpleBond.vestingBlocks()).toNumber();
+
+      setSticks(newSticks);
+      setTokensMedia(newTokenMedia);
+
+      setAllowance({ count: +allowance.count.toString(), price: +allowance.price.toString() / 1e18 });
+
       setBlocksCountInAWeek(blocksCountInAWeek);
       setVestingBlocks(vestingBlocks);
       setVestingTimeInDays(vestingBlocks / (blocksCountInAWeek / 7));
@@ -359,7 +370,7 @@ const App = () => {
   const isConnected = !!(provider && account);
   const isLoaded = !!(contracts && sticks && allowance);
   const isTransacting = activeTransactions.some((tx) => tx.active);
-  const sticksCount = sticks ? sticks.gold + sticks.standard : null;
+  const sticksCount = sticks ? sticks.gold + sticks.black + sticks.invisible : null;
   const isWhitelisted = !!allowance && sticksCount !== null && (allowance.count > 0 || sticksCount > 0);
   const canUsePools = (sticksCount !== null && sticksCount > 0) || !needsStick;
 
@@ -371,7 +382,7 @@ const App = () => {
       {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
       {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
       <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />
-      <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} allowance={allowance} />
+      <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} media={tokenMedia} allowance={allowance} />
       <FundingPools enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <YourBonds enabled={canUsePools} bonds={bondsData} onClaim={contractClaimAll} uarUsdPrice={uarUsdPrice} />
