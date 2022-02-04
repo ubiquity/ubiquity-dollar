@@ -5,14 +5,14 @@ type SidebarProps = {
 export default function Sidebar({ isOpened }: SidebarProps) {
   return (
     <div
-      className={`${isOpened ? "w-[20vw]" : "w-[0vw]"} absolute h-screen shadow-md z-50 bg-white overflow-hidden flex flex-col`}
+      className={`${isOpened ? "w-[300px]" : "w-[0vw]"} absolute h-screen shadow-md z-50 bg-[#00000060] overflow-hidden flex flex-col`}
       style={{ transition: ".15s width ease-in-out" }}
     >
-      <ul className="relative">
+      <ul className="relative mt-8">
         <li className="relative">
           <a
-            className="flex items-center !text-black text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-            href="#!"
+            className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+            href="/intro"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
@@ -21,7 +21,7 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         </li>
         <li className="relative" id="sidenavEx1">
           <a
-            className="flex items-center !text-black text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out cursor-pointer"
+            className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out cursor-pointer"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
             data-bs-toggle="collapse"
@@ -48,8 +48,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
           <ul className="relative accordion-collapse collapse" id="collapseSidenavEx1" aria-labelledby="sidenavEx1" data-bs-parent="#sidenavExample">
             <li className="relative">
               <a
-                href="#!"
-                className="flex items-center !text-black text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
+                href="/price-stabilization"
+                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
               >
@@ -58,8 +58,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
             </li>
             <li className="relative">
               <a
-                href="#!"
-                className="flex items-center !text-black text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
+                href="/liquidity-mining"
+                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
               >
@@ -68,8 +68,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
             </li>
             <li className="relative">
               <a
-                href="#!"
-                className="flex items-center !text-black text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
+                href="/yield-farming"
+                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
               >
@@ -78,8 +78,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
             </li>
             <li className="relative">
               <a
-                href="#!"
-                className="flex items-center !text-black text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
+                href="/launch-party"
+                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
               >
@@ -90,8 +90,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         </li>
         <li className="relative">
           <a
-            className="flex items-center !text-black text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-            href="#!"
+            className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+            href="/markets"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
@@ -100,8 +100,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         </li>
         <li className="relative">
           <a
-            className="flex items-center !text-black text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-            href="#!"
+            className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+            href="/docs"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
@@ -110,8 +110,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         </li>
         <li className="relative">
           <a
-            className="flex items-center !text-black text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-            href="#!"
+            className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+            href="/dao"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
@@ -134,8 +134,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         </li>
         <li className="relative">
           <a
-            className="flex items-center !text-black text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100 transition duration-300 ease-in-out"
-            href="#!"
+            className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+            href="/blog"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >

@@ -42,7 +42,7 @@ export default function Header({ toggleDrawer }: HeaderProps) {
   }
 
   return (
-    <header className="flex h-[50px] items-center justify-center">
+    <header className="flex h-[60px] items-center justify-center">
       <div className="p-[10px] pl-[20px] absolute left-0" onClick={toggleDrawer}>
         <div className="w-10 cursor-pointer">{icons.svgs.menu}</div>
       </div>

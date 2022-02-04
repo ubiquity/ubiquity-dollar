@@ -168,7 +168,8 @@ table {
   padding-right: 13px;
   text-rendering: optimizeLegibility;
   font-weight: initial;
-  height: 11px;
+  height: 20px;
+  line-height: 12px;
 }
 #logo > span:first-child {
   padding-left: 32px;
