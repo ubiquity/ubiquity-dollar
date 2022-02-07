@@ -5,4 +5,4 @@
 [submodule "the-ubiquity-stick"]
 	path = the-ubiquity-stick
 	url = https://github.com/ubiquity/the-ubiquity-stick
-		branch = launch-party
+		branch = main
