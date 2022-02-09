@@ -16,8 +16,8 @@ import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
 import TransactionsDisplay from "../TransactionsDisplay";
 import { PoolData, poolsByToken, allPools, UnipoolData, goldenPool } from "./lib/pools";
-import { ERC20, ERC20__factory } from "../../contracts/artifacts/types";
-import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "../../abi/types";
+import { ERC20, ERC20__factory } from "../../contracts/ubiquity-dollar/artifacts/types";
+import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "../../fixtures/abi/types";
 import { ensureERC20Allowance } from "../common/contracts-shortcuts";
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";

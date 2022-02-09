@@ -1,5 +1,4 @@
-import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "../../../abi/types";
-import { ERC20 } from "../../../contracts/artifacts/types";
+import { ERC20 } from "../../../contracts/ubiquity-dollar/artifacts/types";
 import {
   TheUbiquityStickSale__factory,
   SimpleBond__factory,
@@ -7,7 +6,8 @@ import {
   TheUbiquityStickSale,
   TheUbiquityStick,
   TheUbiquityStick__factory,
-} from "../../../the-ubiquity-stick/types";
+} from "../../../contracts/ubiquistick/types";
+import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "../../../fixtures/abi/types";
 
 type Addresses = {
   ubiquiStick: string;
