@@ -3,7 +3,7 @@ git submodule update --init --recursive --remote
 cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
 
 UP=../
-DEPLOYMENT_ARTIFACT=fixtures/full-deployment.json
+DEPLOYMENT_ARTIFACT=fixtures/ubiquity-dollar-deployment.json
 
 yarn install
 yarn build

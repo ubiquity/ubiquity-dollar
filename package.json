@@ -8,16 +8,17 @@
     "_contracts:install:nft": "cd contracts/ubiquistick && yarn",
     "contracts:build": "run-p _contracts:build:*",
     "_contracts:build:uad": "cd contracts/dollar && yarn build",
-    "_contracts:build:uad:artifacts": "hardhat export --export ../fixtures/full-deployment.json --network mainnet",
-    "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
+    "_contracts:build:uad:artifacts": "hardhat export --export ../fixtures/ubiquity-dollar-deployment.json --network mainnet",
     "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir fixtures/abi/types fixtures/abi/*.json",
     "contracts:run:nft": "cd contracts/ubiquistick && yarn hardhat node --fork-block-number 14044209 ",
     "contracts:run:faucet": "cd contracts/dollar && yarn node:faucet",
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
-    "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
+    "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
+    "prepare": "husky install"
   },
   "scripts:reference": {
+    "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
     "start": "run-s _cdroot contracts:build next:build next:start",
     "dev": "run-s _cdroot contracts:build next:dev",
     "_cdroot": "./build-scripts/cd-to-project-root.sh",
@@ -26,8 +27,7 @@
     "css:watch": "tailwindcss -o pages/styles/tailwind.css --watch",
     "ui:dev": "next dev",
     "ui:build": "next build",
-    "ui:start": "next start",
-    "prepare": "husky install"
+    "ui:start": "next start"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"

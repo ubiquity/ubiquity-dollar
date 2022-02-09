@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 
 import namedAccounts from "./fixtures/named-accounts.json";
-import FullDeployment from "./fixtures/full-deployment.json";
+import FullDeployment from "./fixtures/ubiquity-dollar-deployment.json";
 import {
   UbiquityAlgorithmicDollarManager__factory,
   UbiquityAlgorithmicDollar__factory,
