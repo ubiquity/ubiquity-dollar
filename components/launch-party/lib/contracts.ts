@@ -1,4 +1,4 @@
-import { ERC20 } from "../../../contracts/ubiquity-dollar/artifacts/types";
+import { ERC20 } from "../../../contracts/dollar/artifacts/types";
 import {
   TheUbiquityStickSale__factory,
   SimpleBond__factory,
