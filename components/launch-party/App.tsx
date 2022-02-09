@@ -42,11 +42,21 @@ const App = () => {
 
       const simpleBond = factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer);
 
+      let rewardToken;
+      try {
+        rewardToken = await simpleBond.tokenRewards();
+      } catch (error) {
+        if (!rewardToken) {
+          console.error(error);
+          throw new Error("rewardToken not found on blockchain. Are you on the hardhat network?");
+        }
+      }
+
       const contracts = {
         ubiquiStick: factories.ubiquiStick(chainAddresses.ubiquiStick, provider).connect(signer),
         ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
         simpleBond,
-        rewardToken: ERC20__factory.connect(await simpleBond.tokenRewards(), provider).connect(signer),
+        rewardToken: ERC20__factory.connect(rewardToken, provider).connect(signer),
         chainLink: factories.chainLink(chainAddresses.chainLinkEthUsd, provider),
       };
 
