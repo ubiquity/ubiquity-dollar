@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-git submodule update --init --recursive --remote
-cd ./contracts || echo "ERROR: ./contracts/ doesn't exist?"
+cd "$(npm root)"
+cd ..
+cd ./contracts/dollar || echo "ERROR: ./contracts/dollar/ doesn't exist?"
 
 UP=../
 DEPLOYMENT_ARTIFACT=fixtures/ubiquity-dollar-deployment.json
