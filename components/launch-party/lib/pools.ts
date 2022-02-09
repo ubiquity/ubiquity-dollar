@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { ERC20 } from "../../../contracts/artifacts/types";
+import { ERC20 } from "../../../contracts/dollar/artifacts/types";
 
 export type PoolInfo = {
   name: string;

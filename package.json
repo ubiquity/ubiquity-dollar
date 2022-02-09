@@ -9,7 +9,7 @@
     "contracts:build": "run-p _contracts:build:*",
     "_contracts:build:uad": "cd contracts/dollar && yarn build",
     "_contracts:build:uad:artifacts": "hardhat export --export ../fixtures/full-deployment.json --network mainnet",
-    "_contracts:build:nft": "cd contracts/ubiquistick && yarn build",
+    "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
     "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir fixtures/abi/types fixtures/abi/*.json",
     "contracts:run:nft": "cd contracts/ubiquistick && yarn hardhat node --fork-block-number 14044209 ",
     "contracts:run:faucet": "cd contracts/dollar && yarn node:faucet",

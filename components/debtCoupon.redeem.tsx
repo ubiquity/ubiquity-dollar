@@ -2,7 +2,7 @@ import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
 import { ADDRESS } from "../pages";
-import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
+import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/dollar/artifacts/types";
 import { useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
 
