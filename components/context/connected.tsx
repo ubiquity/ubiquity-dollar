@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { connectedContracts, Contracts } from "../../contracts";
-import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
+import { UbiquityAlgorithmicDollarManager } from "../../contracts/dollar/artifacts/types";
 import { accountBalances, Balances } from "../common/contracts-shortcuts";
 import { EthAccount, Transaction } from "../common/types";
 

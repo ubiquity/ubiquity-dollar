@@ -23,7 +23,7 @@ export const addresses: { [key: string]: Addresses } = {
     simpleBond: "0x0000000000000000000000000000000000000000",
     chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419",
   },
-  "31337": {
+  "1337": {
     ubiquiStick: "0x45379687D28B5CaDf738067Da1058eA9801d9897",
     ubiquiStickSale: "0x23EEe0f3fD17b25C16C712e90c77A6d165a54d2f",
     simpleBond: "0x7833A70b17Aa78C721d70B38D6c6734Ea602a888",

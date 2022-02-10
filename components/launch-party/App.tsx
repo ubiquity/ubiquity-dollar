@@ -48,7 +48,7 @@ const App = () => {
       } catch (error) {
         if (!rewardToken) {
           console.error(error);
-          throw new Error("rewardToken not found on blockchain. Are you on the hardhat network?");
+          throw new Error("rewardToken not found on chain. Are you on the correct network?");
         }
       }
 

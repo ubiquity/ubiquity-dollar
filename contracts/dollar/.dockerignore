@@ -1,0 +1,6 @@
+# Exclude everything
+artifacts
+cache
+coverage
+node_modules
+deployments
