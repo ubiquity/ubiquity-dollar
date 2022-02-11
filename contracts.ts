@@ -40,7 +40,7 @@ import {
   DebtCoupon,
   BondingShareV2,
 } from "./contracts/dollar/artifacts/types";
-import { ERC20__factory, ERC20 } from "./contracts/ubiquistick/types";
+import { ERC20__factory, ERC20 } from "./contracts/dollar/artifacts/types";
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,

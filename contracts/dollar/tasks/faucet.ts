@@ -1,6 +1,6 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
 import { ERC1155Ubiquity, ERC20 } from "../artifacts/types";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
@@ -12,36 +12,30 @@ const accountWithWithdrawableBond =
 task("faucet", "Sends ETH and tokens to an address")
   .addOptionalParam("receiver", "The address that will receive them")
   .addOptionalParam("manager", "The address of uAD Manager")
-  .setAction( faucet() );
-
-function faucet() {
-  return async (
-      taskArgs: { receiver: string | null; manager: string | null; },
+  .setAction(
+    async (
+      taskArgs: { receiver: string | null; manager: string | null },
       { ethers, getNamedAccounts }
     ) => {
       const net = await ethers.provider.getNetwork();
       if (net.name === "hardhat") {
         console.warn(
           "You are running the faucet task with Hardhat network, which" +
-          "gets automatically created and destroyed every time. Use the Hardhat" +
-          " option '--network localhost'"
+            "gets automatically created and destroyed every time. Use the Hardhat" +
+            " option '--network localhost'"
         );
       }
       console.log(`net chainId: ${net.chainId}  `);
 
       // Gotta use this provider otherwise impersonation doesn't work
       // https://github.com/nomiclabs/hardhat/issues/1226#issuecomment-924352129
-      let provider;
-
-      try {
-        provider = new ethers.providers.JsonRpcProvider(NETWORK_ADDRESS);
-      } catch (error) {
-        console.log(error);
-        setTimeout(faucet, 1000);
-      }
+      const provider = new ethers.providers.JsonRpcProvider(NETWORK_ADDRESS);
 
       const {
-        UbiquityAlgorithmicDollarManagerAddress: namedManagerAddress, ubq: namedTreasuryAddress, usdcWhaleAddress, USDC: usdcTokenAddress,
+        UbiquityAlgorithmicDollarManagerAddress: namedManagerAddress,
+        ubq: namedTreasuryAddress,
+        usdcWhaleAddress,
+        USDC: usdcTokenAddress,
         // curve3CrvToken: namedCurve3CrvAddress,
       } = await getNamedAccounts();
 
@@ -107,6 +101,7 @@ function faucet() {
       //   namedCurve3CrvAddress,
       //   treasuryAccount
       // )) as ERC20;
+
       const ubqToken = (await ethers.getContractAt(
         "ERC20",
         await manager.governanceTokenAddress(),
@@ -156,7 +151,9 @@ function faucet() {
         console.log(`${name}: ${token.address}`);
         const tx = await token.transfer(receiverAddress, amount);
         console.log(
-          `  Transferred ${ethers.utils.formatEther(amount)} ${name} from ${tx.from}`
+          `  Transferred ${ethers.utils.formatEther(amount)} ${name} from ${
+            tx.from
+          }`
         );
       };
 
@@ -175,5 +172,5 @@ function faucet() {
       // await transfer("3CRV", crvToken, 1000);
       await transfer("UBQ", ubqToken, ethers.utils.parseEther("1000"));
       await transfer("USDC", usdcToken, ethers.utils.parseUnits("1000", 6));
-    };
-}
+    }
+  );
