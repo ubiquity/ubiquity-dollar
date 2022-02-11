@@ -156,8 +156,8 @@ task(
     )) as Bonding;
 
     console.log("Arguments: ", taskArgs);
-    if (!process.env.ETHERSCAN_API_KEY)
-      throw new Error("ETHERSCAN_API_KEY environment variable must be set");
+    if (!process.env.API_KEY_ETHERSCAN)
+      throw new Error("API_KEY_ETHERSCAN environment variable must be set");
 
     const parsedPath = path.parse(taskArgs.path);
     if (!fs.existsSync(parsedPath.dir))

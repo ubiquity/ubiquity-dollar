@@ -22,10 +22,10 @@ dotenv.config();
 const {
   MNEMONIC,
   UBQ,
-  ALCHEMY_API_KEY,
-  ETHERSCAN_API_KEY,
+  API_KEY_ALCHEMY,
+  API_KEY_ETHERSCAN,
   REPORT_GAS,
-  COINMARKETCAP_API_KEY,
+  API_KEY_COINMARKETCAP,
 } = process.env;
 
 const mnemonic = `${
@@ -105,7 +105,7 @@ const config: HardhatUserConfig = {
       url: `http://127.0.0.1:8545`,
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${
-          process.env.ALCHEMY_API_KEY || ""
+          process.env.API_KEY_ALCHEMY || ""
         }`,
         blockNumber: 13252206,
       },
@@ -116,7 +116,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${
-          process.env.ALCHEMY_API_KEY || ""
+          process.env.API_KEY_ALCHEMY || ""
         }`,
         blockNumber: 13252206,
       },
@@ -126,7 +126,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${
-        process.env.ALCHEMY_API_KEY || ""
+        process.env.API_KEY_ALCHEMY || ""
       }`,
       accounts: UBQ ? [UBQ] : accounts,
       gasPrice: 60000000000,
@@ -134,13 +134,13 @@ const config: HardhatUserConfig = {
     ropsten: {
       gasPrice: 60000000000,
       url: `https://eth-ropsten.alchemyapi.io/v2/${
-        process.env.ALCHEMY_API_KEY || ""
+        process.env.API_KEY_ALCHEMY || ""
       }`,
       accounts,
     },
     rinkeby: {
       gasPrice: 60000000000,
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY || ""}`,
+      url: `https://eth-rinkeby.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""}`,
       accounts,
     },
   },
@@ -152,12 +152,12 @@ const config: HardhatUserConfig = {
     enabled: REPORT_GAS === "true", currency: "USD",
     gasPrice: 60,
     onlyCalledMethods: true,
-    coinmarketcap: `${COINMARKETCAP_API_KEY || ""}`,
+    coinmarketcap: `${API_KEY_COINMARKETCAP || ""}`,
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: `${ETHERSCAN_API_KEY || ""}`,
+    apiKey: `${API_KEY_ETHERSCAN || ""}`,
   },
 };
 

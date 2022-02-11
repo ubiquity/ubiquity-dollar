@@ -22,7 +22,7 @@ after git clone the project make sure to run
 git submodule update --init --recursive --remote
 ```
 
-You need to create `.env` file inside the contracts folder with at least the `ALCHEMY_API_KEY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
+You need to create `.env` file inside the contracts folder with at least the `API_KEY_ALCHEMY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
 
 ### DEV ONLY Running a local node that forks the mainnet
 

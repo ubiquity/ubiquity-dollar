@@ -17,12 +17,21 @@ dotenv.config({
   path: `../../.env`,
 });
 
-if (!process.env.ALCHEMY_API_KEY) {
-  throw new Error("ENV Variable ALCHEMY_API_KEY not set!");
+if (!process.env.API_KEY_ALCHEMY) {
+  throw new Error("ENV Variable API_KEY_ALCHEMY not set!");
 }
 
-const accounts = [process.env.DEPLOYER_PRIVATE_KEY || ""];
-for (let i = 1; i <= 5; i++) accounts.push(Wallet.createRandom().privateKey);
+const accounts = [] as string[];
+
+if (!process.env.MNEMONIC) {
+  throw new Error("ENV Variable MNEMONIC not set!");
+}
+
+for (let i = 0; i <= 5; i++) {
+  const wallet = Wallet.fromMnemonic(process.env.MNEMONIC, `m/44'/60'/0'/0/${i}`);
+  accounts.push(wallet.privateKey);
+}
+
 const accountsHardhat: HardhatNetworkAccountUserConfig[] = accounts.map((account) => ({
   privateKey: account || "",
   balance: "2000000000000000000000"
@@ -62,7 +71,7 @@ const config: HardhatUserConfig = {
       accounts: accountsHardhat,
       initialBaseFeePerGas: 0,
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`
       }
     },
     local: {
@@ -71,13 +80,13 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       chainId: 1,
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`,
       accounts
     },
     rinkeby: {
       loggingEnabled: true,
       chainId: 4,
-      url: `https://rinkeby.infura.io/v3/${process.env.ALCHEMY_API_KEY}`,
+      url: `https://rinkeby.infura.io/v3/${process.env.API_KEY_ALCHEMY}`,
       accounts
     }
   },
@@ -86,7 +95,7 @@ const config: HardhatUserConfig = {
     currency: "USD"
   },
   etherscan: {
-    apiKey: process.env.ETHERSCAN_API_KEY || ""
+    apiKey: process.env.API_KEY_ETHERSCAN || ""
   },
   typechain: {
     outDir: "types",

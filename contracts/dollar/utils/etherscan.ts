@@ -36,7 +36,7 @@ export async function fetchLatestBlockNumber(): Promise<number> {
   const response = await fetchEtherscanApi<{ result: string }>({
     module: "proxy",
     action: "eth_blockNumber",
-    apiKey: process.env.ETHERSCAN_API_KEY || "",
+    apiKey: process.env.API_KEY_ETHERSCAN || "",
   });
   const latestBlockNumber = parseInt(response.result, 16);
   console.log("Latest block number: ", latestBlockNumber);
@@ -55,7 +55,7 @@ export function generateEtherscanQuery(
     startblock: startblock.toString(),
     endblock: endblock.toString(),
     sort: "asc",
-    apiKey: process.env.ETHERSCAN_API_KEY || "",
+    apiKey: process.env.API_KEY_ETHERSCAN || "",
   };
 }
 
@@ -73,6 +73,6 @@ export function generateEventLogQuery(
     startblock: startblock.toString(),
     endblock: endblock.toString(),
     sort: "asc",
-    apiKey: process.env.ETHERSCAN_API_KEY || "",
+    apiKey: process.env.API_KEY_ETHERSCAN || "",
   };
 }

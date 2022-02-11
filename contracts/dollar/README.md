@@ -42,8 +42,8 @@ npx hardhat accounts
 ## Deployment
 
 To deploy the smart contracts on a network defined in the `hardhat.config.ts`
-rename the `example.env` file to `.env` and fill the `MNEMONIC`, `ALCHEMY_API_KEY` and
-`COINMARKETCAP_API_KEY` environment variables.
+rename the `example.env` file to `.env` and fill the `MNEMONIC`, `API_KEY_ALCHEMY` and
+`API_KEY_COINMARKETCAP` environment variables.
 
 ```sh
 npx hardhat run --network <your-network> scripts/deployment.ts
@@ -117,8 +117,8 @@ npx hardhat --network mainnet getBondingTransactions
 
 Rename the `example.env` file to `.env` and fill:
 
-- `ALCHEMY_API_KEY`: [get key at Alchemy API Dashboard](https://dashboard.alchemyapi.io/)
-- `COINMARKETCAP_API_KEY`: [get key at CoinMarket](https://pro.coinmarketcap.com/login)
+- `API_KEY_ALCHEMY`: [get key at Alchemy API Dashboard](https://dashboard.alchemyapi.io/)
+- `API_KEY_COINMARKETCAP`: [get key at CoinMarket](https://pro.coinmarketcap.com/login)
 
 ### Launch all tests
 

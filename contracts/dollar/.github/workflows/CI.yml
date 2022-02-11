@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
+      API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
       TREASURY_PRIV_KEY: ${{ secrets.TREASURY_PRIV_KEY }}
       SECOND_ACC_PRIV_KEY: ${{ secrets.SECOND_ACC_PRIV_KEY }}
     steps:
