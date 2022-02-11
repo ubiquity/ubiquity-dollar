@@ -1,11 +1,11 @@
 import { FC } from "react";
+import { useConnectedContext } from "../components/context/connected";
+import BondingSharesExplorer from "../components/BondingSharesExplorer";
 
 const LiquidityMining: FC = (): JSX.Element => {
-  return (
-    <div>
-      <div className="fixed h-screen w-screen z-10">Liquidity Mining Page</div>
-    </div>
-  );
+  const context = useConnectedContext();
+  const { account } = context;
+  return <div>{account && <BondingSharesExplorer />}</div>;
 };
 
 export default LiquidityMining;

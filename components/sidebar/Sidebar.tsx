@@ -101,7 +101,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         <li className="relative">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
-            href="/docs"
+            href="https://dao.ubq.fi/docs"
+            target="_blank"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
@@ -111,7 +112,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         <li className="relative">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
-            href="/dao"
+            href="https://dao.ubq.fi"
+            target="_blank"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
@@ -135,7 +137,8 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         <li className="relative">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
-            href="/blog"
+            href="https://dao.ubq.fi/blog"
+            target="_blank"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
           >
