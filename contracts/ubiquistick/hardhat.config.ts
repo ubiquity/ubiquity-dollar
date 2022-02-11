@@ -1,22 +1,19 @@
-import type {
-  HardhatUserConfig,
-  HardhatNetworkAccountUserConfig,
-  HardhatNetworkHDAccountsUserConfig
-} from "hardhat/types";
-
-import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
-import "hardhat-deploy";
-import "hardhat-deploy-ethers";
-import "hardhat-gas-reporter";
-import "solidity-coverage";
-
 import "@typechain/hardhat";
-import "tsconfig-paths/register";
-import "./tasks/index";
 import dotenv from "dotenv";
 import { Wallet } from "ethers";
+import "hardhat-deploy";
+import "hardhat-gas-reporter";
+import type {
+  HardhatNetworkAccountUserConfig, HardhatUserConfig
+} from "hardhat/types";
+import "solidity-coverage";
+import "tsconfig-paths/register";
+import "./tasks/index";
+
+
 
 dotenv.config();
 if (!process.env.ALCHEMY_API_KEY) {

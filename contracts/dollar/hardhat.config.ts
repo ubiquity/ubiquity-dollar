@@ -149,8 +149,7 @@ const config: HardhatUserConfig = {
     target: "ethers-v5",
   },
   gasReporter: {
-    enabled: REPORT_GAS === "true",
-    currency: "USD",
+    enabled: REPORT_GAS === "true", currency: "USD",
     gasPrice: 60,
     onlyCalledMethods: true,
     coinmarketcap: `${COINMARKETCAP_API_KEY || ""}`,

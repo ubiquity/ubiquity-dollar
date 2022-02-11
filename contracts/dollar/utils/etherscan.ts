@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 const API_URL = "https://api.etherscan.io/api";
 
 export type EtherscanResponse<T> = {
