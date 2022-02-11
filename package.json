@@ -2,6 +2,7 @@
   "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
+    "ape": "run-s make start",
     "make": "run-s _contracts:install _contracts:build",
     "start": "run-p _start:*",
     "_start:chain": "./build-scripts/dev-chain-init.sh",
