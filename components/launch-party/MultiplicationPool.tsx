@@ -5,7 +5,7 @@ import SectionTitle from "./lib/SectionTitle";
 type MultiplicationPoolParams = {
   enabled: boolean;
   poolsData: { [key: string]: PoolData };
-  onDeposit: ({ token, amount }: { token: string; amount: number }) => any;
+  onDeposit: ({ token, amount }: { token: string; amount: number }) => unknown;
 };
 
 const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoolParams) => {

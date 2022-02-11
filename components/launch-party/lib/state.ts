@@ -1,6 +1,3 @@
-import ethers from "ethers";
-import { ERC20 } from "../../../contracts/dollar/artifacts/types";
-
 export type OwnedSticks = {
   black: number;
   gold: number;

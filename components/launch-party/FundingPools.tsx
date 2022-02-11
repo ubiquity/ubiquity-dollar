@@ -5,7 +5,7 @@ import SectionTitle from "./lib/SectionTitle";
 type FundingPoolParams = {
   enabled: boolean;
   poolsData: { [key: string]: PoolData };
-  onDeposit: ({ token, amount }: { token: string; amount: number }) => any;
+  onDeposit: ({ token, amount }: { token: string; amount: number }) => unknown;
 };
 
 const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {

@@ -9,7 +9,7 @@ type AllowanceData = {
 
 type AllowanceManagerParams = {
   defaultAddress: string;
-  onSubmit: (data: AllowanceData[]) => any;
+  onSubmit: (data: AllowanceData[]) => unknown;
 };
 
 const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) => {

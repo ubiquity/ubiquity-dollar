@@ -6,7 +6,7 @@ import { format, round } from "./lib/utils";
 type BondingPoolParams = PoolInfo & {
   enabled: boolean;
   poolData: PoolData | null;
-  onDeposit: ({ amount }: { amount: number }) => any;
+  onDeposit: ({ amount }: { amount: number }) => unknown;
 };
 
 const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParams) => {

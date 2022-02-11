@@ -9,7 +9,7 @@ type UbiquiStickParams = {
   sticks: OwnedSticks | null;
   allowance: SticksAllowance | null;
   media: TokenMedia;
-  onBuy: () => any;
+  onBuy: () => unknown;
 };
 
 const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiStickParams) => {

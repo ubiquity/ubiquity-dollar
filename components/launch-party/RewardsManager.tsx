@@ -4,7 +4,7 @@ import { poolByAddress } from "./lib/pools";
 import SectionTitle from "./lib/SectionTitle";
 
 type RewardsManagerParams = {
-  onSubmit: ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => any;
+  onSubmit: ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => unknown;
   ratios: { [token: string]: ethers.BigNumber };
 };
 

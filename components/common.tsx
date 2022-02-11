@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { BigNumber, ethers } from "ethers";
-import React, { useState, useEffect } from "react";
-
-import { EthAccount } from "./common/types";
-import Account from "./account";
-import Network from "./network";
+import React, { useEffect, useState } from "react";
 import BondingMigrate from "./bonding.migrate";
+import BondingSharesExplorer from "./BondingSharesExplorer";
+import { EthAccount } from "./common/types";
 import { useConnectedContext } from "./context/connected";
 import DebtCouponDeposit from "./debtCoupon.deposit";
 import DebtCouponRedeem from "./debtCoupon.redeem";
+import Header from "./Header";
+import Inventory from "./inventory";
 import TwapPrice from "./twap.price";
 import UarRedeem from "./uar.redeem";
-import Inventory from "./inventory";
-import BondingSharesExplorer from "./BondingSharesExplorer";
-import YieldFarming from "./YieldFarming";
 import icons from "./ui/icons";
-import Header from "./Header";
+import YieldFarming from "./YieldFarming";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -36,8 +33,9 @@ async function fetchAccount(): Promise<EthAccount | null> {
 
 export function _renderControls() {
   const context = useConnectedContext();
-  const { setAccount, account, balances, twapPrice, activeTransactions, contracts } = context;
+  const { setAccount, account, balances, twapPrice, contracts } = context;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [connecting, setConnecting] = useState(false);
 
   const connect = async (): Promise<void> => {
