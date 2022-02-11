@@ -18,7 +18,7 @@ task("abi", "Get contract abi")
     const { chainId, name: chainName } = await ethers.provider.getNetwork();
     let name: string = "";
 
-    if (chainId == 1337) {
+    if (chainId == 31337) {
       try {
         contractFactory = await ethers.getContractFactory(nameOrAddress);
 

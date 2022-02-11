@@ -19,7 +19,7 @@ task(
 
     console.log(`net chainId: ${net.chainId}  `);
 
-    if (net.chainId === 1337) {
+    if (net.chainId === 31337) {
       console.warn("You are running the   task with Hardhat network");
     }
 

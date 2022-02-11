@@ -465,7 +465,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   /** TO BE REMOVED FOR MAINNET */
   // we should transfer 3CRV manually to the manager contract
   // kindly ask a whale to give us some 3CRV
-  if (net.chainId === 1337) {
+  if (net.chainId === 31337) {
     // hardhat local
     await network.provider.request({
       method: "hardhat_impersonateAccount",

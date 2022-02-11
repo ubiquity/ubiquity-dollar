@@ -141,7 +141,7 @@ from the network menu by adding a custom RPC network with the following configur
 
 - Network name: `Hardhat`
 - RPC Url: `http://localhost:8545`
-- Chain ID: `1337`
+- Chain ID: `31337`
 
 ### Give yourself funds
 
