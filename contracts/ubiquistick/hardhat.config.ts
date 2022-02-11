@@ -13,19 +13,17 @@ import "solidity-coverage";
 import "tsconfig-paths/register";
 import "./tasks/index";
 
-dotenv.config({
-  path: `../../.env`,
-});
+dotenv.config({ path: `../../.env` });
 
 if (!process.env.API_KEY_ALCHEMY) {
   throw new Error("ENV Variable API_KEY_ALCHEMY not set!");
 }
 
-const accounts = [] as string[];
-
 if (!process.env.MNEMONIC) {
   throw new Error("ENV Variable MNEMONIC not set!");
 }
+
+const accounts = [] as string[];
 
 for (let i = 0; i <= 5; i++) {
   const wallet = Wallet.fromMnemonic(process.env.MNEMONIC, `m/44'/60'/0'/0/${i}`);
@@ -33,11 +31,9 @@ for (let i = 0; i <= 5; i++) {
 }
 
 const accountsHardhat: HardhatNetworkAccountUserConfig[] = accounts.map((account) => ({
-  privateKey: account || "",
+  privateKey: account,
   balance: "2000000000000000000000"
 }));
-
-const ubq = "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd";
 
 const config: HardhatUserConfig = {
   defaultNetwork: "hardhat",
