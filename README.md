@@ -1,5 +1,7 @@
 # Ubiquity Dollar
 
+![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
+
 ## Installation
 
 ```bash
