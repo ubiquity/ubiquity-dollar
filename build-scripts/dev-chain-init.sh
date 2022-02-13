@@ -1,26 +1,23 @@
 #!/usr/bin/env bash
 
-# first run node from ubiquistick
-# then run faucet from uad-contracts
-# restart faucet on fail
-
 # hardhat node must first instantiate in a seperate process, which takes 10-15 seconds on my machine
 # only after the node is ready then this faucet can run successfully
 
 assistant() {
+    sleep 10
 
-    # while
-    nc -z 127.0.0.1 8545
-    # ; do yarn hardhat faucet --network localhost; done
+    nc -z 127.0.0.1 8545 # check if node is ready
+
     if [ $? -eq 0 ]; then
-        echo "Faucet szn"
+        echo
+        echo "[ 🚰 ] Faucet activating..."
+        echo
         yarn hardhat faucet --network localhost
     else
         echo
-        echo "FAIL - retrying faucet in 10 seconds..."
+        echo "[ 🚰 ] Retrying faucet in 10 seconds..."
         echo
-        sleep 10
-        assistant "$1"
+        assistant
     fi
 }
 

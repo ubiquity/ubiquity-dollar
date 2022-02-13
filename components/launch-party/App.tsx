@@ -48,6 +48,10 @@ const App = () => {
       } catch (error) {
         if (!rewardToken) {
           console.error(error);
+          // Wait until faucet show the following logs, then it should work
+
+          // Transferred 1000.0 UBQ from 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd
+          // USDC: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
           throw new Error("rewardToken not found on chain. Are you on the correct network?");
         }
       }
