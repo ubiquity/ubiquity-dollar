@@ -1,5 +1,7 @@
 # Ubiquity Dollar
 
+Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). Ubiquity's Algorithmic Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies.
+
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
 ## Installation
@@ -52,3 +54,5 @@ YOUR_ETH_ADDRESS= # enter address here
 UAD_MANAGER_ADDRESS= # enter address here
 yarn hardhat --network localhost faucet --receiver $YOUR_ETH_ADDRESS --manager $UAD_MANAGER_ADDRESS
 ```
+
+Sine stabilitate nihil habemus.
