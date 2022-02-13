@@ -2,6 +2,8 @@
 
 Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). Ubiquity's Algorithmic Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies.
 
+The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
+
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
 ## Installation
