@@ -28,7 +28,7 @@ Make sure you are using the following network configuration:
 ### Shared Private Keys
 
 - All Hardhat developers know about these keys. These keys are derived from the `test test test test test test test test test test test junk` mnemonic in the Hardhat docs.
-- Do not send digital assets of value to these wallets.
+- Do not send assets of value to these wallets.
 
 ```
 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
@@ -39,24 +39,16 @@ Make sure you are using the following network configuration:
 0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba
 ```
 
-### Old Docs Below
+### Ubiquity Dollar Contracts Setup
 
-Personal fork being updated because Vercel offers personal plans for free https://github.com/pavlovcik/uad-ui-launch
-
-### Setup
+This section is for the Ubiquity Dollar core protocol smart contracts (not the UbiquiStick NFT or UI related code.)
 
 You need to create `.env` file inside the contracts folder with at least the `API_KEY_ALCHEMY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
 
-#### Configure metamask
+Run the faucet to get tokens to your address. You will need the `UAD_MANAGER_ADDRESS` that you can find in the output of the `yarn start`
 
-make sure to switch to the hardhat network on metamask
-
-- **chain ID:** 31337
-- **RPC URL:** http://127.0.0.1:8545
-
-then run the faucet to get some token on your address. You will need the `UAD_MANAGER_ADDRESS` that you can find in the output of the `yarn start`
-
-```
-cd contracts
-npx hardhat --network localhost faucet --receiver YOUR_ETH_ADDRESS --manager UAD_MANAGER_ADDRESS
+```bash
+YOUR_ETH_ADDRESS= # enter address here
+UAD_MANAGER_ADDRESS= # enter address here
+yarn hardhat --network localhost faucet --receiver $YOUR_ETH_ADDRESS --manager $UAD_MANAGER_ADDRESS
 ```
