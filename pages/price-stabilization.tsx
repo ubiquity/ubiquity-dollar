@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { BigNumber, ethers } from "ethers";
 import { useConnectedContext } from "../components/context/connected";
+import Account from "../components/account";
 import BondingMigrate from "../components/bonding.migrate";
 import TwapPrice from "../components/twap.price";
 import UarRedeem from "../components/uar.redeem";
@@ -12,6 +13,9 @@ const PriceStabilization: FC = (): JSX.Element => {
   const { account, balances, twapPrice } = context;
   return (
     <div>
+      <header>
+        <Account />
+      </header>
       {account && <TwapPrice />}
       <BondingMigrate />
       {balances?.uar.gt(BigNumber.from(0)) && twapPrice?.gte(ethers.utils.parseEther("1")) ? <UarRedeem /> : ""}

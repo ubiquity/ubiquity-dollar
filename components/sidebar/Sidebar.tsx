@@ -1,8 +1,17 @@
+import { useRouter } from "next/router";
+
 type SidebarProps = {
   isOpened: boolean;
 };
 
 export default function Sidebar({ isOpened }: SidebarProps) {
+  const router = useRouter();
+  const onMenuItemClick = (hash: string) => {
+    router.push({
+      pathname: "/",
+      hash,
+    });
+  };
   return (
     <div
       className={`${isOpened ? "w-[300px]" : "w-[0vw]"} absolute h-screen shadow-md z-50 bg-[#00000060] overflow-hidden flex flex-col`}
@@ -12,9 +21,9 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         <li className="relative">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
-            href="/intro"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
+            onClick={() => onMenuItemClick("intro")}
           >
             <span>Introduction</span>
           </a>
@@ -48,40 +57,40 @@ export default function Sidebar({ isOpened }: SidebarProps) {
           <ul className="relative accordion-collapse collapse" id="collapseSidenavEx1" aria-labelledby="sidenavEx1" data-bs-parent="#sidenavExample">
             <li className="relative">
               <a
-                href="/price-stabilization"
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
+                onClick={() => onMenuItemClick("price-stabilization")}
               >
                 Price Stabilization
               </a>
             </li>
             <li className="relative">
               <a
-                href="/liquidity-mining"
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
+                onClick={() => onMenuItemClick("liquidity-mining")}
               >
                 Liquidity Mining
               </a>
             </li>
             <li className="relative">
               <a
-                href="/yield-farming"
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
+                onClick={() => onMenuItemClick("yield-farming")}
               >
                 Yield Farming
               </a>
             </li>
             <li className="relative">
               <a
-                href="/launch-party"
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
+                onClick={() => onMenuItemClick("launch-party")}
               >
                 Launch Party
               </a>
@@ -91,9 +100,9 @@ export default function Sidebar({ isOpened }: SidebarProps) {
         <li className="relative">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
-            href="/markets"
             data-mdb-ripple="true"
             data-mdb-ripple-color="dark"
+            onClick={() => onMenuItemClick("markets")}
           >
             <span>Markets</span>
           </a>
