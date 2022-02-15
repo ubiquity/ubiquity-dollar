@@ -1,34 +1,12 @@
 import { useConnectedContext } from "../context/connected";
-import CurveBalance from "../curve.balance";
-import CurveLPBalance from "../curveLP.balance";
-import DebtCouponBalance from "../debtCoupon.balance";
-import UadBalance from "../uad.balance";
-import UarBalance from "../uar.balance";
-import UbqBalance from "../ubq.balance";
+import Inventory from "../inventory";
 
 export default function Header() {
-  const { balances } = useConnectedContext();
+  const { balances, account, contracts } = useConnectedContext();
 
-  if (!balances) {
+  if (!balances || !contracts || !account) {
     return null;
   }
 
-  return (
-    <>
-      <div id="inventory-top">
-        <div>
-          <div>
-            <aside>My Ubiquity Inventory</aside>
-            <figure></figure>
-          </div>
-          <UbqBalance />
-          <UadBalance />
-          <UarBalance />
-          <DebtCouponBalance />
-          <CurveBalance />
-          <CurveLPBalance />
-        </div>
-      </div>
-    </>
-  );
+  return <Inventory balances={balances} address={account.address} contracts={contracts} />;
 }
