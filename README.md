@@ -14,6 +14,7 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 git clone https://github.com/ubiquity/uad-ui.git
 cd uad-ui
+git checkout launch-party
 yarn
 yarn ape
 ```
