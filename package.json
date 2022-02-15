@@ -1,24 +1,39 @@
 {
-  "name": "@ubiquity/dollar-ui",
+  "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
-    "start": "run-s _cdroot solidity:build next:build next:start",
-    "dev": "run-s _cdroot solidity:build next:dev",
-    "_cdroot": "./build-scripts/cd-to-project-root.sh",
-    "build": "run-s solidity:build next:build",
-    "solidity:build": "./build-scripts/compile-artifacts.sh",
-    "format": "run-s format:*",
-    "format:prettier": "prettier --write .",
-    "format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "css:build": "tailwindcss -o pages/styles/tailwind.css",
-    "css:watch": "tailwindcss -o pages/styles/tailwind.css --watch",
-    "next:dev": "next dev",
-    "next:build": "next build",
-    "next:start": "next start",
+    "ape": "run-s init:env make start",
+    "make": "run-s _contracts:install _contracts:build",
+    "start": "run-p _start:*",
+    "init:env": "cp .env.example .env",
+    "_start:chain": "./build-scripts/dev-chain-init.sh",
+    "_start:ui": "next dev",
+    "_contracts:install": "run-p _contracts:install:*",
+    "_contracts:install:uad": "cd contracts/dollar && yarn",
+    "_contracts:install:nft": "cd contracts/ubiquistick && yarn",
+    "_contracts:build": "run-p _contracts:build:*",
+    "_contracts:build:uad": "cd contracts/dollar && yarn build",
+    "_contracts:build:nft": "cd contracts/ubiquistick && yarn build",
+    "_contracts:build:uad:artifacts": "cd contracts/dollar && yarn hardhat export --export ../../fixtures/ubiquity-dollar-deployment.json --network mainnet",
+    "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir fixtures/abi/types fixtures/abi/*.json",
+    "contracts:run:nft": "cd contracts/ubiquistick && yarn hardhat node --fork-block-number 14044209",
+    "contracts:run:faucet": "cd contracts/dollar && yarn node:faucet",
+    "format": "run-p _format:*",
+    "_format:prettier": "prettier --write .",
+    "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "prepare": "husky install"
   },
-  "lint-staged": {
-    "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
+  "scripts:reference": {
+    "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
+    "start": "run-s _cdroot contracts:build next:build next:start",
+    "dev": "run-s _cdroot contracts:build next:dev",
+    "_cdroot": "./build-scripts/cd-to-project-root.sh",
+    "build": "run-s contracts:build next:build",
+    "css:build": "tailwindcss -o pages/styles/tailwind.css",
+    "css:watch": "tailwindcss -o pages/styles/tailwind.css --watch",
+    "ui:dev": "next dev",
+    "ui:build": "next build",
+    "ui:start": "next start"
   },
   "nodemonConfig": {
     "ignore": [
@@ -34,31 +49,42 @@
       "start": "clear && printf '\\033[3J'"
     }
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@ethersproject/abi": "^5.0.0",
+    "@ethersproject/bytes": "^5.0.0",
+    "@ethersproject/providers": "^5.0.0",
+    "@svgr/webpack": "^6.1.2",
+    "classnames": "^2.3.1",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.3"
+  },
   "dependencies": {
     "@tippyjs/react": "^4.2.5",
+    "@typechain/ethers-v5": "^9.0.0",
     "@types/node": "^16.7.10",
     "@types/react": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
-    "autoprefixer": "^10.0.2",
+    "autoprefixer": "^10.4.0",
     "eslint": "^7.16.0",
     "eslint-config-next": "^11.1.2",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-tsc": "^2.0.0",
-    "ethers": "^5.0.31",
-    "husky": "^7.0.1",
-    "lint-staged": ">=10",
+    "ethers": "^5.5.4",
     "next": "^11.0.0",
     "nodemon": "^2.0.7",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.2.14",
+    "postcss": "^8.4.5",
     "prettier": "2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropdown-now": "^6.0.1",
-    "tailwindcss": "^2.2.9",
+    "tailwindcss": "^3.0.6",
+    "typechain": "^7.0.0",
     "typescript": "^4.3.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
   }
 }

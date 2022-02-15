@@ -2,15 +2,18 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-  mode: "jit",
-  purge: ["components/**/*.tsx", "pages/**/*.tsx"],
+  content: ["components/**/*.tsx", "pages/**/*.tsx"],
   theme: {
     extend: {
       letterSpacing: {
-        widest: ".2em",
+        widest: ".17em",
       },
       colors: {
         accent: "#00ffff",
+      },
+      dropShadow: { light: "0 0 16px #fff" },
+      fontFamily: {
+        special: ["Ubiquity Nova", "Proxima Nova", "Avenir", "sans-serif"],
       },
     },
   },

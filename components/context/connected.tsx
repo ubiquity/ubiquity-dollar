@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { connectedContracts, Contracts } from "../../contracts";
-import { UbiquityAlgorithmicDollarManager } from "../../contracts/artifacts/types/UbiquityAlgorithmicDollarManager";
+import { UbiquityAlgorithmicDollarManager } from "../../contracts/dollar/artifacts/types";
 import { accountBalances, Balances } from "../common/contracts-shortcuts";
 import { EthAccount, Transaction } from "../common/types";
 
@@ -20,7 +20,7 @@ export interface ConnectedContext {
   setTwapPrice: Dispatch<SetStateAction<BigNumber | null>>;
   contracts: Contracts | null;
   setContracts: Dispatch<SetStateAction<Contracts | null>>;
-  activeTransactions: Transaction[] | null;
+  activeTransactions: Transaction[];
   updateActiveTransaction: (transaction: Transaction) => void;
   refreshBalances: () => Promise<void>;
 }
@@ -39,7 +39,7 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
   const [balances, setBalances] = useState<Balances | null>(null);
   const [twapPrice, setTwapPrice] = useState<BigNumber | null>(null);
   const [contracts, setContracts] = useState<Contracts | null>(null);
-  const [activeTransactions, setActiveTransactions] = useState<Transaction[] | null>(null);
+  const [activeTransactions, setActiveTransactions] = useState<Transaction[]>([]);
 
   async function refreshBalances() {
     if (account && contracts) {
@@ -49,20 +49,17 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
 
   function updateActiveTransaction(transaction: Transaction): void {
     let updated = false;
-    if (activeTransactions) {
-      updated = activeTransactions.some((existingTransaction, index) => {
-        if (existingTransaction.id === transaction.id) {
-          activeTransactions[index] = { ...activeTransactions[index], ...transaction };
-          return true;
-        }
-      });
-    }
-    if (updated) {
-      setActiveTransactions([...(activeTransactions || [])]);
-    } else {
-      setActiveTransactions([...(activeTransactions || []), transaction]);
-    }
-    console.log(activeTransactions);
+    updated = activeTransactions.some((existingTransaction, index) => {
+      if (existingTransaction.id === transaction.id) {
+        activeTransactions[index] = { ...activeTransactions[index], ...transaction };
+        return true;
+      }
+    });
+
+    const newActiveTransactions = updated ? [...activeTransactions] : [...activeTransactions, transaction];
+
+    setActiveTransactions(newActiveTransactions);
+    console.log(newActiveTransactions);
   }
 
   const value: ConnectedContext = {

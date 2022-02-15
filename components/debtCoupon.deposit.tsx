@@ -6,7 +6,7 @@ import {
   ICouponsForDollarsCalculator__factory,
   UbiquityAlgorithmicDollarManager,
   UbiquityAlgorithmicDollar__factory,
-} from "../contracts/artifacts/types";
+} from "../contracts/dollar/artifacts/types";
 import { useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
 

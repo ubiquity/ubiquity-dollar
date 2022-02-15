@@ -1,6 +1,6 @@
 import { ethers, BigNumber } from "ethers";
 import { Contracts } from "../../contracts";
-import { ERC1155Ubiquity, ERC20 } from "../../contracts/artifacts/types";
+import { ERC1155Ubiquity, ERC20 } from "../../contracts/dollar/artifacts/types";
 import { erc1155BalanceOf } from "./utils";
 import { EthAccount } from "./types";
 import { performTransaction } from "./utils";

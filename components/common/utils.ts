@@ -1,5 +1,5 @@
 import { ethers, ContractTransaction, BigNumber } from "ethers";
-import { ERC1155Ubiquity } from "../../contracts/artifacts/types";
+import { ERC1155Ubiquity } from "../../contracts/dollar/artifacts/types";
 import { useEffect } from "react";
 
 export function logGas(txDone: ethers.ContractReceipt) {
@@ -67,7 +67,7 @@ export const getNetworkName = (provider: ethers.providers.Web3Provider): string 
       networkName = "Kovan Test Network";
       break;
     default:
-      networkName = "Unknown";
+      networkName = "Unknown Network";
       break;
   }
   return networkName;

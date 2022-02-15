@@ -1,11 +1,11 @@
 import { BigNumber, ethers } from "ethers";
-import { memo, useState, useCallback } from "react";
-import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
+import { memo, useCallback, useState } from "react";
 import { formatEther } from "./common/format";
-import { useAsyncInit, performTransaction } from "./common/utils";
-import * as widget from "./ui/widget";
-import icons from "./ui/icons";
+import { performTransaction, useAsyncInit } from "./common/utils";
+import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import DepositShare from "./DepositShare";
+import icons from "./ui/icons";
+import * as widget from "./ui/widget";
 
 type ShareData = {
   id: number;
@@ -158,7 +158,7 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <widget.Container className="max-w-screen-md !mx-auto relative" transacting={model?.processing}>
+    <widget.Container className="max-w-screen-md !mx-auto relative">
       <widget.Title text="Liquidity Mining" />
       {model ? <BondingSharesInformation {...model} {...actions} /> : <widget.Loading text="Loading existing shares information" />}
     </widget.Container>
@@ -211,10 +211,10 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         )}
       </table>
       <div id="rewards-summary">
-        <div className="mb-2 ">
+        <div className="mb-2 inline-flex items-center">
           {icons.svgs.ubq}
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
-          pending UBQ rewards
+          &nbsp;pending UBQ rewards
         </div>
         <div className="mb-2">
           {icons.svgs.lp}
@@ -228,7 +228,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
 
 type BondingShareRowProps = ShareData & { onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
 const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
-  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [withdrawAmount] = useState("");
 
   const numLpAmount = +formatEther(bond.lpAmount);
   const usdAmount = numLpAmount * LP_TO_USD;
@@ -248,7 +248,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
         ${Math.round(usdAmount * 100) / 100}
       </td>
       <td>
-        <div className="text-accent whitespace-nowrap">
+        <div className="text-accent whitespace-nowrap inline-flex items-center">
           {icons.svgs.ubq} <span>{formatEther(ugov)}</span>
         </div>
       </td>

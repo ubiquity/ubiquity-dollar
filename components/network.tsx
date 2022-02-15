@@ -18,8 +18,9 @@ const Network = () => {
   }
 
   return network === "Mainnet" ? null : (
-    <div>
-      <span className="text-accent text-sm">{network}</span>
+    <div className="px-4 py-2 border border-solid border-white border-opacity-25 rounded font-special uppercase text-xs text-white text-opacity-75">
+      {network}
+      {/* <span className="text-accent text-sm">{network}</span> */}
     </div>
   );
 };

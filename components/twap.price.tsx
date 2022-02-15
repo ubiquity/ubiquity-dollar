@@ -2,7 +2,7 @@ import { ethers, BigNumber } from "ethers";
 
 import { useConnectedContext } from "./context/connected";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { TWAPOracle__factory, UbiquityAlgorithmicDollarManager } from "../contracts/artifacts/types";
+import { TWAPOracle__factory, UbiquityAlgorithmicDollarManager } from "../contracts/dollar/artifacts/types";
 
 export async function _getTwapPrice(
   provider: ethers.providers.Web3Provider | null,
