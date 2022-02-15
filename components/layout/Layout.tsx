@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "../header/Header";
 import Sidebar from "../sidebar/Sidebar";
+import Footer from "../footer/Footer";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function Layout({ children }: LayoutProps) {
         <Sidebar isOpened={isOpened} />
         <div className="p-[20px] w-[100vw]">{children}</div>
       </div>
+      <Footer />
     </div>
   );
 }

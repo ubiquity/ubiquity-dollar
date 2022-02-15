@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useConnectedContext } from "./context/connected";
-import CurveBalance from "./curve.balance";
-import CurveLPBalance from "./curveLP.balance";
-import DebtCouponBalance from "./debtCoupon.balance";
-import UadBalance from "./uad.balance";
-import UarBalance from "./uar.balance";
-import UbqBalance from "./ubq.balance";
 import Intro from "../pages/intro";
 import YieldFarmingPage from "../pages/yield-farming";
 import LiquidityMining from "../pages/liquidity-mining";
@@ -18,8 +11,6 @@ const PROD = process.env.NODE_ENV == "production";
 
 export function _renderControls() {
   const router = useRouter();
-  const context = useConnectedContext();
-  const { balances } = context;
   const [currentPage, setCurrentPage] = useState("");
 
   const poster =
@@ -51,24 +42,6 @@ export function _renderControls() {
         {currentPage === "#yield-farming" && <YieldFarmingPage />}
         {currentPage === "#launch-party" && <LaunchParty />}
         {currentPage === "#markets" && <Markets />}
-        {balances && (
-          <>
-            <div id="inventory-top">
-              <div>
-                <div>
-                  <aside>My Ubiquity Inventory</aside>
-                  <figure></figure>
-                </div>
-                <UbqBalance />
-                <UadBalance />
-                <UarBalance />
-                <DebtCouponBalance />
-                <CurveBalance />
-                <CurveLPBalance />
-              </div>
-            </div>
-          </>
-        )}
       </div>
     </>
   );
