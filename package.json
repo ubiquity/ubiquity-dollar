@@ -8,6 +8,7 @@
     "init:env": "cp .env.example .env",
     "_start:chain": "./build-scripts/dev-chain-init.sh",
     "_start:ui": "next dev",
+    "_start:css": "tailwindcss -o pages/styles/tailwind.css --watch",
     "_contracts:install": "run-p _contracts:install:*",
     "_contracts:install:uad": "cd contracts/dollar && yarn",
     "_contracts:install:nft": "cd contracts/ubiquistick && yarn",

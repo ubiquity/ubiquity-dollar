@@ -46,7 +46,7 @@ const Token = ({
   return (
     <div id={id}>
       <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
-        <div>
+        <div className="flex justify-center">
           <span>{<Svg />}</span>
           <span>
             {`${parseInt(ethers.utils.formatUnits(balance, decimals))}`} {token}

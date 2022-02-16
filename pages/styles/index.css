@@ -381,7 +381,7 @@ div[id^="inventory-"] aside {
   margin: 8px auto;
   display: inline-block;
   /* float: right; */
-  margin: 8px 16px;
+  margin: 0 16px;
 }
 
 div[id^="inventory-"] svg {
