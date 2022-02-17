@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Header from "../Header";
-import CustomHeader from "./Header";
+import LaunchPartyHeader from "./Header";
 import Whitelist from "./Whitelist";
 import UbiquiStick from "./UbiquiStick";
 import { ethers, utils } from "ethers";
@@ -14,7 +13,6 @@ import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/state
 import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 import { performTransaction } from "../common/utils";
-import TransactionsDisplay from "../TransactionsDisplay";
 import { PoolData, poolsByToken, allPools, UnipoolData, goldenPool } from "./lib/pools";
 import { ERC20, ERC20__factory } from "../../contracts/dollar/artifacts/types";
 import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "../../fixtures/abi/types";
@@ -390,9 +388,7 @@ const App = () => {
 
   return (
     <div>
-      <Header section="Launch Party" href="/launch-party" />
-      <TransactionsDisplay />
-      <CustomHeader />
+      <LaunchPartyHeader />
       {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
       {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
       <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Network from "../network";
 import { useConnectedContext } from "../context/connected";
-import { Transacting } from "../ui/widget";
+import TransactionsDisplay from "../TransactionsDisplay";
 import icons from "../ui/icons";
 import { EthAccount } from "../common/types";
 
@@ -12,9 +12,10 @@ type HeaderProps = {
 };
 
 async function fetchAccount(): Promise<EthAccount | null> {
-  if (window.ethereum?.request) {
+  const ethereum = (window as any).ethereum;
+  if (ethereum?.request) {
     return {
-      address: ((await window.ethereum.request({
+      address: ((await ethereum.request({
         method: "eth_requestAccounts",
       })) as string[])[0],
       balance: 0,
@@ -27,7 +28,7 @@ async function fetchAccount(): Promise<EthAccount | null> {
 }
 
 export default function Header({ toggleDrawer }: HeaderProps) {
-  const { setAccount, activeTransactions } = useConnectedContext();
+  const { setAccount } = useConnectedContext();
   const [connecting, setConnecting] = useState(false);
 
   const connect = async (): Promise<void> => {
@@ -58,9 +59,7 @@ export default function Header({ toggleDrawer }: HeaderProps) {
         </span>
       </div>
       <Network />
-      <div className="fixed top-0 right-0 mr-4 mt-4 pointer-events-none">
-        {activeTransactions ? activeTransactions.map((transaction, index) => <Transacting key={transaction.id + index} transaction={transaction} />) : null}
-      </div>
+      <TransactionsDisplay />
       {/* <Account /> */}
     </header>
   );

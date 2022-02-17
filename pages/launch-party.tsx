@@ -1,11 +1,8 @@
 import { FC } from "react";
+import LaunchPartyContainer from "../components/launch-party/App";
 
 const LaunchParty: FC = (): JSX.Element => {
-  return (
-    <div>
-      <div className="fixed h-screen w-screen z-10">Launch Party Page</div>
-    </div>
-  );
+  return <LaunchPartyContainer />;
 };
 
 export default LaunchParty;
