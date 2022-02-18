@@ -2,9 +2,10 @@ import { useRouter } from "next/router";
 
 type SidebarProps = {
   isOpened: boolean;
+  onClose: () => void;
 };
 
-export default function Sidebar({ isOpened }: SidebarProps) {
+export default function Sidebar({ isOpened, onClose }: SidebarProps) {
   const router = useRouter();
   const onMenuItemClick = (hash: string) => {
     router.push({
@@ -14,10 +15,15 @@ export default function Sidebar({ isOpened }: SidebarProps) {
   };
   return (
     <div
-      className={`${isOpened ? "w-[300px]" : "w-[0vw]"} absolute h-screen shadow-md z-50 bg-[#00000060] overflow-hidden flex flex-col`}
+      className={`${isOpened ? "w-[300px]" : "w-[0vw]"} absolute top-0 h-screen shadow-md z-50 bg-[#00000060] overflow-hidden flex flex-col`}
       style={{ transition: ".15s width ease-in-out" }}
     >
-      <ul className="relative mt-8">
+      <span className="absolute top-[20px] right-[4px] cursor-pointer" onClick={onClose}>
+        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z"></path>
+        </svg>
+      </span>
+      <ul className="relative mt-12">
         <li className="relative">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"

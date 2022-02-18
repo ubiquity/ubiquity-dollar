@@ -8,6 +8,7 @@ import { EthAccount } from "../common/types";
 const PROD = process.env.NODE_ENV == "production";
 
 type HeaderProps = {
+  isOpened: boolean;
   toggleDrawer: () => void;
 };
 
@@ -27,7 +28,7 @@ async function fetchAccount(): Promise<EthAccount | null> {
   }
 }
 
-export default function Header({ toggleDrawer }: HeaderProps) {
+export default function Header({ toggleDrawer, isOpened }: HeaderProps) {
   const { setAccount } = useConnectedContext();
   const [connecting, setConnecting] = useState(false);
 
@@ -44,9 +45,11 @@ export default function Header({ toggleDrawer }: HeaderProps) {
 
   return (
     <header className="flex h-[60px] items-center justify-center">
-      <div className="p-[10px] pl-[20px] absolute left-0" onClick={toggleDrawer}>
-        <div className="w-10 cursor-pointer">{icons.svgs.menu}</div>
-      </div>
+      {!isOpened && (
+        <div className="p-[10px] pl-[20px] absolute left-0" onClick={toggleDrawer}>
+          <div className="w-10 cursor-pointer">{icons.svgs.menu}</div>
+        </div>
+      )}
       <div id="logo">
         <span>Ubiquity Dollar</span>
         <span>|</span>

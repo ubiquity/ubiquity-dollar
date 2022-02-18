@@ -79,6 +79,14 @@
   top: 2px
 }
 
+.top-\[20px\] {
+  top: 20px
+}
+
+.right-\[4px\] {
+  right: 4px
+}
+
 .z-50 {
   z-index: 50
 }
@@ -199,6 +207,14 @@
 
 .-mt-1 {
   margin-top: -0.25rem
+}
+
+.mt-10 {
+  margin-top: 2.5rem
+}
+
+.mt-12 {
+  margin-top: 3rem
 }
 
 .box-border {

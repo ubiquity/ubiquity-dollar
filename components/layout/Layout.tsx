@@ -15,9 +15,9 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="text-center flex flex-col min-h-screen">
-      <Header toggleDrawer={toggleDrawer} />
+      <Header toggleDrawer={toggleDrawer} isOpened={isOpened} />
       <div className="flex flex-1">
-        <Sidebar isOpened={isOpened} />
+        <Sidebar isOpened={isOpened} onClose={toggleDrawer} />
         <div className="p-[20px] w-[100vw]">{children}</div>
       </div>
       <Footer />
