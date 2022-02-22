@@ -75,16 +75,16 @@
   left: 0px
 }
 
-.top-\[2px\] {
-  top: 2px
-}
-
 .top-\[20px\] {
   top: 20px
 }
 
 .right-\[4px\] {
   right: 4px
+}
+
+.top-\[2px\] {
+  top: 2px
 }
 
 .z-50 {
@@ -116,14 +116,19 @@
   margin-right: auto !important
 }
 
+.\!my-4 {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important
+}
+
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto
-}
-
-.mx-4 {
-  margin-left: 1rem;
-  margin-right: 1rem
 }
 
 .-mx-4 {
@@ -131,14 +136,14 @@
   margin-right: -1rem
 }
 
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem
+}
+
 .mx-2 {
   margin-left: 0.5rem;
   margin-right: 0.5rem
-}
-
-.my-4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem
 }
 
 .mb-2 {
@@ -149,16 +154,12 @@
   margin-bottom: 1rem
 }
 
-.-mt-2 {
-  margin-top: -0.5rem
+.mt-1 {
+  margin-top: 0.25rem
 }
 
 .mr-4 {
   margin-right: 1rem
-}
-
-.mt-1 {
-  margin-top: 0.25rem
 }
 
 .mt-4 {
@@ -197,6 +198,10 @@
   margin-left: 0.5rem
 }
 
+.mt-12 {
+  margin-top: 3rem
+}
+
 .ml-auto {
   margin-left: auto
 }
@@ -205,16 +210,12 @@
   margin-right: 0.75rem
 }
 
+.-mt-2 {
+  margin-top: -0.5rem
+}
+
 .-mt-1 {
   margin-top: -0.25rem
-}
-
-.mt-10 {
-  margin-top: 2.5rem
-}
-
-.mt-12 {
-  margin-top: 3rem
 }
 
 .box-border {
@@ -251,10 +252,6 @@
 
 .h-12 {
   height: 3rem
-}
-
-.h-7 {
-  height: 1.75rem
 }
 
 .h-\[60px\] {
@@ -564,8 +561,12 @@
   --tw-bg-opacity: 0.5
 }
 
-.fill-gray-400 {
-  fill: #9ca3af
+.bg-center {
+  background-position: center
+}
+
+.bg-no-repeat {
+  background-repeat: no-repeat
 }
 
 .fill-accent {
@@ -750,12 +751,16 @@
   line-height: 1.5rem
 }
 
-.tracking-widest {
-  letter-spacing: .17em
+.leading-\[28px\] {
+  line-height: 28px
 }
 
 .tracking-wider {
   letter-spacing: 0.05em
+}
+
+.tracking-widest {
+  letter-spacing: .17em
 }
 
 .tracking-wide {
@@ -772,11 +777,6 @@
   color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 
-.text-gray-400 {
-  --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity))
-}
-
 .text-white\/50 {
   color: rgb(255 255 255 / 0.5)
 }
@@ -784,6 +784,11 @@
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity))
+}
+
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity))
 }
 
 .\!text-accent {
@@ -875,12 +880,6 @@
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)
 }
 
-.backdrop-blur-xl {
-  --tw-backdrop-blur: blur(24px);
-  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-          backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)
-}
-
 .transition {
   transition-property: color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
@@ -928,10 +927,6 @@
 
 .disabled\:opacity-25:disabled {
   opacity: 0.25
-}
-
-.group:hover .group-hover\:fill-accent {
-  fill: #00ffff
 }
 
 @media (min-width: 640px) {

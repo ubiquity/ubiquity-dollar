@@ -36,8 +36,8 @@ const TwapPrice = () => {
   return (
     <>
       <div id="twap-price">
-        <p>${twapPrice && ethers.utils.formatEther(twapPrice)}</p>
-        <aside>Time Weighted Average Price</aside>
+        <p className="!my-4">${twapPrice && ethers.utils.formatEther(twapPrice)}</p>
+        <aside className="my-4">Time Weighted Average Price</aside>
       </div>
     </>
   );

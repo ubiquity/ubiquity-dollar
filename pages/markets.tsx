@@ -5,13 +5,13 @@ const Markets: FC = (): JSX.Element => {
   return (
     <div id="markets">
       <div>
-        <aside> Primary Markets</aside>
+        <aside>Primary Markets</aside>
       </div>
       <div>
         <div id="uad-market">
-          <div>
+          <div className="flex justify-center mb-2">
             {icons.svgs.uad}
-            <span>uAD</span>
+            <span className="leading-[28px]">uAD</span>
           </div>
           <div>
             <a target="_blank" href="https://crv.to">
@@ -25,9 +25,9 @@ const Markets: FC = (): JSX.Element => {
           </div>
         </div>
         <div id="ubq-market">
-          <div>
+          <div className="flex justify-center mb-2">
             <span>{icons.svgs.ubq}</span>
-            <span>UBQ</span>
+            <span className="leading-[28px]">UBQ</span>
           </div>
           <div>
             <a

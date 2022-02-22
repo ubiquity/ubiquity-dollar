@@ -413,7 +413,7 @@ export const YieldFarmingDeposit = memo(
           </div>
           <div className="w-1/2">
             <div className="text-3xl text-accent font-bold">{Math.round(maxApy() * 100) / 100}%</div>
-            <div>
+            <div className="flex justify-center">
               Max APY in uAR
               <Tooltip content="All the rewards are multiplied and provided in uAR">
                 <span className="pl-2">{icons.svgs.help}</span>
@@ -423,13 +423,9 @@ export const YieldFarmingDeposit = memo(
         </div>
         <widget.SubTitle text="Boosters" />
         <div className="flex justify-between items-center mb-4">
-          <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
+          <div className="w-5/12 bg-no-repeat bg-center" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">UBQ</span>
-              {/* <span>
-                <span>TVL</span>
-                <span className="pl-4">{tvl.ubq}M</span>
-              </span> */}
             </div>
             <div className="text-left w-10/12 mb-2">
               <span>Minimizes deposit fee</span>
@@ -457,7 +453,7 @@ export const YieldFarmingDeposit = memo(
             </div>
           </div>
 
-          <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
+          <div className="w-5/12 bg-no-repeat bg-center" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">uAD</span>
               {/* <span className="pl-4">
