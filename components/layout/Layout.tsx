@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Header from "../header/Header";
 import Sidebar from "../sidebar/Sidebar";
 import Footer from "../footer/Footer";
@@ -12,6 +12,20 @@ export default function Layout({ children }: LayoutProps) {
   const toggleDrawer = () => {
     setOpened((prev) => !prev);
   };
+
+  const handleKeyDown = useCallback((event) => {
+    if (event.key === "Escape") {
+      setOpened(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyDown, false);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, false);
+    };
+  }, []);
 
   return (
     <div className="text-center flex flex-col min-h-screen">

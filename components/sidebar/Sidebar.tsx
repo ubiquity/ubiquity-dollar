@@ -24,7 +24,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
         </svg>
       </span>
       <ul className="relative mt-12">
-        <li className="relative">
+        <li className="relative cursor-pointer">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
             data-mdb-ripple="true"
@@ -34,7 +34,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             <span>Introduction</span>
           </a>
         </li>
-        <li className="relative" id="sidenavEx1">
+        <li className="relative cursor-pointer" id="sidenavEx1">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out cursor-pointer"
             data-mdb-ripple="true"
@@ -61,7 +61,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             </svg>
           </a>
           <ul className="relative accordion-collapse collapse" id="collapseSidenavEx1" aria-labelledby="sidenavEx1" data-bs-parent="#sidenavExample">
-            <li className="relative">
+            <li className="relative cursor-pointer">
               <a
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
@@ -71,7 +71,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
                 Price Stabilization
               </a>
             </li>
-            <li className="relative">
+            <li className="relative cursor-pointer">
               <a
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
@@ -81,7 +81,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
                 Liquidity Mining
               </a>
             </li>
-            <li className="relative">
+            <li className="relative cursor-pointer">
               <a
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
@@ -91,7 +91,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
                 Yield Farming
               </a>
             </li>
-            <li className="relative">
+            <li className="relative cursor-pointer">
               <a
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
@@ -103,7 +103,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             </li>
           </ul>
         </li>
-        <li className="relative">
+        <li className="relative cursor-pointer">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
             data-mdb-ripple="true"
@@ -113,7 +113,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             <span>Markets</span>
           </a>
         </li>
-        <li className="relative">
+        <li className="relative cursor-pointer">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
             href="https://dao.ubq.fi/docs"
@@ -124,7 +124,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             <span>Docs</span>
           </a>
         </li>
-        <li className="relative">
+        <li className="relative cursor-pointer">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
             href="https://dao.ubq.fi"
@@ -149,7 +149,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             <span>DAO</span>
           </a>
         </li>
-        <li className="relative">
+        <li className="relative cursor-pointer">
           <a
             className="flex items-center !text-accent text-sm py-4 px-6 h-12 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
             href="https://dao.ubq.fi/blog"

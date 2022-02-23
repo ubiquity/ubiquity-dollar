@@ -755,6 +755,10 @@
   line-height: 28px
 }
 
+.leading-\[27px\] {
+  line-height: 27px
+}
+
 .tracking-wider {
   letter-spacing: 0.05em
 }

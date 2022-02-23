@@ -247,6 +247,7 @@ input[type="button"] {
   /* transform: scale(1); */
   transition: 0.25s all cubic-bezier(0, 1, 1, 1);
   min-width: 128px;
+  color: #06061a;
 }
 
 .rdn-drop.dropdown.is-open > div.option.rdn-drop-menu-option,
