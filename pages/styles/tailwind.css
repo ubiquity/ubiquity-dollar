@@ -111,6 +111,10 @@
   margin: 0px
 }
 
+.m-auto {
+  margin: auto
+}
+
 .\!mx-auto {
   margin-left: auto !important;
   margin-right: auto !important
@@ -288,6 +292,10 @@
 
 .h-6 {
   height: 1.5rem
+}
+
+.h-8 {
+  height: 2rem
 }
 
 .min-h-screen {
@@ -747,16 +755,12 @@
   text-transform: uppercase
 }
 
-.leading-6 {
-  line-height: 1.5rem
-}
-
 .leading-\[28px\] {
   line-height: 28px
 }
 
-.leading-\[27px\] {
-  line-height: 27px
+.leading-6 {
+  line-height: 1.5rem
 }
 
 .tracking-wider {
