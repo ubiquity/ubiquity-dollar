@@ -258,6 +258,10 @@
   height: 3rem
 }
 
+.h-8 {
+  height: 2rem
+}
+
 .h-\[60px\] {
   height: 60px
 }
@@ -294,10 +298,6 @@
   height: 1.5rem
 }
 
-.h-8 {
-  height: 2rem
-}
-
 .min-h-screen {
   min-height: 100vh
 }
@@ -330,6 +330,10 @@
   width: 16.666667%
 }
 
+.w-8 {
+  width: 2rem
+}
+
 .w-10 {
   width: 2.5rem
 }
@@ -352,10 +356,6 @@
 
 .w-3 {
   width: 0.75rem
-}
-
-.w-8 {
-  width: 2rem
 }
 
 .w-screen {

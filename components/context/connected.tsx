@@ -59,7 +59,6 @@ export const ConnectedNetwork = (props: Props): JSX.Element => {
     const newActiveTransactions = updated ? [...activeTransactions] : [...activeTransactions, transaction];
 
     setActiveTransactions(newActiveTransactions);
-    console.log(newActiveTransactions);
   }
 
   const value: ConnectedContext = {
