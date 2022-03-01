@@ -39,6 +39,10 @@ import {
   UbiquityGovernance,
   DebtCoupon,
   BondingShareV2,
+  ICouponsForDollarsCalculator,
+  ICouponsForDollarsCalculator__factory,
+  IUARForDollarsCalculator,
+  IUARForDollarsCalculator__factory,
 } from "./contracts/dollar/artifacts/types";
 import { ERC20__factory, ERC20 } from "./contracts/dollar/artifacts/types";
 
@@ -73,6 +77,8 @@ const contracts = {
   yieldProxy: YieldProxy__factory.connect,
   usdc: ERC20__factory.connect,
   jarUsdc: IJar__factory.connect,
+  coupon: ICouponsForDollarsCalculator__factory.connect,
+  uarCalc: IUARForDollarsCalculator__factory.connect,
 };
 
 // 2
@@ -103,6 +109,8 @@ export type Contracts = {
   // ERC1155
   debtCouponToken: DebtCoupon;
   bondingToken: BondingShareV2;
+  coupon: ICouponsForDollarsCalculator;
+  uarCalc: IUARForDollarsCalculator;
 };
 
 // 3
@@ -120,6 +128,8 @@ type ManagerAddresses = {
   masterChef: string;
   sushiSwapPool: string;
   ubiquityFormulas: string;
+  coupon: string;
+  uarCalc: string;
 };
 
 // Load all contract addresses on parallel
@@ -139,6 +149,8 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     masterChef,
     sushiSwapPool,
     ubiquityFormulas,
+    coupon,
+    uarCalc,
   ] = await Promise.all([
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
@@ -153,6 +165,8 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
+    manager.couponCalculatorAddress(),
+    manager.uarCalculatorAddress(),
   ]);
   return {
     uad,
@@ -168,6 +182,8 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     masterChef,
     sushiSwapPool,
     ubiquityFormulas,
+    coupon,
+    uarCalc,
   };
 }
 
@@ -176,12 +192,12 @@ export async function connectedContracts(): Promise<{
   provider: ethers.providers.Web3Provider;
   contracts: Contracts;
 }> {
-  if (!window.ethereum?.request) {
+  if (!(window as any).ethereum?.request) {
     console.log("Metamask is not insalled, cannot initialize contracts");
     return Promise.reject("Metamask is not installed");
   }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
 
   const manager = contracts.manager(ADDRESS.MANAGER, provider);
   const addr = await contractsAddresses(manager);
@@ -218,6 +234,8 @@ export async function connectedContracts(): Promise<{
       sushiSwapPool,
       ugovUadPair,
       ubiquityFormulas: contracts.ubiquityFormulas(addr.ubiquityFormulas, provider),
+      coupon: contracts.coupon(addr.coupon, provider),
+      uarCalc: contracts.uarCalc(addr.uarCalc, provider),
     },
   };
 }
