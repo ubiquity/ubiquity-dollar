@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Intro from "../pages/intro";
 import YieldFarmingPage from "../pages/yield-farming";
+import DebtCouponPage from "../pages/debt-coupon";
 import LiquidityMining from "../pages/liquidity-mining";
 import PriceStabilization from "../pages/price-stabilization";
 import Markets from "../pages/markets";
@@ -40,6 +41,7 @@ export function _renderControls() {
         {currentPage === "#price-stabilization" && <PriceStabilization />}
         {currentPage === "#liquidity-mining" && <LiquidityMining />}
         {currentPage === "#yield-farming" && <YieldFarmingPage />}
+        {currentPage === "#debt-coupon" && <DebtCouponPage />}
         {currentPage === "#launch-party" && <LaunchParty />}
         {currentPage === "#markets" && <Markets />}
       </div>

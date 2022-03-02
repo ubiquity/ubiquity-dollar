@@ -143,7 +143,7 @@ export const DebtCouponContainer = () => {
   };
 
   return (
-    <widget.Container className="max-w-screen-md !mx-auto relative">
+    <widget.Container className="max-w-screen-lg !mx-auto relative">
       <widget.Title text="Debt Coupon" />
       {balances && (
         <DebtCoupon
@@ -520,7 +520,7 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
       <div className="inline-flex my-8">
         <span className="self-center">uAD</span>
         <input className="self-center" type="number" onChange={handleInputUAD} />
-        <nav className="self-center flex flex-col border-b-2 sm:flex-row">
+        <nav className="self-center flex flex-col border-b-0 sm:flex-row">
           <button
             className={`m-0 rounded-[16px] rounded-r-none self-center hover:text-accent focus:outline-none ${
               selectedCurrency === uAR ? "text-accent font-medium border-accent" : "text-gray-600"
@@ -583,16 +583,16 @@ export const PumpCycle = ({
           <table className="w-full">
             <tbody>
               <tr>
-                <td className="pr-4 text-right">Deprecation rate</td>
-                <td className="pl-4 text-left">{uarDeprecationRate * 100}% / week</td>
+                <td className="pr-2 text-right">Deprecation rate</td>
+                <td className="pl-2 text-left">{uarDeprecationRate * 100}% / week</td>
               </tr>
               <tr>
-                <td className="pr-4 text-right">Current reward %</td>
-                <td className="pl-4 text-left">{uarCurrentRewardPct * 100}%</td>
+                <td className="pr-2 text-right">Current reward %</td>
+                <td className="pl-2 text-left">{uarCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
-                <td className="pr-4 text-right">Expires?</td>
-                <td className="pl-4 text-left">No</td>
+                <td className="pr-2 text-right">Expires?</td>
+                <td className="pl-2 text-left">No</td>
               </tr>
             </tbody>
           </table>
@@ -606,16 +606,16 @@ export const PumpCycle = ({
           <table className="w-full">
             <tbody>
               <tr>
-                <td className="pr-4 text-right">Deprecation rate</td>
-                <td className="pl-4 text-left">{udebtDeprecationRate * 100}%</td>
+                <td className="pr-4 text-right w-1/2">Deprecation rate</td>
+                <td className="pl-4 text-left w-1/2">{udebtDeprecationRate * 100}%</td>
               </tr>
               <tr>
-                <td className="pr-4 text-right">Current reward %</td>
-                <td className="pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
+                <td className="pr-4 text-right w-1/2">Current reward %</td>
+                <td className="pl-4 text-left w-1/2">{udebtCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
-                <td className="pr-4 text-right">Expires?</td>
-                <td className="pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
+                <td className="pr-4 text-right w-1/2">Expires?</td>
+                <td className="pl-4 text-left w-1/2">After {calculatedUdebtExpirationTime}</td>
               </tr>
             </tbody>
           </table>

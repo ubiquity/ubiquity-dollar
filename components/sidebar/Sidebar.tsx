@@ -96,6 +96,16 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
                 className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
+                onClick={() => onMenuItemClick("debt-coupon")}
+              >
+                Debt Coupon
+              </a>
+            </li>
+            <li className="relative cursor-pointer">
+              <a
+                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+                data-mdb-ripple="true"
+                data-mdb-ripple-color="dark"
                 onClick={() => onMenuItemClick("launch-party")}
               >
                 Launch Party
