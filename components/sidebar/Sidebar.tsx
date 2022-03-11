@@ -63,7 +63,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
           <ul className="relative accordion-collapse collapse" id="collapseSidenavEx1" aria-labelledby="sidenavEx1" data-bs-parent="#sidenavExample">
             <li className="relative cursor-pointer">
               <a
-                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+                className="flex items-center !text-accent text-sm py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
                 onClick={() => onMenuItemClick("price-stabilization")}
@@ -73,7 +73,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             </li>
             <li className="relative cursor-pointer">
               <a
-                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+                className="flex items-center !text-accent text-sm py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
                 onClick={() => onMenuItemClick("liquidity-mining")}
@@ -83,7 +83,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             </li>
             <li className="relative cursor-pointer">
               <a
-                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+                className="flex items-center !text-accent text-sm py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
                 onClick={() => onMenuItemClick("yield-farming")}
@@ -93,7 +93,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             </li>
             <li className="relative cursor-pointer">
               <a
-                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+                className="flex items-center !text-accent text-sm py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
                 onClick={() => onMenuItemClick("debt-coupon")}
@@ -103,7 +103,7 @@ export default function Sidebar({ isOpened, onClose }: SidebarProps) {
             </li>
             <li className="relative cursor-pointer">
               <a
-                className="flex items-center !text-accent text-xs py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
+                className="flex items-center !text-accent text-sm py-4 pl-12 pr-6 h-6 overflow-hidden text-gray-700 text-ellipsis whitespace-nowrap rounded hover:text-gray-900 hover:bg-gray-100/20 transition duration-300 ease-in-out"
                 data-mdb-ripple="true"
                 data-mdb-ripple-color="dark"
                 onClick={() => onMenuItemClick("launch-party")}
