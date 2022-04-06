@@ -509,4 +509,4 @@ export const YieldFarmingDeposit = memo(
   }
 );
 
-export default connectedWithUserContext(YieldFarmingContainer);
+export default memo(connectedWithUserContext(YieldFarmingContainer));
