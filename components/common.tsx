@@ -30,6 +30,14 @@ export function _renderControls() {
     }
   }, [router]);
 
+  useEffect(() => {
+    const ethereum = (window as any).ethereum;
+    if (ethereum) {
+      ethereum.on("accountsChanged", () => window.location.reload());
+      ethereum.on("chainChanged", () => window.location.reload());
+    }
+  }, []);
+
   return (
     <>
       <div id="background">
