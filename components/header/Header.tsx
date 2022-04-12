@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Network from "../network";
 import { useConnectedContext } from "../context/connected";
 import TransactionsDisplay from "../TransactionsDisplay";
-import icons from "../ui/icons";
 import { EthAccount } from "../common/types";
 
 const PROD = process.env.NODE_ENV == "production";
@@ -44,18 +44,17 @@ export default function Header({ toggleDrawer, isOpened }: HeaderProps) {
   }
 
   return (
-    <header className="flex h-[60px] items-center justify-center">
-      {!isOpened && (
+    <header className="flex h-16 items-center justify-center">
+      {/* {!isOpened && (
         <div className="p-[10px] pl-[20px] absolute left-0" onClick={toggleDrawer}>
           <div className="w-10 cursor-pointer">{icons.svgs.menu}</div>
         </div>
-      )}
-      <div id="logo">
-        <span>Ubiquity Dollar</span>
-        <span>|</span>
-        <span>Dashboard</span>
-        <span></span>
-      </div>
+      )} */}
+      <Link href="/">
+        <a id="logo">
+          <span>Ubiquity Dollar</span>
+        </a>
+      </Link>
       <div>
         <span>
           <input type="button" value="Connect Wallet" disabled={connecting} onClick={() => connect()} />

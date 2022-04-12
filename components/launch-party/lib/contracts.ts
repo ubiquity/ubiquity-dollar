@@ -24,9 +24,9 @@ export const addresses: { [key: string]: Addresses } = {
     chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419",
   },
   "31337": {
-    ubiquiStick: "0x45379687D28B5CaDf738067Da1058eA9801d9897",
-    ubiquiStickSale: "0x23EEe0f3fD17b25C16C712e90c77A6d165a54d2f",
-    simpleBond: "0x7833A70b17Aa78C721d70B38D6c6734Ea602a888",
+    ubiquiStick: "0xab16A69A5a8c12C732e0DEFF4BE56A70bb64c926",
+    ubiquiStickSale: "0x525C7063E7C20997BaaE9bDa922159152D0e8417",
+    simpleBond: "0x8A93d247134d91e0de6f96547cB0204e5BE8e5D8",
     chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419",
   },
 };

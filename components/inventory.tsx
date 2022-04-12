@@ -51,7 +51,6 @@ const Token = ({
     }
     try {
       const base64Img = icons.base64s[token.toLowerCase()];
-      console.log(token, base64Img);
       const wasAdded = await ethereum.request({
         method: "wallet_watchAsset",
         params: {
