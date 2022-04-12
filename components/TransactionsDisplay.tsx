@@ -7,7 +7,7 @@ export const Transacting = (props: { transaction: Transaction }): JSX.Element | 
     return null;
   }
   return (
-    <div className="border-accent border bg-accent bg-opacity-10 border-solid mt-1 rounded-full py-1 px-2 text-accent">
+    <div className="border-accent border bg-accent bg-opacity-10 border-solid mt-1 rounded-full py-1 px-4 text-accent">
       {props.transaction.title} {Spinner}
     </div>
   );
