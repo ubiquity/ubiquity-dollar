@@ -88,9 +88,9 @@ const Token = ({
         }
       >
         <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
-          <div className="flex justify-center">
-            <span>{<Svg />}</span>
-            <span className="leading-[28px]">
+          <div className="flex justify-center items-center">
+            <span className="text-accent mr-2 w-6 flex-shrink-0">{<Svg />}</span>
+            <span className="">
               {`${parseInt(ethers.utils.formatUnits(balance, decimals))}`} {token}
             </span>
           </div>

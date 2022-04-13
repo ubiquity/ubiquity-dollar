@@ -10,7 +10,7 @@ const Markets: FC = (): JSX.Element => {
       <div>
         <div id="uad-market">
           <div className="flex justify-center mb-2">
-            {icons.svgs.uad}
+            <span className="text-accent">{icons.svgs.uad}</span>
             <span className="leading-[28px]">uAD</span>
           </div>
           <div>
@@ -26,7 +26,7 @@ const Markets: FC = (): JSX.Element => {
         </div>
         <div id="ubq-market">
           <div className="flex justify-center mb-2">
-            <span>{icons.svgs.ubq}</span>
+            <span className="text-accent">{icons.svgs.ubq}</span>
             <span className="leading-[28px]">UBQ</span>
           </div>
           <div>

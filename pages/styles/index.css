@@ -320,22 +320,13 @@ span {
 img,
 svg {
   /* fill: #ffffff80; */
-  fill: #00ffffbf;
-  height: 24px;
-  margin-right: 12px;
+  /* fill: #00ffffbf; */
+  /* height: 24px; */
 }
 
 img,
 svg:hover {
   /* fill: #00ffffff; */
-}
-
-img,
-svg {
-  /* fill: #ffffff80; */
-  fill: #00ffffbf;
-  height: 24px;
-  margin-right: 12px;
 }
 
 #markets > div > div {

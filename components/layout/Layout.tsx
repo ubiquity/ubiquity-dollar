@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import cx from "classnames";
 import Header from "../header/Header";
-import { Icon } from "../ui/icons";
+import { Icon, IconNames } from "../ui/icons";
 import Sidebar from "../sidebar/Sidebar";
 import Footer from "../footer/Footer";
 
@@ -141,6 +141,12 @@ export default function Layout({ children }: LayoutProps) {
           <Item text="DAO" href="https://dao.ubq.fi/"></Item>
           <Item text="Blog" href="https://medium.com/ubiquity-dao"></Item>
           {/* <Item text="Public Channels" href="/public-channels"></Item> */}
+          <li className="flex justify-center mt-4">
+            <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
+            <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
+            <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
+            <SocialLinkItem href="https://discord.gg/SjymJ5maJ4" alt="Discord" icon="discord" />
+          </li>
         </ul>
       </div>
       <div className="flex-grow pl-0" style={{ paddingLeft: sidebarClientWidth }}>
@@ -154,6 +160,17 @@ export default function Layout({ children }: LayoutProps) {
     </div>
   );
 }
+
+const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconNames; alt: string }) => (
+  <a
+    href={href}
+    className="rounded-full h-10 w-10 p-2 hover:bg-white/5 hover:drop-shadow-[0_0_16px_#fff] border border-solid border-transparent hover:border-accent/0 flex items-center justify-center mx-1 text-white/75 transition hover:transition-none duration-300 ease-in-out"
+    target="_blank"
+    title={alt}
+  >
+    <Icon className="w-full" icon={icon} />
+  </a>
+);
 
 const Item = ({ text, href }: { text: string; href: string }) => {
   const router = useRouter();
@@ -171,7 +188,7 @@ const Item = ({ text, href }: { text: string; href: string }) => {
           )}
           target={href.match(/https?:\/\//) ? "_blank" : ""}
         >
-          <span>{text}</span>
+          {text}
         </a>
       </Link>
       <div className={cx("absolute left-full -ml-2 top-[50%] h-[1px] bg-accent transition-all", { "w-2": isActive, "w-0": !isActive })}></div>
