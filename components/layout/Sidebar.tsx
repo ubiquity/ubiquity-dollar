@@ -158,7 +158,7 @@ const Item = ({ text, href, icon }: { text: string; href: string; icon: string }
             "flex items-center justify-center text-ellipsis whitespace-nowrap rounded border border-solid py-2  pl-2 text-sm font-light uppercase tracking-widest transition duration-300 ease-in-out hover:transition-none",
             {
               "border-accent bg-accent/10 text-accent drop-shadow-accent": isActive,
-              "hover:drop-shadow-lght border-transparent text-white/75 hover:bg-white/5": !isActive,
+              "border-transparent text-white/75 hover:bg-white/5 hover:drop-shadow-light": !isActive,
             }
           )}
           target={href.match(/https?:\/\//) ? "_blank" : ""}
