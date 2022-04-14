@@ -73,6 +73,15 @@ export default function Layout({ children }: LayoutProps) {
         onMouseEnter={handleSidebarEnter}
         onMouseLeave={handleSidebarLeave}
       >
+        {sidebarState === "permanent" ? (
+          <Link href="/">
+            <a className="flex flex-col items-center justify-center my-8 uppercase tracking-widest hover:text-accent hover:drop-shadow-light transition duration-300 ease-in-out">
+              <Icon icon="ubq" className="w-16 mb-4" />
+              <span>Ubiquity Dollar</span>
+            </a>
+          </Link>
+        ) : null}
+
         {sidebarState === "hidden" || sidebarState === "hidden_hovering" ? (
           <a
             className={cx("absolute flex items-center justify-center rounded-r border border-l-0 border-accent/60 border-solid top-[50%] left-full ml-[1px] ", {
@@ -82,27 +91,17 @@ export default function Layout({ children }: LayoutProps) {
             aria-label="Toggle navigation"
             onClick={handleSidebarToggle}
           >
-            <svg
-              aria-hidden="true"
-              focusable="false"
-              data-prefix="fas"
+            <Icon
+              icon="caret"
               className={cx("w-6 h-6 m-1 transition-transform", {
                 "-rotate-90": sidebarState === "hidden",
                 "rotate-90": sidebarState === "hidden_hovering",
               })}
-              role="img"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
-            >
-              <path
-                fill="currentColor"
-                d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-              ></path>
-            </svg>
+            />
           </a>
         ) : null}
 
-        <ul className="h-full flex flex-col justify-center">
+        <ul className={cx("h-full flex flex-col", { "justify-center": sidebarState !== "permanent" })}>
           <Item text="Ubiquity Intro" href="https://landing.ubq.fi/en/"></Item>
           <Item text="Price Stabilization" href="/"></Item>
           <Item text="Liquidity Mining" href="/liquidity-mining"></Item>
@@ -114,7 +113,7 @@ export default function Layout({ children }: LayoutProps) {
           <Item text="DAO" href="https://dao.ubq.fi/"></Item>
           <Item text="Blog" href="https://medium.com/ubiquity-dao"></Item>
           {/* <Item text="Public Channels" href="/public-channels"></Item> */}
-          <li className="flex justify-center mt-4">
+          <li className="flex justify-center mt-8">
             <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
             <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
             <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
@@ -125,10 +124,25 @@ export default function Layout({ children }: LayoutProps) {
       {sidebarState !== "loading" ? (
         <>
           <div className="relative flex-grow pl-0 z-10" style={{ paddingLeft: sidebarClientWidth }}>
+            <Link href="/">
+              <a
+                className={cx(
+                  "flex items-center justify-center box-content h-12 pt-6 -mt-20 uppercase tracking-widest hover:text-accent hover:drop-shadow-light transition duration-300 ease-in-out",
+                  { "translate-y-[100%]": sidebarState !== "permanent" }
+                )}
+              >
+                <Icon icon="ubq" className="h-8 mr-4" />
+                <span className="mt-1">Ubiquity Dollar</span>
+              </a>
+            </Link>
+
             {sidebarState === "hidden_hovering" ? <div className="absolute h-full w-full bg-black/50 z-40" onClick={handleSidebarToggle}></div> : null}
-            <div className="flex flex-col min-h-screen py-8 px-4 max-w-screen-lg items-center justify-center mx-auto">
-              {/* <Header /> */}
-              {/* <div className="flex-grow">{children}</div> */}
+            <div
+              className={cx("flex flex-col min-h-screen pb-8 px-4 max-w-screen-lg items-center justify-center mx-auto", {
+                "pt-8": sidebarState === "permanent",
+                "pt-24": sidebarState !== "permanent",
+              })}
+            >
               {children}
             </div>
           </div>

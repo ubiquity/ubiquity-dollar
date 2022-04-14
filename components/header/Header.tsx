@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Network from "../network";
 import TransactionsDisplay from "../TransactionsDisplay";
 
 const PROD = process.env.NODE_ENV == "production";
