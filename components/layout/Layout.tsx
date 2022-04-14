@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import cx from "classnames";
 import { Icon } from "../ui/icons";
@@ -16,19 +16,27 @@ export default function Layout({ children }: LayoutProps) {
   const [sidebarClientWidth, setSidebarClientWidth] = useState(0);
   const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
 
+  useEffect(() => {
+    const ethereum = (window as any).ethereum;
+    if (ethereum) {
+      ethereum.on("accountsChanged", () => window.location.reload());
+      ethereum.on("chainChanged", () => window.location.reload());
+    }
+  }, []);
+
   return (
     <div className="flex">
       <GridVideoBg />
       <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
       {sidebarState !== "loading" ? (
         <>
-          <div className="relative flex-grow pl-0 z-10" style={{ paddingLeft: sidebarClientWidth }}>
+          <div className="relative z-10 flex-grow pl-0" style={{ paddingLeft: sidebarClientWidth }}>
             <ConditionalHeader show={sidebarState !== "permanent"} />
 
             {/* Content */}
 
             <div
-              className={cx("flex flex-col min-h-screen pb-8 px-4 max-w-screen-lg items-center justify-center mx-auto", {
+              className={cx("mx-auto flex min-h-screen max-w-screen-lg flex-col items-center justify-center px-4 pb-8", {
                 "pt-8": sidebarState === "permanent",
                 "pt-24": sidebarState !== "permanent",
               })}
@@ -38,7 +46,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
 
           {/* Floating Inventory */}
-          <div className="fixed bottom-0 w-full flex justify-center z-50 pointer-events-none" style={{ paddingLeft: sidebarClientWidth }}>
+          <div className="pointer-events-none fixed bottom-0 z-50 flex w-full justify-center" style={{ paddingLeft: sidebarClientWidth }}>
             <Inventory />
           </div>
         </>
@@ -52,11 +60,11 @@ const ConditionalHeader = ({ show }: { show: boolean }) => (
   <Link href="/">
     <a
       className={cx(
-        "flex items-center justify-center box-content h-12 pt-6 -mt-20 uppercase tracking-widest hover:text-accent hover:drop-shadow-light transition duration-300 ease-in-out",
+        "-mt-20 box-content flex h-12 items-center justify-center pt-6 uppercase tracking-widest transition duration-300 ease-in-out hover:text-accent hover:drop-shadow-light",
         { "translate-y-[100%]": show }
       )}
     >
-      <Icon icon="ubq" className="h-8 mr-4" />
+      <Icon icon="ubq" className="mr-4 h-8" />
       <span className="mt-1">Ubiquity Dollar</span>
     </a>
   </Link>

@@ -27,7 +27,7 @@ const Inventory = () => {
     return (
       <div className="pointer-events-auto">
         <button
-          className="rounded-none rounded-t-lg m-0 bg-accent opacity-100 text-paper hover:bg-accent hover:drop-shadow-accent"
+          className="m-0 rounded-none rounded-t-lg bg-accent text-paper opacity-100 hover:bg-accent hover:drop-shadow-accent"
           disabled={connecting}
           onClick={() => connect()}
         >
@@ -39,11 +39,14 @@ const Inventory = () => {
   const address = account.address;
 
   return (
-    <div className="bg-paper rounded-t-lg border border-solid border-accent/60 max-w-screen-lg translate-y-[67%] hover:translate-y-0 transition-transform duration-500 ease-out pointer-events-auto">
-      <div className="uppercase flex tracking-widest mb-4 relative text-left">
-        <div className="flex-grow flex items-center pl-2 text-xs mt-2 ml-2">My inventory</div>
+    <div className="pointer-events-auto max-w-screen-lg translate-y-[71%] rounded-t-lg border border-solid border-accent/60 bg-paper transition-transform duration-500 ease-out hover:translate-y-0">
+      <div className="relative mb-2 flex text-left uppercase tracking-widest">
+        <div className="mt-2 ml-2 flex flex-grow items-center pl-2 text-xs">My inventory</div>
         <Network />
       </div>
+      <a className="mb-2 block font-mono text-xs text-white/50" href={`https://etherscan.io/address/${address}`}>
+        {address}
+      </a>
       <div className="flex justify-center px-2 pb-2">
         <div className="grid grid-cols-4 gap-2">
           <Token token="uAD" balance={balances.uad} accountAddr={address} tokenAddr={contracts.uad.address} />
@@ -104,11 +107,11 @@ const Token = ({
   return (
     <div className="font-mono text-xs">
       <div className="flex">
-        <div className="text-accent mr-2 w-6 flex-shrink-0 flex items-center relative">
+        <div className="relative mr-2 flex w-6 flex-shrink-0 items-center text-accent">
           {<Svg />}
           <Tippy
             content={
-              <div className="px-4 py-2 border border-white/10 border-solid rounded-md bg-paper text-sm" style={{ backdropFilter: "blur(8px)" }}>
+              <div className="rounded-md border border-solid border-white/10 bg-paper px-4 py-2 text-sm" style={{ backdropFilter: "blur(8px)" }}>
                 <p className="text-center text-white/50">Add to Metamask</p>
               </div>
             }
@@ -117,14 +120,14 @@ const Token = ({
           >
             <div
               onClick={addTokenToWallet}
-              className="absolute h-full w-full border border-solid cursor-pointer border-accent rounded-md bg-paper opacity-0 hover:opacity-100 text-accent flex items-center justify-center"
+              className="absolute flex h-full w-full cursor-pointer items-center justify-center rounded-md border border-solid border-accent bg-paper text-accent opacity-0 hover:opacity-100"
             >
               +
             </div>
           </Tippy>
         </div>
         <a
-          className="flex flex-col leading-none text-left"
+          className="flex flex-col text-left leading-none"
           target="_blank"
           href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}
         >
