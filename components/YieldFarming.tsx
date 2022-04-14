@@ -5,7 +5,7 @@ import * as widget from "./ui/widget";
 import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "./common/contracts-shortcuts";
 import { BigNumber, ethers } from "ethers";
 import { performTransaction, constrainNumber } from "./common/utils";
-import icons from "./ui/icons";
+import icons, { Icon } from "./ui/icons";
 type Balance = { usdc: number; ubq: number; uad: number };
 
 type Actions = {
@@ -90,7 +90,7 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
 export const Tooltip = ({ content, children }: { content: string; children: React.ReactElement }) => (
   <Tippy
     content={
-      <div className="px-4 border border-white/10 border-solid rounded-md" style={{ backdropFilter: "blur(8px)" }}>
+      <div className="px-4 py-2 border border-white/10 border-solid rounded-md bg-paper text-sm" style={{ backdropFilter: "blur(8px)" }}>
         <p className="text-center text-white/50">{content}</p>
       </div>
     }
@@ -117,14 +117,18 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
       <widget.Title text="Boosted Yield Farming (Beta)" />
 
       <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
-        <div className="w-20">{icons.svgs.warning}</div>
+        <div className="w-20">
+          <Icon icon="warning" className="w-10 text-white" />
+        </div>
         <p className="text-left flex-grow">
           <span>Explainer article coming soon!</span>
         </p>
       </div>
 
       <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
-        <div className="w-20">{icons.svgs.warning}</div>
+        <div className="w-20">
+          <Icon icon="warning" className="w-10 text-white" />
+        </div>
         <p className="text-left flex-grow">
           <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
           <a target="_blank" className="text-white" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
@@ -402,7 +406,9 @@ export const YieldFarmingDeposit = memo(
               </span>
               <span className="pl-2">APY</span>
               <Tooltip content="This is the APY from the Pickle Finance USDC jar">
-                <span className="pl-2">{icons.svgs.help}</span>
+                <span className="pl-2">
+                  <Icon icon="help" className="w-4 text-white inline" />
+                </span>
               </Tooltip>
             </div>
             <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
@@ -416,7 +422,9 @@ export const YieldFarmingDeposit = memo(
             <div className="flex justify-center">
               Max APY in uAR
               <Tooltip content="All the rewards are multiplied and provided in uAR">
-                <span className="pl-2">{icons.svgs.help}</span>
+                <span className="pl-2">
+                  <Icon icon="help" className="w-4 text-white inline" />
+                </span>
               </Tooltip>
             </div>
           </div>
@@ -430,7 +438,9 @@ export const YieldFarmingDeposit = memo(
             <div className="text-left w-10/12 mb-2">
               <span>Minimizes deposit fee</span>
               <Tooltip content="The deposit fee gets converted to uAR when you withdraw">
-                <span className="pl-2">{icons.svgs.help}</span>
+                <span className="pl-2">
+                  <Icon icon="help" className="w-4 text-white inline" />
+                </span>
               </Tooltip>
             </div>
             <div className="flex justify-between items-center">
@@ -465,7 +475,9 @@ export const YieldFarmingDeposit = memo(
               <span>Boosts yield</span>
               {/* <span>up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span> */}
               <Tooltip content="Match 50% of the USDC deposit and you get an extra 50% boost">
-                <span className="pl-1">{icons.svgs.help}</span>
+                <span className="pl-1">
+                  <Icon icon="help" className="w-4 text-white inline" />
+                </span>
               </Tooltip>
             </div>
             <div className="flex justify-between items-center">

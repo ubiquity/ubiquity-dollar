@@ -1,16 +1,17 @@
 import { FC } from "react";
-import icons from "../components/ui/icons";
+import { Icon } from "../components/ui/icons";
+import * as widget from "../components/ui/widget";
 
 const Markets: FC = (): JSX.Element => {
   return (
-    <div id="markets">
-      <div>
-        <aside>Primary Markets</aside>
-      </div>
-      <div>
-        <div id="uad-market">
-          <div className="flex justify-center mb-2">
-            <span className="text-accent">{icons.svgs.uad}</span>
+    <widget.Container>
+      <widget.Title text="Primary Markets" />
+      <div className="flex justify-around">
+        <div>
+          <div className="flex justify-center items-center mb-2">
+            <span className="text-accent">
+              <Icon icon="uad" className="w-8 mr-2" />
+            </span>
             <span className="leading-[28px]">uAD</span>
           </div>
           <div>
@@ -24,9 +25,11 @@ const Markets: FC = (): JSX.Element => {
             </a>
           </div>
         </div>
-        <div id="ubq-market">
-          <div className="flex justify-center mb-2">
-            <span className="text-accent">{icons.svgs.ubq}</span>
+        <div>
+          <div className="flex justify-center items-center mb-2">
+            <span className="text-accent">
+              <Icon icon="ubq" className="w-8 mr-2" />
+            </span>
             <span className="leading-[28px]">UBQ</span>
           </div>
           <div>
@@ -44,7 +47,7 @@ const Markets: FC = (): JSX.Element => {
           </div>
         </div>
       </div>
-    </div>
+    </widget.Container>
   );
 };
 

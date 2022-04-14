@@ -1,6 +1,6 @@
 module.exports = {
   corePlugins: {
-    preflight: false,
+    preflight: true,
   },
   content: ["components/**/*.tsx", "pages/**/*.tsx"],
   theme: {
@@ -10,6 +10,7 @@ module.exports = {
       },
       colors: {
         accent: "#00ffff",
+        paper: "#131326",
       },
       dropShadow: { light: "0 0 16px #fff" },
       fontFamily: {

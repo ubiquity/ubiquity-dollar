@@ -1,19 +1,22 @@
-import { FC } from "react";
-import { _renderControls } from "../components/common";
-import FullDeployment from "../fixtures/ubiquity-dollar-deployment.json";
+import PriceStabilization from "./price-stabilization";
 
-export const ADDRESS = {
-  MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
-  DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
-};
+export default PriceStabilization;
+// import { FC } from "react";
+// import { _renderControls } from "../components/common";
+// import FullDeployment from "../fixtures/ubiquity-dollar-deployment.json";
 
-const Index: FC = (): JSX.Element => {
-  // const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
-  // const [account, setAccount] = useState<string>();
+// export const ADDRESS = {
+//   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
+//   DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
+// };
 
-  const renderControls = () => _renderControls();
+// const Index: FC = (): JSX.Element => {
+//   // const [provider, setProvider] = useState<ethers.providers.Web3Provider>();
+//   // const [account, setAccount] = useState<string>();
 
-  return <>{renderControls()}</>;
-};
+//   const renderControls = () => _renderControls();
 
-export default Index;
+//   return <>{renderControls()}</>;
+// };
+
+// export default Index;

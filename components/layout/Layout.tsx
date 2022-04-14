@@ -75,23 +75,11 @@ export default function Layout({ children }: LayoutProps) {
     };
   }, []);
 
-  const poster =
-    "https://ssfy.io/https%3A%2F%2Fwww.notion.so%2Fimage%2Fhttps%253A%252F%252Fs3-us-west-2.amazonaws.com%252Fsecure.notion-static.com%252Fbb144e8e-3a57-4e68-b2b9-6a80dbff07d0%252FGroup_3.png%3Ftable%3Dblock%26id%3Dff1a3cae-9009-41e4-9cc4-d4458cc2867d%26cache%3Dv2";
-
-  const video = (
-    <video autoPlay muted loop playsInline poster={poster} className="bg-video">
-      {PROD && <source src="ubiquity-one-fifth-speed-trimmed-compressed.mp4" type="video/mp4" />}
-    </video>
-  );
-
   return (
     <div className="flex">
-      <div id="background">
-        {video}
-        <div id="grid"></div>
-      </div>
+      <GridVideoBg />
       <div
-        className={cx("fixed top-0 h-screen z-50 transition-transform border-r border-r-accent/60 border-solid bg-[#131326]", {
+        className={cx("fixed top-0 h-screen z-50 transition-transform border-r border-r-accent/60 border-solid bg-paper", {
           "lg:translate-x-0": sidebarState === "permanent" || sidebarState === "hidden_hovering",
           "-translate-x-[97%]": sidebarState === "hidden",
         })}
@@ -102,8 +90,8 @@ export default function Layout({ children }: LayoutProps) {
         {sidebarState !== "permanent" ? (
           <a
             className={cx("absolute flex items-center justify-center rounded-r border border-l-0 border-accent/60 border-solid top-[50%] left-full ml-[1px] ", {
-              "bg-[#131326] text-accent": sidebarState === "hidden",
-              "bg-accent text-[#131326]": sidebarState === "hidden_hovering",
+              "bg-paper text-accent": sidebarState === "hidden",
+              "bg-accent text-paper": sidebarState === "hidden_hovering",
             })}
             aria-label="Toggle navigation"
             onClick={handleSidebarToggle}
@@ -149,17 +137,35 @@ export default function Layout({ children }: LayoutProps) {
           </li>
         </ul>
       </div>
-      <div className="flex-grow pl-0" style={{ paddingLeft: sidebarClientWidth }}>
+      <div className="relative flex-grow pl-0 z-10" style={{ paddingLeft: sidebarClientWidth }}>
         {sidebarState === "hidden_hovering" ? <div className="absolute h-full w-full bg-black/50 z-40" onClick={handleSidebarToggle}></div> : null}
         <div className="flex flex-col min-h-screen max-w-screen-lg px-4 mx-auto">
           <Header toggleDrawer={toggleDrawer} isOpened={isOpened} />
-          <div className="p-4 flex-grow">{children}</div>
+          <div className="p-4 flex-grow rounded-xl">{children}</div>
           <Footer />
         </div>
       </div>
     </div>
   );
 }
+
+const GridVideoBg = () => {
+  const poster =
+    "https://ssfy.io/https%3A%2F%2Fwww.notion.so%2Fimage%2Fhttps%253A%252F%252Fs3-us-west-2.amazonaws.com%252Fsecure.notion-static.com%252Fbb144e8e-3a57-4e68-b2b9-6a80dbff07d0%252FGroup_3.png%3Ftable%3Dblock%26id%3Dff1a3cae-9009-41e4-9cc4-d4458cc2867d%26cache%3Dv2";
+
+  const video = (
+    <video autoPlay muted loop playsInline poster={poster} className="bg-video">
+      {PROD && <source src="ubiquity-one-fifth-speed-trimmed-compressed.mp4" type="video/mp4" />}
+    </video>
+  );
+
+  return (
+    <div id="background" className="z-0">
+      {video}
+      <div id="grid" className="opacity-50"></div>
+    </div>
+  );
+};
 
 const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconNames; alt: string }) => (
   <a

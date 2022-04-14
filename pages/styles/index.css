@@ -25,12 +25,11 @@
   } */
 
   .party-container {
-    @apply p-8 mb-8 mx-auto max-w-screen-md rounded;
+    @apply p-8 mb-8 mx-auto max-w-screen-md rounded-lg bg-paper border border-solid border-accent/60;
     /* @apply backdrop-blur-sm bg-white bg-opacity-5; */
 
     /* Functionally the same as the blur and
        the white background but higher performance on scroll */
-    background-color: #131325;
   }
 }
 :root {

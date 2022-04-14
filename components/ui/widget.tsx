@@ -1,16 +1,16 @@
 export const Container = (props: React.PropsWithChildren<{ className?: string }>): JSX.Element => (
   <div
     className={`
-      !block !py-8 px-4 rounded-md
+      relative
       text-white/50 tracking-wide
-      border-1 border-solid border-white/10
-      bg-blur ${props.className || ""}`}
+      p-8 mb-8 mx-auto max-w-screen-md rounded-lg bg-paper border border-solid border-accent/60
+      ${props.className || ""}`}
   >
     {props.children}
   </div>
 );
 
-export const Title = (props: { text: string }): JSX.Element => <div className="text-center uppercase mb-4 tracking-widest text-sm">{props.text}</div>;
+export const Title = (props: { text: string }): JSX.Element => <div className="uppercase tracking-widest text-white/75 text-lg mb-4">{props.text}</div>;
 
 export const SubTitle = (props: { text: string }): JSX.Element => <div className="text-center uppercase my-4 tracking-widest text-xs">{props.text}</div>;
 

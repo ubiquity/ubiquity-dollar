@@ -4,7 +4,7 @@ import { formatEther } from "./common/format";
 import { performTransaction, useAsyncInit } from "./common/utils";
 import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
 import DepositShare from "./DepositShare";
-import icons from "./ui/icons";
+import { Icon } from "./ui/icons";
 import * as widget from "./ui/widget";
 
 type ShareData = {
@@ -210,14 +210,14 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           </tbody>
         )}
       </table>
-      <div id="rewards-summary">
-        <div className="mb-2 inline-flex items-center">
-          {icons.svgs.ubq}
+      <div id="rewards-summary flex flex-col items-center justify-center">
+        <div className="mb-2 flex items-center justify-center">
+          <Icon className="w-4 text-accent mr-2" icon="ubq" />
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
           &nbsp;pending UBQ rewards
         </div>
-        <div className="mb-2">
-          {icons.svgs.lp}
+        <div className="mb-2 flex items-center justify-center">
+          <Icon className="w-4 text-accent mr-2" icon="liquidity" />
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
         <div className="mb-2">{poolPercentage}% pool ownership</div>
@@ -249,7 +249,7 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
       </td>
       <td>
         <div className="text-accent whitespace-nowrap inline-flex items-center">
-          {icons.svgs.ubq} <span>{formatEther(ugov)}</span>
+          <Icon icon="ubq" className="w-4 text-accent mr-2" /> <span>{formatEther(ugov)}</span>
         </div>
       </td>
       <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
