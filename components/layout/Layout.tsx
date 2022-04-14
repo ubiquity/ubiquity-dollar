@@ -15,20 +15,9 @@ const PROD = process.env.NODE_ENV == "production";
 type SidebarState = "loading" | "permanent" | "hidden" | "hidden_hovering";
 
 export default function Layout({ children }: LayoutProps) {
-  const [isOpened, setOpened] = useState(false);
-  // cosnt [sidebarState, setSidebarState] = useState<sidebarState>("CLOSED");
-  const toggleDrawer = () => {
-    setOpened((prev) => !prev);
-  };
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [sidebarClientWidth, setSidebarClientWidth] = useState(0);
   const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
-
-  const handleKeyDown = useCallback((event) => {
-    if (event.key === "Escape") {
-      setOpened(false);
-    }
-  }, []);
 
   const handleResize = useCallback(() => {
     if (sidebarRef.current) {
@@ -65,11 +54,9 @@ export default function Layout({ children }: LayoutProps) {
   useEffect(() => {
     handleResize();
 
-    document.addEventListener("keydown", handleKeyDown, false);
     window.addEventListener("resize", handleResize);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown, false);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
@@ -103,7 +90,6 @@ export default function Layout({ children }: LayoutProps) {
                 "-rotate-90": sidebarState === "hidden",
                 "rotate-90": sidebarState === "hidden_hovering",
               })}
-              onClick={toggleDrawer}
               role="img"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 448 512"
