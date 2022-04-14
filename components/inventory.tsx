@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Tippy from "@tippyjs/react";
 import { ethers, BigNumber } from "ethers";
 import { useConnectedContext } from "./context/connected";
 import { fetchAccount } from "./common/utils";
@@ -38,7 +39,7 @@ const Inventory = () => {
   const address = account.address;
 
   return (
-    <div className="bg-paper rounded-t-lg border border-solid border-accent/60 max-w-screen-lg translate-y-[67%] hover:translate-y-0 transition-transform ease-out pointer-events-auto">
+    <div className="bg-paper rounded-t-lg border border-solid border-accent/60 max-w-screen-lg translate-y-[67%] hover:translate-y-0 transition-transform duration-500 ease-out pointer-events-auto">
       <div className="uppercase flex tracking-widest mb-4 relative text-left">
         <div className="flex-grow flex items-center pl-2 text-xs mt-2 ml-2">My inventory</div>
         <Network />
@@ -105,12 +106,22 @@ const Token = ({
       <div className="flex">
         <div className="text-accent mr-2 w-6 flex-shrink-0 flex items-center relative">
           {<Svg />}
-          <div
-            onClick={addTokenToWallet}
-            className="absolute h-full w-full border border-solid cursor-pointer border-accent rounded-md bg-paper opacity-0 hover:opacity-100 text-accent flex items-center justify-center"
+          <Tippy
+            content={
+              <div className="px-4 py-2 border border-white/10 border-solid rounded-md bg-paper text-sm" style={{ backdropFilter: "blur(8px)" }}>
+                <p className="text-center text-white/50">Add to Metamask</p>
+              </div>
+            }
+            placement="top"
+            duration={0}
           >
-            +
-          </div>
+            <div
+              onClick={addTokenToWallet}
+              className="absolute h-full w-full border border-solid cursor-pointer border-accent rounded-md bg-paper opacity-0 hover:opacity-100 text-accent flex items-center justify-center"
+            >
+              +
+            </div>
+          </Tippy>
         </div>
         <a
           className="flex flex-col leading-none text-left"
