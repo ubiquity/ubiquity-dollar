@@ -1,3 +1,5 @@
+import { Icon } from "./icons";
+
 export const Container = (props: React.PropsWithChildren<{ className?: string }>): JSX.Element => (
   <div
     className={`
@@ -60,5 +62,14 @@ export const Spinner = (
     <div></div>
     <div></div>
     <div></div>
+  </div>
+);
+
+export const WalletNotConnected = (
+  <div className="rounded-xl bg-white/10 p-8 text-lg text-white/50 flex items-center">
+    <div className="w-20 mr-8">
+      <Icon icon="wallet" />
+    </div>
+    Connect wallet to continue
   </div>
 );

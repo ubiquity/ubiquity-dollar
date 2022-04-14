@@ -75,7 +75,7 @@ export default function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="flex pb-8">
+    <div className="flex">
       <GridVideoBg />
       <div
         className={cx("fixed top-0 h-screen z-50 transition-transform border-r border-r-accent/60 border-solid bg-paper", {
@@ -140,9 +140,10 @@ export default function Layout({ children }: LayoutProps) {
         <>
           <div className="relative flex-grow pl-0 z-10" style={{ paddingLeft: sidebarClientWidth }}>
             {sidebarState === "hidden_hovering" ? <div className="absolute h-full w-full bg-black/50 z-40" onClick={handleSidebarToggle}></div> : null}
-            <div className="flex flex-col min-h-screen max-w-screen-lg px-4 mx-auto">
-              <Header />
-              <div className="p-4 flex-grow rounded-xl">{children}</div>
+            <div className="flex flex-col min-h-screen py-8 px-4 max-w-screen-lg items-center justify-center mx-auto">
+              {/* <Header /> */}
+              {/* <div className="flex-grow">{children}</div> */}
+              {children}
             </div>
           </div>
           <div className="fixed bottom-0 w-full flex justify-center z-50" style={{ paddingLeft: sidebarClientWidth }}>
