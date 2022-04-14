@@ -6,10 +6,7 @@ import TokenMonitor from "../components/token.monitor";
 const Monitor: FC = (): JSX.Element => {
   return (
     <div>
-      <div className="fixed h-screen w-screen z-10">
-        <div id="grid"></div>
-      </div>
-      <div className="relative z-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+      <div className="relative z-20 grid grid-cols-2 gap-4 p-4">
         <PriceMonitor />
         <MetapoolMonitor />
         <TokenMonitor />

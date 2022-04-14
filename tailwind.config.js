@@ -12,7 +12,7 @@ module.exports = {
         accent: "#00ffff",
         paper: "#131326",
       },
-      dropShadow: { light: "0 0 16px #fff" },
+      dropShadow: { light: "0 0 16px #fff", accent: "0 0 16px #0FF" },
       fontFamily: {
         special: ["Ubiquity Nova", "Proxima Nova", "Avenir", "sans-serif"],
       },

@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 import cx from "classnames";
 import Header from "../header/Header";
 import { Icon, IconNames } from "../ui/icons";
-import Sidebar from "../sidebar/Sidebar";
-import Footer from "../footer/Footer";
+import Inventory from "../inventory";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -13,7 +12,7 @@ type LayoutProps = {
 
 const PROD = process.env.NODE_ENV == "production";
 
-type SidebarState = "permanent" | "hidden" | "hidden_hovering";
+type SidebarState = "loading" | "permanent" | "hidden" | "hidden_hovering";
 
 export default function Layout({ children }: LayoutProps) {
   const [isOpened, setOpened] = useState(false);
@@ -23,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
   };
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [sidebarClientWidth, setSidebarClientWidth] = useState(0);
-  const [sidebarState, setSidebarState] = useState<SidebarState>("permanent");
+  const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
 
   const handleKeyDown = useCallback((event) => {
     if (event.key === "Escape") {
@@ -76,18 +75,18 @@ export default function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex pb-8">
       <GridVideoBg />
       <div
         className={cx("fixed top-0 h-screen z-50 transition-transform border-r border-r-accent/60 border-solid bg-paper", {
-          "lg:translate-x-0": sidebarState === "permanent" || sidebarState === "hidden_hovering",
+          "lg:translate-x-0": sidebarState !== "hidden",
           "-translate-x-[97%]": sidebarState === "hidden",
         })}
         ref={sidebarRef}
         onMouseEnter={handleSidebarEnter}
         onMouseLeave={handleSidebarLeave}
       >
-        {sidebarState !== "permanent" ? (
+        {sidebarState === "hidden" || sidebarState === "hidden_hovering" ? (
           <a
             className={cx("absolute flex items-center justify-center rounded-r border border-l-0 border-accent/60 border-solid top-[50%] left-full ml-[1px] ", {
               "bg-paper text-accent": sidebarState === "hidden",
@@ -137,14 +136,20 @@ export default function Layout({ children }: LayoutProps) {
           </li>
         </ul>
       </div>
-      <div className="relative flex-grow pl-0 z-10" style={{ paddingLeft: sidebarClientWidth }}>
-        {sidebarState === "hidden_hovering" ? <div className="absolute h-full w-full bg-black/50 z-40" onClick={handleSidebarToggle}></div> : null}
-        <div className="flex flex-col min-h-screen max-w-screen-lg px-4 mx-auto">
-          <Header toggleDrawer={toggleDrawer} isOpened={isOpened} />
-          <div className="p-4 flex-grow rounded-xl">{children}</div>
-          <Footer />
-        </div>
-      </div>
+      {sidebarState !== "loading" ? (
+        <>
+          <div className="relative flex-grow pl-0 z-10" style={{ paddingLeft: sidebarClientWidth }}>
+            {sidebarState === "hidden_hovering" ? <div className="absolute h-full w-full bg-black/50 z-40" onClick={handleSidebarToggle}></div> : null}
+            <div className="flex flex-col min-h-screen max-w-screen-lg px-4 mx-auto">
+              <Header />
+              <div className="p-4 flex-grow rounded-xl">{children}</div>
+            </div>
+          </div>
+          <div className="fixed bottom-0 w-full flex justify-center z-50" style={{ paddingLeft: sidebarClientWidth }}>
+            <Inventory />
+          </div>
+        </>
+      ) : null}
     </div>
   );
 }
@@ -170,7 +175,7 @@ const GridVideoBg = () => {
 const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconNames; alt: string }) => (
   <a
     href={href}
-    className="rounded-full h-10 w-10 p-2 hover:bg-white/5 hover:drop-shadow-[0_0_16px_#fff] border border-solid border-transparent hover:border-accent/0 flex items-center justify-center mx-1 text-white/75 transition hover:transition-none duration-300 ease-in-out"
+    className="rounded-full h-10 w-10 p-2 hover:bg-white/5 hover:drop-shadow-light border border-solid border-transparent hover:border-accent/0 flex items-center justify-center mx-1 text-white/75 transition hover:transition-none duration-300 ease-in-out"
     target="_blank"
     title={alt}
   >
@@ -188,8 +193,8 @@ const Item = ({ text, href }: { text: string; href: string }) => {
           className={cx(
             "flex px-2 py-2 items-center justify-center text-sm uppercase tracking-widest font-light overflow-hidden text-ellipsis whitespace-nowrap rounded transition hover:transition-none duration-300 ease-in-out border border-solid",
             {
-              "bg-accent/10 border-accent text-accent drop-shadow-[0_0_16px_#0FF]": isActive,
-              "hover:bg-white/5 border-transparent text-white/75 hover:drop-shadow-[0_0_16px_#fff]": !isActive,
+              "bg-accent/10 border-accent text-accent drop-shadow-accent": isActive,
+              "hover:bg-white/5 border-transparent text-white/75 hover:drop-shadow-lght": !isActive,
             }
           )}
           target={href.match(/https?:\/\//) ? "_blank" : ""}

@@ -17,10 +17,9 @@ const Network = () => {
     return null;
   }
 
-  return network === "Mainnet" ? null : (
-    <div className="px-4 py-2 border border-solid border-white border-opacity-25 rounded font-special uppercase text-xs text-white text-opacity-75">
+  return (
+    <div className="bg-white/10 px-4 py-2 border-l border-b border-solid border-accent/60 rounded-bl-lg font-special uppercase text-xs text-white/75">
       {network}
-      {/* <span className="text-accent text-sm">{network}</span> */}
     </div>
   );
 };

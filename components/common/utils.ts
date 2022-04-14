@@ -1,6 +1,7 @@
 import { ethers, ContractTransaction, BigNumber } from "ethers";
 import { ERC1155Ubiquity } from "../../contracts/dollar/artifacts/types";
 import { useEffect } from "react";
+import { EthAccount } from "./types";
 
 export function logGas(txDone: ethers.ContractReceipt) {
   console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);
@@ -93,3 +94,19 @@ export const formatTimeDiff = (diff: number) => {
   const seconds = Math.ceil(diff / second);
   return `${seconds} seconds`;
 };
+
+export async function fetchAccount(): Promise<EthAccount | null> {
+  const ethereum = (window as any).ethereum;
+  if (ethereum?.request) {
+    return {
+      address: ((await ethereum.request({
+        method: "eth_requestAccounts",
+      })) as string[])[0],
+      balance: 0,
+    };
+  } else {
+    alert("MetaMask is not installed!");
+    console.error("MetaMask is not installed, cannot connect wallet");
+    return null;
+  }
+}

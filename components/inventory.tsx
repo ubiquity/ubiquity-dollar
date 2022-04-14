@@ -1,27 +1,57 @@
+import { useState, useEffect } from "react";
 import { ethers, BigNumber } from "ethers";
-import Tippy from "@tippyjs/react";
-import { Contracts } from "../contracts";
-import { Balances } from "./common/contracts-shortcuts";
+import { useConnectedContext } from "./context/connected";
+import { fetchAccount } from "./common/utils";
+import Network from "./network";
 import icons from "./ui/icons";
 
-const Inventory = ({ balances, address, contracts }: { balances: Balances; address: string; contracts: Contracts }) => {
+const PROD = process.env.NODE_ENV == "production";
+
+const Inventory = () => {
+  const { balances, account, contracts, setAccount } = useConnectedContext();
+  const [connecting, setConnecting] = useState(false);
+
+  const connect = async (): Promise<void> => {
+    setConnecting(true);
+    setAccount(await fetchAccount());
+  };
+
+  if (!PROD) {
+    useEffect(() => {
+      connect();
+    }, []);
+  }
+
+  if (!balances || !contracts || !account)
+    return (
+      <div>
+        <button
+          className="rounded-none rounded-t-lg m-0 bg-accent opacity-100 text-paper hover:bg-accent hover:drop-shadow-accent"
+          disabled={connecting}
+          onClick={() => connect()}
+        >
+          Connect Wallet
+        </button>
+      </div>
+    );
+
+  const address = account.address;
+
   return (
-    <div id="inventory-top">
-      <div className="grid grid-cols-12">
-        <div className="col-span-2">
-          <aside>My Inventory</aside>
-          <figure></figure>
-        </div>
-        <div className="col-span-10">
-          <div className="grid grid-cols-7">
-            <Token id="uad-balance" token="uAD" balance={balances.uad} accountAddr={address} tokenAddr={contracts.uad.address} />
-            <Token id="uar-balance" token="uAR" balance={balances.uar} accountAddr={address} tokenAddr={contracts.uar.address} />
-            <Token id="debt-coupon-balance" token="uDEBT" balance={balances.debtCoupon} accountAddr={address} tokenAddr={contracts.debtCouponToken.address} />
-            <Token id="uar-balance" token="UBQ" balance={balances.ubq} accountAddr={address} tokenAddr={contracts.ugov.address} />
-            <Token id="curve-balance" token="3CRV" balance={balances.crv} accountAddr={address} tokenAddr={contracts.crvToken.address} />
-            <Token id="curve-lp-balance" token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={address} tokenAddr={contracts.metaPool.address} />
-            <Token id="usdc-balance" token="USDC" balance={balances.usdc} accountAddr={address} tokenAddr={contracts.usdc.address} decimals={6} />
-          </div>
+    <div className="bg-paper rounded-t-lg border border-solid border-accent/60 max-w-screen-lg translate-y-[67%] hover:translate-y-0 transition-transform ease-out">
+      <div className="uppercase flex tracking-widest mb-4 relative text-left">
+        <div className="flex-grow flex items-center pl-2 text-xs mt-2 ml-2">My inventory</div>
+        <Network />
+      </div>
+      <div className="flex justify-center px-2 pb-2">
+        <div className="grid grid-cols-4 gap-2">
+          <Token token="uAD" balance={balances.uad} accountAddr={address} tokenAddr={contracts.uad.address} />
+          <Token token="uAR" balance={balances.uar} accountAddr={address} tokenAddr={contracts.uar.address} />
+          <Token token="uDEBT" balance={balances.debtCoupon} accountAddr={address} tokenAddr={contracts.debtCouponToken.address} />
+          <Token token="UBQ" balance={balances.ubq} accountAddr={address} tokenAddr={contracts.ugov.address} />
+          <Token token="3CRV" balance={balances.crv} accountAddr={address} tokenAddr={contracts.crvToken.address} />
+          <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={address} tokenAddr={contracts.metaPool.address} />
+          <Token token="USDC" balance={balances.usdc} accountAddr={address} tokenAddr={contracts.usdc.address} decimals={6} />
         </div>
       </div>
     </div>
@@ -29,14 +59,12 @@ const Inventory = ({ balances, address, contracts }: { balances: Balances; addre
 };
 
 const Token = ({
-  id,
   balance,
   token,
   tokenAddr,
   accountAddr,
   decimals = 18,
 }: {
-  id: string;
   balance: BigNumber;
   token: keyof typeof tokenSvg;
   tokenAddr?: string;
@@ -73,29 +101,26 @@ const Token = ({
     }
   };
   return (
-    <div id={id}>
-      <Tippy
-        interactive={true}
-        appendTo={() => document.body}
-        content={
+    <div className="font-mono text-xs">
+      <div className="flex">
+        <div className="text-accent mr-2 w-6 flex-shrink-0 flex items-center relative">
+          {<Svg />}
           <div
-            className="w-8 h-8 border flex border-accent cursor-pointer border-solid rounded-md"
-            style={{ backdropFilter: "blur(8px)" }}
             onClick={addTokenToWallet}
+            className="absolute h-full w-full border border-solid cursor-pointer border-accent rounded-md bg-paper opacity-0 hover:opacity-100 text-accent flex items-center justify-center"
           >
-            <p className="text-center m-auto text-accent">+</p>
+            +
           </div>
-        }
-      >
-        <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
-          <div className="flex justify-center items-center">
-            <span className="text-accent mr-2 w-6 flex-shrink-0">{<Svg />}</span>
-            <span className="">
-              {`${parseInt(ethers.utils.formatUnits(balance, decimals))}`} {token}
-            </span>
-          </div>
+        </div>
+        <a
+          className="flex flex-col leading-none text-left"
+          target="_blank"
+          href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}
+        >
+          <div>{token}</div>
+          <div>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</div>
         </a>
-      </Tippy>
+      </div>
     </div>
   );
 };
