@@ -24,7 +24,7 @@ const Inventory = () => {
 
   if (!balances || !contracts || !account)
     return (
-      <div>
+      <div className="pointer-events-auto">
         <button
           className="rounded-none rounded-t-lg m-0 bg-accent opacity-100 text-paper hover:bg-accent hover:drop-shadow-accent"
           disabled={connecting}
@@ -38,7 +38,7 @@ const Inventory = () => {
   const address = account.address;
 
   return (
-    <div className="bg-paper rounded-t-lg border border-solid border-accent/60 max-w-screen-lg translate-y-[67%] hover:translate-y-0 transition-transform ease-out">
+    <div className="bg-paper rounded-t-lg border border-solid border-accent/60 max-w-screen-lg translate-y-[67%] hover:translate-y-0 transition-transform ease-out pointer-events-auto">
       <div className="uppercase flex tracking-widest mb-4 relative text-left">
         <div className="flex-grow flex items-center pl-2 text-xs mt-2 ml-2">My inventory</div>
         <Network />

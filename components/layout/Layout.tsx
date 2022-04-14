@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import cx from "classnames";
-import Header from "../header/Header";
 import { Icon, IconNames } from "../ui/icons";
 import Inventory from "../inventory";
+import TransactionsDisplay from "../TransactionsDisplay";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -146,11 +146,12 @@ export default function Layout({ children }: LayoutProps) {
               {children}
             </div>
           </div>
-          <div className="fixed bottom-0 w-full flex justify-center z-50" style={{ paddingLeft: sidebarClientWidth }}>
+          <div className="fixed bottom-0 w-full flex justify-center z-50 pointer-events-none" style={{ paddingLeft: sidebarClientWidth }}>
             <Inventory />
           </div>
         </>
       ) : null}
+      <TransactionsDisplay />
     </div>
   );
 }
