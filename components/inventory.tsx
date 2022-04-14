@@ -39,7 +39,7 @@ const Inventory = () => {
   const address = account.address;
 
   return (
-    <div className="pointer-events-auto max-w-screen-lg translate-y-[71%] rounded-t-lg border border-solid border-accent/60 bg-paper transition-transform duration-500 ease-out hover:translate-y-0">
+    <div className="pointer-events-auto max-w-screen-lg translate-y-[71%] rounded-t-lg border border-b-0 border-solid border-accent/60 bg-paper transition-transform duration-500 ease-out hover:translate-y-0">
       <div className="relative mb-2 flex text-left uppercase tracking-widest">
         <div className="mt-2 ml-2 flex flex-grow items-center pl-2 text-xs">My inventory</div>
         <Network />
