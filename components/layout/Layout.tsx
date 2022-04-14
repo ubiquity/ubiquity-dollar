@@ -107,7 +107,7 @@ export default function Layout({ children }: LayoutProps) {
           <Item text="Liquidity Mining" href="/liquidity-mining"></Item>
           <Item text="Yield Farming" href="/yield-farming"></Item>
           {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
-          <Item text="Launch Party" href="/launch-party"></Item>
+          {PROD ? null : <Item text="Launch Party" href="/launch-party"></Item>}
           <Item text="Tokens Swap" href="/tokens-swap"></Item>
           <Item text="Docs" href="https://dao.ubq.fi/docs"></Item>
           <Item text="DAO" href="https://dao.ubq.fi/"></Item>
