@@ -6,6 +6,7 @@
     "make": "run-s _contracts:install _contracts:build",
     "start": "run-p _start:*",
     "init:env": "cp .env.example .env",
+    "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`",
     "_start:chain": "./build-scripts/dev-chain-init.sh",
     "_start:ui": "next dev",
     "_contracts:install": "run-p _contracts:install:*",
