@@ -90,7 +90,7 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
 export const Tooltip = ({ content, children }: { content: string; children: React.ReactElement }) => (
   <Tippy
     content={
-      <div className="px-4 py-2 border border-white/10 border-solid rounded-md bg-paper text-sm" style={{ backdropFilter: "blur(8px)" }}>
+      <div className="rounded-md border border-solid border-white/10 bg-paper px-4 py-2 text-sm" style={{ backdropFilter: "blur(8px)" }}>
         <p className="text-center text-white/50">{content}</p>
       </div>
     }
@@ -113,23 +113,23 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
-    <widget.Container className="max-w-screen-md !mx-auto relative">
+    <widget.Container className="relative !mx-auto max-w-screen-md">
       <widget.Title text="Boosted Yield Farming (Beta)" />
 
-      <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
+      <div className="mb-4 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
         <div className="w-20">
           <Icon icon="warning" className="w-10 text-white" />
         </div>
-        <p className="text-left flex-grow">
+        <p className="flex-grow text-left">
           <span>Explainer article coming soon!</span>
         </p>
       </div>
 
-      <div className="flex justify-evenly items-center p-4 border border-white/10 border-solid rounded-md mb-4">
+      <div className="mb-4 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
         <div className="w-20">
           <Icon icon="warning" className="w-10 text-white" />
         </div>
-        <p className="text-left flex-grow">
+        <p className="flex-grow text-left">
           <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
           <a target="_blank" className="text-white" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
             Learn more &raquo;
@@ -252,7 +252,7 @@ export const YieldFarmindWithdraw = memo(
           <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
           <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
-        <button onClick={onWithdraw} disabled={disable} className="w-full flex justify-center m-0 mt-8">
+        <button onClick={onWithdraw} disabled={disable} className="m-0 mt-8 flex w-full justify-center">
           Withdraw
         </button>
       </>
@@ -390,7 +390,7 @@ export const YieldFarmingDeposit = memo(
     return (
       <>
         <widget.SubTitle text="New Deposit" />
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-8 flex items-center justify-between">
           {/* TODO: ICON */}
           <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
             <div className="flex justify-between">
@@ -400,70 +400,70 @@ export const YieldFarmingDeposit = memo(
                 <span className="pl-4">{tvl.usdc}M</span>
               </span> */}
             </div>
-            <div className="text-left mb-2">
+            <div className="mb-2 text-left">
               <span>
                 {usdcApy.min.toFixed(2)}% - {usdcApy.max.toFixed(2)}%
               </span>
               <span className="pl-2">APY</span>
               <Tooltip content="This is the APY from the Pickle Finance USDC jar">
                 <span className="pl-2">
-                  <Icon icon="help" className="w-4 text-white inline" />
+                  <Icon icon="help" className="inline w-4 text-white" />
                 </span>
               </Tooltip>
             </div>
-            <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="w-full m-0 box-border" />
-            <div className="flex justify-end mt-2">
-              <span className="flex-grow opacity-50 text-left">Balance: {f(balance.usdc)}</span>
+            <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="m-0 box-border w-full" />
+            <div className="mt-2 flex justify-end">
+              <span className="flex-grow text-left opacity-50">Balance: {f(balance.usdc)}</span>
               <button onClick={setMaxUsdc}>Max</button>
             </div>
           </div>
           <div className="w-1/2">
-            <div className="text-3xl text-accent font-bold">{Math.round(maxApy() * 100) / 100}%</div>
+            <div className="text-3xl font-bold text-accent">{Math.round(maxApy() * 100) / 100}%</div>
             <div className="flex justify-center">
               Max APY in uAR
               <Tooltip content="All the rewards are multiplied and provided in uAR">
                 <span className="pl-2">
-                  <Icon icon="help" className="w-4 text-white inline" />
+                  <Icon icon="help" className="inline w-4 text-white" />
                 </span>
               </Tooltip>
             </div>
           </div>
         </div>
         <widget.SubTitle text="Boosters" />
-        <div className="flex justify-between items-center mb-4">
-          <div className="w-5/12 bg-no-repeat bg-center" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
+        <div className="mb-4 flex items-center justify-between">
+          <div className="w-5/12 bg-center bg-no-repeat" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">UBQ</span>
             </div>
-            <div className="text-left w-10/12 mb-2">
+            <div className="mb-2 w-10/12 text-left">
               <span>Minimizes deposit fee</span>
               <Tooltip content="The deposit fee gets converted to uAR when you withdraw">
                 <span className="pl-2">
-                  <Icon icon="help" className="w-4 text-white inline" />
+                  <Icon icon="help" className="inline w-4 text-white" />
                 </span>
               </Tooltip>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <input
                 type="number"
                 value={ubq || ""}
                 onChange={handleInputChange}
                 name="ubq"
-                placeholder={`Max ${maxUbqAmount.toLocaleString()}`}
-                className="w-10/12 m-0 box-border"
+                placeholder={`${maxUbqAmount.toLocaleString()} for 0% fee`}
+                className="m-0 box-border w-10/12"
               />
-              <div className="flex flex-col text-center justify-center items-center text-accent w-2/12">
+              <div className="flex w-2/12 flex-col items-center justify-center text-center text-accent">
                 <span>{Math.round(ubqFee() * 100 * 100) / 100}%</span>
                 <span className="text-xs">FEE</span>
               </div>
             </div>
-            <div className="w-10/12 flex justify-end mt-2">
-              <span className="flex-grow opacity-50 text-left">Balance: {f(balance.ubq)}</span>
+            <div className="mt-2 flex w-10/12 justify-end">
+              <span className="flex-grow text-left opacity-50">Balance: {f(balance.ubq)}</span>
               <button onClick={setMaxUbq}>Max</button>
             </div>
           </div>
 
-          <div className="w-5/12 bg-no-repeat bg-center" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
+          <div className="w-5/12 bg-center bg-no-repeat" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
             <div className="flex justify-between">
               <span className="font-bold">uAD</span>
               {/* <span className="pl-4">
@@ -471,32 +471,32 @@ export const YieldFarmingDeposit = memo(
                 <span className="pl-4">{tvl.uad}M</span>
               </span> */}
             </div>
-            <div className="text-left  w-10/12 mb-2">
+            <div className="mb-2  w-10/12 text-left">
               <span>Boosts yield</span>
               {/* <span>up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span> */}
               <Tooltip content="Match 50% of the USDC deposit and you get an extra 50% boost">
                 <span className="pl-1">
-                  <Icon icon="help" className="w-4 text-white inline" />
+                  <Icon icon="help" className="inline w-4 text-white" />
                 </span>
               </Tooltip>
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <input
                 type="number"
                 disabled={usdc <= 0}
                 value={uad || ""}
                 onChange={handleInputChange}
                 name="uad"
-                placeholder={`Max ${maxUadPct * 100}% of deposit`}
-                className="w-10/12 m-0 box-border disabled:opacity-25 disabled:bg-white disabled:text-black"
+                placeholder={`${maxUadPct * 100}% of deposit for max boost`}
+                className="m-0 box-border w-10/12 disabled:bg-white disabled:text-black disabled:opacity-25"
               />
-              <div className="flex flex-col text-center justify-center items-center text-accent">
+              <div className="flex flex-col items-center justify-center text-center text-accent">
                 <span>{Math.round(uadBoost() * 100 * 100) / 100}%</span>
                 <span className="text-xs">BOOST</span>
               </div>
             </div>
-            <div className="w-10/12 flex justify-end mt-2">
-              <span className="flex-grow opacity-50 text-left">Balance: {f(balance.uad)}</span>
+            <div className="mt-2 flex w-10/12 justify-end">
+              <span className="flex-grow text-left opacity-50">Balance: {f(balance.uad)}</span>
               <button onClick={setMaxUad}>Max</button>
             </div>
           </div>
@@ -512,7 +512,7 @@ export const YieldFarmingDeposit = memo(
               ))}
             </div>
           ) : null}
-          <button onClick={deposit} disabled={!canDeposit() || disable} className="w-full flex justify-center m-0 mt-8">
+          <button onClick={deposit} disabled={!canDeposit() || disable} className="m-0 mt-8 flex w-full justify-center">
             Deposit
           </button>
         </>
