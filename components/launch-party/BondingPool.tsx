@@ -65,7 +65,9 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
                 {poolData.symbol2}
               </div>
             </>
-          ) : null}
+          ) : (
+            <span className="flex-grow text-center text-accent">Loading liquidity info...</span>
+          )}
         </div>
       </div>
 
