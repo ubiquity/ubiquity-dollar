@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SectionTitle from "./lib/SectionTitle";
+import * as widget from "../ui/widget";
 
 type AllowanceData = {
   address: string;
@@ -27,8 +27,9 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
   const disableApply = allowances.some(({ address, count, price }) => !address || count === "" || price === "");
 
   return (
-    <div className="party-container">
-      <SectionTitle title="Allowance management" subtitle="" />
+    <widget.Container>
+      <widget.Title text="Allowance management" />
+
       <div>
         {allowances.map((allowance, i) => (
           <AllowanceInputs key={i} data={allowance} setData={(data) => setAllowanceAt(data, i)} />
@@ -50,7 +51,7 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
           Apply
         </button>
       </div>
-    </div>
+    </widget.Container>
   );
 };
 

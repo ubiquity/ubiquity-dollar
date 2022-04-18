@@ -387,7 +387,7 @@ const App = () => {
   const canUsePools = (sticksCount !== null && sticksCount > 0) || !needsStick;
 
   return (
-    <div>
+    <div className="w-full">
       <LaunchPartyHeader />
       {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
       {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}

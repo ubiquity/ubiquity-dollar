@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { useState } from "react";
 import { poolByAddress } from "./lib/pools";
-import SectionTitle from "./lib/SectionTitle";
+import * as widget from "../ui/widget";
 
 type RewardsManagerParams = {
   onSubmit: ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => unknown;
@@ -19,8 +19,8 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
   const ratiosArr = Object.entries(ratios);
 
   return (
-    <div className="party-container">
-      <SectionTitle title="Rewards management" subtitle="" />
+    <widget.Container>
+      <widget.Title text="Rewards management" />
       <input placeholder="Token address" value={token} onChange={(ev) => setToken(ev.target.value)} />
       <input placeholder="Ratio per billion" type="number" value={ratio} onChange={(ev) => setRatio(ev.target.value)} />
       <button disabled={!token || !ratio} onClick={onClickButton}>
@@ -34,7 +34,7 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
           ))}
         </div>
       ) : null}
-    </div>
+    </widget.Container>
   );
 };
 

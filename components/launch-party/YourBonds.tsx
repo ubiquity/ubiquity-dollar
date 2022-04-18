@@ -1,5 +1,5 @@
 import { round, format, formatFixed } from "./lib/utils";
-import SectionTitle from "./lib/SectionTitle";
+import * as widget from "../ui/widget";
 
 export type BondData = {
   tokenName: string;
@@ -36,10 +36,12 @@ const YourBonds = ({
   const accumulatedInUsd = uarUsdPrice ? accumulated * uarUsdPrice : null;
 
   return (
-    <div className="party-container">
-      <SectionTitle title="Your Bonds" subtitle="Claim the accumulated flow" />
-      <div className="mb-6 inline-block border border-solid border-white border-opacity-10 rounded">
-        <table className="table border-collapse m-0">
+    <widget.Container>
+      <widget.Title text="Your Bonds" />
+      <widget.SubTitle text="Claim the accumulated flow" />
+
+      <div className="mb-6 inline-block rounded border border-solid border-white border-opacity-10">
+        <table className="m-0 table border-collapse">
           <thead className="border-0 border-b border-solid border-white border-opacity-10">
             <tr>
               <th>Bond</th>
@@ -51,15 +53,15 @@ const YourBonds = ({
             <tbody>
               {bonds.map((bond, i) => (
                 <tr key={i}>
-                  <td className="py-2 px-2 whitespace-nowrap border-0 border-r border-solid border-white border-opacity-10">{bond.tokenName}</td>
-                  <td className="py-2 px-2 w-full text-left border-0 border-r border-solid border-white border-opacity-10">
+                  <td className="whitespace-nowrap border-0 border-r border-solid border-white border-opacity-10 py-2 px-2">{bond.tokenName}</td>
+                  <td className="w-full border-0 border-r border-solid border-white border-opacity-10 py-2 px-2 text-left">
                     <div className="flex">
                       <div className="flex-grow">
                         {formatFixed(round(bond.claimable + bond.claimed))}
                         {" / "}
                         {formatFixed(round(bond.rewards))} uAR{" "}
                       </div>
-                      <div className="text-white text-opacity-50 text-sm" title={`Ends at block: ${bond.endsAtBlock}`}>
+                      <div className="text-sm text-white text-opacity-50" title={`Ends at block: ${bond.endsAtBlock}`}>
                         {toTimeInWords(+bond.endsAtDate - +new Date())} left
                       </div>
                     </div>
@@ -79,15 +81,15 @@ const YourBonds = ({
           )}
         </table>
       </div>
-      <div className="text-lg mb-2">Accumulated claimable</div>
-      <div className="text-3xl mb-6 text-accent drop-shadow-light">
+      <div className="mb-2 text-lg">Accumulated claimable</div>
+      <div className="mb-6 text-3xl text-accent drop-shadow-light">
         {format(round(accumulated))} uAR{" "}
-        {accumulatedInUsd !== null ? <span className="text-2xl opacity-50 ml-2 text-white">(${format(round(accumulatedInUsd))})</span> : null}
+        {accumulatedInUsd !== null ? <span className="ml-2 text-2xl text-white opacity-50">(${format(round(accumulatedInUsd))})</span> : null}
       </div>
       <button className="btn-primary" disabled={!enabled || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
         Claim all
       </button>
-    </div>
+    </widget.Container>
   );
 };
 

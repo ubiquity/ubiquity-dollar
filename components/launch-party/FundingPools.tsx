@@ -1,6 +1,6 @@
 import BondingPool from "./BondingPool";
 import { PoolData, pools } from "./lib/pools";
-import SectionTitle from "./lib/SectionTitle";
+import * as widget from "../ui/widget";
 
 type FundingPoolParams = {
   enabled: boolean;
@@ -10,8 +10,9 @@ type FundingPoolParams = {
 
 const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
   return (
-    <div className="party-container">
-      <SectionTitle title="Funding Pools" subtitle="Sell LP, get uAR over the course of 5 days" />
+    <widget.Container>
+      <widget.Title text="Funding Pools" />
+      <widget.SubTitle text="Sell LP, get uAR over the course of 5 days" />
       <div className="grid grid-cols-2 gap-8">
         {pools.map((pool) => (
           <BondingPool
@@ -23,7 +24,7 @@ const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
           />
         ))}
       </div>
-    </div>
+    </widget.Container>
   );
 };
 

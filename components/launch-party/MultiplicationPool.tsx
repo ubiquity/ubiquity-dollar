@@ -1,6 +1,6 @@
 import BondingPool from "./BondingPool";
 import { goldenPool, PoolData } from "./lib/pools";
-import SectionTitle from "./lib/SectionTitle";
+import * as widget from "../ui/widget";
 
 type MultiplicationPoolParams = {
   enabled: boolean;
@@ -10,10 +10,11 @@ type MultiplicationPoolParams = {
 
 const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoolParams) => {
   return (
-    <div className="party-container">
-      <SectionTitle title="Golden Pool" subtitle="Multiply and exchange" />
+    <widget.Container>
+      <widget.Title text="Golden Pool" />
+      <widget.SubTitle text="Multiply and exchanges" />
 
-      <div className="w-2/3 mx-auto">
+      <div className="mx-auto w-2/3">
         <BondingPool
           enabled={enabled}
           poolData={poolsData[goldenPool.tokenAddress]}
@@ -21,7 +22,7 @@ const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoo
           {...goldenPool}
         />
       </div>
-    </div>
+    </widget.Container>
   );
 };
 

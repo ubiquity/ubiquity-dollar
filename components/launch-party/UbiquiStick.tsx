@@ -1,5 +1,5 @@
 import cx from "classnames";
-import SectionTitle from "./lib/SectionTitle";
+import * as widget from "../ui/widget";
 import { OwnedSticks, SticksAllowance, TokenMedia, TokenData } from "./lib/state";
 
 // const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
@@ -29,9 +29,10 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
     : `Mint for ${allowance.price} ETH`;
 
   return (
-    <div className="party-container flex flex-col items-center">
-      <SectionTitle title="The Ubiquistick NFT" subtitle="Access the game bonding pools" />
-      <div className="flex mb-4 -mx-4">
+    <widget.Container className="flex flex-col items-center">
+      <widget.Title text="The Ubiquistick NFT" />
+      <widget.SubTitle text="Access the game bonding pools" />
+      <div className="-mx-4 mb-4 flex">
         {sticksCount && sticksCount > 0 ? (
           <>
             <Stick isConnected={isConnected} loading={!sticks} amount={sticks?.black || 0} media={media.black} />
@@ -46,7 +47,7 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
         {mintButtonText}
       </button>
       <a href="https://opensea.io/collection/the-ubiquistick-v3">See your Ubiquisticks on OpenSeas</a>
-    </div>
+    </widget.Container>
   );
 };
 
@@ -54,8 +55,8 @@ export default UbiquiStick;
 
 const BlurredStick = () => (
   <div className="mx-4 max-w-sm">
-    <div className="relative mb-2 rounded-lg shadow-inner border-2 border-solid border-black border-opacity-25">
-      <img className="block rounded-lg w-full h-auto grayscale opacity-25 blur" src="/ubiquistick.jpeg" />
+    <div className="relative mb-2 rounded-lg border-2 border-solid border-black border-opacity-25 shadow-inner">
+      <img className="block h-auto w-full rounded-lg opacity-25 blur grayscale" src="/ubiquistick.jpeg" />
     </div>
   </div>
 );
@@ -65,17 +66,17 @@ const Stick = ({ amount, media, isConnected, loading }: { amount: number; media?
   return (
     <div className="mx-4 max-w-sm">
       <div
-        className={cx("relative mb-2 rounded-lg shadow-inner border-2 border-solid border-black border-opacity-25", { ["ring-accent ring-1"]: amount !== 0 })}
+        className={cx("relative mb-2 rounded-lg border-2 border-solid border-black border-opacity-25 shadow-inner", { ["ring-1 ring-accent"]: amount !== 0 })}
       >
         {isConnected && loading ? (
-          <div className="absolute w-full h-full flex items-center justify-center pointer-events-none">
+          <div className="pointer-events-none absolute flex h-full w-full items-center justify-center">
             <div className="loader"></div>
           </div>
         ) : null}
-        <video className="block rounded-lg w-full h-auto" autoPlay loop src={media?.animation_url} poster={media?.image}></video>
+        <video className="block h-auto w-full rounded-lg" autoPlay loop src={media?.animation_url} poster={media?.image}></video>
       </div>
-      <div className="flex mx-2 h-12 text-opacity-75 text-accent drop-shadow-light items-center">
-        <div className="text-xl flex-grow text-left">{media?.name}</div>
+      <div className="mx-2 flex h-12 items-center text-accent text-opacity-75 drop-shadow-light">
+        <div className="flex-grow text-left text-xl">{media?.name}</div>
         {isConnected && !loading && amount > 1 ? <div className="text-3xl">x{amount}</div> : null}
       </div>
     </div>
