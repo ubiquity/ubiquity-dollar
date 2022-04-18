@@ -105,16 +105,4 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
   );
 };
 
-const TokenInfo = ({ name, symbol, liquidity }: { name: string; symbol: string; liquidity: number | null | undefined }) => (
-  <div className="flex items-center">
-    <div className="flex-grow" title={name}>
-      {symbol}
-    </div>
-    <div className="flex items-center rounded-full border border-solid border-white/50 bg-opacity-50 px-2 py-0">
-      <img src="liquidity.png" className="mr-2 h-4" />
-      <span className="text-sm leading-6">{liquidity != null ? format(round(liquidity)) : "???"}</span>
-    </div>
-  </div>
-);
-
 export default BondingPool;
