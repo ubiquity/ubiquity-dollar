@@ -30,7 +30,7 @@ const YourBonds = ({
   onClaim: () => void;
   uarUsdPrice: number | null;
 }) => {
-  if (!bonds) return null;
+  if (!bonds || bonds.length === 0) return null;
 
   const accumulated = bonds.reduce((acc, bond) => acc + bond.claimable, 0);
   const accumulatedInUsd = uarUsdPrice ? accumulated * uarUsdPrice : null;
