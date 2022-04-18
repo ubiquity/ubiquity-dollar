@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import cx from "classnames";
 import LaunchPartyHeader from "./Header";
 import Whitelist from "./Whitelist";
 import UbiquiStick from "./UbiquiStick";
@@ -372,6 +373,8 @@ const App = () => {
     refreshSimpleBondData();
   };
 
+  const [showAdminComponents, setShowAdminComponents] = useState(false);
+
   // ██████╗ ███████╗██████╗ ██╗██╗   ██╗███████╗██████╗
   // ██╔══██╗██╔════╝██╔══██╗██║██║   ██║██╔════╝██╔══██╗
   // ██║  ██║█████╗  ██████╔╝██║██║   ██║█████╗  ██║  ██║
@@ -383,15 +386,46 @@ const App = () => {
   const isLoaded = !!(contracts && sticks && allowance);
   const isTransacting = activeTransactions.some((tx) => tx.active);
   const sticksCount = sticks ? sticks.gold + sticks.black + sticks.invisible : null;
-  const isWhitelisted = !!allowance && sticksCount !== null && (allowance.count > 0 || sticksCount > 0);
   const canUsePools = (sticksCount !== null && sticksCount > 0) || !needsStick;
+  const showAdminButton = isSaleContractOwner || isSimpleBondOwner;
 
   return (
-    <div className="w-full">
+    <div className="relative w-full">
+      <button
+        className={cx(
+          "btn-primary absolute top-0 left-[50%] -mt-6 translate-x-[-50%] !rounded-t-none border-t-0 bg-accent text-paper transition duration-500 hover:border-t-0 hover:bg-accent",
+          { "translate-y-0": showAdminButton, "translate-y-[-100%]": !showAdminButton }
+        )}
+        disabled={!showAdminButton}
+        onClick={() => setShowAdminComponents(true)}
+      >
+        Admin
+      </button>
+
+      <div
+        className={cx("absolute top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center", {
+          "pointer-events-none": !showAdminComponents,
+          "pointer-events-auto": showAdminComponents,
+        })}
+      >
+        <div
+          className={cx("fixed top-0 left-0 right-0 bottom-0 bg-black/50 transition-opacity duration-500", {
+            "opacity-100": showAdminComponents,
+            "opacity-0": !showAdminComponents,
+          })}
+          onClick={() => setShowAdminComponents(false)}
+        ></div>
+        <div
+          className={cx("-mt-6 pt-6 transition-transform duration-500", { "translate-y-[-100%]": !showAdminComponents, "translate-y-0": showAdminComponents })}
+        >
+          {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
+          {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
+        </div>
+      </div>
+
       <LaunchPartyHeader />
-      {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
-      {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
-      <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />
+
+      {/* <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} /> */}
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} media={tokenMedia} allowance={allowance} />
       <FundingPools enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />

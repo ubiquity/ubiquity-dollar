@@ -13,7 +13,7 @@ const TWITTER_MESSAGE = "Tweeting to be eligible for the #ubiquistick NFT whitel
 
 const Whitelist = ({ status }: { status: WhitelistStatus }) => {
   return (
-    <widget.Container>
+    <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center  justify-center rounded-lg border-4 border-dashed border-white/25 bg-white/10">
       <div className="flex">
         <div>
           <Vip className="h-20 fill-white px-8 py-4" />
@@ -55,7 +55,7 @@ const Whitelist = ({ status }: { status: WhitelistStatus }) => {
           })()}
         </div>
       </div>
-    </widget.Container>
+    </div>
   );
 };
 

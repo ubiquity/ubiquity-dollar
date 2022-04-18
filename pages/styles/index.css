@@ -4,32 +4,22 @@
 
 @layer components {
   .btn-primary,
-  a.btn-primary:-webkit-any-link {
+  a.btn-primary {
     @apply inline-block h-auto px-4 py-2 transition;
     @apply font-special text-xs uppercase tracking-widest text-white text-opacity-75;
     @apply rounded border border-solid border-white border-opacity-25;
     @apply no-underline;
   }
+
   .btn-primary:disabled {
     @apply pointer-events-none opacity-20;
   }
+
   .btn-primary:hover {
     @apply cursor-pointer;
     @apply text-white;
     @apply border-opacity-0;
     @apply bg-white bg-opacity-20 drop-shadow-light;
-  }
-
-  /* a.btn-primary {
-    @apply
-  } */
-
-  .party-container {
-    @apply mx-auto mb-8 max-w-screen-md rounded-lg border border-solid border-accent/60 bg-paper p-8;
-    /* @apply backdrop-blur-sm bg-white bg-opacity-5; */
-
-    /* Functionally the same as the blur and
-       the white background but higher performance on scroll */
   }
 }
 :root {
@@ -285,7 +275,7 @@ body .bg-video {
   object-fit: cover;
 }
 
-a:-webkit-any-link {
+a {
   color: #fff;
 }
 
