@@ -3,6 +3,7 @@ import Tippy from "@tippyjs/react";
 import { useState } from "react";
 import { PoolInfo, PoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
+import { Tooltip } from "../ui/widget";
 
 type BondingPoolParams = PoolInfo & {
   enabled: boolean;
@@ -27,31 +28,25 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
     <div className="rounded bg-white bg-opacity-5 p-6">
       <div className="mb-6 flex">
         {info.logo ? <img src={info.logo} className="h-20 rounded-full" /> : null}
-        <div
-          className={cx("flex flex-grow items-center justify-center font-light text-accent drop-shadow-light", {
-            ["text-3xl"]: info.logo,
-            ["text-6xl"]: !info.logo,
-          })}
-        >
-          <div>
-            {poolData ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
-            <span className="font-normal">APY</span>
+        <Tooltip title={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
+          <div
+            className={cx("flex flex-grow items-center justify-center font-light text-accent drop-shadow-light", {
+              ["text-3xl"]: info.logo,
+              ["text-6xl"]: !info.logo,
+            })}
+          >
+            <div>
+              {poolData ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
+              <span className="font-normal">APY</span>
+            </div>
           </div>
-        </div>
+        </Tooltip>
       </div>
 
       <div className="mb-6 flex items-center">
-        <Tippy
-          content={
-            <div className="rounded-md border border-solid border-white/10 bg-paper px-4 py-2 text-sm" style={{ backdropFilter: "blur(8px)" }}>
-              <p className="text-center text-white/50">Liquidity</p>
-            </div>
-          }
-          placement="top"
-          duration={0}
-        >
+        <Tooltip title="Liquidity">
           <img src="liquidity.png" className="mr-2 h-4 opacity-50" />
-        </Tippy>
+        </Tooltip>
         <div className="flex h-6 flex-grow items-center rounded-full border border-solid border-accent/30 bg-accent/5 px-2 font-mono text-xs">
           {poolData ? (
             <>

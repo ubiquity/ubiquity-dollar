@@ -39,6 +39,7 @@ export type PoolData = {
   liquidity2: number | null;
   poolTokenBalance: number;
   decimals: number;
+  multiplier: number;
   apy: number;
 };
 

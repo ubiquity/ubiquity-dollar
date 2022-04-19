@@ -28,7 +28,7 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
 
   return (
     <widget.Container>
-      <widget.Title text="Allowance management" />
+      <widget.Title text="Whitelist management" />
 
       <div>
         {allowances.map((allowance, i) => (
@@ -59,7 +59,7 @@ const AllowanceInputs = ({ data: { address, count, price }, setData }: { data: A
   return (
     <div>
       <input placeholder="Address" value={address} onChange={(ev) => setData({ address: ev.target.value, count, price })} />
-      <input placeholder="Count" type="number" value={count} onChange={(ev) => setData({ address, count: ev.target.value, price })} />
+      <input placeholder="Ubiquisticks" type="number" value={count} onChange={(ev) => setData({ address, count: ev.target.value, price })} />
       <input placeholder="Price" type="number" value={price} onChange={(ev) => setData({ address, count, price: ev.target.value })} />
     </div>
   );

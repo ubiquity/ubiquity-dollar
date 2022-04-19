@@ -193,7 +193,11 @@ const App = () => {
         )
       ).reduce<{ [token: string]: PoolData }>((acc, [address, balance, decimals, reward]) => {
         const poolTokenBalance = +ethers.utils.formatUnits(balance, decimals);
-        const apy = (reward.toNumber() / 1_000_000_000 / 5) * 365 * 100;
+
+        const multiplier = reward.toNumber() / 1_000_000_000;
+        const vestingDays = 5;
+        const apy = multiplier ** (365 / vestingDays);
+
         const uniPoolData = newUnipoolFullData[poolsByToken[address].poolAddress];
         const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);
         const liquidity2 = +ethers.utils.formatUnits(uniPoolData.balance2, uniPoolData.decimal2);
@@ -210,6 +214,7 @@ const App = () => {
           name1: uniPoolData.name1,
           name2: uniPoolData.name2,
           decimals,
+          multiplier,
         };
 
         return acc;
