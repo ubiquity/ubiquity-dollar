@@ -143,7 +143,7 @@ export const DebtCouponContainer = () => {
   };
 
   return (
-    <widget.Container className="max-w-screen-lg !mx-auto relative">
+    <widget.Container className="relative !mx-auto max-w-screen-lg">
       <widget.Title text="Debt Coupon" />
       {balances && (
         <DebtCoupon
@@ -396,10 +396,10 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
 
   return (
     <>
-      <div className="w-10/12 my-0 mx-auto">
+      <div className="my-0 mx-auto w-10/12">
         <div className="w-full">
-          <div className="inline-flex justify-between w-full">
-            <div className="w-5/12 text-left self-center">
+          <div className="inline-flex w-full justify-between">
+            <div className="w-5/12 self-center text-left">
               <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
             </div>
             <div className="inline-flex w-7/12 justify-between">
@@ -409,8 +409,8 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
           </div>
         </div>
         <div className="w-full">
-          <div className="inline-flex justify-between w-full">
-            <div className="w-5/12 text-left self-center">
+          <div className="inline-flex w-full justify-between">
+            <div className="w-5/12 self-center text-left">
               <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
             </div>
             <div className="inline-flex w-7/12 justify-between">
@@ -420,12 +420,12 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
           </div>
         </div>
         <div className="w-full">
-          <div className="inline-flex justify-between w-full">
-            <div className="w-5/12 text-left self-center">
+          <div className="inline-flex w-full justify-between">
+            <div className="w-5/12 self-center text-left">
               <span>Deprecation rate 10% / week</span>
             </div>
             <div className="inline-flex w-7/12 justify-between">
-              <span className="text-center w-1/2 self-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
+              <span className="w-1/2 self-center text-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
               <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
             </div>
           </div>
@@ -449,30 +449,30 @@ export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupp
         <span>Reward Cycle</span>
       </div>
       <div className="w-full">
-        <div className="w-10/12 inline-flex justify-between border rounded-md border-white/10 border-solid">
-          <div className="w-1/4 text-center self-center">
+        <div className="inline-flex w-10/12 justify-between rounded-md border border-solid border-white/10">
+          <div className="w-1/4 self-center text-center">
             <span>uAD</span>
           </div>
-          <div className="w-1/4 text-center self-center">
+          <div className="w-1/4 self-center text-center">
             <div className="pt-2 pb-1">Total Supply</div>
             <div className="pt-1 pb-2">{uadTotalSupply.toLocaleString()}</div>
           </div>
-          <div className="w-1/4 text-center self-center">
+          <div className="w-1/4 self-center text-center">
             <div className="pt-2 pb-1">Minted</div>
             <div className="pt-1 pb-2">25k</div>
           </div>
-          <div className="w-1/4 text-center self-center">
+          <div className="w-1/4 self-center text-center">
             <div className="pt-2 pb-1">Mintable</div>
             <div className="pt-1 pb-2">12k</div>
           </div>
         </div>
       </div>
-      <div className="w-full mt-4">
-        <div className="w-10/12 inline-flex">
+      <div className="mt-4 w-full">
+        <div className="inline-flex w-10/12">
           <div className="w-1/4 self-center">
             <span>Total debt</span>
           </div>
-          <div className="w-3/4 inline-flex justify-between border rounded-md rounded-b-none border-white/10 border-solid">
+          <div className="inline-flex w-3/4 justify-between rounded-md rounded-b-none border border-solid border-white/10">
             <div className="w-1/3">
               <div className="pt-2 pb-1">uBOND</div>
               <div className="pt-1 pb-2">{ubondTotalSupply.toLocaleString()}</div>
@@ -489,11 +489,11 @@ export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupp
         </div>
       </div>
       <div className="w-full">
-        <div className="w-10/12 inline-flex">
+        <div className="inline-flex w-10/12">
           <div className="w-1/4 self-center">
             <span>Redeemable</span>
           </div>
-          <div className="inline-flex w-3/4 justify-between border border-t-0 rounded-md rounded-t-none border-white/10 border-solid">
+          <div className="inline-flex w-3/4 justify-between rounded-md rounded-t-none border border-t-0 border-solid border-white/10">
             <div className="w-1/3 py-2">10,000</div>
             <div className="w-1/3 py-2">27,000</div>
             <div className="w-1/3 py-2">0</div>
@@ -517,21 +517,21 @@ type UadBurningProps = {
 export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedCoupon, errMsg }: UadBurningProps) => {
   return (
     <>
-      <div className="inline-flex my-8">
+      <div className="my-8 inline-flex">
         <span className="self-center">uAD</span>
         <input className="self-center" type="number" onChange={handleInputUAD} />
-        <nav className="self-center flex flex-col border-b-0 sm:flex-row">
+        <nav className="flex flex-col self-center border-b-0 sm:flex-row">
           <button
-            className={`m-0 rounded-[16px] rounded-r-none self-center hover:text-accent focus:outline-none ${
-              selectedCurrency === uAR ? "text-accent font-medium border-accent" : "text-gray-600"
+            className={`m-0 self-center rounded-[16px] rounded-r-none hover:text-accent focus:outline-none ${
+              selectedCurrency === uAR ? "border-accent font-medium text-accent" : "text-gray-600"
             }`}
             onClick={() => handleTabSelect(uAR)}
           >
             uAR
           </button>
           <button
-            className={`m-0 rounded-[16px] rounded-l-none self-center hover:text-accent focus:outline-none ${
-              selectedCurrency === uDEBT ? "text-accent font-medium border-accent" : "text-gray-600"
+            className={`m-0 self-center rounded-[16px] rounded-l-none hover:text-accent focus:outline-none ${
+              selectedCurrency === uDEBT ? "border-accent font-medium text-accent" : "text-gray-600"
             }`}
             onClick={() => handleTabSelect(uDEBT)}
           >
@@ -578,7 +578,7 @@ export const PumpCycle = ({
         <span>Pump Cycle</span>
       </div>
       <div className="flex justify-center pb-4">
-        <div className="w-2/4 px-8 border-0 border-r border-white/10 border-solid">
+        <div className="w-2/4 border-0 border-r border-solid border-white/10 px-8">
           <span>Fungible (uAR)</span>
           <table className="w-full">
             <tbody>
@@ -606,16 +606,16 @@ export const PumpCycle = ({
           <table className="w-full">
             <tbody>
               <tr>
-                <td className="pr-4 text-right w-1/2">Deprecation rate</td>
-                <td className="pl-4 text-left w-1/2">{udebtDeprecationRate * 100}%</td>
+                <td className="w-1/2 pr-4 text-right">Deprecation rate</td>
+                <td className="w-1/2 pl-4 text-left">{udebtDeprecationRate * 100}%</td>
               </tr>
               <tr>
-                <td className="pr-4 text-right w-1/2">Current reward %</td>
-                <td className="pl-4 text-left w-1/2">{udebtCurrentRewardPct * 100}%</td>
+                <td className="w-1/2 pr-4 text-right">Current reward %</td>
+                <td className="w-1/2 pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
-                <td className="pr-4 text-right w-1/2">Expires?</td>
-                <td className="pl-4 text-left w-1/2">After {calculatedUdebtExpirationTime}</td>
+                <td className="w-1/2 pr-4 text-right">Expires?</td>
+                <td className="w-1/2 pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
               </tr>
             </tbody>
           </table>
@@ -649,37 +649,37 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
 
   return (
     <>
-      <div className="w-full flex h-8 rounded-md border border-white/10 border-solid relative">
-        <div className="w-full flex">
-          <div className={`flex rounded-l-md justify-end bg-gray-600 border-0 border-r border-white/10 border-solid`} style={{ width: "10%" }}></div>
-          <hr className="h-full border-r-0 m-0 pt-1" />
+      <div className="relative flex h-8 w-full rounded-md border border-solid border-white/10">
+        <div className="flex w-full">
+          <div className={`flex justify-end rounded-l-md border-0 border-r border-solid border-white/10 bg-gray-600`} style={{ width: "10%" }}></div>
+          <hr className="m-0 h-full border-r-0 pt-1" />
           <div
-            className={`flex justify-${leftPositioned ? "end border-r-2 border-right-accent" : "center"} border-0 border-r border-white/10 border-solid`}
+            className={`flex justify-${leftPositioned ? "end border-right-accent border-r-2" : "center"} border-0 border-r border-solid border-white/10`}
             style={{ width: `${leftPositioned ? calculatedPercent() : 40}%` }}
           >
             {leftPositioned ? (
-              <span className="pr-2 self-center text-accent pt-0.5">${price}</span>
+              <span className="self-center pr-2 pt-0.5 text-accent">${price}</span>
             ) : (
-              <span className="pr-2 self-center">Redeeming cycle started {date} ago</span>
+              <span className="self-center pr-2">Redeeming cycle started {date} ago</span>
             )}
           </div>
           {leftPositioned ? (
             <>
-              <div className={`flex justify-center flex-col border-0 border-r border-white/10 border-solid`} style={{ width: `${40 - calculatedPercent()}%` }}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className={`flex flex-col justify-center border-0 border-r border-solid border-white/10`} style={{ width: `${40 - calculatedPercent()}%` }}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
-              <hr className="h-full border-r-0 m-0 pt-1" />
+              <hr className="m-0 h-full border-r-0 pt-1" />
             </>
           ) : (
             <>
-              <hr className="h-full border-r-0 m-0 pt-1" />
+              <hr className="m-0 h-full border-r-0 pt-1" />
               <div
-                className={`flex justify-center flex-col border-0 border-r border-r-2 border-right-accent border-white/10 border-solid`}
+                className={`border-right-accent flex flex-col justify-center border-0 border-r border-r-2 border-solid border-white/10`}
                 style={{ width: `${calculatedPercent() - 40}%` }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-accent mr-2 self-end" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6 self-end text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                 </svg>
               </div>
@@ -687,16 +687,16 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
           )}
           <div className={`flex justify-${leftPositioned ? "center" : "start"}`} style={{ width: `${leftPositioned ? 40 : 80 - calculatedPercent()}%` }}>
             {leftPositioned ? (
-              <span className="pr-2 self-center">Pump cycle started {date} ago</span>
+              <span className="self-center pr-2">Pump cycle started {date} ago</span>
             ) : (
-              <span className="pl-2 self-center text-accent pt-0.5">${price}</span>
+              <span className="self-center pl-2 pt-0.5 text-accent">${price}</span>
             )}
           </div>
-          <hr className="h-full border-r-0 m-0 pt-1" />
-          <div className={`flex rounded-r-md justify-start bg-gray-600`} style={{ width: "10%" }}></div>
+          <hr className="m-0 h-full border-r-0 pt-1" />
+          <div className={`flex justify-start rounded-r-md bg-gray-600`} style={{ width: "10%" }}></div>
         </div>
       </div>
-      <div className="w-full flex justify-between mt-4">
+      <div className="mt-4 flex w-full justify-between">
         <div className="w-1/5">
           <span className="self-center">$0.9</span>
         </div>
@@ -724,8 +724,8 @@ type CouponTableProps = {
 
 export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => {
   return (
-    <div className="w-10/12 my-0 mx-auto">
-      <table className="w-full border border-white/10 border-solid border-colapse mt-16">
+    <div className="my-0 mx-auto w-10/12">
+      <table className="border-colapse mt-16 w-full border border-solid border-white/10">
         <thead>
           <tr>
             <th className="normal-case">uDEBT</th>
