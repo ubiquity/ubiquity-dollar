@@ -8,34 +8,24 @@ import {
   TheUbiquityStick__factory,
 } from "../../../contracts/ubiquistick/types";
 import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "../../../fixtures/abi/types";
+import deployedAddresses from "../../../fixtures/contracts-addresses/ubiquistick.json";
 
 type Addresses = {
-  ubiquiStick: string;
-  ubiquiStickSale: string;
-  simpleBond: string;
+  TheUbiquityStick: string;
+  TheUbiquityStickSale: string;
+  SimpleBond: string;
   chainLinkEthUsd: string;
 };
 
-export const addresses: { [key: string]: Addresses } = {
-  "1": {
-    ubiquiStick: "0xaab265cceb890c0e6e09aa6f5ee63b33de649374",
-    ubiquiStickSale: "0x035e4568f2738917512e4222a8837ad22d21bb1d",
-    simpleBond: "0x0000000000000000000000000000000000000000",
-    chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419",
-  },
-  "31337": {
-    ubiquiStick: "0xab16A69A5a8c12C732e0DEFF4BE56A70bb64c926",
-    ubiquiStickSale: "0x525C7063E7C20997BaaE9bDa922159152D0e8417",
-    simpleBond: "0x8A93d247134d91e0de6f96547cB0204e5BE8e5D8",
-    chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419",
-  },
-  // "31337": {
-  //   ubiquiStick: "0x45379687D28B5CaDf738067Da1058eA9801d9897",
-  //   ubiquiStickSale: "0x23EEe0f3fD17b25C16C712e90c77A6d165a54d2f",
-  //   simpleBond: "0x7833A70b17Aa78C721d70B38D6c6734Ea602a888",
-  //   chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419",
-  // },
-};
+const externalAddresses = { chainLinkEthUsd: "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419" };
+
+const castedDeployedAddress = (deployedAddresses as unknown) as { [key: string]: Addresses };
+
+for (const key in castedDeployedAddress) {
+  castedDeployedAddress[key] = { ...castedDeployedAddress[key], ...externalAddresses };
+}
+
+export const addresses = castedDeployedAddress;
 
 export type Contracts = {
   ubiquiStick: TheUbiquityStick;

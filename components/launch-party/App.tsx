@@ -39,7 +39,7 @@ const App = () => {
       const chainAddresses = addresses[provider.network.chainId];
       const signer = provider.getSigner();
 
-      const simpleBond = factories.simpleBond(chainAddresses.simpleBond, provider).connect(signer);
+      const simpleBond = factories.simpleBond(chainAddresses.SimpleBond, provider).connect(signer);
 
       let rewardToken;
       try {
@@ -56,8 +56,8 @@ const App = () => {
       }
 
       const contracts = {
-        ubiquiStick: factories.ubiquiStick(chainAddresses.ubiquiStick, provider).connect(signer),
-        ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.ubiquiStickSale, provider).connect(signer),
+        ubiquiStick: factories.ubiquiStick(chainAddresses.TheUbiquityStick, provider).connect(signer),
+        ubiquiStickSale: factories.ubiquiStickSale(chainAddresses.TheUbiquityStickSale, provider).connect(signer),
         simpleBond,
         rewardToken: ERC20__factory.connect(rewardToken, provider).connect(signer),
         chainLink: factories.chainLink(chainAddresses.chainLinkEthUsd, provider),
