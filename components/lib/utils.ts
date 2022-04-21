@@ -110,3 +110,5 @@ export async function fetchAccount(): Promise<EthAccount | null> {
     return null;
   }
 }
+
+export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";

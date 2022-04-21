@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { useConnectedContext } from "../components/context/connected";
-import DebtCoupon from "../components/DebtCoupon";
+import { useConnectedContext } from "@/lib/connected";
+import DebtCoupon from "@/components/price-stabilization/DebtCoupon";
 
 const DebtCouponPage: FC = (): JSX.Element => {
   const context = useConnectedContext();

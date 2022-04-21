@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import Tippy from "@tippyjs/react";
 import { ethers, BigNumber } from "ethers";
-import { useConnectedContext } from "./context/connected";
-import { fetchAccount } from "./common/utils";
-import Network from "./network";
-import icons from "./ui/icons";
+
+import { useConnectedContext } from "@/lib/connected";
+import { fetchAccount } from "@/lib/utils";
+import icons from "@/ui/icons";
+
+import Network from "./Network";
 
 const PROD = process.env.NODE_ENV == "production";
 

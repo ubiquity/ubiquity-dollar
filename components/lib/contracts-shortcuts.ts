@@ -1,9 +1,10 @@
 import { ethers, BigNumber } from "ethers";
-import { Contracts } from "../../contracts";
-import { ERC1155Ubiquity, ERC20 } from "../../contracts/dollar/artifacts/types";
-import { erc1155BalanceOf } from "./utils";
+
+import { ERC1155Ubiquity, ERC20 } from "@/dollar-types";
+
+import { Contracts } from "./contracts";
+import { erc1155BalanceOf, performTransaction } from "./utils";
 import { EthAccount } from "./types";
-import { performTransaction } from "./utils";
 
 const isDev = process.env.NODE_ENV == "development";
 const debug = isDev;

@@ -1,11 +1,12 @@
 import { BigNumber, ethers } from "ethers";
 import { memo, useCallback, useState } from "react";
-import { formatEther } from "./common/format";
-import { performTransaction, useAsyncInit } from "./common/utils";
-import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
+
+import { formatEther } from "@/lib/format";
+import { performTransaction, useAsyncInit } from "@/lib/utils";
+import { connectedWithUserContext, useConnectedContext, UserContext } from "@/lib/connected";
+import { Container, Title, SubTitle, Icon, Loading } from "@/ui";
+
 import DepositShare from "./DepositShare";
-import { Icon } from "./ui/icons";
-import * as widget from "./ui/widget";
 
 type ShareData = {
   id: number;
@@ -158,10 +159,10 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <widget.Container className="max-w-screen-md !mx-auto relative">
-      <widget.Title text="Liquidity Mining" />
-      {model ? <BondingSharesInformation {...model} {...actions} /> : <widget.Loading text="Loading existing shares information" />}
-    </widget.Container>
+    <Container className="relative !mx-auto max-w-screen-md">
+      <Title text="Liquidity Mining" />
+      {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
+    </Container>
   );
 });
 
@@ -183,7 +184,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) || ugov.gt(0));
 
   return (
-    <div className="flex flex-col relative">
+    <div className="relative flex flex-col">
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
       <table>
         <thead>
@@ -212,12 +213,12 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
       </table>
       <div id="rewards-summary flex flex-col items-center justify-center">
         <div className="mb-2 flex items-center justify-center">
-          <Icon className="w-4 text-accent mr-2" icon="ubq" />
+          <Icon className="mr-2 w-4 text-accent" icon="ubq" />
           <span className="text-accent">{formatEther(totalPendingUgov)} </span>
           &nbsp;pending UBQ rewards
         </div>
         <div className="mb-2 flex items-center justify-center">
-          <Icon className="w-4 text-accent mr-2" icon="liquidity" />
+          <Icon className="mr-2 w-4 text-accent" icon="liquidity" />
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
         <div className="mb-2">{poolPercentage}% pool ownership</div>
@@ -248,8 +249,8 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
         ${Math.round(usdAmount * 100) / 100}
       </td>
       <td>
-        <div className="text-accent whitespace-nowrap inline-flex items-center">
-          <Icon icon="ubq" className="w-4 text-accent mr-2" /> <span>{formatEther(ugov)}</span>
+        <div className="inline-flex items-center whitespace-nowrap text-accent">
+          <Icon icon="ubq" className="mr-2 w-4 text-accent" /> <span>{formatEther(ugov)}</span>
         </div>
       </td>
       <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>

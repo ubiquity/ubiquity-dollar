@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import cx from "classnames";
-import { Icon } from "../ui/icons";
-import Inventory from "../inventory";
-import TransactionsDisplay from "../TransactionsDisplay";
+
+import { Icon } from "@/ui";
+
+import Inventory from "./Inventory";
+import TransactionsDisplay from "./TransactionsDisplay";
 import Sidebar, { SidebarState } from "./Sidebar";
 
 type LayoutProps = {

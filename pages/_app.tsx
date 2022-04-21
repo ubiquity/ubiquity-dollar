@@ -2,10 +2,11 @@
 import "./styles/index.css";
 import "./styles/proxima.css";
 
-import { ConnectedNetwork } from "../components/context/connected";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import Layout from "../components/layout/Layout";
+
+import Layout from "@/components/layout";
+import { ConnectedNetwork } from "@/lib/connected";
 
 export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Element {
   return (

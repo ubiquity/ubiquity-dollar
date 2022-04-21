@@ -1,14 +1,17 @@
 import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ADDRESS } from "../pages";
+
+import dollarAddresses from "@/fixtures/contracts-addresses/dollar.json";
 import {
   DebtCouponManager__factory,
   ICouponsForDollarsCalculator__factory,
   UbiquityAlgorithmicDollarManager,
   UbiquityAlgorithmicDollar__factory,
-} from "../contracts/dollar/artifacts/types";
-import { useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contracts-shortcuts";
+} from "@/dollar-types";
+import { useConnectedContext } from "@/lib/connected";
+import { Balances } from "@/lib/contracts-shortcuts";
+
+const DEBT_COUPON_MANAGER_ADDRESS = dollarAddresses["1"].DebtCouponManager;
 
 async function _expectedDebtCoupon(
   amount: BigNumber,
@@ -42,11 +45,11 @@ const DebtCouponDeposit = () => {
   const depositDollarForDebtCoupons = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
     if (provider && account && manager) {
       const uAD = UbiquityAlgorithmicDollar__factory.connect(await manager.dollarTokenAddress(), provider.getSigner());
-      const allowance = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const allowance = await uAD.allowance(account.address, DEBT_COUPON_MANAGER_ADDRESS);
       console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
       if (allowance.lt(amount)) {
         // first approve
-        const approveTransaction = await uAD.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
+        const approveTransaction = await uAD.approve(DEBT_COUPON_MANAGER_ADDRESS, amount);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
@@ -54,11 +57,11 @@ const DebtCouponDeposit = () => {
         );
       }
 
-      const allowance2 = await uAD.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const allowance2 = await uAD.allowance(account.address, DEBT_COUPON_MANAGER_ADDRESS);
       console.log("allowance2", ethers.utils.formatEther(allowance2));
       // depositDollarForDebtCoupons uAD
 
-      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner());
+      const debtCouponMgr = DebtCouponManager__factory.connect(DEBT_COUPON_MANAGER_ADDRESS, provider.getSigner());
       const depositDollarForDebtCouponsWaiting = await debtCouponMgr.exchangeDollarsForDebtCoupons(amount);
       await depositDollarForDebtCouponsWaiting.wait();
 

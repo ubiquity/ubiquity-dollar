@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 
-import namedAccounts from "./fixtures/named-accounts.json";
-import FullDeployment from "./fixtures/ubiquity-dollar-deployment.json";
+import namedAccounts from "@/fixtures/named-accounts.json";
+import FullDeployment from "@/fixtures/ubiquity-dollar-deployment.json";
+
 import {
   UbiquityAlgorithmicDollarManager__factory,
   UbiquityAlgorithmicDollar__factory,
@@ -43,8 +44,9 @@ import {
   ICouponsForDollarsCalculator__factory,
   IUARForDollarsCalculator,
   IUARForDollarsCalculator__factory,
-} from "./contracts/dollar/artifacts/types";
-import { ERC20__factory, ERC20 } from "./contracts/dollar/artifacts/types";
+  ERC20__factory,
+  ERC20,
+} from "@/dollar-types";
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,

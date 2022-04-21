@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { useConnectedContext } from "../components/context/connected";
-import BondingSharesExplorer from "../components/BondingSharesExplorer";
-import { WalletNotConnected } from "../components/ui/widget";
+import { WalletNotConnected } from "@/ui";
+import { useConnectedContext } from "@/lib/connected";
+import BondingSharesExplorer from "@/components/liquidity-mining/BondingSharesExplorer";
 
 const LiquidityMining: FC = (): JSX.Element => {
   const context = useConnectedContext();

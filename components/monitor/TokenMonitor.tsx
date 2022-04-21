@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { useConnectedContext } from "./context/connected";
-import { formatEther } from "./common/format";
-import * as widget from "./ui/widget";
+
+import { useConnectedContext } from "@/lib/connected";
+import { formatEther } from "@/lib/format";
+import { Container, Title, SubTitle } from "@/ui";
+
+import { Address, Balance } from "./ui";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {
@@ -38,14 +41,14 @@ const TokenMonitorContainer = () => {
 
 const TokenMonitor = (props: TokenMonitorProps) => {
   return (
-    <widget.Container className="col-span-2">
-      <widget.Title text="Token monitor" />
-      <widget.SubTitle text="Debt Coupon" />
-      <widget.Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />
-      <widget.Address title="Debt Coupon" address={props.debtCouponAddress} />
-      <widget.Balance title="Total Outstanding" unit="uDEBT" balance={props.totalOutstandingDebt} />
-      <widget.Balance title="Total Redeemable" unit="uDEBT" balance={props.totalRedeemable} />
-    </widget.Container>
+    <Container className="col-span-2">
+      <Title text="Token monitor" />
+      <SubTitle text="Debt Coupon" />
+      <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />
+      <Address title="Debt Coupon" address={props.debtCouponAddress} />
+      <Balance title="Total Outstanding" unit="uDEBT" balance={props.totalOutstandingDebt} />
+      <Balance title="Total Redeemable" unit="uDEBT" balance={props.totalRedeemable} />
+    </Container>
   );
 };
 

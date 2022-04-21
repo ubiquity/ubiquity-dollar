@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { useConnectedContext } from "./context/connected";
-import { formatEther } from "./common/format";
-import * as widget from "./ui/widget";
+
+import { formatEther } from "@/lib/format";
+import { useConnectedContext } from "@/lib/connected";
+import { Container, Title } from "@/ui";
+
+import { Address, Balance } from "./ui";
 
 type State = null | MetapoolMonitorProps;
 type MetapoolMonitorProps = {
@@ -39,13 +42,13 @@ const MetapoolMonitorContainer = () => {
 
 const MetapoolMonitor = (props: MetapoolMonitorProps) => {
   return (
-    <widget.Container>
-      <widget.Title text="Metapool monitor" />
-      <widget.Address title="Metapool" address={props.metaPoolAddress} />
-      <widget.Balance title="uAD Balance" unit="$" balance={props.uadBalance} />
-      <widget.Balance title="CRV Balance" unit="$" balance={props.crvBalance} />
-      <widget.Balance title="Spot Price" unit="$" balance={props.spotPrice} />
-    </widget.Container>
+    <Container>
+      <Title text="Metapool monitor" />
+      <Address title="Metapool" address={props.metaPoolAddress} />
+      <Balance title="uAD Balance" unit="$" balance={props.uadBalance} />
+      <Balance title="CRV Balance" unit="$" balance={props.crvBalance} />
+      <Balance title="Spot Price" unit="$" balance={props.spotPrice} />
+    </Container>
   );
 };
 

@@ -1,9 +1,10 @@
-import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
-import { EthAccount } from "./common/types";
-import { useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contracts-shortcuts";
-import { UbiquityAlgorithmicDollarManager, BondingV2__factory } from "../contracts/dollar/artifacts/types";
+import { BigNumber, ethers } from "ethers";
+
+import { EthAccount } from "@/lib/types";
+import { UbiquityAlgorithmicDollarManager, BondingV2__factory } from "@/dollar-types";
+import { useConnectedContext } from "@/lib/connected";
+import { Balances } from "@/lib/contracts-shortcuts";
 
 async function _migrate(
   provider: ethers.providers.Web3Provider | null,

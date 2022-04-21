@@ -1,10 +1,13 @@
-import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Dropdown } from "react-dropdown-now";
-import { ADDRESS } from "../pages";
-import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "../contracts/dollar/artifacts/types";
-import { useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contracts-shortcuts";
+import { BigNumber, ethers } from "ethers";
+
+import { DebtCouponManager__factory, DebtCoupon__factory, UbiquityAlgorithmicDollarManager } from "@/dollar-types";
+import { useConnectedContext } from "@/lib/connected";
+import { Balances } from "@/lib/contracts-shortcuts";
+import dollarAddresses from "@/fixtures/contracts-addresses/dollar.json";
+
+const DEBT_COUPON_MANAGER_ADDRESS = dollarAddresses["1"].DebtCouponManager;
 
 const _getDebtIds = async (
   account: string,
@@ -44,11 +47,11 @@ const DebtCouponRedeem = () => {
     console.log("debtId", debtId);
     if (provider && account && manager && debtId) {
       const debtCoupon = DebtCoupon__factory.connect(await manager.debtCouponAddress(), provider.getSigner());
-      const isAllowed = await debtCoupon.isApprovedForAll(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const isAllowed = await debtCoupon.isApprovedForAll(account.address, DEBT_COUPON_MANAGER_ADDRESS);
       console.log("isAllowed", isAllowed);
       if (!isAllowed) {
         // first approve
-        const approveTransaction = await debtCoupon.setApprovalForAll(ADDRESS.DEBT_COUPON_MANAGER, true);
+        const approveTransaction = await debtCoupon.setApprovalForAll(DEBT_COUPON_MANAGER_ADDRESS, true);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
@@ -56,10 +59,10 @@ const DebtCouponRedeem = () => {
         );
       }
 
-      const isAllowed2 = await debtCoupon.isApprovedForAll(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const isAllowed2 = await debtCoupon.isApprovedForAll(account.address, DEBT_COUPON_MANAGER_ADDRESS);
       console.log("isAllowed2", isAllowed2);
 
-      const debtCouponMgr = DebtCouponManager__factory.connect(ADDRESS.DEBT_COUPON_MANAGER, provider.getSigner());
+      const debtCouponMgr = DebtCouponManager__factory.connect(DEBT_COUPON_MANAGER_ADDRESS, provider.getSigner());
       const redeemCouponsWaiting = await debtCouponMgr.redeemCoupons(BigNumber.from(debtId), amount);
       await redeemCouponsWaiting.wait();
 

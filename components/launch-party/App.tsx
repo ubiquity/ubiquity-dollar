@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
 import cx from "classnames";
+
+import { useConnectedContext } from "@/lib/connected";
+import { performTransaction, ZERO_ADDRESS } from "@/lib/utils";
+import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
+import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "@/fixtures/abi/types";
+import { ERC20, ERC20__factory } from "@/dollar-types";
+
+import { Contracts, factories, addresses } from "./lib/contracts";
+import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/state";
+import { PoolData, poolsByToken, allPools, UnipoolData, goldenPool } from "./lib/pools";
+
 import LaunchPartyHeader from "./Header";
-import Whitelist from "./Whitelist";
 import UbiquiStick from "./UbiquiStick";
 import { ethers, utils } from "ethers";
 import FundingPools from "./FundingPools";
 import MultiplicationPool from "./MultiplicationPool";
 import YourBonds, { BondData } from "./YourBonds";
 import Liquidate from "./Liquidate";
-import { Contracts, factories, addresses } from "./lib/contracts";
-import { useConnectedContext } from "../context/connected";
-import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/state";
 import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
-import { performTransaction } from "../common/utils";
-import { PoolData, poolsByToken, allPools, UnipoolData, goldenPool } from "./lib/pools";
-import { ERC20, ERC20__factory } from "../../contracts/dollar/artifacts/types";
-import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "../../fixtures/abi/types";
-import { ensureERC20Allowance } from "../common/contracts-shortcuts";
-
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const App = () => {
   const { provider, account, updateActiveTransaction, activeTransactions, contracts: ubqContracts } = useConnectedContext();

@@ -1,9 +1,10 @@
-import cx from "classnames";
-import Tippy from "@tippyjs/react";
 import { useState } from "react";
+import cx from "classnames";
+
+import { Tooltip } from "@/ui";
+
 import { PoolInfo, PoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
-import { Tooltip } from "../ui/widget";
 
 type BondingPoolParams = PoolInfo & {
   enabled: boolean;
@@ -28,7 +29,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
     <div className="rounded bg-white bg-opacity-5 p-6">
       <div className="mb-6 flex">
         {info.logo ? <img src={info.logo} className="h-20 rounded-full" /> : null}
-        <Tooltip title={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
+        <Tooltip content={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
           <div
             className={cx("flex flex-grow items-center justify-center font-light text-accent drop-shadow-light", {
               ["text-3xl"]: info.logo,
@@ -44,7 +45,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
       </div>
 
       <div className="mb-6 flex items-center">
-        <Tooltip title="Liquidity">
+        <Tooltip content="Liquidity">
           <img src="liquidity.png" className="mr-2 h-4 opacity-50" />
         </Tooltip>
         <div className="flex h-6 flex-grow items-center rounded-full border border-solid border-accent/30 bg-accent/5 px-2 font-mono text-xs">

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useConnectedContext } from "./context/connected";
-import { getNetworkName } from "./common/utils";
+import { useEffect, useState } from "react";
+
+import { useConnectedContext } from "@/lib/connected";
+import { getNetworkName } from "@/lib/utils";
 
 const Network = () => {
   const { provider } = useConnectedContext();
@@ -18,7 +19,7 @@ const Network = () => {
   }
 
   return (
-    <div className="bg-white/10 px-4 py-2 border-l border-b border-solid border-accent/60 rounded-bl-lg font-special uppercase text-xs text-white/75">
+    <div className="rounded-bl-lg border-l border-b border-solid border-accent/60 bg-white/10 px-4 py-2 font-special text-xs uppercase text-white/75">
       {network}
     </div>
   );

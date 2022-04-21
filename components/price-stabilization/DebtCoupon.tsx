@@ -1,11 +1,12 @@
 import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
-import * as widget from "./ui/widget";
-import { connectedWithUserContext, useConnectedContext } from "./context/connected";
-import { Balances } from "./common/contracts-shortcuts";
-import { formatTimeDiff, constrainNumber } from "./common/utils";
-import { UbiquityAlgorithmicDollarManager } from "../contracts/dollar/artifacts/types";
-import { ADDRESS, Contracts } from "../contracts";
+
+import * as widget from "@/ui/widget";
+import { connectedWithUserContext, useConnectedContext } from "@/lib/connected";
+import { Balances } from "@/lib/contracts-shortcuts";
+import { formatTimeDiff, constrainNumber } from "@/lib/utils";
+import { ADDRESS, Contracts } from "@/lib/contracts";
+import { UbiquityAlgorithmicDollarManager } from "@/dollar-types";
 
 type Actions = {
   onRedeem: () => void;

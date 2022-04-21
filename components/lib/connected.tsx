@@ -1,9 +1,11 @@
 import { BigNumber, ethers } from "ethers";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { connectedContracts, Contracts } from "../../contracts";
-import { UbiquityAlgorithmicDollarManager } from "../../contracts/dollar/artifacts/types";
-import { accountBalances, Balances } from "../common/contracts-shortcuts";
-import { EthAccount, Transaction } from "../common/types";
+
+import { UbiquityAlgorithmicDollarManager } from "@/dollar-types";
+import { EthAccount, Transaction } from "@/lib/types";
+
+import { connectedContracts, Contracts } from "./contracts";
+import { accountBalances, Balances } from "./contracts-shortcuts";
 
 export interface ConnectedContext {
   manager: UbiquityAlgorithmicDollarManager | null;

@@ -1,7 +1,8 @@
+import { useState, useEffect } from "react";
 import { ethers, BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
-import { useState, useEffect } from "react";
-import { useConnectedContext } from "./context/connected";
+
+import { useConnectedContext } from "@/lib/connected";
 
 const roundPrice = (twapPrice: BigNumber): string => parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(8);
 
@@ -22,8 +23,8 @@ const DollarPrice = () => {
   }, [provider, contracts]);
 
   return (
-    <div className="mb-4 flex">
-      <div>
+    <div className="mb-4">
+      <div className="mb-4">
         <div className="mb-2 bg-gradient-to-r from-white/80 to-transparent bg-clip-text text-4xl text-transparent">${twapPrice && roundPrice(twapPrice)}</div>
         <div className="text-sm uppercase tracking-widest">Time Weighted Average Price</div>
       </div>

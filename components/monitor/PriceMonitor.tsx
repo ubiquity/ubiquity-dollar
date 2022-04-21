@@ -1,9 +1,12 @@
 import { ethers, BigNumber } from "ethers";
 import { useEffect, useState } from "react";
-import { ADDRESS, Contracts } from "../contracts";
-import { useConnectedContext } from "./context/connected";
-import { formatEther, formatMwei } from "./common/format";
-import * as widget from "./ui/widget";
+
+import { ADDRESS, Contracts } from "@/lib/contracts";
+import { useConnectedContext } from "@/lib/connected";
+import { formatEther, formatMwei } from "@/lib/format";
+import { Container, Title, SubTitle } from "@/ui";
+
+import { Address, Balance, PriceExchange } from "./ui";
 
 type State = null | PriceMonitorProps;
 type PriceMonitorProps = {
@@ -69,20 +72,20 @@ const PriceMonitorContainer = () => {
 
 const PriceMonitor = (props: PriceMonitorProps) => {
   return (
-    <widget.Container>
-      <widget.Title text="Price monitor" />
-      <widget.Address title="Metapool" address={props.metaPoolAddress} />
-      <widget.PriceExchange from="DAI" to="USDT" value={props.daiUsdt} />
-      <widget.PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
-      <widget.PriceExchange from="uAD" to="DAI" value={props.uadDai} />
-      <widget.PriceExchange from="uAD" to="USDT" value={props.uadUsdt} />
-      <widget.SubTitle text="Time Weighted Average" />
-      <widget.Address title="TWAP Oracle" address={props.twapAddress} />
-      <widget.PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
-      <widget.PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
-      <widget.SubTitle text="Dollar Minting" />
-      <widget.Address title="Dollar Minting Calculator" address={props.dollarMintCalcAddress} />
-      <div className="text-center mt-4">
+    <Container>
+      <Title text="Price monitor" />
+      <Address title="Metapool" address={props.metaPoolAddress} />
+      <PriceExchange from="DAI" to="USDT" value={props.daiUsdt} />
+      <PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
+      <PriceExchange from="uAD" to="DAI" value={props.uadDai} />
+      <PriceExchange from="uAD" to="USDT" value={props.uadUsdt} />
+      <SubTitle text="Time Weighted Average" />
+      <Address title="TWAP Oracle" address={props.twapAddress} />
+      <PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
+      <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
+      <SubTitle text="Dollar Minting" />
+      <Address title="Dollar Minting Calculator" address={props.dollarMintCalcAddress} />
+      <div className="mt-4 text-center">
         {props.dollarToBeMinted ? (
           <div>
             {props.dollarToBeMinted} <span className="text-white text-opacity-75"> uAD</span> to be minted
@@ -91,7 +94,7 @@ const PriceMonitor = (props: PriceMonitorProps) => {
           "No minting needed"
         )}
       </div>
-    </widget.Container>
+    </Container>
   );
 };
 

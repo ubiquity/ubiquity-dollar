@@ -1,11 +1,11 @@
 import React, { memo, useEffect, useState } from "react";
-import Tippy from "@tippyjs/react";
-import { connectedWithUserContext, useConnectedContext, UserContext } from "./context/connected";
-import * as widget from "./ui/widget";
-import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "./common/contracts-shortcuts";
 import { BigNumber, ethers } from "ethers";
-import { performTransaction, constrainNumber } from "./common/utils";
-import icons, { Icon } from "./ui/icons";
+
+import { connectedWithUserContext, useConnectedContext, UserContext } from "@/lib/connected";
+import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "@/lib/contracts-shortcuts";
+import { performTransaction, constrainNumber } from "@/lib/utils";
+import { Tooltip, Container, Title, SubTitle, icons, Icon } from "@/ui";
+
 type Balance = { usdc: number; ubq: number; uad: number };
 
 type Actions = {
@@ -87,18 +87,6 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
   );
 };
 
-export const Tooltip = ({ content, children }: { content: string; children: React.ReactElement }) => (
-  <Tippy
-    content={
-      <div className="rounded-md border border-solid border-white/10 bg-paper px-4 py-2 text-sm" style={{ backdropFilter: "blur(8px)" }}>
-        <p className="text-center text-white/50">{content}</p>
-      </div>
-    }
-  >
-    {children}
-  </Tippy>
-);
-
 type YieldFarmingSubcontainerProps = {
   yieldProxyData: YieldProxyData | null;
   depositInfo: YieldProxyDepositInfo | null;
@@ -113,8 +101,8 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
-    <widget.Container className="relative !mx-auto max-w-screen-md">
-      <widget.Title text="Boosted Yield Farming (Beta)" />
+    <Container className="relative !mx-auto max-w-screen-md">
+      <Title text="Boosted Yield Farming (Beta)" />
 
       <div className="mb-4 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
         <div className="w-20">
@@ -181,7 +169,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
       ) : (
         "Loading..."
       )}
-    </widget.Container>
+    </Container>
   );
 };
 
@@ -237,7 +225,7 @@ export const YieldFarmindWithdraw = memo(
   }: YieldFarmingWithdrawProps) => {
     return (
       <>
-        <widget.SubTitle text="Current Deposit" />
+        <SubTitle text="Current Deposit" />
         <div className="grid grid-cols-3 gap-y-4">
           <DepositItem val={f(newAmount)} fadeVal={` (${f(amount)})`} text={token} />
           <DepositItem val={`${f(yieldPct * 100)}%`} text="Yield %" />
@@ -389,7 +377,7 @@ export const YieldFarmingDeposit = memo(
 
     return (
       <>
-        <widget.SubTitle text="New Deposit" />
+        <SubTitle text="New Deposit" />
         <div className="mb-8 flex items-center justify-between">
           {/* TODO: ICON */}
           <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
@@ -429,7 +417,7 @@ export const YieldFarmingDeposit = memo(
             </div>
           </div>
         </div>
-        <widget.SubTitle text="Boosters" />
+        <SubTitle text="Boosters" />
         <div className="mb-4 flex items-center justify-between">
           <div className="w-5/12 bg-center bg-no-repeat" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
             <div className="flex justify-between">

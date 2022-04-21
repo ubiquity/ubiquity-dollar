@@ -1,5 +1,5 @@
+import * as widget from "@/ui/widget";
 import { format, round } from "./lib/utils";
-import * as widget from "../ui/widget";
 
 const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: number | null; poolAddress: string; uarUsdPrice: number | null }) => {
   const accumulatedInUsd = uarUsdPrice !== null && accumulated !== null ? accumulated * uarUsdPrice : null;
