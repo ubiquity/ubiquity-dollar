@@ -113,7 +113,7 @@ const stringsCyan = {} as Record<string, string>;
 const stringsWhite = {} as Record<string, string>;
 
 Object.entries(strings).forEach(([iconName, svgString]) => {
-  const element = <span className="align-middle" dangerouslySetInnerHTML={{ __html: svgString }} />;
+  const element = <span className="w-full align-middle" dangerouslySetInnerHTML={{ __html: svgString }} />;
   svgs[iconName] = element;
   const output = svgString.replace(/>\n+.*</gim, "><"); // remove newlines
   strings[iconName] = output;
