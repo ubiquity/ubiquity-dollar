@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 
-import namedAccounts from "@/fixtures/named-accounts.json";
-import FullDeployment from "@/fixtures/ubiquity-dollar-deployment.json";
+import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
+import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
 
 import {
   UbiquityAlgorithmicDollarManager__factory,
@@ -48,11 +48,14 @@ import {
   ERC20,
 } from "@/dollar-types";
 
-export const ADDRESS = {
-  MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
-  DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
-  ...namedAccounts,
-};
+export const MANAGER_ADDRESS = dollarDeployments[1].UbiquityAlgorithmicDollarManager;
+export const DEBT_COUPON_MANAGER_ADDRESS = dollarDeployments[1].DebtCouponManager;
+
+// export const ADDRESS = {
+//   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
+//   DEBT_COUPON_MANAGER: FullDeployment.contracts.DebtCouponManager.address,
+//   ...namedAccounts,
+// };
 
 // Want to add a contract? Add to 1, 2, 3, 4, 5
 
@@ -201,7 +204,7 @@ export async function connectedContracts(): Promise<{
 
   const provider = new ethers.providers.Web3Provider((window as any).ethereum);
 
-  const manager = contracts.manager(ADDRESS.MANAGER, provider);
+  const manager = contracts.manager(MANAGER_ADDRESS, provider);
   const addr = await contractsAddresses(manager);
 
   // const signer = provider.getSigner();
@@ -215,11 +218,11 @@ export async function connectedContracts(): Promise<{
     contracts: {
       // Static-address contracts
       manager,
-      curvePool: contracts.curvePool(ADDRESS.curveFactory, provider),
-      yieldProxy: contracts.yieldProxy(namedAccounts.yieldProxy, provider),
-      usdc: contracts.usdc(ADDRESS.USDC, provider),
-      debtCouponManager: contracts.debtCouponManager(ADDRESS.DEBT_COUPON_MANAGER, provider),
-      jarUsdc: contracts.jarUsdc(ADDRESS.jarUSDCAddr, provider),
+      curvePool: contracts.curvePool(NAMED_ACCOUNTS.curveFactory, provider),
+      yieldProxy: contracts.yieldProxy(NAMED_ACCOUNTS.yieldProxy, provider),
+      usdc: contracts.usdc(NAMED_ACCOUNTS.USDC, provider),
+      debtCouponManager: contracts.debtCouponManager(DEBT_COUPON_MANAGER_ADDRESS, provider),
+      jarUsdc: contracts.jarUsdc(NAMED_ACCOUNTS.jarUSDCAddr, provider),
 
       // Dynamic-address contracts
       uad: contracts.uad(addr.uad, provider),

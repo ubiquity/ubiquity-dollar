@@ -5,7 +5,7 @@ import * as widget from "@/ui/widget";
 import { connectedWithUserContext, useConnectedContext } from "@/lib/connected";
 import { Balances } from "@/lib/contracts-shortcuts";
 import { formatTimeDiff, constrainNumber } from "@/lib/utils";
-import { ADDRESS, Contracts } from "@/lib/contracts";
+import { MANAGER_ADDRESS, DEBT_COUPON_MANAGER_ADDRESS, Contracts } from "@/lib/contracts";
 import { UbiquityAlgorithmicDollarManager } from "@/dollar-types";
 
 type Actions = {
@@ -89,11 +89,11 @@ export const DebtCouponContainer = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
     if (account && balances && contracts) {
-      const allowance = await contracts.uad.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const allowance = await contracts.uad.allowance(account.address, DEBT_COUPON_MANAGER_ADDRESS);
       console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
       if (allowance.lt(amount)) {
         // first approve
-        const approveTransaction = await contracts.uad.approve(ADDRESS.DEBT_COUPON_MANAGER, amount);
+        const approveTransaction = await contracts.uad.approve(DEBT_COUPON_MANAGER_ADDRESS, amount);
 
         const approveWaiting = await approveTransaction.wait();
         console.log(
@@ -101,7 +101,7 @@ export const DebtCouponContainer = () => {
         );
       }
 
-      const allowance2 = await contracts.uad.allowance(account.address, ADDRESS.DEBT_COUPON_MANAGER);
+      const allowance2 = await contracts.uad.allowance(account.address, DEBT_COUPON_MANAGER_ADDRESS);
       console.log("allowance2", ethers.utils.formatEther(allowance2));
       // depositDollarForDebtCoupons uAD
 

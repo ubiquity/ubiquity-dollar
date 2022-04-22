@@ -1,7 +1,8 @@
 import { ethers, BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 
-import { ADDRESS, Contracts } from "@/lib/contracts";
+import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
+import { Contracts } from "@/lib/contracts";
 import { useConnectedContext } from "@/lib/connected";
 import { formatEther, formatMwei } from "@/lib/format";
 import { Container, Title, SubTitle } from "@/ui";
@@ -24,8 +25,8 @@ type PriceMonitorProps = {
 
 const fetchPrices = async ({ uad, curvePool, metaPool, twapOracle, dollarMintCalc }: Contracts): Promise<PriceMonitorProps> => {
   const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
-    curvePool.get_coin_indices(metaPool.address, ADDRESS.DAI, ADDRESS.USDT),
-    curvePool.get_coin_indices(metaPool.address, uad.address, ADDRESS.USDC),
+    curvePool.get_coin_indices(metaPool.address, NAMED_ACCOUNTS.DAI, NAMED_ACCOUNTS.USDT),
+    curvePool.get_coin_indices(metaPool.address, uad.address, NAMED_ACCOUNTS.USDC),
   ]);
 
   const metaPoolGet = async (i1: BigNumber, i2: BigNumber): Promise<BigNumber> => {
@@ -38,7 +39,7 @@ const fetchPrices = async ({ uad, curvePool, metaPool, twapOracle, dollarMintCal
     metaPoolGet(uadIndex, daiIndex),
     metaPoolGet(uadIndex, usdtIndex),
     twapOracle.consult(uad.address),
-    twapOracle.consult(ADDRESS.curve3CrvToken),
+    twapOracle.consult(NAMED_ACCOUNTS.curve3CrvToken),
   ]);
 
   return {

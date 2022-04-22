@@ -15,8 +15,7 @@
     "_contracts:build": "run-p _contracts:build:*",
     "_contracts:build:uad": "cd contracts/dollar && yarn build",
     "_contracts:build:nft": "cd contracts/ubiquistick && yarn build",
-    "_contracts:build:uad:artifacts": "cd contracts/dollar && yarn hardhat export --export ../../fixtures/ubiquity-dollar-deployment.json --network mainnet",
-    "_contracts:build:contracts-addresses-summary": "node ./build-scripts/generate_contracts_addresses.js",
+    "_contracts:build:addresses": "node ./build-scripts/generate_contracts_addresses.js",
     "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir fixtures/abi/types fixtures/abi/*.json",
     "contracts:run:nft": "cd contracts/ubiquistick && yarn hardhat node --fork-block-number 14044209",
     "contracts:run:faucet": "cd contracts/dollar && yarn node:faucet",
@@ -24,16 +23,6 @@
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "prepare": "husky install"
-  },
-  "scripts:reference": {
-    "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
-    "start": "run-s _cdroot contracts:build next:build next:start",
-    "dev": "run-s _cdroot contracts:build next:dev",
-    "_cdroot": "./build-scripts/cd-to-project-root.sh",
-    "build": "run-s contracts:build next:build",
-    "ui:dev": "next dev",
-    "ui:build": "next build",
-    "ui:start": "next start"
   },
   "nodemonConfig": {
     "ignore": [
