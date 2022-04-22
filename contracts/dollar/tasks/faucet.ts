@@ -7,7 +7,7 @@ import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
 
 const NETWORK_ADDRESS = "http://localhost:8545";
 const accountWithWithdrawableBond =
-  "0x0000CE08fa224696A819877070BF378e8B131ACF";
+  "0x4007ce2083c7f3e18097aeb3a39bb8ec149a341d";
 
 task("faucet", "Sends ETH and tokens to an address")
   .addOptionalParam("receiver", "The address that will receive them")
@@ -21,8 +21,8 @@ task("faucet", "Sends ETH and tokens to an address")
       if (net.name === "hardhat") {
         console.warn(
           "You are running the faucet task with Hardhat network, which" +
-            "gets automatically created and destroyed every time. Use the Hardhat" +
-            " option '--network localhost'"
+          "gets automatically created and destroyed every time. Use the Hardhat" +
+          " option '--network localhost'"
         );
       }
       console.log(`net chainId: ${net.chainId}  `);
@@ -151,8 +151,7 @@ task("faucet", "Sends ETH and tokens to an address")
         console.log(`${name}: ${token.address}`);
         const tx = await token.transfer(receiverAddress, amount);
         console.log(
-          `  Transferred ${ethers.utils.formatEther(amount)} ${name} from ${
-            tx.from
+          `  Transferred ${ethers.utils.formatEther(amount)} ${name} from ${tx.from
           }`
         );
       };

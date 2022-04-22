@@ -397,10 +397,10 @@ const App = () => {
   return (
     <div className="relative w-full">
       <button
-        className={cx(
-          "btn-primary absolute top-0 left-[50%] -mt-6 translate-x-[-50%] !rounded-t-none border-t-0 bg-accent text-paper transition duration-500 hover:border-t-0 hover:bg-accent",
-          { "translate-y-0": showAdminButton, "translate-y-[-100%]": !showAdminButton }
-        )}
+        className={cx("btn-primary absolute top-0 right-0 min-w-0 bg-accent text-paper transition duration-500 hover:border-t-0 hover:bg-accent", {
+          "opacity-100": showAdminButton,
+          "opacity-0": !showAdminButton,
+        })}
         disabled={!showAdminButton}
         onClick={() => setShowAdminComponents(true)}
       >
@@ -408,21 +408,13 @@ const App = () => {
       </button>
 
       <div
-        className={cx("absolute top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center", {
-          "pointer-events-none": !showAdminComponents,
-          "pointer-events-auto": showAdminComponents,
+        className={cx("absolute top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center transition-opacity duration-500", {
+          "pointer-events-none opacity-0": !showAdminComponents,
+          "pointer-events-auto opacity-100": showAdminComponents,
         })}
       >
-        <div
-          className={cx("fixed top-0 left-0 right-0 bottom-0 bg-black/50 transition-opacity duration-500", {
-            "opacity-100": showAdminComponents,
-            "opacity-0": !showAdminComponents,
-          })}
-          onClick={() => setShowAdminComponents(false)}
-        ></div>
-        <div
-          className={cx("-mt-6 pt-6 transition-transform duration-500", { "translate-y-[-100%]": !showAdminComponents, "translate-y-0": showAdminComponents })}
-        >
+        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/50" onClick={() => setShowAdminComponents(false)}></div>
+        <div className="pt-6">
           {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
           {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
         </div>

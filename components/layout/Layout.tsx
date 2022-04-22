@@ -67,7 +67,7 @@ const ConditionalHeader = ({ show }: { show: boolean }) => (
       )}
     >
       <Icon icon="ubq" className="mr-4 h-8" />
-      <span className="mt-1">Ubiquity Dollar</span>
+      <span className="mt-1">Ubiquity</span>
     </a>
   </Link>
 );
