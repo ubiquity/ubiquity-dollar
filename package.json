@@ -23,7 +23,8 @@
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "vercel-build": "run-s _contracts:install _contracts:build"
   },
   "scripts:reference": {
     "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
