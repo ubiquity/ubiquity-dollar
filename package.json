@@ -24,7 +24,7 @@
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "prepare": "husky install",
-    "vercel-build": "run-s _contracts:install _contracts:build"
+    "vercel-build": "./build-scripts/vercel-build.sh"
   },
   "scripts:reference": {
     "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
