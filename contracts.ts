@@ -1,46 +1,50 @@
 import { ethers } from "ethers";
-import {
-  TWAPOracle,
-  TWAPOracle__factory,
-  ICurveFactory,
-  ICurveFactory__factory,
-  UbiquityAlgorithmicDollarManager,
-  UbiquityAlgorithmicDollarManager__factory,
-  UbiquityAlgorithmicDollar,
-  UbiquityAlgorithmicDollar__factory,
-  DollarMintingCalculator,
-  DollarMintingCalculator__factory,
-  UbiquityAutoRedeem,
-  UbiquityAutoRedeem__factory,
-  IMetaPool,
-  IMetaPool__factory,
-  UbiquityGovernance,
-  UbiquityGovernance__factory,
-  ERC20,
-  ERC20__factory,
-  DebtCoupon,
-  DebtCoupon__factory,
-  DebtCouponManager,
-  DebtCouponManager__factory,
-  BondingV2,
-  BondingV2__factory,
-  MasterChefV2,
-  MasterChefV2__factory,
-  BondingShareV2,
-  BondingShareV2__factory,
-  SushiSwapPool,
-  SushiSwapPool__factory,
-  IUniswapV2Pair,
-  IUniswapV2Pair__factory,
-  UbiquityFormulas,
-  UbiquityFormulas__factory,
-  YieldProxy,
-  YieldProxy__factory,
-  IJar,
-  IJar__factory,
-} from "./contracts/artifacts/types";
+
 import namedAccounts from "./fixtures/named-accounts.json";
-import FullDeployment from "./fixtures/full-deployment.json";
+import FullDeployment from "./fixtures/ubiquity-dollar-deployment.json";
+import {
+  UbiquityAlgorithmicDollarManager__factory,
+  UbiquityAlgorithmicDollar__factory,
+  ICurveFactory__factory,
+  IMetaPool__factory,
+  TWAPOracle__factory,
+  DollarMintingCalculator__factory,
+  UbiquityAutoRedeem__factory,
+  UbiquityGovernance__factory,
+  BondingShareV2__factory,
+  DebtCoupon__factory,
+  DebtCouponManager__factory,
+  BondingV2__factory,
+  MasterChefV2__factory,
+  SushiSwapPool__factory,
+  IUniswapV2Pair__factory,
+  UbiquityFormulas__factory,
+  YieldProxy__factory,
+  IJar__factory,
+  UbiquityAlgorithmicDollarManager,
+  DebtCouponManager,
+  YieldProxy,
+  TWAPOracle,
+  DollarMintingCalculator,
+  BondingV2,
+  MasterChefV2,
+  SushiSwapPool,
+  UbiquityFormulas,
+  IUniswapV2Pair,
+  ICurveFactory,
+  IMetaPool,
+  IJar,
+  UbiquityAlgorithmicDollar,
+  UbiquityAutoRedeem,
+  UbiquityGovernance,
+  DebtCoupon,
+  BondingShareV2,
+  ICouponsForDollarsCalculator,
+  ICouponsForDollarsCalculator__factory,
+  IUARForDollarsCalculator,
+  IUARForDollarsCalculator__factory,
+} from "./contracts/dollar/artifacts/types";
+import { ERC20__factory, ERC20 } from "./contracts/dollar/artifacts/types";
 
 export const ADDRESS = {
   MANAGER: FullDeployment.contracts.UbiquityAlgorithmicDollarManager.address,
@@ -73,6 +77,8 @@ const contracts = {
   yieldProxy: YieldProxy__factory.connect,
   usdc: ERC20__factory.connect,
   jarUsdc: IJar__factory.connect,
+  coupon: ICouponsForDollarsCalculator__factory.connect,
+  uarCalc: IUARForDollarsCalculator__factory.connect,
 };
 
 // 2
@@ -103,6 +109,8 @@ export type Contracts = {
   // ERC1155
   debtCouponToken: DebtCoupon;
   bondingToken: BondingShareV2;
+  coupon: ICouponsForDollarsCalculator;
+  uarCalc: IUARForDollarsCalculator;
 };
 
 // 3
@@ -120,6 +128,8 @@ type ManagerAddresses = {
   masterChef: string;
   sushiSwapPool: string;
   ubiquityFormulas: string;
+  coupon: string;
+  uarCalc: string;
 };
 
 // Load all contract addresses on parallel
@@ -139,6 +149,8 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     masterChef,
     sushiSwapPool,
     ubiquityFormulas,
+    coupon,
+    uarCalc,
   ] = await Promise.all([
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
@@ -153,6 +165,8 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
+    manager.couponCalculatorAddress(),
+    manager.uarCalculatorAddress(),
   ]);
   return {
     uad,
@@ -168,6 +182,8 @@ async function contractsAddresses(manager: UbiquityAlgorithmicDollarManager): Pr
     masterChef,
     sushiSwapPool,
     ubiquityFormulas,
+    coupon,
+    uarCalc,
   };
 }
 
@@ -176,12 +192,12 @@ export async function connectedContracts(): Promise<{
   provider: ethers.providers.Web3Provider;
   contracts: Contracts;
 }> {
-  if (!window.ethereum?.request) {
+  if (!(window as any).ethereum?.request) {
     console.log("Metamask is not insalled, cannot initialize contracts");
     return Promise.reject("Metamask is not installed");
   }
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const provider = new ethers.providers.Web3Provider((window as any).ethereum);
 
   const manager = contracts.manager(ADDRESS.MANAGER, provider);
   const addr = await contractsAddresses(manager);
@@ -218,6 +234,8 @@ export async function connectedContracts(): Promise<{
       sushiSwapPool,
       ugovUadPair,
       ubiquityFormulas: contracts.ubiquityFormulas(addr.ubiquityFormulas, provider),
+      coupon: contracts.coupon(addr.coupon, provider),
+      uarCalc: contracts.uarCalc(addr.uarCalc, provider),
     },
   };
 }

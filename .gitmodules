@@ -1,4 +1,0 @@
-[submodule "contracts"]
-	path = contracts
-	url = https://github.com/ubiquity/uad-contracts.git
-    branch = main

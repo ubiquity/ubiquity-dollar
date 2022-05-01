@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+
+jobs:
+  lint-and-test:
+    strategy:
+      matrix:
+        node: ["14.16.x", "15.x"]
+        os: [ubuntu-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    env:
+      API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
+      TREASURY_PRIV_KEY: ${{ secrets.TREASURY_PRIV_KEY }}
+      SECOND_ACC_PRIV_KEY: ${{ secrets.SECOND_ACC_PRIV_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install -g yarn
+      - id: yarn-cache-2
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-2.outputs.dir }}
+          key: ${{ matrix.os }}-yarn2-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ matrix.os }}-yarn2-
+
+      - run: yarn install --frozen-lockfile --ignore-scripts
+      - run: yarn dev:clean
+      - run: yarn build
+        env:
+          TS_NODE_TRANSPILE_ONLY: 1
+      - run: yarn lint
+      - run: yarn test
