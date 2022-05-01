@@ -1,5 +1,7 @@
-/contracts
-/node_modules
-/fixtures
-/.next
-/pages/styles/tailwind.css
+contracts
+node_modules
+fixtures
+.next
+pages/styles/tailwind.css
+abi
+deployments

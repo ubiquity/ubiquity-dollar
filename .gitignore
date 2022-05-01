@@ -29,7 +29,6 @@ _.seed
 \*.tsbuildinfo
 bower_components
 build/Release
-/contracts
 coverage
 dist
 jspm_packages
@@ -43,3 +42,4 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 systemctl/ \*_/_.DS_Store
 typings
 *.log
+/abi/types/*

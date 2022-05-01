@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "es2018",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "outDir": "./artifacts/type"
+  },
+  "include": ["./scripts", "./tests", "./deploy"],
+  "files": ["hardhat.config.ts"]
+}

@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ADDRESS } from "../pages";
-import { DebtCouponManager__factory, UbiquityAutoRedeem__factory } from "../contracts/artifacts/types";
+import { DebtCouponManager__factory, UbiquityAutoRedeem__factory } from "../contracts/dollar/artifacts/types";
 import { useConnectedContext } from "./context/connected";
 import { Balances } from "./common/contracts-shortcuts";
 
