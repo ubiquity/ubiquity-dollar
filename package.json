@@ -4,7 +4,7 @@
   "scripts": {
     "ape": "run-s install-env install-contracts dev",
     "install-env": "cp .env.example .env",
-    "install-contracts": "run-s _contracts:install _contracts:build",
+    "install-contracts": "run-s _contracts:install:* build:contracts",
     "build": "run-s build:*",
     "build:contracts": "run-p _contracts:build:*",
     "build:ui":"yarn next build",
