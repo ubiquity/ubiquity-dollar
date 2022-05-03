@@ -44,3 +44,4 @@ typings
 *.log
 /abi/types/*
 /fixtures/contracts-addresses/*
+!/fixtures/contracts-addresses/.keep
