@@ -6,7 +6,7 @@
   "ignorePatterns": ["contracts/"],
   "rules": {
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "prettier/prettier": "error"
+    "prettier/prettier": "warn"
   },
   "env": {
     "browser": true,

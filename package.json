@@ -2,13 +2,16 @@
   "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
-    "ape": "run-s init:env make start",
-    "make": "run-s _contracts:install _contracts:build",
-    "start": "run-p _start:*",
+    "ape": "run-s init:env contracts start",
     "init:env": "cp .env.example .env",
-    "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`",
+    "build": "yarn _contracts:build && yarn next build",
+    "start": "run-p _start:*",
     "_start:chain": "./build-scripts/dev-chain-init.sh",
     "_start:ui": "next dev",
+    "install-contracts": "run-s _contracts:install _contracts:build",
+    "_contracts:clean": "run-p _contracts:clean:*",
+    "_contracts:clean:uad": "cd ./contracts/dollar && yarn clean",
+    "_contracts:clean:nft": "cd ./contracts/ubiquistick && yarn clean",
     "_contracts:install": "run-p _contracts:install:*",
     "_contracts:install:uad": "cd ./contracts/dollar && yarn",
     "_contracts:install:nft": "cd ./contracts/ubiquistick && yarn",
@@ -24,7 +27,7 @@
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "prepare": "husky install",
-    "vercel-build": "./build-scripts/vercel-build.sh"
+    "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`"
   },
   "scripts:reference": {
     "__contracts:build:nft": "cd contracts/ubiquistick && yarn build",
