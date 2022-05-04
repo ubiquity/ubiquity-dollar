@@ -6,6 +6,7 @@ import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, Y
 import { BigNumber, ethers } from "ethers";
 import { performTransaction, constrainNumber } from "./common/utils";
 import icons, { Icon } from "./ui/icons";
+import { ERC20 } from "../contracts/dollar/artifacts/types/ERC20";
 type Balance = { usdc: number; ubq: number; uad: number };
 
 type Actions = {
@@ -46,8 +47,8 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
       console.log(`Depositing: USDC ${usdc} | UBQ ${ubq} | uAD ${uad}`);
       if (
         (await ensureERC20Allowance("USDC", contracts.usdc, bigUsdc, signer, contracts.yieldProxy.address, 6)) &&
-        (await ensureERC20Allowance("UBQ", contracts.ugov, bigUbq, signer, contracts.yieldProxy.address)) &&
-        (await ensureERC20Allowance("uAD", contracts.uad, bigUad, signer, contracts.yieldProxy.address)) &&
+        (await ensureERC20Allowance("UBQ", (contracts.ugov as unknown) as ERC20, bigUbq, signer, contracts.yieldProxy.address)) &&
+        (await ensureERC20Allowance("uAD", (contracts.uad as unknown) as ERC20, bigUad, signer, contracts.yieldProxy.address)) &&
         (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
       ) {
         await refreshYieldProxyData();
