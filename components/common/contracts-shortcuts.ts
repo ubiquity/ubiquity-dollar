@@ -27,7 +27,7 @@ export async function accountBalances(account: EthAccount, contracts: Contracts)
     contracts.metaPool.balanceOf(account.address),
     contracts.uar.balanceOf(account.address),
     contracts.ugov.balanceOf(account.address),
-    erc1155BalanceOf(account.address, contracts.debtCouponToken),
+    erc1155BalanceOf(account.address, (contracts.debtCouponToken as unknown) as ERC1155Ubiquity),
     erc1155BalanceOf(account.address, (contracts.bondingToken as unknown) as ERC1155Ubiquity),
     contracts.usdc.balanceOf(account.address),
   ]);

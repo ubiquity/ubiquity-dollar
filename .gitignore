@@ -43,3 +43,5 @@ systemctl/ \*_/_.DS_Store
 typings
 *.log
 /abi/types/*
+/fixtures/contracts-addresses/*
+!/fixtures/contracts-addresses/.keep

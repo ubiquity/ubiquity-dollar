@@ -1,14 +1,16 @@
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
+import "@nomiclabs/hardhat-ethers";
+import "@typechain/hardhat";
 import * as dotenv from "dotenv";
-import fs from "fs";
 import "hardhat-deploy";
-import "hardhat-deploy-ethers";
 import "hardhat-gas-reporter";
-import "hardhat-typechain";
-import { HardhatUserConfig } from "hardhat/config";
-import path from "path";
 import "solidity-coverage";
+import { HardhatUserConfig } from "hardhat/types";
+
+import fs from "fs";
+import path from "path";
+
 
 if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   import("./tasks/index");
@@ -28,9 +30,8 @@ const {
   API_KEY_COINMARKETCAP,
 } = process.env;
 
-const mnemonic = `${
-  MNEMONIC || "test test test test test test test test test test test junk"
-}`;
+const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"
+  }`;
 
 const accounts = {
   // use default accounts
@@ -104,9 +105,8 @@ const config: HardhatUserConfig = {
     localhost: {
       url: `http://127.0.0.1:8545`,
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${
-          process.env.API_KEY_ALCHEMY || ""
-        }`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+          }`,
         blockNumber: 13252206,
       },
       accounts,
@@ -115,9 +115,8 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${
-          process.env.API_KEY_ALCHEMY || ""
-        }`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+          }`,
         blockNumber: 13252206,
       },
       accounts,
@@ -125,17 +124,15 @@ const config: HardhatUserConfig = {
       initialBaseFeePerGas: 0,
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${
-        process.env.API_KEY_ALCHEMY || ""
-      }`,
+      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+        }`,
       accounts: UBQ ? [UBQ] : accounts,
       gasPrice: 60000000000,
     },
     ropsten: {
       gasPrice: 60000000000,
-      url: `https://eth-ropsten.alchemyapi.io/v2/${
-        process.env.API_KEY_ALCHEMY || ""
-      }`,
+      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+        }`,
       accounts,
     },
     rinkeby: {

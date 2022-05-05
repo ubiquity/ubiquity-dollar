@@ -3,13 +3,14 @@ import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import * as dotenv from "dotenv";
-import { Wallet } from "ethers";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
+import "solidity-coverage";
 import type {
   HardhatNetworkAccountUserConfig, HardhatUserConfig
 } from "hardhat/types";
-import "solidity-coverage";
+
+import { Wallet } from "ethers";
 import "tsconfig-paths/register";
 import "./tasks/index";
 
