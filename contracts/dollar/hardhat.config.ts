@@ -18,7 +18,7 @@ if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   );
 }
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 const {
   MNEMONIC,
   UBQ,
@@ -28,9 +28,8 @@ const {
   API_KEY_COINMARKETCAP,
 } = process.env;
 
-const mnemonic = `${
-  MNEMONIC || "test test test test test test test test test test test junk"
-}`;
+const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"
+  }`;
 
 const accounts = {
   // use default accounts
@@ -104,9 +103,8 @@ const config: HardhatUserConfig = {
     localhost: {
       url: `http://127.0.0.1:8545`,
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${
-          process.env.API_KEY_ALCHEMY || ""
-        }`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+          }`,
         blockNumber: 13252206,
       },
       accounts,
@@ -115,9 +113,8 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${
-          process.env.API_KEY_ALCHEMY || ""
-        }`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+          }`,
         blockNumber: 13252206,
       },
       accounts,
@@ -125,17 +122,15 @@ const config: HardhatUserConfig = {
       initialBaseFeePerGas: 0,
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${
-        process.env.API_KEY_ALCHEMY || ""
-      }`,
+      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+        }`,
       accounts: UBQ ? [UBQ] : accounts,
       gasPrice: 60000000000,
     },
     ropsten: {
       gasPrice: 60000000000,
-      url: `https://eth-ropsten.alchemyapi.io/v2/${
-        process.env.API_KEY_ALCHEMY || ""
-      }`,
+      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+        }`,
       accounts,
     },
     rinkeby: {

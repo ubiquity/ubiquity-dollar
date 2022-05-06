@@ -1,6 +1,8 @@
 import { task, types } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
 import { Signer } from "ethers";
+import * as dotenv from "dotenv";
+
 
 import { ICurveFactory } from "../artifacts/types/ICurveFactory";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
@@ -10,6 +12,14 @@ import { BondingV2 } from "../artifacts/types/BondingV2";
 import { ERC20 } from "../artifacts/types/ERC20";
 import pressAnyKey from "../utils/flow";
 import { TWAPOracle } from "../artifacts/types/TWAPOracle";
+import { EthereumProvider } from "hardhat/types";
+import { JsonRpcProvider } from "@ethersproject/providers";
+
+dotenv.config();
+
+const {
+  API_KEY_ALCHEMY
+} = process.env;
 
 task(
   "priceReset",
@@ -31,7 +41,7 @@ task(
   .addOptionalParam(
     "blockheight",
     "block height for the fork",
-    13135453,
+    14044209,
     types.int
   )
   .setAction(
@@ -51,9 +61,8 @@ task(
           params: [
             {
               forking: {
-                jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${
-                  process.env.API_KEY_ALCHEMY || ""
-                }`,
+                jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""
+                  }`,
                 blockNumber,
               },
             },
@@ -64,14 +73,14 @@ task(
       let admin: Signer;
       let adminAdr: string;
       if (taskArgs.dryrun) {
-        await resetFork(taskArgs.blockheight);
+        // await resetFork(taskArgs.blockheight);
         adminAdr = "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd";
         const impersonate = async (account: string): Promise<Signer> => {
-          await network.provider.request({
-            method: "hardhat_impersonateAccount",
-            params: [account],
-          });
-          return ethers.provider.getSigner(account);
+          let provider = new ethers.providers.JsonRpcProvider(
+            "http://localhost:8545"
+          );
+          await provider.send("hardhat_impersonateAccount", [account]);
+          return provider.getSigner(account);
         };
         admin = await impersonate(adminAdr);
       } else {
@@ -288,9 +297,11 @@ task(
         1 uAD => ${ethers.utils.formatEther(dyuAD2DAI)} DAI
         1 uAD => ${ethers.utils.formatUnits(dyuAD2USDT, "mwei")} USDT
           `);
+      // for (let i = 0; i < 5; ++i) {
       tx = await metaPool
         .connect(admin)
-        ["remove_liquidity_one_coin(uint256,int128,uint256)"](1, coinIndex, 0);
+      ["remove_liquidity_one_coin(uint256,int128,uint256)"](1, coinIndex, 0);
+      // }
       console.log(`We execute another action (swap,deposit,withdraw etc..)
                    on the curve pool to update the twap price`);
       receipt = tx.wait(1);
