@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { useConnectedContext } from "@/lib/connected";
 import { formatEther } from "@/lib/format";
+import { useDeployedContracts, useManagerManaged } from "@/lib/hooks";
 import { Container, Title, SubTitle } from "@/ui";
 
 import { Address, Balance } from "./ui";
@@ -15,26 +15,28 @@ type TokenMonitorProps = {
 };
 
 const TokenMonitorContainer = () => {
-  const { contracts } = useConnectedContext();
+  const { debtCouponManager } = useDeployedContracts() || {};
+  const { debtCouponToken, uad } = useManagerManaged() || {};
+
   const [tokenMonitorPRops, setTokenMonitorProps] = useState<State>(null);
 
   useEffect(() => {
-    if (contracts) {
+    if (debtCouponManager && debtCouponToken && uad) {
       (async function () {
         const [totalOutstandingDebt, totalRedeemable] = await Promise.all([
-          contracts.debtCouponToken.getTotalOutstandingDebt(),
-          contracts.uad.balanceOf(contracts.debtCouponManager.address),
+          debtCouponToken.getTotalOutstandingDebt(),
+          uad.balanceOf(debtCouponManager.address),
         ]);
 
         setTokenMonitorProps({
-          debtCouponAddress: contracts.debtCouponToken.address,
-          debtCouponManagerAddress: contracts.debtCouponManager.address,
+          debtCouponAddress: debtCouponToken.address,
+          debtCouponManagerAddress: debtCouponManager.address,
           totalOutstandingDebt: +formatEther(totalOutstandingDebt),
           totalRedeemable: +formatEther(totalRedeemable),
         });
       })();
     }
-  }, [contracts]);
+  }, [debtCouponManager, debtCouponToken, uad]);
 
   return tokenMonitorPRops && <TokenMonitor {...tokenMonitorPRops} />;
 };

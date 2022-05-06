@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 
-import { useConnectedContext } from "@/lib/connected";
 import { getNetworkName } from "@/lib/utils";
+import { useWeb3Provider } from "@/lib/hooks";
 
 const Network = () => {
-  const { provider } = useConnectedContext();
+  const web3Provider = useWeb3Provider();
   const [network, setNetwork] = useState("");
 
   useEffect(() => {
-    if (provider) {
-      const networkName = getNetworkName(provider);
+    if (web3Provider) {
+      const networkName = getNetworkName(web3Provider);
       setNetwork(networkName);
     }
-  }, [provider]);
+  }, [web3Provider]);
 
-  if (!provider) {
+  if (!web3Provider) {
     return null;
   }
 

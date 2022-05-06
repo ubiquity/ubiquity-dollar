@@ -1,12 +1,11 @@
 import { FC } from "react";
 import { WalletNotConnected } from "@/ui";
-import { useConnectedContext } from "@/lib/connected";
 import BondingSharesExplorer from "@/components/liquidity-mining/BondingSharesExplorer";
+import { useWalletAddress } from "@/components/lib/hooks";
 
 const LiquidityMining: FC = (): JSX.Element => {
-  const context = useConnectedContext();
-  const { account } = context;
-  return account ? <BondingSharesExplorer /> : WalletNotConnected;
+  const [walletAddress] = useWalletAddress();
+  return walletAddress ? <BondingSharesExplorer /> : WalletNotConnected;
 };
 
 export default LiquidityMining;

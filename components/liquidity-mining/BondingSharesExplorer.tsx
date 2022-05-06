@@ -3,8 +3,11 @@ import { memo, useCallback, useState } from "react";
 
 import { formatEther } from "@/lib/format";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
-import { connectedWithUserContext, useConnectedContext, UserContext } from "@/lib/connected";
-import { Container, Title, SubTitle, Icon, Loading } from "@/ui";
+import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
+import { Container, Title, Icon, Loading } from "@/ui";
+import { useBalances, useTransactionLogger } from "@/lib/hooks";
+
+// Contracts: bonding, metaPool, bondingToken, masterChef
 
 import DepositShare from "./DepositShare";
 
@@ -38,29 +41,31 @@ type Actions = {
 
 const USD_TO_LP = 0.75;
 const LP_TO_USD = 1 / USD_TO_LP;
-const BONDING_SHARE_TRANSACTION = "BONDING_SHARE_TRANSACTION";
 
-export const BondingSharesExplorerContainer = ({ contracts, provider, account, signer }: UserContext) => {
+export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
   const [model, setModel] = useState<Model | null>(null);
-  const { refreshBalances, updateActiveTransaction } = useConnectedContext();
+  const [, doTransaction] = useTransactionLogger();
+  const [, refreshBalances] = useBalances();
+
+  const { bonding, masterChef, bondingToken, metaPool } = managedContracts;
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {
     console.time("BondingShareExplorerContainer contract loading");
-    const currentBlock = await provider.getBlockNumber();
-    const blockCountInAWeek = +(await contracts.bonding.blockCountInAWeek()).toString();
-    const totalShares = await contracts.masterChef.totalShares();
-    const bondingShareIds = await contracts.bondingToken.holderTokens(account.address);
-    const walletLpBalance = await contracts.metaPool.balanceOf(account.address);
+    const currentBlock = await web3Provider.getBlockNumber();
+    const blockCountInAWeek = +(await bonding.blockCountInAWeek()).toString();
+    const totalShares = await masterChef.totalShares();
+    const bondingShareIds = await bondingToken.holderTokens(walletAddress);
+    const walletLpBalance = await metaPool.balanceOf(walletAddress);
 
     const shares: ShareData[] = [];
     await Promise.all(
       bondingShareIds.map(async (id) => {
         const [ugov, bond, bondingShareInfo, tokenBalance] = await Promise.all([
-          contracts.masterChef.pendingUGOV(id),
-          contracts.bondingToken.getBond(id),
-          contracts.masterChef.getBondingShareInfo(id),
-          contracts.bondingToken.balanceOf(account.address, id),
+          masterChef.pendingUGOV(id),
+          bondingToken.getBond(id),
+          masterChef.getBondingShareInfo(id),
+          bondingToken.balanceOf(walletAddress, id),
         ]);
 
         const endBlock = +bond.endBlock.toString();
@@ -78,7 +83,6 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
 
     console.timeEnd("BondingShareExplorerContainer contract loading");
     setModel({ processing: false, shares: sortedShares, totalShares, walletLpBalance });
-    updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, active: false });
   }
 
   function allLpAmount(id: number): BigNumber {
@@ -93,25 +97,24 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
       async ({ id, amount }) => {
         if (!model || model.processing) return;
         console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
-        const title = `Withdrawing LP...`;
         setModel({ ...model, processing: true });
-        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
-
-        const isAllowed = await contracts.bondingToken.isApprovedForAll(account.address, contracts.bonding.address);
-        if (!isAllowed) {
-          // Allow bonding contract to control account share
-          if (!(await performTransaction(contracts.bondingToken.connect(signer).setApprovalForAll(contracts.bonding.address, true)))) {
-            return; // TODO: Show transaction errors to user
+        doTransaction("Withdrawing LP...", async () => {
+          const isAllowed = await bondingToken.isApprovedForAll(walletAddress, bonding.address);
+          if (!isAllowed) {
+            // Allow bonding contract to control account share
+            if (!(await performTransaction(bondingToken.connect(signer).setApprovalForAll(bonding.address, true)))) {
+              return; // TODO: Show transaction errors to user
+            }
           }
-        }
 
-        const bigNumberAmount = amount ? ethers.utils.parseEther(amount.toString()) : allLpAmount(id);
-        await performTransaction(contracts.bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
+          const bigNumberAmount = amount ? ethers.utils.parseEther(amount.toString()) : allLpAmount(id);
+          await performTransaction(bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
 
-        fetchSharesInformation();
-        refreshBalances();
+          fetchSharesInformation();
+          refreshBalances();
+        });
       },
-      [model, contracts, signer]
+      [model]
     ),
 
     onClaimUbq: useCallback(
@@ -119,15 +122,14 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         if (!model || model.processing) return;
         console.log(`Claiming UBQ rewards from ${id}`);
         setModel({ ...model, processing: true });
-        const title = "Claiming UBQ...";
-        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
+        doTransaction("Claiming UBQ...", async () => {
+          await performTransaction(masterChef.connect(signer).getRewards(BigNumber.from(id)));
 
-        await performTransaction(contracts.masterChef.connect(signer).getRewards(BigNumber.from(id)));
-
-        fetchSharesInformation();
-        refreshBalances();
+          fetchSharesInformation();
+          refreshBalances();
+        });
       },
-      [model, contracts, signer]
+      [model]
     ),
 
     onStake: useCallback(
@@ -136,21 +138,21 @@ export const BondingSharesExplorerContainer = ({ contracts, provider, account, s
         console.log(`Staking ${amount} for ${weeks} weeks`);
         setModel({ ...model, processing: true });
         const title = `Staking...`;
-        updateActiveTransaction({ id: BONDING_SHARE_TRANSACTION, title, active: true });
-        const allowance = await contracts.metaPool.allowance(account.address, contracts.bonding.address);
+        doTransaction("Staking...", async () => {});
+        const allowance = await metaPool.allowance(walletAddress, bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
         console.log("lpsAmount", ethers.utils.formatEther(amount));
         if (allowance.lt(amount)) {
-          await performTransaction(contracts.metaPool.connect(signer).approve(contracts.bonding.address, amount));
-          const allowance2 = await contracts.metaPool.allowance(account.address, contracts.bonding.address);
+          await performTransaction(metaPool.connect(signer).approve(bonding.address, amount));
+          const allowance2 = await metaPool.allowance(walletAddress, bonding.address);
           console.log("allowance2", ethers.utils.formatEther(allowance2));
         }
-        await performTransaction(contracts.bonding.connect(signer).deposit(amount, weeks));
+        await performTransaction(bonding.connect(signer).deposit(amount, weeks));
 
         fetchSharesInformation();
         refreshBalances();
       },
-      [model, contracts, signer]
+      [model]
     ),
   };
 
@@ -275,4 +277,4 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
   );
 };
 
-export default connectedWithUserContext(BondingSharesExplorerContainer);
+export default withLoadedContext(BondingSharesExplorerContainer);

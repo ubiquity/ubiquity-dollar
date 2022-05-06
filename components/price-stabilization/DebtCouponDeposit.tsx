@@ -1,0 +1,75 @@
+import { BigNumber } from "ethers";
+import { useState } from "react";
+
+import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
+import { safeParseEther } from "@/lib/utils";
+import { formatEther } from "@/lib/format";
+import { PositiveNumberInput } from "@/ui";
+import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
+
+const DebtCouponDeposit = () => {
+  const [walletAddress] = useWalletAddress();
+  const signer = useSigner();
+  const [balances, refreshBalances] = useBalances();
+  const [, doTransaction, doingTransaction] = useTransactionLogger();
+  const deployedContracts = useDeployedContracts();
+  const managedContracts = useManagerManaged();
+
+  const [inputVal, setInputVal] = useState("");
+  const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber | null>(null);
+
+  if (!walletAddress || !signer) {
+    return <span>Connnect wallet</span>;
+  }
+
+  if (!balances || !managedContracts || !deployedContracts) {
+    return <span>Loading...</span>;
+  }
+
+  const depositDollarForDebtCoupons = async (amount: BigNumber) => {
+    const { debtCouponManager } = deployedContracts;
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.uad, amount, signer, debtCouponManager.address);
+    await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
+    refreshBalances();
+  };
+
+  const handleBurn = async () => {
+    const amount = extractValidAmount();
+    if (amount) {
+      doTransaction("Burning uAD...", async () => {
+        setInputVal("");
+        await depositDollarForDebtCoupons(amount);
+      });
+    }
+  };
+
+  const handleInput = async (val: string) => {
+    setInputVal(val);
+    const amount = extractValidAmount(val);
+    if (amount) {
+      setExpectedDebtCoupon(null);
+      setExpectedDebtCoupon(await managedContracts.coupon.connect(signer).getCouponAmount(amount));
+    }
+  };
+
+  const extractValidAmount = (val: string = inputVal): null | BigNumber => {
+    const amount = safeParseEther(val);
+    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.uad) ? amount : null;
+  };
+
+  const submitEnabled = !!(extractValidAmount() && !doingTransaction);
+
+  return (
+    <>
+      <div className="flex flex-col">
+        <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
+        <button className="btn-primary" onClick={handleBurn} disabled={!submitEnabled}>
+          Redeem uAD for uDEBT
+        </button>
+      </div>
+      {expectedDebtCoupon && inputVal && <p>expected uDEBT {formatEther(expectedDebtCoupon)}</p>}
+    </>
+  );
+};
+
+export default DebtCouponDeposit;

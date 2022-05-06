@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import cx from "classnames";
 
-import { useConnectedContext } from "@/lib/connected";
+import { useManagerManaged, useTransactionLogger, useWalletAddress, useWeb3Provider } from "@/lib/hooks";
 import { performTransaction, ZERO_ADDRESS } from "@/lib/utils";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "@/fixtures/abi/types";
@@ -22,7 +22,10 @@ import AllowanceManager from "./AllowanceManager";
 import RewardsManager from "./RewardsManager";
 
 const App = () => {
-  const { provider, account, updateActiveTransaction, activeTransactions, contracts: ubqContracts } = useConnectedContext();
+  const provider = useWeb3Provider();
+  const [walletAddress] = useWalletAddress();
+  const [, doTransaction, doingTransaction] = useTransactionLogger();
+  const ubqContracts = useManagerManaged();
   const [contracts, setContracts] = useState<Contracts | null>(null);
   const [tokensContracts, setTokensContracts] = useState<ERC20[]>([]);
 
@@ -31,7 +34,7 @@ const App = () => {
   // Contracts loading
 
   useEffect(() => {
-    if (!provider || !account) {
+    if (!provider || !walletAddress || !provider.network) {
       return;
     }
 
@@ -66,7 +69,7 @@ const App = () => {
       setContracts(contracts);
       setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
     })();
-  }, [provider, account]);
+  }, [provider, walletAddress, provider?.network]);
 
   // ███████╗███████╗████████╗ ██████╗██╗  ██╗██╗███╗   ██╗ ██████╗
   // ██╔════╝██╔════╝╚══██╔══╝██╔════╝██║  ██║██║████╗  ██║██╔════╝
@@ -118,8 +121,8 @@ const App = () => {
 
   async function refreshOwnerData() {
     if (!isConnected || !contracts) return;
-    setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === account.address.toLowerCase());
-    setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === account.address.toLowerCase());
+    setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === walletAddress.toLowerCase());
+    setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === walletAddress.toLowerCase());
   }
 
   const [sticks, setSticks] = useState<OwnedSticks | null>(null);
@@ -134,12 +137,12 @@ const App = () => {
   async function refreshUbiquistickData() {
     if (isConnected && contracts && ubqContracts) {
       const newSticks: OwnedSticks = { black: 0, gold: 0, invisible: 0 };
-      const sticksAmount = (await contracts.ubiquiStick.balanceOf(account.address)).toNumber();
+      const sticksAmount = (await contracts.ubiquiStick.balanceOf(walletAddress)).toNumber();
       const newTokenMedia: TokenMedia = {};
 
       await Promise.all(
         new Array(sticksAmount).fill(0).map(async (_, i) => {
-          const id = (await contracts.ubiquiStick.tokenOfOwnerByIndex(account.address, i)).toNumber();
+          const id = (await contracts.ubiquiStick.tokenOfOwnerByIndex(walletAddress, i)).toNumber();
           const uri = await contracts.ubiquiStick.tokenURI(id);
           const data: TokenData = await fetch(uri).then((res) => res.json());
           newTokenMedia[data.type] = data;
@@ -156,7 +159,7 @@ const App = () => {
         })
       );
 
-      const allowance = await contracts.ubiquiStickSale.allowance(account.address);
+      const allowance = await contracts.ubiquiStickSale.allowance(walletAddress);
 
       const blocksCountInAWeek = (await ubqContracts.bonding.blockCountInAWeek()).toNumber();
       const vestingBlocks = (await contracts.simpleBond.vestingBlocks()).toNumber();
@@ -188,7 +191,7 @@ const App = () => {
       const newPoolsData: { [token: string]: PoolData } = (
         await Promise.all(
           tokensContracts.map((tokenContract) =>
-            Promise.all([tokenContract.address, tokenContract.balanceOf(account.address), tokenContract.decimals(), newTokensRatios[tokenContract.address]])
+            Promise.all([tokenContract.address, tokenContract.balanceOf(walletAddress), tokenContract.decimals(), newTokensRatios[tokenContract.address]])
           )
         )
       ).reduce<{ [token: string]: PoolData }>((acc, [address, balance, decimals, reward]) => {
@@ -223,15 +226,15 @@ const App = () => {
       // Get the current bonds data
 
       const currentBlock = await provider.getBlockNumber();
-      const bondsCount = (await contracts.simpleBond.bondsCount(account.address)).toNumber();
+      const bondsCount = (await contracts.simpleBond.bondsCount(walletAddress)).toNumber();
 
       const newBondsData: BondData[] = (
         await Promise.all(
           Array(bondsCount)
             .fill(null)
             .map(async (_, i) => ({
-              bond: await contracts.simpleBond.bonds(account.address, i),
-              rewards: await contracts.simpleBond.rewardsBondOf(account.address, i),
+              bond: await contracts.simpleBond.bonds(walletAddress, i),
+              rewards: await contracts.simpleBond.rewardsBondOf(walletAddress, i),
             }))
         )
       ).map(({ bond: { token, amount, rewards, claimed, block }, rewards: { rewardsClaimable } }) => {
@@ -252,7 +255,7 @@ const App = () => {
 
       // Get the balance of the reward token
 
-      const newRewardTokenBalance = +ethers.utils.formatUnits(await contracts.rewardToken.balanceOf(account.address), await contracts.rewardToken.decimals());
+      const newRewardTokenBalance = +ethers.utils.formatUnits(await contracts.rewardToken.balanceOf(walletAddress), await contracts.rewardToken.decimals());
 
       // Get wether the Ubiquistick is still neccesary
 
@@ -307,75 +310,73 @@ const App = () => {
   //    ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═╝ ╚═════╝ ╚═╝  ╚═══╝╚══════╝
 
   const contractSetAllowance = async (data: { address: string; count: string; price: string }[]) => {
-    if (!isConnected || !isLoaded || isTransacting) return;
+    if (!isConnected || !isLoaded || doingTransaction) return;
 
-    updateActiveTransaction({ id: "UBIQUISTICK_ALLOWANCE", title: "Setting allowance...", active: true });
-    if (data.length > 1) {
-      const addresses = data.map(({ address }) => address);
-      const counts = data.map(({ count }) => utils.parseUnits(count, "wei"));
-      const prices = data.map(({ price }) => utils.parseEther(price));
-      await performTransaction(contracts.ubiquiStickSale.batchSetAllowances(addresses, counts, prices));
-    } else {
-      const { address, count, price } = data[0];
-      await performTransaction(contracts.ubiquiStickSale.setAllowance(address, utils.parseUnits(count, "wei"), utils.parseEther(price)));
-    }
-    updateActiveTransaction({ id: "UBIQUISTICK_ALLOWANCE", active: false });
-    await refreshUbiquistickData();
+    doTransaction("Setting allowance...", async () => {
+      if (data.length > 1) {
+        const addresses = data.map(({ address }) => address);
+        const counts = data.map(({ count }) => utils.parseUnits(count, "wei"));
+        const prices = data.map(({ price }) => utils.parseEther(price));
+        await performTransaction(contracts.ubiquiStickSale.batchSetAllowances(addresses, counts, prices));
+      } else {
+        const { address, count, price } = data[0];
+        await performTransaction(contracts.ubiquiStickSale.setAllowance(address, utils.parseUnits(count, "wei"), utils.parseEther(price)));
+      }
+      await refreshUbiquistickData();
+    });
   };
 
   const contractMintUbiquistick = async () => {
-    if (!isConnected || !isLoaded || isTransacting) return;
+    if (!isConnected || !isLoaded || doingTransaction) return;
 
-    updateActiveTransaction({ id: "UBIQUISTICK_MINT", title: "Minting Ubiquistick...", active: true });
-    await performTransaction(
-      provider.getSigner().sendTransaction({
-        to: contracts.ubiquiStickSale.address,
-        value: ethers.utils.parseEther(allowance.price.toString()),
-      })
-    );
-    updateActiveTransaction({ id: "UBIQUISTICK_MINT", active: false });
-    await refreshUbiquistickData();
+    await doTransaction("Minting Ubiquistick...", async () => {
+      await performTransaction(
+        provider.getSigner().sendTransaction({
+          to: contracts.ubiquiStickSale.address,
+          value: ethers.utils.parseEther(allowance.price.toString()),
+        })
+      );
+      await refreshUbiquistickData();
+    });
   };
 
   const contractSimpleBondSetReward = async ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => {
-    if (!isConnected || !isLoaded || isTransacting) return;
-
-    updateActiveTransaction({ id: "SIMPLE_BOND_SET_REWARD", title: "Setting reward...", active: true });
-    await performTransaction(contracts.simpleBond.setRewards(token, ratio));
-    updateActiveTransaction({ id: "SIMPLE_BOND_SET_REWARD", active: false });
-    await refreshSimpleBondData();
+    if (!isConnected || !isLoaded || doingTransaction) return;
+    doTransaction("Setting reward...", async () => {
+      await performTransaction(contracts.simpleBond.setRewards(token, ratio));
+      await refreshSimpleBondData();
+    });
   };
 
   const contractDepositAndBond = async ({ token, amount }: { token: string; amount: number }) => {
-    if (!isConnected || !isLoaded || isTransacting || tokensContracts.length === 0) return;
+    if (!isConnected || !isLoaded || doingTransaction || tokensContracts.length === 0) return;
     if (!token || !amount) return;
     const contract = tokensContracts.find((tc) => tc.address === token);
     if (!contract) return;
-    updateActiveTransaction({ id: "DEPOSIT_AND_BOND", title: "Depositing...", active: true });
-    const decimals = await contract.decimals();
-    const symbol = await contract.symbol();
-    const bnAmount = ethers.utils.parseUnits(amount.toString(), decimals);
-    const signer = provider.getSigner();
-    if (await ensureERC20Allowance(symbol, contract, bnAmount, signer, contracts.simpleBond.address, decimals)) {
-      if (await performTransaction(contracts.simpleBond.bond(token, bnAmount))) {
-        console.log("Deposit successful!");
-        refreshSimpleBondData();
+    doTransaction("Depositing...", async () => {
+      const decimals = await contract.decimals();
+      const symbol = await contract.symbol();
+      const bnAmount = ethers.utils.parseUnits(amount.toString(), decimals);
+      const signer = provider.getSigner();
+      if (await ensureERC20Allowance(symbol, contract, bnAmount, signer, contracts.simpleBond.address, decimals)) {
+        if (await performTransaction(contracts.simpleBond.bond(token, bnAmount))) {
+          console.log("Deposit successful!");
+          refreshSimpleBondData();
+        } else {
+          console.log("Deposit failed!");
+        }
       } else {
-        console.log("Deposit failed!");
+        console.error("Error setting ERC20 allowance");
       }
-    } else {
-      console.error("Error setting ERC20 allowance");
-    }
-
-    updateActiveTransaction({ id: "DEPOSIT_AND_BOND", active: false });
+    });
   };
 
   const contractClaimAll = async () => {
-    if (!isConnected || !isLoaded || isTransacting) return;
-    updateActiveTransaction({ id: "SIMPLE_BOND_CLAIM_ALL", title: "Claiming all rewards...", active: true });
-    await performTransaction(contracts.simpleBond.claim());
-    updateActiveTransaction({ id: "SIMPLE_BOND_CLAIM_ALL", active: false });
-    refreshSimpleBondData();
+    if (!isConnected || !isLoaded || doingTransaction) return;
+    await doTransaction("Claiming all rewards...", async () => {
+      await performTransaction(contracts.simpleBond.claim());
+      await refreshSimpleBondData();
+    });
   };
 
   const [showAdminComponents, setShowAdminComponents] = useState(false);
@@ -387,9 +388,8 @@ const App = () => {
   // ██████╔╝███████╗██║  ██║██║ ╚████╔╝ ███████╗██████╔╝
   // ╚═════╝ ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝  ╚══════╝╚═════╝
 
-  const isConnected = !!(provider && account);
+  const isConnected = !!(provider && walletAddress);
   const isLoaded = !!(contracts && sticks && allowance);
-  const isTransacting = activeTransactions.some((tx) => tx.active);
   const sticksCount = sticks ? sticks.gold + sticks.black + sticks.invisible : null;
   const canUsePools = (sticksCount !== null && sticksCount > 0) || !needsStick;
   const showAdminButton = isSaleContractOwner || isSimpleBondOwner;
@@ -415,7 +415,7 @@ const App = () => {
       >
         <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/50" onClick={() => setShowAdminComponents(false)}></div>
         <div className="pt-6">
-          {isSaleContractOwner ? <AllowanceManager defaultAddress={account?.address || ""} onSubmit={contractSetAllowance} /> : null}
+          {isSaleContractOwner ? <AllowanceManager defaultAddress={walletAddress || ""} onSubmit={contractSetAllowance} /> : null}
           {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
         </div>
       </div>

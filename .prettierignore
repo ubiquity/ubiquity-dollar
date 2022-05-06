@@ -1,4 +1,4 @@
-contracts
+./contracts
 node_modules
 fixtures
 .next

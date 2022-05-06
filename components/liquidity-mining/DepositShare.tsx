@@ -1,9 +1,9 @@
 import { ChangeEvent, useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 
-import { connectedWithUserContext, UserContext } from "@/lib/connected";
-import { Contracts } from "@/lib/contracts";
+import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { constrainNumber } from "@/lib/utils";
+import { ManagedContracts } from "@/lib/hooks/contracts/useManagerManaged";
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();
@@ -12,7 +12,7 @@ const MIN_WEEKS = 1;
 const MAX_WEEKS = 208;
 
 type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
-async function prefetchConstants(contracts: Contracts): Promise<PrefetchedConstants> {
+async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Promise<PrefetchedConstants> {
   const reserves = await contracts.ugovUadPair.getReserves();
   const ubqPrice = +reserves.reserve0.toString() / +reserves.reserve1.toString();
   const ubqPerBlock = await contracts.masterChef.uGOVPerBlock();
@@ -26,7 +26,7 @@ async function prefetchConstants(contracts: Contracts): Promise<PrefetchedConsta
   return { totalShares, usdPerWeek, bondingDiscountMultiplier };
 }
 
-async function calculateApyForWeeks(contracts: Contracts, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
+async function calculateApyForWeeks(contracts: NonNullable<ManagedContracts>, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
   const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
   const usdAsLp = 0.7562534324; // TODO: Get this number from the Curve contract
@@ -51,9 +51,9 @@ type DepositShareProps = {
   onStake: ({ amount, weeks }: { amount: BigNumber; weeks: BigNumber }) => void;
   disabled: boolean;
   maxLp: BigNumber;
-} & UserContext;
+} & LoadedContext;
 
-const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps) => {
+const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }: DepositShareProps) => {
   const [amount, setAmount] = useState("");
   const [weeks, setWeeks] = useState("");
   const [currentApy, setCurrentApy] = useState<number | null>(null);
@@ -141,4 +141,4 @@ const DepositShare = ({ onStake, disabled, maxLp, contracts }: DepositShareProps
   );
 };
 
-export default connectedWithUserContext(DepositShare);
+export default withLoadedContext(DepositShare);

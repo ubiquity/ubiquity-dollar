@@ -2,12 +2,11 @@ import { ethers, BigNumber } from "ethers";
 import { useEffect, useState } from "react";
 
 import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
-import { Contracts } from "@/lib/contracts";
-import { useConnectedContext } from "@/lib/connected";
+import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
 import { formatEther, formatMwei } from "@/lib/format";
 import { Container, Title, SubTitle } from "@/ui";
 
-import { Address, Balance, PriceExchange } from "./ui";
+import { Address, PriceExchange } from "./ui";
 
 type State = null | PriceMonitorProps;
 type PriceMonitorProps = {
@@ -23,7 +22,10 @@ type PriceMonitorProps = {
   dollarToBeMinted: number | null;
 };
 
-const fetchPrices = async ({ uad, curvePool, metaPool, twapOracle, dollarMintCalc }: Contracts): Promise<PriceMonitorProps> => {
+type ManagedContracts = NonNullable<Awaited<ReturnType<typeof useManagerManaged>>>;
+type NamedContracts = NonNullable<Awaited<ReturnType<typeof useNamedContracts>>>;
+
+const fetchPrices = async ({ uad, metaPool, twapOracle, dollarMintCalc }: ManagedContracts, { curvePool }: NamedContracts): Promise<PriceMonitorProps> => {
   const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
     curvePool.get_coin_indices(metaPool.address, NAMED_ACCOUNTS.DAI, NAMED_ACCOUNTS.USDT),
     curvePool.get_coin_indices(metaPool.address, uad.address, NAMED_ACCOUNTS.USDC),
@@ -57,16 +59,17 @@ const fetchPrices = async ({ uad, curvePool, metaPool, twapOracle, dollarMintCal
 };
 
 const PriceMonitorContainer = () => {
-  const { contracts } = useConnectedContext();
+  const managedContracts = useManagerManaged();
+  const namedContracts = useNamedContracts();
   const [priceMonitorProps, setPriceMonitorProps] = useState<State>(null);
 
   useEffect(() => {
-    if (contracts) {
+    if (managedContracts && namedContracts) {
       (async function () {
-        setPriceMonitorProps(await fetchPrices(contracts));
+        setPriceMonitorProps(await fetchPrices(managedContracts, namedContracts));
       })();
     }
-  }, [contracts]);
+  }, [managedContracts, namedContracts]);
 
   return priceMonitorProps && <PriceMonitor {...priceMonitorProps} />;
 };

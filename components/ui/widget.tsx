@@ -1,14 +1,16 @@
 import React from "react";
-
+//border border-solid border-accent/60
 export const Container = (props: React.PropsWithChildren<{ className?: string }>): JSX.Element => (
   <div
     className={`
-      relative
-      mx-auto mb-8
-      max-w-screen-md rounded-lg border border-solid border-accent/60 bg-paper p-8 tracking-wide text-white/75
+      relative mx-auto
+      mb-8 max-w-screen-md rounded-lg
+      tracking-wide text-white/75
       ${props.className || ""}`}
   >
-    {props.children}
+    <div className="w-full rounded-lg bg-gradient-to-br from-accent/90 via-accent/50 to-accent/70 p-[1px]">
+      <div className="rounded-[0.46rem]  bg-paper p-8">{props.children}</div>
+    </div>
   </div>
 );
 

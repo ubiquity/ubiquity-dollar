@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
-import { useConnectedContext } from "@/lib/connected";
+// import { useConnectedContext } from "@/lib/connected";
+import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
 import { Container, Title } from "@/ui";
 
 import { Address, Balance } from "./ui";
@@ -15,27 +16,25 @@ type MetapoolMonitorProps = {
 };
 
 const MetapoolMonitorContainer = () => {
-  const { contracts } = useConnectedContext();
+  const { metaPool } = useManagerManaged() || {};
+  const { curvePool } = useNamedContracts() || {};
+
   const [metaPoolMonitorProps, setMetapoolMonitorProps] = useState<State>(null);
 
   useEffect(() => {
-    if (contracts) {
+    if (metaPool && curvePool) {
       (async function () {
-        const [uadBalance, crvBalance, rates] = await Promise.all([
-          contracts.metaPool.balances(0),
-          contracts.metaPool.balances(1),
-          contracts.curvePool.get_rates(contracts.metaPool.address),
-        ]);
+        const [uadBalance, crvBalance, rates] = await Promise.all([metaPool.balances(0), metaPool.balances(1), curvePool.get_rates(metaPool.address)]);
 
         setMetapoolMonitorProps({
-          metaPoolAddress: contracts.metaPool.address,
+          metaPoolAddress: metaPool.address,
           uadBalance: +formatEther(uadBalance),
           crvBalance: +formatEther(crvBalance),
           spotPrice: +formatEther(rates[1]),
         });
       })();
     }
-  }, [contracts]);
+  }, [metaPool, curvePool]);
 
   return metaPoolMonitorProps && <MetapoolMonitor {...metaPoolMonitorProps} />;
 };

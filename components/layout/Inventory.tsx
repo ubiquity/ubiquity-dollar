@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Tippy from "@tippyjs/react";
 import { ethers, BigNumber } from "ethers";
 
-import { useConnectedContext } from "@/lib/connected";
-import { fetchAccount } from "@/lib/utils";
+import { useBalances, useManagerManaged, useNamedContracts, useWalletAddress } from "@/lib/hooks";
 import icons from "@/ui/icons";
 
 import Network from "./Network";
@@ -11,34 +10,39 @@ import Network from "./Network";
 const PROD = process.env.NODE_ENV == "production";
 
 const Inventory = () => {
-  const { balances, account, contracts, setAccount } = useConnectedContext();
-  const [connecting, setConnecting] = useState(false);
-
-  const connect = async (): Promise<void> => {
-    setConnecting(true);
-    setAccount(await fetchAccount());
-  };
+  const [walletAddress, connecting, connectWallet] = useWalletAddress();
+  const [balances, refreshBalances] = useBalances();
+  const managedContracts = useManagerManaged();
+  const namedContracts = useNamedContracts();
 
   if (!PROD) {
     useEffect(() => {
-      connect();
+      connectWallet();
     }, []);
   }
 
-  if (!balances || !contracts || !account)
+  useEffect(() => {
+    if (walletAddress) {
+      refreshBalances();
+    }
+  }, [walletAddress]);
+
+  if (!walletAddress)
     return (
       <div className="pointer-events-auto">
         <button
           className="m-0 rounded-none rounded-t-lg bg-accent text-paper opacity-100 hover:bg-accent hover:drop-shadow-accent"
           disabled={connecting}
-          onClick={() => connect()}
+          onClick={connectWallet}
         >
           Connect Wallet
         </button>
       </div>
     );
 
-  const address = account.address;
+  if (!balances || !managedContracts || !namedContracts) {
+    return null;
+  }
 
   return (
     <div className="pointer-events-auto max-w-screen-lg translate-y-[71%] rounded-t-lg border border-b-0 border-solid border-accent/60 bg-paper transition-transform duration-500 ease-out hover:translate-y-0">
@@ -46,18 +50,18 @@ const Inventory = () => {
         <div className="mt-2 ml-2 flex flex-grow items-center pl-2 text-xs">My inventory</div>
         <Network />
       </div>
-      <a className="mb-2 block font-mono text-xs text-white/50" href={`https://etherscan.io/address/${address}`}>
-        {address}
+      <a className="mb-2 block font-mono text-xs text-white/50" href={`https://etherscan.io/address/${walletAddress}`}>
+        {walletAddress || "Nope"}
       </a>
       <div className="flex justify-center px-2 pb-2">
         <div className="grid grid-cols-4 gap-2">
-          <Token token="uAD" balance={balances.uad} accountAddr={address} tokenAddr={contracts.uad.address} />
-          <Token token="uAR" balance={balances.uar} accountAddr={address} tokenAddr={contracts.uar.address} />
-          <Token token="uDEBT" balance={balances.debtCoupon} accountAddr={address} tokenAddr={contracts.debtCouponToken.address} />
-          <Token token="UBQ" balance={balances.ubq} accountAddr={address} tokenAddr={contracts.ugov.address} />
-          <Token token="3CRV" balance={balances.crv} accountAddr={address} tokenAddr={contracts.crvToken.address} />
-          <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={address} tokenAddr={contracts.metaPool.address} />
-          <Token token="USDC" balance={balances.usdc} accountAddr={address} tokenAddr={contracts.usdc.address} decimals={6} />
+          <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} />
+          <Token token="uAR" balance={balances.uar} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} />
+          <Token token="uDEBT" balance={balances.debtCoupon} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
+          <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} />
+          <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} />
+          <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
+          <Token token="USDC" balance={balances.usdc} accountAddr={walletAddress} tokenAddr={namedContracts.usdc.address} decimals={6} />
         </div>
       </div>
     </div>

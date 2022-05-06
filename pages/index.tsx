@@ -1,3 +1,1 @@
-import PriceStabilization from "./price-stabilization";
-
-export default PriceStabilization;
+export { default as default } from "./price-stabilization";

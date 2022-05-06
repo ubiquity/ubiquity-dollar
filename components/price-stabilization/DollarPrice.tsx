@@ -2,26 +2,28 @@ import { useState, useEffect } from "react";
 import { ethers, BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 
-import { useConnectedContext } from "@/lib/connected";
 import { Tooltip } from "@/ui";
+import { useDeployedContracts, useManagerManaged, useWeb3Provider } from "../lib/hooks";
 
 const roundPrice = (twapPrice: BigNumber): string => parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(8);
 
 const DollarPrice = () => {
-  const { provider, contracts } = useConnectedContext();
+  const web3Provider = useWeb3Provider();
+  const deployedContracts = useDeployedContracts();
+  const managedContracts = useManagerManaged();
   const [twapPrice, setTwapPrice] = useState<BigNumber | null>(null);
   const [spotPrice, setSpotPrice] = useState<BigNumber | null>(null);
 
   useEffect(() => {
-    if (provider && contracts) {
+    if (web3Provider && managedContracts && deployedContracts) {
       (async () => {
-        const newTwapPrice = await contracts.twapOracle.consult(await contracts.manager.dollarTokenAddress());
-        const newSpotPrice = await contracts.metaPool["get_dy(int128,int128,uint256)"](0, 1, parseEther("1"));
+        const newTwapPrice = await managedContracts.twapOracle.consult(await deployedContracts.manager.dollarTokenAddress());
+        const newSpotPrice = await managedContracts.metaPool["get_dy(int128,int128,uint256)"](0, 1, parseEther("1"));
         setTwapPrice(newTwapPrice);
         setSpotPrice(newSpotPrice);
       })();
     }
-  }, [provider, contracts]);
+  }, [web3Provider, managedContracts, deployedContracts]);
 
   return (
     <div className="mb-4">

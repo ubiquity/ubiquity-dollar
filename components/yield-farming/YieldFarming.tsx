@@ -1,10 +1,13 @@
 import React, { memo, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 
-import { connectedWithUserContext, useConnectedContext, UserContext } from "@/lib/connected";
-import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData, ensureERC20Allowance } from "@/lib/contracts-shortcuts";
+import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
+import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { performTransaction, constrainNumber } from "@/lib/utils";
-import { Tooltip, Container, Title, SubTitle, icons, Icon } from "@/ui";
+import { useBalances, useTransactionLogger } from "@/lib/hooks";
+import { Tooltip, Container, Title, SubTitle, icons, Icon, WalletNotConnected } from "@/ui";
+
+import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData } from "./lib/data";
 
 type Balance = { usdc: number; ubq: number; uad: number };
 
@@ -13,18 +16,15 @@ type Actions = {
   onWithdraw: () => void;
 };
 
-const DEPOSIT_TRANSACTION = "DEPOSIT_TRANSACTION";
-const WITHDRAW_TRANSACTION = "WITHDRAW_TRANSACTION";
-
-export const YieldFarmingContainer = ({ contracts, account, signer }: UserContext) => {
+export const YieldFarmingContainer = ({ managedContracts, namedContracts: contracts, walletAddress, signer }: LoadedContext) => {
   const [yieldProxyData, setYieldProxyData] = useState<YieldProxyData | null>(null);
   const [depositInfo, setDepositInfo] = useState<YieldProxyDepositInfo | null>(null);
-  const { refreshBalances, balances, updateActiveTransaction } = useConnectedContext();
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [, doTransaction, doingTransaction] = useTransactionLogger();
+  const [balances, refreshBalances] = useBalances();
 
   async function refreshYieldProxyData() {
     const ypd = await loadYieldProxyData(contracts);
-    const di = await loadYieldProxyDepositInfo(ypd, contracts, account.address);
+    const di = await loadYieldProxyDepositInfo(ypd, contracts, walletAddress);
     setYieldProxyData(ypd);
     setDepositInfo(di);
   }
@@ -37,36 +37,30 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
 
   const actions: Actions = {
     onDeposit: async ({ usdc, ubq, uad }) => {
-      setIsProcessing(true);
-      const title = "Depositing...";
-      updateActiveTransaction({ id: DEPOSIT_TRANSACTION, title, active: true });
-      const bigUsdc = ethers.utils.parseUnits(String(usdc), 6);
-      const bigUbq = ethers.utils.parseUnits(String(ubq), 18);
-      const bigUad = ethers.utils.parseUnits(String(uad), 18);
-      console.log(`Depositing: USDC ${usdc} | UBQ ${ubq} | uAD ${uad}`);
-      if (
-        (await ensureERC20Allowance("USDC", contracts.usdc, bigUsdc, signer, contracts.yieldProxy.address, 6)) &&
-        (await ensureERC20Allowance("UBQ", contracts.ugov, bigUbq, signer, contracts.yieldProxy.address)) &&
-        (await ensureERC20Allowance("uAD", contracts.uad, bigUad, signer, contracts.yieldProxy.address)) &&
-        (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
-      ) {
-        await refreshYieldProxyData();
-        await refreshBalances();
-      } else {
-        // TODO: Show transaction error
-      }
-      setIsProcessing(false);
-      updateActiveTransaction({ id: DEPOSIT_TRANSACTION, title, active: false });
+      doTransaction("Depositing...", async () => {
+        const bigUsdc = ethers.utils.parseUnits(String(usdc), 6);
+        const bigUbq = ethers.utils.parseUnits(String(ubq), 18);
+        const bigUad = ethers.utils.parseUnits(String(uad), 18);
+        console.log(`Depositing: USDC ${usdc} | UBQ ${ubq} | uAD ${uad}`);
+        if (
+          (await ensureERC20Allowance("USDC", contracts.usdc, bigUsdc, signer, contracts.yieldProxy.address, 6)) &&
+          (await ensureERC20Allowance("UBQ", managedContracts.ugov, bigUbq, signer, contracts.yieldProxy.address)) &&
+          (await ensureERC20Allowance("uAD", managedContracts.uad, bigUad, signer, contracts.yieldProxy.address)) &&
+          (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
+        ) {
+          await refreshYieldProxyData();
+          await refreshBalances();
+        } else {
+          // TODO: Show transaction error
+        }
+      });
     },
     onWithdraw: async () => {
-      setIsProcessing(true);
-      const title = "Withdrawing...";
-      updateActiveTransaction({ id: WITHDRAW_TRANSACTION, title, active: true });
-      await performTransaction(contracts.yieldProxy.connect(signer).withdrawAll());
-      await refreshYieldProxyData();
-      await refreshBalances();
-      updateActiveTransaction({ id: WITHDRAW_TRANSACTION, title, active: false });
-      setIsProcessing(false);
+      doTransaction("Withdrawing...", async () => {
+        await performTransaction(contracts.yieldProxy.connect(signer).withdrawAll());
+        await refreshYieldProxyData();
+        await refreshBalances();
+      });
     },
   };
 
@@ -80,7 +74,7 @@ export const YieldFarmingContainer = ({ contracts, account, signer }: UserContex
     <YieldFarmingSubcontainer
       yieldProxyData={yieldProxyData}
       depositInfo={depositInfo}
-      isProcessing={isProcessing}
+      isProcessing={doingTransaction}
       actions={actions}
       balance={parsedBalances}
     />
@@ -113,7 +107,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
         </p>
       </div>
 
-      <div className="mb-4 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
+      <div className="mb-12 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
         <div className="w-20">
           <Icon icon="warning" className="w-10 text-white" />
         </div>
@@ -509,4 +503,4 @@ export const YieldFarmingDeposit = memo(
   }
 );
 
-export default memo(connectedWithUserContext(YieldFarmingContainer));
+export default memo(withLoadedContext(YieldFarmingContainer, () => WalletNotConnected));
