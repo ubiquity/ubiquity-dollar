@@ -2,11 +2,11 @@ import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 
 import * as widget from "@/ui/widget";
-import { connectedWithUserContext, useConnectedContext } from "@/lib/connected";
-import { Balances } from "@/lib/contracts-shortcuts";
+import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { formatTimeDiff, constrainNumber } from "@/lib/utils";
-import { MANAGER_ADDRESS, DEBT_COUPON_MANAGER_ADDRESS, Contracts } from "@/lib/contracts";
 import { UbiquityAlgorithmicDollarManager } from "@/dollar-types";
+import { useBalances, Balances, useTransactionLogger } from "@/lib/hooks";
+import usePrices from "./lib/usePrices";
 
 type Actions = {
   onRedeem: () => void;
@@ -29,31 +29,32 @@ type Coupons = {
 const uDEBT = "uDEBT";
 const uAR = "uAR";
 
-async function _expectedCoupon(
-  uadAmount: string,
-  contracts: Contracts | null,
-  selectedCurrency: string,
-  setExpectedCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
-) {
-  const amount = ethers.utils.parseEther(uadAmount);
-  if (contracts && amount.gt(BigNumber.from(0))) {
-    if (selectedCurrency === uDEBT) {
-      const expectedCoupon = await contracts.coupon.getCouponAmount(amount);
-      console.log("expectedCoupon", expectedCoupon.toString());
-      setExpectedCoupon(expectedCoupon);
-    } else if (selectedCurrency === uAR) {
-      const blockHeight = await contracts.debtCouponManager.blockHeightDebt();
-      const expectedCoupon = await contracts.uarCalc.getUARAmount(amount, blockHeight);
-      console.log("expectedCoupon", expectedCoupon.toString());
-      setExpectedCoupon(expectedCoupon);
-    }
-  }
-}
+// async function _expectedCoupon(
+//   uadAmount: string,
+//   contracts: Contracts | null,
+//   selectedCurrency: string,
+//   setExpectedCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
+// ) {
+//   const amount = ethers.utils.parseEther(uadAmount);
+//   if (contracts && amount.gt(BigNumber.from(0))) {
+//     if (selectedCurrency === uDEBT) {
+//       const expectedCoupon = await contracts.coupon.getCouponAmount(amount);
+//       console.log("expectedCoupon", expectedCoupon.toString());
+//       setExpectedCoupon(expectedCoupon);
+//     } else if (selectedCurrency === uAR) {
+//       const blockHeight = await contracts.debtCouponManager.blockHeightDebt();
+//       const expectedCoupon = await contracts.uarCalc.getUARAmount(amount, blockHeight);
+//       console.log("expectedCoupon", expectedCoupon.toString());
+//       setExpectedCoupon(expectedCoupon);
+//     }
+//   }
+// }
 
-const DEBT_COUPON_DEPOSIT_TRANSACTION = "DEBT_COUPON_DEPOSIT_TRANSACTION";
+export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+  const [balances, refreshBalances] = useBalances();
+  const [, doTransaction] = useTransactionLogger();
+  const [twapPrice, spotPrice] = usePrices();
 
-export const DebtCouponContainer = () => {
-  const { balances, twapPrice, manager, provider, account, contracts, setBalances, updateActiveTransaction } = useConnectedContext();
   const actions: Actions = {
     onRedeem: () => {
       console.log("onRedeem");
@@ -63,58 +64,8 @@ export const DebtCouponContainer = () => {
     },
     onBurn: async (uadAmount, setErrMsg) => {
       setErrMsg("");
-      const title = "Burning uAD...";
-      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, title, active: true });
-      const uadAmountValue = uadAmount;
-      if (!uadAmountValue) {
-        console.log("uadAmountValue", uadAmountValue);
-        setErrMsg("amount not valid");
-      } else {
-        const amount = ethers.utils.parseEther(uadAmountValue);
-        if (BigNumber.isBigNumber(amount)) {
-          if (amount.gt(BigNumber.from(0))) {
-            await depositDollarForDebtCoupons(amount, setBalances);
-          } else {
-            setErrMsg("uAD Amount should be greater than 0");
-          }
-        } else {
-          setErrMsg("amount not valid");
-          updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
-          return;
-        }
-      }
-      updateActiveTransaction({ id: DEBT_COUPON_DEPOSIT_TRANSACTION, active: false });
+      await doTransaction("Burning uAD...", async () => {});
     },
-  };
-
-  const depositDollarForDebtCoupons = async (amount: BigNumber, setBalances: Dispatch<SetStateAction<Balances | null>>) => {
-    if (account && balances && contracts) {
-      const allowance = await contracts.uad.allowance(account.address, DEBT_COUPON_MANAGER_ADDRESS);
-      console.log("allowance", ethers.utils.formatEther(allowance), "amount", ethers.utils.formatEther(amount));
-      if (allowance.lt(amount)) {
-        // first approve
-        const approveTransaction = await contracts.uad.approve(DEBT_COUPON_MANAGER_ADDRESS, amount);
-
-        const approveWaiting = await approveTransaction.wait();
-        console.log(
-          `approveWaiting gas used with 100 gwei / gas:${ethers.utils.formatEther(approveWaiting.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`
-        );
-      }
-
-      const allowance2 = await contracts.uad.allowance(account.address, DEBT_COUPON_MANAGER_ADDRESS);
-      console.log("allowance2", ethers.utils.formatEther(allowance2));
-      // depositDollarForDebtCoupons uAD
-
-      const depositDollarForDebtCouponsWaiting = await contracts.debtCouponManager.exchangeDollarsForDebtCoupons(amount);
-      await depositDollarForDebtCouponsWaiting.wait();
-
-      // fetch new uar and uad balance
-      setBalances({
-        ...balances,
-        uad: BigNumber.from(0),
-        debtCoupon: BigNumber.from(0),
-      });
-    }
   };
 
   const priceIncreaseFormula = async (amount: number) => {
@@ -163,9 +114,6 @@ export const DebtCouponContainer = () => {
           ubondTotalSupply={ubondTotalSupply}
           uarTotalSupply={uarTotalSupply}
           udebtTotalSupply={udebtTotalSupply}
-          manager={manager}
-          provider={provider}
-          contracts={contracts}
           coupons={coupons}
         />
       )}
@@ -188,9 +136,6 @@ type DebtCouponProps = {
   ubondTotalSupply: number;
   uarTotalSupply: number;
   udebtTotalSupply: number;
-  manager: UbiquityAlgorithmicDollarManager | null;
-  provider: ethers.providers.Web3Provider | null;
-  contracts: Contracts | null;
   coupons: Coupons | null;
   priceIncreaseFormula: (amount: number) => Promise<number>;
 };
@@ -210,7 +155,6 @@ const DebtCoupon = memo(
     ubondTotalSupply,
     uarTotalSupply,
     udebtTotalSupply,
-    contracts,
     coupons,
     priceIncreaseFormula,
   }: DebtCouponProps) => {
@@ -278,7 +222,7 @@ const DebtCoupon = memo(
 
     useEffect(() => {
       if (uadAmount) {
-        _expectedCoupon(uadAmount, contracts, selectedCurrency, setExpectedCoupon);
+        // _expectedCoupon(uadAmount, contracts, selectedCurrency, setExpectedCoupon);
       }
     }, [uadAmount, selectedCurrency]);
 
@@ -773,4 +717,4 @@ export const CouponRow = ({ coupon, onRedeem, onSwap }: CouponRowProps) => {
   );
 };
 
-export default connectedWithUserContext(DebtCouponContainer);
+export default withLoadedContext(DebtCouponContainer);

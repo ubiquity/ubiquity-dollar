@@ -1,11 +1,10 @@
 import { FC } from "react";
-import { useConnectedContext } from "@/lib/connected";
 import DebtCoupon from "@/components/price-stabilization/DebtCoupon";
+import { useWalletAddress } from "@/components/lib/hooks";
 
 const DebtCouponPage: FC = (): JSX.Element => {
-  const context = useConnectedContext();
-  const { account } = context;
-  return <div>{account && <DebtCoupon />}</div>;
+  const [walletAddress] = useWalletAddress();
+  return <div>{walletAddress && <DebtCoupon />}</div>;
 };
 
 export default DebtCouponPage;
