@@ -196,7 +196,7 @@ const App = () => {
 
         const multiplier = reward.toNumber() / 1_000_000_000;
         const vestingDays = 5;
-        const apy = multiplier ** (365 / vestingDays);
+        const apy = multiplier ** (365 / vestingDays) - 1;
 
         const uniPoolData = newUnipoolFullData[poolsByToken[address].poolAddress];
         const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);
