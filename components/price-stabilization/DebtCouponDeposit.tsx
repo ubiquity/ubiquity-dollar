@@ -5,6 +5,7 @@ import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
 import { formatEther } from "@/lib/format";
 import { PositiveNumberInput } from "@/ui";
+import { ERC20 } from "@/dollar-types";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
 
 const DebtCouponDeposit = () => {
@@ -28,7 +29,7 @@ const DebtCouponDeposit = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.uad, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uAD -> DebtCouponManager", (managedContracts.uad as unknown) as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
     refreshBalances();
   };

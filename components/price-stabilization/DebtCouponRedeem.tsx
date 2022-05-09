@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 
-import { DebtCoupon } from "@/dollar-types";
+import { DebtCoupon, ERC1155Ubiquity } from "@/dollar-types";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
 import { PositiveNumberInput } from "@/ui";
 import { formatEther } from "@/lib/format";
@@ -64,7 +64,15 @@ const DebtCouponRedeem = () => {
   const redeemUdebtForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
     const debtId = debtIds[selectedDebtId];
-    if (debtId && (await ensureERC1155Allowance("uDebt -> DebtCouponManager", managedContracts.debtCouponToken, signer, debtCouponManager.address))) {
+    if (
+      debtId &&
+      (await ensureERC1155Allowance(
+        "uDebt -> DebtCouponManager",
+        (managedContracts.debtCouponToken as unknown) as ERC1155Ubiquity,
+        signer,
+        debtCouponManager.address
+      ))
+    ) {
       await (await debtCouponManager.connect(signer).redeemCoupons(debtId, amount)).wait();
       refreshBalances();
       fetchDebts(walletAddress, managedContracts.debtCouponToken);
