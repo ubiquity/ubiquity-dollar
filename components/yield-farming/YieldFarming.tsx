@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 
+import { ERC20 } from "@/dollar-types";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { performTransaction, constrainNumber } from "@/lib/utils";
@@ -44,8 +45,8 @@ export const YieldFarmingContainer = ({ managedContracts, namedContracts: contra
         console.log(`Depositing: USDC ${usdc} | UBQ ${ubq} | uAD ${uad}`);
         if (
           (await ensureERC20Allowance("USDC", contracts.usdc, bigUsdc, signer, contracts.yieldProxy.address, 6)) &&
-          (await ensureERC20Allowance("UBQ", managedContracts.ugov, bigUbq, signer, contracts.yieldProxy.address)) &&
-          (await ensureERC20Allowance("uAD", managedContracts.uad, bigUad, signer, contracts.yieldProxy.address)) &&
+          (await ensureERC20Allowance("UBQ", (managedContracts.ugov as unknown) as ERC20, bigUbq, signer, contracts.yieldProxy.address)) &&
+          (await ensureERC20Allowance("uAD", (managedContracts.uad as unknown) as ERC20, bigUad, signer, contracts.yieldProxy.address)) &&
           (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
         ) {
           await refreshYieldProxyData();

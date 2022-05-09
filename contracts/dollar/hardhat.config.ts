@@ -1,14 +1,16 @@
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
+import "@nomiclabs/hardhat-ethers";
+import "@typechain/hardhat";
 import * as dotenv from "dotenv";
-import fs from "fs";
 import "hardhat-deploy";
-import "hardhat-deploy-ethers";
 import "hardhat-gas-reporter";
-import "hardhat-typechain";
-import { HardhatUserConfig } from "hardhat/config";
-import path from "path";
 import "solidity-coverage";
+import { HardhatUserConfig } from "hardhat/types";
+
+import fs from "fs";
+import path from "path";
+
 
 if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   import("./tasks/index");

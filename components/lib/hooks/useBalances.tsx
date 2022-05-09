@@ -35,7 +35,7 @@ export const BalancesContextProvider: React.FC = ({ children }) => {
         managedContracts.metaPool.balanceOf(walletAddress),
         managedContracts.uar.balanceOf(walletAddress),
         managedContracts.ugov.balanceOf(walletAddress),
-        erc1155BalanceOf(walletAddress, managedContracts.debtCouponToken),
+        erc1155BalanceOf(walletAddress, (managedContracts.debtCouponToken as unknown) as ERC1155Ubiquity),
         erc1155BalanceOf(walletAddress, (managedContracts.bondingToken as unknown) as ERC1155Ubiquity),
         namedContracts.usdc.balanceOf(walletAddress),
       ]);
