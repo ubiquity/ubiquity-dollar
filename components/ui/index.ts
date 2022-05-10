@@ -7,5 +7,6 @@ export { default as WalletNotConnected } from "./WalletNotConnected";
 export { default as Spinner } from "./Spinner";
 export { default as Loading } from "./Loading";
 export { default as PositiveNumberInput } from "./PositiveNumberInput";
+export { default as Button } from "./Button";
 
 export * from "./widget";

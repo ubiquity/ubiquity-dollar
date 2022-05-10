@@ -1,6 +1,7 @@
 import { ethers, ContractTransaction, BigNumber } from "ethers";
 import { ERC1155Ubiquity } from "../../contracts/dollar/artifacts/types";
 import { useEffect } from "react";
+import { PossibleProviders } from "@/lib/hooks/useWeb3";
 
 export function logGas(txDone: ethers.ContractReceipt) {
   console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);
@@ -48,9 +49,9 @@ export const constrainNumber = (num: number, min: number, max: number): number =
   else return num;
 };
 
-export const getNetworkName = (provider: ethers.providers.Web3Provider): string => {
+export const getNetworkName = (provider: NonNullable<PossibleProviders>): string => {
   let networkName = "";
-  switch (provider.network.chainId) {
+  switch (provider.network?.chainId) {
     case 1:
       networkName = "Mainnet";
       break;

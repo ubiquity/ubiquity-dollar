@@ -7,6 +7,7 @@ import { Icon } from "@/ui";
 import Inventory from "./Inventory";
 import TransactionsDisplay from "./TransactionsDisplay";
 import Sidebar, { SidebarState } from "./Sidebar";
+import WalletConnect from "./WalletConnect";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -28,32 +29,36 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="flex">
-      <GridVideoBg />
       <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
-      {sidebarState !== "loading" ? (
-        <>
-          <div className="relative z-10 flex-grow pl-0" style={{ paddingLeft: sidebarClientWidth }}>
-            <ConditionalHeader show={sidebarState !== "permanent"} />
+      <div className="fixed top-0 right-0 bottom-0" style={{ left: sidebarClientWidth }}>
+        <WalletConnect />
+        <div className="h-full w-full overflow-auto">
+          <GridVideoBg />
+          {sidebarState !== "loading" ? (
+            <>
+              <div className="relative z-10 flex-grow pl-0">
+                <ConditionalHeader show={sidebarState !== "permanent"} />
 
-            {/* Content */}
+                {/* Content */}
 
-            <div
-              className={cx("mx-auto flex min-h-screen max-w-screen-lg flex-col items-center justify-center px-4 pb-8", {
-                "pt-8": sidebarState === "permanent",
-                "pt-24": sidebarState !== "permanent",
-              })}
-            >
-              {children}
-            </div>
-          </div>
-
-          {/* Floating Inventory */}
-          <div className="pointer-events-none fixed bottom-0 z-50 flex w-full justify-center" style={{ paddingLeft: sidebarClientWidth }}>
-            <Inventory />
-          </div>
-        </>
-      ) : null}
-      <TransactionsDisplay />
+                <div
+                  className={cx("mx-auto flex min-h-screen max-w-screen-lg flex-col items-center justify-center px-4 pb-8", {
+                    "pt-8": sidebarState === "permanent",
+                    "pt-24": sidebarState !== "permanent",
+                  })}
+                >
+                  {children}
+                </div>
+              </div>
+            </>
+          ) : null}
+        </div>
+        {/* Floating Inventory */}
+        <div className="pointer-events-none absolute bottom-0 z-50 flex w-full justify-center">
+          <Inventory />
+        </div>
+        <TransactionsDisplay />
+      </div>
     </div>
   );
 }

@@ -1,16 +1,9 @@
-import { ethers } from "ethers";
+import useWeb3 from "./useWeb3";
 
-export type Web3Provider = ethers.providers.Web3Provider | null;
+const useWeb3Provider = () => {
+  const [{ provider }] = useWeb3();
 
-function getProvider(): ethers.providers.Web3Provider | null {
-  const metamaskInstalled = typeof window !== "undefined" ? !!(window as any)?.ethereum?.request : false;
-  console.log("Metamask: ", metamaskInstalled ? "Installed" : "Not installed");
-  return metamaskInstalled ? new ethers.providers.Web3Provider((window as any).ethereum) : null;
-}
-
-let web3Provider: Web3Provider;
-const useWeb3Provider = (): Web3Provider => {
-  return typeof web3Provider === "undefined" ? (web3Provider = getProvider()) : web3Provider;
+  return provider;
 };
 
 export default useWeb3Provider;

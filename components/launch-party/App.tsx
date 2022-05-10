@@ -6,6 +6,8 @@ import { performTransaction, ZERO_ADDRESS } from "@/lib/utils";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "@/fixtures/abi/types";
 import { ERC20, ERC20__factory } from "@/dollar-types";
+import { Button } from "@/ui";
+import { PossibleProviders } from "@/lib/hooks/useWeb3";
 
 import { Contracts, factories, addresses } from "./lib/contracts";
 import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/state";
@@ -78,7 +80,7 @@ const App = () => {
   // ██║     ███████╗   ██║   ╚██████╗██║  ██║██║██║ ╚████║╚██████╔╝
   // ╚═╝     ╚══════╝   ╚═╝    ╚═════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝ ╚═════╝
 
-  async function fetchUniPoolsData(provider: ethers.providers.Web3Provider): Promise<{ [poolAddress: string]: UnipoolData }> {
+  async function fetchUniPoolsData(provider: NonNullable<PossibleProviders>): Promise<{ [poolAddress: string]: UnipoolData }> {
     const getUniPoolFullData = async (poolAddress: string, isV2: boolean): Promise<UnipoolData> => {
       const pool = isV2 ? UniswapV2Pair__factory.connect(poolAddress, provider) : UniswapV3Pool__factory.connect(poolAddress, provider);
       const t1 = ERC20__factory.connect(await pool.token0(), provider);
@@ -396,17 +398,6 @@ const App = () => {
 
   return (
     <div className="relative w-full">
-      <button
-        className={cx("btn-primary absolute top-0 right-0 min-w-0 bg-accent text-paper transition duration-500 hover:border-t-0 hover:bg-accent", {
-          "opacity-100": showAdminButton,
-          "opacity-0": !showAdminButton,
-        })}
-        disabled={!showAdminButton}
-        onClick={() => setShowAdminComponents(true)}
-      >
-        Admin
-      </button>
-
       <div
         className={cx("absolute top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center transition-opacity duration-500", {
           "pointer-events-none opacity-0": !showAdminComponents,
@@ -421,6 +412,12 @@ const App = () => {
       </div>
 
       <LaunchPartyHeader />
+
+      {showAdminButton ? (
+        <Button disabled={!showAdminButton} styled="accent" className="mb-8" onClick={() => setShowAdminComponents(true)}>
+          Admin
+        </Button>
+      ) : null}
 
       {/* <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} /> */}
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} media={tokenMedia} allowance={allowance} />

@@ -4,22 +4,17 @@ import { ethers, BigNumber } from "ethers";
 
 import { useBalances, useManagerManaged, useNamedContracts, useWalletAddress } from "@/lib/hooks";
 import icons from "@/ui/icons";
+import useWeb3 from "@/lib/hooks/useWeb3";
 
 import Network from "./Network";
 
 const PROD = process.env.NODE_ENV == "production";
 
 const Inventory = () => {
-  const [walletAddress, connecting, connectWallet] = useWalletAddress();
+  const [{ walletAddress }] = useWeb3();
   const [balances, refreshBalances] = useBalances();
   const managedContracts = useManagerManaged();
   const namedContracts = useNamedContracts();
-
-  if (!PROD) {
-    useEffect(() => {
-      connectWallet();
-    }, []);
-  }
 
   useEffect(() => {
     if (walletAddress) {
@@ -27,32 +22,16 @@ const Inventory = () => {
     }
   }, [walletAddress]);
 
-  if (!walletAddress)
-    return (
-      <div className="pointer-events-auto">
-        <button
-          className="m-0 rounded-none rounded-t-lg bg-accent text-paper opacity-100 hover:bg-accent hover:drop-shadow-accent"
-          disabled={connecting}
-          onClick={connectWallet}
-        >
-          Connect Wallet
-        </button>
-      </div>
-    );
-
-  if (!balances || !managedContracts || !namedContracts) {
+  if (!walletAddress || !balances || !managedContracts || !namedContracts) {
     return null;
   }
 
   return (
-    <div className="pointer-events-auto max-w-screen-lg translate-y-[71%] rounded-t-lg border border-b-0 border-solid border-accent/60 bg-paper transition-transform duration-500 ease-out hover:translate-y-0">
+    <div className="pointer-events-auto max-w-screen-lg translate-y-[65%] rounded-t-lg border border-b-0 border-solid border-accent/60 bg-paper transition-transform duration-500 ease-out hover:translate-y-0">
       <div className="relative mb-2 flex text-left uppercase tracking-widest">
         <div className="mt-2 ml-2 flex flex-grow items-center pl-2 text-xs">My inventory</div>
         <Network />
       </div>
-      <a className="mb-2 block font-mono text-xs text-white/50" href={`https://etherscan.io/address/${walletAddress}`}>
-        {walletAddress || "Nope"}
-      </a>
       <div className="flex justify-center px-2 pb-2">
         <div className="grid grid-cols-4 gap-2">
           <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} />

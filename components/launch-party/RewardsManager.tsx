@@ -2,6 +2,7 @@ import { BigNumber, ethers } from "ethers";
 import { useState } from "react";
 import { poolByAddress } from "./lib/pools";
 import { round } from "./lib/utils";
+import { Button } from "@/ui";
 import * as widget from "../ui/widget";
 
 type RewardsManagerParams = {
@@ -36,9 +37,9 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
       </div>
 
       <div className="text-right">
-        <button disabled={!token || isNaN(floatMultiplier) || floatMultiplier < 0} onClick={onClickButton}>
+        <Button disabled={!token || isNaN(floatMultiplier) || floatMultiplier < 0} onClick={onClickButton}>
           Apply
-        </button>
+        </Button>
       </div>
 
       {ratiosArr.length ? (
