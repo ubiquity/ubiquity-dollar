@@ -27,7 +27,7 @@ const UarRedeem = () => {
 
   const redeemUarForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAR -> DebtCouponManager", (managedContracts.uar as unknown) as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uCR -> DebtCouponManager", (managedContracts.uar as unknown) as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
     refreshBalances();
   };
@@ -35,7 +35,7 @@ const UarRedeem = () => {
   const handleRedeem = () => {
     const amount = extractValidAmount();
     if (amount) {
-      doTransaction("Redeeming uAR...", async () => {
+      doTransaction("Redeeming uCR...", async () => {
         setInputVal("");
         await redeemUarForUad(amount);
       });
@@ -52,9 +52,9 @@ const UarRedeem = () => {
   return (
     <>
       <div className="flex flex-col">
-        <PositiveNumberInput placeholder="uAR Amount" value={inputVal} onChange={setInputVal} />
+        <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
         <button onClick={handleRedeem} disabled={!submitEnabled}>
-          Redeem uAR for uAD
+          Redeem uCR for uAD
         </button>
       </div>
     </>

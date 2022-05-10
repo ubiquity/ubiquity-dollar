@@ -56,8 +56,8 @@ const Inventory = () => {
       <div className="flex justify-center px-2 pb-2">
         <div className="grid grid-cols-4 gap-2">
           <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} />
-          <Token token="uAR" balance={balances.uar} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} />
-          <Token token="uDEBT" balance={balances.debtCoupon} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
+          <Token token="uCR" balance={balances.uar} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} />
+          <Token token="uCR-NFT" balance={balances.debtCoupon} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
           <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} />
           <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} />
           <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
@@ -147,8 +147,8 @@ const Token = ({
 
 const tokenSvg = {
   uAD: () => icons.svgs.uad,
-  uAR: () => icons.svgs.uar,
-  uDEBT: () => icons.svgs.udebt,
+  uCR: () => icons.svgs.ucr,
+  "uCR-NFT": () => icons.svgs["ucr-nft"],
   UBQ: () => icons.svgs.ubq,
   USDC: () => icons.svgs.usdc,
   "3CRV": () => <img alt="" src={icons.base64s["3crv"]} />,

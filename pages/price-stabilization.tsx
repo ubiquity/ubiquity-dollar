@@ -32,7 +32,7 @@ const PriceStabilization: FC = (): JSX.Element => {
       </Container>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Container className="w-full">
-          <Title text="Mint Debt Coupons" />
+          <Title text="Mint Credit Coupons" />
           <SubTitle text="When TWAP < 1" />
           <DisabledBlurredMessage disabled={twapGt1} content="Disabled while TWAP > 1">
             <DebtCouponDeposit />
@@ -40,7 +40,7 @@ const PriceStabilization: FC = (): JSX.Element => {
           </DisabledBlurredMessage>
         </Container>
         <Container className="w-full">
-          <Title text="Redeem Debt Coupons" />
+          <Title text="Redeem Credit Coupons" />
           <SubTitle text="When TWAP > 1" />
           <DisabledBlurredMessage disabled={!twapGt1} content="Disabled while TWAP < 1">
             <UarRedeem />

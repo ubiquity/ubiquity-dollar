@@ -113,7 +113,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
           <Icon icon="warning" className="w-10 text-white" />
         </div>
         <p className="flex-grow text-left">
-          <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
+          <span>uCR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
           <a target="_blank" className="text-white" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
             Learn more &raquo;
           </a>
@@ -403,8 +403,8 @@ export const YieldFarmingDeposit = memo(
           <div className="w-1/2">
             <div className="text-3xl font-bold text-accent">{Math.round(maxApy() * 100) / 100}%</div>
             <div className="flex justify-center">
-              Max APY in uAR
-              <Tooltip content="All the rewards are multiplied and provided in uAR">
+              Max APY in uCR
+              <Tooltip content="All the rewards are multiplied and provided in uCR">
                 <span className="pl-2">
                   <Icon icon="help" className="inline w-4 text-white" />
                 </span>
@@ -420,7 +420,7 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="mb-2 w-10/12 text-left">
               <span>Minimizes deposit fee</span>
-              <Tooltip content="The deposit fee gets converted to uAR when you withdraw">
+              <Tooltip content="The deposit fee gets converted to uCR when you withdraw">
                 <span className="pl-2">
                   <Icon icon="help" className="inline w-4 text-white" />
                 </span>

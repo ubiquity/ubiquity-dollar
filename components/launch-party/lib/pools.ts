@@ -65,7 +65,7 @@ export const pools: PoolInfo[] = [
 export const poolByAddress = (address: string) => pools.find((p) => p.tokenAddress === address) || (address === goldenPool.tokenAddress ? goldenPool : null);
 
 export const goldenPool: PoolInfo = {
-  name: "uAR-WETH",
+  name: "uCR-WETH",
   poolAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
   tokenAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
   logo: null,
