@@ -1,5 +1,3 @@
-import React from "react";
-
 import { WalletAddressContextProvider } from "./hooks/useWalletAddress";
 import { ManagedContractsContextProvider } from "./hooks/contracts/useManagerManaged";
 import { TransactionsContextProvider } from "./hooks/useTransactionLogger";

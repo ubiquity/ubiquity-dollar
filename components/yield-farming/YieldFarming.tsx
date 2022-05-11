@@ -224,15 +224,15 @@ export const YieldFarmindWithdraw = memo(
         <div className="grid grid-cols-3 gap-y-4">
           <DepositItem val={f(newAmount)} fadeVal={` (${f(amount)})`} text={token} />
           <DepositItem val={`${f(yieldPct * 100)}%`} text="Yield %" />
-          <DepositItem val={`${f(yieldAmount)} uAR`} text="Yield" />
+          <DepositItem val={`${f(yieldAmount)} uCR`} text="Yield" />
           <DepositItem val={f(uad)} fadeVal={` / ${f(uadMax)}`} text="uAD" />
           <DepositItem val={`${f(uadBasePct * 100)}% + ${f(uadBonusPct * 100)}%`} text="Yield Multiplier" />
-          <DepositItem val={`${f(uadBonusAmount)} uAR`} text="Bonus Yield" />
+          <DepositItem val={`${f(uadBonusAmount)} uCR`} text="Bonus Yield" />
           <DepositItem val={f(ubq)} fadeVal={` / ${f(ubqMax)}`} text="UBQ" />
           <DepositItem val={`${f(feePct * 100)}%`} fadeVal={` / ${f(feePctMax * 100)}%`} text="Deposit Fee" />
-          <DepositItem val={`${f(feeAmount)} uAR`} text={`Converted from ${token}`} />
-          <DepositItem val={f(uar)} text="uAR" />
-          <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
+          <DepositItem val={`${f(feeAmount)} uCR`} text={`Converted from ${token}`} />
+          <DepositItem val={f(uar)} text="uCR" />
+          <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uCR" />
           <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
         <button onClick={onWithdraw} disabled={disable} className="m-0 mt-8 flex w-full justify-center">

@@ -65,10 +65,10 @@ const DebtCouponDeposit = () => {
       <div className="flex flex-col">
         <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
         <button className="btn-primary" onClick={handleBurn} disabled={!submitEnabled}>
-          Redeem uAD for uDEBT
+          Redeem uAD for uCR-NFT
         </button>
       </div>
-      {expectedDebtCoupon && inputVal && <p>expected uDEBT {formatEther(expectedDebtCoupon)}</p>}
+      {expectedDebtCoupon && inputVal && <p>expected uCR-NFT {formatEther(expectedDebtCoupon)}</p>}
     </>
   );
 };
