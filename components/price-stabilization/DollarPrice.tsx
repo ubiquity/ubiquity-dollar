@@ -14,7 +14,7 @@ const DollarPrice = () => {
         <Tooltip content="Time Weighted Average Price" placement="left">
           <div>
             <div className="mb-2 bg-gradient-to-r from-white/80 to-transparent bg-clip-text text-4xl text-transparent">
-              ${twapPrice && roundPrice(twapPrice)}
+              ${(twapPrice && roundPrice(twapPrice)) || 0}
             </div>
             <div className="text-sm uppercase tracking-widest">TWAP Price</div>
           </div>
@@ -24,7 +24,7 @@ const DollarPrice = () => {
         <Tooltip content="Exchange price to 3CRV" placement="left">
           <div>
             <div className="mb-2 bg-gradient-to-r from-white/80 to-transparent bg-clip-text text-4xl text-transparent">
-              ${spotPrice && roundPrice(spotPrice)}
+              ${(spotPrice && roundPrice(spotPrice)) || 0}
             </div>
             <div className="text-sm uppercase tracking-widest">SPOT Price</div>
           </div>

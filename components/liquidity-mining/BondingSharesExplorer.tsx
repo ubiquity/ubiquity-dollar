@@ -137,7 +137,6 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
         if (!model || model.processing) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         setModel({ ...model, processing: true });
-        const title = `Staking...`;
         doTransaction("Staking...", async () => {});
         const allowance = await metaPool.allowance(walletAddress, bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
