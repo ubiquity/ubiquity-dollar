@@ -1,7 +1,9 @@
 import cx from "classnames";
 import * as widget from "../ui/widget";
+import { Button } from "@/ui";
 import { OwnedSticks, SticksAllowance, TokenMedia, TokenData } from "./lib/state";
 import Whitelist from "./Whitelist";
+import { useTransactionLogger } from "../lib/hooks";
 
 // const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
 
@@ -14,13 +16,14 @@ type UbiquiStickParams = {
 };
 
 const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiStickParams) => {
+  const [, , transacting] = useTransactionLogger();
   const sticksCount = sticks ? sticks.gold + sticks.black + sticks.invisible : null;
 
   const isLoaded = !!(sticks && allowance);
 
   // const blurredOutMessage = !isConnected ? "Connect your wallet" : !isLoaded ? "Checking whitelist" ?
 
-  const mintButtonEnabled = sticks && allowance && allowance.count > 0;
+  const mintButtonEnabled = !transacting && sticks && allowance && allowance.count > 0;
   const mintButtonText = !isConnected
     ? "Connect your wallet"
     : !isLoaded
@@ -52,10 +55,12 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
       </div>
       <div className="relative w-full">
         <div className={cx("flex flex-col items-center", { "blur-sm": !!showBlurredOut })}>
-          <button className="btn-primary border-box mb-8 h-20 bg-accent px-12 text-xl text-paper hover:bg-accent" disabled={!mintButtonEnabled} onClick={onBuy}>
+          <Button size="xl" styled="accent" disabled={!mintButtonEnabled} onClick={onBuy}>
             {mintButtonText}
-          </button>
-          <a href="https://opensea.io/collection/the-ubiquistick-v3">See your Ubiquisticks on OpenSeas</a>
+          </Button>
+          <a href="https://opensea.io/collection/the-ubiquistick-v3" className="link-animation mt-4">
+            See your Ubiquisticks on OpenSeas
+          </a>
         </div>
         {showBlurredOut && <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />}
       </div>

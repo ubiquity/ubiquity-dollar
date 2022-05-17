@@ -4,9 +4,9 @@ import { BigNumber, ethers } from "ethers";
 import { ERC20 } from "@/dollar-types";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { performTransaction, constrainNumber } from "@/lib/utils";
+import { performTransaction, constrainNumber, constrainStringNumber } from "@/lib/utils";
 import { useBalances, useTransactionLogger } from "@/lib/hooks";
-import { Tooltip, Container, Title, SubTitle, icons, Icon, WalletNotConnected } from "@/ui";
+import { Tooltip, Container, Title, SubTitle, icons, Icon, Button, WalletNotConnected, PositiveNumberInput, MaxButtonWrapper } from "@/ui";
 
 import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData } from "./lib/data";
 
@@ -235,9 +235,11 @@ export const YieldFarmindWithdraw = memo(
           <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
           <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
-        <button onClick={onWithdraw} disabled={disable} className="m-0 mt-8 flex w-full justify-center">
-          Withdraw
-        </button>
+        <div className="flex justify-center pt-8">
+          <Button styled="accent" size="lg" onClick={onWithdraw} disabled={disable}>
+            Withdraw
+          </Button>
+        </div>
       </>
     );
   }
@@ -286,93 +288,94 @@ export const YieldFarmingDeposit = memo(
     disable,
     onDeposit,
   }: YieldFarmingDepositProps) => {
-    const [usdc, setUsdc] = useState<number>(0);
-    const [ubq, setUbq] = useState<number>(0);
-    const [uad, setUad] = useState<number>(0);
+    const [usdc, setUsdc] = useState<string>("");
+    const [ubq, setUbq] = useState<string>("");
+    const [uad, setUad] = useState<string>("");
     const [errors, setErrors] = useState<string[]>([]);
+
+    const usdcNum = parseFloat(usdc) || 0;
+    const ubqNum = parseFloat(ubq) || 0;
+    const uadNum = parseFloat(uad) || 0;
 
     const deposit: () => void = () => {
       if (usdc && ubq && uad) {
-        onDeposit({ usdc, ubq, uad });
+        onDeposit({ usdc: parseFloat(usdc), ubq: parseFloat(ubq), uad: parseFloat(uad) });
       }
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { value, name } = event.currentTarget;
-      const num = parseFloat(value) || 0;
-      switch (name) {
-        case "usdc":
-          {
-            const newUsdc = constrainNumber(num, 0, Infinity);
-            setUsdc(newUsdc);
-            if (newUsdc < usdc) {
-              setUad(constrainNumber(uad, 0, maxUadPct * newUsdc));
-            }
-          }
-          break;
+    const handleUsdcChange = (v: string) => {
+      setUsdc(v);
+      const newUsdc = parseFloat(v) || 0;
+      if (newUsdc === 0) setUad("");
+      else if (newUsdc < usdcNum) setUad(constrainStringNumber(uad, 0, maxUadPct * newUsdc));
+    };
 
-        case "ubq":
-          setUbq(constrainNumber(num, 0, maxUbqAmount));
-          break;
+    const handleUbqChange = (v: string) => {
+      setUbq(constrainStringNumber(v, 0, maxUbqAmount));
+    };
 
-        case "uad":
-          setUad(constrainNumber(num, 0, maxUadPct * usdc));
-          break;
-        default:
-          break;
-      }
+    const handleUadChange = (v: string) => {
+      setUad(constrainStringNumber(v, 0, maxUadPct * usdcNum));
     };
 
     const canDeposit: () => boolean = () => {
-      if (usdc > 0 && usdc <= balance.usdc && ubq >= 0 && ubq <= balance.ubq && uad >= 0 && uad <= balance.uad) {
+      if (usdcNum > 0 && usdcNum <= balance.usdc && ubqNum >= 0 && ubqNum <= balance.ubq && uadNum >= 0 && uadNum <= balance.uad) {
         return true;
       }
       return false;
     };
 
     const ubqFee = () => {
-      return baseDepositFeePct - (ubq / maxUbqAmount) * (baseDepositFeePct - minDepositFeePct);
+      return baseDepositFeePct - (ubqNum / maxUbqAmount) * (baseDepositFeePct - minDepositFeePct);
     };
 
     const uadBoost = () => {
-      const pct = usdc ? uad / (maxUadPct * usdc) : 0;
+      const pct = usdcNum ? uadNum / (maxUadPct * usdcNum) : 0;
       return baseYieldBonusPct + (maxYieldBonusPct - baseYieldBonusPct) * pct;
     };
 
     const maxApy = () => {
-      return usdcApy.max + usdcApy.max * (uad && usdc ? uadBoost() : maxYieldBonusPct);
+      return usdcApy.max + usdcApy.max * (uadNum && usdcNum ? uadBoost() : maxYieldBonusPct);
     };
 
     const setMaxUbq = () => {
       const max = maxUbqAmount > balance.ubq ? balance.ubq : maxUbqAmount;
-      setUbq(max);
+      setUbq(max.toString());
     };
 
     const setMaxUad = () => {
-      let max = maxUadPct * usdc;
+      let max = maxUadPct * usdcNum;
       if (max > balance.uad) {
         max = balance.uad;
       }
-      setUad(max);
+      setUad(max.toString());
     };
 
     const setMaxUsdc = () => {
-      setUsdc(balance.usdc);
+      setUsdc(balance.usdc.toString());
     };
 
     useEffect(() => {
       const errors: string[] = [];
       const noFunds = (token: string) => `You don't have enough ${token.toUpperCase()}.`;
-      if (usdc > balance.usdc) errors.push(noFunds("usdc"));
-      if (ubq > balance.ubq) errors.push(noFunds("ubq"));
-      if (uad > balance.uad) errors.push(noFunds("uad"));
+      if (usdcNum > balance.usdc) errors.push(noFunds("usdc"));
+      if (ubqNum > balance.ubq) errors.push(noFunds("ubq"));
+      if (uadNum > balance.uad) errors.push(noFunds("uad"));
 
       setErrors(errors);
     }, [usdc, ubq, uad]);
 
+    const HelpTooltip = ({ content }: { content: string }) => (
+      <Tooltip content={content}>
+        <span className="pl-2">
+          <Icon icon="help" className="inline w-4 text-white" />
+        </span>
+      </Tooltip>
+    );
+
     return (
       <>
-        <SubTitle text="New Deposit" />
+        <SubTitle text="Primary deposit" />
         <div className="mb-8 flex items-center justify-between">
           {/* TODO: ICON */}
           <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
@@ -388,27 +391,18 @@ export const YieldFarmingDeposit = memo(
                 {usdcApy.min.toFixed(2)}% - {usdcApy.max.toFixed(2)}%
               </span>
               <span className="pl-2">APY</span>
-              <Tooltip content="This is the APY from the Pickle Finance USDC jar">
-                <span className="pl-2">
-                  <Icon icon="help" className="inline w-4 text-white" />
-                </span>
-              </Tooltip>
+              <HelpTooltip content="This is the APY from the Pickle Finance USDC jar" />
             </div>
-            <input type="number" value={usdc || ""} onChange={handleInputChange} name="usdc" className="m-0 box-border w-full" />
-            <div className="mt-2 flex justify-end">
-              <span className="flex-grow text-left opacity-50">Balance: {f(balance.usdc)}</span>
-              <button onClick={setMaxUsdc}>Max</button>
-            </div>
+            <MaxButtonWrapper onMax={setMaxUsdc}>
+              <PositiveNumberInput value={usdc} onChange={handleUsdcChange} className="w-full pr-14" />
+            </MaxButtonWrapper>
+            <div className="mt-2 opacity-50">Balance: {f(balance.usdc)}</div>
           </div>
           <div className="w-1/2">
-            <div className="text-3xl font-bold text-accent">{Math.round(maxApy() * 100) / 100}%</div>
+            <div className="text-center text-3xl font-bold text-accent">{Math.round(maxApy() * 100) / 100}%</div>
             <div className="flex justify-center">
               Max APY in uAR
-              <Tooltip content="All the rewards are multiplied and provided in uAR">
-                <span className="pl-2">
-                  <Icon icon="help" className="inline w-4 text-white" />
-                </span>
-              </Tooltip>
+              <HelpTooltip content="All the rewards are multiplied and provided in uAR" />
             </div>
           </div>
         </div>
@@ -420,30 +414,23 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="mb-2 w-10/12 text-left">
               <span>Minimizes deposit fee</span>
-              <Tooltip content="The deposit fee gets converted to uAR when you withdraw">
-                <span className="pl-2">
-                  <Icon icon="help" className="inline w-4 text-white" />
-                </span>
-              </Tooltip>
+              <HelpTooltip content="The deposit fee gets converted to uAR when you withdraw" />
             </div>
             <div className="flex items-center justify-between">
-              <input
-                type="number"
-                value={ubq || ""}
-                onChange={handleInputChange}
-                name="ubq"
-                placeholder={`${maxUbqAmount.toLocaleString()} for 0% fee`}
-                className="m-0 box-border w-10/12"
-              />
+              <MaxButtonWrapper onMax={setMaxUbq} className="w-10/12">
+                <PositiveNumberInput
+                  value={ubq}
+                  onChange={handleUbqChange}
+                  placeholder={`${maxUbqAmount.toLocaleString()} for 0% fee`}
+                  className="w-full pr-14"
+                />
+              </MaxButtonWrapper>
               <div className="flex w-2/12 flex-col items-center justify-center text-center text-accent">
                 <span>{Math.round(ubqFee() * 100 * 100) / 100}%</span>
                 <span className="text-xs">FEE</span>
               </div>
             </div>
-            <div className="mt-2 flex w-10/12 justify-end">
-              <span className="flex-grow text-left opacity-50">Balance: {f(balance.ubq)}</span>
-              <button onClick={setMaxUbq}>Max</button>
-            </div>
+            <div className="mt-2 w-10/12 opacity-50">Balance: {f(balance.ubq)}</div>
           </div>
 
           <div className="w-5/12 bg-center bg-no-repeat" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
@@ -457,31 +444,24 @@ export const YieldFarmingDeposit = memo(
             <div className="mb-2  w-10/12 text-left">
               <span>Boosts yield</span>
               {/* <span>up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span> */}
-              <Tooltip content="Match 50% of the USDC deposit and you get an extra 50% boost">
-                <span className="pl-1">
-                  <Icon icon="help" className="inline w-4 text-white" />
-                </span>
-              </Tooltip>
+              <HelpTooltip content="Match 50% of the USDC deposit and you get an extra 50% boost" />
             </div>
             <div className="flex items-center justify-between">
-              <input
-                type="number"
-                disabled={usdc <= 0}
-                value={uad || ""}
-                onChange={handleInputChange}
-                name="uad"
-                placeholder={`${maxUadPct * 100}% of deposit for max boost`}
-                className="m-0 box-border w-10/12 disabled:bg-white disabled:text-black disabled:opacity-25"
-              />
+              <MaxButtonWrapper onMax={setMaxUad} disabled={usdcNum <= 0} className="w-10/12">
+                <PositiveNumberInput
+                  disabled={usdcNum <= 0}
+                  value={uad}
+                  onChange={handleUadChange}
+                  placeholder={`${maxUadPct * 100}% of deposit for max boost`}
+                  className="w-full pr-14"
+                />
+              </MaxButtonWrapper>
               <div className="flex flex-col items-center justify-center text-center text-accent">
                 <span>{Math.round(uadBoost() * 100 * 100) / 100}%</span>
                 <span className="text-xs">BOOST</span>
               </div>
             </div>
-            <div className="mt-2 flex w-10/12 justify-end">
-              <span className="flex-grow text-left opacity-50">Balance: {f(balance.uad)}</span>
-              <button onClick={setMaxUad}>Max</button>
-            </div>
+            <div className="mt-2 w-10/12 opacity-50">Balance: {f(balance.uad)}</div>
           </div>
         </div>
 
@@ -495,9 +475,11 @@ export const YieldFarmingDeposit = memo(
               ))}
             </div>
           ) : null}
-          <button onClick={deposit} disabled={!canDeposit() || disable} className="m-0 mt-8 flex w-full justify-center">
-            Deposit
-          </button>
+          <div className="flex justify-center pt-8">
+            <Button styled="accent" size="lg" onClick={deposit} disabled={!canDeposit() || disable}>
+              Deposit
+            </Button>
+          </div>
         </>
       </>
     );

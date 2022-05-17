@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ERC20 } from "@/dollar-types";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
-import { PositiveNumberInput } from "@/ui";
+import { PositiveNumberInput, Button } from "@/ui";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
 
 const UarRedeem = () => {
@@ -50,14 +50,12 @@ const UarRedeem = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <>
-      <div className="flex flex-col">
-        <PositiveNumberInput placeholder="uAR Amount" value={inputVal} onChange={setInputVal} />
-        <button onClick={handleRedeem} disabled={!submitEnabled}>
-          Redeem uAR for uAD
-        </button>
-      </div>
-    </>
+    <div className="grid gap-4">
+      <PositiveNumberInput placeholder="uAR Amount" value={inputVal} onChange={setInputVal} />
+      <Button onClick={handleRedeem} disabled={!submitEnabled}>
+        Redeem uAR for uAD
+      </Button>
+    </div>
   );
 };
 

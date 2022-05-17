@@ -5,6 +5,9 @@ module.exports = {
   content: ["components/**/*.tsx", "pages/**/*.tsx"],
   theme: {
     extend: {
+      fontSize: {
+        "2xs": "0.6rem",
+      },
       letterSpacing: {
         widest: ".17em",
       },

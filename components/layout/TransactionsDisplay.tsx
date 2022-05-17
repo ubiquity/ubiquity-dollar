@@ -17,7 +17,7 @@ const TransactionsDisplay = () => {
   const [transactions] = useTransactionLogger();
 
   return (
-    <div className="pointer-events-none fixed top-0 right-0 mr-4 mt-4">
+    <div className="pointer-events-none fixed top-0 right-0 mr-8 mt-16">
       {Object.values(transactions).map((transaction) => (
         <Transacting key={transaction.startTime} transaction={transaction} />
       ))}

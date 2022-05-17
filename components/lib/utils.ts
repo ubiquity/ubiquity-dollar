@@ -49,6 +49,14 @@ export const constrainNumber = (num: number, min: number, max: number): number =
   else return num;
 };
 
+export const constrainStringNumber = (val: string, min: number, max: number): string => {
+  const num = parseFloat(val);
+  if (isNaN(num)) return val;
+  else if (num < min) return min.toString();
+  else if (num > max) return max.toString();
+  else return val;
+};
+
 export const getNetworkName = (provider: NonNullable<PossibleProviders>): string => {
   let networkName = "";
   switch (provider.network?.chainId) {

@@ -60,9 +60,21 @@ body {
   background: #06061a;
   color: #fff;
   font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
-  /* font-weight: 100; */
-  text-align: center;
   margin: 0;
+}
+
+a.link-animation {
+  padding: 0 4px 0 4px;
+  border-radius: 2px;
+  box-shadow: inset 0px 0px 0px rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transition-property: box-shadow color;
+  transition-duration: 0.3s;
+}
+
+a.link-animation:hover {
+  box-shadow: inset 0px -24px 0px rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.7);
 }
 
 /* .rdn-control-placeholder :disabled,

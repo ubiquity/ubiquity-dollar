@@ -39,9 +39,7 @@ const WalletConnect = () => {
                 <Icon icon="help" />
               </a>
             </Tooltip>
-            <Button styled="accent" onClick={() => disconnect()}>
-              Disconnect
-            </Button>
+            <Button onClick={() => disconnect()}>Disconnect</Button>
           </div>
         ) : (
           <>
@@ -62,7 +60,7 @@ function Modal({ onClose }: { onClose: () => void }) {
 
   function Btn({ text, onClick, icon }: { text: string; icon: string; onClick: () => void }) {
     return (
-      <div onClick={() => onClick()} className="cursor-pointer rounded-lg border border-solid border-accent p-4 hover:bg-accent/20">
+      <div onClick={() => onClick()} className="border-soli cursor-pointer rounded-lg border border-accent p-4 text-center hover:bg-accent/20">
         <div className="mb-4 flex h-20 items-center justify-center">
           <img className="w-20" src={"/providers-icons/" + icon + ".svg"} />
         </div>

@@ -3,7 +3,7 @@ import { BigNumber, ethers } from "ethers";
 
 import { DebtCoupon, ERC1155Ubiquity } from "@/dollar-types";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
-import { PositiveNumberInput } from "@/ui";
+import { PositiveNumberInput, Button } from "@/ui";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
 import { ensureERC1155Allowance } from "@/lib/contracts-shortcuts";
@@ -82,12 +82,12 @@ const DebtCouponRedeem = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <div className="pt-4">
+    <div className="grid gap-4">
       <div className="flex">
         <select
           value={selectedDebtId}
           onChange={(ev) => setSelectedDebtId(parseInt(ev.target.value))}
-          className="mr-2 block h-10 rounded-md border border-solid border-accent/60 bg-white/10 p-2"
+          className="mr-2 block h-10 rounded-md border border-solid border-white/40 bg-white/10 p-2 outline-2 outline-accent/75 focus-visible:outline"
         >
           {debtIds.map((debtId, i) => (
             <option key={i} value={i}>
@@ -105,9 +105,9 @@ const DebtCouponRedeem = () => {
           </div>
         </div>
       </div>
-      <button className="btn-primary" disabled={!submitEnabled} onClick={handleRedeem}>
+      <Button disabled={!submitEnabled} onClick={handleRedeem}>
         Redeem uDebt for uAD
-      </button>
+      </Button>
     </div>
   );
 };

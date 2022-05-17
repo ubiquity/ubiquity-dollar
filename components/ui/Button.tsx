@@ -1,27 +1,57 @@
 import React from "react";
 import cx from "classnames";
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface BaseButtonProps {
   styled?: "accent" | "default";
+  size?: "sm" | "md" | "lg" | "xl";
+  fill?: "inline" | "full";
 }
 
-const Button: React.FC<ButtonProps> = ({ children, className, disabled, styled = "default", ...rest }) => {
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & BaseButtonProps;
+type ButtonLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & BaseButtonProps;
+
+const buttonStyle = ({ className, styled = "default", size = "md", fill = "inline" }: BaseButtonProps & { className?: string }): string => {
+  const commonStyles = `
+  items-center justify-center
+  cursor-pointer whitespace-nowrap rounded-md font-special uppercase tracking-widest
+  transition duration-200
+  appearance-none outline-transparent outline outline-2 outline-accent/0 focus-visible:outline-accent/60`;
+
+  const disabledStyles = "disabled:opacity-50 disabled:grayscale disabled:pointer-events-none";
+
+  const fillType = {
+    inline: "inline-flex",
+    full: "flex w-full",
+  }[fill];
+
+  const buttonTypeSize = {
+    sm: "text-2xs h-6 px-2",
+    md: "text-xs h-10 px-4",
+    lg: "text-lg h-14 px-6",
+    xl: "text-xl h-20 px-10",
+  }[size];
+
+  const buttonTypeStyle = {
+    default: "bg-transparent border-white/20 text-white/60 border-solid border hover:bg-white/20 hover:text-white",
+    accent: "bg-accent/90 text-black/60 hover:bg-accent hover:drop-shadow-accent hover:text-white",
+  }[styled];
+
+  return cx(commonStyles, buttonTypeStyle, buttonTypeSize, fillType, className, disabledStyles);
+};
+
+const Button: React.FC<ButtonProps> = ({ children, className, styled, size, fill, ...rest }) => {
   return (
-    <button
-      {...rest}
-      disabled={disabled}
-      className={cx(
-        `cursor-pointer rounded-md
-        bg-accent/90 py-2 px-4 font-special
-        text-xs uppercase tracking-widest text-paper
-        transition duration-200
-        hover:bg-accent hover:drop-shadow-accent`,
-        className,
-        { "cursor-auto opacity-50 grayscale hover:bg-accent/90 hover:drop-shadow-none": disabled }
-      )}
-    >
+    <button className={buttonStyle({ className, styled, size, fill })} {...rest}>
       {children}
     </button>
+  );
+};
+
+export const ButtonLink: React.FC<ButtonLinkProps> = ({ children, className, styled, size, fill, ...rest }) => {
+  return (
+    <a className={buttonStyle({ className, styled, size, fill })} {...rest}>
+      {children}
+    </a>
   );
 };
 

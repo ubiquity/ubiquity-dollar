@@ -414,16 +414,18 @@ const App = () => {
       <LaunchPartyHeader />
 
       {showAdminButton ? (
-        <Button disabled={!showAdminButton} styled="accent" className="mb-8" onClick={() => setShowAdminComponents(true)}>
-          Admin
-        </Button>
+        <div className="-mt-8 mb-8 flex h-0 justify-center">
+          <Button disabled={!showAdminButton} size="sm" onClick={() => setShowAdminComponents(true)}>
+            Admin
+          </Button>
+        </div>
       ) : null}
 
       {/* <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} /> */}
       <UbiquiStick isConnected={isConnected} onBuy={contractMintUbiquistick} sticks={sticks} media={tokenMedia} allowance={allowance} />
       <FundingPools enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
       <MultiplicationPool enabled={canUsePools} poolsData={poolsData} onDeposit={contractDepositAndBond} />
-      <YourBonds enabled={canUsePools} bonds={bondsData} onClaim={contractClaimAll} uarUsdPrice={uarUsdPrice} />
+      <YourBonds enabled={canUsePools && !doingTransaction} bonds={bondsData} onClaim={contractClaimAll} uarUsdPrice={uarUsdPrice} />
       <Liquidate accumulated={rewardTokenBalance} uarUsdPrice={uarUsdPrice} poolAddress={goldenPool.tokenAddress} />
     </div>
   );

@@ -12,7 +12,7 @@ import { useManagerManaged, useWalletAddress, useEffectAsync } from "@/component
 
 const PriceStabilization: FC = (): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
-  const walletAddress = useWalletAddress();
+  const [walletAddress] = useWalletAddress();
   const managedContracts = useManagerManaged();
 
   useEffectAsync(async () => {
@@ -43,8 +43,10 @@ const PriceStabilization: FC = (): JSX.Element => {
           <Title text="Redeem Debt Coupons" />
           <SubTitle text="When TWAP > 1" />
           <DisabledBlurredMessage disabled={!twapGt1} content="Disabled while TWAP < 1">
-            <UarRedeem />
-            <DebtCouponRedeem />
+            <div className="grid gap-4">
+              <UarRedeem />
+              <DebtCouponRedeem />
+            </div>
           </DisabledBlurredMessage>
         </Container>
       </div>
