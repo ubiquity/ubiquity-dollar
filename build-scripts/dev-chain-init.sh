@@ -25,4 +25,4 @@ cd contracts/dollar || exit 1
 assistant &
 
 cd ../ubiquistick || exit 1
-yarn hardhat node --fork-block-number 14044209
+yarn hardhat node --fork-block-number 14800000

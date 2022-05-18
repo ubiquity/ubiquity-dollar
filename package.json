@@ -22,7 +22,7 @@
     "_contracts:build:uad:artifacts": "cd ./contracts/dollar && yarn hardhat export --export ../../fixtures/ubiquity-dollar-deployment.json --network mainnet",
     "_contracts:build:contracts-addresses-summary": "node ./build-scripts/generate_contracts_addresses.js",
     "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir ./fixtures/abi/types ./fixtures/abi/*.json",
-    "contracts:run:nft": "cd ./contracts/ubiquistick && yarn hardhat node --fork-block-number 14044209",
+    "contracts:run:nft": "cd ./contracts/ubiquistick && yarn hardhat node --fork-block-number 14800000",
     "contracts:run:faucet": "cd ./contracts/dollar && yarn node:faucet",
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
