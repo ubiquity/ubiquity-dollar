@@ -115,7 +115,7 @@ const Sidebar = ({
           <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
           {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
           {PROD ? null : <Item text="Launch Party" href="/launch-party" icon="🎉"></Item>}
-          <Item text="Tokens Swap" href="/tokens-swap" icon="🔁"></Item>
+          <Item text="Swap" href="/swap" icon="🔁"></Item>
           <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
           <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
           <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
@@ -147,7 +147,7 @@ const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; a
   </a>
 );
 
-const Item = ({ text, href, icon }: { text: string; href: string; icon: string }) => {
+const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
   const router = useRouter();
   const isActive = router.asPath === href;
   return (
