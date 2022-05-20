@@ -111,7 +111,7 @@ const Sidebar = ({
         <ul className={cx("flex h-full flex-col", { "justify-center": state !== "permanent" })}>
           <Item text="Ubiquity Intro" href="https://landing.ubq.fi/en/" icon="🦍"></Item>
           <Item text="Price Stabilization" href="/" icon="💸"></Item>
-          <Item text="Liquidity Mining" href="/liquidity-mining" icon="⛏"></Item>
+          <Item text="Staking" href="/staking" icon="⛏"></Item>
           <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
           {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
           {PROD ? null : <Item text="Launch Party" href="/launch-party" icon="🎉"></Item>}

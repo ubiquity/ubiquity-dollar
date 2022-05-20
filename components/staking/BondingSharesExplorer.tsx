@@ -161,7 +161,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
     <Container className="relative !mx-auto max-w-screen-md">
-      <Title text="Liquidity Mining" />
+      <Title text="Staking" />
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
     </Container>
   );
