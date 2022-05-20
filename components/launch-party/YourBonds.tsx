@@ -1,4 +1,5 @@
 import { round, format, formatFixed } from "./lib/utils";
+import { Button } from "@/ui";
 import * as widget from "../ui/widget";
 
 export type BondData = {
@@ -40,8 +41,8 @@ const YourBonds = ({
       <widget.Title text="Your Bonds" />
       <widget.SubTitle text="Claim the accumulated flow" />
 
-      <div className="mb-6 inline-block rounded border border-solid border-white border-opacity-10">
-        <table className="m-0 table border-collapse">
+      <div className="mb-6 rounded border border-solid border-white border-opacity-10">
+        <table className="m-0 w-full border-collapse">
           <thead className="border-0 border-b border-solid border-white border-opacity-10">
             <tr>
               <th>Bond</th>
@@ -81,14 +82,16 @@ const YourBonds = ({
           )}
         </table>
       </div>
-      <div className="mb-2 text-lg">Accumulated claimable</div>
-      <div className="mb-6 text-3xl text-accent drop-shadow-light">
+      <div className="mb-2 text-center text-lg">Accumulated claimable</div>
+      <div className="mb-6 text-center text-3xl text-accent drop-shadow-light">
         {format(round(accumulated))} uAR{" "}
         {accumulatedInUsd !== null ? <span className="ml-2 text-2xl text-white opacity-50">(${format(round(accumulatedInUsd))})</span> : null}
       </div>
-      <button className="btn-primary" disabled={!enabled || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
-        Claim all
-      </button>
+      <div className="text-center">
+        <Button disabled={!enabled || bonds.length === 0 || accumulated === 0} onClick={onClaim}>
+          Claim all
+        </Button>
+      </div>
     </widget.Container>
   );
 };

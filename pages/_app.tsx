@@ -2,10 +2,11 @@
 import "./styles/index.css";
 import "./styles/proxima.css";
 
-import { ConnectedNetwork } from "../components/context/connected";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import Layout from "../components/layout/Layout";
+
+import Layout from "@/components/layout";
+import AppContextProvider from "@/lib/AppContextProvider";
 
 export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Element {
   return (
@@ -36,11 +37,11 @@ export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Elemen
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
         <meta name="theme-color" content="#06061a" />
       </Head>
-      <ConnectedNetwork>
+      <AppContextProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </ConnectedNetwork>
+      </AppContextProvider>
       <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     </>
   );

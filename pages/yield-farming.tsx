@@ -1,12 +1,3 @@
-import { FC } from "react";
-import { useConnectedContext } from "../components/context/connected";
-import YieldFarming from "../components/YieldFarming";
-import { WalletNotConnected } from "../components/ui/widget";
+import YieldFarming from "@/components/yield-farming";
 
-const YieldFarmingPage: FC = (): JSX.Element => {
-  const context = useConnectedContext();
-  const { account } = context;
-  return account ? <YieldFarming /> : WalletNotConnected;
-};
-
-export default YieldFarmingPage;
+export default YieldFarming;

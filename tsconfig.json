@@ -16,7 +16,18 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/ui": ["components/ui"],
+      "@/ui/*": ["components/ui/*"],
+      "@/lib/*": ["components/lib/*"],
+      "@/dollar-types/*": ["components/lib/*"],
+      "@/fixtures/*": ["fixtures/*"],
+      "@/ubiquistick-types": ["contracts/ubiquistick/types"],
+      "@/dollar-types": ["contracts/dollar/artifacts/types"]
+    }
   },
   "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "contracts"]

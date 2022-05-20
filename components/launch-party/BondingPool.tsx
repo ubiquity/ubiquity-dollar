@@ -1,9 +1,12 @@
-import cx from "classnames";
-import Tippy from "@tippyjs/react";
 import { useState } from "react";
+import cx from "classnames";
+
+import { Tooltip, PositiveNumberInput, Button } from "@/ui";
+
+import { useTransactionLogger } from "@/lib/hooks";
+
 import { PoolInfo, PoolData } from "./lib/pools";
 import { format, round } from "./lib/utils";
-import { Tooltip } from "../ui/widget";
 
 type BondingPoolParams = PoolInfo & {
   enabled: boolean;
@@ -12,6 +15,7 @@ type BondingPoolParams = PoolInfo & {
 };
 
 const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParams) => {
+  const [, , transacting] = useTransactionLogger();
   const LPTokenName = poolData ? poolData.symbol1 + "-" + poolData.symbol2 : "...";
   const [amount, setAmount] = useState("");
 
@@ -20,7 +24,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
   };
 
   const parsedAmount = parseFloat(amount);
-  const disableSubmit = !!(!enabled || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
+  const disableSubmit = transacting || !!(!enabled || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
 
   const poolUrl = info.tokenAddress === info.poolAddress ? "https://v2.info.uniswap.org/pair/" : "https://www.sorbet.finance/#/pools/";
 
@@ -28,14 +32,14 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
     <div className="rounded bg-white bg-opacity-5 p-6">
       <div className="mb-6 flex">
         {info.logo ? <img src={info.logo} className="h-20 rounded-full" /> : null}
-        <Tooltip title={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
+        <Tooltip content={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
           <div
             className={cx("flex flex-grow items-center justify-center font-light text-accent drop-shadow-light", {
               ["text-3xl"]: info.logo,
               ["text-6xl"]: !info.logo,
             })}
           >
-            <div>
+            <div className="text-center">
               {poolData ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
               <span className="font-normal">APY</span>
             </div>
@@ -44,7 +48,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
       </div>
 
       <div className="mb-6 flex items-center">
-        <Tooltip title="Liquidity">
+        <Tooltip content="Liquidity">
           <img src="liquidity.png" className="mr-2 h-4 opacity-50" />
         </Tooltip>
         <div className="flex h-6 flex-grow items-center rounded-full border border-solid border-accent/30 bg-accent/5 px-2 font-mono text-xs">
@@ -68,30 +72,25 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
 
       <div className="relative">
         <div className={cx({ "blur-sm": !enabled })}>
-          <div>
-            <input
-              type="number"
-              value={amount}
-              onChange={(ev) => setAmount(ev.target.value)}
-              className="m-0 mb-2 box-border h-10 w-full px-4 outline outline-accent/0 focus:outline-accent/75"
-              disabled={!enabled}
-              placeholder={`${LPTokenName} token amount`}
-            />
+          <div className="mb-2">
+            <PositiveNumberInput className="w-full" value={amount} onChange={setAmount} disabled={!enabled} placeholder={`${LPTokenName} token amount`} />
           </div>
           <div className="mb-6 flex text-sm">
-            <div className="flex-grow text-left">
-              You have {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
+            <div className="flex-grow text-left opacity-50">
+              Balance: {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
             </div>
-            <a href={`${poolUrl}${info.tokenAddress}`} target="_blank">
+            <a href={`${poolUrl}${info.tokenAddress}`} target="_blank" className="link-animation">
               Get more
             </a>
           </div>
-          <button className="btn-primary m-0" disabled={disableSubmit} onClick={onSubmit}>
-            Deposit &amp; Bond
-          </button>
+          <div className="flex justify-center">
+            <Button disabled={disableSubmit} onClick={onSubmit}>
+              Deposit &amp; Bond
+            </Button>
+          </div>
         </div>
         {!enabled ? (
-          <div className="absolute top-0 right-0 bottom-0 left-0 flex  items-center justify-center rounded-lg border-4 border-dashed border-white/25 bg-white/10 text-sm uppercase tracking-widest">
+          <div className="absolute top-0 right-0 bottom-0 left-0 flex  items-center justify-center rounded-lg border-4 border-dashed border-white/25 bg-white/10 text-center text-sm uppercase tracking-widest">
             You need a UbiquiStick to use this pool
           </div>
         ) : null}

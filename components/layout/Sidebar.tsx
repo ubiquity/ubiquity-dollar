@@ -2,7 +2,7 @@ import { useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import cx from "classnames";
-import { Icon, IconNames } from "../ui/icons";
+import { Icon, IconsNames } from "@/ui";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -136,7 +136,7 @@ const Sidebar = ({
   );
 };
 
-const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconNames; alt: string }) => (
+const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; alt: string }) => (
   <a
     href={href}
     className="mx-1 flex h-10 w-10 items-center justify-center rounded-full border border-solid border-transparent p-2 text-white/75 transition duration-300 ease-in-out hover:border-accent/0 hover:bg-white/5 hover:drop-shadow-light hover:transition-none"

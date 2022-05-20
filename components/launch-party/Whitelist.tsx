@@ -1,5 +1,5 @@
-import Vip from "../ui/vip.svg";
-import * as widget from "../ui/widget";
+import Vip from "@/ui/vip.svg";
+import { ButtonLink } from "@/ui";
 
 const WhitelistContainer = ({ isConnected, isLoaded, isWhitelisted }: { isConnected: boolean; isLoaded: boolean; isWhitelisted: boolean }) => {
   const status = !isConnected ? "not-connected" : !isLoaded ? "loading" : isWhitelisted ? "whitelisted" : "not-whitelisted";
@@ -46,9 +46,9 @@ const Whitelist = ({ status }: { status: WhitelistStatus }) => {
                   <div>
                     <h2 className="m-0 mb-2 text-base uppercase tracking-widest">You are not whitelisted</h2>
                     <p className="m-0 mb-4 font-light tracking-wide">In order to participate you need to be on the whitelist</p>
-                    <a className="btn-primary" target="_blank" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(TWITTER_MESSAGE)}`}>
+                    <ButtonLink target="_blank" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(TWITTER_MESSAGE)}`}>
                       I want in
-                    </a>
+                    </ButtonLink>
                   </div>
                 );
             }
