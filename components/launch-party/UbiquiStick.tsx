@@ -1,7 +1,7 @@
 import cx from "classnames";
 import * as widget from "../ui/widget";
 import { Button } from "@/ui";
-import { OwnedSticks, SticksAllowance, TokenMedia, TokenData } from "./lib/state";
+import { OwnedSticks, SticksAllowance, TokenMedia, TokenData } from "./lib/hooks/useUbiquistick";
 import Whitelist from "./Whitelist";
 import { useTransactionLogger } from "../lib/hooks";
 

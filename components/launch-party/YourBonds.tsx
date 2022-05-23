@@ -1,17 +1,7 @@
 import { round, format, formatFixed } from "./lib/utils";
 import { Button } from "@/ui";
 import * as widget from "../ui/widget";
-
-export type BondData = {
-  tokenName: string;
-  claimed: number;
-  rewards: number;
-  claimable: number;
-  depositAmount: number;
-  endsAtBlock: number;
-  endsAtDate: Date;
-  rewardPrice: number;
-};
+import { BondData } from "./lib/hooks/useSimpleBond";
 
 const toTimeInWords = (time: number): string => {
   const days = Math.floor(time / (1000 * 60 * 60 * 24));

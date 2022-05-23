@@ -1,6 +1,3 @@
-import { ethers } from "ethers";
-import { ERC20 } from "../../../contracts/dollar/artifacts/types";
-
 export type PoolInfo = {
   name: string;
   poolAddress: string;
@@ -10,22 +7,6 @@ export type PoolInfo = {
   // else
   //   pool is UniswapV3 and token is Gelato
   logo: string | null;
-};
-
-export type UnipoolData = {
-  poolAddress: string;
-  contract1: ERC20;
-  contract2: ERC20;
-  token1: string;
-  token2: string;
-  decimal1: number;
-  decimal2: number;
-  balance1: ethers.BigNumber;
-  balance2: ethers.BigNumber;
-  symbol1: string;
-  symbol2: string;
-  name1: string;
-  name2: string;
 };
 
 export type PoolData = {
@@ -41,6 +22,13 @@ export type PoolData = {
   decimals: number;
   multiplier: number;
   apy: number;
+};
+
+export const goldenPool: PoolInfo = {
+  name: "uAR-WETH",
+  poolAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
+  tokenAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
+  logo: null,
 };
 
 export const pools: PoolInfo[] = [
@@ -82,13 +70,6 @@ export const pools: PoolInfo[] = [
  */
 
 export const poolByAddress = (address: string) => pools.find((p) => p.tokenAddress === address) || (address === goldenPool.tokenAddress ? goldenPool : null);
-
-export const goldenPool: PoolInfo = {
-  name: "uAR-WETH",
-  poolAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
-  tokenAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
-  logo: null,
-};
 
 export const allPools = pools.concat([goldenPool]);
 export const poolsByToken: { [token: string]: PoolInfo } = allPools.reduce((acc, pool) => ({ ...acc, [pool.tokenAddress]: pool }), {});
