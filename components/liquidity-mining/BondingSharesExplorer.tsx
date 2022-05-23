@@ -189,7 +189,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
     <div className="relative flex flex-col">
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
       <div className="mb-6 rounded-lg border border-solid border-accent/60">
-        <table className="m-0 w-full">
+        <table className="m-0 w-full text-center">
           <thead className="border-b border-solid border-accent/60">
             <tr>
               <th className="border-r border-solid border-white/10 p-2 !text-xs">Deposit (Approx.)</th>
@@ -225,7 +225,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           <Icon className="mr-2 w-4 text-accent" icon="liquidity" />
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
-        <div className="mb-2">{poolPercentage}% pool ownership</div>
+        <div className="mb-2 text-center">{poolPercentage}% pool ownership</div>
       </div>
     </div>
   );

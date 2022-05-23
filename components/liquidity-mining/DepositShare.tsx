@@ -116,7 +116,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
 
   return (
     <div>
-      <div className="mb-4 text-3xl text-accent opacity-75">
+      <div className="mb-4 text-center text-3xl text-accent opacity-75">
         APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[0]}% - ${apyBounds[1]}%` : "..."}
       </div>
       <div className="mb-4 grid grid-cols-4 justify-center gap-4">
