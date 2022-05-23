@@ -113,7 +113,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
           <Icon icon="warning" className="w-10 text-white" />
         </div>
         <p className="flex-grow text-left">
-          <span>uAR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
+          <span>uCR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
           <a target="_blank" className="text-white" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
             Learn more &raquo;
           </a>
@@ -224,15 +224,15 @@ export const YieldFarmindWithdraw = memo(
         <div className="grid grid-cols-3 gap-y-4">
           <DepositItem val={f(newAmount)} fadeVal={` (${f(amount)})`} text={token} />
           <DepositItem val={`${f(yieldPct * 100)}%`} text="Yield %" />
-          <DepositItem val={`${f(yieldAmount)} uAR`} text="Yield" />
+          <DepositItem val={`${f(yieldAmount)} uCR`} text="Yield" />
           <DepositItem val={f(uad)} fadeVal={` / ${f(uadMax)}`} text="uAD" />
           <DepositItem val={`${f(uadBasePct * 100)}% + ${f(uadBonusPct * 100)}%`} text="Yield Multiplier" />
-          <DepositItem val={`${f(uadBonusAmount)} uAR`} text="Bonus Yield" />
+          <DepositItem val={`${f(uadBonusAmount)} uCR`} text="Bonus Yield" />
           <DepositItem val={f(ubq)} fadeVal={` / ${f(ubqMax)}`} text="UBQ" />
           <DepositItem val={`${f(feePct * 100)}%`} fadeVal={` / ${f(feePctMax * 100)}%`} text="Deposit Fee" />
-          <DepositItem val={`${f(feeAmount)} uAR`} text={`Converted from ${token}`} />
-          <DepositItem val={f(uar)} text="uAR" />
-          <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uAR" />
+          <DepositItem val={`${f(feeAmount)} uCR`} text={`Converted from ${token}`} />
+          <DepositItem val={f(uar)} text="uCR" />
+          <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uCR" />
           <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
         <div className="flex justify-center pt-8">
@@ -401,8 +401,8 @@ export const YieldFarmingDeposit = memo(
           <div className="w-1/2">
             <div className="text-center text-3xl font-bold text-accent">{Math.round(maxApy() * 100) / 100}%</div>
             <div className="flex justify-center">
-              Max APY in uAR
-              <HelpTooltip content="All the rewards are multiplied and provided in uAR" />
+              Max APY in uCR
+              <HelpTooltip content="All the rewards are multiplied and provided in uCR" />
             </div>
           </div>
         </div>
@@ -414,7 +414,7 @@ export const YieldFarmingDeposit = memo(
             </div>
             <div className="mb-2 w-10/12 text-left">
               <span>Minimizes deposit fee</span>
-              <HelpTooltip content="The deposit fee gets converted to uAR when you withdraw" />
+              <HelpTooltip content="The deposit fee gets converted to uCR when you withdraw" />
             </div>
             <div className="flex items-center justify-between">
               <MaxButtonWrapper onMax={setMaxUbq} className="w-10/12">

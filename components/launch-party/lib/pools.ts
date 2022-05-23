@@ -25,7 +25,7 @@ export type PoolData = {
 };
 
 export const goldenPool: PoolInfo = {
-  name: "uAR-WETH",
+  name: "uCR-WETH",
   poolAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
   tokenAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",
   logo: null,

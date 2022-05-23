@@ -50,14 +50,14 @@ const YourBonds = ({
                       <div className="flex-grow">
                         {formatFixed(round(bond.claimable + bond.claimed))}
                         {" / "}
-                        {formatFixed(round(bond.rewards))} uAR{" "}
+                        {formatFixed(round(bond.rewards))} uCR{" "}
                       </div>
                       <div className="text-sm text-white text-opacity-50" title={`Ends at block: ${bond.endsAtBlock}`}>
                         {toTimeInWords(+bond.endsAtDate - +new Date())} left
                       </div>
                     </div>
                   </td>
-                  <td className="py-2 px-2">{formatFixed(round(bond.claimable))} uAR</td>
+                  <td className="py-2 px-2">{formatFixed(round(bond.claimable))} uCR</td>
                 </tr>
               ))}
             </tbody>
@@ -74,7 +74,7 @@ const YourBonds = ({
       </div>
       <div className="mb-2 text-center text-lg">Accumulated claimable</div>
       <div className="mb-6 text-center text-3xl text-accent drop-shadow-light">
-        {format(round(accumulated))} uAR{" "}
+        {format(round(accumulated))} uCR{" "}
         {accumulatedInUsd !== null ? <span className="ml-2 text-2xl text-white opacity-50">(${format(round(accumulatedInUsd))})</span> : null}
       </div>
       <div className="text-center">

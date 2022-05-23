@@ -9,27 +9,19 @@ const DollarPrice = () => {
   const [twapPrice, spotPrice] = usePrices();
 
   return (
-    <div className="mb-4">
-      <div className="mb-4">
-        <Tooltip content="Time Weighted Average Price" placement="left">
-          <div>
-            <div className="mb-2 bg-gradient-to-r from-white/80 to-transparent bg-clip-text text-4xl text-transparent">
-              ${twapPrice && roundPrice(twapPrice)}
-            </div>
-            <div className="text-sm uppercase tracking-widest">TWAP Price</div>
-          </div>
-        </Tooltip>
-      </div>
-      <div>
-        <Tooltip content="Exchange price to 3CRV" placement="left">
-          <div>
-            <div className="mb-2 bg-gradient-to-r from-white/80 to-transparent bg-clip-text text-4xl text-transparent">
-              ${spotPrice && roundPrice(spotPrice)}
-            </div>
-            <div className="text-sm uppercase tracking-widest">SPOT Price</div>
-          </div>
-        </Tooltip>
-      </div>
+    <div className="grid grid-cols-2 gap-4">
+      <Tooltip content="Exchange price to 3CRV" placement="bottom">
+        <div className="text-center">
+          <div className="mb-2 text-4xl font-thin opacity-75">${spotPrice && roundPrice(spotPrice)}</div>
+          <div className="text-sm uppercase tracking-widest">SPOT Price</div>
+        </div>
+      </Tooltip>
+      <Tooltip content="Time Weighted Average Price" placement="bottom">
+        <div className="text-center">
+          <div className="mb-2 text-4xl font-thin opacity-75">${twapPrice && roundPrice(twapPrice)}</div>
+          <div className="text-sm uppercase tracking-widest">TWAP Price</div>
+        </div>
+      </Tooltip>
     </div>
   );
 };

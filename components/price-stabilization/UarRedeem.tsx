@@ -27,7 +27,7 @@ const UarRedeem = () => {
 
   const redeemUarForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAR -> DebtCouponManager", (managedContracts.uar as unknown) as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uCR -> DebtCouponManager", (managedContracts.uar as unknown) as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
     refreshBalances();
   };
@@ -35,7 +35,7 @@ const UarRedeem = () => {
   const handleRedeem = () => {
     const amount = extractValidAmount();
     if (amount) {
-      doTransaction("Redeeming uAR...", async () => {
+      doTransaction("Redeeming uCR...", async () => {
         setInputVal("");
         await redeemUarForUad(amount);
       });
@@ -44,16 +44,16 @@ const UarRedeem = () => {
 
   const extractValidAmount = (val: string = inputVal): null | BigNumber => {
     const amount = safeParseEther(val);
-    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.uar) ? amount : null;
+    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.ucr) ? amount : null;
   };
 
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
     <div className="grid gap-4">
-      <PositiveNumberInput placeholder="uAR Amount" value={inputVal} onChange={setInputVal} />
+      <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
       <Button onClick={handleRedeem} disabled={!submitEnabled}>
-        Redeem uAR for uAD
+        Redeem uCR for uAD
       </Button>
     </div>
   );

@@ -64,9 +64,9 @@ const DebtCouponDeposit = () => {
     <div className="grid gap-4">
       <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
       <Button onClick={handleBurn} disabled={!submitEnabled}>
-        Redeem uAD for uDEBT
+        Redeem uAD for uCR-NFT
       </Button>
-      {expectedDebtCoupon && inputVal && <p>expected uDEBT {formatEther(expectedDebtCoupon)}</p>}
+      {expectedDebtCoupon && inputVal && <p>expected uCR-NFT {formatEther(expectedDebtCoupon)}</p>}
     </div>
   );
 };

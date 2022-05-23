@@ -54,7 +54,7 @@ const DebtCouponRedeem = () => {
   const handleRedeem = async () => {
     const amount = extractValidAmount(inputVal);
     if (amount) {
-      doTransaction("Redeeming uDebt...", async () => {
+      doTransaction("Redeeming uCR-NFT...", async () => {
         setInputVal("");
         await redeemUdebtForUad(amount);
       });
@@ -67,7 +67,7 @@ const DebtCouponRedeem = () => {
     if (
       debtId &&
       (await ensureERC1155Allowance(
-        "uDebt -> DebtCouponManager",
+        "uCR-NFT -> DebtCouponManager",
         (managedContracts.debtCouponToken as unknown) as ERC1155Ubiquity,
         signer,
         debtCouponManager.address
@@ -96,7 +96,7 @@ const DebtCouponRedeem = () => {
           ))}
         </select>
         <div className="relative">
-          <PositiveNumberInput className="flex-grow pr-12" value={inputVal} onChange={setInputVal} placeholder="uDebt Amount" />
+          <PositiveNumberInput className="flex-grow pr-12" value={inputVal} onChange={setInputVal} placeholder="uCR-NFT Amount" />
           <div
             onClick={() => setMax()}
             className="absolute right-0 top-[50%] mr-2 flex  translate-y-[-50%] cursor-pointer items-center rounded-md border border-solid border-white bg-black/80 px-1 text-xs text-white hover:border-accent hover:text-accent hover:drop-shadow-accent"
@@ -106,7 +106,7 @@ const DebtCouponRedeem = () => {
         </div>
       </div>
       <Button disabled={!submitEnabled} onClick={handleRedeem}>
-        Redeem uDebt for uAD
+        Redeem uCR-NFT for uAD
       </Button>
     </div>
   );

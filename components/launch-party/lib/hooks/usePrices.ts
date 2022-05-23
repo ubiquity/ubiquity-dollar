@@ -16,8 +16,8 @@ const usePrices = (contracts: Contracts | null, tokensContracts: ERC20[], poolsD
 
     if (!goldenPoolData || !goldenPoolData.liquidity1 || !goldenPoolData.liquidity2) return;
 
-    // Assuming golden pool is uAR-ETH
-    // Example: If we have 5 uAR and 100 ETH in the pool, then we take 1 uAR = 20 ETH
+    // Assuming golden pool is uCR-ETH
+    // Example: If we have 5 uCR and 100 ETH in the pool, then we take 1 uCR = 20 ETH
 
     const uarEthPrice = goldenPoolData.liquidity2 / goldenPoolData.liquidity1;
 

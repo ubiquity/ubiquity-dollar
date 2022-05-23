@@ -48,8 +48,8 @@ const TokenMonitor = (props: TokenMonitorProps) => {
       <SubTitle text="Debt Coupon" />
       <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />
       <Address title="Debt Coupon" address={props.debtCouponAddress} />
-      <Balance title="Total Outstanding" unit="uDEBT" balance={props.totalOutstandingDebt} />
-      <Balance title="Total Redeemable" unit="uDEBT" balance={props.totalRedeemable} />
+      <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingDebt} />
+      <Balance title="Total Redeemable" unit="uCR-NFT" balance={props.totalRedeemable} />
     </Container>
   );
 };

@@ -10,10 +10,10 @@ export interface Balances {
   uad: BigNumber;
   crv: BigNumber;
   uad3crv: BigNumber;
-  uar: BigNumber;
+  ucr: BigNumber;
+  ucrNft: BigNumber;
   ubq: BigNumber;
   bondingShares: BigNumber;
-  debtCoupon: BigNumber;
   usdc: BigNumber;
 }
 
@@ -29,7 +29,7 @@ export const BalancesContextProvider: React.FC = ({ children }) => {
 
   async function refreshBalances() {
     if (walletAddress && managedContracts && namedContracts) {
-      const [uad, crv, uad3crv, uar, ubq, debtCoupon, bondingShares, usdc] = await Promise.all([
+      const [uad, crv, uad3crv, ucr, ubq, ucrNft, bondingShares, usdc] = await Promise.all([
         managedContracts.uad.balanceOf(walletAddress),
         managedContracts.crvToken.balanceOf(walletAddress),
         managedContracts.metaPool.balanceOf(walletAddress),
@@ -44,9 +44,9 @@ export const BalancesContextProvider: React.FC = ({ children }) => {
         uad,
         crv,
         uad3crv,
-        uar,
+        ucr,
+        ucrNft,
         ubq,
-        debtCoupon,
         bondingShares,
         usdc,
       });

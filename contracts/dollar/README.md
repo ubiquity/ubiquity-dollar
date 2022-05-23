@@ -157,7 +157,7 @@ MNEMONIC="test test test test test test test test test test test junk"
 When the hardhat fork starts it will create 10 accounts with 10000 ETH each from
 that phrase. Metamask will be using these accounts too.
 
-Now for the sake of testing you may want to give yourself uAD, uAR, UBQ, and uAD3CRV-f tokens.
+Now for the sake of testing you may want to give yourself uAD, uCR, UBQ, and uAD3CRV-f tokens.
 To do this, there is a tasks named faucet that gives you 1000 of each, transferred from
 the Ubiquity treasury account.
 
