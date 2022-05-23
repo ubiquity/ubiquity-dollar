@@ -41,11 +41,9 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) =>
       const newTokensRatios = Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]]));
 
       const newUnipoolFullData = await fetchUniswapPoolsData(
-        pools.map(({ poolAddress, tokenAddress }) => ({ address: poolAddress, version: poolAddress === tokenAddress ? "v2" : "v3" })),
+        allPools.map(({ poolAddress, tokenAddress }) => ({ address: poolAddress, version: poolAddress === tokenAddress ? "v2" : "v3" })),
         provider
       );
-
-      console.log(newUnipoolFullData);
 
       const newPoolsData: { [token: string]: PoolData } = (
         await Promise.all(
