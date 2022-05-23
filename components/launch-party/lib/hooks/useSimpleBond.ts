@@ -8,6 +8,7 @@ import { useManagerManaged, useWeb3 } from "@/lib/hooks";
 import { PoolData, allPools, pools, poolsByToken } from "../pools";
 import fetchUniswapPoolsData from "../fetchUniswapPoolsData";
 import { Contracts } from "./useLaunchPartyContracts";
+import { apyFromRatio, multiplierFromRatio } from "../utils";
 
 export type BondData = {
   tokenName: string;
@@ -54,9 +55,8 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) =>
       ).reduce<{ [token: string]: PoolData }>((acc, [address, balance, decimals, reward]) => {
         const poolTokenBalance = +ethers.utils.formatUnits(balance, decimals);
 
-        const multiplier = reward.toNumber() / 1_000_000_000;
-        const vestingDays = 5;
-        const apy = multiplier ** (365 / vestingDays) - 1;
+        const multiplier = multiplierFromRatio(reward);
+        const apy = apyFromRatio(reward);
 
         const uniPoolData = newUnipoolFullData[poolsByToken[address].poolAddress];
         const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);

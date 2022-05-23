@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useState } from "react";
 import { poolByAddress } from "./lib/pools";
-import { round } from "./lib/utils";
+import { round, apyFromRatio, multiplierFromRatio } from "./lib/utils";
 import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import * as widget from "../ui/widget";
 
@@ -66,8 +66,8 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
 const TokenInfo = ({ token, ratio, onClick }: { token: string; ratio: ethers.BigNumber; onClick: () => void }) => {
   const poolInfo = poolByAddress(token);
   if (!poolInfo) return null;
-  const multiplier = parseInt(ratio.toString()) / 1_000_000_000;
-  const apy = multiplier > 1 ? multiplier ** (365 / 5) - 1 : null;
+  const multiplier = multiplierFromRatio(ratio);
+  const apy = apyFromRatio(ratio);
   return (
     <tr className="cursor-pointer hover:bg-white/10" onClick={onClick}>
       <td>{poolInfo.name}</td>

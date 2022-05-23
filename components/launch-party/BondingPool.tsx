@@ -40,7 +40,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
             })}
           >
             <div className="text-center">
-              {poolData ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
+              {poolData?.apy ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
               <span className="font-normal">APY</span>
             </div>
           </div>

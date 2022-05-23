@@ -21,7 +21,7 @@ export type PoolData = {
   poolTokenBalance: number;
   decimals: number;
   multiplier: number;
-  apy: number;
+  apy: number | null;
 };
 
 export const goldenPool: PoolInfo = {
