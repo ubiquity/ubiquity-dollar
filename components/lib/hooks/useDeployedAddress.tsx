@@ -1,4 +1,3 @@
-import useWeb3Provider from "./useWeb3Provider";
 import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
 import ubiquistickDeployments from "@/fixtures/contracts-addresses/ubiquistick.json";
 

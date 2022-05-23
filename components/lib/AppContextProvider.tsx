@@ -11,4 +11,6 @@ const providers = [UseWeb3Provider, ManagedContractsContextProvider, Transaction
 
 const AppContextProvider = combineComponents(...providers);
 
+console.log(AppContextProvider);
+
 export default AppContextProvider;
