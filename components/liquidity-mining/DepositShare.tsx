@@ -129,7 +129,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
           Stake LP Tokens
         </Button>
       </div>
-      {error && <p>{error}</p>}
+      <div className="mb-2 text-center">{error && <p>{error}</p>}</div>
     </div>
   );
 };
