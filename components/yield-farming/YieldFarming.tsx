@@ -384,10 +384,8 @@ export const YieldFarmingDeposit = memo(
               </span> */}
             </div>
             <div className="mb-2 text-left">
-              <span>
-                {usdcApy.min.toFixed(2)}% - {usdcApy.max.toFixed(2)}%
-              </span>
-              <span className="pl-2">APY</span>
+              <span>Projected APY</span>
+              <span className="pl-2">{usdcApy.max.toFixed(2)}%</span>
               <Tooltip content="This is the APY from the Pickle Finance USDC jar">
                 <span className="pl-2">
                   <Icon icon="help" className="inline w-4 text-white" />
@@ -435,7 +433,7 @@ export const YieldFarmingDeposit = memo(
                 placeholder={`${maxUbqAmount.toLocaleString()} for 0% fee`}
                 className="m-0 box-border w-10/12"
               />
-              <div className="flex w-2/12 flex-col items-center justify-center text-center text-accent">
+              <div className="flex w-2/12 flex-col items-center justify-center text-center">
                 <span>{Math.round(ubqFee() * 100 * 100) / 100}%</span>
                 <span className="text-xs">FEE</span>
               </div>
