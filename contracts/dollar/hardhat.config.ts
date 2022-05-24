@@ -20,7 +20,7 @@ if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   );
 }
 
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 const {
   MNEMONIC,
   UBQ,

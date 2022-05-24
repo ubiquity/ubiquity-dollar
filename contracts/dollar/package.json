@@ -23,6 +23,7 @@
     "lint:prettier": "prettier --write .",
     "node:start": "hardhat node --no-deploy --show-accounts",
     "node:faucet": "hardhat faucet --network localhost",
+    "node:twapUp": "hardhat priceReset --amount 20000 --network localhost",
     "node:deployYieldProxy": "hardhat deployYieldProxyLocally --network localhost"
   },
   "keywords": [

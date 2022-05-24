@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import * as widget from "../ui/widget";
 
 type AllowanceData = {
@@ -36,20 +37,18 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
         ))}
       </div>
 
-      <div>
-        <button className="btn-primary" onClick={() => setAllowances(allowances.concat([{ address: "", count: "", price: "" }]))}>
-          Add
-        </button>
+      <div className="mt-4 text-right">
+        <Button onClick={() => setAllowances(allowances.concat([{ address: "", count: "", price: "" }]))}>Add</Button>
         {allowances.length > 1 ? (
-          <button className="btn-primary" onClick={() => setAllowances(allowances.slice(0, -1))}>
+          <Button className="ml-4" onClick={() => setAllowances(allowances.slice(0, -1))}>
             Remove
-          </button>
+          </Button>
         ) : null}
       </div>
-      <div>
-        <button disabled={disableApply} onClick={() => onSubmit(allowances)}>
+      <div className="mt-4 text-right">
+        <Button styled="accent" disabled={disableApply} onClick={() => onSubmit(allowances)}>
           Apply
-        </button>
+        </Button>
       </div>
     </widget.Container>
   );
@@ -57,10 +56,10 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
 
 const AllowanceInputs = ({ data: { address, count, price }, setData }: { data: AllowanceData; setData: (data: AllowanceData) => void }) => {
   return (
-    <div>
-      <input placeholder="Address" value={address} onChange={(ev) => setData({ address: ev.target.value, count, price })} />
-      <input placeholder="Ubiquisticks" type="number" value={count} onChange={(ev) => setData({ address, count: ev.target.value, price })} />
-      <input placeholder="Price" type="number" value={price} onChange={(ev) => setData({ address, count, price: ev.target.value })} />
+    <div className="mb-4 grid grid-cols-3 gap-4">
+      <TextInput placeholder="Address" value={address} onChange={(val) => setData({ address: val, count, price })} />
+      <PositiveNumberInput placeholder="Ubiquisticks" fraction={false} value={count} onChange={(val) => setData({ address, count: val, price })} />
+      <PositiveNumberInput placeholder="Price" value={price} onChange={(val) => setData({ address, count, price: val })} />
     </div>
   );
 };
