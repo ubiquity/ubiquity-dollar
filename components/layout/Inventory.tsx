@@ -127,7 +127,7 @@ const Token = ({
 const tokenSvg = {
   uAD: () => icons.svgs.uad,
   uCR: () => icons.svgs.ucr,
-  "uCR-NFT": () => icons.svgs["ucr-nft"],
+  "uCR-NFT": () => icons.svgs.ucrNft,
   UBQ: () => icons.svgs.ubq,
   USDC: () => icons.svgs.usdc,
   "3CRV": () => <img alt="" src={icons.base64s["3crv"]} />,
