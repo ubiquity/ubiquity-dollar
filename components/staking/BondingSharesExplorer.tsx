@@ -137,7 +137,6 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
         if (!model || model.processing) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         setModel({ ...model, processing: true });
-        const title = `Staking...`;
         doTransaction("Staking...", async () => {});
         const allowance = await metaPool.allowance(walletAddress, bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
@@ -162,7 +161,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
     <Container className="relative !mx-auto max-w-screen-md">
-      <Title text="Liquidity Mining" />
+      <Title text="Stake uAD-3CRV tokens -> Receive uBQ" />
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
     </Container>
   );

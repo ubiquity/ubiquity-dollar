@@ -1,5 +1,3 @@
-import React from "react";
-
 import { UseWeb3Provider } from "./hooks/useWeb3";
 import { ManagedContractsContextProvider } from "./hooks/contracts/useManagerManaged";
 import { TransactionsContextProvider } from "./hooks/useTransactionLogger";
