@@ -3,7 +3,7 @@ import { BigNumber, ethers } from "ethers";
 
 import { DebtCoupon, ERC1155Ubiquity } from "@/dollar-types";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
-import { PositiveNumberInput } from "@/ui";
+import { PositiveNumberInput, Button } from "@/ui";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
 import { ensureERC1155Allowance } from "@/lib/contracts-shortcuts";
@@ -54,7 +54,7 @@ const DebtCouponRedeem = () => {
   const handleRedeem = async () => {
     const amount = extractValidAmount(inputVal);
     if (amount) {
-      doTransaction("Redeeming uDebt...", async () => {
+      doTransaction("Redeeming uCR-NFT...", async () => {
         setInputVal("");
         await redeemUdebtForUad(amount);
       });
@@ -67,7 +67,7 @@ const DebtCouponRedeem = () => {
     if (
       debtId &&
       (await ensureERC1155Allowance(
-        "uDebt -> DebtCouponManager",
+        "uCR-NFT -> DebtCouponManager",
         (managedContracts.debtCouponToken as unknown) as ERC1155Ubiquity,
         signer,
         debtCouponManager.address
@@ -82,12 +82,12 @@ const DebtCouponRedeem = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <div className="pt-4">
+    <div className="grid gap-4">
       <div className="flex">
         <select
           value={selectedDebtId}
           onChange={(ev) => setSelectedDebtId(parseInt(ev.target.value))}
-          className="mr-2 block h-10 rounded-md border border-solid border-accent/60 bg-white/10 p-2"
+          className="mr-2 block h-10 rounded-md border border-solid border-white/40 bg-white/10 p-2 outline-2 outline-accent/75 focus-visible:outline"
         >
           {debtIds.map((debtId, i) => (
             <option key={i} value={i}>
@@ -96,7 +96,7 @@ const DebtCouponRedeem = () => {
           ))}
         </select>
         <div className="relative">
-          <PositiveNumberInput className="flex-grow pr-12" value={inputVal} onChange={setInputVal} placeholder="uDebt Amount" />
+          <PositiveNumberInput className="flex-grow pr-12" value={inputVal} onChange={setInputVal} placeholder="uCR-NFT Amount" />
           <div
             onClick={() => setMax()}
             className="absolute right-0 top-[50%] mr-2 flex  translate-y-[-50%] cursor-pointer items-center rounded-md border border-solid border-white bg-black/80 px-1 text-xs text-white hover:border-accent hover:text-accent hover:drop-shadow-accent"
@@ -105,9 +105,9 @@ const DebtCouponRedeem = () => {
           </div>
         </div>
       </div>
-      <button className="btn-primary" disabled={!submitEnabled} onClick={handleRedeem}>
-        Redeem uDebt for uAD
-      </button>
+      <Button disabled={!submitEnabled} onClick={handleRedeem}>
+        Redeem uCR-NFT for uAD
+      </Button>
     </div>
   );
 };

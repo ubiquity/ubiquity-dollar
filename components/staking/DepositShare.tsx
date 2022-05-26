@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, useEffect } from "react";
 import { BigNumber, ethers } from "ethers";
 
+import { PositiveNumberInput, Button } from "@/ui";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { constrainNumber } from "@/lib/utils";
 import { ManagedContracts } from "@/lib/hooks/contracts/useManagerManaged";
@@ -71,12 +72,12 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   const error = validateAmount();
   const hasErrors = !!error;
 
-  const onWeeksChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    setWeeks(ev.target.value && constrainNumber(parseInt(ev.target.value), MIN_WEEKS, MAX_WEEKS).toString());
+  const onWeeksChange = (inputVal: string) => {
+    setWeeks(inputVal && constrainNumber(parseInt(inputVal), MIN_WEEKS, MAX_WEEKS).toString());
   };
 
-  const onAmountChange = (ev: ChangeEvent<HTMLInputElement>) => {
-    setAmount(ev.target.value && constrainNumber(parseFloat(ev.target.value), 1, Infinity).toString());
+  const onAmountChange = (inputVal: string) => {
+    setAmount(inputVal);
   };
 
   const onClickStake = () => {
@@ -111,32 +112,24 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   }, [prefetched, weeks]);
 
   const noInputYet = !amount || !weeks;
+  const amountParsed = parseFloat(amount);
 
   return (
     <div>
-      <div className="mb-4 text-3xl text-accent opacity-75">
+      <div className="mb-4 text-center text-3xl text-accent opacity-75">
         APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[0]}% - ${apyBounds[1]}%` : "..."}
       </div>
-      <div className="mb-4 flex justify-center">
-        <input type="number" lang="en" value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
-
-        <input
-          type="number"
-          value={weeks}
-          onChange={onWeeksChange}
-          disabled={disabled}
-          placeholder={`Weeks (${MIN_WEEKS}-${MAX_WEEKS})`}
-          min={MIN_WEEKS}
-          max={MAX_WEEKS}
-        />
-        <button className="min-w-0" disabled={disabled} onClick={onClickMax}>
+      <div className="mb-4 grid grid-cols-4 justify-center gap-4">
+        <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
+        <PositiveNumberInput value={weeks} fraction={false} onChange={onWeeksChange} disabled={disabled} placeholder={`Weeks (${MIN_WEEKS}-${MAX_WEEKS})`} />
+        <Button disabled={disabled} onClick={onClickMax}>
           MAX
-        </button>
-        <button disabled={disabled || hasErrors || noInputYet} onClick={onClickStake}>
+        </Button>
+        <Button styled="accent" disabled={disabled || hasErrors || noInputYet || !amountParsed} onClick={onClickStake}>
           Stake LP Tokens
-        </button>
+        </Button>
       </div>
-      {error && <p>{error}</p>}
+      <div className="mb-2 text-center">{error && <p>{error}</p>}</div>
     </div>
   );
 };

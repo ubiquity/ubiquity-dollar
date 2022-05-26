@@ -4,7 +4,7 @@ import { memo, useCallback, useState } from "react";
 import { formatEther } from "@/lib/format";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Container, Title, Icon, Loading } from "@/ui";
+import { Container, Title, Icon, Loading, Button } from "@/ui";
 import { useBalances, useTransactionLogger } from "@/lib/hooks";
 
 // Contracts: bonding, metaPool, bondingToken, masterChef
@@ -188,7 +188,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
     <div className="relative flex flex-col">
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
       <div className="mb-6 rounded-lg border border-solid border-accent/60">
-        <table className="m-0 w-full">
+        <table className="m-0 w-full text-center">
           <thead className="border-b border-solid border-accent/60">
             <tr>
               <th className="border-r border-solid border-white/10 p-2 !text-xs">Deposit (Approx.)</th>
@@ -224,7 +224,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           <Icon className="mr-2 w-4 text-accent" icon="liquidity" />
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
-        <div className="mb-2">{poolPercentage}% pool ownership</div>
+        <div className="mb-2 text-center">{poolPercentage}% pool ownership</div>
       </div>
     </div>
   );
@@ -260,16 +260,14 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
         </div>
       </td>
       <td className="border-r border-solid border-white/10">{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
-      <td>
+      <td className="px-1">
         {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
           <>
             {/* <input type="text" placeholder="All" className="!min-w-0 !w-10" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
             <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
           </>
         ) : ugov.gt(0) ? (
-          <button className="whitespace-nowrap" onClick={() => onClaimUbq(+id.toString())}>
-            Claim reward
-          </button>
+          <Button onClick={() => onClaimUbq(+id.toString())}>Claim reward</Button>
         ) : null}
       </td>
     </tr>

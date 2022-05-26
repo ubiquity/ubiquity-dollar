@@ -1,7 +1,8 @@
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import { useState } from "react";
 import { poolByAddress } from "./lib/pools";
-import { round } from "./lib/utils";
+import { round, apyFromRatio, multiplierFromRatio } from "./lib/utils";
+import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import * as widget from "../ui/widget";
 
 type RewardsManagerParams = {
@@ -26,23 +27,23 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
     <widget.Container>
       <widget.Title text="Rewards management" />
       <div className="flex items-center">
-        <input className="flex-grow" placeholder="Token address" value={token} onChange={(ev) => setToken(ev.target.value)} />
-        <input placeholder="5 days multiplier" type="number" value={multiplier} onChange={(ev) => setMultiplier(ev.target.value)} />
+        <TextInput className="mr-2 flex-grow" placeholder="Token address" value={token} onChange={setToken} />
+        <PositiveNumberInput placeholder="5 days multiplier" value={multiplier} onChange={setMultiplier} />
 
-        <div className="w-36 text-xs leading-none text-accent">
+        <div className="ml-2 w-36 text-center text-xs leading-none text-accent">
           <div>APY</div>
           <div>{apy ? `${round(apy)}%` : "..."}</div>
         </div>
       </div>
 
-      <div className="text-right">
-        <button disabled={!token || isNaN(floatMultiplier) || floatMultiplier < 0} onClick={onClickButton}>
+      <div className="mt-4 text-right">
+        <Button disabled={!token || isNaN(floatMultiplier) || floatMultiplier < 0} onClick={onClickButton}>
           Apply
-        </button>
+        </Button>
       </div>
 
       {ratiosArr.length ? (
-        <table className="mt-4">
+        <table className="mt-4 text-center">
           <thead>
             <tr>
               <th>Token</th>
@@ -65,8 +66,8 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
 const TokenInfo = ({ token, ratio, onClick }: { token: string; ratio: ethers.BigNumber; onClick: () => void }) => {
   const poolInfo = poolByAddress(token);
   if (!poolInfo) return null;
-  const multiplier = parseInt(ratio.toString()) / 1_000_000_000;
-  const apy = multiplier > 1 ? multiplier ** (365 / 5) : null;
+  const multiplier = multiplierFromRatio(ratio);
+  const apy = apyFromRatio(ratio);
   return (
     <tr className="cursor-pointer hover:bg-white/10" onClick={onClick}>
       <td>{poolInfo.name}</td>

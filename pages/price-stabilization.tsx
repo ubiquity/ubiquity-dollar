@@ -12,7 +12,7 @@ import { useManagerManaged, useWalletAddress, useEffectAsync } from "@/component
 
 const PriceStabilization: FC = (): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
-  const walletAddress = useWalletAddress();
+  const [walletAddress] = useWalletAddress();
   const managedContracts = useManagerManaged();
 
   useEffectAsync(async () => {
@@ -32,7 +32,7 @@ const PriceStabilization: FC = (): JSX.Element => {
       </Container>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Container className="w-full">
-          <Title text="Mint Credit Coupons" />
+          <Title text="Mint Ubiquity Credits" />
           <SubTitle text="When TWAP < 1" />
           <DisabledBlurredMessage disabled={twapGt1} content="Disabled while TWAP > 1">
             <DebtCouponDeposit />
@@ -40,11 +40,13 @@ const PriceStabilization: FC = (): JSX.Element => {
           </DisabledBlurredMessage>
         </Container>
         <Container className="w-full">
-          <Title text="Redeem Credit Coupons" />
+          <Title text="Redeem Ubiquity Credits" />
           <SubTitle text="When TWAP > 1" />
           <DisabledBlurredMessage disabled={!twapGt1} content="Disabled while TWAP < 1">
-            <UarRedeem />
-            <DebtCouponRedeem />
+            <div className="grid gap-4">
+              <UarRedeem />
+              <DebtCouponRedeem />
+            </div>
           </DisabledBlurredMessage>
         </Container>
       </div>

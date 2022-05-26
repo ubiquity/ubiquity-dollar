@@ -7,6 +7,7 @@ export type { Transaction } from "./useTransactionLogger";
 export { default as useBalances } from "./useBalances";
 export type { Balances } from "./useBalances";
 export { default as useEffectAsync } from "./useEffectAsync";
+export { default as useWeb3 } from "./useWeb3";
 
 export { default as useDeployedContracts } from "./contracts/useDeployedContracts";
 export { default as useNamedContracts } from "./contracts/useNamedContracts";

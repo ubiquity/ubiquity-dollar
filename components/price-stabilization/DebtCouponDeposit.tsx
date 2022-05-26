@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
 import { formatEther } from "@/lib/format";
-import { PositiveNumberInput } from "@/ui";
+import { PositiveNumberInput, Button } from "@/ui";
 import { ERC20 } from "@/dollar-types";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
 
@@ -61,15 +61,13 @@ const DebtCouponDeposit = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <>
-      <div className="flex flex-col">
-        <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
-        <button className="btn-primary" onClick={handleBurn} disabled={!submitEnabled}>
-          Redeem uAD for uCR-NFT
-        </button>
-      </div>
+    <div className="grid gap-4">
+      <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
+      <Button onClick={handleBurn} disabled={!submitEnabled}>
+        Redeem uAD for uCR-NFT
+      </Button>
       {expectedDebtCoupon && inputVal && <p>expected uCR-NFT {formatEther(expectedDebtCoupon)}</p>}
-    </>
+    </div>
   );
 };
 

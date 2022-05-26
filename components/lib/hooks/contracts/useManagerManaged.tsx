@@ -1,5 +1,4 @@
 import { useEffect, useContext, useState, createContext } from "react";
-import { ethers } from "ethers";
 import {
   UbiquityAlgorithmicDollar__factory,
   IMetaPool__factory,
@@ -19,28 +18,29 @@ import {
   IUniswapV2Pair__factory,
   ERC20__factory,
 } from "@/dollar-types";
-import { useWeb3Provider, useDeployedContracts } from "@/lib/hooks";
+import { useDeployedContracts } from "@/lib/hooks";
+import useWeb3, { PossibleProviders } from "../useWeb3";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;
 export const ManagedContractsContext = createContext<ManagedContracts>(null);
 
 export const ManagedContractsContextProvider: React.FC = ({ children }) => {
-  const web3Provider = useWeb3Provider();
+  const [{ provider }] = useWeb3();
   const deployedContracts = useDeployedContracts();
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);
 
   useEffect(() => {
-    if (deployedContracts && web3Provider) {
+    if (deployedContracts && provider) {
       (async () => {
-        setManagedContracts(await connectManagerContracts(deployedContracts.manager, web3Provider));
+        setManagedContracts(await connectManagerContracts(deployedContracts.manager, provider));
       })();
     }
-  }, [deployedContracts, web3Provider]);
+  }, [deployedContracts, provider]);
 
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: UbiquityAlgorithmicDollarManager, provider: ethers.providers.Web3Provider) {
+async function connectManagerContracts(manager: UbiquityAlgorithmicDollarManager, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     uad,

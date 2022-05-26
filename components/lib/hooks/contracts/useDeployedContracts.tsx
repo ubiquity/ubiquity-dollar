@@ -1,14 +1,16 @@
-import { ethers } from "ethers";
 import { useWeb3Provider, useDeployedAddress } from "@/lib/hooks";
 import { UbiquityAlgorithmicDollarManager__factory, DebtCouponManager__factory } from "@/dollar-types";
+import { PossibleProviders } from "../useWeb3";
 
 export type DeployedContracts = ReturnType<typeof connectedContracts> | null;
-export function connectedContracts(provider: ethers.providers.Web3Provider) {
+export function connectedContracts(provider: NonNullable<PossibleProviders>) {
   const [addr1, addr2] = useDeployedAddress("UbiquityAlgorithmicDollarManager", "DebtCouponManager");
-  return {
-    manager: UbiquityAlgorithmicDollarManager__factory.connect(addr1, provider),
-    debtCouponManager: DebtCouponManager__factory.connect(addr2, provider),
-  };
+  return addr1 && addr2
+    ? {
+        manager: UbiquityAlgorithmicDollarManager__factory.connect(addr1, provider),
+        debtCouponManager: DebtCouponManager__factory.connect(addr2, provider),
+      }
+    : null;
 }
 
 let deployedContracts: DeployedContracts = null;

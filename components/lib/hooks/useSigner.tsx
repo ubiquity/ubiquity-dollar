@@ -1,12 +1,7 @@
-import useWalletAddress from "./useWalletAddress";
-import useWeb3Provider from "./useWeb3Provider";
+import useWeb3 from "./useWeb3";
 
 const useSigner = () => {
-  const [walletAddress] = useWalletAddress();
-  const provider = useWeb3Provider();
-
-  const signer = provider && walletAddress ? provider.getSigner(walletAddress) : null;
-
+  const [{ signer }] = useWeb3();
   return signer;
 };
 
