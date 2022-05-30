@@ -5,7 +5,7 @@ import { Tooltip, PositiveNumberInput, Button } from "@/ui";
 
 import { useTransactionLogger } from "@/lib/hooks";
 
-import { PoolInfo, PoolData } from "./lib/pools";
+import { PoolInfo, PoolData, getPoolUrl } from "./lib/pools";
 import { format, round } from "./lib/utils";
 
 type BondingPoolParams = PoolInfo & {
@@ -26,7 +26,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
   const parsedAmount = parseFloat(amount);
   const disableSubmit = transacting || !!(!enabled || !(parsedAmount > 0) || (poolData && parsedAmount > poolData.poolTokenBalance));
 
-  const poolUrl = info.tokenAddress === info.poolAddress ? "https://v2.info.uniswap.org/pair/" : "https://www.sorbet.finance/#/pools/";
+  const poolUrl = poolData ? getPoolUrl(info, poolData) : "";
 
   return (
     <div className="rounded bg-white bg-opacity-5 p-6">
@@ -79,7 +79,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
             <div className="flex-grow text-left opacity-50">
               Balance: {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
             </div>
-            <a href={`${poolUrl}${info.tokenAddress}`} target="_blank" className="link-animation">
+            <a href={poolUrl} target="_blank" className="link-animation">
               Get more
             </a>
           </div>
