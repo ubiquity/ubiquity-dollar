@@ -33,7 +33,7 @@ export const getPoolContract = (pool: PoolInfo): FungiblePoolContract => {
 export const getPoolUrl = (poolInfo: PoolInfo, poolData: PoolData): string => {
   return {
     UniswapV2: `https://app.uniswap.org/#/add/v2/${poolData.token1}/${poolData.token2}`,
-    Arrakis: `https://www.sorbet.finance/#/pools/${poolInfo.tokenAddress}`,
+    Arrakis: `https://beta.arrakis.finance/#/vaults/${poolInfo.tokenAddress}`,
   }[getPoolContract(poolInfo)];
 };
 
