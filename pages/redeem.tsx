@@ -3,11 +3,11 @@ import { ethers } from "ethers";
 
 import { DisabledBlurredMessage, Container, Title, SubTitle, WalletNotConnected } from "@/ui";
 
-import MigrateButton from "@/components/price-stabilization/MigrateButton";
-import DollarPrice from "@/components/price-stabilization/DollarPrice";
-import UarRedeem from "@/components/price-stabilization/UarRedeem";
-import DebtCouponDeposit from "@/components/price-stabilization/DebtCouponDeposit";
-import DebtCouponRedeem from "@/components/price-stabilization/DebtCouponRedeem";
+import MigrateButton from "@/components/redeem/MigrateButton";
+import DollarPrice from "@/components/redeem/DollarPrice";
+import UarRedeem from "@/components/redeem/UarRedeem";
+import DebtCouponDeposit from "@/components/redeem/DebtCouponDeposit";
+import DebtCouponRedeem from "@/components/redeem/DebtCouponRedeem";
 import { useManagerManaged, useWalletAddress, useEffectAsync } from "@/components/lib/hooks";
 
 const PriceStabilization: FC = (): JSX.Element => {

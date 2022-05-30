@@ -1,1 +1,1 @@
-export { default as default } from "./price-stabilization";
+export { default as default } from "./redeem";

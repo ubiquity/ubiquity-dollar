@@ -2,13 +2,11 @@ import { useEffect } from "react";
 import Tippy from "@tippyjs/react";
 import { ethers, BigNumber } from "ethers";
 
-import { useBalances, useManagerManaged, useNamedContracts, useWalletAddress } from "@/lib/hooks";
+import { useBalances, useManagerManaged, useNamedContracts } from "@/lib/hooks";
 import icons from "@/ui/icons";
 import useWeb3 from "@/lib/hooks/useWeb3";
 
 import Network from "./Network";
-
-const PROD = process.env.NODE_ENV == "production";
 
 const Inventory = () => {
   const [{ walletAddress }] = useWeb3();
@@ -61,6 +59,7 @@ const Token = ({
   decimals?: number;
 }) => {
   const Svg = tokenSvg[token] || (() => null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ethereum = (window as any).ethereum;
   const addTokenToWallet = async () => {
     if (!ethereum?.request) {
