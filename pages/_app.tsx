@@ -8,6 +8,16 @@ import Head from "next/head";
 import Layout from "@/components/layout";
 import AppContextProvider from "@/lib/AppContextProvider";
 
+const noOverlayWorkaroundScript = `
+  window.addEventListener('error', event => {
+    event.stopImmediatePropagation()
+  })
+
+  window.addEventListener('unhandledrejection', event => {
+    event.stopImmediatePropagation()
+  })
+`;
+
 export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Element {
   return (
     <>
@@ -36,6 +46,7 @@ export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Elemen
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
         <meta name="theme-color" content="#06061a" />
+        {process.env.NODE_ENV !== "production" && <script dangerouslySetInnerHTML={{ __html: noOverlayWorkaroundScript }} />}
       </Head>
       <AppContextProvider>
         <Layout>

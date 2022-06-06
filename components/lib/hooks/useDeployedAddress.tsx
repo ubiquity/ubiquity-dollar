@@ -14,6 +14,13 @@ type ChainsAddressesObject = { [key: string]: AddressesObject };
 const dollarChains = dollarDeployments as ChainsAddressesObject;
 const ubiquistickChains = ubiquistickDeployments as ChainsAddressesObject;
 
+class ContractNotAvailable extends Error {
+  constructor(contractName: string, chainId: string) {
+    super(`Neccesary contract ${contractName} not deployed on chain ID ${chainId}`); // (1)
+    this.name = "ContractNotAvailable"; // (2)
+  }
+}
+
 const useDeployedAddress = (...names: ContractsNames[]): string[] => {
   const chainId = typeof window === "undefined" ? null : (window as any)?.ethereum?.networkVersion;
   if (chainId) {
@@ -29,7 +36,7 @@ const useDeployedAddress = (...names: ContractsNames[]): string[] => {
     return names.map((name) => {
       const address = getContractAddress(name);
       if (!address) {
-        console.error(`No address for ${name} on chain ID ${chainId}`);
+        throw new ContractNotAvailable(name, chainId);
       }
       return address;
     });

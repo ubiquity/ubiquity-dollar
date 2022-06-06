@@ -16,15 +16,16 @@ export function useAsyncInit(cb: () => Promise<unknown>) {
 }
 
 export async function performTransaction(transaction: Promise<ContractTransaction>) {
-  try {
-    const tx = await transaction;
-    const txR = await tx.wait();
-    logGas(txR);
-    return true;
-  } catch (e) {
-    console.error("Transaction error", e);
-  }
-  return false;
+  // try {
+  const tx = await transaction;
+  const txR = await tx.wait();
+  logGas(txR);
+  return true;
+  // } catch (e) {
+  //   console.error("Transaction error", e);
+  //   throw e;
+  // }
+  // return false;
 }
 
 export async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: ERC1155Ubiquity): Promise<BigNumber> {
