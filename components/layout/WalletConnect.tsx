@@ -7,7 +7,7 @@ const PROD = process.env.NODE_ENV == "production";
 
 const WalletConnect = () => {
   const [walletModal, setWalletModal] = useState(false);
-  const [{ walletAddress, providerMode, connecting }, { disconnect, connectMetamask }] = useWeb3();
+  const [{ walletAddress, providerMode, connecting, metamaskInstalled }, { disconnect, connectMetamask }] = useWeb3();
 
   const promptConnectWallet = () => {
     setWalletModal(true);
@@ -21,7 +21,7 @@ const WalletConnect = () => {
 
   return (
     <>
-      {walletModal && !walletAddress && !PROD && <Modal onClose={() => setWalletModal(false)} />}
+      {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
       <div className="absolute top-0 right-0 z-40 mt-4 mr-8">
         {walletAddress ? (
           <div className="flex items-center justify-center">
@@ -55,8 +55,10 @@ const WalletConnect = () => {
 
 export default WalletConnect;
 
-function Modal({ onClose }: { onClose: () => void }) {
-  const [, { connectMetamask, connectJsonRpc }] = useWeb3();
+function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskInstalled: boolean }) {
+  const [{ provider }, { connectMetamask, connectJsonRpc }] = useWeb3();
+
+  console.log("PROVIDER!", provider);
 
   function Btn({ text, onClick, icon }: { text: string; icon: string; onClick: () => void }) {
     return (
@@ -82,7 +84,15 @@ function Modal({ onClose }: { onClose: () => void }) {
       <Container>
         <Title text="Connect wallet" />
         <div className="grid grid-cols-2 gap-4">
-          <Btn text="Metamask" icon="metamask" onClick={connectMetamask} />
+          <Btn
+            text="Metamask"
+            icon="metamask"
+            onClick={
+              metamaskInstalled
+                ? connectMetamask
+                : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
+            }
+          />
           <Btn text="Hardhat node" icon="hardhat" onClick={promptForWalletAddress} />
         </div>
       </Container>
