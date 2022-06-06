@@ -24,6 +24,19 @@ export type PoolData = {
   apy: number | null;
 };
 
+type FungiblePoolContract = "Arrakis" | "UniswapV2";
+
+export const getPoolContract = (pool: PoolInfo): FungiblePoolContract => {
+  return pool.poolAddress === pool.tokenAddress ? "UniswapV2" : "Arrakis";
+};
+
+export const getPoolUrl = (poolInfo: PoolInfo, poolData: PoolData): string => {
+  return {
+    UniswapV2: `https://app.uniswap.org/#/add/v2/${poolData.token1}/${poolData.token2}`,
+    Arrakis: `https://beta.arrakis.finance/#/vaults/${poolInfo.tokenAddress}`,
+  }[getPoolContract(poolInfo)];
+};
+
 export const goldenPool: PoolInfo = {
   name: "uCR-WETH",
   poolAddress: "0xd9dc4a753e58cd7a8b03360f042b004da3eb178a",

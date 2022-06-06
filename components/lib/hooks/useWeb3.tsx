@@ -42,27 +42,18 @@ const DEFAULT_WEB3_ACTIONS: Web3Actions = {
   disconnect: async () => {},
 };
 
-function withDefaultProvider(): Web3State {
-  if (metamaskInstalled) {
-    const newProvider = new ethers.providers.Web3Provider((window as any).ethereum);
-    return { ...DEFAULT_WEB3_STATE, providerMode: "metamask", provider: newProvider };
-  } else {
-    return DEFAULT_WEB3_STATE;
-  }
-}
-
 export const Web3Context = createContext<[Web3State, Web3Actions]>([DEFAULT_WEB3_STATE, DEFAULT_WEB3_ACTIONS]);
 
 export const UseWeb3Provider: React.FC = ({ children }) => {
   const [storedWallet, setStoredWallet] = useLocalStorage<null | string>("storedWallet", null);
   const [storedProviderMode, setStoredProviderMode] = useLocalStorage<Web3State["providerMode"]>("storedProviderMode", "none");
-  const [web3State, setWeb3State] = useState<Web3State>(withDefaultProvider());
+  const [web3State, setWeb3State] = useState<Web3State>(DEFAULT_WEB3_STATE);
 
   useEffect(() => {
-    if (storedProviderMode === "metamask") {
-      connectMetamask();
-    } else if (storedProviderMode === "jsonrpc" && storedWallet) {
+    if (storedProviderMode === "jsonrpc" && storedWallet) {
       connectJsonRpc(storedWallet);
+    } else {
+      connectMetamask();
     }
   }, []);
 

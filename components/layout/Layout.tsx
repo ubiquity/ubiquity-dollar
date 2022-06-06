@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import Link from "next/link";
 import cx from "classnames";
 
-import { Icon } from "@/ui";
+import { Icon, Container } from "@/ui";
 
 import Inventory from "./Inventory";
 import TransactionsDisplay from "./TransactionsDisplay";
@@ -14,6 +15,20 @@ type LayoutProps = {
 };
 
 const PROD = process.env.NODE_ENV == "production";
+
+function ErrorHandler({ error }: { error: any }) {
+  return (
+    <Container className="w-96">
+      <div className="flex flex-col items-center justify-center text-center">
+        <div className="mb-8 flex w-96 flex-col items-center justify-center text-accent opacity-50">
+          <Icon icon="warning" className="w-20" />
+          <div className="uppercase leading-tight tracking-widest">Error</div>
+        </div>
+        <div className="opacity-75">{error.message}</div>
+      </div>
+    </Container>
+  );
+}
 
 export default function Layout({ children }: LayoutProps) {
   const [sidebarClientWidth, setSidebarClientWidth] = useState(0);
@@ -47,7 +62,9 @@ export default function Layout({ children }: LayoutProps) {
                     "pt-24": sidebarState !== "permanent",
                   })}
                 >
-                  {children}
+                  <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
+                    {children}
+                  </ErrorBoundary>
                 </div>
               </div>
             </>
