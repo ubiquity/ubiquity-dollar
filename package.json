@@ -2,7 +2,8 @@
   "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
-    "ape": "run-s install-env install-contracts dev",
+    "start": "run-s install-env install-contracts dev",
+    "start:headless": "run-s install-env install-contracts dev:contracts",
     "install-env": "cp .env.example .env",
     "install-contracts": "run-s _contracts:install:* build:contracts",
     "build": "run-s build:*",
