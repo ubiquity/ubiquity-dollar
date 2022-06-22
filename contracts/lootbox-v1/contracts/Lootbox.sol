@@ -6,11 +6,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./interfaces/IUniswapV2Router02.sol";
 import "../../dollar/contracts/interfaces/IUbiquityAlgorithmicDollarManager.sol";
 import "../../dollar/contracts/interfaces/IUbiquityAlgorithmicDollar.sol";
+import "./interfaces/IWyvernExchange.sol";
 
 contract Lootbox is Ownable {
 
   IUbiquityAlgorithmicDollarManager public dollarManager;
   IUbiquityAlgorithmicDollar public dollarToken;
+  IWyvernExchange public wyvernExchange;
+
   address public creditToken;
 
   uint256 public transactionFee;
@@ -33,7 +36,8 @@ contract Lootbox is Ownable {
 
   constructor(
     IUbiquityAlgorithmicDollarManager _dollarManager,
-    IUniswapV2Router02 _uniswapRouter
+    IUniswapV2Router02 _uniswapRouter,
+    IWyvernExchange _wyvernExchange
   ) {
     dollarManager = _dollarManager;
 
@@ -46,6 +50,7 @@ contract Lootbox is Ownable {
     cashbackPercentage = 100;
 
     uniswapRouter = _uniswapRouter;
+    wyvernExchange = _wyvernExchange;
   }
 
   function setDollarToken(IUbiquityAlgorithmicDollar _dollarToken) public onlyOwner {
@@ -103,6 +108,31 @@ contract Lootbox is Ownable {
     path[1] = uniswapRouter.WETH();
     uniswapRouter.swapExactTokensForETH(_amountuAD * 10**18, _amountOutMin, path, address(this), block.timestamp);
 
+    address[] memory addrs = new address[](14);
+
+    /* Exchange address, intended as a versioning mechanism. */
+    addrs[0] = address(wyvernExchange);
+    /* Order maker address. */
+    addrs[1] = address(this);
+    /* Order taker address, if specified. */
+    addrs[2] = address(wyvernExchange);
+    /* Order fee recipient or zero address for taker order. */
+    addrs[3] = address(0);
+    /* Target. */
+    addrs[4] = address(this);
+    
+    uint256[] memory uints = new uint256[](18);
+
+    /* Maker relayer fee of the order, unused for taker order. */
+    uints[0] = 0;
+    /* Taker relayer fee of the order, or maximum taker fee for a taker order. */
+    uints[1] = 0;
+    /* Maker protocol fee of the order, unused for taker order. */
+    uints[2] = 0;
+    /* Taker protocol fee of the order, or maximum taker fee for a taker order. */
+    uints[3] = 0;
+
+    // wyvernExchange.atomicMatch_(addrs, uints, feeMethodsSidesKindsHowToCalls, calldataBuy, calldataSell, replacementPatternBuy, replacementPatternSell, staticExtradataBuy, staticExtradataSell, vs, rssMetadata);
     IERC20(uCRToken).transfer(msg.sender, cashbackAmount);
   }
 
