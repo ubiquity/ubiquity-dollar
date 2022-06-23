@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "hardhat clean",
-    "build": "TS_NODE_TRANSPILE_ONLY=1 yarn hardhat compile",
+    "clean": "npx hardhat clean",
+    "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "node:start": "hardhat node --show-accounts"
+    "node:start": "npx hardhat node --show-accounts"
   },
   "keywords": [],
   "author": "",
