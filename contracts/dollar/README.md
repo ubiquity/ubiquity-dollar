@@ -36,7 +36,7 @@ yarn run compile
 To verify the accounts that will be used by hardhat
 
 ```sh
-npx hardhat accounts
+yarn hardhat accounts
 ```
 
 ## Deployment
@@ -46,7 +46,7 @@ rename the `example.env` file to `.env` and fill the `MNEMONIC`, `API_KEY_ALCHEM
 `API_KEY_COINMARKETCAP` environment variables.
 
 ```sh
-npx hardhat run --network <your-network> scripts/deployment.ts
+yarn hardhat run --network <your-network> scripts/deployment.ts
 ```
 
 Note that by default smart contracts will be deployed locally using hardhat development node.
@@ -58,7 +58,7 @@ Note that by default smart contracts will be deployed locally using hardhat deve
 this task will retrieve information about all our tokens including LP token
 
 ```sh
-npx hardhat --network mainnet token
+yarn hardhat --network mainnet token
 ```
 
 ### Incentives
@@ -66,7 +66,7 @@ npx hardhat --network mainnet token
 this task will retrieve information about the current incentives and penalty on uAD buy and sell
 
 ```sh
-npx hardhat --network mainnet incentive
+yarn hardhat --network mainnet incentive
 ```
 
 ### Metapool
@@ -74,7 +74,7 @@ npx hardhat --network mainnet incentive
 this task will retrieve information about our curve uAD-3CRV metapool
 
 ```sh
-npx hardhat --network mainnet metapool
+yarn hardhat --network mainnet metapool
 ```
 
 ### Price
@@ -82,7 +82,7 @@ npx hardhat --network mainnet metapool
 this task will retrieve information about uAD price
 
 ```sh
-npx hardhat --network mainnet price
+yarn hardhat --network mainnet price
 ```
 
 ### Manager
@@ -90,7 +90,7 @@ npx hardhat --network mainnet price
 this task will all the addresses registered in the manager
 
 ```sh
-npx hardhat --network mainnet manager
+yarn hardhat --network mainnet manager
 ```
 
 ### Get Bonding Contract Transactions
@@ -106,7 +106,7 @@ this task will retrieve and filter the bonding contract transactions, print a su
 #   --start-block	The starting block for the Etherscan request (defaults is contract creation block) (default: 12595544)
 #   path	The path to store the bonding contract transactions (default: "./bonding_transactions.json")
 
-npx hardhat --network mainnet getBondingTransactions
+yarn hardhat --network mainnet getBondingTransactions
 ```
 
 ## Testing

@@ -28,7 +28,7 @@ yarn ape
 Make sure you are using the following network configuration:
 
 - `31337` chain ID of the Hardhat network.
-- `http://127.0.0.1:8545` RPC endpoin of the Hardhat network.
+- `http://127.0.0.1:8545` RPC endpoint of the Hardhat network.
 
 ### Shared Private Keys
 
