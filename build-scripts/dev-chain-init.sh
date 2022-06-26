@@ -6,7 +6,7 @@
 assistant() {
     sleep 10
 
-    nc -z 127.0.0.1 8545 # check if node is ready
+    curl http://127.0.0.1:8545 > /dev/null # check if node is ready
 
     if [ $? -eq 0 ]; then
         echo
@@ -25,4 +25,4 @@ cd contracts/dollar || exit 1
 assistant &
 
 cd ../ubiquistick || exit 1
-yarn hardhat node --fork-block-number 14800000
+yarn hardhat node --hostname 0.0.0.0 --fork-block-number 14800000

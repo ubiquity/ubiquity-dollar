@@ -73,7 +73,7 @@ const config: HardhatUserConfig = {
     },
     local: {
       chainId: 1,
-      url: "http://127.0.0.1:8545"
+      url: "http://0.0.0.0:8545"
     },
     mainnet: {
       chainId: 1,

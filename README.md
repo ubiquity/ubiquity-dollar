@@ -13,10 +13,8 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 # Ubiquity Dollar Installer
 
 git clone https://github.com/ubiquity/uad-ui.git
-cd uad-ui
-git checkout launch-party
 yarn
-yarn ape
+yarn start
 ```
 
 → [localhost:3000](https://localhost:3000/)
@@ -28,7 +26,7 @@ yarn ape
 Make sure you are using the following network configuration:
 
 - `31337` chain ID of the Hardhat network.
-- `http://127.0.0.1:8545` RPC endpoin of the Hardhat network.
+- `http://127.0.0.1:8545` RPC endpoint of the Hardhat network.
 
 ### Shared Private Keys
 
