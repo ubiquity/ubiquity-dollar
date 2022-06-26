@@ -12,7 +12,7 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 #!/usr/bin/env bash
 # Ubiquity Dollar Installer
 
-git clone https://github.com/ubiquity/uad-ui.git
+git clone https://github.com/ubiquity/ubiquity-dollar-development.git
 yarn
 yarn start
 ```
