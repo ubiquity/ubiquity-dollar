@@ -13,10 +13,8 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 # Ubiquity Dollar Installer
 
 git clone https://github.com/ubiquity/uad-ui.git
-cd uad-ui
-git checkout launch-party
 yarn
-yarn ape
+yarn start
 ```
 
 → [localhost:3000](https://localhost:3000/)
