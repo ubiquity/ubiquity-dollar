@@ -2,7 +2,7 @@ import { ethers } from "hardhat";
 import { describe, it } from "mocha";
 import { BigNumber, Signer } from "ethers";
 import { expect } from "./setup";
-import { bondingSetup } from "./BondingSetup";
+import { stakingSetup } from "./StakingSetup";
 import { TWAPOracle } from "../artifacts/types/TWAPOracle";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 import { MasterChef } from "../artifacts/types/MasterChef";
@@ -12,8 +12,8 @@ import { swap3CRVtoUAD } from "./utils/swap";
 import { ERC20 } from "../artifacts/types/ERC20";
 import { calculateUGOVMultiplier, isAmountEquivalent } from "./utils/calc";
 import { UbiquityGovernance } from "../artifacts/types/UbiquityGovernance";
-import { Bonding } from "../artifacts/types/Bonding";
-import { BondingShare } from "../artifacts/types/BondingShare";
+import { Staking } from "../artifacts/types/Staking";
+import { StakingShare } from "../artifacts/types/StakingShare";
 
 describe("MasterChef", () => {
   const one: BigNumber = BigNumber.from(10).pow(18); // one = 1 ether = 10^18
@@ -29,14 +29,14 @@ describe("MasterChef", () => {
   let crvToken: ERC20;
   let uGOV: UbiquityGovernance;
   let uGOVRewardForHundredBlock: BigNumber;
-  let bonding: Bonding;
-  let bondingShare: BondingShare;
+  let staking: Staking;
+  let stakingShare: StakingShare;
 
   before(async () => {
     ({
       masterChef,
-      bonding,
-      bondingShare,
+      staking,
+      stakingShare,
       uGOV,
       curveWhale,
       treasury,
@@ -45,10 +45,10 @@ describe("MasterChef", () => {
       metaPool,
       twapOracle,
       uAD,
-    } = await bondingSetup());
+    } = await stakingSetup());
     secondAddress = await secondAccount.getAddress();
     // for testing purposes set the week equal to one block
-    await bonding.setBlockCountInAWeek(1);
+    await staking.setBlockCountInAWeek(1);
   });
 
   describe("TwapPrice", () => {
@@ -82,8 +82,8 @@ describe("MasterChef", () => {
       );
 
       // need to do a deposit to trigger the uGOV Multiplier calculation
-      await metaPool.connect(secondAccount).approve(bonding.address, one);
-      await bonding.connect(secondAccount).deposit(one, 1);
+      await metaPool.connect(secondAccount).approve(staking.address, one);
+      await staking.connect(secondAccount).deposit(one, 1);
       const m1 = await masterChef.uGOVmultiplier();
 
       expect(m1).to.equal(calcMultiplier);
@@ -91,9 +91,9 @@ describe("MasterChef", () => {
       const user = await masterChef
         .connect(secondAccount)
         .userInfo(secondAddress);
-      const tokenIds = await bondingShare.holderTokens(secondAddress);
+      const tokenIds = await stakingShare.holderTokens(secondAddress);
 
-      await bonding.connect(secondAccount).withdraw(user.amount, tokenIds[0]);
+      await staking.connect(secondAccount).withdraw(user.amount, tokenIds[0]);
 
       const m2 = await masterChef.uGOVmultiplier();
       expect(m1).to.equal(m2); // m2 = m1 * 1.05
@@ -103,17 +103,17 @@ describe("MasterChef", () => {
   describe("deposit", () => {
     it("should be able to deposit", async () => {
       const amount = one.mul(100);
-      await metaPool.connect(secondAccount).approve(bonding.address, amount);
-      await expect(bonding.connect(secondAccount).deposit(amount, 1))
+      await metaPool.connect(secondAccount).approve(staking.address, amount);
+      await expect(staking.connect(secondAccount).deposit(amount, 1))
         .to.emit(metaPool, "Transfer")
-        .withArgs(secondAddress, bonding.address, amount);
+        .withArgs(secondAddress, staking.address, amount);
 
       const user = await masterChef
         .connect(secondAccount)
         .userInfo(secondAddress);
-      // user amount is equal to the amount of user's bonding share
-      const tokensID = await bondingShare.holderTokens(secondAddress);
-      const secondAccountSharebalance = await bondingShare.balanceOf(
+      // user amount is equal to the amount of user's staking share
+      const tokensID = await stakingShare.holderTokens(secondAddress);
+      const secondAccountSharebalance = await stakingShare.balanceOf(
         secondAddress,
         tokensID[0]
       );
@@ -147,9 +147,9 @@ describe("MasterChef", () => {
         .mul(uGOVPerBlock)
         .div(one);
 
-      const totalLPSupply = await bondingShare.totalSupply();
+      const totalLPSupply = await stakingShare.totalSupply();
       // (uGOVReward * 1e12) / lpSupply)
-      // here as the amount is the amount of bonding shares
+      // here as the amount is the amount of staking shares
       // we should divide by the total supply to get
       // the uGOV per share
       const accuGOVPerShare = uGOVRewardForHundredBlock
@@ -258,7 +258,7 @@ describe("MasterChef", () => {
       );
 
       // calculating uGOV Rewards
-      const totalLPSupply = await bondingShare.totalSupply();
+      const totalLPSupply = await stakingShare.totalSupply();
       const user = await masterChef
         .connect(secondAccount)
         .userInfo(secondAddress);
@@ -275,10 +275,10 @@ describe("MasterChef", () => {
       const lostPrecision = pendingCalculated.mod(BigNumber.from(1e8));
 
       // when withdrawing we also get our UGOV Rewards
-      const tokenIds = await bondingShare.holderTokens(secondAddress);
+      const tokenIds = await stakingShare.holderTokens(secondAddress);
       const baluGOVBefore = await uGOV.balanceOf(secondAddress);
       await expect(
-        bonding.connect(secondAccount).withdraw(one.mul(100), tokenIds[0])
+        staking.connect(secondAccount).withdraw(one.mul(100), tokenIds[0])
       )
         .to.emit(uGOV, "Transfer")
         // ugov minting

@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import { ContractTransaction, Signer, BigNumber } from "ethers";
 import { ethers, getNamedAccounts, network } from "hardhat";
-import { Bonding } from "../artifacts/types/Bonding";
-import { BondingV2 } from "../artifacts/types/BondingV2";
-import { BondingFormulas } from "../artifacts/types/BondingFormulas";
-import { BondingShare } from "../artifacts/types/BondingShare";
-import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
+import { Staking } from "../artifacts/types/Staking";
+import { StakingV2 } from "../artifacts/types/StakingV2";
+import { StakingFormulas } from "../artifacts/types/StakingFormulas";
+import { StakingShare } from "../artifacts/types/StakingShare";
+import { StakingShareV2 } from "../artifacts/types/StakingShareV2";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { UbiquityGovernance } from "../artifacts/types/UbiquityGovernance";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
@@ -36,17 +36,17 @@ let uarForDollarsCalculator: UARForDollarsCalculator;
 let excessDollarsDistributor: ExcessDollarsDistributor;
 let twapOracle: TWAPOracle;
 let metaPool: IMetaPool;
-let bonding: Bonding;
-let bondingShare: BondingShare;
-let bondingV2: BondingV2;
-let bondingShareV2: BondingShareV2;
+let staking: Staking;
+let stakingShare: StakingShare;
+let stakingV2: StakingV2;
+let stakingShareV2: StakingShareV2;
 let masterChef: MasterChef;
 let masterChefV2: MasterChefV2;
 let manager: UbiquityAlgorithmicDollarManager;
-let bondingMaxBalance: BigNumber;
-let bondingMinBalance: BigNumber;
+let stakingMaxBalance: BigNumber;
+let stakingMinBalance: BigNumber;
 let uAD: UbiquityAlgorithmicDollar;
-let bondingFormulas: BondingFormulas;
+let stakingFormulas: StakingFormulas;
 let uGOV: UbiquityGovernance;
 let DAI: string;
 let USDC: string;
@@ -63,9 +63,9 @@ let secondAccount: Signer;
 let thirdAccount: Signer;
 let fourthAccount: Signer;
 let treasury: Signer;
-let bondingZeroAccount: Signer;
-let bondingMinAccount: Signer;
-let bondingMaxAccount: Signer;
+let stakingZeroAccount: Signer;
+let stakingMinAccount: Signer;
+let stakingMaxAccount: Signer;
 let adminAddress: string;
 let secondAddress: string;
 let ubiquityFormulas: UbiquityFormulas;
@@ -135,32 +135,32 @@ const deposit: IbondTokens = async function (
   duration: number
 ) {
   const signerAdr = await signer.getAddress();
-  await metaPool.connect(signer).approve(bondingV2.address, amount);
+  await metaPool.connect(signer).approve(stakingV2.address, amount);
   const signerLPBalanceBefore = await metaPool.balanceOf(signerAdr);
-  const bondingLPBalanceBefore = await metaPool.balanceOf(bondingV2.address);
+  const stakingLPBalanceBefore = await metaPool.balanceOf(stakingV2.address);
   const blockBefore = await ethers.provider.getBlock(
     await ethers.provider.getBlockNumber()
   );
-  const curBlockCountInAWeek = await bondingV2.blockCountInAWeek();
+  const curBlockCountInAWeek = await stakingV2.blockCountInAWeek();
   const endBlock =
     blockBefore.number + 1 + duration * curBlockCountInAWeek.toNumber();
-  const zz1 = await bondingV2.bondingDiscountMultiplier(); // zz1 = zerozero1 = 0.001 ether = 10^16
+  const zz1 = await stakingV2.stakingDiscountMultiplier(); // zz1 = zerozero1 = 0.001 ether = 10^16
   const shares = BigNumber.from(
     await ubiquityFormulas.durationMultiply(amount, duration, zz1)
   );
-  const id = (await bondingShareV2.totalSupply()).add(1);
+  const id = (await stakingShareV2.totalSupply()).add(1);
   const creationBlock = (await ethers.provider.getBlockNumber()) + 1;
-  await expect(bondingV2.connect(signer).deposit(amount, duration))
-    .to.emit(bondingShareV2, "TransferSingle")
-    .withArgs(bondingV2.address, ethers.constants.AddressZero, signerAdr, id, 1)
-    .and.to.emit(bondingV2, "Deposit")
+  await expect(stakingV2.connect(signer).deposit(amount, duration))
+    .to.emit(stakingShareV2, "TransferSingle")
+    .withArgs(stakingV2.address, ethers.constants.AddressZero, signerAdr, id, 1)
+    .and.to.emit(stakingV2, "Deposit")
     .withArgs(signerAdr, id, amount, shares, duration, endBlock);
   // 1 week = blockCountInAWeek blocks
   const signerLPBalanceAfter = await metaPool.balanceOf(signerAdr);
-  const bondingLPBalanceAfter = await metaPool.balanceOf(bondingV2.address);
+  const stakingLPBalanceAfter = await metaPool.balanceOf(stakingV2.address);
   expect(signerLPBalanceBefore).to.equal(signerLPBalanceAfter.add(amount));
-  expect(bondingLPBalanceAfter).to.equal(bondingLPBalanceBefore.add(amount));
-  const bsAmount: BigNumber = await bondingShareV2.balanceOf(signerAdr, id);
+  expect(stakingLPBalanceAfter).to.equal(stakingLPBalanceBefore.add(amount));
+  const bsAmount: BigNumber = await stakingShareV2.balanceOf(signerAdr, id);
   return { id, bsAmount, shares, creationBlock, endBlock };
 };
 
@@ -173,38 +173,38 @@ type Bond = [string, BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
   lpAmount: BigNumber;
 };
 
-// withdraw bonding shares of ID belonging to the signer and return the
-// bonding share balance of the signer
+// withdraw staking shares of ID belonging to the signer and return the
+// staking share balance of the signer
 async function removeLiquidity(
   signer: Signer,
   id: BigNumber,
   amount: BigNumber
 ): Promise<Bond> {
   const signerAdr = await signer.getAddress();
-  const bondAmount: BigNumber = await bondingShareV2.balanceOf(signerAdr, id);
+  const bondAmount: BigNumber = await stakingShareV2.balanceOf(signerAdr, id);
   expect(bondAmount).to.equal(1);
-  const bondBefore = await bondingShareV2.getBond(id);
-  await metaPool.connect(signer).approve(bondingV2.address, amount);
-  const bs = await masterChefV2.getBondingShareInfo(id);
-  const bond = await bondingShareV2.getBond(id);
-  const sharesToRemove = await bondingFormulas.sharesForLP(bond, bs, amount);
-  const pendingLpRewards = await bondingV2.pendingLpRewards(id);
+  const bondBefore = await stakingShareV2.getBond(id);
+  await metaPool.connect(signer).approve(stakingV2.address, amount);
+  const bs = await masterChefV2.getStakingShareInfo(id);
+  const bond = await stakingShareV2.getBond(id);
+  const sharesToRemove = await stakingFormulas.sharesForLP(bond, bs, amount);
+  const pendingLpRewards = await stakingV2.pendingLpRewards(id);
 
-  await expect(bondingV2.connect(signer).removeLiquidity(amount, id))
-    .to.emit(bondingV2, "RemoveLiquidityFromBond")
+  await expect(stakingV2.connect(signer).removeLiquidity(amount, id))
+    .to.emit(stakingV2, "RemoveLiquidityFromBond")
     .withArgs(signerAdr, id, amount, amount, pendingLpRewards, sharesToRemove);
 
-  const bsAfter = await masterChefV2.getBondingShareInfo(id);
+  const bsAfter = await masterChefV2.getStakingShareInfo(id);
   expect(bsAfter[0]).to.equal(bs[0].sub(sharesToRemove));
-  const pendingLpRewardsAfter = await bondingV2.pendingLpRewards(id);
-  const bondAfter = await bondingShareV2.getBond(id);
+  const pendingLpRewardsAfter = await stakingV2.pendingLpRewards(id);
+  const bondAfter = await stakingShareV2.getBond(id);
   expect(pendingLpRewardsAfter).to.equal(0);
   expect(bondAfter.lpAmount).to.equal(bondBefore.lpAmount.sub(amount));
   return bondAfter;
 }
 
-// withdraw bonding shares of ID belonging to the signer and return the
-// bonding share balance of the signer
+// withdraw staking shares of ID belonging to the signer and return the
+// staking share balance of the signer
 async function addLiquidity(
   signer: Signer,
   id: BigNumber,
@@ -212,31 +212,31 @@ async function addLiquidity(
   duration: number
 ): Promise<Bond> {
   const signerAdr = await signer.getAddress();
-  const bondAmount: BigNumber = await bondingShareV2.balanceOf(signerAdr, id);
+  const bondAmount: BigNumber = await stakingShareV2.balanceOf(signerAdr, id);
   expect(bondAmount).to.equal(1);
-  await metaPool.connect(signer).approve(bondingV2.address, amount);
-  const bondBefore = await bondingShareV2.getBond(id);
-  const zz1 = await bondingV2.bondingDiscountMultiplier(); // zz1 = zerozero1 = 0.001 ether = 10^16
+  await metaPool.connect(signer).approve(stakingV2.address, amount);
+  const bondBefore = await stakingShareV2.getBond(id);
+  const zz1 = await stakingV2.stakingDiscountMultiplier(); // zz1 = zerozero1 = 0.001 ether = 10^16
 
-  const pendingLpRewards = await bondingV2.pendingLpRewards(id);
+  const pendingLpRewards = await stakingV2.pendingLpRewards(id);
 
   const totalLpAfter = bondBefore.lpAmount.add(amount).add(pendingLpRewards);
   const shares = BigNumber.from(
     await ubiquityFormulas.durationMultiply(totalLpAfter, duration, zz1)
   );
-  await expect(bondingV2.connect(signer).addLiquidity(amount, id, duration))
-    .to.emit(bondingV2, "AddLiquidityFromBond")
+  await expect(stakingV2.connect(signer).addLiquidity(amount, id, duration))
+    .to.emit(stakingV2, "AddLiquidityFromBond")
     .withArgs(signerAdr, id, totalLpAfter, shares);
-  const bs = await masterChefV2.getBondingShareInfo(id);
+  const bs = await masterChefV2.getStakingShareInfo(id);
   expect(bs[0]).to.equal(shares);
-  const bondAfter = await bondingShareV2.getBond(id);
-  const pendingLpRewardsAfter = await bondingV2.pendingLpRewards(id);
+  const bondAfter = await stakingShareV2.getBond(id);
+  const pendingLpRewardsAfter = await stakingV2.pendingLpRewards(id);
   expect(pendingLpRewardsAfter).to.equal(0);
   expect(bondAfter.lpAmount).to.equal(totalLpAfter);
   return bondAfter;
 }
 
-async function bondingSetupV2(): Promise<{
+async function stakingSetupV2(): Promise<{
   crvToken: ERC20;
   curveWhale: Signer;
   admin: Signer;
@@ -245,23 +245,23 @@ async function bondingSetupV2(): Promise<{
   fourthAccount: Signer;
   fifthAccount: Signer;
   treasury: Signer;
-  bondingZeroAccount: Signer;
-  bondingMinAccount: Signer;
-  bondingMaxAccount: Signer;
-  bondingMinBalance: BigNumber;
-  bondingMaxBalance: BigNumber;
-  bondingFormulas: BondingFormulas;
+  stakingZeroAccount: Signer;
+  stakingMinAccount: Signer;
+  stakingMaxAccount: Signer;
+  stakingMinBalance: BigNumber;
+  stakingMaxBalance: BigNumber;
+  stakingFormulas: StakingFormulas;
   curvePoolFactory: ICurveFactory;
   uAD: UbiquityAlgorithmicDollar;
   uAR: UbiquityAutoRedeem;
   uGOV: UbiquityGovernance;
   metaPool: IMetaPool;
-  bonding: Bonding;
+  staking: Staking;
   masterChef: MasterChef;
-  bondingV2: BondingV2;
+  stakingV2: StakingV2;
   masterChefV2: MasterChefV2;
-  bondingShare: BondingShare;
-  bondingShareV2: BondingShareV2;
+  stakingShare: StakingShare;
+  stakingShareV2: StakingShareV2;
   couponsForDollarsCalculator: CouponsForDollarsCalculator;
   dollarMintingCalculator: DollarMintingCalculator;
   debtCoupon: DebtCoupon;
@@ -292,9 +292,9 @@ async function bondingSetupV2(): Promise<{
     thirdAccount,
     treasury,
     fourthAccount,
-    bondingZeroAccount,
-    bondingMaxAccount,
-    bondingMinAccount,
+    stakingZeroAccount,
+    stakingMaxAccount,
+    stakingMinAccount,
     fifthAccount,
   ] = await ethers.getSigners();
   router = (await ethers.getContractAt(
@@ -304,9 +304,9 @@ async function bondingSetupV2(): Promise<{
   adminAddress = await admin.getAddress();
   secondAddress = await secondAccount.getAddress();
   const fourthAddress = await fourthAccount.getAddress();
-  const bondingZeroAccountAddress = await bondingZeroAccount.getAddress();
-  const bondingMinAccountAddress = await bondingMinAccount.getAddress();
-  const bondingMaxAccountAddress = await bondingMaxAccount.getAddress();
+  const stakingZeroAccountAddress = await stakingZeroAccount.getAddress();
+  const stakingMinAccountAddress = await stakingMinAccount.getAddress();
+  const stakingMaxAccountAddress = await stakingMaxAccount.getAddress();
 
   const UBQ_MINTER_ROLE = ethers.utils.keccak256(
     ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE")
@@ -328,28 +328,28 @@ async function bondingSetupV2(): Promise<{
   ).deploy()) as UbiquityFormulas;
   await manager.setFormulasAddress(ubiquityFormulas.address);
 
-  // DEPLOY Bonding Contract
-  bonding = (await (
-    await ethers.getContractFactory("Bonding")
-  ).deploy(manager.address, ethers.constants.AddressZero)) as Bonding;
-  await bonding.setBlockCountInAWeek(420);
-  blockCountInAWeek = await bonding.blockCountInAWeek();
-  await manager.setBondingContractAddress(bonding.address);
-  // DEPLOY BondingShare Contract
-  bondingShare = (await (
-    await ethers.getContractFactory("BondingShare")
-  ).deploy(manager.address)) as BondingShare;
-  await manager.setBondingShareAddress(bondingShare.address);
-  // set bonding as operator for second account so that it can burn its bonding shares
-  await bondingShare
+  // DEPLOY Staking Contract
+  staking = (await (
+    await ethers.getContractFactory("Staking")
+  ).deploy(manager.address, ethers.constants.AddressZero)) as Staking;
+  await staking.setBlockCountInAWeek(420);
+  blockCountInAWeek = await staking.blockCountInAWeek();
+  await manager.setStakingContractAddress(staking.address);
+  // DEPLOY StakingShare Contract
+  stakingShare = (await (
+    await ethers.getContractFactory("StakingShare")
+  ).deploy(manager.address)) as StakingShare;
+  await manager.setStakingShareAddress(stakingShare.address);
+  // set staking as operator for second account so that it can burn its staking shares
+  await stakingShare
     .connect(secondAccount)
-    .setApprovalForAll(bonding.address, true);
-  // set bonding as operator for admin account so that it can burn its bonding shares
-  await bondingShare.setApprovalForAll(bonding.address, true);
-  // set bonding as operator for third account so that it can burn its bonding shares
-  await bondingShare
+    .setApprovalForAll(staking.address, true);
+  // set staking as operator for admin account so that it can burn its staking shares
+  await stakingShare.setApprovalForAll(staking.address, true);
+  // set staking as operator for third account so that it can burn its staking shares
+  await stakingShare
     .connect(thirdAccount)
-    .setApprovalForAll(bonding.address, true);
+    .setApprovalForAll(staking.address, true);
   // DEPLOY UAD token Contract
   uAD = (await (
     await ethers.getContractFactory("UbiquityAlgorithmicDollar")
@@ -378,9 +378,9 @@ async function bondingSetupV2(): Promise<{
     secondAddress,
     manager.address,
     fourthAddress,
-    bondingZeroAccountAddress,
-    bondingMinAccountAddress,
-    bondingMaxAccountAddress,
+    stakingZeroAccountAddress,
+    stakingMinAccountAddress,
+    stakingMaxAccountAddress,
   ].map(
     async (receiver: string): Promise<ContractTransaction> =>
       uAD.mint(receiver, ethers.utils.parseEther("10000"))
@@ -393,10 +393,10 @@ async function bondingSetupV2(): Promise<{
   });
   curveWhale = ethers.provider.getSigner(curveWhaleAddress);
 
-  // bonding should have the UBQ_MINTER_ROLE to mint bonding shares
-  await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, bonding.address);
-  // bonding should have the UBQ_BURNER_ROLE to burn bonding shares
-  await manager.connect(admin).grantRole(UBQ_BURNER_ROLE, bonding.address);
+  // staking should have the UBQ_MINTER_ROLE to mint staking shares
+  await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, staking.address);
+  // staking should have the UBQ_BURNER_ROLE to burn staking shares
+  await manager.connect(admin).grantRole(UBQ_BURNER_ROLE, staking.address);
 
   // Mint uAD for whale
   await uAD.mint(curveWhaleAddress, ethers.utils.parseEther("10"));
@@ -405,10 +405,10 @@ async function bondingSetupV2(): Promise<{
     .transfer(manager.address, ethers.utils.parseEther("10000"));
   await crvToken
     .connect(curveWhale)
-    .transfer(bondingMaxAccountAddress, ethers.utils.parseEther("10000"));
+    .transfer(stakingMaxAccountAddress, ethers.utils.parseEther("10000"));
   await crvToken
     .connect(curveWhale)
-    .transfer(bondingMinAccountAddress, ethers.utils.parseEther("10000"));
+    .transfer(stakingMinAccountAddress, ethers.utils.parseEther("10000"));
   await crvToken
     .connect(curveWhale)
     .transfer(fourthAddress, ethers.utils.parseEther("100000"));
@@ -427,11 +427,11 @@ async function bondingSetupV2(): Promise<{
     metaPoolAddr
   )) as IMetaPool;
 
-  // TRANSFER some uLP tokens to bonding contract to simulate
+  // TRANSFER some uLP tokens to staking contract to simulate
   // the 80% premium from inflation
   await metaPool
     .connect(admin)
-    .transfer(bonding.address, ethers.utils.parseEther("100"));
+    .transfer(staking.address, ethers.utils.parseEther("100"));
 
   // TRANSFER some uLP tokens to second account
   await metaPool
@@ -541,16 +541,16 @@ async function bondingSetupV2(): Promise<{
   // add liquidity to the metapool
   // accounts need to approve metaPool for sending its uAD and 3CRV
   await uAD
-    .connect(bondingMinAccount)
+    .connect(stakingMinAccount)
     .approve(metaPool.address, ethers.utils.parseEther("10000"));
   await crvToken
-    .connect(bondingMinAccount)
+    .connect(stakingMinAccount)
     .approve(metaPool.address, ethers.utils.parseEther("10000"));
   await uAD
-    .connect(bondingMaxAccount)
+    .connect(stakingMaxAccount)
     .approve(metaPool.address, ethers.utils.parseEther("10000"));
   await crvToken
-    .connect(bondingMaxAccount)
+    .connect(stakingMaxAccount)
     .approve(metaPool.address, ethers.utils.parseEther("10000"));
   await uAD
     .connect(fourthAccount)
@@ -564,48 +564,48 @@ async function bondingSetupV2(): Promise<{
     true
   );
   await metaPool
-    .connect(bondingMinAccount)
-    ["add_liquidity(uint256[2],uint256)"](
-      [ethers.utils.parseEther("100"), ethers.utils.parseEther("100")],
-      dyuAD2LP.mul(99).div(100)
-    );
+    .connect(stakingMinAccount)
+  ["add_liquidity(uint256[2],uint256)"](
+    [ethers.utils.parseEther("100"), ethers.utils.parseEther("100")],
+    dyuAD2LP.mul(99).div(100)
+  );
   await metaPool
-    .connect(bondingMaxAccount)
-    ["add_liquidity(uint256[2],uint256)"](
-      [ethers.utils.parseEther("100"), ethers.utils.parseEther("100")],
-      dyuAD2LP.mul(99).div(100)
-    );
+    .connect(stakingMaxAccount)
+  ["add_liquidity(uint256[2],uint256)"](
+    [ethers.utils.parseEther("100"), ethers.utils.parseEther("100")],
+    dyuAD2LP.mul(99).div(100)
+  );
   await metaPool
     .connect(fourthAccount)
-    ["add_liquidity(uint256[2],uint256)"](
-      [ethers.utils.parseEther("100"), ethers.utils.parseEther("100")],
-      dyuAD2LP.mul(99).div(100)
-    );
-  bondingMinBalance = await metaPool.balanceOf(bondingMinAccountAddress);
+  ["add_liquidity(uint256[2],uint256)"](
+    [ethers.utils.parseEther("100"), ethers.utils.parseEther("100")],
+    dyuAD2LP.mul(99).div(100)
+  );
+  stakingMinBalance = await metaPool.balanceOf(stakingMinAccountAddress);
   await metaPool
-    .connect(bondingMinAccount)
-    .approve(bonding.address, bondingMinBalance);
-  await bonding.connect(bondingMinAccount).deposit(bondingMinBalance, 1);
-  bondingMaxBalance = await metaPool.balanceOf(bondingMaxAccountAddress);
+    .connect(stakingMinAccount)
+    .approve(staking.address, stakingMinBalance);
+  await staking.connect(stakingMinAccount).deposit(stakingMinBalance, 1);
+  stakingMaxBalance = await metaPool.balanceOf(stakingMaxAccountAddress);
   await metaPool
-    .connect(bondingMaxAccount)
-    .approve(bonding.address, bondingMaxBalance);
-  await bonding.connect(bondingMaxAccount).deposit(bondingMaxBalance, 208);
-  const bondingMaxIds = await bondingShare.holderTokens(
-    bondingMaxAccountAddress
+    .connect(stakingMaxAccount)
+    .approve(staking.address, stakingMaxBalance);
+  await staking.connect(stakingMaxAccount).deposit(stakingMaxBalance, 208);
+  const stakingMaxIds = await stakingShare.holderTokens(
+    stakingMaxAccountAddress
   );
-  expect(bondingMaxIds.length).to.equal(1);
-  const bsMaxAmount = await bondingShare.balanceOf(
-    bondingMaxAccountAddress,
-    bondingMaxIds[0]
+  expect(stakingMaxIds.length).to.equal(1);
+  const bsMaxAmount = await stakingShare.balanceOf(
+    stakingMaxAccountAddress,
+    stakingMaxIds[0]
   );
-  const bondingMinIds = await bondingShare.holderTokens(
-    bondingMinAccountAddress
+  const stakingMinIds = await stakingShare.holderTokens(
+    stakingMinAccountAddress
   );
-  expect(bondingMinIds.length).to.equal(1);
-  const bsMinAmount = await bondingShare.balanceOf(
-    bondingMinAccountAddress,
-    bondingMinIds[0]
+  expect(stakingMinIds.length).to.equal(1);
+  const bsMinAmount = await stakingShare.balanceOf(
+    stakingMinAccountAddress,
+    stakingMinIds[0]
   );
   expect(bsMinAmount).to.be.lt(bsMaxAmount);
   // DEPLOY MasterChefV2
@@ -619,57 +619,57 @@ async function bondingSetupV2(): Promise<{
   const managerMasterChefV2Address = await manager.masterChefAddress();
   expect(masterChefV2.address).to.be.equal(managerMasterChefV2Address);
 
-  // DEPLOY BondingShareV2 Contract
+  // DEPLOY StakingShareV2 Contract
   const uri = `{
-    "name": "Bonding Share",
-    "description": "Ubiquity Bonding Share V2",
+    "name": "Staking Share",
+    "description": "Ubiquity Staking Share V2",
     "image": "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/"
   }`;
-  bondingShareV2 = (await (
-    await ethers.getContractFactory("BondingShareV2")
-  ).deploy(manager.address, uri)) as BondingShareV2;
+  stakingShareV2 = (await (
+    await ethers.getContractFactory("StakingShareV2")
+  ).deploy(manager.address, uri)) as StakingShareV2;
 
-  await manager.setBondingShareAddress(bondingShareV2.address);
-  const managerBondingShareAddress = await manager.bondingShareAddress();
-  expect(bondingShareV2.address).to.be.equal(managerBondingShareAddress);
+  await manager.setStakingShareAddress(stakingShareV2.address);
+  const managerStakingShareAddress = await manager.stakingShareAddress();
+  expect(stakingShareV2.address).to.be.equal(managerStakingShareAddress);
 
-  // DEPLOY Bonding Contract
-  bondingFormulas = (await (
-    await ethers.getContractFactory("BondingFormulas")
-  ).deploy()) as BondingFormulas;
+  // DEPLOY Staking Contract
+  stakingFormulas = (await (
+    await ethers.getContractFactory("StakingFormulas")
+  ).deploy()) as StakingFormulas;
 
-  bondingV2 = (await (
-    await ethers.getContractFactory("BondingV2")
+  stakingV2 = (await (
+    await ethers.getContractFactory("StakingV2")
   ).deploy(
     manager.address,
-    bondingFormulas.address,
+    stakingFormulas.address,
     [
-      bondingZeroAccountAddress,
-      bondingMinAccountAddress,
-      bondingMaxAccountAddress,
+      stakingZeroAccountAddress,
+      stakingMinAccountAddress,
+      stakingMaxAccountAddress,
     ],
-    [0, bondingMinBalance, bondingMaxBalance],
+    [0, stakingMinBalance, stakingMaxBalance],
     [1, 1, 208]
-  )) as BondingV2;
-  // send the LP token from bonding V1 to V2 to prepare the migration
-  await bonding.sendDust(
-    bondingV2.address,
+  )) as StakingV2;
+  // send the LP token from staking V1 to V2 to prepare the migration
+  await staking.sendDust(
+    stakingV2.address,
     metaPool.address,
-    bondingMinBalance.add(bondingMaxBalance)
+    stakingMinBalance.add(stakingMaxBalance)
   );
   // set migrating state
-  await bondingV2.setMigrating(true);
-  // bondingV2 should have the UBQ_MINTER_ROLE to mint bonding shares
-  await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, bondingV2.address);
-  await bondingV2.setBlockCountInAWeek(420);
-  blockCountInAWeek = await bondingV2.blockCountInAWeek();
-  await manager.setBondingContractAddress(bondingV2.address);
+  await stakingV2.setMigrating(true);
+  // stakingV2 should have the UBQ_MINTER_ROLE to mint staking shares
+  await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, stakingV2.address);
+  await stakingV2.setBlockCountInAWeek(420);
+  blockCountInAWeek = await stakingV2.blockCountInAWeek();
+  await manager.setStakingContractAddress(stakingV2.address);
 
   await manager.connect(admin).revokeRole(UBQ_MINTER_ROLE, masterChef.address);
-  await manager.connect(admin).revokeRole(UBQ_MINTER_ROLE, bonding.address);
-  // bonding should have the UBQ_BURNER_ROLE to burn bonding shares
-  await manager.connect(admin).revokeRole(UBQ_BURNER_ROLE, bonding.address);
-  expect(await manager.connect(admin).hasRole(UBQ_MINTER_ROLE, bonding.address))
+  await manager.connect(admin).revokeRole(UBQ_MINTER_ROLE, staking.address);
+  // staking should have the UBQ_BURNER_ROLE to burn staking shares
+  await manager.connect(admin).revokeRole(UBQ_BURNER_ROLE, staking.address);
+  expect(await manager.connect(admin).hasRole(UBQ_MINTER_ROLE, staking.address))
     .to.be.false;
   expect(
     await manager.connect(admin).hasRole(UBQ_MINTER_ROLE, masterChef.address)
@@ -679,19 +679,19 @@ async function bondingSetupV2(): Promise<{
     curveWhale,
     masterChef,
     masterChefV2,
-    bondingShareV2,
-    bondingFormulas,
-    bondingMaxBalance,
-    bondingMinBalance,
-    bondingV2,
+    stakingShareV2,
+    stakingFormulas,
+    stakingMaxBalance,
+    stakingMinBalance,
+    stakingV2,
     admin,
     crvToken,
     secondAccount,
     thirdAccount,
     fourthAccount,
-    bondingZeroAccount,
-    bondingMinAccount,
-    bondingMaxAccount,
+    stakingZeroAccount,
+    stakingMinAccount,
+    stakingMaxAccount,
     fifthAccount,
     treasury,
     curvePoolFactory,
@@ -699,8 +699,8 @@ async function bondingSetupV2(): Promise<{
     uGOV,
     uAR,
     metaPool,
-    bonding,
-    bondingShare,
+    staking,
+    stakingShare,
     couponsForDollarsCalculator,
     dollarMintingCalculator,
     debtCoupon,
@@ -715,4 +715,4 @@ async function bondingSetupV2(): Promise<{
     excessDollarsDistributor,
   };
 }
-export { bondingSetupV2, deposit, removeLiquidity, addLiquidity };
+export { stakingSetupV2, deposit, removeLiquidity, addLiquidity };

@@ -3,7 +3,7 @@ import "@nomiclabs/hardhat-waffle";
 import { BigNumber } from "ethers";
 import { ERC1155Ubiquity, ERC20 } from "../artifacts/types";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
+import { StakingShareV2 } from "../artifacts/types/StakingShareV2";
 
 const NETWORK_ADDRESS = "http://localhost:8545";
 const accountWithWithdrawableBond =
@@ -108,38 +108,38 @@ task("faucet", "Sends ETH and tokens to an address")
         treasuryAccount
       )) as ERC20;
 
-      const bondingShareToken = (await ethers.getContractAt(
-        "BondingShareV2",
-        await manager.bondingShareAddress(),
+      const stakingShareToken = (await ethers.getContractAt(
+        "StakingShareV2",
+        await manager.stakingShareAddress(),
         accountWithWithdrawableBondAccount
-      )) as BondingShareV2;
+      )) as StakingShareV2;
 
-      const bondingShareId = (
-        await bondingShareToken.holderTokens(accountWithWithdrawableBond)
+      const stakingShareId = (
+        await stakingShareToken.holderTokens(accountWithWithdrawableBond)
       )[0];
 
-      const bondingShareBalance = +(
-        await bondingShareToken.balanceOf(
+      const stakingShareBalance = +(
+        await stakingShareToken.balanceOf(
           accountWithWithdrawableBond,
-          bondingShareId
+          stakingShareId
         )
       ).toString(); // Either 1 or 0
 
-      if (bondingShareBalance > 0) {
-        await bondingShareToken.safeTransferFrom(
+      if (stakingShareBalance > 0) {
+        await stakingShareToken.safeTransferFrom(
           accountWithWithdrawableBond,
           receiverAddress,
-          bondingShareId,
+          stakingShareId,
           ethers.BigNumber.from(1),
           []
         );
 
         console.log(
-          `Transferred withdrawable bonding share token from ${bondingShareId.toString()} from ${accountWithWithdrawableBond}`
+          `Transferred withdrawable staking share token from ${stakingShareId.toString()} from ${accountWithWithdrawableBond}`
         );
       } else {
         console.log(
-          "Tried to transfer a withdrawable bonding share token but couldn't"
+          "Tried to transfer a withdrawable staking share token but couldn't"
         );
       }
 

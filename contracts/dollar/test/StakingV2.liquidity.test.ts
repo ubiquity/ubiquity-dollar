@@ -1,27 +1,27 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { Signer, BigNumber } from "ethers";
-import { BondingV2 } from "../artifacts/types/BondingV2";
-import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
+import { StakingV2 } from "../artifacts/types/StakingV2";
+import { StakingShareV2 } from "../artifacts/types/StakingShareV2";
 import {
-  bondingSetupV2,
+  stakingSetupV2,
   deposit,
   IdBond,
   addLiquidity,
   removeLiquidity,
-} from "./BondingSetupV2";
+} from "./StakingSetupV2";
 import { latestBlockNumber, mineNBlock } from "./utils/hardhatNode";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { MasterChefV2 } from "../artifacts/types/MasterChefV2";
 
-describe("bondingV2 liquidity", () => {
+describe("stakingV2 liquidity", () => {
   const one: BigNumber = BigNumber.from(10).pow(18); // one = 1 ether = 10^18
   let admin: Signer;
   let secondAccount: Signer;
   let fourthAccount: Signer;
   let metaPool: IMetaPool;
-  let bondingV2: BondingV2;
-  let bondingShareV2: BondingShareV2;
+  let stakingV2: StakingV2;
+  let stakingShareV2: StakingShareV2;
   let masterChefV2: MasterChefV2;
   let blockCountInAWeek: BigNumber;
   let bond: IdBond;
@@ -52,36 +52,36 @@ describe("bondingV2 liquidity", () => {
       admin,
       fourthAccount,
       metaPool,
-      bondingV2,
+      stakingV2,
       masterChefV2,
-      bondingShareV2,
+      stakingShareV2,
       blockCountInAWeek,
-    } = await bondingSetupV2());
+    } = await stakingSetupV2());
 
     bond = await deposit(secondAccount, one.mul(100), 1);
     secondAccountAdr = await secondAccount.getAddress();
-    const bondAmount: BigNumber = await bondingShareV2.balanceOf(
+    const bondAmount: BigNumber = await stakingShareV2.balanceOf(
       secondAccountAdr,
       bond.id
     );
-    const holderTokens = await bondingShareV2.holderTokens(secondAccountAdr);
+    const holderTokens = await stakingShareV2.holderTokens(secondAccountAdr);
 
     expect(bondAmount).to.equal(1);
     expect(holderTokens.length).to.equal(1);
     expect(holderTokens[0]).to.equal(1);
 
-    bondDetail = await bondingShareV2.getBond(bond.id);
+    bondDetail = await stakingShareV2.getBond(bond.id);
 
-    const shareDetail = await masterChefV2.getBondingShareInfo(bond.id);
+    const shareDetail = await masterChefV2.getStakingShareInfo(bond.id);
     expect(shareDetail[0]).to.equal(bond.shares);
 
     bondFourth = await deposit(fourthAccount, amountFourth, 42);
     fourthAccountAdr = await fourthAccount.getAddress();
-    const bondfAmount: BigNumber = await bondingShareV2.balanceOf(
+    const bondfAmount: BigNumber = await stakingShareV2.balanceOf(
       fourthAccountAdr,
       bondFourth.id
     );
-    const holderTokensFourth = await bondingShareV2.holderTokens(
+    const holderTokensFourth = await stakingShareV2.holderTokens(
       fourthAccountAdr
     );
 
@@ -89,36 +89,36 @@ describe("bondingV2 liquidity", () => {
     expect(holderTokensFourth.length).to.equal(1);
     expect(holderTokensFourth[0]).to.equal(2);
 
-    bondFourthDetail = await bondingShareV2.getBond(bondFourth.id);
-    const accLpRewardPerShare = await bondingV2.accLpRewardPerShare();
+    bondFourthDetail = await stakingShareV2.getBond(bondFourth.id);
+    const accLpRewardPerShare = await stakingV2.accLpRewardPerShare();
     const debt = bondFourth.shares.mul(accLpRewardPerShare).div(1e12);
     expect(bondFourthDetail.lpRewardDebt).to.equal(debt);
-    const shareFourthDetail = await masterChefV2.getBondingShareInfo(
+    const shareFourthDetail = await masterChefV2.getStakingShareInfo(
       bondFourth.id
     );
     expect(shareFourthDetail[0]).to.equal(bondFourth.shares);
   });
 
   describe("liquidity", () => {
-    it("add should fail if caller is not the bonding share owner", async () => {
-      await expect(bondingV2.addLiquidity(1, bond.id, 10)).to.be.revertedWith(
-        "Bonding: caller is not owner"
+    it("add should fail if caller is not the staking share owner", async () => {
+      await expect(stakingV2.addLiquidity(1, bond.id, 10)).to.be.revertedWith(
+        "Staking: caller is not owner"
       );
     });
     it("add should fail during locking period", async () => {
       await expect(
-        bondingV2.connect(secondAccount).addLiquidity(1, bond.id, 10)
-      ).to.be.revertedWith("Bonding: Redeem not allowed before bonding time");
+        stakingV2.connect(secondAccount).addLiquidity(1, bond.id, 10)
+      ).to.be.revertedWith("Staking: Redeem not allowed before staking time");
     });
-    it("remove should fail if caller is not the bonding share owner", async () => {
-      await expect(bondingV2.removeLiquidity(1, bond.id)).to.be.revertedWith(
-        "Bonding: caller is not owner"
+    it("remove should fail if caller is not the staking share owner", async () => {
+      await expect(stakingV2.removeLiquidity(1, bond.id)).to.be.revertedWith(
+        "Staking: caller is not owner"
       );
     });
     it("remove should fail during locking period", async () => {
       await expect(
-        bondingV2.connect(secondAccount).removeLiquidity(1, bond.id)
-      ).to.be.revertedWith("Bonding: Redeem not allowed before bonding time");
+        stakingV2.connect(secondAccount).removeLiquidity(1, bond.id)
+      ).to.be.revertedWith("Staking: Redeem not allowed before staking time");
     });
     it("add should work", async () => {
       expect(bond.id).to.equal(1);
@@ -140,28 +140,28 @@ describe("bondingV2 liquidity", () => {
       const lastBlockNum = await latestBlockNumber();
       const endOfLockingInBlock =
         bondDetail.endBlock.toNumber() - lastBlockNum.number;
-      const bondBefore = await bondingShareV2.getBond(bond.id);
+      const bondBefore = await stakingShareV2.getBond(bond.id);
       await mineNBlock(endOfLockingInBlock);
 
       const amount = one.mul(900);
       const lastBlock = await latestBlockNumber();
 
-      const totalLPBeforeAdd = await bondingShareV2.totalLP();
-      const balanceBondingBeforeAdd = await metaPool.balanceOf(
-        bondingV2.address
+      const totalLPBeforeAdd = await stakingShareV2.totalLP();
+      const balanceStakingBeforeAdd = await metaPool.balanceOf(
+        stakingV2.address
       );
-      const pendingLpRewards = await bondingV2.pendingLpRewards(bond.id);
+      const pendingLpRewards = await stakingV2.pendingLpRewards(bond.id);
       const bondAfter = await addLiquidity(secondAccount, bond.id, amount, 11);
-      const totalLPAfterAdd = await bondingShareV2.totalLP();
-      const balanceBondingAfterAdd = await metaPool.balanceOf(
-        bondingV2.address
+      const totalLPAfterAdd = await stakingShareV2.totalLP();
+      const balanceStakingAfterAdd = await metaPool.balanceOf(
+        stakingV2.address
       );
 
       expect(totalLPAfterAdd).to.equal(
         totalLPBeforeAdd.add(amount).add(pendingLpRewards)
       );
-      expect(balanceBondingAfterAdd).to.equal(
-        balanceBondingBeforeAdd.add(amount)
+      expect(balanceStakingAfterAdd).to.equal(
+        balanceStakingBeforeAdd.add(amount)
       );
 
       // lp reward distribution takes place during add or remove liquidity
@@ -195,11 +195,11 @@ describe("bondingV2 liquidity", () => {
       const lastBlockNum = await latestBlockNumber();
       const endOfLockingInBlock =
         bondDetail.endBlock.toNumber() - lastBlockNum.number;
-      const bondBefore = await bondingShareV2.getBond(bond.id);
+      const bondBefore = await stakingShareV2.getBond(bond.id);
       await mineNBlock(endOfLockingInBlock);
       secondAccountAdr = await secondAccount.getAddress();
       // simulate distribution of lp token to assess the update of lpRewardDebt
-      await metaPool.transfer(bondingV2.address, one.mul(10));
+      await metaPool.transfer(stakingV2.address, one.mul(10));
       const bondAfter = await removeLiquidity(
         secondAccount,
         bond.id,
@@ -230,29 +230,29 @@ describe("bondingV2 liquidity", () => {
       let lastBlockNum = await latestBlockNumber();
       const endOfLockingInBlock =
         bondDetail.endBlock.toNumber() - lastBlockNum.number;
-      const bondBefore = await bondingShareV2.getBond(bond.id);
+      const bondBefore = await stakingShareV2.getBond(bond.id);
       await mineNBlock(endOfLockingInBlock);
       secondAccountAdr = await secondAccount.getAddress();
 
-      const totalLPBeforeRemove = await bondingShareV2.totalLP();
-      const balanceBondingBeforeRemove = await metaPool.balanceOf(
-        bondingV2.address
+      const totalLPBeforeRemove = await stakingShareV2.totalLP();
+      const balanceStakingBeforeRemove = await metaPool.balanceOf(
+        stakingV2.address
       );
-      const pendingLpRewards = await bondingV2.pendingLpRewards(bond.id);
+      const pendingLpRewards = await stakingV2.pendingLpRewards(bond.id);
       const bondAfter = await removeLiquidity(
         secondAccount,
         bond.id,
         bondDetail.lpAmount
       );
-      const totalLPAfterRemove = await bondingShareV2.totalLP();
-      const balanceBondingAfterRemove = await metaPool.balanceOf(
-        bondingV2.address
+      const totalLPAfterRemove = await stakingShareV2.totalLP();
+      const balanceStakingAfterRemove = await metaPool.balanceOf(
+        stakingV2.address
       );
       expect(totalLPAfterRemove).to.equal(
         totalLPBeforeRemove.sub(bondDetail.lpAmount)
       );
-      expect(balanceBondingAfterRemove).to.equal(
-        balanceBondingBeforeRemove
+      expect(balanceStakingAfterRemove).to.equal(
+        balanceStakingBeforeRemove
           .sub(bondDetail.lpAmount)
           .sub(pendingLpRewards)
       );
@@ -261,22 +261,22 @@ describe("bondingV2 liquidity", () => {
       expect(bondAfter.minter).to.equal(bondBefore.minter);
       expect(bondAfter.creationBlock).to.equal(bondBefore.creationBlock);
       expect(bondAfter.endBlock).to.equal(bondBefore.endBlock);
-      const bsAfter = await masterChefV2.getBondingShareInfo(bond.id);
+      const bsAfter = await masterChefV2.getStakingShareInfo(bond.id);
       expect(bondAfter.lpAmount).to.equal(0);
       expect(bsAfter[0]).to.equal(0);
 
       // distribute lp rewards through
-      // TRANSFER of uLP tokens to bonding contract to simulate excess dollar distribution
+      // TRANSFER of uLP tokens to staking contract to simulate excess dollar distribution
       await metaPool
         .connect(admin)
-        .transfer(bondingV2.address, ethers.utils.parseEther("100"));
+        .transfer(stakingV2.address, ethers.utils.parseEther("100"));
 
-      const totalLPBeforeAdd = await bondingShareV2.totalLP();
-      const balanceBondingBeforeAdd = await metaPool.balanceOf(
-        bondingV2.address
+      const totalLPBeforeAdd = await stakingShareV2.totalLP();
+      const balanceStakingBeforeAdd = await metaPool.balanceOf(
+        stakingV2.address
       );
 
-      const pendingLpRewards2 = await bondingV2.pendingLpRewards(bond.id);
+      const pendingLpRewards2 = await stakingV2.pendingLpRewards(bond.id);
       lastBlockNum = await latestBlockNumber();
       const bond2 = await addLiquidity(
         secondAccount,
@@ -284,18 +284,18 @@ describe("bondingV2 liquidity", () => {
         bondDetail.lpAmount,
         408
       );
-      const pendingLpRewardsAfter2 = await bondingV2.pendingLpRewards(bond.id);
-      const totalLPAfterAdd = await bondingShareV2.totalLP();
-      const balanceBondingAfterAdd = await metaPool.balanceOf(
-        bondingV2.address
+      const pendingLpRewardsAfter2 = await stakingV2.pendingLpRewards(bond.id);
+      const totalLPAfterAdd = await stakingShareV2.totalLP();
+      const balanceStakingAfterAdd = await metaPool.balanceOf(
+        stakingV2.address
       );
       expect(pendingLpRewardsAfter2).to.equal(0);
       expect(pendingLpRewards2).to.equal(0);
       expect(totalLPAfterAdd).to.equal(
         totalLPBeforeAdd.add(bondDetail.lpAmount)
       );
-      expect(balanceBondingAfterAdd).to.equal(
-        balanceBondingBeforeAdd.add(bondDetail.lpAmount)
+      expect(balanceStakingAfterAdd).to.equal(
+        balanceStakingBeforeAdd.add(bondDetail.lpAmount)
       );
       expect(bond2.lpFirstDeposited).to.equal(bondBefore.lpFirstDeposited);
       expect(bond2.minter).to.equal(bondBefore.minter);

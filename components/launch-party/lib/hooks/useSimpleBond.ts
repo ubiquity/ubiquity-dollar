@@ -33,7 +33,7 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) =>
 
   async function refreshSimpleBondData() {
     if (provider && walletAddress && contracts && tokensContracts.length > 0 && ubqContracts) {
-      const blocksCountInAWeek = (await ubqContracts.bonding.blockCountInAWeek()).toNumber();
+      const blocksCountInAWeek = (await ubqContracts.staking.blockCountInAWeek()).toNumber();
       const vestingBlocks = (await contracts.simpleBond.vestingBlocks()).toNumber();
       const vestingTimeInDays = vestingBlocks / (blocksCountInAWeek / 7);
 

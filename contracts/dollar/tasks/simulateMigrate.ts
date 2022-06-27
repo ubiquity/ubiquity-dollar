@@ -9,9 +9,9 @@ import "@nomiclabs/hardhat-waffle";
 import { expect } from "chai";
 import { BigNumber, Signer } from "ethers";
 
-import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
+import { StakingShareV2 } from "../artifacts/types/StakingShareV2";
 import { MasterChefV2 } from "../artifacts/types/MasterChefV2";
-import { BondingV2 } from "../artifacts/types/BondingV2";
+import { StakingV2 } from "../artifacts/types/StakingV2";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 
 const lastBlock = 13004900;
@@ -89,15 +89,15 @@ task("simulateMigrate", "simulate migration of one address")
     const adminAddress = "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd";
     let admin: Signer;
 
-    // const BondingShareV2BlockCreation = 12931486;
-    const BondingShareV2Address = "0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5";
-    let bondingShareV2: BondingShareV2;
+    // const StakingShareV2BlockCreation = 12931486;
+    const StakingShareV2Address = "0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5";
+    let stakingShareV2: StakingShareV2;
 
     let masterChefV2: MasterChefV2;
 
-    // const BondingV2BlockCreation = 12931495;
-    const BondingV2Address = "0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38";
-    let bondingV2: BondingV2;
+    // const StakingV2BlockCreation = 12931495;
+    const StakingV2Address = "0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38";
+    let stakingV2: StakingV2;
 
     const mineBlock = async (timestamp: number): Promise<void> => {
       await network.provider.request({
@@ -145,9 +145,8 @@ task("simulateMigrate", "simulate migration of one address")
         params: [
           {
             forking: {
-              jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${
-                process.env.API_KEY_ALCHEMY || ""
-              }`,
+              jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
+                }`,
               blockNumber,
             },
           },
@@ -192,17 +191,17 @@ task("simulateMigrate", "simulate migration of one address")
         UbiquityAlgorithmicDollarManagerAddress
       )) as UbiquityAlgorithmicDollarManager;
 
-      bondingShareV2 = (await ethers.getContractAt(
-        "BondingShareV2",
-        BondingShareV2Address
-      )) as BondingShareV2;
+      stakingShareV2 = (await ethers.getContractAt(
+        "StakingShareV2",
+        StakingShareV2Address
+      )) as StakingShareV2;
 
       masterChefV2 = await newMasterChefV2();
 
-      bondingV2 = (await ethers.getContractAt(
-        "BondingV2",
-        BondingV2Address
-      )) as BondingV2;
+      stakingV2 = (await ethers.getContractAt(
+        "StakingV2",
+        StakingV2Address
+      )) as StakingV2;
     };
 
     const query = async (
@@ -226,14 +225,14 @@ task("simulateMigrate", "simulate migration of one address")
       const uGOVmultiplier = await masterChefV2.uGOVmultiplier();
       const totalShares = await masterChefV2.totalShares();
       const [lastRewardBlock, accuGOVPerShare] = await masterChefV2.pool();
-      const totalSupply = await bondingShareV2.totalSupply();
-      const totalLP = await bondingShareV2.totalLP();
+      const totalSupply = await stakingShareV2.totalSupply();
+      const totalLP = await stakingShareV2.totalLP();
 
       const pendingUGOV = await masterChefV2.pendingUGOV(bondId);
-      const [amount, rewardDebt] = await masterChefV2.getBondingShareInfo(
+      const [amount, rewardDebt] = await masterChefV2.getStakingShareInfo(
         bondId
       );
-      const bond = await bondingShareV2.getBond(bondId);
+      const bond = await stakingShareV2.getBond(bondId);
 
       if (log) {
         console.log(`BLOCK:${block}`);
@@ -288,9 +287,9 @@ task("simulateMigrate", "simulate migration of one address")
         value: BigNumber.from(10).pow(18).mul(10),
       });
 
-      await bondingV2.connect(admin).setMigrating(true);
+      await stakingV2.connect(admin).setMigrating(true);
       try {
-        const tx = await bondingV2.connect(account).migrate();
+        const tx = await stakingV2.connect(account).migrate();
 
         const { events } = await tx.wait();
         const args = events?.find((event) => event.event === "Migrated")?.args;
@@ -302,7 +301,7 @@ task("simulateMigrate", "simulate migration of one address")
 
         expect(user?.toLowerCase()).to.be.equal(_address.toLowerCase());
         expect(id).to.be.equal(
-          (await bondingShareV2.holderTokens(_address))[0].toString()
+          (await stakingShareV2.holderTokens(_address))[0].toString()
         );
 
         // mine some blocks to get pendingUGOV

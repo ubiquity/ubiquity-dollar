@@ -34,11 +34,11 @@ task("metapool", "Get info about our curve metapool").setAction(
       "IMetaPool",
       metaPoolAddr
     )) as IMetaPool;
-    const bondingAddr = await manager.bondingContractAddress();
-    console.log(`---bondingAddr:${bondingAddr}  `);
-    const bondingBal = await metaPool.balanceOf(bondingAddr);
+    const stakingAddr = await manager.stakingContractAddress();
+    console.log(`---stakingAddr:${stakingAddr}  `);
+    const stakingBal = await metaPool.balanceOf(stakingAddr);
     console.log(`
-    Bonding Balance:${ethers.utils.formatEther(bondingBal)} LP
+    Staking Balance:${ethers.utils.formatEther(stakingBal)} LP
       `);
     let curveFactory = "";
     let DAI = "";

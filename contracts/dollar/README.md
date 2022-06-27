@@ -93,9 +93,9 @@ this task will all the addresses registered in the manager
 npx hardhat --network mainnet manager
 ```
 
-### Get Bonding Contract Transactions
+### Get Staking Contract Transactions
 
-this task will retrieve and filter the bonding contract transactions, print a summary and save them to a file
+this task will retrieve and filter the staking contract transactions, print a summary and save them to a file
 
 ```sh
 # OPTIONS: --end-block <INT> [--is-error <BOOLEAN>] [--name <STRING>] [--start-block <INT>] [path]
@@ -104,9 +104,9 @@ this task will retrieve and filter the bonding contract transactions, print a su
 #   --is-error   	Select transactions that were errors (default: false)
 #   --name       	The function name (use empty string for all) (default: "deposit")
 #   --start-block	The starting block for the Etherscan request (defaults is contract creation block) (default: 12595544)
-#   path	The path to store the bonding contract transactions (default: "./bonding_transactions.json")
+#   path	The path to store the staking contract transactions (default: "./staking_transactions.json")
 
-npx hardhat --network mainnet getBondingTransactions
+npx hardhat --network mainnet getStakingTransactions
 ```
 
 ## Testing
@@ -179,9 +179,9 @@ This is to be run only when the `yarn node:start` task is running on another ter
   - `0x4F3dF4c1e22209d623ab55923109112f1E2B17DE`
 - dollarMintingCalculator
   - `0xab840faA6A5eF68D8D32370EBC297f4DdC9F870F`
-- bondingShare
+- stakingShare
   - `0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5`
-- bondingContract
+- stakingContract
   - `0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38`
 - uAD-3CRV metapool deployed aka stableSwapMetaPool
   - `0x20955CB69Ae1515962177D164dfC9522feef567E`

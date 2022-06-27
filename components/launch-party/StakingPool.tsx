@@ -8,13 +8,13 @@ import { useTransactionLogger } from "@/lib/hooks";
 import { PoolInfo, PoolData, getPoolUrl } from "./lib/pools";
 import { format, round } from "./lib/utils";
 
-type BondingPoolParams = PoolInfo & {
+type StakingPoolParams = PoolInfo & {
   enabled: boolean;
   poolData: PoolData | null;
   onDeposit: ({ amount }: { amount: number }) => unknown;
 };
 
-const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParams) => {
+const StakingPool = ({ enabled, poolData, onDeposit, ...info }: StakingPoolParams) => {
   const [, , transacting] = useTransactionLogger();
   const LPTokenName = poolData ? poolData.symbol1 + "-" + poolData.symbol2 : "...";
   const [amount, setAmount] = useState("");
@@ -99,4 +99,4 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
   );
 };
 
-export default BondingPool;
+export default StakingPool;

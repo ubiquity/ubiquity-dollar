@@ -8,7 +8,7 @@ import { ICurveFactory } from "../artifacts/types/ICurveFactory";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
-import { BondingV2 } from "../artifacts/types/BondingV2";
+import { StakingV2 } from "../artifacts/types/StakingV2";
 import { ERC20 } from "../artifacts/types/ERC20";
 import pressAnyKey from "../utils/flow";
 import { TWAPOracle } from "../artifacts/types/TWAPOracle";
@@ -23,7 +23,7 @@ const {
 
 task(
   "priceReset",
-  "PriceReset can push uAD price lower or higher by burning LP token for uAD or 3CRV from the bonding contract"
+  "PriceReset can push uAD price lower or higher by burning LP token for uAD or 3CRV from the staking contract"
 )
   .addParam("amount", "The amount of uAD-3CRV LP token to be withdrawn")
   .addOptionalParam(
@@ -112,12 +112,12 @@ task(
       )) as ERC20;
       const treasuryAddr = await manager.treasuryAddress();
       console.log(`---treasury Address:${treasuryAddr}  `);
-      const bondingAddr = await manager.bondingContractAddress();
-      console.log(`---bonding Contract Address:${bondingAddr}  `);
-      const bonding = (await ethers.getContractAt(
-        "BondingV2",
-        bondingAddr
-      )) as BondingV2;
+      const stakingAddr = await manager.stakingContractAddress();
+      console.log(`---staking Contract Address:${stakingAddr}  `);
+      const staking = (await ethers.getContractAt(
+        "StakingV2",
+        stakingAddr
+      )) as StakingV2;
       const metaPoolAddr = await manager.stableSwapMetaPoolAddress();
       console.log(`---metaPoolAddr:${metaPoolAddr}  `);
       const metaPool = (await ethers.getContractAt(
@@ -137,10 +137,10 @@ task(
 
       const uadTreasuryBalanceBefore = await uAD.balanceOf(treasuryAddr);
       const crvTreasuryBalanceBefore = await curveToken.balanceOf(treasuryAddr);
-      const bondingMetapoolLPBalanceBefore = await metaPool.balanceOf(
-        bondingAddr
+      const stakingMetapoolLPBalanceBefore = await metaPool.balanceOf(
+        stakingAddr
       );
-      const LPBal = ethers.utils.formatEther(bondingMetapoolLPBalanceBefore);
+      const LPBal = ethers.utils.formatEther(stakingMetapoolLPBalanceBefore);
       const expectedUAD = await metaPool[
         "calc_withdraw_one_coin(uint256,int128)"
       ](amount, 0);
@@ -154,12 +154,12 @@ task(
       let coinIndex = 0;
       if (taskArgs.pushhigher) {
         console.warn(`we will remove :${taskArgs.amount} uAD-3CRV LP token from ${LPBal} uAD3CRV balance
-                      sitting inside the bonding contract for an expected ${expectedUADStr} uAD unilateraly
+                      sitting inside the staking contract for an expected ${expectedUADStr} uAD unilateraly
                       This will have the immediate effect of
                       pushing the uAD price HIGHER`);
       } else {
         console.warn(`we will remove :${taskArgs.amount} uAD-3CRV LP token from ${LPBal} uAD3CRV balance
-                      sitting inside the bonding contract for an expected ${expectedCRVStr} 3CRV unilateraly
+                      sitting inside the staking contract for an expected ${expectedCRVStr} 3CRV unilateraly
                       This will have the immediate effect of
                       pushing the uAD price LOWER`);
         coinIndex = 1;
@@ -224,9 +224,9 @@ task(
 
       let tx;
       if (coinIndex === 1) {
-        tx = await bonding.connect(admin).crvPriceReset(amount);
+        tx = await staking.connect(admin).crvPriceReset(amount);
       } else {
-        tx = await bonding.connect(admin).uADPriceReset(amount);
+        tx = await staking.connect(admin).uADPriceReset(amount);
       }
 
       console.log(`price reset waiting for confirmation`);
@@ -239,7 +239,7 @@ task(
       );
       const uadTreasuryBalanceAfter = await uAD.balanceOf(treasuryAddr);
       const crvTreasuryBalanceAfter = await curveToken.balanceOf(treasuryAddr);
-      const metapoolLPBalanceAfter = await metaPool.balanceOf(bondingAddr);
+      const metapoolLPBalanceAfter = await metaPool.balanceOf(stakingAddr);
       const LPBalAfter = ethers.utils.formatEther(metapoolLPBalanceAfter);
       console.log(`from ${LPBal} to ${LPBalAfter} uAD-3CRV LP token
       `);

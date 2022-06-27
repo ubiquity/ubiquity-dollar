@@ -1,23 +1,23 @@
 import { expect } from "chai";
 import { Signer, BigNumber, ethers } from "ethers";
-import { BondingShare } from "../artifacts/types/BondingShare";
-import { bondingSetup, deposit } from "./BondingSetup";
+import { StakingShare } from "../artifacts/types/StakingShare";
+import { stakingSetup, deposit } from "./StakingSetup";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
-import { Bonding } from "../artifacts/types/Bonding";
+import { Staking } from "../artifacts/types/Staking";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 import { ERC20 } from "../artifacts/types/ERC20";
 import { TWAPOracle } from "../artifacts/types/TWAPOracle";
 import { swapToUpdateOracle } from "./utils/swap";
 
-describe("Bonding.Price.Reset", () => {
+describe("Staking.Price.Reset", () => {
   const one: BigNumber = BigNumber.from(10).pow(18);
   let admin: Signer;
   let secondAccount: Signer;
   let treasury: Signer;
   let secondAddress: string;
-  let bondingShare: BondingShare;
+  let stakingShare: StakingShare;
   let uAD: UbiquityAlgorithmicDollar;
-  let bonding: Bonding;
+  let staking: Staking;
   let metaPool: IMetaPool;
   let crvToken: ERC20;
   let twapOracle: TWAPOracle;
@@ -25,19 +25,19 @@ describe("Bonding.Price.Reset", () => {
     ({
       admin,
       secondAccount,
-      bondingShare,
-      bonding,
+      stakingShare,
+      staking,
       metaPool,
       uAD,
       treasury,
       crvToken,
       twapOracle,
-    } = await bondingSetup());
+    } = await stakingSetup());
     secondAddress = await secondAccount.getAddress();
   });
 
   it("for uAD should work and push uAD price higher", async () => {
-    const bondingUADBalanceBefore = await uAD.balanceOf(bonding.address);
+    const stakingUADBalanceBefore = await uAD.balanceOf(staking.address);
     const pool0bal0 = await metaPool.balances(0);
     const pool1bal0 = await metaPool.balances(1);
     expect(pool0bal0).to.equal(ethers.utils.parseEther("10000"));
@@ -46,43 +46,43 @@ describe("Bonding.Price.Reset", () => {
     const amountOf3CRVforOneUADBefore = await metaPool[
       "get_dy(int128,int128,uint256)"
     ](0, 1, ethers.utils.parseEther("1"));
-    // deposit 100 uLP more tokens in addition to the 100 already in the bonding contract
+    // deposit 100 uLP more tokens in addition to the 100 already in the staking contract
     const idSecond = (await deposit(secondAccount, one.mul(100), 1)).id;
-    const bondBefore = await bondingShare.balanceOf(secondAddress, idSecond);
-    const bondingSCBalance = await metaPool.balanceOf(bonding.address);
+    const bondBefore = await stakingShare.balanceOf(secondAddress, idSecond);
+    const stakingSCBalance = await metaPool.balanceOf(staking.address);
 
-    // value in LP of a bonding share
-    const shareValueBefore = await bonding.currentShareValue();
-    const bondingShareTotalSupply = await bondingShare.totalSupply();
+    // value in LP of a staking share
+    const shareValueBefore = await staking.currentShareValue();
+    const stakingShareTotalSupply = await stakingShare.totalSupply();
     // amount of uAD inside the treasury
     const treasuryAdr = await treasury.getAddress();
     const treasuryUADBalanceBeforeReset = await uAD.balanceOf(treasuryAdr);
     //  priceBOND = totalLP / totalShares * TARGET_PRICE
-    const calculatedShareValue = bondingSCBalance
+    const calculatedShareValue = stakingSCBalance
       .mul(one)
-      .div(bondingShareTotalSupply);
+      .div(stakingShareTotalSupply);
     expect(shareValueBefore).to.equal(calculatedShareValue);
     const amountToTreasury = ethers.utils.parseEther("199.709062633936701658");
 
-    await expect(bonding.uADPriceReset(bondingSCBalance))
+    await expect(staking.uADPriceReset(stakingSCBalance))
       .to.emit(uAD, "Transfer")
-      .withArgs(bonding.address, treasuryAdr, amountToTreasury);
+      .withArgs(staking.address, treasuryAdr, amountToTreasury);
 
     const treasuryUADBalanceAfterReset = await uAD.balanceOf(treasuryAdr);
     expect(treasuryUADBalanceAfterReset).to.equal(
       treasuryUADBalanceBeforeReset.add(amountToTreasury)
     );
 
-    const bondAfter = await bondingShare.balanceOf(secondAddress, idSecond);
-    // bonding share should remain the same
+    const bondAfter = await stakingShare.balanceOf(secondAddress, idSecond);
+    // staking share should remain the same
     expect(bondBefore).to.equal(bondAfter);
     // amount of curve LP to be withdrawn should be less
-    const shareValueAfter = await bonding.currentShareValue();
+    const shareValueAfter = await staking.currentShareValue();
 
-    const bondingSCBalanceAfter = await metaPool.balanceOf(bonding.address);
-    expect(bondingSCBalanceAfter).to.equal(0);
+    const stakingSCBalanceAfter = await metaPool.balanceOf(staking.address);
+    expect(stakingSCBalanceAfter).to.equal(0);
     expect(shareValueAfter).to.equal(0);
-    const bondingUADBalanceAfter = await uAD.balanceOf(bonding.address);
+    const stakingUADBalanceAfter = await uAD.balanceOf(staking.address);
     const oraclePrice = await twapOracle.consult(uAD.address);
     const amountOf3CRVforOneUADAfter = await metaPool[
       "get_dy(int128,int128,uint256)"
@@ -94,8 +94,8 @@ describe("Bonding.Price.Reset", () => {
 
     const pool0bal = await metaPool.balances(0);
     const pool1bal = await metaPool.balances(1);
-    expect(bondingUADBalanceBefore).to.equal(0);
-    expect(bondingUADBalanceAfter).to.equal(0);
+    expect(stakingUADBalanceBefore).to.equal(0);
+    expect(stakingUADBalanceAfter).to.equal(0);
     expect(pool0bal).to.equal(
       ethers.utils.parseEther("9800.270823277548456538")
     );
@@ -111,7 +111,7 @@ describe("Bonding.Price.Reset", () => {
     expect(oracleCRVPriceLatest).to.be.lt(oracleCRVPrice);
   });
   it("for 3CRV should work and push uAD price lower", async () => {
-    const bondingUADBalanceBefore = await uAD.balanceOf(bonding.address);
+    const stakingUADBalanceBefore = await uAD.balanceOf(staking.address);
     const pool0bal0 = await metaPool.balances(0);
     const pool1bal0 = await metaPool.balances(1);
     expect(pool0bal0).to.equal(ethers.utils.parseEther("10000"));
@@ -120,41 +120,41 @@ describe("Bonding.Price.Reset", () => {
     const amountOf3CRVforOneUADBefore = await metaPool[
       "get_dy(int128,int128,uint256)"
     ](0, 1, ethers.utils.parseEther("1"));
-    // deposit 100 uLP more tokens in addition to the 100 already in the bonding contract
+    // deposit 100 uLP more tokens in addition to the 100 already in the staking contract
     const idSecond = (await deposit(secondAccount, one.mul(100), 1)).id;
-    const bondBefore = await bondingShare.balanceOf(secondAddress, idSecond);
-    const bondingSCBalance = await metaPool.balanceOf(bonding.address);
-    // value in LP of a bonding share
-    const shareValueBefore = await bonding.currentShareValue();
-    const bondingShareTotalSupply = await bondingShare.totalSupply();
+    const bondBefore = await stakingShare.balanceOf(secondAddress, idSecond);
+    const stakingSCBalance = await metaPool.balanceOf(staking.address);
+    // value in LP of a staking share
+    const shareValueBefore = await staking.currentShareValue();
+    const stakingShareTotalSupply = await stakingShare.totalSupply();
     // amount of 3crv inside the treasury
     const treasuryAdr = await treasury.getAddress();
     const treasury3CRVBalanceBeforeReset = await crvToken.balanceOf(
       treasuryAdr
     );
     //  priceBOND = totalLP / totalShares * TARGET_PRICE
-    const calculatedShareValue = bondingSCBalance
+    const calculatedShareValue = stakingSCBalance
       .mul(one)
-      .div(bondingShareTotalSupply);
+      .div(stakingShareTotalSupply);
     expect(shareValueBefore).to.equal(calculatedShareValue);
     const amountToTreasury = ethers.utils.parseEther("196.586734740380915533");
-    await expect(bonding.crvPriceReset(bondingSCBalance))
+    await expect(staking.crvPriceReset(stakingSCBalance))
       .to.emit(crvToken, "Transfer")
-      .withArgs(bonding.address, treasuryAdr, amountToTreasury);
+      .withArgs(staking.address, treasuryAdr, amountToTreasury);
     const treasury3CRVBalanceAfterReset = await crvToken.balanceOf(treasuryAdr);
     expect(treasury3CRVBalanceAfterReset).to.equal(
       treasury3CRVBalanceBeforeReset.add(amountToTreasury)
     );
-    const bondAfter = await bondingShare.balanceOf(secondAddress, idSecond);
-    // bonding share should remain the same
+    const bondAfter = await stakingShare.balanceOf(secondAddress, idSecond);
+    // staking share should remain the same
     expect(bondBefore).to.equal(bondAfter);
     // amount of curve LP to be withdrawn should be less
-    const shareValueAfter = await bonding.currentShareValue();
+    const shareValueAfter = await staking.currentShareValue();
 
-    const bondingSCBalanceAfter = await metaPool.balanceOf(bonding.address);
-    expect(bondingSCBalanceAfter).to.equal(0);
+    const stakingSCBalanceAfter = await metaPool.balanceOf(staking.address);
+    expect(stakingSCBalanceAfter).to.equal(0);
     expect(shareValueAfter).to.equal(0);
-    const bondingUADBalanceAfter = await uAD.balanceOf(bonding.address);
+    const stakingUADBalanceAfter = await uAD.balanceOf(staking.address);
 
     const oraclePrice = await twapOracle.consult(uAD.address);
     const amountOf3CRVforOneUADAfter = await metaPool[
@@ -166,8 +166,8 @@ describe("Bonding.Price.Reset", () => {
     expect(amountOf3CRVforOneUADAfter).to.be.lt(amountOf3CRVforOneUADBefore);
     const pool0bal = await metaPool.balances(0);
     const pool1bal = await metaPool.balances(1);
-    expect(bondingUADBalanceBefore).to.equal(0);
-    expect(bondingUADBalanceAfter).to.equal(0);
+    expect(stakingUADBalanceBefore).to.equal(0);
+    expect(stakingUADBalanceAfter).to.equal(0);
     expect(pool1bal).to.equal(
       ethers.utils.parseEther("9803.393775449769704549")
     );
@@ -184,15 +184,15 @@ describe("Bonding.Price.Reset", () => {
   });
 
   it("for uAD should revert if not admin", async () => {
-    const bondingSCBalance = await metaPool.balanceOf(bonding.address);
+    const stakingSCBalance = await metaPool.balanceOf(staking.address);
     await expect(
-      bonding.connect(secondAccount).uADPriceReset(bondingSCBalance)
-    ).to.be.revertedWith("Caller is not a bonding manager");
+      staking.connect(secondAccount).uADPriceReset(stakingSCBalance)
+    ).to.be.revertedWith("Caller is not a staking manager");
   });
   it("for 3CRV should revert if not admin", async () => {
-    const bondingSCBalance = await metaPool.balanceOf(bonding.address);
+    const stakingSCBalance = await metaPool.balanceOf(staking.address);
     await expect(
-      bonding.connect(secondAccount).crvPriceReset(bondingSCBalance)
-    ).to.be.revertedWith("Caller is not a bonding manager");
+      staking.connect(secondAccount).crvPriceReset(stakingSCBalance)
+    ).to.be.revertedWith("Caller is not a staking manager");
   });
 });

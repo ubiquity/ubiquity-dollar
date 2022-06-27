@@ -14,11 +14,16 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     args: [admin.address],
     ...opts,
   });
-  const uAD = await deployments.deploy("Bonding", {
-    args: [manager.address, ethers.constants.AddressZero],
+  const uri = `{
+    "name": "Staking Share",
+    "description": "Ubiquity Staking Share V2",
+    "image": "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/"
+  }`;
+  const uAD = await deployments.deploy("StakingShareV2", {
+    args: [manager.address, uri],
     ...opts,
   });
-  deployments.log("Bonding deployed at:", uAD.address);
+  deployments.log("StakingShareV2 deployed at:", uAD.address);
 };
 export default func;
-func.tags = ["Bonding"];
+func.tags = ["StakingShareV2"];

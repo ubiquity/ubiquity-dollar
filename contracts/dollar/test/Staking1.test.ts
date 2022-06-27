@@ -1,24 +1,24 @@
 import { expect } from "chai";
 import { ethers, Signer, BigNumber } from "ethers";
-import { Bonding } from "../artifacts/types/Bonding";
-import { BondingShare } from "../artifacts/types/BondingShare";
+import { Staking } from "../artifacts/types/Staking";
+import { StakingShare } from "../artifacts/types/StakingShare";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
-import { bondingSetup, deposit, withdraw } from "./BondingSetup";
+import { stakingSetup, deposit, withdraw } from "./StakingSetup";
 import { mineNBlock } from "./utils/hardhatNode";
 
-describe("Bonding1", () => {
+describe("Staking1", () => {
   let idBlock: number;
   const one: BigNumber = BigNumber.from(10).pow(18); // one = 1 ether = 10^18
 
   let uAD: UbiquityAlgorithmicDollar;
-  let bonding: Bonding;
-  let bondingShare: BondingShare;
+  let staking: Staking;
+  let stakingShare: StakingShare;
   let sablier: string;
   let secondAccount: Signer;
   let blockCountInAWeek: BigNumber;
   before(async () => {
-    ({ secondAccount, uAD, bonding, bondingShare, sablier, blockCountInAWeek } =
-      await bondingSetup());
+    ({ secondAccount, uAD, staking, stakingShare, sablier, blockCountInAWeek } =
+      await stakingSetup());
   });
   describe("initialValues", () => {
     it("initial uAD totalSupply should be more than 30 010 (3 * 10 000 + 10)", async () => {
@@ -28,22 +28,22 @@ describe("Bonding1", () => {
       expect(uADtotalSupply).to.gte(uADinitialSupply);
     });
 
-    it("initial bonding totalSupply should be 0", async () => {
-      const bondTotalSupply: BigNumber = await bondingShare.totalSupply();
+    it("initial staking totalSupply should be 0", async () => {
+      const bondTotalSupply: BigNumber = await stakingShare.totalSupply();
       const zero: BigNumber = BigNumber.from(0);
 
       expect(bondTotalSupply).to.eq(zero);
     });
 
     it("initial currentShareValue should be one", async () => {
-      const currentShareValue: BigNumber = await bonding.currentShareValue();
+      const currentShareValue: BigNumber = await staking.currentShareValue();
       const targetPrice: BigNumber = one;
 
       expect(currentShareValue).to.eq(targetPrice);
     });
 
     it("initial currentTokenPrice should be one", async () => {
-      const currentTokenPrice: BigNumber = await bonding.currentTokenPrice();
+      const currentTokenPrice: BigNumber = await staking.currentTokenPrice();
       const targetPrice: BigNumber = one;
 
       expect(currentTokenPrice).to.eq(targetPrice);
@@ -62,18 +62,18 @@ describe("Bonding1", () => {
   describe("withdraw", () => {
     it("should revert when users try to redeem more shares than they have", async () => {
       await expect(
-        bonding
+        staking
           .connect(secondAccount)
           .withdraw(ethers.utils.parseEther("10000"), idBlock)
-      ).to.be.revertedWith("Bonding: caller does not have enough shares");
+      ).to.be.revertedWith("Staking: caller does not have enough shares");
     });
     it("Users should be able to redeem all their shares", async () => {
-      const bondBefore: BigNumber = await bondingShare.balanceOf(
+      const bondBefore: BigNumber = await stakingShare.balanceOf(
         await secondAccount.getAddress(),
         idBlock
       );
       const lp = await withdraw(secondAccount, idBlock);
-      const bondAfter: BigNumber = await bondingShare.balanceOf(
+      const bondAfter: BigNumber = await stakingShare.balanceOf(
         await secondAccount.getAddress(),
         idBlock
       );
@@ -83,7 +83,7 @@ describe("Bonding1", () => {
     });
 
     it("should return the current Sablier address", async () => {
-      expect(await bonding.sablier()).to.equal(sablier);
+      expect(await staking.sablier()).to.equal(sablier);
     });
   });
 });
