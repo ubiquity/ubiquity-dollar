@@ -4,8 +4,8 @@ import { ERC20 } from "../artifacts/types/ERC20";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 import { CurveUADIncentive } from "../artifacts/types/CurveUADIncentive";
-import { BondingShare } from "../artifacts/types/BondingShare";
-import { Bonding } from "../artifacts/types/Bonding";
+import { StakingShare } from "../artifacts/types/StakingShare";
+import { Staking } from "../artifacts/types/Staking";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { UbiquityAutoRedeem } from "../artifacts/types/UbiquityAutoRedeem";
 import { UbiquityGovernance } from "../artifacts/types/UbiquityGovernance";
@@ -342,20 +342,20 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   // set treasury,uGOVFund and lpReward address needed for excessDollarsDistributor
 
-  // DEPLOY BondingShare Contract
-  const bondingShareDeploy = await deployments.deploy("BondingShare", {
+  // DEPLOY StakingShare Contract
+  const stakingShareDeploy = await deployments.deploy("StakingShare", {
     args: [manager.address],
     ...opts,
   });
-  const bondingShareFactory = await ethers.getContractFactory("BondingShare");
-  const bondingShare: BondingShare = bondingShareFactory.attach(
-    bondingShareDeploy.address
-  ) as BondingShare;
+  const stakingShareFactory = await ethers.getContractFactory("StakingShare");
+  const stakingShare: StakingShare = stakingShareFactory.attach(
+    stakingShareDeploy.address
+  ) as StakingShare;
 
-  const bondingShareAdrFromMgr = await manager.bondingShareAddress();
-  if (bondingShareAdrFromMgr !== bondingShare.address) {
-    await manager.connect(admin).setBondingShareAddress(bondingShare.address);
-    deployments.log("bondingShare deployed at:", bondingShare.address);
+  const stakingShareAdrFromMgr = await manager.stakingShareAddress();
+  if (stakingShareAdrFromMgr !== stakingShare.address) {
+    await manager.connect(admin).setStakingShareAddress(stakingShare.address);
+    deployments.log("stakingShare deployed at:", stakingShare.address);
   }
 
   // DEPLOY Ubiquity library
@@ -364,42 +364,42 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const formulasAdrFromMgr = await manager.formulasAddress();
   if (formulasAdrFromMgr !== ubiquityFormulas.address) {
     await manager.connect(admin).setFormulasAddress(ubiquityFormulas.address);
-    deployments.log("ubiquity formulas deployed at:", bondingShare.address);
+    deployments.log("ubiquity formulas deployed at:", stakingShare.address);
   }
-  // bonding
-  const bondingDeploy = await deployments.deploy("Bonding", {
+  // staking
+  const stakingDeploy = await deployments.deploy("Staking", {
     args: [manager.address, ethers.constants.AddressZero],
     ...opts,
   });
-  const bondingFactory = await ethers.getContractFactory("Bonding");
-  const bonding: Bonding = bondingFactory.attach(
-    bondingDeploy.address
-  ) as Bonding;
+  const stakingFactory = await ethers.getContractFactory("Staking");
+  const staking: Staking = stakingFactory.attach(
+    stakingDeploy.address
+  ) as Staking;
 
-  const isBondingMinter = await manager
+  const isStakingMinter = await manager
     .connect(admin)
-    .hasRole(UBQ_MINTER_ROLE, bonding.address);
-  if (!isBondingMinter) {
-    // bonding should have the UBQ_MINTER_ROLE to mint bonding shares
-    await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, bonding.address);
+    .hasRole(UBQ_MINTER_ROLE, staking.address);
+  if (!isStakingMinter) {
+    // staking should have the UBQ_MINTER_ROLE to mint staking shares
+    await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, staking.address);
   }
 
-  const isBondingBurner = await manager
+  const isStakingBurner = await manager
     .connect(admin)
-    .hasRole(UBQ_BURNER_ROLE, bonding.address);
-  if (isBondingBurner) {
-    // bonding should have the UBQ_BURNER_ROLE to burn bonding shares
-    await manager.connect(admin).grantRole(UBQ_BURNER_ROLE, bonding.address);
+    .hasRole(UBQ_BURNER_ROLE, staking.address);
+  if (isStakingBurner) {
+    // staking should have the UBQ_BURNER_ROLE to burn staking shares
+    await manager.connect(admin).grantRole(UBQ_BURNER_ROLE, staking.address);
   }
 
-  await bonding.connect(admin).setBlockCountInAWeek(46550);
-  const blockCountInAWeek = await bonding.blockCountInAWeek();
+  await staking.connect(admin).setBlockCountInAWeek(46550);
+  const blockCountInAWeek = await staking.blockCountInAWeek();
   deployments.log("blockCountInAWeek set to:", blockCountInAWeek);
 
-  const bondingCtrFromMgr = await manager.bondingContractAddress();
-  if (bondingCtrFromMgr !== bonding.address) {
-    await manager.connect(admin).setBondingContractAddress(bonding.address);
-    deployments.log("setBondingContractAddress to:", bonding.address);
+  const stakingCtrFromMgr = await manager.stakingContractAddress();
+  if (stakingCtrFromMgr !== staking.address) {
+    await manager.connect(admin).setStakingContractAddress(staking.address);
+    deployments.log("setStakingContractAddress to:", staking.address);
   }
   // incentive
   const curveIncentiveDeploy = await deployments.deploy("CurveUADIncentive", {
@@ -644,8 +644,8 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const mgrcouponCalculatorAddress = await manager.couponCalculatorAddress();
   const mgrdollarMintingCalculatorAddress =
     await manager.dollarMintingCalculatorAddress();
-  const mgrbondingShareAddress = await manager.bondingShareAddress();
-  const mgrbondingContractAddress = await manager.bondingContractAddress();
+  const mgrstakingShareAddress = await manager.stakingShareAddress();
+  const mgrstakingContractAddress = await manager.stakingContractAddress();
   const mgrstableSwapMetaPoolAddress =
     await manager.stableSwapMetaPoolAddress();
   const mgrcurve3PoolTokenAddress = await manager.curve3PoolTokenAddress(); // 3CRV
@@ -670,8 +670,8 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     uADTokenAddress:${mgrDollarTokenAddress}
     couponCalculatorAddress:${mgrcouponCalculatorAddress}
     dollarMintingCalculatorAddress:${mgrdollarMintingCalculatorAddress}
-    bondingShareAddress:${mgrbondingShareAddress}
-    bondingContractAddress:${mgrbondingContractAddress}
+    stakingShareAddress:${mgrstakingShareAddress}
+    stakingContractAddress:${mgrstakingContractAddress}
     stableSwapMetaPoolAddress:${mgrstableSwapMetaPoolAddress}
     curve3PoolTokenAddress:${mgrcurve3PoolTokenAddress}
     treasuryAddress:${mgrtreasuryAddress}
@@ -719,10 +719,10 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     `);
   await metaPool
     .connect(admin)
-    ["add_liquidity(uint256[2],uint256)"](
-      [ethers.utils.parseEther("10000"), ethers.utils.parseEther("10000")],
-      0
-    );
+  ["add_liquidity(uint256[2],uint256)"](
+    [ethers.utils.parseEther("10000"), ethers.utils.parseEther("10000")],
+    0
+  );
   deployments.log(`
     liquidity Added to the metapool current LP balance:
       ${ethers.utils.formatEther(await metaPool.balanceOf(adminAdr))}

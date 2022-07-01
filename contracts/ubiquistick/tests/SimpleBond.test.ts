@@ -162,7 +162,7 @@ describe("SimpleBond", function () {
     expect(await simpleBond.rewardsRatio(lp.address)).to.be.equal(rewardsRatio);
   });
 
-  it("Should pause bonding and claiming", async function () {
+  it("Should pause staking and claiming", async function () {
     await simpleBond.bond(lp.address, bigOne);
 
     await expect(simpleBond.pause()).to.be.not.reverted;

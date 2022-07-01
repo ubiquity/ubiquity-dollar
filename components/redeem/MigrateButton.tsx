@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BigNumber } from "ethers";
 import { useEffectAsync, useManagerManaged, useWalletAddress, useBalances, useSigner } from "../lib/hooks";
 
-const BondingMigrate = () => {
+const StakingMigrate = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const managedContracts = useManagerManaged();
@@ -14,8 +14,8 @@ const BondingMigrate = () => {
 
   useEffectAsync(async () => {
     if (walletAddress && signer && managedContracts) {
-      managedContracts.bonding.connect(signer);
-      setMigrateId(await managedContracts.bonding.toMigrateId(walletAddress));
+      managedContracts.staking.connect(signer);
+      setMigrateId(await managedContracts.staking.toMigrateId(walletAddress));
     }
   }, [walletAddress, signer]);
 
@@ -28,12 +28,12 @@ const BondingMigrate = () => {
       setErrMsg("");
       setIsLoading(true);
       (async () => {
-        managedContracts.bonding;
+        managedContracts.staking;
 
         console.log("migrateID", migrateId);
 
         if (migrateId.gt(BigNumber.from(0))) {
-          const migrateWaiting = await managedContracts.bonding.migrate();
+          const migrateWaiting = await managedContracts.staking.migrate();
           await migrateWaiting.wait();
           refreshBalances();
           setMigrateId(undefined);
@@ -47,7 +47,7 @@ const BondingMigrate = () => {
 
   return (
     <>
-      <div id="bonding-migrate">
+      <div id="staking-migrate">
         <div>
           <button onClick={handleMigration}>Migrate</button>
           {isLoading && (
@@ -65,4 +65,4 @@ const BondingMigrate = () => {
   );
 };
 
-export default BondingMigrate;
+export default StakingMigrate;
