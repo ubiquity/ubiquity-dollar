@@ -3,8 +3,8 @@
 import "./accountsFromMnemonic";
 import "./accounts";
 import "./get-code";
-import "./getBondingTransactions";
-import "./generateBondingMigrationData";
+import "./getStakingTransactions";
+import "./generateStakingMigrationData";
 import "./blockNumber";
 import "./chainId";
 import "./tx";

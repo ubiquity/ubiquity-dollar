@@ -103,12 +103,12 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     treasury = treasury_;
   }
 
-  /// @notice Pause Bonding and Claiming
+  /// @notice Pause Staking and Claiming
   function pause() public override onlyOwner {
     _pause();
   }
 
-  /// @notice Unpause Bonding and Claiming
+  /// @notice Unpause Staking and Claiming
   function unpause() public override onlyOwner {
     _unpause();
   }
