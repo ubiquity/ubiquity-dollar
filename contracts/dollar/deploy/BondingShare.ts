@@ -14,11 +14,11 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     args: [admin.address],
     ...opts,
   });
-  const uAD = await deployments.deploy("StakingShare", {
+  const uAD = await deployments.deploy("BondingShare", {
     args: [manager.address],
     ...opts,
   });
-  deployments.log("StakingShare deployed at:", uAD.address);
+  deployments.log("BondingShare deployed at:", uAD.address);
 };
 export default func;
-func.tags = ["StakingShare"];
+func.tags = ["BondingShare"];

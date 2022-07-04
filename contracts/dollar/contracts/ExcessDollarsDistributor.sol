@@ -41,7 +41,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
       // convert uAD to uGOV-UAD LP on sushi and burn them
       _governanceBuyBackLPAndBurn(tenPercent);
       // convert remaining uAD to curve LP tokens
-      // and transfer the curve LP tokens to the staking contract
+      // and transfer the curve LP tokens to the bonding contract
       _convertToCurveLPAndTransfer(excessDollars - fiftyPercent - tenPercent);
     }
   }
@@ -84,7 +84,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
   // @dev convert to curve LP
   // @param amount to convert to curve LP by swapping to 3CRV
   //        and deposit the 3CRV as liquidity to get uAD-3CRV LP tokens
-  //        the LP token are sent to the staking contract
+  //        the LP token are sent to the bonding contract
   function _convertToCurveLPAndTransfer(uint256 amount) internal returns (uint256) {
     // we need to approve  metaPool
     IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(manager.stableSwapMetaPoolAddress(), 0);
@@ -98,7 +98,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
     IERC20(manager.curve3PoolTokenAddress()).safeApprove(manager.stableSwapMetaPoolAddress(), amount3CRVReceived);
 
     // deposit liquidity
-    uint256 res = IMetaPool(manager.stableSwapMetaPoolAddress()).add_liquidity([0, amount3CRVReceived], 0, manager.stakingContractAddress());
+    uint256 res = IMetaPool(manager.stableSwapMetaPoolAddress()).add_liquidity([0, amount3CRVReceived], 0, manager.bondingContractAddress());
     // update TWAP price
     return res;
   }

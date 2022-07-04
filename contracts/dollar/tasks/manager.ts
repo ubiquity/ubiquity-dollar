@@ -23,8 +23,8 @@ task("manager", "Get info about manager contract's address").setAction(
     const mgrcouponCalculatorAddress = await manager.couponCalculatorAddress();
     const mgrdollarMintingCalculatorAddress =
       await manager.dollarMintingCalculatorAddress();
-    const mgrstakingShareAddress = await manager.stakingShareAddress();
-    const mgrstakingContractAddress = await manager.stakingContractAddress();
+    const mgrbondingShareAddress = await manager.bondingShareAddress();
+    const mgrbondingContractAddress = await manager.bondingContractAddress();
     const mgrstableSwapMetaPoolAddress =
       await manager.stableSwapMetaPoolAddress();
     const mgrcurve3PoolTokenAddress = await manager.curve3PoolTokenAddress(); // 3CRV
@@ -47,8 +47,8 @@ task("manager", "Get info about manager contract's address").setAction(
       uADTokenAddress:${mgrDollarTokenAddress}
       couponCalculatorAddress:${mgrcouponCalculatorAddress}
       dollarMintingCalculatorAddress:${mgrdollarMintingCalculatorAddress}
-      stakingShareAddress:${mgrstakingShareAddress}
-      stakingContractAddress:${mgrstakingContractAddress}
+      bondingShareAddress:${mgrbondingShareAddress}
+      bondingContractAddress:${mgrbondingContractAddress}
       stableSwapMetaPoolAddress:${mgrstableSwapMetaPoolAddress}
       curve3PoolTokenAddress:${mgrcurve3PoolTokenAddress}
       treasuryAddress:${mgrtreasuryAddress}

@@ -91,7 +91,7 @@ contract YieldProxy is ReentrancyGuard, CollectableDust, Pausable {
   /// @param _amount of token required by the pickle jar
   /// @param _ubqAmount amount of UBQ token that will be stake to decrease your deposit fee
   /// @param _uadAmount amount of uAD token that will be stake to increase your bonusYield
-  /// @notice weeks act as a multiplier for the amount of staking shares to be received
+  /// @notice weeks act as a multiplier for the amount of bonding shares to be received
   function deposit(
     uint256 _amount,
     uint256 _uadAmount,

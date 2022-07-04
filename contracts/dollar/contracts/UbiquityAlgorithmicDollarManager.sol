@@ -26,7 +26,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
 
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 public constant COUPON_MANAGER_ROLE = keccak256("COUPON_MANAGER");
-  bytes32 public constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER");
+  bytes32 public constant BONDING_MANAGER_ROLE = keccak256("BONDING_MANAGER");
   bytes32 public constant INCENTIVE_MANAGER_ROLE = keccak256("INCENTIVE_MANAGER");
   bytes32 public constant UBQ_TOKEN_MANAGER_ROLE = keccak256("UBQ_TOKEN_MANAGER_ROLE");
   address public twapOracleAddress;
@@ -34,8 +34,8 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
   address public dollarTokenAddress; // uAD
   address public couponCalculatorAddress;
   address public dollarMintingCalculatorAddress;
-  address public stakingShareAddress;
-  address public stakingContractAddress;
+  address public bondingShareAddress;
+  address public bondingContractAddress;
   address public stableSwapMetaPoolAddress;
   address public curve3PoolTokenAddress; // 3CRV
   address public treasuryAddress;
@@ -59,7 +59,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
     _setupRole(UBQ_MINTER_ROLE, _admin);
     _setupRole(PAUSER_ROLE, _admin);
     _setupRole(COUPON_MANAGER_ROLE, _admin);
-    _setupRole(STAKING_MANAGER_ROLE, _admin);
+    _setupRole(BONDING_MANAGER_ROLE, _admin);
     _setupRole(INCENTIVE_MANAGER_ROLE, _admin);
     _setupRole(UBQ_TOKEN_MANAGER_ROLE, address(this));
   }
@@ -121,8 +121,8 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
     formulasAddress = _formulasAddress;
   }
 
-  function setStakingShareAddress(address _stakingShareAddress) external onlyAdmin {
-    stakingShareAddress = _stakingShareAddress;
+  function setBondingShareAddress(address _bondingShareAddress) external onlyAdmin {
+    bondingShareAddress = _bondingShareAddress;
   }
 
   function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress) external onlyAdmin {
@@ -130,13 +130,13 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
   }
 
   /**
-    @notice set the staking bontract smart contract address
-    @dev staking contract participants deposit  curve LP token
+    @notice set the bonding bontract smart contract address
+    @dev bonding contract participants deposit  curve LP token
          for a certain duration to earn uGOV and more curve LP token
-    @param _stakingContractAddress staking contract address
+    @param _bondingContractAddress bonding contract address
      */
-  function setStakingContractAddress(address _stakingContractAddress) external onlyAdmin {
-    stakingContractAddress = _stakingContractAddress;
+  function setBondingContractAddress(address _bondingContractAddress) external onlyAdmin {
+    bondingContractAddress = _bondingContractAddress;
   }
 
   /**

@@ -8,7 +8,7 @@ interface IUbiquityFormulas {
     uint256 _multiplier
   ) external pure returns (uint256 _shares);
 
-  function staking(
+  function bonding(
     uint256 _shares,
     uint256 _currentShareValue,
     uint256 _targetPrice

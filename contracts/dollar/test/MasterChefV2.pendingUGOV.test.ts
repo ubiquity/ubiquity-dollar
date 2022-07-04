@@ -8,9 +8,9 @@ import {
   impersonateWithEther,
 } from "./utils/hardhatNode";
 
-import { StakingShareV2 } from "../artifacts/types/StakingShareV2";
+import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
 import { MasterChefV2 } from "../artifacts/types/MasterChefV2";
-import { StakingV2 } from "../artifacts/types/StakingV2";
+import { BondingV2 } from "../artifacts/types/BondingV2";
 import { IERC20Ubiquity } from "../artifacts/types/IERC20Ubiquity";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 
@@ -36,17 +36,17 @@ let manager: UbiquityAlgorithmicDollarManager;
 const adminAddress = "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd";
 let admin: Signer;
 
-// const StakingShareV2BlockCreation = 12931486;
-const StakingShareV2Address = "0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5";
-let stakingShareV2: StakingShareV2;
+// const BondingShareV2BlockCreation = 12931486;
+const BondingShareV2Address = "0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5";
+let bondingShareV2: BondingShareV2;
 
 // const MasterChefV2BlockCreation = 12931490;
 let MasterChefV2Address = "0xb8ec70d24306ecef9d4aaf9986dcb1da5736a997";
 let masterChefV2: MasterChefV2;
 
-// const StakingV2BlockCreation = 12931495;
-const StakingV2Address = "0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38";
-let stakingV2: StakingV2;
+// const BondingV2BlockCreation = 12931495;
+const BondingV2Address = "0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38";
+let bondingV2: BondingV2;
 
 const UbqAddress = "0x4e38d89362f7e5db0096ce44ebd021c3962aa9a0";
 let UBQ: IERC20Ubiquity;
@@ -72,10 +72,10 @@ const init = async (block: number, newChef = false): Promise<void> => {
     UbqAddress
   )) as IERC20Ubiquity;
 
-  stakingShareV2 = (await ethers.getContractAt(
-    "StakingShareV2",
-    StakingShareV2Address
-  )) as StakingShareV2;
+  bondingShareV2 = (await ethers.getContractAt(
+    "BondingShareV2",
+    BondingShareV2Address
+  )) as BondingShareV2;
 
   if (newChef) {
     // await deployments.fixture(["MasterChefV2.1"]);
@@ -108,10 +108,10 @@ const init = async (block: number, newChef = false): Promise<void> => {
       .grantRole(UBQ_MINTER_ROLE, masterChefV2.address);
   }
 
-  stakingV2 = (await ethers.getContractAt(
-    "StakingV2",
-    StakingV2Address
-  )) as StakingV2;
+  bondingV2 = (await ethers.getContractAt(
+    "BondingV2",
+    BondingV2Address
+  )) as BondingV2;
 };
 
 const query = async (
@@ -124,11 +124,11 @@ const query = async (
   const uGOVPerBlock = await masterChefV2.uGOVPerBlock();
   const totalShares = await masterChefV2.totalShares();
   const [lastRewardBlock, accuGOVPerShare] = await masterChefV2.pool();
-  const totalSupply = await stakingShareV2.totalSupply();
+  const totalSupply = await bondingShareV2.totalSupply();
 
   const pendingUGOV = await masterChefV2.pendingUGOV(bondId);
-  const [amount, rewardDebt] = await masterChefV2.getStakingShareInfo(bondId);
-  const bond = await stakingShareV2.getBond(bondId);
+  const [amount, rewardDebt] = await masterChefV2.getBondingShareInfo(bondId);
+  const bond = await bondingShareV2.getBond(bondId);
 
   if (log) {
     console.log(`BLOCK:${block}`);
@@ -211,11 +211,11 @@ describe("MasterChefV2 pendingUGOV", () => {
         BigNumber.from(6),
       ]);
 
-      await stakingV2.connect(admin).setMigrating(true);
-      await (await stakingV2.connect(newOne).migrate()).wait();
+      await bondingV2.connect(admin).setMigrating(true);
+      await (await bondingV2.connect(newOne).migrate()).wait();
 
       const id = (
-        await stakingShareV2.holderTokens(newOneAddress)
+        await bondingShareV2.holderTokens(newOneAddress)
       )[0].toNumber();
 
       // mine some blocks to get pendingUGOV
@@ -247,7 +247,7 @@ describe("MasterChefV2 pendingUGOV", () => {
       await mineNBlock(1000);
 
       const pendingUGOV1 = await masterChefV2.pendingUGOV(2);
-      const bond1 = await stakingShareV2.getBond(2);
+      const bond1 = await bondingShareV2.getBond(2);
       const ubq1 = await UBQ.balanceOf(user2);
 
       // console.log("pendingUGOV", ethers.utils.formatEther(pendingUGOV1));

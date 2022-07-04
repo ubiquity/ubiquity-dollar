@@ -148,7 +148,7 @@ export default async function yieldProxySetup(): Promise<{
     ethers.utils.parseEther("100"),
     5000
   )) as YieldProxy;
-  // staking should have the UBQ_MINTER_ROLE to mint staking shares
+  // bonding should have the UBQ_MINTER_ROLE to mint bonding shares
   await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, yieldProxy.address);
 
   const uARFactory = await ethers.getContractFactory("UbiquityAutoRedeem");

@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { BigNumber } from "ethers";
 import { UbiquityFormulas } from "../artifacts/types/UbiquityFormulas";
-import { stakingSetup } from "./StakingSetup";
+import { bondingSetup } from "./BondingSetup";
 
 describe("UbiquityFormulas", () => {
   const one: BigNumber = BigNumber.from(10).pow(18); // one = 1 ether = 10^18
@@ -11,7 +11,7 @@ describe("UbiquityFormulas", () => {
   let ubiquityFormulas: UbiquityFormulas;
 
   before(async () => {
-    ({ ubiquityFormulas } = await stakingSetup());
+    ({ ubiquityFormulas } = await bondingSetup());
   });
 
   describe("durationMultiply", () => {

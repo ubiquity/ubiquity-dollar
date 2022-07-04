@@ -11,27 +11,16 @@ import { HardhatUserConfig } from "hardhat/types";
 import fs from "fs";
 import path from "path";
 
-
 if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   import("./tasks/index");
 } else {
-  console.warn(
-    "Tasks loading skipped until compilation artifacts are available"
-  );
+  console.warn("Tasks loading skipped until compilation artifacts are available");
 }
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
-const {
-  MNEMONIC,
-  UBQ,
-  API_KEY_ALCHEMY,
-  API_KEY_ETHERSCAN,
-  REPORT_GAS,
-  API_KEY_COINMARKETCAP,
-} = process.env;
+const { MNEMONIC, UBQ, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API_KEY_COINMARKETCAP } = process.env;
 
-const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"
-  }`;
+const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"}`;
 
 const accounts = {
   // use default accounts
@@ -82,10 +71,9 @@ const config: HardhatUserConfig = {
     UbqWhaleAddress: "0xa53A6fE2d8Ad977aD926C485343Ba39f32D3A3F6",
     MasterChefAddress: "0x8fFCf9899738e4633A721904609ffCa0a2C44f3D",
     MetaPoolAddress: "0x20955cb69ae1515962177d164dfc9522feef567e",
-    StakingAddress: "0x831e3674Abc73d7A3e9d8a9400AF2301c32cEF0C",
-    StakingV2Address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", // FAKE ADDRESS, TO BE REPLACED AFTER V2 DEPLOYMENT
-    UbiquityAlgorithmicDollarManagerAddress:
-      "0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98",
+    BondingAddress: "0x831e3674Abc73d7A3e9d8a9400AF2301c32cEF0C",
+    BondingV2Address: "0xdAC17F958D2ee523a2206206994597C13D831ec7", // FAKE ADDRESS, TO BE REPLACED AFTER V2 DEPLOYMENT
+    UbiquityAlgorithmicDollarManagerAddress: "0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98",
     jarUSDCAddr: "0xEB801AB73E9A2A482aA48CaCA13B1954028F4c94",
     jarYCRVLUSDaddr: "0x4fFe73Cf2EEf5E8C8E0E10160bCe440a029166D2",
     strategyYearnUsdcV2: "0xEecEE2637c7328300846622c802B2a29e65f3919",
@@ -103,10 +91,9 @@ const config: HardhatUserConfig = {
   }, */
   networks: {
     localhost: {
-      url: `http://127.0.0.1:8545`,
+      url: "http://0.0.0.0:8545",
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
-          }`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
         blockNumber: 13252206,
       },
       accounts,
@@ -115,8 +102,7 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
-          }`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
         blockNumber: 13252206,
       },
       accounts,
@@ -124,15 +110,13 @@ const config: HardhatUserConfig = {
       initialBaseFeePerGas: 0,
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
-        }`,
+      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
       accounts: UBQ ? [UBQ] : accounts,
       gasPrice: 60000000000,
     },
     ropsten: {
       gasPrice: 60000000000,
-      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""
-        }`,
+      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
       accounts,
     },
     rinkeby: {
@@ -146,7 +130,8 @@ const config: HardhatUserConfig = {
     target: "ethers-v5",
   },
   gasReporter: {
-    enabled: REPORT_GAS === "true", currency: "USD",
+    enabled: REPORT_GAS === "true",
+    currency: "USD",
     gasPrice: 60,
     onlyCalledMethods: true,
     coinmarketcap: `${API_KEY_COINMARKETCAP || ""}`,

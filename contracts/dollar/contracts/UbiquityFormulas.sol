@@ -10,7 +10,7 @@ contract UbiquityFormulas {
   /// @dev formula duration multiply
   /// @param _uLP , amount of LP tokens
   /// @param _weeks , mimimun duration of staking period
-  /// @param _multiplier , staking discount multiplier = 0.0001
+  /// @param _multiplier , bonding discount multiplier = 0.0001
   /// @return _shares , amount of shares
   /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
   //          D32 = D^3/2
@@ -29,14 +29,14 @@ contract UbiquityFormulas {
     _shares = m.mul(d32).mul(a).add(a).toUInt();
   }
 
-  /// @dev formula staking
+  /// @dev formula bonding
   /// @param _shares , amount of shares
   /// @param _currentShareValue , current share value
   /// @param _targetPrice , target uAD price
-  /// @return _uBOND , amount of staking shares
+  /// @return _uBOND , amount of bonding shares
   /// @notice UBOND = _shares / _currentShareValue * _targetPrice
   // newShares = A / V * T
-  function staking(
+  function bonding(
     uint256 _shares,
     uint256 _currentShareValue,
     uint256 _targetPrice
@@ -49,7 +49,7 @@ contract UbiquityFormulas {
   }
 
   /// @dev formula redeem bonds
-  /// @param _uBOND , amount of staking shares
+  /// @param _uBOND , amount of bonding shares
   /// @param _currentShareValue , current share value
   /// @param _targetPrice , target uAD price
   /// @return _uLP , amount of LP tokens

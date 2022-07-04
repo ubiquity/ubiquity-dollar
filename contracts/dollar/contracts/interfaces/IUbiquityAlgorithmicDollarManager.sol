@@ -31,17 +31,17 @@ interface IUbiquityAlgorithmicDollarManager {
 
   function setFormulasAddress(address _formulasAddress) external;
 
-  function setStakingShareAddress(address _stakingShareAddress) external;
+  function setBondingShareAddress(address _bondingShareAddress) external;
 
   function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress) external;
 
   /**
-    @notice set the staking bontract smart contract address
-    @dev staking contract participants deposit  curve LP token
+    @notice set the bonding bontract smart contract address
+    @dev bonding contract participants deposit  curve LP token
          for a certain duration to earn uGOV and more curve LP token
-    @param _stakingContractAddress staking contract address
+    @param _bondingContractAddress bonding contract address
      */
-  function setStakingContractAddress(address _stakingContractAddress) external;
+  function setBondingContractAddress(address _bondingContractAddress) external;
 
   /**
     @notice set the treasury address

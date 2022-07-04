@@ -14,7 +14,7 @@ import "./interfaces/ITWAPOracle.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./utils/CollectableDust.sol";
 
-contract Staking is CollectableDust {
+contract Bonding is CollectableDust {
   using SafeERC20 for IERC20;
 
   bytes public data = "";
@@ -22,22 +22,22 @@ contract Staking is CollectableDust {
 
   uint256 public constant ONE = uint256(1 ether); // 3Crv has 18 decimals
   ISablier public sablier;
-  uint256 public stakingDiscountMultiplier = uint256(1000000 gwei); // 0.001
+  uint256 public bondingDiscountMultiplier = uint256(1000000 gwei); // 0.001
   uint256 public redeemStreamTime = 86400; // 1 day in seconds
   uint256 public blockCountInAWeek = 45361;
   uint256 public blockRonding = 100;
   uint256 public uGOVPerBlock = 1;
 
-  event MaxStakingPriceUpdated(uint256 _maxStakingPrice);
+  event MaxBondingPriceUpdated(uint256 _maxBondingPrice);
   event SablierUpdated(address _sablier);
-  event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
+  event BondingDiscountMultiplierUpdated(uint256 _bondingDiscountMultiplier);
   event RedeemStreamTimeUpdated(uint256 _redeemStreamTime);
   event BlockRondingUpdated(uint256 _blockRonding);
   event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
   event UGOVPerBlockUpdated(uint256 _uGOVPerBlock);
 
-  modifier onlyStakingManager() {
-    require(manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender), "Caller is not a staking manager");
+  modifier onlyBondingManager() {
+    require(manager.hasRole(manager.BONDING_MANAGER_ROLE(), msg.sender), "Caller is not a bonding manager");
     _;
   }
 
@@ -50,11 +50,11 @@ contract Staking is CollectableDust {
   receive() external payable {}
 
   /// @dev uADPriceReset remove uAD unilateraly from the curve LP share sitting inside
-  ///      the staking contract and send the uAD received to the treasury.
+  ///      the bonding contract and send the uAD received to the treasury.
   ///      This will have the immediate effect of pushing the uAD price HIGHER
   /// @param amount of LP token to be removed for uAD
-  /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
-  function uADPriceReset(uint256 amount) external onlyStakingManager {
+  /// @notice it will remove one coin only from the curve LP share sitting in the bonding contract
+  function uADPriceReset(uint256 amount) external onlyBondingManager {
     IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
     // safe approve
     IERC20(manager.stableSwapMetaPoolAddress()).safeApprove(address(this), amount);
@@ -67,11 +67,11 @@ contract Staking is CollectableDust {
   }
 
   /// @dev crvPriceReset remove 3CRV unilateraly from the curve LP share sitting inside
-  ///      the staking contract and send the 3CRV received to the treasury
+  ///      the bonding contract and send the 3CRV received to the treasury
   ///      This will have the immediate effect of pushing the uAD price LOWER
   /// @param amount of LP token to be removed for 3CRV tokens
-  /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
-  function crvPriceReset(uint256 amount) external onlyStakingManager {
+  /// @notice it will remove one coin only from the curve LP share sitting in the bonding contract
+  function crvPriceReset(uint256 amount) external onlyBondingManager {
     IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
     // safe approve
     IERC20(manager.stableSwapMetaPoolAddress()).safeApprove(address(this), amount);
@@ -84,11 +84,11 @@ contract Staking is CollectableDust {
   }
 
   /// Collectable Dust
-  function addProtocolToken(address _token) external override onlyStakingManager {
+  function addProtocolToken(address _token) external override onlyBondingManager {
     _addProtocolToken(_token);
   }
 
-  function removeProtocolToken(address _token) external override onlyStakingManager {
+  function removeProtocolToken(address _token) external override onlyBondingManager {
     _removeProtocolToken(_token);
   }
 
@@ -96,51 +96,51 @@ contract Staking is CollectableDust {
     address _to,
     address _token,
     uint256 _amount
-  ) external override onlyStakingManager {
+  ) external override onlyBondingManager {
     _sendDust(_to, _token, _amount);
   }
 
-  function setSablier(address _sablier) external onlyStakingManager {
+  function setSablier(address _sablier) external onlyBondingManager {
     sablier = ISablier(_sablier);
     emit SablierUpdated(_sablier);
   }
 
-  function setStakingDiscountMultiplier(uint256 _stakingDiscountMultiplier) external onlyStakingManager {
-    stakingDiscountMultiplier = _stakingDiscountMultiplier;
-    emit StakingDiscountMultiplierUpdated(_stakingDiscountMultiplier);
+  function setBondingDiscountMultiplier(uint256 _bondingDiscountMultiplier) external onlyBondingManager {
+    bondingDiscountMultiplier = _bondingDiscountMultiplier;
+    emit BondingDiscountMultiplierUpdated(_bondingDiscountMultiplier);
   }
 
-  function setRedeemStreamTime(uint256 _redeemStreamTime) external onlyStakingManager {
+  function setRedeemStreamTime(uint256 _redeemStreamTime) external onlyBondingManager {
     redeemStreamTime = _redeemStreamTime;
     emit RedeemStreamTimeUpdated(_redeemStreamTime);
   }
 
-  function setBlockRonding(uint256 _blockRonding) external onlyStakingManager {
+  function setBlockRonding(uint256 _blockRonding) external onlyBondingManager {
     blockRonding = _blockRonding;
     emit BlockRondingUpdated(_blockRonding);
   }
 
-  function setBlockCountInAWeek(uint256 _blockCountInAWeek) external onlyStakingManager {
+  function setBlockCountInAWeek(uint256 _blockCountInAWeek) external onlyBondingManager {
     blockCountInAWeek = _blockCountInAWeek;
     emit BlockCountInAWeekUpdated(_blockCountInAWeek);
   }
 
-  function setUGOVPerBlock(uint256 _uGOVPerBlock) external onlyStakingManager {
+  function setUGOVPerBlock(uint256 _uGOVPerBlock) external onlyBondingManager {
     uGOVPerBlock = _uGOVPerBlock;
     emit UGOVPerBlockUpdated(_uGOVPerBlock);
   }
 
-  /// @dev deposit uAD-3CRV LP tokens for a duration to receive staking shares
+  /// @dev deposit uAD-3CRV LP tokens for a duration to receive bonding shares
   /// @param _lpsAmount of LP token to send
   /// @param _weeks during lp token will be held
-  /// @notice weeks act as a multiplier for the amount of staking shares to be received
+  /// @notice weeks act as a multiplier for the amount of bonding shares to be received
   function deposit(uint256 _lpsAmount, uint256 _weeks) public returns (uint256 _id) {
-    require(1 <= _weeks && _weeks <= 208, "Staking: duration must be between 1 and 208 weeks");
+    require(1 <= _weeks && _weeks <= 208, "Bonding: duration must be between 1 and 208 weeks");
     _updateOracle();
 
     IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(msg.sender, address(this), _lpsAmount);
 
-    uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress()).durationMultiply(_lpsAmount, _weeks, stakingDiscountMultiplier);
+    uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress()).durationMultiply(_lpsAmount, _weeks, bondingDiscountMultiplier);
 
     // 1 week = 45361 blocks = 2371753*7/366
     // n = (block + duration * 45361)
@@ -154,13 +154,13 @@ contract Staking is CollectableDust {
   }
 
   /// @dev withdraw an amount of uAD-3CRV LP tokens
-  /// @param _sharesAmount of staking shares of type _id to be withdrawn
-  /// @param _id staking shares id
-  /// @notice staking shares are ERC1155 (aka NFT) because they have an expiration date
+  /// @param _sharesAmount of bonding shares of type _id to be withdrawn
+  /// @param _id bonding shares id
+  /// @notice bonding shares are ERC1155 (aka NFT) because they have an expiration date
   function withdraw(uint256 _sharesAmount, uint256 _id) public {
-    require(block.number > _id, "Staking: Redeem not allowed before staking time");
+    require(block.number > _id, "Bonding: Redeem not allowed before bonding time");
 
-    require(IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(msg.sender, _id) >= _sharesAmount, "Staking: caller does not have enough shares");
+    require(IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(msg.sender, _id) >= _sharesAmount, "Bonding: caller does not have enough shares");
 
     _updateOracle();
     // get masterchef for uGOV rewards To ensure correct computation
@@ -169,7 +169,7 @@ contract Staking is CollectableDust {
 
     uint256 _currentShareValue = currentShareValue();
 
-    IERC1155Ubiquity(manager.stakingShareAddress()).burn(msg.sender, _id, _sharesAmount);
+    IERC1155Ubiquity(manager.bondingShareAddress()).burn(msg.sender, _id, _sharesAmount);
 
     // if (redeemStreamTime == 0) {
     IERC20(manager.stableSwapMetaPoolAddress()).safeTransfer(
@@ -181,7 +181,7 @@ contract Staking is CollectableDust {
   function currentShareValue() public view returns (uint256 priceShare) {
     uint256 totalLP = IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
 
-    uint256 totalShares = IERC1155Ubiquity(manager.stakingShareAddress()).totalSupply();
+    uint256 totalShares = IERC1155Ubiquity(manager.bondingShareAddress()).totalSupply();
 
     priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(totalLP, totalShares, ONE);
   }
@@ -192,9 +192,9 @@ contract Staking is CollectableDust {
 
   function _mint(uint256 _sharesAmount, uint256 _id) internal {
     uint256 _currentShareValue = currentShareValue();
-    require(_currentShareValue != 0, "Staking: share value should not be null");
+    require(_currentShareValue != 0, "Bonding: share value should not be null");
 
-    IERC1155Ubiquity(manager.stakingShareAddress()).mint(msg.sender, _id, _sharesAmount, data);
+    IERC1155Ubiquity(manager.bondingShareAddress()).mint(msg.sender, _id, _sharesAmount, data);
   }
 
   function _updateOracle() internal {

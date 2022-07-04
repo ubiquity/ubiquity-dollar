@@ -16,7 +16,7 @@ import { UbiquityAutoRedeem } from "../artifacts/types/UbiquityAutoRedeem";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 import { DollarMintingCalculator } from "../artifacts/types/DollarMintingCalculator";
 import { DebtCoupon } from "../artifacts/types/DebtCoupon";
-import { StakingShare } from "../artifacts/types/StakingShare";
+import { BondingShare } from "../artifacts/types/BondingShare";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { SushiSwapPool } from "../artifacts/types/SushiSwapPool";
 import { IUniswapV2Pair } from "../artifacts/types/IUniswapV2Pair";
@@ -112,16 +112,16 @@ symbol:${await uAR.symbol()}
 total supply:${ethers.utils.formatEther(await uAR.totalSupply())} uAR
                             `);
 
-    const stakingShareAdr = await manager.stakingShareAddress();
-    const stakingShare = (await ethers.getContractAt(
-      "StakingShare",
-      stakingShareAdr
-    )) as StakingShare;
+    const bondingShareAdr = await manager.bondingShareAddress();
+    const bondingShare = (await ethers.getContractAt(
+      "BondingShare",
+      bondingShareAdr
+    )) as BondingShare;
 
-    const treasuryIds = await stakingShare.holderTokens(treasury);
+    const treasuryIds = await bondingShare.holderTokens(treasury);
 
     const balanceOfs = treasuryIds.map((id) => {
-      return stakingShare.balanceOf(treasury, id);
+      return bondingShare.balanceOf(treasury, id);
     });
     const balances = await Promise.all(balanceOfs);
     let fullBalance = BigNumber.from(0);
@@ -130,14 +130,14 @@ total supply:${ethers.utils.formatEther(await uAR.totalSupply())} uAR
         return prev.add(cur);
       });
     }
-    const stakingSharesInEth = ethers.utils.formatEther(
-      await stakingShare.totalSupply()
+    const bondingSharesInEth = ethers.utils.formatEther(
+      await bondingShare.totalSupply()
     );
     console.log(`
-stakingShare
+bondingShare
 treasury balance:${ethers.utils.formatEther(fullBalance)}
-address:${stakingShareAdr}
-total supply:${stakingSharesInEth} stakingShares
+address:${bondingShareAdr}
+total supply:${bondingSharesInEth} bondingShares
                                                                 `);
 
     const debtCouponAdr = await manager.debtCouponAddress();

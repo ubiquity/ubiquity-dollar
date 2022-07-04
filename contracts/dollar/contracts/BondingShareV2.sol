@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
-contract StakingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
   using SafeAddArray for uint256[];
   struct Bond {
     // address of the minter
@@ -54,9 +54,9 @@ contract StakingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
   }
 
   /// @dev update bond LP amount , LP rewards debt and end block.
-  /// @param _bondId staking share id
+  /// @param _bondId bonding share id
   /// @param _lpAmount amount of LP token deposited
-  /// @param _lpRewardDebt amount of excess LP token inside the staking contract
+  /// @param _lpRewardDebt amount of excess LP token inside the bonding contract
   /// @param _endBlock end locking period block number
   function updateBond(
     uint256 _bondId,
@@ -81,7 +81,7 @@ contract StakingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
   // @dev Creates `amount` new tokens for `to`, of token type `id`.
   /// @param to owner address
   /// @param lpDeposited amount of LP token deposited
-  /// @param lpRewardDebt amount of excess LP token inside the staking contract
+  /// @param lpRewardDebt amount of excess LP token inside the bonding contract
   /// @param endBlock block number when the locking period ends
   function mint(
     address to,

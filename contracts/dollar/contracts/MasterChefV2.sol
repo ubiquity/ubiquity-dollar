@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/ITWAPOracle.sol";
-import "./StakingShareV2.sol";
+import "./BondingShareV2.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 
 import "./interfaces/IERC1155Ubiquity.sol";
@@ -16,8 +16,8 @@ contract MasterChefV2 is ReentrancyGuard {
   using SafeERC20 for IERC20;
 
   // Info of each user.
-  struct StakingShareInfo {
-    uint256 amount; // staking rights.
+  struct BondingShareInfo {
+    uint256 amount; // bonding rights.
     uint256 rewardDebt; // Reward debt. See explanation below.
     //
     // We do some fancy math here. Basically, any point in time, the amount of uGOVs
@@ -52,11 +52,11 @@ contract MasterChefV2 is ReentrancyGuard {
   // Info of each pool.
   PoolInfo public pool;
   // Info of each user that stakes LP tokens.
-  mapping(uint256 => StakingShareInfo) private _bsInfo;
+  mapping(uint256 => BondingShareInfo) private _bsInfo;
 
-  event Deposit(address indexed user, uint256 amount, uint256 indexed stakingShareId);
+  event Deposit(address indexed user, uint256 amount, uint256 indexed bondingShareId);
 
-  event Withdraw(address indexed user, uint256 amount, uint256 indexed stakingShareId);
+  event Withdraw(address indexed user, uint256 amount, uint256 indexed bondingShareId);
 
   event UGOVPerBlockModified(uint256 indexed uGOVPerBlock);
 
@@ -67,8 +67,8 @@ contract MasterChefV2 is ReentrancyGuard {
     require(manager.hasRole(manager.UBQ_TOKEN_MANAGER_ROLE(), msg.sender), "MasterChef: not UBQ manager");
     _;
   }
-  modifier onlyStakingContract() {
-    require(msg.sender == manager.stakingContractAddress(), "MasterChef: not Staking Contract");
+  modifier onlyBondingContract() {
+    require(msg.sender == manager.bondingContractAddress(), "MasterChef: not Bonding Contract");
     _;
   }
 
@@ -76,7 +76,7 @@ contract MasterChefV2 is ReentrancyGuard {
     address _manager,
     address[] memory _tos,
     uint256[] memory _amounts,
-    uint256[] memory _stakingShareIDs
+    uint256[] memory _bondingShareIDs
   ) {
     manager = UbiquityAlgorithmicDollarManager(_manager);
     pool.lastRewardBlock = block.number;
@@ -86,10 +86,10 @@ contract MasterChefV2 is ReentrancyGuard {
 
     uint256 lgt = _tos.length;
     require(lgt == _amounts.length, "_amounts array not same length");
-    require(lgt == _stakingShareIDs.length, "_stakingShareIDs array not same length");
+    require(lgt == _bondingShareIDs.length, "_bondingShareIDs array not same length");
 
     for (uint256 i = 0; i < lgt; ++i) {
-      _deposit(_tos[i], _amounts[i], _stakingShareIDs[i]);
+      _deposit(_tos[i], _amounts[i], _bondingShareIDs[i]);
     }
   }
 
@@ -112,38 +112,38 @@ contract MasterChefV2 is ReentrancyGuard {
   function deposit(
     address to,
     uint256 _amount,
-    uint256 _stakingShareID
-  ) external nonReentrant onlyStakingContract {
-    _deposit(to, _amount, _stakingShareID);
+    uint256 _bondingShareID
+  ) external nonReentrant onlyBondingContract {
+    _deposit(to, _amount, _bondingShareID);
   }
 
   // Withdraw LP tokens from MasterChef.
   function withdraw(
     address to,
     uint256 _amount,
-    uint256 _stakingShareID
-  ) external nonReentrant onlyStakingContract {
-    StakingShareInfo storage bs = _bsInfo[_stakingShareID];
+    uint256 _bondingShareID
+  ) external nonReentrant onlyBondingContract {
+    BondingShareInfo storage bs = _bsInfo[_bondingShareID];
     require(bs.amount >= _amount, "MC: amount too high");
     _updatePool();
     uint256 pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
-    // send UGOV to Staking Share holder
+    // send UGOV to Bonding Share holder
 
     _safeUGOVTransfer(to, pending);
     bs.amount -= _amount;
     bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
     _totalShares -= _amount;
-    emit Withdraw(to, _amount, _stakingShareID);
+    emit Withdraw(to, _amount, _bondingShareID);
   }
 
   /// @dev get pending uGOV rewards from MasterChef.
   /// @return amount of pending rewards transfered to msg.sender
   /// @notice only send pending rewards
-  function getRewards(uint256 stakingShareID) external returns (uint256) {
-    require(IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(msg.sender, stakingShareID) == 1, "MS: caller is not owner");
+  function getRewards(uint256 bondingShareID) external returns (uint256) {
+    require(IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(msg.sender, bondingShareID) == 1, "MS: caller is not owner");
 
     // calculate user reward
-    StakingShareInfo storage user = _bsInfo[stakingShareID];
+    BondingShareInfo storage user = _bsInfo[bondingShareID];
     _updatePool();
     uint256 pending = ((user.amount * pool.accuGOVPerShare) / 1e12) - user.rewardDebt;
     _safeUGOVTransfer(msg.sender, pending);
@@ -152,8 +152,8 @@ contract MasterChefV2 is ReentrancyGuard {
   }
 
   // View function to see pending uGOVs on frontend.
-  function pendingUGOV(uint256 stakingShareID) external view returns (uint256) {
-    StakingShareInfo storage user = _bsInfo[stakingShareID];
+  function pendingUGOV(uint256 bondingShareID) external view returns (uint256) {
+    BondingShareInfo storage user = _bsInfo[bondingShareID];
     uint256 accuGOVPerShare = pool.accuGOVPerShare;
 
     if (block.number > pool.lastRewardBlock && _totalShares != 0) {
@@ -165,9 +165,9 @@ contract MasterChefV2 is ReentrancyGuard {
   }
 
   /**
-   * @dev get the amount of shares and the reward debt of a staking share .
+   * @dev get the amount of shares and the reward debt of a bonding share .
    */
-  function getStakingShareInfo(uint256 _id) external view returns (uint256[2] memory) {
+  function getBondingShareInfo(uint256 _id) external view returns (uint256[2] memory) {
     return [_bsInfo[_id].amount, _bsInfo[_id].rewardDebt];
   }
 
@@ -182,9 +182,9 @@ contract MasterChefV2 is ReentrancyGuard {
   function _deposit(
     address to,
     uint256 _amount,
-    uint256 _stakingShareID
+    uint256 _bondingShareID
   ) internal {
-    StakingShareInfo storage bs = _bsInfo[_stakingShareID];
+    BondingShareInfo storage bs = _bsInfo[_bondingShareID];
     _updatePool();
     if (bs.amount > 0) {
       uint256 pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
@@ -193,7 +193,7 @@ contract MasterChefV2 is ReentrancyGuard {
     bs.amount += _amount;
     bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
     _totalShares += _amount;
-    emit Deposit(to, _amount, _stakingShareID);
+    emit Deposit(to, _amount, _bondingShareID);
   }
 
   // UPDATE uGOV multiplier

@@ -254,7 +254,7 @@ describe("DebtCouponManager", () => {
 
     await manager
       .connect(admin)
-      .setStakingContractAddress(await lpReward.getAddress());
+      .setBondingContractAddress(await lpReward.getAddress());
     await deployUADUGOVSushiPool(thirdAccount);
   });
   it("exchangeDollarsForUAR should work", async () => {

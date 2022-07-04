@@ -2,7 +2,7 @@ import { BigNumber, Signer } from "ethers";
 import { ethers, getNamedAccounts, network } from "hardhat";
 import { expect } from "chai";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-import { StakingShare } from "../artifacts/types/StakingShare";
+import { BondingShare } from "../artifacts/types/BondingShare";
 import { ERC20 } from "../artifacts/types/ERC20";
 import { UbiquityAutoRedeem } from "../artifacts/types/UbiquityAutoRedeem";
 import { UARForDollarsCalculator } from "../artifacts/types/UARForDollarsCalculator";
@@ -12,7 +12,7 @@ import { DebtCoupon } from "../artifacts/types/DebtCoupon";
 import { SushiSwapPool } from "../artifacts/types/SushiSwapPool";
 
 describe("UbiquityAlgorithmicDollarManager", () => {
-  // let staking: Staking;
+  // let bonding: Bonding;
   let debtCoupon: DebtCoupon;
   let manager: UbiquityAlgorithmicDollarManager;
   let admin: Signer;
@@ -25,7 +25,7 @@ describe("UbiquityAlgorithmicDollarManager", () => {
   let curve3CrvToken: string;
   let curveWhaleAddress: string;
   // let twapOracle: TWAPOracle;
-  let stakingShare: StakingShare;
+  let bondingShare: BondingShare;
 
   beforeEach(async () => {
     ({ curveFactory, curve3CrvBasePool, curve3CrvToken, curveWhaleAddress } =
@@ -59,18 +59,18 @@ describe("UbiquityAlgorithmicDollarManager", () => {
       await admin.getAddress()
     )) as DebtCoupon;
   });
-  describe("StakingShare", () => {
+  describe("BondingShare", () => {
     it("Set should work", async () => {
-      stakingShare = (await (await ethers.getContractFactory("StakingShare"))
+      bondingShare = (await (await ethers.getContractFactory("BondingShare"))
         .connect(admin)
-        .deploy(await admin.getAddress())) as StakingShare;
+        .deploy(await admin.getAddress())) as BondingShare;
 
-      await manager.connect(admin).setStakingShareAddress(stakingShare.address);
-      const stakingShareAddr = BigNumber.from(
+      await manager.connect(admin).setBondingShareAddress(bondingShare.address);
+      const bondingShareAddr = BigNumber.from(
         await ethers.provider.getStorageAt(manager.address, 6)
       ).toHexString();
-      expect(stakingShare.address.toLowerCase()).to.equal(
-        stakingShareAddr.toLowerCase()
+      expect(bondingShare.address.toLowerCase()).to.equal(
+        bondingShareAddr.toLowerCase()
       );
     });
   });

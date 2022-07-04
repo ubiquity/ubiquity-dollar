@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../MasterChefV2.sol";
 
 interface IMasterChefV2 {
-  struct StakingShareInfo {
+  struct BondingShareInfo {
     uint256 amount; // How many LP tokens the user has provided.
     uint256 rewardDebt; // Reward debt. See explanation below.
   }
@@ -16,24 +16,24 @@ interface IMasterChefV2 {
     uint256 accuGOVPerShare; // Accumulated SUSHI per share, times 1e12. See below.
   }
 
-  event Deposit(address indexed user, uint256 amount, uint256 stakingShareID);
-  event Withdraw(address indexed user, uint256 amount, uint256 stakingShareID);
+  event Deposit(address indexed user, uint256 amount, uint256 bondingShareID);
+  event Withdraw(address indexed user, uint256 amount, uint256 bondingShareID);
 
   function deposit(
     address sender,
     uint256 amount,
-    uint256 stakingShareID
+    uint256 bondingShareID
   ) external;
 
   // Withdraw LP tokens from MasterChef.
   function withdraw(
     address sender,
     uint256 amount,
-    uint256 stakingShareID
+    uint256 bondingShareID
   ) external;
 
   // Info about a bondinh share
-  function getStakingShareInfo(uint256 _id) external view returns (uint256[2] memory);
+  function getBondingShareInfo(uint256 _id) external view returns (uint256[2] memory);
 
   // Total amount of shares
   function totalShares() external view returns (uint256);

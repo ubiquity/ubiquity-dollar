@@ -20,8 +20,8 @@ describe("ExcessDollarsDistributor", () => {
   let secondAccount: Signer;
   let thirdAccount: Signer;
   let treasury: Signer;
-  let stakingContractAdr: string;
-  let stakingContract: Signer;
+  let bondingContractAdr: string;
+  let bondingContract: Signer;
   let uAD: UbiquityAlgorithmicDollar;
   let crvToken: ERC20;
   let curveFactory: string;
@@ -40,7 +40,7 @@ describe("ExcessDollarsDistributor", () => {
     // list of accounts
     ({ curveFactory, curve3CrvBasePool, curve3CrvToken, curveWhaleAddress } =
       await getNamedAccounts());
-    [admin, secondAccount, thirdAccount, treasury, stakingContract] =
+    [admin, secondAccount, thirdAccount, treasury, bondingContract] =
       await ethers.getSigners();
     await resetFork(12592661);
     router = (await ethers.getContractAt(
@@ -116,12 +116,12 @@ describe("ExcessDollarsDistributor", () => {
       manager.address
     )) as ExcessDollarsDistributor;
 
-    // set treasury,uGOV-UAD LP (TODO) and Staking Cntract address needed for excessDollarsDistributor
+    // set treasury,uGOV-UAD LP (TODO) and Bonding Cntract address needed for excessDollarsDistributor
     treasuryAdr = await treasury.getAddress();
     await manager.setTreasuryAddress(treasuryAdr);
 
-    stakingContractAdr = await stakingContract.getAddress();
-    await manager.setStakingContractAddress(stakingContractAdr);
+    bondingContractAdr = await bondingContract.getAddress();
+    await manager.setBondingContractAddress(bondingContractAdr);
 
     const sushiFactory = await ethers.getContractFactory("SushiSwapPool");
     sushiUGOVPool = (await sushiFactory.deploy(
@@ -147,7 +147,7 @@ describe("ExcessDollarsDistributor", () => {
       excessDollarsDistributor.address
     );
     expect(excessDollarBalance).to.equal(amount);
-    // amount of LP token to send to staking contract
+    // amount of LP token to send to bonding contract
     const dyuADto3CRV = await metaPool["get_dy(int128,int128,uint256)"](
       0,
       1,
@@ -158,10 +158,10 @@ describe("ExcessDollarsDistributor", () => {
       true
     );
 
-    const LPInStakingBeforeDistribute = await metaPool.balanceOf(
-      stakingContractAdr
+    const LPInBondingBeforeDistribute = await metaPool.balanceOf(
+      bondingContractAdr
     );
-    expect(LPInStakingBeforeDistribute).to.equal(0);
+    expect(LPInBondingBeforeDistribute).to.equal(0);
     // provide liquidity to the pair uAD-UGOV so that 1 uGOV = 10 uAD
     const secondAccAdr = await secondAccount.getAddress();
     // must allow to transfer token
@@ -240,7 +240,7 @@ describe("ExcessDollarsDistributor", () => {
     );
     expect(scBalAfterBurnLiquidity).to.equal(0);
     // 50% of UAD should have been deposited as liquidity to curve and transfered
-    // to the staking contract
+    // to the bonding contract
     // calculate the amount of LP token to receive
 
     // no CRV tokens should be left
@@ -253,8 +253,8 @@ describe("ExcessDollarsDistributor", () => {
       excessDollarsDistributor.address
     );
     expect(LPBalAfterAddLiquidity).to.equal(0);
-    // all the LP should have been transferred to the staking contract
-    const fourtyPercentAsLP = await metaPool.balanceOf(stakingContractAdr);
+    // all the LP should have been transferred to the bonding contract
+    const fourtyPercentAsLP = await metaPool.balanceOf(bondingContractAdr);
 
     expect(dyuAD2LP).to.be.lt(fourtyPercentAsLP);
     // 99.9 % precise
@@ -324,7 +324,7 @@ describe("ExcessDollarsDistributor", () => {
 
     console.log("before dyuADto3CRV");
     expect(excessDollarBalance).to.equal(amount);
-    // amount of LP token to send to staking contract
+    // amount of LP token to send to bonding contract
     const dyuADto3CRV = await metaPool["get_dy(int128,int128,uint256)"](
       0,
       1,
@@ -336,10 +336,10 @@ describe("ExcessDollarsDistributor", () => {
     );
     console.log("dyuADto3CRV", ethers.utils.formatEther(dyuADto3CRV));
     console.log("dyuAD2LP", ethers.utils.formatEther(dyuAD2LP));
-    const LPInStakingBeforeDistribute = await metaPool.balanceOf(
-      stakingContractAdr
+    const LPInBondingBeforeDistribute = await metaPool.balanceOf(
+      bondingContractAdr
     );
-    expect(LPInStakingBeforeDistribute).to.equal(0);
+    expect(LPInBondingBeforeDistribute).to.equal(0);
     // provide liquidity to the pair uAD-UGOV so that 1 uGOV = 10 uAD
     const secondAccAdr = await secondAccount.getAddress();
     // must allow to transfer token
@@ -382,7 +382,7 @@ describe("ExcessDollarsDistributor", () => {
     const reservesBeforeBurn = await UGOVPair.getReserves();
 
     const fourtyPercentAsLPBefore = await metaPool.balanceOf(
-      stakingContractAdr
+      bondingContractAdr
     );
     console.log("before excess");
     // distribute uAD
@@ -423,7 +423,7 @@ describe("ExcessDollarsDistributor", () => {
     );
     expect(scBalAfterBurnLiquidity).to.equal(0);
     // 50% of UAD should have been deposited as liquidity to curve and transferred
-    // to the staking contract
+    // to the bonding contract
     // calculate the amount of LP token to receive
 
     // no CRV tokens should be left
@@ -436,8 +436,8 @@ describe("ExcessDollarsDistributor", () => {
       excessDollarsDistributor.address
     );
     expect(LPBalAfterAddLiquidity).to.equal(0);
-    // all the LP should have been transferred to the staking contract
-    const fourtyPercentAsLP = await metaPool.balanceOf(stakingContractAdr);
+    // all the LP should have been transferred to the bonding contract
+    const fourtyPercentAsLP = await metaPool.balanceOf(bondingContractAdr);
 
     expect(dyuAD2LP).to.be.lt(fourtyPercentAsLP);
     console.log("dyuAD2LP", ethers.utils.formatEther(dyuAD2LP));

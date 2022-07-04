@@ -56,8 +56,8 @@ contract MasterChef {
     require(manager.hasRole(manager.UBQ_TOKEN_MANAGER_ROLE(), msg.sender), "MasterChef: not UBQ manager");
     _;
   }
-  modifier onlyStakingContract() {
-    require(msg.sender == manager.stakingContractAddress(), "MasterChef: not Staking Contract");
+  modifier onlyBondingContract() {
+    require(msg.sender == manager.bondingContractAddress(), "MasterChef: not Bonding Contract");
     _;
   }
 
@@ -77,7 +77,7 @@ contract MasterChef {
   }
 
   // Deposit LP tokens to MasterChef for uGOV allocation.
-  function deposit(uint256 _amount, address sender) external onlyStakingContract {
+  function deposit(uint256 _amount, address sender) external onlyBondingContract {
     UserInfo storage user = userInfo[sender];
     _updatePool();
     if (user.amount > 0) {
@@ -90,7 +90,7 @@ contract MasterChef {
   }
 
   // Withdraw LP tokens from MasterChef.
-  function withdraw(uint256 _amount, address sender) external onlyStakingContract {
+  function withdraw(uint256 _amount, address sender) external onlyBondingContract {
     UserInfo storage user = userInfo[sender];
     require(user.amount >= _amount, "MC: amount too high");
     _updatePool();
@@ -117,7 +117,7 @@ contract MasterChef {
   function pendingUGOV(address _user) external view returns (uint256) {
     UserInfo storage user = userInfo[_user];
     uint256 accuGOVPerShare = pool.accuGOVPerShare;
-    uint256 lpSupply = IERC1155Ubiquity(manager.stakingShareAddress()).totalSupply();
+    uint256 lpSupply = IERC1155Ubiquity(manager.bondingShareAddress()).totalSupply();
 
     if (block.number > pool.lastRewardBlock && lpSupply != 0) {
       uint256 multiplier = _getMultiplier();
@@ -154,7 +154,7 @@ contract MasterChef {
       return;
     }
     _updateUGOVMultiplier();
-    uint256 lpSupply = IERC1155Ubiquity(manager.stakingShareAddress()).totalSupply();
+    uint256 lpSupply = IERC1155Ubiquity(manager.bondingShareAddress()).totalSupply();
     if (lpSupply == 0) {
       pool.lastRewardBlock = block.number;
       return;

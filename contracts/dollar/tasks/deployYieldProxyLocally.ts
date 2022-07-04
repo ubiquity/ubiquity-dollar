@@ -2,7 +2,7 @@ import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
 import { ERC1155Ubiquity, ERC20 } from "../artifacts/types";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-import { StakingShareV2 } from "../artifacts/types/StakingShareV2";
+import { BondingShareV2 } from "../artifacts/types/BondingShareV2";
 import { YieldProxy } from "../artifacts/types/YieldProxy";
 import { IJar } from "../artifacts/types/IJar";
 

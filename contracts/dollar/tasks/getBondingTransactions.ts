@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { task, types } from "hardhat/config";
 import * as ethers from "ethers";
-import * as ABI from "../deployments/mainnet/Staking.json"; // Contract ABI
+import * as ABI from "../deployments/mainnet/Bonding.json"; // Contract ABI
 import {
   Transaction,
   EtherscanResponse,
@@ -12,9 +12,9 @@ import {
 
 const inter = new ethers.utils.Interface(ABI.abi);
 
-const STAKING_CONTRACT_ADDRESS = "0x831e3674Abc73d7A3e9d8a9400AF2301c32cEF0C";
+const BONDING_CONTRACT_ADDRESS = "0x831e3674Abc73d7A3e9d8a9400AF2301c32cEF0C";
 const CONTRACT_GENESIS_BLOCK = 12595544;
-const DEFAULT_OUTPUT_NAME = "staking_transactions.json";
+const DEFAULT_OUTPUT_NAME = "bonding_transactions.json";
 const contractFunctions = ABI.abi
   .filter((a) => a.type === "function")
   .map((a) => a.name as string);
@@ -24,11 +24,11 @@ type CliArgs = {
   startBlock: number;
   endBlock?: number;
   name:
-  | ""
-  | "deposit"
-  | "setBlockCountInAWeek"
-  | "crvPriceReset"
-  | "uADPriceReset";
+    | ""
+    | "deposit"
+    | "setBlockCountInAWeek"
+    | "crvPriceReset"
+    | "uADPriceReset";
   isError: boolean;
   listFunctions: boolean;
 };
@@ -43,13 +43,13 @@ type ParsedTransaction = {
   transaction: Transaction;
 };
 
-async function fetchEtherscanStakingContract(
+async function fetchEtherscanBondingContract(
   filter: CliArgs
 ): Promise<EtherscanResponse<Transaction>> {
   const { startBlock } = filter;
   const endBlock = filter.endBlock || "latest";
   return fetchEtherscanApi(
-    generateEtherscanQuery(STAKING_CONTRACT_ADDRESS, startBlock, endBlock)
+    generateEtherscanQuery(BONDING_CONTRACT_ADDRESS, startBlock, endBlock)
   );
 }
 
@@ -115,12 +115,12 @@ function printInGroups(items: string[], groups: number) {
 }
 
 task(
-  "getStakingTransactions",
-  "Extract the staking contract transactions from Etherscan API and save them to a file"
+  "getBondingTransactions",
+  "Extract the bonding contract transactions from Etherscan API and save them to a file"
 )
   .addPositionalParam(
     "path",
-    "The path to store the staking contracts",
+    "The path to store the bonding contracts",
     `./${DEFAULT_OUTPUT_NAME}`,
     types.string
   )
@@ -165,7 +165,7 @@ task(
     }
 
     try {
-      const response = await fetchEtherscanStakingContract(taskArgs);
+      const response = await fetchEtherscanBondingContract(taskArgs);
       const transactions = parseTransactions(response.result);
       console.log("Total results: ", transactions.length);
       const filteredTransactions = filterTransactions(transactions, taskArgs);
