@@ -77,10 +77,10 @@ const Sidebar = ({
         {/* Header */}
 
         {state === "permanent" ? (
-          <Link href="/">
+          <Link href="https://en.wikipedia.org/wiki/Ubik">
             <a className="my-8 flex flex-col items-center justify-center uppercase tracking-widest transition duration-300 ease-in-out hover:text-accent hover:drop-shadow-light">
               <Icon icon="ubq" className="mb-4 w-16" />
-              <span>Ubiquity</span>
+              <span>Ubik</span>
             </a>
           </Link>
         ) : null}
