@@ -1,3 +1,4 @@
+# GitHub Action to build Dapp before deploying on Hosting Service
 name: Build Dapp
 on:
   push:
