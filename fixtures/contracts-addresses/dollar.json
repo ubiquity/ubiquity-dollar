@@ -1,10 +1,10 @@
 {
   "1": {
-    "Staking": "0x831e3674Abc73d7A3e9d8a9400AF2301c32cEF0C",
-    "StakingFormulas": "0x190474f062D05fba6d46A4D358C4d031075DF2b4",
-    "StakingShare": "0x0013B6033dd999676Dc547CEeCEA29f781D8Db17",
-    "StakingShareV2": "0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5",
-    "StakingV2": "0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38",
+    "Bonding": "0x831e3674Abc73d7A3e9d8a9400AF2301c32cEF0C",
+    "BondingFormulas": "0x190474f062D05fba6d46A4D358C4d031075DF2b4",
+    "BondingShare": "0x0013B6033dd999676Dc547CEeCEA29f781D8Db17",
+    "BondingShareV2": "0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5",
+    "BondingV2": "0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38",
     "CouponsForDollarsCalculator": "0x4F3dF4c1e22209d623ab55923109112f1E2B17DE",
     "CurveUADIncentive": "0x86965cdB680350C5de2Fd8D28055DecDDD52745E",
     "DebtCoupon": "0xAd7cceAB6d1633B1760A38650Ad12632B2C7a831",
@@ -19,30 +19,6 @@
     "UbiquityAlgorithmicDollarManager": "0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98",
     "UbiquityAutoRedeem": "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
     "UbiquityFormulas": "0x54F528979A50FA8Fe99E0118EbbEE5fC8Ea802F7",
-    "UbiquityGovernance": "0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0",
-    "SushiSwapPool": ""
-  },
-  "31337": {
-    "Staking": "0xc351628EB244ec633d5f21fBD6621e1a683B1181",
-    "StakingShare": "0xFD471836031dc5108809D173A067e8486B9047A3",
-    "StakingShareV2": "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc",
-    "CouponsForDollarsCalculator": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f",
-    "CurveUADIncentive": "0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07",
-    "DebtCoupon": "0x162A433068F51e18b7d13932F27e66a3f99E6890",
-    "DebtCouponManager": "0x5081a39b8A5f0E35a8D959395a630b68B74Dd30f",
-    "DollarMintingCalculator": "0x1fA02b2d6A771842690194Cf62D91bdd92BfE28d",
-    "ExcessDollarsDistributor": "0xdbC43Ba45381e02825b14322cDdd15eC4B3164E6",
-    "MasterChefV2": "0x04C89607413713Ec9775E14b954286519d836FEf",
-    "SushiSwapPool": "0xDC11f7E700A4c898AE5CAddB1082cFfa76512aDD",
-    "UARForDollarsCalculator": "0x51A1ceB83B83F1985a81C295d1fF28Afef186E02",
-    "UbiquityAlgorithmicDollar": "0x4C4a2f8c81640e47606d3fd77B353E87Ba015584",
-    "UbiquityAlgorithmicDollarManager": "0x7bc06c482DEAd17c0e297aFbC32f6e63d3846650",
-    "UbiquityAutoRedeem": "0x4EE6eCAD1c2Dae9f525404De8555724e3c35d07B",
-    "UbiquityFormulas": "0xC9a43158891282A2B1475592D5719c001986Aaec",
-    "UbiquityGovernance": "0x2E2Ed0Cfd3AD2f1d34481277b3204d807Ca2F8c2",
-    "StakingFormulas": "",
-    "StakingV2": "",
-    "MasterChef": "",
-    "TWAPOracle": ""
+    "UbiquityGovernance": "0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0"
   }
 }

@@ -75,8 +75,6 @@ const PriceMonitorContainer = () => {
 };
 
 const PriceMonitor = (props: PriceMonitorProps) => {
-  console.log("price mointor");
-
   return (
     <Container>
       <Title text="Price monitor" />

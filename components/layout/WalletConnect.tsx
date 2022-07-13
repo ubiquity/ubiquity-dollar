@@ -62,8 +62,6 @@ export default WalletConnect;
 function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskInstalled: boolean }) {
   const [{ provider }, { connectMetamask, connectWalletconnect, connectJsonRpc }] = useWeb3();
 
-  console.log("PROVIDER!", provider);
-
   function Btn({ text, onClick, icon, iconSize = "md" }: { text: string; icon: string; iconSize?: string; onClick: () => void }) {
     return (
       <div onClick={() => onClick()} className="border-soli cursor-pointer rounded-lg border border-accent p-4 text-center hover:bg-accent/20">
