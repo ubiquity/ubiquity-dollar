@@ -53,10 +53,7 @@
     "@svgr/webpack": "^6.1.2",
     "classnames": "^2.3.1",
     "husky": "^7.0.4",
-    "lint-staged": "^12.3.3",
-    "@walletconnect/client": "^1.7.8",
-    "@walletconnect/qrcode-modal": "^1.7.8",
-    "@walletconnect/web3-provider": "^1.7.8"
+    "lint-staged": "^12.3.3"
   },
   "dependencies": {
     "@tippyjs/react": "^4.2.5",
@@ -65,6 +62,9 @@
     "@types/react": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.11.1",
     "@typescript-eslint/parser": "^4.11.1",
+    "@walletconnect/client": "^1.2.1",
+    "@walletconnect/qrcode-modal": "^1.2.1",
+    "@walletconnect/web3-provider": "^1.2.1",
     "autoprefixer": "^10.4.0",
     "eslint": "^7.16.0",
     "eslint-config-next": "^11.1.2",
