@@ -526,7 +526,7 @@ export class ChainlinkPriceFeed__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider | undefined
+    signerOrProvider: Signer | Provider
   ): ChainlinkPriceFeed {
     return new Contract(address, _abi, signerOrProvider) as ChainlinkPriceFeed;
   }

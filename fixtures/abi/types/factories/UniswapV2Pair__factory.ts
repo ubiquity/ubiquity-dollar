@@ -727,7 +727,7 @@ export class UniswapV2Pair__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider | undefined
+    signerOrProvider: Signer | Provider
   ): UniswapV2Pair {
     return new Contract(address, _abi, signerOrProvider) as UniswapV2Pair;
   }

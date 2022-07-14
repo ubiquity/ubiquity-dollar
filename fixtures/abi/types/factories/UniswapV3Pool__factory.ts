@@ -1002,7 +1002,7 @@ export class UniswapV3Pool__factory {
   }
   static connect(
     address: string,
-    signerOrProvider: Signer | Provider | undefined
+    signerOrProvider: Signer | Provider
   ): UniswapV3Pool {
     return new Contract(address, _abi, signerOrProvider) as UniswapV3Pool;
   }
