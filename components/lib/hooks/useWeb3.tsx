@@ -16,7 +16,7 @@ export type Web3State = {
   metamaskInstalled: boolean;
   jsonRpcEnabled: boolean;
   providerMode: "none" | "metamask" | "jsonrpc" | "walletconnect";
-  provider: PossibleProviders;
+  provider: any;
   connecting: boolean;
   walletAddress: null | string;
   signer: null | JsonRpcSigner;
