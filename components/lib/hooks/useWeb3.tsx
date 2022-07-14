@@ -95,6 +95,7 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
   async function connectWalletconnect() {
     const bridge = "https://bridge.walletconnect.org";
     const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+    console.log("type of", typeof Web3Provider);
 
     if (!connector.connected) {
       await connector.createSession();
