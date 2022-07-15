@@ -95,7 +95,6 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
   async function connectWalletconnect() {
     const bridge = "https://bridge.walletconnect.org";
     const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
-    console.log("type of", typeof Web3Provider);
 
     if (!connector.connected) {
       await connector.createSession();
@@ -110,12 +109,15 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
       const newProvider = new WalletConnectProvider({
         infuraId: process.env.API_KEY_ALCHEMY,
       });
-      const newSigner = newProvider.getSigner(newWalletAddress);
+      const web3Provider = new ethers.providers.Web3Provider(newProvider);
+      await newProvider.enable();
+
+      const newSigner = web3Provider.getSigner(newWalletAddress);
       setWeb3State({
         ...web3State,
         connecting: false,
         providerMode: "walletconnect",
-        provider: newProvider,
+        provider: web3Provider,
         walletAddress: newWalletAddress,
         signer: newSigner,
       });
