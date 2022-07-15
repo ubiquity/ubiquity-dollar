@@ -150,6 +150,7 @@ const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; a
 const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
   const router = useRouter();
   const isActive = router.asPath === href;
+  const isExternal = href.startsWith("http");
   return (
     <li className="relative mb-1 cursor-pointer px-2">
       <Link href={href}>
@@ -164,6 +165,7 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
           target={href.match(/https?:\/\//) ? "_blank" : ""}
         >
           {text}
+          {isExternal ? <Icon className="ml-0.5 -mt-0.5 h-3.5 opacity-50" icon="external" /> : null}
         </a>
       </Link>
       <div className={cx("absolute left-full top-[50%] -ml-2 h-[1px] bg-accent transition-all", { "w-2": isActive, "w-0": !isActive })}></div>
