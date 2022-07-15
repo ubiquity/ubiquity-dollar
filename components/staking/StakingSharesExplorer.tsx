@@ -64,7 +64,7 @@ export const StakingSharesExplorerContainer = ({ managedContracts, web3Provider,
         const [ugov, bond, stakingShareInfo, tokenBalance] = await Promise.all([
           masterChef.pendingUGOV(id),
           stakingToken.getBond(id),
-          masterChef.getStakingShareInfo(id),
+          masterChef.getBondingShareInfo(id),
           stakingToken.balanceOf(walletAddress, id),
         ]);
 
