@@ -8,6 +8,8 @@ import "hardhat-gas-reporter";
 import "solidity-coverage";
 import { HardhatUserConfig } from "hardhat/types";
 
+import "./tasks/priceReset"
+
 import fs from "fs";
 import path from "path";
 
