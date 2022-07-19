@@ -12,8 +12,8 @@ import { BondingV2 } from "../artifacts/types/BondingV2";
 import { ERC20 } from "../artifacts/types/ERC20";
 import pressAnyKey from "../utils/flow";
 import { TWAPOracle } from "../artifacts/types/TWAPOracle";
-import { EthereumProvider } from "hardhat/types";
-import { JsonRpcProvider } from "@ethersproject/providers";
+
+import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_ID } from "./constants"
 
 dotenv.config();
 
@@ -52,9 +52,11 @@ task(
         dryrun: boolean;
         blockheight: number;
       },
-      { ethers, network, getNamedAccounts }
+      { ethers, network, getNamedAccounts, deployments }
     ) => {
       const net = await ethers.provider.getNetwork();
+      const OVERRIDES_PARAMS = DEPLOYMENT_OVERRIDES[net.chainId];
+
       const resetFork = async (blockNumber: number): Promise<void> => {
         await network.provider.request({
           method: "hardhat_reset",
@@ -74,7 +76,7 @@ task(
       let adminAdr: string;
       if (taskArgs.dryrun) {
         // await resetFork(taskArgs.blockheight);
-        adminAdr = "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd";
+        adminAdr = OVERRIDES_PARAMS.deployer;
         const impersonate = async (account: string): Promise<Signer> => {
           let provider = new ethers.providers.JsonRpcProvider(
             "http://localhost:8545"
@@ -84,52 +86,73 @@ task(
         };
         admin = await impersonate(adminAdr);
       } else {
-        const accounts = await ethers.getSigners();
-        adminAdr = await accounts[0].getAddress();
-        [admin] = accounts;
+        [admin] = await ethers.getSigners();
+        adminAdr = await admin.getAddress();
       }
 
       const amount = ethers.utils.parseEther(taskArgs.amount);
-      console.log(`---account addr:${adminAdr}  `);
-      let curve3CrvToken = "";
-      ({ curve3CrvToken } = await getNamedAccounts());
-      if (net.name === "hardhat") {
-        console.warn("You are running the task with Hardhat network");
+
+
+      if (net.chainId === FORKING_CHAIN_ID) {
+        // impersonate deployer account
+        await network.provider.request({
+          method: "hardhat_impersonateAccount",
+          params: [OVERRIDES_PARAMS.deployer]
+        });
+
+        admin = await ethers.provider.getSigner(OVERRIDES_PARAMS.deployer);
+        adminAdr = await admin.getAddress();
+
       }
-      console.log(`net chainId: ${net.chainId}  `);
+      console.log({ admin: adminAdr, chainId: net.chainId })
+      let managerAddress;
+      try {
+        const managerDeployments = await deployments.get("UbiquityAlgorithmicDollarManager");
+        managerAddress = managerDeployments?.address || OVERRIDES_PARAMS.UbiquityAlgorithmicDollarManagerAddress;
+      } catch (error: unknown) {
+        managerAddress = OVERRIDES_PARAMS.UbiquityAlgorithmicDollarManagerAddress;
+      }
+      if (!managerAddress) {
+        throw new Error(`UbiquityAlgorithmicDollarManager address empty!`);
+      }
+
       const manager = (await ethers.getContractAt(
         "UbiquityAlgorithmicDollarManager",
-        "0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98"
+        managerAddress
       )) as UbiquityAlgorithmicDollarManager;
       const uADAdr = await manager.dollarTokenAddress();
       const uAD = (await ethers.getContractAt(
         "UbiquityAlgorithmicDollar",
         uADAdr
       )) as UbiquityAlgorithmicDollar;
+
+      const curve3CrvToken = OVERRIDES_PARAMS.curve3CrvToken;
+      if (!curve3CrvToken) {
+        throw new Error(`Not configured 3CRV token address`);
+      }
       const curveToken = (await ethers.getContractAt(
         "ERC20",
         curve3CrvToken
       )) as ERC20;
       const treasuryAddr = await manager.treasuryAddress();
-      console.log(`---treasury Address:${treasuryAddr}  `);
       const bondingAddr = await manager.bondingContractAddress();
-      console.log(`---bonding Contract Address:${bondingAddr}  `);
       const bonding = (await ethers.getContractAt(
         "BondingV2",
         bondingAddr
       )) as BondingV2;
       const metaPoolAddr = await manager.stableSwapMetaPoolAddress();
-      console.log(`---metaPoolAddr:${metaPoolAddr}  `);
+
+      console.log({ treasuryAddr, bondingAddr, metaPoolAddr })
       const metaPool = (await ethers.getContractAt(
         "IMetaPool",
         metaPoolAddr
       )) as IMetaPool;
-      let curveFactory = "";
-      let DAI = "";
-      let USDC = "";
-      let USDT = "";
 
-      ({ curveFactory, DAI, USDC, USDT } = await getNamedAccounts());
+      const { curveFactory, DAI, USDC, USDT } = OVERRIDES_PARAMS;
+      if (!curveFactory || !DAI || !USDC || !USDT) {
+        throw new Error(`Tokens not configured properly. curveFactory: ${curveFactory}, DAI: ${DAI}, USDC: ${USDC}, USDT: ${USDT}`);
+      }
+
       const curvePoolFactory = (await ethers.getContractAt(
         "ICurveFactory",
         curveFactory
