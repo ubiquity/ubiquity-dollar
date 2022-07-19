@@ -44,6 +44,12 @@ task(
     14800000,
     types.int
   )
+  .addOptionalParam(
+    "confirmation",
+    "if false will not ask to press any key",
+    true,
+    types.boolean
+  )
   .setAction(
     async (
       taskArgs: {
@@ -51,6 +57,7 @@ task(
         pushhigher: boolean;
         dryrun: boolean;
         blockheight: number;
+        confirmation: boolean,
       },
       { ethers, network, getNamedAccounts, deployments }
     ) => {
@@ -91,6 +98,7 @@ task(
       }
 
       const amount = ethers.utils.parseEther(taskArgs.amount);
+      const confirmation = taskArgs.confirmation;
 
 
       if (net.chainId === FORKING_CHAIN_ID) {
@@ -160,7 +168,6 @@ task(
 
       const uadTreasuryBalanceBefore = await uAD.balanceOf(treasuryAddr);
       const crvTreasuryBalanceBefore = await curveToken.balanceOf(treasuryAddr);
-      console.log({ uADAdr: uAD.address, treasuryAddr, uadBalance: uadTreasuryBalanceBefore.toString(), crvBalance: crvTreasuryBalanceBefore.toString() });
       const bondingMetapoolLPBalanceBefore = await metaPool.balanceOf(
         bondingAddr
       );
@@ -175,6 +182,14 @@ task(
       ](amount, 1);
 
       const expectedCRVStr = ethers.utils.formatEther(expectedCRV);
+
+      console.log({
+        uADAdr, treasuryAddr, uadBalance: ethers.utils.formatEther(uadTreasuryBalanceBefore), crvBalance: crvTreasuryBalanceBefore.toString(),
+        LPBal: LPBal.toString(), expectedUAD: expectedUADStr,
+        expectedCRV: expectedCRVStr,
+        curveFactory
+      });
+
       let coinIndex = 0;
       if (taskArgs.pushhigher) {
         console.warn(`we will remove :${taskArgs.amount} uAD-3CRV LP token from ${LPBal} uAD3CRV balance
@@ -243,9 +258,12 @@ task(
         pool0UADbal:${ethers.utils.formatEther(pool0UADbal)}
         pool1CRVbal:${ethers.utils.formatEther(pool1CRVbal)}
           `);
-      await pressAnyKey(
-        "Press any key if you are sure you want to continue ..."
-      );
+
+      if (confirmation) {
+        await pressAnyKey(
+          "Press any key if you are sure you want to continue ..."
+        );
+      }
 
       let tx;
       if (coinIndex === 1) {
