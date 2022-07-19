@@ -160,6 +160,7 @@ task(
 
       const uadTreasuryBalanceBefore = await uAD.balanceOf(treasuryAddr);
       const crvTreasuryBalanceBefore = await curveToken.balanceOf(treasuryAddr);
+      console.log({ uADAdr: uAD.address, treasuryAddr, uadBalance: uadTreasuryBalanceBefore.toString(), crvBalance: crvTreasuryBalanceBefore.toString() });
       const bondingMetapoolLPBalanceBefore = await metaPool.balanceOf(
         bondingAddr
       );
@@ -198,6 +199,7 @@ task(
         uAD.address,
         USDC
       );
+
       let dyDAI2USDT = await metaPool[
         "get_dy_underlying(int128,int128,uint256)"
       ](indices[0], indices[1], ethers.utils.parseEther("1"));
@@ -264,8 +266,8 @@ task(
       const crvTreasuryBalanceAfter = await curveToken.balanceOf(treasuryAddr);
       const metapoolLPBalanceAfter = await metaPool.balanceOf(bondingAddr);
       const LPBalAfter = ethers.utils.formatEther(metapoolLPBalanceAfter);
-      console.log(`from ${LPBal} to ${LPBalAfter} uAD-3CRV LP token
-      `);
+      console.log(`from ${LPBal} to ${LPBalAfter} uAD-3CRV LP token`);
+
 
       const crvTreasuryBalanceBeforeStr = ethers.utils.formatEther(
         crvTreasuryBalanceBefore

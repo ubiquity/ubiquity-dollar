@@ -97,7 +97,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
-        blockNumber: 13252206,
+        blockNumber: 15173327,
       },
       accounts,
       hardfork: "london",
