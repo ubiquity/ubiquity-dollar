@@ -24,7 +24,7 @@
     "node:start": "yarn hardhat node --hostname 0.0.0.0 --no-deploy --show-accounts",
     "node:faucet": "yarn hardhat faucet --network localhost",
     "node:twapUp": "yarn hardhat priceReset --amount 20000 --network localhost",
-    "node:twapUp:hardhat": "yarn hardhat priceReset --amount 20000 --network hardhat",
+    "node:twapUp:hardhat": "yarn hardhat priceReset --amount 20000 --network hardhat --dryrun false",
     "node:deployYieldProxy": "yarn hardhat deployYieldProxyLocally --network localhost"
   },
   "keywords": [
