@@ -5,7 +5,7 @@ const LOCAL_CHAIN = "31337";
 const LOCAL_FORK_FROM = "1";
 
 type DollarType = typeof dollarDeployments[1];
-type UbiquistickType = typeof ubiquistickDeployments[31337];
+type UbiquistickType = typeof ubiquistickDeployments[1];
 
 type ContractsNames = keyof DollarType | keyof UbiquistickType;
 type AddressesObject = { [key: string]: string };
