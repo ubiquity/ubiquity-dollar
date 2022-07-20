@@ -11,21 +11,29 @@ interface IUbiquityAlgorithmicDollarManager {
 
     function setDebtCouponAddress(address _debtCouponAddress) external;
 
-    function setIncentiveToUAD(address _account, address _incentiveAddress) external;
+    function setIncentiveToUAD(address _account, address _incentiveAddress)
+        external;
 
     function setDollarTokenAddress(address _dollarTokenAddress) external;
 
-    function setGovernanceTokenAddress(address _governanceTokenAddress) external;
+    function setGovernanceTokenAddress(address _governanceTokenAddress)
+        external;
 
     function setSushiSwapPoolAddress(address _sushiSwapPoolAddress) external;
 
     function setUARCalculatorAddress(address _uarCalculatorAddress) external;
 
-    function setCouponCalculatorAddress(address _couponCalculatorAddress) external;
+    function setCouponCalculatorAddress(address _couponCalculatorAddress)
+        external;
 
-    function setDollarMintingCalculatorAddress(address _dollarMintingCalculatorAddress) external;
+    function setDollarMintingCalculatorAddress(
+        address _dollarMintingCalculatorAddress
+    ) external;
 
-    function setExcessDollarsDistributor(address debtCouponManagerAddress, address excessCouponDistributor) external;
+    function setExcessDollarsDistributor(
+        address debtCouponManagerAddress,
+        address excessCouponDistributor
+    ) external;
 
     function setMasterChefAddress(address _masterChefAddress) external;
 
@@ -33,7 +41,8 @@ interface IUbiquityAlgorithmicDollarManager {
 
     function setBondingShareAddress(address _bondingShareAddress) external;
 
-    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress) external;
+    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
+        external;
 
     /**
     @notice set the bonding bontract smart contract address
@@ -41,7 +50,8 @@ interface IUbiquityAlgorithmicDollarManager {
          for a certain duration to earn uGOV and more curve LP token
     @param _bondingContractAddress bonding contract address
      */
-    function setBondingContractAddress(address _bondingContractAddress) external;
+    function setBondingContractAddress(address _bondingContractAddress)
+        external;
 
     /**
     @notice set the treasury address
@@ -69,5 +79,8 @@ interface IUbiquityAlgorithmicDollarManager {
         uint256 _fee
     ) external;
 
-    function getExcessDollarsDistributor(address _debtCouponManagerAddress) external view returns (address);
+    function getExcessDollarsDistributor(address _debtCouponManagerAddress)
+        external
+        view
+        returns (address);
 }

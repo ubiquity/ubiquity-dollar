@@ -7,7 +7,11 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /// @author Ubiquity Algorithmic Dollar
 interface IERC20Ubiquity is IERC20 {
     // ----------- Events -----------
-    event Minting(address indexed _to, address indexed _minter, uint256 _amount);
+    event Minting(
+        address indexed _to,
+        address indexed _minter,
+        uint256 _amount
+    );
 
     event Burning(address indexed _burned, uint256 _amount);
 

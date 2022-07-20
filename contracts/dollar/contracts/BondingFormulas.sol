@@ -74,7 +74,12 @@ contract BondingFormulas {
         if (_bondingLpBalance < _totalLpDeposited && _bondingLpBalance > 0) {
             // if there is less LP token inside the bonding contract that what have been deposited
             // we have to reduce proportionnaly the lp amount to withdraw
-            return _amount.fromUInt().mul(_bondingLpBalance.fromUInt()).div(_totalLpDeposited.fromUInt()).toUInt();
+            return
+                _amount
+                    .fromUInt()
+                    .mul(_bondingLpBalance.fromUInt())
+                    .div(_totalLpDeposited.fromUInt())
+                    .toUInt();
         }
         return _amount;
     }

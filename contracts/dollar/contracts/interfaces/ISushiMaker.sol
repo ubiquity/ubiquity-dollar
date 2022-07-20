@@ -4,8 +4,18 @@ pragma solidity ^0.8.3;
 
 interface ISushiMaker {
     event LogBridgeSet(address indexed token, address indexed bridge);
-    event LogConvert(address indexed server, address indexed token0, address indexed token1, uint256 amount0, uint256 amount1, uint256 amountSUSHI);
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event LogConvert(
+        address indexed server,
+        address indexed token0,
+        address indexed token1,
+        uint256 amount0,
+        uint256 amount1,
+        uint256 amountSUSHI
+    );
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     function setBridge(address token, address bridge) external;
 
@@ -19,7 +29,8 @@ interface ISushiMaker {
 
     function convert(address token0, address token1) external;
 
-    function convertMultiple(address[] memory token0, address[] memory token1) external;
+    function convertMultiple(address[] memory token0, address[] memory token1)
+        external;
 
     function bar() external view returns (address);
 

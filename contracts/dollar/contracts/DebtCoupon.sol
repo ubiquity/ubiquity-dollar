@@ -22,10 +22,17 @@ contract DebtCoupon is ERC1155Ubiquity {
 
     event MintedCoupons(address recipient, uint256 expiryBlock, uint256 amount);
 
-    event BurnedCoupons(address couponHolder, uint256 expiryBlock, uint256 amount);
+    event BurnedCoupons(
+        address couponHolder,
+        uint256 expiryBlock,
+        uint256 amount
+    );
 
     modifier onlyCouponManager() {
-        require(manager.hasRole(manager.COUPON_MANAGER_ROLE(), msg.sender), "Caller is not a coupon manager");
+        require(
+            manager.hasRole(manager.COUPON_MANAGER_ROLE(), msg.sender),
+            "Caller is not a coupon manager"
+        );
         _;
     }
 
@@ -51,7 +58,9 @@ contract DebtCoupon is ERC1155Ubiquity {
         _sortedBlockNumbers.pushBack(expiryBlockNumber);
 
         //update the total supply for that expiry and total outstanding debt
-        _tokenSupplies[expiryBlockNumber] = _tokenSupplies[expiryBlockNumber] + (amount);
+        _tokenSupplies[expiryBlockNumber] =
+            _tokenSupplies[expiryBlockNumber] +
+            (amount);
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
@@ -65,12 +74,17 @@ contract DebtCoupon is ERC1155Ubiquity {
         uint256 amount,
         uint256 expiryBlockNumber
     ) public onlyCouponManager {
-        require(balanceOf(couponOwner, expiryBlockNumber) >= amount, "Coupon owner not enough coupons");
+        require(
+            balanceOf(couponOwner, expiryBlockNumber) >= amount,
+            "Coupon owner not enough coupons"
+        );
         burn(couponOwner, expiryBlockNumber, amount);
         emit BurnedCoupons(couponOwner, expiryBlockNumber, amount);
 
         //update the total supply for that expiry and total outstanding debt
-        _tokenSupplies[expiryBlockNumber] = _tokenSupplies[expiryBlockNumber] - (amount);
+        _tokenSupplies[expiryBlockNumber] =
+            _tokenSupplies[expiryBlockNumber] -
+            (amount);
         _totalOutstandingDebt = _totalOutstandingDebt - (amount);
     }
 
@@ -88,7 +102,9 @@ contract DebtCoupon is ERC1155Ubiquity {
                 reachedEndOfExpiredKeys = true;
             } else {
                 //update tally and remove key from blocks and map
-                _totalOutstandingDebt = _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                _totalOutstandingDebt =
+                    _totalOutstandingDebt -
+                    (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
                 _sortedBlockNumbers.remove(currentBlockNumber);
             }
@@ -106,9 +122,13 @@ contract DebtCoupon is ERC1155Ubiquity {
             if (currentBlockNumber > block.number) {
                 reachedEndOfExpiredKeys = true;
             } else {
-                outstandingDebt = outstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                outstandingDebt =
+                    outstandingDebt -
+                    (_tokenSupplies[currentBlockNumber]);
             }
-            (, currentBlockNumber) = _sortedBlockNumbers.getNextNode(currentBlockNumber);
+            (, currentBlockNumber) = _sortedBlockNumbers.getNextNode(
+                currentBlockNumber
+            );
         }
 
         return outstandingDebt;

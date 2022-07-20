@@ -26,5 +26,8 @@ interface IUbiquityFormulas {
         uint256 _targetPrice
     ) external pure returns (uint256 _priceUBOND);
 
-    function ugovMultiply(uint256 _multiplier, uint256 _price) external pure returns (uint256 _newMultiplier);
+    function ugovMultiply(uint256 _multiplier, uint256 _price)
+        external
+        pure
+        returns (uint256 _newMultiplier);
 }

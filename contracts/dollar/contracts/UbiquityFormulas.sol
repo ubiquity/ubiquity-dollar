@@ -98,7 +98,11 @@ contract UbiquityFormulas {
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function ugovMultiply(uint256 _multiplier, uint256 _price) public pure returns (uint256 _newMultiplier) {
+    function ugovMultiply(uint256 _multiplier, uint256 _price)
+        public
+        pure
+        returns (uint256 _newMultiplier)
+    {
         bytes16 m = _multiplier.fromUInt();
         bytes16 p = _price.fromUInt();
         bytes16 c = uint256(105 * 1e16).fromUInt(); // 1.05
@@ -108,6 +112,7 @@ contract UbiquityFormulas {
         _newMultiplier = m.mul(c).div(a).toUInt(); // nM = M * C / A
 
         // 5 >= multiplier >= 0.2
-        if (_newMultiplier > 5e18 || _newMultiplier < 2e17) _newMultiplier = _multiplier;
+        if (_newMultiplier > 5e18 || _newMultiplier < 2e17)
+            _newMultiplier = _multiplier;
     }
 }

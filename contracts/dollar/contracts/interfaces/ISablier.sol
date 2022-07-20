@@ -3,15 +3,28 @@
 pragma solidity ^0.8.3;
 
 interface ISablier {
-    event CreateCompoundingStream(uint256 indexed streamId, uint256 exchangeRate, uint256 senderSharePercentage, uint256 recipientSharePercentage);
-    event PayInterest(uint256 indexed streamId, uint256 senderInterest, uint256 recipientInterest, uint256 sablierInterest);
+    event CreateCompoundingStream(
+        uint256 indexed streamId,
+        uint256 exchangeRate,
+        uint256 senderSharePercentage,
+        uint256 recipientSharePercentage
+    );
+    event PayInterest(
+        uint256 indexed streamId,
+        uint256 senderInterest,
+        uint256 recipientInterest,
+        uint256 sablierInterest
+    );
     event TakeEarnings(address indexed tokenAddress, uint256 indexed amount);
     event UpdateFee(uint256 indexed fee);
     event Paused(address account);
     event Unpaused(address account);
     event PauserAdded(address indexed account);
     event PauserRemoved(address indexed account);
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
     event CreateStream(
         uint256 indexed streamId,
         address indexed sender,
@@ -21,14 +34,26 @@ interface ISablier {
         uint256 startTime,
         uint256 stopTime
     );
-    event WithdrawFromStream(uint256 indexed streamId, address indexed recipient, uint256 amount);
-    event CancelStream(uint256 indexed streamId, address indexed sender, address indexed recipient, uint256 senderBalance, uint256 recipientBalance);
+    event WithdrawFromStream(
+        uint256 indexed streamId,
+        address indexed recipient,
+        uint256 amount
+    );
+    event CancelStream(
+        uint256 indexed streamId,
+        address indexed sender,
+        address indexed recipient,
+        uint256 senderBalance,
+        uint256 recipientBalance
+    );
 
     function unpause() external;
 
     function cancelStream(uint256 streamId) external returns (bool);
 
-    function withdrawFromStream(uint256 streamId, uint256 amount) external returns (bool);
+    function withdrawFromStream(uint256 streamId, uint256 amount)
+        external
+        returns (bool);
 
     function initialize() external;
 
@@ -91,7 +116,10 @@ interface ISablier {
             uint256 recipientSharePercentage
         );
 
-    function balanceOf(uint256 streamId, address who) external view returns (uint256 balance);
+    function balanceOf(uint256 streamId, address who)
+        external
+        view
+        returns (uint256 balance);
 
     function isPauser(address account) external view returns (bool);
 

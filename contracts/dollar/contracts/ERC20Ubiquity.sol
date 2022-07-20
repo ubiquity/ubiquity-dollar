@@ -20,29 +20,42 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     bytes32 public DOMAIN_SEPARATOR;
     // keccak256("Permit(address owner,address spender,
     //                   uint256 value,uint256 nonce,uint256 deadline)");
-    bytes32 public constant PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
+    bytes32 public constant PERMIT_TYPEHASH =
+        0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
     mapping(address => uint256) public nonces;
     string private _tokenName;
     string private _symbol;
 
     // ----------- Modifiers -----------
     modifier onlyMinter() {
-        require(manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender), "Governance token: not minter");
+        require(
+            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
+            "Governance token: not minter"
+        );
         _;
     }
 
     modifier onlyBurner() {
-        require(manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender), "Governance token: not burner");
+        require(
+            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
+            "Governance token: not burner"
+        );
         _;
     }
 
     modifier onlyPauser() {
-        require(manager.hasRole(manager.PAUSER_ROLE(), msg.sender), "Governance token: not pauser");
+        require(
+            manager.hasRole(manager.PAUSER_ROLE(), msg.sender),
+            "Governance token: not pauser"
+        );
         _;
     }
 
     modifier onlyAdmin() {
-        require(manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender), "ERC20: deployer must be manager admin");
+        require(
+            manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender),
+            "ERC20: deployer must be manager admin"
+        );
         _;
     }
 
@@ -57,7 +70,10 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
         // sender must be UbiquityAlgorithmicDollarManager roleAdmin
         // because he will get the admin, minter and pauser role on uAD and we want to
         // manage all permissions through the manager
-        require(manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender), "ERC20: deployer must be manager admin");
+        require(
+            manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender),
+            "ERC20: deployer must be manager admin"
+        );
         uint256 chainId;
         // solhint-disable-next-line no-inline-assembly
         assembly {
@@ -108,16 +124,36 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
         // solhint-disable-next-line not-rely-on-time
         require(deadline >= block.timestamp, "Dollar: EXPIRED");
         bytes32 digest = keccak256(
-            abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR, keccak256(abi.encode(PERMIT_TYPEHASH, owner, spender, value, nonces[owner]++, deadline)))
+            abi.encodePacked(
+                "\x19\x01",
+                DOMAIN_SEPARATOR,
+                keccak256(
+                    abi.encode(
+                        PERMIT_TYPEHASH,
+                        owner,
+                        spender,
+                        value,
+                        nonces[owner]++,
+                        deadline
+                    )
+                )
+            )
         );
         address recoveredAddress = ecrecover(digest, v, r, s);
-        require(recoveredAddress != address(0) && recoveredAddress == owner, "Dollar: INVALID_SIGNATURE");
+        require(
+            recoveredAddress != address(0) && recoveredAddress == owner,
+            "Dollar: INVALID_SIGNATURE"
+        );
         _approve(owner, spender, value);
     }
 
     /// @notice burn UAD tokens from caller
     /// @param amount the amount to burn
-    function burn(uint256 amount) public override(ERC20Burnable, IERC20Ubiquity) whenNotPaused {
+    function burn(uint256 amount)
+        public
+        override(ERC20Burnable, IERC20Ubiquity)
+        whenNotPaused
+    {
         super.burn(amount);
         emit Burning(msg.sender, amount);
     }
@@ -136,7 +172,12 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     }
 
     // @dev Creates `amount` new tokens for `to`.
-    function mint(address to, uint256 amount) public override onlyMinter whenNotPaused {
+    function mint(address to, uint256 amount)
+        public
+        override
+        onlyMinter
+        whenNotPaused
+    {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }

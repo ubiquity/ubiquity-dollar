@@ -3,19 +3,70 @@
 pragma solidity ^0.8.3;
 
 interface IMetaPool {
-    event Transfer(address indexed sender, address indexed receiver, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-    event TokenExchange(address indexed buyer, int128 sold_id, uint256 tokens_sold, int128 bought_id, uint256 tokens_bought);
-    event TokenExchangeUnderlying(address indexed buyer, int128 sold_id, uint256 tokens_sold, int128 bought_id, uint256 tokens_bought);
-    event AddLiquidity(address indexed provider, uint256[2] token_amounts, uint256[2] fees, uint256 invariant, uint256 token_supply);
-    event RemoveLiquidity(address indexed provider, uint256[2] token_amounts, uint256[2] fees, uint256 token_supply);
-    event RemoveLiquidityOne(address indexed provider, uint256 token_amount, uint256 coin_amount, uint256 token_supply);
-    event RemoveLiquidityImbalance(address indexed provider, uint256[2] token_amounts, uint256[2] fees, uint256 invariant, uint256 token_supply);
+    event Transfer(
+        address indexed sender,
+        address indexed receiver,
+        uint256 value
+    );
+    event Approval(
+        address indexed owner,
+        address indexed spender,
+        uint256 value
+    );
+    event TokenExchange(
+        address indexed buyer,
+        int128 sold_id,
+        uint256 tokens_sold,
+        int128 bought_id,
+        uint256 tokens_bought
+    );
+    event TokenExchangeUnderlying(
+        address indexed buyer,
+        int128 sold_id,
+        uint256 tokens_sold,
+        int128 bought_id,
+        uint256 tokens_bought
+    );
+    event AddLiquidity(
+        address indexed provider,
+        uint256[2] token_amounts,
+        uint256[2] fees,
+        uint256 invariant,
+        uint256 token_supply
+    );
+    event RemoveLiquidity(
+        address indexed provider,
+        uint256[2] token_amounts,
+        uint256[2] fees,
+        uint256 token_supply
+    );
+    event RemoveLiquidityOne(
+        address indexed provider,
+        uint256 token_amount,
+        uint256 coin_amount,
+        uint256 token_supply
+    );
+    event RemoveLiquidityImbalance(
+        address indexed provider,
+        uint256[2] token_amounts,
+        uint256[2] fees,
+        uint256 invariant,
+        uint256 token_supply
+    );
     event CommitNewAdmin(uint256 indexed deadline, address indexed admin);
     event NewAdmin(address indexed admin);
-    event CommitNewFee(uint256 indexed deadline, uint256 fee, uint256 admin_fee);
+    event CommitNewFee(
+        uint256 indexed deadline,
+        uint256 fee,
+        uint256 admin_fee
+    );
     event NewFee(uint256 fee, uint256 admin_fee);
-    event RampA(uint256 old_A, uint256 new_A, uint256 initial_time, uint256 future_time);
+    event RampA(
+        uint256 old_A,
+        uint256 new_A,
+        uint256 initial_time,
+        uint256 future_time
+    );
     event StopRampA(uint256 A, uint256 t);
 
     function initialize(
@@ -50,7 +101,10 @@ interface IMetaPool {
         uint256 _time_elapsed
     ) external view returns (uint256[2] memory);
 
-    function get_price_cumulative_last() external view returns (uint256[2] memory);
+    function get_price_cumulative_last()
+        external
+        view
+        returns (uint256[2] memory);
 
     function admin_fee() external view returns (uint256);
 
@@ -60,7 +114,10 @@ interface IMetaPool {
 
     function get_virtual_price() external view returns (uint256);
 
-    function calc_token_amount(uint256[2] memory _amounts, bool _is_deposit) external view returns (uint256);
+    function calc_token_amount(uint256[2] memory _amounts, bool _is_deposit)
+        external
+        view
+        returns (uint256);
 
     function calc_token_amount(
         uint256[2] memory _amounts,
@@ -68,7 +125,9 @@ interface IMetaPool {
         bool _previous
     ) external view returns (uint256);
 
-    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount) external returns (uint256);
+    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount)
+        external
+        returns (uint256);
 
     function add_liquidity(
         uint256[2] memory _amounts,
@@ -132,7 +191,10 @@ interface IMetaPool {
         address _receiver
     ) external returns (uint256);
 
-    function remove_liquidity(uint256 _burn_amount, uint256[2] memory _min_amounts) external returns (uint256[2] memory);
+    function remove_liquidity(
+        uint256 _burn_amount,
+        uint256[2] memory _min_amounts
+    ) external returns (uint256[2] memory);
 
     function remove_liquidity(
         uint256 _burn_amount,
@@ -140,7 +202,10 @@ interface IMetaPool {
         address _receiver
     ) external returns (uint256[2] memory);
 
-    function remove_liquidity_imbalance(uint256[2] memory _amounts, uint256 _max_burn_amount) external returns (uint256);
+    function remove_liquidity_imbalance(
+        uint256[2] memory _amounts,
+        uint256 _max_burn_amount
+    ) external returns (uint256);
 
     function remove_liquidity_imbalance(
         uint256[2] memory _amounts,
@@ -148,7 +213,10 @@ interface IMetaPool {
         address _receiver
     ) external returns (uint256);
 
-    function calc_withdraw_one_coin(uint256 _burn_amount, int128 i) external view returns (uint256);
+    function calc_withdraw_one_coin(uint256 _burn_amount, int128 i)
+        external
+        view
+        returns (uint256);
 
     function calc_withdraw_one_coin(
         uint256 _burn_amount,
@@ -201,7 +269,10 @@ interface IMetaPool {
 
     function balanceOf(address arg0) external view returns (uint256);
 
-    function allowance(address arg0, address arg1) external view returns (uint256);
+    function allowance(address arg0, address arg1)
+        external
+        view
+        returns (uint256);
 
     function totalSupply() external view returns (uint256);
 }
