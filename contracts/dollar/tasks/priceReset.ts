@@ -50,6 +50,12 @@ task(
     true,
     types.boolean
   )
+  .addOptionalParam(
+    "twapUpdate",
+    "if true will call the update function of twap oracle",
+    false,
+    types.boolean
+  )
   .setAction(
     async (
       taskArgs: {
@@ -58,11 +64,13 @@ task(
         dryrun: boolean;
         blockheight: number;
         confirmation: boolean,
+        twapUpdate: boolean
       },
       { ethers, network, getNamedAccounts, deployments }
     ) => {
       const net = await ethers.provider.getNetwork();
       const OVERRIDES_PARAMS = DEPLOYMENT_OVERRIDES[net.chainId];
+      const twapUpdate = taskArgs.twapUpdate;
 
       const resetFork = async (blockNumber: number): Promise<void> => {
         await network.provider.request({
@@ -183,12 +191,7 @@ task(
 
       const expectedCRVStr = ethers.utils.formatEther(expectedCRV);
 
-      console.log({
-        uADAdr, treasuryAddr, uadBalance: ethers.utils.formatEther(uadTreasuryBalanceBefore), crvBalance: crvTreasuryBalanceBefore.toString(),
-        LPBal: LPBal.toString(), expectedUAD: expectedUADStr,
-        expectedCRV: expectedCRVStr,
-        curveFactory
-      });
+
 
       let coinIndex = 0;
       if (taskArgs.pushhigher) {
@@ -232,10 +235,26 @@ task(
       ](indices2[0], indices[1], ethers.utils.parseEther("1"));
 
       const mgrtwapOracleAddress = await manager.twapOracleAddress();
+
+      console.log({
+        metaPoolAddr,
+        uADAdr, treasuryAddr, uadBalance: ethers.utils.formatEther(uadTreasuryBalanceBefore), crvBalance: crvTreasuryBalanceBefore.toString(),
+        LPBal: LPBal.toString(), expectedUAD: expectedUADStr,
+        expectedCRV: expectedCRVStr,
+        curveFactory,
+        mgrtwapOracleAddress
+      });
+
       const twapOracle = (await ethers.getContractAt(
         "TWAPOracle",
         mgrtwapOracleAddress
       )) as TWAPOracle;
+      if (twapUpdate) {
+        console.log(`Calling the update function of twap oracle`);
+        const tx = await twapOracle.connect(admin).update();
+        await tx.wait(1);
+        console.log(`Updating twap oracle done!`);
+      }
       let oraclePriceuAD = await twapOracle.consult(uAD.address);
       let oraclePrice3Crv = await twapOracle.consult(curve3CrvToken);
       console.log(`
