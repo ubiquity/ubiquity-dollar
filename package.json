@@ -3,7 +3,7 @@
   "license": "MIT",
   "scripts": {
     "prettier": "prettier --write 'contracts/*/contracts/**/*.sol'",
-    "lint": "prettier --list-different 'contracts/*/contracts/**/*.sol'",
+    "test:prettier": "prettier --list-different 'contracts/*/contracts/**/*.sol'",
     "start": "run-s install-env install-contracts dev",
     "start:headless": "run-s install-env install-contracts dev:contracts",
     "install-env": "cp .env.example .env",
