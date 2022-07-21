@@ -60,7 +60,7 @@ const config: HardhatUserConfig = {
     localhost: {
       url: "http://0.0.0.0:8545",
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+        url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
         blockNumber: 13252206,
       },
       accounts,
@@ -69,7 +69,7 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+        url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
         blockNumber: 15173327,
       },
       accounts,
@@ -77,18 +77,18 @@ const config: HardhatUserConfig = {
       initialBaseFeePerGas: 0,
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+      url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
       accounts: UBQ ? [UBQ] : accounts,
       gasPrice: 60000000000,
     },
     ropsten: {
       gasPrice: 60000000000,
-      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+      url: process.env.ROPSTEN_PROVIDER_URL || `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
       accounts,
     },
     rinkeby: {
       gasPrice: 60000000000,
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""}`,
+      url: process.env.RINKEBY_PROVIDER_URL || `https://eth-rinkeby.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""}`,
       accounts,
     },
   },

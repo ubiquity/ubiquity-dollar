@@ -17,10 +17,14 @@ const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
         S = S.add(x);
     }
 
+    console.log({ S })
+
     if (S.eq(0)) return constants.Zero;
 
     let D = S;
     let Ann = _amp.mul(N_COINS);
+
+    // convergence typically occurs in 4 rounds or less
     for (let i = 0; i < 255; i++) {
         let D_P = D;
         for (const x of _xp) {
@@ -28,7 +32,9 @@ const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
         }
 
         Dprev = D;
-        D = (Ann.mul(S).div(A_PRECISION).add(D_P.mul(N_COINS))).mul(D).div(Ann.sub(A_PRECISION).mul(D).div(A_PRECISION).sub(D_P.mul(N_COINS + 1)));
+        const factor1 = ((Ann.mul(S).div(A_PRECISION)).add(D_P.mul(N_COINS))).mul(D);
+        const factor2 = ((Ann.sub(A_PRECISION)).mul(D).div(A_PRECISION)).add(D_P.mul(N_COINS + 1));
+        D = factor1.div(factor2);
 
         if (D.gt(Dprev)) {
             if (D.sub(Dprev).lte(1)) {
@@ -56,7 +62,10 @@ const _xp_mem = (_rates: BigNumber[], _balances: BigNumber[]): BigNumber[] => {
 
 export const get_D_mem = (_rates: BigNumber[], _balances: BigNumber[], _amp: BigNumber): BigNumber => {
     const xp = _xp_mem(_rates, _balances);
-    return get_D(xp, _amp);
+    console.log({ rates: _rates.map(rate => rate.toString()), _balances: _balances.map(balance => balance.toString()), xp: xp.map(x => x.toString()) });
+    const d_mem = get_D(xp, _amp);
+    console.log({ d_mem: d_mem.toString() });
+    return d_mem;
 }
 
 export interface ImBalanceParam {
@@ -72,12 +81,18 @@ export const get_burn_lp_amount = (args: ImBalanceParam): BigNumber => {
     const { amp, virtual_price, fee, balances, totalSupply, amounts } = args;
     const rates = [RATE_MULTIPLIER, virtual_price];
     const old_balances = balances;
+    console.log({ rates: rates.map(rate => rate.toString()), old_balances: old_balances.map(balance => balance.toString()), amp: amp.toString() })
     const D0 = get_D_mem(rates, old_balances, amp);
 
-    let new_balances = old_balances;
+    console.log({ D0 })
+
+    let new_balances: BigNumber[] = [];
+
     for (let i = 0; i < N_COINS; i++) {
-        new_balances[i] = new_balances[i].sub(amounts[i]);
+        new_balances[i] = old_balances[i].sub(amounts[i]);
     }
+
+    console.log({ old_balances: old_balances.map(balance => balance.toString()), new_balances: new_balances.map(balance => balance.toString()) });
 
     const D1 = get_D_mem(rates, new_balances, amp);
     const base_fee = fee.mul(N_COINS).div(4 * (N_COINS - 1));
@@ -101,5 +116,4 @@ export const get_burn_lp_amount = (args: ImBalanceParam): BigNumber => {
     const burn_amount = (D0.sub(D2).mul(totalSupply).div(D0)).add(1);
 
     return burn_amount;
-
 }
