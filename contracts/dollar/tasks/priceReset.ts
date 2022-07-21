@@ -11,15 +11,10 @@ import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { BondingV2 } from "../artifacts/types/BondingV2";
 import { ERC20 } from "../artifacts/types/ERC20";
 import pressAnyKey from "../utils/flow";
-import { TWAPOracle } from "../artifacts/types/TWAPOracle";
 import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_ID } from "./constants"
 import { A_PRECISION, get_burn_lp_amount } from "./utils"
 
 dotenv.config();
-
-const {
-  API_KEY_ALCHEMY
-} = process.env;
 
 task(
   "priceReset",
@@ -30,12 +25,6 @@ task(
     "dryrun",
     "if false will use account 0 to execute price reset",
     true,
-    types.boolean
-  )
-  .addOptionalParam(
-    "twapUpdate",
-    "if true will call the update function of twap oracle",
-    false,
     types.boolean
   )
   .setAction(
@@ -180,7 +169,9 @@ task(
       console.log(`price reset tx confirmed!`);
 
       const new_balances = await metaPool.get_balances();
-      console.log({ new_balances: new_balances.map(balance => balance.toString()) });
+      console.log({
+        new_balances: new_balances.map(balance => balance.toString()),
+      });
 
     }
   );

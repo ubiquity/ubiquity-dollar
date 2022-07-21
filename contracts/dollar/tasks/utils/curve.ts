@@ -92,8 +92,6 @@ export const get_burn_lp_amount = (args: ImBalanceParam): BigNumber => {
         new_balances[i] = old_balances[i].sub(amounts[i]);
     }
 
-    console.log({ old_balances: old_balances.map(balance => balance.toString()), new_balances: new_balances.map(balance => balance.toString()) });
-
     const D1 = get_D_mem(rates, new_balances, amp);
     const base_fee = fee.mul(N_COINS).div(4 * (N_COINS - 1));
     let fees: BigNumber[] = [];
