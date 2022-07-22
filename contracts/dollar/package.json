@@ -25,6 +25,7 @@
     "node:faucet": "yarn hardhat faucet --network localhost",
     "node:twapUp:localhost": "yarn hardhat priceReset --price 1.00 --network localhost --twap-update true",
     "node:twapUp:hardhat": "yarn hardhat priceReset --price 1.00 --network hardhat --dryrun false --twap-update true",
+    "node:twapUp:mainnet": "yarn hardhat priceReset --price 1.00 --network mainnet --dryrun false --twap-update true",
     "node:deployYieldProxy": "yarn hardhat deployYieldProxyLocally --network localhost"
   },
   "keywords": [
