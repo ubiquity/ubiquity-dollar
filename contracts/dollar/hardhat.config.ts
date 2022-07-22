@@ -18,7 +18,7 @@ if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
 }
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
-const { MNEMONIC, UBQ, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API_KEY_COINMARKETCAP } = process.env;
+const { MNEMONIC, UBQ_ADMIN, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API_KEY_COINMARKETCAP } = process.env;
 
 const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"}`;
 
@@ -102,7 +102,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
-      accounts: UBQ ? [UBQ] : accounts,
+      accounts: UBQ_ADMIN ? [UBQ_ADMIN] : accounts,
       gasPrice: 60000000000,
     },
     ropsten: {
