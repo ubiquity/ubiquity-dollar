@@ -38,8 +38,13 @@ task(
     ) => {
       console.log("started....");
       const { chainId } = network.config;
+
+      // All the deployments in hardhat-deploy are stored in deployments directory. 
+      // There might be some cases we have to override them or use already deployed ones. 
+      // In this case, they will be different per chainId. so that would be awesome to have them per chain.
+
       const OVERRIDES_PARAMS = DEPLOYMENT_OVERRIDES[chainId!];
-      const { price, dryrun, twapUpdate } = taskArgs;
+      const { price, dryrun } = taskArgs;
 
       let admin: Signer;
       let adminAdr: string;
