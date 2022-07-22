@@ -1,4 +1,4 @@
-// Utiliy functions for curve lp pool
+// Utility functions for curve lp pool
 
 import { BigNumber, constants, utils } from "ethers"
 

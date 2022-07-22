@@ -113,7 +113,7 @@ task(
         metaPoolAddr
       )) as IMetaPool;
 
-      const A = await metaPool.A();
+      const metaPoolA = await metaPool.A();
       const fee = await metaPool.fee();
       const balances = await metaPool.get_balances();
       const totalSupply = await metaPool.totalSupply();
@@ -134,7 +134,7 @@ task(
 
       console.log(`Calculating burn amount to reset price...`);
 
-      const amp = A.mul(A_PRECISION);
+      const amp = metaPoolA.mul(A_PRECISION);
       const base_pool = OVERRIDES_PARAMS.curve3CrvBasePool;
       const curveBasePool = (await ethers.getContractAt("IMetaPool", base_pool)) as IMetaPool;
       const virtual_price = await curveBasePool.get_virtual_price();
