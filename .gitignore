@@ -44,3 +44,4 @@ typings
 *.log
 /abi/types/*
 web/dapp
+*/deployments/localhost
