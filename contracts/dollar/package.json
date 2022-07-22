@@ -23,7 +23,9 @@
     "lint:prettier": "prettier --write .",
     "node:start": "yarn hardhat node --hostname 0.0.0.0 --no-deploy --show-accounts",
     "node:faucet": "yarn hardhat faucet --network localhost",
-    "node:twapUp": "yarn hardhat priceReset --amount 20000 --network localhost",
+    "node:twapUp:localhost": "yarn hardhat priceReset --price 1.00 --network localhost",
+    "node:twapUp:hardhat": "yarn hardhat priceReset --price 1.00 --network hardhat --dryrun false",
+    "node:twapUp:mainnet": "yarn hardhat priceReset --price 1.00 --network mainnet --dryrun false",
     "node:deployYieldProxy": "yarn hardhat deployYieldProxyLocally --network localhost"
   },
   "keywords": [
@@ -107,7 +109,7 @@
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.5.4",
+    "ethers": "^5.6.9",
     "hardhat": "^2.8.4",
     "hardhat-deploy": "^0.10.5",
     "hardhat-gas-reporter": "^1.0.7",

@@ -18,7 +18,7 @@ if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
 }
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
-const { MNEMONIC, UBQ, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API_KEY_COINMARKETCAP } = process.env;
+const { MNEMONIC, UBQ_ADMIN, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API_KEY_COINMARKETCAP } = process.env;
 
 const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"}`;
 
@@ -80,20 +80,11 @@ const config: HardhatUserConfig = {
     usdcWhaleAddress: "0x72A53cDBBcc1b9efa39c834A540550e23463AAcB",
     pickleControllerAddr: "0x6847259b2B3A4c17e7c43C54409810aF48bA5210",
   },
-
-  /*   paths: {
-    deploy: "./scripts/deployment",
-    deployments: "./deployments",
-    sources: "./contracts",
-    tests: "./tests",
-    cache: "./cache",
-    artifacts: "./artifacts",
-  }, */
   networks: {
     localhost: {
       url: "http://0.0.0.0:8545",
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+        url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
         blockNumber: 13252206,
       },
       accounts,
@@ -102,26 +93,26 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
-        blockNumber: 13252206,
+        url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+        blockNumber: 15173327,
       },
       accounts,
       hardfork: "london",
       initialBaseFeePerGas: 0,
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
-      accounts: UBQ ? [UBQ] : accounts,
+      url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+      accounts: UBQ_ADMIN ? [UBQ_ADMIN] : accounts,
       gasPrice: 60000000000,
     },
     ropsten: {
       gasPrice: 60000000000,
-      url: `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+      url: process.env.ROPSTEN_PROVIDER_URL || `https://eth-ropsten.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
       accounts,
     },
     rinkeby: {
       gasPrice: 60000000000,
-      url: `https://eth-rinkeby.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""}`,
+      url: process.env.RINKEBY_PROVIDER_URL || `https://eth-rinkeby.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""}`,
       accounts,
     },
   },
