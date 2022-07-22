@@ -1,18 +1,13 @@
-import { task, types } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
-import { BigNumber, Signer } from "ethers";
 import * as dotenv from "dotenv";
-
-
-import { ICurveFactory } from "../artifacts/types/ICurveFactory";
-import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
-import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-import { IMetaPool } from "../artifacts/types/IMetaPool";
+import { BigNumber, Signer } from "ethers";
+import { task, types } from "hardhat/config";
 import { BondingV2 } from "../artifacts/types/BondingV2";
-import { ERC20 } from "../artifacts/types/ERC20";
+import { IMetaPool } from "../artifacts/types/IMetaPool";
+import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 import pressAnyKey from "../utils/flow";
-import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_ID } from "./constants"
-import { A_PRECISION, get_burn_lp_amount } from "./utils"
+import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_ID } from "./constants";
+import { A_PRECISION, get_burn_lp_amount } from "./utils";
 
 dotenv.config();
 
@@ -38,9 +33,8 @@ task(
     ) => {
       console.log("started....");
       const { chainId } = network.config;
-
-      // All the deployments in hardhat-deploy are stored in deployments directory. 
-      // There might be some cases we have to override them or use already deployed ones. 
+      // All the deployments in hardhat-deploy are stored in deployments directory.
+      // There might be some cases we have to override them or use already deployed ones.
       // In this case, they will be different per chainId. so that would be awesome to have them per chain.
 
       const OVERRIDES_PARAMS = DEPLOYMENT_OVERRIDES[chainId!];
@@ -71,7 +65,7 @@ task(
           params: [OVERRIDES_PARAMS.deployer]
         });
 
-        admin = await ethers.provider.getSigner(OVERRIDES_PARAMS.deployer);
+        admin = ethers.provider.getSigner(OVERRIDES_PARAMS.deployer);
         adminAdr = await admin.getAddress();
 
       }
@@ -91,21 +85,12 @@ task(
         "UbiquityAlgorithmicDollarManager",
         managerAddress
       )) as UbiquityAlgorithmicDollarManager;
-      const uADAdr = await manager.dollarTokenAddress();
-      const uAD = (await ethers.getContractAt(
-        "UbiquityAlgorithmicDollar",
-        uADAdr
-      )) as UbiquityAlgorithmicDollar;
 
       const curve3CrvToken = OVERRIDES_PARAMS.curve3CrvToken;
       if (!curve3CrvToken) {
         throw new Error(`Not configured 3CRV token address`);
       }
-      const curveToken = (await ethers.getContractAt(
-        "ERC20",
-        curve3CrvToken
-      )) as ERC20;
-      const treasuryAddr = await manager.treasuryAddress();
+
       const bondingAddr = await manager.bondingContractAddress();
       const bonding = (await ethers.getContractAt(
         "BondingV2",
