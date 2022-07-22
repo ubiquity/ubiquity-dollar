@@ -1,5 +1,5 @@
-export const DEPLOYMENT_OVERRIDES: Record<number, any> = {
-    1: {
+export const DEPLOYMENT_OVERRIDES: Record<string, any> = {
+    "mainnet": {
         deployer: "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd",
         whaleAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         tester: "0x89eae71b865a2a39cba62060ab1b40bbffae5b0d",
@@ -25,7 +25,7 @@ export const DEPLOYMENT_OVERRIDES: Record<number, any> = {
         usdcWhaleAddress: "0x72A53cDBBcc1b9efa39c834A540550e23463AAcB",
         pickleControllerAddr: "0x6847259b2B3A4c17e7c43C54409810aF48bA5210",
     },
-    31337: {
+    "hardhat": {
         deployer: "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd",
         whaleAddress: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
         tester: "0x89eae71b865a2a39cba62060ab1b40bbffae5b0d",
@@ -54,3 +54,4 @@ export const DEPLOYMENT_OVERRIDES: Record<number, any> = {
 }
 
 export const FORKING_CHAIN_ID = 31337;
+export const FORKING_CHAIN_NAME = "hardhat";

@@ -11,7 +11,7 @@ import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { BondingV2 } from "../artifacts/types/BondingV2";
 import { ERC20 } from "../artifacts/types/ERC20";
 import pressAnyKey from "../utils/flow";
-import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_ID } from "./constants"
+import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_NAME } from "./constants"
 import { A_PRECISION, get_burn_lp_amount } from "./utils"
 
 dotenv.config();
@@ -37,13 +37,11 @@ task(
       { ethers, network, getNamedAccounts, deployments }
     ) => {
       console.log("started....");
-      const { chainId } = network.config;
-
       // All the deployments in hardhat-deploy are stored in deployments directory. 
       // There might be some cases we have to override them or use already deployed ones. 
       // In this case, they will be different per chainId. so that would be awesome to have them per chain.
 
-      const OVERRIDES_PARAMS = DEPLOYMENT_OVERRIDES[chainId!];
+      const OVERRIDES_PARAMS = DEPLOYMENT_OVERRIDES[network.name];
       const { price, dryrun } = taskArgs;
 
       let admin: Signer;
@@ -64,7 +62,7 @@ task(
         adminAdr = await admin.getAddress();
       }
 
-      if (chainId === FORKING_CHAIN_ID) {
+      if (network.name === FORKING_CHAIN_NAME) {
         // impersonate deployer account
         await network.provider.request({
           method: "hardhat_impersonateAccount",
@@ -75,7 +73,7 @@ task(
         adminAdr = await admin.getAddress();
 
       }
-      console.log({ admin: adminAdr, chainId })
+      console.log({ admin: adminAdr, name: network.name })
       let managerAddress;
       try {
         const managerDeployments = await deployments.get("UbiquityAlgorithmicDollarManager");
