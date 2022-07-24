@@ -5,7 +5,8 @@ import "hardhat-deploy";
 import { types } from "hardhat/config";
 import { Network } from "hardhat/types";
 import { ActionType, HardhatRuntimeEnvironment } from "hardhat/types/runtime";
-import { contracts } from "../../../../fixtures/ubiquity-dollar-deployment.json";
+// /Users/nv/repos/ubiquity/ubiquity-dollar/contracts/fixtures/ubiquity-dollar-deployment.json
+import { contracts } from "../../../fixtures/ubiquity-dollar-deployment.json";
 import { ERC20 } from "../../artifacts/types/ERC20";
 import { UbiquityAlgorithmicDollarManager } from "../../artifacts/types/UbiquityAlgorithmicDollarManager";
 import { UbiquityGovernance } from "../../artifacts/types/UbiquityGovernance";

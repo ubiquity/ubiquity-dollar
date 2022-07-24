@@ -1,15 +1,15 @@
+import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
-import "@nomiclabs/hardhat-ethers";
 import "@typechain/hardhat";
 import * as dotenv from "dotenv";
+import fs from "fs";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
-import "solidity-coverage";
 import { HardhatUserConfig } from "hardhat/types";
-
-import fs from "fs";
 import path from "path";
+import "solidity-coverage";
+import { colorizeText } from "./tasks/utils/console-colors";
 
 if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   import("./tasks/index");
@@ -22,10 +22,14 @@ const { MNEMONIC, UBQ_ADMIN, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API
 
 const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"}`;
 
-const accounts = {
-  // use default accounts
-  mnemonic,
-};
+const GAS_PRICE = "auto"; // 20000000000;
+const accounts = { mnemonic: "test test test test test test test test test test test junk" }; // use default accounts
+
+if (!MNEMONIC) {
+  warn("MNEMONIC environment variable unset");
+} else {
+  accounts.mnemonic = MNEMONIC;
+}
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -125,13 +129,47 @@ const config: HardhatUserConfig = {
     currency: "USD",
     gasPrice: 60,
     onlyCalledMethods: true,
-    coinmarketcap: `${API_KEY_COINMARKETCAP || ""}`,
+    coinmarketcap: getKey("COINMARKETCAP"),
   },
   etherscan: {
     // Your API key for Etherscan
     // Obtain one at https://etherscan.io/
-    apiKey: `${API_KEY_ETHERSCAN || ""}`,
+    apiKey: getKey("ETHERSCAN"),
   },
 };
 
 export default config;
+
+function loadHardHatTasks() {
+  if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
+    import("./tasks/index");
+  } else {
+    warn("Tasks loading skipped until compilation artifacts are available");
+  }
+}
+
+export function getAlchemyRpc(network: "mainnet" | "ropsten" | "rinkeby"): string {
+  // This will try and resolve alchemy key related issues
+  // first it will read the key value
+  // if no value found, then it will attempt to load the .env from above to the .env in the current folder
+  // if that fails, then it will throw an error and allow the developer to rectify the issue
+  if (process.env.API_KEY_ALCHEMY?.length) {
+    return `https://eth-${network}.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`;
+  } else {
+    throw new Error("Please set the API_KEY_ALCHEMY environment variable to your Alchemy API key");
+  }
+}
+
+export function getKey(keyName: "ETHERSCAN" | "COINMARKETCAP") {
+  const PREFIX = "API_KEY_";
+  const ENV_KEY = PREFIX.concat(keyName);
+  if (process.env[ENV_KEY]) {
+    return process.env[ENV_KEY] as string;
+  } else {
+    warn(`Please set the ${ENV_KEY} environment variable to your ${keyName} API key`);
+  }
+}
+
+export function warn(message: string) {
+  console.warn(colorizeText(`\t⚠ ${message}`, "fgYellow"));
+}
