@@ -18,11 +18,8 @@ if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
 }
 
 dotenv.config({ path: path.join(__dirname, "../../.env") });
-const { MNEMONIC, UBQ_ADMIN, API_KEY_ALCHEMY, API_KEY_ETHERSCAN, REPORT_GAS, API_KEY_COINMARKETCAP } = process.env;
+const { MNEMONIC, UBQ_ADMIN, API_KEY_ALCHEMY, REPORT_GAS } = process.env;
 
-const mnemonic = `${MNEMONIC || "test test test test test test test test test test test junk"}`;
-
-const GAS_PRICE = "auto"; // 20000000000;
 const accounts = { mnemonic: "test test test test test test test test test test test junk" }; // use default accounts
 
 if (!MNEMONIC) {
@@ -139,14 +136,6 @@ const config: HardhatUserConfig = {
 };
 
 export default config;
-
-function loadHardHatTasks() {
-  if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
-    import("./tasks/index");
-  } else {
-    warn("Tasks loading skipped until compilation artifacts are available");
-  }
-}
 
 export function getAlchemyRpc(network: "mainnet" | "ropsten" | "rinkeby"): string {
   // This will try and resolve alchemy key related issues

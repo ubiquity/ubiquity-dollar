@@ -12,5 +12,5 @@ export const libraryDirectory = path.join(__dirname, "library");
 
 // auto import tasks in library
 fs.readdirSync(libraryDirectory) // read library directory
-  .filter((file) => file.endsWith(".ts")) // only typescript files
+  .filter((filename) => filename.endsWith(".ts")) // only typescript files
   .forEach(taskMounter); // process each file
