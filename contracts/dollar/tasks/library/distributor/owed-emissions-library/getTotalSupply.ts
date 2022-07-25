@@ -6,7 +6,7 @@ interface GetTotalSupply {
   ethers: typeof import("ethers/lib/ethers") & HardhatEthersHelpers;
 }
 
-export async function getTotalSupply(_taskArgs: any, { ethers }: GetTotalSupply) {
+export async function getTotalSupply({ ethers }: GetTotalSupply) {
   const manager = (await ethers.getContractAt(
     "UbiquityAlgorithmicDollarManager",
     "0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98"

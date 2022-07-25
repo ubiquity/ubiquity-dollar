@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { abi as tokenABI } from "../../../../artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
 import { getKey } from "../../../../hardhat.config";
 import blockHeightDater from "./block-height-dater";
-import { verifyMinMaxBlockHeight } from "./distributor-helpers";
+import { verifyMinMaxBlockHeight } from "./verifyMinMaxBlockHeight";
 
 interface Filter {
   address: string;

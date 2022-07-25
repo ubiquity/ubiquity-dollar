@@ -1,28 +1,28 @@
-import { ContactWithTransfers } from "../calculate-owed-emissions";
-import { getTranches } from "./getTranches";
+import { InvestorWithTransfers } from "../distributor-library/investor-types";
+import { Tranche } from "../distributor-library/log-filters/transfers-to-investors";
 
-export async function sumTotalSentToContacts() {
-  const transferAmountsToContacts = addressBook.map(addressMapper);
-  // console.log(transferAmountsToContacts);
-  return transferAmountsToContacts;
-
-  async function addressMapper(contact: ContactWithTransfers) {
-    // const contact = _contact as ; // type casting
-    const tranches = await getTranches();
-    tranches.forEach((tranche) => {
-      if (!contact.transferred) {
-        contact.transferred = 0;
-      }
-
-      if (!contact.transactions) {
-        contact.transactions = [];
-      }
-
-      if (tranche.name === contact.name) {
-        contact.transferred += tranche.amount;
-        contact.transactions.push(tranche.hash);
-      }
-    });
-    return contact;
+export async function sumTotalSentToContacts(investorsWithTransfers: InvestorWithTransfers[], tranches: Tranche[]) {
+  let transferAmounts = [] as InvestorWithTransfers[];
+  for (const contact of investorsWithTransfers) {
+    transferAmounts.push(getTransferAmounts(contact, tranches));
   }
+  return transferAmounts;
+}
+
+function getTransferAmounts(investor: InvestorWithTransfers, tranches: Tranche[]) {
+  tranches.forEach((tranche: Tranche) => {
+    if (!investor.transferred) {
+      investor.transferred = 0;
+    }
+
+    if (!investor.transactions) {
+      investor.transactions = [];
+    }
+
+    if (tranche.name === investor.name) {
+      investor.transferred += tranche.amount;
+      investor.transactions.push(tranche.hash);
+    }
+  });
+  return investor;
 }

@@ -1,9 +1,8 @@
 import EthDater from "ethereum-block-by-date";
 import { ethers } from "ethers";
-import { vestingRange } from "../";
 const provider = new ethers.providers.CloudflareProvider();
 
-export default async function blockHeightDater(range: typeof vestingRange) {
+export default async function blockHeightDater(range: string[]) {
   const dater = new EthDater(
     provider // Ethers provider, required.
   );
@@ -16,7 +15,7 @@ export default async function blockHeightDater(range: typeof vestingRange) {
     1, // Duration, optional, integer. By default 1.
     true, // Block after, optional. Search for the nearest block before or after the given date. By default true.
     false // Refresh boundaries, optional. Recheck the latest block before request. By default false.
-  ) as EthDaterExampleResults;
+  ) as EthDaterExampleResult[];
 
   return blocks;
 }
@@ -27,130 +26,30 @@ export interface EthDaterExampleResult {
   timestamp: number;
 }
 
-export type EthDaterExampleResults = [
-  {
-    date: "2022-05-01T00:00:00Z";
-    block: 14688630;
-    timestamp: 1651363205;
-  },
-  {
-    date: "2022-06-01T00:00:00Z";
-    block: 14881677;
-    timestamp: 1654041601;
-  },
-  {
-    date: "2022-07-01T00:00:00Z";
-    block: 14890291; // this is the current block because its in the future when this was run on 2 june 2022
-    timestamp: 1654163340;
-  },
-  {
-    date: "2022-08-01T00:00:00Z";
-    block: 14890291; // this is the current block because its in the future when this was run on 2 june 2022
-    timestamp: 1654163340;
-  },
-  {
-    date: "2022-09-01T00:00:00Z";
-    block: 14890291; // ...
-    timestamp: 1654163340;
-  },
-  {
-    date: "2022-10-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2022-11-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2022-12-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-01-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-02-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-03-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-04-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-05-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-06-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-07-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-08-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-09-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-10-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-11-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2023-12-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2024-01-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2024-02-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2024-03-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2024-04-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  },
-  {
-    date: "2024-05-01T00:00:00Z";
-    block: 14890291;
-    timestamp: 1654163340;
-  }
-];
+// export type EthDaterExampleResults = [
+//   {
+//     date: "2022-05-01T00:00:00Z";
+//     block: 14688630;
+//     timestamp: 1651363205;
+//   },
+//   {
+//     date: "2022-06-01T00:00:00Z";
+//     block: 14881677;
+//     timestamp: 1654041601;
+//   },
+//   {
+//     date: "2022-07-01T00:00:00Z";
+//     block: 14890291; // this is the current block because its in the future when this was run on 2 june 2022
+//     timestamp: 1654163340;
+//   },
+//   {
+//     date: "2022-08-01T00:00:00Z";
+//     block: 14890291; // this is the current block because its in the future when this was run on 2 june 2022
+//     timestamp: 1654163340;
+//   },
+//   {
+//     date: "2022-09-01T00:00:00Z";
+//     block: 14890291; // ...
+//     timestamp: 1654163340;
+//   }
+// ];
