@@ -25,7 +25,6 @@ export async function _distributor(taskArgs: TaskArgs, hre: HardhatRuntimeEnviro
 
   const transactionHistories = await readContractTransactionHistory(taskArgs.token, vestingRange);
   console.log({ transactionHistories });
-  // fs.writeFileSync("./transaction-histories.json", JSON.stringify(transactionHistories, null, 2));
 
   const transfersToAnybody = transactionHistories.filter(transferFilter);
   const transfersToInvestorsFilter = transfersToInvestorsFilterWrapper(investors);
@@ -36,5 +35,5 @@ export async function _distributor(taskArgs: TaskArgs, hre: HardhatRuntimeEnviro
   const owed = await calculateOwedUbqEmissions(investors, tranches, hre);
   console.log({ owed });
 
-  // fs.writeFileSync("./distributor-transactions.json", JSON.stringify(transfersToContactsOnly, null, 2));
+  return owed;
 }

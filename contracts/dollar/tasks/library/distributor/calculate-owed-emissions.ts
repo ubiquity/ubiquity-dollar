@@ -18,7 +18,11 @@ const ubiquityGovernanceTokenAddress = "0x4e38D89362f7e5db0096CE44ebD021c3962aA9
 // yarn hardhat distributor --investors <full path to (investors.json)>
 // yarn hardhat calculate-owed-emissions
 
-export async function calculateOwedUbqEmissions(investors: Investor[], tranches: Tranche[], hre: HardhatRuntimeEnvironment): Promise<({ owed: number; } & InvestorWithTransfers)[]> {
+export async function calculateOwedUbqEmissions(
+  investors: Investor[],
+  tranches: Tranche[],
+  hre: HardhatRuntimeEnvironment
+): Promise<({ owed: number } & InvestorWithTransfers)[]> {
   const totals = await sumTotalSentToContacts(investors, tranches);
 
   let cacheTotalSupply: number;
@@ -34,6 +38,5 @@ export async function calculateOwedUbqEmissions(investors: Investor[], tranches:
     return Object.assign({ owed: shouldGet - investor.transferred }, investor);
   });
 
-  console.log(toSend);
   return toSend;
 }
