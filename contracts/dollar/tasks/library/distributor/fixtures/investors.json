@@ -1,0 +1,72 @@
+[
+  {
+    "percent": 0.02,
+    "address": "0x6a5dBF2Fb5206EC8192620810C3edB6d5e62B188",
+    "name": "Concave"
+  },
+  {
+    "percent": 0.0025,
+    "address": "0xf2c7DCE9dC46dFc5153E5C8f2d49028543a3A050",
+    "name": "DCF Capital"
+  },
+  {
+    "percent": 0.011,
+    "address": "0x05AeB176197F1800465285907844913a2bc02e75",
+    "name": "Momentum6"
+  },
+  {
+    "percent": 0.005,
+    "address": "0xce12e0AbCb030c1D767439712498C3917C56c5C8",
+    "name": "Ascensive Assets"
+  },
+  {
+    "percent": 0.0125,
+    "address": "0xbA50a624A3f6ebcf4634e3F73842231510534c8C",
+    "name": "Best Select Ventures Global Limited"
+  },
+  {
+    "percent": 0.0125,
+    "address": "0x6C23Dec1EA5Ef38606798D5ea76Eb507D2AFdc61",
+    "name": "Brand New Ventures"
+  },
+  {
+    "percent": 0.005,
+    "address": "0x060F6529e7dA2D0d95BD5626b0084069659faD07",
+    "name": "SmallCapScience"
+  },
+  {
+    "percent": 0.0125,
+    "address": "0x7e9e4c0876B2102F33A1d82117Cc73B7FddD0032",
+    "name": "Merit Circle"
+  },
+  {
+    "percent": 0.00125,
+    "address": "0x19f9dDA57196e161E8e943Bb0766C150F05FA3D5",
+    "name": "Balthazar"
+  },
+  {
+    "percent": 0.0025,
+    "address": "0xc2808A5AC8E8E6eD10374af596682F547DB045c1",
+    "name": "369 Capital"
+  },
+  {
+    "percent": 0.0025,
+    "address": "0xE30221bA49E6d2eF1bCE23bB7262A1aE5f3ffB99",
+    "name": "NewTribe Capital"
+  },
+  {
+    "percent": 0.005,
+    "address": "0xe945884500983bFa761A7Ba0C15da22FFC58FF83",
+    "name": "Snackclub"
+  },
+  {
+    "percent": 0.005,
+    "address": "0x4a67118b4A689250977dc3A9D0f575f548B04929",
+    "name": "c2 Ventures"
+  },
+  {
+    "percent": 0.005,
+    "address": "0xE4fA5D83b2c982637895aB541D12A7d093AD77ab",
+    "name": "Play Ventures"
+  }
+]

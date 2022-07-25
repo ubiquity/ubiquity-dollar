@@ -46,6 +46,5 @@ typings
 web/dapp
 deployments/*
 !deployments/mainnet
-contracts/dollar/tasks/library/distributor/fixtures/investors.json
 .gitignore
 contracts/dollar/tasks/library/distributor/fixtures/operators.json
