@@ -23,15 +23,7 @@ describe("MasterChefV2", () => {
   let bondingShareV2: BondingShareV2;
 
   beforeEach(async () => {
-    ({
-      masterChefV2,
-      bondingV2,
-      bondingShareV2,
-      uGOV,
-      secondAccount,
-      fourthAccount,
-      metaPool,
-    } = await bondingSetupV2());
+    ({ masterChefV2, bondingV2, bondingShareV2, uGOV, secondAccount, fourthAccount, metaPool } = await bondingSetupV2());
     secondAddress = await secondAccount.getAddress();
     // for testing purposes set the week equal to one block
     await bondingV2.setBlockCountInAWeek(1);
@@ -40,23 +32,13 @@ describe("MasterChefV2", () => {
   describe("deposit", () => {
     it("should be able to calculate pending UBQ", async () => {
       const totalLPBeforeAdd = await bondingShareV2.totalLP();
-      const balanceBondingBeforeAdd = await metaPool.balanceOf(
-        bondingV2.address
-      );
+      const balanceBondingBeforeAdd = await metaPool.balanceOf(bondingV2.address);
       const amount = one.mul(100);
-      const { id, bsAmount, shares, creationBlock, endBlock } = await deposit(
-        secondAccount,
-        amount,
-        1
-      );
+      const { id, bsAmount, shares, creationBlock, endBlock } = await deposit(secondAccount, amount, 1);
       const totalLPAfterAdd = await bondingShareV2.totalLP();
-      const balanceBondingAfterAdd = await metaPool.balanceOf(
-        bondingV2.address
-      );
+      const balanceBondingAfterAdd = await metaPool.balanceOf(bondingV2.address);
       expect(totalLPAfterAdd).to.equal(totalLPBeforeAdd.add(amount));
-      expect(balanceBondingAfterAdd).to.equal(
-        balanceBondingBeforeAdd.add(amount)
-      );
+      expect(balanceBondingAfterAdd).to.equal(balanceBondingBeforeAdd.add(amount));
       expect(id).to.equal(1);
       expect(bsAmount).to.equal(1);
       const detail = await bondingShareV2.getBond(id);
@@ -85,11 +67,7 @@ describe("MasterChefV2", () => {
       pendingUGOV = await masterChefV2.pendingUGOV(tokensID[0]);
       const calculatedPendingUGOV = uGOVPerBlock.mul(uGOVmultiplier).div(one);
 
-      const isPrecise = isAmountEquivalent(
-        pendingUGOV.toString(),
-        calculatedPendingUGOV.toString(),
-        "0.00000000001"
-      );
+      const isPrecise = isAmountEquivalent(pendingUGOV.toString(), calculatedPendingUGOV.toString(), "0.00000000001");
       expect(isPrecise).to.be.true;
       await deposit(fourthAccount, amount, 1);
 
@@ -105,39 +83,17 @@ describe("MasterChefV2", () => {
       // as we have a new deposit for the same amount/duration
       // we have now only 50% of the shares
       // we should get half the rewards per block
-      const calculatedPendingUGOVAfterTheSecondDeposit = uGOVPerBlock
-        .mul(uGOVmultiplier)
-        .div(2)
-        .mul(99)
-        .div(one);
+      const calculatedPendingUGOVAfterTheSecondDeposit = uGOVPerBlock.mul(uGOVmultiplier).div(2).mul(99).div(one);
       // we have accumulated UBQ before the second deposit
       // 1 block + 2 blocks for the deposit including the approve and the deposit itself
-      const calculatedPendingUGOV2 = calculatedPendingUGOVAfterTheSecondDeposit
-        .add(pendingUGOV)
-        .add(pendingUGOV)
-        .add(pendingUGOV);
-      const isPrecise2 = isAmountEquivalent(
-        pendingUGOV2.toString(),
-        calculatedPendingUGOV2.toString(),
-        "0.00000000001"
-      );
+      const calculatedPendingUGOV2 = calculatedPendingUGOVAfterTheSecondDeposit.add(pendingUGOV).add(pendingUGOV).add(pendingUGOV);
+      const isPrecise2 = isAmountEquivalent(pendingUGOV2.toString(), calculatedPendingUGOV2.toString(), "0.00000000001");
       expect(isPrecise2).to.be.true;
       // the rewards is actually what has been calculated
       await masterChefV2.connect(secondAccount).getRewards(tokensID[0]);
-      const calculatedPendingUGOVAfterGetRewards = uGOVPerBlock
-        .mul(uGOVmultiplier)
-        .div(2)
-        .mul(100)
-        .div(one)
-        .add(pendingUGOV)
-        .add(pendingUGOV)
-        .add(pendingUGOV);
+      const calculatedPendingUGOVAfterGetRewards = uGOVPerBlock.mul(uGOVmultiplier).div(2).mul(100).div(one).add(pendingUGOV).add(pendingUGOV).add(pendingUGOV);
       const afterBal = await uGOV.balanceOf(secondAddress);
-      const isPrecise3 = isAmountEquivalent(
-        afterBal.toString(),
-        calculatedPendingUGOVAfterGetRewards.toString(),
-        "0.00000000001"
-      );
+      const isPrecise3 = isAmountEquivalent(afterBal.toString(), calculatedPendingUGOVAfterGetRewards.toString(), "0.00000000001");
       expect(isPrecise3).to.be.true;
     });
   });

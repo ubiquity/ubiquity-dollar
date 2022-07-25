@@ -28,17 +28,12 @@ export async function mineTsBlock(ts: number): Promise<void> {
   await mineBlock(blockBefore.timestamp + ts);
 }
 
-export async function getTXReceipt(
-  ct: ContractTransaction
-): Promise<TransactionReceipt> {
+export async function getTXReceipt(ct: ContractTransaction): Promise<TransactionReceipt> {
   const receipt = await ethers.provider.getTransactionReceipt(ct.hash);
   return receipt;
 }
 
-export async function mineNBlock(
-  blockCount: number,
-  secondsBetweenBlock?: number
-): Promise<void> {
+export async function mineNBlock(blockCount: number, secondsBetweenBlock?: number): Promise<void> {
   const blockBefore = await ethers.provider.getBlock("latest");
   const maxMinedBlockPerBatch = 5000;
   let blockToMine = blockCount;
@@ -52,11 +47,7 @@ export async function mineNBlock(
     // eslint-disable-next-line no-await-in-loop
     await Promise.all(minings);
     blockToMine -= maxMinedBlockPerBatch;
-    blockTime =
-      blockTime +
-      maxMinedBlockPerBatch -
-      1 +
-      maxMinedBlockPerBatch * (secondsBetweenBlock || 1);
+    blockTime = blockTime + maxMinedBlockPerBatch - 1 + maxMinedBlockPerBatch * (secondsBetweenBlock || 1);
   }
   const minings = [...Array(blockToMine).keys()].map((_v, i) => {
     const newTs = blockTime + i + (secondsBetweenBlock || 1);
@@ -85,10 +76,7 @@ export async function getEther(account: string, amount: number): Promise<void> {
   }
 }
 
-export async function impersonateWithEther(
-  account: string,
-  amount: number
-): Promise<Signer> {
+export async function impersonateWithEther(account: string, amount: number): Promise<Signer> {
   await getEther(account, amount || 0);
   return impersonate(account);
 }
@@ -99,9 +87,7 @@ export async function resetFork(blockNumber: number): Promise<void> {
     params: [
       {
         forking: {
-          jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${
-            process.env.API_KEY_ALCHEMY || ""
-          }`,
+          jsonRpcUrl: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
           blockNumber,
         },
       },

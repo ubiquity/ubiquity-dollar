@@ -5,10 +5,7 @@ import "@nomiclabs/hardhat-waffle";
 // https://iancoleman.io/bip39/
 // and matches the one hardhat uses when using { accounts: { mnemonic }}
 task("accounts-from-mnemonic", "prints the first few accounts of a mnemonic")
-  .addParam(
-    "mnemonic",
-    "The mnemonic used for BIP39 key derivation: See https://iancoleman.io/bip39"
-  )
+  .addParam("mnemonic", "The mnemonic used for BIP39 key derivation: See https://iancoleman.io/bip39")
   .setAction(async (taskArgs: { mnemonic: string }, { ethers }) => {
     const { mnemonic } = taskArgs;
 
@@ -22,10 +19,6 @@ task("accounts-from-mnemonic", "prints the first few accounts of a mnemonic")
 
     Array.from({ length: 5 }).forEach((_, index) => {
       const key = masterKey.derivePath(getPathForIndex(index));
-      console.log(
-        `Key ${getPathForIndex(index)}: ${key.address} (PK: ${key.publicKey}) (sk: ${
-          key.privateKey
-        })`
-      );
+      console.log(`Key ${getPathForIndex(index)}: ${key.address} (PK: ${key.publicKey}) (sk: ${key.privateKey})`);
     });
   });

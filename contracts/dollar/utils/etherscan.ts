@@ -22,12 +22,8 @@ export type TransactionEvent = {
   transactionHash: string;
 };
 
-export async function fetchEtherscanApi<T>(
-  query: Record<string, string>
-): Promise<T> {
-  const response = await fetch(
-    `${API_URL}?${new URLSearchParams(query).toString()}`
-  );
+export async function fetchEtherscanApi<T>(query: Record<string, string>): Promise<T> {
+  const response = await fetch(`${API_URL}?${new URLSearchParams(query).toString()}`);
   return response.json() as Promise<T>;
 }
 
@@ -43,11 +39,7 @@ export async function fetchLatestBlockNumber(): Promise<number> {
   return latestBlockNumber;
 }
 
-export function generateEtherscanQuery(
-  address: string,
-  startblock: number,
-  endblock: number | string
-): Record<string, string> {
+export function generateEtherscanQuery(address: string, startblock: number, endblock: number | string): Record<string, string> {
   return {
     module: "account",
     action: "txlist",
@@ -59,12 +51,7 @@ export function generateEtherscanQuery(
   };
 }
 
-export function generateEventLogQuery(
-  address: string,
-  topic0: string,
-  startblock: number,
-  endblock: number | string
-): Record<string, string> {
+export function generateEventLogQuery(address: string, topic0: string, startblock: number, endblock: number | string): Record<string, string> {
   return {
     module: "logs",
     action: "getLogs",

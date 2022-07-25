@@ -6,4 +6,17 @@ module.exports = {
   printWidth: 160,
   htmlWhitespaceSensitivity: "strict",
   plugins: [],
+  overrides: [
+    {
+      files: "*.sol",
+      options: {
+        printWidth: 80,
+        tabWidth: 4,
+        useTabs: false,
+        singleQuote: false,
+        bracketSpacing: false,
+        explicitTypes: "always",
+      },
+    },
+  ],
 };

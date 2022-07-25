@@ -74,9 +74,7 @@ describe("yield Proxy", () => {
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
 
     const ratio = await jar.getRatio();
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -98,16 +96,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield);
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -126,9 +119,7 @@ describe("yield Proxy", () => {
     const usdcPrecision = BigNumber.from(1000000000000);
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
     expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.mul(2));
   });
@@ -148,9 +139,7 @@ describe("yield Proxy", () => {
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
 
     const ratio = await jar.getRatio();
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -172,16 +161,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield);
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -200,9 +184,7 @@ describe("yield Proxy", () => {
     const usdcPrecision = BigNumber.from(1000000000000);
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
     expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.mul(2));
   });
@@ -227,9 +209,7 @@ describe("yield Proxy", () => {
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
     const ratio = await jar.getRatio();
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -252,16 +232,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield); // used to calculate bonusYield on yield in uAR
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -281,13 +256,9 @@ describe("yield Proxy", () => {
     const usdcPrecision = BigNumber.from(1000000000000);
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
-    expect(uarBalAfterWithdrawRounded).to.equal(
-      calculatedYieldInETH.mul(2).add(expectedFeeInETH)
-    );
+    expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.mul(2).add(expectedFeeInETH));
   });
   it("deposit should work with max yield and 1% reduction deposit fee ", async () => {
     const usdcBal = await usdcToken.balanceOf(secondAddress);
@@ -310,9 +281,7 @@ describe("yield Proxy", () => {
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
     const ratio = await jar.getRatio();
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -336,16 +305,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield); // used to calculate bonusYield on yield in uAR
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -365,13 +329,9 @@ describe("yield Proxy", () => {
     const usdcPrecision = BigNumber.from(1000000000000);
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
-    expect(uarBalAfterWithdrawRounded).to.equal(
-      calculatedYieldInETH.mul(2).add(expectedFeeInETH)
-    );
+    expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.mul(2).add(expectedFeeInETH));
   });
   it("deposit should work with 0 extra yield and min deposit ", async () => {
     const usdcBal = await usdcToken.balanceOf(secondAddress);
@@ -393,9 +353,7 @@ describe("yield Proxy", () => {
 
     const ratio = await jar.getRatio();
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -418,16 +376,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield); // used to calculate bonusYield on yield in uAR
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -448,13 +401,9 @@ describe("yield Proxy", () => {
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     const calculatedExtraYieldInETH = calculatedYieldInETH.div(2);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
-    expect(uarBalAfterWithdrawRounded).to.equal(
-      calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH)
-    );
+    expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH));
   });
   it("deposit should work with 0 extra yield and 10% deposit fee ", async () => {
     const usdcBal = await usdcToken.balanceOf(secondAddress);
@@ -479,9 +428,7 @@ describe("yield Proxy", () => {
 
     const ratio = await jar.getRatio();
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -504,16 +451,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield); // used to calculate bonusYield on yield in uAR
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -534,13 +476,9 @@ describe("yield Proxy", () => {
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     const calculatedExtraYieldInETH = calculatedYieldInETH.div(2);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
-    expect(uarBalAfterWithdrawRounded).to.equal(
-      calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH)
-    );
+    expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH));
   });
   it("deposit should work with 0 extra yield  and 1% reduction deposit fee ", async () => {
     const usdcBal = await usdcToken.balanceOf(secondAddress);
@@ -565,9 +503,7 @@ describe("yield Proxy", () => {
 
     const ratio = await jar.getRatio();
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -590,16 +526,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield); // used to calculate bonusYield on yield in uAR
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -619,13 +550,9 @@ describe("yield Proxy", () => {
     const calculatedYieldInETH = calculatedYieldInUSDC.mul(usdcPrecision);
     const calculatedExtraYieldInETH = calculatedYieldInETH.div(2);
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
 
-    expect(uarBalAfterWithdrawRounded).to.equal(
-      calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH)
-    );
+    expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH));
   });
   it("deposit should work with 55% extra yield  and 5% reduction deposit fee ", async () => {
     const usdcBal = await usdcToken.balanceOf(secondAddress);
@@ -642,12 +569,7 @@ describe("yield Proxy", () => {
 
     // 5000 min amount = 50 10000 max amount
     const bonusYield = BigNumber.from(5000)
-      .mul(
-        maxUADAmount
-          .add(uadAmount)
-          .mul(ethers.utils.parseEther("100"))
-          .div(maxUADAmount)
-      )
+      .mul(maxUADAmount.add(uadAmount).mul(ethers.utils.parseEther("100")).div(maxUADAmount))
       .div(ethers.utils.parseEther("100"));
 
     // 5000 UBQ which mean deposit fee will be 5%
@@ -661,9 +583,7 @@ describe("yield Proxy", () => {
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
     const ratio = await jar.getRatio();
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
     const usdcBalAfterDeposit = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterDeposit = await uAD.balanceOf(secondAddress);
     const ubqBalAfterDeposit = await uGOV.balanceOf(secondAddress);
@@ -686,16 +606,11 @@ describe("yield Proxy", () => {
     expect(infos[6]).to.equal(bonusYield); // used to calculate bonusYield on yield in uAR
 
     // simulate a jar yield
-    await usdcToken
-      .connect(usdcWhale)
-      .transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
+    await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, ethers.utils.parseUnits("100000", 6));
     await jar.earn();
     const ratio2 = await jar.getRatio();
     expect(ratio2.gt(ratio)).to.be.true;
-    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(
-      yieldProxy,
-      "WithdrawAll"
-    );
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.emit(yieldProxy, "WithdrawAll");
     const usdcBalAfterWithdraw = await usdcToken.balanceOf(secondAddress);
     const uadBalAfterWithdraw = await uAD.balanceOf(secondAddress);
     const ubqBalAfterWithdraw = await uGOV.balanceOf(secondAddress);
@@ -718,27 +633,16 @@ describe("yield Proxy", () => {
     const calculatedMinExtraYieldInETH = calculatedYieldInETH.div(2);
     // indeed we sent 10% of the maximum amount of UAD so we should get
     // 10% more of the yield
-    const calculatedExtraYieldInETH = calculatedMinExtraYieldInETH.add(
-      calculatedMinExtraYieldInETH.div(10)
-    );
+    const calculatedExtraYieldInETH = calculatedMinExtraYieldInETH.add(calculatedMinExtraYieldInETH.div(10));
     // remove dust
-    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw
-      .div(usdcPrecision)
-      .mul(usdcPrecision);
-    const uarBalAfterWithdrawMinusMinimumExtraYield =
-      uarBalAfterWithdrawRounded.sub(
-        expectedFeeInETH
-          .add(calculatedYieldInETH)
-          .add(calculatedMinExtraYieldInETH)
-      );
-    const cent = ethers.utils.parseEther("100");
-    const percentOfYield = uarBalAfterWithdrawMinusMinimumExtraYield
-      .mul(cent)
-      .div(calculatedYieldInETH);
-
-    expect(uarBalAfterWithdrawRounded).to.equal(
-      calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH)
+    const uarBalAfterWithdrawRounded = uarBalAfterWithdraw.div(usdcPrecision).mul(usdcPrecision);
+    const uarBalAfterWithdrawMinusMinimumExtraYield = uarBalAfterWithdrawRounded.sub(
+      expectedFeeInETH.add(calculatedYieldInETH).add(calculatedMinExtraYieldInETH)
     );
+    const cent = ethers.utils.parseEther("100");
+    const percentOfYield = uarBalAfterWithdrawMinusMinimumExtraYield.mul(cent).div(calculatedYieldInETH);
+
+    expect(uarBalAfterWithdrawRounded).to.equal(calculatedYieldInETH.add(calculatedExtraYieldInETH).add(expectedFeeInETH));
   });
   it("deposit should revert if it exist", async () => {
     // 1000 USDC
@@ -751,13 +655,9 @@ describe("yield Proxy", () => {
     await uAD.connect(secondAccount).approve(yieldProxy.address, uadAmount);
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.emit(yieldProxy, "Deposit");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.emit(yieldProxy, "Deposit");
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)
-    ).to.be.revertedWith("YieldProxy::DepoExist");
+    await expect(yieldProxy.connect(secondAccount).deposit(amount, uadAmount, ubqAmount)).to.be.revertedWith("YieldProxy::DepoExist");
   });
   it("deposit should revert with 0 amount ", async () => {
     // 500 UAD which is the max
@@ -767,55 +667,40 @@ describe("yield Proxy", () => {
     await uAD.connect(secondAccount).approve(yieldProxy.address, uadAmount);
     await uGOV.connect(secondAccount).approve(yieldProxy.address, ubqAmount);
 
-    await expect(
-      yieldProxy.connect(secondAccount).deposit(0, uadAmount, ubqAmount)
-    ).to.be.revertedWith("YieldProxy::amount==0");
+    await expect(yieldProxy.connect(secondAccount).deposit(0, uadAmount, ubqAmount)).to.be.revertedWith("YieldProxy::amount==0");
   });
   it("withdraw should revert if no deposit", async () => {
-    await expect(
-      yieldProxy.connect(secondAccount).withdrawAll()
-    ).to.be.revertedWith("YieldProxy::amount==0");
+    await expect(yieldProxy.connect(secondAccount).withdrawAll()).to.be.revertedWith("YieldProxy::amount==0");
   });
   it("setDepositFees should work", async () => {
     await yieldProxy.connect(admin).setDepositFees(500);
     expect(await yieldProxy.fees()).to.equal(500);
   });
   it("setDepositFees should revert if not admin", async () => {
-    await expect(
-      yieldProxy.connect(secondAccount).setDepositFees(56)
-    ).to.be.revertedWith("YieldProxy::!admin");
+    await expect(yieldProxy.connect(secondAccount).setDepositFees(56)).to.be.revertedWith("YieldProxy::!admin");
   });
   it("setUBQRate should work", async () => {
     await yieldProxy.connect(admin).setUBQRate(500);
     expect(await yieldProxy.ubqRate()).to.equal(500);
   });
   it("setUBQRate should revert if greater than max", async () => {
-    await expect(
-      yieldProxy.connect(admin).setUBQRate(ethers.utils.parseEther("10001"))
-    ).to.be.revertedWith("YieldProxy::>ubqRateMAX");
+    await expect(yieldProxy.connect(admin).setUBQRate(ethers.utils.parseEther("10001"))).to.be.revertedWith("YieldProxy::>ubqRateMAX");
   });
   it("setUBQRate should revert if not admin", async () => {
-    await expect(
-      yieldProxy.connect(secondAccount).setUBQRate(56)
-    ).to.be.revertedWith("YieldProxy::!admin");
+    await expect(yieldProxy.connect(secondAccount).setUBQRate(56)).to.be.revertedWith("YieldProxy::!admin");
   });
   it("setJar should work", async () => {
     await yieldProxy.connect(admin).setJar(jarYCRVLUSDaddr);
     expect(await yieldProxy.jar()).to.equal(jarYCRVLUSDaddr);
   });
   it("setJar should revert if not admin", async () => {
-    await expect(
-      yieldProxy.connect(secondAccount).setJar(jarYCRVLUSDaddr)
-    ).to.be.revertedWith("YieldProxy::!admin");
+    await expect(yieldProxy.connect(secondAccount).setJar(jarYCRVLUSDaddr)).to.be.revertedWith("YieldProxy::!admin");
   });
   it("setJar should revert if zero address ", async () => {
-    await expect(
-      yieldProxy.connect(admin).setJar(ethers.constants.AddressZero)
-    ).to.be.revertedWith("YieldProxy::!Jar");
+    await expect(yieldProxy.connect(admin).setJar(ethers.constants.AddressZero)).to.be.revertedWith("YieldProxy::!Jar");
   });
   it("setJar should revert if non contract address ", async () => {
-    await expect(yieldProxy.connect(secondAccount).setJar(usdcWhaleAddress)).to
-      .be.reverted;
+    await expect(yieldProxy.connect(secondAccount).setJar(usdcWhaleAddress)).to.be.reverted;
   });
   describe("CollectableDust", () => {
     it("Admin should be able to add protocol token (CollectableDust)", async () => {
@@ -823,22 +708,16 @@ describe("yield Proxy", () => {
     });
 
     it("should revert when another account tries to add protocol token (CollectableDust)", async () => {
-      await expect(
-        yieldProxy.connect(secondAccount).addProtocolToken(USDC)
-      ).to.be.revertedWith("YieldProxy::!admin");
+      await expect(yieldProxy.connect(secondAccount).addProtocolToken(USDC)).to.be.revertedWith("YieldProxy::!admin");
     });
 
     it("should revert when trying to add an already existing protocol token (CollectableDust)", async () => {
       await yieldProxy.connect(admin).addProtocolToken(USDC);
-      await expect(
-        yieldProxy.connect(admin).addProtocolToken(USDC)
-      ).to.be.revertedWith("collectable-dust::token-is-part-of-the-protocol");
+      await expect(yieldProxy.connect(admin).addProtocolToken(USDC)).to.be.revertedWith("collectable-dust::token-is-part-of-the-protocol");
     });
 
     it("should revert when another account tries to remove a protocol token (CollectableDust)", async () => {
-      await expect(
-        yieldProxy.connect(secondAccount).removeProtocolToken(USDC)
-      ).to.be.revertedWith("YieldProxy::!admin");
+      await expect(yieldProxy.connect(secondAccount).removeProtocolToken(USDC)).to.be.revertedWith("YieldProxy::!admin");
     });
 
     it("Admin should be able to remove protocol token (CollectableDust)", async () => {
@@ -847,55 +726,35 @@ describe("yield Proxy", () => {
     });
 
     it("should revert when trying to remove token that is not a part of the protocol (CollectableDust)", async () => {
-      await expect(
-        yieldProxy.connect(admin).removeProtocolToken(USDC)
-      ).to.be.revertedWith("collectable-dust::token-not-part-of-the-protocol");
+      await expect(yieldProxy.connect(admin).removeProtocolToken(USDC)).to.be.revertedWith("collectable-dust::token-not-part-of-the-protocol");
     });
 
     it("should emit DustSent event (CollectableDust)", async () => {
       const amount = ethers.utils.parseUnits("1000", 6);
 
       const uadAmount = ethers.utils.parseEther("500");
-      await usdcToken
-        .connect(secondAccount)
-        .approve(yieldProxy.address, amount);
+      await usdcToken.connect(secondAccount).approve(yieldProxy.address, amount);
       await uAD.connect(secondAccount).approve(yieldProxy.address, uadAmount);
-      await usdcToken
-        .connect(secondAccount)
-        .approve(yieldProxy.address, amount);
+      await usdcToken.connect(secondAccount).approve(yieldProxy.address, amount);
       await yieldProxy.connect(secondAccount).deposit(amount, uadAmount, 0);
 
-      await expect(
-        yieldProxy
-          .connect(admin)
-          .sendDust(await admin.getAddress(), uAD.address, uadAmount)
-      )
+      await expect(yieldProxy.connect(admin).sendDust(await admin.getAddress(), uAD.address, uadAmount))
         .to.emit(yieldProxy, "DustSent")
         .withArgs(await admin.getAddress(), uAD.address, uadAmount);
     });
     it("should revert when another account tries to remove dust from the contract (CollectableDust)", async () => {
       await expect(
-        yieldProxy
-          .connect(secondAccount)
-          .sendDust(
-            await admin.getAddress(),
-            await yieldProxy.ETH_ADDRESS(),
-            ethers.utils.parseUnits("100", "gwei")
-          )
+        yieldProxy.connect(secondAccount).sendDust(await admin.getAddress(), await yieldProxy.ETH_ADDRESS(), ethers.utils.parseUnits("100", "gwei"))
       ).to.be.revertedWith("YieldProxy::!admin");
     });
 
     it("should emit ProtocolTokenAdded event (CollectableDust)", async () => {
-      await expect(yieldProxy.connect(admin).addProtocolToken(DAI))
-        .to.emit(yieldProxy, "ProtocolTokenAdded")
-        .withArgs(DAI);
+      await expect(yieldProxy.connect(admin).addProtocolToken(DAI)).to.emit(yieldProxy, "ProtocolTokenAdded").withArgs(DAI);
     });
 
     it("should emit ProtocolTokenRemoved event (CollectableDust)", async () => {
       await yieldProxy.connect(admin).addProtocolToken(DAI);
-      await expect(yieldProxy.connect(admin).removeProtocolToken(DAI))
-        .to.emit(yieldProxy, "ProtocolTokenRemoved")
-        .withArgs(DAI);
+      await expect(yieldProxy.connect(admin).removeProtocolToken(DAI)).to.emit(yieldProxy, "ProtocolTokenRemoved").withArgs(DAI);
     });
   });
 });

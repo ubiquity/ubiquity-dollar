@@ -34,40 +34,20 @@ describe("CouponForDollarCalculator", () => {
     // list of accounts
     [admin] = await ethers.getSigners();
     // deploy manager
-    const UADMgr = await ethers.getContractFactory(
-      "UbiquityAlgorithmicDollarManager"
-    );
-    manager = (await UADMgr.deploy(
-      await admin.getAddress()
-    )) as UbiquityAlgorithmicDollarManager;
+    const UADMgr = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
+    manager = (await UADMgr.deploy(await admin.getAddress())) as UbiquityAlgorithmicDollarManager;
 
     // set coupon for dollars calculator
-    const couponsForDollarsCalculatorFactory = await ethers.getContractFactory(
-      "CouponsForDollarsCalculator"
-    );
-    couponsForDollarsCalculator =
-      (await couponsForDollarsCalculatorFactory.deploy(
-        manager.address
-      )) as CouponsForDollarsCalculator;
+    const couponsForDollarsCalculatorFactory = await ethers.getContractFactory("CouponsForDollarsCalculator");
+    couponsForDollarsCalculator = (await couponsForDollarsCalculatorFactory.deploy(manager.address)) as CouponsForDollarsCalculator;
 
-    await manager
-      .connect(admin)
-      .setCouponCalculatorAddress(couponsForDollarsCalculator.address);
+    await manager.connect(admin).setCouponCalculatorAddress(couponsForDollarsCalculator.address);
     // set debt coupon Manager
-    const dcManagerFactory = await ethers.getContractFactory(
-      "DebtCouponManager"
-    );
-    debtCouponMgr = (await dcManagerFactory.deploy(
-      manager.address,
-      couponLengthBlocks
-    )) as DebtCouponManager;
+    const dcManagerFactory = await ethers.getContractFactory("DebtCouponManager");
+    debtCouponMgr = (await dcManagerFactory.deploy(manager.address, couponLengthBlocks)) as DebtCouponManager;
     // debtCouponMgr should have the COUPON_MANAGER_ROLE
-    const COUPON_MANAGER_ROLE = ethers.utils.keccak256(
-      ethers.utils.toUtf8Bytes("COUPON_MANAGER")
-    );
-    await manager
-      .connect(admin)
-      .grantRole(COUPON_MANAGER_ROLE, debtCouponMgr.address);
+    const COUPON_MANAGER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("COUPON_MANAGER"));
+    await manager.connect(admin).grantRole(COUPON_MANAGER_ROLE, debtCouponMgr.address);
   });
   it("getCouponAmount should work without debt set to 0", async () => {
     await setup(BigNumber.from(10000000), BigNumber.from(0));
@@ -75,9 +55,7 @@ describe("CouponForDollarCalculator", () => {
     const totalDebt = await debtCoupon.getTotalOutstandingDebt();
     expect(totalDebt).to.equal(0);
     const amountToExchangeForCoupon = 1;
-    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(
-      amountToExchangeForCoupon
-    );
+    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(amountToExchangeForCoupon);
     expect(couponToMint).to.equal(amountToExchangeForCoupon);
   });
   it("getCouponAmount should work without debt set to 0 and large supply", async () => {
@@ -86,9 +64,7 @@ describe("CouponForDollarCalculator", () => {
     const totalDebt = await debtCoupon.getTotalOutstandingDebt();
     expect(totalDebt).to.equal(0);
     const amountToExchangeForCoupon = ethers.utils.parseEther("1");
-    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(
-      amountToExchangeForCoupon
-    );
+    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(amountToExchangeForCoupon);
     expect(couponToMint).to.equal(amountToExchangeForCoupon);
   });
   it("getCouponAmount should work without debt set to 10%", async () => {
@@ -101,9 +77,7 @@ describe("CouponForDollarCalculator", () => {
     // check that total debt is null
     const totalOutstandingDebt = await debtCoupon.getTotalOutstandingDebt();
     expect(totalOutstandingDebt).to.equal(totalDebt);
-    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(
-      amountStr
-    );
+    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(amountStr);
     expect(couponToMint).to.equal(premium);
   });
   it("getCouponAmount should work without debt set to 50%", async () => {
@@ -116,9 +90,7 @@ describe("CouponForDollarCalculator", () => {
     const totalOutstandingDebt = await debtCoupon.getTotalOutstandingDebt();
     expect(totalOutstandingDebt).to.equal(totalDebt);
     const amountToExchangeForCoupon = BigNumber.from(amountStr);
-    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(
-      amountToExchangeForCoupon
-    );
+    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(amountToExchangeForCoupon);
     expect(couponToMint).to.equal(premium);
   });
   it("getCouponAmount should work without debt set to 99%", async () => {
@@ -133,9 +105,7 @@ describe("CouponForDollarCalculator", () => {
     expect(totalOutstandingDebt).to.equal(totalDebt);
     const amountToExchangeForCoupon = BigNumber.from(amountStr);
 
-    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(
-      amountToExchangeForCoupon
-    );
+    const couponToMint = await couponsForDollarsCalculator.getCouponAmount(amountToExchangeForCoupon);
 
     expect(couponToMint).to.equal(premium);
   });
@@ -144,8 +114,6 @@ describe("CouponForDollarCalculator", () => {
     await setup(BigNumber.from(totalDebt), BigNumber.from(totalDebt));
     const totalOutstandingDebt = await debtCoupon.getTotalOutstandingDebt();
     expect(totalOutstandingDebt).to.equal(totalDebt);
-    await expect(
-      couponsForDollarsCalculator.getCouponAmount(1)
-    ).to.revertedWith("Coupon to dollar: DEBT_TOO_HIGH");
+    await expect(couponsForDollarsCalculator.getCouponAmount(1)).to.revertedWith("Coupon to dollar: DEBT_TOO_HIGH");
   });
 });

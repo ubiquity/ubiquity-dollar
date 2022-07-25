@@ -50,17 +50,11 @@ describe("bondingV2 deposit", () => {
     const totalLPBeforeAdd = await bondingShareV2.totalLP();
     const balanceBondingBeforeAdd = await metaPool.balanceOf(bondingV2.address);
     const amount = one.mul(100);
-    const { id, bsAmount, shares, creationBlock, endBlock } = await deposit(
-      secondAccount,
-      amount,
-      1
-    );
+    const { id, bsAmount, shares, creationBlock, endBlock } = await deposit(secondAccount, amount, 1);
     const totalLPAfterAdd = await bondingShareV2.totalLP();
     const balanceBondingAfterAdd = await metaPool.balanceOf(bondingV2.address);
     expect(totalLPAfterAdd).to.equal(totalLPBeforeAdd.add(amount));
-    expect(balanceBondingAfterAdd).to.equal(
-      balanceBondingBeforeAdd.add(amount)
-    );
+    expect(balanceBondingAfterAdd).to.equal(balanceBondingBeforeAdd.add(amount));
     expect(id).to.equal(1);
     expect(bsAmount).to.equal(1);
     const detail = await bondingShareV2.getBond(id);
@@ -76,11 +70,7 @@ describe("bondingV2 deposit", () => {
   });
   describe("pendingLpRewards", () => {
     it("should increase after inflation ", async () => {
-      const { id, bsAmount, shares, creationBlock, endBlock } = await deposit(
-        secondAccount,
-        one.mul(100),
-        1
-      );
+      const { id, bsAmount, shares, creationBlock, endBlock } = await deposit(secondAccount, one.mul(100), 1);
       expect(id).to.equal(1);
       expect(bsAmount).to.equal(1);
       const detail = await bondingShareV2.getBond(id);
@@ -95,9 +85,7 @@ describe("bondingV2 deposit", () => {
       // trigger a debt cycle
       const secondAccountAdr = await secondAccount.getAddress();
 
-      await expect(
-        debtCouponMgr.connect(secondAccount).exchangeDollarsForUAR(1)
-      )
+      await expect(debtCouponMgr.connect(secondAccount).exchangeDollarsForUAR(1))
         .to.emit(uAR, "Transfer")
         .withArgs(ethers.constants.AddressZero, secondAccountAdr, 1);
 
@@ -117,9 +105,7 @@ describe("bondingV2 deposit", () => {
       // Price must be below 1 to mint coupons
 
       const bondingV2BalBefore = await metaPool.balanceOf(bondingV2.address);
-      await debtCouponMgr
-        .connect(secondAccount)
-        .burnAutoRedeemTokensForDollars(1);
+      await debtCouponMgr.connect(secondAccount).burnAutoRedeemTokensForDollars(1);
       const bondingV2BalAfter = await metaPool.balanceOf(bondingV2.address);
 
       expect(bondingV2BalAfter).to.be.gt(bondingV2BalBefore);
@@ -150,11 +136,7 @@ describe("bondingV2 deposit", () => {
 
       // first user should get all the rewards
 
-      const isPrecise = isAmountEquivalent(
-        pendingLpRewards1.toString(),
-        lpRewardsAfter2ndDeposit.toString(),
-        "0.0000000001"
-      );
+      const isPrecise = isAmountEquivalent(pendingLpRewards1.toString(), lpRewardsAfter2ndDeposit.toString(), "0.0000000001");
       expect(isPrecise).to.be.true;
 
       const pendingLpRewards2 = await bondingV2.pendingLpRewards(ibond2.id);
@@ -175,18 +157,14 @@ describe("bondingV2 deposit", () => {
       expect(totalLP.add(detail2.lpAmount)).to.equal(totalLPAfter2ndDeposit);
       // bs shares should increase
       const totalSharesAfter2ndDeposit = await masterChefV2.totalShares();
-      expect(totalShares.add(ibond2.shares)).to.equal(
-        totalSharesAfter2ndDeposit
-      );
+      expect(totalShares.add(ibond2.shares)).to.equal(totalSharesAfter2ndDeposit);
     });
     it("should increase only when we deposit after inflation ", async () => {
       const { id, shares } = await deposit(secondAccount, one.mul(100), 1);
       const detail = await bondingShareV2.getBond(id);
       // trigger a debt cycle
       const secondAccountAdr = await secondAccount.getAddress();
-      await expect(
-        debtCouponMgr.connect(secondAccount).exchangeDollarsForUAR(1)
-      )
+      await expect(debtCouponMgr.connect(secondAccount).exchangeDollarsForUAR(1))
         .to.emit(uAR, "Transfer")
         .withArgs(ethers.constants.AddressZero, secondAccountAdr, 1);
 
@@ -201,9 +179,7 @@ describe("bondingV2 deposit", () => {
       // Price must be below 1 to mint coupons
 
       const bondingV2BalBefore = await metaPool.balanceOf(bondingV2.address);
-      await debtCouponMgr
-        .connect(secondAccount)
-        .burnAutoRedeemTokensForDollars(1);
+      await debtCouponMgr.connect(secondAccount).burnAutoRedeemTokensForDollars(1);
       const bondingV2BalAfter = await metaPool.balanceOf(bondingV2.address);
 
       expect(bondingV2BalAfter).to.be.gt(bondingV2BalBefore);
@@ -235,11 +211,7 @@ describe("bondingV2 deposit", () => {
 
       // first user should get all the rewards
 
-      const isPrecise = isAmountEquivalent(
-        pendingLpRewards1.toString(),
-        lpRewardsAfter2ndDeposit.toString(),
-        "0.0000000001"
-      );
+      const isPrecise = isAmountEquivalent(pendingLpRewards1.toString(), lpRewardsAfter2ndDeposit.toString(), "0.0000000001");
       expect(isPrecise).to.be.true;
 
       const pendingLpRewards2 = await bondingV2.pendingLpRewards(ibond2.id);
@@ -260,9 +232,7 @@ describe("bondingV2 deposit", () => {
       expect(totalLP.add(detail2.lpAmount)).to.equal(totalLPAfter2ndDeposit);
       // bs shares should increase
       const totalSharesAfter2ndDeposit = await masterChefV2.totalShares();
-      expect(totalShares.add(ibond2.shares)).to.equal(
-        totalSharesAfter2ndDeposit
-      );
+      expect(totalShares.add(ibond2.shares)).to.equal(totalSharesAfter2ndDeposit);
       // trigger another excess dollar distribution
       //   1- push dollar price < 1$
       await swapUADto3CRV(metaPool, uAD, one.mul(10000), fourthAccount);
@@ -281,25 +251,17 @@ describe("bondingV2 deposit", () => {
       await swap3CRVtoUAD(metaPool, crvToken, one.mul(100), fourthAccount);
       await twapOracle.update();
       //   4- trigger excess dollar distribution
-      await debtCouponMgr
-        .connect(secondAccount)
-        .burnAutoRedeemTokensForDollars(1);
+      await debtCouponMgr.connect(secondAccount).burnAutoRedeemTokensForDollars(1);
       const bondingV2Bal2After = await metaPool.balanceOf(bondingV2.address);
 
       expect(bondingV2Bal2After).to.be.gt(bondingV2BalAfter);
       // check that bs1 have increased it lprewards
-      const pendingLpRewards1After2ndExcessDollarDistrib =
-        await bondingV2.pendingLpRewards(id);
-      expect(pendingLpRewards1After2ndExcessDollarDistrib).to.be.gt(
-        pendingLpRewards1
-      );
+      const pendingLpRewards1After2ndExcessDollarDistrib = await bondingV2.pendingLpRewards(id);
+      expect(pendingLpRewards1After2ndExcessDollarDistrib).to.be.gt(pendingLpRewards1);
       // check that bs2 have increased it lprewards
-      const pendingLpRewards2After2ndExcessDollarDistrib =
-        await bondingV2.pendingLpRewards(ibond2.id);
+      const pendingLpRewards2After2ndExcessDollarDistrib = await bondingV2.pendingLpRewards(ibond2.id);
       expect(pendingLpRewards2After2ndExcessDollarDistrib).to.be.gt(0);
-      expect(pendingLpRewards1After2ndExcessDollarDistrib).to.be.gt(
-        pendingLpRewards2After2ndExcessDollarDistrib
-      );
+      expect(pendingLpRewards1After2ndExcessDollarDistrib).to.be.gt(pendingLpRewards2After2ndExcessDollarDistrib);
       // total share + pending lp rewards + lp to migrate should be almost equal to lp tokens inside the bonding contract
       const totalLPToMigrate = await bondingV2.totalLpToMigrate();
       const isPendingLPPrecise = isAmountEquivalent(

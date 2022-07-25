@@ -15,13 +15,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     args: [admin.address],
     ...opts,
   });
-  const mgrFactory = await ethers.getContractFactory(
-    "UbiquityAlgorithmicDollarManager"
-  );
+  const mgrFactory = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
 
-  const manager: UbiquityAlgorithmicDollarManager = mgrFactory.attach(
-    mgr.address
-  ) as UbiquityAlgorithmicDollarManager;
+  const manager: UbiquityAlgorithmicDollarManager = mgrFactory.attach(mgr.address) as UbiquityAlgorithmicDollarManager;
 
   const uAD = await deployments.deploy("UbiquityAlgorithmicDollar", {
     args: [manager.address],

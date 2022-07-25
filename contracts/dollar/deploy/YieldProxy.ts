@@ -40,9 +40,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     log: true,
   };
 
-  const UBQ_MINTER_ROLE = ethers.utils.keccak256(
-    ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE")
-  );
+  const UBQ_MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE"));
   if (mgrAdr.length === 0) {
     const mgr = await deployments.deploy("UbiquityAlgorithmicDollarManager", {
       args: [adminAdr],
@@ -51,9 +49,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     mgrAdr = mgr.address;
   }
 
-  const mgrFactory = await ethers.getContractFactory(
-    "UbiquityAlgorithmicDollarManager"
-  );
+  const mgrFactory = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
 
   const manager: UbiquityAlgorithmicDollarManager = mgrFactory.attach(
     mgrAdr // mgr.address
@@ -61,19 +57,11 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   deployments.log(`UbiquityAlgorithmicDollarManager at:`, manager.address);
 
   const yieldProxyFactory = await ethers.getContractFactory("YieldProxy");
-  const yieldProxy = (await yieldProxyFactory.deploy(
-    manager.address,
-    jar.address,
-    fees,
-    UBQRate,
-    bonusYield
-  )) as YieldProxy;
+  const yieldProxy = (await yieldProxyFactory.deploy(manager.address, jar.address, fees, UBQRate, bonusYield)) as YieldProxy;
 
   deployments.log("yieldProxy deployed at:", yieldProxy.address);
   // yieldProxy should have the UBQ_MINTER_ROLE to mint uAR
-  const tx = await manager
-    .connect(ubqAccount)
-    .grantRole(UBQ_MINTER_ROLE, yieldProxy.address);
+  const tx = await manager.connect(ubqAccount).grantRole(UBQ_MINTER_ROLE, yieldProxy.address);
   await tx.wait();
 
   // try to migrate test

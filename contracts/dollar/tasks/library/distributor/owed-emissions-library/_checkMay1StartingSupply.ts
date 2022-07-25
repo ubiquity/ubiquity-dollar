@@ -6,7 +6,6 @@
 // import { verifyMinMaxBlockHeight } from "../utils/distributor-helpers";
 // import { setBlockHeight } from "./setBlockHeight";
 
-
 // async function checkMay1StartingSupply(hre: HardhatRuntimeEnvironment) {
 //   const timestampsDated = await blockHeightDater(vestingRange); // "2022-05-01T00:00:00.000Z" // this should only be one date instead of a range (two)
 //   const range = await verifyMinMaxBlockHeight(timestampsDated);

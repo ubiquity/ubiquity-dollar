@@ -1,5 +1,5 @@
 import type { DeployFunction } from "hardhat-deploy/types";
-import { TheUbiquityStick } from "../types/TheUbiquityStick"
+import { TheUbiquityStick } from "../types/TheUbiquityStick";
 import tokenURIs from "../metadata/json.json";
 
 const deployTheUbiquityStick: DeployFunction = async function ({ ethers, deployments, getNamedAccounts }) {

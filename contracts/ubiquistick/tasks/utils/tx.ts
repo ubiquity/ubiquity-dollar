@@ -1,10 +1,6 @@
 import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
-import type {
-  TransactionReceipt,
-  TransactionRequest,
-  TransactionResponse
-} from "@ethersproject/abstract-provider";
+import type { TransactionReceipt, TransactionRequest, TransactionResponse } from "@ethersproject/abstract-provider";
 
 task("tx", "Prints the detail for the transaction hash")
   .addPositionalParam("hash", "The transaction's hash")

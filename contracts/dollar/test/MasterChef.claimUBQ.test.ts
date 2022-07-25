@@ -25,15 +25,9 @@ let ubqAdmin: Signer;
 let ubqWhale: Signer;
 let manager: UbiquityAlgorithmicDollarManager;
 
-const UBQ_MINTER_ROLE = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE")
-);
-const UBQ_BURNER_ROLE = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes("UBQ_BURNER_ROLE")
-);
-const BONDING_MANAGER = ethers.utils.keccak256(
-  ethers.utils.toUtf8Bytes("BONDING_MANAGER")
-);
+const UBQ_MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE"));
+const UBQ_BURNER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("UBQ_BURNER_ROLE"));
+const BONDING_MANAGER = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("BONDING_MANAGER"));
 
 describe("MasterChef UBQ rewards", () => {
   after(async () => {
@@ -51,25 +45,13 @@ describe("MasterChef UBQ rewards", () => {
       UbiquityAlgorithmicDollarManagerAddress,
     } = await getNamedAccounts());
 
-    masterChef = (await ethers.getContractAt(
-      "MasterChef",
-      MasterChefAddress
-    )) as MasterChef;
+    masterChef = (await ethers.getContractAt("MasterChef", MasterChefAddress)) as MasterChef;
 
-    manager = (await ethers.getContractAt(
-      "UbiquityAlgorithmicDollarManager",
-      UbiquityAlgorithmicDollarManagerAddress
-    )) as UbiquityAlgorithmicDollarManager;
+    manager = (await ethers.getContractAt("UbiquityAlgorithmicDollarManager", UbiquityAlgorithmicDollarManagerAddress)) as UbiquityAlgorithmicDollarManager;
 
-    bonding = (await ethers.getContractAt(
-      "Bonding",
-      BondingAddress
-    )) as Bonding;
+    bonding = (await ethers.getContractAt("Bonding", BondingAddress)) as Bonding;
 
-    metaPool = (await ethers.getContractAt(
-      "IMetaPool",
-      MetaPoolAddress
-    )) as IMetaPool;
+    metaPool = (await ethers.getContractAt("IMetaPool", MetaPoolAddress)) as IMetaPool;
 
     await network.provider.request({
       method: "hardhat_impersonateAccount",
@@ -99,23 +81,15 @@ describe("MasterChef UBQ rewards", () => {
     describe("Without MasterChef ROLES", () => {
       it("Should fail without MINTER_ROLE", async () => {
         const pendingUGOV = await masterChef.pendingUGOV(UbqWhaleAddress);
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_MINTER_ROLE, MasterChefAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_MINTER_ROLE, MasterChefAddress);
 
-        await expect(
-          masterChef.connect(ubqWhale).getRewards()
-        ).to.be.revertedWith("Governance token: not minter");
+        await expect(masterChef.connect(ubqWhale).getRewards()).to.be.revertedWith("Governance token: not minter");
 
-        expect(await masterChef.pendingUGOV(UbqWhaleAddress)).to.be.gte(
-          pendingUGOV
-        );
+        expect(await masterChef.pendingUGOV(UbqWhaleAddress)).to.be.gte(pendingUGOV);
       });
 
       it("Should work without BURNER_ROLE", async () => {
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_BURNER_ROLE, MasterChefAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_BURNER_ROLE, MasterChefAddress);
 
         await (await masterChef.connect(ubqWhale).getRewards()).wait();
         expect(await masterChef.pendingUGOV(UbqWhaleAddress)).to.be.equal(0);
@@ -124,18 +98,14 @@ describe("MasterChef UBQ rewards", () => {
 
     describe("Without Bonding ROLES", () => {
       it("Should work without MINTER_ROLE", async () => {
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_MINTER_ROLE, BondingAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_MINTER_ROLE, BondingAddress);
 
         await (await masterChef.connect(ubqWhale).getRewards()).wait();
         expect(await masterChef.pendingUGOV(UbqWhaleAddress)).to.be.equal(0);
       });
 
       it("Should work without BURNER_ROLE", async () => {
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_BURNER_ROLE, BondingAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_BURNER_ROLE, BondingAddress);
 
         await (await masterChef.connect(ubqWhale).getRewards()).wait();
         expect(await masterChef.pendingUGOV(UbqWhaleAddress)).to.be.equal(0);
@@ -147,9 +117,7 @@ describe("MasterChef UBQ rewards", () => {
         const totalLP = await metaPool.balanceOf(BondingAddress);
         expect(totalLP).to.be.gt(0);
 
-        await bonding
-          .connect(ubqAdmin)
-          .sendDust(BondingV2Address, MetaPoolAddress, totalLP);
+        await bonding.connect(ubqAdmin).sendDust(BondingV2Address, MetaPoolAddress, totalLP);
 
         expect(await metaPool.balanceOf(BondingAddress)).to.be.equal(0);
 
@@ -161,25 +129,13 @@ describe("MasterChef UBQ rewards", () => {
     describe("Without LP, without MasterChef and Bonding BURNER_ROLE, without Bonding MINTER_ROLE", () => {
       it("Should work in real conditions", async () => {
         await manager.connect(ubqAdmin).grantRole(BONDING_MANAGER, ubq);
-        await bonding
-          .connect(ubqAdmin)
-          .sendDust(
-            BondingV2Address,
-            MetaPoolAddress,
-            await metaPool.balanceOf(BondingAddress)
-          );
+        await bonding.connect(ubqAdmin).sendDust(BondingV2Address, MetaPoolAddress, await metaPool.balanceOf(BondingAddress));
 
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_BURNER_ROLE, MasterChefAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_BURNER_ROLE, MasterChefAddress);
 
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_BURNER_ROLE, BondingAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_BURNER_ROLE, BondingAddress);
 
-        await manager
-          .connect(ubqAdmin)
-          .revokeRole(UBQ_MINTER_ROLE, BondingAddress);
+        await manager.connect(ubqAdmin).revokeRole(UBQ_MINTER_ROLE, BondingAddress);
 
         await (await masterChef.connect(ubqWhale).getRewards()).wait();
         expect(await masterChef.pendingUGOV(UbqWhaleAddress)).to.be.equal(0);

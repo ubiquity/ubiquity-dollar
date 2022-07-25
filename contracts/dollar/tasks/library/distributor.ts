@@ -15,4 +15,4 @@ export const params = {
 export const optionalParams = {
   token: ["Token address", ubiquityGovernanceTokenAddress, types.string],
 };
-export const action = (): ActionType<any> => _distributor
+export const action = (): ActionType<any> => _distributor;

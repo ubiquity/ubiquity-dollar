@@ -57,18 +57,10 @@ export default async function yieldProxySetup(): Promise<{
 }> {
   await resetFork(13185077);
   // GET contracts adresses
-  ({
-    DAI,
-    USDC,
-    usdcWhaleAddress,
-    jarUSDCAddr,
-    strategyYearnUsdcV2,
-    jarYCRVLUSDaddr,
-  } = await getNamedAccounts());
+  ({ DAI, USDC, usdcWhaleAddress, jarUSDCAddr, strategyYearnUsdcV2, jarYCRVLUSDaddr } = await getNamedAccounts());
 
   // GET first EOA account as admin Signer
-  [admin, secondAccount, thirdAccount, treasury, fourthAccount, fifthAccount] =
-    await ethers.getSigners();
+  [admin, secondAccount, thirdAccount, treasury, fourthAccount, fifthAccount] = await ethers.getSigners();
 
   await network.provider.request({
     method: "hardhat_impersonateAccount",
@@ -82,55 +74,33 @@ export default async function yieldProxySetup(): Promise<{
   secondAddress = await secondAccount.getAddress();
   const fourthAddress = await fourthAccount.getAddress();
 
-  const UBQ_MINTER_ROLE = ethers.utils.keccak256(
-    ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE")
-  );
+  const UBQ_MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE"));
 
   // DEPLOY UbiquityAlgorithmicDollarManager Contract
-  manager = (await (
-    await ethers.getContractFactory("UbiquityAlgorithmicDollarManager")
-  ).deploy(adminAddress)) as UbiquityAlgorithmicDollarManager;
+  manager = (await (await ethers.getContractFactory("UbiquityAlgorithmicDollarManager")).deploy(adminAddress)) as UbiquityAlgorithmicDollarManager;
 
   // DEPLOY Ubiquity library
-  ubiquityFormulas = (await (
-    await ethers.getContractFactory("UbiquityFormulas")
-  ).deploy()) as UbiquityFormulas;
+  ubiquityFormulas = (await (await ethers.getContractFactory("UbiquityFormulas")).deploy()) as UbiquityFormulas;
   await manager.setFormulasAddress(ubiquityFormulas.address);
 
   // DEPLOY UAD token Contract
-  uAD = (await (
-    await ethers.getContractFactory("UbiquityAlgorithmicDollar")
-  ).deploy(manager.address)) as UbiquityAlgorithmicDollar;
+  uAD = (await (await ethers.getContractFactory("UbiquityAlgorithmicDollar")).deploy(manager.address)) as UbiquityAlgorithmicDollar;
   await manager.setDollarTokenAddress(uAD.address);
   // set treasury,uGOVFund and lpReward address needed for excessDollarsDistributor
   await manager.connect(admin).setTreasuryAddress(await treasury.getAddress());
   // DEPLOY UGOV token Contract
-  uGOV = (await (
-    await ethers.getContractFactory("UbiquityGovernance")
-  ).deploy(manager.address)) as UbiquityGovernance;
+  uGOV = (await (await ethers.getContractFactory("UbiquityGovernance")).deploy(manager.address)) as UbiquityGovernance;
   await manager.setGovernanceTokenAddress(uGOV.address);
 
   // GET USDC token contract
   usdcToken = (await ethers.getContractAt("ERC20", USDC)) as ERC20;
   await usdcToken.connect(usdcWhale).transfer(secondAddress, amountToDeposit);
 
-  const mintingUAD = [
-    adminAddress,
-    secondAddress,
-    manager.address,
-    fourthAddress,
-  ].map(
-    async (signer: string): Promise<ContractTransaction> =>
-      uAD.mint(signer, ethers.utils.parseEther("20000"))
+  const mintingUAD = [adminAddress, secondAddress, manager.address, fourthAddress].map(
+    async (signer: string): Promise<ContractTransaction> => uAD.mint(signer, ethers.utils.parseEther("20000"))
   );
-  const mintingUBQ = [
-    adminAddress,
-    secondAddress,
-    manager.address,
-    fourthAddress,
-  ].map(
-    async (signer: string): Promise<ContractTransaction> =>
-      uGOV.mint(signer, ethers.utils.parseEther("20000"))
+  const mintingUBQ = [adminAddress, secondAddress, manager.address, fourthAddress].map(
+    async (signer: string): Promise<ContractTransaction> => uGOV.mint(signer, ethers.utils.parseEther("20000"))
   );
 
   await Promise.all([mintingUAD, mintingUBQ]);
@@ -139,9 +109,7 @@ export default async function yieldProxySetup(): Promise<{
   // _UBQRate 10e18, if the UBQRate is 10 then 10/10000 = 0.001  1UBQ gives you 0.001% of fee reduction so 100000 UBQ gives you 100%
   // _bonusYield  5000 = 50% 100 = 1% 10 = 0.1% 1 = 0.01%
   jar = (await ethers.getContractAt("IJar", jarUSDCAddr)) as IJar;
-  yieldProxy = (await (
-    await ethers.getContractFactory("YieldProxy")
-  ).deploy(
+  yieldProxy = (await (await ethers.getContractFactory("YieldProxy")).deploy(
     manager.address,
     jar.address,
     10000,

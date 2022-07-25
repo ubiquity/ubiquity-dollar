@@ -6,9 +6,7 @@ import * as dotenv from "dotenv";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
-import type {
-  HardhatNetworkAccountUserConfig, HardhatUserConfig
-} from "hardhat/types";
+import type { HardhatNetworkAccountUserConfig, HardhatUserConfig } from "hardhat/types";
 
 import { Wallet } from "ethers";
 import "tsconfig-paths/register";

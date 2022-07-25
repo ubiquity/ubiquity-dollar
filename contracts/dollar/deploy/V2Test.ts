@@ -168,16 +168,10 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   // calculate end locking period block number
   // 1 week = 45361 blocks = 2371753*7/366
 
-  const UBQ_MINTER_ROLE = ethers.utils.keccak256(
-    ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE")
-  );
-  const UBQ_BURNER_ROLE = ethers.utils.keccak256(
-    ethers.utils.toUtf8Bytes("UBQ_BURNER_ROLE")
-  );
+  const UBQ_MINTER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("UBQ_MINTER_ROLE"));
+  const UBQ_BURNER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("UBQ_BURNER_ROLE"));
 
-  const PAUSER_ROLE = ethers.utils.keccak256(
-    ethers.utils.toUtf8Bytes("PAUSER_ROLE")
-  );
+  const PAUSER_ROLE = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("PAUSER_ROLE"));
 
   if (mgrAdr.length === 0) {
     const mgr = await deployments.deploy("UbiquityAlgorithmicDollarManager", {
@@ -187,9 +181,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     mgrAdr = mgr.address;
   }
 
-  const mgrFactory = await ethers.getContractFactory(
-    "UbiquityAlgorithmicDollarManager"
-  );
+  const mgrFactory = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
 
   const manager: UbiquityAlgorithmicDollarManager = mgrFactory.attach(
     mgrAdr // mgr.address
@@ -197,38 +189,23 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
   const ubqFactory = await ethers.getContractFactory("UbiquityGovernance");
   const ubqGovAdr = "0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0";
-  const ubiquityGovernance: UbiquityGovernance = ubqFactory.attach(
-    ubqGovAdr
-  ) as UbiquityGovernance;
+  const ubiquityGovernance: UbiquityGovernance = ubqFactory.attach(ubqGovAdr) as UbiquityGovernance;
 
-  deployments.log(
-    `UbiquityAlgorithmicDollarManager deployed at:`,
-    manager.address
-  );
+  deployments.log(`UbiquityAlgorithmicDollarManager deployed at:`, manager.address);
   const currentBondingAdr = await manager.bondingContractAddress();
   deployments.log("current Bonding Adr :", currentBondingAdr);
   const currentMSAdr = await manager.masterChefAddress();
   deployments.log("current Masterchef Adr :", currentMSAdr);
-  let tx = await manager
-    .connect(ubqAccount)
-    .revokeRole(UBQ_MINTER_ROLE, currentMSAdr);
+  let tx = await manager.connect(ubqAccount).revokeRole(UBQ_MINTER_ROLE, currentMSAdr);
   await tx.wait();
-  tx = await manager
-    .connect(ubqAccount)
-    .revokeRole(UBQ_MINTER_ROLE, currentBondingAdr);
+  tx = await manager.connect(ubqAccount).revokeRole(UBQ_MINTER_ROLE, currentBondingAdr);
   await tx.wait();
-  tx = await manager
-    .connect(ubqAccount)
-    .revokeRole(UBQ_BURNER_ROLE, currentBondingAdr);
+  tx = await manager.connect(ubqAccount).revokeRole(UBQ_BURNER_ROLE, currentBondingAdr);
   await tx.wait();
 
-  const isMSMinter = await manager
-    .connect(ubqAccount)
-    .hasRole(UBQ_MINTER_ROLE, currentMSAdr);
+  const isMSMinter = await manager.connect(ubqAccount).hasRole(UBQ_MINTER_ROLE, currentMSAdr);
   deployments.log("Master Chef Is minter ?:", isMSMinter);
-  const isBSMinter = await manager
-    .connect(ubqAccount)
-    .hasRole(UBQ_MINTER_ROLE, currentBondingAdr);
+  const isBSMinter = await manager.connect(ubqAccount).hasRole(UBQ_MINTER_ROLE, currentBondingAdr);
   deployments.log("Bonding Is minter ?:", isBSMinter);
 
   // BondingShareV2
@@ -246,23 +223,14 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     bondingShareV2deployAddress = bondingShareV2deploy.address;
   }
   /* */
-  const bondingShareV2Factory = await ethers.getContractFactory(
-    "BondingShareV2"
-  );
+  const bondingShareV2Factory = await ethers.getContractFactory("BondingShareV2");
 
-  const bondingShareV2: BondingShareV2 = bondingShareV2Factory.attach(
-    bondingShareV2deployAddress
-  ) as BondingShareV2;
+  const bondingShareV2: BondingShareV2 = bondingShareV2Factory.attach(bondingShareV2deployAddress) as BondingShareV2;
   deployments.log("BondingShareV2 deployed at:", bondingShareV2.address);
-  tx = await manager
-    .connect(ubqAccount)
-    .setBondingShareAddress(bondingShareV2.address);
+  tx = await manager.connect(ubqAccount).setBondingShareAddress(bondingShareV2.address);
   await tx.wait();
   const managerBondingShareAddress = await manager.bondingShareAddress();
-  deployments.log(
-    "BondingShareV2 in Manager is set to:",
-    managerBondingShareAddress
-  );
+  deployments.log("BondingShareV2 in Manager is set to:", managerBondingShareAddress);
   // MasterchefV2
 
   if (masterchefV2deployAddress.length === 0) {
@@ -276,23 +244,14 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   /* */
   const masterChefV2Factory = await ethers.getContractFactory("MasterChefV2");
 
-  const masterChefV2: MasterChefV2 = masterChefV2Factory.attach(
-    masterchefV2deployAddress
-  ) as MasterChefV2;
+  const masterChefV2: MasterChefV2 = masterChefV2Factory.attach(masterchefV2deployAddress) as MasterChefV2;
   deployments.log("MasterChefV2 deployed at:", masterChefV2.address);
-  tx = await manager
-    .connect(ubqAccount)
-    .setMasterChefAddress(masterChefV2.address);
+  tx = await manager.connect(ubqAccount).setMasterChefAddress(masterChefV2.address);
   await tx.wait();
-  tx = await manager
-    .connect(ubqAccount)
-    .grantRole(UBQ_MINTER_ROLE, masterChefV2.address);
+  tx = await manager.connect(ubqAccount).grantRole(UBQ_MINTER_ROLE, masterChefV2.address);
   await tx.wait();
   const managerMasterChefV2Address = await manager.masterChefAddress();
-  deployments.log(
-    "masterChefAddress in Manager is set to:",
-    managerMasterChefV2Address
-  );
+  deployments.log("masterChefAddress in Manager is set to:", managerMasterChefV2Address);
   // Bonding Formula
 
   if (bondingFormulasdeployAddress.length === 0) {
@@ -303,30 +262,17 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     bondingFormulasdeployAddress = bondingFormulas.address;
   }
 
-  const bondingFormulasFactory = await ethers.getContractFactory(
-    "BondingFormulas"
-  );
+  const bondingFormulasFactory = await ethers.getContractFactory("BondingFormulas");
 
-  const bf: BondingFormulas = bondingFormulasFactory.attach(
-    bondingFormulasdeployAddress
-  ) as BondingFormulas;
+  const bf: BondingFormulas = bondingFormulasFactory.attach(bondingFormulasdeployAddress) as BondingFormulas;
   deployments.log("BondingFormulas deployed at:", bf.address);
   // BondingV2
 
-  deployments.log(
-    "bondingFormulasdeployAddress :",
-    bondingFormulasdeployAddress
-  );
+  deployments.log("bondingFormulasdeployAddress :", bondingFormulasdeployAddress);
   deployments.log("manager.address :", manager.address);
   if (bondingV2deployAddress.length === 0) {
     const bondingV2deploy = await deployments.deploy("BondingV2", {
-      args: [
-        manager.address,
-        bondingFormulasdeployAddress,
-        toMigrateOriginals,
-        toMigrateLpBalances,
-        toMigrateWeeks,
-      ],
+      args: [manager.address, bondingFormulasdeployAddress, toMigrateOriginals, toMigrateLpBalances, toMigrateWeeks],
       ...opts,
     });
 
@@ -336,9 +282,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   /* */
   const bondingV2Factory = await ethers.getContractFactory("BondingV2");
 
-  const bondingV2: BondingV2 = bondingV2Factory.attach(
-    bondingV2deployAddress
-  ) as BondingV2;
+  const bondingV2: BondingV2 = bondingV2Factory.attach(bondingV2deployAddress) as BondingV2;
   deployments.log("bondingV2 deployed at:", bondingV2.address);
   tx = await bondingV2.setMigrating(true);
   await tx.wait();
@@ -346,50 +290,32 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   // send the LP token from bonding V1 to V2 to prepare the migration
   const bondingFactory = await ethers.getContractFactory("Bonding");
   const metaPoolAddr = await manager.connect(admin).stableSwapMetaPoolAddress();
-  const metaPool = (await ethers.getContractAt(
-    "IMetaPool",
-    metaPoolAddr
-  )) as IMetaPool;
+  const metaPool = (await ethers.getContractAt("IMetaPool", metaPoolAddr)) as IMetaPool;
 
   const bondingLPBal = await metaPool.balanceOf(currentBondingAdr);
   deployments.log("bondingLPBal :", ethers.utils.formatEther(bondingLPBal));
   const bonding: Bonding = bondingFactory.attach(currentBondingAdr) as Bonding;
-  await bonding
-    .connect(ubqAccount)
-    .sendDust(bondingV2.address, metaPool.address, bondingLPBal);
+  await bonding.connect(ubqAccount).sendDust(bondingV2.address, metaPool.address, bondingLPBal);
   const bondingV2LPBal = await metaPool.balanceOf(bondingV2.address);
-  deployments.log(
-    "all bondingLPBal sent to bondingV2... bondingV2LPBal:",
-    ethers.utils.formatEther(bondingV2LPBal)
-  );
+  deployments.log("all bondingLPBal sent to bondingV2... bondingV2LPBal:", ethers.utils.formatEther(bondingV2LPBal));
   // bondingV2 should have the UBQ_MINTER_ROLE to mint bonding shares
-  const isUBQPauser = await manager
-    .connect(ubqAccount)
-    .hasRole(PAUSER_ROLE, ubqAdr);
+  const isUBQPauser = await manager.connect(ubqAccount).hasRole(PAUSER_ROLE, ubqAdr);
   deployments.log("UBQ Is pauser ?:", isUBQPauser);
 
-  tx = await manager
-    .connect(ubqAccount)
-    .grantRole(UBQ_MINTER_ROLE, bondingV2.address);
+  tx = await manager.connect(ubqAccount).grantRole(UBQ_MINTER_ROLE, bondingV2.address);
   await tx.wait();
   tx = await bondingV2.connect(ubqAccount).setBlockCountInAWeek(46550);
   await tx.wait();
   const blockCountInAWeek = await bondingV2.blockCountInAWeek();
   deployments.log("bondingV2 blockCountInAWeek:", blockCountInAWeek);
-  tx = await manager
-    .connect(ubqAccount)
-    .setBondingContractAddress(bondingV2.address);
+  tx = await manager.connect(ubqAccount).setBondingContractAddress(bondingV2.address);
   await tx.wait();
   const managerBondingV2Address = await manager.bondingContractAddress();
   deployments.log("BondingV2 in Manager is set to:", managerBondingV2Address);
 
-  const ismasterChefV2Minter = await manager
-    .connect(ubqAccount)
-    .hasRole(UBQ_MINTER_ROLE, masterChefV2.address);
+  const ismasterChefV2Minter = await manager.connect(ubqAccount).hasRole(UBQ_MINTER_ROLE, masterChefV2.address);
   deployments.log("MasterChef V2 Is minter ?:", ismasterChefV2Minter);
-  const isbondingShareV2Minter = await manager
-    .connect(ubqAccount)
-    .hasRole(UBQ_MINTER_ROLE, bondingV2.address);
+  const isbondingShareV2Minter = await manager.connect(ubqAccount).hasRole(UBQ_MINTER_ROLE, bondingV2.address);
   deployments.log("Bonding V2 Is minter ?:", isbondingShareV2Minter);
 
   // try to migrate test
@@ -407,9 +333,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   await tx.wait();
   const totalLpToMigrateAfterMigrate = await bondingV2.totalLpToMigrate();
   const idsAfter = await bondingShareV2.holderTokens(tester);
-  const testerLPRewardsAfterMigrate = await bondingV2.pendingLpRewards(
-    idsAfter[0]
-  );
+  const testerLPRewardsAfterMigrate = await bondingV2.pendingLpRewards(idsAfter[0]);
   deployments.log("idsAfter:", idsAfter[0].toNumber());
   let bond = await bondingShareV2.getBond(idsAfter[0]);
   deployments.log(`bond id:${idsAfter[0].toNumber()}
@@ -444,9 +368,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   bond.endblock:${bond.endBlock.toString()}
   tx:${tx.blockNumber ? tx.blockNumber.toString() : ""}
 `);
-  tx = await bondingV2
-    .connect(testAccount)
-    .removeLiquidity(bond.lpAmount, idsAfter[0]);
+  tx = await bondingV2.connect(testAccount).removeLiquidity(bond.lpAmount, idsAfter[0]);
   await tx.wait();
   bond = await bondingShareV2.getBond(idsAfter[0]);
   deployments.log(`old bond id:${idsAfter[0].toNumber()}
@@ -457,16 +379,10 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   tx:${tx.blockNumber ? tx.blockNumber.toString() : ""}
 `);
 
-  const testerLPRewardsAfterRemove = await bondingV2.pendingLpRewards(
-    idsAfter[0]
-  );
+  const testerLPRewardsAfterRemove = await bondingV2.pendingLpRewards(idsAfter[0]);
   deployments.log(`
-  testerLPRewardsAfterMigrate  :${ethers.utils.formatEther(
-    testerLPRewardsAfterMigrate
-  )}
-  testerLPRewardsAfterRemove  :${ethers.utils.formatEther(
-    testerLPRewardsAfterRemove
-  )}
+  testerLPRewardsAfterMigrate  :${ethers.utils.formatEther(testerLPRewardsAfterMigrate)}
+  testerLPRewardsAfterRemove  :${ethers.utils.formatEther(testerLPRewardsAfterRemove)}
 `);
   const testerLPBalAfterMigrate = await metaPool.balanceOf(tester);
   deployments.log(`
@@ -474,26 +390,18 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   LPBalAfter  :${ethers.utils.formatEther(testerLPBalAfterMigrate)}
 `);
   deployments.log(`
-totalLpToMigrateBeforeMigrate  :${ethers.utils.formatEther(
-    totalLpToMigrateBeforeMigrate
-  )}
-totalLpToMigrateAfterMigrate  :${ethers.utils.formatEther(
-    totalLpToMigrateAfterMigrate
-  )}
+totalLpToMigrateBeforeMigrate  :${ethers.utils.formatEther(totalLpToMigrateBeforeMigrate)}
+totalLpToMigrateAfterMigrate  :${ethers.utils.formatEther(totalLpToMigrateAfterMigrate)}
 `);
 
-  tx = await metaPool
-    .connect(testAccount)
-    .approve(bondingV2.address, testerLPBalAfterMigrate);
+  tx = await metaPool.connect(testAccount).approve(bondingV2.address, testerLPBalAfterMigrate);
   await tx.wait();
   const addAmount = testerLPBalAfterMigrate.div(BigNumber.from(2));
   deployments.log(`
   addAmount  :${ethers.utils.formatEther(addAmount)}
 
   `);
-  tx = await bondingV2
-    .connect(testAccount)
-    .addLiquidity(addAmount, idsAfter[0], 42);
+  tx = await bondingV2.connect(testAccount).addLiquidity(addAmount, idsAfter[0], 42);
   await tx.wait();
   const testerLPBalAfterAdd = await metaPool.balanceOf(tester);
   tx = await bondingV2.connect(testAccount).deposit(testerLPBalAfterAdd, 208);
@@ -535,12 +443,8 @@ totalLpToMigrateAfterMigrate  :${ethers.utils.formatEther(
 
   const pendingBond1 = await masterChefV2.pendingUGOV(testerBsIds[0]);
   const pendingBond2 = await masterChefV2.pendingUGOV(testerBsIds[1]);
-  const bondingShareInfoBond1 = await masterChefV2.getBondingShareInfo(
-    testerBsIds[0]
-  );
-  const bondingShareInfoBond2 = await masterChefV2.getBondingShareInfo(
-    testerBsIds[1]
-  );
+  const bondingShareInfoBond1 = await masterChefV2.getBondingShareInfo(testerBsIds[0]);
+  const bondingShareInfoBond2 = await masterChefV2.getBondingShareInfo(testerBsIds[1]);
   const totalShares = await masterChefV2.totalShares();
   deployments.log(`
 

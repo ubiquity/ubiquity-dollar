@@ -17,8 +17,7 @@ describe("Bonding1", () => {
   let secondAccount: Signer;
   let blockCountInAWeek: BigNumber;
   before(async () => {
-    ({ secondAccount, uAD, bonding, bondingShare, sablier, blockCountInAWeek } =
-      await bondingSetup());
+    ({ secondAccount, uAD, bonding, bondingShare, sablier, blockCountInAWeek } = await bondingSetup());
   });
   describe("initialValues", () => {
     it("initial uAD totalSupply should be more than 30 010 (3 * 10 000 + 10)", async () => {
@@ -61,22 +60,14 @@ describe("Bonding1", () => {
 
   describe("withdraw", () => {
     it("should revert when users try to redeem more shares than they have", async () => {
-      await expect(
-        bonding
-          .connect(secondAccount)
-          .withdraw(ethers.utils.parseEther("10000"), idBlock)
-      ).to.be.revertedWith("Bonding: caller does not have enough shares");
+      await expect(bonding.connect(secondAccount).withdraw(ethers.utils.parseEther("10000"), idBlock)).to.be.revertedWith(
+        "Bonding: caller does not have enough shares"
+      );
     });
     it("Users should be able to redeem all their shares", async () => {
-      const bondBefore: BigNumber = await bondingShare.balanceOf(
-        await secondAccount.getAddress(),
-        idBlock
-      );
+      const bondBefore: BigNumber = await bondingShare.balanceOf(await secondAccount.getAddress(), idBlock);
       const lp = await withdraw(secondAccount, idBlock);
-      const bondAfter: BigNumber = await bondingShare.balanceOf(
-        await secondAccount.getAddress(),
-        idBlock
-      );
+      const bondAfter: BigNumber = await bondingShare.balanceOf(await secondAccount.getAddress(), idBlock);
       expect(lp).to.be.gt(0);
       expect(bondBefore).to.be.gt(0);
       expect(bondAfter).to.be.equal(0);
