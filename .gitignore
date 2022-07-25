@@ -48,3 +48,4 @@ deployments/*
 !deployments/mainnet
 .gitignore
 contracts/dollar/tasks/library/distributor/fixtures/operators.json
+*/deployments/localhost
