@@ -1,6 +1,6 @@
-import { abi as tokenABI } from "../../../artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
-import { UbiquityGovernance } from "../../../artifacts/types/UbiquityGovernance";
-import { addressBook } from "../investor-emissions";
+import { addressBook } from ".";
+import { abi as tokenABI } from "../../../../artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
+import { UbiquityGovernance } from "../../../../artifacts/types/UbiquityGovernance";
 import { Account, Balance, EthersAndNetwork } from "./impersonate-types";
 import { HardhatRpcMethods } from "./rpc-methods/hardhat-rpc-methods";
 

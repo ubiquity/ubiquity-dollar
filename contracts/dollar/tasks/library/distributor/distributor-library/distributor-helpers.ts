@@ -1,8 +1,8 @@
 import { Wallet } from "ethers";
-import { EthDaterExampleResult, EthDaterExampleResults } from "./block-height-dater";
-import { Investor } from "./distributor-types";
 import path from "path";
 import { warn } from "../../../../hardhat.config";
+import { EthDaterExampleResult, EthDaterExampleResults } from "./block-height-dater";
+import { Investor } from "./distributor-types";
 
 export function getDistributor(): Wallet {
   if (process.env.UBQ_DISTRIBUTOR) {

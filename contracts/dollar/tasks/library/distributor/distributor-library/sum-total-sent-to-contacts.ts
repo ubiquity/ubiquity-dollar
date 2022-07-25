@@ -1,17 +1,12 @@
 import "@nomiclabs/hardhat-waffle";
 import "hardhat-deploy";
 import tranches from "../../../../distributor-transactions.json"; // TODO: pass these in as arguments
+import { ContactWithTransfers } from "../calculate-owed-emissions";
 import investors from "../investors.json";
 // module.exports = {
 //   description: "total the amount sent to recipients from a list of transactions",
 //   action: () => sumTotalSentToContacts,
 // };
-
-type AddressBookContact = typeof investors[0];
-interface ContactWithTransfers extends AddressBookContact {
-  transferred: number;
-  transactions: string[];
-}
 
 export function sumTotalSentToContacts() {
   const transferAmountsToContacts = investors.map((_contact) => {
