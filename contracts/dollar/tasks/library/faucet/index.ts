@@ -1,10 +1,11 @@
 import { BigNumber } from "ethers";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ERC20 } from "../../../artifacts/types";
 import { BondingShareV2 } from "../../../artifacts/types/BondingShareV2";
 import { UbiquityAlgorithmicDollarManager } from "../../../artifacts/types/UbiquityAlgorithmicDollarManager";
 import { accountWithWithdrawableBond } from "../faucet";
 const NETWORK_ADDRESS = "http://localhost:8545";
-export default async function faucet(taskArgs: { receiver: string | null; manager: string | null }, { ethers, getNamedAccounts }) {
+export default async function faucet(taskArgs: { receiver: string | null; manager: string | null }, { ethers, getNamedAccounts }: HardhatRuntimeEnvironment) {
   const net = await ethers.provider.getNetwork();
   if (net.name === "hardhat") {
     console.warn(
