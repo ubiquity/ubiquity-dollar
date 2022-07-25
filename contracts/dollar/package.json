@@ -129,6 +129,7 @@
     "usb": "^2.1.2"
   },
   "devDependencies": {
+    "@types/ethereum-block-by-date": "^1.4.1",
     "ethereum-block-by-date": "^1.4.5"
   }
 }

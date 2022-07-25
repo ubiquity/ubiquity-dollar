@@ -4,7 +4,7 @@ import "hardhat-deploy";
 import { HardhatRuntimeEnvironment } from "hardhat/types/runtime";
 import { ERC20 } from "../../../artifacts/types/ERC20";
 
-import { Investor, InvestorWithTransfers, TaskArgs } from "./distributor-library/investor-types";
+import { Investor, InvestorWithTransfers } from "./distributor-library/investor-types";
 import { Tranche } from "./distributor-library/log-filters/transfers-to-investors";
 import { getTotalSupply } from "./owed-emissions-library/getTotalSupply";
 import { sumTotalSentToContacts } from "./owed-emissions-library/sumTotalSentToContacts";

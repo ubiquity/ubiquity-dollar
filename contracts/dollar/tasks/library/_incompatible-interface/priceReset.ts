@@ -2,13 +2,13 @@ import "@nomiclabs/hardhat-waffle";
 import * as dotenv from "dotenv";
 import { BigNumber, Signer } from "ethers";
 import { task, types } from "hardhat/config";
+import pressAnyKey from "../../utils/flow";
 import { BondingV2 } from "../artifacts/types/BondingV2";
 import { IMetaPool } from "../artifacts/types/IMetaPool";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-import pressAnyKey from "../../utils/flow";
 
-import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_NAME } from "./constants"
-import { A_PRECISION, get_burn_lp_amount } from "./utils"
+import { DEPLOYMENT_OVERRIDES, FORKING_CHAIN_NAME } from "./constants";
+import { A_PRECISION, get_burn_lp_amount } from "./utils";
 
 
 dotenv.config();

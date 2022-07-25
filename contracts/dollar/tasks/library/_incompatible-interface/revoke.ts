@@ -1,5 +1,5 @@
-import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
+import { task } from "hardhat/config";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
 // This file is only here to make interacting with the Dapp easier,
 // feel free to ignore it if you don't need it.

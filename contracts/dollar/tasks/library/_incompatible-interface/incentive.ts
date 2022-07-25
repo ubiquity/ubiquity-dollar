@@ -1,8 +1,8 @@
-import { task } from "hardhat/config";
 import "@nomiclabs/hardhat-waffle";
+import { task } from "hardhat/config";
+import { CurveUADIncentive } from "../artifacts/types/CurveUADIncentive";
 import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-import { CurveUADIncentive } from "../artifacts/types/CurveUADIncentive";
 // This file is only here to make interacting with the Dapp easier,
 // feel free to ignore it if you don't need it.
 
