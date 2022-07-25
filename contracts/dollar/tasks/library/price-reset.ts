@@ -1,6 +1,6 @@
 import "@nomiclabs/hardhat-waffle";
-import { priceResetter } from "./price-reset/";
 import { types } from "hardhat/config";
+import { priceResetter } from "./price-reset/";
 
 export interface TaskArgs {
   amount: string;

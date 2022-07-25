@@ -1,7 +1,7 @@
+import { ethers } from "ethers";
 import { ERC20 } from "../../../artifacts/types/ERC20";
 import { IMetaPool } from "../../../artifacts/types/IMetaPool";
 import { UbiquityAlgorithmicDollar } from "../../../artifacts/types/UbiquityAlgorithmicDollar";
-import { ethers } from "ethers";
 
 interface Params {
   uAD: UbiquityAlgorithmicDollar;

@@ -1,4 +1,4 @@
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { ERC20 } from "../../../artifacts/types/ERC20";
 import { IMetaPool } from "../../../artifacts/types/IMetaPool";
 import { UbiquityAlgorithmicDollar } from "../../../artifacts/types/UbiquityAlgorithmicDollar";
