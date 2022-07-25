@@ -1,7 +1,7 @@
-import { UseWeb3Provider } from "./hooks/useWeb3";
 import { ManagedContractsContextProvider } from "./hooks/contracts/useManagerManaged";
-import { TransactionsContextProvider } from "./hooks/useTransactionLogger";
 import { BalancesContextProvider } from "./hooks/useBalances";
+import { TransactionsContextProvider } from "./hooks/useTransactionLogger";
+import { UseWeb3Provider } from "./hooks/useWeb3";
 
 import { combineComponents } from "./combineComponents";
 

@@ -1,11 +1,10 @@
 import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 
-import * as widget from "@/ui/widget";
+import { Balances, useBalances, useTransactionLogger } from "@/lib/hooks";
+import { constrainNumber, formatTimeDiff } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { formatTimeDiff, constrainNumber } from "@/lib/utils";
-import { UbiquityAlgorithmicDollarManager } from "@/dollar-types";
-import { useBalances, Balances, useTransactionLogger } from "@/lib/hooks";
+import * as widget from "@/ui/widget";
 import usePrices from "./lib/usePrices";
 
 type Actions = {

@@ -1,5 +1,5 @@
-import * as widget from "@/ui/widget";
 import { ButtonLink } from "@/ui";
+import * as widget from "@/ui/widget";
 import { format, round } from "./lib/utils";
 
 const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: number | null; poolAddress: string; uarUsdPrice: number | null }) => {

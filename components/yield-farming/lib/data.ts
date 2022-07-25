@@ -1,6 +1,6 @@
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
-import { YieldProxy, IJar } from "@/dollar-types";
+import { IJar, YieldProxy } from "@/dollar-types";
 
 const isDev = process.env.NODE_ENV == "development";
 const debug = isDev;

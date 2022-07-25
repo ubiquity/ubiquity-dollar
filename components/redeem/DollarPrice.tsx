@@ -1,4 +1,4 @@
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 import { Tooltip } from "@/ui";
 import usePrices from "./lib/usePrices";

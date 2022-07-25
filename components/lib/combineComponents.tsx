@@ -1,4 +1,4 @@
-import React, { ComponentProps, FC } from "react";
+import { ComponentProps, FC } from "react";
 
 export const combineComponents = (...components: FC[]): FC => {
   return components.reduce(

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { ErrorBoundary } from "react-error-boundary";
-import Link from "next/link";
 import cx from "classnames";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
-import { Icon, Container } from "@/ui";
+import { Container, Icon } from "@/ui";
 
 import Inventory from "./Inventory";
-import TransactionsDisplay from "./TransactionsDisplay";
 import Sidebar, { SidebarState } from "./Sidebar";
+import TransactionsDisplay from "./TransactionsDisplay";
 import WalletConnect from "./WalletConnect";
 
 type LayoutProps = {

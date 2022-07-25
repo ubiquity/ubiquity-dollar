@@ -85,28 +85,16 @@ describe("TheUbiquityStick", function () {
 
   it("Check burn", async function () {
     await expect((await theUbiquityStick.connect(tester1).burn(tokenIdStart + 2)).wait()).to.be.not.reverted;
-    await expect(theUbiquityStick.connect(tester1).burn(tokenIdStart + 2)).to.be.revertedWith(
-      "ERC721: operator query for nonexistent token"
-    );
-    await expect(theUbiquityStick.connect(tester1).burn(tokenIdStart + 1)).to.be.revertedWith(
-      "ERC721Burnable: caller is not owner nor approved"
-    );
-    await expect(theUbiquityStick.connect(minter).burn(999)).to.be.revertedWith(
-      "ERC721: operator query for nonexistent token"
-    );
+    await expect(theUbiquityStick.connect(tester1).burn(tokenIdStart + 2)).to.be.revertedWith("ERC721: operator query for nonexistent token");
+    await expect(theUbiquityStick.connect(tester1).burn(tokenIdStart + 1)).to.be.revertedWith("ERC721Burnable: caller is not owner nor approved");
+    await expect(theUbiquityStick.connect(minter).burn(999)).to.be.revertedWith("ERC721: operator query for nonexistent token");
   });
 
   it("Check setTokenURI", async function () {
-    await expect((await theUbiquityStick.connect(minter).setTokenURI(0, tokenURIs.standardJson)).wait()).to.be.not
-      .reverted;
+    await expect((await theUbiquityStick.connect(minter).setTokenURI(0, tokenURIs.standardJson)).wait()).to.be.not.reverted;
     await expect((await theUbiquityStick.connect(minter).setTokenURI(1, tokenURIs.goldJson)).wait()).to.be.not.reverted;
-    await expect((await theUbiquityStick.connect(minter).setTokenURI(2, tokenURIs.invisibleJson)).wait()).to.be.not
-      .reverted;
-    expect(await theUbiquityStick.tokenURI(tokenIdStart + 1)).to.be.oneOf([
-      tokenURIs.standardJson,
-      tokenURIs.goldJson,
-      tokenURIs.invisibleJson
-    ]);
+    await expect((await theUbiquityStick.connect(minter).setTokenURI(2, tokenURIs.invisibleJson)).wait()).to.be.not.reverted;
+    expect(await theUbiquityStick.tokenURI(tokenIdStart + 1)).to.be.oneOf([tokenURIs.standardJson, tokenURIs.goldJson, tokenURIs.invisibleJson]);
     await expect(theUbiquityStick.connect(tester1).setTokenURI(0, tokenURIs.standardJson)).to.be.reverted;
     await expect(theUbiquityStick.connect(tester1).setTokenURI(1, tokenURIs.standardJson)).to.be.reverted;
   });

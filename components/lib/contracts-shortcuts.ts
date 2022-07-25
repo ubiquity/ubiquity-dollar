@@ -1,4 +1,4 @@
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 import { ERC1155Ubiquity, ERC20 } from "@/dollar-types";
 

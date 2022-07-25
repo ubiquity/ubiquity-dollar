@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { ethers } from "ethers";
+import { useEffect, useState } from "react";
 
 import { ERC20 } from "@/dollar-types";
 

@@ -13,7 +13,7 @@ const deployTheUbiquityStick: DeployFunction = async function ({ ethers, deploym
   const deployResult = await deploy("TheUbiquityStick", {
     from: deployer.address,
     args: [],
-    log: true
+    log: true,
     // type: 2,
     // gasLimit: BigNumber.from("1000000"),
     // gasPrice: BigNumber.from("1000000000")

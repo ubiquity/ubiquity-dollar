@@ -1,10 +1,10 @@
-import { useContext, useState, createContext, useEffect } from "react";
-import { BigNumber } from "ethers";
-import { erc1155BalanceOf } from "@/lib/utils";
 import { ERC1155Ubiquity } from "@/dollar-types";
+import { erc1155BalanceOf } from "@/lib/utils";
+import { BigNumber } from "ethers";
+import { createContext, useContext, useEffect, useState } from "react";
 import useManagerManaged from "./contracts/useManagerManaged";
-import useWalletAddress from "./useWalletAddress";
 import useNamedContracts from "./contracts/useNamedContracts";
+import useWalletAddress from "./useWalletAddress";
 
 export interface Balances {
   uad: BigNumber;

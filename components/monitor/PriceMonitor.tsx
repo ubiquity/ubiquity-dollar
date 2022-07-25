@@ -1,10 +1,10 @@
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
 import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
-import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
 import { formatEther, formatMwei } from "@/lib/format";
-import { Container, Title, SubTitle } from "@/ui";
+import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
+import { Container, SubTitle, Title } from "@/ui";
 
 import { Address, PriceExchange } from "./ui";
 

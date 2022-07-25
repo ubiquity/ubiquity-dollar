@@ -1,5 +1,5 @@
-import Vip from "@/ui/vip.svg";
 import { ButtonLink } from "@/ui";
+import Vip from "@/ui/vip.svg";
 
 const WhitelistContainer = ({ isConnected, isLoaded, isWhitelisted }: { isConnected: boolean; isLoaded: boolean; isWhitelisted: boolean }) => {
   const status = !isConnected ? "not-connected" : !isLoaded ? "loading" : isWhitelisted ? "whitelisted" : "not-whitelisted";

@@ -1,24 +1,24 @@
-import { useEffect, useContext, useState, createContext } from "react";
 import {
-  UbiquityAlgorithmicDollar__factory,
-  IMetaPool__factory,
-  TWAPOracle__factory,
-  DollarMintingCalculator__factory,
-  UbiquityAutoRedeem__factory,
-  UbiquityGovernance__factory,
   BondingShareV2__factory,
-  DebtCoupon__factory,
   BondingV2__factory,
-  MasterChefV2__factory,
-  SushiSwapPool__factory,
-  UbiquityFormulas__factory,
-  UbiquityAlgorithmicDollarManager,
+  DebtCoupon__factory,
+  DollarMintingCalculator__factory,
+  ERC20__factory,
   ICouponsForDollarsCalculator__factory,
+  IMetaPool__factory,
   IUARForDollarsCalculator__factory,
   IUniswapV2Pair__factory,
-  ERC20__factory,
+  MasterChefV2__factory,
+  SushiSwapPool__factory,
+  TWAPOracle__factory,
+  UbiquityAlgorithmicDollarManager,
+  UbiquityAlgorithmicDollar__factory,
+  UbiquityAutoRedeem__factory,
+  UbiquityFormulas__factory,
+  UbiquityGovernance__factory,
 } from "@/dollar-types";
 import { useDeployedContracts } from "@/lib/hooks";
+import { createContext, useContext, useEffect, useState } from "react";
 import useWeb3, { PossibleProviders } from "../useWeb3";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;

@@ -1,26 +1,26 @@
-import { useState } from "react";
 import cx from "classnames";
+import { useState } from "react";
 
+import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { useTransactionLogger, useWalletAddress, useWeb3Provider } from "@/lib/hooks";
 import { performTransaction } from "@/lib/utils";
-import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { Button } from "@/ui";
 
-import { goldenPool } from "./lib/pools";
 import useLaunchPartyContracts from "./lib/hooks/useLaunchPartyContracts";
-import useUbiquistick from "./lib/hooks/useUbiquistick";
-import useSimpleBond from "./lib/hooks/useSimpleBond";
 import usePrices from "./lib/hooks/usePrices";
+import useSimpleBond from "./lib/hooks/useSimpleBond";
+import useUbiquistick from "./lib/hooks/useUbiquistick";
+import { goldenPool } from "./lib/pools";
 
-import LaunchPartyHeader from "./Header";
-import UbiquiStick from "./UbiquiStick";
 import { ethers, utils } from "ethers";
-import FundingPools from "./FundingPools";
-import MultiplicationPool from "./MultiplicationPool";
-import YourBonds from "./YourBonds";
-import Liquidate from "./Liquidate";
 import AllowanceManager from "./AllowanceManager";
+import FundingPools from "./FundingPools";
+import LaunchPartyHeader from "./Header";
+import Liquidate from "./Liquidate";
+import MultiplicationPool from "./MultiplicationPool";
 import RewardsManager from "./RewardsManager";
+import UbiquiStick from "./UbiquiStick";
+import YourBonds from "./YourBonds";
 
 const App = () => {
   const provider = useWeb3Provider();

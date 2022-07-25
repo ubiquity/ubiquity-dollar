@@ -1,10 +1,10 @@
-import { useEffect } from "react";
 import Tippy from "@tippyjs/react";
-import { ethers, BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
+import { useEffect } from "react";
 
 import { useBalances, useManagerManaged, useNamedContracts } from "@/lib/hooks";
-import icons from "@/ui/icons";
 import useWeb3 from "@/lib/hooks/useWeb3";
+import icons from "@/ui/icons";
 
 import Network from "./Network";
 

@@ -1,12 +1,12 @@
 import { BigNumber } from "ethers";
 import { useState } from "react";
 
-import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { safeParseEther } from "@/lib/utils";
-import { formatEther } from "@/lib/format";
-import { PositiveNumberInput, Button } from "@/ui";
 import { ERC20 } from "@/dollar-types";
+import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
+import { formatEther } from "@/lib/format";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
+import { safeParseEther } from "@/lib/utils";
+import { Button, PositiveNumberInput } from "@/ui";
 
 const DebtCouponDeposit = () => {
   const [walletAddress] = useWalletAddress();

@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { BigNumber } from "ethers";
-import { useEffectAsync, useManagerManaged, useWalletAddress, useBalances, useSigner } from "../lib/hooks";
+import { useState } from "react";
+import { useBalances, useEffectAsync, useManagerManaged, useSigner, useWalletAddress } from "../lib/hooks";
 
 const BondingMigrate = () => {
   const [walletAddress] = useWalletAddress();

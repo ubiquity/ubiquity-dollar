@@ -1,8 +1,8 @@
-import { ICurveFactory__factory, DebtCouponManager__factory, YieldProxy__factory, IJar__factory, ERC20__factory } from "@/dollar-types";
+import { DebtCouponManager__factory, ERC20__factory, ICurveFactory__factory, IJar__factory, YieldProxy__factory } from "@/dollar-types";
 import useWeb3, { PossibleProviders } from "../useWeb3";
 
-import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
 import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
+import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
 
 export const DEBT_COUPON_MANAGER_ADDRESS = dollarDeployments[1].DebtCouponManager;
 

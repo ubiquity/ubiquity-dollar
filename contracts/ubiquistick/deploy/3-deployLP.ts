@@ -11,7 +11,7 @@ const deployLP: DeployFunction = async function (hre: HardhatRuntimeEnvironment)
   const deployResult = await deploy("LP", {
     from: deployer,
     args: ["LP token", "LP"],
-    log: true
+    log: true,
   });
   if (deployResult.newlyDeployed) {
     console.log("New LP deployment");

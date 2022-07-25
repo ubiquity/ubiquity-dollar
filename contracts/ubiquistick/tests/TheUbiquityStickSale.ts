@@ -37,7 +37,7 @@ describe("TheUbiquityStickSale", () => {
     await expect(
       signer.sendTransaction({
         to: theUbiquityStickSale.address,
-        value: price.mul(count).add(gas)
+        value: price.mul(count).add(gas),
       })
     )
       .to.emit(theUbiquityStickSale, "Mint")
@@ -109,9 +109,7 @@ describe("TheUbiquityStickSale", () => {
       expect(allow.price).to.be.equal(price);
     });
     it("Check batchSetAllowances", async () => {
-      await (
-        await theUbiquityStickSale.batchSetAllowances([tester1, tester2], [count, count * 2], [one, price])
-      ).wait();
+      await (await theUbiquityStickSale.batchSetAllowances([tester1, tester2], [count, count * 2], [one, price])).wait();
       const allow1 = await theUbiquityStickSale.allowance(tester1);
       expect(allow1.count).to.be.equal(count);
       expect(allow1.price).to.be.equal(one);
@@ -123,23 +121,13 @@ describe("TheUbiquityStickSale", () => {
 
   describe("TheUbiquityStickSale modifiers", () => {
     it("Check onlyOwner", async () => {
-      await expect(theUbiquityStickSale.connect(tester1Signer).setTokenContract(random)).to.be.revertedWith(
-        "Ownable: caller is not the owner"
-      );
-      await expect(theUbiquityStickSale.connect(tester1Signer).setFundsAddress(random)).to.be.revertedWith(
-        "Ownable: caller is not the owner"
-      );
-      await expect(theUbiquityStickSale.connect(tester1Signer).setAllowance(random, count, one)).to.be.revertedWith(
-        "Ownable: caller is not the owner"
-      );
+      await expect(theUbiquityStickSale.connect(tester1Signer).setTokenContract(random)).to.be.revertedWith("Ownable: caller is not the owner");
+      await expect(theUbiquityStickSale.connect(tester1Signer).setFundsAddress(random)).to.be.revertedWith("Ownable: caller is not the owner");
+      await expect(theUbiquityStickSale.connect(tester1Signer).setAllowance(random, count, one)).to.be.revertedWith("Ownable: caller is not the owner");
       await expect(
-        theUbiquityStickSale
-          .connect(tester1Signer)
-          .batchSetAllowances([tester1, tester2], [count, count * 2], [one, one.mul(3)])
+        theUbiquityStickSale.connect(tester1Signer).batchSetAllowances([tester1, tester2], [count, count * 2], [one, one.mul(3)])
       ).to.be.revertedWith("Ownable: caller is not the owner");
-      await expect(theUbiquityStickSale.connect(tester1Signer).withdraw()).to.be.revertedWith(
-        "Ownable: caller is not the owner"
-      );
+      await expect(theUbiquityStickSale.connect(tester1Signer).withdraw()).to.be.revertedWith("Ownable: caller is not the owner");
     });
   });
 
@@ -180,27 +168,23 @@ describe("TheUbiquityStickSale", () => {
       const totalSupplyBefore = await theUbiquityStick.totalSupply();
       await (await theUbiquityStickSale.setAllowance(random, 1, one.mul(2))).wait();
 
-      await (
-        await randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(2).add(gas) })
-      ).wait();
+      await (await randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(2).add(gas) })).wait();
 
       const totalSupplyAfter = await theUbiquityStick.totalSupply();
       expect(totalSupplyAfter.sub(totalSupplyBefore)).to.be.eq(1);
     });
 
     it("Check Mint not possible without allowance", async () => {
-      await expect(
-        randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.add(gas) })
-      ).to.be.revertedWith("Not Whitelisted For The Sale Or Insufficient Allowance");
+      await expect(randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.add(gas) })).to.be.revertedWith(
+        "Not Whitelisted For The Sale Or Insufficient Allowance"
+      );
     });
 
     it("Check Mint 10 maximum per transaction", async () => {
       const totalSupplyBefore = await theUbiquityStick.totalSupply();
       await (await theUbiquityStickSale.setAllowance(random, 100, one)).wait();
 
-      await (
-        await randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(20).add(gas) })
-      ).wait();
+      await (await randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(20).add(gas) })).wait();
 
       const totalSupplyAfter = await theUbiquityStick.totalSupply();
       expect(totalSupplyAfter.sub(totalSupplyBefore)).to.be.eq(10);
@@ -208,9 +192,7 @@ describe("TheUbiquityStickSale", () => {
 
     it("Check Mint not possible without enough funds", async () => {
       await (await theUbiquityStickSale.setAllowance(random, 1, one.mul(51))).wait();
-      await expect(
-        randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(50).add(gas) })
-      ).to.be.revertedWith("Not enough Funds");
+      await expect(randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(50).add(gas) })).to.be.revertedWith("Not enough Funds");
     });
 
     it("Check Mint and emit Mint event", async () => {
@@ -253,9 +235,7 @@ describe("TheUbiquityStickSale", () => {
         await randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: one.mul(12).add(gas) });
       }
       console.log(i);
-      await expect(randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: gas })).to.be.revertedWith(
-        "Sold Out"
-      );
+      await expect(randomSigner.sendTransaction({ to: theUbiquityStickSale.address, value: gas })).to.be.revertedWith("Sold Out");
       expect(await theUbiquityStick.totalSupply()).to.be.equal(MAXIMUM_SUPPLY);
     });
 

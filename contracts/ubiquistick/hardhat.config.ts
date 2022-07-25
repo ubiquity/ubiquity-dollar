@@ -31,7 +31,7 @@ for (let i = 0; i <= 5; i++) {
 
 const accountsHardhat: HardhatNetworkAccountUserConfig[] = accounts.map((account) => ({
   privateKey: account,
-  balance: "2000000000000000000000"
+  balance: "2000000000000000000000",
 }));
 
 const config: HardhatUserConfig = {
@@ -42,7 +42,7 @@ const config: HardhatUserConfig = {
     tester1: { default: 2 },
     tester2: { default: 3 },
     random: { default: 4 },
-    treasury: { default: 5, mainnet: 0 }
+    treasury: { default: 5, mainnet: 0 },
   },
   solidity: {
     compilers: [
@@ -51,14 +51,14 @@ const config: HardhatUserConfig = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200
-          }
-        }
+            runs: 200,
+          },
+        },
       },
       {
-        version: "0.8.4"
-      }
-    ]
+        version: "0.8.4",
+      },
+    ],
   },
   networks: {
     hardhat: {
@@ -66,35 +66,35 @@ const config: HardhatUserConfig = {
       accounts: accountsHardhat,
       initialBaseFeePerGas: 0,
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`
-      }
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`,
+      },
     },
     local: {
       chainId: 1,
-      url: "http://0.0.0.0:8545"
+      url: "http://0.0.0.0:8545",
     },
     mainnet: {
       chainId: 1,
       url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`,
-      accounts
+      accounts,
     },
     rinkeby: {
       loggingEnabled: true,
       chainId: 4,
       url: `https://rinkeby.infura.io/v3/${process.env.API_KEY_ALCHEMY}`,
-      accounts
-    }
+      accounts,
+    },
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
-    currency: "USD"
+    currency: "USD",
   },
   etherscan: {
-    apiKey: process.env.API_KEY_ETHERSCAN || ""
+    apiKey: process.env.API_KEY_ETHERSCAN || "",
   },
   typechain: {
     outDir: "types",
-    target: "ethers-v5"
+    target: "ethers-v5",
   },
   paths: {
     sources: "contracts",
@@ -103,12 +103,12 @@ const config: HardhatUserConfig = {
     tests: "tests",
     imports: "lib",
     cache: "artifacts/cache",
-    artifacts: "artifacts"
+    artifacts: "artifacts",
   },
   mocha: {
     timeout: 1_000_000,
-    bail: true
-  }
+    bail: true,
+  },
 };
 
 export default config;

@@ -1,8 +1,8 @@
-import { useEffect, useCallback, useRef } from "react";
+import { Icon, IconsNames } from "@/ui";
+import cx from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import cx from "classnames";
-import { Icon, IconsNames } from "@/ui";
+import { useCallback, useEffect, useRef } from "react";
 
 const PROD = process.env.NODE_ENV == "production";
 

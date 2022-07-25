@@ -1,9 +1,9 @@
-import cx from "classnames";
-import * as widget from "../ui/widget";
 import { Button } from "@/ui";
-import { OwnedSticks, SticksAllowance, TokenMedia, TokenData } from "./lib/hooks/useUbiquistick";
-import Whitelist from "./Whitelist";
+import cx from "classnames";
 import { useTransactionLogger } from "../lib/hooks";
+import * as widget from "../ui/widget";
+import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/hooks/useUbiquistick";
+import Whitelist from "./Whitelist";
 
 // const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
 

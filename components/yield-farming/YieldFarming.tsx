@@ -1,14 +1,14 @@
-import React, { memo, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
+import { memo, useEffect, useState } from "react";
 
 import { ERC20 } from "@/dollar-types";
-import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { performTransaction, constrainNumber, constrainStringNumber } from "@/lib/utils";
 import { useBalances, useTransactionLogger } from "@/lib/hooks";
-import { Tooltip, Container, Title, SubTitle, icons, Icon, Button, WalletNotConnected, PositiveNumberInput, MaxButtonWrapper } from "@/ui";
+import { constrainStringNumber, performTransaction } from "@/lib/utils";
+import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
+import { Button, Container, Icon, icons, MaxButtonWrapper, PositiveNumberInput, SubTitle, Title, Tooltip, WalletNotConnected } from "@/ui";
 
-import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyDepositInfo, YieldProxyData } from "./lib/data";
+import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyData, YieldProxyDepositInfo } from "./lib/data";
 
 type Balance = { usdc: number; ubq: number; uad: number };
 

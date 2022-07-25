@@ -1,17 +1,16 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { useWeb3 } from "@/lib/hooks";
 import { ERC20, ERC20__factory } from "@/dollar-types";
+import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "@/fixtures/abi/types";
+import { useDeployedAddress, useWeb3 } from "@/lib/hooks";
 import {
-  TheUbiquityStickSale__factory,
-  SimpleBond__factory,
   SimpleBond,
-  TheUbiquityStickSale,
+  SimpleBond__factory,
   TheUbiquityStick,
+  TheUbiquityStickSale,
+  TheUbiquityStickSale__factory,
   TheUbiquityStick__factory,
 } from "@/ubiquistick-types";
-import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "@/fixtures/abi/types";
-import { useDeployedAddress } from "@/lib/hooks";
 
 import { allPools } from "../pools";
 

@@ -1,9 +1,9 @@
+import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import { ethers } from "ethers";
 import { useState } from "react";
-import { poolByAddress } from "./lib/pools";
-import { round, apyFromRatio, multiplierFromRatio } from "./lib/utils";
-import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import * as widget from "../ui/widget";
+import { poolByAddress } from "./lib/pools";
+import { apyFromRatio, multiplierFromRatio, round } from "./lib/utils";
 
 type RewardsManagerParams = {
   onSubmit: ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => unknown;

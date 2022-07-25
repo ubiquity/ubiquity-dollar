@@ -1,5 +1,5 @@
-import { useTransactionLogger, Transaction } from "@/lib/hooks";
-import { Spinner, Button } from "../ui";
+import { Transaction, useTransactionLogger } from "@/lib/hooks";
+import { Button, Spinner } from "../ui";
 
 export const Transacting = (props: { transaction: Transaction; onDismiss: () => void }): JSX.Element | null => {
   if (props.transaction.status === "failure" && !props.transaction.dismissed) {

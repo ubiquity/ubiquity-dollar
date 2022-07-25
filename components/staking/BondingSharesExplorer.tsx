@@ -2,10 +2,10 @@ import { BigNumber, ethers } from "ethers";
 import { memo, useCallback, useState } from "react";
 
 import { formatEther } from "@/lib/format";
+import { useBalances, useTransactionLogger } from "@/lib/hooks";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Container, Title, Icon, Loading, Button } from "@/ui";
-import { useBalances, useTransactionLogger } from "@/lib/hooks";
+import { Button, Container, Icon, Loading, Title } from "@/ui";
 
 // Contracts: bonding, metaPool, bondingToken, masterChef
 

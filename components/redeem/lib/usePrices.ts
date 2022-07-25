@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { BigNumber, utils } from "ethers";
 import { useDeployedContracts, useManagerManaged } from "@/components/lib/hooks";
+import { BigNumber, utils } from "ethers";
+import { useEffect, useState } from "react";
 
 const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] => {
   const deployedContracts = useDeployedContracts();

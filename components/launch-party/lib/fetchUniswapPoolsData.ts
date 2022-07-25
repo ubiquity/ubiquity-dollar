@@ -1,7 +1,7 @@
-import { ethers } from "ethers";
-import { UniswapV3Pool__factory, UniswapV2Pair__factory } from "@/fixtures/abi/types";
-import { PossibleProviders } from "@/lib/hooks/useWeb3";
 import { ERC20, ERC20__factory } from "@/dollar-types";
+import { UniswapV2Pair__factory, UniswapV3Pool__factory } from "@/fixtures/abi/types";
+import { PossibleProviders } from "@/lib/hooks/useWeb3";
+import { ethers } from "ethers";
 
 export type UniswapData = {
   poolAddress: string;

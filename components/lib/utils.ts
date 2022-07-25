@@ -1,7 +1,7 @@
-import { ethers, ContractTransaction, BigNumber } from "ethers";
-import { ERC1155Ubiquity } from "../../contracts/dollar/artifacts/types";
-import { useEffect } from "react";
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
+import { BigNumber, ContractTransaction, ethers } from "ethers";
+import { useEffect } from "react";
+import { ERC1155Ubiquity } from "../../contracts/dollar/artifacts/types";
 
 export function logGas(txDone: ethers.ContractReceipt) {
   console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);

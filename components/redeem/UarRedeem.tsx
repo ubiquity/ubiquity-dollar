@@ -3,9 +3,9 @@ import { useState } from "react";
 
 import { ERC20 } from "@/dollar-types";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { safeParseEther } from "@/lib/utils";
-import { PositiveNumberInput, Button } from "@/ui";
 import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
+import { safeParseEther } from "@/lib/utils";
+import { Button, PositiveNumberInput } from "@/ui";
 
 const UarRedeem = () => {
   const [walletAddress] = useWalletAddress();

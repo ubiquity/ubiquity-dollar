@@ -1,8 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
-import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
+import { createContext, useContext, useEffect, useState } from "react";
 import useLocalStorage from "./useLocalStorage";
-import { useEffect } from "react";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
@@ -68,7 +67,14 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
         const newSigner = newProvider.getSigner(newWalletAddress);
         setStoredWallet(newWalletAddress);
         setStoredProviderMode("metamask");
-        setWeb3State({ ...web3State, connecting: false, providerMode: "metamask", provider: newProvider, walletAddress: newWalletAddress, signer: newSigner });
+        setWeb3State({
+          ...web3State,
+          connecting: false,
+          providerMode: "metamask",
+          provider: newProvider,
+          walletAddress: newWalletAddress,
+          signer: newSigner,
+        });
       } else {
         alert("No accounts found");
         setWeb3State({ ...web3State, connecting: false });

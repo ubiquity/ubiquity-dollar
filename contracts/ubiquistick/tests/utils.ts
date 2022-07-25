@@ -9,24 +9,24 @@ export async function forkReset(blockNumber: any) {
         forking: {
           // @ts-ignore
           jsonRpcUrl: hardhatConfig.networks.hardhat.forking.url,
-          blockNumber
-        }
-      }
-    ]
+          blockNumber,
+        },
+      },
+    ],
   });
 }
 
 export async function mineBlock(timestamp: any) {
   await network.provider.request({
     method: "evm_mine",
-    params: [timestamp]
+    params: [timestamp],
   });
 }
 
 export async function sendEth(from: any, to: any, amount: any) {
   await from.sendTransaction({
     to: to,
-    value: ethers.BigNumber.from(10).pow(18).mul(amount)
+    value: ethers.BigNumber.from(10).pow(18).mul(amount),
   });
 }
 

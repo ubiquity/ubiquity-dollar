@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { Container, Title, Button, Icon, Tooltip } from "@/ui";
 import { useWeb3 } from "@/lib/hooks";
-import { useEffect } from "react";
+import { Button, Container, Icon, Title, Tooltip } from "@/ui";
+import { useEffect, useState } from "react";
 
 const PROD = process.env.NODE_ENV == "production";
 

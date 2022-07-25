@@ -1,7 +1,7 @@
-import { round, format, formatFixed } from "./lib/utils";
 import { Button } from "@/ui";
 import * as widget from "../ui/widget";
 import { BondData } from "./lib/hooks/useSimpleBond";
+import { format, formatFixed, round } from "./lib/utils";
 
 const toTimeInWords = (time: number): string => {
   const days = Math.floor(time / (1000 * 60 * 60 * 24));

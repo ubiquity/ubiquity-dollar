@@ -1,6 +1,6 @@
+import * as widget from "../ui/widget";
 import BondingPool from "./BondingPool";
 import { PoolData, pools } from "./lib/pools";
-import * as widget from "../ui/widget";
 
 type FundingPoolParams = {
   enabled: boolean;

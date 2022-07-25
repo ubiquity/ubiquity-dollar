@@ -7,7 +7,7 @@ const deployTheUbiquityStickSale: DeployFunction = async function ({ ethers, dep
   const deployResult = await deployments.deploy("TheUbiquityStickSale", {
     from: deployer.address,
     args: [],
-    log: true
+    log: true,
   });
   if (deployResult.newlyDeployed) {
     const theUbiquityStick = await ethers.getContract("TheUbiquityStick");
