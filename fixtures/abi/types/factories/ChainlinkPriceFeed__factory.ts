@@ -4,10 +4,7 @@
 
 import { Contract, Signer, utils } from "ethers";
 import { Provider } from "@ethersproject/providers";
-import type {
-  ChainlinkPriceFeed,
-  ChainlinkPriceFeedInterface,
-} from "../ChainlinkPriceFeed";
+import type { ChainlinkPriceFeed, ChainlinkPriceFeedInterface } from "../ChainlinkPriceFeed";
 
 const _abi = [
   {
@@ -524,10 +521,7 @@ export class ChainlinkPriceFeed__factory {
   static createInterface(): ChainlinkPriceFeedInterface {
     return new utils.Interface(_abi) as ChainlinkPriceFeedInterface;
   }
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): ChainlinkPriceFeed {
+  static connect(address: string, signerOrProvider: Signer | Provider): ChainlinkPriceFeed {
     return new Contract(address, _abi, signerOrProvider) as ChainlinkPriceFeed;
   }
 }

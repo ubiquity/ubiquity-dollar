@@ -16,7 +16,7 @@ type LayoutProps = {
 
 const PROD = process.env.NODE_ENV == "production";
 
-function ErrorHandler({ error }: { error: any }) {
+function ErrorHandler({ error }: { error: Error }) {
   return (
     <Container className="w-96">
       <div className="flex flex-col items-center justify-center text-center">
@@ -35,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
   const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
 
   useEffect(() => {
-    const ethereum = (window as any).ethereum;
+    const { ethereum } = window;
     if (ethereum) {
       ethereum.on("accountsChanged", () => window.location.reload());
       ethereum.on("chainChanged", () => window.location.reload());

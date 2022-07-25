@@ -1000,10 +1000,7 @@ export class UniswapV3Pool__factory {
   static createInterface(): UniswapV3PoolInterface {
     return new utils.Interface(_abi) as UniswapV3PoolInterface;
   }
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): UniswapV3Pool {
+  static connect(address: string, signerOrProvider: Signer | Provider): UniswapV3Pool {
     return new Contract(address, _abi, signerOrProvider) as UniswapV3Pool;
   }
 }
