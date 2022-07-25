@@ -1,28 +1,30 @@
-import { InvestorWithTransfers } from "../distributor-library/investor-types";
+import { Investor, InvestorWithTransfers } from "../distributor-library/investor-types";
 import { Tranche } from "../distributor-library/log-filters/transfers-to-investors";
 
-export async function sumTotalSentToContacts(investorsWithTransfers: InvestorWithTransfers[], tranches: Tranche[]) {
+export async function sumTotalSentToContacts(Investors: Investor[], tranches: Tranche[]): Promise<InvestorWithTransfers[]> {
   let transferAmounts = [] as InvestorWithTransfers[];
-  for (const contact of investorsWithTransfers) {
-    transferAmounts.push(getTransferAmounts(contact, tranches));
+  for (const investor of Investors) {
+    transferAmounts.push(getTransferAmounts(investor, tranches));
   }
   return transferAmounts;
 }
 
-function getTransferAmounts(investor: InvestorWithTransfers, tranches: Tranche[]) {
+function getTransferAmounts(investor: Investor, tranches: Tranche[]) {
+  let investorWithTransfers = Object.assign({}, investor) as InvestorWithTransfers;
   tranches.forEach((tranche: Tranche) => {
-    if (!investor.transferred) {
-      investor.transferred = 0;
+    if (!investorWithTransfers.transferred) {
+      investorWithTransfers.transferred = 0;
     }
 
-    if (!investor.transactions) {
-      investor.transactions = [];
+    if (!investorWithTransfers.transactions) {
+      investorWithTransfers.transactions = [];
     }
 
-    if (tranche.name === investor.name) {
-      investor.transferred += tranche.amount;
-      investor.transactions.push(tranche.hash);
+    if (tranche.name === investorWithTransfers.name) {
+      investorWithTransfers.transferred += tranche.amount;
+      investorWithTransfers.transactions.push(tranche.hash);
     }
   });
-  return investor;
+
+  return investorWithTransfers;
 }

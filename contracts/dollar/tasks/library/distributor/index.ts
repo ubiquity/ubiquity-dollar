@@ -32,7 +32,7 @@ export async function _distributor(taskArgs: TaskArgs, hre: HardhatRuntimeEnviro
   const distributorTransactions = transfersToInvestors;
   const tranches = distributorTransactions;
 
-  calculateOwedUbqEmissions(investorsWithTransfers, tranches, hre);
+  calculateOwedUbqEmissions(investors, tranches, hre);
 
   // fs.writeFileSync("./distributor-transactions.json", JSON.stringify(transfersToContactsOnly, null, 2));
 }

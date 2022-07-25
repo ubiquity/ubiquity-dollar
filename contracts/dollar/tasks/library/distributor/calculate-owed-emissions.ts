@@ -4,7 +4,7 @@ import "hardhat-deploy";
 import { HardhatRuntimeEnvironment } from "hardhat/types/runtime";
 import { ERC20 } from "../../../artifacts/types/ERC20";
 
-import { InvestorWithTransfers, TaskArgs } from "./distributor-library/investor-types";
+import { Investor, InvestorWithTransfers, TaskArgs } from "./distributor-library/investor-types";
 import { Tranche } from "./distributor-library/log-filters/transfers-to-investors";
 import { getTotalSupply } from "./owed-emissions-library/getTotalSupply";
 import { sumTotalSentToContacts } from "./owed-emissions-library/sumTotalSentToContacts";
@@ -18,8 +18,8 @@ const ubiquityGovernanceTokenAddress = "0x4e38D89362f7e5db0096CE44ebD021c3962aA9
 // yarn hardhat distributor --investors <full path to (investors.json)>
 // yarn hardhat calculate-owed-emissions
 
-export async function calculateOwedUbqEmissions(investorsWithTransfers: InvestorWithTransfers[], tranches: Tranche[], hre: HardhatRuntimeEnvironment) {
-  const totals = await sumTotalSentToContacts(investorsWithTransfers, tranches);
+export async function calculateOwedUbqEmissions(investors: Investor[], tranches: Tranche[], hre: HardhatRuntimeEnvironment): Promise<({ owed: number; } & InvestorWithTransfers)[]> {
+  const totals = await sumTotalSentToContacts(investors, tranches);
 
   let cacheTotalSupply: number;
   if (ubiquityGovernanceTokenAddress) {
