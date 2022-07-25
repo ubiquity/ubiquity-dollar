@@ -13,20 +13,27 @@
     "url": "https://github.com/ubiquity/uad-contracts.git"
   },
   "scripts": {
-    "clean": "yarn hardhat clean",
+    "clean": "hardhat clean",
     "build": "TS_NODE_TRANSPILE_ONLY=1 yarn hardhat compile",
-    "test": "yarn hardhat test",
-    "test:coverage": "yarn hardhat coverage",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
     "lint": "run-s lint:* build",
     "lint:sol": "solhint 'contracts/**/*.sol' --fix",
     "lint:eslint": "eslint . --ext .js,.ts --fix",
     "lint:prettier": "prettier --write .",
+<<<<<<< HEAD
+    "node:start": "hardhat node --no-deploy --show-accounts",
+    "node:faucet": "hardhat faucet --network localhost",
+    "node:twapUp": "hardhat priceReset --amount 20000 --network localhost",
+    "node:deployYieldProxy": "hardhat deployYieldProxyLocally --network localhost"
+=======
     "node:start": "yarn hardhat node --hostname 0.0.0.0 --no-deploy --show-accounts",
     "node:faucet": "yarn hardhat faucet --network localhost",
     "node:twapUp:localhost": "yarn hardhat priceReset --price 1.00 --network localhost",
     "node:twapUp:hardhat": "yarn hardhat priceReset --price 1.00 --network hardhat --dryrun false",
     "node:twapUp:mainnet": "yarn hardhat priceReset --price 1.00 --network mainnet --dryrun false",
     "node:deployYieldProxy": "yarn hardhat deployYieldProxyLocally --network localhost"
+>>>>>>> 830f38242198d3cd1789a9a5a23e193e510d1c18
   },
   "keywords": [
     "stablecoin",

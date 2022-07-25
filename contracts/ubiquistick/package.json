@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "yarn hardhat clean",
+    "clean": "hardhat clean",
     "build": "TS_NODE_TRANSPILE_ONLY=1 yarn hardhat compile",
     "test": "echo \"Error: no test specified\" && exit 1",
     "node:start": "yarn hardhat node --hostname 0.0.0.0 --show-accounts"
@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "@codechecks/client": "^0.1.12",
     "@ethersproject/abi": "^5.5.0",
     "@ethersproject/abstract-provider": "^5.5.1",
@@ -52,6 +52,5 @@
     "tsconfig-paths": "^3.12.0",
     "typechain": "^7.0.0",
     "typescript": "^4.5.5"
-  },
-  "devDependencies": {}
+  }
 }

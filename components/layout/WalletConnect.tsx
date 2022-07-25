@@ -19,6 +19,10 @@ const WalletConnect = () => {
     }
   }, [walletModal]);
 
+  useEffect(() => {
+    setWalletModal(connecting);
+  }, [connecting]);
+
   return (
     <>
       {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
@@ -56,15 +60,17 @@ const WalletConnect = () => {
 export default WalletConnect;
 
 function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskInstalled: boolean }) {
-  const [{ provider }, { connectMetamask, connectJsonRpc }] = useWeb3();
+  const [{ provider }, { connectMetamask, connectWalletconnect, connectJsonRpc }] = useWeb3();
 
-  console.log("PROVIDER!", provider);
-
-  function Btn({ text, onClick, icon }: { text: string; icon: string; onClick: () => void }) {
+  function Btn({ text, onClick, icon, iconSize = "md" }: { text: string; icon: string; iconSize?: string; onClick: () => void }) {
     return (
       <div onClick={() => onClick()} className="border-soli cursor-pointer rounded-lg border border-accent p-4 text-center hover:bg-accent/20">
         <div className="mb-4 flex h-20 items-center justify-center">
-          <img className="w-20" src={"/providers-icons/" + icon + ".svg"} />
+          {iconSize === "md" ? (
+            <img className={`w-[5rem]`} src={"/providers-icons/" + icon + ".svg"} />
+          ) : (
+            <img className={`w-[7rem]`} src={"/providers-icons/" + icon + ".svg"} />
+          )}
         </div>
         <span className="text-sm uppercase tracking-widest">{text}</span>
       </div>
@@ -83,7 +89,7 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
       <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/50" onClick={() => onClose()}></div>
       <Container>
         <Title text="Connect wallet" />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           <Btn
             text="Metamask"
             icon="metamask"
@@ -93,6 +99,7 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
                 : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
             }
           />
+          <Btn text="WalletConnect" icon="walletconnect" iconSize="lg" onClick={connectWalletconnect} />
           <Btn text="Hardhat node" icon="hardhat" onClick={promptForWalletAddress} />
         </div>
       </Container>
