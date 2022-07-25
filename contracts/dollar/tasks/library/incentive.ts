@@ -1,12 +1,13 @@
 import "@nomiclabs/hardhat-waffle";
-import { task } from "hardhat/config";
-import { CurveUADIncentive } from "../artifacts/types/CurveUADIncentive";
-import { UbiquityAlgorithmicDollar } from "../artifacts/types/UbiquityAlgorithmicDollar";
-import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-// This file is only here to make interacting with the Dapp easier,
-// feel free to ignore it if you don't need it.
 
-task("incentive", "Sends ETH and tokens to an address").setAction(
+import { ActionType } from "hardhat/types";
+import { CurveUADIncentive } from "../../artifacts/types/CurveUADIncentive";
+import { UbiquityAlgorithmicDollar } from "../../artifacts/types/UbiquityAlgorithmicDollar";
+import { UbiquityAlgorithmicDollarManager } from "../../artifacts/types/UbiquityAlgorithmicDollarManager";
+
+export const description = "Sends ETH and tokens to an address";
+export const action =
+  (): ActionType<any> =>
   async (taskArgs: { receiver: string; manager: string }, { ethers }) => {
     const net = await ethers.provider.getNetwork();
 
@@ -20,16 +21,10 @@ task("incentive", "Sends ETH and tokens to an address").setAction(
     )) as UbiquityAlgorithmicDollarManager;
     const uADAdr = await manager.dollarTokenAddress();
 
-    const uAD = (await ethers.getContractAt(
-      "UbiquityAlgorithmicDollar",
-      uADAdr
-    )) as UbiquityAlgorithmicDollar;
+    const uAD = (await ethers.getContractAt("UbiquityAlgorithmicDollar", uADAdr)) as UbiquityAlgorithmicDollar;
     const metaPoolAddr = await manager.stableSwapMetaPoolAddress();
     const incentive = await uAD.incentiveContract(metaPoolAddr);
-    const curveIncentive = (await ethers.getContractAt(
-      "CurveUADIncentive",
-      incentive
-    )) as CurveUADIncentive;
+    const curveIncentive = (await ethers.getContractAt("CurveUADIncentive", incentive)) as CurveUADIncentive;
 
     console.log("curveIncentive   at:", incentive);
 
@@ -39,5 +34,4 @@ task("incentive", "Sends ETH and tokens to an address").setAction(
     isSellPenaltyOn: ${isSellPenaltyOn ? "True" : "False"}
     isBuyIncentiveOn: ${isBuyIncentiveOn ? "True" : "False"}
       `);
-  }
-);
+  };

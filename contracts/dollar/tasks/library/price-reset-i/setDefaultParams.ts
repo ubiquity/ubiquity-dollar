@@ -1,4 +1,4 @@
-import { TaskArgs } from '../price-reset';
+import { TaskArgs } from "../price-reset-i";
 export function setDefaultParams(taskArgs: TaskArgs) {
   if (!taskArgs["pushHigher"]) {
     taskArgs["pushHigher"] = true;

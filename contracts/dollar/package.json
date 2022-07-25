@@ -130,6 +130,7 @@
   },
   "devDependencies": {
     "@types/ethereum-block-by-date": "^1.4.1",
-    "ethereum-block-by-date": "^1.4.5"
+    "ethereum-block-by-date": "^1.4.5",
+    "nodemon": "^2.0.19"
   }
 }

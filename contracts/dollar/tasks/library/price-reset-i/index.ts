@@ -4,13 +4,13 @@ import { ActionType } from "hardhat/types";
 import { ICurveFactory } from "../../../artifacts/types/ICurveFactory";
 import { TWAPOracle } from "../../../artifacts/types/TWAPOracle";
 import pressAnyKey from "../../utils/flow";
-import { TaskArgs } from "../price-reset";
 import { afterBalances } from "./afterBalances";
 import { balancesAndCalculations } from "./balancesAndCalculations";
 import { dryRunner } from "./dryRunner";
 import { getAddresses } from "./getAddresses";
 import { read3crvInfo } from "./read3crvInfo";
 import { setDefaultParams } from "./setDefaultParams";
+import { TaskArgs } from '../price-reset-i';
 
 export const priceResetter =
   (): ActionType<any> =>

@@ -1,5 +1,5 @@
 import { Signer } from "ethers";
-import { TaskArgs } from '../price-reset';
+import { TaskArgs } from '../price-reset-i';
 
 const ADMIN_WALLET = "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd";
 
