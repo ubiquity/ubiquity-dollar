@@ -1,10 +1,9 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { getRecipients } from "./distributor-library/distributor-helpers";
-import { transfersToInvestorsFilterWrapper } from "./distributor-library/log-filters/transfers-to-investors";
+import { Tranche, transfersToInvestorsFilterWrapper } from "./distributor-library/log-filters/transfers-to-investors";
 import { readContractTransactionHistory } from "./distributor-library/read-contract-transaction-history";
 import transferFilter from "./distributor-library/log-filters/transfers";
 import { calculateOwedUbqEmissions } from "./calculate-owed-emissions";
-
+import { getInvestors } from "./distributor-library/getInvestors";
 const vestingRange = ["2022-05-01T00:00:00.000Z", "2024-05-01T00:00:00.000Z"];
 
 /**
@@ -21,7 +20,7 @@ interface TaskArgs {
 }
 
 export async function _distributor(taskArgs: TaskArgs, hre: HardhatRuntimeEnvironment) {
-  const investors = await getRecipients(taskArgs.investors); // 1
+  const investors = await getInvestors(taskArgs.investors); // 1
 
   const transactionHistories = await readContractTransactionHistory(taskArgs.token, vestingRange);
   // fs.writeFileSync("./transaction-histories.json", JSON.stringify(transactionHistories, null, 2));
@@ -29,11 +28,9 @@ export async function _distributor(taskArgs: TaskArgs, hre: HardhatRuntimeEnviro
   const transfersToAnybody = transactionHistories.filter(transferFilter);
   const transfersToInvestorsFilter = transfersToInvestorsFilterWrapper(investors);
 
-  const transfersToInvestors = transfersToAnybody.map(transfersToInvestorsFilter).filter(Boolean);
+  const transfersToInvestors = transfersToAnybody.map(transfersToInvestorsFilter).filter(Boolean) as Tranche[];
   const distributorTransactions = transfersToInvestors;
   const tranches = distributorTransactions;
-
-
 
   calculateOwedUbqEmissions(investorsWithTransfers, tranches, hre);
 
