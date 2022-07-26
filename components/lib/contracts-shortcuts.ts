@@ -4,8 +4,6 @@ import { ERC1155Ubiquity, ERC20 } from "@/dollar-types";
 
 import { performTransaction } from "./utils";
 
-const isDev = process.env.NODE_ENV == "development";
-
 export async function ensureERC20Allowance(
   logName: string,
   contract: ERC20,

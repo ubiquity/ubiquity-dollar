@@ -35,7 +35,6 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) =>
     if (provider && walletAddress && contracts && tokensContracts.length > 0 && ubqContracts) {
       const blocksCountInAWeek = (await ubqContracts.bonding.blockCountInAWeek()).toNumber();
       const vestingBlocks = (await contracts.simpleBond.vestingBlocks()).toNumber();
-      const vestingTimeInDays = vestingBlocks / (blocksCountInAWeek / 7);
 
       const ratios = await Promise.all(allPools.map((pool) => contracts.simpleBond.rewardsRatio(pool.tokenAddress)));
 
