@@ -1,0 +1,17 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": ["UbiquiStick"],
+  "ignorePaths": [
+    "**/*.json",
+    "**/*.log",
+    "**/*.svg",
+    "**/*.lock",
+    "**/node_modules/**",
+    "fixtures/abi/types/**",
+    "contracts/*/deployments/**",
+    "contracts/*/artifacts/**",
+    "contracts/*/cache/**",
+    "contracts/*/types/**"
+  ]
+}

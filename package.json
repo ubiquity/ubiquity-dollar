@@ -30,7 +30,8 @@
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "prepare": "husky install",
-    "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`"
+    "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`",
+    "__format:cspell": "cspell '**'"
   },
   "nodemonConfig": {
     "ignore": [
@@ -52,6 +53,7 @@
     "@ethersproject/providers": "^5.0.0",
     "@svgr/webpack": "^6.1.2",
     "classnames": "^2.3.1",
+    "cspell": "^6.4.2",
     "husky": "^7.0.4",
     "lint-staged": "^12.3.3"
   },
