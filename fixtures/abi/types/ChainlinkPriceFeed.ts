@@ -233,16 +233,14 @@ export type OwnershipTransferRequestedEvent = TypedEvent<
   { from: string; to: string }
 >;
 
-export type OwnershipTransferRequestedEventFilter =
-  TypedEventFilter<OwnershipTransferRequestedEvent>;
+export type OwnershipTransferRequestedEventFilter = TypedEventFilter<OwnershipTransferRequestedEvent>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string],
   { from: string; to: string }
 >;
 
-export type OwnershipTransferredEventFilter =
-  TypedEventFilter<OwnershipTransferredEvent>;
+export type OwnershipTransferredEventFilter = TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface ChainlinkPriceFeed extends BaseContract {
   contractName: "ChainlinkPriceFeed";
