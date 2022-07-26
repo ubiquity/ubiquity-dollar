@@ -6,7 +6,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 
 import Layout from "@/components/layout";
-import AppContextProvider from "@/lib/AppContextProvider";
+import _AppContextProvider from "@/lib/AppContextProvider";
 
 const noOverlayWorkaroundScript = `
   window.addEventListener('error', event => {
@@ -48,11 +48,11 @@ export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Elemen
         <meta name="theme-color" content="#06061a" />
         {process.env.NODE_ENV !== "production" && <script dangerouslySetInnerHTML={{ __html: noOverlayWorkaroundScript }} />}
       </Head>
-      <AppContextProvider>
+      <_AppContextProvider>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </AppContextProvider>
+      </_AppContextProvider>
       <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     </>
   );
