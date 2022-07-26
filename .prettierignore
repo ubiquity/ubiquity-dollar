@@ -6,3 +6,5 @@ contracts/*/artifacts/
 contracts/*/cache/
 contracts/*/deployments/
 contracts/*/types/
+
+fixtures/
