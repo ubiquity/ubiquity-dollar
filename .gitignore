@@ -44,6 +44,8 @@ typings
 *.log
 /abi/types/*
 
+###
+
 web/dapp
 contracts/*/deployments/*
 !contracts/*/deployments/mainnet
