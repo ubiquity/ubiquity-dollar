@@ -57,3 +57,5 @@ yarn hardhat --network localhost faucet --receiver $YOUR_ETH_ADDRESS --manager $
 ```
 
 Sine stabilitate nihil habemus.
+
+## Foundry Set Up
