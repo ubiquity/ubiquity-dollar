@@ -43,9 +43,9 @@ systemctl/ \*_/_.DS_Store
 typings
 *.log
 /abi/types/*
+
 web/dapp
-deployments/*
-!deployments/mainnet
-.gitignore
+contracts/*/deployments/*
+!contracts/*/deployments/mainnet
 contracts/dollar/tasks/library/distributor/fixtures/operators.json
-*/deployments/localhost
+fixtures/abi/types/
