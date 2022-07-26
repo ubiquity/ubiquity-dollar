@@ -22,7 +22,7 @@ class ContractNotAvailable extends Error {
 }
 
 const useDeployedAddress = (...names: ContractsNames[]): string[] => {
-  const chainId = typeof window === "undefined" ? null : (window as any)?.ethereum?.networkVersion || LOCAL_CHAIN;
+  const chainId = typeof window === "undefined" ? null : window?.ethereum?.networkVersion || LOCAL_CHAIN;
   if (chainId) {
     const fallbackDollar = dollarChains[LOCAL_FORK_FROM] || {};
     const fallbackUbiquistick = ubiquistickChains[LOCAL_FORK_FROM] || {};

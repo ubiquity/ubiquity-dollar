@@ -60,7 +60,7 @@ const Token = ({
 }) => {
   const Svg = tokenSvg[token] || (() => null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ethereum = (window as any).ethereum;
+  const ethereum = window.ethereum;
   const addTokenToWallet = async () => {
     if (!ethereum?.request) {
       return;
