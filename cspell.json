@@ -1,7 +1,7 @@
 {
   "version": "0.2",
   "language": "en",
-  "words": ["UbiquiStick"],
+  "ignoreWords": [],
   "ignorePaths": [
     "**/*.json",
     "**/*.log",
@@ -13,5 +13,6 @@
     "contracts/*/artifacts/**",
     "contracts/*/cache/**",
     "contracts/*/types/**"
-  ]
+  ],
+  "words": ["UbiquiStick", "Chainlink", "Arrakis", "LUSD", "FRAX", "DOLA", "twap", "metapool", "Sablier", "keccak", "stablecoins", "stabilitate", "habemus"]
 }
