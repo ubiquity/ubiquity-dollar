@@ -1,13 +1,13 @@
 import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
 import ubiquistickDeployments from "@/fixtures/contracts-addresses/ubiquistick.json";
 
-const LOCAL_CHAIN = "31337";
-const LOCAL_FORK_FROM = "1";
+const LOCAL_CHAIN = 31337;
+const LOCAL_FORK_FROM = 1;
 
 console.log(ubiquistickDeployments);
 
-type DollarType = typeof dollarDeployments["1"];
-type UbiquistickType = typeof ubiquistickDeployments["31337"];
+type DollarType = typeof dollarDeployments[1];
+type UbiquistickType = typeof ubiquistickDeployments[1];
 
 type ContractsNames = keyof DollarType | keyof UbiquistickType;
 type AddressesObject = { [key: string]: string };
