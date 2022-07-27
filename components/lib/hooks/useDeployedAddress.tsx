@@ -1,20 +1,20 @@
 import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
-import ubiquistickDeployments from "@/fixtures/contracts-addresses/ubiquistick.json";
+import ubiquiStickDeployments from "@/fixtures/contracts-addresses/ubiquistick.json";
 
 const LOCAL_CHAIN = 31337;
 const LOCAL_FORK_FROM = 1;
 
-console.log(ubiquistickDeployments);
+console.log(ubiquiStickDeployments);
 
-type DollarType = typeof dollarDeployments[1];
-type UbiquistickType = typeof ubiquistickDeployments[1];
+type Dollar = typeof dollarDeployments[1];
+type UbiquiStick = typeof ubiquiStickDeployments[31337];
 
-type ContractsNames = keyof DollarType | keyof UbiquistickType;
+type ContractsNames = keyof Dollar | keyof UbiquiStick;
 type AddressesObject = { [key: string]: string };
 type ChainsAddressesObject = { [key: string]: AddressesObject };
 
 const dollarChains = dollarDeployments as ChainsAddressesObject;
-const ubiquistickChains = ubiquistickDeployments as ChainsAddressesObject;
+const ubiquistickChains = ubiquiStickDeployments as ChainsAddressesObject;
 
 class ContractNotAvailable extends Error {
   constructor(contractName: string, chainId: string) {
@@ -31,9 +31,8 @@ const useDeployedAddress = (...names: ContractsNames[]): string[] => {
     const dollar = dollarChains[chainId] || {};
     const ubiquistick = ubiquistickChains[chainId] || {};
 
-    const getContractAddress = (key: string) => {
-      return dollar[key] || ubiquistick[key] || (chainId === LOCAL_CHAIN ? fallbackDollar[key] || fallbackUbiquistick[key] : "");
-    };
+    const getContractAddress = (key: string) =>
+      dollar[key] || ubiquistick[key] || (chainId === LOCAL_CHAIN ? fallbackDollar[key] || fallbackUbiquistick[key] : "");
 
     return names.map((name) => {
       const address = getContractAddress(name);
