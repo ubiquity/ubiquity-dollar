@@ -4,8 +4,10 @@ import ubiquistickDeployments from "@/fixtures/contracts-addresses/ubiquistick.j
 const LOCAL_CHAIN = "31337";
 const LOCAL_FORK_FROM = "1";
 
-type DollarType = typeof dollarDeployments[1];
-type UbiquistickType = typeof ubiquistickDeployments[31337];
+console.log(ubiquistickDeployments);
+
+type DollarType = typeof dollarDeployments["1"];
+type UbiquistickType = typeof ubiquistickDeployments["31337"];
 
 type ContractsNames = keyof DollarType | keyof UbiquistickType;
 type AddressesObject = { [key: string]: string };
@@ -16,7 +18,7 @@ const ubiquistickChains = ubiquistickDeployments as ChainsAddressesObject;
 
 class ContractNotAvailable extends Error {
   constructor(contractName: string, chainId: string) {
-    super(`Neccesary contract ${contractName} not deployed on chain ID ${chainId}`); // (1)
+    super(`Necessary contract ${contractName} not deployed on chain ID ${chainId}`); // (1)
     this.name = "ContractNotAvailable"; // (2)
   }
 }
