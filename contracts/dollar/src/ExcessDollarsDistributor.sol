@@ -6,6 +6,7 @@ import "./interfaces/IERC20Ubiquity.sol";
 import "openzeppelin-token-ERC20/utils/SafeERC20.sol";
 import "uniswap/v2-core/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "uniswap/v2-core/interfaces/IUniswapV2Pair.sol";
 import "./interfaces/IExcessDollarsDistributor.sol";
 import "./interfaces/IMetaPool.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
