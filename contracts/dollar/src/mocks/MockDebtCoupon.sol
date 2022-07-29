@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "openzeppelin-token-ERC1155/ERC1155.sol";
 
 contract MockDebtCoupon is ERC1155 {
     uint256 private _totalOutstandingDebt;
