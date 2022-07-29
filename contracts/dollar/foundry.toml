@@ -1,0 +1,17 @@
+[profile.default]
+src = 'src'
+out = 'artifacts'
+libs = ["node_modules", "lib"]
+remappings = [
+    '@ensdomains/=node_modules/@ensdomains/',
+    '@openzeppelin/=node_modules/@openzeppelin/',
+    '@solidity-parser/=node_modules/abi-to-sol/node_modules/@solidity-parser/',
+    '@uniswap/=node_modules/@uniswap/',
+    'eth-gas-reporter/=node_modules/eth-gas-reporter/',
+    'hardhat-deploy/=node_modules/hardhat-deploy/',
+    'hardhat/=node_modules/hardhat/',
+    'prettier-plugin-solidity/=node_modules/abi-to-sol/node_modules/prettier-plugin-solidity/',
+    'solidity-linked-list/=node_modules/solidity-linked-list/',
+]
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
