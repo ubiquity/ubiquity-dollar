@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
+import "openzeppelin-token-ERC1155/IERC1155Receiver.sol";
 
 /// @title A debt redemption mechanism for coupon holders
 /// @notice Allows users to redeem individual debt coupons or batch redeem coupons

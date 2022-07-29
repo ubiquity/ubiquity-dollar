@@ -1,0 +1,2 @@
+openzeppelin-token-ERC1155/=lib/openzeppelin-contracts/contracts/token/ERC1155/
+openzeppelin-token-ERC20/=lib/openzeppelin-contracts/contracts/token/ERC20/

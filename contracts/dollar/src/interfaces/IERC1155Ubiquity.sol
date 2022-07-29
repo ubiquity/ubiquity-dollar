@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "openzeppelin-token-ERC1155/IERC1155.sol";
 
 /// @title ERC1155 Ubiquiti preset interface
 /// @author Ubiquity Algorithmic Dollar

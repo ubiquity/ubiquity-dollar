@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "openzeppelin-token-ERC1155/IERC1155.sol";
 
 /// @title A debt coupon which corresponds to a IDebtRedemption contract
 interface IDebtCoupon is IERC1155 {
