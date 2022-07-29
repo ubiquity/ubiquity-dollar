@@ -1,6 +1,6 @@
 openzeppelin-token-ERC1155/=lib/openzeppelin-contracts/contracts/token/ERC1155/
 openzeppelin-token-ERC20/=lib/openzeppelin-contracts/contracts/token/ERC20/
-openzeppelin-access/=lib/openzeppelin-contracts/access/
+openzeppelin-access/=lib/openzeppelin-contracts/contracts/access/
 openzeppelin-utils/=lib/openzeppelin-contracts/contracts/utils/
 openzeppelin-security/=lib/openzeppelin-contracts/contracts/security/
 uniswap/v2-core/interfaces/=lib/v2-core/contracts/interfaces/
