@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-token-ERC20/IERC20.sol";
 import "./interfaces/ICouponsForDollarsCalculator.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./libs/ABDKMathQuad.sol";

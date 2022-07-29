@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-token-ERC20/IERC20.sol";
 import "./TWAPOracle.sol";
 import "./libs/ABDKMathQuad.sol";
 

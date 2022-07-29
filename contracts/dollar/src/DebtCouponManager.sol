@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "openzeppelin-token-ERC20/utils/introspection/ERC165.sol";
 import "./interfaces/IDebtRedemption.sol";
 import "./interfaces/IUARForDollarsCalculator.sol";
 import "./interfaces/ICouponsForDollarsCalculator.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
 import "./interfaces/IExcessDollarsDistributor.sol";
 import "./TWAPOracle.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "openzeppelin-token-ERC20/utils/SafeERC20.sol";
 import "./UbiquityAlgorithmicDollar.sol";
 import "./UbiquityAutoRedeem.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
