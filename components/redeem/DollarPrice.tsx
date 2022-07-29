@@ -16,7 +16,7 @@ const DollarPrice = () => {
           <div className="mb-2 text-4xl font-thin opacity-75">${(twapPrice && roundPrice(twapPrice)) || 0}</div>
           <div className="flex items-center justify-center">
             <div className="mr-1 text-sm uppercase tracking-widest">TWAP Price</div>
-            <Icon icon="exclamationMark" className="w-4" />
+            <Icon icon="questionMark" className="w-4" />
           </div>
         </div>
       </Tooltip>
