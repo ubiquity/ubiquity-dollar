@@ -1,5 +1,5 @@
 import * as widget from "../ui/widget";
-import BondingPool from "./BondingPool";
+import StakingPool from "./StakingPool";
 import { PoolData, pools } from "./lib/pools";
 
 type FundingPoolParams = {
@@ -15,7 +15,7 @@ const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
       <widget.SubTitle text="Sell LP, get uCR over the course of 5 days" />
       <div className="grid grid-cols-2 gap-8">
         {pools.map((pool) => (
-          <BondingPool
+          <StakingPool
             key={pool.name}
             enabled={enabled}
             poolData={poolsData[pool.tokenAddress]}

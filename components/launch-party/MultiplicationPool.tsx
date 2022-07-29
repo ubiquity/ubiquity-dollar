@@ -1,5 +1,5 @@
 import * as widget from "@/ui/widget";
-import BondingPool from "./BondingPool";
+import StakingPool from "./StakingPool";
 import { goldenPool, PoolData } from "./lib/pools";
 
 type MultiplicationPoolParams = {
@@ -15,7 +15,7 @@ const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoo
       <widget.SubTitle text="Multiply and exchanges" />
 
       <div className="mx-auto w-2/3">
-        <BondingPool
+        <StakingPool
           enabled={enabled}
           poolData={poolsData[goldenPool.tokenAddress]}
           onDeposit={({ amount }) => onDeposit({ token: goldenPool.tokenAddress, amount })}

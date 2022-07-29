@@ -1,2 +1,2 @@
-import BondingSharesExplorer from "./BondingSharesExplorer";
-export default BondingSharesExplorer;
+import StakingSharesExplorer from "./StakingSharesExplorer";
+export default StakingSharesExplorer;

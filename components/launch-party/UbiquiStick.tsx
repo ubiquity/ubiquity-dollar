@@ -41,7 +41,7 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
   return (
     <widget.Container className="flex w-full flex-col items-center">
       <widget.Title text="The Ubiquistick NFT" />
-      <widget.SubTitle text="Access the game bonding pools" />
+      <widget.SubTitle text="Access the game staking pools" />
       <div className="-mx-4 mb-4 flex justify-center">
         {sticksCount && sticksCount > 0 ? (
           <>
