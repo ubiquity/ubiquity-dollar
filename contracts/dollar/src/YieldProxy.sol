@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 import "./utils/CollectableDust.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
+import "openzeppelin-token-ERC20/ERC20.sol";
+import "openzeppelin-security/Pausable.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "openzeppelin-token-ERC20/utils/SafeERC20.sol";
+import "openzeppelin-security/ReentrancyGuard.sol";
 import "./interfaces/IJar.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 
