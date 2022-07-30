@@ -10,3 +10,6 @@
 [submodule "contracts/dollar/lib/v2-periphery"]
 	path = contracts/dollar/lib/v2-periphery
 	url = https://github.com/Uniswap/v2-periphery
+[submodule "contracts/ubiquistick/lib/forge-std"]
+	path = contracts/ubiquistick/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
