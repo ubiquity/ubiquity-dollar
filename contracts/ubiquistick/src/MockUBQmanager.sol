@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/access/AccessControl.sol";
+import "openzeppelin-access/AccessControl.sol";
 
 contract MockUBQmanager is AccessControl {
   bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");

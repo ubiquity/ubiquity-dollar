@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "openzeppelin-token-ERC20/ERC20.sol";
+import "openzeppelin-access/Ownable.sol";
 import "./interfaces/IUAR.sol";
 
 contract UAR is IUAR, ERC20, Ownable {
