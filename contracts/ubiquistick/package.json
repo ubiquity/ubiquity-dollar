@@ -6,7 +6,7 @@
   "scripts": {
     "node": "hardhat node",
     "clean": "hardhat clean",
-    "build": "hardhat compile",
+    "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
     "test": "echo \"Error: no test specified\" && exit 1",
     "node:start": "hardhat node --hostname 0.0.0.0 --show-accounts"
   },
