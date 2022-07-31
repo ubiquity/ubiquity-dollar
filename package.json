@@ -67,6 +67,7 @@
     "autoprefixer": "^10.4.8",
     "classnames": "^2.3.1",
     "ethers": "^5.5.4",
+    "hardhat": "^2.10.1",
     "next": "^11.0.0",
     "npm-run-all": "^4.1.5",
     "react": "^17.0.2",
