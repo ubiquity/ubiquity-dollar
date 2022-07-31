@@ -15,9 +15,6 @@ const Whitelist = ({ status }: { status: WhitelistStatus }) => {
     <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center  justify-center rounded-lg border-4 border-dashed border-white/25 bg-white/10">
       <div className="flex">
         <div>
-          {/* style="enable-background:new 0 0 512 512;"  */}
-          {/* xmlns:xlink="http://www.w3.org/1999/xlink"  */}
-          {/* xml:space="preserve" */}
           <svg className="h-20 fill-white px-8 py-4" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 512 512">
             <g>
               <g>
