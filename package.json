@@ -53,6 +53,7 @@
   },
   "dependencies": {
     "@tippyjs/react": "^4.2.5",
+    "@typechain/ethers-v5": "^10.1.0",
     "autoprefixer": "^10.4.8",
     "classnames": "^2.3.1",
     "ethers": "^5.5.4",
