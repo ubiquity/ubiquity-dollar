@@ -21,7 +21,6 @@
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "SHIM": "cd contracts/ubiquistick && yarn SHIM:NFT",
     "BUILD:NEXT": "next build && next export --outdir web/dapp"
   },
   "_scripts": {

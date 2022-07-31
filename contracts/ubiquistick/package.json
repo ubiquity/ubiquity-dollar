@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "SHIM:NFT": "run-p _SHIM:DEPLOY:* # please fix this",
-    "_SHIM:DEPLOY": "run-p _SHIM:DEPLOY:*",
+    "SHIM:DEPLOY": "run-p _SHIM:DEPLOY:* # please fix this",
     "_SHIM:DEPLOY:1": "hardhat run --network hardhat deploy/1-*.ts",
     "_SHIM:DEPLOY:2": "hardhat run --network hardhat deploy/2-*.ts",
     "_SHIM:DEPLOY:3": "hardhat run --network hardhat deploy/3-*.ts",
