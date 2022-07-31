@@ -21,7 +21,7 @@
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "SHIM": "cd contracts/ubiquistick && npx hardhat --show-stack-traces run --network localhost deploy/1-*.ts # please fix this",
+    "SHIM": "cd contracts/ubiquistick && npx hardhat --show-stack-traces run --network hardhat deploy/1-*.ts # please fix this",
     "BUILD:NEXT": "next build && next export --outdir web/dapp"
   },
   "_scripts": {
