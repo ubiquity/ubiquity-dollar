@@ -12,12 +12,16 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 #!/usr/bin/env bash
 # Ubiquity Dollar Installer
 
-git clone https://github.com/ubiquity/ubiquity-dollar-development.git
+git clone https://github.com/ubiquity/ubiquity-dollar.git
 yarn
 yarn start
 ```
 
 → [localhost:3000](https://localhost:3000/)
+
+## Temporary Build Warning
+
+31 July 2022 - need to manually run `npx hardhat node` before build in the `contracts/ubiquistick` project in order for it to build the `31337` network types. Need to research this more.
 
 ## Metamask Development Wallet Setup
 

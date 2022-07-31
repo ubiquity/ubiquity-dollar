@@ -2,7 +2,6 @@
 
 cd "$(npm root)" || exit 1
 cd ..
-pwd
 cd "$1" || exit 1
 
 yarn hardhat export --network mainnet
