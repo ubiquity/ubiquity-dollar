@@ -1,20 +1,10 @@
-./contracts
-node_modules
-fixtures
-.next
-pages/styles/tailwind.css
-abi
-deployments
+# doesn't seem to work
+!contracts/*/deployments/mainnet/
+#
+.next/
+contracts/*/artifacts/
+contracts/*/cache/
+contracts/*/deployments/
+contracts/*/types/
 
-./contracts/dollar/coverage
-./contracts/dollar/node_modules
-./contracts/dollar/build
-./contracts/dollar/cache
-./contracts/dollar/artifacts
-./contracts/dollar/deployments
-
-./contracts/ubiquistick/node_modules
-./contracts/ubiquistick/artifacts
-./contracts/ubiquistick/cache
-./contracts/ubiquistick/coverage*
-./contracts/ubiquistick/gasReporterOutput.json
+fixtures/

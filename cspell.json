@@ -1,0 +1,18 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignoreWords": [],
+  "ignorePaths": [
+    "**/*.json",
+    "**/*.log",
+    "**/*.svg",
+    "**/*.lock",
+    "**/node_modules/**",
+    "fixtures/abi/types/**",
+    "contracts/*/deployments/**",
+    "contracts/*/artifacts/**",
+    "contracts/*/cache/**",
+    "contracts/*/types/**"
+  ],
+  "words": ["UbiquiStick", "Chainlink", "Arrakis", "LUSD", "FRAX", "DOLA", "twap", "metapool", "Sablier", "keccak", "stablecoins", "stabilitate", "habemus"]
+}

@@ -4,10 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "clean": "yarn hardhat clean",
-    "build": "TS_NODE_TRANSPILE_ONLY=1 yarn hardhat compile",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "node:start": "yarn hardhat node --hostname 0.0.0.0 --show-accounts"
+    "SHIM:DEPLOY": "run-p _SHIM:DEPLOY:* # please fix this",
+    "_SHIM:DEPLOY:1": "hardhat run --network hardhat deploy/1-*.ts",
+    "_SHIM:DEPLOY:2": "hardhat run --network hardhat deploy/2-*.ts",
+    "_SHIM:DEPLOY:3": "hardhat run --network hardhat deploy/3-*.ts",
+    "_SHIM:DEPLOY:4": "hardhat run --network hardhat deploy/4-*.ts",
+    "_SHIM:DEPLOY:5": "hardhat run --network hardhat deploy/5-*.ts",
+    "node": "hardhat node",
+    "clean": "hardhat clean",
+    "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
+    "node:start": "hardhat node --hostname 0.0.0.0 --show-accounts"
   },
   "keywords": [],
   "author": "",
@@ -51,7 +57,7 @@
     "ts-node": "^10.5.0",
     "tsconfig-paths": "^3.12.0",
     "typechain": "^7.0.0",
-    "typescript": "^4.5.5"
+    "typescript": "^4.7.4"
   },
   "devDependencies": {}
 }

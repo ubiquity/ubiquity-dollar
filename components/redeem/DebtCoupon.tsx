@@ -1,10 +1,9 @@
-import { BigNumber, ethers } from "ethers";
-import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
-
 import { Balances, useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainNumber, formatTimeDiff } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import * as widget from "@/ui/widget";
+import { BigNumber, ethers } from "ethers";
+import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 import usePrices from "./lib/usePrices";
 
 type Actions = {
@@ -49,9 +48,12 @@ const uAR = "uAR";
 //   }
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction] = useTransactionLogger();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [twapPrice, spotPrice] = usePrices();
 
   const actions: Actions = {
@@ -161,6 +163,7 @@ const DebtCoupon = memo(
     const [selectedCurrency, selectCurrency] = useState(uDEBT);
     const [increasedValue, setIncreasedValue] = useState(0);
     const [errMsg, setErrMsg] = useState<string>();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [expectedCoupon, setExpectedCoupon] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
 

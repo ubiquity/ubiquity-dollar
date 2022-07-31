@@ -16,7 +16,7 @@ type LayoutProps = {
 
 const PROD = process.env.NODE_ENV == "production";
 
-function ErrorHandler({ error }: { error: any }) {
+function ErrorHandler({ error }: { error: Error }) {
   return (
     <Container className="w-96">
       <div className="flex flex-col items-center justify-center text-center">
@@ -35,7 +35,7 @@ export default function Layout({ children }: LayoutProps) {
   const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
 
   useEffect(() => {
-    const ethereum = (window as any).ethereum;
+    const { ethereum } = window;
     if (ethereum) {
       ethereum.on("accountsChanged", () => window.location.reload());
       ethereum.on("chainChanged", () => window.location.reload());
@@ -95,11 +95,8 @@ const ConditionalHeader = ({ show }: { show: boolean }) => (
 );
 
 const GridVideoBg = () => {
-  const poster =
-    "https://ssfy.io/https%3A%2F%2Fwww.notion.so%2Fimage%2Fhttps%253A%252F%252Fs3-us-west-2.amazonaws.com%252Fsecure.notion-static.com%252Fbb144e8e-3a57-4e68-b2b9-6a80dbff07d0%252FGroup_3.png%3Ftable%3Dblock%26id%3Dff1a3cae-9009-41e4-9cc4-d4458cc2867d%26cache%3Dv2";
-
   const video = (
-    <video autoPlay muted loop playsInline poster={poster} className="bg-video">
+    <video autoPlay muted loop playsInline className="bg-video">
       {PROD && <source src="ubiquity-one-fifth-speed-trimmed-compressed.mp4" type="video/mp4" />}
     </video>
   );

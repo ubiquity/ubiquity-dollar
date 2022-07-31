@@ -24,7 +24,7 @@ type Web3Actions = {
   disconnect: () => Promise<void>;
 };
 
-const metamaskInstalled = typeof window !== "undefined" ? !!(window as any)?.ethereum?.request : false;
+const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 const DEFAULT_WEB3_STATE: Web3State = {
   metamaskInstalled,
   jsonRpcEnabled: IS_DEV,
@@ -58,7 +58,7 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
 
   async function connectMetamask() {
     if (metamaskInstalled) {
-      const newProvider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const newProvider = new ethers.providers.Web3Provider(window.ethereum);
       setWeb3State({ ...web3State, connecting: true });
       const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
       if (addresses.length > 0) {
