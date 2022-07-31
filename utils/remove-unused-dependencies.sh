@@ -11,7 +11,7 @@ cd "$PROJECT_ROOT" || exit
 
 npx depcheck >$file
 n=1
-while read line; do
+while read -r line; do
     dep=$(echo "$line" | cut -c 3-)
     echo "uninstall : $dep"
     yarn remove "$dep" &

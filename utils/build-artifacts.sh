@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 cd "$(npm root)" || exit 1
+cd ..
+pwd
 cd "$1" || exit 1
-
-echo "BUILDING ARTIFACTS"
 
 yarn hardhat export --network mainnet
 yarn hardhat export --network hardhat

@@ -9,11 +9,11 @@
     "_contracts:install": "run-p _contracts:install:*",
     "_contracts:install:dollar": "cd ./contracts/dollar && yarn",
     "_contracts:install:nft": "cd ./contracts/ubiquistick && yarn",
-    "build:contracts": "run-p _contracts:build:*",
-    "_contracts:build:contracts:dollar": "cd ./contracts/dollar && yarn build",
-    "_contracts:build:artifacts:dollar": "./utils/build-artifacts.sh ./contracts/dollar",
+    "build:contracts": "run-s _contracts:build:contracts:* _contracts:build:artifacts:* _contracts:build:summary",
     "_contracts:build:contracts:nft": "cd ./contracts/ubiquistick && yarn build",
+    "_contracts:build:contracts:dollar": "cd ./contracts/dollar && yarn build",
     "_contracts:build:artifacts:nft": "./utils/build-artifacts.sh ./contracts/ubiquistick",
+    "_contracts:build:artifacts:dollar": "./utils/build-artifacts.sh ./contracts/dollar",
     "_contracts:build:summary": "node ./utils/generate_contracts_addresses.js"
   },
   "_scripts": {
