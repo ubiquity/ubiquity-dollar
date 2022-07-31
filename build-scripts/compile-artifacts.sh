@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-cd "$(npm root)"
+cd "$(npm root)" || exit 1
 cd ..
 cd ./contracts/dollar || echo "ERROR: ./contracts/dollar/ doesn't exist?"
 
@@ -10,5 +10,6 @@ yarn install
 yarn build
 
 rm -f $UP$DEPLOYMENT_ARTIFACT
-yarn hardhat export --export $UP$DEPLOYMENT_ARTIFACT --network mainnet
+yarn hardhat export --export $UP$DEPLOYMENT_ARTIFACT --network mainnet &
+yarn hardhat export --export $UP$DEPLOYMENT_ARTIFACT --network hardhat
 cd $UP || exit 1
