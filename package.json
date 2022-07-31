@@ -34,20 +34,6 @@
     "__format:cspell": "cspell '**'",
     "__test:watch:ci": "nodemon"
   },
-  "nodemonConfig": {
-    "ignore": [
-      "**/*/cache/",
-      "**/*/artifacts/",
-      "**/*/node_modules/**/*"
-    ],
-    "events": {
-      "config": "",
-      "exit": "",
-      "crash": "stop",
-      "restart": "clear && printf '\\033[3J'",
-      "start": "clear && printf '\\033[3J'"
-    }
-  },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",
     "@ethersproject/bytes": "^5.0.0",
@@ -87,6 +73,13 @@
     "typescript": "^4.3.2"
   },
   "nodemonConfig": {
+    "events": {
+      "config": "",
+      "exit": "",
+      "crash": "stop",
+      "restart": "clear && printf '\\033[3J'",
+      "start": "clear && printf '\\033[3J'"
+    },
     "verbose": true,
     "ignore": [
       "**/*.json",
