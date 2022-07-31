@@ -21,14 +21,7 @@
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "SHIM": "run-s _SHIM:CD _SHIM:DEPLOY # please fix this",
-    "_SHIM:CD": "cd contracts/ubiquistick",
-    "_SHIM:DEPLOY": "run-p _SHIM:DEPLOY:*",
-    "_SHIM:DEPLOY:1": "hardhat run --network hardhat deploy/1-*.ts",
-    "_SHIM:DEPLOY:2": "hardhat run --network hardhat deploy/2-*.ts",
-    "_SHIM:DEPLOY:3": "hardhat run --network hardhat deploy/3-*.ts",
-    "_SHIM:DEPLOY:4": "hardhat run --network hardhat deploy/4-*.ts",
-    "_SHIM:DEPLOY:5": "hardhat run --network hardhat deploy/5-*.ts",
+    "SHIM": "cd contracts/ubiquistick && yarn SHIM:NFT",
     "BUILD:NEXT": "next build && next export --outdir web/dapp"
   },
   "_scripts": {
