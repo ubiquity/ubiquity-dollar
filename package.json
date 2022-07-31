@@ -9,7 +9,7 @@
     "_contracts:install": "run-p _contracts:install:*",
     "_contracts:install:dollar": "cd ./contracts/dollar && yarn",
     "_contracts:install:nft": "cd ./contracts/ubiquistick && yarn",
-    "build:contracts": "run-s SHIM _contracts:build:contracts _contracts:build:artifacts _contracts:build:typechain _contracts:build:summary",
+    "build:contracts": "run-s _contracts:build:contracts _contracts:build:artifacts _contracts:build:typechain _contracts:build:summary",
     "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir ./fixtures/abi/types ./fixtures/abi/*.json",
     "_contracts:build:contracts": "run-p _contracts:build:contracts:*",
     "_contracts:build:contracts:nft": "cd ./contracts/ubiquistick && yarn build",
