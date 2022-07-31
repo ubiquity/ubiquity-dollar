@@ -76,7 +76,7 @@
     "events": {
       "config": "",
       "exit": "",
-      "crash": "stop",
+      "crash": "",
       "restart": "clear && printf '\\033[3J'",
       "start": "clear && printf '\\033[3J'"
     },
@@ -84,7 +84,9 @@
     "ignore": [
       "**/*.json",
       "fixtures/**",
-      "contracts/*/types/**"
+      "contracts/*/types/**",
+      "**/*/cache/",
+      "**/*/artifacts/"
     ],
     "ext": "ts,sh",
     "exec": "yarn build:fleek"
