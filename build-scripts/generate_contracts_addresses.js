@@ -1,26 +1,31 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
+generateAddressesFile("dollar");
+generateAddressesFile("ubiquistick");
+
+//
+//
+//
+
 const fs = require("fs");
+const path = require("path");
 
 function getContractsAddressesFor(directory) {
   const directoryContractsNames = [];
   const chains = {};
-  const deploymentsPath = `${__dirname}/../contracts/${directory}/deployments`;
+  const deploymentsPath = path.join(__dirname, "..", "contracts", directory, "deployments");
   const chainsDirectories = fs.readdirSync(deploymentsPath);
-  chainsDirectories.forEach((chainDirectory) => {
-    const chainDeploymentPath = `${deploymentsPath}/${chainDirectory}`;
-    const id = fs.readFileSync(`${chainDeploymentPath}/.chainId`);
-    const contractsDirectories = fs.readdirSync(chainDeploymentPath);
-    chains[id] = {};
-    fs.readdirSync(chainDeploymentPath).forEach((file) => {
-      if (file.endsWith(".json")) {
-        const contractDeployment = JSON.parse(fs.readFileSync(`${chainDeploymentPath}/${file}`));
-        const contractName = file.replace(/\.json$/, "");
-        if (directoryContractsNames.indexOf(contractName) === -1) {
-          directoryContractsNames.push(contractName);
-        }
-        chains[id][contractName] = contractDeployment.address;
-      }
-    });
+  chainsDirectories.forEach(_processDirectory(deploymentsPath, chains, directoryContractsNames));
+  return chains;
+}
 
+function _processDirectory(deploymentsPath, chains, directoryContractsNames) {
+  return function processDirectory(chainDirectory) {
+    const chainDeploymentPath = path.join(deploymentsPath, chainDirectory);
+    const pathToChainId = path.join(chainDeploymentPath, ".chainId");
+    const id = fs.readFileSync(pathToChainId, "utf-8");
+    chains[id] = {};
+    fs.readdirSync(chainDeploymentPath).forEach(_processDeployment(chainDeploymentPath, directoryContractsNames, chains, id));
     for (let chainId in chains) {
       directoryContractsNames.forEach((contractName) => {
         if (!chains[chainId][contractName]) {
@@ -28,14 +33,26 @@ function getContractsAddressesFor(directory) {
         }
       });
     }
-  });
-  return chains;
+  };
+}
+
+function _processDeployment(chainDeploymentPath, directoryContractsNames, chains, id) {
+  return function processDeployment(file) {
+    if (file.endsWith(".json")) {
+      const filePath = path.join(chainDeploymentPath, file);
+      const buffer = fs.readFileSync(filePath, "utf-8");
+      const contractDeployment = JSON.parse(buffer);
+      const contractName = file.replace(/\.json$/, "");
+      if (directoryContractsNames.indexOf(contractName) === -1) {
+        directoryContractsNames.push(contractName);
+      }
+      chains[id][contractName] = contractDeployment.address;
+    }
+  };
 }
 
 function generateAddressesFile(directory) {
   const addresses = getContractsAddressesFor(directory);
-  fs.writeFileSync(`${__dirname}/../fixtures/contracts-addresses/${directory}.json`, JSON.stringify(addresses, null, 2));
+  const pathToJson = path.join(__dirname, "..", "fixtures", "contracts-addresses", directory.concat(".json"));
+  fs.writeFileSync(pathToJson, JSON.stringify(addresses, null, 2));
 }
-
-generateAddressesFile("dollar");
-generateAddressesFile("ubiquistick");
