@@ -9,7 +9,7 @@
     "_contracts:install": "run-p _contracts:install:*",
     "_contracts:install:dollar": "cd ./contracts/dollar && yarn",
     "_contracts:install:nft": "cd ./contracts/ubiquistick && yarn",
-    "build:contracts": "run-s _contracts:build:contracts:* _contracts:build:artifacts:* _contracts:build:summary",
+    "build:contracts": "run-s SHIM _contracts:build:contracts:* _contracts:build:artifacts:* _contracts:build:summary",
     "_contracts:build:contracts:nft": "cd ./contracts/ubiquistick && yarn build",
     "_contracts:build:contracts:dollar": "cd ./contracts/dollar && yarn build",
     "_contracts:build:artifacts:nft": "./utils/build-artifacts.sh ./contracts/ubiquistick",
@@ -17,7 +17,8 @@
     "_contracts:build:summary": "node ./utils/generate_contracts_addresses.js",
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
-    "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'"
+    "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
+    "SHIM": "cd contracts/ubiquistick && npx hardhat --show-stack-traces run --network localhost deploy/1-*.ts # please fix this"
   },
   "_scripts": {
     "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir ./fixtures/abi/types ./fixtures/abi/*.json",
