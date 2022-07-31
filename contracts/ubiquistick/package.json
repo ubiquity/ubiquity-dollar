@@ -4,6 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "SHIM:NFT": "run-p _SHIM:DEPLOY:* # please fix this",
+    "_SHIM:DEPLOY": "run-p _SHIM:DEPLOY:*",
+    "_SHIM:DEPLOY:1": "hardhat run --network hardhat deploy/1-*.ts",
+    "_SHIM:DEPLOY:2": "hardhat run --network hardhat deploy/2-*.ts",
+    "_SHIM:DEPLOY:3": "hardhat run --network hardhat deploy/3-*.ts",
+    "_SHIM:DEPLOY:4": "hardhat run --network hardhat deploy/4-*.ts",
+    "_SHIM:DEPLOY:5": "hardhat run --network hardhat deploy/5-*.ts",
     "node": "hardhat node",
     "clean": "hardhat clean",
     "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",

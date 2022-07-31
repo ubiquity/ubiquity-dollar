@@ -6,10 +6,11 @@ const LOCAL_FORK_FROM = 1;
 
 console.log(ubiquiStickDeployments);
 
-type Dollar = typeof dollarDeployments[1];
-type UbiquiStick = typeof ubiquiStickDeployments[31337];
+// type Dollar = typeof dollarDeployments[1];
+// type UbiquiStick = typeof ubiquiStickDeployments[31337];
 
-type ContractsNames = keyof Dollar | keyof UbiquiStick;
+// type ContractsNames = keyof Dollar | keyof UbiquiStick;
+type ContractsNames = string;
 type AddressesObject = { [key: string]: string };
 type ChainsAddressesObject = { [key: string]: AddressesObject };
 
