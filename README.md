@@ -19,10 +19,6 @@ yarn start
 
 → [localhost:3000](https://localhost:3000/)
 
-## Temporary Build Warning
-
-31 July 2022 - need to manually run `npx hardhat node` before build in the `contracts/ubiquistick` project in order for it to build the `31337` network types. Need to research this more.
-
 ## Metamask Development Wallet Setup
 
 ### Network Settings
