@@ -43,6 +43,10 @@ function _processDeployment(chainDeploymentPath, directoryContractsNames, chains
 
 function generateAddressesFile(directory) {
   const addresses = getContractsAddressesFor(directory);
-  const pathToJson = path.join(__dirname, "..", "fixtures", "contracts-addresses", directory.concat(".json"));
+
+  const pathToDir = path.join(__dirname, "..", "fixtures", "contracts-addresses");
+  fs.mkdirSync(pathToDir, { recursive: true });
+
+  const pathToJson = path.join(pathToDir, directory.concat(".json"));
   fs.writeFileSync(pathToJson, JSON.stringify(addresses, null, 2));
 }

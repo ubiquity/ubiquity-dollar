@@ -1,15 +1,10 @@
+// @dev you need to run a build to generate these fixtures.
 import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
 import ubiquiStickDeployments from "@/fixtures/contracts-addresses/ubiquistick.json";
-
+//
 const LOCAL_CHAIN = 31337;
 const LOCAL_FORK_FROM = 1;
 
-console.log(ubiquiStickDeployments);
-
-// type Dollar = typeof dollarDeployments[1];
-// type UbiquiStick = typeof ubiquiStickDeployments[31337];
-
-// type ContractsNames = keyof Dollar | keyof UbiquiStick;
 type ContractsNames = string;
 type AddressesObject = { [key: string]: string };
 type ChainsAddressesObject = { [key: string]: AddressesObject };
