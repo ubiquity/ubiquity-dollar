@@ -4,7 +4,7 @@ import { Placement } from "tippy.js";
 const Tooltip = ({ children, content, placement }: { children: React.ReactElement; content: React.ReactNode | string; placement?: Placement }) => (
   <Tippy
     content={
-      <div style={{ backdropFilter: "blur(8px)" }}>
+      <div>
         <div>{content}</div>
       </div>
     }

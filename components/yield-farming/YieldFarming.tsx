@@ -378,7 +378,7 @@ export const YieldFarmingDeposit = memo(
         <SubTitle text="Primary deposit" />
         <div>
           {/* TODO: ICON */}
-          <div style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
+          <div>
             <div>
               <span>USDC</span>
               {/* <span>
@@ -408,7 +408,7 @@ export const YieldFarmingDeposit = memo(
         </div>
         <SubTitle text="Boosters" />
         <div>
-          <div style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
+          <div>
             <div>
               <span>UBQ</span>
             </div>
@@ -428,7 +428,7 @@ export const YieldFarmingDeposit = memo(
             <div>Balance: {f(balance.ubq)}</div>
           </div>
 
-          <div style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
+          <div>
             <div>
               <span>uAD</span>
               {/* <span>

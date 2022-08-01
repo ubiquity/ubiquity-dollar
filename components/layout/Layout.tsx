@@ -45,7 +45,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div>
       <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
-      <div style={{ left: sidebarClientWidth }}>
+      <div>
         <WalletConnect />
         <div>
           <GridVideoBg />

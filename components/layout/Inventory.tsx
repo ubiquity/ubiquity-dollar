@@ -95,7 +95,7 @@ const Token = ({
           {<Svg />}
           <Tippy
             content={
-              <div style={{ backdropFilter: "blur(8px)" }}>
+              <div>
                 <p>Add to Metamask</p>
               </div>
             }
