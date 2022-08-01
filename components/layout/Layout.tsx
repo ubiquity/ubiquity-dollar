@@ -14,8 +14,6 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-const PROD = process.env.NODE_ENV == "production";
-
 function ErrorHandler({ error }: { error: Error }) {
   return (
     <Container>
@@ -48,7 +46,6 @@ export default function Layout({ children }: LayoutProps) {
       <div>
         <WalletConnect />
         <div>
-          <GridVideoBg />
           {sidebarState !== "loading" ? (
             <>
               <div>
@@ -66,7 +63,7 @@ export default function Layout({ children }: LayoutProps) {
           ) : null}
         </div>
         {/* Floating Inventory */}
-        <div>
+        <div id="Inventory">
           <Inventory />
         </div>
         <TransactionsDisplay />
@@ -83,18 +80,3 @@ const ConditionalHeader = ({ show }: { show: boolean }) => (
     </a>
   </Link>
 );
-
-const GridVideoBg = () => {
-  const video = (
-    <video autoPlay muted loop playsInline>
-      {PROD && <source src="ubiquity-one-fifth-speed-trimmed-compressed.mp4" type="video/mp4" />}
-    </video>
-  );
-
-  return (
-    <div id="background">
-      {video}
-      <div id="grid"></div>
-    </div>
-  );
-};

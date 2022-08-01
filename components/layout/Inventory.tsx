@@ -102,7 +102,7 @@ const Token = ({
             placement="top"
             duration={0}
           >
-            <div onClick={addTokenToWallet}>+</div>
+            <button onClick={addTokenToWallet}>+</button>
           </Tippy>
         </div>
         <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>

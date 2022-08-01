@@ -7,6 +7,7 @@ import Head from "next/head";
 
 import Layout from "@/components/layout";
 import AppContextProvider from "@/lib/AppContextProvider";
+import Background from "../components/layout/Background";
 
 const noOverlayWorkaroundScript = `
 ;(function () {
@@ -45,6 +46,7 @@ export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Elemen
         {process.env.NODE_ENV !== "production" && <script dangerouslySetInnerHTML={{ __html: noOverlayWorkaroundScript }} />}
       </Head>
       <AppContextProvider>
+        <Background></Background>
         <Layout>
           <Component {...pageProps} />
         </Layout>

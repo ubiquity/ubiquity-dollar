@@ -1,0 +1,57 @@
+input,
+button {
+  border-radius: 3px;
+  border: none;
+  padding: 8px 16px;
+  background: #ffffff10;
+  margin-right: 3px;
+}
+input:last-child,
+button:last-child {
+  margin-right: auto;
+}
+input:hover,
+button:hover {
+  background: #ffffff20;
+}
+
+#background {
+  /* position: absolute; */
+  background-position: center;
+  vertical-align: middle;
+  text-align: center;
+  /* width: 100vw; */
+  /* height: 100vh; */
+  /* -webkit-mask-image: radial-gradient(rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 1) 100%); */
+  background-image: url(//ubq.fi/image/grid-1.png);
+  background-repeat: repeat;
+}
+
+#Inventory {
+  width: 100vw;
+  text-align: center;
+  position: absolute;
+}
+#Inventory > div > div:nth-child(2) > div {
+  display: flex;
+}
+#Inventory > div > div:nth-child(2) > div > div {
+  display: inline-block;
+  display: inline-flex;
+  margin: auto;
+}
+#Inventory > div > div:nth-child(2) > div > div > div > div > button {
+  background-color: #ffffff20;
+  display: block;
+}
+
+#Background {
+  pointer-events: none;
+}
+video {
+  position: fixed;
+  /* background: red; */
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
