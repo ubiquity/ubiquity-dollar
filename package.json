@@ -90,5 +90,11 @@
     ],
     "ext": "ts,sh,tsx",
     "exec": "yarn build:fleek"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   }
 }
