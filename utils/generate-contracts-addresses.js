@@ -25,20 +25,7 @@ function _processDirectory(deploymentsPath, chains, directoryContractsNames) {
     fs.readdirSync(chainDeploymentPath)
       .filter((fileName) => fileName.endsWith(".json"))
       .forEach(_processDeployment(chainDeploymentPath, directoryContractsNames, chains, chainId));
-
-    // seems like an anti-pattern
-    // setMissingContractsAsEmptyAddress(chains, directoryContractsNames);
   };
-}
-
-function setMissingContractsAsEmptyAddress(chains, directoryContractsNames) {
-  for (const chainId in chains) {
-    directoryContractsNames.forEach((contractName) => {
-      if (!chains[chainId][contractName]) {
-        chains[chainId][contractName] = "";
-      }
-    });
-  }
 }
 
 function _processDeployment(chainDeploymentPath, directoryContractsNames, chains, chainId) {

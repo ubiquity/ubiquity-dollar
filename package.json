@@ -17,7 +17,7 @@
     "_contracts:build:artifacts": "run-p _contracts:build:artifacts:*",
     "_contracts:build:artifacts:nft": "./utils/build-artifacts.sh ./contracts/ubiquistick",
     "_contracts:build:artifacts:dollar": "./utils/build-artifacts.sh ./contracts/dollar",
-    "_contracts:build:summary": "node ./utils/generate_contracts_addresses.js",
+    "_contracts:build:summary": "node ./utils/generate-contracts-addresses.js",
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
