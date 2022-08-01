@@ -126,12 +126,7 @@ const App = () => {
 
   return (
     <div>
-      <div
-        className={cx("absolute top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center transition-opacity duration-500", {
-          "pointer-events-none opacity-0": !showAdminComponents,
-          "pointer-events-auto opacity-100": showAdminComponents,
-        })}
-      >
+      <div>
         <div onClick={() => setShowAdminComponents(false)}></div>
         <div>
           {isSaleContractOwner ? <AllowanceManager defaultAddress={walletAddress || ""} onSubmit={contractSetAllowance} /> : null}

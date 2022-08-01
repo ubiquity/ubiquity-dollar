@@ -468,22 +468,8 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
         <span>uAD</span>
         <input type="number" onChange={handleInputUAD} />
         <nav>
-          <button
-            className={`m-0 self-center rounded-[16px] rounded-r-none hover:text-accent focus:outline-none ${
-              selectedCurrency === uAR ? "border-accent font-medium text-accent" : "text-gray-600"
-            }`}
-            onClick={() => handleTabSelect(uAR)}
-          >
-            uAR
-          </button>
-          <button
-            className={`m-0 self-center rounded-[16px] rounded-l-none hover:text-accent focus:outline-none ${
-              selectedCurrency === uDEBT ? "border-accent font-medium text-accent" : "text-gray-600"
-            }`}
-            onClick={() => handleTabSelect(uDEBT)}
-          >
-            uDEBT
-          </button>
+          <button onClick={() => handleTabSelect(uAR)}>uAR</button>
+          <button onClick={() => handleTabSelect(uDEBT)}>uDEBT</button>
         </nav>
         <button onClick={handleBurn}>Burn</button>
       </div>
@@ -596,17 +582,14 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
     <>
       <div>
         <div>
-          <div className={`flex justify-end rounded-l-md border-0 border-r border-solid border-white/10 bg-gray-600`} style={{ width: "10%" }}></div>
+          <div></div>
           <hr />
-          <div
-            className={`flex justify-${leftPositioned ? "end border-right-accent border-r-2" : "center"} border-0 border-r border-solid border-white/10`}
-            style={{ width: `${leftPositioned ? calculatedPercent() : 40}%` }}
-          >
+          <div style={{ width: `${leftPositioned ? calculatedPercent() : 40}%` }}>
             {leftPositioned ? <span>${price}</span> : <span>Redeeming cycle started {date} ago</span>}
           </div>
           {leftPositioned ? (
             <>
-              <div className={`flex flex-col justify-center border-0 border-r border-solid border-white/10`} style={{ width: `${40 - calculatedPercent()}%` }}>
+              <div>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
@@ -616,21 +599,16 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
           ) : (
             <>
               <hr />
-              <div
-                className={`border-right-accent flex flex-col justify-center border-0 border-r border-r-2 border-solid border-white/10`}
-                style={{ width: `${calculatedPercent() - 40}%` }}
-              >
+              <div style={{ width: `${calculatedPercent() - 40}%` }}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                 </svg>
               </div>
             </>
           )}
-          <div className={`flex justify-${leftPositioned ? "center" : "start"}`} style={{ width: `${leftPositioned ? 40 : 80 - calculatedPercent()}%` }}>
-            {leftPositioned ? <span>Pump cycle started {date} ago</span> : <span>${price}</span>}
-          </div>
+          <div>{leftPositioned ? <span>Pump cycle started {date} ago</span> : <span>${price}</span>}</div>
           <hr />
-          <div className={`flex justify-start rounded-r-md bg-gray-600`} style={{ width: "10%" }}></div>
+          <div></div>
         </div>
       </div>
       <div>

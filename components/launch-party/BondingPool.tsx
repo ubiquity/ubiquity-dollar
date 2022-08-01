@@ -33,12 +33,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
       <div>
         {info.logo ? <img src={info.logo} /> : null}
         <Tooltip content={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
-          <div
-            className={cx("flex flex-grow items-center justify-center font-light text-accent drop-shadow-light", {
-              ["text-3xl"]: info.logo,
-              ["text-6xl"]: !info.logo,
-            })}
-          >
+          <div>
             <div>
               {poolData?.apy ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
               <span>APY</span>
@@ -67,7 +62,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
       </div>
 
       <div>
-        <div className={cx({ "blur-sm": !enabled })}>
+        <div>
           <div>
             <PositiveNumberInput value={amount} onChange={setAmount} disabled={!enabled} placeholder={`${LPTokenName} token amount`} />
           </div>

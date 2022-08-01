@@ -56,12 +56,7 @@ export default function Layout({ children }: LayoutProps) {
 
                 {/* Content */}
 
-                <div
-                  className={cx("mx-auto flex min-h-screen max-w-screen-lg flex-col items-center justify-center px-4 pb-8", {
-                    "pt-8": sidebarState === "permanent",
-                    "pt-24": sidebarState !== "permanent",
-                  })}
-                >
+                <div>
                   <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
                     {children}
                   </ErrorBoundary>
@@ -82,12 +77,7 @@ export default function Layout({ children }: LayoutProps) {
 
 const ConditionalHeader = ({ show }: { show: boolean }) => (
   <Link href="/">
-    <a
-      className={cx(
-        "-mt-20 box-content flex h-12 items-center justify-center pt-6 uppercase tracking-widest transition duration-300 ease-in-out hover:text-accent hover:drop-shadow-light",
-        { "translate-y-[100%]": show }
-      )}
-    >
+    <a>
       <Icon icon="ubq" />
       <span>Ubiquity</span>
     </a>

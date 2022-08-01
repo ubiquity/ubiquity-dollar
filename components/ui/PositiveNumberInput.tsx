@@ -43,16 +43,7 @@ const PositiveNumberInput = ({
       }
     }
   };
-  return (
-    <input
-      type="tel"
-      value={value}
-      className={cx(BASE_CLASS, className)}
-      onChange={onChangePatternWrap(onChange)}
-      placeholder={placeholder}
-      disabled={disabled}
-    />
-  );
+  return <input type="tel" value={value} onChange={onChangePatternWrap(onChange)} placeholder={placeholder} disabled={disabled} />;
 };
 
 export const TextInput = ({
@@ -74,7 +65,7 @@ export const TextInput = ({
     handler(ev.currentTarget.value);
   };
 
-  return <input value={value} className={cx(BASE_CLASS, className)} onChange={onChangePatternWrap(onChange)} placeholder={placeholder} disabled={disabled} />;
+  return <input value={value} />;
 };
 
 export default PositiveNumberInput;

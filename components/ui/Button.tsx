@@ -40,19 +40,11 @@ const buttonStyle = ({ className, styled = "default", size = "md", fill = "inlin
 };
 
 const Button: React.FC<ButtonProps> = ({ children, className, styled, size, fill, ...rest }) => {
-  return (
-    <button className={buttonStyle({ className, styled, size, fill })} {...rest}>
-      {children}
-    </button>
-  );
+  return <button>{children}</button>;
 };
 
 export const ButtonLink: React.FC<ButtonLinkProps> = ({ children, className, styled, size, fill, ...rest }) => {
-  return (
-    <a className={buttonStyle({ className, styled, size, fill })} {...rest}>
-      {children}
-    </a>
-  );
+  return <a>{children}</a>;
 };
 
 export default Button;

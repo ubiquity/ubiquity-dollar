@@ -65,15 +65,7 @@ const Sidebar = ({
 
   return (
     <>
-      <div
-        className={cx("fixed top-0 z-50 h-screen border-r border-solid border-r-accent/60 bg-paper transition-transform duration-500 ease-in-out", {
-          "lg:translate-x-0": state !== "hidden",
-          "-translate-x-[97%]": state === "hidden",
-        })}
-        ref={sidebarRef}
-        onMouseEnter={handleEnter}
-        onMouseLeave={handleLeave}
-      >
+      <div ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
         {/* Header */}
 
         {state === "permanent" ? (
@@ -88,27 +80,14 @@ const Sidebar = ({
         {/* Caret / Toggle button */}
 
         {state === "hidden" || state === "hidden_hovering" ? (
-          <a
-            className={cx("absolute top-[50%] left-full ml-[1px] flex items-center justify-center rounded-r border border-l-0 border-solid border-accent/60 ", {
-              "bg-paper text-accent": state === "hidden",
-              "bg-accent text-paper": state === "hidden_hovering",
-            })}
-            aria-label="Toggle navigation"
-            onClick={handleToggle}
-          >
-            <Icon
-              icon="caret"
-              className={cx("m-1 h-6 w-6 transition-transform duration-500 ease-in-out", {
-                "rotate-[270deg]": state === "hidden",
-                "rotate-90": state === "hidden_hovering",
-              })}
-            />
+          <a aria-label="Toggle navigation" onClick={handleToggle}>
+            <Icon icon="caret" />
           </a>
         ) : null}
 
         {/* Items */}
 
-        <ul className={cx("flex h-full flex-col", { "justify-center": state !== "permanent" })}>
+        <ul>
           <Item text="Ubiquity Intro" href="https://landing.ubq.fi/en/" icon="🦍"></Item>
           <Item text="Redeem" href="/" icon="💸"></Item>
           <Item text="Staking" href="/staking" icon="⛏"></Item>
@@ -149,21 +128,12 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
   return (
     <li>
       <Link href={href}>
-        <a
-          className={cx(
-            "flex items-center justify-center text-ellipsis whitespace-nowrap rounded border border-solid py-2  pl-2 text-sm font-light uppercase tracking-widest transition duration-300 ease-in-out hover:transition-none",
-            {
-              "border-accent bg-accent/10 text-accent drop-shadow-accent": isActive,
-              "border-transparent text-white/75 hover:bg-white/5 hover:drop-shadow-light": !isActive,
-            }
-          )}
-          target={href.match(/https?:\/\//) ? "_blank" : ""}
-        >
+        <a target={href.match(/https?:\/\//) ? "_blank" : ""}>
           {text}
           {isExternal ? <Icon icon="external" /> : null}
         </a>
       </Link>
-      <div className={cx("absolute left-full top-[50%] -ml-2 h-[1px] bg-accent transition-all", { "w-2": isActive, "w-0": !isActive })}></div>
+      <div></div>
     </li>
   );
 };

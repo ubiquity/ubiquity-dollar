@@ -54,7 +54,7 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
         )}
       </div>
       <div>
-        <div className={cx("flex flex-col items-center", { "blur-sm": !!showBlurredOut })}>
+        <div>
           <Button size="xl" styled="accent" disabled={!mintButtonEnabled} onClick={onBuy}>
             {mintButtonText}
           </Button>
@@ -80,9 +80,7 @@ const Stick = ({ amount, media, isConnected, loading }: { amount: number; media?
   if (amount === 0) return null;
   return (
     <div>
-      <div
-        className={cx("relative mb-2 rounded-lg border-2 border-solid border-black border-opacity-25 shadow-inner", { ["ring-1 ring-accent"]: amount !== 0 })}
-      >
+      <div>
         {isConnected && loading ? (
           <div>
             <div></div>
