@@ -51,7 +51,7 @@ const BondingMigrate = () => {
         <div>
           <button onClick={handleMigration}>Migrate</button>
           {isLoading && (
-            <div className="lds-ring">
+            <div>
               <div></div>
               <div></div>
               <div></div>

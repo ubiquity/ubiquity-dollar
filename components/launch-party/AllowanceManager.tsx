@@ -37,15 +37,11 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
         ))}
       </div>
 
-      <div className="mt-4 text-right">
+      <div>
         <Button onClick={() => setAllowances(allowances.concat([{ address: "", count: "", price: "" }]))}>Add</Button>
-        {allowances.length > 1 ? (
-          <Button className="ml-4" onClick={() => setAllowances(allowances.slice(0, -1))}>
-            Remove
-          </Button>
-        ) : null}
+        {allowances.length > 1 ? <Button onClick={() => setAllowances(allowances.slice(0, -1))}>Remove</Button> : null}
       </div>
-      <div className="mt-4 text-right">
+      <div>
         <Button styled="accent" disabled={disableApply} onClick={() => onSubmit(allowances)}>
           Apply
         </Button>
@@ -56,7 +52,7 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
 
 const AllowanceInputs = ({ data: { address, count, price }, setData }: { data: AllowanceData; setData: (data: AllowanceData) => void }) => {
   return (
-    <div className="mb-4 grid grid-cols-3 gap-4">
+    <div>
       <TextInput placeholder="Address" value={address} onChange={(val) => setData({ address: val, count, price })} />
       <PositiveNumberInput placeholder="Ubiquisticks" fraction={false} value={count} onChange={(val) => setData({ address, count: val, price })} />
       <PositiveNumberInput placeholder="Price" value={price} onChange={(val) => setData({ address, count, price: val })} />

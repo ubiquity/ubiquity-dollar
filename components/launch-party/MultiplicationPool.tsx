@@ -14,7 +14,7 @@ const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoo
       <widget.Title text="Golden Pool" />
       <widget.SubTitle text="Multiply and exchanges" />
 
-      <div className="mx-auto w-2/3">
+      <div>
         <BondingPool
           enabled={enabled}
           poolData={poolsData[goldenPool.tokenAddress]}

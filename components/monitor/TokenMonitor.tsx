@@ -43,7 +43,7 @@ const TokenMonitorContainer = () => {
 
 const TokenMonitor = (props: TokenMonitorProps) => {
   return (
-    <Container className="col-span-2">
+    <Container>
       <Title text="Token monitor" />
       <SubTitle text="Debt Coupon" />
       <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />

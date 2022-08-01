@@ -160,7 +160,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <Container className="relative !mx-auto max-w-screen-md">
+    <Container>
       <Title text="Stake uAD-3CRV tokens -> Receive uBQ" />
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
     </Container>
@@ -185,16 +185,16 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) || ugov.gt(0));
 
   return (
-    <div className="relative flex flex-col">
+    <div>
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
-      <div className="mb-6 rounded-lg border border-solid border-accent/60">
-        <table className="m-0 w-full text-center">
-          <thead className="border-b border-solid border-accent/60">
+      <div>
+        <table>
+          <thead>
             <tr>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Deposit (Approx.)</th>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Pending Reward</th>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Unlock Time</th>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Action</th>
+              <th>Deposit (Approx.)</th>
+              <th>Pending Reward</th>
+              <th>Unlock Time</th>
+              <th>Action</th>
             </tr>
           </thead>
           {filteredShares.length > 0 ? (
@@ -206,25 +206,23 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           ) : (
             <tbody>
               <tr>
-                <td className="py-4" colSpan={5}>
-                  Nothing staked yet
-                </td>
+                <td colSpan={5}>Nothing staked yet</td>
               </tr>
             </tbody>
           )}
         </table>
       </div>
       <div id="rewards-summary flex flex-col items-center justify-center">
-        <div className="mb-2 flex items-center justify-center">
-          <Icon className="mr-2 w-4 text-accent" icon="ubq" />
-          <span className="text-accent">{formatEther(totalPendingUgov)} </span>
+        <div>
+          <Icon icon="ubq" />
+          <span>{formatEther(totalPendingUgov)} </span>
           &nbsp;pending UBQ rewards
         </div>
-        <div className="mb-2 flex items-center justify-center">
-          <Icon className="mr-2 w-4 text-accent" icon="liquidity" />
+        <div>
+          <Icon icon="liquidity" />
           {formatEther(totalLpBalance)} LP locked in Bonding Shares
         </div>
-        <div className="mb-2 text-center">{poolPercentage}% pool ownership</div>
+        <div>{poolPercentage}% pool ownership</div>
       </div>
     </div>
   );
@@ -247,23 +245,18 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
   }
 
   return (
-    <tr key={id} className="h-12" title={id.toString()}>
-      <td
-        className="border-r border-solid border-white/10 text-white"
-        title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}
-      >
-        ${Math.round(usdAmount * 100) / 100}
-      </td>
-      <td className="border-r border-solid border-white/10">
-        <div className="inline-flex items-center whitespace-nowrap text-accent">
-          <Icon icon="ubq" className="mr-2 w-4 text-accent" /> <span>{formatEther(ugov)}</span>
+    <tr key={id} title={id.toString()}>
+      <td title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}>${Math.round(usdAmount * 100) / 100}</td>
+      <td>
+        <div>
+          <Icon icon="ubq" /> <span>{formatEther(ugov)}</span>
         </div>
       </td>
-      <td className="border-r border-solid border-white/10">{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
-      <td className="px-1">
+      <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
+      <td>
         {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
           <>
-            {/* <input type="text" placeholder="All" className="!min-w-0 !w-10" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
+            {/* <input type="text" placeholder="All" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
             <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
           </>
         ) : ugov.gt(0) ? (

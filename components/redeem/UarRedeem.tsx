@@ -50,7 +50,7 @@ const UarRedeem = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <div className="grid gap-4">
+    <div>
       <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
       <Button onClick={handleRedeem} disabled={!submitEnabled}>
         Redeem uCR for uAD

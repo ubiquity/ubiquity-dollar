@@ -21,9 +21,9 @@ const WalletConnect = () => {
   return (
     <>
       {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
-      <div className="absolute top-0 right-0 z-40 mt-4 mr-8">
+      <div>
         {walletAddress ? (
-          <div className="flex items-center justify-center">
+          <div>
             <Tooltip
               content={
                 <>
@@ -34,7 +34,7 @@ const WalletConnect = () => {
               }
               placement="bottom"
             >
-              <a href={`https://etherscan.io/address/${walletAddress}`} target="_blank" className="mr-2 inline-block h-6 w-6 text-white/60">
+              <a href={`https://etherscan.io/address/${walletAddress}`} target="_blank">
                 <Icon icon="help" />
               </a>
             </Tooltip>
@@ -61,11 +61,11 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
 
   function Btn({ text, onClick, icon }: { text: string; icon: string; onClick: () => void }) {
     return (
-      <div onClick={() => onClick()} className="border-soli cursor-pointer rounded-lg border border-accent p-4 text-center hover:bg-accent/20">
-        <div className="mb-4 flex h-20 items-center justify-center">
-          <img className="w-20" src={"/providers-icons/" + icon + ".svg"} />
+      <div onClick={() => onClick()}>
+        <div>
+          <img src={"/providers-icons/" + icon + ".svg"} />
         </div>
-        <span className="text-sm uppercase tracking-widest">{text}</span>
+        <span>{text}</span>
       </div>
     );
   }
@@ -78,11 +78,11 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
   }
 
   return (
-    <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50">
-      <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/50" onClick={() => onClose()}></div>
+    <div>
+      <div onClick={() => onClose()}></div>
       <Container>
         <Title text="Connect wallet" />
-        <div className="grid grid-cols-2 gap-4">
+        <div>
           <Btn
             text="Metamask"
             icon="metamask"

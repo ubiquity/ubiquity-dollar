@@ -82,27 +82,18 @@ const DebtCouponRedeem = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <div className="grid gap-4">
-      <div className="flex">
-        <select
-          value={selectedDebtId}
-          onChange={(ev) => setSelectedDebtId(parseInt(ev.target.value))}
-          className="mr-2 block h-10 rounded-md border border-solid border-white/40 bg-white/10 p-2 outline-2 outline-accent/75 focus-visible:outline"
-        >
+    <div>
+      <div>
+        <select value={selectedDebtId} onChange={(ev) => setSelectedDebtId(parseInt(ev.target.value))}>
           {debtIds.map((debtId, i) => (
             <option key={i} value={i}>
               {debtBalances[i] && `$${formatEther(debtBalances[i])}`}
             </option>
           ))}
         </select>
-        <div className="relative">
-          <PositiveNumberInput className="flex-grow pr-12" value={inputVal} onChange={setInputVal} placeholder="uCR-NFT Amount" />
-          <div
-            onClick={() => setMax()}
-            className="absolute right-0 top-[50%] mr-2 flex  translate-y-[-50%] cursor-pointer items-center rounded-md border border-solid border-white bg-black/80 px-1 text-xs text-white hover:border-accent hover:text-accent hover:drop-shadow-accent"
-          >
-            MAX
-          </div>
+        <div>
+          <PositiveNumberInput value={inputVal} onChange={setInputVal} placeholder="uCR-NFT Amount" />
+          <div onClick={() => setMax()}>MAX</div>
         </div>
       </div>
       <Button disabled={!submitEnabled} onClick={handleRedeem}>

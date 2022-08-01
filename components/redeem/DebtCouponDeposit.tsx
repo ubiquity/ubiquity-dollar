@@ -61,7 +61,7 @@ const DebtCouponDeposit = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <div className="grid gap-4">
+    <div>
       <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
       <Button onClick={handleBurn} disabled={!submitEnabled}>
         Redeem uAD for uCR-NFT

@@ -18,13 +18,13 @@ const PROD = process.env.NODE_ENV == "production";
 
 function ErrorHandler({ error }: { error: Error }) {
   return (
-    <Container className="w-96">
-      <div className="flex flex-col items-center justify-center text-center">
-        <div className="mb-8 flex w-96 flex-col items-center justify-center text-accent opacity-50">
-          <Icon icon="warning" className="w-20" />
-          <div className="uppercase leading-tight tracking-widest">Error</div>
+    <Container>
+      <div>
+        <div>
+          <Icon icon="warning" />
+          <div>Error</div>
         </div>
-        <div className="opacity-75">{error.message}</div>
+        <div>{error.message}</div>
       </div>
     </Container>
   );
@@ -43,15 +43,15 @@ export default function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="flex">
+    <div>
       <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
-      <div className="fixed top-0 right-0 bottom-0" style={{ left: sidebarClientWidth }}>
+      <div style={{ left: sidebarClientWidth }}>
         <WalletConnect />
-        <div className="h-full w-full overflow-auto">
+        <div>
           <GridVideoBg />
           {sidebarState !== "loading" ? (
             <>
-              <div className="relative z-10 flex-grow pl-0">
+              <div>
                 <ConditionalHeader show={sidebarState !== "permanent"} />
 
                 {/* Content */}
@@ -71,7 +71,7 @@ export default function Layout({ children }: LayoutProps) {
           ) : null}
         </div>
         {/* Floating Inventory */}
-        <div className="pointer-events-none absolute bottom-0 z-50 flex w-full justify-center">
+        <div>
           <Inventory />
         </div>
         <TransactionsDisplay />
@@ -88,23 +88,23 @@ const ConditionalHeader = ({ show }: { show: boolean }) => (
         { "translate-y-[100%]": show }
       )}
     >
-      <Icon icon="ubq" className="mr-4 h-8" />
-      <span className="mt-1">Ubiquity</span>
+      <Icon icon="ubq" />
+      <span>Ubiquity</span>
     </a>
   </Link>
 );
 
 const GridVideoBg = () => {
   const video = (
-    <video autoPlay muted loop playsInline className="bg-video">
+    <video autoPlay muted loop playsInline>
       {PROD && <source src="ubiquity-one-fifth-speed-trimmed-compressed.mp4" type="video/mp4" />}
     </video>
   );
 
   return (
-    <div id="background" className="z-0">
+    <div id="background">
       {video}
-      <div id="grid" className="opacity-75"></div>
+      <div id="grid"></div>
     </div>
   );
 };

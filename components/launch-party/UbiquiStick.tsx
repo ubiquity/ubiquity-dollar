@@ -39,10 +39,10 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
   const showBlurredOut = !isConnected || !isLoaded || (allowance.count === 0 && sticksCount === 0);
 
   return (
-    <widget.Container className="flex w-full flex-col items-center">
+    <widget.Container>
       <widget.Title text="The Ubiquistick NFT" />
       <widget.SubTitle text="Access the game bonding pools" />
-      <div className="-mx-4 mb-4 flex justify-center">
+      <div>
         {sticksCount && sticksCount > 0 ? (
           <>
             <Stick isConnected={isConnected} loading={!sticks} amount={sticks?.black || 0} media={media.black} />
@@ -53,14 +53,12 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
           <BlurredStick />
         )}
       </div>
-      <div className="relative w-full">
+      <div>
         <div className={cx("flex flex-col items-center", { "blur-sm": !!showBlurredOut })}>
           <Button size="xl" styled="accent" disabled={!mintButtonEnabled} onClick={onBuy}>
             {mintButtonText}
           </Button>
-          <a href="https://opensea.io/collection/the-ubiquistick-v3" className="link-animation mt-4">
-            See your Ubiquisticks on OpenSeas
-          </a>
+          <a href="https://opensea.io/collection/the-ubiquistick-v3">See your Ubiquisticks on OpenSeas</a>
         </div>
         {showBlurredOut && <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />}
       </div>
@@ -71,9 +69,9 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
 export default UbiquiStick;
 
 const BlurredStick = () => (
-  <div className="mx-4 max-w-sm">
-    <div className="relative mb-2 rounded-lg border-2 border-solid border-black border-opacity-25 shadow-inner">
-      <img className="block h-auto w-full rounded-lg opacity-25 blur grayscale" src="/ubiquistick.jpeg" />
+  <div>
+    <div>
+      <img src="/ubiquistick.jpeg" />
     </div>
   </div>
 );
@@ -81,20 +79,20 @@ const BlurredStick = () => (
 const Stick = ({ amount, media, isConnected, loading }: { amount: number; media?: TokenData; isConnected: boolean; loading: boolean }) => {
   if (amount === 0) return null;
   return (
-    <div className="mx-4 max-w-sm">
+    <div>
       <div
         className={cx("relative mb-2 rounded-lg border-2 border-solid border-black border-opacity-25 shadow-inner", { ["ring-1 ring-accent"]: amount !== 0 })}
       >
         {isConnected && loading ? (
-          <div className="pointer-events-none absolute flex h-full w-full items-center justify-center">
-            <div className="loader"></div>
+          <div>
+            <div></div>
           </div>
         ) : null}
-        <video className="block aspect-square h-auto w-full rounded-lg" autoPlay loop src={media?.animation_url} poster={media?.image}></video>
+        <video autoPlay loop src={media?.animation_url} poster={media?.image}></video>
       </div>
-      <div className="mx-2 flex h-12 items-center text-accent text-opacity-75 drop-shadow-light">
-        <div className="flex-grow text-left text-xl">{media?.name}</div>
-        {isConnected && !loading && amount > 1 ? <div className="text-3xl">x{amount}</div> : null}
+      <div>
+        <div>{media?.name}</div>
+        {isConnected && !loading && amount > 1 ? <div>x{amount}</div> : null}
       </div>
     </div>
   );

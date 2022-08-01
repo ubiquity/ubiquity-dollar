@@ -96,25 +96,25 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
-    <Container className="relative !mx-auto max-w-screen-md">
+    <Container>
       <Title text="Boosted Yield Farming (Beta)" />
 
-      <div className="mb-4 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
-        <div className="w-20">
-          <Icon icon="warning" className="w-10 text-white" />
+      <div>
+        <div>
+          <Icon icon="warning" />
         </div>
-        <p className="flex-grow text-left">
+        <p>
           <span>Explainer article coming soon!</span>
         </p>
       </div>
 
-      <div className="mb-12 flex items-center justify-evenly rounded-md border border-solid border-white/10 p-4">
-        <div className="w-20">
-          <Icon icon="warning" className="w-10 text-white" />
+      <div>
+        <div>
+          <Icon icon="warning" />
         </div>
-        <p className="flex-grow text-left">
+        <p>
           <span>uCR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
-          <a target="_blank" className="text-white" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
+          <a target="_blank" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
             Learn more &raquo;
           </a>
         </p>
@@ -221,7 +221,7 @@ export const YieldFarmindWithdraw = memo(
     return (
       <>
         <SubTitle text="Current Deposit" />
-        <div className="grid grid-cols-3 gap-y-4">
+        <div>
           <DepositItem val={f(newAmount)} fadeVal={` (${f(amount)})`} text={token} />
           <DepositItem val={`${f(yieldPct * 100)}%`} text="Yield %" />
           <DepositItem val={`${f(yieldAmount)} uCR`} text="Yield" />
@@ -235,7 +235,7 @@ export const YieldFarmindWithdraw = memo(
           <DepositItem val={`${f(uarApyMin)}% - ${f(uarApyMax)}%`} text="APY in uCR" />
           <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
-        <div className="flex justify-center pt-8">
+        <div>
           <Button styled="accent" size="lg" onClick={onWithdraw} disabled={disable}>
             Withdraw
           </Button>
@@ -251,12 +251,12 @@ type DepositItemProps = {
   text: string;
 };
 const DepositItem = ({ val, fadeVal, text }: DepositItemProps) => (
-  <div className="flex flex-col justify-center">
-    <div className="mb-1 text-lg font-bold">
+  <div>
+    <div>
       {val}
-      {fadeVal ? <span className="opacity-50">{fadeVal}</span> : null}
+      {fadeVal ? <span>{fadeVal}</span> : null}
     </div>
-    <div className="text-sm">{text}</div>
+    <div>{text}</div>
   </div>
 );
 
@@ -367,8 +367,8 @@ export const YieldFarmingDeposit = memo(
 
     const HelpTooltip = ({ content }: { content: string }) => (
       <Tooltip content={content}>
-        <span className="pl-2">
-          <Icon icon="help" className="inline w-4 text-white" />
+        <span>
+          <Icon icon="help" />
         </span>
       </Tooltip>
     );
@@ -376,92 +376,86 @@ export const YieldFarmingDeposit = memo(
     return (
       <>
         <SubTitle text="Primary deposit" />
-        <div className="mb-8 flex items-center justify-between">
+        <div>
           {/* TODO: ICON */}
-          <div className="w-5/12" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
-            <div className="flex justify-between">
-              <span className="font-bold">USDC</span>
+          <div style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.strings.usdc}')` }}>
+            <div>
+              <span>USDC</span>
               {/* <span>
                 <span>TVL</span>
-                <span className="pl-4">{tvl.usdc}M</span>
+                <span>{tvl.usdc}M</span>
               </span> */}
             </div>
-            <div className="mb-2 text-left">
+            <div>
               <span>
                 {usdcApy.min.toFixed(2)}% - {usdcApy.max.toFixed(2)}%
               </span>
-              <span className="pl-2">APY</span>
+              <span>APY</span>
               <HelpTooltip content="This is the APY from the Pickle Finance USDC jar" />
             </div>
             <MaxButtonWrapper onMax={setMaxUsdc}>
-              <PositiveNumberInput value={usdc} onChange={handleUsdcChange} className="w-full pr-14" />
+              <PositiveNumberInput value={usdc} onChange={handleUsdcChange} />
             </MaxButtonWrapper>
-            <div className="mt-2 opacity-50">Balance: {f(balance.usdc)}</div>
+            <div>Balance: {f(balance.usdc)}</div>
           </div>
-          <div className="w-1/2">
-            <div className="text-center text-3xl font-bold text-accent">{Math.round(maxApy() * 100) / 100}%</div>
-            <div className="flex justify-center">
+          <div>
+            <div>{Math.round(maxApy() * 100) / 100}%</div>
+            <div>
               Max APY in uCR
               <HelpTooltip content="All the rewards are multiplied and provided in uCR" />
             </div>
           </div>
         </div>
         <SubTitle text="Boosters" />
-        <div className="mb-4 flex items-center justify-between">
-          <div className="w-5/12 bg-center bg-no-repeat" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
-            <div className="flex justify-between">
-              <span className="font-bold">UBQ</span>
+        <div>
+          <div style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.ubq}')` }}>
+            <div>
+              <span>UBQ</span>
             </div>
-            <div className="mb-2 w-10/12 text-left">
+            <div>
               <span>Minimizes deposit fee</span>
               <HelpTooltip content="The deposit fee gets converted to uCR when you withdraw" />
             </div>
-            <div className="flex items-center justify-between">
-              <MaxButtonWrapper onMax={setMaxUbq} className="w-10/12">
-                <PositiveNumberInput
-                  value={ubq}
-                  onChange={handleUbqChange}
-                  placeholder={`${maxUbqAmount.toLocaleString()} for 0% fee`}
-                  className="w-full pr-14"
-                />
+            <div>
+              <MaxButtonWrapper onMax={setMaxUbq}>
+                <PositiveNumberInput value={ubq} onChange={handleUbqChange} placeholder={`${maxUbqAmount.toLocaleString()} for 0% fee`} />
               </MaxButtonWrapper>
-              <div className="flex w-2/12 flex-col items-center justify-center text-center text-accent">
+              <div>
                 <span>{Math.round(ubqFee() * 100 * 100) / 100}%</span>
-                <span className="text-xs">FEE</span>
+                <span>FEE</span>
               </div>
             </div>
-            <div className="mt-2 w-10/12 opacity-50">Balance: {f(balance.ubq)}</div>
+            <div>Balance: {f(balance.ubq)}</div>
           </div>
 
-          <div className="w-5/12 bg-center bg-no-repeat" style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
-            <div className="flex justify-between">
-              <span className="font-bold">uAD</span>
-              {/* <span className="pl-4">
+          <div style={{ backgroundImage: `url('data:image/svg+xml;utf8,${icons.stringsCyan.uad}')` }}>
+            <div>
+              <span>uAD</span>
+              {/* <span>
                 <span>TVL</span>
-                <span className="pl-4">{tvl.uad}M</span>
+                <span>{tvl.uad}M</span>
               </span> */}
             </div>
-            <div className="mb-2  w-10/12 text-left">
+            <div>
               <span>Boosts yield</span>
               {/* <span>up to {(maxYieldBonusPct - baseYieldBonusPct) * 100}% more</span> */}
               <HelpTooltip content="Match 50% of the USDC deposit and you get an extra 50% boost" />
             </div>
-            <div className="flex items-center justify-between">
-              <MaxButtonWrapper onMax={setMaxUad} disabled={usdcNum <= 0} className="w-10/12">
+            <div>
+              <MaxButtonWrapper onMax={setMaxUad} disabled={usdcNum <= 0}>
                 <PositiveNumberInput
                   disabled={usdcNum <= 0}
                   value={uad}
                   onChange={handleUadChange}
                   placeholder={`${maxUadPct * 100}% of deposit for max boost`}
-                  className="w-full pr-14"
                 />
               </MaxButtonWrapper>
-              <div className="flex flex-col items-center justify-center text-center text-accent">
+              <div>
                 <span>{Math.round(uadBoost() * 100 * 100) / 100}%</span>
-                <span className="text-xs">BOOST</span>
+                <span>BOOST</span>
               </div>
             </div>
-            <div className="mt-2 w-10/12 opacity-50">Balance: {f(balance.uad)}</div>
+            <div>Balance: {f(balance.uad)}</div>
           </div>
         </div>
 
@@ -469,13 +463,11 @@ export const YieldFarmingDeposit = memo(
           {errors.length ? (
             <div>
               {errors.map((err, i) => (
-                <div key={i} className="text-red-500">
-                  {err}
-                </div>
+                <div key={i}>{err}</div>
               ))}
             </div>
           ) : null}
-          <div className="flex justify-center pt-8">
+          <div>
             <Button styled="accent" size="lg" onClick={deposit} disabled={!canDeposit() || disable}>
               Deposit
             </Button>

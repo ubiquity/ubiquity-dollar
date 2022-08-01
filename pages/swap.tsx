@@ -2,9 +2,9 @@ import { FC } from "react";
 import { Icon, IconsNames, Container, Title, ButtonLink } from "@/ui";
 
 const Currency = ({ name, icon }: { name: string; icon: IconsNames }) => (
-  <div className="flex items-center justify-center">
-    <span className="text-accent">
-      <Icon icon={icon} className="mr-2 w-8" />
+  <div>
+    <span>
+      <Icon icon={icon} />
     </span>
     <span>{name}</span>
   </div>
@@ -15,8 +15,8 @@ const Markets: FC = (): JSX.Element => {
     <Container>
       <Title text="Primary Markets" />
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="grid w-40 grid-cols-1 gap-4">
+      <div>
+        <div>
           <Currency name="uAD" icon="uad" />
           <ButtonLink fill="full" target="_blank" href="https://crv.to">
             Swap
@@ -25,7 +25,7 @@ const Markets: FC = (): JSX.Element => {
             Deposit
           </ButtonLink>
         </div>
-        <div className="grid w-40 grid-cols-1 gap-4">
+        <div>
           <Currency name="UBQ" icon="ubq" />
           <ButtonLink
             fill="full"

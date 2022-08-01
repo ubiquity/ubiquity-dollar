@@ -89,10 +89,10 @@ const PriceMonitor = (props: PriceMonitorProps) => {
       <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
       <SubTitle text="Dollar Minting" />
       <Address title="Dollar Minting Calculator" address={props.dollarMintCalcAddress} />
-      <div className="mt-4 text-center">
+      <div>
         {props.dollarToBeMinted ? (
           <div>
-            {props.dollarToBeMinted} <span className="text-white text-opacity-75"> uAD</span> to be minted
+            {props.dollarToBeMinted} <span> uAD</span> to be minted
           </div>
         ) : (
           "No minting needed"

@@ -78,8 +78,8 @@ const Sidebar = ({
 
         {state === "permanent" ? (
           <Link href="/">
-            <a className="my-8 flex flex-col items-center justify-center uppercase tracking-widest transition duration-300 ease-in-out hover:text-accent hover:drop-shadow-light">
-              <Icon icon="ubq" className="mb-4 w-16" />
+            <a>
+              <Icon icon="ubq" />
               <span>Ubiquity</span>
             </a>
           </Link>
@@ -120,7 +120,7 @@ const Sidebar = ({
           <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
           <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
           {/* <Item text="Public Channels" href="/public-channels"></Item> */}
-          <li className="mt-8 flex justify-center">
+          <li>
             <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
             <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
             <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
@@ -131,19 +131,14 @@ const Sidebar = ({
 
       {/* Overlay */}
 
-      {state === "hidden_hovering" ? <div className="absolute z-40 h-full w-full bg-black/50" onClick={handleToggle}></div> : null}
+      {state === "hidden_hovering" ? <div onClick={handleToggle}></div> : null}
     </>
   );
 };
 
 const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; alt: string }) => (
-  <a
-    href={href}
-    className="mx-1 flex h-10 w-10 items-center justify-center rounded-full border border-solid border-transparent p-2 text-white/75 transition duration-300 ease-in-out hover:border-accent/0 hover:bg-white/5 hover:drop-shadow-light hover:transition-none"
-    target="_blank"
-    title={alt}
-  >
-    <Icon className="w-full" icon={icon} />
+  <a href={href} target="_blank" title={alt}>
+    <Icon icon={icon} />
   </a>
 );
 
@@ -152,7 +147,7 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
   const isActive = router.asPath === href;
   const isExternal = href.startsWith("http");
   return (
-    <li className="relative mb-1 cursor-pointer px-2">
+    <li>
       <Link href={href}>
         <a
           className={cx(
@@ -165,7 +160,7 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
           target={href.match(/https?:\/\//) ? "_blank" : ""}
         >
           {text}
-          {isExternal ? <Icon className="ml-0.5 -mt-0.5 h-3.5 opacity-50" icon="external" /> : null}
+          {isExternal ? <Icon icon="external" /> : null}
         </a>
       </Link>
       <div className={cx("absolute left-full top-[50%] -ml-2 h-[1px] bg-accent transition-all", { "w-2": isActive, "w-0": !isActive })}></div>

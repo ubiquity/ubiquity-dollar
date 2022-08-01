@@ -125,15 +125,15 @@ const App = () => {
   const showAdminButton = isSaleContractOwner || isSimpleBondOwner;
 
   return (
-    <div className="relative w-full">
+    <div>
       <div
         className={cx("absolute top-0 left-0 right-0 bottom-0 z-40 flex flex-col items-center transition-opacity duration-500", {
           "pointer-events-none opacity-0": !showAdminComponents,
           "pointer-events-auto opacity-100": showAdminComponents,
         })}
       >
-        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/50" onClick={() => setShowAdminComponents(false)}></div>
-        <div className="pt-6">
+        <div onClick={() => setShowAdminComponents(false)}></div>
+        <div>
           {isSaleContractOwner ? <AllowanceManager defaultAddress={walletAddress || ""} onSubmit={contractSetAllowance} /> : null}
           {isSimpleBondOwner ? <RewardsManager onSubmit={contractSimpleBondSetReward} ratios={tokensRatios} /> : null}
         </div>
@@ -142,7 +142,7 @@ const App = () => {
       <LaunchPartyHeader />
 
       {showAdminButton ? (
-        <div className="-mt-8 mb-8 flex h-0 justify-center">
+        <div>
           <Button disabled={!showAdminButton} size="sm" onClick={() => setShowAdminComponents(true)}>
             Admin
           </Button>

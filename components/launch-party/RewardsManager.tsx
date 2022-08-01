@@ -26,24 +26,24 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
   return (
     <widget.Container>
       <widget.Title text="Rewards management" />
-      <div className="flex items-center">
-        <TextInput className="mr-2 flex-grow" placeholder="Token address" value={token} onChange={setToken} />
+      <div>
+        <TextInput placeholder="Token address" value={token} onChange={setToken} />
         <PositiveNumberInput placeholder="5 days multiplier" value={multiplier} onChange={setMultiplier} />
 
-        <div className="ml-2 w-36 text-center text-xs leading-none text-accent">
+        <div>
           <div>APY</div>
           <div>{apy ? `${round(apy)}%` : "..."}</div>
         </div>
       </div>
 
-      <div className="mt-4 text-right">
+      <div>
         <Button disabled={!token || isNaN(floatMultiplier) || floatMultiplier < 0} onClick={onClickButton}>
           Apply
         </Button>
       </div>
 
       {ratiosArr.length ? (
-        <table className="mt-4 text-center">
+        <table>
           <thead>
             <tr>
               <th>Token</th>
@@ -69,12 +69,10 @@ const TokenInfo = ({ token, ratio, onClick }: { token: string; ratio: ethers.Big
   const multiplier = multiplierFromRatio(ratio);
   const apy = apyFromRatio(ratio);
   return (
-    <tr className="cursor-pointer hover:bg-white/10" onClick={onClick}>
+    <tr onClick={onClick}>
       <td>{poolInfo.name}</td>
       <td>
-        <div className="w-60 overflow-hidden text-ellipsis" title={token}>
-          {token}
-        </div>
+        <div title={token}>{token}</div>
       </td>
       <td>{multiplier}</td>
       <td>{apy !== null ? round(apy) : "..."}</td>

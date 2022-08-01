@@ -13,7 +13,7 @@ const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
     <widget.Container>
       <widget.Title text="Funding Pools" />
       <widget.SubTitle text="Sell LP, get uCR over the course of 5 days" />
-      <div className="grid grid-cols-2 gap-8">
+      <div>
         {pools.map((pool) => (
           <BondingPool
             key={pool.name}
