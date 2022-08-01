@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import "./styles/index.css";
+import "./styles/tailwind-compiled.css";
+import "./styles/ubiquity.css";
 import "./styles/proxima.css";
 
 import { AppProps } from "next/app";
@@ -9,13 +9,11 @@ import Layout from "@/components/layout";
 import AppContextProvider from "@/lib/AppContextProvider";
 
 const noOverlayWorkaroundScript = `
-  window.addEventListener('error', event => {
-    event.stopImmediatePropagation()
-  })
-
-  window.addEventListener('unhandledrejection', event => {
-    event.stopImmediatePropagation()
-  })
+;(function () {
+	const stopPropagation = (event) => event.stopImmediatePropagation();
+	window.addEventListener("error", stopPropagation);
+	window.addEventListener("unhandledrejection", stopPropagation);
+})()
 `;
 
 export default function Ubiquity({ Component, pageProps }: AppProps): JSX.Element {
