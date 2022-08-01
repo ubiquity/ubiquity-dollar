@@ -23,15 +23,15 @@
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "BUILD:NEXT": "next build && next export --outdir web/dapp",
-    "build": "run-s install:env install:contracts "
+    "build": "run-s install:env install:contracts",
+    "dev": "run-p dev:*",
+    "dev:contracts": "./utils/dev-chain-init.sh",
+    "dev:ui": "next dev"
   },
   "_scripts": {
     "start": "run-s install:env install:contracts dev",
     "start:headless": "run-s install:env install:contracts dev:contracts",
     "build:ui": "yarn next build",
-    "dev": "run-p dev:*",
-    "dev:contracts": "./utils/dev-chain-init.sh",
-    "dev:ui": "next dev",
     "_contracts:clean": "run-p _contracts:clean:*",
     "_contracts:clean:dollar": "cd ./contracts/dollar && yarn clean",
     "_contracts:clean:nft": "cd ./contracts/ubiquistick && yarn clean",
@@ -69,7 +69,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
-    "tailwindcss": "^3.1.7",
     "typechain": "^8.1.0"
   },
   "nodemonConfig": {
