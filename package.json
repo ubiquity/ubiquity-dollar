@@ -41,16 +41,19 @@
     "__format:cspell": "cspell '**'"
   },
   "devDependencies": {
-    "@ethersproject/providers": "^5.0.0",
-    "@types/react": "^17.0.19",
-    "@typescript-eslint/eslint-plugin": "^4.11.1",
-    "@typescript-eslint/parser": "^4.11.1",
-    "eslint": "^7.16.0",
-    "eslint-config-prettier": "^7.1.0",
-    "eslint-plugin-prettier": "^3.4.0",
+    "@ethersproject/abi": "^5.0.0",
+    "@ethersproject/bytes": "^5.0.0",
+    "@ethersproject/providers": "^5.6.8",
+    "@types/react": "^18.0.15",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^7.21.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
-    "nodemon": "^2.0.7",
-    "prettier": "2.2.1",
+    "nodemon": "^2.0.19",
+    "postcss": "^8.1.0",
+    "prettier": "2.7.1",
     "typescript": "^4.7.4"
   },
   "dependencies": {
@@ -58,12 +61,12 @@
     "@typechain/ethers-v5": "^10.1.0",
     "autoprefixer": "^10.4.8",
     "classnames": "^2.3.1",
-    "ethers": "^5.5.4",
+    "ethers": "^5.6.9",
     "hardhat": "^2.10.1",
-    "next": "^11.0.0",
+    "next": "^12.2.3",
     "npm-run-all": "^4.1.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "tailwindcss": "^3.1.7",
     "typechain": "^8.1.0"
@@ -84,7 +87,7 @@
       "**/*/cache/",
       "**/*/artifacts/"
     ],
-    "ext": "ts,sh",
+    "ext": "ts,sh,tsx",
     "exec": "yarn build:fleek"
   }
 }

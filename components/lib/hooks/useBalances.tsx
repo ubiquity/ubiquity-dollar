@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import useManagerManaged from "./contracts/useManagerManaged";
 import useNamedContracts from "./contracts/useNamedContracts";
 import useWalletAddress from "./useWalletAddress";
+import { ChildrenShim } from "./children-shim";
 
 export interface Balances {
   uad: BigNumber;
@@ -21,7 +22,7 @@ type RefreshBalances = () => Promise<void>;
 
 export const BalancesContext = createContext<[Balances | null, RefreshBalances]>([null, async () => {}]);
 
-export const BalancesContextProvider: React.FC = ({ children }) => {
+export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) => {
   const [balances, setBalances] = useState<Balances | null>(null);
   const [walletAddress] = useWalletAddress();
   const managedContracts = useManagerManaged();
@@ -35,8 +36,8 @@ export const BalancesContextProvider: React.FC = ({ children }) => {
         managedContracts.metaPool.balanceOf(walletAddress),
         managedContracts.uar.balanceOf(walletAddress),
         managedContracts.ugov.balanceOf(walletAddress),
-        erc1155BalanceOf(walletAddress, (managedContracts.debtCouponToken as unknown) as ERC1155Ubiquity),
-        erc1155BalanceOf(walletAddress, (managedContracts.bondingToken as unknown) as ERC1155Ubiquity),
+        erc1155BalanceOf(walletAddress, managedContracts.debtCouponToken as unknown as ERC1155Ubiquity),
+        erc1155BalanceOf(walletAddress, managedContracts.bondingToken as unknown as ERC1155Ubiquity),
         namedContracts.usdc.balanceOf(walletAddress),
       ]);
 

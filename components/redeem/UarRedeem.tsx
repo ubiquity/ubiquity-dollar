@@ -18,7 +18,7 @@ const UarRedeem = () => {
   const [inputVal, setInputVal] = useState("");
 
   if (!walletAddress || !signer) {
-    return <span>Connnect wallet</span>;
+    return <span>Connect wallet</span>;
   }
 
   if (!managedContracts || !deployedContracts || !balances) {
@@ -27,7 +27,7 @@ const UarRedeem = () => {
 
   const redeemUarForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uCR -> DebtCouponManager", (managedContracts.uar as unknown) as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.uar as unknown as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
     refreshBalances();
   };

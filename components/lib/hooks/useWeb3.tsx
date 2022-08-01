@@ -2,6 +2,7 @@ import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/pro
 import { ethers } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import useLocalStorage from "./useLocalStorage";
+import { ChildrenShim } from "./children-shim";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
@@ -43,7 +44,7 @@ const DEFAULT_WEB3_ACTIONS: Web3Actions = {
 
 export const Web3Context = createContext<[Web3State, Web3Actions]>([DEFAULT_WEB3_STATE, DEFAULT_WEB3_ACTIONS]);
 
-export const UseWeb3Provider: React.FC = ({ children }) => {
+export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   const [storedWallet, setStoredWallet] = useLocalStorage<null | string>("storedWallet", null);
   const [storedProviderMode, setStoredProviderMode] = useLocalStorage<Web3State["providerMode"]>("storedProviderMode", "none");
   const [web3State, setWeb3State] = useState<Web3State>(DEFAULT_WEB3_STATE);

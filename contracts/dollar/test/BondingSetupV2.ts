@@ -251,17 +251,8 @@ async function bondingSetupV2(): Promise<{
   ({ DAI, USDC, curveFactory, curve3CrvBasePool, curve3CrvToken, curveWhaleAddress } = await getNamedAccounts());
 
   // GET first EOA account as admin Signer
-  [
-    admin,
-    secondAccount,
-    thirdAccount,
-    treasury,
-    fourthAccount,
-    bondingZeroAccount,
-    bondingMaxAccount,
-    bondingMinAccount,
-    fifthAccount,
-  ] = await ethers.getSigners();
+  [admin, secondAccount, thirdAccount, treasury, fourthAccount, bondingZeroAccount, bondingMaxAccount, bondingMinAccount, fifthAccount] =
+    await ethers.getSigners();
   router = (await ethers.getContractAt("IUniswapV2Router02", routerAdr)) as IUniswapV2Router02;
   adminAddress = await admin.getAddress();
   secondAddress = await secondAccount.getAddress();
@@ -464,7 +455,9 @@ async function bondingSetupV2(): Promise<{
   // DEPLOY Bonding Contract
   bondingFormulas = (await (await ethers.getContractFactory("BondingFormulas")).deploy()) as BondingFormulas;
 
-  bondingV2 = (await (await ethers.getContractFactory("BondingV2")).deploy(
+  bondingV2 = (await (
+    await ethers.getContractFactory("BondingV2")
+  ).deploy(
     manager.address,
     bondingFormulas.address,
     [bondingZeroAccountAddress, bondingMinAccountAddress, bondingMaxAccountAddress],

@@ -20,11 +20,12 @@ import {
 import { useDeployedContracts } from "@/lib/hooks";
 import { createContext, useContext, useEffect, useState } from "react";
 import useWeb3, { PossibleProviders } from "../useWeb3";
+import { ChildrenShim } from "../children-shim";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;
 export const ManagedContractsContext = createContext<ManagedContracts>(null);
 
-export const ManagedContractsContextProvider: React.FC = ({ children }) => {
+export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ children }) => {
   const [{ provider }] = useWeb3();
   const deployedContracts = useDeployedContracts();
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);

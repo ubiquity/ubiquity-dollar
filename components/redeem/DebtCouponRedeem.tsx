@@ -68,7 +68,7 @@ const DebtCouponRedeem = () => {
       debtId &&
       (await ensureERC1155Allowance(
         "uCR-NFT -> DebtCouponManager",
-        (managedContracts.debtCouponToken as unknown) as ERC1155Ubiquity,
+        managedContracts.debtCouponToken as unknown as ERC1155Ubiquity,
         signer,
         debtCouponManager.address
       ))

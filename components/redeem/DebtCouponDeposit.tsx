@@ -20,7 +20,7 @@ const DebtCouponDeposit = () => {
   const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber | null>(null);
 
   if (!walletAddress || !signer) {
-    return <span>Connnect wallet</span>;
+    return <span>Connect wallet</span>;
   }
 
   if (!balances || !managedContracts || !deployedContracts) {
@@ -29,7 +29,7 @@ const DebtCouponDeposit = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", (managedContracts.uad as unknown) as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.uad as unknown as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
     refreshBalances();
   };

@@ -109,13 +109,9 @@ export default async function yieldProxySetup(): Promise<{
   // _UBQRate 10e18, if the UBQRate is 10 then 10/10000 = 0.001  1UBQ gives you 0.001% of fee reduction so 100000 UBQ gives you 100%
   // _bonusYield  5000 = 50% 100 = 1% 10 = 0.1% 1 = 0.01%
   jar = (await ethers.getContractAt("IJar", jarUSDCAddr)) as IJar;
-  yieldProxy = (await (await ethers.getContractFactory("YieldProxy")).deploy(
-    manager.address,
-    jar.address,
-    10000,
-    ethers.utils.parseEther("100"),
-    5000
-  )) as YieldProxy;
+  yieldProxy = (await (
+    await ethers.getContractFactory("YieldProxy")
+  ).deploy(manager.address, jar.address, 10000, ethers.utils.parseEther("100"), 5000)) as YieldProxy;
   // bonding should have the UBQ_MINTER_ROLE to mint bonding shares
   await manager.connect(admin).grantRole(UBQ_MINTER_ROLE, yieldProxy.address);
 

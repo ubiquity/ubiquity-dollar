@@ -1,6 +1,11 @@
 import cx from "classnames";
 
-const MaxButtonWrapper: React.FC<{ onMax: () => void; className?: string; disabled?: boolean }> = ({ onMax, children, className, disabled }) => {
+const MaxButtonWrapper: React.FC<{ onMax: () => void; children: React.ReactNode; className?: string; disabled?: boolean }> = ({
+  onMax,
+  children,
+  className,
+  disabled,
+}) => {
   return (
     <div className={cx("relative", className)}>
       {children}
