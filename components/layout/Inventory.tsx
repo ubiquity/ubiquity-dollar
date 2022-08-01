@@ -25,7 +25,7 @@ const Inventory = () => {
   }
 
   return (
-    <div>
+    <div id="Inventory">
       <div>
         <div>My inventory</div>
         <Network />
@@ -95,8 +95,8 @@ const Token = ({
           {<Svg />}
           <Tippy
             content={
-              <div>
-                <p>Add to Metamask</p>
+              <div id="tippy">
+                <span>Add to Metamask</span>
               </div>
             }
             placement="top"

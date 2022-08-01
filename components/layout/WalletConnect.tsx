@@ -21,7 +21,7 @@ const WalletConnect = () => {
   return (
     <>
       {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
-      <div>
+      <div id="WalletConnect">
         {walletAddress ? (
           <div>
             <Tooltip

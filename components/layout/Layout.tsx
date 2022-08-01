@@ -42,10 +42,9 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div>
-      <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
       <div>
         <WalletConnect />
-        <div>
+        <div id="Content">
           {sidebarState !== "loading" ? (
             <>
               <div>
@@ -62,10 +61,8 @@ export default function Layout({ children }: LayoutProps) {
             </>
           ) : null}
         </div>
-        {/* Floating Inventory */}
-        <div id="Inventory">
-          <Inventory />
-        </div>
+        <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
+        <Inventory />
         <TransactionsDisplay />
       </div>
     </div>

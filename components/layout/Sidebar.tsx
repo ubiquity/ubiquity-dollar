@@ -65,7 +65,7 @@ const Sidebar = ({
 
   return (
     <>
-      <div ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
         {/* Header */}
 
         {state === "permanent" ? (
