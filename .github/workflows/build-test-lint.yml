@@ -57,7 +57,6 @@ jobs:
         run: yarn test:all
 
       - name: Deploy Development
-        if: github.ref == 'refs/heads/development'
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --prod --build --context development
