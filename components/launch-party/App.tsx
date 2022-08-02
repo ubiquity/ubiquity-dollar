@@ -10,6 +10,10 @@ import useUbiquistick from "./lib/hooks/useUbiquistick";
 import { goldenPool } from "./lib/pools";
 
 import { ethers, utils } from "ethers";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import useWalletAddress from "../lib/hooks/useWalletAddress";
+import useWeb3Provider from "../lib/hooks/useWeb3Provider";
+import Button from "../ui/Button";
 import AllowanceManager from "./AllowanceManager";
 import FundingPools from "./FundingPools";
 import LaunchPartyHeader from "./Header";
@@ -18,10 +22,6 @@ import MultiplicationPool from "./MultiplicationPool";
 import RewardsManager from "./RewardsManager";
 import UbiquiStick from "./UbiquiStick";
 import YourBonds from "./YourBonds";
-import useTransactionLogger from "../lib/hooks/useTransactionLogger";
-import useWalletAddress from "../lib/hooks/useWalletAddress";
-import useWeb3Provider from "../lib/hooks/useWeb3Provider";
-import Button from "../ui/Button";
 
 const App = () => {
   const provider = useWeb3Provider();

@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import useWeb3 from "@/lib/hooks/useWeb3";
 import icons from "@/ui/icons";
 
-import Network from "./Network";
 import useNamedContracts from "../lib/hooks/contracts/useDeployedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
 import useBalances from "../lib/hooks/useBalances";
+import Network from "./Network";
 
 const Inventory = () => {
   const [{ walletAddress }] = useWeb3();
