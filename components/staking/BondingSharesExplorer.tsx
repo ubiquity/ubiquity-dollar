@@ -216,7 +216,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         <div>
           <Icon icon="ubq" />
           <span>{formatEther(totalPendingUgov)} </span>
-          &nbsp;pending UBQ rewards
+          <span>pending UBQ rewards</span>
         </div>
         <div>
           <Icon icon="liquidity" />

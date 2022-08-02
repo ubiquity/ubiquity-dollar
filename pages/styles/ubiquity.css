@@ -65,3 +65,37 @@ video {
   padding: var(--button-pad);
   border-radius: var(--button-rounding);
 }
+#Foreground > div {
+  vertical-align: middle;
+}
+#Sidebar {
+  display: inline-block;
+  max-width: 12.5vw;
+}
+#MainContent {
+  max-width: 87.5vw;
+  display: inline-block;
+}
+#Inventory {
+}
+#Sidebar ul li div {
+  min-height: 24px;
+  padding: var(--button-pad);
+}
+#Sidebar ul li {
+  position: relative;
+}
+#Sidebar ul li a {
+  opacity: 0.5;
+  display: block;
+}
+#Sidebar ul li a:hover {
+  opacity: 1;
+}
+#Sidebar ul li svg {
+  height: 16px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: var(--button-pad);
+}

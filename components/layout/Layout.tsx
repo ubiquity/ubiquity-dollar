@@ -41,30 +41,32 @@ export default function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div>
-      <div>
-        <WalletConnect />
-        <div id="Content">
-          {sidebarState !== "loading" ? (
-            <>
-              <div>
-                <ConditionalHeader show={sidebarState !== "permanent"} />
-
-                {/* Content */}
-
+    <div id="Foreground">
+      <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
+      <div id="MainContent">
+        <div>
+          <WalletConnect />
+          <div id="Content">
+            {sidebarState !== "loading" ? (
+              <>
                 <div>
-                  <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
-                    {children}
-                  </ErrorBoundary>
+                  <ConditionalHeader show={sidebarState !== "permanent"} />
+
+                  {/* Content */}
+
+                  <div>
+                    <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
+                      {children}
+                    </ErrorBoundary>
+                  </div>
                 </div>
-              </div>
-            </>
-          ) : null}
+              </>
+            ) : null}
+          </div>
+          <TransactionsDisplay />
         </div>
-        <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
-        <Inventory />
-        <TransactionsDisplay />
       </div>
+      <Inventory />
     </div>
   );
 }

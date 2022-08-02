@@ -68,15 +68,6 @@ const Sidebar = ({
       <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
         {/* Header */}
 
-        {state === "permanent" ? (
-          <Link href="/">
-            <a>
-              <Icon icon="ubq" />
-              <span>Ubiquity</span>
-            </a>
-          </Link>
-        ) : null}
-
         {/* Caret / Toggle button */}
 
         {state === "hidden" || state === "hidden_hovering" ? (
@@ -88,7 +79,19 @@ const Sidebar = ({
         {/* Items */}
 
         <ul>
-          <Item text="Ubiquity Intro" href="https://landing.ubq.fi/en/" icon="🦍"></Item>
+          <li>
+            <div>
+              {" "}
+              {state === "permanent" ? (
+                <Link href="/">
+                  <a>
+                    <Icon icon="uad" />
+                    <span>Ubiquity Dollar Dashboard</span>
+                  </a>
+                </Link>
+              ) : null}
+            </div>
+          </li>
           <Item text="Redeem" href="/" icon="💸"></Item>
           <Item text="Staking" href="/staking" icon="⛏"></Item>
           <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
@@ -99,10 +102,17 @@ const Sidebar = ({
           <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
           <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
           {/* <Item text="Public Channels" href="/public-channels"></Item> */}
+
           <li>
             <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
+          </li>
+          <li>
             <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
+          </li>
+          <li>
             <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
+          </li>
+          <li>
             <SocialLinkItem href="https://discord.gg/SjymJ5maJ4" alt="Discord" icon="discord" />
           </li>
         </ul>
@@ -117,7 +127,9 @@ const Sidebar = ({
 
 const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; alt: string }) => (
   <a href={href} target="_blank" title={alt}>
-    <Icon icon={icon} />
+    <div>
+      <Icon icon={icon} />
+    </div>
   </a>
 );
 
@@ -127,13 +139,14 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
   const isExternal = href.startsWith("http");
   return (
     <li>
-      <Link href={href}>
-        <a target={href.match(/https?:\/\//) ? "_blank" : ""}>
-          {text}
-          {isExternal ? <Icon icon="external" /> : null}
-        </a>
-      </Link>
-      <div></div>
+      <div>
+        <Link href={href}>
+          <a target={href.match(/https?:\/\//) ? "_blank" : ""}>
+            <span>{text}</span>
+            {isExternal ? <Icon icon="external" /> : null}
+          </a>
+        </Link>
+      </div>
     </li>
   );
 };
