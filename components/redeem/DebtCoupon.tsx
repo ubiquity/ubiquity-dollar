@@ -569,13 +569,6 @@ type TwapPriceBarProps = {
 };
 
 export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
-  const calculatedPercent = () => {
-    const parsedPrice = parseFloat(price);
-    let leftBarPercent = ((parsedPrice - 0.9) * 100 * 0.8) / 0.2;
-    leftBarPercent = leftBarPercent < 10 ? 10 : leftBarPercent > 90 ? 90 : leftBarPercent;
-    return leftBarPercent;
-  };
-
   const leftPositioned = parseFloat(price) <= 1;
 
   return (

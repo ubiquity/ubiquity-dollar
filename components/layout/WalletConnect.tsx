@@ -42,7 +42,7 @@ const WalletConnect = () => {
           </div>
         ) : (
           <>
-            <Button styled="accent" disabled={connecting} onClick={() => promptConnectWallet()}>
+            <Button disabled={connecting} onClick={() => promptConnectWallet()}>
               {connecting ? "Connecting..." : "Connect Wallet"}
             </Button>
           </>

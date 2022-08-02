@@ -42,7 +42,7 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
         {allowances.length > 1 ? <Button onClick={() => setAllowances(allowances.slice(0, -1))}>Remove</Button> : null}
       </div>
       <div>
-        <Button styled="accent" disabled={disableApply} onClick={() => onSubmit(allowances)}>
+        <Button disabled={disableApply} onClick={() => onSubmit(allowances)}>
           Apply
         </Button>
       </div>
@@ -54,7 +54,7 @@ const AllowanceInputs = ({ data: { address, count, price }, setData }: { data: A
   return (
     <div>
       <TextInput placeholder="Address" value={address} onChange={(val) => setData({ address: val, count, price })} />
-      <PositiveNumberInput placeholder="Ubiquisticks" fraction={false} value={count} onChange={(val) => setData({ address, count: val, price })} />
+      <PositiveNumberInput placeholder="UbiquiSticks" fraction={false} value={count} onChange={(val) => setData({ address, count: val, price })} />
       <PositiveNumberInput placeholder="Price" value={price} onChange={(val) => setData({ address, count, price: val })} />
     </div>
   );

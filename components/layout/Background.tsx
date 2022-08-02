@@ -1,8 +1,6 @@
-import { ChildrenShim } from "../lib/hooks/children-shim";
-
 const PROD = process.env.NODE_ENV == "production";
 
-export default function Background({ children }: ChildrenShim) {
+export default function Background() {
   return <GridVideoBg />;
 }
 function GridVideoBg() {

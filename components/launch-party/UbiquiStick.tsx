@@ -54,10 +54,10 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
       </div>
       <div>
         <div>
-          <Button size="xl" styled="accent" disabled={!mintButtonEnabled} onClick={onBuy}>
+          <Button disabled={!mintButtonEnabled} onClick={onBuy}>
             {mintButtonText}
           </Button>
-          <a href="https://opensea.io/collection/the-ubiquistick-v3">See your Ubiquisticks on OpenSeas</a>
+          <a href="https://opensea.io/collection/the-ubiquistick-v3">See your UbiquiSticks on OpenSeas</a>
         </div>
         {showBlurredOut && <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />}
       </div>

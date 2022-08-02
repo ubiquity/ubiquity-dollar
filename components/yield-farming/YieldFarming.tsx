@@ -236,7 +236,7 @@ export const YieldFarmindWithdraw = memo(
           <DepositItem val={`${f(uarCurrentYieldPct * 100)}%`} text="Current Yield" />
         </div>
         <div>
-          <Button styled="accent" size="lg" onClick={onWithdraw} disabled={disable}>
+          <Button onClick={onWithdraw} disabled={disable}>
             Withdraw
           </Button>
         </div>
@@ -468,7 +468,7 @@ export const YieldFarmingDeposit = memo(
             </div>
           ) : null}
           <div>
-            <Button styled="accent" size="lg" onClick={deposit} disabled={!canDeposit() || disable}>
+            <Button onClick={deposit} disabled={!canDeposit() || disable}>
               Deposit
             </Button>
           </div>

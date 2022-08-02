@@ -137,7 +137,7 @@ const App = () => {
 
       {showAdminButton ? (
         <div>
-          <Button disabled={!showAdminButton} size="sm" onClick={() => setShowAdminComponents(true)}>
+          <Button disabled={!showAdminButton} onClick={() => setShowAdminComponents(true)}>
             Admin
           </Button>
         </div>

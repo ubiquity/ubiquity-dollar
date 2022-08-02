@@ -1,32 +1,19 @@
 import { Icon, IconsNames } from "@/ui";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef } from "react";
 
 const PROD = process.env.NODE_ENV == "production";
 
 export type SidebarState = "loading" | "permanent" | "hidden" | "hidden_hovering";
 
-const Sidebar = ({
-  state,
-  onChange,
-  onResize,
-  permanentThreshold,
-}: {
-  state: SidebarState;
-  onChange: (state: SidebarState) => void;
-  onResize: (size: number) => void;
-  permanentThreshold: number;
-}) => {
+const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState; onChange: (state: SidebarState) => void; permanentThreshold: number }) => {
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleResize = useCallback(() => {
     if (sidebarRef.current) {
       if (window.innerWidth < permanentThreshold) {
-        onResize(0);
         onChange("hidden");
       } else {
-        onResize(sidebarRef.current.clientWidth);
         onChange("permanent");
       }
     }
@@ -133,8 +120,6 @@ const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; a
 );
 
 const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
-  const router = useRouter();
-  const isActive = router.asPath === href;
   const isExternal = href.startsWith("http");
   return (
     <li>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
@@ -28,7 +27,7 @@ function ErrorHandler({ error }: { error: Error }) {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [sidebarClientWidth, setSidebarClientWidth] = useState(0);
+  const [setSidebarClientWidth] = useState(0);
   const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
 
   useEffect(() => {
@@ -41,7 +40,7 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div id="Foreground">
-      <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} onResize={setSidebarClientWidth} />
+      <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} />
       <div id="MainContent">
         <div>
           <WalletConnect />
@@ -69,12 +68,3 @@ export default function Layout({ children }: LayoutProps) {
     </div>
   );
 }
-
-const ConditionalHeader = ({ show }: { show: boolean }) => (
-  <Link href="/">
-    <a>
-      <Icon icon="ubq" />
-      <span>Ubiquity</span>
-    </a>
-  </Link>
-);

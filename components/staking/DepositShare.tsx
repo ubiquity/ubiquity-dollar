@@ -123,7 +123,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
         <Button disabled={disabled} onClick={onClickMax}>
           MAX
         </Button>
-        <Button styled="accent" disabled={disabled || hasErrors || noInputYet || !amountParsed} onClick={onClickStake}>
+        <Button disabled={disabled || hasErrors || noInputYet || !amountParsed} onClick={onClickStake}>
           Stake LP Tokens
         </Button>
       </div>

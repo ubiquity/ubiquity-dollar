@@ -18,27 +18,22 @@ const Markets: FC = (): JSX.Element => {
       <div>
         <div>
           <Currency name="uAD" icon="uad" />
-          <ButtonLink fill="full" target="_blank" href="https://crv.to">
+          <ButtonLink target="_blank" href="https://crv.to">
             Swap
           </ButtonLink>
-          <ButtonLink fill="full" target="_blank" href="https://crv.to/pool">
+          <ButtonLink target="_blank" href="https://crv.to/pool">
             Deposit
           </ButtonLink>
         </div>
         <div>
           <Currency name="UBQ" icon="ubq" />
           <ButtonLink
-            fill="full"
             target="_blank"
             href="https://app.sushi.com/swap?inputCurrency=0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0&outputCurrency=0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"
           >
             Swap
           </ButtonLink>
-          <ButtonLink
-            fill="full"
-            target="_blank"
-            href="https://app.sushi.com/add/0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"
-          >
+          <ButtonLink target="_blank" href="https://app.sushi.com/add/0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6">
             Deposit
           </ButtonLink>
         </div>
