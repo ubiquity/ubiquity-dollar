@@ -75,12 +75,17 @@ video {
 #MainContent {
   max-width: 87.5vw;
   display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+#MainContent > div {
+  display: inline-block;
+  text-align: left;
 }
 #Inventory {
 }
 #Sidebar ul li div {
   min-height: 24px;
-  padding: var(--button-pad);
 }
 #Sidebar ul li {
   position: relative;
@@ -88,6 +93,7 @@ video {
 #Sidebar ul li a {
   opacity: 0.5;
   display: block;
+  padding: var(--button-pad);
 }
 #Sidebar ul li a:hover {
   opacity: 1;
@@ -98,4 +104,21 @@ video {
   right: 0;
   top: 0;
   padding: var(--button-pad);
+}
+#Inventory > div:nth-child(2) > div > div > div > div {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: inline-block;
+}
+#Inventory > div:nth-child(2) > div > div > div > div svg {
+  height: 48px;
+  width: 48px;
+}
+#Inventory > div:nth-child(2) > div > div > div > div > * {
+  position: absolute;
+  left: 0;
+}
+#Inventory > div:nth-child(2) > div > div > div > div a {
+  text-align: left;
 }

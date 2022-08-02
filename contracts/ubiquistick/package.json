@@ -50,6 +50,7 @@
     "hardhat-deploy": "^0.10.5",
     "hardhat-gas-reporter": "^1.0.7",
     "lodash": "^4.17.21",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7",

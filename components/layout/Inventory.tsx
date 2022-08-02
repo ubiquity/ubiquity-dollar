@@ -105,10 +105,12 @@ const Token = ({
             <button onClick={addTokenToWallet}>+</button>
           </Tippy>
         </div>
-        <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
-          <div>{token}</div>
-          <div>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</div>
-        </a>
+        <div>
+          <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
+            <div>{token}</div>
+            <div>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</div>
+          </a>
+        </div>
       </div>
     </div>
   );

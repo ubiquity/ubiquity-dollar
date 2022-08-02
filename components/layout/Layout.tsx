@@ -50,7 +50,7 @@ export default function Layout({ children }: LayoutProps) {
             {sidebarState !== "loading" ? (
               <>
                 <div>
-                  <ConditionalHeader show={sidebarState !== "permanent"} />
+                  {/* <ConditionalHeader show={sidebarState !== "permanent"} /> */}
 
                   {/* Content */}
 
