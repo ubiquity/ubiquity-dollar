@@ -18,7 +18,7 @@ on:
       - "v*"
 
 jobs:
-  install-and-build:
+  build-and-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,3 +49,9 @@ jobs:
 
       - name: Building UI
         run: yarn BUILD:NEXT
+
+      - name: Yarn test
+        run: yarn test:all
+
+      - name: Yarn lint
+        run: yarn lint:all
