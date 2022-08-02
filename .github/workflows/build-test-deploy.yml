@@ -1,0 +1,49 @@
+name: Workflow for Ubiquity
+
+on:
+  push:
+    branches:
+      - development
+      - staging
+      - production
+  pull_request:
+    branches:
+      - development
+      - staging
+      - production
+  create:
+    tag:
+      - "v*"
+
+jobs:
+  install-and-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Installing nft
+        run: cd contracts/ubiquistick && yarn
+
+      - name: Building nft
+        run: yarn build
+
+      - name: Installing dollar
+        run: cd ../dollar && yarn
+
+      - name: Building dollar
+        run: yarn build
+
+      - name: Installing UI
+        run: yarn
+
+      - name: Building UI
+        run: yarn build && yarn build:ui
