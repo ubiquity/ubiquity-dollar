@@ -8,9 +8,3 @@ command = "yarn build:fleek"
 
 [context.development.environment]
 NETLIFY_NEXT_PLUGIN_SKIP = "true"
-
-[context.staging.environment]
-NETLIFY_NEXT_PLUGIN_SKIP = "true"
-
-[context.production.environment]
-NETLIFY_NEXT_PLUGIN_SKIP = "true"

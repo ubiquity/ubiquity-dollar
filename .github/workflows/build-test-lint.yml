@@ -61,15 +61,3 @@ jobs:
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --prod --build --context development
-
-      - name: Deploy Staging
-        if: github.ref == 'refs/heads/staging'
-        run: |
-          netlify link --id ${{ secrets.NETLIFY_SITE_ID_STAGING }}
-          netlify deploy --prod --build --context staging
-
-      - name: Deploy Production
-        if: github.ref == 'refs/heads/main'
-        run: |
-          netlify link --id ${{ secrets.NETLIFY_SITE_ID_PRODUCTION }}
-          netlify deploy --prod --build --context production
