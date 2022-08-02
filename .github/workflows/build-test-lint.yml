@@ -20,6 +20,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
     permissions:
       contents: read
 
@@ -52,3 +55,21 @@ jobs:
 
       - name: Yarn test
         run: yarn test:all
+
+      - name: Deploy Development
+        if: github.ref == 'refs/heads/development'
+        run: |
+          netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
+          netlify deploy --prod --build --context development
+
+      - name: Deploy Staging
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          netlify link --id ${{ secrets.NETLIFY_SITE_ID_STAGING }}
+          netlify deploy --prod --build --context staging
+
+      - name: Deploy Production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          netlify link --id ${{ secrets.NETLIFY_SITE_ID_PRODUCTION }}
+          netlify deploy --prod --build --context production
