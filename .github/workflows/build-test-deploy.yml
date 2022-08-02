@@ -31,19 +31,19 @@ jobs:
           node-version: "16"
 
       - name: Installing nft
-        run: cd contracts/ubiquistick && yarn
+        run: cd contracts/ubiquistick && yarn install
 
       - name: Building nft
         run: yarn build
 
       - name: Installing dollar
-        run: cd ../dollar && yarn
+        run: cd ../dollar && yarn install
 
       - name: Building dollar
         run: yarn build
 
       - name: Installing UI
-        run: yarn
+        run: yarn install
 
       - name: Building UI
         run: yarn build && yarn build:ui
