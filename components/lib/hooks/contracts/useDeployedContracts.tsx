@@ -1,6 +1,7 @@
 import { DebtCouponManager__factory, UbiquityAlgorithmicDollarManager__factory } from "@/dollar-types";
-import { useDeployedAddress, useWeb3Provider } from "@/lib/hooks";
+import useDeployedAddress from "../useDeployedAddress";
 import { PossibleProviders } from "../useWeb3";
+import useWeb3Provider from "../useWeb3Provider";
 
 export type DeployedContracts = ReturnType<typeof connectedContracts> | null;
 export function connectedContracts(provider: NonNullable<PossibleProviders>) {

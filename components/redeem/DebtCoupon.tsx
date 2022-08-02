@@ -1,8 +1,9 @@
-import { Balances, useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainNumber, formatTimeDiff } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
+import useBalances, { Balances } from "../lib/hooks/useBalances";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import usePrices from "./lib/usePrices";
 
 type Actions = {

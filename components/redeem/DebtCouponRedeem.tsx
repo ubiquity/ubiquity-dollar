@@ -4,9 +4,15 @@ import { useEffect, useState } from "react";
 import { DebtCoupon, ERC1155Ubiquity } from "@/dollar-types";
 import { ensureERC1155Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
-import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
 import { safeParseEther } from "@/lib/utils";
-import { Button, PositiveNumberInput } from "@/ui";
+import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useBalances from "../lib/hooks/useBalances";
+import useSigner from "../lib/hooks/useSigner";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import useWalletAddress from "../lib/hooks/useWalletAddress";
+import Button from "../ui/Button";
+import PositiveNumberInput from "../ui/PositiveNumberInput";
 
 const DebtCouponRedeem = () => {
   const [walletAddress] = useWalletAddress();
