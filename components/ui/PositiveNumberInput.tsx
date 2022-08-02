@@ -1,5 +1,3 @@
-import cx from "classnames";
-
 const BASE_CLASS = `
   block
   h-10 px-4

@@ -1,5 +1,4 @@
 import { Icon, IconsNames } from "@/ui";
-import cx from "classnames";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useRef } from "react";

@@ -1,5 +1,3 @@
-import cx from "classnames";
-
 const MaxButtonWrapper: React.FC<{ onMax: () => void; children: React.ReactNode; className?: string; disabled?: boolean }> = ({
   onMax,
   children,

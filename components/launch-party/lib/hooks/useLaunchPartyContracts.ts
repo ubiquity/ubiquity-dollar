@@ -9,7 +9,7 @@ import {
   TheUbiquityStick,
   TheUbiquityStickSale,
   TheUbiquityStickSale__factory,
-  TheUbiquityStick__factory,
+  TheUbiquityStick__factory
 } from "@/ubiquistick-types";
 
 import { allPools } from "../pools";

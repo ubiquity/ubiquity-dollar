@@ -6,7 +6,7 @@ import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainStringNumber, performTransaction } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Button, Container, Icon, icons, MaxButtonWrapper, PositiveNumberInput, SubTitle, Title, Tooltip, WalletNotConnected } from "@/ui";
+import { Button, Container, Icon, MaxButtonWrapper, PositiveNumberInput, SubTitle, Title, Tooltip, WalletNotConnected } from "@/ui";
 
 import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyData, YieldProxyDepositInfo } from "./lib/data";
 

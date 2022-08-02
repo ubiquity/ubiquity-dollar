@@ -1,5 +1,4 @@
 import { Button } from "@/ui";
-import cx from "classnames";
 import { useTransactionLogger } from "../lib/hooks";
 import * as widget from "../ui/widget";
 import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/hooks/useUbiquistick";
