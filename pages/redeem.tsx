@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { ethers } from "ethers";
 
-import { DisabledBlurredMessage, Container, Title, SubTitle, WalletNotConnected } from "@/ui";
+import { DisabledBlurredMessage, WalletNotConnected } from "@/ui";
 
 import MigrateButton from "@/components/redeem/MigrateButton";
 import DollarPrice from "@/components/redeem/DollarPrice";
@@ -25,30 +25,24 @@ const PriceStabilization: FC = (): JSX.Element => {
 
   return walletAddress ? (
     <>
-      <Container>
-        <Title text="uAD Price" />
-        <DollarPrice />
-        <MigrateButton />
-      </Container>
+      <h2>uAD Price"</h2>
+      <DollarPrice />
+      <MigrateButton />
       <div>
-        <Container>
-          <Title text="Mint Ubiquity Credits" />
-          <SubTitle text="When TWAP < 1" />
-          <DisabledBlurredMessage disabled={twapGt1} content="Disabled while TWAP > 1">
-            <DebtCouponDeposit />
-            {/* <UarDeposit /> */}
-          </DisabledBlurredMessage>
-        </Container>
-        <Container>
-          <Title text="Redeem Ubiquity Credits" />
-          <SubTitle text="When TWAP > 1" />
-          <DisabledBlurredMessage disabled={!twapGt1} content="Disabled while TWAP < 1">
-            <div>
-              <UarRedeem />
-              <DebtCouponRedeem />
-            </div>
-          </DisabledBlurredMessage>
-        </Container>
+        <h2>Mint Ubiquity Credits"</h2>
+        <aside>When TWAP &lt;1"</aside>
+        <DisabledBlurredMessage disabled={twapGt1} content="Disabled while TWAP > 1">
+          <DebtCouponDeposit />
+          {/* <UarDeposit /> */}
+        </DisabledBlurredMessage>
+        <h2>Redeem Ubiquity Credits"</h2>
+        <aside>When TWAP &gt; 1"</aside>
+        <DisabledBlurredMessage disabled={!twapGt1} content="Disabled while TWAP < 1">
+          <div>
+            <UarRedeem />
+            <DebtCouponRedeem />
+          </div>
+        </DisabledBlurredMessage>
       </div>
     </>
   ) : (

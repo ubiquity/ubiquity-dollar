@@ -1,4 +1,5 @@
-import { useManagerManaged, useWeb3 } from "@/lib/hooks";
+import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
+import useWeb3 from "@/components/lib/hooks/useWeb3";
 import { useEffect, useState } from "react";
 import { Contracts } from "./useLaunchPartyContracts";
 

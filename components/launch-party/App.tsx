@@ -1,9 +1,7 @@
 import { useState } from "react";
 
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { useTransactionLogger, useWalletAddress, useWeb3Provider } from "@/lib/hooks";
 import { performTransaction } from "@/lib/utils";
-import { Button } from "@/ui";
 
 import useLaunchPartyContracts from "./lib/hooks/useLaunchPartyContracts";
 import usePrices from "./lib/hooks/usePrices";
@@ -20,6 +18,10 @@ import MultiplicationPool from "./MultiplicationPool";
 import RewardsManager from "./RewardsManager";
 import UbiquiStick from "./UbiquiStick";
 import YourBonds from "./YourBonds";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import useWalletAddress from "../lib/hooks/useWalletAddress";
+import useWeb3Provider from "../lib/hooks/useWeb3Provider";
+import Button from "../ui/Button";
 
 const App = () => {
   const provider = useWeb3Provider();

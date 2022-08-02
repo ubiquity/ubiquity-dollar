@@ -9,11 +9,11 @@ const DollarPrice = () => {
   const [twapPrice, spotPrice] = usePrices();
 
   return (
-    <div>
+    <div id="DollarPrice">
       <Tooltip content="Exchange price to 3CRV" placement="bottom">
         <div>
           <div>${(spotPrice && roundPrice(spotPrice)) || 0}</div>
-          <div>SPOT Price</div>
+          <div>Spot Price</div>
         </div>
       </Tooltip>
       <Tooltip content="Time Weighted Average Price" placement="bottom">

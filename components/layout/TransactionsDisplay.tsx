@@ -1,5 +1,6 @@
-import { Transaction, useTransactionLogger } from "@/lib/hooks";
-import { Button, Spinner } from "../ui";
+import useTransactionLogger, { Transaction } from "../lib/hooks/useTransactionLogger";
+import Button from "../ui/Button";
+import Spinner from "../ui/Spinner";
 
 export const Transacting = (props: { transaction: Transaction; onDismiss: () => void }): JSX.Element | null => {
   if (props.transaction.status === "failure" && !props.transaction.dismissed) {
@@ -45,7 +46,7 @@ const TransactionsDisplay = () => {
   return (
     <div id="TransactionsDisplay">
       {Object.entries(transactions).map(([key, transaction]) => (
-        <Transacting key={key} transaction={transaction} onDismiss={() => dismissTransaction(key)} />
+        <Transacting key={key} transaction={transaction as Transaction} onDismiss={() => dismissTransaction(key)} />
       ))}
     </div>
   );

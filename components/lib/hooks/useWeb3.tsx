@@ -1,8 +1,8 @@
 import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
-import useLocalStorage from "./useLocalStorage";
 import { ChildrenShim } from "./children-shim";
+import useLocalStorage from "./useLocalStorage";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";

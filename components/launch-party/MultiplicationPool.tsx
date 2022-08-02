@@ -1,4 +1,3 @@
-import * as widget from "@/ui/widget";
 import BondingPool from "./BondingPool";
 import { goldenPool, PoolData } from "./lib/pools";
 
@@ -10,9 +9,9 @@ type MultiplicationPoolParams = {
 
 const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoolParams) => {
   return (
-    <widget.Container>
-      <widget.Title text="Golden Pool" />
-      <widget.SubTitle text="Multiply and exchanges" />
+    <div>
+      <h2>Golden Pool</h2>
+      <h3>Multiply and exchanges</h3>
 
       <div>
         <BondingPool
@@ -22,7 +21,7 @@ const MultiplicationPool = ({ enabled, poolsData, onDeposit }: MultiplicationPoo
           {...goldenPool}
         />
       </div>
-    </widget.Container>
+    </div>
   );
 };
 

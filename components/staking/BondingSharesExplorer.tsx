@@ -5,7 +5,7 @@ import { formatEther } from "@/lib/format";
 import { useBalances, useTransactionLogger } from "@/lib/hooks";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Button, Container, Icon, Loading, Title } from "@/ui";
+import { Button, Icon, Loading } from "@/ui";
 
 // Contracts: bonding, metaPool, bondingToken, masterChef
 
@@ -160,10 +160,10 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <Container>
-      <Title text="Stake uAD-3CRV tokens -> Receive uBQ" />
+    <div>
+      <h2>Stake uAD-3CRV tokens to receive UBQ</h2>
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
-    </Container>
+    </div>
   );
 });
 

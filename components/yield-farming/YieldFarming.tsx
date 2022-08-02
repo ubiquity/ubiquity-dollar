@@ -6,7 +6,7 @@ import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainStringNumber, performTransaction } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Button, Container, Icon, MaxButtonWrapper, PositiveNumberInput, SubTitle, Title, Tooltip, WalletNotConnected } from "@/ui";
+import { Button, Icon, MaxButtonWrapper, PositiveNumberInput, Tooltip, WalletNotConnected } from "@/ui";
 
 import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyData, YieldProxyDepositInfo } from "./lib/data";
 
@@ -96,8 +96,8 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
-    <Container>
-      <Title text="Boosted Yield Farming (Beta)" />
+    <div>
+      <h2>Boosted Yield Farming (Beta)</h2>
 
       <div>
         <div>
@@ -164,7 +164,7 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
       ) : (
         "Loading..."
       )}
-    </Container>
+    </div>
   );
 };
 
@@ -220,7 +220,7 @@ export const YieldFarmindWithdraw = memo(
   }: YieldFarmingWithdrawProps) => {
     return (
       <>
-        <SubTitle text="Current Deposit" />
+        <h3>Current Deposit</h3>
         <div>
           <DepositItem val={f(newAmount)} fadeVal={` (${f(amount)})`} text={token} />
           <DepositItem val={`${f(yieldPct * 100)}%`} text="Yield %" />
@@ -375,7 +375,7 @@ export const YieldFarmingDeposit = memo(
 
     return (
       <>
-        <SubTitle text="Primary deposit" />
+        <h3>Primary deposit</h3>
         <div>
           {/* TODO: ICON */}
           <div>
@@ -406,7 +406,7 @@ export const YieldFarmingDeposit = memo(
             </div>
           </div>
         </div>
-        <SubTitle text="Boosters" />
+        <h3>Boosters</h3>
         <div>
           <div>
             <div>

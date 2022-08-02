@@ -1,4 +1,3 @@
-import * as widget from "../ui/widget";
 import BondingPool from "./BondingPool";
 import { PoolData, pools } from "./lib/pools";
 
@@ -10,9 +9,9 @@ type FundingPoolParams = {
 
 const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
   return (
-    <widget.Container>
-      <widget.Title text="Funding Pools" />
-      <widget.SubTitle text="Sell LP, get uCR over the course of 5 days" />
+    <div>
+      <h2>Funding Pools</h2>
+      <h3>Sell LP, get uCR over the course of 5 days</h3>
       <div>
         {pools.map((pool) => (
           <BondingPool
@@ -24,7 +23,7 @@ const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
           />
         ))}
       </div>
-    </widget.Container>
+    </div>
   );
 };
 

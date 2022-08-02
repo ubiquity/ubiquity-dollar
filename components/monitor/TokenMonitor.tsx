@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
 import { useDeployedContracts, useManagerManaged } from "@/lib/hooks";
-import { Container, SubTitle, Title } from "@/ui";
 
 import { Address, Balance } from "./ui";
 
@@ -43,14 +42,14 @@ const TokenMonitorContainer = () => {
 
 const TokenMonitor = (props: TokenMonitorProps) => {
   return (
-    <Container>
-      <Title text="Token monitor" />
-      <SubTitle text="Debt Coupon" />
+    <div>
+      <h2>Token monitor</h2>
+      <h3>Debt Coupon</h3>
       <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />
       <Address title="Debt Coupon" address={props.debtCouponAddress} />
       <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingDebt} />
       <Balance title="Total Redeemable" unit="uCR-NFT" balance={props.totalRedeemable} />
-    </Container>
+    </div>
   );
 };
 

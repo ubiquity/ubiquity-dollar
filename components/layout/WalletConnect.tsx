@@ -1,6 +1,8 @@
-import { useWeb3 } from "@/lib/hooks";
-import { Button, Container, Icon, Title, Tooltip } from "@/ui";
 import { useEffect, useState } from "react";
+import useWeb3 from "../lib/hooks/useWeb3";
+import Button from "../ui/Button";
+import Icon from "../ui/Icon";
+import Tooltip from "../ui/Tooltip";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -80,8 +82,8 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
   return (
     <div>
       <div onClick={() => onClose()}></div>
-      <Container>
-        <Title text="Connect wallet" />
+      <div>
+        <h2>Connect wallet</h2>
         <div>
           <Btn
             text="Metamask"
@@ -94,7 +96,7 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
           />
           <Btn text="Hardhat node" icon="hardhat" onClick={promptForWalletAddress} />
         </div>
-      </Container>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { Icon, IconsNames } from "@/ui";
 import Link from "next/link";
 import { useCallback, useEffect, useRef } from "react";
+import Icon, { IconsNames } from "../ui/Icon";
 import WalletConnect from "./WalletConnect";
 
 const PROD = process.env.NODE_ENV == "production";

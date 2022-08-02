@@ -1,5 +1,4 @@
-import { Button } from "@/ui";
-import * as widget from "../ui/widget";
+import Button from "../ui/Button";
 import { BondData } from "./lib/hooks/useSimpleBond";
 import { format, formatFixed, round } from "./lib/utils";
 
@@ -27,9 +26,9 @@ const YourBonds = ({
   const accumulatedInUsd = uarUsdPrice ? accumulated * uarUsdPrice : null;
 
   return (
-    <widget.Container>
-      <widget.Title text="Your Bonds" />
-      <widget.SubTitle text="Claim the accumulated flow" />
+    <div>
+      <h2>Your Bonds</h2>
+      <h3>Claim the accumulated flow</h3>
 
       <div>
         <table>
@@ -77,7 +76,7 @@ const YourBonds = ({
           Claim all
         </Button>
       </div>
-    </widget.Container>
+    </div>
   );
 };
 

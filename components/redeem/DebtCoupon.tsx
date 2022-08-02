@@ -1,7 +1,6 @@
 import { Balances, useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainNumber, formatTimeDiff } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import * as widget from "@/ui/widget";
 import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 import usePrices from "./lib/usePrices";
@@ -96,8 +95,8 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
   };
 
   return (
-    <widget.Container>
-      <widget.Title text="Debt Coupon" />
+    <div>
+      <h2>Debt Coupon</h2>
       {balances && (
         <DebtCoupon
           twapPrice={twapPrice}
@@ -118,7 +117,7 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
           coupons={coupons}
         />
       )}
-    </widget.Container>
+    </div>
   );
 };
 

@@ -19,8 +19,8 @@ import {
 } from "@/dollar-types";
 import { useDeployedContracts } from "@/lib/hooks";
 import { createContext, useContext, useEffect, useState } from "react";
-import useWeb3, { PossibleProviders } from "../useWeb3";
 import { ChildrenShim } from "../children-shim";
+import useWeb3, { PossibleProviders } from "../useWeb3";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;
 export const ManagedContractsContext = createContext<ManagedContracts>(null);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { useWeb3Provider } from "@/lib/hooks";
 import { getNetworkName } from "@/lib/utils";
+import useWeb3Provider from "../lib/hooks/useWeb3Provider";
 
 const Network = () => {
   const web3Provider = useWeb3Provider();

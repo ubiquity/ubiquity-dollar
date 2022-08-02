@@ -1,5 +1,6 @@
+import { ButtonLink } from "@/components/ui/Button";
+import Icon, { IconsNames } from "@/components/ui/Icon";
 import { FC } from "react";
-import { Icon, IconsNames, Container, Title, ButtonLink } from "@/ui";
 
 const Currency = ({ name, icon }: { name: string; icon: IconsNames }) => (
   <div>
@@ -12,8 +13,8 @@ const Currency = ({ name, icon }: { name: string; icon: IconsNames }) => (
 
 const Markets: FC = (): JSX.Element => {
   return (
-    <Container>
-      <Title text="Primary Markets" />
+    <div>
+      <h2>Primary Markets</h2>
 
       <div>
         <div>
@@ -38,7 +39,7 @@ const Markets: FC = (): JSX.Element => {
           </ButtonLink>
         </div>
       </div>
-    </Container>
+    </div>
   );
 };
 

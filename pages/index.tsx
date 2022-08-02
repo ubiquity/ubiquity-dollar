@@ -1,1 +1,1 @@
-export { default as default } from "./redeem";
+export { default } from "./redeem";

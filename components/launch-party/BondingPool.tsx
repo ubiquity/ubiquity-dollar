@@ -1,8 +1,8 @@
 import { useState } from "react";
-
-import { Button, PositiveNumberInput, Tooltip } from "@/ui";
-
-import { useTransactionLogger } from "@/lib/hooks";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import Button from "../ui/Button";
+import PositiveNumberInput from "../ui/PositiveNumberInput";
+import Tooltip from "../ui/Tooltip";
 
 import { getPoolUrl, PoolData, PoolInfo } from "./lib/pools";
 import { format, round } from "./lib/utils";

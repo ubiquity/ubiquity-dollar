@@ -1,7 +1,8 @@
-import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import { ethers } from "ethers";
 import { useState } from "react";
-import * as widget from "../ui/widget";
+import Button from "../ui/Button";
+import PositiveNumberInput, { TextInput } from "../ui/PositiveNumberInput";
+
 import { poolByAddress } from "./lib/pools";
 import { apyFromRatio, multiplierFromRatio, round } from "./lib/utils";
 
@@ -24,8 +25,8 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
   const apy = floatMultiplier > 1 ? floatMultiplier ** (365 / 5) : null;
 
   return (
-    <widget.Container>
-      <widget.Title text="Rewards management" />
+    <div>
+      <h2>Rewards management</h2>
       <div>
         <TextInput placeholder="Token address" value={token} onChange={setToken} />
         <PositiveNumberInput placeholder="5 days multiplier" value={multiplier} onChange={setMultiplier} />
@@ -59,7 +60,7 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
           </tbody>
         </table>
       ) : null}
-    </widget.Container>
+    </div>
   );
 };
 

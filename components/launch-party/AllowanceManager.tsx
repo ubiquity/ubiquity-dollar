@@ -1,6 +1,6 @@
-import { Button, PositiveNumberInput, TextInput } from "@/ui";
 import { useState } from "react";
-import * as widget from "../ui/widget";
+import Button from "../ui/Button";
+import PositiveNumberInput, { TextInput } from "../ui/PositiveNumberInput";
 
 type AllowanceData = {
   address: string;
@@ -28,8 +28,8 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
   const disableApply = allowances.some(({ address, count, price }) => !address || count === "" || price === "");
 
   return (
-    <widget.Container>
-      <widget.Title text="Whitelist management" />
+    <div>
+      <h2>Whitelist management</h2>
 
       <div>
         {allowances.map((allowance, i) => (
@@ -46,16 +46,16 @@ const AllowanceManager = ({ defaultAddress, onSubmit }: AllowanceManagerParams) 
           Apply
         </Button>
       </div>
-    </widget.Container>
+    </div>
   );
 };
 
 const AllowanceInputs = ({ data: { address, count, price }, setData }: { data: AllowanceData; setData: (data: AllowanceData) => void }) => {
   return (
     <div>
-      <TextInput placeholder="Address" value={address} onChange={(val) => setData({ address: val, count, price })} />
-      <PositiveNumberInput placeholder="UbiquiSticks" fraction={false} value={count} onChange={(val) => setData({ address, count: val, price })} />
-      <PositiveNumberInput placeholder="Price" value={price} onChange={(val) => setData({ address, count, price: val })} />
+      <TextInput placeholder="Address" value={address} onChange={(val: string) => setData({ address: val, count, price })} />
+      <PositiveNumberInput placeholder="UbiquiSticks" fraction={false} value={count} onChange={(val: string) => setData({ address, count: val, price })} />
+      <PositiveNumberInput placeholder="Price" value={price} onChange={(val: string) => setData({ address, count, price: val })} />
     </div>
   );
 };

@@ -1,6 +1,5 @@
-import { Button } from "@/ui";
-import { useTransactionLogger } from "../lib/hooks";
-import * as widget from "../ui/widget";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import Button from "../ui/Button";
 import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/hooks/useUbiquistick";
 import Whitelist from "./Whitelist";
 
@@ -38,9 +37,9 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
   const showBlurredOut = !isConnected || !isLoaded || (allowance.count === 0 && sticksCount === 0);
 
   return (
-    <widget.Container>
-      <widget.Title text="The Ubiquistick NFT" />
-      <widget.SubTitle text="Access the game bonding pools" />
+    <div>
+      <h2>The Ubiquistick NFT</h2>
+      <h3>Access the game bonding pools</h3>
       <div>
         {sticksCount && sticksCount > 0 ? (
           <>
@@ -61,7 +60,7 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
         </div>
         {showBlurredOut && <Whitelist isConnected={isConnected} isLoaded={isLoaded} isWhitelisted={isWhitelisted} />}
       </div>
-    </widget.Container>
+    </div>
   );
 };
 

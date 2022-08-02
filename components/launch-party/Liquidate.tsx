@@ -1,13 +1,12 @@
-import { ButtonLink } from "@/ui";
-import * as widget from "@/ui/widget";
+import { ButtonLink } from "../ui/Button";
 import { format, round } from "./lib/utils";
 
 const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: number | null; poolAddress: string; uarUsdPrice: number | null }) => {
   const accumulatedInUsd = uarUsdPrice !== null && accumulated !== null ? accumulated * uarUsdPrice : null;
   return (
-    <widget.Container>
-      <widget.Title text="Liquidate" />
-      <widget.SubTitle text="Exit the game; sell uCR for ETH" />
+    <div>
+      <h2>Liquidate</h2>
+      <h3>Exit the game; sell uCR for ETH</h3>
       <div>You have</div>
       <div>
         {accumulated !== null ? format(round(accumulated)) : "????"} uCR
@@ -16,7 +15,7 @@ const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: num
       <ButtonLink target="_blank" href={`https://v2.info.uniswap.org/pair/${poolAddress}`}>
         Exchange for ETH
       </ButtonLink>
-    </widget.Container>
+    </div>
   );
 };
 

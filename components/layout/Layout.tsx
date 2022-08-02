@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import { Container, Icon } from "@/ui";
-
 import Inventory from "./Inventory";
 import Sidebar, { SidebarState } from "./Sidebar";
 import TransactionsDisplay from "./TransactionsDisplay";
-import WalletConnect from "./WalletConnect";
+import Icon from "../ui/Icon";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -14,7 +12,7 @@ type LayoutProps = {
 
 function ErrorHandler({ error }: { error: Error }) {
   return (
-    <Container>
+    <div>
       <div>
         <div>
           <Icon icon="warning" />
@@ -22,7 +20,7 @@ function ErrorHandler({ error }: { error: Error }) {
         </div>
         <div>{error.message}</div>
       </div>
-    </Container>
+    </div>
   );
 }
 
