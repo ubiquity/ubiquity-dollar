@@ -1,7 +1,25 @@
+body {
+  background: #06061a;
+  color: #fff;
+  font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
+  margin: 0;
+  font-weight: 400;
+}
 :root {
   --button-pad: 8px 16px;
   --button-rounding: 4px;
+  --dollar-logo-black: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 131.66 150'%3E%3Cpath d='m54.5 97.23.51.29L95.45 121l-27.54 16a5.44 5.44 0 0 1-5.11.16l-.29-.16-49.1-28.35a5.42 5.42 0 0 1-2.69-4.36v-8.7a48.08 48.08 0 0 1 43.78 1.7zm-30.45-60.7 42.73 24.8.55.32a59 59 0 0 0 52.38 2.77v39.48a5.4 5.4 0 0 1-2.44 4.51l-.26.18-10.67 6.14-45.85-26.61a58.92 58.92 0 0 0-49.78-4.38v-36.4a5.42 5.42 0 0 1 2.44-4.51l.26-.16zm41.16-22.87a5.43 5.43 0 0 1 2.38.55l.32.17L117 42.67a5.4 5.4 0 0 1 2.7 4.35v5.33a48 48 0 0 1-46.8 0l-.64-.35-37.34-21.73 27.59-15.89a5.25 5.25 0 0 1 2.35-.72zm66.45 27.11a6.54 6.54 0 0 0-3.27-5.66L69.1.87a6.58 6.58 0 0 0-6.54 0L3.27 35.11A6.54 6.54 0 0 0 0 40.77v68.46a6.57 6.57 0 0 0 3.27 5.67l59.29 34.23a6.58 6.58 0 0 0 6.54 0l59.29-34.23a6.57 6.57 0 0 0 3.27-5.67z' /%3E%3C/svg%3E");
+  --dollar-logo-white: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 131.66 150'%3E%3Cpath fill='%23fff' d='m54.5 97.23.51.29L95.45 121l-27.54 16a5.44 5.44 0 0 1-5.11.16l-.29-.16-49.1-28.35a5.42 5.42 0 0 1-2.69-4.36v-8.7a48.08 48.08 0 0 1 43.78 1.7zm-30.45-60.7 42.73 24.8.55.32a59 59 0 0 0 52.38 2.77v39.48a5.4 5.4 0 0 1-2.44 4.51l-.26.18-10.67 6.14-45.85-26.61a58.92 58.92 0 0 0-49.78-4.38v-36.4a5.42 5.42 0 0 1 2.44-4.51l.26-.16zm41.16-22.87a5.43 5.43 0 0 1 2.38.55l.32.17L117 42.67a5.4 5.4 0 0 1 2.7 4.35v5.33a48 48 0 0 1-46.8 0l-.64-.35-37.34-21.73 27.59-15.89a5.25 5.25 0 0 1 2.35-.72zm66.45 27.11a6.54 6.54 0 0 0-3.27-5.66L69.1.87a6.58 6.58 0 0 0-6.54 0L3.27 35.11A6.54 6.54 0 0 0 0 40.77v68.46a6.57 6.57 0 0 0 3.27 5.67l59.29 34.23a6.58 6.58 0 0 0 6.54 0l59.29-34.23a6.57 6.57 0 0 0 3.27-5.67z' /%3E%3C/svg%3E");
+  --dollar-logo-cyan: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 131.66 150'%3E%3Cpath fill='%2300ffff' d='m54.5 97.23.51.29L95.45 121l-27.54 16a5.44 5.44 0 0 1-5.11.16l-.29-.16-49.1-28.35a5.42 5.42 0 0 1-2.69-4.36v-8.7a48.08 48.08 0 0 1 43.78 1.7zm-30.45-60.7 42.73 24.8.55.32a59 59 0 0 0 52.38 2.77v39.48a5.4 5.4 0 0 1-2.44 4.51l-.26.18-10.67 6.14-45.85-26.61a58.92 58.92 0 0 0-49.78-4.38v-36.4a5.42 5.42 0 0 1 2.44-4.51l.26-.16zm41.16-22.87a5.43 5.43 0 0 1 2.38.55l.32.17L117 42.67a5.4 5.4 0 0 1 2.7 4.35v5.33a48 48 0 0 1-46.8 0l-.64-.35-37.34-21.73 27.59-15.89a5.25 5.25 0 0 1 2.35-.72zm66.45 27.11a6.54 6.54 0 0 0-3.27-5.66L69.1.87a6.58 6.58 0 0 0-6.54 0L3.27 35.11A6.54 6.54 0 0 0 0 40.77v68.46a6.57 6.57 0 0 0 3.27 5.67l59.29 34.23a6.58 6.58 0 0 0 6.54 0l59.29-34.23a6.57 6.57 0 0 0 3.27-5.67z' /%3E%3C/svg%3E");
+  --box-shadow: none;
 }
+
+img,
+svg {
+  max-width: 48px;
+  max-height: 48px;
+}
+
 input,
 button {
   border-radius: var(--button-rounding);
@@ -68,6 +86,7 @@ video {
 #Foreground > div {
   vertical-align: middle;
 }
+
 #Sidebar {
   display: inline-block;
   max-width: 12.5vw;
@@ -98,7 +117,10 @@ video {
 #Sidebar ul li a:hover {
   opacity: 1;
 }
-#Sidebar ul li svg {
+#WalletConnect {
+  position: relative;
+}
+#Sidebar svg {
   height: 16px;
   position: absolute;
   right: 0;
@@ -111,9 +133,10 @@ video {
   height: 48px;
   display: inline-block;
 }
+#Inventory > div:nth-child(2) > div > div > div > div img,
 #Inventory > div:nth-child(2) > div > div > div > div svg {
-  height: 48px;
-  width: 48px;
+  height: 100%;
+  width: 100%;
 }
 #Inventory > div:nth-child(2) > div > div > div > div > * {
   position: absolute;
@@ -127,4 +150,32 @@ video {
   /* background: red; */
   padding: var(--button-pad);
   border-radius: var(--button-rounding);
+}
+
+div#background {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+}
+
+div#grid {
+  background-position: 50%;
+  vertical-align: middle;
+  text-align: center;
+  -webkit-mask-image: radial-gradient(rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0.25) 50%, #000 100%);
+  background-image: url(//ubq.fi/image/grid-1.png);
+  background-repeat: repeat;
+}
+
+a,
+button {
+  color: inherit;
+  text-decoration: inherit;
+  color: #fff;
+  cursor: pointer;
+}
+ul,
+ol {
+  list-style: none;
+  padding: 0;
 }
