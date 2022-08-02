@@ -1,6 +1,7 @@
 import { Icon, IconsNames } from "@/ui";
 import Link from "next/link";
 import { useCallback, useEffect, useRef } from "react";
+import WalletConnect from "./WalletConnect";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -52,6 +53,7 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
   return (
     <>
       <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+        <WalletConnect />
         {/* Header */}
 
         {/* Caret / Toggle button */}

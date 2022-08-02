@@ -122,3 +122,9 @@ video {
 #Inventory > div:nth-child(2) > div > div > div > div a {
   text-align: left;
 }
+
+[data-tippy-root] {
+  /* background: red; */
+  padding: var(--button-pad);
+  border-radius: var(--button-rounding);
+}
