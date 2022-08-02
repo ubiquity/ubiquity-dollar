@@ -53,8 +53,8 @@ jobs:
       - name: Building UI
         run: yarn BUILD:NEXT
 
-      - name: Yarn test
-        run: yarn test:all
+      # - name: Yarn test
+      #   run: yarn test:all
 
       - name: Deploy Development
         run: |
