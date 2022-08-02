@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import useWeb3 from "@/lib/hooks/useWeb3";
 import icons from "@/ui/icons";
 
-import useNamedContracts from "../lib/hooks/contracts/useDeployedContracts";
+import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
 import useBalances from "../lib/hooks/useBalances";
 import Network from "./Network";
@@ -40,7 +40,7 @@ const Inventory = () => {
           <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} />
           <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} />
           <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
-          <Token token="USDC" balance={balances.usdc} accountAddr={walletAddress} tokenAddr={namedContracts.usdc.address} decimals={6} />
+          {/* <Token token="USDC" balance={balances.usdc} accountAddr={walletAddress} tokenAddr={namedContracts.usdc.address} decimals={6} /> */}
         </div>
       </div>
     </div>

@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 
 import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
 import { formatEther, formatMwei } from "@/lib/format";
-import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
-
-import { Address, PriceExchange } from "./ui";
+import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import Address from "./ui/Address";
+import PriceExchange from "./ui/PriceExchange";
 
 type State = null | PriceMonitorProps;
 type PriceMonitorProps = {

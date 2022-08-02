@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
+import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import Address from "./ui/Address";
+import Balance from "./ui/Balance";
 // import { useConnectedContext } from "@/lib/connected";
-import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
-
-import { Address, Balance } from "./ui";
 
 type State = null | MetapoolMonitorProps;
 type MetapoolMonitorProps = {

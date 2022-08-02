@@ -3,12 +3,18 @@ import { memo, useEffect, useState } from "react";
 
 import { ERC20 } from "@/dollar-types";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainStringNumber, performTransaction } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Button, Icon, MaxButtonWrapper, PositiveNumberInput, Tooltip, WalletNotConnected } from "@/ui";
 
 import { loadYieldProxyData, loadYieldProxyDepositInfo, YieldProxyData, YieldProxyDepositInfo } from "./lib/data";
+import useBalances from "../lib/hooks/useBalances";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import Button from "../ui/Button";
+import Icon from "../ui/Icon";
+import MaxButtonWrapper from "../ui/MaxButtonWrapper";
+import PositiveNumberInput from "../ui/PositiveNumberInput";
+import Tooltip from "../ui/Tooltip";
+import WalletNotConnected from "../ui/WalletNotConnected";
 
 type Balance = { usdc: number; ubq: number; uad: number };
 

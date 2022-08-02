@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { ERC20, ERC20__factory } from "@/dollar-types";
 import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "@/fixtures/abi/types";
-import { useDeployedAddress, useWeb3 } from "@/lib/hooks";
 import {
   SimpleBond,
   SimpleBond__factory,
@@ -13,6 +12,8 @@ import {
 } from "@/ubiquistick-types";
 
 import { allPools } from "../pools";
+import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
+import useWeb3 from "@/components/lib/hooks/useWeb3";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
 

@@ -15,9 +15,9 @@ export function connectedContracts(provider: NonNullable<PossibleProviders>) {
 }
 
 let deployedContracts: DeployedContracts = null;
-const useNamedContracts = () => {
+const useDeployedContracts = () => {
   const web3Provider = useWeb3Provider();
   return web3Provider && (deployedContracts || (deployedContracts = connectedContracts(web3Provider)));
 };
 
-export default useNamedContracts;
+export default useDeployedContracts;

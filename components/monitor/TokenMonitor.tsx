@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
-import { useDeployedContracts, useManagerManaged } from "@/lib/hooks";
-
-import { Address, Balance } from "./ui";
+import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import Address from "./ui/Address";
+import Balance from "./ui/Balance";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {

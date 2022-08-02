@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { ManagedContracts } from "@/lib/hooks/contracts/useManagerManaged";
 import { constrainNumber } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Button, PositiveNumberInput } from "@/ui";
+import Button from "../ui/Button";
+import PositiveNumberInput from "../ui/PositiveNumberInput";
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();

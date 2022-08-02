@@ -2,13 +2,14 @@ import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
 import { ERC20 } from "@/dollar-types";
-import { useManagerManaged, useWeb3 } from "@/lib/hooks";
 import { ZERO_ADDRESS } from "@/lib/utils";
 
 import fetchUniswapPoolsData from "../fetchUniswapPoolsData";
 import { allPools, PoolData, poolsByToken } from "../pools";
 import { apyFromRatio, multiplierFromRatio } from "../utils";
 import { Contracts } from "./useLaunchPartyContracts";
+import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
+import useWeb3 from "@/components/lib/hooks/useWeb3";
 
 export type BondData = {
   tokenName: string;
