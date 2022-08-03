@@ -1,4 +1,4 @@
-name: Workflow for Ubiquidity
+name: Build and Test Workflow for Ubiquidity
 
 on:
   push:
@@ -20,9 +20,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
     permissions:
       contents: read
 
@@ -56,7 +53,12 @@ jobs:
       - name: Yarn test
         run: yarn test:all
 
-      - name: Deploy Development
+      - name: Zip build directory
         run: |
-          netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
-          netlify deploy --prod --build --context development
+          mkdir -p ./pr
+          zip -r pull-request.zip ./web/dapp && cp pull-request.zip ./pr
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: pr/
