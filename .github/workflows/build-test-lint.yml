@@ -1,4 +1,4 @@
-name: Build and Test Workflow for Ubiquidity
+name: Build and Test Workflow for Ubiquity
 
 on:
   push:

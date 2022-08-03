@@ -1,8 +1,8 @@
-name: Received PR and Deploy for Ubiquidity
+name: Received PR and Deploy for Ubiquity
 
 on:
   workflow_run:
-    workflows: ["Build and Test Workflow for Ubiquidity"]
+    workflows: ["Build and Test Workflow for Ubiquity"]
     types:
       - completed
 
