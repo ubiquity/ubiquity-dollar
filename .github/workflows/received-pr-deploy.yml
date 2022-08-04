@@ -1,8 +1,8 @@
-name: Received PR and Deploy for Ubiquity
+name: Received PR and Deploy
 
 on:
   workflow_run:
-    workflows: ["Build and Test Workflow for Ubiquity"]
+    workflows: ["Install and Build Workflow for Pull Request"]
     types:
       - completed
 
@@ -41,4 +41,19 @@ jobs:
       - name: Deploy Development
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
-          netlify deploy --prod
+          netlify deploy --prod > ./deployments.log
+
+      - name: "Comment on PR"
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            let fs = require('fs');
+            let issue_number = Number(fs.readFileSync('./pr_number'));
+            let deployments_log = fs.readFileSync('./deployments.log')
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: deployments_log.toString()
+            });

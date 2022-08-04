@@ -1,12 +1,6 @@
-name: Build and Test Workflow for Ubiquity
+name: Install and Build Workflow for Pull Request
 
 on:
-  push:
-    branches:
-      - main
-      - development
-      - staging
-      - production
   pull_request:
     branches:
       - main
@@ -50,14 +44,13 @@ jobs:
       - name: Building UI
         run: yarn BUILD:NEXT
 
-      # - name: Yarn test
-      #   run: yarn test:all
-
-      - name: Zip build directory
+      - name: Save PR
+        env:
+          PR_NUMBER: ${{ github.event.number }}
         run: |
           mkdir -p ./pr
+          echo $PR_NUMBER > ./pr/pr_number
           zip -r pull-request.zip ./web/dapp && cp pull-request.zip ./pr
-
       - uses: actions/upload-artifact@v2
         with:
           name: pr
