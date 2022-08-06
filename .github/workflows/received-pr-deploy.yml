@@ -22,10 +22,7 @@ jobs:
             const run_id = ${{ github.event.workflow_run.id }};
             const downloadArtifact = require('./download-artifact.js')(github, context, run_id);
       - name: Extract files
-        run: |
-          unzip pr.zip
-          unzip pull-request.zip
-          ls
+        run: unzip pr.zip && unzip pull-request.zip && ls
 
       - name: Deploy Development
         run: |
