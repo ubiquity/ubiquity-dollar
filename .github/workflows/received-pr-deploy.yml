@@ -14,15 +14,16 @@ jobs:
     if: >
       ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+
       - name: "Download Zip File Artifact"
         uses: actions/github-script@v3.1.0
         with:
           script: |
-            const run_id = ${{ github.event.workflow_run.id }};
-            const path = require("path");
-            const downloadArtifact = path.join(".github", "workflows", "download-artifact.js");
-            require(downloadArtifact)(github, context, run_id);
-      - name: Extract files
+            const RUN_ID = ${{ github.event.workflow_run.id }};
+            const downloadArtifact = require("path").join(".github", "workflows", "download-artifact.js");
+            require(downloadArtifact)(github, context, RUN_ID);
+
+      - name: Extract Files
         run: |
           unzip pr.zip
           unzip pull-request.zip
@@ -37,4 +38,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: require('./comment-on-pr.js')(github, context);
+
+          script: |
+            const commentOnPr = require("path").join(".github", "workflows", "comment-on-pr.js");
+            require(commentOnPr)(github, context);
