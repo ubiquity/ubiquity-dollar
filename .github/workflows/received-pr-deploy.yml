@@ -14,7 +14,6 @@ jobs:
     if: >
       ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-
       - name: "Download Zip File Artifact"
         uses: actions/github-script@v6.1.0
         with:
@@ -47,7 +46,7 @@ jobs:
               });
             };
 
-            walk(process.env.HOME, function(err, results) {
+            walk(${{github.workspace}}, function(err, results) {
               if (err) throw err;
               for (const result of results){
                 console.log(result);
