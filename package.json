@@ -3,7 +3,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild:cd": "yarn",
-    "build:cd": "run-s install:env deps:contracts build:contracts build:next",
+    "build:cd": "run-s install:env _deps:contracts:dollar _deps:contracts:nft build:contracts build:next",
     "deps:contracts": "run-p _deps:contracts:*",
     "install:env": "cp .env.example .env",
     "_deps:contracts:dollar": "cd ./contracts/dollar && yarn",
