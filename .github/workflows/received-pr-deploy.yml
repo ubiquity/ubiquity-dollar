@@ -22,6 +22,7 @@ jobs:
             const RUN_ID = ${{ github.event.workflow_run.id }};
             # .github/workflows/download-artifact.js
             const downloadArtifact = require("path").join(".github", "workflows", "download-artifact.js");
+            console.log(process.cwd());
             require("./".concat(downloadArtifact))(github, context, RUN_ID);
 
       - name: Extract Files
@@ -42,4 +43,5 @@ jobs:
 
           script: |
             const commentOnPr = require("path").join(".github", "workflows", "comment-on-pr.js");
+            console.log(process.cwd());
             require("./".concat(commentOnPr))(github, context);
