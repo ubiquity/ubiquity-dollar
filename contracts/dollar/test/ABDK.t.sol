@@ -17,4 +17,15 @@ contract ABDK is Test {
         uint256 max = abdkTest.max();
         assertEq(max, maxABDK);
     }
+
+    function testcannotOverflow() public {
+        // should revert if overflow
+        uint256 amountOK = 11150372599265311570767859136324180752990207;
+        uint256 amountNOK = 11150372599265311570767859136324180752990208;
+
+        vm.expectRevert();
+        abdkTest.add(amountNOK);
+        uint256 max = abdkTest.add(amountOK);
+        assertEq(max, maxABDK);
+    }
 }
