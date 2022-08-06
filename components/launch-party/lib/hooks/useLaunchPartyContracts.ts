@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { ERC20, ERC20__factory } from "@/dollar-types";
-// make sure to run a build to generate these typings or else this will be missing
 import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "@/fixtures/abi/types";
 import { useDeployedAddress, useWeb3 } from "@/lib/hooks";
 import {

@@ -1,9 +1,6 @@
 name: Install and Build Workflow for Pull Request
 
 on:
-  push:
-    branches:
-      - "*"
   pull_request:
     branches:
       - main

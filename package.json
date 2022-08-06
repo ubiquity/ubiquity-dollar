@@ -45,9 +45,6 @@
     "__format:cspell": "cspell '**'"
   },
   "devDependencies": {
-    "@cspell/dict-bash": "^2.0.4",
-    "@cspell/dict-cryptocurrencies": "^2.0.0",
-    "@cspell/dict-typescript": "^2.0.1",
     "@ethersproject/providers": "^5.0.0",
     "@types/react": "^17.0.19",
     "@typescript-eslint/eslint-plugin": "^4.11.1",

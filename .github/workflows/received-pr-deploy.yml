@@ -19,8 +19,22 @@ jobs:
         uses: actions/github-script@v3.1.0
         with:
           script: |
-            const run_id = ${{ github.event.workflow_run.id }};
-            const downloadArtifact = require('./download-artifact.js')(github, context, run_id);
+            var artifacts = await github.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: ${{github.event.workflow_run.id }},
+            });
+            var matchArtifact = artifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "pr"
+            })[0];
+            var download = await github.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            var fs = require('fs');
+            fs.writeFileSync('${{github.workspace}}/pr.zip', Buffer.from(download.data));
       - name: Extract files
         run: unzip pr.zip && unzip pull-request.zip && ls
 
@@ -33,4 +47,13 @@ jobs:
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: require('./comment-on-pr.js')(github, context);
+          script: |
+            let fs = require('fs');
+            let issue_number = Number(fs.readFileSync('./pr_number'));
+            let deployments_log = fs.readFileSync('./deployments.log')
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              body: deployments_log.toString()
+            });
