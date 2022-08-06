@@ -26,23 +26,11 @@ jobs:
         with:
           node-version: "16"
 
-      - name: Install dependencies
+      - name: Install OS Dependencies
         run: sudo apt -y install libusb-1.0-0-dev libudev-dev
 
-      - name: Yarn install
-        run: yarn install
-
-      - name: Setup environment
-        run: yarn install:env
-
-      - name: Install contracts
-        run: yarn install:contracts
-
-      - name: Build contracts
-        run: yarn build:contracts
-
-      - name: Building UI
-        run: yarn BUILD:NEXT
+      - name: Ubiquity Dollar CI/CD
+        run: yarn build:fleek
 
       - name: Save PR
         env:
