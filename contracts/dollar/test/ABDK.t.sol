@@ -2,7 +2,6 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Test.sol";
-import "forge-std/console.sol";
 import "../src/ABDKTest.sol";
 
 contract ABDK is Test {
