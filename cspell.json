@@ -14,5 +14,6 @@
     "contracts/*/cache/**",
     "contracts/*/types/**"
   ],
-  "words": ["UbiquiStick", "Chainlink", "Arrakis", "LUSD", "FRAX", "DOLA", "twap", "metapool", "Sablier", "keccak", "stablecoins", "stabilitate", "habemus"]
+  "words": ["UbiquiStick", "Chainlink", "Arrakis", "LUSD", "FRAX", "DOLA", "twap", "metapool", "Sablier", "keccak", "stablecoins", "stabilitate", "habemus"],
+  "import": ["@cspell/dict-bash/cspell-ext.json", "@cspell/dict-cryptocurrencies/cspell-ext.json", "@cspell/dict-typescript"]
 }
