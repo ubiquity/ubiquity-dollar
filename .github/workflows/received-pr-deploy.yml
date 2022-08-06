@@ -16,8 +16,9 @@ jobs:
     steps:
 
       - name: "Download Zip File Artifact"
-        uses: actions/github-script@v3.1.0
+        uses: actions/github-script@v6.1.0
         with:
+          debug: true
           script: |
             const RUN_ID = ${{ github.event.workflow_run.id }};
             const downloadArtifact = require("path").join(".github", "workflows", "download-artifact.js");
@@ -36,11 +37,12 @@ jobs:
           netlify deploy --prod > ./deployments.log
 
       - name: "Comment on PR"
-        uses: actions/github-script@v6
+        uses: actions/github-script@v6.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
+          debug: true
+          result-encoding: string
           script: |
             const commentOnPr = require("path").join(".github", "workflows", "comment-on-pr.js");
             console.log(process.cwd());
-            require("./".concat(commentOnPr))(github, context);
+            return require("./".concat(commentOnPr))(github, context);
