@@ -2,8 +2,8 @@
   "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
-    "__test:watch:ci": "nodemon",
-    "build:fleek": "run-s install:env install:contracts build:contracts BUILD:NEXT",
+    "prebuild:cd": "yarn",
+    "build:cd": "run-s install:env install:contracts build:next",
     "install:env": "cp .env.example .env",
     "install:contracts": "run-s _contracts:install:*",
     "_contracts:install": "run-p _contracts:install:*",
@@ -25,7 +25,8 @@
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "BUILD:NEXT": "next build && next export --outdir web/dapp"
+    "build:next": "next build && next export --outdir web/dapp",
+    "__test:watch:ci": "nodemon"
   },
   "_scripts": {
     "start": "run-s install:env install:contracts dev",
