@@ -19,7 +19,9 @@ jobs:
         with:
           script: |
             const run_id = ${{ github.event.workflow_run.id }};
-            const downloadArtifact = require('./download-artifact.js')(github, context, run_id);
+            const path = require("path");
+            const downloadArtifact = path.join(__dirname, "download-artifact.js");
+            require(downloadArtifact)(github, context, run_id);
       - name: Extract files
         run: |
           unzip pr.zip
