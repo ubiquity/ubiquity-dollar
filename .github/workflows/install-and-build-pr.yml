@@ -51,7 +51,7 @@ jobs:
           mkdir -p ./pr
           echo $PR_NUMBER > ./pr/pr_number
           zip -r pull-request.zip ./web/dapp
-          zip -d pull-request.zip ubiquity-one-fifth-speed-trimmed-compressed.mp4
+          zip -d pull-request.zip web/dapp/ubiquity-one-fifth-speed-trimmed-compressed.mp4
           cp pull-request.zip ./pr
       - uses: actions/upload-artifact@v2
         with:
