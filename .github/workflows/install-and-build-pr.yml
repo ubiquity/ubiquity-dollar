@@ -30,7 +30,7 @@ jobs:
         run: sudo apt -y install libusb-1.0-0-dev libudev-dev
 
       - name: Ubiquity Dollar CI/CD
-        run: yarn build:fleek
+        run: yarn && yarn build:fleek
 
       - name: Save PR
         env:
