@@ -32,7 +32,7 @@ jobs:
       - name: Ubiquity Dollar CI/CD
         run: yarn && yarn build:fleek
 
-      - name: Save PR
+      - name: Save as Zip File Artifact
         env:
           PR_NUMBER: ${{ github.event.number }}
         run: |
