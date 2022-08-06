@@ -12,19 +12,24 @@ jobs:
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
     if: >
-      ${{ github.event.workflow_run.event == 'pull_request' &&
-      github.event.workflow_run.conclusion == 'success' }}
+      ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: "Download artifact"
+
+      - name: "Download Zip File Artifact"
         uses: actions/github-script@v3.1.0
         with:
           script: |
-            const run_id = ${{ github.event.workflow_run.id }};
-            const downloadArtifact = require('./download-artifact.js')(github, context, run_id);
-      - name: Extract files
-        run: unzip pr.zip && unzip pull-request.zip && ls
+            const RUN_ID = ${{ github.event.workflow_run.id }};
+            const downloadArtifact = require("path").join(".github", "workflows", "download-artifact.js");
+            require(downloadArtifact)(github, context, RUN_ID);
 
-      - name: Deploy Development
+      - name: Extract Files
+        run: |
+          unzip pr.zip
+          unzip pull-request.zip
+          ls
+
+      - name: Deploy Preview
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --prod > ./deployments.log
@@ -33,4 +38,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: require('./comment-on-pr.js')(github, context);
+
+          script: |
+            const commentOnPr = require("path").join(".github", "workflows", "comment-on-pr.js");
+            require(commentOnPr)(github, context);
