@@ -50,7 +50,10 @@ jobs:
         run: |
           mkdir -p ./pr
           echo $PR_NUMBER > ./pr/pr_number
-          zip -r pull-request.zip ./web/dapp && cp pull-request.zip ./pr
+          zip -r pull-request.zip ./web/dapp
+          zip -d pull-request.zip *.mp4"
+          cp pull-request.zip ./pr
+
       - uses: actions/upload-artifact@v2
         with:
           name: pr
