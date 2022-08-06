@@ -25,7 +25,7 @@
     "format": "run-p _format:*",
     "_format:prettier": "prettier --write .",
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "build:next": "next build && next export --outdir web/dapp",
+    "build:next": "next build && next export --outdir dist",
     "__test:watch:ci": "nodemon"
   },
   "_scripts": {

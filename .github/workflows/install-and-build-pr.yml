@@ -30,7 +30,7 @@ jobs:
         run: sudo apt -y install libusb-1.0-0-dev libudev-dev
 
       - name: Ubiquity Dollar CI/CD
-        run: yarn && yarn build:fleek
+        run: yarn build:cd
 
       - name: Save as Zip File Artifact
         env:
@@ -38,8 +38,8 @@ jobs:
         run: |
           mkdir -p ./pr
           echo $PR_NUMBER > ./pr/pr_number
-          zip -r pull-request.zip ./web/dapp
-          zip -d pull-request.zip web/dapp/ubiquity-one-fifth-speed-trimmed-compressed.mp4
+          zip -r pull-request.zip ./dist
+          zip -d pull-request.zip dist/ubiquity-one-fifth-speed-trimmed-compressed.mp4
           cp pull-request.zip ./pr
       - uses: actions/upload-artifact@v2
         with:
