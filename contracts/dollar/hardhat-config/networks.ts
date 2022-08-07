@@ -1,11 +1,15 @@
 import { HardhatUserConfig } from "hardhat/config";
-
+import { getAlchemyRpc } from "./utils/getAlchemyRpc"
 const gasPrice = 60000000000;
 
 export default function networks(accounts: { mnemonic: string; }, { MAINNET_PROVIDER_URL, ROPSTEN_PROVIDER_URL, RINKEBY_PROVIDER_URL, API_KEY_ALCHEMY, UBQ_ADMIN }: EnvironmentVariables) {
 
+  if (!API_KEY_ALCHEMY) {
+    throw new Error("API_KEY_ALCHEMY unset!")
+  }
+
   const forking = {
-    url: MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${API_KEY_ALCHEMY || ""}`,
+    url: MAINNET_PROVIDER_URL || getAlchemyRpc("mainnet"),
     blockNumber: 13252206,
   };
 
@@ -24,17 +28,17 @@ export default function networks(accounts: { mnemonic: string; }, { MAINNET_PROV
       initialBaseFeePerGas: 0,
     },
     ropsten: {
-      url: ROPSTEN_PROVIDER_URL || `https://eth-ropsten.alchemyapi.io/v2/${API_KEY_ALCHEMY}`,
+      url: ROPSTEN_PROVIDER_URL || getAlchemyRpc("ropsten"),
       accounts,
       gasPrice,
     },
     rinkeby: {
-      url: RINKEBY_PROVIDER_URL || `https://eth-rinkeby.alchemyapi.io/v2/${API_KEY_ALCHEMY}`,
+      url: RINKEBY_PROVIDER_URL || getAlchemyRpc("rinkeby"),
       accounts,
       gasPrice,
     },
     mainnet: {
-      url: MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${API_KEY_ALCHEMY}`,
+      url: MAINNET_PROVIDER_URL || getAlchemyRpc("mainnet"),
       accounts: UBQ_ADMIN ? [UBQ_ADMIN] : accounts,
       gasPrice,
     },
