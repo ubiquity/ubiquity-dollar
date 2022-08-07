@@ -103,6 +103,9 @@ video {
 }
 #Inventory {
 }
+#Sidebar ul {
+  margin: auto;
+}
 #Sidebar ul li div {
   min-height: 24px;
 }
@@ -119,6 +122,7 @@ video {
 }
 #WalletConnect {
   position: relative;
+  padding: var(--button-pad);
 }
 #Sidebar svg {
   height: 16px;
