@@ -84,19 +84,19 @@ const config: HardhatUserConfig = {
   networks: {
     localhost: {
       url: "http://0.0.0.0:8545",
-      forking: {
-        url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
-        blockNumber: 13252206,
-      },
+      // forking: {
+      //   url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+      //   blockNumber: 13252206,
+      // },
       accounts,
       hardfork: "london",
       initialBaseFeePerGas: 0,
     },
     hardhat: {
-      forking: {
-        url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
-        blockNumber: 15173327,
-      },
+      // forking: {
+      //   url: process.env.MAINNET_PROVIDER_URL || `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY || ""}`,
+      //   blockNumber: 15173327,
+      // },
       accounts,
       hardfork: "london",
       initialBaseFeePerGas: 0,
