@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-
+import { warn } from "../hardhat.config";
 const MANAGER_ADDRESS = "0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98";
 const ALREADY_MIGRATED = [
   "0x89eae71b865a2a39cba62060ab1b40bbffae5b0d",
@@ -23,7 +23,7 @@ const IDS = [1, 2, 3, 4, 5, 6];
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, ethers } = hre;
   const [admin] = await ethers.getSigners();
-  deployments.log("admin address :", admin.address);
+  deployments.log(warn(`admin.address: ${admin.address}`));
 
   const opts = {
     from: admin.address,

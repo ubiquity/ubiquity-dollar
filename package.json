@@ -35,7 +35,7 @@
     "_contracts:clean": "run-p _contracts:clean:*",
     "_contracts:clean:dollar": "cd ./contracts/dollar && yarn clean",
     "_contracts:clean:nft": "cd ./contracts/ubiquistick && yarn clean",
-    "contracts:run:nft": "cd ./contracts/ubiquistick && hardhat node --hostname 0.0.0.0 --fork-block-number 14800000",
+    "contracts:run:nft": "cd ./contracts/ubiquistick && hardhat node",
     "contracts:run:faucet": "cd ./contracts/dollar && yarn node:faucet",
     "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`",
     "__format:cspell": "cspell '**'"
