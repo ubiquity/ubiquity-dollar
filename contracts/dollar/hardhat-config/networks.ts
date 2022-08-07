@@ -1,11 +1,13 @@
 import { HardhatUserConfig } from "hardhat/config";
-import { getAlchemyRpc } from "./utils/getAlchemyRpc"
+import { getAlchemyRpc } from "./utils/getAlchemyRpc";
 const gasPrice = 60000000000;
 
-export default function networks(accounts: { mnemonic: string; }, { MAINNET_PROVIDER_URL, ROPSTEN_PROVIDER_URL, RINKEBY_PROVIDER_URL, API_KEY_ALCHEMY, UBQ_ADMIN }: EnvironmentVariables) {
-
+export default function networks(
+  accounts: { mnemonic: string },
+  { MAINNET_PROVIDER_URL, ROPSTEN_PROVIDER_URL, RINKEBY_PROVIDER_URL, API_KEY_ALCHEMY, UBQ_ADMIN }: EnvironmentVariables
+) {
   if (!API_KEY_ALCHEMY) {
-    throw new Error("API_KEY_ALCHEMY unset!")
+    throw new Error("API_KEY_ALCHEMY unset!");
   }
 
   const forking = {
@@ -42,13 +44,13 @@ export default function networks(accounts: { mnemonic: string; }, { MAINNET_PROV
       accounts: UBQ_ADMIN ? [UBQ_ADMIN] : accounts,
       gasPrice,
     },
-  } as HardhatUserConfig["networks"]
+  } as HardhatUserConfig["networks"];
 }
 
 interface EnvironmentVariables {
-  MAINNET_PROVIDER_URL: string | undefined;
-  ROPSTEN_PROVIDER_URL: string | undefined;
-  RINKEBY_PROVIDER_URL: string | undefined;
-  API_KEY_ALCHEMY: string | undefined;
-  UBQ_ADMIN: string | undefined;
+  MAINNET_PROVIDER_URL?: string | undefined;
+  ROPSTEN_PROVIDER_URL?: string | undefined;
+  RINKEBY_PROVIDER_URL?: string | undefined;
+  API_KEY_ALCHEMY?: string | undefined;
+  UBQ_ADMIN?: string | undefined;
 }

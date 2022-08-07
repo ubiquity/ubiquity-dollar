@@ -75,10 +75,12 @@ describe("SushiSwapPool", () => {
     sushiFactory = await ethers.getContractFactory("SushiSwapPool");
     sushiUGOVPool = (await sushiFactory.deploy(manager.address)) as SushiSwapPool;
 
-    const mintings = [await secondAccount.getAddress()].map(async (signer): Promise<void> => {
-      await uAD.mint(signer, ethers.utils.parseEther("10000"));
-      await uGOV.mint(signer, ethers.utils.parseEther("1000"));
-    });
+    const mintings = [await secondAccount.getAddress()].map(
+      async (signer): Promise<void> => {
+        await uAD.mint(signer, ethers.utils.parseEther("10000"));
+        await uGOV.mint(signer, ethers.utils.parseEther("1000"));
+      }
+    );
     await Promise.all(mintings);
     uGOVPair = await sushiUGOVPool.pair();
     poolContract = (await ethers.getContractAt("IUniswapV2Pair", uGOVPair)) as IUniswapV2Pair;

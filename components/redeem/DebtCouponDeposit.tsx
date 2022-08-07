@@ -35,7 +35,7 @@ const DebtCouponDeposit = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.uad as unknown as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uAD -> DebtCouponManager", (managedContracts.uad as unknown) as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
     refreshBalances();
   };

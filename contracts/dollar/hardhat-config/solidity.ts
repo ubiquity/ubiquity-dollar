@@ -1,4 +1,4 @@
-import HardhatUserConfig from 'hardhat/types';
+import HardhatUserConfig from "hardhat/types";
 export default {
   compilers: [
     {
@@ -16,5 +16,5 @@ export default {
         },
       },
     },
-  ]
-} as HardhatUserConfig.SolidityConfig
+  ],
+} as HardhatUserConfig.SolidityConfig;

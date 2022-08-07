@@ -1,6 +1,5 @@
-import { getKey } from './utils/getKey';
+import { getKey } from "./utils/getKey";
 export default function gasReporter(REPORT_GAS?: string | boolean) {
-
   if (!REPORT_GAS) {
     REPORT_GAS = false;
   }
@@ -11,5 +10,5 @@ export default function gasReporter(REPORT_GAS?: string | boolean) {
     gasPrice: 60,
     onlyCalledMethods: true,
     coinmarketcap: getKey("COINMARKETCAP"),
-  }
+  };
 }

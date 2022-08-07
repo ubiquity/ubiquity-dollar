@@ -66,9 +66,11 @@ describe("ExcessDollarsDistributor", () => {
     await crvToken.connect(curveWhale).transfer(manager.address, ethers.utils.parseEther("10000"));
     // just mint som uAD
     // mint 10000 uAD each for admin, manager and secondAccount
-    const mintings = [await secondAccount.getAddress(), await thirdAccount.getAddress(), manager.address].map(async (signer): Promise<void> => {
-      await uAD.mint(signer, ethers.utils.parseEther("10000"));
-    });
+    const mintings = [await secondAccount.getAddress(), await thirdAccount.getAddress(), manager.address].map(
+      async (signer): Promise<void> => {
+        await uAD.mint(signer, ethers.utils.parseEther("10000"));
+      }
+    );
     await Promise.all(mintings);
 
     await uGOV.mint(await thirdAccount.getAddress(), ethers.utils.parseEther("1000"));

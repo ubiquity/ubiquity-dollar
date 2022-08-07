@@ -35,8 +35,15 @@ describe("MasterChef UBQ rewards", () => {
   });
   beforeEach(async () => {
     await resetFork(12910000);
-    ({ ubq, UbqWhaleAddress, MasterChefAddress, MetaPoolAddress, BondingAddress, BondingV2Address, UbiquityAlgorithmicDollarManagerAddress } =
-      await getNamedAccounts());
+    ({
+      ubq,
+      UbqWhaleAddress,
+      MasterChefAddress,
+      MetaPoolAddress,
+      BondingAddress,
+      BondingV2Address,
+      UbiquityAlgorithmicDollarManagerAddress,
+    } = await getNamedAccounts());
 
     masterChef = (await ethers.getContractAt("MasterChef", MasterChefAddress)) as MasterChef;
 

@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { warn } from '../hardhat-config/utils/warn';
+import { warn } from "../hardhat-config/utils/warn";
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, ethers } = hre;
 

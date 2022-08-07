@@ -26,4 +26,4 @@ export default {
   strategyYearnUsdcV2: "0xEecEE2637c7328300846622c802B2a29e65f3919",
   usdcWhaleAddress: "0x72A53cDBBcc1b9efa39c834A540550e23463AAcB",
   pickleControllerAddr: "0x6847259b2B3A4c17e7c43C54409810aF48bA5210",
-}
+};
