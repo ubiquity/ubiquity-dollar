@@ -4,9 +4,9 @@ pragma solidity ^0.8.13;
 import "forge-std/Script.sol";
 import "forge-std/console.sol";
 import "../src/UbiquityAlgorithmicDollarManager.sol";
-import "../src/Bonding.sol";
+import "../src/BondingShare.sol";
 
-contract BondingScript is Script {
+contract BondingShareScript is Script {
     function setUp() public {}
 
     function run() public {
@@ -16,7 +16,7 @@ contract BondingScript is Script {
             );
         address manager = address(ubiquityAlgorithmicDollarManager);
 
-        new Bonding(manager, address(0));
+        new BondingShare(manager);
         vm.stopBroadcast();
     }
 }
