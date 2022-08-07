@@ -53,62 +53,64 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
   return (
     <>
       <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
-        <WalletConnect />
-        {/* Header */}
+        <div>
+          <WalletConnect />
+          {/* Header */}
 
-        {/* Caret / Toggle button */}
+          {/* Caret / Toggle button */}
 
-        {state === "hidden" || state === "hidden_hovering" ? (
-          <a aria-label="Toggle navigation" onClick={handleToggle}>
-            <Icon icon="caret" />
-          </a>
-        ) : null}
+          {state === "hidden" || state === "hidden_hovering" ? (
+            <a aria-label="Toggle navigation" onClick={handleToggle}>
+              <Icon icon="caret" />
+            </a>
+          ) : null}
 
-        {/* Items */}
+          {/* Items */}
 
-        <ul>
-          <li>
-            <div>
-              {" "}
-              {state === "permanent" ? (
-                <Link href="/">
-                  <a>
-                    <Icon icon="uad" />
-                    <span>Ubiquity Dollar Dashboard</span>
-                  </a>
-                </Link>
-              ) : null}
-            </div>
-          </li>
-          <Item text="Redeem" href="/" icon="💸"></Item>
-          <Item text="Staking" href="/staking" icon="⛏"></Item>
-          <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
-          {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
-          {PROD ? null : <Item text="Launch Party" href="/launch-party" icon="🎉"></Item>}
-          <Item text="Swap" href="/swap" icon="🔁"></Item>
-          <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
-          <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
-          <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
-          {/* <Item text="Public Channels" href="/public-channels"></Item> */}
+          <ul>
+            <li>
+              <div>
+                {" "}
+                {state === "permanent" ? (
+                  <Link href="/">
+                    <a>
+                      <Icon icon="uad" />
+                      <span>Ubiquity Dollar Dashboard</span>
+                    </a>
+                  </Link>
+                ) : null}
+              </div>
+            </li>
+            <Item text="Redeem" href="/" icon="💸"></Item>
+            <Item text="Staking" href="/staking" icon="⛏"></Item>
+            <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
+            {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
+            {PROD ? null : <Item text="Launch Party" href="/launch-party" icon="🎉"></Item>}
+            <Item text="Swap" href="/swap" icon="🔁"></Item>
+            <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
+            <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
+            <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
+            {/* <Item text="Public Channels" href="/public-channels"></Item> */}
 
-          <li>
-            <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
-          </li>
-          <li>
-            <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
-          </li>
-          <li>
-            <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
-          </li>
-          <li>
-            <SocialLinkItem href="https://discord.gg/SjymJ5maJ4" alt="Discord" icon="discord" />
-          </li>
-        </ul>
+            <li>
+              <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
+            </li>
+            <li>
+              <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
+            </li>
+            <li>
+              <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
+            </li>
+            <li>
+              <SocialLinkItem href="https://discord.gg/SjymJ5maJ4" alt="Discord" icon="discord" />
+            </li>
+          </ul>
+        </div>
+
+        {/* Overlay */}
+
+        {state === "hidden_hovering" ? <div onClick={handleToggle}></div> : null}
       </div>
-
-      {/* Overlay */}
-
-      {state === "hidden_hovering" ? <div onClick={handleToggle}></div> : null}
     </>
   );
 };

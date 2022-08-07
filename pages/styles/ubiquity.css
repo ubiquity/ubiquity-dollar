@@ -88,8 +88,14 @@ video {
 }
 
 #Sidebar {
-  display: inline-block;
+  /* display: inline-block; */
+  display: inline-table;
   max-width: 12.5vw;
+  min-height: 100vh;
+}
+#Sidebar > div {
+  display: table-cell;
+  vertical-align: middle;
 }
 #MainContent {
   max-width: 87.5vw;
@@ -182,4 +188,20 @@ ul,
 ol {
   list-style: none;
   padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1;
+  font-size: 24px;
+  margin: 16px auto;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-rendering: geometricPrecision;
+  color: #ffffff80;
 }
