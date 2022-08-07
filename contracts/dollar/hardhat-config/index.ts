@@ -26,7 +26,11 @@ if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
 }
 
 // LOAD .ENV
-dotenv.config({ path: path.join(__dirname, "../../.env") });
+const pathToDotEnv = path.join(__dirname, "../../../.env");
+fs.stat(pathToDotEnv, function (err, stats) {
+  if (err) throw err
+})
+dotenv.config({ path: pathToDotEnv });
 
 // READ .ENV
 const {
