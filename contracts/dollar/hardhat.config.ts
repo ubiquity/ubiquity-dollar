@@ -1,2 +1,2 @@
-import config from "./hardhat-config"
-export default config;
+import hardhatConfig from "./hardhat-config"
+export default hardhatConfig;

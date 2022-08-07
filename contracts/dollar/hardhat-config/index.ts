@@ -18,17 +18,17 @@ import solidity from './solidity';
 import { getKey } from './utils/getKey';
 import { warn } from "./utils/warn";
 
-// wait until artifacts are generated before running tasks.
+// WAIT UNTIL ARTIFACTS ARE GENERATED BEFORE RUNNING TASKS.
 if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
   import("../tasks/index");
 } else {
   console.warn("Tasks loading skipped until compilation artifacts are available");
 }
 
-// load .env
+// LOAD .ENV
 dotenv.config({ path: path.join(__dirname, "../../.env") });
 
-// read .env
+// READ .ENV
 const {
   MNEMONIC,
   UBQ_ADMIN,
@@ -39,7 +39,7 @@ const {
   RINKEBY_PROVIDER_URL
 } = process.env;
 
-// default accounts if MNEMONIC not set
+// USE TEST/DEFAULT ACCOUNTS IF MNEMONIC ENVIRONMENT VARIABLE UNSET
 const accounts = { mnemonic: "test test test test test test test test test test test junk" };
 
 if (!MNEMONIC) {
@@ -48,7 +48,7 @@ if (!MNEMONIC) {
   accounts.mnemonic = MNEMONIC;
 }
 
-// the hardhat config
+// THE HARDHAT CONFIG
 export default {
   solidity,
   namedAccounts,

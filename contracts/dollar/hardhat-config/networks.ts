@@ -1,3 +1,5 @@
+import { HardhatUserConfig } from "hardhat/config";
+
 const gasPrice = 60000000000;
 
 export default function networks(accounts: { mnemonic: string; }, { MAINNET_PROVIDER_URL, ROPSTEN_PROVIDER_URL, RINKEBY_PROVIDER_URL, API_KEY_ALCHEMY, UBQ_ADMIN }: EnvironmentVariables) {
@@ -36,7 +38,7 @@ export default function networks(accounts: { mnemonic: string; }, { MAINNET_PROV
       accounts: UBQ_ADMIN ? [UBQ_ADMIN] : accounts,
       gasPrice,
     },
-  }
+  } as HardhatUserConfig["networks"]
 }
 
 interface EnvironmentVariables {
