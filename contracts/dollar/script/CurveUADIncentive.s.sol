@@ -3,9 +3,9 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
 import "../src/UbiquityAlgorithmicDollarManager.sol";
-import "../src/BondingShare.sol";
+import "../src/CurveUADIncentive.sol";
 
-contract BondingShareScript is Script {
+contract CurveUADIncentiveScript is Script {
     function setUp() public {}
 
     function run() public {
@@ -15,7 +15,7 @@ contract BondingShareScript is Script {
             );
         address manager = address(ubiquityAlgorithmicDollarManager);
 
-        new BondingShare(manager);
+        new CurveUADIncentive(manager);
         vm.stopBroadcast();
     }
 }
