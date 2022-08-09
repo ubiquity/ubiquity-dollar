@@ -21,3 +21,4 @@ yarn hardhat export --network hardhat
 # yarn hardhat export --export $UP$DEPLOYMENT_ARTIFACT --network mainnet &
 # yarn hardhat export --export $UP$DEPLOYMENT_ARTIFACT --network hardhat
 # cd $UP || exit 1
+
