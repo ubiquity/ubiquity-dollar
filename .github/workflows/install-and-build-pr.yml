@@ -7,6 +7,12 @@ on:
       - development
       - staging
       - production
+  push:
+    branches:
+      - main
+      - development
+      - staging
+      - production
   create:
     tag:
       - "v*"
