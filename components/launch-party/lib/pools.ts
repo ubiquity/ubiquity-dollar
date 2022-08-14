@@ -21,7 +21,7 @@ export type PoolData = {
   poolTokenBalance: number;
   decimals: number;
   multiplier: number;
-  apy: number | null;
+  apr: number | null;
 };
 
 type FungiblePoolContract = "Arrakis" | "UniswapV2";

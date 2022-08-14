@@ -34,8 +34,8 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
         <Tooltip content={`Compounding 5-days ${poolData?.multiplier} multiplier for 365 days`}>
           <div>
             <div>
-              {poolData?.apy ? format(Math.round(poolData.apy)) : "????"}%{info.logo ? <br /> : " "}
-              <span>APY</span>
+              {poolData?.apr ? format(Math.round(poolData.apr)) : "????"}%{info.logo ? <br /> : " "}
+              <span>APR</span>
             </div>
           </div>
         </Tooltip>

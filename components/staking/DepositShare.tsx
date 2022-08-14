@@ -60,7 +60,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   const [weeks, setWeeks] = useState("");
   const [currentApy, setCurrentApy] = useState<number | null>(null);
   const [prefetched, setPrefetched] = useState<PrefetchedConstants | null>(null);
-  const [apyBounds, setApyBounds] = useState<[number, number] | null>(null);
+  const [aprBounds, setApyBounds] = useState<[number, number] | null>(null);
 
   function validateAmount(): string | null {
     if (amount) {
@@ -117,7 +117,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
 
   return (
     <div>
-      <div>APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[1]}%` : "..."}</div>
+      <div>APR {currentApy ? `${currentApy}%` : aprBounds ? `${aprBounds[1]}%` : "..."}</div>
       <div>
         <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
         <PositiveNumberInput value={weeks} fraction={false} onChange={onWeeksChange} disabled={disabled} placeholder={`Weeks (${MIN_WEEKS}-${MAX_WEEKS})`} />

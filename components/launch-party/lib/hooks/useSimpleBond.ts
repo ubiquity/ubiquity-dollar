@@ -6,7 +6,7 @@ import { ZERO_ADDRESS } from "@/lib/utils";
 
 import fetchUniswapPoolsData from "../fetchUniswapPoolsData";
 import { allPools, PoolData, poolsByToken } from "../pools";
-import { apyFromRatio, multiplierFromRatio } from "../utils";
+import { aprFromRatio, multiplierFromRatio } from "../utils";
 import { Contracts } from "./useLaunchPartyContracts";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
@@ -56,7 +56,7 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) =>
         const poolTokenBalance = +ethers.utils.formatUnits(balance, decimals);
 
         const multiplier = multiplierFromRatio(reward);
-        const apy = apyFromRatio(reward);
+        const apr = aprFromRatio(reward);
 
         const uniPoolData = newUnipoolFullData[poolsByToken[address].poolAddress];
         const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);
@@ -64,7 +64,7 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) =>
 
         acc[address] = {
           poolTokenBalance,
-          apy,
+          apr,
           token1: uniPoolData.token1,
           token2: uniPoolData.token2,
           liquidity1,

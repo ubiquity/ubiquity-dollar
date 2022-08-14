@@ -10,7 +10,7 @@ export const multiplierFromRatio = (ratio: ethers.BigNumber): number => {
   return parseInt(ratio.toString()) / 1_000_000_000;
 };
 
-export const apyFromRatio = (ratio: ethers.BigNumber): number | null => {
+export const aprFromRatio = (ratio: ethers.BigNumber): number | null => {
   const VESTING_DAYS = 5;
   const multiplier = multiplierFromRatio(ratio);
   return multiplier > 1 ? multiplier ** (365 / VESTING_DAYS) - 1 : null;

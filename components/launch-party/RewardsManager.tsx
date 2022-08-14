@@ -4,7 +4,7 @@ import Button from "../ui/Button";
 import PositiveNumberInput, { TextInput } from "../ui/PositiveNumberInput";
 
 import { poolByAddress } from "./lib/pools";
-import { apyFromRatio, multiplierFromRatio, round } from "./lib/utils";
+import { aprFromRatio, multiplierFromRatio, round } from "./lib/utils";
 
 type RewardsManagerParams = {
   onSubmit: ({ token, ratio }: { token: string; ratio: ethers.BigNumber }) => unknown;
@@ -50,7 +50,7 @@ const RewardsManager = ({ onSubmit, ratios }: RewardsManagerParams) => {
               <th>Token</th>
               <th>Address</th>
               <th>Multiplier</th>
-              <th>APY</th>
+              <th>APR</th>
             </tr>
           </thead>
           <tbody>
@@ -68,7 +68,7 @@ const TokenInfo = ({ token, ratio, onClick }: { token: string; ratio: ethers.Big
   const poolInfo = poolByAddress(token);
   if (!poolInfo) return null;
   const multiplier = multiplierFromRatio(ratio);
-  const apy = apyFromRatio(ratio);
+  const apy = aprFromRatio(ratio);
   return (
     <tr onClick={onClick}>
       <td>{poolInfo.name}</td>
