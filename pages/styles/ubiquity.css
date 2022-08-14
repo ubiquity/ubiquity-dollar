@@ -5,6 +5,7 @@ body {
   margin: 0;
   font-weight: 400;
 }
+
 :root {
   --button-pad: 8px 16px;
   --button-rounding: 4px;
@@ -20,6 +21,11 @@ svg {
   max-height: 48px;
 }
 
+svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
 input,
 button {
   border-radius: var(--button-rounding);
@@ -209,7 +215,8 @@ h2,
 h3,
 h4,
 h5,
-h6 {
+h6,
+th {
   line-height: 1;
   font-size: 24px;
   margin: 16px auto;
@@ -218,6 +225,9 @@ h6 {
   letter-spacing: 2px;
   text-rendering: geometricPrecision;
   color: #ffffff80;
+}
+th {
+  font-size: unset;
 }
 #Foreground {
   display: table;

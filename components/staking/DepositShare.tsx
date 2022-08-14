@@ -117,7 +117,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
 
   return (
     <div>
-      <div>APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[0]}% - ${apyBounds[1]}%` : "..."}</div>
+      <div>APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[1]}%` : "..."}</div>
       <div>
         <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
         <PositiveNumberInput value={weeks} fraction={false} onChange={onWeeksChange} disabled={disabled} placeholder={`Weeks (${MIN_WEEKS}-${MAX_WEEKS})`} />

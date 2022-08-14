@@ -27,19 +27,19 @@ const PriceStabilization: FC = (): JSX.Element => {
 
   return walletAddress ? (
     <>
-      <h2>uAD Price</h2>
+      <h2>Ubiquity Dollar Price</h2>
       <DollarPrice />
       <MigrateButton />
       <div>
         <h2>Mint Ubiquity Credits</h2>
-        <aside>When TWAP &lt;1</aside>
-        <DisabledBlurredMessage disabled={twapGt1} content="Disabled while TWAP > 1">
+        <aside>When TWAP is below peg</aside>
+        <DisabledBlurredMessage disabled={twapGt1} content="Disabled when TWAP is above peg">
           <DebtCouponDeposit />
           {/* <UarDeposit /> */}
         </DisabledBlurredMessage>
         <h2>Redeem Ubiquity Credits</h2>
-        <aside>When TWAP &gt; 1</aside>
-        <DisabledBlurredMessage disabled={!twapGt1} content="Disabled while TWAP < 1">
+        <aside>When TWAP is above peg</aside>
+        <DisabledBlurredMessage disabled={!twapGt1} content="Disabled when TWAP is below peg">
           <div>
             <UarRedeem />
             <DebtCouponRedeem />

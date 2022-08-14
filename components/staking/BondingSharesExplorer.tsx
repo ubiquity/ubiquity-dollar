@@ -42,7 +42,7 @@ type Actions = {
   onStake: (payload: { amount: BigNumber; weeks: BigNumber }) => void;
 };
 
-const USD_TO_LP = 0.75;
+const USD_TO_LP = 0.7562534324;
 const LP_TO_USD = 1 / USD_TO_LP;
 
 export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
@@ -215,7 +215,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           )}
         </table>
       </div>
-      <div id="rewards-summary flex flex-col items-center justify-center">
+      <div>
         <div>
           <Icon icon="ubq" />
           <span>{formatEther(totalPendingUgov)} </span>
