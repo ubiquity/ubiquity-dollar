@@ -60,8 +60,11 @@ export default function Layout({ children }: LayoutProps) {
           </div>
           <TransactionsDisplay />
         </div>
+
+        <div>
+          <Inventory />
+        </div>
       </div>
-      <Inventory />
     </div>
   );
 }

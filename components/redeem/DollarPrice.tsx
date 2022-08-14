@@ -10,16 +10,16 @@ const DollarPrice = () => {
 
   return (
     <div id="DollarPrice">
-      <Tooltip content="Exchange price to 3CRV" placement="bottom">
+      <Tooltip content="Swap for DAI/USDC/USDT" placement="bottom">
         <div>
-          <div>${(spotPrice && roundPrice(spotPrice)) || 0}</div>
-          <div>Spot Price</div>
+          <span>${(spotPrice && roundPrice(spotPrice)) || 0}</span>
+          <span>Spot</span>
         </div>
       </Tooltip>
-      <Tooltip content="Time Weighted Average Price" placement="bottom">
+      <Tooltip content="Time weighted average price" placement="bottom">
         <div>
-          <div>${(twapPrice && roundPrice(twapPrice)) || 0}</div>
-          <div>TWAP Price</div>
+          <span>${(twapPrice && roundPrice(twapPrice)) || 0}</span>
+          <span>TWAP</span>
         </div>
       </Tooltip>
     </div>

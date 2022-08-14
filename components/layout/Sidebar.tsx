@@ -58,12 +58,12 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
           {/* Header */}
 
           {/* Caret / Toggle button */}
-
+          {/*
           {state === "hidden" || state === "hidden_hovering" ? (
             <a aria-label="Toggle navigation" onClick={handleToggle}>
               <Icon icon="caret" />
             </a>
-          ) : null}
+          ) : null} */}
 
           {/* Items */}
 
