@@ -33,7 +33,7 @@ const UarRedeem = () => {
 
   const redeemUarForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uCR -> DebtCouponManager", (managedContracts.uar as unknown) as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.uar as unknown as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
     refreshBalances();
   };
