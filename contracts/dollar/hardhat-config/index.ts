@@ -17,12 +17,13 @@ import solidity from "./solidity";
 import { getKey } from "./utils/getKey";
 import { warn } from "./utils/warn";
 
+import "../tasks";
 // WAIT UNTIL ARTIFACTS ARE GENERATED BEFORE RUNNING TASKS.
-if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
-  import("../tasks/index");
-} else {
-  console.warn("Tasks loading skipped until compilation artifacts are available");
-}
+// if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
+//   import("../tasks");
+// } else {
+//   console.warn("Tasks loading skipped until compilation artifacts are available");
+// }
 
 // LOAD .ENV
 const pathToDotEnv = path.join(__dirname, "../../../.env");
