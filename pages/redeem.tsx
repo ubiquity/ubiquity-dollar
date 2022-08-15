@@ -30,7 +30,7 @@ const PriceStabilization: FC = (): JSX.Element => {
       <DollarPrice />
       <MigrateButton />
       <div id="MintUcr" className="panel">
-        <h2>Mint Ubiquity Credits</h2>
+        <h2>Generate Ubiquity Credits</h2>
         <aside>When TWAP is below peg</aside>
         <DisabledBlurredMessage disabled={twapGt1} content="Disabled when TWAP is above peg">
           <DebtCouponDeposit />

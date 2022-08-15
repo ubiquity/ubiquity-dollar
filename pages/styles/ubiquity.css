@@ -1,5 +1,6 @@
 body {
-  background: #06061a;
+  /* background: #06061a; */
+  background: #000;
   color: #fff;
   font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
   margin: 0;
@@ -63,7 +64,8 @@ button:hover {
   text-align: center;
   position: absolute;
   padding: 12px 0;
-  background: linear-gradient(90deg, #ffffff08, #ffffff00);
+  /* background: linear-gradient(90deg, #ffffff08, #ffffff00); */
+  background: radial-gradient(#000000ff, #101010ff);
 }
 #Inventory > div > div {
   display: flex;
@@ -113,10 +115,15 @@ video {
 }
 
 #Sidebar {
-  background: #ffffff08;
+  /* background: #ffffff08; */
+  background: radial-gradient(#000000ff, #101010ff);
   display: inline-table;
   max-width: 12.5vw;
   min-height: 100vh;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-rendering: geometricPrecision;
+  font-size: 12px;
 }
 #Sidebar > div {
   display: table-cell;
@@ -129,7 +136,7 @@ video {
   text-align: center;
 }
 #MainContent > div {
-  /* display: inline-block; */
+  display: inline-block;
   text-align: right;
 }
 #Inventory {
@@ -173,11 +180,11 @@ video {
 } */
 #Inventory > div:nth-child(2) > div > div > div {
   display: table;
-  width: 128px;
+  width: 96px;
 }
 #Inventory > div:nth-child(2) > div > div:nth-child(2) > div > div:first-child {
   width: 24px;
-  padding-right: 8px;
+  /* padding-right: 8px; */
 }
 #Inventory > div:nth-child(2) > div > div > div > div {
   position: relative;
@@ -281,10 +288,13 @@ th {
 }
 
 .panel {
-  background: linear-gradient(90deg, #ffffff08, #ffffff00);
+  /* background: linear-gradient(90deg, #ffffff08, #ffffff00); */
+  background: radial-gradient(#000000ff, #101010ff);
   margin: 24px auto;
   border-radius: 3px;
   padding: 12px 48px 24px;
+  display: inline-block;
+  vertical-align: top;
 }
 
 table#Staking {
