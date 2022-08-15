@@ -1,4 +1,3 @@
-import "./styles/tailwind-compiled.css";
 import "./styles/ubiquity.css";
 import "./styles/proxima.css";
 

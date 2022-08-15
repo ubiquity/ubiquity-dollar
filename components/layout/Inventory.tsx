@@ -72,8 +72,7 @@ const Token = ({
   accountAddr?: string;
   decimals?: number;
 }) => {
-  const Svg = tokenSvg[token] || (() => null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Svg = tokenSvg[token] || (() => <></>);
   const ethereum = window.ethereum;
   const addTokenToWallet = async () => {
     if (!ethereum?.request) {

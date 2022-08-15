@@ -10,6 +10,7 @@ const DollarPrice = () => {
 
   return (
     <div id="DollarPrice">
+      <h2>Ubiquity Dollar Price</h2>
       <Tooltip content="Swap for DAI/USDC/USDT" placement="bottom">
         <div>
           <span>${(spotPrice && roundPrice(spotPrice)) || 0}</span>

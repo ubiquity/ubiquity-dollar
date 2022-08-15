@@ -41,6 +41,7 @@ export default function Layout({ children }: LayoutProps) {
       <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} />
       <div id="MainContent">
         <div>
+          <TransactionsDisplay />
           <div id="Content">
             {sidebarState !== "loading" ? (
               <>
@@ -58,7 +59,6 @@ export default function Layout({ children }: LayoutProps) {
               </>
             ) : null}
           </div>
-          <TransactionsDisplay />
         </div>
 
         <div>
