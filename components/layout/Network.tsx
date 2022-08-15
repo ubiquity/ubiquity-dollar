@@ -18,7 +18,7 @@ const Network = () => {
     return null;
   }
 
-  return <div>{network}</div>;
+  return <>{network}</>;
 };
 
 export default Network;

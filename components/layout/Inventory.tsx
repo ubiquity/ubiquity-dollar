@@ -29,8 +29,10 @@ const Inventory = () => {
   return (
     <div id="Inventory">
       <div>
-        <div>My inventory</div>
-        <Network />
+        <span>My inventory</span>
+        <span>
+          <Network />
+        </span>
       </div>
       <div>
         <div>
@@ -104,13 +106,13 @@ const Token = ({
             placement="top"
             duration={0}
           >
-            <button onClick={addTokenToWallet}>+</button>
+            <button onClick={addTokenToWallet}></button>
           </Tippy>
         </div>
         <div>
           <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
-            <div>{token}</div>
-            <div>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</div>
+            <span>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</span>
+            <span>{token}</span>
           </a>
         </div>
       </div>
