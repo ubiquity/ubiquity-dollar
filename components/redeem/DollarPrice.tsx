@@ -9,7 +9,7 @@ const DollarPrice = () => {
   const [twapPrice, spotPrice] = usePrices();
 
   return (
-    <div id="DollarPrice">
+    <div id="DollarPrice" className="panel">
       <h2>Ubiquity Dollar Price</h2>
       <Tooltip content="Swap for DAI/USDC/USDT" placement="bottom">
         <div>

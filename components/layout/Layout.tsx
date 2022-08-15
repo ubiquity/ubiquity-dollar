@@ -25,14 +25,13 @@ function ErrorHandler({ error }: { error: Error }) {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [setSidebarClientWidth] = useState(0);
   const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
 
   useEffect(() => {
     const { ethereum } = window;
     if (ethereum) {
-      ethereum.on("accountsChanged", () => window.location.reload());
-      ethereum.on("chainChanged", () => window.location.reload());
+      ethereum.on("accountsChanged", window.location.reload);
+      ethereum.on("chainChanged", window.location.reload);
     }
   }, []);
 
@@ -46,10 +45,6 @@ export default function Layout({ children }: LayoutProps) {
             {sidebarState !== "loading" ? (
               <>
                 <div>
-                  {/* <ConditionalHeader show={sidebarState !== "permanent"} /> */}
-
-                  {/* Content */}
-
                   <div>
                     <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
                       {children}

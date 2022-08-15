@@ -163,7 +163,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <div>
+    <div className="panel">
       <h2>Stake uAD-3CRV tokens to receive UBQ</h2>
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
     </div>
@@ -191,7 +191,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
     <div>
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
       <div>
-        <table>
+        <table id="Staking">
           <thead>
             <tr>
               <th>Deposit (Approx.)</th>

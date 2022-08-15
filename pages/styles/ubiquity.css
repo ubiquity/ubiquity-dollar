@@ -280,8 +280,16 @@ th {
 }
 
 #Content > div > div > div {
-  margin: 24px auto;
+}
+
+.panel {
   background: linear-gradient(90deg, #ffffff08, #ffffff00);
+  margin: 24px auto;
   border-radius: 3px;
   padding: 12px 48px 24px;
+}
+
+table#Staking {
+  margin: 24px auto;
+  text-align: center;
 }

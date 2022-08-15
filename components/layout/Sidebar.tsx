@@ -81,7 +81,7 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
                 ) : null}
               </div>
             </li>
-            <Item text="Redeem" href="/" icon="💸"></Item>
+            <Item text="Redeem" href="/redeem" icon="💸"></Item>
             <Item text="Staking" href="/staking" icon="⛏"></Item>
             <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
             {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
