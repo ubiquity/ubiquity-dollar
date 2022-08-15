@@ -42,7 +42,7 @@ type Actions = {
   onStake: (payload: { amount: BigNumber; weeks: BigNumber }) => void;
 };
 
-const USD_TO_LP = 0.7562534324;
+const USD_TO_LP = 0.7460387929;
 const LP_TO_USD = 1 / USD_TO_LP;
 
 export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
