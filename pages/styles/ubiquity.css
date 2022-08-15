@@ -74,6 +74,12 @@ button:hover {
 #Inventory > div > div > div > div > div > button {
   background-color: #ffffff20;
   display: block;
+  height: 48px;
+  width: 48px;
+  opacity: 0;
+}
+#Inventory > div > div > div > div > div > button:hover {
+  opacity: 1;
 }
 
 #Background {
