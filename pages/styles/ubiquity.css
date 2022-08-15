@@ -256,6 +256,7 @@ th {
 }
 th {
   font-size: unset;
+  font-size: 12px;
 }
 #Foreground {
   display: table;
@@ -277,9 +278,6 @@ th {
 #Inventory > div:nth-child(2) > div > div > div > div:nth-child(2) > a > span:last-child {
   color: #ffffff80;
   margin-left: 3px;
-}
-
-#Content > div > div > div {
 }
 
 .panel {

@@ -164,7 +164,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
     <div className="panel">
-      <h2>Stake uAD-3CRV tokens to receive UBQ</h2>
+      <h2>Stake liquidity to receive UBQ</h2>
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
     </div>
   );
@@ -179,9 +179,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
     return sum.add(val.bond.lpAmount);
   }, BigNumber.from(0));
 
-  const totalPendingUgov = shares.reduce((sum, val) => {
-    return sum.add(val.ugov);
-  }, BigNumber.from(0));
+  const totalPendingUgov = shares.reduce((sum, val) => sum.add(val.ugov), BigNumber.from(0));
 
   const poolPercentage = formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
 
@@ -194,8 +192,8 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         <table id="Staking">
           <thead>
             <tr>
-              <th>Deposit (Approx.)</th>
-              <th>Pending Reward</th>
+              <th>Est. Deposit</th>
+              <th>Rewards</th>
               <th>Unlock Time</th>
               <th>Action</th>
             </tr>
@@ -215,18 +213,36 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           )}
         </table>
       </div>
-      <div>
-        <div>
-          <Icon icon="ubq" />
-          <span>{formatEther(totalPendingUgov)} </span>
-          <span>pending UBQ rewards</span>
-        </div>
-        <div>
-          <Icon icon="liquidity" />
-          {formatEther(totalLpBalance)} LP locked in Bonding Shares
-        </div>
-        <div>{poolPercentage}% pool ownership</div>
-      </div>
+
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <span>Pending</span>
+            </td>
+            <td>
+              <Icon icon="ubq" />
+            </td>
+            <td>
+              <span>{formatEther(totalPendingUgov)} </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span>Staked LP</span>
+            </td>
+            <td>
+              <Icon icon="liquidity" />
+            </td>
+            <td>{formatEther(totalLpBalance)}</td>
+          </tr>
+          <tr>
+            <td>Ownership</td>
+            <td>%</td>
+            <td>{poolPercentage}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };

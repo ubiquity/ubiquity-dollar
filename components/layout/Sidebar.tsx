@@ -55,17 +55,6 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
       <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
         <div>
           <WalletConnect />
-          {/* Header */}
-
-          {/* Caret / Toggle button */}
-          {/*
-          {state === "hidden" || state === "hidden_hovering" ? (
-            <a aria-label="Toggle navigation" onClick={handleToggle}>
-              <Icon icon="caret" />
-            </a>
-          ) : null} */}
-
-          {/* Items */}
 
           <ul>
             <li>
@@ -85,7 +74,7 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
             <Item text="Staking" href="/staking" icon="⛏"></Item>
             <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
             {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
-            {PROD ? null : <Item text="Launch Party" href="/launch-party" icon="🎉"></Item>}
+            {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
             <Item text="Swap" href="/swap" icon="🔁"></Item>
             <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
             <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>

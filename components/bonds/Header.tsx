@@ -1,7 +1,7 @@
 const Header = () => {
   return (
     <header>
-      <div>Launch Party</div>
+      <div>Bonds</div>
     </header>
   );
 };
