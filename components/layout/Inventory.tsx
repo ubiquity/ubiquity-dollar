@@ -29,20 +29,30 @@ const Inventory = () => {
   return (
     <div id="Inventory">
       <div>
-        <span>My inventory</span>
-        <span>
-          <Network />
-        </span>
+        {/* <span>My inventory</span> */}
+        {/* <span> <Network /> </span> */}
       </div>
       <div>
         <div>
-          <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} />
-          <Token token="uCR" balance={balances.ucr} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} />
-          <Token token="uCR-NFT" balance={balances.ucrNft} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
-          <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} />
-          <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} />
-          <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
-          {/* <Token token="USDC" balance={balances.usdc} accountAddr={walletAddress} tokenAddr={namedContracts.usdc.address} decimals={6} /> */}
+          {Number(balances.uad) ? <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} /> : ""}
+          {Number(balances.ucr) ? <Token token="uCR" balance={balances.ucr} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} /> : ""}
+          {Number(balances.ucrNft) ? (
+            <Token token="uCR-NFT" balance={balances.ucrNft} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
+          ) : (
+            ""
+          )}
+          {Number(balances.ubq) ? <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} /> : ""}
+          {Number(balances.crv) ? <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} /> : ""}
+          {Number(balances.uad3crv) ? (
+            <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
+          ) : (
+            ""
+          )}
+          {Number(balances.usdc) ? (
+            <Token token="USDC" balance={balances.usdc} accountAddr={walletAddress} tokenAddr={namedContracts.usdc.address} decimals={6} />
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
