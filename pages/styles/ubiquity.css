@@ -297,7 +297,11 @@ th {
   vertical-align: top;
 }
 
-table#Staking {
+table {
   margin: 24px auto;
   text-align: center;
+  border-collapse: collapse;
+}
+td {
+  padding: 0 8px;
 }
