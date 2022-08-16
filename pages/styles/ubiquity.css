@@ -154,6 +154,7 @@ video {
 }
 #Sidebar ul li div {
   min-height: 24px;
+  vertical-align: bottom;
 }
 #Sidebar ul li {
   position: relative;
@@ -304,4 +305,22 @@ table {
 }
 td {
   padding: 0 8px;
+}
+
+#Logo svg {
+  float: right;
+}
+
+#Logo > div > div {
+  display: inline-block;
+}
+#Logo > div > div:first-child {
+  /* float: left; */
+  width: calc(100% - 16px);
+}
+#Logo > div > div:last-child {
+  /* float: right; */
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
 }
