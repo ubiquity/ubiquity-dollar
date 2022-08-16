@@ -1,6 +1,6 @@
 import Spinner from "./Spinner";
 
-const Loading = ({ text = "Loading..." }: { text: string }): JSX.Element => (
+const Loading = ({ text = "· · ·" }: { text: string }): JSX.Element => (
   <div>
     <span>{text}</span>
     <span>{Spinner}</span>

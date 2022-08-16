@@ -13,13 +13,13 @@ const DollarPrice = () => {
       <h2>Ubiquity Dollar Price</h2>
       <Tooltip content="Swap for DAI/USDC/USDT" placement="bottom">
         <div>
-          <span>${(spotPrice && roundPrice(spotPrice)) || "..."}</span>
+          <span>${(spotPrice && roundPrice(spotPrice)) || "· · ·"}</span>
           <span>Spot</span>
         </div>
       </Tooltip>
       <Tooltip content="Time weighted average price" placement="bottom">
         <div>
-          <span>${(twapPrice && roundPrice(twapPrice)) || "..."}</span>
+          <span>${(twapPrice && roundPrice(twapPrice)) || "· · ·"}</span>
           <span>TWAP</span>
         </div>
       </Tooltip>

@@ -55,7 +55,7 @@ button:hover {
   /* width: 100vw; */
   /* height: 100vh; */
   /* -webkit-mask-image: radial-gradient(rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 1) 100%); */
-  background-image: url(//ubq.fi/image/grid-1.png);
+  background-image: url(/grid-1.png);
   background-repeat: repeat;
 }
 
@@ -228,7 +228,7 @@ div#grid {
   vertical-align: middle;
   text-align: center;
   -webkit-mask-image: radial-gradient(rgba(0, 0, 0, 0.5) 0, rgba(0, 0, 0, 0.25) 50%, #000 100%);
-  background-image: url(//ubq.fi/image/grid-1.png);
+  background-image: url(/grid-1.png);
   background-repeat: repeat;
   height: 100vh;
 }

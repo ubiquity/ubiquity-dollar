@@ -28,7 +28,7 @@ const UarRedeem = () => {
   }
 
   if (!managedContracts || !deployedContracts || !balances) {
-    return <span>Loading...</span>;
+    return <span>· · ·</span>;
   }
 
   const redeemUarForUad = async (amount: BigNumber) => {

@@ -165,10 +165,10 @@ export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo,
             disable={isProcessing}
           />
         ) : (
-          "Loading..."
+          "· · ·"
         )
       ) : (
-        "Loading..."
+        "· · ·"
       )}
     </div>
   );

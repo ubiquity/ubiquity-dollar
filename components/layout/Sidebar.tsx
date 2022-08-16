@@ -62,9 +62,15 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
                 {" "}
                 {state === "permanent" ? (
                   <Link href="/">
-                    <a>
-                      <Icon icon="uad" />
-                      <span>Ubiquity Dollar Dashboard</span>
+                    <a id="Logo">
+                      <div>
+                        <div>
+                          <span>Ubiquity Dollar</span>
+                        </div>
+                        <div>
+                          <Icon icon="uad" />
+                        </div>
+                      </div>
                     </a>
                   </Link>
                 ) : null}
@@ -120,7 +126,7 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
         <Link href={href}>
           <a target={href.match(/https?:\/\//) ? "_blank" : ""}>
             <span>{text}</span>
-            {isExternal ? <Icon icon="external" /> : null}
+            <span>{isExternal ? <Icon icon="external" /> : null}</span>
           </a>
         </Link>
       </div>

@@ -30,7 +30,7 @@ const DebtCouponDeposit = () => {
   }
 
   if (!balances || !managedContracts || !deployedContracts) {
-    return <span>Loading...</span>;
+    return <span>· · ·</span>;
   }
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {

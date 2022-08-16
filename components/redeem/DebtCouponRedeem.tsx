@@ -40,7 +40,7 @@ const DebtCouponRedeem = () => {
   }, [managedContracts, walletAddress]);
 
   if (!walletAddress || !signer) return <span>Connect wallet</span>;
-  if (!deployedContracts || !managedContracts || !debtIds) return <span>Loading...</span>;
+  if (!deployedContracts || !managedContracts || !debtIds) return <span>· · ·</span>;
   if (debtIds.length === 0) return <span>No credit coupons</span>;
 
   async function fetchDebts(address: string, contract: DebtCoupon) {
