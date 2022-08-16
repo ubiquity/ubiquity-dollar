@@ -100,7 +100,7 @@ video {
   position: relative;
 }
 #Sidebar {
-  background: radial-gradient(#000000ff, #101010ff);
+  /* background: radial-gradient(#000000ff, #101010ff); */
   display: inline-table;
   max-width: 12.5vw;
   min-height: 100vh;
@@ -108,7 +108,27 @@ video {
   letter-spacing: 1.5px;
   text-rendering: geometricPrecision;
   font-size: 12px;
+  /* width: 128px; */
 }
+
+@media only screen and (max-width: 400px) {
+  #Foreground > div {
+    display: table;
+    text-align: center;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  #Foreground > #Sidebar {
+  }
+  #Foreground > #MainContent {
+    max-width: unset;
+  }
+  #Foreground > #MainContent > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+
 #Sidebar > div {
   display: table-cell;
   vertical-align: middle;
