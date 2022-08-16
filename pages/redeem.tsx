@@ -32,7 +32,7 @@ const PriceStabilization: FC = (): JSX.Element => {
       <div id="MintUcr" className="panel">
         <h2>Generate Ubiquity Credits</h2>
         <aside>When TWAP is below peg</aside>
-        <DisabledBlurredMessage disabled={twapGt1} content="Disabled when TWAP is above peg">
+        <DisabledBlurredMessage disabled={twapGt1} content="(Disabled when TWAP is above peg)">
           <DebtCouponDeposit />
           {/* <UarDeposit /> */}
         </DisabledBlurredMessage>
@@ -40,7 +40,7 @@ const PriceStabilization: FC = (): JSX.Element => {
       <div id="RedeemUcr" className="panel">
         <h2>Redeem Ubiquity Credits</h2>
         <aside>When TWAP is above peg</aside>
-        <DisabledBlurredMessage disabled={!twapGt1} content="Disabled when TWAP is below peg">
+        <DisabledBlurredMessage disabled={!twapGt1} content="(Disabled when TWAP is below peg)">
           <div>
             <UarRedeem />
             <DebtCouponRedeem />

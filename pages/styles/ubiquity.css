@@ -341,3 +341,9 @@ td {
   /* float: left; */
   width: calc(100% - 32px);
 }
+
+#Markets {
+}
+#Markets > div > div {
+  margin: 24px auto;
+}
