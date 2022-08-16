@@ -112,6 +112,9 @@ video {
 }
 
 @media only screen and (max-width: 400px) {
+  #Foreground {
+    /* text-align: right; */
+  }
   #Foreground > div {
     display: table;
     text-align: center;
@@ -119,6 +122,9 @@ video {
     min-height: 100vh;
   }
   #Foreground > #Sidebar {
+    right: 0;
+    position: absolute;
+    z-index: 1;
   }
   #Foreground > #MainContent {
     max-width: unset;
@@ -143,16 +149,31 @@ video {
   display: inline-block;
   text-align: right;
 }
-#Inventory {
-  max-width: 100vw;
-  text-align: center;
+
+#Foreground input[type="checkbox"] {
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
   position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  overflow: scroll;
-  overflow-x: hidden;
+  right: 0;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
 }
+#Foreground input[type="checkbox"]:checked {
+  background: #ffffff;
+}
+
+#Foreground input[type="checkbox"] + #Sidebar {
+  transform: translateX(0);
+  transition: 0.33s transform cubic-bezier(0, 1, 1, 1);
+  /* backdrop-filter: blur(16px); */
+  background: radial-gradient(#000000ff, #101010ff);
+}
+#Foreground input[type="checkbox"]:checked + #Sidebar {
+  transform: translateX(100%);
+}
+
 #Sidebar ul {
   margin: auto;
 }
@@ -171,9 +192,21 @@ video {
 #Sidebar ul li a:hover {
   opacity: 1;
 }
+
 #WalletConnect {
   position: relative;
   padding: var(--button-pad);
+}
+
+#Inventory {
+  max-width: 100vw;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
 }
 #Inventory > div:nth-child(2) > div > div > div {
   display: table;

@@ -52,6 +52,7 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
 
   return (
     <>
+      <input type="checkbox" />
       <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
         <div>
           <ul>
