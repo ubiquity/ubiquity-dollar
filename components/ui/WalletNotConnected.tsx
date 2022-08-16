@@ -1,9 +1,9 @@
 const WalletNotConnected = (
-  <div>
+  <div className="panel">
     <div>
       <img src="/ethereum-wallet.svg" />
     </div>
-    Connect wallet to continue
+    <span>Connect wallet to continue</span>
   </div>
 );
 

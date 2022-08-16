@@ -1,7 +1,14 @@
 const PROD = process.env.NODE_ENV == "production";
 
 export default function Background() {
-  return <GridVideoBg />;
+  return (
+    <div id="Background">
+      {/* {video} */}
+      <div id="color"></div>
+      <div id="grid"></div>
+    </div>
+  );
+  // <GridVideoBg />;
 }
 function GridVideoBg() {
   const video = (

@@ -14,7 +14,7 @@ const ubiquistickChains = ubiquiStickDeployments as ChainsAddressesObject;
 
 class ContractNotAvailable extends Error {
   constructor(contractName: string, chainId: string) {
-    super(`Necessary contract ${contractName} not deployed on chain ID ${chainId}`); // (1)
+    super(`Contract "${contractName}" not found on chain ID ${chainId}`); // (1)
     this.name = "ContractNotAvailable"; // (2)
   }
 }

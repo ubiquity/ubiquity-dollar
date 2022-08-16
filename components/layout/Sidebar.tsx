@@ -54,27 +54,25 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
     <>
       <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
         <div>
-          <WalletConnect />
-
           <ul>
             <li>
               <div>
-                {" "}
-                {state === "permanent" ? (
-                  <Link href="/">
-                    <a id="Logo">
+                <Link href="/">
+                  <a id="Logo">
+                    <div>
                       <div>
-                        <div>
-                          <span>Ubiquity Dollar</span>
-                        </div>
-                        <div>
-                          <Icon icon="uad" />
-                        </div>
+                        <Icon icon="uad" />
                       </div>
-                    </a>
-                  </Link>
-                ) : null}
+                      <div>
+                        <span>Ubiquity Dollar</span>
+                      </div>
+                    </div>
+                  </a>
+                </Link>
               </div>
+            </li>
+            <li>
+              <WalletConnect />
             </li>
             <Item text="Redeem" href="/redeem" icon="💸"></Item>
             <Item text="Staking" href="/staking" icon="⛏"></Item>

@@ -5,8 +5,6 @@ import svgs from "./svgs";
 const b64svg = `data:image/svg+xml;base64,`;
 const base64s = {} as Record<string, string>;
 
-console.log(svgs);
-
 base64s["help"] = b64svg.concat(btoa(renderToString(svgs.help)));
 base64s["liquidity"] = b64svg.concat(btoa(renderToString(svgs.liquidity)));
 base64s["uad"] = b64svg.concat(btoa(renderToString(svgs.uad)));
