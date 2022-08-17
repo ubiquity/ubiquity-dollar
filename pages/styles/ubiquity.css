@@ -154,6 +154,13 @@ video {
   padding: var(--button-pad);
 }
 
+#WalletConnect button {
+  /* box-shadow: 0 0 48px 4px #00ffff; */
+  border: 1px solid #80ffff;
+  /* background-color: #00ffff; */
+  /* color: #000; */
+  /* font-weight: 900; */
+}
 #Inventory {
   max-width: 100vw;
   text-align: center;
@@ -316,4 +323,17 @@ td {
 #Markets > div > div > a,
 #Markets > div > div > span {
   margin-left: 6px;
+}
+
+#WalletConnect {
+  /* position: fixed; */
+  word-break: break-all;
+  top: 0;
+  text-transform: initial;
+}
+#WalletConnect.connected button {
+  border: transparent;
+}
+#Sidebar #Address {
+  padding: 8px 0;
 }

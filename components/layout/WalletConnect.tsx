@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useWeb3 from "../lib/hooks/useWeb3";
-import Button from "../ui/Button";
+import Button, { ButtonLink } from "../ui/Button";
 import Icon from "../ui/Icon";
 import Tooltip from "../ui/Tooltip";
 
@@ -22,25 +22,13 @@ const WalletConnect = () => {
 
   return (
     <>
-      {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
-      <div id="WalletConnect">
+      <div id="WalletConnect" className={walletAddress ? "connected" : ""}>
         {walletAddress ? (
           <div>
-            <Tooltip
-              content={
-                <>
-                  {walletAddress}
-                  <br />
-                  Provider: {providerMode}
-                </>
-              }
-              placement="bottom"
-            >
-              <a href={`https://etherscan.io/address/${walletAddress}`} target="_blank">
-                <Icon icon="help" />
-              </a>
-            </Tooltip>
             <Button onClick={() => disconnect()}>Disconnect</Button>
+            <a href={`https://etherscan.io/address/${walletAddress}`} target="_blank" id="Address">
+              {shortenAddress(walletAddress)}
+            </a>
           </div>
         ) : (
           <>
@@ -49,6 +37,7 @@ const WalletConnect = () => {
             </Button>
           </>
         )}
+        {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
       </div>
     </>
   );
@@ -105,4 +94,8 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
       </div>
     </div>
   );
+}
+
+function shortenAddress(address: string) {
+  return address.slice(0, 6) + "..." + address.slice(-4);
 }

@@ -72,9 +72,7 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
                 </Link>
               </div>
             </li>
-            <li>
-              <WalletConnect />
-            </li>
+
             <Item text="Staking" href="/staking" icon="⛏"></Item>
             <Item text="Credit Operations" href="/credit-operations" icon="💸"></Item>
             {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
@@ -95,6 +93,9 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
             <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
             <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
             <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
+            <li>
+              <WalletConnect />
+            </li>
           </ul>
         </div>
 
