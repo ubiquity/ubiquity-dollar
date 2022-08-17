@@ -103,13 +103,12 @@ video {
 #Sidebar {
   /* background: radial-gradient(#000000ff, #101010ff); */
   display: inline-table;
-  max-width: 12.5vw;
   min-height: 100vh;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   text-rendering: geometricPrecision;
   font-size: 12px;
-  /* width: 128px; */
+  /* max-width: 200px; */
 }
 #Foreground input[type="checkbox"] {
   display: none;
@@ -120,9 +119,9 @@ video {
   vertical-align: middle;
 }
 #MainContent {
-  max-width: 87.5vw;
+  /* max-width: 87.5vw; */
   display: inline-table;
-  width: 100%;
+  width: calc(100vw - 200px);
   text-align: center;
 }
 #MainContent > div {
