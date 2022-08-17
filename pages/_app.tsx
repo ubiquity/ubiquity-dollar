@@ -1,4 +1,5 @@
 import "./styles/ubiquity.css";
+import "./styles/queries.css";
 import "./styles/proxima.css";
 
 import { AppProps } from "next/app";
