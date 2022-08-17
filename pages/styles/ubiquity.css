@@ -110,7 +110,9 @@ video {
   font-size: 12px;
   /* width: 128px; */
 }
-
+#Foreground input[type="checkbox"] {
+  display: none;
+}
 @media only screen and (max-width: 460px) {
   #Foreground {
     /* text-align: right; */
@@ -139,16 +141,49 @@ video {
     appearance: none;
     margin: 0;
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: 8px;
+    bottom: 8px;
     z-index: 2;
-    margin: var(--button-pad);
+    padding: var(--button-pad);
     width: 48px;
     height: 48px;
-    background: red;
+    display: unset;
+    background: transparent;
+  }
+
+  #Foreground input[type="checkbox"]::before,
+  #Foreground input[type="checkbox"]::after {
+    /* unchecked */
+    content: "";
+    background: #ffffff80;
+    display: inline-block;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    /* bottom */
+    /* position: absolute; */
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    width: 24px;
+    transition: 0.125s transform ease;
+  }
+  #Foreground input[type="checkbox"]::after {
+    bottom: 12px;
   }
   #Foreground input[type="checkbox"]:checked {
+  }
+  #Foreground input[type="checkbox"]:checked::before,
+  #Foreground input[type="checkbox"]:checked::after {
+    /* checked */
+    content: "";
     background: #ffffff;
+  }
+  #Foreground input[type="checkbox"]:checked::before {
+    transform: translateY(8px) rotate(45deg);
+  }
+  #Foreground input[type="checkbox"]:checked::after {
+    transform: translateY(-8px) rotate(-45deg);
   }
 
   #Foreground input[type="checkbox"] + #Sidebar {
