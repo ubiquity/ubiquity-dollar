@@ -18,6 +18,7 @@ svg {
   max-width: 48px;
   max-height: 48px;
 }
+img,
 svg {
   width: 16px;
   height: 16px;
@@ -133,7 +134,7 @@ video {
   margin: auto;
 }
 #Sidebar ul li div {
-  min-height: 24px;
+  min-height: 16px;
   vertical-align: middle;
 }
 #Sidebar ul li {
@@ -293,7 +294,7 @@ td {
   padding: 0 8px;
 }
 #Logo svg {
-  float: right;
+  /* float: right; */
   height: 24px;
   width: 24px;
 }
@@ -307,7 +308,7 @@ td {
   margin-right: 8px;
 }
 #Logo > div > div:last-child {
-  width: calc(100% - 32px);
+  /* width: calc(100% - 32px); */
 }
 #Markets > div > div {
   margin: 24px auto;

@@ -64,10 +64,10 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
   function Btn({ text, onClick, icon }: { text: string; icon: string; onClick: () => void }) {
     return (
       <div onClick={() => onClick()}>
-        <div>
-          <img src={"/providers-icons/" + icon + ".svg"} />
-        </div>
         <span>{text}</span>
+        <span>
+          <img src={`/providers-icons/${icon}.svg`} />
+        </span>
       </div>
     );
   }
@@ -83,18 +83,24 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
     <div>
       <div onClick={() => onClose()}></div>
       <div>
-        <h2>Connect wallet</h2>
+        {/* <div> */}
+        {/* <h2>Provider</h2> */}
+        {/* </div> */}
         <div>
-          <Btn
-            text="Metamask"
-            icon="metamask"
-            onClick={
-              metamaskInstalled
-                ? connectMetamask
-                : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
-            }
-          />
-          <Btn text="Hardhat node" icon="hardhat" onClick={promptForWalletAddress} />
+          <a>
+            <Btn
+              text="Metamask"
+              icon="metamask"
+              onClick={
+                metamaskInstalled
+                  ? connectMetamask
+                  : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
+              }
+            />
+          </a>
+          <a>
+            <Btn text="Hardhat" icon="hardhat" onClick={promptForWalletAddress} />
+          </a>
         </div>
       </div>
     </div>

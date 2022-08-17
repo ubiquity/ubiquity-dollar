@@ -9,7 +9,7 @@
   }
   #Foreground > div {
     display: table;
-    text-align: center;
+    text-align: right;
     margin: 0 auto;
     min-height: 100vh;
   }
@@ -29,7 +29,7 @@
   #Foreground input[type="checkbox"]:hover,
   #Foreground input[type="checkbox"]:hover::before,
   #Foreground input[type="checkbox"]:hover::after {
-    border-top: 2px solid #ffffffff;
+    border-top: 2px solid #808080ff;
     cursor: pointer;
   }
 
@@ -91,6 +91,9 @@
     transition: 0.33s opacity cubic-bezier(0, 1, 1, 1);
     pointer-events: none;
     background: radial-gradient(#000000ff, #101010ff);
+    -webkit-mask-image: linear-gradient(-90deg, #000000ff, #000000ff, #00000000);
+    max-width: unset;
+    width: 100%;
   }
   #Foreground input[type="checkbox"]:checked + #Sidebar {
     opacity: 1;
