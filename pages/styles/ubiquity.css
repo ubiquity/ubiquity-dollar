@@ -109,6 +109,7 @@ video {
   text-rendering: geometricPrecision;
   font-size: 12px;
   /* max-width: 200px; */
+  padding-left: 16px;
 }
 #Foreground input[type="checkbox"] {
   display: none;
@@ -121,7 +122,7 @@ video {
 #MainContent {
   /* max-width: 87.5vw; */
   display: inline-table;
-  width: calc(100vw - 200px);
+  width: calc(100vw - 216px);
   text-align: center;
 }
 #MainContent > div {
