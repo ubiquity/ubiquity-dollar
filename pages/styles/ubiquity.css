@@ -111,7 +111,7 @@ video {
   /* width: 128px; */
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 460px) {
   #Foreground {
     /* text-align: right; */
   }
@@ -133,6 +133,37 @@ video {
     display: table-cell;
     vertical-align: middle;
   }
+
+  #Foreground input[type="checkbox"] {
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    margin: var(--button-pad);
+    width: 48px;
+    height: 48px;
+    background: red;
+  }
+  #Foreground input[type="checkbox"]:checked {
+    background: #ffffff;
+  }
+
+  #Foreground input[type="checkbox"] + #Sidebar {
+    opacity: 0;
+    transition: 0.33s opacity cubic-bezier(0, 1, 1, 1);
+    pointer-events: none;
+    background: radial-gradient(#000000ff, #101010ff);
+  }
+  #Foreground input[type="checkbox"]:checked + #Sidebar {
+    opacity: 1;
+    pointer-events: unset;
+  }
+  #Foreground #MainContent > div {
+    text-align: center;
+  }
 }
 
 #Sidebar > div {
@@ -148,30 +179,6 @@ video {
 #MainContent > div {
   display: inline-block;
   text-align: right;
-}
-
-#Foreground input[type="checkbox"] {
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0;
-  position: absolute;
-  right: 0;
-  z-index: 2;
-  width: 48px;
-  height: 48px;
-}
-#Foreground input[type="checkbox"]:checked {
-  background: #ffffff;
-}
-
-#Foreground input[type="checkbox"] + #Sidebar {
-  transform: translateX(0);
-  transition: 0.33s transform cubic-bezier(0, 1, 1, 1);
-  /* backdrop-filter: blur(16px); */
-  background: radial-gradient(#000000ff, #101010ff);
-}
-#Foreground input[type="checkbox"]:checked + #Sidebar {
-  transform: translateX(100%);
 }
 
 #Sidebar ul {
