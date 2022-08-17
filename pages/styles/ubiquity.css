@@ -149,6 +149,30 @@ video {
     height: 48px;
     display: unset;
     background: transparent;
+    /*
+     */
+    /*
+     */
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    position: absolute;
+    right: 8px;
+    bottom: 48px;
+    z-index: 2;
+    padding: var(--button-pad);
+    width: 24px;
+    height: 24px;
+    display: unset;
+    /* background: #fff; */
+    padding: 0px;
+    border-top: 3px solid #ffffff80;
+    /* border-bottom: 3px solid; */
+    border-radius: 0;
+    /* box-sizing: border-box; */
+    /* padding-top: 0px; */
+    transition: 0.125s border ease;
   }
 
   #Foreground input[type="checkbox"]::before,
@@ -170,8 +194,10 @@ video {
   }
   #Foreground input[type="checkbox"]::after {
     bottom: 12px;
+    transform: translateY(-4px);
   }
   #Foreground input[type="checkbox"]:checked {
+    border-top: 3px solid #ffffff00;
   }
   #Foreground input[type="checkbox"]:checked::before,
   #Foreground input[type="checkbox"]:checked::after {
