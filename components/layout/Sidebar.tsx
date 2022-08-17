@@ -75,17 +75,11 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
             <li>
               <WalletConnect />
             </li>
-            <Item text="Redeem" href="/redeem" icon="💸"></Item>
             <Item text="Staking" href="/staking" icon="⛏"></Item>
-            <Item text="Yield Farming" href="/yield-farming" icon="🚜"></Item>
-            {/* <Item text="Debt Coupon" href="/debt-coupon"></Item> */}
+            <Item text="Credit Operations" href="/credit-operations" icon="💸"></Item>
             {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
-            <Item text="Swap" href="/swap" icon="🔁"></Item>
-            <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
-            <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
-            <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
-            {/* <Item text="Public Channels" href="/public-channels"></Item> */}
-
+            <Item text="Primary Markets" href="/primary-markets" icon="🔁"></Item>
+            <Item text="Proxy Yield Farming" href="/proxy-yield-farming" icon="🚜"></Item>
             <li>
               <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
             </li>
@@ -98,6 +92,9 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
             <li>
               <SocialLinkItem href="https://discord.gg/SjymJ5maJ4" alt="Discord" icon="discord" />
             </li>
+            <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
+            <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
+            <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
           </ul>
         </div>
 
