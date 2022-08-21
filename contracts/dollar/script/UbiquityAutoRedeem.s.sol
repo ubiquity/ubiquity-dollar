@@ -3,9 +3,9 @@ pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
 import "../src/UbiquityAlgorithmicDollarManager.sol";
-import "../src/UbiquityGovernance.sol";
+import "../src/UbiquityAutoRedeem.sol";
 
-contract UbiquityGovernanceScript is Script {
+contract UbiquityAutoRedeemScript is Script {
     function run() public {
         vm.startBroadcast();
         UbiquityAlgorithmicDollarManager ubiquityAlgorithmicDollarManager = new UbiquityAlgorithmicDollarManager(
@@ -13,7 +13,7 @@ contract UbiquityGovernanceScript is Script {
             );
         address manager = address(ubiquityAlgorithmicDollarManager);
 
-        new UbiquityGovernance(manager);
+        new UbiquityAutoRedeem(manager);
         vm.stopBroadcast();
     }
 }
