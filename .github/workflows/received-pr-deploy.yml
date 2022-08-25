@@ -2,7 +2,7 @@ name: Received PR and Deploy
 
 on:
   workflow_run:
-    workflows: ["Install and Build Workflow for Pull Request"]
+    workflows: ["Install and Build Workflow"]
     types:
       - completed
 
