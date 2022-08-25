@@ -2,17 +2,7 @@ name: Install and Build Workflow for Pull Request
 
 on:
   pull_request:
-    branches:
-      - main
-      - development
-      - staging
-      - production
   push:
-    branches:
-      - main
-      - development
-      - staging
-      - production
   create:
     tag:
       - "v*"
