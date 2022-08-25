@@ -73,7 +73,7 @@ const Token = ({
   decimals?: number;
 }) => {
   const Svg = tokenSvg[token] || (() => <></>);
-  const ethereum = window.ethereum;
+  const { ethereum } = window;
   const addTokenToWallet = async () => {
     if (!ethereum?.request) {
       return;

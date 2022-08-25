@@ -31,6 +31,7 @@ input {
   padding: var(--button-pad);
   background: #ffffff10;
   margin-right: 3px;
+  margin-bottom: 3px;
   font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
   font-weight: 400;
   color: #fff;
@@ -313,9 +314,10 @@ td {
   height: 24px;
   vertical-align: middle;
   margin-right: 8px;
+  margin-bottom: 8px;
 }
 #Logo > div > div:last-child {
-  /* width: calc(100% - 32px); */
+  height: 22px;
 }
 #Markets > div > div {
   margin: 24px auto;
@@ -337,3 +339,44 @@ td {
 #Sidebar #Address {
   padding: 8px 0;
 }
+
+/* spinner */
+
+#Spinner {
+  display: inline-block;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  margin: 0 16px;
+}
+#Spinner div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: 1px;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #ffffff transparent transparent transparent;
+}
+#Spinner div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+#Spinner div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+#Spinner div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* spinner */

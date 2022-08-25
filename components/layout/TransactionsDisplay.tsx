@@ -13,9 +13,9 @@ export const Transacting = (props: { transaction: Transaction; onDismiss: () => 
               <pre>{props.transaction.error}</pre>
               {/Nonce too high/.test(props.transaction.error) ? (
                 <div>
-                  This is a common error caused by mismatched transaction number after the development server is restarted,{" "}
+                  <span>This is a common error caused by mismatched transaction number after the development server is restarted,</span>
                   <a href="https://medium.com/@thelasthash/solved-nonce-too-high-error-with-metamask-and-hardhat-adc66f092cd">
-                    can be easily resolved by resetting the Metamask account
+                    <span>can be easily resolved by resetting the Metamask account</span>
                   </a>
                 </div>
               ) : null}
@@ -35,7 +35,8 @@ export const Transacting = (props: { transaction: Transaction; onDismiss: () => 
 
   return (
     <div>
-      {props.transaction.title} {Spinner}
+      <span>{props.transaction.title}</span>
+      <span>{Spinner}</span>
     </div>
   );
 };

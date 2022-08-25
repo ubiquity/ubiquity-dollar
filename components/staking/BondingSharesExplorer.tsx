@@ -123,9 +123,9 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
     onClaimUbq: useCallback(
       async (id) => {
         if (!model || model.processing) return;
-        console.log(`Claiming UBQ rewards from ${id}`);
+        console.log(`Claiming Ubiquity Governance token rewards from ${id}`);
         setModel({ ...model, processing: true });
-        doTransaction("Claiming UBQ...", async () => {
+        doTransaction("Claiming Ubiquity Governance tokens...", async () => {
           await performTransaction(masterChef.connect(signer).getRewards(BigNumber.from(id)));
 
           fetchSharesInformation();

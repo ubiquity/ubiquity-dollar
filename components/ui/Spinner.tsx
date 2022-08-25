@@ -1,5 +1,5 @@
 const Spinner = (
-  <div>
+  <div id="Spinner">
     <div></div>
     <div></div>
     <div></div>
