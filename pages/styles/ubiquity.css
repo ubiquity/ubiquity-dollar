@@ -380,3 +380,11 @@ td {
 }
 
 /* spinner */
+
+#Sidebar > div > ul:nth-child(2) li {
+  display: inline-block;
+}
+/*
+#Sidebar > div > ul:nth-child(3) li {
+  display: inline-block;
+} */
