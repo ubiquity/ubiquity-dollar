@@ -49,6 +49,15 @@
     border-top: 2px solid #808080;
     border-radius: 0;
     transition: 0.125s border ease;
+
+    box-shadow: 0 0 48px 36px #000;
+    background: #000000;
+  }
+
+  #Foreground input[type="checkbox"]:hover,
+  #Foreground input[type="checkbox"]:hover::before,
+  #Foreground input[type="checkbox"]:hover::after {
+    border-top: 2px solid #fff;
   }
 
   #Foreground input[type="checkbox"]::before,

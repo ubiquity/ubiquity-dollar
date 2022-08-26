@@ -2,6 +2,7 @@
   "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
+    "start": "run-s install:env install:contracts build:contracts dev",
     "prepare": "husky install",
     "__test:watch:ci": "nodemon",
     "build:fleek": "run-s install:env install:contracts build:contracts BUILD:NEXT",
@@ -28,12 +29,11 @@
     "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "BUILD:NEXT": "next build && next export --outdir web/dapp",
     "build": "run-s install:env install:contracts",
-    "dev": "run-p dev:*",
-    "dev:contracts": "./utils/dev-chain-init.sh",
-    "dev:ui": "next dev"
+    "run": "run-p run:*",
+    "run:contracts": "./utils/dev-chain-init.sh",
+    "run:ui": "next dev"
   },
   "_scripts": {
-    "start": "run-s install:env install:contracts dev",
     "start:headless": "run-s install:env install:contracts dev:contracts",
     "build:ui": "yarn next build",
     "_contracts:clean": "run-p _contracts:clean:*",
