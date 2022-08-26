@@ -58,22 +58,18 @@ const Inventory = () => {
     </div>
   );
 };
-
-const Token = ({
-  balance,
-  token,
-  tokenAddr,
-  accountAddr,
-  decimals = 18,
-}: {
+interface TokenInterface {
   balance: BigNumber;
   token: keyof typeof tokenSvg;
   tokenAddr?: string;
   accountAddr?: string;
   decimals?: number;
-}) => {
+}
+
+const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenInterface) => {
   const Svg = tokenSvg[token] || (() => <></>);
   const { ethereum } = window;
+
   const addTokenToWallet = async () => {
     if (!ethereum?.request) {
       return;
@@ -85,7 +81,7 @@ const Token = ({
         params: {
           type: "ERC20",
           options: {
-            address: accountAddr,
+            address: tokenAddr,
             symbol: token,
             decimals: decimals,
             image: base64Img,
@@ -101,6 +97,7 @@ const Token = ({
       console.log(error);
     }
   };
+
   return (
     <div>
       <div>
