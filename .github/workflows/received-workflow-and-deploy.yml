@@ -31,7 +31,7 @@ jobs:
       - name: Deploy Development
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
-          netlify deploy --prod > ./deployments.log
+          netlify deploy --dir=./web/dapp --prod > ./deployments.log
 
       - name: Print Logs
         uses: actions/github-script@v6
