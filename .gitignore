@@ -49,5 +49,5 @@ contracts/*/deployments/*
 !contracts/*/deployments/mainnet
 contracts/dollar/tasks/library/distributor/fixtures/operators.json
 fixtures/abi/types/
-web/dapp/
+dist/
 fixtures/contracts-addresses/*

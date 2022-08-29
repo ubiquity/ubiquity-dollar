@@ -38,7 +38,7 @@ jobs:
         run: yarn build:contracts
 
       - name: Building UI
-        run: yarn BUILD:NEXT
+        run: yarn build:next
 
       - name: Save PR
         env:
@@ -49,7 +49,7 @@ jobs:
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
           mkdir -p ./pr
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
-          zip -r pull-request.zip ./web/dapp && cp pull-request.zip ./pr
+          zip -r pull-request.zip ./dist && cp pull-request.zip ./pr
       - uses: actions/upload-artifact@v2
         with:
           name: pr
