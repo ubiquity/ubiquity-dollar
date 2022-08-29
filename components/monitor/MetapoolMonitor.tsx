@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
+import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import Address from "./ui/Address";
+import Balance from "./ui/Balance";
 // import { useConnectedContext } from "@/lib/connected";
-import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
-import { Container, Title } from "@/ui";
-
-import { Address, Balance } from "./ui";
 
 type State = null | MetapoolMonitorProps;
 type MetapoolMonitorProps = {
@@ -41,13 +41,13 @@ const MetapoolMonitorContainer = () => {
 
 const MetapoolMonitor = (props: MetapoolMonitorProps) => {
   return (
-    <Container>
-      <Title text="Metapool monitor" />
+    <div>
+      <h2>Metapool monitor</h2>
       <Address title="Metapool" address={props.metaPoolAddress} />
       <Balance title="uAD Balance" unit="$" balance={props.uadBalance} />
       <Balance title="CRV Balance" unit="$" balance={props.crvBalance} />
       <Balance title="Spot Price" unit="$" balance={props.spotPrice} />
-    </Container>
+    </div>
   );
 };
 

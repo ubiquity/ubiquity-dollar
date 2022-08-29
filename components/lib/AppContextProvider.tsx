@@ -7,6 +7,6 @@ import { combineComponents } from "./combineComponents";
 
 const providers = [UseWeb3Provider, ManagedContractsContextProvider, TransactionsContextProvider, BalancesContextProvider];
 
-const _AppContextProvider = combineComponents(...providers);
+const AppContextProvider = combineComponents(...providers);
 
-export default _AppContextProvider;
+export default AppContextProvider;

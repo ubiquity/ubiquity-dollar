@@ -31,28 +31,15 @@ describe("ExcessDollarsDistributorV2", () => {
   let router: IUniswapV2Router02;
 
   beforeEach(async () => {
-    ({
-      secondAccount,
-      thirdAccount,
-      uGOV,
-      manager,
-      bondingV2,
-      treasury,
-      uAD,
-      metaPool,
-      crvToken,
-      sushiUGOVPool,
-      excessDollarsDistributor,
-    } = await bondingSetupV2());
+    ({ secondAccount, thirdAccount, uGOV, manager, bondingV2, treasury, uAD, metaPool, crvToken, sushiUGOVPool, excessDollarsDistributor } =
+      await bondingSetupV2());
     treasuryAdr = await treasury.getAddress();
     router = (await ethers.getContractAt("IUniswapV2Router02", routerAdr)) as IUniswapV2Router02;
     // just mint som uAD
     // mint 10000 uAD each for admin, manager and secondAccount
-    const mintings = [await secondAccount.getAddress(), await thirdAccount.getAddress(), manager.address].map(
-      async (signer): Promise<void> => {
-        await uAD.mint(signer, ethers.utils.parseEther("10000"));
-      }
-    );
+    const mintings = [await secondAccount.getAddress(), await thirdAccount.getAddress(), manager.address].map(async (signer): Promise<void> => {
+      await uAD.mint(signer, ethers.utils.parseEther("10000"));
+    });
     await Promise.all(mintings);
 
     await uGOV.mint(await thirdAccount.getAddress(), ethers.utils.parseEther("1000"));

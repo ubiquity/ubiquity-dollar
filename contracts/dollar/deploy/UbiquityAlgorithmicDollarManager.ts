@@ -50,13 +50,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   let curveWhaleAddress = "";
   // let ubq = "ubq.eth";
   ({ curve3CrvToken, curveFactory, curve3CrvBasePool, curveWhaleAddress } = await getNamedAccounts());
-  deployments.log(
-    `*****
-  admin address :`,
-    adminAdr,
-    `
-  `
-  );
+  deployments.log({ adminAdr });
 
   const opts = {
     from: adminAdr,

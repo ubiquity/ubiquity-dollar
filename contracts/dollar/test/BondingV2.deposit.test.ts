@@ -30,20 +30,8 @@ describe("bondingV2 deposit", () => {
   let masterChefV2: MasterChefV2;
   let blockCountInAWeek: BigNumber;
   beforeEach(async () => {
-    ({
-      secondAccount,
-      fourthAccount,
-      uAD,
-      metaPool,
-      bondingV2,
-      masterChefV2,
-      debtCouponMgr,
-      uAR,
-      crvToken,
-      bondingShareV2,
-      twapOracle,
-      blockCountInAWeek,
-    } = await bondingSetupV2());
+    ({ secondAccount, fourthAccount, uAD, metaPool, bondingV2, masterChefV2, debtCouponMgr, uAR, crvToken, bondingShareV2, twapOracle, blockCountInAWeek } =
+      await bondingSetupV2());
   });
 
   it("deposit should work", async () => {

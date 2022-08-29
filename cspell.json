@@ -14,5 +14,21 @@
     "contracts/*/cache/**",
     "contracts/*/types/**"
   ],
-  "words": ["UbiquiStick", "Chainlink", "Arrakis", "LUSD", "FRAX", "DOLA", "twap", "metapool", "Sablier", "keccak", "stablecoins", "stabilitate", "habemus"]
+  "words": [
+    "Arrakis",
+    "Chainlink",
+    "DOLA",
+    "FRAX",
+    "habemus",
+    "keccak",
+    "LUSD",
+    "metapool",
+    "Sablier",
+    "stabilitate",
+    "stablecoins",
+    "twap",
+    "typechain",
+    "UbiquiStick",
+    "UbiquiSticks"
+  ]
 }

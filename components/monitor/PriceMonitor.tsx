@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
 import { formatEther, formatMwei } from "@/lib/format";
-import { useManagerManaged, useNamedContracts } from "@/lib/hooks";
-import { Container, SubTitle, Title } from "@/ui";
-
-import { Address, PriceExchange } from "./ui";
+import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import Address from "./ui/Address";
+import PriceExchange from "./ui/PriceExchange";
 
 type State = null | PriceMonitorProps;
 type PriceMonitorProps = {
@@ -76,29 +76,29 @@ const PriceMonitorContainer = () => {
 
 const PriceMonitor = (props: PriceMonitorProps) => {
   return (
-    <Container>
-      <Title text="Price monitor" />
+    <div>
+      <h2>Price monitor</h2>
       <Address title="Metapool" address={props.metaPoolAddress} />
       <PriceExchange from="DAI" to="USDT" value={props.daiUsdt} />
       <PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
       <PriceExchange from="uAD" to="DAI" value={props.uadDai} />
       <PriceExchange from="uAD" to="USDT" value={props.uadUsdt} />
-      <SubTitle text="Time Weighted Average" />
+      <h3>Time Weighted Average</h3>
       <Address title="TWAP Oracle" address={props.twapAddress} />
       <PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
       <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
-      <SubTitle text="Dollar Minting" />
+      <h3>Dollar Minting</h3>
       <Address title="Dollar Minting Calculator" address={props.dollarMintCalcAddress} />
-      <div className="mt-4 text-center">
+      <div>
         {props.dollarToBeMinted ? (
           <div>
-            {props.dollarToBeMinted} <span className="text-white text-opacity-75"> uAD</span> to be minted
+            {props.dollarToBeMinted} <span> uAD</span> to be minted
           </div>
         ) : (
           "No minting needed"
         )}
       </div>
-    </Container>
+    </div>
   );
 };
 

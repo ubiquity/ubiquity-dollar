@@ -21,7 +21,7 @@
     "lint:sol": "solhint 'contracts/**/*.sol' --fix",
     "lint:eslint": "eslint . --ext js,ts --fix",
     "lint:prettier": "prettier --write .",
-    "node:start": "hardhat node --hostname 0.0.0.0 --no-deploy --show-accounts",
+    "node:start": "hardhat node --hostname 0.0.0.0 --no-deploy",
     "node:faucet": "hardhat faucet --network localhost",
     "node:price-reset": "hardhat priceReset --price 1.00 --network mainnet --dryrun false"
   },
