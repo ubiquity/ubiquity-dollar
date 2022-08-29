@@ -95,7 +95,7 @@
       "**/*/artifacts/"
     ],
     "ext": "ts,sh,tsx",
-    "exec": "yarn build:fleek"
+    "exec": "yarn build:ci"
   },
   "husky": {
     "hooks": {
