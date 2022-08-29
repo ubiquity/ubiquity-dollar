@@ -23,34 +23,45 @@ const PriceStabilization: FC = (): JSX.Element => {
     }
   }, [managedContracts]);
 
-  const twapGt1 = twapPrice?.gte(ethers.utils.parseEther("1")) ?? false;
+  const currentlyAbovePeg = twapPrice?.gte(ethers.utils.parseEther("1")) ?? false;
 
   return walletAddress ? (
-    <>
+    <div id="CreditOperations" data-above-peg={currentlyAbovePeg}>
       <DollarPrice />
       <MigrateButton />
-      <div id="MintUcr" className="panel">
-        <h2>Generate Ubiquity Credits</h2>
-        <aside>When TWAP is below peg</aside>
-        <DisabledBlurredMessage disabled={twapGt1} content="(Disabled when TWAP is above peg)">
-          <DebtCouponDeposit />
-          {/* <UarDeposit /> */}
-        </DisabledBlurredMessage>
-      </div>
-      <div id="RedeemUcr" className="panel">
-        <h2>Redeem Ubiquity Credits</h2>
-        <aside>When TWAP is above peg</aside>
-        <DisabledBlurredMessage disabled={!twapGt1} content="(Disabled when TWAP is below peg)">
-          <div>
-            <UarRedeem />
-            <DebtCouponRedeem />
-          </div>
-        </DisabledBlurredMessage>
-      </div>
-    </>
+      {MintUcr(currentlyAbovePeg)}
+      {RedeemUcr(currentlyAbovePeg)}
+    </div>
   ) : (
     WalletNotConnected
   );
 };
 
 export default PriceStabilization;
+
+function MintUcr(currentlyAbovePeg: boolean) {
+  return (
+    <div id="MintUcr" className="panel">
+      <h2>Generate Ubiquity Credits</h2>
+      <aside>When TWAP is below peg</aside>
+      <DisabledBlurredMessage disabled={currentlyAbovePeg} content="(Disabled when TWAP is above peg)">
+        <DebtCouponDeposit />
+        {/* <UarDeposit /> */}
+      </DisabledBlurredMessage>
+    </div>
+  );
+}
+function RedeemUcr(currentlyAbovePeg: boolean) {
+  return (
+    <div id="RedeemUcr" className="panel">
+      <h2>Redeem Ubiquity Credits</h2>
+      <aside>When TWAP is above peg</aside>
+      <DisabledBlurredMessage disabled={!currentlyAbovePeg} content="(Disabled when TWAP is below peg)">
+        <div>
+          <UarRedeem />
+          <DebtCouponRedeem />
+        </div>
+      </DisabledBlurredMessage>
+    </div>
+  );
+}

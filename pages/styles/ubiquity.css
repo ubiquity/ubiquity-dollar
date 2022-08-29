@@ -384,10 +384,43 @@ td {
 
 /* spinner */
 
-#Sidebar > div > ul:nth-child(2) li {
+#Sidebar > div > ul:nth-child(3) li {
   display: inline-block;
 }
 /*
 #Sidebar > div > ul:nth-child(3) li {
   display: inline-block;
 } */
+
+#WalletNotConnected {
+  background-image: url("/ethereum-wallet.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+#WalletNotConnected > h2 {
+  backdrop-filter: blur(8px);
+}
+
+aside {
+  color: #bfbfbf;
+}
+
+#MintUcr,
+#RedeemUcr {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+#MintUcr > div,
+#RedeemUcr > div {
+  pointer-events: none;
+}
+
+#CreditOperations[data-above-peg="false"] #MintUcr,
+#CreditOperations[data-above-peg="true"] #RedeemUcr {
+  opacity: 1;
+  cursor: unset;
+}
+#CreditOperations[data-above-peg="false"] #MintUcr > div,
+#CreditOperations[data-above-peg="true"] #RedeemUcr > div {
+  pointer-events: unset;
+}
