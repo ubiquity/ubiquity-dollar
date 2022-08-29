@@ -2,7 +2,7 @@
   "name": "@ubiquity/dollar",
   "license": "MIT",
   "scripts": {
-    "start": "run-s install:env install:contracts build:contracts dev",
+    "start": "run-s install:env install:contracts build:contracts run",
     "prepare": "husky install",
     "__test:watch:ci": "nodemon",
     "build:ci": "run-s install:env install:contracts build:contracts build:next",

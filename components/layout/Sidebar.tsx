@@ -73,7 +73,7 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
             <Item text="Credit Operations" href="/credit-operations" icon="💸"></Item>
             {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
             <Item text="Primary Markets" href="/primary-markets" icon="🔁"></Item>
-            <Item text="Boosted Yield Farming" href="/boosted-yield-farming" icon="🚜"></Item>
+            {/* <Item text="Boosted Yield Farming" href="/boosted-yield-farming" icon="🚜"></Item> */}
           </ul>
           <ul>
             <li>

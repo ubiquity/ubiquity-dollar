@@ -15,6 +15,7 @@ import MaxButtonWrapper from "../ui/MaxButtonWrapper";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 import Tooltip from "../ui/Tooltip";
 import WalletNotConnected from "../ui/WalletNotConnected";
+import { ButtonLink } from "@/components/ui/Button";
 
 type Balance = { usdc: number; ubq: number; uad: number };
 
@@ -102,32 +103,23 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
-    <div>
+    <div className="panel">
       <h2>Boosted Yield Farming (Beta)</h2>
 
       <div>
-        <div>
+        <span>uCR is 1:1 redeemable for uAD when the TWAP goes above 1.00.</span>
+        <span>
           <Icon icon="warning" />
-        </div>
-        <p>
-          <span>Explainer article coming soon!</span>
-        </p>
+        </span>
       </div>
-
       <div>
-        <div>
-          <Icon icon="warning" />
-        </div>
-        <p>
-          <span>uCR is 1:1 redeemable for uAD when the TWAP goes above 1.00. </span>
-          <a target="_blank" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
-            Learn more &raquo;
-          </a>
-        </p>
+        <ButtonLink target="_blank" href="https://medium.com/ubiquity-dao/ubiquitys-debt-system-explained-40e51325fc5">
+          Learn More
+        </ButtonLink>
       </div>
       {yieldProxyData ? (
         depositInfo ? (
-          <YieldFarmindWithdraw
+          <YieldFarmingWithdraw
             token={yieldProxyData.token.toUpperCase()}
             amount={fm(depositInfo.amount, yieldProxyData.decimals)}
             newAmount={fm(depositInfo.newAmount, yieldProxyData.decimals)}
@@ -200,7 +192,7 @@ type YieldFarmingWithdrawProps = {
 
 const f = (n: number) => (Math.round(n * 100) / 100).toLocaleString();
 
-export const YieldFarmindWithdraw = memo(
+export const YieldFarmingWithdraw = memo(
   ({
     token,
     amount,
