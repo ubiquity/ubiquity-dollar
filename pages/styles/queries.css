@@ -12,7 +12,7 @@
     text-align: right;
     margin: 0 auto;
     min-height: 100vh;
-    width: unset;
+    width: 100vw;
   }
   #Foreground > #Sidebar {
     right: 0;
