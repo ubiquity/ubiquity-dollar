@@ -7,7 +7,7 @@ interface AddressBook {
   token: string;
   sender: string;
   receiver: string;
-};
+}
 
 const account = {
   token: new Account(),
