@@ -116,7 +116,8 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   const amountParsed = parseFloat(amount);
 
   return (
-    <div>
+    <div className="panel">
+      <h2>Stake liquidity to receive UBQ</h2>
       <div>APR {currentApy ? `${currentApy}%` : aprBounds ? `${aprBounds[1]}%` : "..."}</div>
       <div>
         <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />

@@ -58,6 +58,9 @@ input:hover {
   padding: 12px 0;
   background: radial-gradient(#000000ff, #101010ff);
 }
+#Inventory > div {
+  overflow: scroll;
+}
 #Inventory > div > div {
   display: flex;
 }
