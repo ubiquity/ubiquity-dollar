@@ -16,11 +16,7 @@ describe("DollarMintingCalculator", () => {
   let admin: Signer;
   let uAD: MockuADToken;
 
-  const setup = async (
-    uADTotalSupply: BigNumber,
-    priceUAD: BigNumber,
-    price3CRV: BigNumber
-  ) => {
+  const setup = async (uADTotalSupply: BigNumber, priceUAD: BigNumber, price3CRV: BigNumber) => {
     // set uAD Mock
     const UAD = await ethers.getContractFactory("MockuADToken");
     uAD = (await UAD.deploy(uADTotalSupply)) as MockuADToken;
@@ -29,13 +25,7 @@ describe("DollarMintingCalculator", () => {
     // set TWAP Oracle Mock
 
     const TWAPOracleFactory = await ethers.getContractFactory("MockTWAPOracle");
-    twapOracle = (await TWAPOracleFactory.deploy(
-      metaPoolAddr,
-      uAD.address,
-      curve3CrvToken,
-      priceUAD,
-      price3CRV
-    )) as MockTWAPOracle;
+    twapOracle = (await TWAPOracleFactory.deploy(metaPoolAddr, uAD.address, curve3CrvToken, priceUAD, price3CRV)) as MockTWAPOracle;
 
     await manager.setTwapOracleAddress(twapOracle.address);
   };
@@ -45,26 +35,16 @@ describe("DollarMintingCalculator", () => {
     // list of accounts
     [admin] = await ethers.getSigners();
     // deploy manager
-    const UADMgr = await ethers.getContractFactory(
-      "UbiquityAlgorithmicDollarManager"
-    );
-    manager = (await UADMgr.deploy(
-      await admin.getAddress()
-    )) as UbiquityAlgorithmicDollarManager;
+    const UADMgr = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
+    manager = (await UADMgr.deploy(await admin.getAddress())) as UbiquityAlgorithmicDollarManager;
 
     // setup the oracle
     metaPoolAddr = await manager.stableSwapMetaPoolAddress();
 
     // set Dollar Minting Calculator
-    const dollarMintingCalculatorFactory = await ethers.getContractFactory(
-      "DollarMintingCalculator"
-    );
-    dollarMintingCalculator = (await dollarMintingCalculatorFactory.deploy(
-      manager.address
-    )) as DollarMintingCalculator;
-    await manager.setDollarMintingCalculatorAddress(
-      dollarMintingCalculator.address
-    );
+    const dollarMintingCalculatorFactory = await ethers.getContractFactory("DollarMintingCalculator");
+    dollarMintingCalculator = (await dollarMintingCalculatorFactory.deploy(manager.address)) as DollarMintingCalculator;
+    await manager.setDollarMintingCalculatorAddress(dollarMintingCalculator.address);
   });
   it("getDollarsToMint should revert with price less than 1$", async () => {
     const totSupply = ethers.utils.parseEther("10000");
@@ -92,10 +72,7 @@ describe("DollarMintingCalculator", () => {
     const uadPrice = ethers.utils.parseEther("1.054678911145683254");
     await setup(totSupply, uadPrice, uadPrice);
     const toMint = await dollarMintingCalculator.getDollarsToMint();
-    const calculatedToMint = calcDollarsToMint(
-      totSupply.toString(),
-      uadPrice.toString()
-    );
+    const calculatedToMint = calcDollarsToMint(totSupply.toString(), uadPrice.toString());
     expect(toMint).to.equal(calculatedToMint);
   });
   it("getDollarsToMint lose precision if supply is too large", async () => {
@@ -105,16 +82,10 @@ describe("DollarMintingCalculator", () => {
     await setup(totSupply, uadPrice, uadPrice);
     // check tfor overflow revert
     const toMint = await dollarMintingCalculator.getDollarsToMint();
-    const calculatedToMint = calcDollarsToMint(
-      totSupply.toString(),
-      uadPrice.toString()
-    );
+    const calculatedToMint = calcDollarsToMint(totSupply.toString(), uadPrice.toString());
 
     // assert expected precision
-    const isPrecise = isAmountEquivalent(
-      calculatedToMint.toString(),
-      toMint.toString()
-    );
+    const isPrecise = isAmountEquivalent(calculatedToMint.toString(), toMint.toString());
     expect(isPrecise).to.be.true;
     expect(toMint).not.to.equal(calculatedToMint);
   });
@@ -125,10 +96,7 @@ describe("DollarMintingCalculator", () => {
     await setup(totSupply, uadPrice, uadPrice);
     // check tfor overflow revert
     const toMint = await dollarMintingCalculator.getDollarsToMint();
-    const calculatedToMint = calcDollarsToMint(
-      totSupply.toString(),
-      uadPrice.toString()
-    );
+    const calculatedToMint = calcDollarsToMint(totSupply.toString(), uadPrice.toString());
     expect(toMint).to.equal(calculatedToMint);
   });
 });

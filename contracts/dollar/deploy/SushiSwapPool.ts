@@ -1,11 +1,11 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { UbiquityAlgorithmicDollarManager } from "../artifacts/types/UbiquityAlgorithmicDollarManager";
-
+import { warn } from "../hardhat-config/utils/warn";
 const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, ethers } = hre;
   const [admin] = await ethers.getSigners();
-  deployments.log("admin address :", admin.address);
+  deployments.log(warn(`admin.address: ${admin.address}`));
 
   const opts = {
     from: admin.address,
@@ -15,13 +15,9 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     args: [admin.address],
     ...opts,
   });
-  const mgrFactory = await ethers.getContractFactory(
-    "UbiquityAlgorithmicDollarManager"
-  );
+  const mgrFactory = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
 
-  const manager: UbiquityAlgorithmicDollarManager = mgrFactory.attach(
-    mgr.address
-  ) as UbiquityAlgorithmicDollarManager;
+  const manager: UbiquityAlgorithmicDollarManager = mgrFactory.attach(mgr.address) as UbiquityAlgorithmicDollarManager;
 
   const uAD = await deployments.deploy("UbiquityAlgorithmicDollar", {
     args: [manager.address],

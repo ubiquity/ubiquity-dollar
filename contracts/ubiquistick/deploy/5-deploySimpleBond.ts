@@ -15,7 +15,7 @@ const deploySimpleBond = async function (hre: HardhatRuntimeEnvironment) {
   const deploySimpleBond = await deploy("SimpleBond", {
     from: deployer.address,
     args: [uARDeployment.address, vestingBlocks, treasury.address],
-    log: true
+    log: true,
   });
 
   if (deploySimpleBond.newlyDeployed) {

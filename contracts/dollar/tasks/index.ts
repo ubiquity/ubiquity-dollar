@@ -1,22 +1,16 @@
-// for hardhat to pick up these tasks, they need to be imported like this
-// not with 'import * as tasks from ...'
-import "./accountsFromMnemonic";
-import "./accounts";
-import "./get-code";
-import "./getBondingTransactions";
-import "./generateBondingMigrationData";
-import "./blockNumber";
-import "./chainId";
-import "./tx";
-import "./faucet";
-import "./incentive";
-import "./metapool";
-import "./price";
-import "./token";
-import "./manager";
-import "./adminRemoveLiquidity";
-import "./excessDollarDistribution";
-import "./revoke";
-import "./simulateMigrate";
-import "./priceReset";
-import "./deployYieldProxyLocally";
+import path from "path";
+import { taskMounter } from "./utils/task-mounter";
+import * as fs from "fs";
+
+/**
+ * This is an adapter to automatically import tasks from the library directory
+ *  and map them to Hardhat by taking the filename and using that for the task name.
+ *  all of the rest (description, parameters etc) are defined within each task file
+ */
+
+export const libraryDirectory = path.join(__dirname, "library");
+
+// auto import tasks in library
+fs.readdirSync(libraryDirectory) // read library directory
+  .filter((filename) => filename.endsWith(".ts")) // only typescript files
+  .forEach(taskMounter); // process each file

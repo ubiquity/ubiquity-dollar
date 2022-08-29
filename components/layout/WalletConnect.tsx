@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { Container, Title, Button, Icon, Tooltip } from "@/ui";
-import { useWeb3 } from "@/lib/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import useWeb3 from "../lib/hooks/useWeb3";
+import Button, { ButtonLink } from "../ui/Button";
+import Icon from "../ui/Icon";
+import Tooltip from "../ui/Tooltip";
 
 const PROD = process.env.NODE_ENV == "production";
 
@@ -21,33 +22,22 @@ const WalletConnect = () => {
 
   return (
     <>
-      {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
-      <div className="absolute top-0 right-0 z-40 mt-4 mr-8">
+      <div id="WalletConnect" className={walletAddress ? "connected" : ""}>
         {walletAddress ? (
-          <div className="flex items-center justify-center">
-            <Tooltip
-              content={
-                <>
-                  {walletAddress}
-                  <br />
-                  Provider: {providerMode}
-                </>
-              }
-              placement="bottom"
-            >
-              <a href={`https://etherscan.io/address/${walletAddress}`} target="_blank" className="mr-2 inline-block h-6 w-6 text-white/60">
-                <Icon icon="help" />
-              </a>
-            </Tooltip>
+          <div>
             <Button onClick={() => disconnect()}>Disconnect</Button>
+            <a href={`https://etherscan.io/address/${walletAddress}`} target="_blank" id="Address">
+              {shortenAddress(walletAddress)}
+            </a>
           </div>
         ) : (
           <>
-            <Button styled="accent" disabled={connecting} onClick={() => promptConnectWallet()}>
+            <Button disabled={connecting} onClick={() => promptConnectWallet()}>
               {connecting ? "Connecting..." : "Connect Wallet"}
             </Button>
           </>
         )}
+        {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
       </div>
     </>
   );
@@ -62,11 +52,11 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
 
   function Btn({ text, onClick, icon }: { text: string; icon: string; onClick: () => void }) {
     return (
-      <div onClick={() => onClick()} className="border-soli cursor-pointer rounded-lg border border-accent p-4 text-center hover:bg-accent/20">
-        <div className="mb-4 flex h-20 items-center justify-center">
-          <img className="w-20" src={"/providers-icons/" + icon + ".svg"} />
-        </div>
-        <span className="text-sm uppercase tracking-widest">{text}</span>
+      <div onClick={() => onClick()}>
+        <span>{text}</span>
+        <span>
+          <img src={`/providers-icons/${icon}.svg`} />
+        </span>
       </div>
     );
   }
@@ -79,23 +69,33 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
   }
 
   return (
-    <div className="fixed top-0 left-0 z-50 flex h-full w-full items-center justify-center bg-black/50">
-      <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/50" onClick={() => onClose()}></div>
-      <Container>
-        <Title text="Connect wallet" />
-        <div className="grid grid-cols-2 gap-4">
-          <Btn
-            text="Metamask"
-            icon="metamask"
-            onClick={
-              metamaskInstalled
-                ? connectMetamask
-                : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
-            }
-          />
-          <Btn text="Hardhat node" icon="hardhat" onClick={promptForWalletAddress} />
+    <div>
+      <div onClick={() => onClose()}></div>
+      <div>
+        {/* <div> */}
+        {/* <h2>Provider</h2> */}
+        {/* </div> */}
+        <div>
+          <a>
+            <Btn
+              text="Metamask"
+              icon="metamask"
+              onClick={
+                metamaskInstalled
+                  ? connectMetamask
+                  : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
+              }
+            />
+          </a>
+          <a>
+            <Btn text="Hardhat" icon="hardhat" onClick={promptForWalletAddress} />
+          </a>
         </div>
-      </Container>
+      </div>
     </div>
   );
+}
+
+function shortenAddress(address: string) {
+  return address.slice(0, 6) + "..." + address.slice(-4);
 }

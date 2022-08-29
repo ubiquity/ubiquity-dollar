@@ -19,14 +19,7 @@ describe("Bonding3", () => {
   let blockCountInAWeek: BigNumber;
 
   before(async () => {
-    ({
-      admin,
-      secondAccount,
-      bondingShare,
-      bonding,
-      metaPool,
-      blockCountInAWeek,
-    } = await bondingSetup());
+    ({ admin, secondAccount, bondingShare, bonding, metaPool, blockCountInAWeek } = await bondingSetup());
     secondAddress = await secondAccount.getAddress();
   });
 
@@ -37,32 +30,18 @@ describe("Bonding3", () => {
       await metaPool.balanceOf(secondAddress);
       idSecond = (await deposit(secondAccount, one.mul(100), 1)).id;
 
-      const bond: BigNumber = await bondingShare.balanceOf(
-        secondAddress,
-        idSecond
-      );
-      const isPrecise = isAmountEquivalent(
-        bond.toString(),
-        "100100000000000000000",
-        "0.00000000000000000001"
-      );
+      const bond: BigNumber = await bondingShare.balanceOf(secondAddress, idSecond);
+      const isPrecise = isAmountEquivalent(bond.toString(), "100100000000000000000", "0.00000000000000000001");
       expect(isPrecise).to.be.true;
     });
     it("second account should not be able to redeem before 1 week", async () => {
-      await expect(withdraw(secondAccount, idSecond)).to.be.revertedWith(
-        "Bonding: Redeem not allowed before bonding time"
-      );
+      await expect(withdraw(secondAccount, idSecond)).to.be.revertedWith("Bonding: Redeem not allowed before bonding time");
     });
 
     it("second account should be able to redeem after 1 week", async () => {
       const secondAccountAdr = await secondAccount.getAddress();
-      const balBSBefore = await bondingShare.balanceOf(
-        secondAccountAdr,
-        idSecond
-      );
-      expect(balBSBefore).to.be.equal(
-        ethers.utils.parseEther("100.099999999999999999")
-      );
+      const balBSBefore = await bondingShare.balanceOf(secondAccountAdr, idSecond);
+      expect(balBSBefore).to.be.equal(ethers.utils.parseEther("100.099999999999999999"));
       const totalSupplyBSBefore = await bondingShare.totalSupply();
       const TotalLPInBondingBefore = await metaPool.balanceOf(bonding.address);
       const balLPBefore = await metaPool.balanceOf(secondAccountAdr);
@@ -73,26 +52,13 @@ describe("Bonding3", () => {
       const TotalLPInBondingAfter = await metaPool.balanceOf(bonding.address);
       const totalSupplyBSAfter = await bondingShare.totalSupply();
       const balLPAfter = await metaPool.balanceOf(secondAccountAdr);
-      const balBSAfter = await bondingShare.balanceOf(
-        secondAccountAdr,
-        idSecond
-      );
-      const calculatedLPToWithdraw = calcShareInToken(
-        totalSupplyBSBefore.toString(),
-        balBSBefore.toString(),
-        TotalLPInBondingBefore.toString()
-      );
+      const balBSAfter = await bondingShare.balanceOf(secondAccountAdr, idSecond);
+      const calculatedLPToWithdraw = calcShareInToken(totalSupplyBSBefore.toString(), balBSBefore.toString(), TotalLPInBondingBefore.toString());
       expect(balBSAfter).to.be.equal(0);
       const lpWithdrawn = balLPAfter.sub(balLPBefore);
-      const isPrecise = isAmountEquivalent(
-        lpWithdrawn.toString(),
-        calculatedLPToWithdraw.toString(),
-        "0.000000000000000001"
-      );
+      const isPrecise = isAmountEquivalent(lpWithdrawn.toString(), calculatedLPToWithdraw.toString(), "0.000000000000000001");
       expect(isPrecise).to.be.true;
-      expect(TotalLPInBondingBefore).to.equal(
-        TotalLPInBondingAfter.add(lpWithdrawn)
-      );
+      expect(TotalLPInBondingBefore).to.equal(TotalLPInBondingAfter.add(lpWithdrawn));
       expect(totalSupplyBSAfter).to.equal(totalSupplyBSBefore.sub(balBSBefore));
     });
 
@@ -101,23 +67,16 @@ describe("Bonding3", () => {
       const adminAdr = await admin.getAddress();
       const totalSupplyBSBefore = await bondingShare.totalSupply();
       const TotalLPInBondingBefore = await metaPool.balanceOf(bonding.address);
-      const [bondAdmin, bondSecond] = await Promise.all([
-        deposit(admin, one.mul(100), 1),
-        deposit(secondAccount, one.mul(100), 1),
-      ]);
+      const [bondAdmin, bondSecond] = await Promise.all([deposit(admin, one.mul(100), 1), deposit(secondAccount, one.mul(100), 1)]);
       const TotalLPInBondingAfter = await metaPool.balanceOf(bonding.address);
-      expect(TotalLPInBondingAfter).to.equal(
-        TotalLPInBondingBefore.add(one.mul(200))
-      );
+      expect(TotalLPInBondingAfter).to.equal(TotalLPInBondingBefore.add(one.mul(200)));
       const { id } = bondAdmin;
       expect(bondAdmin.id).to.be.equal(bondSecond.id);
       const secAccBalBS = await bondingShare.balanceOf(secondAccountAdr, id);
       const adminBalBS = await bondingShare.balanceOf(adminAdr, id);
 
       const totalSupplyBSAfter = await bondingShare.totalSupply();
-      expect(totalSupplyBSAfter).to.equal(
-        totalSupplyBSBefore.add(secAccBalBS).add(adminBalBS)
-      );
+      expect(totalSupplyBSAfter).to.equal(totalSupplyBSBefore.add(secAccBalBS).add(adminBalBS));
     });
   });
 });

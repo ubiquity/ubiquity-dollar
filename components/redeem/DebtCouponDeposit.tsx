@@ -1,12 +1,18 @@
 import { BigNumber } from "ethers";
 import { useState } from "react";
 
-import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
-import { safeParseEther } from "@/lib/utils";
-import { formatEther } from "@/lib/format";
-import { PositiveNumberInput, Button } from "@/ui";
 import { ERC20 } from "@/dollar-types";
-import { useBalances, useDeployedContracts, useManagerManaged, useSigner, useTransactionLogger, useWalletAddress } from "@/lib/hooks";
+import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
+import { formatEther } from "@/lib/format";
+import { safeParseEther } from "@/lib/utils";
+import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useBalances from "../lib/hooks/useBalances";
+import useSigner from "../lib/hooks/useSigner";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import useWalletAddress from "../lib/hooks/useWalletAddress";
+import Button from "../ui/Button";
+import PositiveNumberInput from "../ui/PositiveNumberInput";
 
 const DebtCouponDeposit = () => {
   const [walletAddress] = useWalletAddress();
@@ -20,16 +26,16 @@ const DebtCouponDeposit = () => {
   const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber | null>(null);
 
   if (!walletAddress || !signer) {
-    return <span>Connnect wallet</span>;
+    return <span>Connect wallet</span>;
   }
 
   if (!balances || !managedContracts || !deployedContracts) {
-    return <span>Loading...</span>;
+    return <span>· · ·</span>;
   }
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", (managedContracts.uad as unknown) as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.uad as unknown as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
     refreshBalances();
   };
@@ -61,7 +67,7 @@ const DebtCouponDeposit = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   return (
-    <div className="grid gap-4">
+    <div>
       <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
       <Button onClick={handleBurn} disabled={!submitEnabled}>
         Redeem uAD for uCR-NFT

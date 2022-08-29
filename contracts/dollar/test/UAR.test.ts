@@ -19,31 +19,19 @@ describe("UAR", () => {
     // list of accounts
     [admin, secondAcc, treasury] = await ethers.getSigners();
     // deploy manager
-    const UADMgr = await ethers.getContractFactory(
-      "UbiquityAlgorithmicDollarManager"
-    );
-    manager = (await UADMgr.deploy(
-      await admin.getAddress()
-    )) as UbiquityAlgorithmicDollarManager;
+    const UADMgr = await ethers.getContractFactory("UbiquityAlgorithmicDollarManager");
+    manager = (await UADMgr.deploy(await admin.getAddress())) as UbiquityAlgorithmicDollarManager;
     // set ubiquity Dollar
-    const uADFactory = await ethers.getContractFactory(
-      "UbiquityAlgorithmicDollar"
-    );
-    uAD = (await uADFactory.deploy(
-      manager.address
-    )) as UbiquityAlgorithmicDollar;
+    const uADFactory = await ethers.getContractFactory("UbiquityAlgorithmicDollar");
+    uAD = (await uADFactory.deploy(manager.address)) as UbiquityAlgorithmicDollar;
     await manager.connect(admin).setDollarTokenAddress(uAD.address);
     await uAD.mint(await admin.getAddress(), ethers.utils.parseEther("10000"));
     // set treasury
-    await manager
-      .connect(admin)
-      .setTreasuryAddress(await treasury.getAddress());
+    await manager.connect(admin).setTreasuryAddress(await treasury.getAddress());
 
     // set debt coupon token
     const debtCouponFactory = await ethers.getContractFactory("DebtCoupon");
-    debtCoupon = (await debtCouponFactory.deploy(
-      manager.address
-    )) as DebtCoupon;
+    debtCoupon = (await debtCouponFactory.deploy(manager.address)) as DebtCoupon;
 
     await manager.connect(admin).setDebtCouponAddress(debtCoupon.address);
 
@@ -62,9 +50,7 @@ describe("UAR", () => {
       expect(name).to.equal(newName);
     });
     it("should fail if not admin", async () => {
-      await expect(uAR.connect(secondAcc).setName(newName)).to.revertedWith(
-        "ERC20: deployer must be manager admin"
-      );
+      await expect(uAR.connect(secondAcc).setName(newName)).to.revertedWith("ERC20: deployer must be manager admin");
     });
   });
   describe("SetSymbol", () => {
@@ -77,15 +63,11 @@ describe("UAR", () => {
       expect(symbol).to.equal(newSymbol);
     });
     it("should fail if not admin", async () => {
-      await expect(uAR.connect(secondAcc).setSymbol(newSymbol)).to.revertedWith(
-        "ERC20: deployer must be manager admin"
-      );
+      await expect(uAR.connect(secondAcc).setSymbol(newSymbol)).to.revertedWith("ERC20: deployer must be manager admin");
     });
   });
   it("should revert if you call raise capital when not being a minter", async () => {
-    await expect(uAR.connect(secondAcc).raiseCapital(100)).to.be.revertedWith(
-      "Governance token: not minter"
-    );
+    await expect(uAR.connect(secondAcc).raiseCapital(100)).to.be.revertedWith("Governance token: not minter");
   });
   it("raise capital should mint UAR for the treasury", async () => {
     const treasuryAdr = await treasury.getAddress();

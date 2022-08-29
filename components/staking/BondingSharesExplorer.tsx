@@ -4,12 +4,15 @@ import { memo, useCallback, useState } from "react";
 import { formatEther } from "@/lib/format";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Container, Title, Icon, Loading, Button } from "@/ui";
-import { useBalances, useTransactionLogger } from "@/lib/hooks";
 
 // Contracts: bonding, metaPool, bondingToken, masterChef
 
 import DepositShare from "./DepositShare";
+import useBalances from "../lib/hooks/useBalances";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import Button from "../ui/Button";
+import Icon from "../ui/Icon";
+import Loading from "../ui/Loading";
 
 type ShareData = {
   id: number;
@@ -39,7 +42,7 @@ type Actions = {
   onStake: (payload: { amount: BigNumber; weeks: BigNumber }) => void;
 };
 
-const USD_TO_LP = 0.75;
+const USD_TO_LP = 0.7460387929;
 const LP_TO_USD = 1 / USD_TO_LP;
 
 export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
@@ -120,9 +123,9 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
     onClaimUbq: useCallback(
       async (id) => {
         if (!model || model.processing) return;
-        console.log(`Claiming UBQ rewards from ${id}`);
+        console.log(`Claiming Ubiquity Governance token rewards from ${id}`);
         setModel({ ...model, processing: true });
-        doTransaction("Claiming UBQ...", async () => {
+        doTransaction("Claiming Ubiquity Governance tokens...", async () => {
           await performTransaction(masterChef.connect(signer).getRewards(BigNumber.from(id)));
 
           fetchSharesInformation();
@@ -160,10 +163,10 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
   return (
-    <Container className="relative !mx-auto max-w-screen-md">
-      <Title text="Stake uAD-3CRV tokens -> Receive uBQ" />
+    <div className="panel">
+      <h2>Stake liquidity to receive UBQ</h2>
       {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
-    </Container>
+    </div>
   );
 });
 
@@ -176,25 +179,23 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
     return sum.add(val.bond.lpAmount);
   }, BigNumber.from(0));
 
-  const totalPendingUgov = shares.reduce((sum, val) => {
-    return sum.add(val.ugov);
-  }, BigNumber.from(0));
+  const totalPendingUgov = shares.reduce((sum, val) => sum.add(val.ugov), BigNumber.from(0));
 
   const poolPercentage = formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
 
   const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) || ugov.gt(0));
 
   return (
-    <div className="relative flex flex-col">
+    <div>
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
-      <div className="mb-6 rounded-lg border border-solid border-accent/60">
-        <table className="m-0 w-full text-center">
-          <thead className="border-b border-solid border-accent/60">
+      <div>
+        <table id="Staking">
+          <thead>
             <tr>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Deposit (Approx.)</th>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Pending Reward</th>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Unlock Time</th>
-              <th className="border-r border-solid border-white/10 p-2 !text-xs">Action</th>
+              <th>Est. Deposit</th>
+              <th>Rewards</th>
+              <th>Unlock Time</th>
+              <th>Action</th>
             </tr>
           </thead>
           {filteredShares.length > 0 ? (
@@ -206,26 +207,42 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
           ) : (
             <tbody>
               <tr>
-                <td className="py-4" colSpan={5}>
-                  Nothing staked yet
-                </td>
+                <td colSpan={5}>Nothing staked yet</td>
               </tr>
             </tbody>
           )}
         </table>
       </div>
-      <div id="rewards-summary flex flex-col items-center justify-center">
-        <div className="mb-2 flex items-center justify-center">
-          <Icon className="mr-2 w-4 text-accent" icon="ubq" />
-          <span className="text-accent">{formatEther(totalPendingUgov)} </span>
-          &nbsp;pending UBQ rewards
-        </div>
-        <div className="mb-2 flex items-center justify-center">
-          <Icon className="mr-2 w-4 text-accent" icon="liquidity" />
-          {formatEther(totalLpBalance)} LP locked in Bonding Shares
-        </div>
-        <div className="mb-2 text-center">{poolPercentage}% pool ownership</div>
-      </div>
+
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <span>Pending</span>
+            </td>
+            <td>
+              <Icon icon="ubq" />
+            </td>
+            <td>
+              <span>{formatEther(totalPendingUgov)} </span>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span>Staked LP</span>
+            </td>
+            <td>
+              <Icon icon="liquidity" />
+            </td>
+            <td>{formatEther(totalLpBalance)}</td>
+          </tr>
+          <tr>
+            <td>Ownership</td>
+            <td>%</td>
+            <td>{poolPercentage}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -247,23 +264,18 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
   }
 
   return (
-    <tr key={id} className="h-12" title={id.toString()}>
-      <td
-        className="border-r border-solid border-white/10 text-white"
-        title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}
-      >
-        ${Math.round(usdAmount * 100) / 100}
-      </td>
-      <td className="border-r border-solid border-white/10">
-        <div className="inline-flex items-center whitespace-nowrap text-accent">
-          <Icon icon="ubq" className="mr-2 w-4 text-accent" /> <span>{formatEther(ugov)}</span>
+    <tr key={id} title={id.toString()}>
+      <td title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}>${Math.round(usdAmount * 100) / 100}</td>
+      <td>
+        <div>
+          <Icon icon="ubq" /> <span>{formatEther(ugov)}</span>
         </div>
       </td>
-      <td className="border-r border-solid border-white/10">{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
-      <td className="px-1">
+      <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
+      <td>
         {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
           <>
-            {/* <input type="text" placeholder="All" className="!min-w-0 !w-10" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
+            {/* <input type="text" placeholder="All" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
             <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
           </>
         ) : ugov.gt(0) ? (

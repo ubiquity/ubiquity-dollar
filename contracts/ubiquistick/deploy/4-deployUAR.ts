@@ -11,7 +11,7 @@ const deployUAR: DeployFunction = async function (hre: HardhatRuntimeEnvironment
   const deployResult = await deploy("UAR", {
     from: deployer,
     args: ["Ubiquity Auto Redeem", "uAR", treasury],
-    log: true
+    log: true,
   });
   // if (deployResult.newlyDeployed) {
   //   console.log("New UAR deployment");

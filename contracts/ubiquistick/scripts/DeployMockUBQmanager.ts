@@ -7,7 +7,7 @@ const deployMockUBQmanager: DeployFunction = async function ({ deployments, getN
   await deploy("MockUBQmanager", {
     from: deployer,
     args: [],
-    log: true
+    log: true,
   });
 };
 deployMockUBQmanager.skip = async ({ getChainId }) => {

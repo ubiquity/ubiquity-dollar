@@ -1,9 +1,10 @@
 import { ethers } from "ethers";
-import { DeployedContracts, default as useDeployedContracts } from "./hooks/contracts/useDeployedContracts";
-import { ManagedContracts, default as useManagerManaged } from "./hooks/contracts/useManagerManaged";
-import { NamedContracts, default as useNamedContracts } from "./hooks/contracts/useNamedContracts";
+import useDeployedContracts, { DeployedContracts } from "./hooks/contracts/useDeployedContracts";
+import { ManagedContracts } from "./hooks/contracts/useManagerManaged";
+import useNamedContracts, { NamedContracts } from "./hooks/contracts/useNamedContracts";
 import useWeb3, { PossibleProviders } from "./hooks/useWeb3";
 
+import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 export type LoadedContext = {
   managedContracts: NonNullable<ManagedContracts>;
   deployedContracts: NonNullable<DeployedContracts>;

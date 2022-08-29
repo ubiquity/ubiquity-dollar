@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
-import { useDeployedContracts, useManagerManaged } from "@/lib/hooks";
-import { Container, Title, SubTitle } from "@/ui";
-
-import { Address, Balance } from "./ui";
+import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import Address from "./ui/Address";
+import Balance from "./ui/Balance";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {
@@ -43,14 +43,14 @@ const TokenMonitorContainer = () => {
 
 const TokenMonitor = (props: TokenMonitorProps) => {
   return (
-    <Container className="col-span-2">
-      <Title text="Token monitor" />
-      <SubTitle text="Debt Coupon" />
+    <div>
+      <h2>Token monitor</h2>
+      <h3>Debt Coupon</h3>
       <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} />
       <Address title="Debt Coupon" address={props.debtCouponAddress} />
       <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingDebt} />
       <Balance title="Total Redeemable" unit="uCR-NFT" balance={props.totalRedeemable} />
-    </Container>
+    </div>
   );
 };
 

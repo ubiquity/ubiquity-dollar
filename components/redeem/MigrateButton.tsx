@@ -1,6 +1,10 @@
-import { useState } from "react";
 import { BigNumber } from "ethers";
-import { useEffectAsync, useManagerManaged, useWalletAddress, useBalances, useSigner } from "../lib/hooks";
+import { useState } from "react";
+import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useBalances from "../lib/hooks/useBalances";
+import useEffectAsync from "../lib/hooks/useEffectAsync";
+import useSigner from "../lib/hooks/useSigner";
+import useWalletAddress from "../lib/hooks/useWalletAddress";
 
 const BondingMigrate = () => {
   const [walletAddress] = useWalletAddress();
@@ -51,7 +55,7 @@ const BondingMigrate = () => {
         <div>
           <button onClick={handleMigration}>Migrate</button>
           {isLoading && (
-            <div className="lds-ring">
+            <div>
               <div></div>
               <div></div>
               <div></div>

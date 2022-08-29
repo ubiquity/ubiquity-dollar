@@ -23,23 +23,12 @@ describe("Pickle", () => {
   let jarUSDCAddr: string;
   let usdcWhale: Signer;
   beforeEach(async () => {
-    ({
-      DAI,
-      USDC,
-      USDT,
-      usdcWhaleAddress,
-      jarUSDCAddr,
-      pickleControllerAddr,
-      strategyYearnUsdcV2,
-    } = await getNamedAccounts());
+    ({ DAI, USDC, USDT, usdcWhaleAddress, jarUSDCAddr, pickleControllerAddr, strategyYearnUsdcV2 } = await getNamedAccounts());
     [admin, secondAccount] = await ethers.getSigners();
     await resetFork(13185077);
 
     jar = (await ethers.getContractAt("IJar", jarUSDCAddr)) as IJar;
-    pickleController = (await ethers.getContractAt(
-      "IController",
-      pickleControllerAddr
-    )) as IController;
+    pickleController = (await ethers.getContractAt("IController", pickleControllerAddr)) as IController;
     usdcToken = (await ethers.getContractAt("IERC20", USDC)) as IERC20;
 
     await network.provider.request({
@@ -63,9 +52,7 @@ describe("Pickle", () => {
       balWhaleUsdc:${ethers.utils.formatUnits(balWhaleUsdc, 6)}
       `);
 
-      await usdcToken
-        .connect(usdcWhale)
-        .transfer(secondAccountAdr, amountToDeposit);
+      await usdcToken.connect(usdcWhale).transfer(secondAccountAdr, amountToDeposit);
 
       const balUsdc1 = await usdcToken.balanceOf(secondAccountAdr);
       const balJar1 = await jar.balanceOf(secondAccountAdr);
@@ -76,9 +63,7 @@ describe("Pickle", () => {
       balJar:${ethers.utils.formatEther(balJar1)}
       balUsdc:${ethers.utils.formatUnits(balUsdc1, 6)}
       `);
-      await usdcToken
-        .connect(secondAccount)
-        .approve(jarUSDCAddr, amountToDeposit);
+      await usdcToken.connect(secondAccount).approve(jarUSDCAddr, amountToDeposit);
       await jar.connect(secondAccount).deposit(amountToDeposit);
       const balUsdc2 = await usdcToken.balanceOf(secondAccountAdr);
       const balJar2 = await jar.balanceOf(secondAccountAdr);
@@ -115,29 +100,19 @@ describe("Pickle", () => {
 
       // await mineNBlock(100);
       // simulate yield + 100%
-      await usdcToken
-        .connect(usdcWhale)
-        .transfer(strategyYearnUsdcV2, amountToDeposit);
+      await usdcToken.connect(usdcWhale).transfer(strategyYearnUsdcV2, amountToDeposit);
       await jar.earn();
       const ratio4 = await jar.getRatio();
       const tx = await jar.connect(secondAccount).withdrawAll();
-      const balUsdcUserAfterWithdraw = await usdcToken.balanceOf(
-        secondAccountAdr
-      );
+      const balUsdcUserAfterWithdraw = await usdcToken.balanceOf(secondAccountAdr);
       const balUsdc3 = await usdcToken.balanceOf(secondAccountAdr);
       const balJar3 = await jar.balanceOf(secondAccountAdr);
       const ratio4After = await jar.getRatio();
       console.log(`
       AFTER Withdraw
       USDC amount deposited    : ${ethers.utils.formatUnits(amountToDeposit, 6)}
-      balUsdcUserAfterWithdraw :${ethers.utils.formatUnits(
-        balUsdcUserAfterWithdraw,
-        6
-      )}
-      net win : ${ethers.utils.formatUnits(
-        balUsdcUserAfterWithdraw.sub(amountToDeposit),
-        6
-      )}
+      balUsdcUserAfterWithdraw :${ethers.utils.formatUnits(balUsdcUserAfterWithdraw, 6)}
+      net win : ${ethers.utils.formatUnits(balUsdcUserAfterWithdraw.sub(amountToDeposit), 6)}
       ratio4 :${ethers.utils.formatEther(ratio4)}
       ratio4After:${ethers.utils.formatEther(ratio4After)}
       balJar:${ethers.utils.formatEther(balJar3)}

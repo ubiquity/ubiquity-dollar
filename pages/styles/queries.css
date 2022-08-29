@@ -1,0 +1,115 @@
+@media (orientation: portrait) {
+  div.panel {
+    display: block;
+  }
+}
+@media (max-width: 460px) {
+  #Foreground {
+    /* text-align: right; */
+  }
+  #Foreground > div {
+    display: table;
+    text-align: right;
+    margin: 0 auto;
+    min-height: 100vh;
+    width: unset;
+  }
+  #Foreground > #Sidebar {
+    right: 0;
+    position: absolute;
+    z-index: 1;
+  }
+  #Foreground > #MainContent {
+    max-width: unset;
+  }
+  #Foreground > #MainContent > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  #Foreground input[type="checkbox"]:hover,
+  #Foreground input[type="checkbox"]:hover::before,
+  #Foreground input[type="checkbox"]:hover::after {
+    border-top: 2px solid #808080ff;
+    cursor: pointer;
+  }
+
+  #Foreground input[type="checkbox"] {
+    background: transparent;
+    appearance: none;
+    margin: 0;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    z-index: 2;
+    width: 24px;
+    height: 24px;
+    display: unset;
+    padding: 0px;
+    border-top: 2px solid #808080;
+    border-radius: 0;
+    transition: 0.125s border ease;
+
+    box-shadow: 0 0 48px 36px #000;
+    background: #000000;
+  }
+
+  #Foreground input[type="checkbox"]:hover,
+  #Foreground input[type="checkbox"]:hover::before,
+  #Foreground input[type="checkbox"]:hover::after {
+    border-top: 2px solid #fff;
+  }
+
+  #Foreground input[type="checkbox"]::before,
+  #Foreground input[type="checkbox"]::after {
+    /* unchecked */
+    content: "";
+    border-top: 2px solid #808080;
+    display: inline-block;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    /* bottom */
+    /* position: absolute; */
+    right: 0;
+    bottom: 0;
+    height: 3px;
+    width: 24px;
+    transition: 0.125s all ease;
+  }
+  #Foreground input[type="checkbox"]::after {
+    transform: translateY(-7px);
+  }
+  #Foreground input[type="checkbox"]:checked {
+    border-top: 2px solid #ffffff00;
+  }
+  #Foreground input[type="checkbox"]:checked::before,
+  #Foreground input[type="checkbox"]:checked::after {
+    /* checked */
+    content: "";
+    /* background: #ffffff; */
+  }
+  #Foreground input[type="checkbox"]:checked::before {
+    transform: rotate(45deg) translateY(2px) translateX(1px);
+  }
+  #Foreground input[type="checkbox"]:checked::after {
+    transform: rotate(-45deg) translateY(-9px) translateX(11px);
+  }
+
+  #Foreground input[type="checkbox"] + #Sidebar {
+    opacity: 0;
+    transition: 0.33s opacity cubic-bezier(0, 1, 1, 1);
+    pointer-events: none;
+    background: radial-gradient(#000000ff, #101010ff);
+    -webkit-mask-image: linear-gradient(-90deg, #000000ff, #000000ff, #00000000);
+    max-width: unset;
+    width: 100%;
+  }
+  #Foreground input[type="checkbox"]:checked + #Sidebar {
+    opacity: 1;
+    pointer-events: unset;
+  }
+  #Foreground #MainContent > div {
+    text-align: center;
+  }
+}

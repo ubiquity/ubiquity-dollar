@@ -1,8 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
-import { JsonRpcSigner, Web3Provider, JsonRpcProvider } from "@ethersproject/providers";
+import { createContext, useContext, useEffect, useState } from "react";
+import { ChildrenShim } from "./children-shim";
 import useLocalStorage from "./useLocalStorage";
-import { useEffect } from "react";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
@@ -25,7 +25,7 @@ type Web3Actions = {
   disconnect: () => Promise<void>;
 };
 
-const metamaskInstalled = typeof window !== "undefined" ? !!(window as any)?.ethereum?.request : false;
+const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 const DEFAULT_WEB3_STATE: Web3State = {
   metamaskInstalled,
   jsonRpcEnabled: IS_DEV,
@@ -44,7 +44,7 @@ const DEFAULT_WEB3_ACTIONS: Web3Actions = {
 
 export const Web3Context = createContext<[Web3State, Web3Actions]>([DEFAULT_WEB3_STATE, DEFAULT_WEB3_ACTIONS]);
 
-export const UseWeb3Provider: React.FC = ({ children }) => {
+export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   const [storedWallet, setStoredWallet] = useLocalStorage<null | string>("storedWallet", null);
   const [storedProviderMode, setStoredProviderMode] = useLocalStorage<Web3State["providerMode"]>("storedProviderMode", "none");
   const [web3State, setWeb3State] = useState<Web3State>(DEFAULT_WEB3_STATE);
@@ -59,7 +59,7 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
 
   async function connectMetamask() {
     if (metamaskInstalled) {
-      const newProvider = new ethers.providers.Web3Provider((window as any).ethereum);
+      const newProvider = new ethers.providers.Web3Provider(window.ethereum);
       setWeb3State({ ...web3State, connecting: true });
       const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
       if (addresses.length > 0) {
@@ -68,7 +68,14 @@ export const UseWeb3Provider: React.FC = ({ children }) => {
         const newSigner = newProvider.getSigner(newWalletAddress);
         setStoredWallet(newWalletAddress);
         setStoredProviderMode("metamask");
-        setWeb3State({ ...web3State, connecting: false, providerMode: "metamask", provider: newProvider, walletAddress: newWalletAddress, signer: newSigner });
+        setWeb3State({
+          ...web3State,
+          connecting: false,
+          providerMode: "metamask",
+          provider: newProvider,
+          walletAddress: newWalletAddress,
+          signer: newSigner,
+        });
       } else {
         alert("No accounts found");
         setWeb3State({ ...web3State, connecting: false });

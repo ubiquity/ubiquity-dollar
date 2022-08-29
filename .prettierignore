@@ -1,7 +1,11 @@
-./contracts
-node_modules
-fixtures
-.next
-pages/styles/tailwind.css
-abi
-deployments
+# doesn't seem to work
+!contracts/*/deployments/mainnet/
+#
+.next/
+contracts/*/artifacts/
+contracts/*/cache/
+contracts/*/deployments/
+contracts/*/types/
+
+fixtures/
+dist/
