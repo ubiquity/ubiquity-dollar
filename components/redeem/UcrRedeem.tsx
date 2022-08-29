@@ -13,7 +13,7 @@ import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 
-const UarRedeem = () => {
+const UcrRedeem = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
@@ -31,9 +31,9 @@ const UarRedeem = () => {
     return <span>· · ·</span>;
   }
 
-  const redeemUarForUad = async (amount: BigNumber) => {
+  const redeemUcrForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.uar as unknown as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken as unknown as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
     refreshBalances();
   };
@@ -43,7 +43,7 @@ const UarRedeem = () => {
     if (amount) {
       doTransaction("Redeeming uCR...", async () => {
         setInputVal("");
-        await redeemUarForUad(amount);
+        await redeemUcrForUad(amount);
       });
     }
   };
@@ -65,4 +65,4 @@ const UarRedeem = () => {
   );
 };
 
-export default UarRedeem;
+export default UcrRedeem;

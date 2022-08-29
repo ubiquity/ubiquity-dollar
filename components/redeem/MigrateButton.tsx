@@ -18,8 +18,8 @@ const BondingMigrate = () => {
 
   useEffectAsync(async () => {
     if (walletAddress && signer && managedContracts) {
-      managedContracts.bonding.connect(signer);
-      setMigrateId(await managedContracts.bonding.toMigrateId(walletAddress));
+      managedContracts.staking.connect(signer);
+      setMigrateId(await managedContracts.staking.toMigrateId(walletAddress));
     }
   }, [walletAddress, signer]);
 
@@ -32,12 +32,12 @@ const BondingMigrate = () => {
       setErrMsg("");
       setIsLoading(true);
       (async () => {
-        managedContracts.bonding;
+        managedContracts.staking;
 
         console.log("migrateID", migrateId);
 
         if (migrateId.gt(BigNumber.from(0))) {
-          const migrateWaiting = await managedContracts.bonding.migrate();
+          const migrateWaiting = await managedContracts.staking.migrate();
           await migrateWaiting.wait();
           refreshBalances();
           setMigrateId(undefined);

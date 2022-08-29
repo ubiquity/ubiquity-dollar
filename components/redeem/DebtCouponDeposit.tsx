@@ -35,7 +35,7 @@ const DebtCouponDeposit = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.uad as unknown as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken as unknown as ERC20, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
     refreshBalances();
   };
@@ -55,7 +55,7 @@ const DebtCouponDeposit = () => {
     const amount = extractValidAmount(val);
     if (amount) {
       setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await managedContracts.coupon.connect(signer).getCouponAmount(amount));
+      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCouponAmount(amount));
     }
   };
 

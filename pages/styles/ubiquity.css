@@ -415,12 +415,12 @@ aside {
   pointer-events: none;
 }
 
-#CreditOperations[data-above-peg="false"] #MintUcr,
-#CreditOperations[data-above-peg="true"] #RedeemUcr {
+#CreditOperations[data-twap^="0."] #MintUcr,
+#CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
   cursor: unset;
 }
-#CreditOperations[data-above-peg="false"] #MintUcr > div,
-#CreditOperations[data-above-peg="true"] #RedeemUcr > div {
+#CreditOperations[data-twap^="0."] #MintUcr > div,
+#CreditOperations[data-twap^="1."] #RedeemUcr > div {
   pointer-events: unset;
 }

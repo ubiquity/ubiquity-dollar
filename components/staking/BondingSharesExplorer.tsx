@@ -50,7 +50,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
   const [, doTransaction] = useTransactionLogger();
   const [, refreshBalances] = useBalances();
 
-  const { bonding, masterChef, bondingToken, metaPool } = managedContracts;
+  const { staking: bonding, masterChef, stakingToken: bondingToken, dollarMetapool: metaPool } = managedContracts;
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {

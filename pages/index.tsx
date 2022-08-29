@@ -15,7 +15,7 @@ const index: FC = (): JSX.Element => {
 
   useEffectAsync(async () => {
     if (managedContracts) {
-      setTwapPrice(await managedContracts.twapOracle.consult(managedContracts.uad.address));
+      setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
     }
   }, [managedContracts]);
 

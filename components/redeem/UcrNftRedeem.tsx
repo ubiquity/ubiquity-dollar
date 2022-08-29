@@ -14,7 +14,7 @@ import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 
-const DebtCouponRedeem = () => {
+const UcrNftRedeem = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [, refreshBalances] = useBalances();
@@ -35,13 +35,13 @@ const DebtCouponRedeem = () => {
 
   useEffect(() => {
     if (managedContracts && walletAddress) {
-      fetchDebts(walletAddress, managedContracts.debtCouponToken);
+      fetchDebts(walletAddress, managedContracts.creditNft);
     }
   }, [managedContracts, walletAddress]);
 
   if (!walletAddress || !signer) return <span>Connect wallet</span>;
   if (!deployedContracts || !managedContracts || !debtIds) return <span>· · ·</span>;
-  if (debtIds.length === 0) return <span>No credit coupons</span>;
+  if (debtIds.length === 0) return <span>No uCR-NFT coupons</span>;
 
   async function fetchDebts(address: string, contract: DebtCoupon) {
     const ids = await contract.holderTokens(address);
@@ -62,26 +62,26 @@ const DebtCouponRedeem = () => {
     if (amount) {
       doTransaction("Redeeming uCR-NFT...", async () => {
         setInputVal("");
-        await redeemUdebtForUad(amount);
+        await redeemUcrNftForUad(amount);
       });
     }
   };
 
-  const redeemUdebtForUad = async (amount: BigNumber) => {
+  const redeemUcrNftForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
     const debtId = debtIds[selectedDebtId];
     if (
       debtId &&
       (await ensureERC1155Allowance(
         "uCR-NFT -> DebtCouponManager",
-        managedContracts.debtCouponToken as unknown as ERC1155Ubiquity,
+        managedContracts.creditNft as unknown as ERC1155Ubiquity,
         signer,
         debtCouponManager.address
       ))
     ) {
       await (await debtCouponManager.connect(signer).redeemCoupons(debtId, amount)).wait();
       refreshBalances();
-      fetchDebts(walletAddress, managedContracts.debtCouponToken);
+      fetchDebts(walletAddress, managedContracts.creditNft);
     }
   };
 
@@ -109,4 +109,4 @@ const DebtCouponRedeem = () => {
   );
 };
 
-export default DebtCouponRedeem;
+export default UcrNftRedeem;

@@ -33,17 +33,29 @@ const Inventory = () => {
       </div>
       <div>
         <div>
-          {Number(balances.uad) ? <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} /> : ""}
-          {Number(balances.ucr) ? <Token token="uCR" balance={balances.ucr} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} /> : ""}
-          {Number(balances.ucrNft) ? (
-            <Token token="uCR-NFT" balance={balances.ucrNft} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
+          {Number(balances.uad) ? (
+            <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.dollarToken.address} />
           ) : (
             ""
           )}
-          {Number(balances.ubq) ? <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} /> : ""}
+          {Number(balances.ucr) ? (
+            <Token token="uCR" balance={balances.ucr} accountAddr={walletAddress} tokenAddr={managedContracts.creditToken.address} />
+          ) : (
+            ""
+          )}
+          {Number(balances.ucrNft) ? (
+            <Token token="uCR-NFT" balance={balances.ucrNft} accountAddr={walletAddress} tokenAddr={managedContracts.creditNft.address} />
+          ) : (
+            ""
+          )}
+          {Number(balances.ubq) ? (
+            <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.governanceToken.address} />
+          ) : (
+            ""
+          )}
           {Number(balances.crv) ? <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} /> : ""}
           {Number(balances.uad3crv) ? (
-            <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
+            <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.dollarMetapool.address} />
           ) : (
             ""
           )}

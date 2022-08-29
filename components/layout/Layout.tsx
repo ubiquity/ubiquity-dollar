@@ -12,14 +12,12 @@ type LayoutProps = {
 
 function ErrorHandler({ error }: { error: Error }) {
   return (
-    <div className="panel">
+    <div id="Error" className="panel">
       <div>
-        <div>
-          <Icon icon="warning" />
-          <div>Error</div>
-        </div>
-        <div>{error.message}</div>
+        <Icon icon="warning" />
+        <h2>Error</h2>
       </div>
+      <div>{error.message}</div>
     </div>
   );
 }

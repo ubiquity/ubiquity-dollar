@@ -3,13 +3,13 @@ import { ethers } from "ethers";
 
 import MigrateButton from "@/components/redeem/MigrateButton";
 import DollarPrice from "@/components/redeem/DollarPrice";
-import UarRedeem from "@/components/redeem/UarRedeem";
+import UcrRedeem from "@/components/redeem/UcrRedeem";
 import DebtCouponDeposit from "@/components/redeem/DebtCouponDeposit";
-import DebtCouponRedeem from "@/components/redeem/DebtCouponRedeem";
+import UcrNftRedeem from "@/components/redeem/UcrNftRedeem";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
 import useWalletAddress from "@/components/lib/hooks/useWalletAddress";
-import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
+// import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
 import WalletNotConnected from "@/components/ui/WalletNotConnected";
 
 const PriceStabilization: FC = (): JSX.Element => {
@@ -19,18 +19,22 @@ const PriceStabilization: FC = (): JSX.Element => {
 
   useEffectAsync(async () => {
     if (managedContracts) {
-      setTwapPrice(await managedContracts.twapOracle.consult(managedContracts.uad.address));
+      setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
     }
   }, [managedContracts]);
 
-  const currentlyAbovePeg = twapPrice?.gte(ethers.utils.parseEther("1")) ?? false;
+  // const currentlyAbovePeg = twapPrice?.gte(ethers.utils.parseEther("1")) ?? false;
+  let twapInteger = 0;
+  if (twapPrice) {
+    twapInteger = (twapPrice as unknown as number) / 1e18;
+  }
 
   return walletAddress ? (
-    <div id="CreditOperations" data-above-peg={currentlyAbovePeg}>
+    <div id="CreditOperations" data-twap={twapInteger}>
       <DollarPrice />
       <MigrateButton />
-      {MintUcr(currentlyAbovePeg)}
-      {RedeemUcr(currentlyAbovePeg)}
+      {MintUcr()}
+      {RedeemUcr()}
     </div>
   ) : (
     WalletNotConnected
@@ -39,29 +43,24 @@ const PriceStabilization: FC = (): JSX.Element => {
 
 export default PriceStabilization;
 
-function MintUcr(currentlyAbovePeg: boolean) {
+function MintUcr() {
   return (
     <div id="MintUcr" className="panel">
-      <h2>Generate Ubiquity Credits</h2>
+      <h2>Generate Ubiquity Credit NFTs</h2>
       <aside>When TWAP is below peg</aside>
-      <DisabledBlurredMessage disabled={currentlyAbovePeg} content="(Disabled when TWAP is above peg)">
-        <DebtCouponDeposit />
-        {/* <UarDeposit /> */}
-      </DisabledBlurredMessage>
+      <DebtCouponDeposit />
     </div>
   );
 }
-function RedeemUcr(currentlyAbovePeg: boolean) {
+function RedeemUcr() {
   return (
     <div id="RedeemUcr" className="panel">
-      <h2>Redeem Ubiquity Credits</h2>
+      <h2>Redeem Ubiquity Credit NFTs</h2>
       <aside>When TWAP is above peg</aside>
-      <DisabledBlurredMessage disabled={!currentlyAbovePeg} content="(Disabled when TWAP is below peg)">
-        <div>
-          <UarRedeem />
-          <DebtCouponRedeem />
-        </div>
-      </DisabledBlurredMessage>
+      <div>
+        <UcrRedeem />
+        <UcrNftRedeem />
+      </div>
     </div>
   );
 }

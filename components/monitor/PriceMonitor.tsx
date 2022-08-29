@@ -25,7 +25,10 @@ type PriceMonitorProps = {
 type ManagedContracts = NonNullable<Awaited<ReturnType<typeof useManagerManaged>>>;
 type NamedContracts = NonNullable<Awaited<ReturnType<typeof useNamedContracts>>>;
 
-const fetchPrices = async ({ uad, metaPool, twapOracle, dollarMintCalc }: ManagedContracts, { curvePool }: NamedContracts): Promise<PriceMonitorProps> => {
+const fetchPrices = async (
+  { dollarToken: uad, dollarMetapool: metaPool, dollarTwapOracle: twapOracle, dollarMintingCalculator: dollarMintCalc }: ManagedContracts,
+  { curvePool }: NamedContracts
+): Promise<PriceMonitorProps> => {
   const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
     curvePool.get_coin_indices(metaPool.address, NAMED_ACCOUNTS.DAI, NAMED_ACCOUNTS.USDT),
     curvePool.get_coin_indices(metaPool.address, uad.address, NAMED_ACCOUNTS.USDC),

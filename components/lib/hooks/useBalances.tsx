@@ -31,13 +31,13 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
   async function refreshBalances() {
     if (walletAddress && managedContracts && namedContracts) {
       const [uad, crv, uad3crv, ucr, ubq, ucrNft, bondingShares, usdc] = await Promise.all([
-        managedContracts.uad.balanceOf(walletAddress),
+        managedContracts.dollarToken.balanceOf(walletAddress),
         managedContracts.crvToken.balanceOf(walletAddress),
-        managedContracts.metaPool.balanceOf(walletAddress),
-        managedContracts.uar.balanceOf(walletAddress),
-        managedContracts.ugov.balanceOf(walletAddress),
-        erc1155BalanceOf(walletAddress, managedContracts.debtCouponToken as unknown as ERC1155Ubiquity),
-        erc1155BalanceOf(walletAddress, managedContracts.bondingToken as unknown as ERC1155Ubiquity),
+        managedContracts.dollarMetapool.balanceOf(walletAddress),
+        managedContracts.creditToken.balanceOf(walletAddress),
+        managedContracts.governanceToken.balanceOf(walletAddress),
+        erc1155BalanceOf(walletAddress, managedContracts.creditNft as unknown as ERC1155Ubiquity),
+        erc1155BalanceOf(walletAddress, managedContracts.stakingToken as unknown as ERC1155Ubiquity),
         namedContracts.usdc.balanceOf(walletAddress),
       ]);
 
