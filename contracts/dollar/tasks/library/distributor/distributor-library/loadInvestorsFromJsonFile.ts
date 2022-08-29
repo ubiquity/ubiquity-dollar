@@ -1,5 +1,5 @@
 import path from "path";
-import { warn } from "../../../../hardhat.config";
+import { warn } from "../../../../hardhat-config/utils/warn";
 import { Investor } from "./investor-types";
 
 export async function loadInvestorsFromJsonFile(pathToJson: string): Promise<Investor[]> {

@@ -17,14 +17,15 @@ import {
   UbiquityFormulas__factory,
   UbiquityGovernance__factory,
 } from "@/dollar-types";
-import { useDeployedContracts } from "@/lib/hooks";
 import { createContext, useContext, useEffect, useState } from "react";
+import { ChildrenShim } from "../children-shim";
 import useWeb3, { PossibleProviders } from "../useWeb3";
+import useDeployedContracts from "./useDeployedContracts";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;
 export const ManagedContractsContext = createContext<ManagedContracts>(null);
 
-export const ManagedContractsContextProvider: React.FC = ({ children }) => {
+export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ children }) => {
   const [{ provider }] = useWeb3();
   const deployedContracts = useDeployedContracts();
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);

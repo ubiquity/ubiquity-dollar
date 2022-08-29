@@ -1,4 +1,4 @@
-import { warn } from "../../../../hardhat.config";
+import { warn } from "../../../../hardhat-config/utils/warn";
 interface VestingMath {
   investorAllocationPercentage: number;
   totalSupplyCached: number;

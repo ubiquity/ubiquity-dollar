@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { ChildrenShim } from "./children-shim";
 
 export type Transaction = {
   title: string;
@@ -16,7 +17,7 @@ type TransactionLogger = [Transactions, DoTransactionType, boolean, (transaction
 
 export const TransactionsContext = createContext<TransactionLogger>([{}, async () => true, false, () => {}]);
 
-export const TransactionsContextProvider: React.FC = ({ children }) => {
+export const TransactionsContextProvider: React.FC<ChildrenShim> = ({ children }) => {
   const [transactions, setTransactions] = useState<Transactions>({});
 
   const doTransaction = async (title: string, wrappedFun: () => Promise<void>): Promise<boolean> => {

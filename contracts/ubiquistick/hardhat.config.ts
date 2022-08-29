@@ -65,9 +65,10 @@ const config: HardhatUserConfig = {
       loggingEnabled: false,
       accounts: accountsHardhat,
       initialBaseFeePerGas: 0,
-      forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`,
-      },
+      // forking: {
+      // blockNumber: 14800000,
+      // url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`,
+      // },
     },
     local: {
       chainId: 1,

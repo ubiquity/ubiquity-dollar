@@ -1,6 +1,6 @@
 import { FC } from "react";
 import DebtCoupon from "@/components/redeem/DebtCoupon";
-import { useWalletAddress } from "@/components/lib/hooks";
+import useWalletAddress from "@/components/lib/hooks/useWalletAddress";
 
 const DebtCouponPage: FC = (): JSX.Element => {
   const [walletAddress] = useWalletAddress();

@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
+import Tooltip from "../ui/Tooltip";
 
-import { Tooltip } from "@/ui";
 import usePrices from "./lib/usePrices";
 import { Icon } from "@/ui";
 
@@ -10,14 +10,18 @@ const DollarPrice = () => {
   const [twapPrice, spotPrice] = usePrices();
 
   return (
-    <div className="text-center">
-      <Tooltip content={`$${(spotPrice && roundPrice(spotPrice)) || 0} (SPOT PRICE)`} placement="bottom">
-        <div className="text-center">
-          <div className="mb-2 text-4xl font-thin opacity-75">${(twapPrice && roundPrice(twapPrice)) || 0}</div>
-          <div className="flex items-center justify-center">
-            <div className="mr-1 text-sm uppercase tracking-widest">TWAP Price</div>
-            <Icon icon="questionMark" className="w-4" />
-          </div>
+    <div id="DollarPrice" className="panel">
+      <h2>Ubiquity Dollar Price</h2>
+      <Tooltip content="Swap for DAI/USDC/USDT" placement="bottom">
+        <div>
+          <span>${(spotPrice && roundPrice(spotPrice)) || "· · ·"}</span>
+          <span>Spot</span>
+        </div>
+      </Tooltip>
+      <Tooltip content="Time weighted average price" placement="bottom">
+        <div>
+          <span>${(twapPrice && roundPrice(twapPrice)) || "· · ·"}</span>
+          <span>TWAP</span>
         </div>
       </Tooltip>
     </div>
