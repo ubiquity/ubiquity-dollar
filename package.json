@@ -5,7 +5,7 @@
     "start": "run-s install:env install:contracts build:contracts dev",
     "prepare": "husky install",
     "__test:watch:ci": "nodemon",
-    "build:fleek": "run-s install:env install:contracts build:contracts BUILD:NEXT",
+    "build:ci": "run-s install:env install:contracts build:contracts BUILD:NEXT",
     "install:env": "cp .env.example .env",
     "install:contracts": "run-s _contracts:install:*",
     "_contracts:install": "run-p _contracts:install:*",
