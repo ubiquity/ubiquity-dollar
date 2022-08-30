@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 import MigrateButton from "@/components/redeem/MigrateButton";
 import DollarPrice from "@/components/redeem/DollarPrice";
 import UcrRedeem from "@/components/redeem/UcrRedeem";
-import DebtCouponDeposit from "@/components/redeem/DebtCouponDeposit";
+import UcrNftGenerator from "@/components/redeem/DebtCouponDeposit";
 import UcrNftRedeem from "@/components/redeem/UcrNftRedeem";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
@@ -48,14 +48,14 @@ function MintUcr() {
     <div id="MintUcr" className="panel">
       <h2>Generate Ubiquity Credit NFTs</h2>
       <aside>When TWAP is below peg</aside>
-      <DebtCouponDeposit />
+      <UcrNftGenerator />
     </div>
   );
 }
 function RedeemUcr() {
   return (
     <div id="RedeemUcr" className="panel">
-      <h2>Redeem Ubiquity Credit NFTs</h2>
+      <h2>Redeem Ubiquity Credits</h2>
       <aside>When TWAP is above peg</aside>
       <div>
         <UcrRedeem />

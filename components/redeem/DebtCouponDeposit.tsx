@@ -14,7 +14,7 @@ import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 
-const DebtCouponDeposit = () => {
+const UcrNftGenerator = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
@@ -77,4 +77,4 @@ const DebtCouponDeposit = () => {
   );
 };
 
-export default DebtCouponDeposit;
+export default UcrNftGenerator;

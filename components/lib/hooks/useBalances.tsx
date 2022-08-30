@@ -9,13 +9,15 @@ import { ChildrenShim } from "./children-shim";
 
 export interface Balances {
   uad: BigNumber;
-  crv: BigNumber;
+  _3crv: BigNumber;
   uad3crv: BigNumber;
   ucr: BigNumber;
   ucrNft: BigNumber;
   ubq: BigNumber;
   bondingShares: BigNumber;
   usdc: BigNumber;
+  dai: BigNumber;
+  usdt: BigNumber;
 }
 
 type RefreshBalances = () => Promise<void>;
@@ -30,26 +32,30 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
 
   async function refreshBalances() {
     if (walletAddress && managedContracts && namedContracts) {
-      const [uad, crv, uad3crv, ucr, ubq, ucrNft, bondingShares, usdc] = await Promise.all([
+      const [uad, crv, uad3crv, ucr, ubq, ucrNft, bondingShares, usdc, dai, usdt] = await Promise.all([
         managedContracts.dollarToken.balanceOf(walletAddress),
-        managedContracts.crvToken.balanceOf(walletAddress),
+        managedContracts._3crvToken.balanceOf(walletAddress),
         managedContracts.dollarMetapool.balanceOf(walletAddress),
         managedContracts.creditToken.balanceOf(walletAddress),
         managedContracts.governanceToken.balanceOf(walletAddress),
         erc1155BalanceOf(walletAddress, managedContracts.creditNft as unknown as ERC1155Ubiquity),
         erc1155BalanceOf(walletAddress, managedContracts.stakingToken as unknown as ERC1155Ubiquity),
         namedContracts.usdc.balanceOf(walletAddress),
+        namedContracts.dai.balanceOf(walletAddress),
+        namedContracts.usdt.balanceOf(walletAddress),
       ]);
 
       setBalances({
         uad,
-        crv,
+        _3crv: crv,
         uad3crv,
         ucr,
         ucrNft,
         ubq,
         bondingShares,
         usdc,
+        dai,
+        usdt,
       });
     }
   }
