@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import useWeb3 from "../lib/hooks/useWeb3";
-import Button, { ButtonLink } from "../ui/Button";
-import Icon from "../ui/Icon";
-import Tooltip from "../ui/Tooltip";
+import Button from "../ui/Button";
 
 const PROD = process.env.NODE_ENV == "production";
 

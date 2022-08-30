@@ -1,14 +1,14 @@
 import Tippy from "@tippyjs/react";
-import { BigNumber, ethers } from "ethers";
+import { BaseContract, BigNumber, ethers } from "ethers";
 import { useEffect } from "react";
 
 import useWeb3 from "@/lib/hooks/useWeb3";
 import icons from "@/ui/icons";
 
-import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
-import useBalances from "../lib/hooks/useBalances";
-import Network from "./Network";
+import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
+import useBalances, { Balances } from "../lib/hooks/useBalances";
+import { ManagedContracts } from "../lib/hooks/contracts/useManagerManaged";
 
 const Inventory = () => {
   const [{ walletAddress }] = useWeb3();
@@ -34,30 +34,38 @@ const Inventory = () => {
       </div>
       <div>
         <div>
-          {Number(balances.uad) ? <Token token="uAD" balance={balances.uad} accountAddr={walletAddress} tokenAddr={managedContracts.uad.address} /> : ""}
-          {Number(balances.ucr) ? <Token token="uCR" balance={balances.ucr} accountAddr={walletAddress} tokenAddr={managedContracts.uar.address} /> : ""}
-          {Number(balances.ucrNft) ? (
-            <Token token="uCR-NFT" balance={balances.ucrNft} accountAddr={walletAddress} tokenAddr={managedContracts.debtCouponToken.address} />
-          ) : (
-            ""
-          )}
-          {Number(balances.ubq) ? <Token token="UBQ" balance={balances.ubq} accountAddr={walletAddress} tokenAddr={managedContracts.ugov.address} /> : ""}
-          {Number(balances.crv) ? <Token token="3CRV" balance={balances.crv} accountAddr={walletAddress} tokenAddr={managedContracts.crvToken.address} /> : ""}
-          {Number(balances.uad3crv) ? (
-            <Token token="uAD3CRV-f" balance={balances.uad3crv} accountAddr={walletAddress} tokenAddr={managedContracts.metaPool.address} />
-          ) : (
-            ""
-          )}
-          {Number(balances.usdc) ? (
-            <Token token="USDC" balance={balances.usdc} accountAddr={walletAddress} tokenAddr={namedContracts.usdc.address} decimals={6} />
-          ) : (
-            ""
-          )}
+          {showIfBalanceExists("uad", "uAD", "dollarToken")}
+          {showIfBalanceExists("ucr", "uCR", "creditToken")}
+          {showIfBalanceExists("ucrNft", "uCR-NFT", "creditNft")}
+          {showIfBalanceExists("ubq", "UBQ", "governanceToken")}
+          {showIfBalanceExists("_3crv", "3crv", "_3crvToken")}
+          {showIfBalanceExists("uad3crv", "uAD3CRV-f", "dollarMetapool")}
+          {showIfBalanceExists("usdc", "USDC", "usdc")}
+          {showIfBalanceExists("dai", "DAI", "dai")}
+          {showIfBalanceExists("usdt", "USDT", "usdt")}
         </div>
       </div>
     </div>
   );
+
+  function showIfBalanceExists(key: keyof Balances | keyof typeof namedContracts, name: keyof typeof tokenSvg, id: string) {
+    const usdcFix = function () {
+      if (key == "usdc") return 6;
+      else return 18;
+    };
+
+    const balance = (balances as Balances)[key];
+    if (Number(balance) && managedContracts) {
+      let selectedContract = managedContracts[id as keyof ManagedContracts] as BaseContract;
+      if (!selectedContract && namedContracts) {
+        selectedContract = namedContracts[key as keyof typeof namedContracts];
+      }
+
+      return <Token token={name} balance={balance} accountAddr={walletAddress as string} tokenAddr={selectedContract.address} decimals={usdcFix()} />;
+    }
+  }
 };
+
 interface TokenInterface {
   balance: BigNumber;
   token: keyof typeof tokenSvg;
@@ -68,7 +76,8 @@ interface TokenInterface {
 
 const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenInterface) => {
   const Svg = tokenSvg[token] || (() => <></>);
-  const { ethereum } = window;
+
+  const ethereum = window.ethereum;
 
   const addTokenToWallet = async () => {
     if (!ethereum?.request) {
@@ -132,8 +141,10 @@ const tokenSvg = {
   "uCR-NFT": () => icons.svgs.ucrNft,
   UBQ: () => icons.svgs.ubq,
   USDC: () => icons.svgs.usdc,
-  "3CRV": () => <img alt="" src={icons.base64s["3crv"]} />,
-  "uAD3CRV-f": () => <img alt="" src={icons.base64s["uad3crv-f"]} />,
+  DAI: () => icons.svgs.dai,
+  USDT: () => icons.svgs.usdt,
+  "3crv": () => <img src={icons.base64s["3crv"]} />,
+  "uAD3CRV-f": () => <img src={icons.base64s["uad3crv-f"]} />,
 };
 
 export default Inventory;

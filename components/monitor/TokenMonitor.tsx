@@ -16,7 +16,7 @@ type TokenMonitorProps = {
 
 const TokenMonitorContainer = () => {
   const { debtCouponManager } = useDeployedContracts() || {};
-  const { debtCouponToken, uad } = useManagerManaged() || {};
+  const { creditNft: debtCouponToken, dollarToken: uad } = useManagerManaged() || {};
 
   const [tokenMonitorPRops, setTokenMonitorProps] = useState<State>(null);
 

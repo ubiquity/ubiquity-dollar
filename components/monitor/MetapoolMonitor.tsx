@@ -16,7 +16,7 @@ type MetapoolMonitorProps = {
 };
 
 const MetapoolMonitorContainer = () => {
-  const { metaPool } = useManagerManaged() || {};
+  const { dollarMetapool: metaPool } = useManagerManaged() || {};
   const { curvePool } = useNamedContracts() || {};
 
   const [metaPoolMonitorProps, setMetapoolMonitorProps] = useState<State>(null);

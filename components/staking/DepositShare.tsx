@@ -15,16 +15,16 @@ const MAX_WEEKS = 208;
 
 type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
 async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Promise<PrefetchedConstants> {
-  const reserves = await contracts.ugovUadPair.getReserves();
+  const reserves = await contracts.governanceMarket.getReserves();
   const ubqPrice = +reserves.reserve0.toString() / +reserves.reserve1.toString();
   const ubqPerBlock = await contracts.masterChef.uGOVPerBlock();
   const ubqMultiplier = await contracts.masterChef.uGOVmultiplier();
   const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));
-  const blockCountInAWeek = toNum(await contracts.bonding.blockCountInAWeek());
+  const blockCountInAWeek = toNum(await contracts.staking.blockCountInAWeek());
   const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
   const totalShares = toEtherNum(await contracts.masterChef.totalShares());
   const usdPerWeek = ubqPerWeek * ubqPrice;
-  const bondingDiscountMultiplier = await contracts.bonding.bondingDiscountMultiplier();
+  const bondingDiscountMultiplier = await contracts.staking.bondingDiscountMultiplier();
   return { totalShares, usdPerWeek, bondingDiscountMultiplier };
 }
 
@@ -116,7 +116,8 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   const amountParsed = parseFloat(amount);
 
   return (
-    <div>
+    <div className="panel">
+      <h2>Stake liquidity to receive UBQ</h2>
       <div>APR {currentApy ? `${currentApy}%` : aprBounds ? `${aprBounds[1]}%` : "..."}</div>
       <div>
         <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />

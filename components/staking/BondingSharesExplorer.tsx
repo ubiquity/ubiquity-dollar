@@ -50,7 +50,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
   const [, doTransaction] = useTransactionLogger();
   const [, refreshBalances] = useBalances();
 
-  const { bonding, masterChef, bondingToken, metaPool } = managedContracts;
+  const { staking: bonding, masterChef, stakingToken: bondingToken, dollarMetapool: metaPool } = managedContracts;
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {
@@ -162,12 +162,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 };
 
 export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
-  return (
-    <div className="panel">
-      <h2>Stake liquidity to receive UBQ</h2>
-      {model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}
-    </div>
-  );
+  return <>{model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}</>;
 });
 
 export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake, processing, walletLpBalance }: Model & Actions) => {
@@ -188,31 +183,29 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   return (
     <div>
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
-      <div>
-        <table id="Staking">
-          <thead>
+      <table id="Staking">
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Rewards</th>
+            <th>Unlock Time</th>
+            <th>Est. Deposit</th>
+          </tr>
+        </thead>
+        {filteredShares.length > 0 ? (
+          <tbody>
+            {filteredShares.map((share) => (
+              <BondingShareRow key={share.id} {...share} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
             <tr>
-              <th>Est. Deposit</th>
-              <th>Rewards</th>
-              <th>Unlock Time</th>
-              <th>Action</th>
+              <td colSpan={5}>Nothing staked yet</td>
             </tr>
-          </thead>
-          {filteredShares.length > 0 ? (
-            <tbody>
-              {filteredShares.map((share) => (
-                <BondingShareRow key={share.id} {...share} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
-              ))}
-            </tbody>
-          ) : (
-            <tbody>
-              <tr>
-                <td colSpan={5}>Nothing staked yet</td>
-              </tr>
-            </tbody>
-          )}
-        </table>
-      </div>
+          </tbody>
+        )}
+      </table>
 
       <table>
         <tbody>
@@ -264,24 +257,22 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
   }
 
   return (
-    <tr key={id} title={id.toString()}>
-      <td title={`LP = ${numLpAmount} | Shares = ${formatEther(sharesBalance)} | 1 USD = ${USD_TO_LP} LP`}>${Math.round(usdAmount * 100) / 100}</td>
+    <tr key={id} title={`Bonding Share ID: ${id.toString()}`}>
+      <td>
+        {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
+          <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
+        ) : ugov.gt(0) ? (
+          <Button onClick={() => onClaimUbq(+id.toString())}>Claim reward</Button>
+        ) : null}
+      </td>
       <td>
         <div>
           <Icon icon="ubq" /> <span>{formatEther(ugov)}</span>
         </div>
       </td>
       <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>
-      <td>
-        {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
-          <>
-            {/* <input type="text" placeholder="All" value={withdrawAmount} onChange={(ev) => setWithdrawAmount(ev.target.value)} /> */}
-            <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
-          </>
-        ) : ugov.gt(0) ? (
-          <Button onClick={() => onClaimUbq(+id.toString())}>Claim reward</Button>
-        ) : null}
-      </td>
+
+      <td>${Math.round(usdAmount * 100) / 100}</td>
     </tr>
   );
 };

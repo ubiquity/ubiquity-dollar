@@ -12,6 +12,8 @@ base64s["ubq"] = b64svg.concat(btoa(renderToString(svgs.ubq)));
 base64s["ucr-nft"] = b64svg.concat(btoa(renderToString(svgs.ucr)));
 base64s["ucr"] = b64svg.concat(btoa(renderToString(svgs.ucr)));
 base64s["usdc"] = b64svg.concat(btoa(renderToString(svgs.usdc)));
+base64s["dai"] = b64svg.concat(btoa(renderToString(svgs.dai)));
+base64s["usdt"] = b64svg.concat(btoa(renderToString(svgs.usdt)));
 base64s["warning"] = b64svg.concat(btoa(renderToString(svgs.warning)));
 
 base64s[

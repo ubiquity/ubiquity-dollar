@@ -12,7 +12,7 @@
     text-align: right;
     margin: 0 auto;
     min-height: 100vh;
-    width: unset;
+    width: 100vw;
   }
   #Foreground > #Sidebar {
     right: 0;
@@ -40,7 +40,7 @@
     margin: 0;
     position: absolute;
     right: 16px;
-    bottom: 16px;
+    bottom: 48px;
     z-index: 2;
     width: 24px;
     height: 24px;
@@ -111,5 +111,11 @@
   }
   #Foreground #MainContent > div {
     text-align: center;
+  }
+  #Staking > thead > tr > th:nth-child(3),
+  #Staking > tbody > tr > td:nth-child(3),
+  #Staking > thead > tr > th:nth-child(4),
+  #Staking > tbody > tr > td:nth-child(4) {
+    display: none;
   }
 }

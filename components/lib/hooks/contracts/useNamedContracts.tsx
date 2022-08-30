@@ -12,6 +12,8 @@ export function connectedContracts(provider: NonNullable<PossibleProviders>) {
     curvePool: ICurveFactory__factory.connect(NAMED_ACCOUNTS.curveFactory, provider),
     yieldProxy: YieldProxy__factory.connect(NAMED_ACCOUNTS.yieldProxy, provider),
     usdc: ERC20__factory.connect(NAMED_ACCOUNTS.USDC, provider),
+    dai: ERC20__factory.connect(NAMED_ACCOUNTS.DAI, provider),
+    usdt: ERC20__factory.connect(NAMED_ACCOUNTS.USDT, provider),
     debtCouponManager: DebtCouponManager__factory.connect(DEBT_COUPON_MANAGER_ADDRESS, provider),
     jarUsdc: IJar__factory.connect(NAMED_ACCOUNTS.jarUSDCAddr, provider),
   };
