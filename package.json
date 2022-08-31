@@ -105,5 +105,11 @@
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,sol}": [
+      "yarn _format:prettier",
+      "yarn _format:eslint"
+    ]
   }
 }
