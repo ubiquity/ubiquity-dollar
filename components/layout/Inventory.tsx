@@ -115,7 +115,7 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
           <Tippy
             content={
               <div id="tippy">
-                <span>Add to Metamask</span>
+                <span>Add to MetaMask</span>
               </div>
             }
             placement="top"

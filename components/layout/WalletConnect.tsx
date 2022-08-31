@@ -44,7 +44,7 @@ const WalletConnect = () => {
 export default WalletConnect;
 
 function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskInstalled: boolean }) {
-  const [{ provider }, { connectMetamask, connectJsonRpc }] = useWeb3();
+  const [{ provider }, { connectMetamask, connectWalletConnect, connectJsonRpc }] = useWeb3();
 
   console.log("PROVIDER!", provider);
 
@@ -76,7 +76,7 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
         <div>
           <a>
             <Btn
-              text="Metamask"
+              text="MetaMask"
               icon="metamask"
               onClick={
                 metamaskInstalled
@@ -84,6 +84,9 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
                   : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
               }
             />
+          </a>
+          <a>
+            <Btn text="WalletConnect" icon="walletconnect" onClick={connectWalletConnect} />
           </a>
           <a>
             <Btn text="Hardhat" icon="hardhat" onClick={promptForWalletAddress} />

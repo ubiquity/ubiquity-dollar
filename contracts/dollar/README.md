@@ -136,7 +136,7 @@ To run a local node that forks mainnet we use Hardhat with the Alchemy API.
 yarn node:start
 ```
 
-If you are using Metamask on the browser, you can point it to the local node
+If you are using MetaMask on the browser, you can point it to the local node
 from the network menu by adding a custom RPC network with the following configuration:
 
 - Network name: `Hardhat`
@@ -145,7 +145,7 @@ from the network menu by adding a custom RPC network with the following configur
 
 ### Give yourself funds
 
-We recommend you use a separate browser session with Metamask for development.
+We recommend you use a separate browser session with MetaMask for development.
 When you are prompted with the mnemonic phrase copy it to the .env file:
 
 ```bash
@@ -155,7 +155,7 @@ MNEMONIC="test test test test test test test test test test test junk"
 (remember to use the quotation marks)
 
 When the hardhat fork starts it will create 10 accounts with 10000 ETH each from
-that phrase. Metamask will be using these accounts too.
+that phrase. MetaMask will be using these accounts too.
 
 Now for the sake of testing you may want to give yourself uAD, uCR, UBQ, and uAD3CRV-f tokens.
 To do this, there is a tasks named faucet that gives you 1000 of each, transferred from

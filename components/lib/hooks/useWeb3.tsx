@@ -1,8 +1,12 @@
+/* eslint-disable no-debugger */
 import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "./children-shim";
 import useLocalStorage from "./useLocalStorage";
+import WalletConnect from "@walletconnect/client";
+import QRCodeModal from "@walletconnect/qrcode-modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
@@ -12,7 +16,7 @@ export type PossibleProviders = Web3Provider | JsonRpcProvider | null;
 export type Web3State = {
   metamaskInstalled: boolean;
   jsonRpcEnabled: boolean;
-  providerMode: "none" | "metamask" | "jsonrpc";
+  providerMode: "none" | "metamask" | "jsonrpc" | "walletconnect";
   provider: PossibleProviders;
   connecting: boolean;
   walletAddress: null | string;
@@ -22,6 +26,7 @@ export type Web3State = {
 type Web3Actions = {
   connectMetamask: () => Promise<void>;
   connectJsonRpc: (address: string) => Promise<void>;
+  connectWalletConnect: () => Promise<void>;
   disconnect: () => Promise<void>;
 };
 
@@ -38,6 +43,7 @@ const DEFAULT_WEB3_STATE: Web3State = {
 
 const DEFAULT_WEB3_ACTIONS: Web3Actions = {
   connectMetamask: async () => {},
+  connectWalletConnect: async () => {},
   connectJsonRpc: async () => {},
   disconnect: async () => {},
 };
@@ -50,12 +56,50 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   const [web3State, setWeb3State] = useState<Web3State>(DEFAULT_WEB3_STATE);
 
   useEffect(() => {
-    if (storedProviderMode === "jsonrpc" && storedWallet) {
-      connectJsonRpc(storedWallet);
-    } else {
-      connectMetamask();
+    if (storedProviderMode) {
+      if ("jsonrpc" == storedProviderMode) {
+        if (storedWallet) {
+          connectJsonRpc(storedWallet);
+        }
+      } else if ("metamask" == storedProviderMode) {
+        connectMetamask();
+      } else if ("walletconnect" == storedProviderMode) {
+        connectWalletConnect();
+      }
     }
   }, []);
+
+  async function connectWalletConnect() {
+    const bridge = "https://bridge.walletconnect.org";
+    const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
+
+    if (!connector.connected) {
+      await connector.createSession();
+    }
+
+    connector.on("connect", async (error, payload) => {
+      if (error) throw error;
+
+      const { chainId, accounts } = payload.params[0];
+      setStoredProviderMode("walletconnect");
+      const newWalletAddress = accounts[0];
+      const newProvider = new WalletConnectProvider({
+        infuraId: process.env.API_KEY_ALCHEMY,
+      });
+      const web3Provider = new ethers.providers.Web3Provider(newProvider);
+      await newProvider.enable();
+
+      const newSigner = web3Provider.getSigner(newWalletAddress);
+      setWeb3State({
+        ...web3State,
+        connecting: false,
+        providerMode: "walletconnect",
+        provider: web3Provider,
+        walletAddress: newWalletAddress,
+        signer: newSigner,
+      });
+    });
+  }
 
   async function connectMetamask() {
     if (metamaskInstalled) {
@@ -97,7 +141,7 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
     setWeb3State({ ...web3State, walletAddress: null, signer: null });
   }
 
-  return <Web3Context.Provider value={[web3State, { connectMetamask, connectJsonRpc, disconnect }]}>{children}</Web3Context.Provider>;
+  return <Web3Context.Provider value={[web3State, { connectMetamask, connectWalletConnect, connectJsonRpc, disconnect }]}>{children}</Web3Context.Provider>;
 };
 
 const useWeb3 = () => useContext(Web3Context);
