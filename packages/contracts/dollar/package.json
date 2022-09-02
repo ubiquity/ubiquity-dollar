@@ -15,6 +15,7 @@
   "scripts": {
     "clean": "hardhat clean",
     "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
+    "purge": "yarn clean && rimraf ./node_modules",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage",
     "lint": "run-s lint:* build",
@@ -37,12 +38,6 @@
     "token",
     "algorithmic"
   ],
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
-  },
   "lavamoat": {
     "allowScripts": {
       "core-js": false,

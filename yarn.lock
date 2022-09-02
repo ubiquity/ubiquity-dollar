@@ -2626,6 +2626,52 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ubiquity/ubiquistick@workspace:packages/contracts/ubiquistick":
+  version: 0.0.0-use.local
+  resolution: "@ubiquity/ubiquistick@workspace:packages/contracts/ubiquistick"
+  dependencies:
+    "@codechecks/client": ^0.1.12
+    "@ethersproject/abi": ^5.5.0
+    "@ethersproject/abstract-provider": ^5.5.1
+    "@ethersproject/address": ^5.5.0
+    "@ethersproject/bytes": ^5.5.0
+    "@ethersproject/hardware-wallets": ^5.5.0
+    "@ethersproject/providers": ^5.5.3
+    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13"
+    "@nomiclabs/hardhat-etherscan": ^3.0.1
+    "@nomiclabs/hardhat-waffle": ^2.0.2
+    "@openzeppelin/contracts": ^4.5.0
+    "@typechain/ethers-v5": ^9.0.0
+    "@typechain/hardhat": ^4.0.0
+    "@types/chai": ^4.3.0
+    "@types/mocha": ^9.1.0
+    "@types/node": ^17.0.17
+    chai: ^4.3.6
+    dotenv: ^16.0.0
+    eslint-config-prettier: ^8.3.0
+    eslint-config-standard: ^16.0.3
+    eslint-plugin-import: ^2.25.4
+    eslint-plugin-node: ^11.1.0
+    eslint-plugin-prettier: ^4.0.0
+    eslint-plugin-promise: ^6.0.0
+    ethereum-waffle: ^3.4.0
+    ethers: ^5.5.4
+    hardhat: ^2.8.4
+    hardhat-deploy: ^0.10.5
+    hardhat-gas-reporter: ^1.0.7
+    lodash: ^4.17.21
+    npm-run-all: ^4.1.5
+    prettier: ^2.5.1
+    prettier-plugin-solidity: ^1.0.0-beta.19
+    solhint: ^3.3.7
+    solidity-coverage: ^0.7.19
+    ts-node: ^10.5.0
+    tsconfig-paths: ^3.12.0
+    typechain: ^7.0.0
+    typescript: ^4.7.4
+  languageName: unknown
+  linkType: soft
+
 "@ubiquity/ubiquity-dollar@workspace:packages/contracts/dollar":
   version: 0.0.0-use.local
   resolution: "@ubiquity/ubiquity-dollar@workspace:packages/contracts/dollar"
@@ -16220,52 +16266,6 @@ __metadata:
   checksum: a04c07bb9e2d8f46776517d4618f2406fb977a74d914ad98b264fc3db0fe8224da5bec11e5f8902c5b9bcb8ace22d95fbe3c7b36b8593b7dfc8391a25898f32f
   languageName: node
   linkType: hard
-
-"template@workspace:packages/contracts/ubiquistick":
-  version: 0.0.0-use.local
-  resolution: "template@workspace:packages/contracts/ubiquistick"
-  dependencies:
-    "@codechecks/client": ^0.1.12
-    "@ethersproject/abi": ^5.5.0
-    "@ethersproject/abstract-provider": ^5.5.1
-    "@ethersproject/address": ^5.5.0
-    "@ethersproject/bytes": ^5.5.0
-    "@ethersproject/hardware-wallets": ^5.5.0
-    "@ethersproject/providers": ^5.5.3
-    "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.13"
-    "@nomiclabs/hardhat-etherscan": ^3.0.1
-    "@nomiclabs/hardhat-waffle": ^2.0.2
-    "@openzeppelin/contracts": ^4.5.0
-    "@typechain/ethers-v5": ^9.0.0
-    "@typechain/hardhat": ^4.0.0
-    "@types/chai": ^4.3.0
-    "@types/mocha": ^9.1.0
-    "@types/node": ^17.0.17
-    chai: ^4.3.6
-    dotenv: ^16.0.0
-    eslint-config-prettier: ^8.3.0
-    eslint-config-standard: ^16.0.3
-    eslint-plugin-import: ^2.25.4
-    eslint-plugin-node: ^11.1.0
-    eslint-plugin-prettier: ^4.0.0
-    eslint-plugin-promise: ^6.0.0
-    ethereum-waffle: ^3.4.0
-    ethers: ^5.5.4
-    hardhat: ^2.8.4
-    hardhat-deploy: ^0.10.5
-    hardhat-gas-reporter: ^1.0.7
-    lodash: ^4.17.21
-    npm-run-all: ^4.1.5
-    prettier: ^2.5.1
-    prettier-plugin-solidity: ^1.0.0-beta.19
-    solhint: ^3.3.7
-    solidity-coverage: ^0.7.19
-    ts-node: ^10.5.0
-    tsconfig-paths: ^3.12.0
-    typechain: ^7.0.0
-    typescript: ^4.7.4
-  languageName: unknown
-  linkType: soft
 
 "test-value@npm:^2.1.0":
   version: 2.1.0

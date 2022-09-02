@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "@ubiquity/ubiquistick",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,7 @@
     "_SHIM:DEPLOY:5": "hardhat run --network hardhat deploy/5-*.ts",
     "node": "hardhat node",
     "clean": "hardhat clean",
+    "purge": "yarn clean && rimraf ./node_modules",
     "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
     "node:start": "hardhat node --hostname 0.0.0.0 --show-accounts"
   },
