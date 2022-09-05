@@ -35,7 +35,7 @@ const WalletConnect = () => {
             </Button>
           </>
         )}
-        {walletModal && !walletAddress && !PROD && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
+        {walletModal && !walletAddress && <Modal metamaskInstalled={metamaskInstalled} onClose={() => setWalletModal(false)} />}
       </div>
     </>
   );
@@ -67,7 +67,7 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
   }
 
   return (
-    <div> 
+    <div>
       <div onClick={() => onClose()}></div>
       <div>
         {/* <div> */}
