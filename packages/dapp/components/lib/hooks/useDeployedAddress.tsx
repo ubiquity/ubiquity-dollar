@@ -1,42 +1,25 @@
 // @dev you need to run a build to generate these fixtures.
-import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
-import ubiquiStickDeployments from "@/fixtures/contracts-addresses/ubiquistick.json";
-//
+import dollarDeployments from "@ubiquity/dollar/deployments.json";
+import ubiquiStickDeployments from "@ubiquity/ubiquistick/deployments.json";
+
 const LOCAL_CHAIN = 31337;
-const LOCAL_FORK_FROM = 1;
+const dollarChains: Record<string, any> = dollarDeployments;
+const ubiquistickChains: Record<string, any> = ubiquiStickDeployments;
 
-type ContractsNames = string;
-type AddressesObject = { [key: string]: string };
-type ChainsAddressesObject = { [key: string]: AddressesObject };
-
-const dollarChains = dollarDeployments as ChainsAddressesObject;
-const ubiquistickChains = ubiquiStickDeployments as ChainsAddressesObject;
-
-class ContractNotAvailable extends Error {
-  constructor(contractName: string, chainId: string) {
-    super(`Contract "${contractName}" not found on chain ID ${chainId}`); // (1)
-    this.name = "ContractNotAvailable"; // (2)
-  }
-}
-
-const useDeployedAddress = (...names: ContractsNames[]): string[] => {
-  const chainId = typeof window === "undefined" ? null : window?.ethereum?.networkVersion || LOCAL_CHAIN;
+const useDeployedAddress = (...names: string[]): string[] => {
+  const chainId: number = typeof window === "undefined" ? null : window?.ethereum?.networkVersion || LOCAL_CHAIN;
   if (chainId) {
-    const fallbackDollar = dollarChains[LOCAL_FORK_FROM] || {};
-    const fallbackUbiquistick = ubiquistickChains[LOCAL_FORK_FROM] || {};
-    const dollar = dollarChains[chainId] || {};
-    const ubiquistick = ubiquistickChains[chainId] || {};
+    const dollarRecord = dollarChains[chainId.toString()] ?? {};
+    const ubiquistickRecord = ubiquistickChains[chainId.toString()] ?? {};
 
-    const getContractAddress = (key: string) =>
-      dollar[key] || ubiquistick[key] || (chainId === LOCAL_CHAIN ? fallbackDollar[key] || fallbackUbiquistick[key] : "");
+    const getContractAddress = (name: string): string | undefined => {
+      const dollarContract = dollarRecord[0]?.contracts ? dollarRecord[0]?.contracts[name] : undefined
+      const ubiquistickContract = ubiquistickRecord[0]?.contracts ? ubiquistickRecord[0]?.contracts[name] : undefined
+      return dollarContract?.address || ubiquistickContract?.address || undefined;
+    }
 
-    return names.map((name) => {
-      const address = getContractAddress(name);
-      if (!address) {
-        throw new ContractNotAvailable(name, chainId);
-      }
-      return address;
-    });
+    const addresses = names.map(name => getContractAddress(name) || "");
+    return addresses;
   } else {
     return [];
   }

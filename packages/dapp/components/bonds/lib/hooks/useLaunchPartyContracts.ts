@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { ERC20, ERC20__factory } from "@ubiquity/dollar/artifacts/types";
-import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "@/fixtures/abi/types";
 import {
   SimpleBond,
   SimpleBond__factory,
@@ -9,11 +8,13 @@ import {
   TheUbiquityStickSale,
   TheUbiquityStickSale__factory,
   TheUbiquityStick__factory,
-} from "@ubiquity/ubiquistick/artifacts/types";
+} from "@ubiquity/ubiquistick/types";
 
 import { allPools } from "../pools";
 import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
+import { getChainlinkPriceFeedContract } from "@/components/utils/contracts";
+import { ethers } from "ethers";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
 
@@ -22,14 +23,13 @@ export type Contracts = {
   ubiquiStickSale: TheUbiquityStickSale;
   simpleBond: SimpleBond;
   rewardToken: ERC20;
-  chainLink: ChainlinkPriceFeed;
+  chainLink: ethers.Contract;
 };
 
 export const factories = {
   ubiquiStick: TheUbiquityStick__factory.connect,
   ubiquiStickSale: TheUbiquityStickSale__factory.connect,
   simpleBond: SimpleBond__factory.connect,
-  chainLink: ChainlinkPriceFeed__factory.connect,
 };
 
 const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
@@ -60,7 +60,7 @@ const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContract
         ubiquiStickSale: factories.ubiquiStickSale(TheUbiquityStickSaleAddress, provider).connect(signer),
         simpleBond,
         rewardToken: ERC20__factory.connect(rewardToken, provider).connect(signer),
-        chainLink: factories.chainLink(ChainLinkEthUsdAddress, provider),
+        chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),
       };
 
       setContracts(contracts);

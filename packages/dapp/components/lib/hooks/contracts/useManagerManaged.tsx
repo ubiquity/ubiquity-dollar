@@ -16,7 +16,7 @@ import {
   UbiquityAutoRedeem__factory,
   UbiquityFormulas__factory,
   UbiquityGovernance__factory,
-} from "@/dollar-types";
+} from "@ubiquity/dollar/artifacts/types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "../children-shim";
 import useWeb3, { PossibleProviders } from "../useWeb3";

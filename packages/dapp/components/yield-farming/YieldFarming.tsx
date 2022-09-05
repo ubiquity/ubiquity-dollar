@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { memo, useEffect, useState } from "react";
 
-import { ERC20 } from "@/dollar-types";
+import { ERC20 } from "@ubiquity/dollar/artifacts/types";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { constrainStringNumber, performTransaction } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";

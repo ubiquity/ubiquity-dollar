@@ -1,7 +1,7 @@
 import { BigNumber } from "ethers";
 import { useState } from "react";
 
-import { ERC20 } from "@/dollar-types";
+import { ERC20 } from "@ubiquity/dollar/artifacts/types";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";

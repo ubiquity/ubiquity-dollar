@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-import { DebtCoupon, ERC1155Ubiquity } from "@/dollar-types";
+import { DebtCoupon, ERC1155Ubiquity } from "@ubiquity/dollar/artifacts/types";
 import { ensureERC1155Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";

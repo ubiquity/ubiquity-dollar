@@ -1,4 +1,4 @@
-import { DebtCouponManager__factory, UbiquityAlgorithmicDollarManager__factory } from "@/dollar-types";
+import { DebtCouponManager__factory, UbiquityAlgorithmicDollarManager__factory } from "@ubiquity/dollar/artifacts/types";
 import useDeployedAddress from "../useDeployedAddress";
 import { PossibleProviders } from "../useWeb3";
 import useWeb3Provider from "../useWeb3Provider";

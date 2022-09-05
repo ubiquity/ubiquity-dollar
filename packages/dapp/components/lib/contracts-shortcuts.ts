@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 
-import { ERC1155Ubiquity, ERC20 } from "@/dollar-types";
+import { ERC1155Ubiquity, ERC20 } from "@ubiquity/dollar/artifacts/types";
 
 import { performTransaction } from "./utils";
 

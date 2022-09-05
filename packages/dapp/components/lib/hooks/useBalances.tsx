@@ -1,4 +1,4 @@
-import { ERC1155Ubiquity } from "@/dollar-types";
+import { ERC1155Ubiquity } from "@ubiquity/dollar/artifacts/types";
 import { erc1155BalanceOf } from "@/lib/utils";
 import { BigNumber } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
