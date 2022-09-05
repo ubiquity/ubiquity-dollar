@@ -67,7 +67,7 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
   }
 
   return (
-    <div>
+    <div> 
       <div onClick={() => onClose()}></div>
       <div>
         {/* <div> */}
