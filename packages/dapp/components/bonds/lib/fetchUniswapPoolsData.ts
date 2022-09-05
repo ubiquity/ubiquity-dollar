@@ -1,4 +1,4 @@
-import { ERC20, ERC20__factory } from "@/dollar-types";
+import { ERC20, ERC20__factory } from "@ubiquity/dollar/artifacts/types";
 import { UniswapV2Pair__factory, UniswapV3Pool__factory } from "@/fixtures/abi/types";
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
 import { ethers } from "ethers";
