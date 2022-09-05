@@ -21,7 +21,7 @@
   "scripts": {
     "build": "yarn workspaces foreach run build",
     "test": "yarn workspaces foreach run test",
-    "purge": "yarn workspaces foreach run purge && rimraf ./node_modules",
+    "purge": "yarn workspaces foreach run purge && rimraf './node_modules'",
     "prettier": "yarn workspaces foreach run prettier",
     "lint": "yarn workspaces foreach run lint"
   },

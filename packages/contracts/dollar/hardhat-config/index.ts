@@ -2,7 +2,6 @@ import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
-import * as dotenv from "dotenv";
 import fs from "fs";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";

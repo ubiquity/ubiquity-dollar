@@ -2,7 +2,6 @@ import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
-import * as dotenv from "dotenv";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
@@ -12,20 +11,12 @@ import { Wallet } from "ethers";
 import "tsconfig-paths/register";
 import "./tasks/index";
 
-dotenv.config({ path: `../../.env` });
-
-if (!process.env.API_KEY_ALCHEMY) {
-  throw new Error("ENV Variable API_KEY_ALCHEMY not set!");
-}
-
-if (!process.env.MNEMONIC) {
-  throw new Error("ENV Variable MNEMONIC not set!");
-}
+const mnemonic = process.env.MNEMONIC || "test test test test test test test test test test test junk"
 
 const accounts = [] as string[];
 
 for (let i = 0; i <= 5; i++) {
-  const wallet = Wallet.fromMnemonic(process.env.MNEMONIC, `m/44'/60'/0'/0/${i}`);
+  const wallet = Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${i}`);
   accounts.push(wallet.privateKey);
 }
 
@@ -76,13 +67,13 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       chainId: 1,
-      url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}`,
+      url: process.env.MAINNET_RPC_URL || (process.env.API_KEY_ALCHEMY ? `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}` : "http://localhost:8545"),
       accounts,
     },
     rinkeby: {
       loggingEnabled: true,
       chainId: 4,
-      url: `https://rinkeby.infura.io/v3/${process.env.API_KEY_ALCHEMY}`,
+      url: process.env.RINKEBY_RPC_URL || (process.env.API_KEY_ALCHEMY ? `https://rinkeby.infura.io/v3/${process.env.API_KEY_ALCHEMY}` : "http://localhost:8545"),
       accounts,
     },
   },
