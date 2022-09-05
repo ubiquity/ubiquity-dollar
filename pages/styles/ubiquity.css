@@ -158,6 +158,64 @@ video {
   padding: var(--button-pad);
 }
 
+.wallet-modal-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.wallet-modal-wrapper .overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.wallet-group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.wallet-group > div:not(.overlay) {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 2rem;
+  color: #fff;
+  border-radius: 0.44rem;
+  border: 1px solid #0ff;
+  transform: translate(-50%, -50%);
+  background: #131326;
+}
+
+.wallet-group h2 {
+  color: #fff;
+}
+
+.walletconnect-qrcode__image {
+  max-width: none;
+  max-height: none;
+  height: auto;
+}
+
+.walletconnect-modal__mobile__toggle a {
+  color: #000;
+  font-weight: 600;
+}
+
+.walletconnect-search__input {
+  color: #000;
+}
+
+.walletconnect-search__input:hover {
+  background-color: #d4d5d9;
+}
+
 #WalletConnect button {
   /* box-shadow: 0 0 48px 4px #00ffff; */
   border: 1px solid #80ffff;
