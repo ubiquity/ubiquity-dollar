@@ -1,7 +1,7 @@
 import { ERC20, ERC20__factory } from "@ubiquity/dollar/artifacts/types";
-import { UniswapV2Pair__factory, UniswapV3Pool__factory } from "@/fixtures/abi/types";
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
 import { ethers } from "ethers";
+import { getERC20Contract, getUniswapV2FactoryContract, getUniswapV3PoolContract } from "@/components/utils/contracts";
 
 export type UniswapData = {
   poolAddress: string;
@@ -26,13 +26,15 @@ type UniswapDataRequest = {
 
 async function fetchUniswapPoolsData(pools: UniswapDataRequest[], provider: NonNullable<PossibleProviders>): Promise<{ [poolAddress: string]: UniswapData }> {
   const getUniPoolFullData = async (poolAddress: string, isV2: boolean): Promise<UniswapData> => {
-    const pool = isV2 ? UniswapV2Pair__factory.connect(poolAddress, provider) : UniswapV3Pool__factory.connect(poolAddress, provider);
+
+    const pool = isV2 ? getUniswapV2FactoryContract(poolAddress, provider) : getUniswapV3PoolContract(poolAddress, provider);
     const t1 = ERC20__factory.connect(await pool.token0(), provider);
     const t2 = ERC20__factory.connect(await pool.token1(), provider);
     const d1 = await t1.decimals();
     const d2 = await t2.decimals();
     const b1 = await t1.balanceOf(pool.address);
     const b2 = await t2.balanceOf(pool.address);
+
 
     return {
       poolAddress: poolAddress,

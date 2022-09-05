@@ -17,6 +17,7 @@
     "clean": "hardhat clean",
     "purge": "yarn clean && rimraf ./node_modules",
     "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
+    "export": "hardhat export --export-all ./deployments.json",
     "node:start": "hardhat node --hostname 0.0.0.0 --show-accounts"
   },
   "keywords": [],

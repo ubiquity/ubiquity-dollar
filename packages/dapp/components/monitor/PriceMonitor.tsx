@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-import NAMED_ACCOUNTS from "@/fixtures/named-accounts.json";
+import NAMED_ACCOUNTS from "../config/named-accounts.json";
 import { formatEther, formatMwei } from "@/lib/format";
 import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
