@@ -3,6 +3,7 @@ import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import fs from "fs";
+import dotenv from "dotenv";
 import "hardhat-deploy";
 import "hardhat-gas-reporter";
 import { HardhatUserConfig } from "hardhat/types";
@@ -17,18 +18,18 @@ import { getKey } from "./utils/getKey";
 import { warn } from "./utils/warn";
 
 // WAIT UNTIL ARTIFACTS ARE GENERATED BEFORE RUNNING TASKS.
-if (fs.existsSync(path.join(__dirname, "artifacts/types"))) {
+if (fs.existsSync(path.join(__dirname, "../artifacts/types"))) {
   import("../tasks");
 } else {
   warn("Tasks loading skipped until compilation artifacts are available");
 }
 
-// // LOAD .ENV
-// const pathToDotEnv = path.join(__dirname, "../../../.env");
-// fs.stat(pathToDotEnv, (err, stats) => {
-//   if (err) throw err;
-// });
-// dotenv.config({ path: pathToDotEnv });
+// LOAD .ENV
+const pathToDotEnv = path.join(__dirname, "../.env");
+fs.stat(pathToDotEnv, (err, stats) => {
+  if (err) { warn("Env file not set") };
+});
+dotenv.config({ path: pathToDotEnv });
 
 // READ .ENV
 const { MNEMONIC, UBQ_ADMIN, API_KEY_ALCHEMY, REPORT_GAS, MAINNET_PROVIDER_URL, ROPSTEN_PROVIDER_URL, RINKEBY_PROVIDER_URL } = process.env;

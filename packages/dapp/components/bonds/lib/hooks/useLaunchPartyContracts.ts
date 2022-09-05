@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { ERC20, ERC20__factory } from "@/dollar-types";
+import { ERC20, ERC20__factory } from "@ubiquity/dollar/artifacts/types";
 import { ChainlinkPriceFeed, ChainlinkPriceFeed__factory } from "@/fixtures/abi/types";
 import {
   SimpleBond,
@@ -9,7 +9,7 @@ import {
   TheUbiquityStickSale,
   TheUbiquityStickSale__factory,
   TheUbiquityStick__factory,
-} from "@/ubiquistick-types";
+} from "@ubiquity/ubiquistick/artifacts/types";
 
 import { allPools } from "../pools";
 import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";

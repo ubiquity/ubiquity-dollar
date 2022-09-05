@@ -1,10 +1,16 @@
 import { DebtCouponManager__factory, ERC20__factory, ICurveFactory__factory, IJar__factory, YieldProxy__factory } from "@ubiquity/dollar/artifacts/types";
 import useWeb3, { PossibleProviders } from "../useWeb3";
 
-import dollarDeployments from "@/fixtures/contracts-addresses/dollar.json";
+import DollarDeployments from "@ubiquity/dollar/deployments.json";
 import NAMED_ACCOUNTS from "../../../config/named-accounts.json";
 
-export const DEBT_COUPON_MANAGER_ADDRESS = dollarDeployments[1].DebtCouponManager;
+const getDebtCouponManagerAddress = () => {
+  const contractDeployments: Record<string, any> = DollarDeployments;
+  const record = contractDeployments["1"] ?? {};
+  const contract = record[0]?.contracts ? record[0]?.contracts["DebtCouponManager"] : undefined;
+  return contract ? contract.address : undefined
+}
+export const DEBT_COUPON_MANAGER_ADDRESS = getDebtCouponManagerAddress();
 
 export type NamedContracts = ReturnType<typeof connectedContracts> | null;
 export function connectedContracts(provider: NonNullable<PossibleProviders>) {
