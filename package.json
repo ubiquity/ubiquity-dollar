@@ -1,6 +1,9 @@
 {
   "name": "@ubiquity/monorepo",
-  "license": "MIT",
+  "version": "1.0.1-beta",
+  "private": true,
+  "author": "Ubiquity DAO",
+  "license": "Apache-2.0",
   "workspaces": [
     "packages/dapp",
     "packages/contracts/dollar",
@@ -29,5 +32,8 @@
     }
   },
   "packageManager": "yarn@3.2.3",
-  "private": true
+  "dependencies": {
+    "@ubiquity/ubiquistick": "./packages/contracts/ubiquistick",
+    "@ubiquity/ubiquity-dollar": "./packages/contracts/dollar"
+  }
 }
