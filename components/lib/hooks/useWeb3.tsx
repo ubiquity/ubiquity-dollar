@@ -86,8 +86,8 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
       const newProvider = new WalletConnectProvider({
         infuraId: process.env.API_KEY_ALCHEMY,
       });
-      const web3Provider = new ethers.providers.Web3Provider(newProvider);
       await newProvider.enable();
+      const web3Provider = new ethers.providers.Web3Provider(newProvider);
 
       const newSigner = web3Provider.getSigner(newWalletAddress);
       setWeb3State({
