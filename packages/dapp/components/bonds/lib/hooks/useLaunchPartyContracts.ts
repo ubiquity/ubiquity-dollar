@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { ERC20, ERC20__factory } from "@ubiquity/dollar/artifacts/types";
 import {
-  SimpleBond,
   SimpleBond__factory,
-  TheUbiquityStick,
-  TheUbiquityStickSale,
   TheUbiquityStickSale__factory,
   TheUbiquityStick__factory,
 } from "@ubiquity/ubiquistick/types";
@@ -13,17 +9,17 @@ import {
 import { allPools } from "../pools";
 import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
-import { getChainlinkPriceFeedContract } from "@/components/utils/contracts";
-import { ethers } from "ethers";
+import { getChainlinkPriceFeedContract, getERC20Contract } from "@/components/utils/contracts";
+import { Contract } from "ethers";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
 
 export type Contracts = {
-  ubiquiStick: TheUbiquityStick;
-  ubiquiStickSale: TheUbiquityStickSale;
-  simpleBond: SimpleBond;
-  rewardToken: ERC20;
-  chainLink: ethers.Contract;
+  ubiquiStick: Contract;
+  ubiquiStickSale: Contract;
+  simpleBond: Contract;
+  rewardToken: Contract;
+  chainLink: Contract;
 };
 
 export const factories = {
@@ -32,7 +28,7 @@ export const factories = {
   simpleBond: SimpleBond__factory.connect,
 };
 
-const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
+const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
   const [TheUbiquityStickAddress, TheUbiquityStickSaleAddress, SimpleBondAddress] = useDeployedAddress(
     "TheUbiquityStick",
     "TheUbiquityStickSale",
@@ -40,7 +36,7 @@ const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContract
   );
   const [{ provider, walletAddress }] = useWeb3();
   const [contracts, setContracts] = useState<Contracts | null>(null);
-  const [tokensContracts, setTokensContracts] = useState<ERC20[]>([]);
+  const [tokensContracts, setTokensContracts] = useState<Contract[]>([]);
   const [isSaleContractOwner, setIsSaleContractOwner] = useState<boolean>(false);
   const [isSimpleBondOwner, setIsSimpleBondOwner] = useState<boolean>(false);
 
@@ -59,12 +55,12 @@ const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContract
         ubiquiStick: factories.ubiquiStick(TheUbiquityStickAddress, provider).connect(signer),
         ubiquiStickSale: factories.ubiquiStickSale(TheUbiquityStickSaleAddress, provider).connect(signer),
         simpleBond,
-        rewardToken: ERC20__factory.connect(rewardToken, provider).connect(signer),
+        rewardToken: getERC20Contract(rewardToken, provider),
         chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),
       };
 
       setContracts(contracts);
-      setTokensContracts(allPools.map((pool) => ERC20__factory.connect(pool.tokenAddress, provider)));
+      setTokensContracts(allPools.map((pool) => getERC20Contract(pool.tokenAddress, provider)));
 
       setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === walletAddress.toLowerCase());
       setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === walletAddress.toLowerCase());
