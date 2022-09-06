@@ -1,7 +1,6 @@
-import { BigNumber } from "ethers";
+import { BigNumber, Contract } from "ethers";
 import { useState } from "react";
 
-import { ERC20 } from "@ubiquity/dollar/artifacts/types";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
@@ -35,7 +34,7 @@ const UcrNftGenerator = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken as unknown as ERC20, amount, signer, debtCouponManager.address);
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken as unknown as Contract, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
     refreshBalances();
   };

@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
 
-import {
-  SimpleBond__factory,
-  TheUbiquityStickSale__factory,
-  TheUbiquityStick__factory,
-} from "@ubiquity/ubiquistick/types";
-
 import { allPools } from "../pools";
 import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
-import { getChainlinkPriceFeedContract, getERC20Contract } from "@/components/utils/contracts";
+import { getChainlinkPriceFeedContract, getERC20Contract, getSimpleBondContract, getUbiquitystickContract, getUbiquityStickSaleContract } from "@/components/utils/contracts";
 import { Contract } from "ethers";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
@@ -20,12 +14,6 @@ export type Contracts = {
   simpleBond: Contract;
   rewardToken: Contract;
   chainLink: Contract;
-};
-
-export const factories = {
-  ubiquiStick: TheUbiquityStick__factory.connect,
-  ubiquiStickSale: TheUbiquityStickSale__factory.connect,
-  simpleBond: SimpleBond__factory.connect,
 };
 
 const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
@@ -46,14 +34,12 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
     }
 
     (async () => {
-      const signer = provider.getSigner();
 
-      const simpleBond = factories.simpleBond(SimpleBondAddress, provider).connect(signer);
-
+      const simpleBond = getSimpleBondContract(SimpleBondAddress, provider);
       const rewardToken = await simpleBond.tokenRewards();
       const contracts = {
-        ubiquiStick: factories.ubiquiStick(TheUbiquityStickAddress, provider).connect(signer),
-        ubiquiStickSale: factories.ubiquiStickSale(TheUbiquityStickSaleAddress, provider).connect(signer),
+        ubiquiStick: getUbiquitystickContract(TheUbiquityStickAddress, provider),
+        ubiquiStickSale: getUbiquityStickSaleContract(TheUbiquityStickSaleAddress, provider),
         simpleBond,
         rewardToken: getERC20Contract(rewardToken, provider),
         chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),

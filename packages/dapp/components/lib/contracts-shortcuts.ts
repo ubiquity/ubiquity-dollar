@@ -1,12 +1,10 @@
-import { BigNumber, ethers } from "ethers";
-
-import { ERC1155Ubiquity, ERC20 } from "@ubiquity/dollar/artifacts/types";
+import { BigNumber, ethers, Contract } from "ethers";
 
 import { performTransaction } from "./utils";
 
 export async function ensureERC20Allowance(
   logName: string,
-  contract: ERC20,
+  contract: Contract,
   amount: BigNumber,
   signer: ethers.providers.JsonRpcSigner,
   spender: string,
@@ -28,7 +26,7 @@ export async function ensureERC20Allowance(
 
 export async function ensureERC1155Allowance(
   logName: string,
-  contract: ERC1155Ubiquity,
+  contract: Contract,
   signer: ethers.providers.JsonRpcSigner,
   spender: string
 ): Promise<boolean> {

@@ -1,7 +1,6 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, Contract } from "ethers";
 import { useEffect, useState } from "react";
 
-import { DebtCoupon, ERC1155Ubiquity } from "@ubiquity/dollar/artifacts/types";
 import { ensureERC1155Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
@@ -43,9 +42,9 @@ const UcrNftRedeem = () => {
   if (!deployedContracts || !managedContracts || !debtIds) return <span>· · ·</span>;
   if (debtIds.length === 0) return <span>No uCR-NFT coupons</span>;
 
-  async function fetchDebts(address: string, contract: DebtCoupon) {
+  async function fetchDebts(address: string, contract: Contract) {
     const ids = await contract.holderTokens(address);
-    const newBalances = await Promise.all(ids.map(async (id) => await contract.balanceOf(address, id)));
+    const newBalances = await Promise.all(ids.map(async (id: any) => await contract.balanceOf(address, id)));
     setDebtIds(ids);
     setSelectedDebtId(0);
     setDebtBalances(newBalances);
@@ -74,7 +73,7 @@ const UcrNftRedeem = () => {
       debtId &&
       (await ensureERC1155Allowance(
         "uCR-NFT -> DebtCouponManager",
-        managedContracts.creditNft as unknown as ERC1155Ubiquity,
+        managedContracts.creditNft as unknown as Contract,
         signer,
         debtCouponManager.address
       ))

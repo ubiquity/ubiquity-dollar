@@ -1,7 +1,6 @@
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-import { ERC20 } from "@ubiquity/dollar/artifacts/types";
 import { ZERO_ADDRESS } from "@/lib/utils";
 
 import fetchUniswapPoolsData from "../fetchUniswapPoolsData";
@@ -22,7 +21,7 @@ export type BondData = {
   rewardPrice: number;
 };
 
-const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) => {
+const useSimpleBond = (contracts: Contracts | null, tokensContracts: Contract[]) => {
   const [{ provider, walletAddress }] = useWeb3();
   const ubqContracts = useManagerManaged();
 

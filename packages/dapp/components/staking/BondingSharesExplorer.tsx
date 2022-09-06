@@ -63,7 +63,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
     const shares: ShareData[] = [];
     await Promise.all(
-      bondingShareIds.map(async (id) => {
+      bondingShareIds.map(async (id: any) => {
         const [ugov, bond, bondingShareInfo, tokenBalance] = await Promise.all([
           masterChef.pendingUGOV(id),
           bondingToken.getBond(id),

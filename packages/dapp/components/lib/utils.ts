@@ -1,7 +1,6 @@
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
-import { BigNumber, ContractTransaction, ethers } from "ethers";
+import { BigNumber, Contract, ContractTransaction, ethers } from "ethers";
 import { useEffect } from "react";
-import { ERC1155Ubiquity } from "@ubiquity/dollar/artifacts/types";
 
 export function logGas(txDone: ethers.ContractReceipt) {
   console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);
@@ -28,10 +27,10 @@ export async function performTransaction(transaction: Promise<ContractTransactio
   // return false;
 }
 
-export async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: ERC1155Ubiquity): Promise<BigNumber> {
+export async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: Contract): Promise<BigNumber> {
   const treasuryIds = await erc1155UbiquityCtr.holderTokens(addr);
 
-  const balanceOfs = treasuryIds.map((id) => {
+  const balanceOfs = treasuryIds.map((id: any) => {
     return erc1155UbiquityCtr.balanceOf(addr, id);
   });
   const balances = await Promise.all(balanceOfs);

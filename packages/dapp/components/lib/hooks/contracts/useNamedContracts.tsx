@@ -1,8 +1,8 @@
-import { DebtCouponManager__factory, ERC20__factory, ICurveFactory__factory, IJar__factory, YieldProxy__factory } from "@ubiquity/dollar/artifacts/types";
 import useWeb3, { PossibleProviders } from "../useWeb3";
 
 import DollarDeployments from "@ubiquity/dollar/deployments.json";
 import NAMED_ACCOUNTS from "../../../config/named-accounts.json";
+import { getCurveFactoryContract, getDebtCouponManagerContract, getERC20Contract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts";
 
 const getDebtCouponManagerAddress = () => {
   const contractDeployments: Record<string, any> = DollarDeployments;
@@ -15,13 +15,13 @@ export const DEBT_COUPON_MANAGER_ADDRESS = getDebtCouponManagerAddress();
 export type NamedContracts = ReturnType<typeof connectedContracts> | null;
 export function connectedContracts(provider: NonNullable<PossibleProviders>) {
   return {
-    curvePool: ICurveFactory__factory.connect(NAMED_ACCOUNTS.curveFactory, provider),
-    yieldProxy: YieldProxy__factory.connect(NAMED_ACCOUNTS.yieldProxy, provider),
-    usdc: ERC20__factory.connect(NAMED_ACCOUNTS.USDC, provider),
-    dai: ERC20__factory.connect(NAMED_ACCOUNTS.DAI, provider),
-    usdt: ERC20__factory.connect(NAMED_ACCOUNTS.USDT, provider),
-    debtCouponManager: DebtCouponManager__factory.connect(DEBT_COUPON_MANAGER_ADDRESS, provider),
-    jarUsdc: IJar__factory.connect(NAMED_ACCOUNTS.jarUSDCAddr, provider),
+    curvePool: getCurveFactoryContract(NAMED_ACCOUNTS.curveFactory, provider),
+    yieldProxy: getYieldProxyContract(NAMED_ACCOUNTS.yieldProxy, provider),
+    usdc: getERC20Contract(NAMED_ACCOUNTS.USDC, provider),
+    dai: getERC20Contract(NAMED_ACCOUNTS.DAI, provider),
+    usdt: getERC20Contract(NAMED_ACCOUNTS.USDT, provider),
+    debtCouponManager: getDebtCouponManagerContract(DEBT_COUPON_MANAGER_ADDRESS, provider),
+    jarUsdc: getIJarContract(NAMED_ACCOUNTS.jarUSDCAddr, provider),
   };
 }
 

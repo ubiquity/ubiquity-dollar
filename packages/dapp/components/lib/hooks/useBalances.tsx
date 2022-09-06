@@ -1,6 +1,5 @@
-import { ERC1155Ubiquity } from "@ubiquity/dollar/artifacts/types";
 import { erc1155BalanceOf } from "@/lib/utils";
-import { BigNumber } from "ethers";
+import { BigNumber, Contract } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import useManagerManaged from "./contracts/useManagerManaged";
 import useNamedContracts from "./contracts/useNamedContracts";
@@ -38,8 +37,8 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         managedContracts.dollarMetapool.balanceOf(walletAddress),
         managedContracts.creditToken.balanceOf(walletAddress),
         managedContracts.governanceToken.balanceOf(walletAddress),
-        erc1155BalanceOf(walletAddress, managedContracts.creditNft as unknown as ERC1155Ubiquity),
-        erc1155BalanceOf(walletAddress, managedContracts.stakingToken as unknown as ERC1155Ubiquity),
+        erc1155BalanceOf(walletAddress, managedContracts.creditNft as unknown as Contract),
+        erc1155BalanceOf(walletAddress, managedContracts.stakingToken as unknown as Contract),
         namedContracts.usdc.balanceOf(walletAddress),
         namedContracts.dai.balanceOf(walletAddress),
         namedContracts.usdt.balanceOf(walletAddress),

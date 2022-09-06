@@ -1,4 +1,4 @@
-import { DebtCouponManager__factory, UbiquityAlgorithmicDollarManager__factory } from "@ubiquity/dollar/artifacts/types";
+import { getDebtCouponManagerContract, getUbiquityAlgorithmicDollarManagerContract } from "@/components/utils/contracts";
 import useDeployedAddress from "../useDeployedAddress";
 import { PossibleProviders } from "../useWeb3";
 import useWeb3Provider from "../useWeb3Provider";
@@ -8,8 +8,8 @@ export function connectedContracts(provider: NonNullable<PossibleProviders>) {
   const [addr1, addr2] = useDeployedAddress("UbiquityAlgorithmicDollarManager", "DebtCouponManager");
   return addr1 && addr2
     ? {
-        manager: UbiquityAlgorithmicDollarManager__factory.connect(addr1, provider),
-        debtCouponManager: DebtCouponManager__factory.connect(addr2, provider),
+        manager: getUbiquityAlgorithmicDollarManagerContract(addr1, provider),
+        debtCouponManager: getDebtCouponManagerContract(addr2, provider),
       }
     : null;
 }

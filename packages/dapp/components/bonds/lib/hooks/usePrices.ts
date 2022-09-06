@@ -1,12 +1,10 @@
-import { ethers } from "ethers";
+import { ethers, Contract } from "ethers";
 import { useEffect, useState } from "react";
-
-import { ERC20 } from "@ubiquity/dollar/artifacts/types";
 
 import { goldenPool, PoolData } from "../pools";
 import { Contracts } from "./useLaunchPartyContracts";
 
-const usePrices = (contracts: Contracts | null, tokensContracts: ERC20[], poolsData: { [token: string]: PoolData }) => {
+const usePrices = (contracts: Contracts | null, tokensContracts: Contract[], poolsData: { [token: string]: PoolData }) => {
   const [uarUsdPrice, setUarUsdPrice] = useState<number | null>(null);
 
   async function refreshPrices() {
