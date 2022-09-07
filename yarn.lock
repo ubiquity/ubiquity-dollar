@@ -2980,7 +2980,7 @@ __metadata:
 
 "@ubiquity/ubiquistick@file:./packages/contracts/ubiquistick::locator=%40ubiquity%2Fmonorepo%40workspace%3A.":
   version: 1.0.1-beta
-  resolution: "@ubiquity/ubiquistick@file:./packages/contracts/ubiquistick#./packages/contracts/ubiquistick::hash=03cf8c&locator=%40ubiquity%2Fmonorepo%40workspace%3A."
+  resolution: "@ubiquity/ubiquistick@file:./packages/contracts/ubiquistick#./packages/contracts/ubiquistick::hash=565af9&locator=%40ubiquity%2Fmonorepo%40workspace%3A."
   dependencies:
     "@codechecks/client": ^0.1.12
     "@ethersproject/abi": ^5.5.0
@@ -3022,7 +3022,7 @@ __metadata:
     tsconfig-paths: ^3.12.0
     typechain: ^7.0.0
     typescript: ^4.7.4
-  checksum: 1909e024062bf2de98e54d424f05ec0dccd93cc7c0d3f34b0c52e9718a637cf1217c810260cf3829a57c23fecb83322fafec4f7a44d22ba7ca4b2d502b6754f6
+  checksum: d9dd6d16fc7082b2f4389e9d07d258dea1b17c6d35a2dfdc9ac869c987bbf46ec2159e451071fe94a83832bb96ddee31de8e7b351501fca811d5b54dc4770887
   languageName: node
   linkType: hard
 
@@ -3075,7 +3075,7 @@ __metadata:
 
 "@ubiquity/ubiquity-dollar@file:./packages/contracts/dollar::locator=%40ubiquity%2Fmonorepo%40workspace%3A.":
   version: 1.0.1-beta
-  resolution: "@ubiquity/ubiquity-dollar@file:./packages/contracts/dollar#./packages/contracts/dollar::hash=338c94&locator=%40ubiquity%2Fmonorepo%40workspace%3A."
+  resolution: "@ubiquity/ubiquity-dollar@file:./packages/contracts/dollar#./packages/contracts/dollar::hash=d4f96f&locator=%40ubiquity%2Fmonorepo%40workspace%3A."
   dependencies:
     "@commitlint/cli": ^16.1.0
     "@commitlint/config-conventional": ^16.0.0
@@ -3142,7 +3142,7 @@ __metadata:
     typechain: ^7.0.0
     typescript: ^4.5.5
     usb: ^2.1.2
-  checksum: 0f25f10d20270c5a5d5ef757a7290f9cdd53ef4377f169cb7cb0f8876857e64194ed6c3c65a77c6855ed3fd9d5f492f61a0589616a54d013148d20a1924b940d
+  checksum: c39e1be566589f11dfb4224a76a7e6b4bd66e41cc3910048fceacba6e66f51d97446e76d3d67dc15923439829eac4b894859311ceeb61200c2a5ec9a74752558
   languageName: node
   linkType: hard
 

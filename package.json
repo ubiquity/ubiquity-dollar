@@ -19,11 +19,11 @@
     "rimraf": "3.0.2"
   },
   "scripts": {
-    "build": "yarn workspaces foreach run build",
-    "test": "yarn workspaces foreach run test",
-    "purge": "yarn workspaces foreach run purge && rimraf './node_modules'",
-    "prettier": "yarn workspaces foreach run prettier",
-    "lint": "yarn workspaces foreach run lint"
+    "build:all": "yarn workspaces foreach run build",
+    "test:all": "yarn workspaces foreach run test",
+    "purge:all": "yarn workspaces foreach run purge && rimraf './node_modules'",
+    "prettier:all": "yarn workspaces foreach run prettier",
+    "lint:all": "yarn workspaces foreach run lint"
   },
   "husky": {
     "hooks": {

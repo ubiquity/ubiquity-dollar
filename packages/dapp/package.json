@@ -8,7 +8,7 @@
     "build": "next build && next export --outdir dist",
     "start": "next dev",
     "clean": "rimraf ./dist",
-    "purge": "yarn clean && rimraf ./node_modules",
+    "purge": "yarn clean && rimraf ./node_modules ./dist ./next",
     "lint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
     "prettier": "prettier --write ."
   },
