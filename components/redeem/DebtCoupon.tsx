@@ -1,10 +1,9 @@
-import { BigNumber, ethers } from "ethers";
-import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
-
-import { Balances, useBalances, useTransactionLogger } from "@/lib/hooks";
 import { constrainNumber, formatTimeDiff } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import * as widget from "@/ui/widget";
+import { BigNumber, ethers } from "ethers";
+import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
+import useBalances, { Balances } from "../lib/hooks/useBalances";
+import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import usePrices from "./lib/usePrices";
 
 type Actions = {
@@ -49,9 +48,12 @@ const uAR = "uAR";
 //   }
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction] = useTransactionLogger();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [twapPrice, spotPrice] = usePrices();
 
   const actions: Actions = {
@@ -94,8 +96,8 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
   };
 
   return (
-    <widget.Container className="relative !mx-auto max-w-screen-lg">
-      <widget.Title text="Debt Coupon" />
+    <div>
+      <h2>Debt Coupon</h2>
       {balances && (
         <DebtCoupon
           twapPrice={twapPrice}
@@ -116,7 +118,7 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
           coupons={coupons}
         />
       )}
-    </widget.Container>
+    </div>
   );
 };
 
@@ -161,6 +163,7 @@ const DebtCoupon = memo(
     const [selectedCurrency, selectCurrency] = useState(uDEBT);
     const [increasedValue, setIncreasedValue] = useState(0);
     const [errMsg, setErrMsg] = useState<string>();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [expectedCoupon, setExpectedCoupon] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
 
@@ -287,7 +290,7 @@ export const Coupons = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupply, udeb
         uarTotalSupply={uarTotalSupply}
         udebtTotalSupply={udebtTotalSupply}
       />
-      <div className="py-8">
+      <div>
         <span>Your Coupons</span>
       </div>
       <CouponRedeem coupons={coupons} actions={actions} />
@@ -340,36 +343,36 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
 
   return (
     <>
-      <div className="my-0 mx-auto w-10/12">
-        <div className="w-full">
-          <div className="inline-flex w-full justify-between">
-            <div className="w-5/12 self-center text-left">
+      <div>
+        <div>
+          <div>
+            <div>
               <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
             </div>
-            <div className="inline-flex w-7/12 justify-between">
+            <div>
               <input type="number" value={ubondAmount} disabled={shouldDisableInput("ubond")} onChange={handleInputUBOND} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
         </div>
-        <div className="w-full">
-          <div className="inline-flex w-full justify-between">
-            <div className="w-5/12 self-center text-left">
+        <div>
+          <div>
+            <div>
               <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
             </div>
-            <div className="inline-flex w-7/12 justify-between">
+            <div>
               <input type="number" value={uarAmount} disabled={shouldDisableInput("uar")} onChange={handleInputUAR} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
         </div>
-        <div className="w-full">
-          <div className="inline-flex w-full justify-between">
-            <div className="w-5/12 self-center text-left">
+        <div>
+          <div>
+            <div>
               <span>Deprecation rate 10% / week</span>
             </div>
-            <div className="inline-flex w-7/12 justify-between">
-              <span className="w-1/2 self-center text-center">{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
+            <div>
+              <span>{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
               <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
             </div>
           </div>
@@ -389,58 +392,58 @@ type RewardCycleInfoProps = {
 export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupply, udebtTotalSupply }: RewardCycleInfoProps) => {
   return (
     <>
-      <div className="my-4">
+      <div>
         <span>Reward Cycle</span>
       </div>
-      <div className="w-full">
-        <div className="inline-flex w-10/12 justify-between rounded-md border border-solid border-white/10">
-          <div className="w-1/4 self-center text-center">
+      <div>
+        <div>
+          <div>
             <span>uAD</span>
           </div>
-          <div className="w-1/4 self-center text-center">
-            <div className="pt-2 pb-1">Total Supply</div>
-            <div className="pt-1 pb-2">{uadTotalSupply.toLocaleString()}</div>
+          <div>
+            <div>Total Supply</div>
+            <div>{uadTotalSupply.toLocaleString()}</div>
           </div>
-          <div className="w-1/4 self-center text-center">
-            <div className="pt-2 pb-1">Minted</div>
-            <div className="pt-1 pb-2">25k</div>
+          <div>
+            <div>Minted</div>
+            <div>25k</div>
           </div>
-          <div className="w-1/4 self-center text-center">
-            <div className="pt-2 pb-1">Mintable</div>
-            <div className="pt-1 pb-2">12k</div>
+          <div>
+            <div>Mintable</div>
+            <div>12k</div>
           </div>
         </div>
       </div>
-      <div className="mt-4 w-full">
-        <div className="inline-flex w-10/12">
-          <div className="w-1/4 self-center">
+      <div>
+        <div>
+          <div>
             <span>Total debt</span>
           </div>
-          <div className="inline-flex w-3/4 justify-between rounded-md rounded-b-none border border-solid border-white/10">
-            <div className="w-1/3">
-              <div className="pt-2 pb-1">uBOND</div>
-              <div className="pt-1 pb-2">{ubondTotalSupply.toLocaleString()}</div>
+          <div>
+            <div>
+              <div>uBOND</div>
+              <div>{ubondTotalSupply.toLocaleString()}</div>
             </div>
-            <div className="w-1/3">
-              <div className="pt-2 pb-1">uAR</div>
-              <div className="pt-1 pb-2">{uarTotalSupply.toLocaleString()}</div>
+            <div>
+              <div>uAR</div>
+              <div>{uarTotalSupply.toLocaleString()}</div>
             </div>
-            <div className="w-1/3">
-              <div className="pt-2 pb-1">uDEBT</div>
-              <div className="pt-1 pb-2">{udebtTotalSupply.toLocaleString()}</div>
+            <div>
+              <div>uDEBT</div>
+              <div>{udebtTotalSupply.toLocaleString()}</div>
             </div>
           </div>
         </div>
       </div>
-      <div className="w-full">
-        <div className="inline-flex w-10/12">
-          <div className="w-1/4 self-center">
+      <div>
+        <div>
+          <div>
             <span>Redeemable</span>
           </div>
-          <div className="inline-flex w-3/4 justify-between rounded-md rounded-t-none border border-t-0 border-solid border-white/10">
-            <div className="w-1/3 py-2">10,000</div>
-            <div className="w-1/3 py-2">27,000</div>
-            <div className="w-1/3 py-2">0</div>
+          <div>
+            <div>10,000</div>
+            <div>27,000</div>
+            <div>0</div>
           </div>
         </div>
       </div>
@@ -461,30 +464,14 @@ type UadBurningProps = {
 export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedCoupon, errMsg }: UadBurningProps) => {
   return (
     <>
-      <div className="my-8 inline-flex">
-        <span className="self-center">uAD</span>
-        <input className="self-center" type="number" onChange={handleInputUAD} />
-        <nav className="flex flex-col self-center border-b-0 sm:flex-row">
-          <button
-            className={`m-0 self-center rounded-[16px] rounded-r-none hover:text-accent focus:outline-none ${
-              selectedCurrency === uAR ? "border-accent font-medium text-accent" : "text-gray-600"
-            }`}
-            onClick={() => handleTabSelect(uAR)}
-          >
-            uAR
-          </button>
-          <button
-            className={`m-0 self-center rounded-[16px] rounded-l-none hover:text-accent focus:outline-none ${
-              selectedCurrency === uDEBT ? "border-accent font-medium text-accent" : "text-gray-600"
-            }`}
-            onClick={() => handleTabSelect(uDEBT)}
-          >
-            uDEBT
-          </button>
+      <div>
+        <span>uAD</span>
+        <input type="number" onChange={handleInputUAD} />
+        <nav>
+          <button onClick={() => handleTabSelect(uAR)}>uAR</button>
+          <button onClick={() => handleTabSelect(uDEBT)}>uDEBT</button>
         </nav>
-        <button onClick={handleBurn} className="self-center">
-          Burn
-        </button>
+        <button onClick={handleBurn}>Burn</button>
       </div>
       <p>{errMsg}</p>
       {expectedCoupon && (
@@ -492,7 +479,7 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
           expected {selectedCurrency} {ethers.utils.formatEther(expectedCoupon)}
         </p>
       )}
-      <div className="my-4">
+      <div>
         <span>Price will increase by an estimated of +${increasedValue}</span>
       </div>
     </>
@@ -518,25 +505,25 @@ export const PumpCycle = ({
 }: PumpCycleProps) => {
   return (
     <>
-      <div className="py-8">
+      <div>
         <span>Pump Cycle</span>
       </div>
-      <div className="flex justify-center pb-4">
-        <div className="w-2/4 border-0 border-r border-solid border-white/10 px-8">
+      <div>
+        <div>
           <span>Fungible (uAR)</span>
-          <table className="w-full">
+          <table>
             <tbody>
               <tr>
-                <td className="pr-2 text-right">Deprecation rate</td>
-                <td className="pl-2 text-left">{uarDeprecationRate * 100}% / week</td>
+                <td>Deprecation rate</td>
+                <td>{uarDeprecationRate * 100}% / week</td>
               </tr>
               <tr>
-                <td className="pr-2 text-right">Current reward %</td>
-                <td className="pl-2 text-left">{uarCurrentRewardPct * 100}%</td>
+                <td>Current reward %</td>
+                <td>{uarCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
-                <td className="pr-2 text-right">Expires?</td>
-                <td className="pl-2 text-left">No</td>
+                <td>Expires?</td>
+                <td>No</td>
               </tr>
             </tbody>
           </table>
@@ -545,21 +532,21 @@ export const PumpCycle = ({
           </div>
           <a href="">Learn more</a>
         </div>
-        <div className="w-2/4 px-8">
+        <div>
           <span>Non-fungible (uDEBT)</span>
-          <table className="w-full">
+          <table>
             <tbody>
               <tr>
-                <td className="w-1/2 pr-4 text-right">Deprecation rate</td>
-                <td className="w-1/2 pl-4 text-left">{udebtDeprecationRate * 100}%</td>
+                <td>Deprecation rate</td>
+                <td>{udebtDeprecationRate * 100}%</td>
               </tr>
               <tr>
-                <td className="w-1/2 pr-4 text-right">Current reward %</td>
-                <td className="w-1/2 pl-4 text-left">{udebtCurrentRewardPct * 100}%</td>
+                <td>Current reward %</td>
+                <td>{udebtCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
-                <td className="w-1/2 pr-4 text-right">Expires?</td>
-                <td className="w-1/2 pl-4 text-left">After {calculatedUdebtExpirationTime}</td>
+                <td>Expires?</td>
+                <td>After {calculatedUdebtExpirationTime}</td>
               </tr>
             </tbody>
           </table>
@@ -582,77 +569,52 @@ type TwapPriceBarProps = {
 };
 
 export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
-  const calculatedPercent = () => {
-    const parsedPrice = parseFloat(price);
-    let leftBarPercent = ((parsedPrice - 0.9) * 100 * 0.8) / 0.2;
-    leftBarPercent = leftBarPercent < 10 ? 10 : leftBarPercent > 90 ? 90 : leftBarPercent;
-    return leftBarPercent;
-  };
-
   const leftPositioned = parseFloat(price) <= 1;
 
   return (
     <>
-      <div className="relative flex h-8 w-full rounded-md border border-solid border-white/10">
-        <div className="flex w-full">
-          <div className={`flex justify-end rounded-l-md border-0 border-r border-solid border-white/10 bg-gray-600`} style={{ width: "10%" }}></div>
-          <hr className="m-0 h-full border-r-0 pt-1" />
-          <div
-            className={`flex justify-${leftPositioned ? "end border-right-accent border-r-2" : "center"} border-0 border-r border-solid border-white/10`}
-            style={{ width: `${leftPositioned ? calculatedPercent() : 40}%` }}
-          >
-            {leftPositioned ? (
-              <span className="self-center pr-2 pt-0.5 text-accent">${price}</span>
-            ) : (
-              <span className="self-center pr-2">Redeeming cycle started {date} ago</span>
-            )}
-          </div>
+      <div>
+        <div>
+          <div></div>
+          <hr />
+          <div>{leftPositioned ? <span>${price}</span> : <span>Redeeming cycle started {date} ago</span>}</div>
           {leftPositioned ? (
             <>
-              <div className={`flex flex-col justify-center border-0 border-r border-solid border-white/10`} style={{ width: `${40 - calculatedPercent()}%` }}>
-                <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </div>
-              <hr className="m-0 h-full border-r-0 pt-1" />
+              <hr />
             </>
           ) : (
             <>
-              <hr className="m-0 h-full border-r-0 pt-1" />
-              <div
-                className={`border-right-accent flex flex-col justify-center border-0 border-r border-r-2 border-solid border-white/10`}
-                style={{ width: `${calculatedPercent() - 40}%` }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 h-6 w-6 self-end text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <hr />
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
                 </svg>
               </div>
             </>
           )}
-          <div className={`flex justify-${leftPositioned ? "center" : "start"}`} style={{ width: `${leftPositioned ? 40 : 80 - calculatedPercent()}%` }}>
-            {leftPositioned ? (
-              <span className="self-center pr-2">Pump cycle started {date} ago</span>
-            ) : (
-              <span className="self-center pl-2 pt-0.5 text-accent">${price}</span>
-            )}
-          </div>
-          <hr className="m-0 h-full border-r-0 pt-1" />
-          <div className={`flex justify-start rounded-r-md bg-gray-600`} style={{ width: "10%" }}></div>
+          <div>{leftPositioned ? <span>Pump cycle started {date} ago</span> : <span>${price}</span>}</div>
+          <hr />
+          <div></div>
         </div>
       </div>
-      <div className="mt-4 flex w-full justify-between">
-        <div className="w-1/5">
-          <span className="self-center">$0.9</span>
+      <div>
+        <div>
+          <span>$0.9</span>
         </div>
-        <div className="w-1/5">
-          <span className="self-center">$1</span>
+        <div>
+          <span>$1</span>
         </div>
-        <div className="w-1/5">
-          <span className="self-center">$1.1</span>
+        <div>
+          <span>$1.1</span>
         </div>
       </div>
-      <div className="py-4">
-        <span className="text-center">
+      <div>
+        <span>
           {parseFloat(price) <= 1 ? "Burn uAD for debt coupons and help pump the price back up" : "Time to redeem debts coupons and help move the price down"}
         </span>
       </div>
@@ -668,13 +630,13 @@ type CouponTableProps = {
 
 export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => {
   return (
-    <div className="my-0 mx-auto w-10/12">
-      <table className="border-colapse mt-16 w-full border border-solid border-white/10">
+    <div>
+      <table>
         <thead>
           <tr>
-            <th className="normal-case">uDEBT</th>
-            <th className="normal-case">Expiration</th>
-            <th className="normal-case">Swap</th>
+            <th>uDEBT</th>
+            <th>Expiration</th>
+            <th>Swap</th>
             <th></th>
           </tr>
         </thead>
@@ -711,7 +673,7 @@ export const CouponRow = ({ coupon, onRedeem, onSwap }: CouponRowProps) => {
       <td>
         <button onClick={handleSwap}>{`${coupon.swap.amount.toLocaleString()} ${coupon.swap.unit}`}</button>
       </td>
-      <td className="h-12">{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
+      <td>{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
     </tr>
   );
 };

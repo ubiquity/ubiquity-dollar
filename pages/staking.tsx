@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { WalletNotConnected } from "@/ui";
 import BondingSharesExplorer from "@/components/staking/BondingSharesExplorer";
-import { useWalletAddress } from "@/components/lib/hooks";
+import useWalletAddress from "@/components/lib/hooks/useWalletAddress";
+import WalletNotConnected from "@/components/ui/WalletNotConnected";
 
 const Staking: FC = (): JSX.Element => {
   const [walletAddress] = useWalletAddress();

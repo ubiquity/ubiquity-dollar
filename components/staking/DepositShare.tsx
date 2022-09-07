@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { ManagedContracts } from "@/lib/hooks/contracts/useManagerManaged";
 import { constrainNumber } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
-import { Button, PositiveNumberInput } from "@/ui";
+import Button from "../ui/Button";
+import PositiveNumberInput from "../ui/PositiveNumberInput";
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();
@@ -30,7 +31,7 @@ async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Prom
 async function calculateApyForWeeks(contracts: NonNullable<ManagedContracts>, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
   const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
-  const usdAsLp = 0.7562534324; // TODO: Get this number from the Curve contract
+  const usdAsLp = 0.7460387929; // TODO: Get this number from the Curve contract
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
   const weeks = BigNumber.from(weeksNum.toString());
   const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
@@ -59,7 +60,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   const [weeks, setWeeks] = useState("");
   const [currentApy, setCurrentApy] = useState<number | null>(null);
   const [prefetched, setPrefetched] = useState<PrefetchedConstants | null>(null);
-  const [apyBounds, setApyBounds] = useState<[number, number] | null>(null);
+  const [aprBounds, setApyBounds] = useState<[number, number] | null>(null);
 
   function validateAmount(): string | null {
     if (amount) {
@@ -116,20 +117,18 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
 
   return (
     <div>
-      <div className="mb-4 text-center text-3xl text-accent opacity-75">
-        APY {currentApy ? `${currentApy}%` : apyBounds ? `${apyBounds[0]}% - ${apyBounds[1]}%` : "..."}
-      </div>
-      <div className="mb-4 grid grid-cols-4 justify-center gap-4">
+      <div>APR {currentApy ? `${currentApy}%` : aprBounds ? `${aprBounds[1]}%` : "..."}</div>
+      <div>
         <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
         <PositiveNumberInput value={weeks} fraction={false} onChange={onWeeksChange} disabled={disabled} placeholder={`Weeks (${MIN_WEEKS}-${MAX_WEEKS})`} />
         <Button disabled={disabled} onClick={onClickMax}>
           MAX
         </Button>
-        <Button styled="accent" disabled={disabled || hasErrors || noInputYet || !amountParsed} onClick={onClickStake}>
+        <Button disabled={disabled || hasErrors || noInputYet || !amountParsed} onClick={onClickStake}>
           Stake LP Tokens
         </Button>
       </div>
-      <div className="mb-2 text-center">{error && <p>{error}</p>}</div>
+      <div>{error && <p>{error}</p>}</div>
     </div>
   );
 };

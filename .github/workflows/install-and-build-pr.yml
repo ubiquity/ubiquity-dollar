@@ -1,0 +1,56 @@
+name: Install and Build Workflow
+
+on:
+  pull_request:
+  push:
+  create:
+    tag:
+      - "v*"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Yarn install
+        run: yarn install
+
+      - name: Setup environment
+        run: yarn install:env
+
+      - name: Install contracts
+        run: yarn install:contracts
+
+      - name: Build contracts
+        run: yarn build:contracts
+
+      - name: Building UI
+        run: yarn build:next
+
+      - name: Save PR
+        env:
+          EVENT_NAME: ${{github.event_name}}
+          PR_NUMBER: ${{ github.event.number }}
+          SHA: ${{github.sha}}
+        run: |
+          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
+          mkdir -p ./pr
+          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
+          zip -r pull-request.zip ./dist && cp pull-request.zip ./pr
+      - uses: actions/upload-artifact@v2
+        with:
+          name: pr
+          path: pr/
