@@ -1,0 +1,3 @@
+[submodule "contracts/yield-aggregator/lib/openzeppelin-contracts"]
+	path = contracts/yield-aggregator/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
