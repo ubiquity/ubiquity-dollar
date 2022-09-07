@@ -2,7 +2,7 @@ import { BigNumber, ethers } from "ethers";
 
 import { Tooltip } from "@/ui";
 import usePrices from "./lib/usePrices";
-import { Icon } from "@/ui";
+import { Icon } from "../ui";
 
 const roundPrice = (twapPrice: BigNumber): string => parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(8);
 
