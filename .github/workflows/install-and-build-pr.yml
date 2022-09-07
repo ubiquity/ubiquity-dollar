@@ -40,7 +40,7 @@ jobs:
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
           mkdir -p ./pr
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
-          zip -r pull-request.zip ./packages/dapp/dist && cp pull-request.zip ./pr
+          cd ./packages/dapp && zip -r pull-request.zip ./dist && cp pull-request.zip ../../pr
       - uses: actions/upload-artifact@v2
         with:
           name: pr
