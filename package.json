@@ -1,109 +1,38 @@
 {
-  "name": "@ubiquity/dollar",
-  "license": "MIT",
-  "scripts": {
-    "start": "run-s install:env install:contracts build:contracts run",
-    "prepare": "husky install",
-    "__test:watch:ci": "nodemon",
-    "build:ci": "run-s install:env install:contracts build:contracts build:next",
-    "install:env": "cp .env.example .env",
-    "install:contracts": "run-s _contracts:install:*",
-    "_contracts:install": "run-p _contracts:install:*",
-    "_contracts:install:dollar": "cd ./contracts/dollar && yarn",
-    "_contracts:install:nft": "cd ./contracts/ubiquistick && yarn",
-    "build:contracts": "run-s _contracts:build:contracts _contracts:build:artifacts _contracts:build:typechain _contracts:build:summary",
-    "_contracts:build:typechain": "typechain --target=ethers-v5 --out-dir ./fixtures/abi/types ./fixtures/abi/*.json",
-    "_contracts:build:contracts": "run-p _contracts:build:contracts:*",
-    "_contracts:build:contracts:nft": "cd ./contracts/ubiquistick && yarn build",
-    "_contracts:build:contracts:dollar": "cd ./contracts/dollar && yarn build",
-    "_contracts:build:artifacts": "run-p _contracts:build:artifacts:*",
-    "_contracts:build:artifacts:nft": "sh ./utils/build-artifacts.sh ./contracts/ubiquistick",
-    "_contracts:build:artifacts:dollar": "sh ./utils/build-artifacts.sh ./contracts/dollar",
-    "_contracts:build:summary": "node ./utils/generate-contracts-addresses.js",
-    "test:all": "run-s _contracts:test:*",
-    "_contracts:test:dollar": "cd ./contracts/dollar && yarn test",
-    "lint:all": "run-s _contracts:lint:*",
-    "_contracts:lint:dollar": "cd ./contracts/dollar && yarn lint",
-    "format": "run-p _format:*",
-    "_format:prettier": "prettier --write .",
-    "_format:eslint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "build:next": "next build && next export --outdir dist",
-    "build": "run-s install:env install:contracts",
-    "run": "run-p run:*",
-    "run:contracts": "./utils/dev-chain-init.sh",
-    "run:ui": "next dev"
-  },
-  "_scripts": {
-    "start:headless": "run-s install:env install:contracts dev:contracts",
-    "build:ui": "yarn next build",
-    "_contracts:clean": "run-p _contracts:clean:*",
-    "_contracts:clean:dollar": "cd ./contracts/dollar && yarn clean",
-    "_contracts:clean:nft": "cd ./contracts/ubiquistick && yarn clean",
-    "contracts:run:nft": "cd ./contracts/ubiquistick && hardhat node",
-    "contracts:run:faucet": "cd ./contracts/dollar && yarn node:faucet",
-    "killscript": "kill `ps | grep dev-chain-init.sh | grep -v grep | awk '{ print $1 }'`",
-    "__format:cspell": "cspell '**'"
-  },
+  "name": "@ubiquity/monorepo",
+  "version": "1.0.1-beta",
+  "private": true,
+  "author": "Ubiquity DAO",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "packages/dapp",
+    "packages/contracts/dollar",
+    "packages/contracts/ubiquistick"
+  ],
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "@ethersproject/abi": "^5.0.0",
-    "@ethersproject/bytes": "^5.0.0",
-    "@ethersproject/providers": "^5.6.8",
-    "@types/react": "^18.0.15",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "eslint": "^7.21.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
-    "lint-staged": "^13.0.3",
-    "nodemon": "^2.0.19",
-    "postcss": "^8.1.0",
-    "prettier": "2.7.1",
-    "typescript": "^4.7.4"
+    "rimraf": "3.0.2"
   },
-  "dependencies": {
-    "@tippyjs/react": "^4.2.5",
-    "@typechain/ethers-v5": "^10.1.0",
-    "@types/btoa": "^1.2.3",
-    "@types/react-dom": "^18.0.6",
-    "autoprefixer": "^10.4.8",
-    "btoa": "^1.2.1",
-    "classnames": "^2.3.1",
-    "ethers": "^5.6.9",
-    "hardhat": "^2.10.1",
-    "husky": "^8.0.1",
-    "next": "^12.2.3",
-    "npm-run-all": "^4.1.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-error-boundary": "^3.1.4",
-    "typechain": "^8.1.0"
-  },
-  "nodemonConfig": {
-    "events": {
-      "config": "",
-      "exit": "",
-      "crash": "",
-      "restart": "clear && printf '\\033[3J'",
-      "start": "clear && printf '\\033[3J'"
-    },
-    "verbose": true,
-    "ignore": [
-      "**/*.json",
-      "fixtures/**",
-      "contracts/*/types/**",
-      "**/*/cache/",
-      "**/*/artifacts/"
-    ],
-    "ext": "ts,sh,tsx",
-    "exec": "yarn build:ci"
+  "scripts": {
+    "build:all": "yarn workspaces foreach run build",
+    "test:all": "yarn workspaces foreach run test",
+    "purge:all": "yarn workspaces foreach run purge && rimraf './node_modules'",
+    "prettier:all": "yarn workspaces foreach run prettier",
+    "lint:all": "yarn workspaces foreach run lint",
+    "build:ci:cloudflare": "yarn workspaces foreach run build",
+    "build:ci:netlify": "yarn workspaces foreach run build",
+    "build:ci:fleek": "yarn workspaces foreach run build"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }
