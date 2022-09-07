@@ -31,9 +31,5 @@
       "pre-commit": "lint-staged"
     }
   },
-  "packageManager": "yarn@3.2.3",
-  "dependencies": {
-    "@ubiquity/ubiquistick": "./packages/contracts/ubiquistick",
-    "@ubiquity/ubiquity-dollar": "./packages/contracts/dollar"
-  }
+  "packageManager": "yarn@3.2.3"
 }
