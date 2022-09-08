@@ -63,39 +63,41 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
         }
       } else if ("metamask" == storedProviderMode) {
         connectMetamask();
-      } else if ("walletconnect" == storedProviderMode) {
-        connectWalletConnect();
       }
     }
   }, []);
 
   async function connectWalletConnect() {
     const bridge = "https://bridge.walletconnect.org";
+
+    // create new connector
     const connector = new WalletConnect({ bridge, qrcodeModal: QRCodeModal });
 
+    // check if already connected
     if (!connector.connected) {
+      // create new session
       await connector.createSession();
     }
 
     connector.on("connect", async (error, payload) => {
-      if (error) throw error;
-
       const { chainId, accounts } = payload.params[0];
-      setStoredProviderMode("walletconnect");
       const newWalletAddress = accounts[0];
-      const newProvider = new WalletConnectProvider({
-        infuraId: process.env.API_KEY_ALCHEMY,
-      });
-      await newProvider.enable();
-      const web3Provider = new ethers.providers.Web3Provider(newProvider);
 
+      const newProvider = new WalletConnectProvider({
+        infuraId: "kFEhzpdK3uq4qNYUZcGfidrhF2_NoMx_",
+      });
+
+      const web3Provider = new ethers.providers.Web3Provider(newProvider);
       const newSigner = web3Provider.getSigner(newWalletAddress);
+      setStoredWallet(newWalletAddress);
+      setStoredProviderMode("walletconnect");
+
       setWeb3State({
         ...web3State,
-        connecting: false,
+        connecting: true,
         providerMode: "walletconnect",
-        provider: web3Provider,
         walletAddress: newWalletAddress,
+        provider: web3Provider,
         signer: newSigner,
       });
     });
