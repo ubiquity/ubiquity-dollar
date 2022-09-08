@@ -44,7 +44,7 @@ const UcrNftRedeem = () => {
 
   async function fetchDebts(address: string, contract: Contract) {
     const ids = await contract.holderTokens(address);
-    const newBalances = await Promise.all(ids.map(async (id: any) => await contract.balanceOf(address, id)));
+    const newBalances = await Promise.all(ids.map(async (id: string) => await contract.balanceOf(address, id)));
     setDebtIds(ids);
     setSelectedDebtId(0);
     setDebtBalances(newBalances);

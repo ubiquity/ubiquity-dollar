@@ -30,7 +30,7 @@ export async function performTransaction(transaction: Promise<ContractTransactio
 export async function erc1155BalanceOf(addr: string, erc1155UbiquityCtr: Contract): Promise<BigNumber> {
   const treasuryIds = await erc1155UbiquityCtr.holderTokens(addr);
 
-  const balanceOfs = treasuryIds.map((id: any) => {
+  const balanceOfs = treasuryIds.map((id: string) => {
     return erc1155UbiquityCtr.balanceOf(addr, id);
   });
   const balances = await Promise.all(balanceOfs);
