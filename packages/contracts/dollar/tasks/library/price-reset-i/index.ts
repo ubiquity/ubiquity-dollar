@@ -1,3 +1,4 @@
+/* eslint no-use-before-define: 0 */ // --> OFF
 import { Signer } from "ethers";
 import "hardhat-deploy";
 import { ActionType } from "hardhat/types";
@@ -25,8 +26,8 @@ export const priceResetter =
       });
     };
 
-    var admin: Signer;
-    var adminAdr: string;
+    let admin: Signer;
+    let adminAdr: string;
 
     if (taskArgs.dryRun) {
       ({ adminAdr, admin } = await dryRunner({ resetFork, taskArgs, network, ethers }));
@@ -38,7 +39,7 @@ export const priceResetter =
 
     const amount = ethers.utils.parseEther(taskArgs.amount);
     console.log(`---account addr:${adminAdr}  `);
-    var { curveFactory, DAI, USDC, USDT, uAD, treasuryAddr, curveToken, metaPool, bondingAddr, manager, curve3CrvToken, bonding } = await getAddresses({
+    let { curveFactory, DAI, USDC, USDT, uAD, treasuryAddr, curveToken, metaPool, bondingAddr, manager, curve3CrvToken, bonding } = await getAddresses({
       getNamedAccounts,
       net,
       ethers,
@@ -68,7 +69,7 @@ export const priceResetter =
                       pushing the uAD price LOWER`);
       coinIndex = 1;
     }
-    var { dyDAI2USDT, dyuAD2USDC, dyuAD2DAI, dyuAD2USDT, indices, indices2 } = await read3crvInfo({ curvePoolFactory, metaPool, DAI, USDT, uAD, USDC, ethers });
+    let { dyDAI2USDT, dyuAD2USDC, dyuAD2DAI, dyuAD2USDT, indices, indices2 } = await read3crvInfo({ curvePoolFactory, metaPool, DAI, USDT, uAD, USDC, ethers });
 
     const mgrtwapOracleAddress = await manager.twapOracleAddress();
     const twapOracle = (await ethers.getContractAt("TWAPOracle", mgrtwapOracleAddress)) as TWAPOracle;

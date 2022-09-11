@@ -26,9 +26,9 @@ export async function getAddresses({ getNamedAccounts, net, ethers }: { getNamed
   const metaPoolAddr = await manager.stableSwapMetaPoolAddress();
   console.log(`---metaPoolAddr:${metaPoolAddr}  `);
   const metaPool = (await ethers.getContractAt("IMetaPool", metaPoolAddr)) as IMetaPool;
-  let curveFactory = "";
-  let DAI = "";
-  let USDC = "";
-  let USDT = "";
+  const curveFactory = "";
+  const DAI = "";
+  const USDC = "";
+  const USDT = "";
   return { curveFactory, DAI, USDC, USDT, uAD, treasuryAddr, curveToken, metaPool, bondingAddr, manager, curve3CrvToken, bonding };
 }

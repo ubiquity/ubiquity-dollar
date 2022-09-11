@@ -34,7 +34,7 @@ export const action =
       // await resetFork(taskArgs.blockheight);
       adminAdr = OVERRIDES_PARAMS.deployer;
       const impersonate = async (account: string): Promise<Signer> => {
-        let provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+        const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
         await provider.send("hardhat_impersonateAccount", [account]);
         return provider.getSigner(account);
       };
