@@ -6,8 +6,7 @@
   "license": "Apache-2.0",
   "workspaces": [
     "packages/dapp",
-    "packages/contracts/dollar",
-    "packages/contracts/ubiquistick"
+    "packages/contracts/*"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.32.0",
@@ -21,12 +20,13 @@
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
     "test:all": "yarn workspaces foreach run test",
-    "purge:all": "yarn workspaces foreach run purge && rimraf './node_modules'",
+    "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "prettier:all": "yarn workspaces foreach run prettier",
     "lint:all": "yarn workspaces foreach run lint",
-    "build:ci:cloudflare": "yarn workspaces foreach run build",
-    "build:ci:netlify": "yarn workspaces foreach run build",
-    "build:ci:fleek": "yarn workspaces foreach run build"
+    "build:ci:cloudflare": "run-s build:all",
+    "build:ci:netlify": "run-s build:all",
+    "build:ci:fleek": "run-s build:all",
+    "___": "___"
   },
   "husky": {
     "hooks": {
