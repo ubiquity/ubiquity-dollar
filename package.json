@@ -25,8 +25,7 @@
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:cloudflare": "run-s build:all",
     "build:ci:netlify": "run-s build:all",
-    "build:ci:fleek": "run-s build:all",
-    "___": "___"
+    "build:ci:fleek": "run-s build:all"
   },
   "husky": {
     "hooks": {
