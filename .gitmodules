@@ -4,3 +4,12 @@
 [submodule "packages/contracts/dollar/lib/openzeppelin-contracts"]
 	path = packages/contracts/dollar/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "packages/contracts/dollar/lib/solidity-linked-list"]
+	path = packages/contracts/dollar/lib/solidity-linked-list
+	url = https://github.com/vittominacori/solidity-linked-list
+[submodule "packages/contracts/dollar/lib/Uniswap/v2-core"]
+	path = packages/contracts/dollar/lib/Uniswap/v2-core
+	url = https://github.com/Uniswap/v2-core.git
+[submodule "packages/contracts/dollar/lib/Uniswap/v2-periphery"]
+	path = packages/contracts/dollar/lib/Uniswap/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery.git
