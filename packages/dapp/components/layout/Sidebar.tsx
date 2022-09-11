@@ -1,55 +1,17 @@
 import Link from "next/link";
-import { useCallback, useEffect, useRef } from "react";
+import { useRef } from "react";
 import Icon, { IconsNames } from "../ui/Icon";
 import WalletConnect from "./WalletConnect";
 
 const PROD = process.env.NODE_ENV == "production";
 
-export type SidebarState = "loading" | "permanent" | "hidden" | "hidden_hovering";
-
-const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState; onChange: (state: SidebarState) => void; permanentThreshold: number }) => {
+const Sidebar = () => {
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  const handleResize = useCallback(() => {
-    if (sidebarRef.current) {
-      if (window.innerWidth < permanentThreshold) {
-        onChange("hidden");
-      } else {
-        onChange("permanent");
-      }
-    }
-  }, []);
-
-  const handleEnter = useCallback(() => {
-    if (state === "hidden") {
-      onChange("hidden_hovering");
-    }
-  }, [state]);
-
-  const handleLeave = useCallback(() => {
-    if (state === "hidden_hovering") {
-      onChange("hidden");
-    }
-  }, [state]);
-
-  const handleToggle = useCallback(() => {
-    if (state === "hidden") {
-      onChange("hidden_hovering");
-    } else {
-      onChange("hidden");
-    }
-  }, [state]);
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <>
       <input type="checkbox" />
-      <div id="Sidebar" ref={sidebarRef} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <div id="Sidebar" ref={sidebarRef}>
         <div>
           <ul>
             <li>
@@ -101,10 +63,6 @@ const Sidebar = ({ state, onChange, permanentThreshold }: { state: SidebarState;
             </li>
           </ul>
         </div>
-
-        {/* Overlay */}
-
-        {state === "hidden_hovering" ? <div onClick={handleToggle}></div> : null}
       </div>
     </>
   );

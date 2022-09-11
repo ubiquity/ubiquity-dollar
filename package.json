@@ -34,5 +34,11 @@
       "pre-commit": "lint-staged"
     }
   },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,sol}": [
+      "yarn _format:prettier",
+      "yarn _format:eslint"
+    ]
+  },
   "packageManager": "yarn@3.2.3"
 }
