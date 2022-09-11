@@ -9,5 +9,5 @@
   "verbose": true,
   "ignore": ["**/*.json", "fixtures/**", "contracts/*/types/**", "**/*/cache/", "**/*/artifacts/"],
   "ext": "ts,sh,tsx",
-  "exec": "yarn build:ci"
+  "exec": "yarn build:all"
 }
