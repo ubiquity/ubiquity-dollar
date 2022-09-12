@@ -29,38 +29,114 @@ import UbiquityAutoRedeem from "@ubiquity/dollar/artifacts/contracts/UbiquityAut
 import UbiquityFormulas from "@ubiquity/dollar/artifacts/contracts/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UbiquityGovernance from "@ubiquity/dollar/artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
 
-const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => new ethers.Contract(address, abi, provider);
+const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
+  return new ethers.Contract(address, abi, provider);
+};
 
-export const getUniswapV2FactoryContract = (address: string, provider: ethers.providers.Provider) => getContract(UniswapV2PairABI, address, provider);
-export const getUniswapV3PoolContract = (address: string, provider: ethers.providers.Provider) => getContract(UniswapV3PoolABI, address, provider);
-export const getChainlinkPriceFeedContract = (address: string, provider: ethers.providers.Provider): ethers.Contract =>
-  getContract(ChainlinkPriceFeedABI, address, provider);
-export const getERC20Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC20ABI, address, provider);
-export const getERC1155UbiquityContract = (address: string, provider: ethers.providers.Provider) => getContract(ERC1155Ubiquity.abi, address, provider);
-export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => getContract(SimpleBond.abi, address, provider);
-export const getUbiquitystickContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquityStick.abi, address, provider);
-export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquityStickSale.abi, address, provider);
-export const getIJarContract = (address: string, provider: ethers.providers.Provider) => getContract(IJar.abi, address, provider);
-export const getDebtCouponManagerContract = (address: string, provider: ethers.providers.Provider) => getContract(DebtCouponManager.abi, address, provider);
-export const getCurveFactoryContract = (address: string, provider: ethers.providers.Provider) => getContract(ICurveFactory.abi, address, provider);
-export const getYieldProxyContract = (address: string, provider: ethers.providers.Provider) => getContract(YieldProxy.abi, address, provider);
-export const getBondingShareV2Contract = (address: string, provider: ethers.providers.Provider) => getContract(BondingShareV2.abi, address, provider);
-export const getBondingV2Contract = (address: string, provider: ethers.providers.Provider) => getContract(BondingV2.abi, address, provider);
-export const getDebtCouponContract = (address: string, provider: ethers.providers.Provider) => getContract(DebtCoupon.abi, address, provider);
-export const getTWAPOracleContract = (address: string, provider: ethers.providers.Provider) => getContract(TWAPOracle.abi, address, provider);
-export const getDollarMintingCalculatorContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DollarMintingCalculator.abi, address, provider);
-export const getICouponsForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ICouponsForDollarsCalculator.abi, address, provider);
-export const getIUARForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(IUARForDollarsCalculator.abi, address, provider);
-export const getIMetaPoolContract = (address: string, provider: ethers.providers.Provider) => getContract(IMetaPool.abi, address, provider);
-export const getMasterChefv2Contract = (address: string, provider: ethers.providers.Provider) => getContract(MasterChefv2.abi, address, provider);
-export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) => getContract(SushiSwapPool.abi, address, provider);
-export const getUbiquityAlgorithmicDollarManagerContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityAlgorithmicDollarManager.abi, address, provider);
-export const getUbiquityAlgorithmicDollarContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityAlgorithmicDollar.abi, address, provider);
-export const getUbiquityAutoRedeemContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquityAutoRedeem.abi, address, provider);
-export const getUbiquityFormulasContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquityFormulas.abi, address, provider);
-export const getUbiquityGovernanceContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquityGovernance.abi, address, provider);
+export const getUniswapV2FactoryContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UniswapV2PairABI, address, provider);
+};
+
+export const getUniswapV3PoolContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UniswapV3PoolABI, address, provider);
+};
+
+export const getChainlinkPriceFeedContract = (address: string, provider: ethers.providers.Provider): ethers.Contract => {
+  return getContract(ChainlinkPriceFeedABI, address, provider);
+};
+
+export const getERC20Contract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(ERC20ABI, address, provider);
+};
+
+export const getERC1155UbiquityContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(ERC1155Ubiquity.abi, address, provider);
+};
+
+export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(SimpleBond.abi, address, provider);
+};
+
+export const getUbiquitystickContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityStick.abi, address, provider);
+};
+
+export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityStickSale.abi, address, provider);
+};
+
+export const getIJarContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(IJar.abi, address, provider);
+};
+
+export const getDebtCouponManagerContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(DebtCouponManager.abi, address, provider);
+};
+
+export const getCurveFactoryContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(ICurveFactory.abi, address, provider);
+};
+
+export const getYieldProxyContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(YieldProxy.abi, address, provider);
+};
+
+export const getBondingShareV2Contract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(BondingShareV2.abi, address, provider);
+};
+
+export const getBondingV2Contract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(BondingV2.abi, address, provider);
+};
+
+export const getDebtCouponContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(DebtCoupon.abi, address, provider);
+};
+
+export const getTWAPOracleContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(TWAPOracle.abi, address, provider);
+};
+
+export const getDollarMintingCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(DollarMintingCalculator.abi, address, provider);
+};
+
+export const getICouponsForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(ICouponsForDollarsCalculator.abi, address, provider);
+};
+
+export const getIUARForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(IUARForDollarsCalculator.abi, address, provider);
+};
+
+export const getIMetaPoolContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(IMetaPool.abi, address, provider);
+};
+
+export const getMasterChefv2Contract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(MasterChefv2.abi, address, provider);
+};
+
+export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(SushiSwapPool.abi, address, provider);
+};
+
+export const getUbiquityAlgorithmicDollarManagerContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityAlgorithmicDollarManager.abi, address, provider);
+};
+
+export const getUbiquityAlgorithmicDollarContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityAlgorithmicDollar.abi, address, provider);
+};
+
+export const getUbiquityAutoRedeemContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityAutoRedeem.abi, address, provider);
+};
+
+export const getUbiquityFormulasContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityFormulas.abi, address, provider);
+};
+
+export const getUbiquityGovernanceContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityGovernance.abi, address, provider);
+};
