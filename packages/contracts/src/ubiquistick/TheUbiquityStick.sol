@@ -90,8 +90,17 @@ contract TheUbiquityStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable {
     address from,
     address to,
     uint256 tokenId
-  ) internal override(ERC721, ERC721Enumerable) {
+  ) internal override(ERC721,ERC721Enumerable) {
     super._beforeTokenTransfer(from, to, tokenId);
+  }
+
+  function _beforeConsecutiveTokenTransfer(
+      address,
+      address,
+      uint256,
+      uint96
+  ) internal override(ERC721, ERC721Enumerable) {
+      revert("ERC721Enumerable: consecutive transfers not supported");
   }
 
   function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {

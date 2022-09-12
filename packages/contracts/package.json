@@ -1,5 +1,5 @@
 {
-  "name": "@ubiquity/dollar",
+  "name": "@ubiquity/contracts",
   "version": "1.0.1-beta",
   "private": true,
   "description": "Ubiquity Algorithmic Dollar smart contracts",

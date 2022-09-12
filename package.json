@@ -6,8 +6,7 @@
   "license": "Apache-2.0",
   "workspaces": [
     "packages/dapp",
-    "packages/contracts/dollar",
-    "packages/contracts/ubiquistick"
+    "packages/contracts"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.32.0",
