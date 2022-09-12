@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <div id="Foreground">
       <Sidebar />
-      <div id="MainContent">
+      <div id="MainContent" onClick={hideSidebarOnMobile}>
         <div>
           <TransactionsDisplay />
           <div id="Content">
@@ -54,4 +54,9 @@ export default function Layout({ children }: LayoutProps) {
       </div>
     </div>
   );
+}
+
+function hideSidebarOnMobile() {
+  const checkbox = document.querySelector("#Foreground > input[type=checkbox]") as HTMLInputElement;
+  checkbox.checked = false;
 }
