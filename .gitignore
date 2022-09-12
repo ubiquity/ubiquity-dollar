@@ -52,6 +52,7 @@ fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
 
+
 .yarn
 .yarn/*
 !.yarn/releases
@@ -59,3 +60,4 @@ fixtures/contracts-addresses/*
 cache
 build
 out
+ 
