@@ -1614,6 +1614,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ubiquity/contracts@workspace:packages/contracts"
   dependencies:
+    dotenv: ^16.0.0
     ts-node: 10.9.1
   languageName: unknown
   linkType: soft
@@ -2818,6 +2819,13 @@ __metadata:
   dependencies:
     is-obj: ^2.0.0
   checksum: d5775790093c234ef4bfd5fbe40884ff7e6c87573e5339432870616331189f7f5d86575c5b5af2dcf0f61172990f4f734d07844b1f23482fff09e3c4bead05ea
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.0.0":
+  version: 16.0.2
+  resolution: "dotenv@npm:16.0.2"
+  checksum: ca8f9ca2d67929c7771069f4c31b4e46b9932621009e658e5afd655dde2d69b77642bf36dbc9e72bc170523dfd908a9ee41c26f034c1fdc605ace3b1b4b10faf
   languageName: node
   linkType: hard
 

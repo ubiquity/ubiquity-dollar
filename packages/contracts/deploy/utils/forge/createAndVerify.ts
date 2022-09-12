@@ -1,12 +1,11 @@
-import { execute } from "./execute";
+import { execute } from "../process/execute";
 
 export type DeployArguments = {
-    rpcURL: string,
+    rpcUrl: string,
     privateKey: string,
     contractInstance: string,
     constructorArguments: string[],
-    etherscanApiKey: string,
-    verify: boolean
+    etherscanApiKey?: string,
 }
 
 export const createdAndVerify = async (args: DeployArguments) => {
@@ -15,7 +14,7 @@ export const createdAndVerify = async (args: DeployArguments) => {
         flattenConstructorArgs += `${param} `;
     }
 
-    const executeCmd = `forge create --rpc-url ${args.rpcURL} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance} --etherscan-api-key ${args.etherscanApiKey} ${args.verify ? `--verify` : ''}}`;
+    const executeCmd = `forge create --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance} --etherscan-api-key ${args.etherscanApiKey ? `${args.etherscanApiKey} --verify` : ``}`;
     const { stdout, stderr } = await execute(executeCmd)
     console.log({ stdout, stderr })
 }

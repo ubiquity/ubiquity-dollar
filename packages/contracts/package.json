@@ -14,6 +14,7 @@
     "url": "https://github.com/ubiquity/ubiquity-dollar.git"
   },
   "dependencies": {
+    "dotenv": "^16.0.0",
     "ts-node": "10.9.1"
   },
   "scripts": {
