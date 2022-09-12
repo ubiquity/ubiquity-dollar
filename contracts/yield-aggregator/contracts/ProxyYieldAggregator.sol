@@ -6,7 +6,6 @@ import "openzeppelin-contracts/contracts/token/ERC20/extensions/ERC4626.sol";
 import "openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./interfaces/IUbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
-import "forge-std/Test.sol";
 
 contract ProxyYieldAggregator is Pausable, ERC4626 {
     // @dev event emitted when redeem split is called
