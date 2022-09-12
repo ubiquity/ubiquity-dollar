@@ -106,9 +106,9 @@
     transition: 0.33s opacity cubic-bezier(0, 1, 1, 1);
     pointer-events: none;
     background: radial-gradient(#000000ff, #101010ff);
-    -webkit-mask-image: linear-gradient(-90deg, #000000ff, #000000ff, #000000ff, #00000000);
+    -webkit-mask-image: linear-gradient(-90deg, #000000ff, #000000ff, #000000ff, #000000ff, #00000000);
     max-width: unset;
-    width: 50vw;
+    width: 75vw;
   }
   #Foreground input[type="checkbox"]:checked + #Sidebar {
     opacity: 1;
