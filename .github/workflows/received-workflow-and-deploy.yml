@@ -21,7 +21,7 @@ jobs:
         with:
           script: |
             const fs = require("fs");
-            const download_artifact = require('${{ github.workspace }}/bin/download_artifact.js');
+            const download_artifact = require('${{ github.workspace }}/utils/download_artifact.js');
             const workflow_run_id = '${{ github.event.workflow_run.id }}';
             const workspace = '${{ github.workspace }}';
             download_artifact({github, context, fs, workflow_run_id, workspace})
@@ -39,5 +39,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require("fs");
-            const print_deployments_log = require('${{ github.workspace }}/bin/print_deployments_logs.js');
+            const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
             await print_deployments_log({github, context, fs});

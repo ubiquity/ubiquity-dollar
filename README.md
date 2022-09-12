@@ -8,6 +8,7 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ## Installation
 
+Build the smart contracts first
 ```bash
 #!/usr/bin/env bash
 # Ubiquity Dollar Installer

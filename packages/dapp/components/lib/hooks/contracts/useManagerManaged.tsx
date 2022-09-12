@@ -1,4 +1,21 @@
-import { getBondingShareV2Contract, getBondingV2Contract, getDebtCouponContract, getDollarMintingCalculatorContract, getERC20Contract, getICouponsForDollarsCalculatorContract, getIMetaPoolContract, getIUARForDollarsCalculatorContract, getMasterChefv2Contract, getSushiSwapPoolContract, getTWAPOracleContract, getUbiquityAlgorithmicDollarContract, getUbiquityAutoRedeemContract, getUbiquityFormulasContract, getUbiquityGovernanceContract, getUniswapV2FactoryContract } from "@/components/utils/contracts";
+import {
+  getBondingShareV2Contract,
+  getBondingV2Contract,
+  getDebtCouponContract,
+  getDollarMintingCalculatorContract,
+  getERC20Contract,
+  getICouponsForDollarsCalculatorContract,
+  getIMetaPoolContract,
+  getIUARForDollarsCalculatorContract,
+  getMasterChefv2Contract,
+  getSushiSwapPoolContract,
+  getTWAPOracleContract,
+  getUbiquityAlgorithmicDollarContract,
+  getUbiquityAutoRedeemContract,
+  getUbiquityFormulasContract,
+  getUbiquityGovernanceContract,
+  getUniswapV2FactoryContract,
+} from "@/components/utils/contracts";
 import { Contract } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "../children-shim";
