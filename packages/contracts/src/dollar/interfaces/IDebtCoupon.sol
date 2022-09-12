@@ -7,17 +7,9 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 interface IDebtCoupon is IERC1155 {
     function updateTotalDebt() external;
 
-    function burnCoupons(
-        address couponOwner,
-        uint256 amount,
-        uint256 expiryBlockNumber
-    ) external;
+    function burnCoupons(address couponOwner, uint256 amount, uint256 expiryBlockNumber) external;
 
-    function mintCoupons(
-        address recipient,
-        uint256 amount,
-        uint256 expiryBlockNumber
-    ) external;
+    function mintCoupons(address recipient, uint256 amount, uint256 expiryBlockNumber) external;
 
     function getTotalOutstandingDebt() external view returns (uint256);
 }

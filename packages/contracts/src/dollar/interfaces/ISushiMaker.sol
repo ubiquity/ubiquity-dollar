@@ -12,25 +12,17 @@ interface ISushiMaker {
         uint256 amount1,
         uint256 amountSUSHI
     );
-    event OwnershipTransferred(
-        address indexed previousOwner,
-        address indexed newOwner
-    );
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     function setBridge(address token, address bridge) external;
 
-    function transferOwnership(
-        address newOwner,
-        bool direct,
-        bool renounce
-    ) external;
+    function transferOwnership(address newOwner, bool direct, bool renounce) external;
 
     function claimOwnership() external;
 
     function convert(address token0, address token1) external;
 
-    function convertMultiple(address[] memory token0, address[] memory token1)
-        external;
+    function convertMultiple(address[] memory token0, address[] memory token1) external;
 
     function bar() external view returns (address);
 

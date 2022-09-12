@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 interface ITheUbiquityStick {
-  function totalSupply() external view returns (uint256);
+    function totalSupply() external view returns (uint256);
 
-  function batchSafeMint(address, uint256) external;
+    function batchSafeMint(address, uint256) external;
 }

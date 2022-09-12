@@ -10,9 +10,5 @@ interface ICollectableDust {
 
     function removeProtocolToken(address _token) external;
 
-    function sendDust(
-        address _to,
-        address _token,
-        uint256 _amount
-    ) external;
+    function sendDust(address _to, address _token, uint256 _amount) external;
 }

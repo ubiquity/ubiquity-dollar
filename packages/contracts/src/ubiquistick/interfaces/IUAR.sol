@@ -2,5 +2,5 @@
 pragma solidity ^0.8.9;
 
 interface IUAR {
-  function raiseCapital(uint256 amount) external;
+    function raiseCapital(uint256 amount) external;
 }

@@ -21,89 +21,88 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // - allow one minter to mint NFT (safeMint)
 
 contract TheUbiquityStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable {
-  uint256 public tokenIdNext = 1;
+    uint256 public tokenIdNext = 1;
 
-  address public minter;
+    address public minter;
 
-  string private _tokenURI;
-  uint256 private constant STANDARD_TYPE = 0;
+    string private _tokenURI;
+    uint256 private constant STANDARD_TYPE = 0;
 
-  string private _goldTokenURI;
-  mapping(uint256 => bool) public gold;
-  uint256 private constant GOLD_FREQ = 64;
-  uint256 private constant GOLD_TYPE = 1;
+    string private _goldTokenURI;
+    mapping(uint256 => bool) public gold;
+    uint256 private constant GOLD_FREQ = 64;
+    uint256 private constant GOLD_TYPE = 1;
 
-  string private _invisibleTokenURI;
-  uint256 private constant INVISIBLE_TOKEN_ID = 42;
-  uint256 private constant INVISIBLE_TYPE = 2;
+    string private _invisibleTokenURI;
+    uint256 private constant INVISIBLE_TOKEN_ID = 42;
+    uint256 private constant INVISIBLE_TYPE = 2;
 
-  modifier onlyMinter() {
-    require(msg.sender == minter, "Not minter");
-    _;
-  }
-
-  constructor() ERC721("The UbiquiStick", "KEY") {
-    setMinter(msg.sender);
-  }
-
-  function tokenURI(uint256 tokenId) public view override(ERC721) returns (string memory uri) {
-    require(_exists(tokenId), "Nonexistent token");
-    return gold[tokenId] ? _goldTokenURI : (tokenId == INVISIBLE_TOKEN_ID ? _invisibleTokenURI : _tokenURI);
-  }
-
-  function setTokenURI(uint256 ntype, string memory tokenURI_) public onlyMinter {
-    if (ntype == STANDARD_TYPE) {
-      _tokenURI = tokenURI_;
-    } else if (ntype == GOLD_TYPE) {
-      _goldTokenURI = tokenURI_;
-    } else if (ntype == INVISIBLE_TYPE) {
-      _invisibleTokenURI = tokenURI_;
+    modifier onlyMinter() {
+        require(msg.sender == minter, "Not minter");
+        _;
     }
-  }
 
-  function setMinter(address minter_) public onlyOwner {
-    minter = minter_;
-  }
-
-  function safeMint(address to) public onlyMinter {
-    uint256 tokenId = tokenIdNext;
-    tokenIdNext += 1;
-
-    // Gold one
-    if (random() % uint256(GOLD_FREQ) == 0) {
-      if (tokenId != INVISIBLE_TOKEN_ID) gold[tokenId] = true;
+    constructor() ERC721("The UbiquiStick", "KEY") {
+        setMinter(msg.sender);
     }
-    _safeMint(to, tokenId);
-  }
 
-  function batchSafeMint(address to, uint256 count) public onlyMinter {
-    for (uint256 i = 0; i < count; i++) {
-      safeMint(to);
+    function tokenURI(uint256 tokenId) public view override (ERC721) returns (string memory uri) {
+        require(_exists(tokenId), "Nonexistent token");
+        return gold[tokenId] ? _goldTokenURI : (tokenId == INVISIBLE_TOKEN_ID ? _invisibleTokenURI : _tokenURI);
     }
-  }
 
-  function random() private view returns (uint256) {
-    return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, msg.sender, tokenIdNext)));
-  }
+    function setTokenURI(uint256 ntype, string memory tokenURI_) public onlyMinter {
+        if (ntype == STANDARD_TYPE) {
+            _tokenURI = tokenURI_;
+        } else if (ntype == GOLD_TYPE) {
+            _goldTokenURI = tokenURI_;
+        } else if (ntype == INVISIBLE_TYPE) {
+            _invisibleTokenURI = tokenURI_;
+        }
+    }
 
-  function _beforeTokenTransfer(
-    address from,
-    address to,
-    uint256 tokenId
-  ) internal override(ERC721,ERC721Enumerable) {
-    super._beforeTokenTransfer(from, to, tokenId);
-  }
+    function setMinter(address minter_) public onlyOwner {
+        minter = minter_;
+    }
 
-  function _beforeConsecutiveTokenTransfer(
-      address,
-      address,
-      uint256,
-      uint96
-  ) internal override(ERC721, ERC721Enumerable) {
-      revert("ERC721Enumerable: consecutive transfers not supported");
-  }
+    function safeMint(address to) public onlyMinter {
+        uint256 tokenId = tokenIdNext;
+        tokenIdNext += 1;
 
-  function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
-    return super.supportsInterface(interfaceId);
-  }
+        // Gold one
+        if (random() % uint256(GOLD_FREQ) == 0) {
+            if (tokenId != INVISIBLE_TOKEN_ID) {
+                gold[tokenId] = true;
+            }
+        }
+        _safeMint(to, tokenId);
+    }
+
+    function batchSafeMint(address to, uint256 count) public onlyMinter {
+        for (uint256 i = 0; i < count; i++) {
+            safeMint(to);
+        }
+    }
+
+    function random() private view returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, msg.sender, tokenIdNext)));
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        override (ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _beforeConsecutiveTokenTransfer(address, address, uint256, uint96)
+        internal
+        override (ERC721, ERC721Enumerable)
+    {
+        revert("ERC721Enumerable: consecutive transfers not supported");
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view override (ERC721, ERC721Enumerable) returns (bool) {
+        return super.supportsInterface(interfaceId);
+    }
 }

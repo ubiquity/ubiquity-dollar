@@ -10,6 +10,7 @@ import "./utils/SafeAddArray.sol";
 
 contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
+
     struct Bond {
         // address of the minter
         address minter;
@@ -32,26 +33,17 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     // ----------- Modifiers -----------
     modifier onlyMinter() {
-        require(
-            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
-            "Governance token: not minter"
-        );
+        require(manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender), "Governance token: not minter");
         _;
     }
 
     modifier onlyBurner() {
-        require(
-            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
-            "Governance token: not burner"
-        );
+        require(manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender), "Governance token: not burner");
         _;
     }
 
     modifier onlyPauser() {
-        require(
-            manager.hasRole(manager.PAUSER_ROLE(), msg.sender),
-            "Governance token: not pauser"
-        );
+        require(manager.hasRole(manager.PAUSER_ROLE(), msg.sender), "Governance token: not pauser");
         _;
     }
 
@@ -67,12 +59,11 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @param _lpAmount amount of LP token deposited
     /// @param _lpRewardDebt amount of excess LP token inside the bonding contract
     /// @param _endBlock end locking period block number
-    function updateBond(
-        uint256 _bondId,
-        uint256 _lpAmount,
-        uint256 _lpRewardDebt,
-        uint256 _endBlock
-    ) external onlyMinter whenNotPaused {
+    function updateBond(uint256 _bondId, uint256 _lpAmount, uint256 _lpRewardDebt, uint256 _endBlock)
+        external
+        onlyMinter
+        whenNotPaused
+    {
         Bond storage bond = _bonds[_bondId];
         uint256 curLpAmount = bond.lpAmount;
         if (curLpAmount > _lpAmount) {
@@ -92,12 +83,13 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @param lpDeposited amount of LP token deposited
     /// @param lpRewardDebt amount of excess LP token inside the bonding contract
     /// @param endBlock block number when the locking period ends
-    function mint(
-        address to,
-        uint256 lpDeposited,
-        uint256 lpRewardDebt,
-        uint256 endBlock
-    ) public virtual onlyMinter whenNotPaused returns (uint256 id) {
+    function mint(address to, uint256 lpDeposited, uint256 lpRewardDebt, uint256 endBlock)
+        public
+        virtual
+        onlyMinter
+        whenNotPaused
+        returns (uint256 id)
+    {
         id = _totalSupply + 1;
         _mint(to, id, 1, bytes(""));
         _totalSupply += 1;
@@ -135,13 +127,11 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev See {IERC1155-safeTransferFrom}.
      */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public override whenNotPaused {
+    function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes memory data)
+        public
+        override
+        whenNotPaused
+    {
         super.safeTransferFrom(from, to, id, amount, data);
         _holderBalances[to].add(id);
     }
@@ -155,7 +145,12 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) public virtual override whenNotPaused {
+    )
+        public
+        virtual
+        override
+        whenNotPaused
+    {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
         _holderBalances[to].add(ids);
     }
@@ -184,19 +179,11 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(address holder) public view returns (uint256[] memory) {
         return _holderBalances[holder];
     }
 
-    function _burn(
-        address account,
-        uint256 id,
-        uint256 amount
-    ) internal virtual override whenNotPaused {
+    function _burn(address account, uint256 id, uint256 amount) internal virtual override whenNotPaused {
         require(amount == 1, "amount <> 1");
         super._burn(account, id, 1);
         Bond storage _bond = _bonds[id];
@@ -204,11 +191,12 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         _totalSupply -= 1;
     }
 
-    function _burnBatch(
-        address account,
-        uint256[] memory ids,
-        uint256[] memory amounts
-    ) internal virtual override whenNotPaused {
+    function _burnBatch(address account, uint256[] memory ids, uint256[] memory amounts)
+        internal
+        virtual
+        override
+        whenNotPaused
+    {
         super._burnBatch(account, ids, amounts);
         for (uint256 i = 0; i < ids.length; ++i) {
             _totalSupply -= amounts[i];
@@ -222,7 +210,11 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155, ERC1155Pausable) {
+    )
+        internal
+        virtual
+        override (ERC1155, ERC1155Pausable)
+    {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

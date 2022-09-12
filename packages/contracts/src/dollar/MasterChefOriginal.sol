@@ -17,22 +17,24 @@ contract MasterChefOriginal is Ownable {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
     // Info of each user.
+
     struct UserInfo {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
-        //
-        // We do some fancy math here. Basically, any point in time, the amount of UBQs
-        // entitled to a user but is pending to be distributed is:
-        //
-        //   pending reward = (user.amount * pool.accUbqPerShare) - user.rewardDebt
-        //
-        // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accUbqPerShare` (and `lastRewardBlock`) gets updated.
-        //   2. User receives the pending reward sent to his/her address.
-        //   3. User's `amount` gets updated.
-        //   4. User's `rewardDebt` gets updated.
+            //
+            // We do some fancy math here. Basically, any point in time, the amount of UBQs
+            // entitled to a user but is pending to be distributed is:
+            //
+            //   pending reward = (user.amount * pool.accUbqPerShare) - user.rewardDebt
+            //
+            // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
+            //   1. The pool's `accUbqPerShare` (and `lastRewardBlock`) gets updated.
+            //   2. User receives the pending reward sent to his/her address.
+            //   3. User's `amount` gets updated.
+            //   4. User's `rewardDebt` gets updated.
     }
     // Info of each pool.
+
     struct PoolInfo {
         IERC20 lpToken; // Address of LP token contract.
         // How many allocation points assigned to this pool. UBQ to distribute per block.
@@ -41,6 +43,7 @@ contract MasterChefOriginal is Ownable {
         uint256 accUbqPerShare; // Accumulated UBQs per share, times 1e12. See below.
     }
     // Ubiquity Manager
+
     UbiquityAlgorithmicDollarManager public manager;
     // Block number when bonus UBQ period ends.
     uint256 public bonusEndBlock;
@@ -57,20 +60,14 @@ contract MasterChefOriginal is Ownable {
     uint256 public totalAllocPoint = 0;
     // The block number when UBQ mining starts.
     uint256 public startBlock;
+
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
-    event EmergencyWithdraw(
-        address indexed user,
-        uint256 indexed pid,
-        uint256 amount
-    );
+    event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
     // ----------- Modifiers -----------
     modifier onlyTokenManager() {
-        require(
-            manager.hasRole(manager.UBQ_TOKEN_MANAGER_ROLE(), msg.sender),
-            "MasterChef: not UBQ manager"
-        );
+        require(manager.hasRole(manager.UBQ_TOKEN_MANAGER_ROLE(), msg.sender), "MasterChef: not UBQ manager");
         _;
     }
 
@@ -92,10 +89,7 @@ contract MasterChefOriginal is Ownable {
     }
 
     // the bigger uGOVDivider is the less extra Ugov will be minted for the treasury
-    function setUGOVShareForTreasury(uint256 _uGOVDivider)
-        external
-        onlyTokenManager
-    {
+    function setUGOVShareForTreasury(uint256 _uGOVDivider) external onlyTokenManager {
         uGOVDivider = _uGOVDivider;
     }
 
@@ -104,68 +98,39 @@ contract MasterChefOriginal is Ownable {
     }
 
     // View function to see pending UBQs on frontend.
-    function pendingUBQ(uint256 _pid, address _user)
-        external
-        view
-        returns (uint256)
-    {
+    function pendingUBQ(uint256 _pid, address _user) external view returns (uint256) {
         PoolInfo storage pool = poolInfo[_pid];
         UserInfo storage user = userInfo[_pid][_user];
         uint256 accUbqPerShare = pool.accUbqPerShare;
         uint256 lpSupply = pool.lpToken.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-            uint256 multiplier = getMultiplier(
-                pool.lastRewardBlock,
-                block.number
-            );
+            uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
 
-            uint256 ubqReward = (multiplier *
-                (ubqPerBlock) *
-                (pool.allocPoint)) / (totalAllocPoint);
-            accUbqPerShare =
-                accUbqPerShare +
-                ((ubqReward * (1e12)) / (lpSupply));
+            uint256 ubqReward = (multiplier * (ubqPerBlock) * (pool.allocPoint)) / (totalAllocPoint);
+            accUbqPerShare = accUbqPerShare + ((ubqReward * (1e12)) / (lpSupply));
         }
         return ((user.amount * accUbqPerShare) / 1e12) - user.rewardDebt;
     }
 
     // Add a new lp to the pool. Can only be called by the owner.
     // XXX DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(
-        uint256 _allocPoint,
-        IERC20 _lpToken,
-        bool _withUpdate
-    ) public onlyOwner {
+    function add(uint256 _allocPoint, IERC20 _lpToken, bool _withUpdate) public onlyOwner {
         if (_withUpdate) {
             massUpdatePools();
         }
-        uint256 lastRewardBlock = block.number > startBlock
-            ? block.number
-            : startBlock;
+        uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint + _allocPoint;
         poolInfo.push(
-            PoolInfo({
-                lpToken: _lpToken,
-                allocPoint: _allocPoint,
-                lastRewardBlock: lastRewardBlock,
-                accUbqPerShare: 0
-            })
+            PoolInfo({lpToken: _lpToken, allocPoint: _allocPoint, lastRewardBlock: lastRewardBlock, accUbqPerShare: 0})
         );
     }
 
     // Update the given pool's UBQ allocation point. Can only be called by the owner.
-    function set(
-        uint256 _pid,
-        uint256 _allocPoint,
-        bool _withUpdate
-    ) public onlyOwner {
+    function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) public onlyOwner {
         if (_withUpdate) {
             massUpdatePools();
         }
-        totalAllocPoint =
-            totalAllocPoint -
-            poolInfo[_pid].allocPoint +
-            _allocPoint;
+        totalAllocPoint = totalAllocPoint - poolInfo[_pid].allocPoint + _allocPoint;
         poolInfo[_pid].allocPoint = _allocPoint;
     }
 
@@ -189,22 +154,13 @@ contract MasterChefOriginal is Ownable {
             return;
         }
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
-        uint256 ubqReward = (multiplier * ubqPerBlock * pool.allocPoint) /
-            totalAllocPoint;
+        uint256 ubqReward = (multiplier * ubqPerBlock * pool.allocPoint) / totalAllocPoint;
 
         // mint another x% for the treasury
-        IERC20Ubiquity(manager.governanceTokenAddress()).mint(
-            manager.treasuryAddress(),
-            ubqReward / uGOVDivider
-        );
-        IERC20Ubiquity(manager.governanceTokenAddress()).mint(
-            address(this),
-            ubqReward
-        );
+        IERC20Ubiquity(manager.governanceTokenAddress()).mint(manager.treasuryAddress(), ubqReward / uGOVDivider);
+        IERC20Ubiquity(manager.governanceTokenAddress()).mint(address(this), ubqReward);
 
-        pool.accUbqPerShare =
-            pool.accUbqPerShare +
-            ((ubqReward * 1e12) / lpSupply);
+        pool.accUbqPerShare = pool.accUbqPerShare + ((ubqReward * 1e12) / lpSupply);
         pool.lastRewardBlock = block.number;
     }
 
@@ -214,15 +170,10 @@ contract MasterChefOriginal is Ownable {
         UserInfo storage user = userInfo[_pid][msg.sender];
         updatePool(_pid);
         if (user.amount > 0) {
-            uint256 pending = ((user.amount * pool.accUbqPerShare) / 1e12) -
-                user.rewardDebt;
+            uint256 pending = ((user.amount * pool.accUbqPerShare) / 1e12) - user.rewardDebt;
             _safeUGOVTransfer(msg.sender, pending);
         }
-        pool.lpToken.safeTransferFrom(
-            address(msg.sender),
-            address(this),
-            _amount
-        );
+        pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
         user.amount = user.amount + _amount;
         user.rewardDebt = (user.amount * pool.accUbqPerShare) / 1e12;
         emit Deposit(msg.sender, _pid, _amount);
@@ -234,8 +185,7 @@ contract MasterChefOriginal is Ownable {
         UserInfo storage user = userInfo[_pid][msg.sender];
         require(user.amount >= _amount, "withdraw: not good");
         updatePool(_pid);
-        uint256 pending = ((user.amount * pool.accUbqPerShare) / 1e12) -
-            user.rewardDebt;
+        uint256 pending = ((user.amount * pool.accUbqPerShare) / 1e12) - user.rewardDebt;
         _safeUGOVTransfer(msg.sender, pending);
         user.amount = user.amount - _amount;
         user.rewardDebt = (user.amount * pool.accUbqPerShare) / 1e12;
@@ -254,19 +204,13 @@ contract MasterChefOriginal is Ownable {
     }
 
     // Return reward multiplier over the given _from to _to block.
-    function getMultiplier(uint256 _from, uint256 _to)
-        public
-        view
-        returns (uint256)
-    {
+    function getMultiplier(uint256 _from, uint256 _to) public view returns (uint256) {
         if (_to <= bonusEndBlock) {
             return (_to - _from) * BONUS_MULTIPLIER;
         } else if (_from >= bonusEndBlock) {
             return _to - _from;
         } else {
-            return
-                ((bonusEndBlock - _from) * BONUS_MULTIPLIER) +
-                (_to - bonusEndBlock);
+            return ((bonusEndBlock - _from) * BONUS_MULTIPLIER) + (_to - bonusEndBlock);
         }
     }
 

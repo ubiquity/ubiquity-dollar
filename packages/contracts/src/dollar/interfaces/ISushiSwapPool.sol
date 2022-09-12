@@ -5,9 +5,5 @@ interface ISushiSwapPool {
     function pairInfo(address tokenA, address tokenB)
         external
         view
-        returns (
-            uint256 reserveA,
-            uint256 reserveB,
-            uint256 totalSupply
-        );
+        returns (uint256 reserveA, uint256 reserveB, uint256 totalSupply);
 }

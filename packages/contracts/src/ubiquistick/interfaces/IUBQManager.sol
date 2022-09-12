@@ -2,7 +2,7 @@
 pragma solidity ^0.8.9;
 
 interface IUBQManager {
-  function hasRole(bytes32 role, address account) external view returns (bool);
+    function hasRole(bytes32 role, address account) external view returns (bool);
 
-  function UBQ_MINTER_ROLE() external view returns (bytes32);
+    function UBQ_MINTER_ROLE() external view returns (bytes32);
 }

@@ -16,7 +16,8 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test"
+    "test": "forge test",
+    "prettier": "forge fmt"
   },
   "keywords": [
     "stablecoin",
