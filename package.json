@@ -6,33 +6,40 @@
   "license": "Apache-2.0",
   "workspaces": [
     "packages/dapp",
-    "packages/contracts/dollar",
-    "packages/contracts/ubiquistick"
+    "packages/contracts/*"
   ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
-    "eslint": "^7.21.0",
+    "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
+    "lint-staged": "^13.0.3",
+    "nodemon": "^2.0.19",
     "rimraf": "3.0.2"
   },
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
     "test:all": "yarn workspaces foreach run test",
-    "purge:all": "yarn workspaces foreach run purge && rimraf './node_modules'",
+    "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "prettier:all": "yarn workspaces foreach run prettier",
     "lint:all": "yarn workspaces foreach run lint",
-    "build:ci:cloudflare": "yarn workspaces foreach run build",
-    "build:ci:netlify": "yarn workspaces foreach run build",
-    "build:ci:fleek": "yarn workspaces foreach run build"
+    "build:ci:cloudflare": "yarn build:all",
+    "build:ci:netlify": "yarn build:all",
+    "build:ci:fleek": "yarn build:all"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
       "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,sol}": [
+      "prettier --write",
+      "eslint --fix"
+    ]
   },
   "packageManager": "yarn@3.2.3"
 }

@@ -7,8 +7,7 @@ export async function forkReset(blockNumber: any) {
     params: [
       {
         forking: {
-          // @ts-ignore
-          jsonRpcUrl: hardhatConfig.networks.hardhat.forking.url,
+          jsonRpcUrl: hardhatConfig?.networks?.hardhat?.forking?.url,
           blockNumber,
         },
       },

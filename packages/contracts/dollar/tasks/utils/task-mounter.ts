@@ -24,7 +24,7 @@ interface TaskModule {
 
 export function taskMounter(filename: string) {
   const pathToFile = path.join(libraryDirectory, filename);
-  let taskName = filename.split("/").pop()?.split(".").shift() as string; // dynamically name task based on filename
+  const taskName = filename.split("/").pop()?.split(".").shift() as string; // dynamically name task based on filename
 
   import(pathToFile).then(extendHardhatCli);
 
@@ -61,7 +61,7 @@ export function taskMounter(filename: string) {
       // optional
       Object.entries(optionalParams).forEach((optionalParam) => {
         const flattened = optionalParam.flat();
-        // @ts-expect-error
+        // @ts-expect-error - this seems to work fine, not sure the correct way to write it
         extension.addOptionalParam(...flattened);
       });
     } else {
@@ -73,7 +73,7 @@ export function taskMounter(filename: string) {
       // optional
       Object.entries(positionalParams).forEach((positionalParam) => {
         const flattened = positionalParam.flat();
-        // @ts-expect-error
+        // @ts-expect-error - this seems to work fine, not sure the correct way to write it
         extension.addPositionalParam(...flattened);
       });
     } else {

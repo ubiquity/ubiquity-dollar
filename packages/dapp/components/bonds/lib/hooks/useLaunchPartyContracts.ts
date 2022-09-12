@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import { allPools } from "../pools";
 import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
-import { getChainlinkPriceFeedContract, getERC20Contract, getSimpleBondContract, getUbiquitystickContract, getUbiquityStickSaleContract } from "@/components/utils/contracts";
+import {
+  getChainlinkPriceFeedContract,
+  getERC20Contract,
+  getSimpleBondContract,
+  getUbiquitystickContract,
+  getUbiquityStickSaleContract,
+} from "@/components/utils/contracts";
 import { Contract } from "ethers";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
@@ -34,7 +40,6 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
     }
 
     (async () => {
-
       const simpleBond = getSimpleBondContract(SimpleBondAddress, provider);
       const rewardToken = await simpleBond.tokenRewards();
       const contracts = {

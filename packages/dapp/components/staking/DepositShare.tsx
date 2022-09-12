@@ -16,7 +16,8 @@ const MAX_WEEKS = 208;
 type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
 async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Promise<PrefetchedConstants> {
   const reserves = await contracts.governanceMarket.getReserves();
-  const ubqPrice = +reserves.reserve0.toString() / +reserves.reserve1.toString();
+
+  const ubqPrice = +reserves[0].toString() / +reserves[1].toString();
   const ubqPerBlock = await contracts.masterChef.uGOVPerBlock();
   const ubqMultiplier = await contracts.masterChef.uGOVmultiplier();
   const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));

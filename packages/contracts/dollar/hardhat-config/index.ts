@@ -27,7 +27,9 @@ if (fs.existsSync(path.join(__dirname, "../artifacts/types"))) {
 // LOAD .ENV
 const pathToDotEnv = path.join(__dirname, "../.env");
 fs.stat(pathToDotEnv, (err, stats) => {
-  if (err) { warn("Env file not set") };
+  if (err) {
+    warn("Env file not set");
+  }
 });
 dotenv.config({ path: pathToDotEnv });
 

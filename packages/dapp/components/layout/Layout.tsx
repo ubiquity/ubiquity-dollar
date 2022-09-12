@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import Icon from "../ui/Icon";
 import Inventory from "./Inventory";
-import Sidebar, { SidebarState } from "./Sidebar";
+import Sidebar from "./Sidebar";
 import TransactionsDisplay from "./TransactionsDisplay";
 
 type LayoutProps = {
@@ -23,8 +23,6 @@ function ErrorHandler({ error }: { error: Error }) {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const [sidebarState, setSidebarState] = useState<SidebarState>("loading");
-
   useEffect(() => {
     const { ethereum } = window;
     if (ethereum) {
@@ -35,22 +33,18 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div id="Foreground">
-      <Sidebar permanentThreshold={1024} state={sidebarState} onChange={setSidebarState} />
-      <div id="MainContent">
+      <Sidebar />
+      <div id="MainContent" onClick={hideSidebarOnMobile}>
         <div>
           <TransactionsDisplay />
           <div id="Content">
-            {sidebarState !== "loading" ? (
-              <>
-                <div>
-                  <div>
-                    <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
-                      {children}
-                    </ErrorBoundary>
-                  </div>
-                </div>
-              </>
-            ) : null}
+            <div>
+              <div>
+                <ErrorBoundary FallbackComponent={ErrorHandler} resetKeys={[children]}>
+                  {children}
+                </ErrorBoundary>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -60,4 +54,9 @@ export default function Layout({ children }: LayoutProps) {
       </div>
     </div>
   );
+}
+
+function hideSidebarOnMobile() {
+  const checkbox = document.querySelector("#Foreground > input[type=checkbox]") as HTMLInputElement;
+  checkbox.checked = false;
 }

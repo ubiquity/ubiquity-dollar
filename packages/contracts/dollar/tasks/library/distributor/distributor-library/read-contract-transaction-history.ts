@@ -14,7 +14,7 @@ export async function readContractTransactionHistory(address: string, queryDates
   const timestampsDated = await blockHeightDater(queryDates);
   const range = await verifyMinMaxBlockHeight(timestampsDated);
 
-  let provider = new ethers.providers.EtherscanProvider(1, getKey("ETHERSCAN"));
+  const provider = new ethers.providers.EtherscanProvider(1, getKey("ETHERSCAN"));
 
   const filter = {
     address: address,
@@ -28,9 +28,9 @@ export async function readContractTransactionHistory(address: string, queryDates
 async function getLogs(provider: ethers.providers.EtherscanProvider, filter: Filter): Promise<LogAndEvents[]> {
   // https://github.com/ethers-io/ethers.js/issues/487#issuecomment-481881691
 
-  let tokenInterface = new ethers.utils.Interface(tokenABI);
+  const tokenInterface = new ethers.utils.Interface(tokenABI);
   const logs = await provider.getLogs(filter);
-  let logsAndEvents = logs.map((log) => {
+  const logsAndEvents = logs.map((log) => {
     const events = tokenInterface.parseLog(log);
     return { log, events };
   });
