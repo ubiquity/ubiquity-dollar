@@ -20,7 +20,7 @@ export type Web3State = {
 };
 
 type Web3Actions = {
-  connectMetamask: () => Promise<void>;
+  connectMetaMask: () => Promise<void>;
   connectJsonRpc: (address: string) => Promise<void>;
   disconnect: () => Promise<void>;
 };
@@ -37,7 +37,7 @@ const DEFAULT_WEB3_STATE: Web3State = {
 };
 
 const DEFAULT_WEB3_ACTIONS: Web3Actions = {
-  connectMetamask: async () => {},
+  connectMetaMask: async () => {},
   connectJsonRpc: async () => {},
   disconnect: async () => {},
 };
@@ -53,11 +53,11 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
     if (storedProviderMode === "jsonrpc" && storedWallet) {
       connectJsonRpc(storedWallet);
     } else {
-      connectMetamask();
+      connectMetaMask();
     }
   }, []);
 
-  async function connectMetamask() {
+  async function connectMetaMask() {
     if (metamaskInstalled) {
       const newProvider = new ethers.providers.Web3Provider(window.ethereum);
       setWeb3State({ ...web3State, connecting: true });
@@ -97,7 +97,7 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
     setWeb3State({ ...web3State, walletAddress: null, signer: null });
   }
 
-  return <Web3Context.Provider value={[web3State, { connectMetamask, connectJsonRpc, disconnect }]}>{children}</Web3Context.Provider>;
+  return <Web3Context.Provider value={[web3State, { connectMetaMask, connectJsonRpc, disconnect }]}>{children}</Web3Context.Provider>;
 };
 
 const useWeb3 = () => useContext(Web3Context);

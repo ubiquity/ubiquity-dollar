@@ -6,7 +6,7 @@ const PROD = process.env.NODE_ENV == "production";
 
 const WalletConnect = () => {
   const [walletModal, setWalletModal] = useState(false);
-  const [{ walletAddress, providerMode, connecting, metamaskInstalled }, { disconnect, connectMetamask }] = useWeb3();
+  const [{ walletAddress, providerMode, connecting, metamaskInstalled }, { disconnect, connectMetaMask }] = useWeb3();
 
   const promptConnectWallet = () => {
     setWalletModal(true);
@@ -14,7 +14,7 @@ const WalletConnect = () => {
 
   useEffect(() => {
     if (walletModal && PROD) {
-      connectMetamask();
+      connectMetaMask();
     }
   }, [walletModal]);
 
@@ -44,7 +44,7 @@ const WalletConnect = () => {
 export default WalletConnect;
 
 function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskInstalled: boolean }) {
-  const [{ provider }, { connectMetamask, connectJsonRpc }] = useWeb3();
+  const [{ provider }, { connectMetaMask, connectJsonRpc }] = useWeb3();
 
   console.log("PROVIDER!", provider);
 
@@ -76,11 +76,11 @@ function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskIn
         <div>
           <a>
             <Btn
-              text="Metamask"
+              text="MetaMask"
               icon="metamask"
               onClick={
                 metamaskInstalled
-                  ? connectMetamask
+                  ? connectMetaMask
                   : () => window.open("https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=es", "_blank")
               }
             />
