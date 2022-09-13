@@ -113,7 +113,7 @@ video {
   text-rendering: geometricPrecision;
   font-size: 12px;
   /* max-width: 200px; */
-  padding-left: 16px;
+  /* padding-left: 16px; */
 }
 #Foreground input[type="checkbox"] {
   display: none;

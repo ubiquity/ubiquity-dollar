@@ -8,7 +8,7 @@ export default async function blockHeightDater(range: string[]) {
   );
 
   // Getting block by period duration. For example: every first block of month's midnights between vesting start and vesting end
-  let blocks = dater.getEvery(
+  const blocks = dater.getEvery(
     "months", // Period, required. Valid value: years, quarters, months, weeks, days, hours, minutes
     range[0], // Start date, required. Any valid moment.js value: string, milliseconds, Date() object, moment() object.
     range[range.length - 1], // End date, required. Any valid moment.js value: string, milliseconds, Date() object, moment() object.

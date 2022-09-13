@@ -25,7 +25,6 @@ type UniswapDataRequest = {
 
 async function fetchUniswapPoolsData(pools: UniswapDataRequest[], provider: NonNullable<PossibleProviders>): Promise<{ [poolAddress: string]: UniswapData }> {
   const getUniPoolFullData = async (poolAddress: string, isV2: boolean): Promise<UniswapData> => {
-
     const pool = isV2 ? getUniswapV2FactoryContract(poolAddress, provider) : getUniswapV3PoolContract(poolAddress, provider);
     const t1 = getERC20Contract(await pool.token0(), provider);
     const t2 = getERC20Contract(await pool.token1(), provider);
@@ -33,7 +32,6 @@ async function fetchUniswapPoolsData(pools: UniswapDataRequest[], provider: NonN
     const d2 = await t2.decimals();
     const b1 = await t1.balanceOf(pool.address);
     const b2 = await t2.balanceOf(pool.address);
-
 
     return {
       poolAddress: poolAddress,

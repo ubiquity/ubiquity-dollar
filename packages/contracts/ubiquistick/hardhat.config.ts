@@ -11,7 +11,7 @@ import { Wallet } from "ethers";
 import "tsconfig-paths/register";
 import "./tasks/index";
 
-const mnemonic = process.env.MNEMONIC || "test test test test test test test test test test test junk"
+const mnemonic = process.env.MNEMONIC || "test test test test test test test test test test test junk";
 
 const accounts = [] as string[];
 
@@ -67,13 +67,16 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       chainId: 1,
-      url: process.env.MAINNET_RPC_URL || (process.env.API_KEY_ALCHEMY ? `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}` : "http://localhost:8545"),
+      url:
+        process.env.MAINNET_RPC_URL ||
+        (process.env.API_KEY_ALCHEMY ? `https://eth-mainnet.alchemyapi.io/v2/${process.env.API_KEY_ALCHEMY}` : "http://localhost:8545"),
       accounts,
     },
     rinkeby: {
       loggingEnabled: true,
       chainId: 4,
-      url: process.env.RINKEBY_RPC_URL || (process.env.API_KEY_ALCHEMY ? `https://rinkeby.infura.io/v3/${process.env.API_KEY_ALCHEMY}` : "http://localhost:8545"),
+      url:
+        process.env.RINKEBY_RPC_URL || (process.env.API_KEY_ALCHEMY ? `https://rinkeby.infura.io/v3/${process.env.API_KEY_ALCHEMY}` : "http://localhost:8545"),
       accounts,
     },
   },

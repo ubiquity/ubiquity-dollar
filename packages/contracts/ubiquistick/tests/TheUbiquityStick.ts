@@ -100,7 +100,7 @@ describe("TheUbiquityStick", function () {
   });
 
   it("Mint lot of NFTs", async function () {
-    let nn = network.name === "hardhat" ? 1024 : network.name === "rinkeby" ? 16 : network.name === "matic" ? 1 : 0;
+    const nn = network.name === "hardhat" ? 1024 : network.name === "rinkeby" ? 16 : network.name === "matic" ? 1 : 0;
 
     if (nn) {
       const tokenIdMin = Number(await theUbiquityStick.tokenIdNext());

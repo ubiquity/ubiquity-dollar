@@ -21,7 +21,7 @@ const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
   if (S.eq(0)) return constants.Zero;
 
   let D = S;
-  let Ann = _amp.mul(N_COINS);
+  const Ann = _amp.mul(N_COINS);
 
   // convergence typically occurs in 4 rounds or less
   for (let i = 0; i < 255; i++) {
@@ -87,7 +87,7 @@ export const get_burn_lp_amount = (args: ImBalanceParam): BigNumber => {
 
   console.log({ D0 });
 
-  let new_balances: BigNumber[] = [];
+  const new_balances: BigNumber[] = [];
 
   for (let i = 0; i < N_COINS; i++) {
     new_balances[i] = old_balances[i].sub(amounts[i]);
@@ -95,7 +95,7 @@ export const get_burn_lp_amount = (args: ImBalanceParam): BigNumber => {
 
   const D1 = get_D_mem(rates, new_balances, amp);
   const base_fee = fee.mul(N_COINS).div(4 * (N_COINS - 1));
-  let fees: BigNumber[] = [];
+  const fees: BigNumber[] = [];
 
   for (let i = 0; i < N_COINS; i++) {
     const ideal_balance = D1.mul(old_balances[i]).div(D0);

@@ -6,85 +6,28 @@
   "license": "Apache-2.0",
   "workspaces": [
     "packages/dapp",
-    "packages/contracts/dollar",
-    "packages/contracts/ubiquistick"
+    "packages/contracts/*"
   ],
   "devDependencies": {
-<<<<<<< HEAD
-    "@babel/core": "^7.18.13",
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
-    "@ethereumjs/block": "^3.6.3",
-    "@ethereumjs/common": "^2.6.5",
-    "@ethereumjs/tx": "^3.5.2",
-    "@ethereumjs/vm": "^5.9.3",
-    "@ethersproject/abi": "^5.0.0",
-    "@ethersproject/bytes": "^5.0.0",
-    "@ethersproject/providers": "^5.6.8",
-    "@metamask/eth-sig-util": "^4.0.1",
-    "@metamask/safe-event-emitter": "^2.0.0",
-    "@types/react": "^18.0.15",
-=======
->>>>>>> fd95a9f8f1db2970a8c0d5d1da6af2e0de12d795
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
-    "eslint": "^7.21.0",
+    "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
+    "lint-staged": "^13.0.3",
+    "nodemon": "^2.0.19",
     "rimraf": "3.0.2"
   },
-<<<<<<< HEAD
-  "dependencies": {
-    "@tippyjs/react": "^4.2.5",
-    "@typechain/ethers-v5": "^10.1.0",
-    "@types/btoa": "^1.2.3",
-    "@types/react-dom": "^18.0.6",
-    "@walletconnect/client": "^1.7.8",
-    "@walletconnect/qrcode-modal": "^1.7.8",
-    "@walletconnect/web3-provider": "^1.7.8",
-    "autoprefixer": "^10.4.8",
-    "btoa": "^1.2.1",
-    "classnames": "^2.3.1",
-    "ethers": "^5.6.9",
-    "hardhat": "^2.10.1",
-    "husky": "^8.0.1",
-    "next": "^12.2.3",
-    "npm-run-all": "^4.1.5",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-error-boundary": "^3.1.4",
-    "typechain": "^8.1.0"
-  },
-  "nodemonConfig": {
-    "events": {
-      "config": "",
-      "exit": "",
-      "crash": "",
-      "restart": "clear && printf '\\033[3J'",
-      "start": "clear && printf '\\033[3J'"
-    },
-    "verbose": true,
-    "ignore": [
-      "**/*.json",
-      "fixtures/**",
-      "contracts/*/types/**",
-      "**/*/cache/",
-      "**/*/artifacts/"
-    ],
-    "ext": "ts,sh,tsx",
-    "exec": "yarn build:ci"
-=======
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
     "test:all": "yarn workspaces foreach run test",
-    "purge:all": "yarn workspaces foreach run purge && rimraf './node_modules'",
+    "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "prettier:all": "yarn workspaces foreach run prettier",
     "lint:all": "yarn workspaces foreach run lint",
-    "build:ci:cloudflare": "yarn workspaces foreach run build",
-    "build:ci:netlify": "yarn workspaces foreach run build",
-    "build:ci:fleek": "yarn workspaces foreach run build"
->>>>>>> fd95a9f8f1db2970a8c0d5d1da6af2e0de12d795
+    "build:ci:cloudflare": "yarn build:all",
+    "build:ci:netlify": "yarn build:all",
+    "build:ci:fleek": "yarn build:all"
   },
   "husky": {
     "hooks": {
@@ -92,14 +35,11 @@
       "pre-commit": "lint-staged"
     }
   },
-<<<<<<< HEAD
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,sol}": [
-      "yarn _format:prettier",
-      "yarn _format:eslint"
+      "prettier --write",
+      "eslint --fix"
     ]
-  }
-=======
+  },
   "packageManager": "yarn@3.2.3"
->>>>>>> fd95a9f8f1db2970a8c0d5d1da6af2e0de12d795
 }

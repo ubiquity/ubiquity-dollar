@@ -8,8 +8,8 @@ const getDebtCouponManagerAddress = () => {
   const contractDeployments: Record<string, any> = DollarDeployments;
   const record = contractDeployments["1"] ?? {};
   const contract = record[0]?.contracts ? record[0]?.contracts["DebtCouponManager"] : undefined;
-  return contract ? contract.address : undefined
-}
+  return contract ? contract.address : undefined;
+};
 export const DEBT_COUPON_MANAGER_ADDRESS = getDebtCouponManagerAddress();
 
 export type NamedContracts = ReturnType<typeof connectedContracts> | null;

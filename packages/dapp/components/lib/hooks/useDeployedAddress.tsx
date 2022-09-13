@@ -13,12 +13,12 @@ const useDeployedAddress = (...names: string[]): string[] => {
     const ubiquistickRecord = ubiquistickChains[chainId.toString()] ?? {};
 
     const getContractAddress = (name: string): string | undefined => {
-      const dollarContract = dollarRecord[0]?.contracts ? dollarRecord[0]?.contracts[name] : undefined
-      const ubiquistickContract = ubiquistickRecord[0]?.contracts ? ubiquistickRecord[0]?.contracts[name] : undefined
+      const dollarContract = dollarRecord[0]?.contracts ? dollarRecord[0]?.contracts[name] : undefined;
+      const ubiquistickContract = ubiquistickRecord[0]?.contracts ? ubiquistickRecord[0]?.contracts[name] : undefined;
       return dollarContract?.address || ubiquistickContract?.address || undefined;
-    }
+    };
 
-    const addresses = names.map(name => getContractAddress(name) || "");
+    const addresses = names.map((name) => getContractAddress(name) || "");
     return addresses;
   } else {
     return [];

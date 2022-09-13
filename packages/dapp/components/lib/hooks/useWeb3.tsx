@@ -24,7 +24,7 @@ export type Web3State = {
 };
 
 type Web3Actions = {
-  connectMetamask: () => Promise<void>;
+  connectMetaMask: () => Promise<void>;
   connectJsonRpc: (address: string) => Promise<void>;
   connectWalletConnect: () => Promise<void>;
   disconnect: () => Promise<void>;
@@ -56,7 +56,6 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   const [web3State, setWeb3State] = useState<Web3State>(DEFAULT_WEB3_STATE);
 
   useEffect(() => {
-    if (storedProviderMode) {
       if ("jsonrpc" == storedProviderMode) {
         if (storedWallet) {
           connectJsonRpc(storedWallet);
@@ -105,16 +104,6 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
 
   async function connectMetamask() {
     if (metamaskInstalled) {
-      const newProvider = new ethers.providers.Web3Provider(window.ethereum);
-      setWeb3State({ ...web3State, connecting: true });
-      const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
-      if (addresses.length > 0) {
-        console.log("Connected wallet ", addresses[0]);
-        const newWalletAddress = addresses[0];
-        const newSigner = newProvider.getSigner(newWalletAddress);
-        setStoredWallet(newWalletAddress);
-        setStoredProviderMode("metamask");
-        setWeb3State({
           ...web3State,
           connecting: false,
           providerMode: "metamask",
