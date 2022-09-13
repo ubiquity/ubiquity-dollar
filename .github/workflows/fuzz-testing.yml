@@ -2,8 +2,6 @@ name: Fuzz Testing
 
 on:
   push:
-    branches:
-      - development
   pull_request:
 
 jobs:
