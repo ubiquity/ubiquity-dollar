@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import { create } from "./create";
 import { loadEnv } from "./utils";
 
 const func = async () => {
@@ -13,8 +14,13 @@ const func = async () => {
     }
     const env = loadEnv(envPath);
 
-    // TODO: Gets the contract relative path from the name
+    // TODO: Both things should be done here
+    // 1. Gets the contract relative path from the name
+    // 2. Should parse args to get a list of individual argument
     const contractInstance = name;
+    const constructorArguments = [args];
+    const { stdout, stderr } = await create({ ...env, contractInstance, constructorArguments })
+    console.log(`Deployed ${name} contract successfully, stdout: ${stdout}, stderr: ${stderr}`);
 
 }
 
