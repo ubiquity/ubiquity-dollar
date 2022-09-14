@@ -103,7 +103,7 @@ const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
   return (
     <div className="panel">
-      <h2>Boosted Yield Farming (Beta)</h2>
+      <h2>Vaults (Beta)</h2>
 
       <div>
         <span>uCR is 1:1 redeemable for uAD when the TWAP goes above 1.00.</span>
