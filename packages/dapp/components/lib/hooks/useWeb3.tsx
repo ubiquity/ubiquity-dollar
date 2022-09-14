@@ -88,7 +88,7 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
       const newWalletAddress = accounts[0];
 
       const newProvider = new WalletConnectProvider({
-        infuraId: publicRuntimeConfig.API_KEY_ALCHEMY,
+        infuraId: process.env.API_KEY_ALCHEMY,
       });
 
       const web3Provider = new ethers.providers.Web3Provider(newProvider);
