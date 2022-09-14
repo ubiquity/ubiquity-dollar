@@ -1,10 +1,6 @@
-const Balance = (props: { balance: number; unit: string; title: string }): JSX.Element => (
+const Balance = (props: { balance: number; unit?: string; title: string }): JSX.Element => (
   <div>
-    <div>{props.title}</div>
-    <div>
-      <span>{props.unit}</span>
-      {props.balance}
-    </div>
+    <span>{props.title}</span> <span>{props.balance}</span>
   </div>
 );
 
