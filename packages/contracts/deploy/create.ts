@@ -1,14 +1,7 @@
-import { execute } from "../process/execute";
+import { execute } from "./utils/helpers/execute";
+import { ForgeArguments } from "./utils/types";
 
-export type DeployArguments = {
-    rpcUrl: string,
-    privateKey: string,
-    contractInstance: string,
-    constructorArguments: string[],
-    etherscanApiKey?: string,
-}
-
-export const createdAndVerify = async (args: DeployArguments) => {
+export const create = async (args: ForgeArguments) => {
     let flattenConstructorArgs = ``;
     for (const param of args.constructorArguments) {
         flattenConstructorArgs += `${param} `;

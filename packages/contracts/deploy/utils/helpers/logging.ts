@@ -29,3 +29,7 @@ export const colors = {
 export function colorizeText(text: string, color: keyof typeof colors): string {
     return colors[color].concat(text).concat(colors.reset);
 }
+
+export const warn = (message: string) => {
+    console.warn(colorizeText(`\t⚠ ${message}`, "fgYellow"));
+}
