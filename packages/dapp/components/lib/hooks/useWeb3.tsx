@@ -87,6 +87,9 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
       const { chainId, accounts } = payload.params[0];
       const newWalletAddress = accounts[0];
 
+      console.log("process env is", process.env.API_KEY_ALCHEMY);
+      console.log("local process env is", publicRuntimeConfig.API_KEY_ALCHEMY);
+
       const newProvider = new WalletConnectProvider({
         infuraId: process.env.API_KEY_ALCHEMY,
       });
