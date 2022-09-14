@@ -14,7 +14,6 @@
   },
   "keywords": [],
   "dependencies": {
-    "@codechecks/client": "^0.1.12",
     "@ethersproject/abi": "^5.5.0",
     "@ethersproject/abstract-provider": "^5.5.1",
     "@ethersproject/address": "^5.5.0",
