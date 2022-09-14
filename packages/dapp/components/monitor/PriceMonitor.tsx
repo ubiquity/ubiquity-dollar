@@ -5,7 +5,7 @@ import NAMED_ACCOUNTS from "../config/named-accounts.json";
 import { formatEther, formatMwei } from "@/lib/format";
 import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
-import Address from "./ui/Address";
+// import Address from "./ui/Address";
 import PriceExchange from "./ui/PriceExchange";
 
 type State = null | PriceMonitorProps;
@@ -79,19 +79,13 @@ const PriceMonitorContainer = () => {
 
 const PriceMonitor = (props: PriceMonitorProps) => {
   return (
-    <div>
-      <h2>Price monitor</h2>
-      <Address title="Metapool" address={props.metaPoolAddress} />
-      <PriceExchange from="DAI" to="USDT" value={props.daiUsdt} />
+    <div className="panel">
+      <h2>Spot</h2>
       <PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
-      <PriceExchange from="uAD" to="DAI" value={props.uadDai} />
-      <PriceExchange from="uAD" to="USDT" value={props.uadUsdt} />
       <h3>Time Weighted Average</h3>
-      <Address title="TWAP Oracle" address={props.twapAddress} />
       <PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
       <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
       <h3>Dollar Minting</h3>
-      <Address title="Dollar Minting Calculator" address={props.dollarMintCalcAddress} />
       <div>
         {props.dollarToBeMinted ? (
           <div>
