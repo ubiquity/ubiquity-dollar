@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { formatEther } from "@/lib/format";
 import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
-import Address from "./ui/Address";
+// import Address from "./ui/Address";
 import Balance from "./ui/Balance";
 // import { useConnectedContext } from "@/lib/connected";
 
@@ -12,7 +12,6 @@ type MetapoolMonitorProps = {
   metaPoolAddress: string;
   uadBalance: number;
   crvBalance: number;
-  spotPrice: number;
 };
 
 const MetapoolMonitorContainer = () => {
@@ -24,13 +23,12 @@ const MetapoolMonitorContainer = () => {
   useEffect(() => {
     if (metaPool && curvePool) {
       (async function () {
-        const [uadBalance, crvBalance, rates] = await Promise.all([metaPool.balances(0), metaPool.balances(1), curvePool.get_rates(metaPool.address)]);
+        const [uadBalance, crvBalance] = await Promise.all([metaPool.balances(0), metaPool.balances(1)]);
 
         setMetapoolMonitorProps({
           metaPoolAddress: metaPool.address,
           uadBalance: +formatEther(uadBalance),
           crvBalance: +formatEther(crvBalance),
-          spotPrice: +formatEther(rates[1]),
         });
       })();
     }
@@ -41,12 +39,10 @@ const MetapoolMonitorContainer = () => {
 
 const MetapoolMonitor = (props: MetapoolMonitorProps) => {
   return (
-    <div>
-      <h2>Metapool monitor</h2>
-      <Address title="Metapool" address={props.metaPoolAddress} />
-      <Balance title="uAD Balance" unit="$" balance={props.uadBalance} />
-      <Balance title="CRV Balance" unit="$" balance={props.crvBalance} />
-      <Balance title="Spot Price" unit="$" balance={props.spotPrice} />
+    <div className="panel">
+      <h2>Metapool Balances</h2>
+      <Balance title="uAD" balance={props.uadBalance} />
+      <Balance title="CRV" balance={props.crvBalance} />
     </div>
   );
 };
