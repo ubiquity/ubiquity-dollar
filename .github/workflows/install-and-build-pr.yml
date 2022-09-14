@@ -28,6 +28,11 @@ jobs:
       - name: Install
         run: yarn install
 
+      - name: Setup Env
+        env:
+          INFURA_ID: ${{ secrets.INFURA_ID }}
+        run: echo "INFURA_ID=$INFURA_ID" > ./packages/dapp/.env
+
       - name: Build
         run: yarn build:all
 
