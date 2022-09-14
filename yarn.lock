@@ -1615,6 +1615,7 @@ __metadata:
   resolution: "@ubiquity/contracts@workspace:packages/contracts"
   dependencies:
     dotenv: ^16.0.0
+    ethers: ^5.6.9
     ts-node: 10.9.1
   languageName: unknown
   linkType: soft
