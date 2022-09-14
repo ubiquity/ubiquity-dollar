@@ -1,5 +1,6 @@
 import dotenv from "dotenv"
 import { TEST_MNEMONIC } from "../constants"
+import { Env } from "../types";
 
 export const loadEnv = (path: string): Env => {
     dotenv.config({ path });

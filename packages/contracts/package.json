@@ -21,7 +21,8 @@
     "forge": "forge",
     "build": "forge build",
     "test": "forge test",
-    "prettier": "forge fmt"
+    "prettier": "forge fmt",
+    "deploy": "ts-node ./deploy/deploy.ts"
   },
   "keywords": [
     "stablecoin",
