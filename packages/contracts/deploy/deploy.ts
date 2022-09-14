@@ -11,10 +11,11 @@ const func = async () => {
     if (!fs.existsSync(envPath)) {
         throw new Error("Env file not found")
     }
-    loadEnv(envPath);
+    const env = loadEnv(envPath);
 
     // TODO: Gets the contract relative path from the name
     const contractInstance = name;
+
 }
 
 export default func;

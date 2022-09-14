@@ -1,7 +1,7 @@
 import { execute } from "./utils/helpers/execute";
 import { ForgeArguments } from "./utils/types";
 
-export const create = async (args: ForgeArguments) => {
+export const create = async (args: ForgeArguments): Promise<any> => {
     let flattenConstructorArgs = ``;
     for (const param of args.constructorArguments) {
         flattenConstructorArgs += `${param} `;
@@ -9,5 +9,5 @@ export const create = async (args: ForgeArguments) => {
 
     const executeCmd = `forge create --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance} --etherscan-api-key ${args.etherscanApiKey ? `${args.etherscanApiKey} --verify` : ``}`;
     const { stdout, stderr } = await execute(executeCmd)
-    console.log({ stdout, stderr })
+    return { stdout, stderr }
 }
