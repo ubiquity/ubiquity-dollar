@@ -44,7 +44,7 @@ const WalletConnect = () => {
 export default WalletConnect;
 
 function Modal({ onClose, metamaskInstalled }: { onClose: () => void; metamaskInstalled: boolean }) {
-  const [{ provider }, { connectMetamask, connectWalletConnect, connectJsonRpc }] = useWeb3();
+  const [{ provider }, { connectMetaMask, connectWalletConnect, connectJsonRpc }] = useWeb3();
 
   console.log("PROVIDER!", provider);
 

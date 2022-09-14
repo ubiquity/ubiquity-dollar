@@ -19,6 +19,7 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
+      "@ubiquity/*": ["../contracts/*"],
       "@/components/*": ["components/*"],
       "@/ui": ["components/ui"],
       "@/ui/*": ["components/ui/*"],

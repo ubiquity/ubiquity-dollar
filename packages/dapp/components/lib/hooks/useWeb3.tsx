@@ -7,6 +7,8 @@ import useLocalStorage from "./useLocalStorage";
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import getConfig from "next/config";
+const { publicRuntimeConfig } = getConfig();
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
@@ -21,6 +23,7 @@ export type Web3State = {
   connecting: boolean;
   walletAddress: null | string;
   signer: null | JsonRpcSigner;
+  connector: null | WalletConnect;
 };
 
 type Web3Actions = {
@@ -39,10 +42,11 @@ const DEFAULT_WEB3_STATE: Web3State = {
   connecting: false,
   walletAddress: null,
   signer: null,
+  connector: null,
 };
 
 const DEFAULT_WEB3_ACTIONS: Web3Actions = {
-  connectMetamask: async () => {},
+  connectMetaMask: async () => {},
   connectWalletConnect: async () => {},
   connectJsonRpc: async () => {},
   disconnect: async () => {},
@@ -56,12 +60,13 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   const [web3State, setWeb3State] = useState<Web3State>(DEFAULT_WEB3_STATE);
 
   useEffect(() => {
+    if (storedProviderMode) {
       if ("jsonrpc" == storedProviderMode) {
         if (storedWallet) {
           connectJsonRpc(storedWallet);
         }
       } else if ("metamask" == storedProviderMode) {
-        connectMetamask();
+        connectMetaMask();
       }
     }
   }, []);
@@ -83,7 +88,7 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
       const newWalletAddress = accounts[0];
 
       const newProvider = new WalletConnectProvider({
-        infuraId: "kFEhzpdK3uq4qNYUZcGfidrhF2_NoMx_",
+        infuraId: publicRuntimeConfig.API_KEY_ALCHEMY,
       });
 
       const web3Provider = new ethers.providers.Web3Provider(newProvider);
@@ -98,12 +103,23 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
         walletAddress: newWalletAddress,
         provider: web3Provider,
         signer: newSigner,
+        connector: connector,
       });
     });
   }
 
-  async function connectMetamask() {
+  async function connectMetaMask() {
     if (metamaskInstalled) {
+      const newProvider = new ethers.providers.Web3Provider(window.ethereum);
+      setWeb3State({ ...web3State, connecting: true });
+      const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
+      if (addresses.length > 0) {
+        console.log("Connected wallet ", addresses[0]);
+        const newWalletAddress = addresses[0];
+        const newSigner = newProvider.getSigner(newWalletAddress);
+        setStoredWallet(newWalletAddress);
+        setStoredProviderMode("metamask");
+        setWeb3State({
           ...web3State,
           connecting: false,
           providerMode: "metamask",
@@ -129,10 +145,13 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   }
 
   async function disconnect() {
+    if (web3State.connector) {
+      web3State.connector.killSession();
+    }
     setWeb3State({ ...web3State, walletAddress: null, signer: null });
   }
 
-  return <Web3Context.Provider value={[web3State, { connectMetamask, connectWalletConnect, connectJsonRpc, disconnect }]}>{children}</Web3Context.Provider>;
+  return <Web3Context.Provider value={[web3State, { connectMetaMask, connectWalletConnect, connectJsonRpc, disconnect }]}>{children}</Web3Context.Provider>;
 };
 
 const useWeb3 = () => useContext(Web3Context);
