@@ -2,6 +2,7 @@ import { DeployFuncCallback } from "./utils";
 import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding"
 import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmDollarManager"
 import bondingShareFunc, { optionDefinitions as bondingShareOptions } from "./dollar/BondingShare"
+import bondingShareV2Func, { optionDefinitions as bondingShareV2Options } from "./dollar/BondingShareV2"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -14,5 +15,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "BondingShare": {
         handler: bondingShareFunc,
         options: bondingShareOptions
+    },
+    "BondingShareV2": {
+        handler: bondingShareV2Func,
+        options: bondingShareV2Options
     }
 }
