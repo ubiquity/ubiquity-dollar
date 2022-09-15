@@ -7,7 +7,7 @@ export const optionDefinitions = [
 ]
 
 const func = async (params: DeployFuncParam) => {
-    const contractInstance = "../src/dollar/UbiquityAlgorithmicDollarManager.sol:UbiquityAlgorithmicDollarManager";
+    const contractInstance = "src/dollar/UbiquityAlgorithmicDollarManager.sol:UbiquityAlgorithmicDollarManager";
     const { env, args } = params;
     console.log({ env, args })
     const admin_addr = args.admin;
@@ -15,4 +15,4 @@ const func = async (params: DeployFuncParam) => {
     console.log({ stdout, stderr });
     return "OK"
 }
-export default func;
+export default func; ""

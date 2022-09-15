@@ -22,10 +22,12 @@
   },
   "scripts": {
     "forge": "forge",
-    "build": "forge build",
+    "build": "forge build --use solc:0.8.9",
     "test": "forge test",
     "prettier": "forge fmt",
-    "deploy": "ts-node ./deploy/deploy.ts"
+    "deploy": "ts-node ./deploy/deploy.ts",
+    "clean": "forge clean",
+    "purge": "yarn clean"
   },
   "keywords": [
     "stablecoin",
