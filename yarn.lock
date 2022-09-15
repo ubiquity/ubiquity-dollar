@@ -1384,6 +1384,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/command-line-args@npm:5.2.0":
+  version: 5.2.0
+  resolution: "@types/command-line-args@npm:5.2.0"
+  checksum: 423121d2d083765f5b78d090115f3be82d53a39cec9de63719cbd07021e6330fab19b75e2290af1f7dda84efd7964dc498eb10b2b465991de27045db95aa1eef
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
@@ -1614,6 +1621,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ubiquity/contracts@workspace:packages/contracts"
   dependencies:
+    "@types/command-line-args": 5.2.0
+    command-line-args: 5.2.1
     dotenv: ^16.0.0
     ethers: ^5.6.9
     ts-node: 10.9.1
@@ -2480,7 +2489,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"command-line-args@npm:^5.1.1":
+"command-line-args@npm:5.2.1, command-line-args@npm:^5.1.1":
   version: 5.2.1
   resolution: "command-line-args@npm:5.2.1"
   dependencies:

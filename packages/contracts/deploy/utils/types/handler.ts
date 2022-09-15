@@ -2,7 +2,7 @@ import { Env } from "./env"
 
 export type DeployFuncParam = {
     env: Env
-    args: string[]
+    args: any
 };
 
 export type DeployFuncCallback = (params: DeployFuncParam) => Promise<any>;

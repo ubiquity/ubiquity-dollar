@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 import { DEPLOY_FUNCS } from "./manager";
 import { loadEnv } from "./utils";
+import CommandLineArgs from "command-line-args"
 
 const main = async () => {
     const cmdArgs = process.argv.slice(2);
@@ -20,8 +21,10 @@ const main = async () => {
         throw new Error(`Did you create a script for ${name} or maybe you forgot to configure it?`);
     }
 
-    const deployHandler = DEPLOY_FUNCS[name];
-    const result = await deployHandler({ env, args: cmdArgs })
+    const deployHandler = DEPLOY_FUNCS[name].handler;
+    const cmdline_parse_options = DEPLOY_FUNCS[name].options;
+    const args = CommandLineArgs(cmdline_parse_options, { stopAtFirstUnknown: true });
+    const result = await deployHandler({ env, args })
     console.log(`Deployed ${name} contract successfully. res: ${result}`);
 
 }

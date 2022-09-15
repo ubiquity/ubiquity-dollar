@@ -1,8 +1,13 @@
 import { DeployFuncCallback } from "./utils";
-import bondingFunc from "./dollar/Bonding"
-import uAdManagerFunc from "./dollar/UbiquityAlgorithmDollarManater"
+import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding"
+import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmDollarManater"
 
-export const DEPLOY_FUNCS: Record<string, DeployFuncCallback> = {
-    "bonding": bondingFunc,
-    "uad-manager": uAdManagerFunc
+export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
+    "bonding": {
+        handler: bondingFunc,
+        options: bondingOptions
+    },
+    "uad-manager": {
+        handler: uAdManagerFunc, options: uadManagerOptions
+    }
 }
