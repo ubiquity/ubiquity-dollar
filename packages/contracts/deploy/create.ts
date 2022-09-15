@@ -8,14 +8,29 @@ export const create = async (args: ForgeArguments): Promise<any> => {
     }
 
     const executeCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance} --etherscan-api-key ${args.etherscanApiKey ? `${args.etherscanApiKey} --verify` : ``}`;
-    const { stdout, stderr } = await execute(executeCmd)
-    const regex = /{(?:[^{}]*|(R))*}/g;
-    const found = stdout.match(regex);
-    if (found && JSON.parse(found[0])?.deployedTo) {
-        const { abi } = await import(`../artifacts/${args.name}.sol/${args.name}.json`)
-        const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
-        await exportDeployment(args.name, abi, deployedTo, deployer, transactionHash);
+    let stdout;
+    let stderr;
+    try {
+        const { stdout: _stdout, stderr: _stderr } = await execute(executeCmd)
+        stdout = _stdout;
+        stderr = _stderr;
+    } catch (err: any) {
+        console.log(err);
+        stdout = err?.stdout;
+        stderr = err?.stderr;
     }
-    if (stdout) { console.log(stdout) } else if (stderr) console.log(stderr);
+    if (stdout) {
+        const regex = /{(?:[^{}]*|(R))*}/g;
+        const found = stdout.match(regex);
+        if (found && JSON.parse(found[0])?.deployedTo) {
+            const { abi } = await import(`../artifacts/${args.name}.sol/${args.name}.json`)
+            const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
+            await exportDeployment(args.name, abi, deployedTo, deployer, transactionHash);
+        }
+    }
+
+    console.log("result: ", stdout);
+    console.log("error: ", stderr);
+
     return { stdout, stderr }
 }

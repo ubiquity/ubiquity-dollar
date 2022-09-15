@@ -656,5 +656,218 @@
       },
       { "stateMutability": "payable", "type": "receive" }
     ]
+  },
+  "BondingShare": {
+    "address": "0x7ecaC82D0825C544ECA06C5549E870B6Ea3C1A07",
+    "deployer": "0x5feaeb1f878E9F28aB26f1C45b7D4cEA3416547e",
+    "transactionHash": "0xea1089150bd203f92f8a54a2a94b5c2ce6a5be383f374a90d0a15b081f48e0d8",
+    "abi": [
+      { "inputs": [{ "internalType": "address", "name": "_manager", "type": "address" }], "stateMutability": "nonpayable", "type": "constructor" },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "operator", "type": "address" },
+          { "indexed": false, "internalType": "bool", "name": "approved", "type": "bool" }
+        ],
+        "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "account", "type": "address" }],
+        "name": "Paused",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "operator", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
+          { "indexed": false, "internalType": "uint256[]", "name": "ids", "type": "uint256[]" },
+          { "indexed": false, "internalType": "uint256[]", "name": "values", "type": "uint256[]" }
+        ],
+        "name": "TransferBatch",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "operator", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "id", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
+        ],
+        "name": "TransferSingle",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": false, "internalType": "string", "name": "value", "type": "string" },
+          { "indexed": true, "internalType": "uint256", "name": "id", "type": "uint256" }
+        ],
+        "name": "URI",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [{ "indexed": false, "internalType": "address", "name": "account", "type": "address" }],
+        "name": "Unpaused",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "uint256", "name": "id", "type": "uint256" }
+        ],
+        "name": "balanceOf",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address[]", "name": "accounts", "type": "address[]" },
+          { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" }
+        ],
+        "name": "balanceOfBatch",
+        "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "uint256", "name": "id", "type": "uint256" },
+          { "internalType": "uint256", "name": "value", "type": "uint256" }
+        ],
+        "name": "burn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" },
+          { "internalType": "uint256[]", "name": "values", "type": "uint256[]" }
+        ],
+        "name": "burnBatch",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "holder", "type": "address" }],
+        "name": "holderTokens",
+        "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "account", "type": "address" },
+          { "internalType": "address", "name": "operator", "type": "address" }
+        ],
+        "name": "isApprovedForAll",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "manager",
+        "outputs": [{ "internalType": "contract UbiquityAlgorithmicDollarManager", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "to", "type": "address" },
+          { "internalType": "uint256", "name": "id", "type": "uint256" },
+          { "internalType": "uint256", "name": "amount", "type": "uint256" },
+          { "internalType": "bytes", "name": "data", "type": "bytes" }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "to", "type": "address" },
+          { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" },
+          { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" },
+          { "internalType": "bytes", "name": "data", "type": "bytes" }
+        ],
+        "name": "mintBatch",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      { "inputs": [], "name": "pause", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      { "inputs": [], "name": "paused", "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }], "stateMutability": "view", "type": "function" },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "from", "type": "address" },
+          { "internalType": "address", "name": "to", "type": "address" },
+          { "internalType": "uint256[]", "name": "ids", "type": "uint256[]" },
+          { "internalType": "uint256[]", "name": "amounts", "type": "uint256[]" },
+          { "internalType": "bytes", "name": "data", "type": "bytes" }
+        ],
+        "name": "safeBatchTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "from", "type": "address" },
+          { "internalType": "address", "name": "to", "type": "address" },
+          { "internalType": "uint256", "name": "id", "type": "uint256" },
+          { "internalType": "uint256", "name": "amount", "type": "uint256" },
+          { "internalType": "bytes", "name": "data", "type": "bytes" }
+        ],
+        "name": "safeTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "operator", "type": "address" },
+          { "internalType": "bool", "name": "approved", "type": "bool" }
+        ],
+        "name": "setApprovalForAll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }],
+        "name": "supportsInterface",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      { "inputs": [], "name": "unpause", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "uri",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ]
   }
 }

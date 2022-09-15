@@ -8,10 +8,13 @@ export const exportDeployment = async (name: string, abi: JSON, deployedTo: stri
         deployments[name] = { address: deployedTo, deployer, transactionHash, abi };
     } else {
         const existDeployments = await import(deployment_file);
-        deployments = { ...existDeployments };
+
+        console.log({ existDeployments });
+        deployments = existDeployments.default;
+        console.log({ deployments });
         deployments[name] = { address: deployedTo, deployer, transactionHash, abi };
     }
-
+    console.log({ deployments });
     fs.writeFileSync(deployment_file, JSON.stringify(deployments));
 
 }
