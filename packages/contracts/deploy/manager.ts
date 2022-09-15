@@ -7,7 +7,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         handler: bondingFunc,
         options: bondingOptions
     },
-    "uad-manager": {
+    "UbiquityAlgorithmicDollarManager": {
         handler: uAdManagerFunc, options: uadManagerOptions
     }
 }
