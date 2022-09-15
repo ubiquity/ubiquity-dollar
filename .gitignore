@@ -56,5 +56,6 @@ fixtures/contracts-addresses/*
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
-out
+artifacts
 cache
+build

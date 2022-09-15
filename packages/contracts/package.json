@@ -22,7 +22,7 @@
   },
   "scripts": {
     "forge": "forge",
-    "build": "forge build --use solc:0.8.9",
+    "build": "forge build",
     "test": "forge test",
     "prettier": "forge fmt",
     "deploy": "ts-node ./deploy/deploy.ts",
