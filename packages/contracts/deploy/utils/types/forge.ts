@@ -1,4 +1,5 @@
 export type ForgeArguments = {
+    name: string,
     rpcUrl: string,
     privateKey: string,
     contractInstance: string,

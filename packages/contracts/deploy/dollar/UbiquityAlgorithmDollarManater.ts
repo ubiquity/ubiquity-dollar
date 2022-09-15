@@ -9,9 +9,11 @@ export const optionDefinitions = [
 const func = async (params: DeployFuncParam) => {
     const contractInstance = "src/dollar/UbiquityAlgorithmicDollarManager.sol:UbiquityAlgorithmicDollarManager";
     const { env, args } = params;
-    console.log({ env, args })
     const admin_addr = args.admin;
-    const { stdout, stderr } = await create({ ...env, contractInstance, constructorArguments: [admin_addr] });
+
+    // TODO: Need to compare bytecode with previous deployedBytecode and deploy if there's a change.
+    // If there's no change, we need to check `--force` flag
+    const { stdout, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [admin_addr] });
     console.log({ stdout, stderr });
     return "OK"
 }
