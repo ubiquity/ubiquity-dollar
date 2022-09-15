@@ -14,7 +14,6 @@ const func = async (params: DeployFuncParam) => {
     // TODO: Need to compare bytecode with previous deployedBytecode and deploy if there's a change.
     // If there's no change, we need to check `--force` flag
     const { stdout, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [admin_addr] });
-    console.log({ stdout, stderr });
-    return "OK"
+    return !stderr ? "succeeded" : "failed"
 }
-export default func; ""
+export default func;

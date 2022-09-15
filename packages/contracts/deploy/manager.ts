@@ -3,7 +3,7 @@ import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bondi
 import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmDollarManater"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
-    "bonding": {
+    "Bonding": {
         handler: bondingFunc,
         options: bondingOptions
     },

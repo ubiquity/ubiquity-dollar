@@ -11,11 +11,11 @@ export const create = async (args: ForgeArguments): Promise<any> => {
     const { stdout, stderr } = await execute(executeCmd)
     const regex = /{(?:[^{}]*|(R))*}/g;
     const found = stdout.match(regex);
-    if (found) {
+    if (found && JSON.parse(found[0])?.deployedTo) {
         const { abi } = await import(`../artifacts/${args.name}.sol/${args.name}.json`)
         const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
         await exportDeployment(args.name, abi, deployedTo, deployer, transactionHash);
     }
-
+    if (stdout) { console.log(stdout) } else if (stderr) console.log(stderr);
     return { stdout, stderr }
 }
