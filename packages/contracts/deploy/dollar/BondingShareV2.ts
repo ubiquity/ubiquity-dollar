@@ -1,6 +1,5 @@
 import { DeployFuncParam } from "../utils";
 import { create } from "../create"
-import { constants } from "ethers"
 
 export const optionDefinitions = [
     { name: 'task', defaultOption: true },
@@ -17,7 +16,7 @@ const func = async (params: DeployFuncParam) => {
         "image": "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/"
     });
 
-    const { stdout, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [manager, uri] });
+    const { stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [manager, uri] });
     return !stderr ? "succeeded" : "failed"
 }
 export default func;

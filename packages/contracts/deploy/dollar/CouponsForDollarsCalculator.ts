@@ -7,7 +7,7 @@ export const optionDefinitions = [
 ]
 
 const func = async (params: DeployFuncParam) => {
-    const contractInstance = "src/dollar/BondingShare.sol:BondingShare";
+    const contractInstance = "src/dollar/CouponsForDollarsCalculator.sol:CouponsForDollarsCalculator";
     const { env, args } = params;
     const manager = args.manager;
 

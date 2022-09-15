@@ -3,6 +3,9 @@ import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bondi
 import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmDollarManager"
 import bondingShareFunc, { optionDefinitions as bondingShareOptions } from "./dollar/BondingShare"
 import bondingShareV2Func, { optionDefinitions as bondingShareV2Options } from "./dollar/BondingShareV2"
+import couponsForDollarsCalculatorFunc, { optionDefinitions as couponsForDollarsCalculatorOptions } from "./dollar/CouponsForDollarsCalculator"
+import curveUADIncentiveFunc, { optionDefinitions as curveUADIncentiveOptions } from "./dollar/CurveUADIncentive"
+import debtCouponFunc, { optionDefinitions as debtCouponOptions } from "./dollar/DebtCoupon"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -19,5 +22,17 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "BondingShareV2": {
         handler: bondingShareV2Func,
         options: bondingShareV2Options
+    },
+    "CouponsForDollarsCalculator": {
+        handler: couponsForDollarsCalculatorFunc,
+        options: couponsForDollarsCalculatorOptions
+    },
+    "CurveUADIncentive": {
+        handler: curveUADIncentiveFunc,
+        options: curveUADIncentiveOptions
+    },
+    "DebtCoupon": {
+        handler: debtCouponFunc,
+        options: debtCouponOptions
     }
 }
