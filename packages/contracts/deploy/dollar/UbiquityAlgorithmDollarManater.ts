@@ -1,4 +1,3 @@
-import { Wallet } from "ethers"
 import { create } from "../create"
 import { DeployFuncParam } from "../utils";
 
@@ -11,9 +10,9 @@ const func = async (params: DeployFuncParam) => {
     const contractInstance = "../src/dollar/UbiquityAlgorithmicDollarManager.sol:UbiquityAlgorithmicDollarManager";
     const { env, args } = params;
     console.log({ env, args })
-    const wallet = new Wallet(env.privateKey);
-    const adminAddress = await wallet.getAddress();
-
+    const admin_addr = args.admin;
+    const { stdout, stderr } = await create({ ...env, contractInstance, constructorArguments: [admin_addr] });
+    console.log({ stdout, stderr });
     return "OK"
 }
 export default func;
