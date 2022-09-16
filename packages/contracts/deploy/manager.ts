@@ -6,6 +6,7 @@ import bondingShareV2Func, { optionDefinitions as bondingShareV2Options } from "
 import couponsForDollarsCalculatorFunc, { optionDefinitions as couponsForDollarsCalculatorOptions } from "./dollar/CouponsForDollarsCalculator"
 import curveUADIncentiveFunc, { optionDefinitions as curveUADIncentiveOptions } from "./dollar/CurveUADIncentive"
 import debtCouponFunc, { optionDefinitions as debtCouponOptions } from "./dollar/DebtCoupon"
+import debtCouponManagerFunc, { optionDefinitions as debtCouponManagerOptions } from "./dollar/DebtCouponManager"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -34,5 +35,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "DebtCoupon": {
         handler: debtCouponFunc,
         options: debtCouponOptions
+    },
+    "DebtCouponManager": {
+        handler: debtCouponManagerFunc,
+        options: debtCouponManagerOptions
     }
 }
