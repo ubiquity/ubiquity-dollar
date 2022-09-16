@@ -13,6 +13,7 @@ import masterChefFunc, { optionDefinitions as masterChefOptions } from "./dollar
 import ubiquityGovernanceFunc, { optionDefinitions as ubiquityGovernanceOptions } from "./dollar/UbiquityGovernance"
 import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/UbiquityGovernance"
 import uARForDollarsCalculatorFunc, { optionDefinitions as uARForDollarsCalculatorOptions } from "./dollar/UARForDollarsCalculator"
+import ubiquityAlgorithmDollarFunc, { optionDefinitions as ubiquityAlgorithmDollarOptions } from "./dollar/UbiquityAlgorithmDollar"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -69,5 +70,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "UARForDollarsCalculator": {
         handler: uARForDollarsCalculatorFunc,
         options: uARForDollarsCalculatorOptions
+    },
+    "UbiquityAlgorithmDollar": {
+        handler: ubiquityAlgorithmDollarFunc,
+        options: ubiquityAlgorithmDollarOptions
     }
 }
