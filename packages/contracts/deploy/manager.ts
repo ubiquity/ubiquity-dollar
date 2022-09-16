@@ -18,6 +18,7 @@ import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions 
 import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas"
 import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy"
 import theUbiquityStickFunc, { optionDefinitions as theUbiquityStickOptions } from "./ubiquistick/TheUbiquityStick"
+import theUbiquityStickSaleFunc, { optionDefinitions as theUbiquityStickSaleOptions } from "./ubiquistick/TheUbiquityStickSale"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -94,5 +95,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "TheUbiquityStick": {
         handler: theUbiquityStickFunc,
         options: theUbiquityStickOptions
+    },
+    "TheUbiquityStickSale": {
+        handler: theUbiquityStickSaleFunc,
+        options: theUbiquityStickSaleOptions
     }
 }
