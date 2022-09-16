@@ -14,6 +14,9 @@ import ubiquityGovernanceFunc, { optionDefinitions as ubiquityGovernanceOptions 
 import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/UbiquityGovernance"
 import uARForDollarsCalculatorFunc, { optionDefinitions as uARForDollarsCalculatorOptions } from "./dollar/UARForDollarsCalculator"
 import ubiquityAlgorithmDollarFunc, { optionDefinitions as ubiquityAlgorithmDollarOptions } from "./dollar/UbiquityAlgorithmDollar"
+import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions } from "./dollar/UbiquityAutoRedeem"
+import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas"
+import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -74,5 +77,17 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "UbiquityAlgorithmDollar": {
         handler: ubiquityAlgorithmDollarFunc,
         options: ubiquityAlgorithmDollarOptions
+    },
+    "UbiquityAutoRedeem": {
+        handler: ubiquityAutoRedeemFunc,
+        options: ubiquityAutoRedeemOptions
+    },
+    "UbiquityFormulas": {
+        handler: ubiquityFormulaFunc,
+        options: ubiquityFormulaOptions
+    },
+    "YielProxy": {
+        handler: yieldProxyFunc,
+        options: yieldProxyOptions
     }
 }
