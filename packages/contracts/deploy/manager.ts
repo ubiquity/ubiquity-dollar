@@ -9,6 +9,7 @@ import debtCouponFunc, { optionDefinitions as debtCouponOptions } from "./dollar
 import debtCouponManagerFunc, { optionDefinitions as debtCouponManagerOptions } from "./dollar/DebtCouponManager"
 import dollarMintingCalculatorFunc, { optionDefinitions as dollarMintingCalculatorOptions } from "./dollar/DollarMintingCalculator"
 import excessDollarsDistributorFunc, { optionDefinitions as excessDollarsDistributorOptions } from "./dollar/ExcessDollarDistributor"
+import masterChefFunc, { optionDefinitions as masterChefOptions } from "./dollar/MasterChef"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -49,5 +50,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "ExcessDollarDistributor": {
         handler: excessDollarsDistributorFunc,
         options: excessDollarsDistributorOptions
+    },
+    "MasterChef": {
+        handler: masterChefFunc,
+        options: masterChefOptions
     }
 }
