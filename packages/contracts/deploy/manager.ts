@@ -11,6 +11,7 @@ import dollarMintingCalculatorFunc, { optionDefinitions as dollarMintingCalculat
 import excessDollarsDistributorFunc, { optionDefinitions as excessDollarsDistributorOptions } from "./dollar/ExcessDollarDistributor"
 import masterChefFunc, { optionDefinitions as masterChefOptions } from "./dollar/MasterChef"
 import ubiquityGovernanceFunc, { optionDefinitions as ubiquityGovernanceOptions } from "./dollar/UbiquityGovernance"
+import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/UbiquityGovernance"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -59,5 +60,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "UbiquityGovernance": {
         handler: ubiquityGovernanceFunc,
         options: ubiquityGovernanceOptions
+    },
+    "SushiSwapPool": {
+        handler: sushiSwapPoolFunc,
+        options: sushiSwapPoolOptions
     }
 }
