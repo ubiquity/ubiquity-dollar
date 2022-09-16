@@ -7,6 +7,7 @@ import couponsForDollarsCalculatorFunc, { optionDefinitions as couponsForDollars
 import curveUADIncentiveFunc, { optionDefinitions as curveUADIncentiveOptions } from "./dollar/CurveUADIncentive"
 import debtCouponFunc, { optionDefinitions as debtCouponOptions } from "./dollar/DebtCoupon"
 import debtCouponManagerFunc, { optionDefinitions as debtCouponManagerOptions } from "./dollar/DebtCouponManager"
+import dollarMintingCalculatorFunc, { optionDefinitions as dollarMintingCalculatorOptions } from "./dollar/DebtCouponManager"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -39,5 +40,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "DebtCouponManager": {
         handler: debtCouponManagerFunc,
         options: debtCouponManagerOptions
+    },
+    "DollarMintingCalculator": {
+        handler: dollarMintingCalculatorFunc,
+        options: dollarMintingCalculatorOptions
     }
 }
