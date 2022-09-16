@@ -17,6 +17,7 @@ import ubiquityAlgorithmDollarFunc, { optionDefinitions as ubiquityAlgorithmDoll
 import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions } from "./dollar/UbiquityAutoRedeem"
 import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas"
 import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy"
+import theUbiquityStickFunc, { optionDefinitions as theUbiquityStickOptions } from "./ubiquistick/TheUbiquityStick"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -89,5 +90,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "YielProxy": {
         handler: yieldProxyFunc,
         options: yieldProxyOptions
+    },
+    "TheUbiquityStick": {
+        handler: theUbiquityStickFunc,
+        options: theUbiquityStickOptions
     }
 }
