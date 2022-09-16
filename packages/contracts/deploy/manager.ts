@@ -19,6 +19,9 @@ import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from
 import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy"
 import theUbiquityStickFunc, { optionDefinitions as theUbiquityStickOptions } from "./ubiquistick/TheUbiquityStick"
 import theUbiquityStickSaleFunc, { optionDefinitions as theUbiquityStickSaleOptions } from "./ubiquistick/TheUbiquityStickSale"
+import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR"
+import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP"
+import simpleBondFunc, { optionDefinitions as simpleBondOptions } from "./ubiquistick/SimpleBond"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
     "Bonding": {
@@ -99,5 +102,17 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "TheUbiquityStickSale": {
         handler: theUbiquityStickSaleFunc,
         options: theUbiquityStickSaleOptions
+    },
+    "UAR": {
+        handler: uARFunc,
+        options: uAROptions,
+    },
+    "LP": {
+        handler: lpFunc,
+        options: lpOptions
+    },
+    "SimpleBond": {
+        handler: simpleBondFunc,
+        options: simpleBondOptions
     }
 }
