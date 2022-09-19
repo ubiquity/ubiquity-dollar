@@ -303,6 +303,30 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         return remainingStratShares;
     }
 
+    function withdrawWithSplit(
+        uint256 assets,
+        address receiver,
+        address owner,
+        uint16 split
+    ) public returns (uint256) {
+        require(split >= _minSplit, "PYield::split<min");
+        require(split <= PRECISION, "PYield::split>max");
+        require(assets <= maxWithdraw(owner), "PYield::withdraw>max");
+
+        uint256 shares = previewWithdraw(assets);
+        uint256 remainingStratShares = _withdrawWithSplit(
+            _msgSender(),
+            receiver,
+            owner,
+            assets,
+            shares,
+            split
+        );
+        IERC20 strategyToken = IERC20(address(_strategy));
+        SafeERC20.safeTransfer(strategyToken, receiver, remainingStratShares);
+        return shares;
+    }
+
     /** @dev See {IERC4626-withdraw}. */
     function withdraw(
         uint256 assets,
