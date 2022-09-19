@@ -18,7 +18,9 @@ contract ProxyYieldAggregatorTest is Test {
             0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
         );
     uint16 minSplit = 500; // 5%
-    uint16 premium = 4200; // 42%
+    uint16 split = 1500; // 15%
+    //uint16 premium = 4200; // 42%
+    uint16 premium = 14200; // 142%
     address user1 = 0x41e25bdD8CC3146A1d0287f38A4c39122b2182fc;
     uint256 amountDaiUser1 = 54e18;
     uint16 private constant PRECISION = 10_000;
@@ -145,6 +147,75 @@ contract ProxyYieldAggregatorTest is Test {
         assertEq(ubiquityAutoRedeem.balanceOf(address(this)), uCRMinted);
     }
 
+    function testDepositWithStrategyAsset_And_RedeemWithSplit() public {
+        uint256 amount = 10e18;
+        uint256 amountDaiWonByStrat = 18e18;
+        // get some dai to invest
+        addDai(address(this), amount);
+
+        uint256 balance = dai.balanceOf(address(this));
+        assertEq(balance, amount);
+        // we allow proxy to take our dai
+        dai.approve(address(proxyYieldAggregator), amount);
+
+        uint256 sDAIbalance = zozoVault.balanceOf(
+            address(proxyYieldAggregator)
+        );
+        uint256 pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 prevShares = zozoVault.previewDeposit(amount);
+        uint256 pShares = proxyYieldAggregator.previewDeposit(prevShares);
+        proxyYieldAggregator.depositWithStrategyAsset(address(this), amount);
+
+        balance = dai.balanceOf(address(this));
+        assertEq(balance, 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, prevShares);
+        assertEq(pDAIbalance, pShares);
+
+        assertEq(dai.balanceOf(address(zozoVault)), amount + amountDaiUser1);
+
+        // transfer DAI to strategy to simulate a positive yield
+        addDai(address(zozoVault), amountDaiWonByStrat);
+
+        assertEq(
+            dai.balanceOf(address(zozoVault)),
+            amount + amountDaiUser1 + amountDaiWonByStrat
+        );
+        // redeem without specifying split
+        IERC20Ubiquity ubiquityAutoRedeem = IERC20Ubiquity(
+            manager.autoRedeemTokenAddress()
+        );
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), 0);
+        assertEq(zozoVault.balanceOf(address(this)), 0);
+
+        proxyYieldAggregator.redeemWithSplit(
+            pDAIbalance,
+            address(this),
+            address(this),
+            split
+        );
+
+        assertEq(dai.balanceOf(address(this)), 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 splitAmount = ((split * prevShares) / PRECISION);
+        assertEq(zozoVault.balanceOf(address(this)), prevShares - splitAmount);
+        uint256 treasuryBalance = zozoVault.balanceOf(
+            manager.treasuryAddress()
+        );
+        assertEq(treasuryBalance, splitAmount);
+        // uCR check
+
+        uint256 vaultAssetForSplitAmount = zozoVault.previewRedeem(splitAmount);
+        uint256 uCRMinted = (vaultAssetForSplitAmount * premium) / PRECISION;
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), uCRMinted);
+    }
+
     function testDepositWithStrategyAsset_And_RedeemStrategyAsset() public {
         uint256 amount = 10e18;
         uint256 amountDaiWonByStrat = 18e18;
@@ -193,6 +264,231 @@ contract ProxyYieldAggregatorTest is Test {
         // start redeem
         proxyYieldAggregator.reedemStrategyAsset(
             pDAIbalance,
+            address(this),
+            address(this),
+            currentSplit
+        );
+
+        uint256 sDAIbalanceAfter = zozoVault.balanceOf(
+            address(proxyYieldAggregator)
+        );
+        uint256 pDAIbalanceAfter = proxyYieldAggregator.balanceOf(
+            address(this)
+        );
+        assertEq(sDAIbalanceAfter, 0);
+        assertEq(pDAIbalanceAfter, 0);
+        uint256 totalDai = zozoVault.totalAssets();
+        uint256 totalStratShares = zozoVault.totalSupply();
+
+        uint256 splitAmount = ((currentSplit * prevShares) / PRECISION);
+        uint256 remainingStratShares = prevShares - splitAmount;
+        uint256 prevStratRedeem = zozoVault.previewRedeem(remainingStratShares);
+
+        assertEq(
+            prevStratRedeem,
+            (remainingStratShares * totalDai) / totalStratShares
+        );
+
+        assertEq(dai.balanceOf(address(this)), prevStratRedeem);
+        assertEq(zozoVault.balanceOf(address(this)), 0);
+        uint256 treasuryBalance = zozoVault.balanceOf(
+            manager.treasuryAddress()
+        );
+        assertEq(treasuryBalance, splitAmount);
+        // uCR check
+        uint256 vaultAssetForSplitAmount = zozoVault.previewRedeem(splitAmount);
+        uint256 uCRMinted = (vaultAssetForSplitAmount * premium) / PRECISION;
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), uCRMinted);
+    }
+
+    function testDepositWithStrategyAsset_And_Withdraw() public {
+        uint256 amount = 10e18;
+        uint256 amountDaiWonByStrat = 18e18;
+        // get some dai to invest
+        addDai(address(this), amount);
+
+        uint256 balance = dai.balanceOf(address(this));
+        assertEq(balance, amount);
+        // we allow proxy to take our dai
+        dai.approve(address(proxyYieldAggregator), amount);
+
+        uint256 sDAIbalance = zozoVault.balanceOf(
+            address(proxyYieldAggregator)
+        );
+        uint256 pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 prevShares = zozoVault.previewDeposit(amount);
+        uint256 pShares = proxyYieldAggregator.previewDeposit(prevShares);
+        proxyYieldAggregator.depositWithStrategyAsset(address(this), amount);
+
+        balance = dai.balanceOf(address(this));
+        assertEq(balance, 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, prevShares);
+        assertEq(pDAIbalance, pShares);
+
+        assertEq(dai.balanceOf(address(zozoVault)), amount + amountDaiUser1);
+
+        // transfer DAI to strategy to simulate a positive yield
+        addDai(address(zozoVault), amountDaiWonByStrat);
+
+        assertEq(
+            dai.balanceOf(address(zozoVault)),
+            amount + amountDaiUser1 + amountDaiWonByStrat
+        );
+
+        // withdraw without specifying split
+        IERC20Ubiquity ubiquityAutoRedeem = IERC20Ubiquity(
+            manager.autoRedeemTokenAddress()
+        );
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), 0);
+        assertEq(zozoVault.balanceOf(address(this)), 0);
+
+        proxyYieldAggregator.withdraw(
+            sDAIbalance,
+            address(this),
+            address(this)
+        );
+
+        assertEq(dai.balanceOf(address(this)), 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 splitAmount = ((minSplit * prevShares) / PRECISION);
+        assertEq(zozoVault.balanceOf(address(this)), prevShares - splitAmount);
+        uint256 treasuryBalance = zozoVault.balanceOf(
+            manager.treasuryAddress()
+        );
+        assertEq(treasuryBalance, splitAmount);
+        // uCR check
+
+        uint256 vaultAssetForSplitAmount = zozoVault.previewRedeem(splitAmount);
+        uint256 uCRMinted = (vaultAssetForSplitAmount * premium) / PRECISION;
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), uCRMinted);
+    }
+
+    function testDepositWithStrategyAsset_And_WithdrawWithSplit() public {
+        uint256 amount = 10e18;
+        uint256 amountDaiWonByStrat = 18e18;
+
+        // get some dai to invest
+        addDai(address(this), amount);
+
+        uint256 balance = dai.balanceOf(address(this));
+        assertEq(balance, amount);
+        // we allow proxy to take our dai
+        dai.approve(address(proxyYieldAggregator), amount);
+
+        uint256 sDAIbalance = zozoVault.balanceOf(
+            address(proxyYieldAggregator)
+        );
+        uint256 pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 prevShares = zozoVault.previewDeposit(amount);
+        uint256 pShares = proxyYieldAggregator.previewDeposit(prevShares);
+        proxyYieldAggregator.depositWithStrategyAsset(address(this), amount);
+
+        balance = dai.balanceOf(address(this));
+        assertEq(balance, 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, prevShares);
+        assertEq(pDAIbalance, pShares);
+
+        assertEq(dai.balanceOf(address(zozoVault)), amount + amountDaiUser1);
+
+        // transfer DAI to strategy to simulate a positive yield
+        addDai(address(zozoVault), amountDaiWonByStrat);
+
+        assertEq(
+            dai.balanceOf(address(zozoVault)),
+            amount + amountDaiUser1 + amountDaiWonByStrat
+        );
+
+        // withdraw with specifying split
+        IERC20Ubiquity ubiquityAutoRedeem = IERC20Ubiquity(
+            manager.autoRedeemTokenAddress()
+        );
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), 0);
+        assertEq(zozoVault.balanceOf(address(this)), 0);
+
+        proxyYieldAggregator.withdrawWithSplit(
+            sDAIbalance,
+            address(this),
+            address(this),
+            split
+        );
+
+        assertEq(dai.balanceOf(address(this)), 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 splitAmount = ((split * prevShares) / PRECISION);
+        assertEq(zozoVault.balanceOf(address(this)), prevShares - splitAmount);
+        uint256 treasuryBalance = zozoVault.balanceOf(
+            manager.treasuryAddress()
+        );
+        assertEq(treasuryBalance, splitAmount);
+
+        // uCR check
+        uint256 vaultAssetForSplitAmount = zozoVault.previewRedeem(splitAmount);
+        uint256 uCRMinted = (vaultAssetForSplitAmount * premium) / PRECISION;
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), uCRMinted);
+    }
+
+    function testDepositWithStrategyAsset_And_WithdrawStrategyAsset() public {
+        uint256 amount = 10e18;
+        uint256 amountDaiWonByStrat = 18e18;
+        // get some dai to invest
+        addDai(address(this), amount);
+
+        uint256 balance = dai.balanceOf(address(this));
+        assertEq(balance, amount);
+        // we allow proxy to take our dai
+        dai.approve(address(proxyYieldAggregator), amount);
+        uint256 sDAIbalance = zozoVault.balanceOf(
+            address(proxyYieldAggregator)
+        );
+        uint256 pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, 0);
+        assertEq(pDAIbalance, 0);
+        uint256 prevShares = zozoVault.previewDeposit(amount);
+        //uint stratAssets = _strategy.previewMint(prevShares);
+        uint256 pShares = proxyYieldAggregator.previewDeposit(prevShares);
+
+        proxyYieldAggregator.depositWithStrategyAsset(address(this), amount);
+        // deposit done
+        balance = dai.balanceOf(address(this));
+        assertEq(balance, 0);
+        sDAIbalance = zozoVault.balanceOf(address(proxyYieldAggregator));
+        pDAIbalance = proxyYieldAggregator.balanceOf(address(this));
+        assertEq(sDAIbalance, prevShares);
+        assertEq(pDAIbalance, pShares);
+
+        assertEq(dai.balanceOf(address(zozoVault)), amount + amountDaiUser1);
+
+        // transfer DAI to strategy to simulate a positive yield
+        addDai(address(zozoVault), amountDaiWonByStrat);
+
+        assertEq(
+            dai.balanceOf(address(zozoVault)),
+            amount + amountDaiUser1 + amountDaiWonByStrat
+        );
+
+        IERC20Ubiquity ubiquityAutoRedeem = IERC20Ubiquity(
+            manager.autoRedeemTokenAddress()
+        );
+        assertEq(ubiquityAutoRedeem.balanceOf(address(this)), 0);
+        assertEq(zozoVault.balanceOf(address(this)), 0);
+        uint16 currentSplit = 1000;
+        // start redeem
+        proxyYieldAggregator.withdrawStrategyAsset(
+            sDAIbalance,
             address(this),
             address(this),
             currentSplit
