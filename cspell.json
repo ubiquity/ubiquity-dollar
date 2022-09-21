@@ -7,12 +7,7 @@
     "**/*.log",
     "**/*.svg",
     "**/*.lock",
-    "**/node_modules/**",
-    "fixtures/abi/types/**",
-    "contracts/*/deployments/**",
-    "contracts/*/artifacts/**",
-    "contracts/*/cache/**",
-    "contracts/*/types/**"
+    "**/node_modules/**"
   ],
   "words": [
     "Arrakis",
