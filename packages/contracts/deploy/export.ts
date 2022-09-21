@@ -7,13 +7,11 @@ export const exportDeployment = async (name: string, chainId: string, network: s
     if (!fs.existsSync(deployment_file)) {
         const contracts: any = {}
         contracts[name] = { address: deployedTo, deployer, transactionHash, abi };
-        const deployments_for_chain: any = {};
-        deployments_for_chain[chainId] = {
+        deployments[chainId] = {
             name: network,
             chainId,
             contracts
         }
-        deployments[chainId] = deployments_for_chain;
     } else {
         const existDeployments = await import(deployment_file);
 
@@ -21,9 +19,10 @@ export const exportDeployment = async (name: string, chainId: string, network: s
         deployments = existDeployments.default;
         console.log({ deployments });
         const deployments_for_chain: any = deployments[chainId] ?? {};
-        deployments_for_chain[name] = { address: deployedTo, deployer, transactionHash, abi };
+        const contracts: any = deployments_for_chain["contracts"] ?? {}
+        contracts[name] = { address: deployedTo, deployer, transactionHash, abi };
 
-        deployments[chainId] = deployments_for_chain;
+        deployments[chainId]["contracts"] = contracts;
     }
     console.log({ deployments });
     fs.writeFileSync(deployment_file, JSON.stringify(deployments));
