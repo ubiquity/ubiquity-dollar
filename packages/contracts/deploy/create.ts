@@ -1,4 +1,5 @@
 import { exportDeployment } from "./export";
+import { Networks } from "./utils/constants/networks";
 import { execute } from "./utils/helpers/execute";
 import { ForgeArguments } from "./utils/types";
 export const create = async (args: ForgeArguments): Promise<any> => {
@@ -7,7 +8,18 @@ export const create = async (args: ForgeArguments): Promise<any> => {
         flattenConstructorArgs += `${param} `;
     }
 
-    const executeCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance} --etherscan-api-key ${args.etherscanApiKey ? `${args.etherscanApiKey} --verify` : ``}`;
+    const chainId = Networks[args.network] ?? undefined;
+    if (!chainId) {
+        throw new Error(`Unsupported network: ${args.network} Please configure it out first`);
+    }
+
+    const prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance}`;
+    let executeCmd: string;
+    if (args.etherscanApiKey) {
+        executeCmd = `${prepareCmd} --etherscan-api-key ${args.etherscanApiKey} --verify`
+    } else {
+        executeCmd = prepareCmd
+    }
     let stdout;
     let stderr;
     let result: any = {};
@@ -27,7 +39,7 @@ export const create = async (args: ForgeArguments): Promise<any> => {
             const { abi } = await import(`../artifacts/${args.name}.sol/${args.name}.json`)
             const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
             result = { deployedTo, deployer, transactionHash };
-            await exportDeployment(args.name, abi, deployedTo, deployer, transactionHash);
+            await exportDeployment(args.name, chainId.toString(), args.network, abi, deployedTo, deployer, transactionHash);
         }
     }
 

@@ -11,7 +11,7 @@ const func = async (params: DeployFuncParam) => {
     const { env, args } = params;
     const treasury = args.treasury;
 
-    const { result, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: ["Ubiquity Auto Redeem", "uAR", treasury] });
+    const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: ["Ubiquity Auto Redeem", "uAR", treasury] });
     return !stderr ? "succeeded" : "failed"
 }
 export default func;
