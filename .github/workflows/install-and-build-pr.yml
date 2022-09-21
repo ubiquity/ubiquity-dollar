@@ -30,11 +30,11 @@ jobs:
         with:
           version: nightly
 
-      - name: Forge Install
-        run: yarn workspace @ubiquity/contracts forge install
-
       - name: Install
         run: yarn install
+
+      - name: Forge Install
+        run: yarn workspace @ubiquity/contracts forge install
 
       - name: Build
         run: yarn build:all
