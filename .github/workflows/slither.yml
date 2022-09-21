@@ -23,4 +23,11 @@ jobs:
       - name: Test with Slither
         run: |
           yarn install
-          yarn run slither:all
+          cp -rf node_modules/@openzeppelin packages/contracts/dollar/node_modules
+          cp -rf node_modules/@openzeppelin packages/contracts/ubiquistick/node_modules
+          cp -rf node_modules/@uniswap packages/contracts/dollar/node_modules
+          cp -rf node_modules/solidity-linked-list packages/contracts/dollar/node_modules
+          cd packages/contracts/dollar
+          yarn slither
+          cd ../ubiquistick
+          yarn slither
