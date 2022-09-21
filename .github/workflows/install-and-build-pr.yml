@@ -25,6 +25,14 @@ jobs:
       - name: Install dependencies
         run: sudo apt -y install libusb-1.0-0-dev libudev-dev
 
+      - name: Setup Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Forge Install
+        run: yarn workspace @ubiquity/contracts forge install
+
       - name: Install
         run: yarn install
 
