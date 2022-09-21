@@ -4,7 +4,8 @@ import { ethers } from "ethers";
 
 export const optionDefinitions = [
     { name: 'task', defaultOption: true },
-    { name: 'treasury', alias: 't', type: String }
+    { name: 'treasury', alias: 't', type: String },
+    { name: "network", alias: 'n', type: String },
 ]
 
 const func = async (params: DeployFuncParam) => {
@@ -12,7 +13,7 @@ const func = async (params: DeployFuncParam) => {
     const { env, args } = params;
     const treasury = args.treasury;
 
-    const { result, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [] });
+    const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [] });
 
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     const ubiquityStickSaleAddress = result.deployedTo;

@@ -6,7 +6,8 @@ export const optionDefinitions = [
     { name: 'task', defaultOption: true },
     { name: 'treasury', alias: 't', type: String },
     { name: 'vestingBlocks', alias: 'v', type: Number },
-    { name: 'testenv', alias: 'v', type: Boolean }
+    { name: 'testenv', alias: 'v', type: Boolean },
+    { name: "network", alias: 'n', type: String },
 ]
 
 const func = async (params: DeployFuncParam) => {
@@ -21,7 +22,7 @@ const func = async (params: DeployFuncParam) => {
     const uAR_deployments = await deployments("UAR");
 
 
-    const { result, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [uAR_deployments.address, vestingBlocks, treasury] });
+    const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [uAR_deployments.address, vestingBlocks, treasury] });
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     const simpleBondAddress = result.deployedTo;
     const simple_bond_deployments = await deployments("SimpleBond");

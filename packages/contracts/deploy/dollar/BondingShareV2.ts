@@ -3,7 +3,8 @@ import { create } from "../create"
 
 export const optionDefinitions = [
     { name: 'task', defaultOption: true },
-    { name: 'manager', alias: 'm', type: String }
+    { name: 'manager', alias: 'm', type: String },
+    { name: "network", alias: 'n', type: String },
 ]
 
 const func = async (params: DeployFuncParam) => {
@@ -16,7 +17,7 @@ const func = async (params: DeployFuncParam) => {
         "image": "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/"
     });
 
-    const { stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [manager, uri] });
+    const { stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager, uri] });
     return !stderr ? "succeeded" : "failed"
 }
 export default func;

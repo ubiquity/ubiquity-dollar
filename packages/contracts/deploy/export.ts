@@ -16,5 +16,4 @@ export const exportDeployment = async (name: string, abi: JSON, deployedTo: stri
     }
     console.log({ deployments });
     fs.writeFileSync(deployment_file, JSON.stringify(deployments));
-
 }

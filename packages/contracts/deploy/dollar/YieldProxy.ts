@@ -6,6 +6,7 @@ export const optionDefinitions = [
     { name: 'task', defaultOption: true },
     { name: 'manager', alias: 'm', type: String },
     { name: 'jar', alias: 'j', type: String },
+    { name: "network", alias: 'n', type: String },
 ]
 
 const func = async (params: DeployFuncParam) => {
@@ -22,7 +23,7 @@ const func = async (params: DeployFuncParam) => {
     // bonusYield  5000 = 50% 100 = 1% 10 = 0.1% 1 = 0.01%
     const bonusYield = 5000;
 
-    const { result, stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [manager, jar_address, fees, UBQRate, bonusYield] });
+    const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager, jar_address, fees, UBQRate, bonusYield] });
 
     const yield_proxy_address = result.deployedTo;
 

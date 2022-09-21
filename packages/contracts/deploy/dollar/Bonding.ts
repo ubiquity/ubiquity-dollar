@@ -5,7 +5,8 @@ import { constants } from "ethers"
 export const optionDefinitions = [
     { name: 'task', defaultOption: true },
     { name: 'manager', alias: 'm', type: String },
-    { name: "sablier", alias: 's', type: String }
+    { name: "sablier", alias: 's', type: String },
+    { name: "network", alias: 'n', type: String },
 ]
 
 const func = async (params: DeployFuncParam) => {
@@ -14,7 +15,7 @@ const func = async (params: DeployFuncParam) => {
     const manager = args.manager;
     const sablier = args.sablier ?? constants.AddressZero;
 
-    const { stderr } = await create({ ...env, name: args.task, contractInstance, constructorArguments: [manager, sablier] });
+    const { stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager, sablier] });
     return !stderr ? "succeeded" : "failed"
 }
 export default func;
