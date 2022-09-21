@@ -1,0 +1,729 @@
+{
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "DustSent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        }
+      ],
+      "name": "ProtocolTokenAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        }
+      ],
+      "name": "ProtocolTokenRemoved",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        }
+      ],
+      "name": "addProtocolToken",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        }
+      ],
+      "name": "removeProtocolToken",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sendDust",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "addProtocolToken(address)": "fa3305c9",
+    "removeProtocolToken(address)": "bf0d68e4",
+    "sendDust(address,address,uint256)": "2db8c129"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"DustSent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"ProtocolTokenAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"ProtocolTokenRemoved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"addProtocolToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"removeProtocolToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"sendDust\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/utils/ICollectableDust.sol\":\"ICollectableDust\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"src/dollar/interfaces/utils/ICollectableDust.sol\":{\"keccak256\":\"0xe9c4f4b1db5555fdb6bfa154f29796503518a6ddbc1004c1671357c67b997627\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bdf8ef900bfcd308e927e17a28fd8453499ade48449eda56e7216be98ff26172\",\"dweb:/ipfs/QmPs1oQeSN6R2ygbhqdJietPKMF9jRwYBmM3yXZn5efk7w\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_to",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "token",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "DustSent",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ProtocolTokenAdded",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ProtocolTokenRemoved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "addProtocolToken"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "removeProtocolToken"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_to",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "sendDust"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
+        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/utils/ICollectableDust.sol": "ICollectableDust"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/dollar/interfaces/utils/ICollectableDust.sol": {
+        "keccak256": "0xe9c4f4b1db5555fdb6bfa154f29796503518a6ddbc1004c1671357c67b997627",
+        "urls": [
+          "bzz-raw://bdf8ef900bfcd308e927e17a28fd8453499ade48449eda56e7216be98ff26172",
+          "dweb:/ipfs/QmPs1oQeSN6R2ygbhqdJietPKMF9jRwYBmM3yXZn5efk7w"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/dollar/interfaces/utils/ICollectableDust.sol",
+    "id": 21481,
+    "exportedSymbols": {
+      "ICollectableDust": [
+        21480
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:410:88",
+    "nodes": [
+      {
+        "id": 21444,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:88",
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".3"
+        ]
+      },
+      {
+        "id": 21480,
+        "nodeType": "ContractDefinition",
+        "src": "57:384:88",
+        "nodes": [
+          {
+            "id": 21452,
+            "nodeType": "EventDefinition",
+            "src": "90:59:88",
+            "anonymous": false,
+            "name": "DustSent",
+            "nameLocation": "96:8:88",
+            "parameters": {
+              "id": 21451,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21446,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "113:3:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21452,
+                  "src": "105:11:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21445,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "105:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21448,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "token",
+                  "nameLocation": "126:5:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21452,
+                  "src": "118:13:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21447,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "118:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21450,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "141:6:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21452,
+                  "src": "133:14:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 21449,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "133:7:88",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "104:44:88"
+            }
+          },
+          {
+            "id": 21456,
+            "nodeType": "EventDefinition",
+            "src": "154:41:88",
+            "anonymous": false,
+            "name": "ProtocolTokenAdded",
+            "nameLocation": "160:18:88",
+            "parameters": {
+              "id": 21455,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21454,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nameLocation": "187:6:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21456,
+                  "src": "179:14:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21453,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "179:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "178:16:88"
+            }
+          },
+          {
+            "id": 21460,
+            "nodeType": "EventDefinition",
+            "src": "200:43:88",
+            "anonymous": false,
+            "name": "ProtocolTokenRemoved",
+            "nameLocation": "206:20:88",
+            "parameters": {
+              "id": 21459,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21458,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nameLocation": "235:6:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21460,
+                  "src": "227:14:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21457,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "227:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "226:16:88"
+            }
+          },
+          {
+            "id": 21465,
+            "nodeType": "FunctionDefinition",
+            "src": "249:51:88",
+            "functionSelector": "fa3305c9",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "addProtocolToken",
+            "nameLocation": "258:16:88",
+            "parameters": {
+              "id": 21463,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21462,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nameLocation": "283:6:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21465,
+                  "src": "275:14:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21461,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "275:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "274:16:88"
+            },
+            "returnParameters": {
+              "id": 21464,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "299:0:88"
+            },
+            "scope": 21480,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 21470,
+            "nodeType": "FunctionDefinition",
+            "src": "306:54:88",
+            "functionSelector": "bf0d68e4",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "removeProtocolToken",
+            "nameLocation": "315:19:88",
+            "parameters": {
+              "id": 21468,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21467,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nameLocation": "343:6:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21470,
+                  "src": "335:14:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21466,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "335:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "334:16:88"
+            },
+            "returnParameters": {
+              "id": 21469,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "359:0:88"
+            },
+            "scope": 21480,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 21479,
+            "nodeType": "FunctionDefinition",
+            "src": "366:73:88",
+            "functionSelector": "2db8c129",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "sendDust",
+            "nameLocation": "375:8:88",
+            "parameters": {
+              "id": 21477,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21472,
+                  "mutability": "mutable",
+                  "name": "_to",
+                  "nameLocation": "392:3:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21479,
+                  "src": "384:11:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21471,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "384:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21474,
+                  "mutability": "mutable",
+                  "name": "_token",
+                  "nameLocation": "405:6:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21479,
+                  "src": "397:14:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21473,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "397:7:88",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 21476,
+                  "mutability": "mutable",
+                  "name": "_amount",
+                  "nameLocation": "421:7:88",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21479,
+                  "src": "413:15:88",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 21475,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "413:7:88",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "383:46:88"
+            },
+            "returnParameters": {
+              "id": 21478,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "438:0:88"
+            },
+            "scope": 21480,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ICollectableDust",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          21480
+        ],
+        "name": "ICollectableDust",
+        "nameLocation": "67:16:88",
+        "scope": 21481,
+        "usedErrors": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 88
+}

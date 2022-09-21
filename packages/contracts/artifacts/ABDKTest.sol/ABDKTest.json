@@ -1,0 +1,1152 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "add",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "max",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x608060405234801561001057600080fd5b50610939806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80631003e2d21461003b5780636ac5db1914610060575b600080fd5b61004e6100493660046108ea565b610068565b60405190815260200160405180910390f35b61004e6100f9565b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6100f26100cb61009a8561012e565b6100a38461012e565b7fffffffffffffffffffffffffffffffff000000000000000000000000000000001690610199565b7fffffffffffffffffffffffffffffffff000000000000000000000000000000001661077c565b9392505050565b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6101286100cb8261012e565b91505090565b60008161013d57506000919050565b8160006101498261083a565b90506070811015610162578060700382901b9150610175565b6070811115610175576070810382901c91505b613fff0160701b6dffffffffffffffffffffffffffff919091161760801b92915050565b6000617fff60f084811c8216919084901c81169082141561022a5780617fff1415610220577fffffffffffffffffffffffffffffffff0000000000000000000000000000000085811690851614156101f5578492505050610776565b507f7fff80000000000000000000000000000000000000000000000000000000000091506107769050565b8492505050610776565b80617fff141561023e578392505050610776565b6f80000000000000000000000000000000608086901c90811015906dffffffffffffffffffffffffffff16836102775760019350610289565b6e010000000000000000000000000000175b6f80000000000000000000000000000000608087901c90811015906dffffffffffffffffffffffffffff16846102c257600194506102d4565b6e010000000000000000000000000000175b82610338577fffffffffffffffffffffffffffffffff0000000000000000000000000000000088167f800000000000000000000000000000000000000000000000000000000000000014610328578761032b565b60005b9650505050505050610776565b8061038c577fffffffffffffffffffffffffffffffff0000000000000000000000000000000089167f800000000000000000000000000000000000000000000000000000000000000014610328578861032b565b848603841515831515141561051a5760708113156103b35789975050505050505050610776565b60008113156103c55790811c90610412565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff908112156103fc5788975050505050505050610776565b6000811215610412578060000384901c93508596505b928101926e0200000000000000000000000000008410610438576001968701969390931c925b86617fff141561049d578461046d577f7fff00000000000000000000000000000000000000000000000000000000000061048f565b7fffff0000000000000000000000000000000000000000000000000000000000005b975050505050505050610776565b6e0100000000000000000000000000008410156104bd57600096506104d1565b6dffffffffffffffffffffffffffff841693505b83607088901b866104e35760006104f5565b6f800000000000000000000000000000005b6fffffffffffffffffffffffffffffffff16171760801b975050505050505050610776565b600081131561053557600184901b935060018703965061054c565b600081121561054c57600182901b91506001860396505b607081131561055e57600191506105e7565b600181131561057b576001810360018303901c60010191506105e7565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff908112156105ac57600193506105e7565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8112156105e7576001816000030360018503901c60010193505b8184106105f8578184039350610601565b83820393508294505b8361061757506000965061077695505050505050565b60006106228561083a565b9050806071141561064f57600185901c6dffffffffffffffffffffffffffff1694506001880197506106ca565b60708110156106b657607081900380891115610685578086901b6dffffffffffffffffffffffffffff16955080890398506106b0565b6000987fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff019590951b945b506106ca565b6dffffffffffffffffffffffffffff851694505b87617fff141561073057856106ff577f7fff000000000000000000000000000000000000000000000000000000000000610721565b7fffff0000000000000000000000000000000000000000000000000000000000005b98505050505050505050610776565b84607089901b87610742576000610754565b6f800000000000000000000000000000005b6fffffffffffffffffffffffffffffffff16171760801b985050505050505050505b92915050565b6000617fff60f083901c16613fff81101561079a5750600092915050565b6f80000000000000000000000000000000608084901c106107ba57600080fd5b6140fe8111156107c957600080fd5b6e0100000000000000000000000000006dffffffffffffffffffffffffffff608085901c161761406f8210156108055761406f8290031c6100f2565b61406f8211156100f2577fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffbf9182011b9392505050565b600080821161084857600080fd5b6000700100000000000000000000000000000000831061086a57608092831c92015b68010000000000000000831061088257604092831c92015b640100000000831061089657602092831c92015b6201000083106108a857601092831c92015b61010083106108b957600892831c92015b601083106108c957600492831c92015b600483106108d957600292831c92015b600283106107765760010192915050565b6000602082840312156108fc57600080fd5b503591905056fea26469706673582212207529fda34f1594d2ecdc38ed07b9499a5424cbaec1668ae97a4fe7bb0d28a5e464736f6c63430008090033",
+    "sourceMap": "277:627:37:-:0;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c80631003e2d21461003b5780636ac5db1914610060575b600080fd5b61004e6100493660046108ea565b610068565b60405190815260200160405180910390f35b61004e6100f9565b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6100f26100cb61009a8561012e565b6100a38461012e565b7fffffffffffffffffffffffffffffffff000000000000000000000000000000001690610199565b7fffffffffffffffffffffffffffffffff000000000000000000000000000000001661077c565b9392505050565b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6101286100cb8261012e565b91505090565b60008161013d57506000919050565b8160006101498261083a565b90506070811015610162578060700382901b9150610175565b6070811115610175576070810382901c91505b613fff0160701b6dffffffffffffffffffffffffffff919091161760801b92915050565b6000617fff60f084811c8216919084901c81169082141561022a5780617fff1415610220577fffffffffffffffffffffffffffffffff0000000000000000000000000000000085811690851614156101f5578492505050610776565b507f7fff80000000000000000000000000000000000000000000000000000000000091506107769050565b8492505050610776565b80617fff141561023e578392505050610776565b6f80000000000000000000000000000000608086901c90811015906dffffffffffffffffffffffffffff16836102775760019350610289565b6e010000000000000000000000000000175b6f80000000000000000000000000000000608087901c90811015906dffffffffffffffffffffffffffff16846102c257600194506102d4565b6e010000000000000000000000000000175b82610338577fffffffffffffffffffffffffffffffff0000000000000000000000000000000088167f800000000000000000000000000000000000000000000000000000000000000014610328578761032b565b60005b9650505050505050610776565b8061038c577fffffffffffffffffffffffffffffffff0000000000000000000000000000000089167f800000000000000000000000000000000000000000000000000000000000000014610328578861032b565b848603841515831515141561051a5760708113156103b35789975050505050505050610776565b60008113156103c55790811c90610412565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff908112156103fc5788975050505050505050610776565b6000811215610412578060000384901c93508596505b928101926e0200000000000000000000000000008410610438576001968701969390931c925b86617fff141561049d578461046d577f7fff00000000000000000000000000000000000000000000000000000000000061048f565b7fffff0000000000000000000000000000000000000000000000000000000000005b975050505050505050610776565b6e0100000000000000000000000000008410156104bd57600096506104d1565b6dffffffffffffffffffffffffffff841693505b83607088901b866104e35760006104f5565b6f800000000000000000000000000000005b6fffffffffffffffffffffffffffffffff16171760801b975050505050505050610776565b600081131561053557600184901b935060018703965061054c565b600081121561054c57600182901b91506001860396505b607081131561055e57600191506105e7565b600181131561057b576001810360018303901c60010191506105e7565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff908112156105ac57600193506105e7565b7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8112156105e7576001816000030360018503901c60010193505b8184106105f8578184039350610601565b83820393508294505b8361061757506000965061077695505050505050565b60006106228561083a565b9050806071141561064f57600185901c6dffffffffffffffffffffffffffff1694506001880197506106ca565b60708110156106b657607081900380891115610685578086901b6dffffffffffffffffffffffffffff16955080890398506106b0565b6000987fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff019590951b945b506106ca565b6dffffffffffffffffffffffffffff851694505b87617fff141561073057856106ff577f7fff000000000000000000000000000000000000000000000000000000000000610721565b7fffff0000000000000000000000000000000000000000000000000000000000005b98505050505050505050610776565b84607089901b87610742576000610754565b6f800000000000000000000000000000005b6fffffffffffffffffffffffffffffffff16171760801b985050505050505050505b92915050565b6000617fff60f083901c16613fff81101561079a5750600092915050565b6f80000000000000000000000000000000608084901c106107ba57600080fd5b6140fe8111156107c957600080fd5b6e0100000000000000000000000000006dffffffffffffffffffffffffffff608085901c161761406f8210156108055761406f8290031c6100f2565b61406f8211156100f2577fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffbf9182011b9392505050565b600080821161084857600080fd5b6000700100000000000000000000000000000000831061086a57608092831c92015b68010000000000000000831061088257604092831c92015b640100000000831061089657602092831c92015b6201000083106108a857601092831c92015b61010083106108b957600892831c92015b601083106108c957600492831c92015b600483106108d957600292831c92015b600283106107765760010192915050565b6000602082840312156108fc57600080fd5b503591905056fea26469706673582212207529fda34f1594d2ecdc38ed07b9499a5424cbaec1668ae97a4fe7bb0d28a5e464736f6c63430008090033",
+    "sourceMap": "277:627:37:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;669:233;;;;;;:::i;:::-;;:::i;:::-;;;345:25:106;;;333:2;318:18;669:233:37;;;;;;;374:289;;;:::i;669:233::-;719:7;759:66;842:53;:44;868:17;:6;:15;:17::i;:::-;842:21;:10;:19;:21::i;:::-;:25;;;;:44::i;:::-;:51;;;:53::i;:::-;835:60;669:233;-1:-1:-1;;;669:233:37:o;374:289::-;410:7;543:66;626:30;:21;543:66;626:19;:21::i;:30::-;619:37;;;374:289;:::o;3567:608:90:-;3619:7;3666:6;3662:497;;-1:-1:-1;3707:1:90;;3567:608;-1:-1:-1;3567:608:90:o;3662:497::-;3765:1;3748:14;3799:26;3765:1;3799:18;:26::i;:::-;3785:40;;3853:3;3847;:9;3843:158;;;3897:3;3891;:9;3880:20;;;;;3843:158;;;3935:3;3929;:9;3925:76;;;3979:3;3973;:9;3962:20;;;;;3925:76;4074:5;:11;4090:3;4073:20;4038:30;4029:39;;;;4028:66;4120:24;;;;-1:-1:-1;;3567:608:90:o;19758:5738::-;19816:7;19901:6;19880:17;;;;19879:28;;;19942:17;;;;19941:28;;;19988:19;;19984:5496;;;20031:9;20044:6;20031:19;20027:254;;;20078:6;;;;;;;;20074:134;;;20119:1;20112:8;;;;;;20074:134;-1:-1:-1;20182:3:90;;-1:-1:-1;20175:10:90;;-1:-1:-1;20175:10:90;20027:254;20261:1;20254:8;;;;;;19984:5496;20305:9;20318:6;20305:19;20301:5179;;;20351:1;20344:8;;;;;;20301:5179;20418:34;20404:10;;;;:48;;;;;20504:30;20491:43;20556:14;20552:166;;20606:1;20594:13;;20552:166;;;20668:31;20654:45;20552:166;20763:34;20749:10;;;;:48;;;;;20849:30;20836:43;20901:14;20897:166;;20951:1;20939:13;;20897:166;;;21013:31;20999:45;20897:166;21085:15;21081:4385;;21131:19;;;21136:14;21131:19;:40;;21170:1;21131:40;;;580:34;21131:40;21124:47;;;;;;;;;;21081:4385;21200:15;21196:4270;;21246:19;;;21251:14;21246:19;:40;;21285:1;21246:40;;21196:4270;21348:37;;;21412:14;;;;;;;21408:4040;;;21466:3;21458:5;:11;21454:437;;;21508:1;21501:8;;;;;;;;;;;21454:437;21554:1;21546:5;:9;21542:349;;;21587:29;;;;21542:349;;;21661:4;21653:5;:12;21649:242;;;21704:1;21697:8;;;;;;;;;;;21649:242;21750:1;21742:5;:9;21738:153;;;21807:5;21806:6;;21783:30;;;;;21855:9;21843:21;;21738:153;21917:24;;;;21986:31;21972:45;;21968:168;;22064:1;22095:14;;;;22049:16;;;;;21968:168;22166:9;22179:6;22166:19;22162:711;;;22224:5;:47;;22253:18;22224:47;;;22232:18;22224:47;22217:54;;;;;;;;;;;22162:711;22351:31;22338:10;:44;22334:243;;;22430:1;22418:13;;22334:243;;;22516:30;22502:44;;;;22334:243;22772:10;22765:3;22752:9;:16;;22701:5;:46;;22746:1;22701:46;;;22709:34;22701:46;22700:69;;;:82;22614:232;;22607:239;;;;;;;;;;;21408:4040;22939:1;22931:5;:9;22927:281;;;22987:1;22972:16;;;;;23031:1;23018:14;;;;22927:281;;;23077:1;23069:5;:9;23065:143;;;23125:1;23110:16;;;;;23180:1;23168:9;:13;23156:25;;23065:143;23246:3;23238:5;:11;23234:455;;;23294:1;23281:14;;23234:455;;;23340:1;23332:5;:9;23328:361;;;23423:1;23415:5;:9;23401:1;23388:10;:14;23387:38;;23429:1;23386:44;23373:57;;23328:361;;;23475:4;23467:5;:12;23463:226;;;23524:1;23511:14;;23463:226;;;23570:2;23562:5;:10;23558:131;;;23655:1;23647:5;23646:6;;:10;23632:1;23619:10;:14;23618:39;;23661:1;23617:45;23604:58;;23558:131;23733:10;23719;:24;23715:253;;23789:10;23775:24;;;;23715:253;;;23888:10;23875;:23;23862:36;;23936:5;23928:13;;23715:253;23998:15;23994:99;;-1:-1:-1;580:34:90;;-1:-1:-1;24045:21:90;;-1:-1:-1;;;;;;24045:21:90;23994:99;24119:11;24133:30;24152:10;24133:18;:30::i;:::-;24119:44;;24194:3;24201;24194:10;24190:772;;;24264:1;24250:10;:15;;24269:30;24249:50;24236:63;;24342:1;24329:14;;;;24190:772;;;24386:3;24380;:9;24376:586;;;24437:3;:9;;;24480:17;;;24476:353;;;24561:5;24547:10;:19;;24570:30;24546:54;24533:67;;24647:5;24634:18;;;;24476:353;;;24797:1;;24738:13;;24723:28;;;;;24476:353;24391:464;24376:586;;;24905:30;24891:44;;;;24376:586;24992:9;25005:6;24992:19;24988:438;;;25050:5;:47;;25079:18;25050:47;;;25058:18;25050:47;25043:54;;;;;;;;;;;;24988:438;25325:10;25318:3;25305:9;:16;;25254:5;:46;;25299:1;25254:46;;;25262:34;25254:46;25253:69;;;:82;25167:232;;25160:239;;;;;;;;;;19758:5738;;;;;:::o;4592:714::-;4642:7;4726:6;4705:17;;;;4704:28;4762:5;4751:16;;4747:63;;;-1:-1:-1;4794:1:90;;4592:714;-1:-1:-1;;4592:714:90:o;4747:63::-;4858:34;4845:10;;;;:47;4837:56;;;;;;4940:5;4928:8;:17;;4920:26;;;;;;5046:31;5012:30;4998:10;;;;4990:52;4989:88;5107:5;5096:16;;5092:170;;;5143:5;:16;;;5132:27;5092:170;;;5195:5;5184:8;:16;5180:82;;;5231:16;;;5220:27;5283:6;4592:714;-1:-1:-1;;;4592:714:90:o;68128:1043::-;68189:7;68244:1;68240;:5;68232:14;;;;;;68261;68303:35;68298:1;:40;68294:119;;68364:3;68358:9;;;;68385:13;68294:119;68435:19;68430:1;:24;68426:101;;68480:2;68474:8;;;;68500:12;68426:101;68549:11;68544:1;:16;68540:93;;68586:2;68580:8;;;;68606:12;68540:93;68655:7;68650:1;:12;68646:89;;68688:2;68682:8;;;;68708:12;68646:89;68757:5;68752:1;:10;68748:85;;68788:1;68782:7;;;;68807:11;68748:85;68855:4;68850:1;:9;68846:84;;68885:1;68879:7;;;;68904:11;68846:84;68952:3;68947:1;:8;68943:83;;68981:1;68975:7;;;;69000:11;68943:83;69048:3;69043:1;:8;69039:58;;69081:1;69071:11;69148:6;68128:1043;-1:-1:-1;;68128:1043:90:o;14:180:106:-;73:6;126:2;114:9;105:7;101:23;97:32;94:52;;;142:1;139;132:12;94:52;-1:-1:-1;165:23:106;;14:180;-1:-1:-1;14:180:106:o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "add(uint256)": "1003e2d2",
+    "max()": "6ac5db19"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"add\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"max\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/ABDKTest.sol\":\"ABDKTest\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/AccessControl.sol\":{\"keccak256\":\"0x07cf8d783adf28649b2ec21c55dd14941b5c779e87d19b6233fa1cb0debe2f71\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3752ae12fdcfa26302c48e93103a6951e545842f836c368860f5191d7eee2b46\",\"dweb:/ipfs/QmeJMaAv99yh5WJHcHnt24diZREjMab4wBptkETwxNfyaq\"]},\"lib/openzeppelin-contracts/contracts/access/IAccessControl.sol\":{\"keccak256\":\"0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a\",\"dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh\"]},\"lib/openzeppelin-contracts/contracts/security/Pausable.sol\":{\"keccak256\":\"0x0849d93b16c9940beb286a7864ed02724b248b93e0d80ef6355af5ef15c64773\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ddabb16009cd17eaca3143feadf450ac13e72919ebe2ca50e00f61cb78bc004\",\"dweb:/ipfs/QmSPwPxX7d6TTWakN5jy5wsaGkS1y9TW8fuhGSraMkLk2B\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol\":{\"keccak256\":\"0xe720b214fc3173cebcba734efb258dd89ae27733f18f5abc4deca28e33a05854\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fec2446774323fe4d3979f42f9abef398e4258b3064aa4f2752ca1a4abf8964d\",\"dweb:/ipfs/Qmc8Yhvd3C3N1HwA9WbWwb2RELtkChUErwQMuZBg9fmEGR\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol\":{\"keccak256\":\"0x6392f2cfe3a5ee802227fe7a2dfd47096d881aec89bddd214b35c5b46d3cd941\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bd9c47a375639888e726a99da718890ba16d17d7ad9eacb0ccc892d46d1b3ee0\",\"dweb:/ipfs/Qmb41W5RUjy2sWg49A2rMnxekSeEk6SvGyJL5tyCCSr7un\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Burnable.sol\":{\"keccak256\":\"0x2759d25ad3d3d96e0886d461dee4b14b8249355ba970a2f106ef45c2c352ecad\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ef7141c2ad980f33a4c11346460c53022e28af52bab49ba585c95328a628d01\",\"dweb:/ipfs/QmZbTT4QfoKrWVgcWv8vWnS8UJV9wR6Gev8V7CvggSyGQX\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Pausable.sol\":{\"keccak256\":\"0xdad22b949de979bb2ad9001c044b2aeaacf8a25e3de09ed6f022a9469f936d5b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f2e9219d44b0ab528f8dc32f06897c5d7260e9f7190db830a017265ac0d22585\",\"dweb:/ipfs/QmYWP5r1Zkr5HRVm7cJG72vMqiDUwe9PbCmZZo9xc44V8K\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol\":{\"keccak256\":\"0xa66d18b9a85458d28fc3304717964502ae36f7f8a2ff35bc83f6f85d74b03574\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e46c80ea068989111d6103e5521223f9ef337e93de76deed8b03f75c6f7b2797\",\"dweb:/ipfs/QmNoSE6knNfFncdDDLTb3fGR6oSQty1srG96Vsx3E9wQdw\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x3270d2a7a042dda9cf85dddd16e6106c2c9ad784c0972315630b2a148215fa7d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b394e20d57877a825c24c1841e219d6ab1e41decec060ea935422ac9b7a25f8a\",\"dweb:/ipfs/QmVTaGCMR4Gi9w1LUVVcjEJHrHF2qcr1avFkLtsLD6sEAr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol\":{\"keccak256\":\"0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95\",\"dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\":{\"keccak256\":\"0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6\",\"dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf\"]},\"lib/openzeppelin-contracts/contracts/utils/Address.sol\":{\"keccak256\":\"0x9720545d8ea1f76222f98683f861f919e9c28bd5d5503caa7e3620a21b6aaa24\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fe3dac0e0258d8396c33fd27c277699a9bfac198f2cb45632c4f5df2c2ca895a\",\"dweb:/ipfs/QmfEWsX7aGpWN9wooHiQo1XjiGM1h6iXeaeMTAJ1TUcnts\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"lib/openzeppelin-contracts/contracts/utils/Strings.sol\":{\"keccak256\":\"0xbaa90c891304799f6aa4039eae4b59afc0b59ce3bcc647f3fc2bbf5a04b17f1e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cc3f5b077759f92f28ba4182d9410aa8fd586d7efc5f76bdd22228bf2d227f0\",\"dweb:/ipfs/QmbLPLb31LxAyB7GWir5AssC1TYVHqhBsN6R7APj2UV9fv\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol\":{\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d\",\"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"lib/openzeppelin-contracts/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x768fcac57789d8edb0b4c8e02bad17b15faeebbc3c8b2c8ec473b485cc0b59fe\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://422e724988089c9f08fab930fe24ae9fd593cd069d488a36084ba5a3d46fcfcf\",\"dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP\"]},\"lib/solidity-linked-list/contracts/StructuredLinkedList.sol\":{\"keccak256\":\"0x4cbb667c893519162eda39e0405a146176b643311f40278acf3c5a6d2d251b76\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cb602dc36c34611fce073f45dd93dafbb0471771a0837e5f1f3627fbffe5e766\",\"dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV\"]},\"src/dollar/ABDKTest.sol\":{\"keccak256\":\"0x3051406173a34abebb17099d048403d8101f3b877a185bf35634716451027215\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://de26e833f7f2214c8b7668f87917bbc7cf79bc5b8687b7f9d9679f69d144c867\",\"dweb:/ipfs/QmR5EpocxhDS4TDMnt677s2ECE1YLqWyXpg5bySURT1jFm\"]},\"src/dollar/DebtCoupon.sol\":{\"keccak256\":\"0xf7b174683aa4d95055205572723339a9ed12b3a30acd8b49bcd16468fdadc2f4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e57e29c154fc3e3c54cb6c039f4c2e1d0a5e96aafce09110a37abaaa674c3ee6\",\"dweb:/ipfs/QmSUCHhZ1yigvXWmbXu4XGBjFHCpz2yfAeESwwfwiYk3iJ\"]},\"src/dollar/ERC1155Ubiquity.sol\":{\"keccak256\":\"0xa155185e401f682cdc701a9f135463526fd354e377bcea35de426dab83fa2563\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e7ae9d338ca96f4780cea3859f5ff7b59022ab1709435d6d869d989e71e55d8f\",\"dweb:/ipfs/QmYXqtXrXtDxiAvDLKh2r1Y59CSwwEfJFYusT48tEt8x8J\"]},\"src/dollar/TWAPOracle.sol\":{\"keccak256\":\"0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c\",\"dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr\"]},\"src/dollar/UbiquityAlgorithmicDollarManager.sol\":{\"keccak256\":\"0x4ff37ea7a89d94197642d4cbc1839802d44b013f7ca2dff8e471652b631378a7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://57636c83be53dc4096b6728d0f91a052f4c0e52e24f0e06b7acbbb7f6c5cb4cf\",\"dweb:/ipfs/QmS97gCETfC84hsSGG9Qe1RkFiRX5hUN7ADcJ329XsTTaY\"]},\"src/dollar/interfaces/ICurveFactory.sol\":{\"keccak256\":\"0x25e5c9178f4c41a035b7a2ad1ec13b158e44f6fccee5850627d51e5edd1c856c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://54b9796bdd51533eca37951296f9eacfbf1f8f2892619bbaab84edaecf140211\",\"dweb:/ipfs/QmZf4kY5Jyufm3eyRFL3FGGXMWz6hnQiEzEqLMVm5MoQ3f\"]},\"src/dollar/interfaces/IERC20Ubiquity.sol\":{\"keccak256\":\"0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://8863f7ba9962d2c6808ab73cb010f54bdf99e9ea58f2392122022b8077b10cf5\",\"dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j\"]},\"src/dollar/interfaces/IMetaPool.sol\":{\"keccak256\":\"0x76c711383ae012556089e0f538f02d2d9a2b6c8ecc5892ec6683460b6c59fe9b\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://bdaa026adb4aa85dd1071195a5479d65177e2732e57773fc6c0b7d7132388685\",\"dweb:/ipfs/QmecTNhpiJ5SR1QenVtzRJTXboV6gygZ5JZTsHsNYkwLcF\"]},\"src/dollar/interfaces/IUARForDollarsCalculator.sol\":{\"keccak256\":\"0x673569f8cb154bb593c23dbb4969467e3768c3cf708e8aa160ee4e0a6a9d2917\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://512ac3b73c59a5990b514245e5b430b9c22f188118728b002b86ac89986bd6d3\",\"dweb:/ipfs/QmddkHNU1NeL9vgBETu25HvvLgAfyAhp6JMPe4hTfcTgzv\"]},\"src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol\":{\"keccak256\":\"0x55b89fea92edf9f7123954e7aa80d65a1004043f67f8450fb3ed1159bdd6ed9d\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://d6a1312a8dc1309eb2a955dd5418ba1d1cec5508d54e34a7c59d49cfb3e143fc\",\"dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX\"]},\"src/dollar/libs/ABDKMathQuad.sol\":{\"keccak256\":\"0x013c83996cca295f42fa8d9a20598081ccb7ac62b48b7c3a4890c894e11d3cb9\",\"license\":\"BSD-4-Clause\",\"urls\":[\"bzz-raw://0a1216b526bc798149737ba8d8c5a6629447003243c5ada67bb84f73b9eb3c09\",\"dweb:/ipfs/QmfApvfgYRE4FGDx5bqv28KXTedTqPrkXKAriaavqfwVwh\"]},\"src/dollar/utils/SafeAddArray.sol\":{\"keccak256\":\"0x0d96c9e2a0423e2a0b85e7c306bd5aa1e135811aef3176e8982100e26d31a25b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://01af6c7975af7d4cdeadce64bcd459988790bf2dd674efda044e9b490ab11f0a\",\"dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "add",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "max",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
+        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/ABDKTest.sol": "ABDKTest"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/access/AccessControl.sol": {
+        "keccak256": "0x07cf8d783adf28649b2ec21c55dd14941b5c779e87d19b6233fa1cb0debe2f71",
+        "urls": [
+          "bzz-raw://3752ae12fdcfa26302c48e93103a6951e545842f836c368860f5191d7eee2b46",
+          "dweb:/ipfs/QmeJMaAv99yh5WJHcHnt24diZREjMab4wBptkETwxNfyaq"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol": {
+        "keccak256": "0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57",
+        "urls": [
+          "bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a",
+          "dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/security/Pausable.sol": {
+        "keccak256": "0x0849d93b16c9940beb286a7864ed02724b248b93e0d80ef6355af5ef15c64773",
+        "urls": [
+          "bzz-raw://4ddabb16009cd17eaca3143feadf450ac13e72919ebe2ca50e00f61cb78bc004",
+          "dweb:/ipfs/QmSPwPxX7d6TTWakN5jy5wsaGkS1y9TW8fuhGSraMkLk2B"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol": {
+        "keccak256": "0xe720b214fc3173cebcba734efb258dd89ae27733f18f5abc4deca28e33a05854",
+        "urls": [
+          "bzz-raw://fec2446774323fe4d3979f42f9abef398e4258b3064aa4f2752ca1a4abf8964d",
+          "dweb:/ipfs/Qmc8Yhvd3C3N1HwA9WbWwb2RELtkChUErwQMuZBg9fmEGR"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol": {
+        "keccak256": "0x6392f2cfe3a5ee802227fe7a2dfd47096d881aec89bddd214b35c5b46d3cd941",
+        "urls": [
+          "bzz-raw://bd9c47a375639888e726a99da718890ba16d17d7ad9eacb0ccc892d46d1b3ee0",
+          "dweb:/ipfs/Qmb41W5RUjy2sWg49A2rMnxekSeEk6SvGyJL5tyCCSr7un"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol": {
+        "keccak256": "0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b",
+        "urls": [
+          "bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec",
+          "dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Burnable.sol": {
+        "keccak256": "0x2759d25ad3d3d96e0886d461dee4b14b8249355ba970a2f106ef45c2c352ecad",
+        "urls": [
+          "bzz-raw://4ef7141c2ad980f33a4c11346460c53022e28af52bab49ba585c95328a628d01",
+          "dweb:/ipfs/QmZbTT4QfoKrWVgcWv8vWnS8UJV9wR6Gev8V7CvggSyGQX"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Pausable.sol": {
+        "keccak256": "0xdad22b949de979bb2ad9001c044b2aeaacf8a25e3de09ed6f022a9469f936d5b",
+        "urls": [
+          "bzz-raw://f2e9219d44b0ab528f8dc32f06897c5d7260e9f7190db830a017265ac0d22585",
+          "dweb:/ipfs/QmYWP5r1Zkr5HRVm7cJG72vMqiDUwe9PbCmZZo9xc44V8K"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol": {
+        "keccak256": "0xa66d18b9a85458d28fc3304717964502ae36f7f8a2ff35bc83f6f85d74b03574",
+        "urls": [
+          "bzz-raw://e46c80ea068989111d6103e5521223f9ef337e93de76deed8b03f75c6f7b2797",
+          "dweb:/ipfs/QmNoSE6knNfFncdDDLTb3fGR6oSQty1srG96Vsx3E9wQdw"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol": {
+        "keccak256": "0x3270d2a7a042dda9cf85dddd16e6106c2c9ad784c0972315630b2a148215fa7d",
+        "urls": [
+          "bzz-raw://b394e20d57877a825c24c1841e219d6ab1e41decec060ea935422ac9b7a25f8a",
+          "dweb:/ipfs/QmVTaGCMR4Gi9w1LUVVcjEJHrHF2qcr1avFkLtsLD6sEAr"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": {
+        "keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
+        "urls": [
+          "bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
+          "dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+        "keccak256": "0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca",
+        "urls": [
+          "bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd",
+          "dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
+        "keccak256": "0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329",
+        "urls": [
+          "bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95",
+          "dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": {
+        "keccak256": "0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29",
+        "urls": [
+          "bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6",
+          "dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/Address.sol": {
+        "keccak256": "0x9720545d8ea1f76222f98683f861f919e9c28bd5d5503caa7e3620a21b6aaa24",
+        "urls": [
+          "bzz-raw://fe3dac0e0258d8396c33fd27c277699a9bfac198f2cb45632c4f5df2c2ca895a",
+          "dweb:/ipfs/QmfEWsX7aGpWN9wooHiQo1XjiGM1h6iXeaeMTAJ1TUcnts"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/Context.sol": {
+        "keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
+        "urls": [
+          "bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
+          "dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/Strings.sol": {
+        "keccak256": "0xbaa90c891304799f6aa4039eae4b59afc0b59ce3bcc647f3fc2bbf5a04b17f1e",
+        "urls": [
+          "bzz-raw://1cc3f5b077759f92f28ba4182d9410aa8fd586d7efc5f76bdd22228bf2d227f0",
+          "dweb:/ipfs/QmbLPLb31LxAyB7GWir5AssC1TYVHqhBsN6R7APj2UV9fv"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol": {
+        "keccak256": "0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b",
+        "urls": [
+          "bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d",
+          "dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": {
+        "keccak256": "0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1",
+        "urls": [
+          "bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f",
+          "dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/math/Math.sol": {
+        "keccak256": "0x768fcac57789d8edb0b4c8e02bad17b15faeebbc3c8b2c8ec473b485cc0b59fe",
+        "urls": [
+          "bzz-raw://422e724988089c9f08fab930fe24ae9fd593cd069d488a36084ba5a3d46fcfcf",
+          "dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP"
+        ],
+        "license": "MIT"
+      },
+      "lib/solidity-linked-list/contracts/StructuredLinkedList.sol": {
+        "keccak256": "0x4cbb667c893519162eda39e0405a146176b643311f40278acf3c5a6d2d251b76",
+        "urls": [
+          "bzz-raw://cb602dc36c34611fce073f45dd93dafbb0471771a0837e5f1f3627fbffe5e766",
+          "dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/ABDKTest.sol": {
+        "keccak256": "0x3051406173a34abebb17099d048403d8101f3b877a185bf35634716451027215",
+        "urls": [
+          "bzz-raw://de26e833f7f2214c8b7668f87917bbc7cf79bc5b8687b7f9d9679f69d144c867",
+          "dweb:/ipfs/QmR5EpocxhDS4TDMnt677s2ECE1YLqWyXpg5bySURT1jFm"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/DebtCoupon.sol": {
+        "keccak256": "0xf7b174683aa4d95055205572723339a9ed12b3a30acd8b49bcd16468fdadc2f4",
+        "urls": [
+          "bzz-raw://e57e29c154fc3e3c54cb6c039f4c2e1d0a5e96aafce09110a37abaaa674c3ee6",
+          "dweb:/ipfs/QmSUCHhZ1yigvXWmbXu4XGBjFHCpz2yfAeESwwfwiYk3iJ"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/ERC1155Ubiquity.sol": {
+        "keccak256": "0xa155185e401f682cdc701a9f135463526fd354e377bcea35de426dab83fa2563",
+        "urls": [
+          "bzz-raw://e7ae9d338ca96f4780cea3859f5ff7b59022ab1709435d6d869d989e71e55d8f",
+          "dweb:/ipfs/QmYXqtXrXtDxiAvDLKh2r1Y59CSwwEfJFYusT48tEt8x8J"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/TWAPOracle.sol": {
+        "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
+        "urls": [
+          "bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c",
+          "dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr"
+        ],
+        "license": "Apache-2.0"
+      },
+      "src/dollar/UbiquityAlgorithmicDollarManager.sol": {
+        "keccak256": "0x4ff37ea7a89d94197642d4cbc1839802d44b013f7ca2dff8e471652b631378a7",
+        "urls": [
+          "bzz-raw://57636c83be53dc4096b6728d0f91a052f4c0e52e24f0e06b7acbbb7f6c5cb4cf",
+          "dweb:/ipfs/QmS97gCETfC84hsSGG9Qe1RkFiRX5hUN7ADcJ329XsTTaY"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/interfaces/ICurveFactory.sol": {
+        "keccak256": "0x25e5c9178f4c41a035b7a2ad1ec13b158e44f6fccee5850627d51e5edd1c856c",
+        "urls": [
+          "bzz-raw://54b9796bdd51533eca37951296f9eacfbf1f8f2892619bbaab84edaecf140211",
+          "dweb:/ipfs/QmZf4kY5Jyufm3eyRFL3FGGXMWz6hnQiEzEqLMVm5MoQ3f"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/interfaces/IERC20Ubiquity.sol": {
+        "keccak256": "0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65",
+        "urls": [
+          "bzz-raw://8863f7ba9962d2c6808ab73cb010f54bdf99e9ea58f2392122022b8077b10cf5",
+          "dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j"
+        ],
+        "license": "Apache-2.0"
+      },
+      "src/dollar/interfaces/IMetaPool.sol": {
+        "keccak256": "0x76c711383ae012556089e0f538f02d2d9a2b6c8ecc5892ec6683460b6c59fe9b",
+        "urls": [
+          "bzz-raw://bdaa026adb4aa85dd1071195a5479d65177e2732e57773fc6c0b7d7132388685",
+          "dweb:/ipfs/QmecTNhpiJ5SR1QenVtzRJTXboV6gygZ5JZTsHsNYkwLcF"
+        ],
+        "license": "UNLICENSED"
+      },
+      "src/dollar/interfaces/IUARForDollarsCalculator.sol": {
+        "keccak256": "0x673569f8cb154bb593c23dbb4969467e3768c3cf708e8aa160ee4e0a6a9d2917",
+        "urls": [
+          "bzz-raw://512ac3b73c59a5990b514245e5b430b9c22f188118728b002b86ac89986bd6d3",
+          "dweb:/ipfs/QmddkHNU1NeL9vgBETu25HvvLgAfyAhp6JMPe4hTfcTgzv"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol": {
+        "keccak256": "0x55b89fea92edf9f7123954e7aa80d65a1004043f67f8450fb3ed1159bdd6ed9d",
+        "urls": [
+          "bzz-raw://d6a1312a8dc1309eb2a955dd5418ba1d1cec5508d54e34a7c59d49cfb3e143fc",
+          "dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX"
+        ],
+        "license": "Apache-2.0"
+      },
+      "src/dollar/libs/ABDKMathQuad.sol": {
+        "keccak256": "0x013c83996cca295f42fa8d9a20598081ccb7ac62b48b7c3a4890c894e11d3cb9",
+        "urls": [
+          "bzz-raw://0a1216b526bc798149737ba8d8c5a6629447003243c5ada67bb84f73b9eb3c09",
+          "dweb:/ipfs/QmfApvfgYRE4FGDx5bqv28KXTedTqPrkXKAriaavqfwVwh"
+        ],
+        "license": "BSD-4-Clause"
+      },
+      "src/dollar/utils/SafeAddArray.sol": {
+        "keccak256": "0x0d96c9e2a0423e2a0b85e7c306bd5aa1e135811aef3176e8982100e26d31a25b",
+        "urls": [
+          "bzz-raw://01af6c7975af7d4cdeadce64bcd459988790bf2dd674efda044e9b490ab11f0a",
+          "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/dollar/ABDKTest.sol",
+    "id": 8236,
+    "exportedSymbols": {
+      "ABDKMathQuad": [
+        30085
+      ],
+      "ABDKTest": [
+        8235
+      ],
+      "AccessControl": [
+        1016
+      ],
+      "Address": [
+        5834
+      ],
+      "Context": [
+        5856
+      ],
+      "DebtCoupon": [
+        12064
+      ],
+      "ERC1155": [
+        2587
+      ],
+      "ERC1155Burnable": [
+        2819
+      ],
+      "ERC1155Pausable": [
+        2867
+      ],
+      "ERC1155Ubiquity": [
+        13557
+      ],
+      "ERC165": [
+        6055
+      ],
+      "ERC20": [
+        3469
+      ],
+      "IAccessControl": [
+        1089
+      ],
+      "ICurveFactory": [
+        19500
+      ],
+      "IERC1155": [
+        2709
+      ],
+      "IERC1155MetadataURI": [
+        2882
+      ],
+      "IERC1155Receiver": [
+        2750
+      ],
+      "IERC165": [
+        6067
+      ],
+      "IERC20": [
+        3547
+      ],
+      "IERC20Metadata": [
+        3653
+      ],
+      "IERC20Permit": [
+        3689
+      ],
+      "IERC20Ubiquity": [
+        19696
+      ],
+      "IMetaPool": [
+        20490
+      ],
+      "IStructureInterface": [
+        7555
+      ],
+      "IUARForDollarsCalculator": [
+        21236
+      ],
+      "IUbiquityAlgorithmicDollar": [
+        21263
+      ],
+      "Math": [
+        6932
+      ],
+      "Pausable": [
+        1310
+      ],
+      "SafeAddArray": [
+        30571
+      ],
+      "SafeERC20": [
+        3970
+      ],
+      "Strings": [
+        6031
+      ],
+      "StructuredLinkedList": [
+        8182
+      ],
+      "TWAPOracle": [
+        17044
+      ],
+      "UbiquityAlgorithmicDollarManager": [
+        17965
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:873:37",
+    "nodes": [
+      {
+        "id": 8184,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:37",
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".3"
+        ]
+      },
+      {
+        "id": 8185,
+        "nodeType": "ImportDirective",
+        "src": "57:56:37",
+        "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
+        "file": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 8236,
+        "sourceUnit": 3548,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 8186,
+        "nodeType": "ImportDirective",
+        "src": "114:51:37",
+        "absolutePath": "src/dollar/interfaces/IUARForDollarsCalculator.sol",
+        "file": "./interfaces/IUARForDollarsCalculator.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 8236,
+        "sourceUnit": 21237,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 8187,
+        "nodeType": "ImportDirective",
+        "src": "166:48:37",
+        "absolutePath": "src/dollar/UbiquityAlgorithmicDollarManager.sol",
+        "file": "./UbiquityAlgorithmicDollarManager.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 8236,
+        "sourceUnit": 17966,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 8188,
+        "nodeType": "ImportDirective",
+        "src": "215:33:37",
+        "absolutePath": "src/dollar/libs/ABDKMathQuad.sol",
+        "file": "./libs/ABDKMathQuad.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 8236,
+        "sourceUnit": 30086,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 8189,
+        "nodeType": "ImportDirective",
+        "src": "249:26:37",
+        "absolutePath": "src/dollar/DebtCoupon.sol",
+        "file": "./DebtCoupon.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 8236,
+        "sourceUnit": 12065,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 8235,
+        "nodeType": "ContractDefinition",
+        "src": "277:627:37",
+        "nodes": [
+          {
+            "id": 8192,
+            "nodeType": "UsingForDirective",
+            "src": "301:31:37",
+            "libraryName": {
+              "id": 8190,
+              "name": "ABDKMathQuad",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 30085,
+              "src": "307:12:37"
+            },
+            "typeName": {
+              "id": 8191,
+              "name": "uint256",
+              "nodeType": "ElementaryTypeName",
+              "src": "324:7:37",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            }
+          },
+          {
+            "id": 8195,
+            "nodeType": "UsingForDirective",
+            "src": "337:31:37",
+            "libraryName": {
+              "id": 8193,
+              "name": "ABDKMathQuad",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 30085,
+              "src": "343:12:37"
+            },
+            "typeName": {
+              "id": 8194,
+              "name": "bytes16",
+              "nodeType": "ElementaryTypeName",
+              "src": "360:7:37",
+              "typeDescriptions": {
+                "typeIdentifier": "t_bytes16",
+                "typeString": "bytes16"
+              }
+            }
+          },
+          {
+            "id": 8211,
+            "nodeType": "FunctionDefinition",
+            "src": "374:289:37",
+            "body": {
+              "id": 8210,
+              "nodeType": "Block",
+              "src": "419:244:37",
+              "statements": [
+                {
+                  "assignments": [
+                    8201
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 8201,
+                      "mutability": "mutable",
+                      "name": "maxUInt256",
+                      "nameLocation": "530:10:37",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 8210,
+                      "src": "522:18:37",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 8200,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "522:7:37",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 8203,
+                  "initialValue": {
+                    "hexValue": "307866666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666",
+                    "id": 8202,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "543:66:37",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639935_by_1",
+                      "typeString": "int_const 1157...(70 digits omitted)...9935"
+                    },
+                    "value": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "522:87:37"
+                },
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "expression": {
+                            "id": 8204,
+                            "name": "maxUInt256",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 8201,
+                            "src": "626:10:37",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_uint256",
+                              "typeString": "uint256"
+                            }
+                          },
+                          "id": 8205,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "fromUInt",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 24740,
+                          "src": "626:19:37",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_bytes16_$bound_to$_t_uint256_$",
+                            "typeString": "function (uint256) pure returns (bytes16)"
+                          }
+                        },
+                        "id": 8206,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "626:21:37",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes16",
+                          "typeString": "bytes16"
+                        }
+                      },
+                      "id": 8207,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "toUInt",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 24823,
+                      "src": "626:28:37",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_bytes16_$returns$_t_uint256_$bound_to$_t_bytes16_$",
+                        "typeString": "function (bytes16) pure returns (uint256)"
+                      }
+                    },
+                    "id": 8208,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "626:30:37",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 8199,
+                  "id": 8209,
+                  "nodeType": "Return",
+                  "src": "619:37:37"
+                }
+              ]
+            },
+            "functionSelector": "6ac5db19",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "max",
+            "nameLocation": "383:3:37",
+            "parameters": {
+              "id": 8196,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "386:2:37"
+            },
+            "returnParameters": {
+              "id": 8199,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8198,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8211,
+                  "src": "410:7:37",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8197,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "410:7:37",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "409:9:37"
+            },
+            "scope": 8235,
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "id": 8234,
+            "nodeType": "FunctionDefinition",
+            "src": "669:233:37",
+            "body": {
+              "id": 8233,
+              "nodeType": "Block",
+              "src": "728:174:37",
+              "statements": [
+                {
+                  "assignments": [
+                    8219
+                  ],
+                  "declarations": [
+                    {
+                      "constant": false,
+                      "id": 8219,
+                      "mutability": "mutable",
+                      "name": "maxUInt256",
+                      "nameLocation": "746:10:37",
+                      "nodeType": "VariableDeclaration",
+                      "scope": 8233,
+                      "src": "738:18:37",
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_uint256",
+                        "typeString": "uint256"
+                      },
+                      "typeName": {
+                        "id": 8218,
+                        "name": "uint256",
+                        "nodeType": "ElementaryTypeName",
+                        "src": "738:7:37",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      },
+                      "visibility": "internal"
+                    }
+                  ],
+                  "id": 8221,
+                  "initialValue": {
+                    "hexValue": "307866666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666",
+                    "id": 8220,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "number",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "759:66:37",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_rational_115792089237316195423570985008687907853269984665640564039457584007913129639935_by_1",
+                      "typeString": "int_const 1157...(70 digits omitted)...9935"
+                    },
+                    "value": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+                  },
+                  "nodeType": "VariableDeclarationStatement",
+                  "src": "738:87:37"
+                },
+                {
+                  "expression": {
+                    "arguments": [],
+                    "expression": {
+                      "argumentTypes": [],
+                      "expression": {
+                        "arguments": [
+                          {
+                            "arguments": [],
+                            "expression": {
+                              "argumentTypes": [],
+                              "expression": {
+                                "id": 8226,
+                                "name": "amount",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 8213,
+                                "src": "868:6:37",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              },
+                              "id": 8227,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "fromUInt",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 24740,
+                              "src": "868:15:37",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_bytes16_$bound_to$_t_uint256_$",
+                                "typeString": "function (uint256) pure returns (bytes16)"
+                              }
+                            },
+                            "id": 8228,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "868:17:37",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bytes16",
+                              "typeString": "bytes16"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_bytes16",
+                              "typeString": "bytes16"
+                            }
+                          ],
+                          "expression": {
+                            "arguments": [],
+                            "expression": {
+                              "argumentTypes": [],
+                              "expression": {
+                                "id": 8222,
+                                "name": "maxUInt256",
+                                "nodeType": "Identifier",
+                                "overloadedDeclarations": [],
+                                "referencedDeclaration": 8219,
+                                "src": "842:10:37",
+                                "typeDescriptions": {
+                                  "typeIdentifier": "t_uint256",
+                                  "typeString": "uint256"
+                                }
+                              },
+                              "id": 8223,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "memberName": "fromUInt",
+                              "nodeType": "MemberAccess",
+                              "referencedDeclaration": 24740,
+                              "src": "842:19:37",
+                              "typeDescriptions": {
+                                "typeIdentifier": "t_function_internal_pure$_t_uint256_$returns$_t_bytes16_$bound_to$_t_uint256_$",
+                                "typeString": "function (uint256) pure returns (bytes16)"
+                              }
+                            },
+                            "id": 8224,
+                            "isConstant": false,
+                            "isLValue": false,
+                            "isPure": false,
+                            "kind": "functionCall",
+                            "lValueRequested": false,
+                            "names": [],
+                            "nodeType": "FunctionCall",
+                            "src": "842:21:37",
+                            "tryCall": false,
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_bytes16",
+                              "typeString": "bytes16"
+                            }
+                          },
+                          "id": 8225,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "add",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 26448,
+                          "src": "842:25:37",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_internal_pure$_t_bytes16_$_t_bytes16_$returns$_t_bytes16_$bound_to$_t_bytes16_$",
+                            "typeString": "function (bytes16,bytes16) pure returns (bytes16)"
+                          }
+                        },
+                        "id": 8229,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "842:44:37",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bytes16",
+                          "typeString": "bytes16"
+                        }
+                      },
+                      "id": 8230,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "toUInt",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": 24823,
+                      "src": "842:51:37",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_internal_pure$_t_bytes16_$returns$_t_uint256_$bound_to$_t_bytes16_$",
+                        "typeString": "function (bytes16) pure returns (uint256)"
+                      }
+                    },
+                    "id": 8231,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "842:53:37",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 8217,
+                  "id": 8232,
+                  "nodeType": "Return",
+                  "src": "835:60:37"
+                }
+              ]
+            },
+            "functionSelector": "1003e2d2",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "add",
+            "nameLocation": "678:3:37",
+            "parameters": {
+              "id": 8214,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8213,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "690:6:37",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8234,
+                  "src": "682:14:37",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8212,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "682:7:37",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "681:16:37"
+            },
+            "returnParameters": {
+              "id": 8217,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 8216,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 8234,
+                  "src": "719:7:37",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 8215,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "719:7:37",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "718:9:37"
+            },
+            "scope": 8235,
+            "stateMutability": "pure",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ABDKTest",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "linearizedBaseContracts": [
+          8235
+        ],
+        "name": "ABDKTest",
+        "nameLocation": "286:8:37",
+        "scope": 8236,
+        "usedErrors": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 37
+}

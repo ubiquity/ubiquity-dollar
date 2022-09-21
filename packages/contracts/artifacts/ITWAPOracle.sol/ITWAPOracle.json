@@ -1,0 +1,281 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        }
+      ],
+      "name": "consult",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "amountOut",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "update",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "consult(address)": "283583c6",
+    "update()": "a2e62045"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"consult\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"amountOut\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"update\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/ITWAPOracle.sol\":\"ITWAPOracle\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"src/dollar/interfaces/ITWAPOracle.sol\":{\"keccak256\":\"0x363aabed248b8af1af9afffb9243afbce75e2af95afeabb1abea4dbfd73022d1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e11c6c0e6027a55259ed2d024547b5f56e3cafdac0d68832059ff21604d710da\",\"dweb:/ipfs/QmcTCNCkdA3J9kivNgxLkEivu3TYoCpWoDB38AxXGz1TVS\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "token",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "consult",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "amountOut",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "update"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
+        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/ITWAPOracle.sol": "ITWAPOracle"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/dollar/interfaces/ITWAPOracle.sol": {
+        "keccak256": "0x363aabed248b8af1af9afffb9243afbce75e2af95afeabb1abea4dbfd73022d1",
+        "urls": [
+          "bzz-raw://e11c6c0e6027a55259ed2d024547b5f56e3cafdac0d68832059ff21604d710da",
+          "dweb:/ipfs/QmcTCNCkdA3J9kivNgxLkEivu3TYoCpWoDB38AxXGz1TVS"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/dollar/interfaces/ITWAPOracle.sol",
+    "id": 21224,
+    "exportedSymbols": {
+      "ITWAPOracle": [
+        21223
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:163:82",
+    "nodes": [
+      {
+        "id": 21212,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:82",
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".3"
+        ]
+      },
+      {
+        "id": 21223,
+        "nodeType": "ContractDefinition",
+        "src": "57:137:82",
+        "nodes": [
+          {
+            "id": 21215,
+            "nodeType": "FunctionDefinition",
+            "src": "85:27:82",
+            "functionSelector": "a2e62045",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "update",
+            "nameLocation": "94:6:82",
+            "parameters": {
+              "id": 21213,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "100:2:82"
+            },
+            "returnParameters": {
+              "id": 21214,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "111:0:82"
+            },
+            "scope": 21223,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 21222,
+            "nodeType": "FunctionDefinition",
+            "src": "118:74:82",
+            "functionSelector": "283583c6",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "consult",
+            "nameLocation": "127:7:82",
+            "parameters": {
+              "id": 21218,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21217,
+                  "mutability": "mutable",
+                  "name": "token",
+                  "nameLocation": "143:5:82",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21222,
+                  "src": "135:13:82",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 21216,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "135:7:82",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "134:15:82"
+            },
+            "returnParameters": {
+              "id": 21221,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 21220,
+                  "mutability": "mutable",
+                  "name": "amountOut",
+                  "nameLocation": "181:9:82",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 21222,
+                  "src": "173:17:82",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 21219,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "173:7:82",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "172:19:82"
+            },
+            "scope": 21223,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "ITWAPOracle",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          21223
+        ],
+        "name": "ITWAPOracle",
+        "nameLocation": "67:11:82",
+        "scope": 21224,
+        "usedErrors": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 82
+}

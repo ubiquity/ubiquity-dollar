@@ -1,0 +1,239 @@
+{
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getDollarsToMint",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "getDollarsToMint()": "764263cf"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getDollarsToMint\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"A mechanism for calculating dollars to be minted\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IDollarMintingCalculator.sol\":\"IDollarMintingCalculator\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"src/dollar/interfaces/IDollarMintingCalculator.sol\":{\"keccak256\":\"0xd86e047647c26ad000708918cf28dc8fc653cdcd5335357155afc4d24cd7234b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0999fcab2c29765497030277d7b09159a1654d344b385f6754da90f8200f601c\",\"dweb:/ipfs/QmWLkHFD59v9uUhqcf2hwLNx6dhXis1YgSC3jHjLoZU3bw\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getDollarsToMint",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
+        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/IDollarMintingCalculator.sol": "IDollarMintingCalculator"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol": {
+        "keccak256": "0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b",
+        "urls": [
+          "bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec",
+          "dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D"
+        ],
+        "license": "MIT"
+      },
+      "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": {
+        "keccak256": "0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1",
+        "urls": [
+          "bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f",
+          "dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
+        ],
+        "license": "MIT"
+      },
+      "src/dollar/interfaces/IDollarMintingCalculator.sol": {
+        "keccak256": "0xd86e047647c26ad000708918cf28dc8fc653cdcd5335357155afc4d24cd7234b",
+        "urls": [
+          "bzz-raw://0999fcab2c29765497030277d7b09159a1654d344b385f6754da90f8200f601c",
+          "dweb:/ipfs/QmWLkHFD59v9uUhqcf2hwLNx6dhXis1YgSC3jHjLoZU3bw"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/dollar/interfaces/IDollarMintingCalculator.sol",
+    "id": 19565,
+    "exportedSymbols": {
+      "IDollarMintingCalculator": [
+        19564
+      ],
+      "IERC1155Receiver": [
+        2750
+      ],
+      "IERC165": [
+        6067
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:259:67",
+    "nodes": [
+      {
+        "id": 19556,
+        "nodeType": "PragmaDirective",
+        "src": "32:23:67",
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".3"
+        ]
+      },
+      {
+        "id": 19557,
+        "nodeType": "ImportDirective",
+        "src": "57:68:67",
+        "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
+        "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 19565,
+        "sourceUnit": 2751,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 19564,
+        "nodeType": "ContractDefinition",
+        "src": "187:103:67",
+        "nodes": [
+          {
+            "id": 19563,
+            "nodeType": "FunctionDefinition",
+            "src": "228:60:67",
+            "functionSelector": "764263cf",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getDollarsToMint",
+            "nameLocation": "237:16:67",
+            "parameters": {
+              "id": 19559,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "253:2:67"
+            },
+            "returnParameters": {
+              "id": 19562,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 19561,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 19563,
+                  "src": "279:7:67",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 19560,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "279:7:67",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "278:9:67"
+            },
+            "scope": 19564,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IDollarMintingCalculator",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": {
+          "id": 19558,
+          "nodeType": "StructuredDocumentation",
+          "src": "127:60:67",
+          "text": "@title A mechanism for calculating dollars to be minted"
+        },
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          19564
+        ],
+        "name": "IDollarMintingCalculator",
+        "nameLocation": "197:24:67",
+        "scope": 19565,
+        "usedErrors": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 67
+}
