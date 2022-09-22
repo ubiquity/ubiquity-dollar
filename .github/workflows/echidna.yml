@@ -35,4 +35,10 @@ jobs:
           yarn install --frozen-lockfile
 
       - name: Run ${{ matrix.testName }}
-        run: echidna-test . --contract ${{ matrix.testName }} --config echidna.config.yml
+        run: |
+          cp -rf node_modules/@openzeppelin packages/contracts/dollar/node_modules
+          cp -rf node_modules/@openzeppelin packages/contracts/ubiquistick/node_modules
+          cp -rf node_modules/@uniswap packages/contracts/dollar/node_modules
+          cp -rf node_modules/solidity-linked-list packages/contracts/dollar/node_modules
+          cd packages/contracts/dollar
+          echidna-test . --contract ${{ matrix.testName }} --config echidna.config.yml
