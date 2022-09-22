@@ -16,7 +16,7 @@
     "node": "hardhat node",
     "clean": "hardhat clean",
     "purge": "yarn clean && rimraf ./node_modules",
-    "slither": "ln -s ../../../node_modules node_modules && ls -la | grep \"\\->\" && slither . --config-file ../../../slither.config.json",
+    "slither": "ln -s ../../../node_modules node_modules && slither . --config-file ../../../slither.config.json",
     "build": "TS_NODE_TRANSPILE_ONLY=1 npx hardhat compile",
     "export": "hardhat export --export-all ./deployments.json",
     "node:start": "hardhat node --hostname 0.0.0.0 --show-accounts"
