@@ -41,4 +41,4 @@ jobs:
           cp -rf node_modules/@uniswap packages/contracts/dollar/node_modules
           cp -rf node_modules/solidity-linked-list packages/contracts/dollar/node_modules
           cd packages/contracts/dollar
-          echidna-test . --contract ${{ matrix.testName }} --config echidna.config.yml
+          echidna-test . --contract ${{ matrix.testName }} --config ../../../echidna.config.yml
