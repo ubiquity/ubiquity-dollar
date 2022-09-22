@@ -40,6 +40,6 @@ jobs:
             --async \
             --create-group \
             --group-name "@ubiquity/ubiquity-dollar@${{ github.sha }}" \
-            --solc-version 0.7.6 \
+            --solc-version 0.8.4 \
             --check-properties \
             contracts/ExampleEchidnaTest.sol --include ExampleEchidnaTest
