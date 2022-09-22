@@ -168,10 +168,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         address _crv3PoolTokenAddress,
         uint256 _amplificationCoefficient,
         uint256 _fee
-    )
-        external
-        onlyAdmin
-    {
+    ) external onlyAdmin {
         // Create new StableSwap meta pool (uAD <-> 3Crv)
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,

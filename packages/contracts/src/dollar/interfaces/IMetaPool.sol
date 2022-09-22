@@ -34,8 +34,7 @@ interface IMetaPool {
         uint256 _A,
         uint256 _fee,
         address _admin
-    )
-        external;
+    ) external;
 
     function decimals() external view returns (uint256);
 
@@ -53,10 +52,7 @@ interface IMetaPool {
         uint256[2] memory _first_balances,
         uint256[2] memory _last_balances,
         uint256 _time_elapsed
-    )
-        external
-        view
-        returns (uint256[2] memory);
+    ) external view returns (uint256[2] memory);
 
     function get_price_cumulative_last() external view returns (uint256[2] memory);
 

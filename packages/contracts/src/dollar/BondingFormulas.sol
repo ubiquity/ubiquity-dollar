@@ -4,8 +4,6 @@ pragma solidity ^0.8.3;
 import "./BondingShareV2.sol";
 import "./libs/ABDKMathQuad.sol";
 
-import "./interfaces/IMasterChefV2.sol";
-
 contract BondingFormulas {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
@@ -38,11 +36,7 @@ contract BondingFormulas {
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    )
-        public
-        pure
-        returns (uint256)
-    {
+    ) public pure returns (uint256) {
         return _amount;
     }
 
@@ -57,11 +51,7 @@ contract BondingFormulas {
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    )
-        public
-        pure
-        returns (uint256)
-    {
+    ) public pure returns (uint256) {
         return _amount;
     }
 

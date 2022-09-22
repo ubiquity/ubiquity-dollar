@@ -67,8 +67,7 @@ interface IUbiquityAlgorithmicDollarManager {
         address _crv3PoolTokenAddress,
         uint256 _amplificationCoefficient,
         uint256 _fee
-    )
-        external;
+    ) external;
 
     function getExcessDollarsDistributor(address _debtCouponManagerAddress) external view returns (address);
 }

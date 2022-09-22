@@ -43,9 +43,7 @@ interface ICurveFactory {
         address _coin,
         uint256 _A,
         uint256 _fee
-    )
-        external
-        returns (address);
+    ) external returns (address);
 
     function commit_transfer_ownership(address addr) external;
 

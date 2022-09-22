@@ -23,7 +23,7 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test",
+    "test": "forge test --gas-report",
     "prettier": "forge fmt",
     "deploy": "ts-node ./deploy/deploy.ts",
     "clean": "forge clean",

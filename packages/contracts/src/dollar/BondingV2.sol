@@ -96,10 +96,7 @@ contract BondingV2 is CollectableDust, Pausable {
         address[] memory _originals,
         uint256[] memory _lpBalances,
         uint256[] memory _weeks
-    )
-        CollectableDust()
-        Pausable()
-    {
+    ) CollectableDust() Pausable() {
         manager = UbiquityAlgorithmicDollarManager(_manager);
         bondingFormulasAddress = _bondingFormulasAddress;
         migrator = msg.sender;

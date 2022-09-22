@@ -50,9 +50,7 @@ interface ISablier {
         uint256 stopTime,
         uint256 senderSharePercentage,
         uint256 recipientSharePercentage
-    )
-        external
-        returns (uint256);
+    ) external returns (uint256);
 
     function addPauser(address account) external;
 
