@@ -21,7 +21,7 @@
     "export": "hardhat export --export-all ./deployments.json",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage",
-    "slither": "ln -s ../../../node_modules node_modules && slither . --config-file ../../../slither.config.json",
+    "slither": "ln -s ../../../node_modules node_modules && ls -la grep \"\\->\" && slither . --config-file ../../../slither.config.json",
     "lint": "run-s lint:* build",
     "lint:sol": "solhint 'contracts/**/*.sol' --fix",
     "lint:eslint": "eslint . --ext js,ts --fix",
