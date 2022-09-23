@@ -39,6 +39,9 @@ jobs:
       - name: Build
         run: yarn build:all
 
+      - name: Test
+        run: yarn test:all
+
       - name: Save PR
         env:
           EVENT_NAME: ${{github.event_name}}
