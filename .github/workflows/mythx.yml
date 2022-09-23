@@ -36,10 +36,9 @@ jobs:
           mythx --api-key ${{ secrets.API_KEY_MYTHX }} \
             --yes \
             analyze \
-            --mode deep \
+            --mode quick \
             --async \
             --create-group \
             --group-name "@ubiquity/ubiquity-dollar@${{ github.sha }}" \
             --solc-version 0.8.4 \
-            --check-properties \
-            contracts/ExampleEchidnaTest.sol --include ExampleEchidnaTest
+            --async contracts/ExampleEchidnaTest.sol
