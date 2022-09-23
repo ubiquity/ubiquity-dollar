@@ -1,5 +1,5 @@
 name: Snyk push gate
-on: push
+on: [push, pull_request]
 jobs:
   security:
     runs-on: ubuntu-latest
