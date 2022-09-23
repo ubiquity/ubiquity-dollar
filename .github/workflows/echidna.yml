@@ -32,6 +32,8 @@ jobs:
           sudo wget -O /tmp/echidna-test.tar.gz https://github.com/crytic/echidna/releases/download/v2.0.3/echidna-test-2.0.3-Ubuntu-18.04.tar.gz
           sudo tar -xf /tmp/echidna-test.tar.gz -C /usr/bin
           sudo chmod +x /usr/bin/echidna-test
+          curl -L https://foundry.paradigm.xyz | bash
+          foundryup
           yarn install --frozen-lockfile
 
       - name: Run ${{ matrix.testName }}

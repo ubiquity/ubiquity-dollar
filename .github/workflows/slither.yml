@@ -19,6 +19,8 @@ jobs:
           chmod +x solc-static-linux
           sudo mv solc-static-linux /usr/local/bin/solc
           pip3 install slither-analyzer
+          curl -L https://foundry.paradigm.xyz | bash
+          foundryup
           yarn install
 
       - name: Test with Slither
