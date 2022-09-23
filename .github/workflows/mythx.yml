@@ -1,44 +1,44 @@
-name: Mythx
+# name: Mythx
 
-on: [push, pull_request]
-jobs:
-  mythx:
-    name: Submit to Mythx
-    runs-on: ubuntu-latest
+# on: [push, pull_request]
+# jobs:
+#   mythx:
+#     name: Submit to Mythx
+#     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
+#     steps:
+#       - uses: actions/checkout@v3
 
-      - name: Set up Node 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
+#       - name: Set up Node 16
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 16
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+#       - name: Set up Python 3.10
+#         uses: actions/setup-python@v4
+#         with:
+#           python-version: '3.10'
 
-      - name: Install dependencies
-        run: |
-          wget https://github.com/ethereum/solidity/releases/download/v0.8.4/solc-static-linux
-          chmod +x solc-static-linux
-          sudo mv solc-static-linux /usr/local/bin/solc
-          yarn install --frozen-lockfile
+#       - name: Install dependencies
+#         run: |
+#           wget https://github.com/ethereum/solidity/releases/download/v0.8.4/solc-static-linux
+#           chmod +x solc-static-linux
+#           sudo mv solc-static-linux /usr/local/bin/solc
+#           yarn install --frozen-lockfile
 
-      - name: Install mythx CLI
-        run: |
-          pip3 install mythx-cli
+#       - name: Install mythx CLI
+#         run: |
+#           pip3 install mythx-cli
 
-      - name: Submit code to Mythx
-        run: |
-          cd packages/contracts/dollar
-          mythx --api-key ${{ secrets.API_KEY_MYTHX }} \
-            --yes \
-            analyze \
-            --mode quick \
-            --async \
-            --create-group \
-            --group-name "@ubiquity/ubiquity-dollar@${{ github.sha }}" \
-            --solc-version 0.8.4 \
-            --async contracts/ExampleEchidnaTest.sol
+#       - name: Submit code to Mythx
+#         run: |
+#           cd packages/contracts/dollar
+#           mythx --api-key ${{ secrets.API_KEY_MYTHX }} \
+#             --yes \
+#             analyze \
+#             --mode quick \
+#             --async \
+#             --create-group \
+#             --group-name "@ubiquity/ubiquity-dollar@${{ github.sha }}" \
+#             --solc-version 0.8.4 \
+#             --async contracts/ExampleEchidnaTest.sol
