@@ -17,16 +17,19 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
+      
+      - name: Install solc-select
+        run: pip3 install solc-select
+
+      - name: Install solc 0.8.4
+        run: |
+          solc-select install 0.8.4
+          solc-select use 0.8.4
 
       - name: Install dependencies
         run: |
-          wget https://github.com/ethereum/solidity/releases/download/v0.8.4/solc-static-linux
-          chmod +x solc-static-linux
-          sudo mv solc-static-linux /usr/local/bin/solc
-          pip3 install slither-analyzer
           yarn install
           yarn workspace @ubiquity/contracts forge install
-          
 
       - name: Test with Slither
         run: yarn workspace @ubiquity/contracts run slither
