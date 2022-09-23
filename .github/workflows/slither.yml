@@ -25,6 +25,9 @@ jobs:
         run: |
           solc-select install 0.8.4
           solc-select use 0.8.4
+      
+      - name: Install Slither
+        run: pip3 install slither-analyzer
 
       - name: Install dependencies
         run: |
