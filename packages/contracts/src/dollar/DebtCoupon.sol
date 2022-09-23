@@ -2,7 +2,7 @@
 pragma solidity ^0.8.3;
 
 import "./ERC1155Ubiquity.sol";
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
+import "solidity-linked-list/StructuredLinkedList.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 
 /// @title A coupon redeemable for dollars with an expiry block number
