@@ -322,8 +322,8 @@ library ABDKMathQuad {
             } else if (exponent < 245649) {
                 return negative ? _NEGATIVE_ZERO : _POSITIVE_ZERO;
             } else if (exponent < 245761) {
-                significand = (significand | 0x100000000000000000000000000000000000000000000000000000000000)
-                    >> (245885 - exponent);
+                significand =
+                    (significand | 0x100000000000000000000000000000000000000000000000000000000000) >> (245885 - exponent);
                 exponent = 0;
             } else {
                 significand >>= 124;
@@ -660,9 +660,7 @@ library ABDKMathQuad {
                             }
 
                             return bytes16(
-                                uint128(
-                                    (xSign ? 0x80000000000000000000000000000000 : 0) | (xExponent << 112) | xSignifier
-                                )
+                                uint128((xSign ? 0x80000000000000000000000000000000 : 0) | (xExponent << 112) | xSignifier)
                             );
                         }
                     } else {
@@ -717,9 +715,7 @@ library ABDKMathQuad {
                             return xSign ? _NEGATIVE_INFINITY : _POSITIVE_INFINITY;
                         } else {
                             return bytes16(
-                                uint128(
-                                    (xSign ? 0x80000000000000000000000000000000 : 0) | (xExponent << 112) | xSignifier
-                                )
+                                uint128((xSign ? 0x80000000000000000000000000000000 : 0) | (xExponent << 112) | xSignifier)
                             );
                         }
                     }

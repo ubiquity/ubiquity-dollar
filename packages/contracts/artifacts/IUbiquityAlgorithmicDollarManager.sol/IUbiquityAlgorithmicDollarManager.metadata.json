@@ -1,0 +1,372 @@
+{
+  "compiler": {
+    "version": "0.8.9+commit.e5eed63a"
+  },
+  "language": "Solidity",
+  "output": {
+    "abi": [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_curveFactory",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_crvBasePool",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_crv3PoolTokenAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_amplificationCoefficient",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_fee",
+            "type": "uint256"
+          }
+        ],
+        "name": "deployStableSwapPool",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_debtCouponManagerAddress",
+            "type": "address"
+          }
+        ],
+        "name": "getExcessDollarsDistributor",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_bondingContractAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setBondingContractAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_bondingShareAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setBondingShareAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_couponCalculatorAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setCouponCalculatorAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_debtCouponAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setDebtCouponAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_dollarMintingCalculatorAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setDollarMintingCalculatorAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_dollarTokenAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setDollarTokenAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "debtCouponManagerAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "excessCouponDistributor",
+            "type": "address"
+          }
+        ],
+        "name": "setExcessDollarsDistributor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_formulasAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setFormulasAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_governanceTokenAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setGovernanceTokenAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_account",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_incentiveAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setIncentiveToUAD",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_masterChefAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setMasterChefAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_stableSwapMetaPoolAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setStableSwapMetaPoolAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_sushiSwapPoolAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setSushiSwapPoolAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_treasuryAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setTreasuryAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_twapOracleAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setTwapOracleAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_uarCalculatorAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setUARCalculatorAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_uarTokenAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setuARTokenAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ],
+    "devdoc": {
+      "author": "Ubiquity Algorithmic Manager",
+      "kind": "dev",
+      "methods": {
+        "deployStableSwapPool(address,address,address,uint256,uint256)": {
+          "details": "From the curve documentation for uncollateralized algorithmic stablecoins amplification should be 5-10",
+          "params": {
+            "_amplificationCoefficient": "amplification coefficient. The smaller it is the closer to a constant product we are.",
+            "_crv3PoolTokenAddress": "curve 3Pool token Address",
+            "_crvBasePool": "Address of the base pool to use within the new metapool.",
+            "_curveFactory": "MetaPool factory address",
+            "_fee": "Trade fee, given as an integer with 1e10 precision."
+          }
+        },
+        "setBondingContractAddress(address)": {
+          "details": "bonding contract participants deposit  curve LP token for a certain duration to earn uGOV and more curve LP token",
+          "params": {
+            "_bondingContractAddress": "bonding contract address"
+          }
+        },
+        "setTreasuryAddress(address)": {
+          "details": "the treasury fund is used to maintain the protocol",
+          "params": {
+            "_treasuryAddress": "treasury fund address"
+          }
+        }
+      },
+      "title": "UAD Manager interface",
+      "version": 1
+    },
+    "userdoc": {
+      "kind": "user",
+      "methods": {
+        "deployStableSwapPool(address,address,address,uint256,uint256)": {
+          "notice": "deploy a new Curve metapools for uAD Token uAD/3Pool"
+        },
+        "setBondingContractAddress(address)": {
+          "notice": "set the bonding bontract smart contract address"
+        },
+        "setTreasuryAddress(address)": {
+          "notice": "set the treasury address"
+        }
+      },
+      "version": 1
+    }
+  },
+  "settings": {
+    "compilationTarget": {
+      "src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol": "IUbiquityAlgorithmicDollarManager"
+    },
+    "evmVersion": "london",
+    "libraries": {},
+    "metadata": {
+      "bytecodeHash": "ipfs"
+    },
+    "optimizer": {
+      "enabled": true,
+      "runs": 20000
+    },
+    "remappings": [
+      ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+      ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+      ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+      ":Uniswap/=lib/Uniswap/",
+      ":ds-test/=lib/forge-std/lib/ds-test/src/",
+      ":forge-std/=lib/forge-std/src/",
+      ":solidity-linked-list/=lib/solidity-linked-list/"
+    ]
+  },
+  "sources": {
+    "src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol": {
+      "keccak256": "0x78af2f78e4e3e9a24410f6e4f7b115b5c584dcc479302f07a94ef94107a341b3",
+      "license": "Apache-2.0",
+      "urls": [
+        "bzz-raw://cab1da4f915aedc6a05a9c2a3f8b1f0d6a1f013683d5515d075e90b15b4143c7",
+        "dweb:/ipfs/QmWDZR1f26jGVWHMvP1Q1ZvML68W7DHsNaC4fAc2LNrFfs"
+      ]
+    }
+  },
+  "version": 1
+}

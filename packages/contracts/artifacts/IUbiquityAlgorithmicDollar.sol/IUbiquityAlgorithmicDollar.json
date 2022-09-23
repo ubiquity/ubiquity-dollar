@@ -400,487 +400,27 @@
     "transfer(address,uint256)": "a9059cbb",
     "transferFrom(address,address,uint256)": "23b872dd"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Approval\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_burned\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"Burning\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_incentivized\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_incentiveContract\",\"type\":\"address\"}],\"name\":\"IncentiveContractUpdate\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_minter\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"Minting\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"Transfer\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"}],\"name\":\"allowance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"burn\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"burnFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"incentiveContract\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"permit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"incentive\",\"type\":\"address\"}],\"name\":\"setIncentiveContract\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Ubiquity Algorithmic Dollar\",\"kind\":\"dev\",\"methods\":{\"allowance(address,address)\":{\"details\":\"Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called.\"},\"approve(address,uint256)\":{\"details\":\"Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event.\"},\"balanceOf(address)\":{\"details\":\"Returns the amount of tokens owned by `account`.\"},\"totalSupply()\":{\"details\":\"Returns the amount of tokens in existence.\"},\"transfer(address,uint256)\":{\"details\":\"Moves `amount` tokens from the caller's account to `to`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event.\"},\"transferFrom(address,address,uint256)\":{\"details\":\"Moves `amount` tokens from `from` to `to` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event.\"}},\"title\":\"UAD stablecoin interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol\":\"IUbiquityAlgorithmicDollar\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"src/dollar/interfaces/IERC20Ubiquity.sol\":{\"keccak256\":\"0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://8863f7ba9962d2c6808ab73cb010f54bdf99e9ea58f2392122022b8077b10cf5\",\"dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j\"]},\"src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol\":{\"keccak256\":\"0x55b89fea92edf9f7123954e7aa80d65a1004043f67f8450fb3ed1159bdd6ed9d\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://d6a1312a8dc1309eb2a955dd5418ba1d1cec5508d54e34a7c59d49cfb3e143fc\",\"dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX\"]}},\"version\":1}",
-  "metadata": {
-    "compiler": {
-      "version": "0.8.9+commit.e5eed63a"
-    },
-    "language": "Solidity",
-    "output": {
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "address",
-              "name": "spender",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "uint256",
-              "name": "value",
-              "type": "uint256",
-              "indexed": false
-            }
-          ],
-          "type": "event",
-          "name": "Approval",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_burned",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "uint256",
-              "name": "_amount",
-              "type": "uint256",
-              "indexed": false
-            }
-          ],
-          "type": "event",
-          "name": "Burning",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_incentivized",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "address",
-              "name": "_incentiveContract",
-              "type": "address",
-              "indexed": true
-            }
-          ],
-          "type": "event",
-          "name": "IncentiveContractUpdate",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_to",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "address",
-              "name": "_minter",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "uint256",
-              "name": "_amount",
-              "type": "uint256",
-              "indexed": false
-            }
-          ],
-          "type": "event",
-          "name": "Minting",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "from",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "address",
-              "name": "to",
-              "type": "address",
-              "indexed": true
-            },
-            {
-              "internalType": "uint256",
-              "name": "value",
-              "type": "uint256",
-              "indexed": false
-            }
-          ],
-          "type": "event",
-          "name": "Transfer",
-          "anonymous": false
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "spender",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "allowance",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "spender",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "approve",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "balanceOf",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "burn"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "burnFrom"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "incentiveContract",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "mint"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "spender",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "value",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "deadline",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint8",
-              "name": "v",
-              "type": "uint8"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "r",
-              "type": "bytes32"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "s",
-              "type": "bytes32"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "permit"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "incentive",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setIncentiveContract"
-        },
-        {
-          "inputs": [],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "totalSupply",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "to",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "transfer",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "from",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "to",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "transferFrom",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ]
-        }
-      ],
-      "devdoc": {
-        "kind": "dev",
-        "methods": {
-          "allowance(address,address)": {
-            "details": "Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called."
-          },
-          "approve(address,uint256)": {
-            "details": "Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event."
-          },
-          "balanceOf(address)": {
-            "details": "Returns the amount of tokens owned by `account`."
-          },
-          "totalSupply()": {
-            "details": "Returns the amount of tokens in existence."
-          },
-          "transfer(address,uint256)": {
-            "details": "Moves `amount` tokens from the caller's account to `to`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
-          },
-          "transferFrom(address,address,uint256)": {
-            "details": "Moves `amount` tokens from `from` to `to` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
-          }
-        },
-        "version": 1
-      },
-      "userdoc": {
-        "kind": "user",
-        "methods": {},
-        "version": 1
-      }
-    },
-    "settings": {
-      "remappings": [
-        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
-        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
-        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
-        ":Uniswap/=lib/Uniswap/",
-        ":ds-test/=lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/",
-        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
-        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
-      ],
-      "optimizer": {
-        "enabled": true,
-        "runs": 20000
-      },
-      "metadata": {
-        "bytecodeHash": "ipfs"
-      },
-      "compilationTarget": {
-        "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol": "IUbiquityAlgorithmicDollar"
-      },
-      "libraries": {}
-    },
-    "sources": {
-      "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": {
-        "keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
-        "urls": [
-          "bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
-          "dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
-        ],
-        "license": "MIT"
-      },
-      "src/dollar/interfaces/IERC20Ubiquity.sol": {
-        "keccak256": "0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65",
-        "urls": [
-          "bzz-raw://8863f7ba9962d2c6808ab73cb010f54bdf99e9ea58f2392122022b8077b10cf5",
-          "dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j"
-        ],
-        "license": "Apache-2.0"
-      },
-      "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol": {
-        "keccak256": "0x55b89fea92edf9f7123954e7aa80d65a1004043f67f8450fb3ed1159bdd6ed9d",
-        "urls": [
-          "bzz-raw://d6a1312a8dc1309eb2a955dd5418ba1d1cec5508d54e34a7c59d49cfb3e143fc",
-          "dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX"
-        ],
-        "license": "Apache-2.0"
-      }
-    },
-    "version": 1
-  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol",
-    "id": 21264,
+    "id": 41215,
     "exportedSymbols": {
       "IERC20": [
-        3547
+        26706
       ],
       "IERC20Ubiquity": [
-        19696
+        39647
       ],
       "IUbiquityAlgorithmicDollar": [
-        21263
+        41214
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "39:457:84",
+    "src": "39:457:85",
     "nodes": [
       {
-        "id": 21238,
+        "id": 41189,
         "nodeType": "PragmaDirective",
-        "src": "39:23:84",
+        "src": "39:23:85",
         "literals": [
           "solidity",
           "^",
@@ -889,43 +429,43 @@
         ]
       },
       {
-        "id": 21239,
+        "id": 41190,
         "nodeType": "ImportDirective",
-        "src": "64:30:84",
+        "src": "64:30:85",
         "absolutePath": "src/dollar/interfaces/IERC20Ubiquity.sol",
         "file": "./IERC20Ubiquity.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 21264,
-        "sourceUnit": 19697,
+        "scope": 41215,
+        "sourceUnit": 39648,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 21263,
+        "id": 41214,
         "nodeType": "ContractDefinition",
-        "src": "172:323:84",
+        "src": "172:323:85",
         "nodes": [
           {
-            "id": 21248,
+            "id": 41199,
             "nodeType": "EventDefinition",
-            "src": "233:97:84",
+            "src": "233:97:85",
             "anonymous": false,
             "name": "IncentiveContractUpdate",
-            "nameLocation": "239:23:84",
+            "nameLocation": "239:23:85",
             "parameters": {
-              "id": 21247,
+              "id": 41198,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 21244,
+                  "id": 41195,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "_incentivized",
-                  "nameLocation": "279:13:84",
+                  "nameLocation": "279:13:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 21248,
-                  "src": "263:29:84",
+                  "scope": 41199,
+                  "src": "263:29:85",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -933,10 +473,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 21243,
+                    "id": 41194,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "263:7:84",
+                    "src": "263:7:85",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -947,14 +487,14 @@
                 },
                 {
                   "constant": false,
-                  "id": 21246,
+                  "id": 41197,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "_incentiveContract",
-                  "nameLocation": "310:18:84",
+                  "nameLocation": "310:18:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 21248,
-                  "src": "294:34:84",
+                  "scope": 41199,
+                  "src": "294:34:85",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -962,10 +502,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 21245,
+                    "id": 41196,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "294:7:84",
+                    "src": "294:7:85",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -975,32 +515,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "262:67:84"
+              "src": "262:67:85"
             }
           },
           {
-            "id": 21255,
+            "id": 41206,
             "nodeType": "FunctionDefinition",
-            "src": "336:75:84",
+            "src": "336:75:85",
             "functionSelector": "b6232c99",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setIncentiveContract",
-            "nameLocation": "345:20:84",
+            "nameLocation": "345:20:85",
             "parameters": {
-              "id": 21253,
+              "id": 41204,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 21250,
+                  "id": 41201,
                   "mutability": "mutable",
                   "name": "account",
-                  "nameLocation": "374:7:84",
+                  "nameLocation": "374:7:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 21255,
-                  "src": "366:15:84",
+                  "scope": 41206,
+                  "src": "366:15:85",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1008,10 +548,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 21249,
+                    "id": 41200,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "366:7:84",
+                    "src": "366:7:85",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1022,13 +562,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 21252,
+                  "id": 41203,
                   "mutability": "mutable",
                   "name": "incentive",
-                  "nameLocation": "391:9:84",
+                  "nameLocation": "391:9:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 21255,
-                  "src": "383:17:84",
+                  "scope": 41206,
+                  "src": "383:17:85",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1036,10 +576,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 21251,
+                    "id": 41202,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "383:7:84",
+                    "src": "383:7:85",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1049,42 +589,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "365:36:84"
+              "src": "365:36:85"
             },
             "returnParameters": {
-              "id": 21254,
+              "id": 41205,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "410:0:84"
+              "src": "410:0:85"
             },
-            "scope": 21263,
+            "scope": 41214,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 21262,
+            "id": 41213,
             "nodeType": "FunctionDefinition",
-            "src": "417:76:84",
+            "src": "417:76:85",
             "functionSelector": "bc701e75",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "incentiveContract",
-            "nameLocation": "426:17:84",
+            "nameLocation": "426:17:85",
             "parameters": {
-              "id": 21258,
+              "id": 41209,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 21257,
+                  "id": 41208,
                   "mutability": "mutable",
                   "name": "account",
-                  "nameLocation": "452:7:84",
+                  "nameLocation": "452:7:85",
                   "nodeType": "VariableDeclaration",
-                  "scope": 21262,
-                  "src": "444:15:84",
+                  "scope": 41213,
+                  "src": "444:15:85",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1092,10 +632,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 21256,
+                    "id": 41207,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "444:7:84",
+                    "src": "444:7:85",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1105,21 +645,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "443:17:84"
+              "src": "443:17:85"
             },
             "returnParameters": {
-              "id": 21261,
+              "id": 41212,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 21260,
+                  "id": 41211,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 21262,
-                  "src": "484:7:84",
+                  "scope": 41213,
+                  "src": "484:7:85",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1127,10 +667,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 21259,
+                    "id": 41210,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "484:7:84",
+                    "src": "484:7:85",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1140,9 +680,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "483:9:84"
+              "src": "483:9:85"
             },
-            "scope": 21263,
+            "scope": 41214,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -1152,39 +692,39 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 21241,
+              "id": 41192,
               "name": "IERC20Ubiquity",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 19696,
-              "src": "212:14:84"
+              "referencedDeclaration": 39647,
+              "src": "212:14:85"
             },
-            "id": 21242,
+            "id": 41193,
             "nodeType": "InheritanceSpecifier",
-            "src": "212:14:84"
+            "src": "212:14:85"
           }
         ],
         "canonicalName": "IUbiquityAlgorithmicDollar",
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 21240,
+          "id": 41191,
           "nodeType": "StructuredDocumentation",
-          "src": "96:76:84",
+          "src": "96:76:85",
           "text": "@title UAD stablecoin interface\n @author Ubiquity Algorithmic Dollar"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          21263,
-          19696,
-          3547
+          41214,
+          39647,
+          26706
         ],
         "name": "IUbiquityAlgorithmicDollar",
-        "nameLocation": "182:26:84",
-        "scope": 21264,
+        "nameLocation": "182:26:85",
+        "scope": 41215,
         "usedErrors": []
       }
     ],
     "license": "Apache-2.0"
   },
-  "id": 84
+  "id": 85
 }

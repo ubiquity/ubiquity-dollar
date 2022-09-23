@@ -40,8 +40,7 @@ contract UARForDollarsCalculator is IUARForDollarsCalculator {
     // dollarsToBurn * (blockheight_debt/blockheight_burn) * _coef
     function getUARAmount(uint256 dollarsToBurn, uint256 blockHeightDebt) external view override returns (uint256) {
         require(
-            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt()
-                < IERC20(manager.dollarTokenAddress()).totalSupply(),
+            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt() < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "uAR to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 coef = _coef.fromUInt().div((uint256(1 ether)).fromUInt());

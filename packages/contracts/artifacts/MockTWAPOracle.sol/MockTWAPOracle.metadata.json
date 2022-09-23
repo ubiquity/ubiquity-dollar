@@ -1,0 +1,208 @@
+{
+  "compiler": {
+    "version": "0.8.9+commit.e5eed63a"
+  },
+  "language": "Solidity",
+  "output": {
+    "abi": [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_pool",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_uADtoken0",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_curve3CRVtoken1",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_price0Average",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_price1Average",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          }
+        ],
+        "name": "consult",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "amountOut",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "pool",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "price0Average",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "price1Average",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "priceCumulativeLast",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "pricesBlockTimestampLast",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "token0",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "token1",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "update",
+        "outputs": [],
+        "stateMutability": "pure",
+        "type": "function"
+      }
+    ],
+    "devdoc": {
+      "kind": "dev",
+      "methods": {},
+      "version": 1
+    },
+    "userdoc": {
+      "kind": "user",
+      "methods": {},
+      "version": 1
+    }
+  },
+  "settings": {
+    "compilationTarget": {
+      "src/dollar/mocks/MockTWAPOracle.sol": "MockTWAPOracle"
+    },
+    "evmVersion": "london",
+    "libraries": {},
+    "metadata": {
+      "bytecodeHash": "ipfs"
+    },
+    "optimizer": {
+      "enabled": true,
+      "runs": 20000
+    },
+    "remappings": [
+      ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+      ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+      ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+      ":Uniswap/=lib/Uniswap/",
+      ":ds-test/=lib/forge-std/lib/ds-test/src/",
+      ":forge-std/=lib/forge-std/src/",
+      ":solidity-linked-list/=lib/solidity-linked-list/"
+    ]
+  },
+  "sources": {
+    "src/dollar/mocks/MockTWAPOracle.sol": {
+      "keccak256": "0xeb85d49242940614d3854a121032e80c65eb380ba8fe493bf0afa2b26da6917d",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://44855b3ad9947fc5fbec7ba6c8151b9b80a9b8cedb87504c86cf356be042062e",
+        "dweb:/ipfs/QmdU76ipATvYJHnxk73pC8KP8ofcFm2EwHr9E49Rjd1YXP"
+      ]
+    }
+  },
+  "version": 1
+}

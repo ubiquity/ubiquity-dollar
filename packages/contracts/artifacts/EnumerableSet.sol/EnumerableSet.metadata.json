@@ -1,0 +1,54 @@
+{
+  "compiler": {
+    "version": "0.8.9+commit.e5eed63a"
+  },
+  "language": "Solidity",
+  "output": {
+    "abi": [],
+    "devdoc": {
+      "details": "Library for managing https://en.wikipedia.org/wiki/Set_(abstract_data_type)[sets] of primitive types. Sets have the following properties: - Elements are added, removed, and checked for existence in constant time (O(1)). - Elements are enumerated in O(n). No guarantees are made on the ordering. ``` contract Example {     // Add the library methods     using EnumerableSet for EnumerableSet.AddressSet;     // Declare a set state variable     EnumerableSet.AddressSet private mySet; } ``` As of v3.3.0, sets of type `bytes32` (`Bytes32Set`), `address` (`AddressSet`) and `uint256` (`UintSet`) are supported. [WARNING] ==== Trying to delete such a structure from storage will likely result in data corruption, rendering the structure unusable. See https://github.com/ethereum/solidity/pull/11843[ethereum/solidity#11843] for more info. In order to clean an EnumerableSet, you can either remove all elements one by one or create a fresh instance using an array of EnumerableSet. ====",
+      "kind": "dev",
+      "methods": {},
+      "version": 1
+    },
+    "userdoc": {
+      "kind": "user",
+      "methods": {},
+      "version": 1
+    }
+  },
+  "settings": {
+    "compilationTarget": {
+      "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol": "EnumerableSet"
+    },
+    "evmVersion": "london",
+    "libraries": {},
+    "metadata": {
+      "bytecodeHash": "ipfs"
+    },
+    "optimizer": {
+      "enabled": true,
+      "runs": 20000
+    },
+    "remappings": [
+      ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+      ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+      ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+      ":Uniswap/=lib/Uniswap/",
+      ":ds-test/=lib/forge-std/lib/ds-test/src/",
+      ":forge-std/=lib/forge-std/src/",
+      ":solidity-linked-list/=lib/solidity-linked-list/"
+    ]
+  },
+  "sources": {
+    "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol": {
+      "keccak256": "0x636eab608b4563c01e88042aba9330e6fe69af2c567fe1adf4d85731974ac81d",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://e35967fa779d58a99de2f6d7ac23ef489d09bc18a5668fd231753905e0a9f633",
+        "dweb:/ipfs/QmWUSbnhG7z4fDUYMbCuyJ4nyhqKwzL2jbeFEnVLDxo6R6"
+      ]
+    }
+  },
+  "version": 1
+}

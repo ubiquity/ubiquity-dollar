@@ -24,8 +24,7 @@ contract CouponsForDollarsCalculator is ICouponsForDollarsCalculator {
 
     function getCouponAmount(uint256 dollarsToBurn) external view override returns (uint256) {
         require(
-            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt()
-                < IERC20(manager.dollarTokenAddress()).totalSupply(),
+            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt() < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "Coupon to dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();

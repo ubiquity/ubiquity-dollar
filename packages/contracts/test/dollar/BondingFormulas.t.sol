@@ -13,7 +13,6 @@ contract BondingFormulaTest is TestHelper {
 
     BondingFormulas bondingFormula;
 
-
     function setUp() public {
         bondingFormula = new BondingFormulas();
     }
@@ -22,7 +21,10 @@ contract BondingFormulaTest is TestHelper {
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    ) public {
+    )
+        public
+    {
+        vm.assume(_bond.lpAmount > 0);
         bytes16 a = _shareInfo[0].fromUInt(); // shares amount
         bytes16 v = _amount.fromUInt();
         bytes16 t = _bond.lpAmount.fromUInt();
@@ -31,7 +33,34 @@ contract BondingFormulaTest is TestHelper {
         assertEq(bondingFormula.sharesForLP(_bond, _shareInfo, _amount), _uLP);
     }
 
-    function test_BondingFormulas_lpRewardsRemoveLiquidityNormalization() public {}
+    function test_BondingFormulas_lpRewardsRemoveLiquidityNormalization(
+        BondingShareV2.Bond memory _bond,
+        uint256[2] memory _shareInfo,
+        uint256 _amount
+    )
+        public
+    {
+        assertEq(bondingFormula.lpRewardsRemoveLiquidityNormalization(_bond, _shareInfo, _amount), _amount);
+    }
 
-    function test_BondingFormulas_lpRewardsAddLiquidityNormalization() public {}
+    function test_BondingFormulas_lpRewardsAddLiquidityNormalization(
+        BondingShareV2.Bond memory _bond,
+        uint256[2] memory _shareInfo,
+        uint256 _amount
+    )
+        public
+    {
+        assertEq(bondingFormula.lpRewardsAddLiquidityNormalization(_bond, _shareInfo, _amount), _amount);
+    }
+
+    function test_BondingFormulas_correctedAmountToWithdraw(uint256 _totalLpDeposited, uint256 _bondingLpBalance, uint256 _amount) public {
+        vm.assume(_totalLpDeposited > 0);
+
+        uint256 amount = _amount;
+        if (_bondingLpBalance > _totalLpDeposited && _bondingLpBalance > 0) {
+            amount = _amount.fromUInt().mul(_bondingLpBalance.fromUInt()).div(_totalLpDeposited.fromUInt()).toUInt();
+        }
+
+        assertEq(bondingFormula.correctedAmountToWithdraw(_totalLpDeposited, _bondingLpBalance, _amount), amount);
+    }
 }

@@ -168,7 +168,10 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         address _crv3PoolTokenAddress,
         uint256 _amplificationCoefficient,
         uint256 _fee
-    ) external onlyAdmin {
+    )
+        external
+        onlyAdmin
+    {
         // Create new StableSwap meta pool (uAD <-> 3Crv)
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
@@ -197,10 +200,8 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
             "uADMGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
-        uint256[2] memory amounts = [
-            IERC20(dollarTokenAddress).balanceOf(address(this)),
-            IERC20(_crv3PoolTokenAddress).balanceOf(address(this))
-        ];
+        uint256[2] memory amounts =
+            [IERC20(dollarTokenAddress).balanceOf(address(this)), IERC20(_crv3PoolTokenAddress).balanceOf(address(this))];
 
         // set curve 3Pool address
         curve3PoolTokenAddress = _crv3PoolTokenAddress;

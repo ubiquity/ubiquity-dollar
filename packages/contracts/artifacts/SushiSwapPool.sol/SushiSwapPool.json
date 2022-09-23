@@ -52,292 +52,19 @@
     }
   ],
   "bytecode": {
-    "object": "0x6080604052600080546001600160a01b03191673c0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac17905534801561003657600080fd5b506040516106a13803806106a183398101604081905261005591610566565b600180546001600160a01b0319166001600160a01b03831690811790915560408051631787d40360e31b815290516000929163bc3ea018916004808301926020929190829003018186803b1580156100ac57600080fd5b505afa1580156100c0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906100e49190610566565b6001600160a01b031614156101405760405162461bcd60e51b815260206004820152601660248201527f446f6c6c61722061646472657373206e6f74207365740000000000000000000060448201526064015b60405180910390fd5b60015460408051630b42165d60e41b815290516000926001600160a01b03169163b42165d0916004808301926020929190829003018186803b15801561018557600080fd5b505afa158015610199573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101bd9190610566565b6001600160a01b031614156102145760405162461bcd60e51b815260206004820152601460248201527f75474f562041646472657373206e6f74207365740000000000000000000000006044820152606401610137565b6000805460015460408051631787d40360e31b815290516001600160a01b039384169363e6a4390593169163bc3ea018916004808301926020929190829003018186803b15801561026457600080fd5b505afa158015610278573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061029c9190610566565b600160009054906101000a90046001600160a01b03166001600160a01b031663b42165d06040518163ffffffff1660e01b815260040160206040518083038186803b1580156102ea57600080fd5b505afa1580156102fe573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103229190610566565b6040516001600160e01b031960e085901b1681526001600160a01b0392831660048201529116602482015260440160206040518083038186803b15801561036857600080fd5b505afa15801561037c573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103a09190610566565b90506001600160a01b0381166105405760005460015460408051631787d40360e31b815290516001600160a01b039384169363c9c6539693169163bc3ea018916004808301926020929190829003018186803b1580156103ff57600080fd5b505afa158015610413573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104379190610566565b600160009054906101000a90046001600160a01b03166001600160a01b031663b42165d06040518163ffffffff1660e01b815260040160206040518083038186803b15801561048557600080fd5b505afa158015610499573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104bd9190610566565b6040516001600160e01b031960e085901b1681526001600160a01b03928316600482015291166024820152604401602060405180830381600087803b15801561050557600080fd5b505af1158015610519573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061053d9190610566565b90505b600280546001600160a01b0319166001600160a01b039290921691909117905550610596565b60006020828403121561057857600080fd5b81516001600160a01b038116811461058f57600080fd5b9392505050565b60fd806105a46000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c8063481c6a75146041578063a8aa1b31146089578063c45a01551460a8575b600080fd5b60015460609073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b60025460609073ffffffffffffffffffffffffffffffffffffffff1681565b60005460609073ffffffffffffffffffffffffffffffffffffffff168156fea264697066735822122034a84bcd72d25bf391bcd226f645c268c76f26ffae69493ee76ee5c8a429a83c64736f6c63430008090033",
-    "sourceMap": "244:822:48:-:0;;;273:96;;;-1:-1:-1;;;;;;273:96:48;326:42;273:96;;;462:602;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;502:7;:52;;-1:-1:-1;;;;;;502:52:48;-1:-1:-1;;;;;502:52:48;;;;;;;;572:28;;;-1:-1:-1;;;572:28:48;;;;-1:-1:-1;;502:52:48;572:26;;:28;;;;;;;;;;;;;;502:52;572:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;-1:-1:-1;;;;;572:42:48;;;564:77;;;;-1:-1:-1;;;564:77:48;;511:2:78;564:77:48;;;493:21:78;550:2;530:18;;;523:30;589:24;569:18;;;562:52;631:18;;564:77:48;;;;;;;;;659:7;;:32;;;-1:-1:-1;;;659:32:48;;;;703:1;;-1:-1:-1;;;;;659:7:48;;:30;;:32;;;;;;;;;;;;;;:7;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;-1:-1:-1;;;;;659:46:48;;;651:79;;;;-1:-1:-1;;;651:79:48;;862:2:78;651:79:48;;;844:21:78;901:2;881:18;;;874:30;940:22;920:18;;;913:50;980:18;;651:79:48;660:344:78;651:79:48;779:12;794:7;;;810;:28;;;-1:-1:-1;;;810:28:48;;;;-1:-1:-1;;;;;794:7:48;;;;:15;;810:7;;:26;;:28;;;;;;;;;;;;;;:7;:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;840:7;;;;;;;;;-1:-1:-1;;;;;840:7:48;-1:-1:-1;;;;;840:30:48;;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;794:79;;-1:-1:-1;;;;;;794:79:48;;;;;;;-1:-1:-1;;;;;1239:15:78;;;794:79:48;;;1221:34:78;1291:15;;1271:18;;;1264:43;1156:18;;794:79:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;779:94;-1:-1:-1;;;;;;887:18:48;;883:138;;928:7;;;947;:28;;;-1:-1:-1;;;947:28:48;;;;-1:-1:-1;;;;;928:7:48;;;;:18;;947:7;;:26;;:28;;;;;;;;;;;;;;:7;:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;977:7;;;;;;;;;-1:-1:-1;;;;;977:7:48;-1:-1:-1;;;;;977:30:48;;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;928:82;;-1:-1:-1;;;;;;928:82:48;;;;;;;-1:-1:-1;;;;;1239:15:78;;;928:82:48;;;1221:34:78;1291:15;;1271:18;;;1264:43;1156:18;;928:82:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;921:89;;883:138;1030:4;:27;;-1:-1:-1;;;;;;1030:27:48;-1:-1:-1;;;;;1030:27:48;;;;;;;;;;-1:-1:-1;244:822:48;;14:290:78;84:6;137:2;125:9;116:7;112:23;108:32;105:52;;;153:1;150;143:12;105:52;179:16;;-1:-1:-1;;;;;224:31:78;;214:42;;204:70;;270:1;267;260:12;204:70;293:5;14:290;-1:-1:-1;;;14:290:78:o;1009:304::-;244:822:48;;;;;;",
+    "object": "0x6080604052600080546001600160a01b03191673c0aee478e3658e2610c5f7a4a2e1777ce9e4f2ac17905534801561003657600080fd5b506040516106a13803806106a183398101604081905261005591610566565b600180546001600160a01b0319166001600160a01b03831690811790915560408051631787d40360e31b815290516000929163bc3ea018916004808301926020929190829003018186803b1580156100ac57600080fd5b505afa1580156100c0573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906100e49190610566565b6001600160a01b031614156101405760405162461bcd60e51b815260206004820152601660248201527f446f6c6c61722061646472657373206e6f74207365740000000000000000000060448201526064015b60405180910390fd5b60015460408051630b42165d60e41b815290516000926001600160a01b03169163b42165d0916004808301926020929190829003018186803b15801561018557600080fd5b505afa158015610199573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101bd9190610566565b6001600160a01b031614156102145760405162461bcd60e51b815260206004820152601460248201527f75474f562041646472657373206e6f74207365740000000000000000000000006044820152606401610137565b6000805460015460408051631787d40360e31b815290516001600160a01b039384169363e6a4390593169163bc3ea018916004808301926020929190829003018186803b15801561026457600080fd5b505afa158015610278573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061029c9190610566565b600160009054906101000a90046001600160a01b03166001600160a01b031663b42165d06040518163ffffffff1660e01b815260040160206040518083038186803b1580156102ea57600080fd5b505afa1580156102fe573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103229190610566565b6040516001600160e01b031960e085901b1681526001600160a01b0392831660048201529116602482015260440160206040518083038186803b15801561036857600080fd5b505afa15801561037c573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103a09190610566565b90506001600160a01b0381166105405760005460015460408051631787d40360e31b815290516001600160a01b039384169363c9c6539693169163bc3ea018916004808301926020929190829003018186803b1580156103ff57600080fd5b505afa158015610413573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104379190610566565b600160009054906101000a90046001600160a01b03166001600160a01b031663b42165d06040518163ffffffff1660e01b815260040160206040518083038186803b15801561048557600080fd5b505afa158015610499573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906104bd9190610566565b6040516001600160e01b031960e085901b1681526001600160a01b03928316600482015291166024820152604401602060405180830381600087803b15801561050557600080fd5b505af1158015610519573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061053d9190610566565b90505b600280546001600160a01b0319166001600160a01b039290921691909117905550610596565b60006020828403121561057857600080fd5b81516001600160a01b038116811461058f57600080fd5b9392505050565b60fd806105a46000396000f3fe6080604052348015600f57600080fd5b5060043610603c5760003560e01c8063481c6a75146041578063a8aa1b31146089578063c45a01551460a8575b600080fd5b60015460609073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b60025460609073ffffffffffffffffffffffffffffffffffffffff1681565b60005460609073ffffffffffffffffffffffffffffffffffffffff168156fea2646970667358221220d6f572cce9c6525b836c9a1df85766f705eb77dfec8e1ab05ce879465515eacd64736f6c63430008090033",
+    "sourceMap": "244:822:48:-:0;;;273:96;;;-1:-1:-1;;;;;;273:96:48;326:42;273:96;;;462:602;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;502:7;:52;;-1:-1:-1;;;;;;502:52:48;-1:-1:-1;;;;;502:52:48;;;;;;;;572:28;;;-1:-1:-1;;;572:28:48;;;;-1:-1:-1;;502:52:48;572:26;;:28;;;;;;;;;;;;;;502:52;572:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;-1:-1:-1;;;;;572:42:48;;;564:77;;;;-1:-1:-1;;;564:77:48;;511:2:80;564:77:48;;;493:21:80;550:2;530:18;;;523:30;589:24;569:18;;;562:52;631:18;;564:77:48;;;;;;;;;659:7;;:32;;;-1:-1:-1;;;659:32:48;;;;703:1;;-1:-1:-1;;;;;659:7:48;;:30;;:32;;;;;;;;;;;;;;:7;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;-1:-1:-1;;;;;659:46:48;;;651:79;;;;-1:-1:-1;;;651:79:48;;862:2:80;651:79:48;;;844:21:80;901:2;881:18;;;874:30;940:22;920:18;;;913:50;980:18;;651:79:48;660:344:80;651:79:48;779:12;794:7;;;810;:28;;;-1:-1:-1;;;810:28:48;;;;-1:-1:-1;;;;;794:7:48;;;;:15;;810:7;;:26;;:28;;;;;;;;;;;;;;:7;:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;840:7;;;;;;;;;-1:-1:-1;;;;;840:7:48;-1:-1:-1;;;;;840:30:48;;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;794:79;;-1:-1:-1;;;;;;794:79:48;;;;;;;-1:-1:-1;;;;;1239:15:80;;;794:79:48;;;1221:34:80;1291:15;;1271:18;;;1264:43;1156:18;;794:79:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;779:94;-1:-1:-1;;;;;;887:18:48;;883:138;;928:7;;;947;:28;;;-1:-1:-1;;;947:28:48;;;;-1:-1:-1;;;;;928:7:48;;;;:18;;947:7;;:26;;:28;;;;;;;;;;;;;;:7;:28;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;977:7;;;;;;;;;-1:-1:-1;;;;;977:7:48;-1:-1:-1;;;;;977:30:48;;:32;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;928:82;;-1:-1:-1;;;;;;928:82:48;;;;;;;-1:-1:-1;;;;;1239:15:80;;;928:82:48;;;1221:34:80;1291:15;;1271:18;;;1264:43;1156:18;;928:82:48;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;921:89;;883:138;1030:4;:27;;-1:-1:-1;;;;;;1030:27:48;-1:-1:-1;;;;;1030:27:48;;;;;;;;;;-1:-1:-1;244:822:48;;14:290:80;84:6;137:2;125:9;116:7;112:23;108:32;105:52;;;153:1;150;143:12;105:52;179:16;;-1:-1:-1;;;;;224:31:80;;214:42;;204:70;;270:1;267;260:12;204:70;293:5;14:290;-1:-1:-1;;;14:290:80:o;1009:304::-;244:822:48;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c8063481c6a75146041578063a8aa1b31146089578063c45a01551460a8575b600080fd5b60015460609073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b60025460609073ffffffffffffffffffffffffffffffffffffffff1681565b60005460609073ffffffffffffffffffffffffffffffffffffffff168156fea264697066735822122034a84bcd72d25bf391bcd226f645c268c76f26ffae69493ee76ee5c8a429a83c64736f6c63430008090033",
-    "sourceMap": "244:822:48:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;376:47;;;;;;;;;;;;232:42:78;220:55;;;202:74;;190:2;175:18;376:47:48;;;;;;;429:26;;;;;;;;;273:96;;;;;;;;",
+    "object": "0x6080604052348015600f57600080fd5b5060043610603c5760003560e01c8063481c6a75146041578063a8aa1b31146089578063c45a01551460a8575b600080fd5b60015460609073ffffffffffffffffffffffffffffffffffffffff1681565b60405173ffffffffffffffffffffffffffffffffffffffff909116815260200160405180910390f35b60025460609073ffffffffffffffffffffffffffffffffffffffff1681565b60005460609073ffffffffffffffffffffffffffffffffffffffff168156fea2646970667358221220d6f572cce9c6525b836c9a1df85766f705eb77dfec8e1ab05ce879465515eacd64736f6c63430008090033",
+    "sourceMap": "244:822:48:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;376:47;;;;;;;;;;;;232:42:80;220:55;;;202:74;;190:2;175:18;376:47:48;;;;;;;429:26;;;;;;;;;273:96;;;;;;;;",
     "linkReferences": {}
   },
   "methodIdentifiers": {
     "factory()": "c45a0155",
     "manager()": "481c6a75",
     "pair()": "a8aa1b31"
-  },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_manager\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"factory\",\"outputs\":[{\"internalType\":\"contract IUniswapV2Factory\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"manager\",\"outputs\":[{\"internalType\":\"contract UbiquityAlgorithmicDollarManager\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"pair\",\"outputs\":[{\"internalType\":\"contract IUniswapV2Pair\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/SushiSwapPool.sol\":\"SushiSwapPool\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"lib/Uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol\":{\"keccak256\":\"0xe5905c0989cf5a865ed9bb7b9252536ca011c5b744017a82a7d4443b9c00a891\",\"urls\":[\"bzz-raw://5d2a90a0a796491507462a3da18c3f8819721d571572d765a2207c35bf0a0389\",\"dweb:/ipfs/Qmf9ACYiT3qzjgsYuhm866FBdiBpRMXAPpQhSFbgqcyhHt\"]},\"lib/Uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol\":{\"keccak256\":\"0x7c9bc70e5996c763e02ff38905282bc24fb242b0ef2519a003b36824fc524a4b\",\"urls\":[\"bzz-raw://85d5ad2dd23ee127f40907a12865a1e8cb5828814f6f2480285e1827dd72dedf\",\"dweb:/ipfs/QmayKQWJgWmr46DqWseADyUanmqxh662hPNdAkdHRjiQQH\"]},\"lib/openzeppelin-contracts/contracts/access/AccessControl.sol\":{\"keccak256\":\"0x07cf8d783adf28649b2ec21c55dd14941b5c779e87d19b6233fa1cb0debe2f71\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3752ae12fdcfa26302c48e93103a6951e545842f836c368860f5191d7eee2b46\",\"dweb:/ipfs/QmeJMaAv99yh5WJHcHnt24diZREjMab4wBptkETwxNfyaq\"]},\"lib/openzeppelin-contracts/contracts/access/IAccessControl.sol\":{\"keccak256\":\"0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a\",\"dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x3270d2a7a042dda9cf85dddd16e6106c2c9ad784c0972315630b2a148215fa7d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b394e20d57877a825c24c1841e219d6ab1e41decec060ea935422ac9b7a25f8a\",\"dweb:/ipfs/QmVTaGCMR4Gi9w1LUVVcjEJHrHF2qcr1avFkLtsLD6sEAr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol\":{\"keccak256\":\"0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95\",\"dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\":{\"keccak256\":\"0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6\",\"dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf\"]},\"lib/openzeppelin-contracts/contracts/utils/Address.sol\":{\"keccak256\":\"0x9720545d8ea1f76222f98683f861f919e9c28bd5d5503caa7e3620a21b6aaa24\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fe3dac0e0258d8396c33fd27c277699a9bfac198f2cb45632c4f5df2c2ca895a\",\"dweb:/ipfs/QmfEWsX7aGpWN9wooHiQo1XjiGM1h6iXeaeMTAJ1TUcnts\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"lib/openzeppelin-contracts/contracts/utils/Strings.sol\":{\"keccak256\":\"0xbaa90c891304799f6aa4039eae4b59afc0b59ce3bcc647f3fc2bbf5a04b17f1e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cc3f5b077759f92f28ba4182d9410aa8fd586d7efc5f76bdd22228bf2d227f0\",\"dweb:/ipfs/QmbLPLb31LxAyB7GWir5AssC1TYVHqhBsN6R7APj2UV9fv\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol\":{\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d\",\"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"lib/openzeppelin-contracts/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x768fcac57789d8edb0b4c8e02bad17b15faeebbc3c8b2c8ec473b485cc0b59fe\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://422e724988089c9f08fab930fe24ae9fd593cd069d488a36084ba5a3d46fcfcf\",\"dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP\"]},\"src/dollar/SushiSwapPool.sol\":{\"keccak256\":\"0x0b13b96d902d9401c13ca5f7b5d7e6f65138d3be76f6f7e850ee198c508d17bb\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8a76d45897fc083e939e2bf753955ba2c4e16112e94303726f025a16d3cc47c8\",\"dweb:/ipfs/QmZFtcot5NUsWRh7ZmDrGEwdKHWoPQcVCinfnshrVnovHH\"]},\"src/dollar/TWAPOracle.sol\":{\"keccak256\":\"0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c\",\"dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr\"]},\"src/dollar/UbiquityAlgorithmicDollarManager.sol\":{\"keccak256\":\"0x4ba55bc9602efae0c731c648d28337e8c5068f8c365d513e838be1dca14924dc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f2d2cd7f2c44faa2c5a3c267b77a36491caf1046ceae9e038dbcef131cfb376b\",\"dweb:/ipfs/QmccYv7GfdVQ9ucmQeSCMuwmhbLKQijWvGYLRo6gTiG6yN\"]},\"src/dollar/interfaces/ICurveFactory.sol\":{\"keccak256\":\"0xcc3211e58eb01261451e7f906d4d3f6993ac2b1cc4cfc2a7ddfc07f40a92c0c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f796db68916b76c2c7f1db9d126c8d3e1a24bfa3d04e19b0ceacd95c5859a169\",\"dweb:/ipfs/QmQqDMWp48RCdtct3FkrbpP1SLzPTs6c15tJTd7ZTmheft\"]},\"src/dollar/interfaces/IERC20Ubiquity.sol\":{\"keccak256\":\"0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://8863f7ba9962d2c6808ab73cb010f54bdf99e9ea58f2392122022b8077b10cf5\",\"dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j\"]},\"src/dollar/interfaces/IMetaPool.sol\":{\"keccak256\":\"0xd4a7a55d55d0220f4b0063e056594cfb75a758dbdc0cb67fc96c95977ee51af5\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://d227a005b01dd7900561e794ac6d00afd6c6f98606fc141e7d7e0ebaf5c116f9\",\"dweb:/ipfs/QmdfHSsSoiix3sLnSZ7PkpoqRLVdPLNo7xaCP2Jx84t2c2\"]},\"src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol\":{\"keccak256\":\"0x55b89fea92edf9f7123954e7aa80d65a1004043f67f8450fb3ed1159bdd6ed9d\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://d6a1312a8dc1309eb2a955dd5418ba1d1cec5508d54e34a7c59d49cfb3e143fc\",\"dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX\"]}},\"version\":1}",
-  "metadata": {
-    "compiler": {
-      "version": "0.8.9+commit.e5eed63a"
-    },
-    "language": "Solidity",
-    "output": {
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_manager",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "factory",
-          "outputs": [
-            {
-              "internalType": "contract IUniswapV2Factory",
-              "name": "",
-              "type": "address"
-            }
-          ]
-        },
-        {
-          "inputs": [],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "manager",
-          "outputs": [
-            {
-              "internalType": "contract UbiquityAlgorithmicDollarManager",
-              "name": "",
-              "type": "address"
-            }
-          ]
-        },
-        {
-          "inputs": [],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "pair",
-          "outputs": [
-            {
-              "internalType": "contract IUniswapV2Pair",
-              "name": "",
-              "type": "address"
-            }
-          ]
-        }
-      ],
-      "devdoc": {
-        "kind": "dev",
-        "methods": {},
-        "version": 1
-      },
-      "userdoc": {
-        "kind": "user",
-        "methods": {},
-        "version": 1
-      }
-    },
-    "settings": {
-      "remappings": [
-        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
-        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
-        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
-        ":Uniswap/=lib/Uniswap/",
-        ":ds-test/=lib/forge-std/lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/",
-        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
-        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
-      ],
-      "optimizer": {
-        "enabled": true,
-        "runs": 20000
-      },
-      "metadata": {
-        "bytecodeHash": "ipfs"
-      },
-      "compilationTarget": {
-        "src/dollar/SushiSwapPool.sol": "SushiSwapPool"
-      },
-      "libraries": {}
-    },
-    "sources": {
-      "lib/Uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol": {
-        "keccak256": "0xe5905c0989cf5a865ed9bb7b9252536ca011c5b744017a82a7d4443b9c00a891",
-        "urls": [
-          "bzz-raw://5d2a90a0a796491507462a3da18c3f8819721d571572d765a2207c35bf0a0389",
-          "dweb:/ipfs/Qmf9ACYiT3qzjgsYuhm866FBdiBpRMXAPpQhSFbgqcyhHt"
-        ],
-        "license": null
-      },
-      "lib/Uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol": {
-        "keccak256": "0x7c9bc70e5996c763e02ff38905282bc24fb242b0ef2519a003b36824fc524a4b",
-        "urls": [
-          "bzz-raw://85d5ad2dd23ee127f40907a12865a1e8cb5828814f6f2480285e1827dd72dedf",
-          "dweb:/ipfs/QmayKQWJgWmr46DqWseADyUanmqxh662hPNdAkdHRjiQQH"
-        ],
-        "license": null
-      },
-      "lib/openzeppelin-contracts/contracts/access/AccessControl.sol": {
-        "keccak256": "0x07cf8d783adf28649b2ec21c55dd14941b5c779e87d19b6233fa1cb0debe2f71",
-        "urls": [
-          "bzz-raw://3752ae12fdcfa26302c48e93103a6951e545842f836c368860f5191d7eee2b46",
-          "dweb:/ipfs/QmeJMaAv99yh5WJHcHnt24diZREjMab4wBptkETwxNfyaq"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/access/IAccessControl.sol": {
-        "keccak256": "0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57",
-        "urls": [
-          "bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a",
-          "dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol": {
-        "keccak256": "0x3270d2a7a042dda9cf85dddd16e6106c2c9ad784c0972315630b2a148215fa7d",
-        "urls": [
-          "bzz-raw://b394e20d57877a825c24c1841e219d6ab1e41decec060ea935422ac9b7a25f8a",
-          "dweb:/ipfs/QmVTaGCMR4Gi9w1LUVVcjEJHrHF2qcr1avFkLtsLD6sEAr"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol": {
-        "keccak256": "0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b",
-        "urls": [
-          "bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34",
-          "dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
-        "keccak256": "0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca",
-        "urls": [
-          "bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd",
-          "dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol": {
-        "keccak256": "0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329",
-        "urls": [
-          "bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95",
-          "dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol": {
-        "keccak256": "0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29",
-        "urls": [
-          "bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6",
-          "dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/Address.sol": {
-        "keccak256": "0x9720545d8ea1f76222f98683f861f919e9c28bd5d5503caa7e3620a21b6aaa24",
-        "urls": [
-          "bzz-raw://fe3dac0e0258d8396c33fd27c277699a9bfac198f2cb45632c4f5df2c2ca895a",
-          "dweb:/ipfs/QmfEWsX7aGpWN9wooHiQo1XjiGM1h6iXeaeMTAJ1TUcnts"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/Context.sol": {
-        "keccak256": "0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7",
-        "urls": [
-          "bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92",
-          "dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/Strings.sol": {
-        "keccak256": "0xbaa90c891304799f6aa4039eae4b59afc0b59ce3bcc647f3fc2bbf5a04b17f1e",
-        "urls": [
-          "bzz-raw://1cc3f5b077759f92f28ba4182d9410aa8fd586d7efc5f76bdd22228bf2d227f0",
-          "dweb:/ipfs/QmbLPLb31LxAyB7GWir5AssC1TYVHqhBsN6R7APj2UV9fv"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol": {
-        "keccak256": "0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b",
-        "urls": [
-          "bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d",
-          "dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": {
-        "keccak256": "0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1",
-        "urls": [
-          "bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f",
-          "dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/math/Math.sol": {
-        "keccak256": "0x768fcac57789d8edb0b4c8e02bad17b15faeebbc3c8b2c8ec473b485cc0b59fe",
-        "urls": [
-          "bzz-raw://422e724988089c9f08fab930fe24ae9fd593cd069d488a36084ba5a3d46fcfcf",
-          "dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP"
-        ],
-        "license": "MIT"
-      },
-      "src/dollar/SushiSwapPool.sol": {
-        "keccak256": "0x0b13b96d902d9401c13ca5f7b5d7e6f65138d3be76f6f7e850ee198c508d17bb",
-        "urls": [
-          "bzz-raw://8a76d45897fc083e939e2bf753955ba2c4e16112e94303726f025a16d3cc47c8",
-          "dweb:/ipfs/QmZFtcot5NUsWRh7ZmDrGEwdKHWoPQcVCinfnshrVnovHH"
-        ],
-        "license": "MIT"
-      },
-      "src/dollar/TWAPOracle.sol": {
-        "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
-        "urls": [
-          "bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c",
-          "dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr"
-        ],
-        "license": "Apache-2.0"
-      },
-      "src/dollar/UbiquityAlgorithmicDollarManager.sol": {
-        "keccak256": "0x4ba55bc9602efae0c731c648d28337e8c5068f8c365d513e838be1dca14924dc",
-        "urls": [
-          "bzz-raw://f2d2cd7f2c44faa2c5a3c267b77a36491caf1046ceae9e038dbcef131cfb376b",
-          "dweb:/ipfs/QmccYv7GfdVQ9ucmQeSCMuwmhbLKQijWvGYLRo6gTiG6yN"
-        ],
-        "license": "MIT"
-      },
-      "src/dollar/interfaces/ICurveFactory.sol": {
-        "keccak256": "0xcc3211e58eb01261451e7f906d4d3f6993ac2b1cc4cfc2a7ddfc07f40a92c0c7",
-        "urls": [
-          "bzz-raw://f796db68916b76c2c7f1db9d126c8d3e1a24bfa3d04e19b0ceacd95c5859a169",
-          "dweb:/ipfs/QmQqDMWp48RCdtct3FkrbpP1SLzPTs6c15tJTd7ZTmheft"
-        ],
-        "license": "MIT"
-      },
-      "src/dollar/interfaces/IERC20Ubiquity.sol": {
-        "keccak256": "0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65",
-        "urls": [
-          "bzz-raw://8863f7ba9962d2c6808ab73cb010f54bdf99e9ea58f2392122022b8077b10cf5",
-          "dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j"
-        ],
-        "license": "Apache-2.0"
-      },
-      "src/dollar/interfaces/IMetaPool.sol": {
-        "keccak256": "0xd4a7a55d55d0220f4b0063e056594cfb75a758dbdc0cb67fc96c95977ee51af5",
-        "urls": [
-          "bzz-raw://d227a005b01dd7900561e794ac6d00afd6c6f98606fc141e7d7e0ebaf5c116f9",
-          "dweb:/ipfs/QmdfHSsSoiix3sLnSZ7PkpoqRLVdPLNo7xaCP2Jx84t2c2"
-        ],
-        "license": "UNLICENSED"
-      },
-      "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol": {
-        "keccak256": "0x55b89fea92edf9f7123954e7aa80d65a1004043f67f8450fb3ed1159bdd6ed9d",
-        "urls": [
-          "bzz-raw://d6a1312a8dc1309eb2a955dd5418ba1d1cec5508d54e34a7c59d49cfb3e143fc",
-          "dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX"
-        ],
-        "license": "Apache-2.0"
-      }
-    },
-    "version": 1
   },
   "ast": {
     "absolutePath": "src/dollar/SushiSwapPool.sol",
@@ -362,7 +89,7 @@
         24248
       ],
       "ICurveFactory": [
-        37500
+        37804
       ],
       "IERC165": [
         27579
@@ -377,13 +104,13 @@
         26735
       ],
       "IERC20Ubiquity": [
-        37663
+        37967
       ],
       "IMetaPool": [
-        38357
+        38661
       ],
       "IUbiquityAlgorithmicDollar": [
-        38715
+        39019
       ],
       "IUniswapV2Factory": [
         62

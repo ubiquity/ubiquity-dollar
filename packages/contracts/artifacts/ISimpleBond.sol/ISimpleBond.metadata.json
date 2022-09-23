@@ -1,0 +1,368 @@
+{
+  "compiler": {
+    "version": "0.8.9+commit.e5eed63a"
+  },
+  "language": "Solidity",
+  "output": {
+    "abi": [
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "block",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "bondId",
+            "type": "uint256"
+          }
+        ],
+        "name": "LogBond",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          }
+        ],
+        "name": "LogClaim",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "rewardsRatio",
+            "type": "uint256"
+          }
+        ],
+        "name": "LogSetRewards",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "bond",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "bondId",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          }
+        ],
+        "name": "bondsCount",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "bondNb",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "claim",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "claimed",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "name": "claimBond",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "claimed",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "pause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "index",
+            "type": "uint256"
+          }
+        ],
+        "name": "rewardsBondOf",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardsClaimed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardsClaimable",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "addr",
+            "type": "address"
+          }
+        ],
+        "name": "rewardsOf",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "rewards",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardsClaimed",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "rewardsClaimable",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenRewardsRatio",
+            "type": "uint256"
+          }
+        ],
+        "name": "setRewards",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "sticker",
+            "type": "address"
+          }
+        ],
+        "name": "setSticker",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "treasury",
+            "type": "address"
+          }
+        ],
+        "name": "setTreasury",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "vestingBlocks_",
+            "type": "uint256"
+          }
+        ],
+        "name": "setVestingBlocks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "unpause",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "token",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "withdraw",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ],
+    "devdoc": {
+      "kind": "dev",
+      "methods": {},
+      "version": 1
+    },
+    "userdoc": {
+      "kind": "user",
+      "methods": {},
+      "version": 1
+    }
+  },
+  "settings": {
+    "compilationTarget": {
+      "src/ubiquistick/interfaces/ISimpleBond.sol": "ISimpleBond"
+    },
+    "evmVersion": "london",
+    "libraries": {},
+    "metadata": {
+      "bytecodeHash": "ipfs"
+    },
+    "optimizer": {
+      "enabled": true,
+      "runs": 20000
+    },
+    "remappings": [
+      ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+      ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+      ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+      ":Uniswap/=lib/Uniswap/",
+      ":ds-test/=lib/forge-std/lib/ds-test/src/",
+      ":forge-std/=lib/forge-std/src/",
+      ":solidity-linked-list/=lib/solidity-linked-list/"
+    ]
+  },
+  "sources": {
+    "src/ubiquistick/interfaces/ISimpleBond.sol": {
+      "keccak256": "0x075efe9e5965487c3a27691924d36c7771cb554592304927b60ac46be42d0719",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://7df92cc358ac2d1fcb1c7f609e02fc31aa6df4bf1cb9e7d98790787980c672c1",
+        "dweb:/ipfs/QmPqFgTPpsFY7PcsB8WQ9hm82oGwHkk2AbgaHMyae1V216"
+      ]
+    }
+  },
+  "version": 1
+}

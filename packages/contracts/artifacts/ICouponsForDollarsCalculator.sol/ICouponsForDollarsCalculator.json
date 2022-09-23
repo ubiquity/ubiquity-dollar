@@ -33,117 +33,27 @@
   "methodIdentifiers": {
     "getCouponAmount(uint256)": "9172dd23"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"dollarsToBurn\",\"type\":\"uint256\"}],\"name\":\"getCouponAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"A mechanism for calculating coupons received for a dollar amount burnt\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/ICouponsForDollarsCalculator.sol\":\"ICouponsForDollarsCalculator\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/contracts/\",\":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"src/dollar/interfaces/ICouponsForDollarsCalculator.sol\":{\"keccak256\":\"0xb30c24ed1dfed8253a6c650c057924c1cec8c27bedb5a341ee2c17f44c74b430\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://99bff38593625172693d2f1342ff53d51552e4ba9b837b9b4e0864865b214b3a\",\"dweb:/ipfs/Qmc8z5jXmsZM8ZG64onNy3hwaYQWtaEctrv88NgY2kpdQy\"]}},\"version\":1}",
-  "metadata": {
-    "compiler": {
-      "version": "0.8.9+commit.e5eed63a"
-    },
-    "language": "Solidity",
-    "output": {
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "dollarsToBurn",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "getCouponAmount",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ]
-        }
-      ],
-      "devdoc": {
-        "kind": "dev",
-        "methods": {},
-        "version": 1
-      },
-      "userdoc": {
-        "kind": "user",
-        "methods": {},
-        "version": 1
-      }
-    },
-    "settings": {
-      "remappings": [
-        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
-        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
-        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
-        ":Uniswap/=lib/Uniswap/",
-        ":ds-test/=lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/",
-        ":solidity-linked-list/=lib/solidity-linked-list/contracts/",
-        ":solidity-linked-list/contracts/=lib/solidity-linked-list/contracts/"
-      ],
-      "optimizer": {
-        "enabled": true,
-        "runs": 20000
-      },
-      "metadata": {
-        "bytecodeHash": "ipfs"
-      },
-      "compilationTarget": {
-        "src/dollar/interfaces/ICouponsForDollarsCalculator.sol": "ICouponsForDollarsCalculator"
-      },
-      "libraries": {}
-    },
-    "sources": {
-      "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol": {
-        "keccak256": "0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b",
-        "urls": [
-          "bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec",
-          "dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D"
-        ],
-        "license": "MIT"
-      },
-      "lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol": {
-        "keccak256": "0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1",
-        "urls": [
-          "bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f",
-          "dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy"
-        ],
-        "license": "MIT"
-      },
-      "src/dollar/interfaces/ICouponsForDollarsCalculator.sol": {
-        "keccak256": "0xb30c24ed1dfed8253a6c650c057924c1cec8c27bedb5a341ee2c17f44c74b430",
-        "urls": [
-          "bzz-raw://99bff38593625172693d2f1342ff53d51552e4ba9b837b9b4e0864865b214b3a",
-          "dweb:/ipfs/Qmc8z5jXmsZM8ZG64onNy3hwaYQWtaEctrv88NgY2kpdQy"
-        ],
-        "license": "MIT"
-      }
-    },
-    "version": 1
-  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/ICouponsForDollarsCalculator.sol",
-    "id": 19261,
+    "id": 39212,
     "exportedSymbols": {
       "ICouponsForDollarsCalculator": [
-        19260
+        39211
       ],
       "IERC1155Receiver": [
-        2750
+        25909
       ],
       "IERC165": [
-        6067
+        29226
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:305:63",
+    "src": "32:305:64",
     "nodes": [
       {
-        "id": 19250,
+        "id": 39201,
         "nodeType": "PragmaDirective",
-        "src": "32:23:63",
+        "src": "32:23:64",
         "literals": [
           "solidity",
           "^",
@@ -152,45 +62,45 @@
         ]
       },
       {
-        "id": 19251,
+        "id": 39202,
         "nodeType": "ImportDirective",
-        "src": "57:68:63",
+        "src": "57:68:64",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 19261,
-        "sourceUnit": 2751,
+        "scope": 39212,
+        "sourceUnit": 25910,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 19260,
+        "id": 39211,
         "nodeType": "ContractDefinition",
-        "src": "209:127:63",
+        "src": "209:127:64",
         "nodes": [
           {
-            "id": 19259,
+            "id": 39210,
             "nodeType": "FunctionDefinition",
-            "src": "254:80:63",
+            "src": "254:80:64",
             "functionSelector": "9172dd23",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCouponAmount",
-            "nameLocation": "263:15:63",
+            "nameLocation": "263:15:64",
             "parameters": {
-              "id": 19255,
+              "id": 39206,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 19254,
+                  "id": 39205,
                   "mutability": "mutable",
                   "name": "dollarsToBurn",
-                  "nameLocation": "287:13:63",
+                  "nameLocation": "287:13:64",
                   "nodeType": "VariableDeclaration",
-                  "scope": 19259,
-                  "src": "279:21:63",
+                  "scope": 39210,
+                  "src": "279:21:64",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -198,10 +108,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 19253,
+                    "id": 39204,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "279:7:63",
+                    "src": "279:7:64",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -210,21 +120,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "278:23:63"
+              "src": "278:23:64"
             },
             "returnParameters": {
-              "id": 19258,
+              "id": 39209,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 19257,
+                  "id": 39208,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 19259,
-                  "src": "325:7:63",
+                  "scope": 39210,
+                  "src": "325:7:64",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -232,10 +142,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 19256,
+                    "id": 39207,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "325:7:63",
+                    "src": "325:7:64",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -244,9 +154,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "324:9:63"
+              "src": "324:9:64"
             },
-            "scope": 19260,
+            "scope": 39211,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -258,22 +168,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 19252,
+          "id": 39203,
           "nodeType": "StructuredDocumentation",
-          "src": "127:82:63",
+          "src": "127:82:64",
           "text": "@title A mechanism for calculating coupons received for a dollar amount burnt"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          19260
+          39211
         ],
         "name": "ICouponsForDollarsCalculator",
-        "nameLocation": "219:28:63",
-        "scope": 19261,
+        "nameLocation": "219:28:64",
+        "scope": 39212,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 63
+  "id": 64
 }

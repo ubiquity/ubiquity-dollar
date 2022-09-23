@@ -96,7 +96,10 @@ contract BondingV2 is CollectableDust, Pausable {
         address[] memory _originals,
         uint256[] memory _lpBalances,
         uint256[] memory _weeks
-    ) CollectableDust() Pausable() {
+    )
+        CollectableDust()
+        Pausable()
+    {
         manager = UbiquityAlgorithmicDollarManager(_manager);
         bondingFormulasAddress = _bondingFormulasAddress;
         migrator = msg.sender;
@@ -251,9 +254,8 @@ contract BondingV2 is CollectableDust, Pausable {
         IMasterChefV2(manager.masterChefAddress()).withdraw(msg.sender, sharesToRemove, _id);
 
         // calculate the amount of share based on the new amount of lp deposited and the duration
-        uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress()).durationMultiply(
-            bond.lpAmount, _weeks, bondingDiscountMultiplier
-        );
+        uint256 _sharesAmount =
+            IUbiquityFormulas(manager.formulasAddress()).durationMultiply(bond.lpAmount, _weeks, bondingDiscountMultiplier);
 
         // deposit new shares
         IMasterChefV2(manager.masterChefAddress()).deposit(msg.sender, _sharesAmount, _id);
@@ -296,9 +298,8 @@ contract BondingV2 is CollectableDust, Pausable {
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = BondingFormulas(this.bondingFormulasAddress()).lpRewardsRemoveLiquidityNormalization(
-            bond, bs, pendingLpReward
-        );
+        pendingLpReward =
+            BondingFormulas(this.bondingFormulasAddress()).lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
 
         uint256 correctedAmount = BondingFormulas(this.bondingFormulasAddress()).correctedAmountToWithdraw(
             BondingShareV2(manager.bondingShareAddress()).totalLP(),
@@ -336,8 +337,8 @@ contract BondingV2 is CollectableDust, Pausable {
             // if new rewards we should calculate the new curAccLpRewardPerShare
             if (currentLpRewards > lpRewards) {
                 uint256 newLpRewards = currentLpRewards - lpRewards;
-                curAccLpRewardPerShare = accLpRewardPerShare
-                    + ((newLpRewards * 1e12) / IMasterChefV2(manager.masterChefAddress()).totalShares());
+                curAccLpRewardPerShare =
+                    accLpRewardPerShare + ((newLpRewards * 1e12) / IMasterChefV2(manager.masterChefAddress()).totalShares());
             }
             // we multiply the shares amount by the accumulated lpRewards per share
             // and remove the lp Reward Debt

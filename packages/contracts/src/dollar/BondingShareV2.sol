@@ -145,7 +145,12 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) public virtual override whenNotPaused {
+    )
+        public
+        virtual
+        override
+        whenNotPaused
+    {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
         _holderBalances[to].add(ids);
     }
@@ -205,7 +210,11 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override (ERC1155, ERC1155Pausable) {
+    )
+        internal
+        virtual
+        override (ERC1155, ERC1155Pausable)
+    {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }
