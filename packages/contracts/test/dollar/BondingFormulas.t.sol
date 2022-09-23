@@ -17,23 +17,27 @@ contract BondingFormulaTest is TestHelper {
         bondingFormula = new BondingFormulas();
     }
 
-    function test_BondingFormulas_sharesForLP(
-        BondingShareV2.Bond memory _bond,
-        uint256[2] memory _shareInfo,
-        uint256 _amount
-    )
-        public
-    {
-        vm.assume(_bond.lpAmount > 0);
-        bytes16 a = _shareInfo[0].fromUInt(); // shares amount
-        bytes16 v = _amount.fromUInt();
-        bytes16 t = _bond.lpAmount.fromUInt();
-        uint256 _uLP = a.mul(v).div(t).toUInt();
+    function test_sharesForLP() public {
+        BondingShareV2.Bond memory _bond = BondingShareV2.Bond({
+            // address of the minter
+            minter: address(0x11111),
+            // lp amount deposited by the user
+            lpFirstDeposited: 0,
+            creationBlock: 100,
+            // lp that were already there when created
+            lpRewardDebt: 0,
+            endBlock: 1000,
+            // lp remaining for a user
+            lpAmount: 100
+        });
 
-        assertEq(bondingFormula.sharesForLP(_bond, _shareInfo, _amount), _uLP);
+        uint256[2] memory _shareInfo = [uint256(100), uint256(100)];
+        uint256 _amount = 10;
+
+        assertEq(bondingFormula.sharesForLP(_bond, _shareInfo, _amount), 10);
     }
 
-    function test_BondingFormulas_lpRewardsRemoveLiquidityNormalization(
+    function test_lpRewardsRemoveLiquidityNormalization(
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
@@ -43,7 +47,7 @@ contract BondingFormulaTest is TestHelper {
         assertEq(bondingFormula.lpRewardsRemoveLiquidityNormalization(_bond, _shareInfo, _amount), _amount);
     }
 
-    function test_BondingFormulas_lpRewardsAddLiquidityNormalization(
+    function test_lpRewardsAddLiquidityNormalization(
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
@@ -53,14 +57,17 @@ contract BondingFormulaTest is TestHelper {
         assertEq(bondingFormula.lpRewardsAddLiquidityNormalization(_bond, _shareInfo, _amount), _amount);
     }
 
-    function test_BondingFormulas_correctedAmountToWithdraw(uint256 _totalLpDeposited, uint256 _bondingLpBalance, uint256 _amount) public {
-        vm.assume(_totalLpDeposited > 0);
+    function test_correctedAmountToWithdraw_returnAmount() public {
+        uint256 _totalLpDeposited = 10000;
+        uint256 _bondingLpBalance = 20000;
+        uint256 _amount = 100;
+        assertEq(bondingFormula.correctedAmountToWithdraw(_totalLpDeposited, _bondingLpBalance, _amount), 100);
+    }
 
-        uint256 amount = _amount;
-        if (_bondingLpBalance > _totalLpDeposited && _bondingLpBalance > 0) {
-            amount = _amount.fromUInt().mul(_bondingLpBalance.fromUInt()).div(_totalLpDeposited.fromUInt()).toUInt();
-        }
-
-        assertEq(bondingFormula.correctedAmountToWithdraw(_totalLpDeposited, _bondingLpBalance, _amount), amount);
+    function test_correctedAmountToWithdraw_calcSharedAmount() public {
+        uint256 _totalLpDeposited = 10000;
+        uint256 _bondingLpBalance = 5000;
+        uint256 _amount = 100;
+        assertEq(bondingFormula.correctedAmountToWithdraw(_totalLpDeposited, _bondingLpBalance, _amount), 50);
     }
 }

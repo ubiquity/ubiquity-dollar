@@ -429,24 +429,15 @@
         "type": "function"
       },
       {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "_totalLpDeposited",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_bondingLpBalance",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_BondingFormulas_correctedAmountToWithdraw",
+        "inputs": [],
+        "name": "test_correctedAmountToWithdraw_calcSharedAmount",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_correctedAmountToWithdraw_returnAmount",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -501,7 +492,7 @@
             "type": "uint256"
           }
         ],
-        "name": "test_BondingFormulas_lpRewardsAddLiquidityNormalization",
+        "name": "test_lpRewardsAddLiquidityNormalization",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -556,62 +547,14 @@
             "type": "uint256"
           }
         ],
-        "name": "test_BondingFormulas_lpRewardsRemoveLiquidityNormalization",
+        "name": "test_lpRewardsRemoveLiquidityNormalization",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
       {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_BondingFormulas_sharesForLP",
+        "inputs": [],
+        "name": "test_sharesForLP",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -962,11 +905,11 @@
       ]
     },
     "test/dollar/BondingFormulas.t.sol": {
-      "keccak256": "0x31970b48f4faa08f9154cc49dd0491eff61721a6fea43ce77f68239627f613b6",
+      "keccak256": "0xf42349fce34eb629a38f06b89b9317cc4c865474eb8bc9afa0fdd47f4ce84ccf",
       "license": "MIT",
       "urls": [
-        "bzz-raw://1a09780e1ca4789b5caf37d780fa00bd30f16e96551ecd3745bf9f862cc4a13d",
-        "dweb:/ipfs/QmSVxQQU6ntpLxA9puxC5fy9rCK5L3XYkLcAThXMAksgG1"
+        "bzz-raw://e3c715262c0cde444a51bf8e0b93a3d654459a554998861df01f7cc62d1578ea",
+        "dweb:/ipfs/QmfBYvvWTmgzNEndD6gdyzn6AqHJj6dtn9N5TPNNUQaRZp"
       ]
     },
     "test/helpers/TestHelper.sol": {
