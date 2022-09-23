@@ -38,8 +38,7 @@ jobs:
           sudo tar -xf /tmp/echidna-test.tar.gz -C /usr/bin
           sudo chmod +x /usr/bin/echidna-test
           yarn install --frozen-lockfile
+          yarn workspace @ubiquity/contracts forge install
 
       - name: Run ${{ matrix.testName }}
-        run: |
-          cd packages/contracts
-          echidna-test . --contract ${{ matrix.testName }} --config echidna.config.yml
+        run: yarn workspace @ubiquity/contracts echidna-test . --contract ${{ matrix.testName }} --config echidna.config.yml

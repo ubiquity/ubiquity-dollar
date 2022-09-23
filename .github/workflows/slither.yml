@@ -29,5 +29,4 @@ jobs:
           
 
       - name: Test with Slither
-        run: |
-          yarn workspace @ubiquity/contracts run slither
+        run: yarn workspace @ubiquity/contracts run slither
