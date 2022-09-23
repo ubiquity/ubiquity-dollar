@@ -25,6 +25,7 @@
     "build": "forge build",
     "test": "forge test --gas-report",
     "slither": "slither . --config-file slither.config.json",
+    "echidna": "slither . --config-file slither.config.json",
     "prettier": "forge fmt",
     "deploy": "ts-node ./deploy/deploy.ts",
     "clean": "forge clean",
