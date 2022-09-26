@@ -306,6 +306,19 @@
       {
         "inputs": [
           {
+            "internalType": "uint256",
+            "name": "totalDebt",
+            "type": "uint256"
+          }
+        ],
+        "name": "setTotalOutstandingDebt",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
             "internalType": "bytes4",
             "name": "interfaceId",
             "type": "bytes4"
@@ -467,11 +480,11 @@
       ]
     },
     "src/dollar/mocks/MockDebtCoupon.sol": {
-      "keccak256": "0x51ee97e5d8909c6a2c4529d206da561cd5bbf207413f730ab133030798eeee46",
+      "keccak256": "0x9b16210ea3f35ecdce2f42f033cee7dc23ce25f52987893efcb310f8f5bb7646",
       "license": "MIT",
       "urls": [
-        "bzz-raw://b2b5fd1e0497f03d2951ef7b8fdcb1d5631df9da0d3cc6f4ed6e314dd24c5ac7",
-        "dweb:/ipfs/QmaC2dgpyk8zHSjEmXJUGnRsbwJ8HW3yvfjB7H72P8GE2e"
+        "bzz-raw://4cfe013d7407b6d30fb7717867bbd2c50a6be51e53ee79c76b3035a48ae830fe",
+        "dweb:/ipfs/QmUGEe748LwmE1T4BPsNXd4b5VXLmRNCCRW28EAo9archK"
       ]
     }
   },

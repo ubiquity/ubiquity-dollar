@@ -449,6 +449,27 @@
       },
       {
         "inputs": [],
+        "name": "setUp",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_getCouponAmount",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_getCouponAmount_revertsIfDebtTooHigh",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
         "name": "vm",
         "outputs": [
           {
@@ -474,7 +495,7 @@
   },
   "settings": {
     "compilationTarget": {
-      "test/helpers/TestHelper.sol": "TestHelper"
+      "test/dollar/CouponsForDollarsCalculator.t.sol": "CouponsForDollarsCalculatorTest"
     },
     "evmVersion": "london",
     "libraries": {},
@@ -568,6 +589,14 @@
         "dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh"
       ]
     },
+    "lib/openzeppelin-contracts/contracts/security/Pausable.sol": {
+      "keccak256": "0x0849d93b16c9940beb286a7864ed02724b248b93e0d80ef6355af5ef15c64773",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://4ddabb16009cd17eaca3143feadf450ac13e72919ebe2ca50e00f61cb78bc004",
+        "dweb:/ipfs/QmSPwPxX7d6TTWakN5jy5wsaGkS1y9TW8fuhGSraMkLk2B"
+      ]
+    },
     "lib/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol": {
       "keccak256": "0xe720b214fc3173cebcba734efb258dd89ae27733f18f5abc4deca28e33a05854",
       "license": "MIT",
@@ -590,6 +619,22 @@
       "urls": [
         "bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec",
         "dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D"
+      ]
+    },
+    "lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Burnable.sol": {
+      "keccak256": "0x2759d25ad3d3d96e0886d461dee4b14b8249355ba970a2f106ef45c2c352ecad",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://4ef7141c2ad980f33a4c11346460c53022e28af52bab49ba585c95328a628d01",
+        "dweb:/ipfs/QmZbTT4QfoKrWVgcWv8vWnS8UJV9wR6Gev8V7CvggSyGQX"
+      ]
+    },
+    "lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Pausable.sol": {
+      "keccak256": "0xdad22b949de979bb2ad9001c044b2aeaacf8a25e3de09ed6f022a9469f936d5b",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://f2e9219d44b0ab528f8dc32f06897c5d7260e9f7190db830a017265ac0d22585",
+        "dweb:/ipfs/QmYWP5r1Zkr5HRVm7cJG72vMqiDUwe9PbCmZZo9xc44V8K"
       ]
     },
     "lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol": {
@@ -688,6 +733,38 @@
         "dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP"
       ]
     },
+    "lib/solidity-linked-list/contracts/StructuredLinkedList.sol": {
+      "keccak256": "0x4cbb667c893519162eda39e0405a146176b643311f40278acf3c5a6d2d251b76",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://cb602dc36c34611fce073f45dd93dafbb0471771a0837e5f1f3627fbffe5e766",
+        "dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV"
+      ]
+    },
+    "src/dollar/CouponsForDollarsCalculator.sol": {
+      "keccak256": "0x5ffe57a9a46a07a1a03733974e31023f57966f152e293fd3f9e1b1aaaccf5d75",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://458c68333e9ba63e31164db81afb5654ac41027631a2d24f35dee65541cfe121",
+        "dweb:/ipfs/QmeyrvyC3Hr48X2umcngXL2ZBv4Q5XGnxw6hmpgyKVAzb7"
+      ]
+    },
+    "src/dollar/DebtCoupon.sol": {
+      "keccak256": "0xf7b174683aa4d95055205572723339a9ed12b3a30acd8b49bcd16468fdadc2f4",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://e57e29c154fc3e3c54cb6c039f4c2e1d0a5e96aafce09110a37abaaa674c3ee6",
+        "dweb:/ipfs/QmSUCHhZ1yigvXWmbXu4XGBjFHCpz2yfAeESwwfwiYk3iJ"
+      ]
+    },
+    "src/dollar/ERC1155Ubiquity.sol": {
+      "keccak256": "0xa155185e401f682cdc701a9f135463526fd354e377bcea35de426dab83fa2563",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://e7ae9d338ca96f4780cea3859f5ff7b59022ab1709435d6d869d989e71e55d8f",
+        "dweb:/ipfs/QmYXqtXrXtDxiAvDLKh2r1Y59CSwwEfJFYusT48tEt8x8J"
+      ]
+    },
     "src/dollar/TWAPOracle.sol": {
       "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
       "license": "Apache-2.0",
@@ -702,6 +779,14 @@
       "urls": [
         "bzz-raw://2ff34ab06576fc074ca7baf6fc720003a9106704ae8fe7006c2b06120f4cdcb6",
         "dweb:/ipfs/QmeZJAb3TMAGjDFj4EquJNxCcri1ggQb9kuuYWJ8CvidEm"
+      ]
+    },
+    "src/dollar/interfaces/ICouponsForDollarsCalculator.sol": {
+      "keccak256": "0xb30c24ed1dfed8253a6c650c057924c1cec8c27bedb5a341ee2c17f44c74b430",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://99bff38593625172693d2f1342ff53d51552e4ba9b837b9b4e0864865b214b3a",
+        "dweb:/ipfs/Qmc8z5jXmsZM8ZG64onNy3hwaYQWtaEctrv88NgY2kpdQy"
       ]
     },
     "src/dollar/interfaces/ICurveFactory.sol": {
@@ -736,6 +821,14 @@
         "dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX"
       ]
     },
+    "src/dollar/libs/ABDKMathQuad.sol": {
+      "keccak256": "0xcad519ada31d1ba4038ef6484a5c056fa807c7b4dbee42e5de59fc046a154f33",
+      "license": "BSD-4-Clause",
+      "urls": [
+        "bzz-raw://56d38e400451cd86151e6e50cf87e316262f395dac59e735c014956ef23c120a",
+        "dweb:/ipfs/QmP1P9hoB6DCGEeYCqFgwkTydrdaMvw85SpQBbyAFhA1Bq"
+      ]
+    },
     "src/dollar/mocks/MockDebtCoupon.sol": {
       "keccak256": "0x9b16210ea3f35ecdce2f42f033cee7dc23ce25f52987893efcb310f8f5bb7646",
       "license": "MIT",
@@ -750,6 +843,22 @@
       "urls": [
         "bzz-raw://a1d6903d126b684e4f1269c2d59a0d26ab237e45726e39f2fcd9e08d29a92240",
         "dweb:/ipfs/QmZMKjvdCwzvuLekVKvmGs2J5RGvtzEGup7xEZMmDnq7FX"
+      ]
+    },
+    "src/dollar/utils/SafeAddArray.sol": {
+      "keccak256": "0x0d96c9e2a0423e2a0b85e7c306bd5aa1e135811aef3176e8982100e26d31a25b",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://01af6c7975af7d4cdeadce64bcd459988790bf2dd674efda044e9b490ab11f0a",
+        "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
+      ]
+    },
+    "test/dollar/CouponsForDollarsCalculator.t.sol": {
+      "keccak256": "0xbcea786f31f8ff517750c1b602988c268b0aeab9c28a48e00eb1b02665ddf4f4",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://01e0585765156dc49600d7196d0cc5f79e321aa6c5cf76654652ec2eb7eff137",
+        "dweb:/ipfs/QmZNUmFTKnYzn8mUBptSArjUTsk3rHh4WMBEtoP3FuYyuJ"
       ]
     },
     "test/helpers/TestHelper.sol": {
