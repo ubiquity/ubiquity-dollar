@@ -74,6 +74,36 @@ contract CurveUADIncentive is IIncentive {
         return _exempt[account];
     }
 
+    function _incentivizeSell(address target, uint256 amount) internal {
+        _updateOracle();
+        if (isExemptAddress(target) || !isSellPenaltyOn) {
+            return;
+        }
+
+        /*
+        WARNING
+        From curve doc :Tokens that take a fee upon a successful transfer may cause the curve pool
+        to break or act in unexpected ways.
+        fei does it differently because they can make sure only one contract has the ability to sell
+        uAD and they control the whole liquidity pool on uniswap.
+        here to avoid problem with the curve pool we execute the transfer as specified and then we
+        take the penalty so if penalty + amount > balance then we revert
+        swapping uAD for 3CRV (or underlying) (aka selling uAD) will burn x% of uAD
+        Where x = (1- TWAP_Price) *100.
+        */
+
+        uint256 penalty = _getPercentDeviationFromUnderPeg(amount);
+        if (penalty != 0) {
+            require(penalty < amount, "Dollar: burn exceeds trade size");
+
+            require(
+                UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).balanceOf(target) >= penalty + amount,
+                "Dollar: balance too low to get penalized"
+            );
+            UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(target, penalty); // burn from the recipient
+        }
+    }
+
     function _incentivizeBuy(address target, uint256 amountIn) internal {
         _updateOracle();
 
@@ -104,36 +134,6 @@ contract CurveUADIncentive is IIncentive {
         uint256 res = _one.sub(curPrice.fromUInt()).mul((amount.fromUInt().div(_one))).toUInt();
         // returns (1- TWAP_Price) * amount.
         return res;
-    }
-
-    function _incentivizeSell(address target, uint256 amount) internal {
-        _updateOracle();
-        if (isExemptAddress(target) || !isSellPenaltyOn) {
-            return;
-        }
-
-        /*
-        WARNING
-        From curve doc :Tokens that take a fee upon a successful transfer may cause the curve pool
-        to break or act in unexpected ways.
-        fei does it differently because they can make sure only one contract has the ability to sell
-        uAD and they control the whole liquidity pool on uniswap.
-        here to avoid problem with the curve pool we execute the transfer as specified and then we
-        take the penalty so if penalty + amount > balance then we revert
-        swapping uAD for 3CRV (or underlying) (aka selling uAD) will burn x% of uAD
-        Where x = (1- TWAP_Price) *100.
-        */
-
-        uint256 penalty = _getPercentDeviationFromUnderPeg(amount);
-        if (penalty != 0) {
-            require(penalty < amount, "Dollar: burn exceeds trade size");
-
-            require(
-                UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).balanceOf(target) >= penalty + amount,
-                "Dollar: balance too low to get penalized"
-            );
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(target, penalty); // burn from the recipient
-        }
     }
 
     function _updateOracle() internal {

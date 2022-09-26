@@ -12,6 +12,10 @@ contract MockDebtCoupon is ERC1155 {
         _totalOutstandingDebt = totalDebt;
     }
 
+    function setTotalOutstandingDebt(uint256 totalDebt) public {
+        _totalOutstandingDebt = totalDebt;
+    }
+
     function getTotalOutstandingDebt() public view returns (uint256) {
         return _totalOutstandingDebt;
     }

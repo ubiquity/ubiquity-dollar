@@ -349,11 +349,11 @@
       ]
     },
     "src/dollar/CurveUADIncentive.sol": {
-      "keccak256": "0xd8c23cc77a97b4df9c57987bd44fcc1361264a1eabe8182c11030414436d5924",
+      "keccak256": "0x3eaac9c9c201231948d06c235f83af1fd0b8d9dc009bbdb4cc3e3d7667e5ed2a",
       "license": "MIT",
       "urls": [
-        "bzz-raw://4aaa46ba9ca0915884a13d753a40b955068388e9abbe6b88a201f125ed74d030",
-        "dweb:/ipfs/Qme13s1zrNL5Yr8LtmtfYNgWxqAEn2PEqtC5VsyrQi2GMA"
+        "bzz-raw://7596c72849a12269f748dd3a62ae204464a459f568a9fcbbe382ff35cc0c812e",
+        "dweb:/ipfs/QmV7rpVVAb7SHBMbxRtTJ1TTe95JZTydPxtRxdJHUQF67u"
       ]
     },
     "src/dollar/ERC20Ubiquity.sol": {

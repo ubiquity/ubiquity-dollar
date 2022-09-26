@@ -32,9 +32,7 @@ contract CouponsForDollarsCalculator is ICouponsForDollarsCalculator {
         bytes16 r = totalDebt.div(IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt());
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));
-
         bytes16 res = one.div(oneMinusRAllSquared);
-
         return res.mul(dollarsToBurn.fromUInt()).toUInt();
     }
 }

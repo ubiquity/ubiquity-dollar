@@ -260,11 +260,11 @@
       ]
     },
     "src/dollar/CouponsForDollarsCalculator.sol": {
-      "keccak256": "0xea346d17cb84eb12b163b2388a49b6c0a7b37681f9badc903819b950384f0ef6",
+      "keccak256": "0x5ffe57a9a46a07a1a03733974e31023f57966f152e293fd3f9e1b1aaaccf5d75",
       "license": "MIT",
       "urls": [
-        "bzz-raw://cc83b60413bc4b79d245f58dcdf8acf7f3a3351af5a6f0859e1815ef98f37c5f",
-        "dweb:/ipfs/QmbbkNtcWxc9FJ6io3c9rfh7y8hWdENjc7w5fvvffrJbn5"
+        "bzz-raw://458c68333e9ba63e31164db81afb5654ac41027631a2d24f35dee65541cfe121",
+        "dweb:/ipfs/QmeyrvyC3Hr48X2umcngXL2ZBv4Q5XGnxw6hmpgyKVAzb7"
       ]
     },
     "src/dollar/DebtCoupon.sol": {
