@@ -152,6 +152,24 @@
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "burnFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "decimals",
         "outputs": [
@@ -425,11 +443,11 @@
       ]
     },
     "src/dollar/mocks/MockuADToken.sol": {
-      "keccak256": "0x8302e66df1a890bbd0f37101c0531d68235833d9de0958a1ebf5c5597332c544",
+      "keccak256": "0x6120198f02b603379fea427ad9969fdaaec564f9238627d1eb34b2d69b7673da",
       "license": "MIT",
       "urls": [
-        "bzz-raw://a1d6903d126b684e4f1269c2d59a0d26ab237e45726e39f2fcd9e08d29a92240",
-        "dweb:/ipfs/QmZMKjvdCwzvuLekVKvmGs2J5RGvtzEGup7xEZMmDnq7FX"
+        "bzz-raw://160acc6ab3461e9155b51193372d2a46b81477dd21691b03f46b024fd6ee5c7c",
+        "dweb:/ipfs/QmZeQciNCDAN27vrGmo99DVCjbg1faeVupiKXJSqyRgoPN"
       ]
     }
   },

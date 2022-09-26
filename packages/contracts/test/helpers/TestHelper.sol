@@ -2,6 +2,7 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
 import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
@@ -31,8 +32,8 @@ abstract contract TestHelper is Test {
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token
-        
-
+        UbiquityGovernance _uGov = new UbiquityGovernance(address(_manager));
+        _manager.setGovernanceTokenAddress(address(_uGov));
         vm.stopPrank();
 
         return address(_manager);

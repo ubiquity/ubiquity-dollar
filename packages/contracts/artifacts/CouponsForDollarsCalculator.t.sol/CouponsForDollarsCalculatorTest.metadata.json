@@ -661,6 +661,22 @@
         "dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr"
       ]
     },
+    "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Burnable.sol": {
+      "keccak256": "0x0d19410453cda55960a818e02bd7c18952a5c8fe7a3036e81f0d599f34487a7b",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://4c0f62d3d5bef22b5ca00cc3903e7de6152cb68d2d22401a463f373cda54c00f",
+        "dweb:/ipfs/QmSfzjZux7LC7NW2f7rjCXTHeFMUCWERqDkhpCTBy7kxTe"
+      ]
+    },
+    "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/ERC20Pausable.sol": {
+      "keccak256": "0x978847fbff92d66d27d8767402a90ba996970b1936b372406aa17f5492bd8dc5",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://1414cb92779420b50d3e796b47bad6ea800ef1805bc6f9bf35a3ccb4e17db3dc",
+        "dweb:/ipfs/QmaMzwYqLiivfaWSgqeaAPboBtJjVD1hSrH48p7ExJZ7DG"
+      ]
+    },
     "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
       "keccak256": "0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca",
       "license": "MIT",
@@ -765,6 +781,14 @@
         "dweb:/ipfs/QmYXqtXrXtDxiAvDLKh2r1Y59CSwwEfJFYusT48tEt8x8J"
       ]
     },
+    "src/dollar/ERC20Ubiquity.sol": {
+      "keccak256": "0x982926d67c842fae870dc8f75bdcb843a28161c6f4fe87cfa4c7051cf616fe3e",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://76aae2f45831234eb23e96ccef95b1ad60d86f28987f33aba53fe0545a42d32d",
+        "dweb:/ipfs/QmS9G3ccCbB9tWRxjemtMSAGnuddpibY5jrDy1f6ktBmpd"
+      ]
+    },
     "src/dollar/TWAPOracle.sol": {
       "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
       "license": "Apache-2.0",
@@ -779,6 +803,14 @@
       "urls": [
         "bzz-raw://2ff34ab06576fc074ca7baf6fc720003a9106704ae8fe7006c2b06120f4cdcb6",
         "dweb:/ipfs/QmeZJAb3TMAGjDFj4EquJNxCcri1ggQb9kuuYWJ8CvidEm"
+      ]
+    },
+    "src/dollar/UbiquityGovernance.sol": {
+      "keccak256": "0x8bac90ee10b3dadde84afef9f450d6d79f3ff88ca53d1dd6ff71508691159d6a",
+      "license": "Apache-2.0",
+      "urls": [
+        "bzz-raw://f5fbe50b7336b48535aff5a84bfcac063668bf0854afdc58431f524aa3858022",
+        "dweb:/ipfs/QmczXoccNT355qKAWHMUixNPyeyJbFavmvxsJBR8eAnaFf"
       ]
     },
     "src/dollar/interfaces/ICouponsForDollarsCalculator.sol": {
@@ -837,12 +869,20 @@
         "dweb:/ipfs/QmUGEe748LwmE1T4BPsNXd4b5VXLmRNCCRW28EAo9archK"
       ]
     },
-    "src/dollar/mocks/MockuADToken.sol": {
-      "keccak256": "0x8302e66df1a890bbd0f37101c0531d68235833d9de0958a1ebf5c5597332c544",
+    "src/dollar/mocks/MockTWAPOracle.sol": {
+      "keccak256": "0xeb85d49242940614d3854a121032e80c65eb380ba8fe493bf0afa2b26da6917d",
       "license": "MIT",
       "urls": [
-        "bzz-raw://a1d6903d126b684e4f1269c2d59a0d26ab237e45726e39f2fcd9e08d29a92240",
-        "dweb:/ipfs/QmZMKjvdCwzvuLekVKvmGs2J5RGvtzEGup7xEZMmDnq7FX"
+        "bzz-raw://44855b3ad9947fc5fbec7ba6c8151b9b80a9b8cedb87504c86cf356be042062e",
+        "dweb:/ipfs/QmdU76ipATvYJHnxk73pC8KP8ofcFm2EwHr9E49Rjd1YXP"
+      ]
+    },
+    "src/dollar/mocks/MockuADToken.sol": {
+      "keccak256": "0x6120198f02b603379fea427ad9969fdaaec564f9238627d1eb34b2d69b7673da",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://160acc6ab3461e9155b51193372d2a46b81477dd21691b03f46b024fd6ee5c7c",
+        "dweb:/ipfs/QmZeQciNCDAN27vrGmo99DVCjbg1faeVupiKXJSqyRgoPN"
       ]
     },
     "src/dollar/utils/SafeAddArray.sol": {
@@ -862,11 +902,11 @@
       ]
     },
     "test/helpers/TestHelper.sol": {
-      "keccak256": "0xa6ab18c8365eef6e214c40b12b38d08d97fc1a932ecb349fde0d00f5791e5382",
+      "keccak256": "0xd9095a6a9c8bb182adb18544a6b2129bd9d838eb59d5bf05d0f17dc81f1e999f",
       "license": "MIT",
       "urls": [
-        "bzz-raw://47b232fd59ffb58f37befba7a2c9058fd3049d11aacd1fe43b4ac52d0481844a",
-        "dweb:/ipfs/QmdXz8XuTWrqkSmuAh3jEqp5iantwZy5DWDuWrhbuQRrbU"
+        "bzz-raw://2656b3b4119696ce9e7234d2251d402d8962555620baab85b62b14daa0179712",
+        "dweb:/ipfs/QmfF67qQA8qX4UycmwCWDCDLtaH3koPQ6xf9gSooPd478n"
       ]
     }
   },
