@@ -10,6 +10,56 @@
         "inputs": [
           {
             "indexed": false,
+            "internalType": "address",
+            "name": "couponHolder",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "expiryBlock",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "BurnedCoupons",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "expiryBlock",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "MintedCoupons",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
             "internalType": "string",
             "name": "",
             "type": "string"
@@ -456,131 +506,42 @@
       },
       {
         "inputs": [],
-        "name": "test_correctedAmountToWithdraw_calcSharedAmount",
+        "name": "test_burnCouponRevertsWorks",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
       {
         "inputs": [],
-        "name": "test_correctedAmountToWithdraw_returnAmount",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_lpRewardsAddLiquidityNormalization",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_lpRewardsRemoveLiquidityNormalization",
+        "name": "test_burnCouponsRevertsIfNotCouponManager",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
       {
         "inputs": [],
-        "name": "test_sharesForLP",
+        "name": "test_getTotalOutstandingDebt",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_mintCouponsRevertsIfNotCouponManager",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_mintCouponsWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_updateTotalDebt",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -612,7 +573,7 @@
   },
   "settings": {
     "compilationTarget": {
-      "test/dollar/BondingFormulas.t.sol": "BondingFormulaTest"
+      "test/dollar/DebtCoupon.t.sol": "DebtCouponTest"
     },
     "evmVersion": "london",
     "libraries": {},
@@ -866,20 +827,28 @@
         "dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP"
       ]
     },
-    "src/dollar/BondingFormulas.sol": {
-      "keccak256": "0x708f7b74680a30f8841b1e21b85bbaa305e3ec25c89b19805e79dfb1db06a08c",
+    "lib/solidity-linked-list/contracts/StructuredLinkedList.sol": {
+      "keccak256": "0x4cbb667c893519162eda39e0405a146176b643311f40278acf3c5a6d2d251b76",
       "license": "MIT",
       "urls": [
-        "bzz-raw://ddf35cd2b8d6c84bbf0c41887af80f215d2af14806513be31e8a2c4c544f3626",
-        "dweb:/ipfs/QmUGvqrSx7n7Wzd8SLGPVzBxsA8BZEPfZPQJWBPYXhXRB9"
+        "bzz-raw://cb602dc36c34611fce073f45dd93dafbb0471771a0837e5f1f3627fbffe5e766",
+        "dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV"
       ]
     },
-    "src/dollar/BondingShareV2.sol": {
-      "keccak256": "0xe60f6f1ac3feed25526506267f0c17ac65872092b777cf6f423b69dcbb9ab52c",
+    "src/dollar/DebtCoupon.sol": {
+      "keccak256": "0xf7b174683aa4d95055205572723339a9ed12b3a30acd8b49bcd16468fdadc2f4",
       "license": "MIT",
       "urls": [
-        "bzz-raw://2fd4560ace2ac941f554f1cd8664754a0d5282b242395937437288ed46d9fe32",
-        "dweb:/ipfs/QmcPwmsy4K1LK3day2bhiYxKtByESqVvw8dRV4iW4ycF52"
+        "bzz-raw://e57e29c154fc3e3c54cb6c039f4c2e1d0a5e96aafce09110a37abaaa674c3ee6",
+        "dweb:/ipfs/QmSUCHhZ1yigvXWmbXu4XGBjFHCpz2yfAeESwwfwiYk3iJ"
+      ]
+    },
+    "src/dollar/ERC1155Ubiquity.sol": {
+      "keccak256": "0xa155185e401f682cdc701a9f135463526fd354e377bcea35de426dab83fa2563",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://e7ae9d338ca96f4780cea3859f5ff7b59022ab1709435d6d869d989e71e55d8f",
+        "dweb:/ipfs/QmYXqtXrXtDxiAvDLKh2r1Y59CSwwEfJFYusT48tEt8x8J"
       ]
     },
     "src/dollar/ERC20Ubiquity.sol": {
@@ -946,14 +915,6 @@
         "dweb:/ipfs/QmZwhSLkE1Z94psMvdirv7DfRBVSC54QTtDJizNjGQKQXX"
       ]
     },
-    "src/dollar/libs/ABDKMathQuad.sol": {
-      "keccak256": "0xcad519ada31d1ba4038ef6484a5c056fa807c7b4dbee42e5de59fc046a154f33",
-      "license": "BSD-4-Clause",
-      "urls": [
-        "bzz-raw://56d38e400451cd86151e6e50cf87e316262f395dac59e735c014956ef23c120a",
-        "dweb:/ipfs/QmP1P9hoB6DCGEeYCqFgwkTydrdaMvw85SpQBbyAFhA1Bq"
-      ]
-    },
     "src/dollar/mocks/MockDebtCoupon.sol": {
       "keccak256": "0x9b16210ea3f35ecdce2f42f033cee7dc23ce25f52987893efcb310f8f5bb7646",
       "license": "MIT",
@@ -986,12 +947,12 @@
         "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
       ]
     },
-    "test/dollar/BondingFormulas.t.sol": {
-      "keccak256": "0x2ed2a6fc31168017545f313060974b477fc9f131c1545571fbfaee7e20ba245b",
+    "test/dollar/DebtCoupon.t.sol": {
+      "keccak256": "0xaef7c04b59e751fb2f711e9f5863f34e0a2be73cfabff689cf366d4b92cd4c38",
       "license": "MIT",
       "urls": [
-        "bzz-raw://fec7af328ac8ff1f01d6667145164a1de261a86eca11c13351744c8f9aeffc98",
-        "dweb:/ipfs/QmNyDWn1iwBadYDz6D1yA9vv5A1ZMuXsmFK9jorhCGeQUJ"
+        "bzz-raw://a7d27e5531b30c8ec02fc6caa5f4f55681a147af96b42c18507a6ac87bec25d2",
+        "dweb:/ipfs/QmaV3tQWfrSRxqbmLHGirTeyGp4NEjQgGCvXmcTu1rBtk2"
       ]
     },
     "test/helpers/TestHelper.sol": {

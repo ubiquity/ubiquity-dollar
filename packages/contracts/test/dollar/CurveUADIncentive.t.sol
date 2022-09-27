@@ -49,7 +49,6 @@ contract CurveUADIncentiveTest is TestHelper {
         IERC20 govToken = IERC20(UbiquityAlgorithmicDollarManager(uADManagerAddress).governanceTokenAddress());
         address uAD_addr = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarTokenAddress();
         address mockReceiver = address(0x111);
-        
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = govToken.balanceOf(mockReceiver);
@@ -58,7 +57,7 @@ contract CurveUADIncentiveTest is TestHelper {
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(stableSwapPoolAddress, mockReceiver, address(0), 100e18);
-        
+
         uint256 last_balance = govToken.balanceOf(mockReceiver);
         assertEq(last_balance, init_balance);
 
@@ -71,7 +70,7 @@ contract CurveUADIncentiveTest is TestHelper {
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(stableSwapPoolAddress, mockReceiver, address(0), 100e18);
-        
+
         last_balance = govToken.balanceOf(mockReceiver);
         assertEq(last_balance, init_balance);
 
@@ -85,7 +84,7 @@ contract CurveUADIncentiveTest is TestHelper {
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(stableSwapPoolAddress, mockReceiver, address(0), 100e18);
-        
+
         last_balance = govToken.balanceOf(mockReceiver);
         assertEq(last_balance, init_balance);
 
@@ -93,13 +92,14 @@ contract CurveUADIncentiveTest is TestHelper {
         init_balance = govToken.balanceOf(mockReceiver);
         mockInternalFuncs(5e17);
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(keccak256("UBQ_MINTER_ROLE"), curveIncentiveAddress);
+        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(
+            keccak256("UBQ_MINTER_ROLE"), curveIncentiveAddress
+        );
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(stableSwapPoolAddress, mockReceiver, address(0), 100e18);
-        
+
         last_balance = govToken.balanceOf(mockReceiver);
         assertEq(last_balance - init_balance, 50e18);
-
     }
 
     function test_incentivize_sell() public {
@@ -108,7 +108,6 @@ contract CurveUADIncentiveTest is TestHelper {
         address uAD_addr = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarTokenAddress();
         IERC20 uADToken = IERC20(uAD_addr);
         address mockSender = address(0x222);
-        
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = uADToken.balanceOf(mockSender);
@@ -117,7 +116,7 @@ contract CurveUADIncentiveTest is TestHelper {
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(mockSender, stableSwapPoolAddress, address(0), 100e18);
-        
+
         uint256 last_balance = uADToken.balanceOf(mockSender);
         assertEq(last_balance, init_balance);
 
@@ -130,7 +129,7 @@ contract CurveUADIncentiveTest is TestHelper {
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(mockSender, stableSwapPoolAddress, address(0), 100e18);
-        
+
         last_balance = uADToken.balanceOf(mockSender);
         assertEq(last_balance, init_balance);
 
@@ -144,7 +143,7 @@ contract CurveUADIncentiveTest is TestHelper {
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(mockSender, stableSwapPoolAddress, address(0), 100e18);
-        
+
         last_balance = uADToken.balanceOf(mockSender);
         assertEq(last_balance, init_balance);
 
@@ -156,7 +155,7 @@ contract CurveUADIncentiveTest is TestHelper {
         mockInternalFuncs(5e17);
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(mockSender, stableSwapPoolAddress, address(0), 100e18);
-        
+
         last_balance = uADToken.balanceOf(mockSender);
         assertEq(init_balance - last_balance, 50e18);
     }
@@ -183,7 +182,6 @@ contract CurveUADIncentiveTest is TestHelper {
         CurveUADIncentive(curveIncentiveAddress).switchSellPenalty();
         assertEq(CurveUADIncentive(curveIncentiveAddress).isSellPenaltyOn(), false);
     }
-
 
     function test_switchBuyIncentive() public {
         vm.expectRevert("CurveIncentive: not admin");

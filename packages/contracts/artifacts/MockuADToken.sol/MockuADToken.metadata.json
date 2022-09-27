@@ -443,11 +443,11 @@
       ]
     },
     "src/dollar/mocks/MockuADToken.sol": {
-      "keccak256": "0x6120198f02b603379fea427ad9969fdaaec564f9238627d1eb34b2d69b7673da",
+      "keccak256": "0x59f976de0ee3fbf65e30315c6b00827596f9fa49a2ca7cb4810eb3a64c548a77",
       "license": "MIT",
       "urls": [
-        "bzz-raw://160acc6ab3461e9155b51193372d2a46b81477dd21691b03f46b024fd6ee5c7c",
-        "dweb:/ipfs/QmZeQciNCDAN27vrGmo99DVCjbg1faeVupiKXJSqyRgoPN"
+        "bzz-raw://32a954df0b300db7e990887cbf39588f27793a0a710e701448c0203aadf2e3af",
+        "dweb:/ipfs/QmVuBiTZVrKYRRz1aq2ZCK4ZqiwZh9XCTm2wvuhZKPLUBA"
       ]
     }
   },
