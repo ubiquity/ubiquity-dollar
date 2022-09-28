@@ -47,6 +47,31 @@
           {
             "indexed": true,
             "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "couponsToMint",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "expiryBlockNumber",
+            "type": "uint256"
+          }
+        ],
+        "name": "MintedCoupons",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
             "name": "operator",
             "type": "address"
           },
@@ -184,6 +209,19 @@
       },
       {
         "inputs": [],
+        "name": "checkPoint",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
         "name": "getTotalOutstandingDebt",
         "outputs": [
           {
@@ -217,6 +255,29 @@
           }
         ],
         "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "couponsToMint",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiryBlockNumber",
+            "type": "uint256"
+          }
+        ],
+        "name": "mintCoupons",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
       },
       {
@@ -333,6 +394,13 @@
           }
         ],
         "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "updateTotalDebt",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
       },
       {
@@ -480,11 +548,11 @@
       ]
     },
     "src/dollar/mocks/MockDebtCoupon.sol": {
-      "keccak256": "0x9b16210ea3f35ecdce2f42f033cee7dc23ce25f52987893efcb310f8f5bb7646",
+      "keccak256": "0x0e8057f93a64025c94a7a0aad2bc70da00f1b2453c70610e635f21e0b993b545",
       "license": "MIT",
       "urls": [
-        "bzz-raw://4cfe013d7407b6d30fb7717867bbd2c50a6be51e53ee79c76b3035a48ae830fe",
-        "dweb:/ipfs/QmUGEe748LwmE1T4BPsNXd4b5VXLmRNCCRW28EAo9archK"
+        "bzz-raw://8ed8067f5485c23e6f5badf307ad17d9c02df5a5073a59ed93261100fe580741",
+        "dweb:/ipfs/QmSzPKvREDqVRKPVhYx9ZfFin3yGE9hn1c1nKD2QYtHXmX"
       ]
     }
   },

@@ -3,12 +3,22 @@ pragma solidity ^0.8.3;
 
 import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
+import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCalculator.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
 import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
+import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
+
+contract MockCouponsForDollarsCalculator {
+    constructor () {}
+
+    function getCouponAmount(uint256 dollarsToBurn) external view returns (uint256) {
+        return dollarsToBurn;
+    }
+}
 
 abstract contract TestHelper is Test {
     address public constant NATIVE_ASSET = address(0);
@@ -34,6 +44,15 @@ abstract contract TestHelper is Test {
         // deploy governance token
         UbiquityGovernance _uGov = new UbiquityGovernance(address(_manager));
         _manager.setGovernanceTokenAddress(address(_uGov));
+        
+        // deploy couponsForDollarCalculator
+        MockCouponsForDollarsCalculator couponsForDollarsCalculator = new MockCouponsForDollarsCalculator();
+        _manager.setCouponCalculatorAddress(address(couponsForDollarsCalculator));
+        
+
+        // deploy ubiquityAutoRedeem
+        MockAutoRedeem autoRedeem = new MockAutoRedeem();
+        _manager.setuARTokenAddress(address(autoRedeem));
         vm.stopPrank();
 
         return address(_manager);

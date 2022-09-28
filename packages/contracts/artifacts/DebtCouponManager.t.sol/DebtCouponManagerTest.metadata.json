@@ -448,6 +448,19 @@
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_twapPrice",
+            "type": "uint256"
+          }
+        ],
+        "name": "mockInternalFuncs",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "setUp",
         "outputs": [],
@@ -456,131 +469,154 @@
       },
       {
         "inputs": [],
-        "name": "test_correctedAmountToWithdraw_calcSharedAmount",
+        "name": "test_burnAutoRedeemTokensForDollarsIfNotEnoughBalance",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
       {
         "inputs": [],
-        "name": "test_correctedAmountToWithdraw_returnAmount",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_lpRewardsAddLiquidityNormalization",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_lpRewardsRemoveLiquidityNormalization",
+        "name": "test_burnAutoRedeemTokensForDollarsRevertsIfPriceLowerThan1Ether",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
       {
         "inputs": [],
-        "name": "test_sharesForLP",
+        "name": "test_burnAutoRedeemTokensForDollarsWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_burnCouponsForAutoRedemptionRevertsIfNotEnoughBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_burnCouponsForAutoRedemptionRevertsIfNotExpired",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_burnCouponsForAutoRedemptionWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_burnExpiredCouponsForUGOVRevertsIfNotEnoughBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_burnExpiredCouponsForUGOVRevertsIfNotExpired",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_burnExpiredCouponsForUGOVWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_exchangeDollarsForDebtCoupons",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_exchangeDollarsForUARRevertsIfPriceHigherThan1Ether",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_exchangeDollarsForUARWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_getCouponsReturnedForDollars",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_getUARReturnedForDollars",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_mintClaimableDollars",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_redeemCouponsRevertsIfCouponExpired",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_redeemCouponsRevertsIfNotEnoughBalance",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_redeemCouponsRevertsIfNotEnoughUAD",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_redeemCouponsRevertsIfPriceLowerThan1Ether",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_redeemCouponsRevertsIfZeroAmountOfUAD",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_setCouponLength",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_setExpiredCouponConvertionRate",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -612,7 +648,7 @@
   },
   "settings": {
     "compilationTarget": {
-      "test/dollar/BondingFormulas.t.sol": "BondingFormulaTest"
+      "test/dollar/DebtCouponManager.t.sol": "DebtCouponManagerTest"
     },
     "evmVersion": "london",
     "libraries": {},
@@ -874,22 +910,6 @@
         "dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV"
       ]
     },
-    "src/dollar/BondingFormulas.sol": {
-      "keccak256": "0x708f7b74680a30f8841b1e21b85bbaa305e3ec25c89b19805e79dfb1db06a08c",
-      "license": "MIT",
-      "urls": [
-        "bzz-raw://ddf35cd2b8d6c84bbf0c41887af80f215d2af14806513be31e8a2c4c544f3626",
-        "dweb:/ipfs/QmUGvqrSx7n7Wzd8SLGPVzBxsA8BZEPfZPQJWBPYXhXRB9"
-      ]
-    },
-    "src/dollar/BondingShareV2.sol": {
-      "keccak256": "0xe60f6f1ac3feed25526506267f0c17ac65872092b777cf6f423b69dcbb9ab52c",
-      "license": "MIT",
-      "urls": [
-        "bzz-raw://2fd4560ace2ac941f554f1cd8664754a0d5282b242395937437288ed46d9fe32",
-        "dweb:/ipfs/QmcPwmsy4K1LK3day2bhiYxKtByESqVvw8dRV4iW4ycF52"
-      ]
-    },
     "src/dollar/CouponsForDollarsCalculator.sol": {
       "keccak256": "0x5ffe57a9a46a07a1a03733974e31023f57966f152e293fd3f9e1b1aaaccf5d75",
       "license": "MIT",
@@ -904,6 +924,14 @@
       "urls": [
         "bzz-raw://e57e29c154fc3e3c54cb6c039f4c2e1d0a5e96aafce09110a37abaaa674c3ee6",
         "dweb:/ipfs/QmSUCHhZ1yigvXWmbXu4XGBjFHCpz2yfAeESwwfwiYk3iJ"
+      ]
+    },
+    "src/dollar/DebtCouponManager.sol": {
+      "keccak256": "0x419faacc2bfe0facafa62257a76c2eb402b1da5b1010b9d4234d595761ab1573",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://d84f0d25de47c1185325a5d582156451521d003a3220edb599ebc3ddc5f64ad5",
+        "dweb:/ipfs/QmRha8CKV5N3ASt7wwEAqRssRqD9hiDVBgmHonm46vNuZt"
       ]
     },
     "src/dollar/ERC1155Ubiquity.sol": {
@@ -930,12 +958,28 @@
         "dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr"
       ]
     },
+    "src/dollar/UbiquityAlgorithmicDollar.sol": {
+      "keccak256": "0x4da07ca79459da9082834a22b1ea60b7e6a8d1b903817d99db393a558d4a1c3e",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://5f6607db31a54d3f23a4ca1b09b79c2e79f799d61defe8e8d24fb71884f84c8f",
+        "dweb:/ipfs/QmNNF15uy844oFuC34KYTw1VnWt3D7pYemDwSiERteiLwe"
+      ]
+    },
     "src/dollar/UbiquityAlgorithmicDollarManager.sol": {
       "keccak256": "0x2502821421eaa4e3d96a597727779cd57ce4acdac8a9e2a30f0735133d61f17c",
       "license": "MIT",
       "urls": [
         "bzz-raw://2ff34ab06576fc074ca7baf6fc720003a9106704ae8fe7006c2b06120f4cdcb6",
         "dweb:/ipfs/QmeZJAb3TMAGjDFj4EquJNxCcri1ggQb9kuuYWJ8CvidEm"
+      ]
+    },
+    "src/dollar/UbiquityAutoRedeem.sol": {
+      "keccak256": "0x550b7f47705c1c32fbb22ece2988c6cbfdc062259822786eae1e77f5a5e079e7",
+      "license": "Apache-2.0",
+      "urls": [
+        "bzz-raw://d2b919a7aede176463ade2dae6b1fa8ee4d58582a671b59dca6c2be4eb91a096",
+        "dweb:/ipfs/Qma6SN1CUpdCa6DYGfra9raqqKqzPTN3UdpGHwxm2nPKHK"
       ]
     },
     "src/dollar/UbiquityGovernance.sol": {
@@ -962,6 +1006,22 @@
         "dweb:/ipfs/QmZf4kY5Jyufm3eyRFL3FGGXMWz6hnQiEzEqLMVm5MoQ3f"
       ]
     },
+    "src/dollar/interfaces/IDebtRedemption.sol": {
+      "keccak256": "0xbb2752f25fd5b1669e5f95ce3002d1905b0ec15d555855fd6e69e387b9775a24",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://d87448916fbc7767207b36aa2bbfe34cf35ec411583044574d7491534e86e44d",
+        "dweb:/ipfs/QmfF2RkEzmxpjCMC8fNnbcd2okB71dJHKT5GxytotdiR9W"
+      ]
+    },
+    "src/dollar/interfaces/IDollarMintingCalculator.sol": {
+      "keccak256": "0xd86e047647c26ad000708918cf28dc8fc653cdcd5335357155afc4d24cd7234b",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://0999fcab2c29765497030277d7b09159a1654d344b385f6754da90f8200f601c",
+        "dweb:/ipfs/QmWLkHFD59v9uUhqcf2hwLNx6dhXis1YgSC3jHjLoZU3bw"
+      ]
+    },
     "src/dollar/interfaces/IERC20Ubiquity.sol": {
       "keccak256": "0xf68853c56cd665f0a9cb0c4951e5dbd404959701c9b70b5e851ce77b24bc0c65",
       "license": "Apache-2.0",
@@ -970,12 +1030,36 @@
         "dweb:/ipfs/QmSxzB6qGDWurJBLWNWkX1PfFcxqwQ4UZ2mPZjS7saTJ5j"
       ]
     },
+    "src/dollar/interfaces/IExcessDollarsDistributor.sol": {
+      "keccak256": "0x9017fd1bdbe37469905c85a4e6d71a177881c5e56b411a22acc03802c0c89ed1",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://6d365e990bdd3c748adc02554f9a0c14784681b8549ec6c69dc58f67d60bc0c0",
+        "dweb:/ipfs/QmSeVTgyGZFosFTPo3pccygYoik5iHsqw1iPXspBaUnDKx"
+      ]
+    },
+    "src/dollar/interfaces/IIncentive.sol": {
+      "keccak256": "0x2e7ce5439784e96694fae1e8a49501baba7144f688ba40b8e19dfbf951fbb266",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://44f8e82547b06dbb5c9449eb4bf71fb9ba36d3b539a94e29be880421745d3614",
+        "dweb:/ipfs/QmaMmAufWvVcb5Cz8Qeys9ZdaK3qSnwsiB49iE5Hjo264a"
+      ]
+    },
     "src/dollar/interfaces/IMetaPool.sol": {
       "keccak256": "0x76c711383ae012556089e0f538f02d2d9a2b6c8ecc5892ec6683460b6c59fe9b",
       "license": "UNLICENSED",
       "urls": [
         "bzz-raw://bdaa026adb4aa85dd1071195a5479d65177e2732e57773fc6c0b7d7132388685",
         "dweb:/ipfs/QmecTNhpiJ5SR1QenVtzRJTXboV6gygZ5JZTsHsNYkwLcF"
+      ]
+    },
+    "src/dollar/interfaces/IUARForDollarsCalculator.sol": {
+      "keccak256": "0x673569f8cb154bb593c23dbb4969467e3768c3cf708e8aa160ee4e0a6a9d2917",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://512ac3b73c59a5990b514245e5b430b9c22f188118728b002b86ac89986bd6d3",
+        "dweb:/ipfs/QmddkHNU1NeL9vgBETu25HvvLgAfyAhp6JMPe4hTfcTgzv"
       ]
     },
     "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol": {
@@ -1026,12 +1110,12 @@
         "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
       ]
     },
-    "test/dollar/BondingFormulas.t.sol": {
-      "keccak256": "0x2ed2a6fc31168017545f313060974b477fc9f131c1545571fbfaee7e20ba245b",
+    "test/dollar/DebtCouponManager.t.sol": {
+      "keccak256": "0xf4d857ac02a3f9583059abbf9ed47ddf4db83f8e0c01a79eccfd8e14f7cefb0a",
       "license": "MIT",
       "urls": [
-        "bzz-raw://fec7af328ac8ff1f01d6667145164a1de261a86eca11c13351744c8f9aeffc98",
-        "dweb:/ipfs/QmNyDWn1iwBadYDz6D1yA9vv5A1ZMuXsmFK9jorhCGeQUJ"
+        "bzz-raw://e489049ce6c3dfcbe805188a54f93b34699d8a9bd9dba9bfbb458dddbc17db34",
+        "dweb:/ipfs/QmdFw8iRH5yrm4isrbsAvQMgJQYXHXPaL7cA82NULLLLrr"
       ]
     },
     "test/helpers/TestHelper.sol": {

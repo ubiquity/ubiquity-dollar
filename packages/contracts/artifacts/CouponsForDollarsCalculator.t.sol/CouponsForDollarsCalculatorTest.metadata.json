@@ -862,11 +862,11 @@
       ]
     },
     "src/dollar/mocks/MockDebtCoupon.sol": {
-      "keccak256": "0x9b16210ea3f35ecdce2f42f033cee7dc23ce25f52987893efcb310f8f5bb7646",
+      "keccak256": "0x0e8057f93a64025c94a7a0aad2bc70da00f1b2453c70610e635f21e0b993b545",
       "license": "MIT",
       "urls": [
-        "bzz-raw://4cfe013d7407b6d30fb7717867bbd2c50a6be51e53ee79c76b3035a48ae830fe",
-        "dweb:/ipfs/QmUGEe748LwmE1T4BPsNXd4b5VXLmRNCCRW28EAo9archK"
+        "bzz-raw://8ed8067f5485c23e6f5badf307ad17d9c02df5a5073a59ed93261100fe580741",
+        "dweb:/ipfs/QmSzPKvREDqVRKPVhYx9ZfFin3yGE9hn1c1nKD2QYtHXmX"
       ]
     },
     "src/dollar/mocks/MockTWAPOracle.sol": {
@@ -902,11 +902,11 @@
       ]
     },
     "test/helpers/TestHelper.sol": {
-      "keccak256": "0xd9095a6a9c8bb182adb18544a6b2129bd9d838eb59d5bf05d0f17dc81f1e999f",
+      "keccak256": "0x40234af0f5b996d09d83a4e080f8e9840a97723b3e04612da64d917db4f0c59a",
       "license": "MIT",
       "urls": [
-        "bzz-raw://2656b3b4119696ce9e7234d2251d402d8962555620baab85b62b14daa0179712",
-        "dweb:/ipfs/QmfF67qQA8qX4UycmwCWDCDLtaH3koPQ6xf9gSooPd478n"
+        "bzz-raw://a965f395639c7d97a6862f8fd51e0ad25a66796e3724d99216a419a0c5203945",
+        "dweb:/ipfs/QmU2LiqQAbPyM4EQsvHqPJyk6xagwxXRHttnk7wkmAF9Er"
       ]
     }
   },
