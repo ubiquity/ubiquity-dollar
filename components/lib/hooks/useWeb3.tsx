@@ -6,6 +6,7 @@ import useLocalStorage from "./useLocalStorage";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
+const Chain_Id = process.env.MAINNET_ID || 1;
 
 export type PossibleProviders = Web3Provider | JsonRpcProvider | null;
 
@@ -66,7 +67,7 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
       const newProvider = new ethers.providers.Web3Provider(window.ethereum);
 
       const chainId = await newProvider.getNetwork().then((network) => network.chainId);
-      if (chainId === 1) {
+      if (chainId === Chain_Id) {
         setWeb3State({ ...web3State, connecting: true });
         const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
         if (addresses.length > 0) {
