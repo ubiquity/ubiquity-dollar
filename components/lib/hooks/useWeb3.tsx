@@ -71,7 +71,6 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
         setWeb3State({ ...web3State, connecting: true });
         const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
         if (addresses.length > 0) {
-          console.log("Connected wallet ", addresses[0]);
           const newWalletAddress = addresses[0];
           const newSigner = newProvider.getSigner(newWalletAddress);
           setStoredWallet(newWalletAddress);
@@ -89,7 +88,6 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
           setWeb3State({ ...web3State, connecting: false });
         }
       } else {
-        alert("Please change network to Ethereum Mainnet.");
         await newProvider.send("wallet_switchEthereumChain", [{ chainId: idToHexString(1) }]);
         setWeb3State({ ...web3State, connecting: false });
         setTimeout(() => window.location.reload(), 1);
