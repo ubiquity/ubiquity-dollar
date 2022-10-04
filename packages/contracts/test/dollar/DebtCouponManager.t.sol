@@ -3,7 +3,10 @@ pragma solidity ^0.8.3;
 
 import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {DebtCouponManager} from "../../src/dollar/DebtCouponManager.sol";
+import {UARForDollarsCalculator} from "../../src/dollar/UARForDollarsCalculator.sol";
+import {UbiquityAutoRedeem} from "../../src/dollar/UbiquityAutoRedeem.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
+import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
 
@@ -12,9 +15,13 @@ import "../helpers/TestHelper.sol";
 contract DebtCouponManagerTest is TestHelper {
     address uADManagerAddress;
     address uADAddress;
+    address uARDollarCalculatorAddress;
     address debtCouponManagerAddress;
     uint256 couponLengthBlocks = 100;
     address twapOracleAddress;
+    address debtCouponAddress;
+    address uGovAddress;
+    address autoRedeemTokenAddress;
 
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
@@ -22,11 +29,19 @@ contract DebtCouponManagerTest is TestHelper {
         debtCouponManagerAddress = address(new DebtCouponManager(uADManagerAddress, couponLengthBlocks));
         twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).twapOracleAddress();
         uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarTokenAddress();
+        uARDollarCalculatorAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).uarCalculatorAddress();
+        debtCouponAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).debtCouponAddress();
+        uGovAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).governanceTokenAddress();
+        autoRedeemTokenAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).autoRedeemTokenAddress();
     }
 
-    function mockInternalFuncs(uint256 _twapPrice) public {
+    function mockTwapFuncs(uint256 _twapPrice) public {
         vm.mockCall(twapOracleAddress, abi.encodeWithSelector(TWAPOracle.update.selector), abi.encode());
         vm.mockCall(twapOracleAddress, abi.encodeWithSelector(TWAPOracle.consult.selector), abi.encode(_twapPrice));
+    }
+
+    function mockUARCalculatorFuncs(uint256 _uarAmount) public {
+        vm.mockCall(uARDollarCalculatorAddress, abi.encodeWithSelector(UARForDollarsCalculator.getUARAmount.selector), abi.encode(_uarAmount));
     }
 
     function test_setExpiredCouponConvertionRate() public {
@@ -48,12 +63,12 @@ contract DebtCouponManagerTest is TestHelper {
     }
 
     function test_exchangeDollarsForDebtCoupons() public {
-        mockInternalFuncs(2e18);
+        mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint coupons");
         DebtCouponManager(debtCouponManagerAddress).exchangeDollarsForDebtCoupons(100);
 
         
-        mockInternalFuncs(5e17);
+        mockTwapFuncs(5e17);
         address mockSender = address(0x123);
         vm.roll(10000);
         vm.startPrank(mockSender);
@@ -70,13 +85,13 @@ contract DebtCouponManagerTest is TestHelper {
     }
 
     function test_exchangeDollarsForUARRevertsIfPriceHigherThan1Ether() public {
-        mockInternalFuncs(2e18);
+        mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint uAR");
         DebtCouponManager(debtCouponManagerAddress).exchangeDollarsForUAR(100);
     }
 
     function test_exchangeDollarsForUARWorks() public {
-        mockInternalFuncs(5e17);
+        mockTwapFuncs(5e17);
         address mockSender = address(0x123);
         vm.roll(10000);
         vm.startPrank(mockSender);
@@ -85,25 +100,67 @@ contract DebtCouponManagerTest is TestHelper {
         MockuADToken(uADAddress).mint(mockSender, 10000e18);
         MockuADToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
         
-        uint256 expiryBlockNumber = DebtCouponManager(debtCouponManagerAddress).exchangeDollarsForUAR(100);
-        assertEq(expiryBlockNumber, 10000 + couponLengthBlocks);
+        mockUARCalculatorFuncs(10e18);
+        uint256 uARAmount = DebtCouponManager(debtCouponManagerAddress).exchangeDollarsForUAR(100);
+        assertEq(uARAmount, 10e18);
     }
 
-    function test_getCouponsReturnedForDollars() public {}
+    function test_burnExpiredCouponsForUGOVRevertsIfNotExpired() public {
+        vm.roll(1000);
+        vm.expectRevert("Coupon has not expired");
+        DebtCouponManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(2000, 1e18);
+    }
 
-    function test_getUARReturnedForDollars() public {}
+    function test_burnExpiredCouponsForUGOVRevertsIfNotEnoughBalance() public {
+        address mockMessageSender = address(0x123);
+        vm.prank(admin);
+        MockDebtCoupon(debtCouponAddress).mintCoupons(mockMessageSender, 100, 500);
+        vm.roll(1000);
+        vm.prank(mockMessageSender);
+        vm.expectRevert("User not enough coupons");
+        DebtCouponManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(500, 1e18);
+    }
 
-    function test_burnExpiredCouponsForUGOVRevertsIfNotExpired() public {}
+    function test_burnExpiredCouponsForUGOVWorks() public {
+        address mockMessageSender = address(0x123);
+        uint256 expiryBlockNumber = 500;
+        vm.startPrank(admin);
+        MockDebtCoupon(debtCouponAddress).mintCoupons(mockMessageSender, 2e18, expiryBlockNumber);
+        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(keccak256("UBQ_MINTER_ROLE"), debtCouponManagerAddress);
+        vm.stopPrank();
+        vm.roll(1000);
+        vm.prank(mockMessageSender);
+        DebtCouponManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(expiryBlockNumber, 1e18);
+        uint256 uGovBalance = UbiquityGovernance(uGovAddress).balanceOf(mockMessageSender);
+        assertEq(uGovBalance, 5e17);
+    }
 
-    function test_burnExpiredCouponsForUGOVRevertsIfNotEnoughBalance() public {}
+    function test_burnCouponsForAutoRedemptionRevertsIfExpired() public {
 
-    function test_burnExpiredCouponsForUGOVWorks() public {}
+        vm.warp(1000);
+        vm.expectRevert("Coupon has expired");
+        DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(500, 1e18);        
+    }
 
-    function test_burnCouponsForAutoRedemptionRevertsIfNotExpired() public {}
+    function test_burnCouponsForAutoRedemptionRevertsIfNotEnoughBalance() public {
+        vm.warp(1000);
+        vm.expectRevert("User not enough coupons");
+        DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(1001, 1e18);  
+    }
 
-    function test_burnCouponsForAutoRedemptionRevertsIfNotEnoughBalance() public {}
-
-    function test_burnCouponsForAutoRedemptionWorks() public {}
+    function test_burnCouponsForAutoRedemptionWorks() public {
+        address mockMessageSender = address(0x123);
+        uint256 expiryBlockNumber = 500;
+        vm.startPrank(admin);
+        MockDebtCoupon(debtCouponAddress).mintCoupons(mockMessageSender, 2e18, expiryBlockNumber);
+        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(keccak256("UBQ_MINTER_ROLE"), debtCouponManagerAddress);
+        vm.stopPrank();
+        vm.roll(1000);
+        vm.prank(mockMessageSender);
+        DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(expiryBlockNumber, 1e18);
+        uint256 redeemBalance = UbiquityAutoRedeem(autoRedeemTokenAddress).balanceOf(mockMessageSender);
+        assertEq(redeemBalance, 1e18);        
+    }
 
     function test_burnAutoRedeemTokensForDollarsRevertsIfPriceLowerThan1Ether() public {}
 
