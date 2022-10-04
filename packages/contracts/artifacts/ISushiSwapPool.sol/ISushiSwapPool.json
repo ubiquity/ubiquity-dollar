@@ -48,6 +48,93 @@
   "methodIdentifiers": {
     "pairInfo(address,address)": "c3dd56b9"
   },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenA\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"tokenB\",\"type\":\"address\"}],\"name\":\"pairInfo\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"reserveA\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reserveB\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalSupply\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/ISushiSwapPool.sol\":\"ISushiSwapPool\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/ISushiSwapPool.sol\":{\"keccak256\":\"0x3705c9898c2dade671a3b2709642e64ff3aba2f331a3bdec3545de2a35216cdd\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://d810e5469fe9fa31cc23285a12f739e62478e05211dae018153c809e5a2a9732\",\"dweb:/ipfs/QmWXMPcC6qDaPas6J7Eab1WspdUqu3AgxqzTfkWtAtqnej\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "tokenA",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "tokenB",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "pairInfo",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "reserveA",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "reserveB",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "totalSupply",
+              "type": "uint256"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/ISushiSwapPool.sol": "ISushiSwapPool"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/dollar/interfaces/ISushiSwapPool.sol": {
+        "keccak256": "0x3705c9898c2dade671a3b2709642e64ff3aba2f331a3bdec3545de2a35216cdd",
+        "urls": [
+          "bzz-raw://d810e5469fe9fa31cc23285a12f739e62478e05211dae018153c809e5a2a9732",
+          "dweb:/ipfs/QmWXMPcC6qDaPas6J7Eab1WspdUqu3AgxqzTfkWtAtqnej"
+        ],
+        "license": "Apache-2.0"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/ISushiSwapPool.sol",
     "id": 41162,

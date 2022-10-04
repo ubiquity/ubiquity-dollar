@@ -76,17 +76,192 @@
     }
   ],
   "bytecode": {
-    "object": "0x61031861003a600b82828239805160001a60731461002d57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100355760003560e01c8063535849391461003a575b600080fd5b61004d610048366004610123565b61005f565b60405190815260200160405180910390f35b60008060006020855111610074578451610077565b60205b905060005b818110156100ea5761008f816008610225565b8661009a8388610262565b815181106100aa576100aa61027a565b01602001517fff0000000000000000000000000000000000000000000000000000000000000016901c9290921791806100e2816102a9565b91505061007c565b5090949350505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000806040838503121561013657600080fd5b823567ffffffffffffffff8082111561014e57600080fd5b818501915085601f83011261016257600080fd5b813581811115610174576101746100f4565b604051601f82017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0908116603f011681019083821181831017156101ba576101ba6100f4565b816040528281528860208487010111156101d357600080fd5b826020860160208301376000602093820184015298969091013596505050505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000817fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff048311821515161561025d5761025d6101f6565b500290565b60008219821115610275576102756101f6565b500190565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8214156102db576102db6101f6565b506001019056fea2646970667358221220c499c77e674497463fb1fcf771c06b3869e81f1cd1535c99a707068ee2189c3a64736f6c63430008090033",
+    "object": "0x61031861003a600b82828239805160001a60731461002d57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100355760003560e01c8063535849391461003a575b600080fd5b61004d610048366004610123565b61005f565b60405190815260200160405180910390f35b60008060006020855111610074578451610077565b60205b905060005b818110156100ea5761008f816008610225565b8661009a8388610262565b815181106100aa576100aa61027a565b01602001517fff0000000000000000000000000000000000000000000000000000000000000016901c9290921791806100e2816102a9565b91505061007c565b5090949350505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000806040838503121561013657600080fd5b823567ffffffffffffffff8082111561014e57600080fd5b818501915085601f83011261016257600080fd5b813581811115610174576101746100f4565b604051601f82017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0908116603f011681019083821181831017156101ba576101ba6100f4565b816040528281528860208487010111156101d357600080fd5b826020860160208301376000602093820184015298969091013596505050505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000817fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff048311821515161561025d5761025d6101f6565b500290565b60008219821115610275576102756101f6565b500190565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8214156102db576102db6101f6565b506001019056fea2646970667358221220ef1bff214598806f1a99ba80bbc6f760eaf507cc096a409bd7f27a3d0ba6071b64736f6c63430008090033",
     "sourceMap": "27684:8875:7:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;27684:8875:7;;;;;;;;;;;;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x73000000000000000000000000000000000000000030146080604052600436106100355760003560e01c8063535849391461003a575b600080fd5b61004d610048366004610123565b61005f565b60405190815260200160405180910390f35b60008060006020855111610074578451610077565b60205b905060005b818110156100ea5761008f816008610225565b8661009a8388610262565b815181106100aa576100aa61027a565b01602001517fff0000000000000000000000000000000000000000000000000000000000000016901c9290921791806100e2816102a9565b91505061007c565b5090949350505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000806040838503121561013657600080fd5b823567ffffffffffffffff8082111561014e57600080fd5b818501915085601f83011261016257600080fd5b813581811115610174576101746100f4565b604051601f82017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0908116603f011681019083821181831017156101ba576101ba6100f4565b816040528281528860208487010111156101d357600080fd5b826020860160208301376000602093820184015298969091013596505050505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000817fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff048311821515161561025d5761025d6101f6565b500290565b60008219821115610275576102756101f6565b500190565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8214156102db576102db6101f6565b506001019056fea2646970667358221220c499c77e674497463fb1fcf771c06b3869e81f1cd1535c99a707068ee2189c3a64736f6c63430008090033",
-    "sourceMap": "27684:8875:7:-:0;;;;;;;;;;;;;;;;;;;;;;;;35854:297;;;;;;:::i;:::-;;:::i;:::-;;;1420:25:109;;;1408:2;1393:18;35854:297:7;;;;;;;;35928:7;35947:11;35969;35994:2;35983:1;:8;:13;:29;;36004:1;:8;35983:29;;;35999:2;35983:29;35969:43;;36027:6;36022:103;36043:3;36039:1;:7;36022:103;;;36108:5;:1;36112;36108:5;:::i;:::-;36082:1;36084:10;36093:1;36084:6;:10;:::i;:::-;36082:13;;;;;;;;:::i;:::-;;;;;;;36074:40;;36067:47;;;;;36048:3;;;;:::i;:::-;;;;36022:103;;;-1:-1:-1;36141:3:7;;35854:297;-1:-1:-1;;;;35854:297:7:o;14:184:109:-;66:77;63:1;56:88;163:4;160:1;153:15;187:4;184:1;177:15;203:1058;280:6;288;341:2;329:9;320:7;316:23;312:32;309:52;;;357:1;354;347:12;309:52;397:9;384:23;426:18;467:2;459:6;456:14;453:34;;;483:1;480;473:12;453:34;521:6;510:9;506:22;496:32;;566:7;559:4;555:2;551:13;547:27;537:55;;588:1;585;578:12;537:55;624:2;611:16;646:2;642;639:10;636:36;;;652:18;;:::i;:::-;786:2;780:9;848:4;840:13;;691:66;836:22;;;860:2;832:31;828:40;816:53;;;884:18;;;904:22;;;881:46;878:72;;;930:18;;:::i;:::-;970:10;966:2;959:22;1005:2;997:6;990:18;1047:7;1040:4;1035:2;1031;1027:11;1023:22;1020:35;1017:55;;;1068:1;1065;1058:12;1017:55;1128:2;1121:4;1117:2;1113:13;1106:4;1098:6;1094:17;1081:50;1175:1;1168:4;1151:15;;;1147:26;;1140:37;1151:15;1234:20;;;;1221:34;;-1:-1:-1;;;;;;203:1058:109:o;1456:184::-;1508:77;1505:1;1498:88;1605:4;1602:1;1595:15;1629:4;1626:1;1619:15;1645:228;1685:7;1811:1;1743:66;1739:74;1736:1;1733:81;1728:1;1721:9;1714:17;1710:105;1707:131;;;1818:18;;:::i;:::-;-1:-1:-1;1858:9:109;;1645:228::o;1878:128::-;1918:3;1949:1;1945:6;1942:1;1939:13;1936:39;;;1955:18;;:::i;:::-;-1:-1:-1;1991:9:109;;1878:128::o;2011:184::-;2063:77;2060:1;2053:88;2160:4;2157:1;2150:15;2184:4;2181:1;2174:15;2200:195;2239:3;2270:66;2263:5;2260:77;2257:103;;;2340:18;;:::i;:::-;-1:-1:-1;2387:1:109;2376:13;;2200:195::o",
+    "object": "0x73000000000000000000000000000000000000000030146080604052600436106100355760003560e01c8063535849391461003a575b600080fd5b61004d610048366004610123565b61005f565b60405190815260200160405180910390f35b60008060006020855111610074578451610077565b60205b905060005b818110156100ea5761008f816008610225565b8661009a8388610262565b815181106100aa576100aa61027a565b01602001517fff0000000000000000000000000000000000000000000000000000000000000016901c9290921791806100e2816102a9565b91505061007c565b5090949350505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052604160045260246000fd5b6000806040838503121561013657600080fd5b823567ffffffffffffffff8082111561014e57600080fd5b818501915085601f83011261016257600080fd5b813581811115610174576101746100f4565b604051601f82017fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe0908116603f011681019083821181831017156101ba576101ba6100f4565b816040528281528860208487010111156101d357600080fd5b826020860160208301376000602093820184015298969091013596505050505050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b6000817fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff048311821515161561025d5761025d6101f6565b500290565b60008219821115610275576102756101f6565b500190565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052603260045260246000fd5b60007fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8214156102db576102db6101f6565b506001019056fea2646970667358221220ef1bff214598806f1a99ba80bbc6f760eaf507cc096a409bd7f27a3d0ba6071b64736f6c63430008090033",
+    "sourceMap": "27684:8875:7:-:0;;;;;;;;;;;;;;;;;;;;;;;;35854:297;;;;;;:::i;:::-;;:::i;:::-;;;1420:25:116;;;1408:2;1393:18;35854:297:7;;;;;;;;35928:7;35947:11;35969;35994:2;35983:1;:8;:13;:29;;36004:1;:8;35983:29;;;35999:2;35983:29;35969:43;;36027:6;36022:103;36043:3;36039:1;:7;36022:103;;;36108:5;:1;36112;36108:5;:::i;:::-;36082:1;36084:10;36093:1;36084:6;:10;:::i;:::-;36082:13;;;;;;;;:::i;:::-;;;;;;;36074:40;;36067:47;;;;;36048:3;;;;:::i;:::-;;;;36022:103;;;-1:-1:-1;36141:3:7;;35854:297;-1:-1:-1;;;;35854:297:7:o;14:184:116:-;66:77;63:1;56:88;163:4;160:1;153:15;187:4;184:1;177:15;203:1058;280:6;288;341:2;329:9;320:7;316:23;312:32;309:52;;;357:1;354;347:12;309:52;397:9;384:23;426:18;467:2;459:6;456:14;453:34;;;483:1;480;473:12;453:34;521:6;510:9;506:22;496:32;;566:7;559:4;555:2;551:13;547:27;537:55;;588:1;585;578:12;537:55;624:2;611:16;646:2;642;639:10;636:36;;;652:18;;:::i;:::-;786:2;780:9;848:4;840:13;;691:66;836:22;;;860:2;832:31;828:40;816:53;;;884:18;;;904:22;;;881:46;878:72;;;930:18;;:::i;:::-;970:10;966:2;959:22;1005:2;997:6;990:18;1047:7;1040:4;1035:2;1031;1027:11;1023:22;1020:35;1017:55;;;1068:1;1065;1058:12;1017:55;1128:2;1121:4;1117:2;1113:13;1106:4;1098:6;1094:17;1081:50;1175:1;1168:4;1151:15;;;1147:26;;1140:37;1151:15;1234:20;;;;1221:34;;-1:-1:-1;;;;;;203:1058:116:o;1456:184::-;1508:77;1505:1;1498:88;1605:4;1602:1;1595:15;1629:4;1626:1;1619:15;1645:228;1685:7;1811:1;1743:66;1739:74;1736:1;1733:81;1728:1;1721:9;1714:17;1710:105;1707:131;;;1818:18;;:::i;:::-;-1:-1:-1;1858:9:116;;1645:228::o;1878:128::-;1918:3;1949:1;1945:6;1942:1;1939:13;1936:39;;;1955:18;;:::i;:::-;-1:-1:-1;1991:9:116;;1878:128::o;2011:184::-;2063:77;2060:1;2053:88;2160:4;2157:1;2150:15;2184:4;2181:1;2174:15;2200:195;2239:3;2270:66;2263:5;2260:77;2257:103;;;2340:18;;:::i;:::-;-1:-1:-1;2387:1:116;2376:13;;2200:195::o",
     "linkReferences": {}
   },
   "methodIdentifiers": {
     "bytesToBytes32(bytes,uint256)": "53584939"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"who\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes4\",\"name\":\"fsig\",\"type\":\"bytes4\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"keysHash\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"slot\",\"type\":\"uint256\"}],\"name\":\"SlotFound\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"who\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"slot\",\"type\":\"uint256\"}],\"name\":\"WARNING_UninitedSlot\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"b\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"offset\",\"type\":\"uint256\"}],\"name\":\"bytesToBytes32\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"lib/forge-std/src/Test.sol\":\"stdStorage\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/forge-std/lib/ds-test/src/test.sol\":{\"keccak256\":\"0xb39cd1d5220cb474947b131e15a4538334b7e886af244b440ae5c9c6bba96a54\",\"license\":\"GPL-3.0-or-later\",\"urls\":[\"bzz-raw://3101520221449ac0070bda3881311a71d9aa87e5210765e875246922cb5cb5f5\",\"dweb:/ipfs/Qmbg6kAHNoG7ox9N9Xqd9Ere2H2XixMFWFqvyPwFCzB3Gr\"]},\"lib/forge-std/src/Script.sol\":{\"keccak256\":\"0x9d09c1e55cd508d3376cff9961625d51d73f8ce075ec1e9deed41408a4556e00\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8880c5551daf337ab91665a9ce593df67a9eb11b0bee820f631d324d2fdd3a8b\",\"dweb:/ipfs/QmNpvSBGnS9Jr6Swd6XKsijG59a4yjYemWCFwprjKFkpNC\"]},\"lib/forge-std/src/StdJson.sol\":{\"keccak256\":\"0x1297a1cc393bc8163ccf143e5335536e78cb25ac24a4f6dfdb25f5746dd4827e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://945ccffad9fc09d2aa0ac200a80dcfa2f491dba8680fc9c3d3d450d891284b87\",\"dweb:/ipfs/QmYSfFb1L6LN1ZB9KWzZqxt2iAbpuFDskBcU1Bz4RiyuQ5\"]},\"lib/forge-std/src/Test.sol\":{\"keccak256\":\"0x6c9cbd51234372b66bf7c146870edf0855770c46e960a8fae8f354ddf382876b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fd0ff1f449294dd1447b9d483c52d78e137d8cac518646e76df9fdd4d185d6c2\",\"dweb:/ipfs/QmS3JP4vKgvAWo8Tc7zVrGxbdR7t37ayk1mTHN3seD6UAZ\"]},\"lib/forge-std/src/Vm.sol\":{\"keccak256\":\"0x405c85da2b6a01ca3377cea271ad23ff43d9df86883c48ed7fada4533637509e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4931d09716433bc7115554de6504b3aeb675490cfe525295e438c0e7bab810c4\",\"dweb:/ipfs/QmfLV7CuKtumh6R2mTz4duuGE2kffi5STzq2NahLxGfuWM\"]},\"lib/forge-std/src/console.sol\":{\"keccak256\":\"0x91d5413c2434ca58fd278b6e1e79fd98d10c83931cc2596a6038eee4daeb34ba\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://91ccea707361e48b9b7a161fe81f496b9932bc471e9c4e4e1e9c283f2453cc70\",\"dweb:/ipfs/QmcB66sZhQ6Kz7MUHcLE78YXRUZxoZnnxZjN6yATsbB2ec\"]},\"lib/forge-std/src/console2.sol\":{\"keccak256\":\"0xbeb823fcdb356244a83aaccdf828ad019ecc1ffaa3dff18e624fc6d5714ea671\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4cbe9400340e5f9ec55e2aff3bad1c15fa3afbbe37e80800e6f3fed2ad26854f\",\"dweb:/ipfs/QmdJBABsuXkvWxVzEyGXsTE3vyfBPXDdw5xvvtUz3JeoYW\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "who",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "bytes4",
+              "name": "fsig",
+              "type": "bytes4",
+              "indexed": false
+            },
+            {
+              "internalType": "bytes32",
+              "name": "keysHash",
+              "type": "bytes32",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "slot",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "SlotFound",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "who",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "slot",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "WARNING_UninitedSlot",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes",
+              "name": "b",
+              "type": "bytes"
+            },
+            {
+              "internalType": "uint256",
+              "name": "offset",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "bytesToBytes32",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "lib/forge-std/src/Test.sol": "stdStorage"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/forge-std/lib/ds-test/src/test.sol": {
+        "keccak256": "0xb39cd1d5220cb474947b131e15a4538334b7e886af244b440ae5c9c6bba96a54",
+        "urls": [
+          "bzz-raw://3101520221449ac0070bda3881311a71d9aa87e5210765e875246922cb5cb5f5",
+          "dweb:/ipfs/Qmbg6kAHNoG7ox9N9Xqd9Ere2H2XixMFWFqvyPwFCzB3Gr"
+        ],
+        "license": "GPL-3.0-or-later"
+      },
+      "lib/forge-std/src/Script.sol": {
+        "keccak256": "0x9d09c1e55cd508d3376cff9961625d51d73f8ce075ec1e9deed41408a4556e00",
+        "urls": [
+          "bzz-raw://8880c5551daf337ab91665a9ce593df67a9eb11b0bee820f631d324d2fdd3a8b",
+          "dweb:/ipfs/QmNpvSBGnS9Jr6Swd6XKsijG59a4yjYemWCFwprjKFkpNC"
+        ],
+        "license": "MIT"
+      },
+      "lib/forge-std/src/StdJson.sol": {
+        "keccak256": "0x1297a1cc393bc8163ccf143e5335536e78cb25ac24a4f6dfdb25f5746dd4827e",
+        "urls": [
+          "bzz-raw://945ccffad9fc09d2aa0ac200a80dcfa2f491dba8680fc9c3d3d450d891284b87",
+          "dweb:/ipfs/QmYSfFb1L6LN1ZB9KWzZqxt2iAbpuFDskBcU1Bz4RiyuQ5"
+        ],
+        "license": "MIT"
+      },
+      "lib/forge-std/src/Test.sol": {
+        "keccak256": "0x6c9cbd51234372b66bf7c146870edf0855770c46e960a8fae8f354ddf382876b",
+        "urls": [
+          "bzz-raw://fd0ff1f449294dd1447b9d483c52d78e137d8cac518646e76df9fdd4d185d6c2",
+          "dweb:/ipfs/QmS3JP4vKgvAWo8Tc7zVrGxbdR7t37ayk1mTHN3seD6UAZ"
+        ],
+        "license": "MIT"
+      },
+      "lib/forge-std/src/Vm.sol": {
+        "keccak256": "0x405c85da2b6a01ca3377cea271ad23ff43d9df86883c48ed7fada4533637509e",
+        "urls": [
+          "bzz-raw://4931d09716433bc7115554de6504b3aeb675490cfe525295e438c0e7bab810c4",
+          "dweb:/ipfs/QmfLV7CuKtumh6R2mTz4duuGE2kffi5STzq2NahLxGfuWM"
+        ],
+        "license": "MIT"
+      },
+      "lib/forge-std/src/console.sol": {
+        "keccak256": "0x91d5413c2434ca58fd278b6e1e79fd98d10c83931cc2596a6038eee4daeb34ba",
+        "urls": [
+          "bzz-raw://91ccea707361e48b9b7a161fe81f496b9932bc471e9c4e4e1e9c283f2453cc70",
+          "dweb:/ipfs/QmcB66sZhQ6Kz7MUHcLE78YXRUZxoZnnxZjN6yATsbB2ec"
+        ],
+        "license": "MIT"
+      },
+      "lib/forge-std/src/console2.sol": {
+        "keccak256": "0xbeb823fcdb356244a83aaccdf828ad019ecc1ffaa3dff18e624fc6d5714ea671",
+        "urls": [
+          "bzz-raw://4cbe9400340e5f9ec55e2aff3bad1c15fa3afbbe37e80800e6f3fed2ad26854f",
+          "dweb:/ipfs/QmdJBABsuXkvWxVzEyGXsTE3vyfBPXDdw5xvvtUz3JeoYW"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
   },
   "ast": {
     "absolutePath": "lib/forge-std/src/Test.sol",

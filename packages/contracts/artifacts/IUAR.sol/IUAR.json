@@ -27,21 +27,86 @@
   "methodIdentifiers": {
     "raiseCapital(uint256)": "c621bf8a"
   },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"raiseCapital\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/IUAR.sol\":\"IUAR\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/IUAR.sol\":{\"keccak256\":\"0x51eeeb5dd46c223bf7b4ae0a53100a5f4ea16ae2c3e5b5bb3b05df5cb3b82159\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://48caa1b0ad1fb0e2550f4413e70181b0330c1f0f051d655c4140e842f3507198\",\"dweb:/ipfs/QmdQNQUtUo57nR7eiRHBJ6WwNmLnEnmCSrsKqNR9qJauDf\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "raiseCapital"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/ubiquistick/interfaces/IUAR.sol": "IUAR"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/ubiquistick/interfaces/IUAR.sol": {
+        "keccak256": "0x51eeeb5dd46c223bf7b4ae0a53100a5f4ea16ae2c3e5b5bb3b05df5cb3b82159",
+        "urls": [
+          "bzz-raw://48caa1b0ad1fb0e2550f4413e70181b0330c1f0f051d655c4140e842f3507198",
+          "dweb:/ipfs/QmdQNQUtUo57nR7eiRHBJ6WwNmLnEnmCSrsKqNR9qJauDf"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "src/ubiquistick/interfaces/IUAR.sol",
-    "id": 52105,
+    "id": 52836,
     "exportedSymbols": {
       "IUAR": [
-        52104
+        52835
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:96:105",
+    "src": "32:96:106",
     "nodes": [
       {
-        "id": 52098,
+        "id": 52829,
         "nodeType": "PragmaDirective",
-        "src": "32:23:105",
+        "src": "32:23:106",
         "literals": [
           "solidity",
           "^",
@@ -50,33 +115,33 @@
         ]
       },
       {
-        "id": 52104,
+        "id": 52835,
         "nodeType": "ContractDefinition",
-        "src": "57:70:105",
+        "src": "57:70:106",
         "nodes": [
           {
-            "id": 52103,
+            "id": 52834,
             "nodeType": "FunctionDefinition",
-            "src": "78:47:105",
+            "src": "78:47:106",
             "functionSelector": "c621bf8a",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "raiseCapital",
-            "nameLocation": "87:12:105",
+            "nameLocation": "87:12:106",
             "parameters": {
-              "id": 52101,
+              "id": 52832,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 52100,
+                  "id": 52831,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "108:6:105",
+                  "nameLocation": "108:6:106",
                   "nodeType": "VariableDeclaration",
-                  "scope": 52103,
-                  "src": "100:14:105",
+                  "scope": 52834,
+                  "src": "100:14:106",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -84,10 +149,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 52099,
+                    "id": 52830,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "100:7:105",
+                    "src": "100:7:106",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -96,15 +161,15 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "99:16:105"
+              "src": "99:16:106"
             },
             "returnParameters": {
-              "id": 52102,
+              "id": 52833,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "124:0:105"
+              "src": "124:0:106"
             },
-            "scope": 52104,
+            "scope": 52835,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -117,15 +182,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          52104
+          52835
         ],
         "name": "IUAR",
-        "nameLocation": "67:4:105",
-        "scope": 52105,
+        "nameLocation": "67:4:106",
+        "scope": 52836,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 105
+  "id": 106
 }

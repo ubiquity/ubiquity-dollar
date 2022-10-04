@@ -1,16 +1,68 @@
 {
   "abi": [],
   "bytecode": {
-    "object": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122052fd29826542934d9c28144c8570ad84cd1dd262ce33057eae3cc4d80634f5ff64736f6c63430008090033",
+    "object": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220128e3de0d2305014634497e8b6c9a49ea9a95789f01c93c1e6e6b11a02f6296664736f6c63430008090033",
     "sourceMap": "362:9592:43:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;362:9592:43;;;;;;;;;;;;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122052fd29826542934d9c28144c8570ad84cd1dd262ce33057eae3cc4d80634f5ff64736f6c63430008090033",
+    "object": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220128e3de0d2305014634497e8b6c9a49ea9a95789f01c93c1e6e6b11a02f6296664736f6c63430008090033",
     "sourceMap": "362:9592:43:-:0;;;;;;;;",
     "linkReferences": {}
   },
   "methodIdentifiers": {},
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"author\":\"Vittorio Minacori (https://github.com/vittominacori)\",\"details\":\"An utility library for using sorted linked list data structures in your Solidity project.\",\"kind\":\"dev\",\"methods\":{},\"title\":\"StructuredLinkedList\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"lib/solidity-linked-list/contracts/StructuredLinkedList.sol\":\"StructuredLinkedList\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/solidity-linked-list/contracts/StructuredLinkedList.sol\":{\"keccak256\":\"0x4cbb667c893519162eda39e0405a146176b643311f40278acf3c5a6d2d251b76\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cb602dc36c34611fce073f45dd93dafbb0471771a0837e5f1f3627fbffe5e766\",\"dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "lib/solidity-linked-list/contracts/StructuredLinkedList.sol": "StructuredLinkedList"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/solidity-linked-list/contracts/StructuredLinkedList.sol": {
+        "keccak256": "0x4cbb667c893519162eda39e0405a146176b643311f40278acf3c5a6d2d251b76",
+        "urls": [
+          "bzz-raw://cb602dc36c34611fce073f45dd93dafbb0471771a0837e5f1f3627fbffe5e766",
+          "dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "lib/solidity-linked-list/contracts/StructuredLinkedList.sol",
     "id": 31342,

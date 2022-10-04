@@ -1,6 +1,7 @@
-@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts
-forge-std/=lib/forge-std/src/
+Uniswap/=lib/Uniswap/
 ds-test/=lib/forge-std/lib/ds-test/src/
-solidity-linked-list/contracts/=lib/solidity-linked-list/contracts
-@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts
-@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts
+forge-std/=lib/forge-std/src/
+solidity-linked-list/=lib/solidity-linked-list/
+@openzeppelin/=lib/openzeppelin-contracts/
+@uniswap/=lib/Uniswap
+uni-solc0.8/=lib/uniswapv2-solc0.8/contracts/
