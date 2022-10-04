@@ -47,6 +47,31 @@
           {
             "indexed": true,
             "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "expiryBlockNumber",
+            "type": "uint256"
+          }
+        ],
+        "name": "BurntCoupons",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
             "name": "receiver",
             "type": "address"
           },
@@ -163,7 +188,7 @@
         "inputs": [
           {
             "internalType": "address",
-            "name": "account",
+            "name": "receiver",
             "type": "address"
           },
           {
@@ -205,6 +230,29 @@
           }
         ],
         "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "couponOwner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "expiryBlockNumber",
+            "type": "uint256"
+          }
+        ],
+        "name": "burnCoupons",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
       },
       {
@@ -426,9 +474,6 @@
     "devdoc": {
       "kind": "dev",
       "methods": {
-        "balanceOf(address,uint256)": {
-          "details": "See {IERC1155-balanceOf}. Requirements: - `account` cannot be the zero address."
-        },
         "balanceOfBatch(address[],uint256[])": {
           "details": "See {IERC1155-balanceOfBatch}. Requirements: - `accounts` and `ids` must have the same length."
         },
@@ -548,11 +593,11 @@
       ]
     },
     "src/dollar/mocks/MockDebtCoupon.sol": {
-      "keccak256": "0x0e8057f93a64025c94a7a0aad2bc70da00f1b2453c70610e635f21e0b993b545",
+      "keccak256": "0xe02a4a6a76f675af3848fe0cbaa6aa0357d8f1b997656ccf31cb951b65f605ed",
       "license": "MIT",
       "urls": [
-        "bzz-raw://8ed8067f5485c23e6f5badf307ad17d9c02df5a5073a59ed93261100fe580741",
-        "dweb:/ipfs/QmSzPKvREDqVRKPVhYx9ZfFin3yGE9hn1c1nKD2QYtHXmX"
+        "bzz-raw://fb919c2e56c1f48f5f4037b3a91de8fe9da2660529a3bfe179581cfc233353b4",
+        "dweb:/ipfs/QmRNDp9WNsou9DM7tPA8s457qnW2qPfNqGHYdKp41NzVJY"
       ]
     }
   },
