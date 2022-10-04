@@ -26,13 +26,13 @@
     }
   ],
   "bytecode": {
-    "object": "0x6080604052348015600f57600080fd5b50609b8061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80639172dd2314602d575b600080fd5b603b6038366004604d565b90565b60405190815260200160405180910390f35b600060208284031215605e57600080fd5b503591905056fea264697066735822122068c2b0c05f0f816cc9f5b9de58e496343d2b9e5137e9cd606960d8ad6da1c58a64736f6c63430008090033",
-    "sourceMap": "948:189:73:-:0;;;995:17;;;;;;;;;;948:189;;;;;;",
+    "object": "0x6080604052348015600f57600080fd5b50609b8061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80639172dd2314602d575b600080fd5b603b6038366004604d565b90565b60405190815260200160405180910390f35b600060208284031215605e57600080fd5b503591905056fea264697066735822122036f1c66566173aced4dd9b5819b03e1f35f0645709e7c5d94d866716504f2ad164736f6c63430008090033",
+    "sourceMap": "948:189:74:-:0;;;995:17;;;;;;;;;;948:189;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80639172dd2314602d575b600080fd5b603b6038366004604d565b90565b60405190815260200160405180910390f35b600060208284031215605e57600080fd5b503591905056fea264697066735822122068c2b0c05f0f816cc9f5b9de58e496343d2b9e5137e9cd606960d8ad6da1c58a64736f6c63430008090033",
-    "sourceMap": "948:189:73:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1018:117;;;;;;:::i;:::-;1115:13;1018:117;;;;345:25:74;;;333:2;318:18;1018:117:73;;;;;;;14:180:74;73:6;126:2;114:9;105:7;101:23;97:32;94:52;;;142:1;139;132:12;94:52;-1:-1:-1;165:23:74;;14:180;-1:-1:-1;14:180:74:o",
+    "object": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c80639172dd2314602d575b600080fd5b603b6038366004604d565b90565b60405190815260200160405180910390f35b600060208284031215605e57600080fd5b503591905056fea264697066735822122036f1c66566173aced4dd9b5819b03e1f35f0645709e7c5d94d866716504f2ad164736f6c63430008090033",
+    "sourceMap": "948:189:74:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1018:117;;;;;;:::i;:::-;1115:13;1018:117;;;;345:25:75;;;333:2;318:18;1018:117:74;;;;;;;14:180:75;73:6;126:2;114:9;105:7;101:23;97:32;94:52;;;142:1;139;132:12;94:52;-1:-1:-1;165:23:75;;14:180;-1:-1:-1;14:180:75:o",
     "linkReferences": {}
   },
   "methodIdentifiers": {
@@ -40,7 +40,7 @@
   },
   "ast": {
     "absolutePath": "test/helpers/TestHelper.sol",
-    "id": 44391,
+    "id": 44694,
     "exportedSymbols": {
       "CouponsForDollarsCalculator": [
         29829
@@ -58,7 +58,7 @@
         40869
       ],
       "MockCouponsForDollarsCalculator": [
-        44179
+        44482
       ],
       "MockDebtCoupon": [
         41029
@@ -79,7 +79,7 @@
         5680
       ],
       "TestHelper": [
-        44390
+        44693
       ],
       "UARForDollarsCalculator": [
         33336
@@ -113,12 +113,12 @@
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:3071:73",
+    "src": "32:3071:74",
     "nodes": [
       {
-        "id": 44142,
+        "id": 44445,
         "nodeType": "PragmaDirective",
-        "src": "32:23:73",
+        "src": "32:23:74",
         "literals": [
           "solidity",
           "^",
@@ -127,22 +127,22 @@
         ]
       },
       {
-        "id": 44144,
+        "id": 44447,
         "nodeType": "ImportDirective",
-        "src": "57:103:73",
+        "src": "57:103:74",
         "absolutePath": "src/dollar/UbiquityAlgorithmicDollarManager.sol",
         "file": "../../src/dollar/UbiquityAlgorithmicDollarManager.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 34095,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44143,
+              "id": 44446,
               "name": "UbiquityAlgorithmicDollarManager",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "65:32:73",
+              "src": "65:32:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -151,22 +151,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44146,
+        "id": 44449,
         "nodeType": "ImportDirective",
-        "src": "161:75:73",
+        "src": "161:75:74",
         "absolutePath": "src/dollar/UbiquityGovernance.sol",
         "file": "../../src/dollar/UbiquityGovernance.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 34147,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44145,
+              "id": 44448,
               "name": "UbiquityGovernance",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "169:18:73",
+              "src": "169:18:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -175,22 +175,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44148,
+        "id": 44451,
         "nodeType": "ImportDirective",
-        "src": "237:85:73",
+        "src": "237:85:74",
         "absolutePath": "src/dollar/UARForDollarsCalculator.sol",
         "file": "../../src/dollar/UARForDollarsCalculator.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 33337,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44147,
+              "id": 44450,
               "name": "UARForDollarsCalculator",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "245:23:73",
+              "src": "245:23:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -199,22 +199,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44150,
+        "id": 44453,
         "nodeType": "ImportDirective",
-        "src": "323:93:73",
+        "src": "323:93:74",
         "absolutePath": "src/dollar/CouponsForDollarsCalculator.sol",
         "file": "../../src/dollar/CouponsForDollarsCalculator.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 29830,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44149,
+              "id": 44452,
               "name": "CouponsForDollarsCalculator",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "331:27:73",
+              "src": "331:27:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -223,22 +223,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44152,
+        "id": 44455,
         "nodeType": "ImportDirective",
-        "src": "417:86:73",
+        "src": "417:86:74",
         "absolutePath": "src/dollar/DollarMintingCalculator.sol",
         "file": "../../src/dollar/DollarMintingCalculator.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 31612,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44151,
+              "id": 44454,
               "name": "DollarMintingCalculator",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "426:23:73",
+              "src": "426:23:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -247,22 +247,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44154,
+        "id": 44457,
         "nodeType": "ImportDirective",
-        "src": "504:88:73",
+        "src": "504:88:74",
         "absolutePath": "src/dollar/ExcessDollarsDistributor.sol",
         "file": "../../src/dollar/ExcessDollarsDistributor.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 32827,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44153,
+              "id": 44456,
               "name": "ExcessDollarsDistributor",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "513:24:73",
+              "src": "513:24:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -271,22 +271,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44156,
+        "id": 44459,
         "nodeType": "ImportDirective",
-        "src": "593:73:73",
+        "src": "593:73:74",
         "absolutePath": "src/dollar/mocks/MockDebtCoupon.sol",
         "file": "../../src/dollar/mocks/MockDebtCoupon.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 41030,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44155,
+              "id": 44458,
               "name": "MockDebtCoupon",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "601:14:73",
+              "src": "601:14:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -295,22 +295,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44158,
+        "id": 44461,
         "nodeType": "ImportDirective",
-        "src": "667:69:73",
+        "src": "667:69:74",
         "absolutePath": "src/dollar/mocks/MockuADToken.sol",
         "file": "../../src/dollar/mocks/MockuADToken.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 41178,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44157,
+              "id": 44460,
               "name": "MockuADToken",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "675:12:73",
+              "src": "675:12:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -319,22 +319,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44160,
+        "id": 44463,
         "nodeType": "ImportDirective",
-        "src": "737:73:73",
+        "src": "737:73:74",
         "absolutePath": "src/dollar/mocks/MockTWAPOracle.sol",
         "file": "../../src/dollar/mocks/MockTWAPOracle.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 41117,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44159,
+              "id": 44462,
               "name": "MockTWAPOracle",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "745:14:73",
+              "src": "745:14:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -343,22 +343,22 @@
         "unitAlias": ""
       },
       {
-        "id": 44162,
+        "id": 44465,
         "nodeType": "ImportDirective",
-        "src": "811:73:73",
+        "src": "811:73:74",
         "absolutePath": "src/dollar/mocks/MockAutoRedeem.sol",
         "file": "../../src/dollar/mocks/MockAutoRedeem.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 40870,
         "symbolAliases": [
           {
             "foreign": {
-              "id": 44161,
+              "id": 44464,
               "name": "MockAutoRedeem",
               "nodeType": "Identifier",
               "overloadedDeclarations": [],
-              "src": "819:14:73",
+              "src": "819:14:74",
               "typeDescriptions": {}
             },
             "nameLocation": "-1:-1:-1"
@@ -367,42 +367,42 @@
         "unitAlias": ""
       },
       {
-        "id": 44163,
+        "id": 44466,
         "nodeType": "ImportDirective",
-        "src": "886:28:73",
+        "src": "886:28:74",
         "absolutePath": "lib/forge-std/src/Test.sol",
         "file": "forge-std/Test.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 7020,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44164,
+        "id": 44467,
         "nodeType": "ImportDirective",
-        "src": "915:31:73",
+        "src": "915:31:74",
         "absolutePath": "lib/forge-std/src/console.sol",
         "file": "forge-std/console.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44391,
+        "scope": 44694,
         "sourceUnit": 15796,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44179,
+        "id": 44482,
         "nodeType": "ContractDefinition",
-        "src": "948:189:73",
+        "src": "948:189:74",
         "nodes": [
           {
-            "id": 44168,
+            "id": 44471,
             "nodeType": "FunctionDefinition",
-            "src": "995:17:73",
+            "src": "995:17:74",
             "body": {
-              "id": 44167,
+              "id": 44470,
               "nodeType": "Block",
-              "src": "1010:2:73",
+              "src": "1010:2:74",
               "statements": []
             },
             "implemented": true,
@@ -411,48 +411,48 @@
             "name": "",
             "nameLocation": "-1:-1:-1",
             "parameters": {
-              "id": 44165,
+              "id": 44468,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1007:2:73"
+              "src": "1007:2:74"
             },
             "returnParameters": {
-              "id": 44166,
+              "id": 44469,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1010:0:73"
+              "src": "1010:0:74"
             },
-            "scope": 44179,
+            "scope": 44482,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
-            "id": 44178,
+            "id": 44481,
             "nodeType": "FunctionDefinition",
-            "src": "1018:117:73",
+            "src": "1018:117:74",
             "body": {
-              "id": 44177,
+              "id": 44480,
               "nodeType": "Block",
-              "src": "1098:37:73",
+              "src": "1098:37:74",
               "statements": [
                 {
                   "expression": {
-                    "id": 44175,
+                    "id": 44478,
                     "name": "dollarsToBurn",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 44170,
-                    "src": "1115:13:73",
+                    "referencedDeclaration": 44473,
+                    "src": "1115:13:74",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
                     }
                   },
-                  "functionReturnParameters": 44174,
-                  "id": 44176,
+                  "functionReturnParameters": 44477,
+                  "id": 44479,
                   "nodeType": "Return",
-                  "src": "1108:20:73"
+                  "src": "1108:20:74"
                 }
               ]
             },
@@ -461,20 +461,20 @@
             "kind": "function",
             "modifiers": [],
             "name": "getCouponAmount",
-            "nameLocation": "1027:15:73",
+            "nameLocation": "1027:15:74",
             "parameters": {
-              "id": 44171,
+              "id": 44474,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44170,
+                  "id": 44473,
                   "mutability": "mutable",
                   "name": "dollarsToBurn",
-                  "nameLocation": "1051:13:73",
+                  "nameLocation": "1051:13:74",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44178,
-                  "src": "1043:21:73",
+                  "scope": 44481,
+                  "src": "1043:21:74",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -482,10 +482,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44169,
+                    "id": 44472,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1043:7:73",
+                    "src": "1043:7:74",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -494,21 +494,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1042:23:73"
+              "src": "1042:23:74"
             },
             "returnParameters": {
-              "id": 44174,
+              "id": 44477,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44173,
+                  "id": 44476,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44178,
-                  "src": "1089:7:73",
+                  "scope": 44481,
+                  "src": "1089:7:74",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -516,10 +516,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44172,
+                    "id": 44475,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1089:7:73",
+                    "src": "1089:7:74",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -528,9 +528,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1088:9:73"
+              "src": "1088:9:74"
             },
-            "scope": 44179,
+            "scope": 44482,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -543,28 +543,28 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "linearizedBaseContracts": [
-          44179
+          44482
         ],
         "name": "MockCouponsForDollarsCalculator",
-        "nameLocation": "957:31:73",
-        "scope": 44391,
+        "nameLocation": "957:31:74",
+        "scope": 44694,
         "usedErrors": []
       },
       {
-        "id": 44390,
+        "id": 44693,
         "nodeType": "ContractDefinition",
-        "src": "1139:1963:73",
+        "src": "1139:1963:74",
         "nodes": [
           {
-            "id": 44187,
+            "id": 44490,
             "nodeType": "VariableDeclaration",
-            "src": "1182:49:73",
+            "src": "1182:49:74",
             "constant": true,
             "functionSelector": "bf53253b",
             "mutability": "constant",
             "name": "NATIVE_ASSET",
-            "nameLocation": "1206:12:73",
-            "scope": 44390,
+            "nameLocation": "1206:12:74",
+            "scope": 44693,
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -572,10 +572,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 44182,
+              "id": 44485,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1182:7:73",
+              "src": "1182:7:74",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -586,14 +586,14 @@
               "arguments": [
                 {
                   "hexValue": "30",
-                  "id": 44185,
+                  "id": 44488,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "1229:1:73",
+                  "src": "1229:1:74",
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_0_by_1",
                     "typeString": "int_const 0"
@@ -608,26 +608,26 @@
                     "typeString": "int_const 0"
                   }
                 ],
-                "id": 44184,
+                "id": 44487,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
                 "lValueRequested": false,
                 "nodeType": "ElementaryTypeNameExpression",
-                "src": "1221:7:73",
+                "src": "1221:7:74",
                 "typeDescriptions": {
                   "typeIdentifier": "t_type$_t_address_$",
                   "typeString": "type(address)"
                 },
                 "typeName": {
-                  "id": 44183,
+                  "id": 44486,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1221:7:73",
+                  "src": "1221:7:74",
                   "typeDescriptions": {}
                 }
               },
-              "id": 44186,
+              "id": 44489,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -635,7 +635,7 @@
               "lValueRequested": false,
               "names": [],
               "nodeType": "FunctionCall",
-              "src": "1221:10:73",
+              "src": "1221:10:74",
               "tryCall": false,
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -645,15 +645,15 @@
             "visibility": "public"
           },
           {
-            "id": 44193,
+            "id": 44496,
             "nodeType": "VariableDeclaration",
-            "src": "1238:40:73",
+            "src": "1238:40:74",
             "constant": false,
             "functionSelector": "f851a440",
             "mutability": "mutable",
             "name": "admin",
-            "nameLocation": "1253:5:73",
-            "scope": 44390,
+            "nameLocation": "1253:5:74",
+            "scope": 44693,
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -661,10 +661,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 44188,
+              "id": 44491,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "1238:7:73",
+              "src": "1238:7:74",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -675,14 +675,14 @@
               "arguments": [
                 {
                   "hexValue": "3078313233616263",
-                  "id": 44191,
+                  "id": 44494,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "1269:8:73",
+                  "src": "1269:8:74",
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_1194684_by_1",
                     "typeString": "int_const 1194684"
@@ -697,26 +697,26 @@
                     "typeString": "int_const 1194684"
                   }
                 ],
-                "id": 44190,
+                "id": 44493,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
                 "lValueRequested": false,
                 "nodeType": "ElementaryTypeNameExpression",
-                "src": "1261:7:73",
+                "src": "1261:7:74",
                 "typeDescriptions": {
                   "typeIdentifier": "t_type$_t_address_$",
                   "typeString": "type(address)"
                 },
                 "typeName": {
-                  "id": 44189,
+                  "id": 44492,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1261:7:73",
+                  "src": "1261:7:74",
                   "typeDescriptions": {}
                 }
               },
-              "id": 44192,
+              "id": 44495,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -724,7 +724,7 @@
               "lValueRequested": false,
               "names": [],
               "nodeType": "FunctionCall",
-              "src": "1261:17:73",
+              "src": "1261:17:74",
               "tryCall": false,
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -734,28 +734,28 @@
             "visibility": "public"
           },
           {
-            "id": 44389,
+            "id": 44692,
             "nodeType": "FunctionDefinition",
-            "src": "1285:1815:73",
+            "src": "1285:1815:74",
             "body": {
-              "id": 44388,
+              "id": 44691,
               "nodeType": "Block",
-              "src": "1368:1732:73",
+              "src": "1368:1732:74",
               "statements": [
                 {
                   "assignments": [
-                    44200
+                    44503
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44200,
+                      "id": 44503,
                       "mutability": "mutable",
                       "name": "_manager",
-                      "nameLocation": "1411:8:73",
+                      "nameLocation": "1411:8:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "1378:41:73",
+                      "scope": 44691,
+                      "src": "1378:41:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -763,17 +763,17 @@
                         "typeString": "contract UbiquityAlgorithmicDollarManager"
                       },
                       "typeName": {
-                        "id": 44199,
+                        "id": 44502,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44198,
+                          "id": 44501,
                           "name": "UbiquityAlgorithmicDollarManager",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 34094,
-                          "src": "1378:32:73"
+                          "src": "1378:32:74"
                         },
                         "referencedDeclaration": 34094,
-                        "src": "1378:32:73",
+                        "src": "1378:32:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
@@ -782,16 +782,16 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44206,
+                  "id": 44509,
                   "initialValue": {
                     "arguments": [
                       {
-                        "id": 44204,
+                        "id": 44507,
                         "name": "admin",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44193,
-                        "src": "1459:5:73",
+                        "referencedDeclaration": 44496,
+                        "src": "1459:5:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -805,36 +805,36 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 44203,
+                      "id": 44506,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "1422:36:73",
+                      "src": "1422:36:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_UbiquityAlgorithmicDollarManager_$34094_$",
                         "typeString": "function (address) returns (contract UbiquityAlgorithmicDollarManager)"
                       },
                       "typeName": {
-                        "id": 44202,
+                        "id": 44505,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44201,
+                          "id": 44504,
                           "name": "UbiquityAlgorithmicDollarManager",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 34094,
-                          "src": "1426:32:73"
+                          "src": "1426:32:74"
                         },
                         "referencedDeclaration": 34094,
-                        "src": "1426:32:73",
+                        "src": "1426:32:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       }
                     },
-                    "id": 44205,
+                    "id": 44508,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -842,7 +842,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1422:43:73",
+                    "src": "1422:43:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
@@ -850,18 +850,18 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1378:87:73"
+                  "src": "1378:87:74"
                 },
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 44210,
+                        "id": 44513,
                         "name": "admin",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44193,
-                        "src": "1490:5:73",
+                        "referencedDeclaration": 44496,
+                        "src": "1490:5:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -876,18 +876,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44207,
+                        "id": 44510,
                         "name": "vm",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 2518,
-                        "src": "1476:2:73",
+                        "src": "1476:2:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_Vm_$7731",
                           "typeString": "contract Vm"
                         }
                       },
-                      "id": 44209,
+                      "id": 44512,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -895,13 +895,13 @@
                       "memberName": "startPrank",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 7249,
-                      "src": "1476:13:73",
+                      "src": "1476:13:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44211,
+                    "id": 44514,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -909,31 +909,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1476:20:73",
+                    "src": "1476:20:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44212,
+                  "id": 44515,
                   "nodeType": "ExpressionStatement",
-                  "src": "1476:20:73"
+                  "src": "1476:20:74"
                 },
                 {
                   "assignments": [
-                    44215
+                    44518
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44215,
+                      "id": 44518,
                       "mutability": "mutable",
                       "name": "_debtCoupon",
-                      "nameLocation": "1550:11:73",
+                      "nameLocation": "1550:11:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "1535:26:73",
+                      "scope": 44691,
+                      "src": "1535:26:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -941,17 +941,17 @@
                         "typeString": "contract MockDebtCoupon"
                       },
                       "typeName": {
-                        "id": 44214,
+                        "id": 44517,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44213,
+                          "id": 44516,
                           "name": "MockDebtCoupon",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 41029,
-                          "src": "1535:14:73"
+                          "src": "1535:14:74"
                         },
                         "referencedDeclaration": 41029,
-                        "src": "1535:14:73",
+                        "src": "1535:14:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockDebtCoupon_$41029",
                           "typeString": "contract MockDebtCoupon"
@@ -960,19 +960,19 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44221,
+                  "id": 44524,
                   "initialValue": {
                     "arguments": [
                       {
                         "hexValue": "313030",
-                        "id": 44219,
+                        "id": 44522,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "number",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "1583:3:73",
+                        "src": "1583:3:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_rational_100_by_1",
                           "typeString": "int_const 100"
@@ -987,36 +987,36 @@
                           "typeString": "int_const 100"
                         }
                       ],
-                      "id": 44218,
+                      "id": 44521,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "1564:18:73",
+                      "src": "1564:18:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_uint256_$returns$_t_contract$_MockDebtCoupon_$41029_$",
                         "typeString": "function (uint256) returns (contract MockDebtCoupon)"
                       },
                       "typeName": {
-                        "id": 44217,
+                        "id": 44520,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44216,
+                          "id": 44519,
                           "name": "MockDebtCoupon",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 41029,
-                          "src": "1568:14:73"
+                          "src": "1568:14:74"
                         },
                         "referencedDeclaration": 41029,
-                        "src": "1568:14:73",
+                        "src": "1568:14:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockDebtCoupon_$41029",
                           "typeString": "contract MockDebtCoupon"
                         }
                       }
                     },
-                    "id": 44220,
+                    "id": 44523,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1024,7 +1024,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1564:23:73",
+                    "src": "1564:23:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_MockDebtCoupon_$41029",
@@ -1032,7 +1032,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1535:52:73"
+                  "src": "1535:52:74"
                 },
                 {
                   "expression": {
@@ -1040,12 +1040,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44227,
+                            "id": 44530,
                             "name": "_debtCoupon",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44215,
-                            "src": "1635:11:73",
+                            "referencedDeclaration": 44518,
+                            "src": "1635:11:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_MockDebtCoupon_$41029",
                               "typeString": "contract MockDebtCoupon"
@@ -1059,26 +1059,26 @@
                               "typeString": "contract MockDebtCoupon"
                             }
                           ],
-                          "id": 44226,
+                          "id": 44529,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "1627:7:73",
+                          "src": "1627:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44225,
+                            "id": 44528,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "1627:7:73",
+                            "src": "1627:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44228,
+                        "id": 44531,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1086,7 +1086,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1627:20:73",
+                        "src": "1627:20:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1102,18 +1102,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44222,
+                        "id": 44525,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "1597:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "1597:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44224,
+                      "id": 44527,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1121,13 +1121,13 @@
                       "memberName": "setDebtCouponAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33741,
-                      "src": "1597:29:73",
+                      "src": "1597:29:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44229,
+                    "id": 44532,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1135,31 +1135,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1597:51:73",
+                    "src": "1597:51:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44230,
+                  "id": 44533,
                   "nodeType": "ExpressionStatement",
-                  "src": "1597:51:73"
+                  "src": "1597:51:74"
                 },
                 {
                   "assignments": [
-                    44233
+                    44536
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44233,
+                      "id": 44536,
                       "mutability": "mutable",
                       "name": "_uAD",
-                      "nameLocation": "1700:4:73",
+                      "nameLocation": "1700:4:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "1687:17:73",
+                      "scope": 44691,
+                      "src": "1687:17:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1167,17 +1167,17 @@
                         "typeString": "contract MockuADToken"
                       },
                       "typeName": {
-                        "id": 44232,
+                        "id": 44535,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44231,
+                          "id": 44534,
                           "name": "MockuADToken",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 41177,
-                          "src": "1687:12:73"
+                          "src": "1687:12:74"
                         },
                         "referencedDeclaration": 41177,
-                        "src": "1687:12:73",
+                        "src": "1687:12:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockuADToken_$41177",
                           "typeString": "contract MockuADToken"
@@ -1186,19 +1186,19 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44239,
+                  "id": 44542,
                   "initialValue": {
                     "arguments": [
                       {
                         "hexValue": "3130303030653138",
-                        "id": 44237,
+                        "id": 44540,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "number",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "1724:8:73",
+                        "src": "1724:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_rational_10000000000000000000000_by_1",
                           "typeString": "int_const 10000000000000000000000"
@@ -1213,36 +1213,36 @@
                           "typeString": "int_const 10000000000000000000000"
                         }
                       ],
-                      "id": 44236,
+                      "id": 44539,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "1707:16:73",
+                      "src": "1707:16:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_uint256_$returns$_t_contract$_MockuADToken_$41177_$",
                         "typeString": "function (uint256) returns (contract MockuADToken)"
                       },
                       "typeName": {
-                        "id": 44235,
+                        "id": 44538,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44234,
+                          "id": 44537,
                           "name": "MockuADToken",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 41177,
-                          "src": "1711:12:73"
+                          "src": "1711:12:74"
                         },
                         "referencedDeclaration": 41177,
-                        "src": "1711:12:73",
+                        "src": "1711:12:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockuADToken_$41177",
                           "typeString": "contract MockuADToken"
                         }
                       }
                     },
-                    "id": 44238,
+                    "id": 44541,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1250,7 +1250,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1707:26:73",
+                    "src": "1707:26:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_MockuADToken_$41177",
@@ -1258,7 +1258,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1687:46:73"
+                  "src": "1687:46:74"
                 },
                 {
                   "expression": {
@@ -1266,12 +1266,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44245,
+                            "id": 44548,
                             "name": "_uAD",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44233,
-                            "src": "1782:4:73",
+                            "referencedDeclaration": 44536,
+                            "src": "1782:4:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_MockuADToken_$41177",
                               "typeString": "contract MockuADToken"
@@ -1285,26 +1285,26 @@
                               "typeString": "contract MockuADToken"
                             }
                           ],
-                          "id": 44244,
+                          "id": 44547,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "1774:7:73",
+                          "src": "1774:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44243,
+                            "id": 44546,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "1774:7:73",
+                            "src": "1774:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44246,
+                        "id": 44549,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1312,7 +1312,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1774:13:73",
+                        "src": "1774:13:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1328,18 +1328,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44240,
+                        "id": 44543,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "1743:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "1743:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44242,
+                      "id": 44545,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1347,13 +1347,13 @@
                       "memberName": "setDollarTokenAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33771,
-                      "src": "1743:30:73",
+                      "src": "1743:30:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44247,
+                    "id": 44550,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1361,31 +1361,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1743:45:73",
+                    "src": "1743:45:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44248,
+                  "id": 44551,
                   "nodeType": "ExpressionStatement",
-                  "src": "1743:45:73"
+                  "src": "1743:45:74"
                 },
                 {
                   "assignments": [
-                    44251
+                    44554
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44251,
+                      "id": 44554,
                       "mutability": "mutable",
                       "name": "_twapOracle",
-                      "nameLocation": "1849:11:73",
+                      "nameLocation": "1849:11:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "1834:26:73",
+                      "scope": 44691,
+                      "src": "1834:26:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1393,17 +1393,17 @@
                         "typeString": "contract MockTWAPOracle"
                       },
                       "typeName": {
-                        "id": 44250,
+                        "id": 44553,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44249,
+                          "id": 44552,
                           "name": "MockTWAPOracle",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 41116,
-                          "src": "1834:14:73"
+                          "src": "1834:14:74"
                         },
                         "referencedDeclaration": 41116,
-                        "src": "1834:14:73",
+                        "src": "1834:14:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockTWAPOracle_$41116",
                           "typeString": "contract MockTWAPOracle"
@@ -1412,21 +1412,21 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44270,
+                  "id": 44573,
                   "initialValue": {
                     "arguments": [
                       {
                         "arguments": [
                           {
                             "hexValue": "3078313030",
-                            "id": 44257,
+                            "id": 44560,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "1890:5:73",
+                            "src": "1890:5:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_256_by_1",
                               "typeString": "int_const 256"
@@ -1441,26 +1441,26 @@
                               "typeString": "int_const 256"
                             }
                           ],
-                          "id": 44256,
+                          "id": 44559,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "1882:7:73",
+                          "src": "1882:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44255,
+                            "id": 44558,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "1882:7:73",
+                            "src": "1882:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44258,
+                        "id": 44561,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1468,7 +1468,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1882:14:73",
+                        "src": "1882:14:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1478,12 +1478,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44261,
+                            "id": 44564,
                             "name": "_uAD",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44233,
-                            "src": "1906:4:73",
+                            "referencedDeclaration": 44536,
+                            "src": "1906:4:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_MockuADToken_$41177",
                               "typeString": "contract MockuADToken"
@@ -1497,26 +1497,26 @@
                               "typeString": "contract MockuADToken"
                             }
                           ],
-                          "id": 44260,
+                          "id": 44563,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "1898:7:73",
+                          "src": "1898:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44259,
+                            "id": 44562,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "1898:7:73",
+                            "src": "1898:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44262,
+                        "id": 44565,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1524,7 +1524,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1898:13:73",
+                        "src": "1898:13:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1535,14 +1535,14 @@
                         "arguments": [
                           {
                             "hexValue": "3078313031",
-                            "id": 44265,
+                            "id": 44568,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": true,
                             "kind": "number",
                             "lValueRequested": false,
                             "nodeType": "Literal",
-                            "src": "1921:5:73",
+                            "src": "1921:5:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_rational_257_by_1",
                               "typeString": "int_const 257"
@@ -1557,26 +1557,26 @@
                               "typeString": "int_const 257"
                             }
                           ],
-                          "id": 44264,
+                          "id": 44567,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "1913:7:73",
+                          "src": "1913:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44263,
+                            "id": 44566,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "1913:7:73",
+                            "src": "1913:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44266,
+                        "id": 44569,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1584,7 +1584,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1913:14:73",
+                        "src": "1913:14:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1593,14 +1593,14 @@
                       },
                       {
                         "hexValue": "313030",
-                        "id": 44267,
+                        "id": 44570,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "number",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "1929:3:73",
+                        "src": "1929:3:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_rational_100_by_1",
                           "typeString": "int_const 100"
@@ -1609,14 +1609,14 @@
                       },
                       {
                         "hexValue": "313030",
-                        "id": 44268,
+                        "id": 44571,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "number",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "1934:3:73",
+                        "src": "1934:3:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_rational_100_by_1",
                           "typeString": "int_const 100"
@@ -1647,36 +1647,36 @@
                           "typeString": "int_const 100"
                         }
                       ],
-                      "id": 44254,
+                      "id": 44557,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "1863:18:73",
+                      "src": "1863:18:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_address_$_t_address_$_t_address_$_t_uint256_$_t_uint256_$returns$_t_contract$_MockTWAPOracle_$41116_$",
                         "typeString": "function (address,address,address,uint256,uint256) returns (contract MockTWAPOracle)"
                       },
                       "typeName": {
-                        "id": 44253,
+                        "id": 44556,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44252,
+                          "id": 44555,
                           "name": "MockTWAPOracle",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 41116,
-                          "src": "1867:14:73"
+                          "src": "1867:14:74"
                         },
                         "referencedDeclaration": 41116,
-                        "src": "1867:14:73",
+                        "src": "1867:14:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockTWAPOracle_$41116",
                           "typeString": "contract MockTWAPOracle"
                         }
                       }
                     },
-                    "id": 44269,
+                    "id": 44572,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1684,7 +1684,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1863:75:73",
+                    "src": "1863:75:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_MockTWAPOracle_$41116",
@@ -1692,7 +1692,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "1834:104:73"
+                  "src": "1834:104:74"
                 },
                 {
                   "expression": {
@@ -1700,12 +1700,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44276,
+                            "id": 44579,
                             "name": "_twapOracle",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44251,
-                            "src": "1986:11:73",
+                            "referencedDeclaration": 44554,
+                            "src": "1986:11:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_MockTWAPOracle_$41116",
                               "typeString": "contract MockTWAPOracle"
@@ -1719,26 +1719,26 @@
                               "typeString": "contract MockTWAPOracle"
                             }
                           ],
-                          "id": 44275,
+                          "id": 44578,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "1978:7:73",
+                          "src": "1978:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44274,
+                            "id": 44577,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "1978:7:73",
+                            "src": "1978:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44277,
+                        "id": 44580,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1746,7 +1746,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "1978:20:73",
+                        "src": "1978:20:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1762,18 +1762,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44271,
+                        "id": 44574,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "1948:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "1948:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44273,
+                      "id": 44576,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1781,13 +1781,13 @@
                       "memberName": "setTwapOracleAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33717,
-                      "src": "1948:29:73",
+                      "src": "1948:29:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44278,
+                    "id": 44581,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1795,31 +1795,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1948:51:73",
+                    "src": "1948:51:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44279,
+                  "id": 44582,
                   "nodeType": "ExpressionStatement",
-                  "src": "1948:51:73"
+                  "src": "1948:51:74"
                 },
                 {
                   "assignments": [
-                    44282
+                    44585
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44282,
+                      "id": 44585,
                       "mutability": "mutable",
                       "name": "_uGov",
-                      "nameLocation": "2064:5:73",
+                      "nameLocation": "2064:5:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "2045:24:73",
+                      "scope": 44691,
+                      "src": "2045:24:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -1827,17 +1827,17 @@
                         "typeString": "contract UbiquityGovernance"
                       },
                       "typeName": {
-                        "id": 44281,
+                        "id": 44584,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44280,
+                          "id": 44583,
                           "name": "UbiquityGovernance",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 34146,
-                          "src": "2045:18:73"
+                          "src": "2045:18:74"
                         },
                         "referencedDeclaration": 34146,
-                        "src": "2045:18:73",
+                        "src": "2045:18:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityGovernance_$34146",
                           "typeString": "contract UbiquityGovernance"
@@ -1846,18 +1846,18 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44291,
+                  "id": 44594,
                   "initialValue": {
                     "arguments": [
                       {
                         "arguments": [
                           {
-                            "id": 44288,
+                            "id": 44591,
                             "name": "_manager",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44200,
-                            "src": "2103:8:73",
+                            "referencedDeclaration": 44503,
+                            "src": "2103:8:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                               "typeString": "contract UbiquityAlgorithmicDollarManager"
@@ -1871,26 +1871,26 @@
                               "typeString": "contract UbiquityAlgorithmicDollarManager"
                             }
                           ],
-                          "id": 44287,
+                          "id": 44590,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2095:7:73",
+                          "src": "2095:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44286,
+                            "id": 44589,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2095:7:73",
+                            "src": "2095:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44289,
+                        "id": 44592,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1898,7 +1898,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2095:17:73",
+                        "src": "2095:17:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1913,36 +1913,36 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 44285,
+                      "id": 44588,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "2072:22:73",
+                      "src": "2072:22:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_UbiquityGovernance_$34146_$",
                         "typeString": "function (address) returns (contract UbiquityGovernance)"
                       },
                       "typeName": {
-                        "id": 44284,
+                        "id": 44587,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44283,
+                          "id": 44586,
                           "name": "UbiquityGovernance",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 34146,
-                          "src": "2076:18:73"
+                          "src": "2076:18:74"
                         },
                         "referencedDeclaration": 34146,
-                        "src": "2076:18:73",
+                        "src": "2076:18:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityGovernance_$34146",
                           "typeString": "contract UbiquityGovernance"
                         }
                       }
                     },
-                    "id": 44290,
+                    "id": 44593,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1950,7 +1950,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2072:41:73",
+                    "src": "2072:41:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_UbiquityGovernance_$34146",
@@ -1958,7 +1958,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "2045:68:73"
+                  "src": "2045:68:74"
                 },
                 {
                   "expression": {
@@ -1966,12 +1966,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44297,
+                            "id": 44600,
                             "name": "_uGov",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44282,
-                            "src": "2166:5:73",
+                            "referencedDeclaration": 44585,
+                            "src": "2166:5:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_UbiquityGovernance_$34146",
                               "typeString": "contract UbiquityGovernance"
@@ -1985,26 +1985,26 @@
                               "typeString": "contract UbiquityGovernance"
                             }
                           ],
-                          "id": 44296,
+                          "id": 44599,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2158:7:73",
+                          "src": "2158:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44295,
+                            "id": 44598,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2158:7:73",
+                            "src": "2158:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44298,
+                        "id": 44601,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2012,7 +2012,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2158:14:73",
+                        "src": "2158:14:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2028,18 +2028,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44292,
+                        "id": 44595,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "2123:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "2123:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44294,
+                      "id": 44597,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2047,13 +2047,13 @@
                       "memberName": "setGovernanceTokenAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33783,
-                      "src": "2123:34:73",
+                      "src": "2123:34:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44299,
+                    "id": 44602,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2061,92 +2061,92 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2123:50:73",
+                    "src": "2123:50:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44300,
+                  "id": 44603,
                   "nodeType": "ExpressionStatement",
-                  "src": "2123:50:73"
+                  "src": "2123:50:74"
                 },
                 {
                   "assignments": [
-                    44303
+                    44606
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44303,
+                      "id": 44606,
                       "mutability": "mutable",
                       "name": "couponsForDollarsCalculator",
-                      "nameLocation": "2269:27:73",
+                      "nameLocation": "2269:27:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "2237:59:73",
+                      "scope": 44691,
+                      "src": "2237:59:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44179",
+                        "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44482",
                         "typeString": "contract MockCouponsForDollarsCalculator"
                       },
                       "typeName": {
-                        "id": 44302,
+                        "id": 44605,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44301,
+                          "id": 44604,
                           "name": "MockCouponsForDollarsCalculator",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 44179,
-                          "src": "2237:31:73"
+                          "referencedDeclaration": 44482,
+                          "src": "2237:31:74"
                         },
-                        "referencedDeclaration": 44179,
-                        "src": "2237:31:73",
+                        "referencedDeclaration": 44482,
+                        "src": "2237:31:74",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44179",
+                          "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44482",
                           "typeString": "contract MockCouponsForDollarsCalculator"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44308,
+                  "id": 44611,
                   "initialValue": {
                     "arguments": [],
                     "expression": {
                       "argumentTypes": [],
-                      "id": 44306,
+                      "id": 44609,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "2299:35:73",
+                      "src": "2299:35:74",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_creation_nonpayable$__$returns$_t_contract$_MockCouponsForDollarsCalculator_$44179_$",
+                        "typeIdentifier": "t_function_creation_nonpayable$__$returns$_t_contract$_MockCouponsForDollarsCalculator_$44482_$",
                         "typeString": "function () returns (contract MockCouponsForDollarsCalculator)"
                       },
                       "typeName": {
-                        "id": 44305,
+                        "id": 44608,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44304,
+                          "id": 44607,
                           "name": "MockCouponsForDollarsCalculator",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 44179,
-                          "src": "2303:31:73"
+                          "referencedDeclaration": 44482,
+                          "src": "2303:31:74"
                         },
-                        "referencedDeclaration": 44179,
-                        "src": "2303:31:73",
+                        "referencedDeclaration": 44482,
+                        "src": "2303:31:74",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44179",
+                          "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44482",
                           "typeString": "contract MockCouponsForDollarsCalculator"
                         }
                       }
                     },
-                    "id": 44307,
+                    "id": 44610,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2154,15 +2154,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2299:37:73",
+                    "src": "2299:37:74",
                     "tryCall": false,
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44179",
+                      "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44482",
                       "typeString": "contract MockCouponsForDollarsCalculator"
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "2237:99:73"
+                  "src": "2237:99:74"
                 },
                 {
                   "expression": {
@@ -2170,14 +2170,14 @@
                       {
                         "arguments": [
                           {
-                            "id": 44314,
+                            "id": 44617,
                             "name": "couponsForDollarsCalculator",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44303,
-                            "src": "2390:27:73",
+                            "referencedDeclaration": 44606,
+                            "src": "2390:27:74",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44179",
+                              "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44482",
                               "typeString": "contract MockCouponsForDollarsCalculator"
                             }
                           }
@@ -2185,30 +2185,30 @@
                         "expression": {
                           "argumentTypes": [
                             {
-                              "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44179",
+                              "typeIdentifier": "t_contract$_MockCouponsForDollarsCalculator_$44482",
                               "typeString": "contract MockCouponsForDollarsCalculator"
                             }
                           ],
-                          "id": 44313,
+                          "id": 44616,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2382:7:73",
+                          "src": "2382:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44312,
+                            "id": 44615,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2382:7:73",
+                            "src": "2382:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44315,
+                        "id": 44618,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2216,7 +2216,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2382:36:73",
+                        "src": "2382:36:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2232,18 +2232,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44309,
+                        "id": 44612,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "2346:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "2346:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44311,
+                      "id": 44614,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2251,13 +2251,13 @@
                       "memberName": "setCouponCalculatorAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33819,
-                      "src": "2346:35:73",
+                      "src": "2346:35:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44316,
+                    "id": 44619,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2265,31 +2265,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2346:73:73",
+                    "src": "2346:73:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44317,
+                  "id": 44620,
                   "nodeType": "ExpressionStatement",
-                  "src": "2346:73:73"
+                  "src": "2346:73:74"
                 },
                 {
                   "assignments": [
-                    44320
+                    44623
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44320,
+                      "id": 44623,
                       "mutability": "mutable",
                       "name": "autoRedeem",
-                      "nameLocation": "2491:10:73",
+                      "nameLocation": "2491:10:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "2476:25:73",
+                      "scope": 44691,
+                      "src": "2476:25:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2297,17 +2297,17 @@
                         "typeString": "contract MockAutoRedeem"
                       },
                       "typeName": {
-                        "id": 44319,
+                        "id": 44622,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44318,
+                          "id": 44621,
                           "name": "MockAutoRedeem",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 40869,
-                          "src": "2476:14:73"
+                          "src": "2476:14:74"
                         },
                         "referencedDeclaration": 40869,
-                        "src": "2476:14:73",
+                        "src": "2476:14:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockAutoRedeem_$40869",
                           "typeString": "contract MockAutoRedeem"
@@ -2316,19 +2316,19 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44326,
+                  "id": 44629,
                   "initialValue": {
                     "arguments": [
                       {
                         "hexValue": "30",
-                        "id": 44324,
+                        "id": 44627,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "number",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "2523:1:73",
+                        "src": "2523:1:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_rational_0_by_1",
                           "typeString": "int_const 0"
@@ -2343,36 +2343,36 @@
                           "typeString": "int_const 0"
                         }
                       ],
-                      "id": 44323,
+                      "id": 44626,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "2504:18:73",
+                      "src": "2504:18:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_uint256_$returns$_t_contract$_MockAutoRedeem_$40869_$",
                         "typeString": "function (uint256) returns (contract MockAutoRedeem)"
                       },
                       "typeName": {
-                        "id": 44322,
+                        "id": 44625,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44321,
+                          "id": 44624,
                           "name": "MockAutoRedeem",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 40869,
-                          "src": "2508:14:73"
+                          "src": "2508:14:74"
                         },
                         "referencedDeclaration": 40869,
-                        "src": "2508:14:73",
+                        "src": "2508:14:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_MockAutoRedeem_$40869",
                           "typeString": "contract MockAutoRedeem"
                         }
                       }
                     },
-                    "id": 44325,
+                    "id": 44628,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2380,7 +2380,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2504:21:73",
+                    "src": "2504:21:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_MockAutoRedeem_$40869",
@@ -2388,7 +2388,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "2476:49:73"
+                  "src": "2476:49:74"
                 },
                 {
                   "expression": {
@@ -2396,12 +2396,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44332,
+                            "id": 44635,
                             "name": "autoRedeem",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44320,
-                            "src": "2571:10:73",
+                            "referencedDeclaration": 44623,
+                            "src": "2571:10:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_MockAutoRedeem_$40869",
                               "typeString": "contract MockAutoRedeem"
@@ -2415,26 +2415,26 @@
                               "typeString": "contract MockAutoRedeem"
                             }
                           ],
-                          "id": 44331,
+                          "id": 44634,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2563:7:73",
+                          "src": "2563:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44330,
+                            "id": 44633,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2563:7:73",
+                            "src": "2563:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44333,
+                        "id": 44636,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2442,7 +2442,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2563:19:73",
+                        "src": "2563:19:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2458,18 +2458,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44327,
+                        "id": 44630,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "2535:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "2535:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44329,
+                      "id": 44632,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2477,13 +2477,13 @@
                       "memberName": "setuARTokenAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33729,
-                      "src": "2535:27:73",
+                      "src": "2535:27:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44334,
+                    "id": 44637,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2491,31 +2491,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2535:48:73",
+                    "src": "2535:48:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44335,
+                  "id": 44638,
                   "nodeType": "ExpressionStatement",
-                  "src": "2535:48:73"
+                  "src": "2535:48:74"
                 },
                 {
                   "assignments": [
-                    44338
+                    44641
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44338,
+                      "id": 44641,
                       "mutability": "mutable",
                       "name": "_uarDollarCalculator",
-                      "nameLocation": "2666:20:73",
+                      "nameLocation": "2666:20:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "2641:45:73",
+                      "scope": 44691,
+                      "src": "2641:45:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2523,17 +2523,17 @@
                         "typeString": "contract UARForDollarsCalculator"
                       },
                       "typeName": {
-                        "id": 44337,
+                        "id": 44640,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44336,
+                          "id": 44639,
                           "name": "UARForDollarsCalculator",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 33336,
-                          "src": "2641:23:73"
+                          "src": "2641:23:74"
                         },
                         "referencedDeclaration": 33336,
-                        "src": "2641:23:73",
+                        "src": "2641:23:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UARForDollarsCalculator_$33336",
                           "typeString": "contract UARForDollarsCalculator"
@@ -2542,18 +2542,18 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44347,
+                  "id": 44650,
                   "initialValue": {
                     "arguments": [
                       {
                         "arguments": [
                           {
-                            "id": 44344,
+                            "id": 44647,
                             "name": "_manager",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44200,
-                            "src": "2725:8:73",
+                            "referencedDeclaration": 44503,
+                            "src": "2725:8:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                               "typeString": "contract UbiquityAlgorithmicDollarManager"
@@ -2567,26 +2567,26 @@
                               "typeString": "contract UbiquityAlgorithmicDollarManager"
                             }
                           ],
-                          "id": 44343,
+                          "id": 44646,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2717:7:73",
+                          "src": "2717:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44342,
+                            "id": 44645,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2717:7:73",
+                            "src": "2717:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44345,
+                        "id": 44648,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2594,7 +2594,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2717:17:73",
+                        "src": "2717:17:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2609,36 +2609,36 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 44341,
+                      "id": 44644,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "2689:27:73",
+                      "src": "2689:27:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_UARForDollarsCalculator_$33336_$",
                         "typeString": "function (address) returns (contract UARForDollarsCalculator)"
                       },
                       "typeName": {
-                        "id": 44340,
+                        "id": 44643,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44339,
+                          "id": 44642,
                           "name": "UARForDollarsCalculator",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 33336,
-                          "src": "2693:23:73"
+                          "src": "2693:23:74"
                         },
                         "referencedDeclaration": 33336,
-                        "src": "2693:23:73",
+                        "src": "2693:23:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UARForDollarsCalculator_$33336",
                           "typeString": "contract UARForDollarsCalculator"
                         }
                       }
                     },
-                    "id": 44346,
+                    "id": 44649,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2646,7 +2646,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2689:46:73",
+                    "src": "2689:46:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_UARForDollarsCalculator_$33336",
@@ -2654,7 +2654,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "2641:94:73"
+                  "src": "2641:94:74"
                 },
                 {
                   "expression": {
@@ -2662,12 +2662,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44353,
+                            "id": 44656,
                             "name": "_uarDollarCalculator",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44338,
-                            "src": "2786:20:73",
+                            "referencedDeclaration": 44641,
+                            "src": "2786:20:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_UARForDollarsCalculator_$33336",
                               "typeString": "contract UARForDollarsCalculator"
@@ -2681,26 +2681,26 @@
                               "typeString": "contract UARForDollarsCalculator"
                             }
                           ],
-                          "id": 44352,
+                          "id": 44655,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2778:7:73",
+                          "src": "2778:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44351,
+                            "id": 44654,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2778:7:73",
+                            "src": "2778:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44354,
+                        "id": 44657,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2708,7 +2708,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2778:29:73",
+                        "src": "2778:29:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2724,18 +2724,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44348,
+                        "id": 44651,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "2745:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "2745:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44350,
+                      "id": 44653,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2743,13 +2743,13 @@
                       "memberName": "setUARCalculatorAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33807,
-                      "src": "2745:32:73",
+                      "src": "2745:32:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44355,
+                    "id": 44658,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2757,31 +2757,31 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2745:63:73",
+                    "src": "2745:63:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44356,
+                  "id": 44659,
                   "nodeType": "ExpressionStatement",
-                  "src": "2745:63:73"
+                  "src": "2745:63:74"
                 },
                 {
                   "assignments": [
-                    44359
+                    44662
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 44359,
+                      "id": 44662,
                       "mutability": "mutable",
                       "name": "_mintingCalculator",
-                      "nameLocation": "2885:18:73",
+                      "nameLocation": "2885:18:74",
                       "nodeType": "VariableDeclaration",
-                      "scope": 44388,
-                      "src": "2861:42:73",
+                      "scope": 44691,
+                      "src": "2861:42:74",
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
@@ -2789,17 +2789,17 @@
                         "typeString": "contract DollarMintingCalculator"
                       },
                       "typeName": {
-                        "id": 44358,
+                        "id": 44661,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44357,
+                          "id": 44660,
                           "name": "DollarMintingCalculator",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 31611,
-                          "src": "2861:23:73"
+                          "src": "2861:23:74"
                         },
                         "referencedDeclaration": 31611,
-                        "src": "2861:23:73",
+                        "src": "2861:23:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_DollarMintingCalculator_$31611",
                           "typeString": "contract DollarMintingCalculator"
@@ -2808,18 +2808,18 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 44368,
+                  "id": 44671,
                   "initialValue": {
                     "arguments": [
                       {
                         "arguments": [
                           {
-                            "id": 44365,
+                            "id": 44668,
                             "name": "_manager",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44200,
-                            "src": "2942:8:73",
+                            "referencedDeclaration": 44503,
+                            "src": "2942:8:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                               "typeString": "contract UbiquityAlgorithmicDollarManager"
@@ -2833,26 +2833,26 @@
                               "typeString": "contract UbiquityAlgorithmicDollarManager"
                             }
                           ],
-                          "id": 44364,
+                          "id": 44667,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "2934:7:73",
+                          "src": "2934:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44363,
+                            "id": 44666,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "2934:7:73",
+                            "src": "2934:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44366,
+                        "id": 44669,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2860,7 +2860,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "2934:17:73",
+                        "src": "2934:17:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2875,36 +2875,36 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 44362,
+                      "id": 44665,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "nodeType": "NewExpression",
-                      "src": "2906:27:73",
+                      "src": "2906:27:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_creation_nonpayable$_t_address_$returns$_t_contract$_DollarMintingCalculator_$31611_$",
                         "typeString": "function (address) returns (contract DollarMintingCalculator)"
                       },
                       "typeName": {
-                        "id": 44361,
+                        "id": 44664,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 44360,
+                          "id": 44663,
                           "name": "DollarMintingCalculator",
                           "nodeType": "IdentifierPath",
                           "referencedDeclaration": 31611,
-                          "src": "2910:23:73"
+                          "src": "2910:23:74"
                         },
                         "referencedDeclaration": 31611,
-                        "src": "2910:23:73",
+                        "src": "2910:23:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_DollarMintingCalculator_$31611",
                           "typeString": "contract DollarMintingCalculator"
                         }
                       }
                     },
-                    "id": 44367,
+                    "id": 44670,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2912,7 +2912,7 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2906:46:73",
+                    "src": "2906:46:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_contract$_DollarMintingCalculator_$31611",
@@ -2920,7 +2920,7 @@
                     }
                   },
                   "nodeType": "VariableDeclarationStatement",
-                  "src": "2861:91:73"
+                  "src": "2861:91:74"
                 },
                 {
                   "expression": {
@@ -2928,12 +2928,12 @@
                       {
                         "arguments": [
                           {
-                            "id": 44374,
+                            "id": 44677,
                             "name": "_mintingCalculator",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 44359,
-                            "src": "3013:18:73",
+                            "referencedDeclaration": 44662,
+                            "src": "3013:18:74",
                             "typeDescriptions": {
                               "typeIdentifier": "t_contract$_DollarMintingCalculator_$31611",
                               "typeString": "contract DollarMintingCalculator"
@@ -2947,26 +2947,26 @@
                               "typeString": "contract DollarMintingCalculator"
                             }
                           ],
-                          "id": 44373,
+                          "id": 44676,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "nodeType": "ElementaryTypeNameExpression",
-                          "src": "3005:7:73",
+                          "src": "3005:7:74",
                           "typeDescriptions": {
                             "typeIdentifier": "t_type$_t_address_$",
                             "typeString": "type(address)"
                           },
                           "typeName": {
-                            "id": 44372,
+                            "id": 44675,
                             "name": "address",
                             "nodeType": "ElementaryTypeName",
-                            "src": "3005:7:73",
+                            "src": "3005:7:74",
                             "typeDescriptions": {}
                           }
                         },
-                        "id": 44375,
+                        "id": 44678,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2974,7 +2974,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "3005:27:73",
+                        "src": "3005:27:74",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2990,18 +2990,18 @@
                         }
                       ],
                       "expression": {
-                        "id": 44369,
+                        "id": 44672,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "2962:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "2962:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       },
-                      "id": 44371,
+                      "id": 44674,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3009,13 +3009,13 @@
                       "memberName": "setDollarMintingCalculatorAddress",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 33831,
-                      "src": "2962:42:73",
+                      "src": "2962:42:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 44376,
+                    "id": 44679,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3023,16 +3023,16 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "2962:71:73",
+                    "src": "2962:71:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44377,
+                  "id": 44680,
                   "nodeType": "ExpressionStatement",
-                  "src": "2962:71:73"
+                  "src": "2962:71:74"
                 },
                 {
                   "expression": {
@@ -3040,18 +3040,18 @@
                     "expression": {
                       "argumentTypes": [],
                       "expression": {
-                        "id": 44378,
+                        "id": 44681,
                         "name": "vm",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 2518,
-                        "src": "3044:2:73",
+                        "src": "3044:2:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_Vm_$7731",
                           "typeString": "contract Vm"
                         }
                       },
-                      "id": 44380,
+                      "id": 44683,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3059,13 +3059,13 @@
                       "memberName": "stopPrank",
                       "nodeType": "MemberAccess",
                       "referencedDeclaration": 7266,
-                      "src": "3044:12:73",
+                      "src": "3044:12:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$__$returns$__$",
                         "typeString": "function () external"
                       }
                     },
-                    "id": 44381,
+                    "id": 44684,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3073,27 +3073,27 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "3044:14:73",
+                    "src": "3044:14:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 44382,
+                  "id": 44685,
                   "nodeType": "ExpressionStatement",
-                  "src": "3044:14:73"
+                  "src": "3044:14:74"
                 },
                 {
                   "expression": {
                     "arguments": [
                       {
-                        "id": 44385,
+                        "id": 44688,
                         "name": "_manager",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 44200,
-                        "src": "3084:8:73",
+                        "referencedDeclaration": 44503,
+                        "src": "3084:8:74",
                         "typeDescriptions": {
                           "typeIdentifier": "t_contract$_UbiquityAlgorithmicDollarManager_$34094",
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
@@ -3107,26 +3107,26 @@
                           "typeString": "contract UbiquityAlgorithmicDollarManager"
                         }
                       ],
-                      "id": 44384,
+                      "id": 44687,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "lValueRequested": false,
                       "nodeType": "ElementaryTypeNameExpression",
-                      "src": "3076:7:73",
+                      "src": "3076:7:74",
                       "typeDescriptions": {
                         "typeIdentifier": "t_type$_t_address_$",
                         "typeString": "type(address)"
                       },
                       "typeName": {
-                        "id": 44383,
+                        "id": 44686,
                         "name": "address",
                         "nodeType": "ElementaryTypeName",
-                        "src": "3076:7:73",
+                        "src": "3076:7:74",
                         "typeDescriptions": {}
                       }
                     },
-                    "id": 44386,
+                    "id": 44689,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3134,17 +3134,17 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "3076:17:73",
+                    "src": "3076:17:74",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 44197,
-                  "id": 44387,
+                  "functionReturnParameters": 44500,
+                  "id": 44690,
                   "nodeType": "Return",
-                  "src": "3069:24:73"
+                  "src": "3069:24:74"
                 }
               ]
             },
@@ -3153,26 +3153,26 @@
             "kind": "function",
             "modifiers": [],
             "name": "helpers_deployUbiquityAlgorithmicDollarManager",
-            "nameLocation": "1294:46:73",
+            "nameLocation": "1294:46:74",
             "parameters": {
-              "id": 44194,
+              "id": 44497,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1340:2:73"
+              "src": "1340:2:74"
             },
             "returnParameters": {
-              "id": 44197,
+              "id": 44500,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44196,
+                  "id": 44499,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44389,
-                  "src": "1359:7:73",
+                  "scope": 44692,
+                  "src": "1359:7:74",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -3180,10 +3180,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44195,
+                    "id": 44498,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1359:7:73",
+                    "src": "1359:7:74",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -3193,9 +3193,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1358:9:73"
+              "src": "1358:9:74"
             },
-            "scope": 44390,
+            "scope": 44693,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
@@ -3205,15 +3205,15 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 44180,
+              "id": 44483,
               "name": "Test",
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 5680,
-              "src": "1171:4:73"
+              "src": "1171:4:74"
             },
-            "id": 44181,
+            "id": 44484,
             "nodeType": "InheritanceSpecifier",
-            "src": "1171:4:73"
+            "src": "1171:4:74"
           }
         ],
         "canonicalName": "TestHelper",
@@ -3226,23 +3226,23 @@
           41029,
           41116,
           41177,
-          44179
+          44482
         ],
         "contractKind": "contract",
         "fullyImplemented": true,
         "linearizedBaseContracts": [
-          44390,
+          44693,
           5680,
           2750,
           2487
         ],
         "name": "TestHelper",
-        "nameLocation": "1157:10:73",
-        "scope": 44391,
+        "nameLocation": "1157:10:74",
+        "scope": 44694,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 73
+  "id": 74
 }

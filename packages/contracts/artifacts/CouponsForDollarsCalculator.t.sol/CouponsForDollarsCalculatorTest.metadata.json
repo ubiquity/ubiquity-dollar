@@ -802,11 +802,11 @@
       ]
     },
     "src/dollar/DollarMintingCalculator.sol": {
-      "keccak256": "0xb2982fd922b25332aca16b75ce38400a7ef667e89fcb7fd439564420783641e7",
+      "keccak256": "0x2b3ff219359e85bf28ed3bc19964392fb68435646a69358c4edac763a8d85c44",
       "license": "MIT",
       "urls": [
-        "bzz-raw://5345dd56cf1a787cb2ccdc3a7fbdae644098bc3ec3acdbc5b7feadf68fa76a36",
-        "dweb:/ipfs/QmVQ2yCZXkecZ5gMDCXevJBZGukWZPNkKzHVuXnmZezaJp"
+        "bzz-raw://1bbb8caaa03dd8ff2927f50aef288f92a7ed746552623aa4df5fdb90c53d1025",
+        "dweb:/ipfs/QmW1LXQzNq1iR3f2mhQdmUyWDPrTApN6rghhSM4zNt6RYk"
       ]
     },
     "src/dollar/ERC1155Ubiquity.sol": {

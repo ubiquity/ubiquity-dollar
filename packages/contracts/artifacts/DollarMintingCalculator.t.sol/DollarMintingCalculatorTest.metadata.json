@@ -448,6 +448,19 @@
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_twapPrice",
+            "type": "uint256"
+          }
+        ],
+        "name": "mockTwapFuncs",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "setUp",
         "outputs": [],
@@ -456,131 +469,14 @@
       },
       {
         "inputs": [],
-        "name": "test_correctedAmountToWithdraw_calcSharedAmount",
+        "name": "test_getDollarsToMintRevertsIfPriceLowerThan1USD",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
       {
         "inputs": [],
-        "name": "test_correctedAmountToWithdraw_returnAmount",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_lpRewardsAddLiquidityNormalization",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              {
-                "internalType": "address",
-                "name": "minter",
-                "type": "address"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpFirstDeposited",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "creationBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpRewardDebt",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "endBlock",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
-                "name": "lpAmount",
-                "type": "uint256"
-              }
-            ],
-            "internalType": "struct BondingShareV2.Bond",
-            "name": "_bond",
-            "type": "tuple"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "_shareInfo",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "test_lpRewardsRemoveLiquidityNormalization",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "test_sharesForLP",
+        "name": "test_getDollarsToMintWorks",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -612,7 +508,7 @@
   },
   "settings": {
     "compilationTarget": {
-      "test/dollar/BondingFormulas.t.sol": "BondingFormulaTest"
+      "test/dollar/DollarMintingCalculator.t.sol": "DollarMintingCalculatorTest"
     },
     "evmVersion": "london",
     "libraries": {},
@@ -902,22 +798,6 @@
         "dweb:/ipfs/QmURvGZPyLNiP6WQDXZeowxSaGbaPW1F3Eov5EdvAtcvcV"
       ]
     },
-    "src/dollar/BondingFormulas.sol": {
-      "keccak256": "0x708f7b74680a30f8841b1e21b85bbaa305e3ec25c89b19805e79dfb1db06a08c",
-      "license": "MIT",
-      "urls": [
-        "bzz-raw://ddf35cd2b8d6c84bbf0c41887af80f215d2af14806513be31e8a2c4c544f3626",
-        "dweb:/ipfs/QmUGvqrSx7n7Wzd8SLGPVzBxsA8BZEPfZPQJWBPYXhXRB9"
-      ]
-    },
-    "src/dollar/BondingShareV2.sol": {
-      "keccak256": "0xe60f6f1ac3feed25526506267f0c17ac65872092b777cf6f423b69dcbb9ab52c",
-      "license": "MIT",
-      "urls": [
-        "bzz-raw://2fd4560ace2ac941f554f1cd8664754a0d5282b242395937437288ed46d9fe32",
-        "dweb:/ipfs/QmcPwmsy4K1LK3day2bhiYxKtByESqVvw8dRV4iW4ycF52"
-      ]
-    },
     "src/dollar/CouponsForDollarsCalculator.sol": {
       "keccak256": "0x5ffe57a9a46a07a1a03733974e31023f57966f152e293fd3f9e1b1aaaccf5d75",
       "license": "MIT",
@@ -1118,12 +998,12 @@
         "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
       ]
     },
-    "test/dollar/BondingFormulas.t.sol": {
-      "keccak256": "0x2ed2a6fc31168017545f313060974b477fc9f131c1545571fbfaee7e20ba245b",
+    "test/dollar/DollarMintingCalculator.t.sol": {
+      "keccak256": "0xa11cc230f84de12ecd6725921cfce6c4c3f614fa71a17b5b78bb7360bd1d6d4b",
       "license": "MIT",
       "urls": [
-        "bzz-raw://fec7af328ac8ff1f01d6667145164a1de261a86eca11c13351744c8f9aeffc98",
-        "dweb:/ipfs/QmNyDWn1iwBadYDz6D1yA9vv5A1ZMuXsmFK9jorhCGeQUJ"
+        "bzz-raw://93632c85c7525798e1879d2894b0d9276e2c141267547a47d3661593b0c472f7",
+        "dweb:/ipfs/QmRrrKtNhcoeSDmgm4Lq9YkvhdGos91j8hYbLy6D6gwRkU"
       ]
     },
     "test/helpers/TestHelper.sol": {
