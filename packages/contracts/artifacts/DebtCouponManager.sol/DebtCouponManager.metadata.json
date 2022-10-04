@@ -746,11 +746,11 @@
       ]
     },
     "src/dollar/DebtCouponManager.sol": {
-      "keccak256": "0x419faacc2bfe0facafa62257a76c2eb402b1da5b1010b9d4234d595761ab1573",
+      "keccak256": "0xa155960232edb724b13d8ed27fb6a5c2129efb5e8ad06eaea86cc3de85535696",
       "license": "MIT",
       "urls": [
-        "bzz-raw://d84f0d25de47c1185325a5d582156451521d003a3220edb599ebc3ddc5f64ad5",
-        "dweb:/ipfs/QmRha8CKV5N3ASt7wwEAqRssRqD9hiDVBgmHonm46vNuZt"
+        "bzz-raw://c32c59851dabc3805620f660031f17d1a0c1bb5ba7a3416d87a6cd0db01d9c5f",
+        "dweb:/ipfs/QmSdz71LCQenVL3YQbhGkLS7nyqvJWoScZuwkR8VtkozKc"
       ]
     },
     "src/dollar/ERC1155Ubiquity.sol": {

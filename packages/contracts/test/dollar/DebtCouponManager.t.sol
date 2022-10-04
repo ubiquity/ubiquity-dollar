@@ -4,11 +4,15 @@ pragma solidity ^0.8.3;
 import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {DebtCouponManager} from "../../src/dollar/DebtCouponManager.sol";
 import {UARForDollarsCalculator} from "../../src/dollar/UARForDollarsCalculator.sol";
+import {DollarMintingCalculator} from "../../src/dollar/DollarMintingCalculator.sol";
 import {UbiquityAutoRedeem} from "../../src/dollar/UbiquityAutoRedeem.sol";
-import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
-import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
+
+import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
+import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
 import "../helpers/TestHelper.sol";
 
@@ -22,6 +26,7 @@ contract DebtCouponManagerTest is TestHelper {
     address debtCouponAddress;
     address uGovAddress;
     address autoRedeemTokenAddress;
+    address dollarMintingCalculatorAddress;
 
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
@@ -33,6 +38,7 @@ contract DebtCouponManagerTest is TestHelper {
         debtCouponAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).debtCouponAddress();
         uGovAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).governanceTokenAddress();
         autoRedeemTokenAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).autoRedeemTokenAddress();
+        dollarMintingCalculatorAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarMintingCalculatorAddress();
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {
@@ -42,6 +48,15 @@ contract DebtCouponManagerTest is TestHelper {
 
     function mockUARCalculatorFuncs(uint256 _uarAmount) public {
         vm.mockCall(uARDollarCalculatorAddress, abi.encodeWithSelector(UARForDollarsCalculator.getUARAmount.selector), abi.encode(_uarAmount));
+    }
+
+    function mockDollarMintingCalcFuncs(uint256 _dollarsToMint) public {
+        vm.mockCall(dollarMintingCalculatorAddress, abi.encodeWithSelector(DollarMintingCalculator.getDollarsToMint.selector), abi.encode(_dollarsToMint));
+    }
+
+    function helperDeployExcessDollarCalculator(address _excessDollarsDistributor) public {
+        vm.prank(admin);
+        UbiquityAlgorithmicDollarManager(uADManagerAddress).setExcessDollarsDistributor(debtCouponManagerAddress, _excessDollarsDistributor);
     }
 
     function test_setExpiredCouponConvertionRate() public {
@@ -162,21 +177,115 @@ contract DebtCouponManagerTest is TestHelper {
         assertEq(redeemBalance, 1e18);        
     }
 
-    function test_burnAutoRedeemTokensForDollarsRevertsIfPriceLowerThan1Ether() public {}
+    function test_burnAutoRedeemTokensForDollarsRevertsIfPriceLowerThan1Ether() public {
+        mockTwapFuncs(5e17);
+        vm.expectRevert("Price must be above 1 to auto redeem");
+        DebtCouponManager(debtCouponManagerAddress).burnAutoRedeemTokensForDollars(100);
+    }
 
-    function test_burnAutoRedeemTokensForDollarsIfNotEnoughBalance() public {}
+    function test_burnAutoRedeemTokensForDollarsIfNotEnoughBalance() public {
+        mockTwapFuncs(2e18);
+        vm.expectRevert("User doesn't have enough auto redeem pool tokens.");
+        DebtCouponManager(debtCouponManagerAddress).burnAutoRedeemTokensForDollars(100);        
+    }
 
-    function test_burnAutoRedeemTokensForDollarsWorks() public {}
+    function test_burnAutoRedeemTokensForDollarsWorks() public {
+        mockTwapFuncs(2e18);
+        mockDollarMintingCalcFuncs(1e18);
+        address account1 = address(0x123);
+        MockAutoRedeem(autoRedeemTokenAddress).mint(account1, 100e18);
+        vm.prank(account1);
+        uint256 unredeemed = DebtCouponManager(debtCouponManagerAddress).burnAutoRedeemTokensForDollars(10e18);
+        assertEq(unredeemed, 10e18 - 1e18);
 
-    function test_redeemCouponsRevertsIfPriceLowerThan1Ether() public {}
+    }
 
-    function test_redeemCouponsRevertsIfCouponExpired() public {}
+    function test_redeemCouponsRevertsIfPriceLowerThan1Ether() public {
+        mockTwapFuncs(5e17);        
+        vm.expectRevert("Price must be above 1 to redeem coupons");
+        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(123123123, 100);
+    }
 
-    function test_redeemCouponsRevertsIfNotEnoughBalance() public {}
+    function test_redeemCouponsRevertsIfCouponExpired() public {
+        mockTwapFuncs(2e18);
+        vm.roll(10000);
+        vm.expectRevert("Coupon has expired");
+        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(5555, 100); 
+    }
 
-    function test_redeemCouponsRevertsIfNotEnoughUAD() public {}
+    function test_redeemCouponsRevertsIfNotEnoughBalance() public {
+        mockTwapFuncs(2e18);
+        address account1 = address(0x123);
+        uint256 expiryBlockNumber = 123123;
+        MockDebtCoupon(debtCouponAddress).mintCoupons(account1, 100, expiryBlockNumber);
+        vm.expectRevert("User not enough coupons");
+        vm.prank(account1);
+        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(expiryBlockNumber, 200);
+    }
 
-    function test_redeemCouponsRevertsIfZeroAmountOfUAD() public {}
+    function test_redeemCouponsRevertsIfNotEnoughUAD() public {
+        mockTwapFuncs(2e18);
+        address account1 = address(0x123);
+        uint256 expiryBlockNumber = 123123;
+        MockDebtCoupon(debtCouponAddress).mintCoupons(account1, 100, expiryBlockNumber);
+        MockAutoRedeem(autoRedeemTokenAddress).mint(debtCouponManagerAddress, 20000e18);
 
-    function test_mintClaimableDollars() public {}
+        // set excess dollar distributor for debtCouponAddress
+        ExcessDollarsDistributor _excessDollarsDistributor = new ExcessDollarsDistributor(uADManagerAddress);
+        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
+        vm.mockCall(address(_excessDollarsDistributor), abi.encodeWithSelector(ExcessDollarsDistributor.distributeDollars.selector), abi.encode());
+        
+        vm.prank(account1);
+        vm.expectRevert("There aren't enough uAD to redeem currently");
+        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(expiryBlockNumber, 99);
+    }
+
+    function test_redeemCouponsRevertsIfZeroAmountOfUAD() public {
+        mockTwapFuncs(2e18);
+        mockDollarMintingCalcFuncs(0);
+        address account1 = address(0x123);
+        uint256 expiryBlockNumber = 123123;
+        MockDebtCoupon(debtCouponAddress).mintCoupons(account1, 100, expiryBlockNumber);
+        // MockAutoRedeem(autoRedeemTokenAddress).mint(debtCouponManagerAddress, 20000e18);
+
+        // set excess dollar distributor for debtCouponAddress
+        ExcessDollarsDistributor _excessDollarsDistributor = new ExcessDollarsDistributor(uADManagerAddress);
+        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
+        vm.mockCall(address(_excessDollarsDistributor), abi.encodeWithSelector(ExcessDollarsDistributor.distributeDollars.selector), abi.encode());
+        
+        vm.prank(account1);
+        vm.expectRevert("There aren't any uAD to redeem currently");
+        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(expiryBlockNumber, 99);
+    }
+
+    function test_redeemCouponsWorks() public {
+        mockTwapFuncs(2e18);
+        mockDollarMintingCalcFuncs(20000e18);
+        address account1 = address(0x123);
+        uint256 expiryBlockNumber = 123123;
+        MockDebtCoupon(debtCouponAddress).mintCoupons(account1, 100, expiryBlockNumber);
+        MockAutoRedeem(autoRedeemTokenAddress).mint(debtCouponManagerAddress, 10000e18);
+
+        // set excess dollar distributor for debtCouponAddress
+        ExcessDollarsDistributor _excessDollarsDistributor = new ExcessDollarsDistributor(uADManagerAddress);
+        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
+        vm.mockCall(address(_excessDollarsDistributor), abi.encodeWithSelector(ExcessDollarsDistributor.distributeDollars.selector), abi.encode());
+        vm.prank(account1);
+        uint256 unredeemedCoupons = DebtCouponManager(debtCouponManagerAddress).redeemCoupons(expiryBlockNumber, 99);
+        assertEq(unredeemedCoupons, 0);
+    }
+
+    function test_mintClaimableDollars() public {
+        mockDollarMintingCalcFuncs(50);
+        // set excess dollar distributor for debtCouponAddress
+        ExcessDollarsDistributor _excessDollarsDistributor = new ExcessDollarsDistributor(uADManagerAddress);
+        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
+        vm.mockCall(address(_excessDollarsDistributor), abi.encodeWithSelector(ExcessDollarsDistributor.distributeDollars.selector), abi.encode());
+
+        uint256 beforeBalance = MockuADToken(uADAddress).balanceOf(debtCouponManagerAddress);
+        DebtCouponManager(debtCouponManagerAddress).mintClaimableDollars();
+        uint256 afterBalance = MockuADToken(uADAddress).balanceOf(debtCouponManagerAddress);
+        assertEq(afterBalance - beforeBalance, 50);
+
+    }
 }

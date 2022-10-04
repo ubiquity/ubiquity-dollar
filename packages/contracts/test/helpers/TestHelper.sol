@@ -5,6 +5,8 @@ import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorit
 import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
 import {UARForDollarsCalculator} from "../../src/dollar/UARForDollarsCalculator.sol";
 import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCalculator.sol";
+import { DollarMintingCalculator} from "../../src/dollar/DollarMintingCalculator.sol";
+import { ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
 import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
@@ -52,13 +54,17 @@ abstract contract TestHelper is Test {
         
 
         // deploy ubiquityAutoRedeem
-        MockAutoRedeem autoRedeem = new MockAutoRedeem(100e18);
+        MockAutoRedeem autoRedeem = new MockAutoRedeem(0);
         _manager.setuARTokenAddress(address(autoRedeem));
         
 
         // deploy UARDollarCalculator
         UARForDollarsCalculator  _uarDollarCalculator = new UARForDollarsCalculator(address(_manager));
         _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
+
+        // deploy dollarMintingCalculator
+        DollarMintingCalculator _mintingCalculator = new DollarMintingCalculator(address(_manager));
+        _manager.setDollarMintingCalculatorAddress(address(_mintingCalculator));
 
         vm.stopPrank();
 

@@ -435,6 +435,19 @@
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_excessDollarsDistributor",
+            "type": "address"
+          }
+        ],
+        "name": "helperDeployExcessDollarCalculator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "helpers_deployUbiquityAlgorithmicDollarManager",
         "outputs": [
@@ -444,6 +457,19 @@
             "type": "address"
           }
         ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_dollarsToMint",
+            "type": "uint256"
+          }
+        ],
+        "name": "mockDollarMintingCalcFuncs",
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
       },
@@ -608,6 +634,13 @@
       },
       {
         "inputs": [],
+        "name": "test_redeemCouponsWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
         "name": "test_setCouponLength",
         "outputs": [],
         "stateMutability": "nonpayable",
@@ -669,6 +702,34 @@
     ]
   },
   "sources": {
+    "lib/Uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol": {
+      "keccak256": "0xe5905c0989cf5a865ed9bb7b9252536ca011c5b744017a82a7d4443b9c00a891",
+      "urls": [
+        "bzz-raw://5d2a90a0a796491507462a3da18c3f8819721d571572d765a2207c35bf0a0389",
+        "dweb:/ipfs/Qmf9ACYiT3qzjgsYuhm866FBdiBpRMXAPpQhSFbgqcyhHt"
+      ]
+    },
+    "lib/Uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol": {
+      "keccak256": "0x7c9bc70e5996c763e02ff38905282bc24fb242b0ef2519a003b36824fc524a4b",
+      "urls": [
+        "bzz-raw://85d5ad2dd23ee127f40907a12865a1e8cb5828814f6f2480285e1827dd72dedf",
+        "dweb:/ipfs/QmayKQWJgWmr46DqWseADyUanmqxh662hPNdAkdHRjiQQH"
+      ]
+    },
+    "lib/Uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol": {
+      "keccak256": "0x8a3c5c449d4b7cd76513ed6995f4b86e4a86f222c770f8442f5fc128ce29b4d2",
+      "urls": [
+        "bzz-raw://1df63ca373dafae3bd0ee7fe70f890a1dc7c45ed869c01de68413e0e97ff9deb",
+        "dweb:/ipfs/QmefJgEYGUL8KX7kQKYTrDweF8GB7yjy3nw5Bmqzryg7PG"
+      ]
+    },
+    "lib/Uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol": {
+      "keccak256": "0x744e30c133bd0f7ca9e7163433cf6d72f45c6bb1508c2c9c02f1a6db796ae59d",
+      "urls": [
+        "bzz-raw://9bf2f4454ad63d4cff03a0630e787d9e8a9deed80aec89682cd8ad6379d9ef8c",
+        "dweb:/ipfs/Qme51hQNR2wpax7ooUadhtqLtXm8ffeVVYyubLkTT4wMCG"
+      ]
+    },
     "lib/forge-std/lib/ds-test/src/test.sol": {
       "keccak256": "0xb39cd1d5220cb474947b131e15a4538334b7e886af244b440ae5c9c6bba96a54",
       "license": "GPL-3.0-or-later",
@@ -926,11 +987,19 @@
       ]
     },
     "src/dollar/DebtCouponManager.sol": {
-      "keccak256": "0x419faacc2bfe0facafa62257a76c2eb402b1da5b1010b9d4234d595761ab1573",
+      "keccak256": "0xa155960232edb724b13d8ed27fb6a5c2129efb5e8ad06eaea86cc3de85535696",
       "license": "MIT",
       "urls": [
-        "bzz-raw://d84f0d25de47c1185325a5d582156451521d003a3220edb599ebc3ddc5f64ad5",
-        "dweb:/ipfs/QmRha8CKV5N3ASt7wwEAqRssRqD9hiDVBgmHonm46vNuZt"
+        "bzz-raw://c32c59851dabc3805620f660031f17d1a0c1bb5ba7a3416d87a6cd0db01d9c5f",
+        "dweb:/ipfs/QmSdz71LCQenVL3YQbhGkLS7nyqvJWoScZuwkR8VtkozKc"
+      ]
+    },
+    "src/dollar/DollarMintingCalculator.sol": {
+      "keccak256": "0xb2982fd922b25332aca16b75ce38400a7ef667e89fcb7fd439564420783641e7",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://5345dd56cf1a787cb2ccdc3a7fbdae644098bc3ec3acdbc5b7feadf68fa76a36",
+        "dweb:/ipfs/QmVQ2yCZXkecZ5gMDCXevJBZGukWZPNkKzHVuXnmZezaJp"
       ]
     },
     "src/dollar/ERC1155Ubiquity.sol": {
@@ -947,6 +1016,22 @@
       "urls": [
         "bzz-raw://76aae2f45831234eb23e96ccef95b1ad60d86f28987f33aba53fe0545a42d32d",
         "dweb:/ipfs/QmS9G3ccCbB9tWRxjemtMSAGnuddpibY5jrDy1f6ktBmpd"
+      ]
+    },
+    "src/dollar/ExcessDollarsDistributor.sol": {
+      "keccak256": "0xdeef29c0b7731f1402449d8b75f6a623c55a1bc8b944f91e42655c1051e38ee8",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://d963a6f6be0e0a999dfc4961b58c42018a5358f132ad8d54912e58f4c063230e",
+        "dweb:/ipfs/QmTHcC4YD2FPVRKdGqYLKB9rzGxb6ngXXp2p7r3mY9ioRQ"
+      ]
+    },
+    "src/dollar/SushiSwapPool.sol": {
+      "keccak256": "0x0b13b96d902d9401c13ca5f7b5d7e6f65138d3be76f6f7e850ee198c508d17bb",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://8a76d45897fc083e939e2bf753955ba2c4e16112e94303726f025a16d3cc47c8",
+        "dweb:/ipfs/QmZFtcot5NUsWRh7ZmDrGEwdKHWoPQcVCinfnshrVnovHH"
       ]
     },
     "src/dollar/TWAPOracle.sol": {
@@ -1126,19 +1211,19 @@
       ]
     },
     "test/dollar/DebtCouponManager.t.sol": {
-      "keccak256": "0x8ddaf823bd46c8b3923b5a2bc6db8c82a2d7eee810637d6a84f3dd4d54344f15",
+      "keccak256": "0x818777dd3e302b479b1170b975892d7caf320d9a8bd6adead07bc911e5b64e6f",
       "license": "MIT",
       "urls": [
-        "bzz-raw://443dce738aa930046f54888fe3311a7be6a3f3b2e04aac1dd29326b8976fed5b",
-        "dweb:/ipfs/QmZx5wEhfBc3BPAQhyNvdCtEh7y2j5eadCaZphMFqHEpZN"
+        "bzz-raw://9c788ece6ce8aadf6cdf6f60a46c020b400a0f860801e61fa91387115b047c7f",
+        "dweb:/ipfs/QmcP7Cnbcw4EYUR4BzxfGY7XTS4UHjv2WHDsNSKezu1SH9"
       ]
     },
     "test/helpers/TestHelper.sol": {
-      "keccak256": "0x2a9370ae2cd882a6f27ea5f8e9485d6a34c4ba65a315a9ffc6f0dec566f59385",
+      "keccak256": "0xe1da570ad3d3bc90f5103ca0374a1aac44d86fcab819252d2875ee44645eea7a",
       "license": "MIT",
       "urls": [
-        "bzz-raw://89df8fbc299643e9a1055fbabf43e02e548ced1f776f0eedf7a29e468bdaf233",
-        "dweb:/ipfs/QmRVEyjh4W6ucfSRTYqmbMJEVqNU6HLTzCU7k9NPHohL2K"
+        "bzz-raw://7364ee5f26d6ac3f8bb89ad8697f323c27aaa8959cb15a940e721ef1eb21bb73",
+        "dweb:/ipfs/QmQnY9b42cyddyKXvsNuZzGjH417sBnE4GCuwxUbkbMTeS"
       ]
     }
   },

@@ -298,7 +298,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
 
             IExcessDollarsDistributor dollarsDistributor =
                 IExcessDollarsDistributor(manager.getExcessDollarsDistributor(address(this)));
-            //transfer excess dollars to the distributor and tell it to distribute
+            // transfer excess dollars to the distributor and tell it to distribute
             uAD.transfer(manager.getExcessDollarsDistributor(address(this)), excessDollars);
             dollarsDistributor.distributeDollars();
         }
