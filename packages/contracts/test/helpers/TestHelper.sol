@@ -3,6 +3,7 @@ pragma solidity ^0.8.3;
 
 import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
+import {UARForDollarsCalculator} from "../../src/dollar/UARForDollarsCalculator.sol";
 import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCalculator.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
@@ -51,8 +52,14 @@ abstract contract TestHelper is Test {
         
 
         // deploy ubiquityAutoRedeem
-        MockAutoRedeem autoRedeem = new MockAutoRedeem();
+        MockAutoRedeem autoRedeem = new MockAutoRedeem(100e18);
         _manager.setuARTokenAddress(address(autoRedeem));
+        
+
+        // deploy UARDollarCalculator
+        UARForDollarsCalculator  _uarDollarCalculator = new UARForDollarsCalculator(address(_manager));
+        _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
+
         vm.stopPrank();
 
         return address(_manager);
