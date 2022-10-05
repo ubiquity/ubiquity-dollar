@@ -149,16 +149,5 @@ contract DepositStateTest is DepositState {
         assertEq(info1[1], info2[1]);
     }
 
-    function testSlippage() public {
-        (uint256 lastRewardBlock, ) = chefV2.pool();
-        uint256 currentBlock = block.number;
-        vm.roll(currentBlock + 1000);
-        ///uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        ///uint256 reward = (multiplier * 10e18 / 1e18);
-        
-        uint256 userReward = 1000*chefV2.uGOVPerBlock();
-        vm.prank(fourthAccount);
-        uint256 rewardSent = chefV2.getRewards(1);
-        assertEq(userReward, rewardSent);
-    }
+    
 }

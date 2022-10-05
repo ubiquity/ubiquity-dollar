@@ -191,6 +191,7 @@ contract BondedStateTest is BondedState {
 
     function testRewardsOf(uint256 blocks) public {
         blocks = bound(blocks, 0, 2**128-1);
+        
         vm.warp(block.number + blocks);
         
         for(uint i; i < amounts.length; ++i) {
@@ -218,5 +219,29 @@ contract BondedStateTest is BondedState {
         assertEq(rewardsExpected, rewards_);
         assertEq(0, rewardsClaimed);
         assertEq(claimableExpected, rewardsClaimable);
+    }
+
+    function testRewardsBondOf(uint256 blocks, uint256 i) public  {
+        blocks = bound(blocks, 0, 2**128-1);
+        i = bound(i, 0, 4);
+        vm.warp(block.number + blocks);
+
+        ( , uint256 amount, uint256 rewardExpected, , uint256 block_) =bond.bonds(secondAccount, i);
+
+        uint256 claimableExpected = amount * 50 / 1e9 * (block.number - block_) / 100;
+        (uint256 reward, uint256 rewardClaimed, uint256 rewardClaimable) = bond.rewardsBondOf(secondAccount, i);
+        assertEq(rewardExpected, reward);
+        assertEq(rewardClaimed, 0);
+        assertEq(rewardClaimable, claimableExpected);
+
+    }
+
+    function testBondsCount() public {
+        uint256 firstCount = bond.bondsCount(firstAccount);
+        uint256 secondCount = bond.bondsCount(secondAccount);
+
+        assertEq(firstCount, firstIDs.length);
+        assertEq(secondCount, secondIDs.length);
+
     }
 }
