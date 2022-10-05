@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
-import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import "./interfaces/IExcessDollarsDistributor.sol";
 import "./interfaces/IMetaPool.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
@@ -22,7 +22,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
 
     UbiquityAlgorithmicDollarManager public manager;
     uint256 private immutable _minAmountToDistribute = 100 ether;
-    IUniswapV2Router02 private immutable _router = IUniswapV2Router02(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F); // SushiV2Router02
+    IUniswapV2Router01 private immutable _router = IUniswapV2Router01(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F); // SushiV2Router02
 
     /// @param _manager the address of the manager contract so we can fetch variables
     constructor(address _manager) {
@@ -89,15 +89,15 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
     //        the LP token are sent to the bonding contract
     function _convertToCurveLPAndTransfer(uint256 amount) internal returns (uint256) {
         // we need to approve  metaPool
-        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(manager.stableSwapMetaPoolAddress(), 0);
-        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(manager.stableSwapMetaPoolAddress(), amount);
+        IERC20Ubiquity(manager.dollarTokenAddress()).approve(manager.stableSwapMetaPoolAddress(), 0);
+        IERC20Ubiquity(manager.dollarTokenAddress()).approve(manager.stableSwapMetaPoolAddress(), amount);
 
         // swap  amount of uAD => 3CRV
         uint256 amount3CRVReceived = IMetaPool(manager.stableSwapMetaPoolAddress()).exchange(0, 1, amount, 0);
 
         // approve metapool to transfer our 3CRV
-        IERC20(manager.curve3PoolTokenAddress()).safeApprove(manager.stableSwapMetaPoolAddress(), 0);
-        IERC20(manager.curve3PoolTokenAddress()).safeApprove(manager.stableSwapMetaPoolAddress(), amount3CRVReceived);
+        IERC20(manager.curve3PoolTokenAddress()).approve(manager.stableSwapMetaPoolAddress(), 0);
+        IERC20(manager.curve3PoolTokenAddress()).approve(manager.stableSwapMetaPoolAddress(), amount3CRVReceived);
 
         // deposit liquidity
         uint256 res = IMetaPool(manager.stableSwapMetaPoolAddress()).add_liquidity(

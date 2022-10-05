@@ -587,6 +587,19 @@
       },
       {
         "inputs": [],
+        "name": "treasuryAddress",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
         "name": "vm",
         "outputs": [
           {
@@ -653,13 +666,6 @@
       "urls": [
         "bzz-raw://1df63ca373dafae3bd0ee7fe70f890a1dc7c45ed869c01de68413e0e97ff9deb",
         "dweb:/ipfs/QmefJgEYGUL8KX7kQKYTrDweF8GB7yjy3nw5Bmqzryg7PG"
-      ]
-    },
-    "lib/Uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol": {
-      "keccak256": "0x744e30c133bd0f7ca9e7163433cf6d72f45c6bb1508c2c9c02f1a6db796ae59d",
-      "urls": [
-        "bzz-raw://9bf2f4454ad63d4cff03a0630e787d9e8a9deed80aec89682cd8ad6379d9ef8c",
-        "dweb:/ipfs/Qme51hQNR2wpax7ooUadhtqLtXm8ffeVVYyubLkTT4wMCG"
       ]
     },
     "lib/forge-std/lib/ds-test/src/test.sol": {
@@ -959,11 +965,11 @@
       ]
     },
     "src/dollar/ExcessDollarsDistributor.sol": {
-      "keccak256": "0xdeef29c0b7731f1402449d8b75f6a623c55a1bc8b944f91e42655c1051e38ee8",
+      "keccak256": "0xa27c5b669a4f119ac79088111a6826b2529a2ad0761101375200c9551fde18a8",
       "license": "MIT",
       "urls": [
-        "bzz-raw://d963a6f6be0e0a999dfc4961b58c42018a5358f132ad8d54912e58f4c063230e",
-        "dweb:/ipfs/QmTHcC4YD2FPVRKdGqYLKB9rzGxb6ngXXp2p7r3mY9ioRQ"
+        "bzz-raw://e4edee2adff6fa30ab502d3a411f28334c7b93a1f1fec3302cb879773778088b",
+        "dweb:/ipfs/QmaqUMSEN51ZL1ehwTdRftCBzvFTUyx3hNMJ9JGDfehfzn"
       ]
     },
     "src/dollar/SushiSwapPool.sol": {
@@ -1047,11 +1053,11 @@
       ]
     },
     "src/dollar/interfaces/IMetaPool.sol": {
-      "keccak256": "0x76c711383ae012556089e0f538f02d2d9a2b6c8ecc5892ec6683460b6c59fe9b",
+      "keccak256": "0x009a8ae1094c5eb564789fa77a3fffe3662dc23e6e5c72c912162f74d5c30be9",
       "license": "UNLICENSED",
       "urls": [
-        "bzz-raw://bdaa026adb4aa85dd1071195a5479d65177e2732e57773fc6c0b7d7132388685",
-        "dweb:/ipfs/QmecTNhpiJ5SR1QenVtzRJTXboV6gygZ5JZTsHsNYkwLcF"
+        "bzz-raw://2ea4dfcd491287c5f74f10971d54ae67e1bed676e93598ea4b52fc48ece1da58",
+        "dweb:/ipfs/QmPw7HHWzvs79xjQB8nsHDv8rsCv1bbm4YkbpcTtUrVWzZ"
       ]
     },
     "src/dollar/interfaces/IUARForDollarsCalculator.sol": {
@@ -1127,11 +1133,11 @@
       ]
     },
     "test/helpers/TestHelper.sol": {
-      "keccak256": "0xe1da570ad3d3bc90f5103ca0374a1aac44d86fcab819252d2875ee44645eea7a",
+      "keccak256": "0x5e5f31cdcb25409abe23a4932f054e50f7fbac221a0802913ac7cb84bf76b7e2",
       "license": "MIT",
       "urls": [
-        "bzz-raw://7364ee5f26d6ac3f8bb89ad8697f323c27aaa8959cb15a940e721ef1eb21bb73",
-        "dweb:/ipfs/QmQnY9b42cyddyKXvsNuZzGjH417sBnE4GCuwxUbkbMTeS"
+        "bzz-raw://2c9174d3e717c9c7f5eab651726d8cb4118ae2ff6d65c8a57279b0f934605a19",
+        "dweb:/ipfs/QmdjrLhw57LTxnuyfQBzRdraHQD42AA5VPorafXXPnCgLY"
       ]
     }
   },

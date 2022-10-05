@@ -448,6 +448,74 @@
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_curve3PoolAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "_bondingContractAddress",
+            "type": "address"
+          }
+        ],
+        "name": "mockManagerAddresses",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_metaPoolAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_expectedLiqAmt",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_expectedExchangeAmt",
+            "type": "uint256"
+          }
+        ],
+        "name": "mockMetaPool",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "_expected_swap_amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "mockSushiSwapRouter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "setUp",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "testFails_distributeDollarsWorks",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "treasuryAddress",
         "outputs": [
@@ -487,7 +555,7 @@
   },
   "settings": {
     "compilationTarget": {
-      "test/helpers/TestHelper.sol": "TestHelper"
+      "test/dollar/ExcessDollarsDistributor.t.sol": "ExcessDollarsDistributorTest"
     },
     "evmVersion": "london",
     "libraries": {},
@@ -968,6 +1036,14 @@
       "urls": [
         "bzz-raw://01af6c7975af7d4cdeadce64bcd459988790bf2dd674efda044e9b490ab11f0a",
         "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
+      ]
+    },
+    "test/dollar/ExcessDollarsDistributor.t.sol": {
+      "keccak256": "0x8b60d378ff4e3d9e5e0340d913e777707f02b47c646349a523f1a81d1d67707c",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://90c30fd70d61fb5e576123dfedc4400b443cdf04e15f9bb8c70d48c42cd50b98",
+        "dweb:/ipfs/QmaeqP3vfsCMG3yra3jJPCFEoAKsdsLR9rfx4XRpTpT6Bp"
       ]
     },
     "test/helpers/TestHelper.sol": {

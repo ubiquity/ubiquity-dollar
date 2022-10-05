@@ -27,6 +27,7 @@ abstract contract TestHelper is Test {
     address public constant NATIVE_ASSET = address(0);
 
     address public admin = address(0x123abc);
+    address public treasuryAddress = address(0x111222333);
 
     function helpers_deployUbiquityAlgorithmicDollarManager() public returns (address) {
         UbiquityAlgorithmicDollarManager _manager = new UbiquityAlgorithmicDollarManager(admin);
@@ -65,6 +66,9 @@ abstract contract TestHelper is Test {
         // deploy dollarMintingCalculator
         DollarMintingCalculator _mintingCalculator = new DollarMintingCalculator(address(_manager));
         _manager.setDollarMintingCalculatorAddress(address(_mintingCalculator));
+
+        // set treasury address
+        _manager.setTreasuryAddress(treasuryAddress);
 
         vm.stopPrank();
 

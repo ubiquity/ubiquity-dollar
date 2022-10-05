@@ -75,8 +75,6 @@ interface IMetaPool {
         view
         returns (uint256);
 
-    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount) external returns (uint256);
-
     function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount, address _receiver)
         external
         returns (uint256);
@@ -93,8 +91,6 @@ interface IMetaPool {
         returns (uint256);
 
     function exchange(int128 i, int128 j, uint256 dx, uint256 min_dy) external returns (uint256);
-
-    function exchange(int128 i, int128 j, uint256 dx, uint256 min_dy, address _receiver) external returns (uint256);
 
     function exchange_underlying(int128 i, int128 j, uint256 dx, uint256 min_dy) external returns (uint256);
 

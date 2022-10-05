@@ -428,30 +428,6 @@
             "internalType": "uint256",
             "name": "_min_mint_amount",
             "type": "uint256"
-          }
-        ],
-        "name": "add_liquidity",
-        "outputs": [
-          {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256[2]",
-            "name": "_amounts",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_min_mint_amount",
-            "type": "uint256"
           },
           {
             "internalType": "address",
@@ -773,45 +749,6 @@
             "internalType": "uint256",
             "name": "min_dy",
             "type": "uint256"
-          }
-        ],
-        "name": "exchange",
-        "outputs": [
-          {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-          }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "int128",
-            "name": "i",
-            "type": "int128"
-          },
-          {
-            "internalType": "int128",
-            "name": "j",
-            "type": "int128"
-          },
-          {
-            "internalType": "uint256",
-            "name": "dx",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "min_dy",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "_receiver",
-            "type": "address"
           }
         ],
         "name": "exchange",
@@ -1543,11 +1480,11 @@
   },
   "sources": {
     "src/dollar/interfaces/IMetaPool.sol": {
-      "keccak256": "0x76c711383ae012556089e0f538f02d2d9a2b6c8ecc5892ec6683460b6c59fe9b",
+      "keccak256": "0x009a8ae1094c5eb564789fa77a3fffe3662dc23e6e5c72c912162f74d5c30be9",
       "license": "UNLICENSED",
       "urls": [
-        "bzz-raw://bdaa026adb4aa85dd1071195a5479d65177e2732e57773fc6c0b7d7132388685",
-        "dweb:/ipfs/QmecTNhpiJ5SR1QenVtzRJTXboV6gygZ5JZTsHsNYkwLcF"
+        "bzz-raw://2ea4dfcd491287c5f74f10971d54ae67e1bed676e93598ea4b52fc48ece1da58",
+        "dweb:/ipfs/QmPw7HHWzvs79xjQB8nsHDv8rsCv1bbm4YkbpcTtUrVWzZ"
       ]
     }
   },
