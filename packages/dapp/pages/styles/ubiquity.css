@@ -406,3 +406,13 @@ td {
 aside {
   color: #bfbfbf;
 }
+
+#CreditOperations[data-twap^="0."] #MintUcr,
+#CreditOperations[data-twap^="1."] #RedeemUcr {
+  opacity: 1;
+  cursor: unset;
+}
+#CreditOperations[data-twap^="0."] #MintUcr > div,
+#CreditOperations[data-twap^="1."] #RedeemUcr > div {
+  pointer-events: unset;
+}
