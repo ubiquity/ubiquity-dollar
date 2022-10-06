@@ -131,6 +131,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
         bondId = bonds[msg.sender].length;
         bonds[msg.sender].push(bnd);
+
         emit LogBond(msg.sender, bnd.token, bnd.amount, bnd.rewards, bnd.block, bondId);
     }
 

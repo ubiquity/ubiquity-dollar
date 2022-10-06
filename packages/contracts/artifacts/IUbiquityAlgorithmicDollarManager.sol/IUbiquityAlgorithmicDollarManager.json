@@ -315,372 +315,21 @@
     "setUARCalculatorAddress(address)": "4ac11608",
     "setuARTokenAddress(address)": "b90bbaff"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_curveFactory\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_crvBasePool\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_crv3PoolTokenAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amplificationCoefficient\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_fee\",\"type\":\"uint256\"}],\"name\":\"deployStableSwapPool\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_debtCouponManagerAddress\",\"type\":\"address\"}],\"name\":\"getExcessDollarsDistributor\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_bondingContractAddress\",\"type\":\"address\"}],\"name\":\"setBondingContractAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_bondingShareAddress\",\"type\":\"address\"}],\"name\":\"setBondingShareAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_couponCalculatorAddress\",\"type\":\"address\"}],\"name\":\"setCouponCalculatorAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_debtCouponAddress\",\"type\":\"address\"}],\"name\":\"setDebtCouponAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_dollarMintingCalculatorAddress\",\"type\":\"address\"}],\"name\":\"setDollarMintingCalculatorAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_dollarTokenAddress\",\"type\":\"address\"}],\"name\":\"setDollarTokenAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"debtCouponManagerAddress\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"excessCouponDistributor\",\"type\":\"address\"}],\"name\":\"setExcessDollarsDistributor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_formulasAddress\",\"type\":\"address\"}],\"name\":\"setFormulasAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_governanceTokenAddress\",\"type\":\"address\"}],\"name\":\"setGovernanceTokenAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_incentiveAddress\",\"type\":\"address\"}],\"name\":\"setIncentiveToUAD\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_masterChefAddress\",\"type\":\"address\"}],\"name\":\"setMasterChefAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_stableSwapMetaPoolAddress\",\"type\":\"address\"}],\"name\":\"setStableSwapMetaPoolAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_sushiSwapPoolAddress\",\"type\":\"address\"}],\"name\":\"setSushiSwapPoolAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_treasuryAddress\",\"type\":\"address\"}],\"name\":\"setTreasuryAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_twapOracleAddress\",\"type\":\"address\"}],\"name\":\"setTwapOracleAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_uarCalculatorAddress\",\"type\":\"address\"}],\"name\":\"setUARCalculatorAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_uarTokenAddress\",\"type\":\"address\"}],\"name\":\"setuARTokenAddress\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Ubiquity Algorithmic Manager\",\"kind\":\"dev\",\"methods\":{\"deployStableSwapPool(address,address,address,uint256,uint256)\":{\"details\":\"From the curve documentation for uncollateralized algorithmic stablecoins amplification should be 5-10\",\"params\":{\"_amplificationCoefficient\":\"amplification coefficient. The smaller it is the closer to a constant product we are.\",\"_crv3PoolTokenAddress\":\"curve 3Pool token Address\",\"_crvBasePool\":\"Address of the base pool to use within the new metapool.\",\"_curveFactory\":\"MetaPool factory address\",\"_fee\":\"Trade fee, given as an integer with 1e10 precision.\"}},\"setBondingContractAddress(address)\":{\"details\":\"bonding contract participants deposit  curve LP token for a certain duration to earn uGOV and more curve LP token\",\"params\":{\"_bondingContractAddress\":\"bonding contract address\"}},\"setTreasuryAddress(address)\":{\"details\":\"the treasury fund is used to maintain the protocol\",\"params\":{\"_treasuryAddress\":\"treasury fund address\"}}},\"title\":\"UAD Manager interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"deployStableSwapPool(address,address,address,uint256,uint256)\":{\"notice\":\"deploy a new Curve metapools for uAD Token uAD/3Pool\"},\"setBondingContractAddress(address)\":{\"notice\":\"set the bonding bontract smart contract address\"},\"setTreasuryAddress(address)\":{\"notice\":\"set the treasury address\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol\":\"IUbiquityAlgorithmicDollarManager\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol\":{\"keccak256\":\"0x78af2f78e4e3e9a24410f6e4f7b115b5c584dcc479302f07a94ef94107a341b3\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://cab1da4f915aedc6a05a9c2a3f8b1f0d6a1f013683d5515d075e90b15b4143c7\",\"dweb:/ipfs/QmWDZR1f26jGVWHMvP1Q1ZvML68W7DHsNaC4fAc2LNrFfs\"]}},\"version\":1}",
-  "metadata": {
-    "compiler": {
-      "version": "0.8.9+commit.e5eed63a"
-    },
-    "language": "Solidity",
-    "output": {
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_curveFactory",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_crvBasePool",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_crv3PoolTokenAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "_amplificationCoefficient",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "_fee",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "deployStableSwapPool"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_debtCouponManagerAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function",
-          "name": "getExcessDollarsDistributor",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ]
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_bondingContractAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setBondingContractAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_bondingShareAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setBondingShareAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_couponCalculatorAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setCouponCalculatorAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_debtCouponAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setDebtCouponAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_dollarMintingCalculatorAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setDollarMintingCalculatorAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_dollarTokenAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setDollarTokenAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "debtCouponManagerAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "excessCouponDistributor",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setExcessDollarsDistributor"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_formulasAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setFormulasAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_governanceTokenAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setGovernanceTokenAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_account",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "_incentiveAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setIncentiveToUAD"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_masterChefAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setMasterChefAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_stableSwapMetaPoolAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setStableSwapMetaPoolAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_sushiSwapPoolAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setSushiSwapPoolAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_treasuryAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setTreasuryAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_twapOracleAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setTwapOracleAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_uarCalculatorAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setUARCalculatorAddress"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_uarTokenAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function",
-          "name": "setuARTokenAddress"
-        }
-      ],
-      "devdoc": {
-        "kind": "dev",
-        "methods": {
-          "deployStableSwapPool(address,address,address,uint256,uint256)": {
-            "details": "From the curve documentation for uncollateralized algorithmic stablecoins amplification should be 5-10",
-            "params": {
-              "_amplificationCoefficient": "amplification coefficient. The smaller it is the closer to a constant product we are.",
-              "_crv3PoolTokenAddress": "curve 3Pool token Address",
-              "_crvBasePool": "Address of the base pool to use within the new metapool.",
-              "_curveFactory": "MetaPool factory address",
-              "_fee": "Trade fee, given as an integer with 1e10 precision."
-            }
-          },
-          "setBondingContractAddress(address)": {
-            "details": "bonding contract participants deposit  curve LP token for a certain duration to earn uGOV and more curve LP token",
-            "params": {
-              "_bondingContractAddress": "bonding contract address"
-            }
-          },
-          "setTreasuryAddress(address)": {
-            "details": "the treasury fund is used to maintain the protocol",
-            "params": {
-              "_treasuryAddress": "treasury fund address"
-            }
-          }
-        },
-        "version": 1
-      },
-      "userdoc": {
-        "kind": "user",
-        "methods": {
-          "deployStableSwapPool(address,address,address,uint256,uint256)": {
-            "notice": "deploy a new Curve metapools for uAD Token uAD/3Pool"
-          },
-          "setBondingContractAddress(address)": {
-            "notice": "set the bonding bontract smart contract address"
-          },
-          "setTreasuryAddress(address)": {
-            "notice": "set the treasury address"
-          }
-        },
-        "version": 1
-      }
-    },
-    "settings": {
-      "remappings": [
-        ":@openzeppelin/=lib/openzeppelin-contracts/",
-        ":@uniswap/=lib/Uniswap/",
-        ":Uniswap/=lib/Uniswap/",
-        ":ds-test/=lib/forge-std/lib/ds-test/src/",
-        ":forge-std/=lib/forge-std/src/",
-        ":solidity-linked-list/=lib/solidity-linked-list/"
-      ],
-      "optimizer": {
-        "enabled": true,
-        "runs": 20000
-      },
-      "metadata": {
-        "bytecodeHash": "ipfs"
-      },
-      "compilationTarget": {
-        "src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol": "IUbiquityAlgorithmicDollarManager"
-      },
-      "libraries": {}
-    },
-    "sources": {
-      "src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol": {
-        "keccak256": "0x78af2f78e4e3e9a24410f6e4f7b115b5c584dcc479302f07a94ef94107a341b3",
-        "urls": [
-          "bzz-raw://cab1da4f915aedc6a05a9c2a3f8b1f0d6a1f013683d5515d075e90b15b4143c7",
-          "dweb:/ipfs/QmWDZR1f26jGVWHMvP1Q1ZvML68W7DHsNaC4fAc2LNrFfs"
-        ],
-        "license": "Apache-2.0"
-      }
-    },
-    "version": 1
-  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IUbiquityAlgorithmicDollarManager.sol",
-    "id": 41331,
+    "id": 39136,
     "exportedSymbols": {
       "IUbiquityAlgorithmicDollarManager": [
-        41330
+        39135
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "39:2995:86",
+    "src": "39:2995:70",
     "nodes": [
       {
-        "id": 41216,
+        "id": 39021,
         "nodeType": "PragmaDirective",
-        "src": "39:23:86",
+        "src": "39:23:70",
         "literals": [
           "solidity",
           "^",
@@ -689,33 +338,33 @@
         ]
       },
       {
-        "id": 41330,
+        "id": 39135,
         "nodeType": "ContractDefinition",
-        "src": "138:2895:86",
+        "src": "138:2895:70",
         "nodes": [
           {
-            "id": 41222,
+            "id": 39027,
             "nodeType": "FunctionDefinition",
-            "src": "265:67:86",
+            "src": "265:67:70",
             "functionSelector": "3b194dcc",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setTwapOracleAddress",
-            "nameLocation": "274:20:86",
+            "nameLocation": "274:20:70",
             "parameters": {
-              "id": 41220,
+              "id": 39025,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41219,
+                  "id": 39024,
                   "mutability": "mutable",
                   "name": "_twapOracleAddress",
-                  "nameLocation": "303:18:86",
+                  "nameLocation": "303:18:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41222,
-                  "src": "295:26:86",
+                  "scope": 39027,
+                  "src": "295:26:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -723,10 +372,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41218,
+                    "id": 39023,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "295:7:86",
+                    "src": "295:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -736,42 +385,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "294:28:86"
+              "src": "294:28:70"
             },
             "returnParameters": {
-              "id": 41221,
+              "id": 39026,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "331:0:86"
+              "src": "331:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41227,
+            "id": 39032,
             "nodeType": "FunctionDefinition",
-            "src": "338:63:86",
+            "src": "338:63:70",
             "functionSelector": "b90bbaff",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setuARTokenAddress",
-            "nameLocation": "347:18:86",
+            "nameLocation": "347:18:70",
             "parameters": {
-              "id": 41225,
+              "id": 39030,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41224,
+                  "id": 39029,
                   "mutability": "mutable",
                   "name": "_uarTokenAddress",
-                  "nameLocation": "374:16:86",
+                  "nameLocation": "374:16:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41227,
-                  "src": "366:24:86",
+                  "scope": 39032,
+                  "src": "366:24:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -779,10 +428,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41223,
+                    "id": 39028,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "366:7:86",
+                    "src": "366:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -792,42 +441,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "365:26:86"
+              "src": "365:26:70"
             },
             "returnParameters": {
-              "id": 41226,
+              "id": 39031,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "400:0:86"
+              "src": "400:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41232,
+            "id": 39037,
             "nodeType": "FunctionDefinition",
-            "src": "407:67:86",
+            "src": "407:67:70",
             "functionSelector": "47091398",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setDebtCouponAddress",
-            "nameLocation": "416:20:86",
+            "nameLocation": "416:20:70",
             "parameters": {
-              "id": 41230,
+              "id": 39035,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41229,
+                  "id": 39034,
                   "mutability": "mutable",
                   "name": "_debtCouponAddress",
-                  "nameLocation": "445:18:86",
+                  "nameLocation": "445:18:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41232,
-                  "src": "437:26:86",
+                  "scope": 39037,
+                  "src": "437:26:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -835,10 +484,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41228,
+                    "id": 39033,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "437:7:86",
+                    "src": "437:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -848,42 +497,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "436:28:86"
+              "src": "436:28:70"
             },
             "returnParameters": {
-              "id": 41231,
+              "id": 39036,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "473:0:86"
+              "src": "473:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41239,
+            "id": 39044,
             "nodeType": "FunctionDefinition",
-            "src": "480:81:86",
+            "src": "480:81:70",
             "functionSelector": "53b07507",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setIncentiveToUAD",
-            "nameLocation": "489:17:86",
+            "nameLocation": "489:17:70",
             "parameters": {
-              "id": 41237,
+              "id": 39042,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41234,
+                  "id": 39039,
                   "mutability": "mutable",
                   "name": "_account",
-                  "nameLocation": "515:8:86",
+                  "nameLocation": "515:8:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41239,
-                  "src": "507:16:86",
+                  "scope": 39044,
+                  "src": "507:16:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -891,10 +540,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41233,
+                    "id": 39038,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "507:7:86",
+                    "src": "507:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -905,13 +554,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41236,
+                  "id": 39041,
                   "mutability": "mutable",
                   "name": "_incentiveAddress",
-                  "nameLocation": "533:17:86",
+                  "nameLocation": "533:17:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41239,
-                  "src": "525:25:86",
+                  "scope": 39044,
+                  "src": "525:25:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -919,10 +568,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41235,
+                    "id": 39040,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "525:7:86",
+                    "src": "525:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -932,42 +581,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "506:45:86"
+              "src": "506:45:70"
             },
             "returnParameters": {
-              "id": 41238,
+              "id": 39043,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "560:0:86"
+              "src": "560:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41244,
+            "id": 39049,
             "nodeType": "FunctionDefinition",
-            "src": "567:69:86",
+            "src": "567:69:70",
             "functionSelector": "f986cd57",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setDollarTokenAddress",
-            "nameLocation": "576:21:86",
+            "nameLocation": "576:21:70",
             "parameters": {
-              "id": 41242,
+              "id": 39047,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41241,
+                  "id": 39046,
                   "mutability": "mutable",
                   "name": "_dollarTokenAddress",
-                  "nameLocation": "606:19:86",
+                  "nameLocation": "606:19:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41244,
-                  "src": "598:27:86",
+                  "scope": 39049,
+                  "src": "598:27:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -975,10 +624,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41240,
+                    "id": 39045,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "598:7:86",
+                    "src": "598:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -988,42 +637,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "597:29:86"
+              "src": "597:29:70"
             },
             "returnParameters": {
-              "id": 41243,
+              "id": 39048,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "635:0:86"
+              "src": "635:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41249,
+            "id": 39054,
             "nodeType": "FunctionDefinition",
-            "src": "642:77:86",
+            "src": "642:77:70",
             "functionSelector": "e2d443bd",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setGovernanceTokenAddress",
-            "nameLocation": "651:25:86",
+            "nameLocation": "651:25:70",
             "parameters": {
-              "id": 41247,
+              "id": 39052,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41246,
+                  "id": 39051,
                   "mutability": "mutable",
                   "name": "_governanceTokenAddress",
-                  "nameLocation": "685:23:86",
+                  "nameLocation": "685:23:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41249,
-                  "src": "677:31:86",
+                  "scope": 39054,
+                  "src": "677:31:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1031,10 +680,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41245,
+                    "id": 39050,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "677:7:86",
+                    "src": "677:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1044,42 +693,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "676:33:86"
+              "src": "676:33:70"
             },
             "returnParameters": {
-              "id": 41248,
+              "id": 39053,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "718:0:86"
+              "src": "718:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41254,
+            "id": 39059,
             "nodeType": "FunctionDefinition",
-            "src": "725:73:86",
+            "src": "725:73:70",
             "functionSelector": "147f1b96",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setSushiSwapPoolAddress",
-            "nameLocation": "734:23:86",
+            "nameLocation": "734:23:70",
             "parameters": {
-              "id": 41252,
+              "id": 39057,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41251,
+                  "id": 39056,
                   "mutability": "mutable",
                   "name": "_sushiSwapPoolAddress",
-                  "nameLocation": "766:21:86",
+                  "nameLocation": "766:21:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41254,
-                  "src": "758:29:86",
+                  "scope": 39059,
+                  "src": "758:29:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1087,10 +736,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41250,
+                    "id": 39055,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "758:7:86",
+                    "src": "758:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1100,42 +749,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "757:31:86"
+              "src": "757:31:70"
             },
             "returnParameters": {
-              "id": 41253,
+              "id": 39058,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "797:0:86"
+              "src": "797:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41259,
+            "id": 39064,
             "nodeType": "FunctionDefinition",
-            "src": "804:73:86",
+            "src": "804:73:70",
             "functionSelector": "4ac11608",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setUARCalculatorAddress",
-            "nameLocation": "813:23:86",
+            "nameLocation": "813:23:70",
             "parameters": {
-              "id": 41257,
+              "id": 39062,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41256,
+                  "id": 39061,
                   "mutability": "mutable",
                   "name": "_uarCalculatorAddress",
-                  "nameLocation": "845:21:86",
+                  "nameLocation": "845:21:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41259,
-                  "src": "837:29:86",
+                  "scope": 39064,
+                  "src": "837:29:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1143,10 +792,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41255,
+                    "id": 39060,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "837:7:86",
+                    "src": "837:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1156,42 +805,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "836:31:86"
+              "src": "836:31:70"
             },
             "returnParameters": {
-              "id": 41258,
+              "id": 39063,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "876:0:86"
+              "src": "876:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41264,
+            "id": 39069,
             "nodeType": "FunctionDefinition",
-            "src": "883:79:86",
+            "src": "883:79:70",
             "functionSelector": "38174654",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setCouponCalculatorAddress",
-            "nameLocation": "892:26:86",
+            "nameLocation": "892:26:70",
             "parameters": {
-              "id": 41262,
+              "id": 39067,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41261,
+                  "id": 39066,
                   "mutability": "mutable",
                   "name": "_couponCalculatorAddress",
-                  "nameLocation": "927:24:86",
+                  "nameLocation": "927:24:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41264,
-                  "src": "919:32:86",
+                  "scope": 39069,
+                  "src": "919:32:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1199,10 +848,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41260,
+                    "id": 39065,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "919:7:86",
+                    "src": "919:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1212,42 +861,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "918:34:86"
+              "src": "918:34:70"
             },
             "returnParameters": {
-              "id": 41263,
+              "id": 39068,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "961:0:86"
+              "src": "961:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41269,
+            "id": 39074,
             "nodeType": "FunctionDefinition",
-            "src": "968:93:86",
+            "src": "968:93:70",
             "functionSelector": "4c9f5d86",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setDollarMintingCalculatorAddress",
-            "nameLocation": "977:33:86",
+            "nameLocation": "977:33:70",
             "parameters": {
-              "id": 41267,
+              "id": 39072,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41266,
+                  "id": 39071,
                   "mutability": "mutable",
                   "name": "_dollarMintingCalculatorAddress",
-                  "nameLocation": "1019:31:86",
+                  "nameLocation": "1019:31:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41269,
-                  "src": "1011:39:86",
+                  "scope": 39074,
+                  "src": "1011:39:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1255,10 +904,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41265,
+                    "id": 39070,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1011:7:86",
+                    "src": "1011:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1268,42 +917,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1010:41:86"
+              "src": "1010:41:70"
             },
             "returnParameters": {
-              "id": 41268,
+              "id": 39073,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1060:0:86"
+              "src": "1060:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41276,
+            "id": 39081,
             "nodeType": "FunctionDefinition",
-            "src": "1067:113:86",
+            "src": "1067:113:70",
             "functionSelector": "f6f172cb",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setExcessDollarsDistributor",
-            "nameLocation": "1076:27:86",
+            "nameLocation": "1076:27:70",
             "parameters": {
-              "id": 41274,
+              "id": 39079,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41271,
+                  "id": 39076,
                   "mutability": "mutable",
                   "name": "debtCouponManagerAddress",
-                  "nameLocation": "1112:24:86",
+                  "nameLocation": "1112:24:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41276,
-                  "src": "1104:32:86",
+                  "scope": 39081,
+                  "src": "1104:32:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1311,10 +960,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41270,
+                    "id": 39075,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1104:7:86",
+                    "src": "1104:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1325,13 +974,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41273,
+                  "id": 39078,
                   "mutability": "mutable",
                   "name": "excessCouponDistributor",
-                  "nameLocation": "1146:23:86",
+                  "nameLocation": "1146:23:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41276,
-                  "src": "1138:31:86",
+                  "scope": 39081,
+                  "src": "1138:31:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1339,10 +988,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41272,
+                    "id": 39077,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1138:7:86",
+                    "src": "1138:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1352,42 +1001,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1103:67:86"
+              "src": "1103:67:70"
             },
             "returnParameters": {
-              "id": 41275,
+              "id": 39080,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1179:0:86"
+              "src": "1179:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41281,
+            "id": 39086,
             "nodeType": "FunctionDefinition",
-            "src": "1186:67:86",
+            "src": "1186:67:70",
             "functionSelector": "be1d86e1",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setMasterChefAddress",
-            "nameLocation": "1195:20:86",
+            "nameLocation": "1195:20:70",
             "parameters": {
-              "id": 41279,
+              "id": 39084,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41278,
+                  "id": 39083,
                   "mutability": "mutable",
                   "name": "_masterChefAddress",
-                  "nameLocation": "1224:18:86",
+                  "nameLocation": "1224:18:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41281,
-                  "src": "1216:26:86",
+                  "scope": 39086,
+                  "src": "1216:26:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1395,10 +1044,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41277,
+                    "id": 39082,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1216:7:86",
+                    "src": "1216:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1408,42 +1057,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1215:28:86"
+              "src": "1215:28:70"
             },
             "returnParameters": {
-              "id": 41280,
+              "id": 39085,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1252:0:86"
+              "src": "1252:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41286,
+            "id": 39091,
             "nodeType": "FunctionDefinition",
-            "src": "1259:63:86",
+            "src": "1259:63:70",
             "functionSelector": "15f97398",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setFormulasAddress",
-            "nameLocation": "1268:18:86",
+            "nameLocation": "1268:18:70",
             "parameters": {
-              "id": 41284,
+              "id": 39089,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41283,
+                  "id": 39088,
                   "mutability": "mutable",
                   "name": "_formulasAddress",
-                  "nameLocation": "1295:16:86",
+                  "nameLocation": "1295:16:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41286,
-                  "src": "1287:24:86",
+                  "scope": 39091,
+                  "src": "1287:24:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1451,10 +1100,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41282,
+                    "id": 39087,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1287:7:86",
+                    "src": "1287:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1464,42 +1113,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1286:26:86"
+              "src": "1286:26:70"
             },
             "returnParameters": {
-              "id": 41285,
+              "id": 39090,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1321:0:86"
+              "src": "1321:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41291,
+            "id": 39096,
             "nodeType": "FunctionDefinition",
-            "src": "1328:71:86",
+            "src": "1328:71:70",
             "functionSelector": "0bcf9ca3",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setBondingShareAddress",
-            "nameLocation": "1337:22:86",
+            "nameLocation": "1337:22:70",
             "parameters": {
-              "id": 41289,
+              "id": 39094,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41288,
+                  "id": 39093,
                   "mutability": "mutable",
                   "name": "_bondingShareAddress",
-                  "nameLocation": "1368:20:86",
+                  "nameLocation": "1368:20:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41291,
-                  "src": "1360:28:86",
+                  "scope": 39096,
+                  "src": "1360:28:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1507,10 +1156,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41287,
+                    "id": 39092,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1360:7:86",
+                    "src": "1360:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1520,42 +1169,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1359:30:86"
+              "src": "1359:30:70"
             },
             "returnParameters": {
-              "id": 41290,
+              "id": 39095,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1398:0:86"
+              "src": "1398:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41296,
+            "id": 39101,
             "nodeType": "FunctionDefinition",
-            "src": "1405:83:86",
+            "src": "1405:83:70",
             "functionSelector": "92324611",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "setStableSwapMetaPoolAddress",
-            "nameLocation": "1414:28:86",
+            "nameLocation": "1414:28:70",
             "parameters": {
-              "id": 41294,
+              "id": 39099,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41293,
+                  "id": 39098,
                   "mutability": "mutable",
                   "name": "_stableSwapMetaPoolAddress",
-                  "nameLocation": "1451:26:86",
+                  "nameLocation": "1451:26:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41296,
-                  "src": "1443:34:86",
+                  "scope": 39101,
+                  "src": "1443:34:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1563,10 +1212,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41292,
+                    "id": 39097,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1443:7:86",
+                    "src": "1443:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1576,27 +1225,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1442:36:86"
+              "src": "1442:36:70"
             },
             "returnParameters": {
-              "id": 41295,
+              "id": 39100,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1487:0:86"
+              "src": "1487:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41302,
+            "id": 39107,
             "nodeType": "FunctionDefinition",
-            "src": "1769:77:86",
+            "src": "1769:77:70",
             "documentation": {
-              "id": 41297,
+              "id": 39102,
               "nodeType": "StructuredDocumentation",
-              "src": "1494:270:86",
+              "src": "1494:270:70",
               "text": " @notice set the bonding bontract smart contract address\n @dev bonding contract participants deposit  curve LP token\n for a certain duration to earn uGOV and more curve LP token\n @param _bondingContractAddress bonding contract address"
             },
             "functionSelector": "b3094fd6",
@@ -1604,20 +1253,20 @@
             "kind": "function",
             "modifiers": [],
             "name": "setBondingContractAddress",
-            "nameLocation": "1778:25:86",
+            "nameLocation": "1778:25:70",
             "parameters": {
-              "id": 41300,
+              "id": 39105,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41299,
+                  "id": 39104,
                   "mutability": "mutable",
                   "name": "_bondingContractAddress",
-                  "nameLocation": "1812:23:86",
+                  "nameLocation": "1812:23:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41302,
-                  "src": "1804:31:86",
+                  "scope": 39107,
+                  "src": "1804:31:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1625,10 +1274,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41298,
+                    "id": 39103,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1804:7:86",
+                    "src": "1804:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1638,27 +1287,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1803:33:86"
+              "src": "1803:33:70"
             },
             "returnParameters": {
-              "id": 41301,
+              "id": 39106,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1845:0:86"
+              "src": "1845:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41308,
+            "id": 39113,
             "nodeType": "FunctionDefinition",
-            "src": "2024:63:86",
+            "src": "2024:63:70",
             "documentation": {
-              "id": 41303,
+              "id": 39108,
               "nodeType": "StructuredDocumentation",
-              "src": "1852:167:86",
+              "src": "1852:167:70",
               "text": " @notice set the treasury address\n @dev the treasury fund is used to maintain the protocol\n @param _treasuryAddress treasury fund address"
             },
             "functionSelector": "6605bfda",
@@ -1666,20 +1315,20 @@
             "kind": "function",
             "modifiers": [],
             "name": "setTreasuryAddress",
-            "nameLocation": "2033:18:86",
+            "nameLocation": "2033:18:70",
             "parameters": {
-              "id": 41306,
+              "id": 39111,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41305,
+                  "id": 39110,
                   "mutability": "mutable",
                   "name": "_treasuryAddress",
-                  "nameLocation": "2060:16:86",
+                  "nameLocation": "2060:16:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41308,
-                  "src": "2052:24:86",
+                  "scope": 39113,
+                  "src": "2052:24:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1687,10 +1336,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41304,
+                    "id": 39109,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2052:7:86",
+                    "src": "2052:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1700,27 +1349,27 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2051:26:86"
+              "src": "2051:26:70"
             },
             "returnParameters": {
-              "id": 41307,
+              "id": 39112,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "2086:0:86"
+              "src": "2086:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41322,
+            "id": 39127,
             "nodeType": "FunctionDefinition",
-            "src": "2703:218:86",
+            "src": "2703:218:70",
             "documentation": {
-              "id": 41309,
+              "id": 39114,
               "nodeType": "StructuredDocumentation",
-              "src": "2093:605:86",
+              "src": "2093:605:70",
               "text": " @notice deploy a new Curve metapools for uAD Token uAD/3Pool\n @dev  From the curve documentation for uncollateralized algorithmic\n stablecoins amplification should be 5-10\n @param _curveFactory MetaPool factory address\n @param _crvBasePool Address of the base pool to use within the new metapool.\n @param _crv3PoolTokenAddress curve 3Pool token Address\n @param _amplificationCoefficient amplification coefficient. The smaller\n it is the closer to a constant product we are.\n @param _fee Trade fee, given as an integer with 1e10 precision."
             },
             "functionSelector": "fbff3a41",
@@ -1728,20 +1377,20 @@
             "kind": "function",
             "modifiers": [],
             "name": "deployStableSwapPool",
-            "nameLocation": "2712:20:86",
+            "nameLocation": "2712:20:70",
             "parameters": {
-              "id": 41320,
+              "id": 39125,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41311,
+                  "id": 39116,
                   "mutability": "mutable",
                   "name": "_curveFactory",
-                  "nameLocation": "2750:13:86",
+                  "nameLocation": "2750:13:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41322,
-                  "src": "2742:21:86",
+                  "scope": 39127,
+                  "src": "2742:21:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1749,10 +1398,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41310,
+                    "id": 39115,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2742:7:86",
+                    "src": "2742:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1763,13 +1412,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41313,
+                  "id": 39118,
                   "mutability": "mutable",
                   "name": "_crvBasePool",
-                  "nameLocation": "2781:12:86",
+                  "nameLocation": "2781:12:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41322,
-                  "src": "2773:20:86",
+                  "scope": 39127,
+                  "src": "2773:20:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1777,10 +1426,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41312,
+                    "id": 39117,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2773:7:86",
+                    "src": "2773:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1791,13 +1440,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41315,
+                  "id": 39120,
                   "mutability": "mutable",
                   "name": "_crv3PoolTokenAddress",
-                  "nameLocation": "2811:21:86",
+                  "nameLocation": "2811:21:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41322,
-                  "src": "2803:29:86",
+                  "scope": 39127,
+                  "src": "2803:29:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1805,10 +1454,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41314,
+                    "id": 39119,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2803:7:86",
+                    "src": "2803:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1819,13 +1468,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41317,
+                  "id": 39122,
                   "mutability": "mutable",
                   "name": "_amplificationCoefficient",
-                  "nameLocation": "2850:25:86",
+                  "nameLocation": "2850:25:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41322,
-                  "src": "2842:33:86",
+                  "scope": 39127,
+                  "src": "2842:33:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1833,10 +1482,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41316,
+                    "id": 39121,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2842:7:86",
+                    "src": "2842:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1846,13 +1495,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41319,
+                  "id": 39124,
                   "mutability": "mutable",
                   "name": "_fee",
-                  "nameLocation": "2893:4:86",
+                  "nameLocation": "2893:4:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41322,
-                  "src": "2885:12:86",
+                  "scope": 39127,
+                  "src": "2885:12:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1860,10 +1509,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41318,
+                    "id": 39123,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2885:7:86",
+                    "src": "2885:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1872,42 +1521,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2732:171:86"
+              "src": "2732:171:70"
             },
             "returnParameters": {
-              "id": 41321,
+              "id": 39126,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "2920:0:86"
+              "src": "2920:0:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41329,
+            "id": 39134,
             "nodeType": "FunctionDefinition",
-            "src": "2927:104:86",
+            "src": "2927:104:70",
             "functionSelector": "aef6be3c",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getExcessDollarsDistributor",
-            "nameLocation": "2936:27:86",
+            "nameLocation": "2936:27:70",
             "parameters": {
-              "id": 41325,
+              "id": 39130,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41324,
+                  "id": 39129,
                   "mutability": "mutable",
                   "name": "_debtCouponManagerAddress",
-                  "nameLocation": "2972:25:86",
+                  "nameLocation": "2972:25:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41329,
-                  "src": "2964:33:86",
+                  "scope": 39134,
+                  "src": "2964:33:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1915,10 +1564,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41323,
+                    "id": 39128,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "2964:7:86",
+                    "src": "2964:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1928,21 +1577,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "2963:35:86"
+              "src": "2963:35:70"
             },
             "returnParameters": {
-              "id": 41328,
+              "id": 39133,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41327,
+                  "id": 39132,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41329,
-                  "src": "3022:7:86",
+                  "scope": 39134,
+                  "src": "3022:7:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1950,10 +1599,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41326,
+                    "id": 39131,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "3022:7:86",
+                    "src": "3022:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1963,9 +1612,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "3021:9:86"
+              "src": "3021:9:70"
             },
-            "scope": 41330,
+            "scope": 39135,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -1977,22 +1626,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 41217,
+          "id": 39022,
           "nodeType": "StructuredDocumentation",
-          "src": "64:74:86",
+          "src": "64:74:70",
           "text": "@title UAD Manager interface\n @author Ubiquity Algorithmic Manager"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          41330
+          39135
         ],
         "name": "IUbiquityAlgorithmicDollarManager",
-        "nameLocation": "148:33:86",
-        "scope": 41331,
+        "nameLocation": "148:33:70",
+        "scope": 39136,
         "usedErrors": []
       }
     ],
     "license": "Apache-2.0"
   },
-  "id": 86
+  "id": 70
 }
