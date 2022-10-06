@@ -105,6 +105,19 @@ export const formatTimeDiff = (diff: number) => {
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
+// Coin Addresses
+export const uCR_ADDRESS = "0x5894cfebfdedbe61d01f20140f41c5c49aedae97";
+export const uAD_ADDRESS = "0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6";
+export const USDC_ADDRESS = "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48";
+export const DAI_ADDRESS = "0x6b175474e89094c44da98b954eedeac495271d0f";
+export const USDT_ADDRESS = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+
+// Uniswap Pool Addresses
+export const uCR_uAD_ADDRESS = "0x429630355C3Ab8E7AceCD99B78BE2D37Bb939E27";
+export const uCR_USDC_ADDRESS = "0x895BEbB725be4b1B9168508b84a811c7710EfB3C";
+export const uCR_DAI_ADDRESS = "0x587B192f4c2c4C9115Ea1E0Fe4129d5188eC3728";
+export const uCR_USDT_ADDRESS = "0x9d498aB38Aa889AE0f4A865d30da2116ee9716bC";
+
 export const safeParseEther = (val: string) => {
   try {
     return ethers.utils.parseEther(val);

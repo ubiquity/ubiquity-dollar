@@ -1,4 +1,4 @@
-import { BigNumber, Contract } from "ethers";
+import { BigNumber, Contract, ethers } from "ethers";
 import { useState } from "react";
 
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
@@ -11,6 +11,7 @@ import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
+import useRatio from "./lib/getRatioInUniswapPool";
 
 const UcrRedeem = () => {
   const [walletAddress] = useWalletAddress();
@@ -21,6 +22,8 @@ const UcrRedeem = () => {
   const managedContracts = useManagerManaged();
 
   const [inputVal, setInputVal] = useState("");
+  const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
+  const ratio = useRatio(selectedRedeemToken);
 
   if (!walletAddress || !signer) {
     return <span>Connect wallet</span>;
@@ -54,11 +57,42 @@ const UcrRedeem = () => {
 
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
+  const handleMax = () => {
+    const ucrValue = ethers.utils.formatEther(balances.ucr);
+    setInputVal(ucrValue);
+  };
+
+  function onChangeValue(e: React.ChangeEvent<HTMLInputElement>) {
+    setSelectedRedeemToken(e.target.value);
+  }
+
   return (
     <div>
-      <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
+      <div onChange={onChangeValue}>
+        <p>Please select a token to redeem for:</p>
+        <input type="radio" id="tokenChoice1" name="redeemToken" value="uAD" checked={selectedRedeemToken === "uAD"} readOnly />
+        <label htmlFor="tokenChoice1">uAD</label>
+
+        <input type="radio" id="tokenChoice2" name="redeemToken" value="USDC" checked={selectedRedeemToken === "USDC"} readOnly />
+        <label htmlFor="tokenChoice2">USDC</label>
+
+        <input type="radio" id="tokenChoice3" name="redeemToken" value="DAI" checked={selectedRedeemToken === "DAI"} readOnly />
+        <label htmlFor="tokenChoice3">DAI</label>
+
+        <input type="radio" id="tokenChoice4" name="redeemToken" value="USDT" checked={selectedRedeemToken === "USDT"} readOnly />
+        <label htmlFor="tokenChoice4">USDT</label>
+      </div>
+      <div>
+        <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
+        <span onClick={handleMax}>MAX</span>
+      </div>
+      {inputVal && (
+        <div>
+          {inputVal} uCR -&gt; {Number(inputVal) * ratio} {selectedRedeemToken}.
+        </div>
+      )}
       <Button onClick={handleRedeem} disabled={!submitEnabled}>
-        Redeem uCR for uAD
+        Redeem uCR for {selectedRedeemToken}
       </Button>
     </div>
   );

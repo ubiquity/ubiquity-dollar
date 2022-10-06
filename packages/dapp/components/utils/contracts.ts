@@ -4,6 +4,11 @@ import UniswapV2PairABI from "../config/abis/UniswapV2Pair.json";
 import UniswapV3PoolABI from "../config/abis/UniswapV3Pool.json";
 import ChainlinkPriceFeedABI from "../config/abis/ChainlinkPriceFeed.json";
 import ERC20ABI from "../config/abis/ERC20.json";
+import uCRTokenABI from "../config/abis/uCRToken.json";
+import uADTokenABI from "../config/abis/uADToken.json";
+import USDCTokenABI from "../config/abis/USDCToken.json";
+import DAITokenABI from "../config/abis/DAIToken.json";
+import USDTTokenABI from "../config/abis/USDTToken.json";
 
 import SimpleBond from "@ubiquity/ubiquistick/artifacts/contracts/SimpleBond.sol/SimpleBond.json";
 import UbiquityStick from "@ubiquity/ubiquistick/artifacts/contracts/TheUbiquityStick.sol/TheUbiquityStick.json";
@@ -139,4 +144,24 @@ export const getUbiquityFormulasContract = (address: string, provider: ethers.pr
 
 export const getUbiquityGovernanceContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquityGovernance.abi, address, provider);
+};
+
+export const getuCRTokenContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(uCRTokenABI, address, provider);
+};
+
+export const getuADTokenContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(uADTokenABI, address, provider);
+};
+
+export const getUSDCTokenContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(USDCTokenABI, address, provider);
+};
+
+export const getDAITokenContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(DAITokenABI, address, provider);
+};
+
+export const getUSDTTokenContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(USDTTokenABI, address, provider);
 };
