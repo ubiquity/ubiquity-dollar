@@ -448,60 +448,6 @@
         "type": "function"
       },
       {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_curve3PoolAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_bondingContractAddress",
-            "type": "address"
-          }
-        ],
-        "name": "mockManagerAddresses",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_metaPoolAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_expectedLiqAmt",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_expectedExchangeAmt",
-            "type": "uint256"
-          }
-        ],
-        "name": "mockMetaPool",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "_expected_swap_amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "mockSushiSwapRouter",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
         "inputs": [],
         "name": "setUp",
         "outputs": [],
@@ -510,7 +456,7 @@
       },
       {
         "inputs": [],
-        "name": "testFails_distributeDollarsWorks",
+        "name": "test_overall",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -555,7 +501,7 @@
   },
   "settings": {
     "compilationTarget": {
-      "test/dollar/ExcessDollarsDistributor.t.sol": "ExcessDollarsDistributorTest"
+      "test/dollar/TWAPOracle.t.sol": "TWAPOracleTest"
     },
     "evmVersion": "london",
     "libraries": {},
@@ -1014,6 +960,14 @@
         "dweb:/ipfs/QmRNDp9WNsou9DM7tPA8s457qnW2qPfNqGHYdKp41NzVJY"
       ]
     },
+    "src/dollar/mocks/MockMetaPool.sol": {
+      "keccak256": "0x6051189ee1026087204d4d333d30e29a515b393a783dbdd7591defb0f9920643",
+      "license": "MIT",
+      "urls": [
+        "bzz-raw://9c139228955b24df3c43806adc0825fd97093dd4ddb88731df5c4b128e0a3ff4",
+        "dweb:/ipfs/QmWBaRNBHeaZk3Whxa9PocXEYiuZGBNhe9zjz7CGN8eU9g"
+      ]
+    },
     "src/dollar/mocks/MockTWAPOracle.sol": {
       "keccak256": "0xeb85d49242940614d3854a121032e80c65eb380ba8fe493bf0afa2b26da6917d",
       "license": "MIT",
@@ -1038,12 +992,11 @@
         "dweb:/ipfs/QmUW1Z7YFyUtFg8uNuK8zZ5T1SJ39ho4b6TSi2mc9fpUVZ"
       ]
     },
-    "test/dollar/ExcessDollarsDistributor.t.sol": {
-      "keccak256": "0xde084da850f918f8b0d2d5303874263204f647fa7556003a0ca48afb76c0d6fc",
-      "license": "MIT",
+    "test/dollar/TWAPOracle.t.sol": {
+      "keccak256": "0xd9b90024ee12f08eacc87bcf0f156ebd961330e30f6af072457b81bc85bd0b7b",
       "urls": [
-        "bzz-raw://0677baaa8d128789ad0f228ee5e1aff5079cce9e37efaad8480da754e8af4447",
-        "dweb:/ipfs/QmVxkhWqSdgeE6coQQucBj9BNryxCD31BhFiyGqU2cb5UE"
+        "bzz-raw://4d65a4c79d63e4c013622800deacc06fb7e607cedcf4d04bf78602bb17482825",
+        "dweb:/ipfs/QmYAMxCGgz1uJDqzYV7mTaNCLCU5XnguiQMCNZuvciS2Pu"
       ]
     },
     "test/helpers/TestHelper.sol": {
