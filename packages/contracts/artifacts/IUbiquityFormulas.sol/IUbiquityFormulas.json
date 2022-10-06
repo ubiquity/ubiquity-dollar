@@ -158,6 +158,199 @@
     "redeemBonds(uint256,uint256,uint256)": "d58d45a8",
     "ugovMultiply(uint256,uint256)": "794e955c"
   },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_totalULP\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_totalUBOND\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_targetPrice\",\"type\":\"uint256\"}],\"name\":\"bondPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_priceUBOND\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_shares\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_currentShareValue\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_targetPrice\",\"type\":\"uint256\"}],\"name\":\"bonding\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_uBOND\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_uLP\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_weeks\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_multiplier\",\"type\":\"uint256\"}],\"name\":\"durationMultiply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_shares\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_uBOND\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_currentShareValue\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_targetPrice\",\"type\":\"uint256\"}],\"name\":\"redeemBonds\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_uLP\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_multiplier\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_price\",\"type\":\"uint256\"}],\"name\":\"ugovMultiply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"_newMultiplier\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IUbiquityFormulas.sol\":\"IUbiquityFormulas\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IUbiquityFormulas.sol\":{\"keccak256\":\"0xc7494016aacadc3282674fadf2d64639455833e7fef5d7ef1996342978eba667\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4cd8620d41a0d46ac3f1a0c87d43d425945de135ba96dab9a078971d2f6fd3a2\",\"dweb:/ipfs/QmTaTLNR9Symbc3fvMMQAE6DWjEFFZq6KeaTrkfxXfi6ff\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_totalULP",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_totalUBOND",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_targetPrice",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "bondPrice",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_priceUBOND",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_shares",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_currentShareValue",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_targetPrice",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "bonding",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_uBOND",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_uLP",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_weeks",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_multiplier",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "durationMultiply",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_shares",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_uBOND",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_currentShareValue",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_targetPrice",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "redeemBonds",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_uLP",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "_multiplier",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_price",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function",
+          "name": "ugovMultiply",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "_newMultiplier",
+              "type": "uint256"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/IUbiquityFormulas.sol": "IUbiquityFormulas"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/dollar/interfaces/IUbiquityFormulas.sol": {
+        "keccak256": "0xc7494016aacadc3282674fadf2d64639455833e7fef5d7ef1996342978eba667",
+        "urls": [
+          "bzz-raw://4cd8620d41a0d46ac3f1a0c87d43d425945de135ba96dab9a078971d2f6fd3a2",
+          "dweb:/ipfs/QmTaTLNR9Symbc3fvMMQAE6DWjEFFZq6KeaTrkfxXfi6ff"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IUbiquityFormulas.sol",
     "id": 41387,

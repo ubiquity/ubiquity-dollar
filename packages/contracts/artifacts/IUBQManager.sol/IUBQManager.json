@@ -52,21 +52,111 @@
     "UBQ_MINTER_ROLE()": "2f533cb7",
     "hasRole(bytes32,address)": "91d14854"
   },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"UBQ_MINTER_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/IUBQManager.sol\":\"IUBQManager\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/IUBQManager.sol\":{\"keccak256\":\"0x6b16cd63be4303f4e3b3585915b50c44f515b7f9277835552536fd3ebfda00e9\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://467ad280596d68cca8a52c3aa2768477481cbbd483419353089b41664c7606b2\",\"dweb:/ipfs/QmaETqCQwnjK6DPWyZLVxY5NZqaj5dqdgWAfaXPjtNdE5n\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "UBQ_MINTER_ROLE",
+          "outputs": [
+            {
+              "internalType": "bytes32",
+              "name": "",
+              "type": "bytes32"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "bytes32",
+              "name": "role",
+              "type": "bytes32"
+            },
+            {
+              "internalType": "address",
+              "name": "account",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "hasRole",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
+            }
+          ]
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/ubiquistick/interfaces/IUBQManager.sol": "IUBQManager"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/ubiquistick/interfaces/IUBQManager.sol": {
+        "keccak256": "0x6b16cd63be4303f4e3b3585915b50c44f515b7f9277835552536fd3ebfda00e9",
+        "urls": [
+          "bzz-raw://467ad280596d68cca8a52c3aa2768477481cbbd483419353089b41664c7606b2",
+          "dweb:/ipfs/QmaETqCQwnjK6DPWyZLVxY5NZqaj5dqdgWAfaXPjtNdE5n"
+        ],
+        "license": "Apache-2.0"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "src/ubiquistick/interfaces/IUBQManager.sol",
-    "id": 52122,
+    "id": 52853,
     "exportedSymbols": {
       "IUBQManager": [
-        52121
+        52852
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "39:198:106",
+    "src": "39:198:107",
     "nodes": [
       {
-        "id": 52106,
+        "id": 52837,
         "nodeType": "PragmaDirective",
-        "src": "39:23:106",
+        "src": "39:23:107",
         "literals": [
           "solidity",
           "^",
@@ -75,33 +165,33 @@
         ]
       },
       {
-        "id": 52121,
+        "id": 52852,
         "nodeType": "ContractDefinition",
-        "src": "64:172:106",
+        "src": "64:172:107",
         "nodes": [
           {
-            "id": 52115,
+            "id": 52846,
             "nodeType": "FunctionDefinition",
-            "src": "92:77:106",
+            "src": "92:77:107",
             "functionSelector": "91d14854",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "hasRole",
-            "nameLocation": "101:7:106",
+            "nameLocation": "101:7:107",
             "parameters": {
-              "id": 52111,
+              "id": 52842,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 52108,
+                  "id": 52839,
                   "mutability": "mutable",
                   "name": "role",
-                  "nameLocation": "117:4:106",
+                  "nameLocation": "117:4:107",
                   "nodeType": "VariableDeclaration",
-                  "scope": 52115,
-                  "src": "109:12:106",
+                  "scope": 52846,
+                  "src": "109:12:107",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -109,10 +199,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 52107,
+                    "id": 52838,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "109:7:106",
+                    "src": "109:7:107",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -122,13 +212,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 52110,
+                  "id": 52841,
                   "mutability": "mutable",
                   "name": "account",
-                  "nameLocation": "131:7:106",
+                  "nameLocation": "131:7:107",
                   "nodeType": "VariableDeclaration",
-                  "scope": 52115,
-                  "src": "123:15:106",
+                  "scope": 52846,
+                  "src": "123:15:107",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -136,10 +226,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 52109,
+                    "id": 52840,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "123:7:106",
+                    "src": "123:7:107",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -149,21 +239,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "108:31:106"
+              "src": "108:31:107"
             },
             "returnParameters": {
-              "id": 52114,
+              "id": 52845,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 52113,
+                  "id": 52844,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 52115,
-                  "src": "163:4:106",
+                  "scope": 52846,
+                  "src": "163:4:107",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -171,10 +261,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 52112,
+                    "id": 52843,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "163:4:106",
+                    "src": "163:4:107",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -183,42 +273,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "162:6:106"
+              "src": "162:6:107"
             },
-            "scope": 52121,
+            "scope": 52852,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 52120,
+            "id": 52851,
             "nodeType": "FunctionDefinition",
-            "src": "175:59:106",
+            "src": "175:59:107",
             "functionSelector": "2f533cb7",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "UBQ_MINTER_ROLE",
-            "nameLocation": "184:15:106",
+            "nameLocation": "184:15:107",
             "parameters": {
-              "id": 52116,
+              "id": 52847,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "199:2:106"
+              "src": "199:2:107"
             },
             "returnParameters": {
-              "id": 52119,
+              "id": 52850,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 52118,
+                  "id": 52849,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 52120,
-                  "src": "225:7:106",
+                  "scope": 52851,
+                  "src": "225:7:107",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -226,10 +316,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 52117,
+                    "id": 52848,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "225:7:106",
+                    "src": "225:7:107",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -238,9 +328,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "224:9:106"
+              "src": "224:9:107"
             },
-            "scope": 52121,
+            "scope": 52852,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -253,15 +343,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          52121
+          52852
         ],
         "name": "IUBQManager",
-        "nameLocation": "74:11:106",
-        "scope": 52122,
+        "nameLocation": "74:11:107",
+        "scope": 52853,
         "usedErrors": []
       }
     ],
     "license": "Apache-2.0"
   },
-  "id": 106
+  "id": 107
 }

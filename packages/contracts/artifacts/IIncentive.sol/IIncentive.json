@@ -42,6 +42,99 @@
   "methodIdentifiers": {
     "incentivize(address,address,address,uint256)": "6e22230d"
   },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"incentivize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"should be appointed as a Minter or Burner as needed\",\"kind\":\"dev\",\"methods\":{\"incentivize(address,address,address,uint256)\":{\"params\":{\"amount\":\"the amount of uAD transferred\",\"operator\":\"the operator (msg.sender) of the transfer\",\"receiver\":\"the receiver address of uAD\",\"sender\":\"the sender address of uAD\"}}},\"title\":\"incentive contract interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"incentivize(address,address,address,uint256)\":{\"notice\":\"apply incentives on transfer\"}},\"notice\":\"Called by uAD token contract when transferring with an incentivized address\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IIncentive.sol\":\"IIncentive\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/=lib/openzeppelin-contracts/\",\":@uniswap/=lib/Uniswap/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IIncentive.sol\":{\"keccak256\":\"0x2e7ce5439784e96694fae1e8a49501baba7144f688ba40b8e19dfbf951fbb266\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://44f8e82547b06dbb5c9449eb4bf71fb9ba36d3b539a94e29be880421745d3614\",\"dweb:/ipfs/QmaMmAufWvVcb5Cz8Qeys9ZdaK3qSnwsiB49iE5Hjo264a\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "sender",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "receiver",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "operator",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "incentivize"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {
+          "incentivize(address,address,address,uint256)": {
+            "params": {
+              "amount": "the amount of uAD transferred",
+              "operator": "the operator (msg.sender) of the transfer",
+              "receiver": "the receiver address of uAD",
+              "sender": "the sender address of uAD"
+            }
+          }
+        },
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "incentivize(address,address,address,uint256)": {
+            "notice": "apply incentives on transfer"
+          }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/=lib/openzeppelin-contracts/",
+        ":@uniswap/=lib/Uniswap/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/IIncentive.sol": "IIncentive"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/dollar/interfaces/IIncentive.sol": {
+        "keccak256": "0x2e7ce5439784e96694fae1e8a49501baba7144f688ba40b8e19dfbf951fbb266",
+        "urls": [
+          "bzz-raw://44f8e82547b06dbb5c9449eb4bf71fb9ba36d3b539a94e29be880421745d3614",
+          "dweb:/ipfs/QmaMmAufWvVcb5Cz8Qeys9ZdaK3qSnwsiB49iE5Hjo264a"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IIncentive.sol",
     "id": 39672,
