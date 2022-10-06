@@ -34,14 +34,14 @@ contract MockDebtCoupon is ERC1155 {
         emit MintedCoupons(receiver, couponsToMint, expiryBlockNumber);
     }
 
-    function balanceOf(address receiver, uint256 id) public view override returns ( uint256 ) {
+    function balanceOf(address receiver, uint256 id) public view override returns (uint256) {
         return _balances[receiver][id];
     }
 
-    function burnCoupons(address couponOwner, uint256 amount, uint256 expiryBlockNumber) public { 
+    function burnCoupons(address couponOwner, uint256 amount, uint256 expiryBlockNumber) public {
         uint256 _balance = _balances[couponOwner][expiryBlockNumber];
         require(_balance >= amount, "Insufficient balance");
         _balances[couponOwner][expiryBlockNumber] = _balance - amount;
         emit BurntCoupons(couponOwner, amount, expiryBlockNumber);
-     }
+    }
 }

@@ -4,7 +4,6 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract MockAutoRedeem is ERC20 {
-
     constructor(uint256 initialSupply) ERC20("Ubiquity Auto Redeem", "uAR") {
         _mint(msg.sender, initialSupply);
     }
@@ -22,7 +21,6 @@ contract MockAutoRedeem is ERC20 {
     }
 
     function raiseCapital(uint256 amount) external {
-        
         mint(address(this), amount);
     }
 }

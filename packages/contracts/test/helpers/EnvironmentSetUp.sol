@@ -28,21 +28,18 @@ import "../../src/dollar/interfaces/IERC1155Ubiquity.sol";
 import "Uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "Uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 
-
 import "forge-std/Test.sol";
 
-
 contract EnvironmentSetUp is Test {
-
     using stdStorage for StdStorage;
 
     Bonding bondingV1;
     BondingV2 bondingV2;
     BondingFormulas bFormulas;
     BondingShareV2 bondingShareV2;
-    
+
     UbiquityAlgorithmicDollarManager manager;
-    
+
     UbiquityFormulas uFormulas;
     TWAPOracle twapOracle;
     MasterChefV2 chefV2;
@@ -55,22 +52,21 @@ contract EnvironmentSetUp is Test {
     ExcessDollarsDistributor excessDollarsDistributor;
     SushiSwapPool sushiUGOVPool;
     IMetaPool metapool;
-    
+
     MockuADToken uAD;
     UbiquityGovernance uGov;
 
     BondingShare bondingShareV1;
-     
-    
+
     IUniswapV2Factory factory = IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
     IUniswapV2Router02 router = IUniswapV2Router02(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F);
-    
+
     IERC20 DAI = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     IERC20 USDC = IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
     IERC20 USDT = IERC20(0xdAC17F958D2ee523a2206206994597C13D831ec7);
     IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
     IERC20 WETH = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
-    
+
     ICurveFactory curvePoolFactory = ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
 
     address admin = address(0x1);
@@ -90,7 +86,6 @@ contract EnvironmentSetUp is Test {
     address usdcWhaleAddress = 0x72A53cDBBcc1b9efa39c834A540550e23463AAcB;
     address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
 
-
     string uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
     uint256 couponLengthBlocks = 100;
 
@@ -98,9 +93,7 @@ contract EnvironmentSetUp is Test {
     uint256[] migrateLP;
     uint256[] locked;
 
-
-    function setUp() public virtual{
-        
+    function setUp() public virtual {
         vm.startPrank(admin);
 
         manager = new UbiquityAlgorithmicDollarManager(admin);
@@ -130,7 +123,7 @@ contract EnvironmentSetUp is Test {
         manager.setBondingContractAddress(address(bondingV1));
 
         bondingShareV1.setApprovalForAll(address(bondingV1), true);
-        
+
         manager.setTreasuryAddress(treasury);
 
         deal(address(uGov), thirdAccount, 100000e18);
@@ -145,29 +138,16 @@ contract EnvironmentSetUp is Test {
         uAD.approve(address(router), 1000000e18);
         uGov.approve(address(router), 100000e18);
         router.addLiquidity(
-            address(uAD), 
-            address(uGov), 
-            1000000e18, 
-            100000e18, 
-            990000e18, 
-            99000e18,
-            thirdAccount,
-            block.timestamp + 100);
+            address(uAD), address(uGov), 1000000e18, 100000e18, 990000e18, 99000e18, thirdAccount, block.timestamp + 100
+        );
         vm.stopPrank();
 
         vm.startPrank(admin);
 
-        
+        address[6] memory mintings =
+            [admin, address(manager), fourthAccount, bondingZeroAccount, bondingMinAccount, bondingMaxAccount];
 
-        address[6] memory mintings = [
-            admin, 
-            address(manager),
-            fourthAccount, 
-            bondingZeroAccount, 
-            bondingMinAccount, 
-            bondingMaxAccount];
-
-        for(uint i = 0; i < mintings.length; ++i) {
+        for (uint256 i = 0; i < mintings.length; ++i) {
             deal(address(uAD), mintings[i], 10000e18);
         }
 
@@ -180,12 +160,10 @@ contract EnvironmentSetUp is Test {
 
         address[4] memory crvDeal = [address(manager), bondingMaxAccount, bondingMinAccount, fourthAccount];
 
-        for(uint i; i < crvDeal.length; ++i) {
+        for (uint256 i; i < crvDeal.length; ++i) {
             vm.prank(curveWhaleAddress);
             crvToken.transfer(crvDeal[i], 10000e18);
         }
-        
-
 
         vm.startPrank(admin);
         manager.deployStableSwapPool(address(curvePoolFactory), curve3CrvBasePool, curve3CrvToken, 10, 50000000);
@@ -226,13 +204,10 @@ contract EnvironmentSetUp is Test {
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(chefV2));
         manager.grantRole(manager.UBQ_TOKEN_MANAGER_ROLE(), admin);
         manager.grantRole(manager.UBQ_TOKEN_MANAGER_ROLE(), managerAddress);
-        
+
         chefV2.setUGOVPerBlock(10e18);
 
         vm.stopPrank();
-
-        
-        
 
         vm.startPrank(bondingMinAccount);
         uAD.approve(address(metapool), 10000e18);
@@ -264,7 +239,7 @@ contract EnvironmentSetUp is Test {
 
         ///uint256 bondingMinBal = metapool.balanceOf(bondingMinAccount);
         ///uint256 bondingMaxBal = metapool.balanceOf(bondingMaxAccount);
-        
+
         vm.startPrank(admin);
         bondingShareV2 = new BondingShareV2(address(manager), uri);
         manager.setBondingShareAddress(address(bondingShareV2));
@@ -296,6 +271,4 @@ contract EnvironmentSetUp is Test {
         vm.prank(thirdAccount);
         bondingShareV1.setApprovalForAll(address(bondingV1), true);
     }
-
-
 }

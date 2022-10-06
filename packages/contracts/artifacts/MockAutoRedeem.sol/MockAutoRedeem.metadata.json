@@ -456,11 +456,11 @@
       ]
     },
     "src/dollar/mocks/MockAutoRedeem.sol": {
-      "keccak256": "0x7548183f53780122269401fff7d6863510c635130e363387173c2f2a0cbf4668",
+      "keccak256": "0xd9d7cf84b7f9734455eab47e37023e10e0a66e28996b4395636bb5d8095e7f41",
       "license": "Apache-2.0",
       "urls": [
-        "bzz-raw://c3bf1af314080e1ffd36c83378af54981aa13afd9e6f50d5a9d638844b351173",
-        "dweb:/ipfs/QmXhPPsej9hU53K51r2sxH38Edz5UMyUQfo77xXxD119dJ"
+        "bzz-raw://f4442f0d5e9ee5ccd0dd1eed15440ec7e7a3ce7107e2adef2089d512a4e73a05",
+        "dweb:/ipfs/QmQ2hXbpzxwWDwaHvyuyn7YQ7RBbE1FUpAD8AwmAtsLDzB"
       ]
     }
   },

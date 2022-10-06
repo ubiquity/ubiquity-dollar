@@ -130,16 +130,32 @@
         "name": "get_price_cumulative_last",
         "outputs": [
           {
-            "internalType": "uint256",
+            "internalType": "uint256[2]",
             "name": "",
-            "type": "uint256"
+            "type": "uint256[2]"
           }
         ],
         "stateMutability": "view",
         "type": "function"
       },
       {
-        "inputs": [],
+        "inputs": [
+          {
+            "internalType": "uint256[2]",
+            "name": "_first_balances",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256[2]",
+            "name": "_last_balances",
+            "type": "uint256[2]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "_time_elapsed",
+            "type": "uint256"
+          }
+        ],
         "name": "get_twap_balances",
         "outputs": [
           {
@@ -154,9 +170,9 @@
       {
         "inputs": [
           {
-            "internalType": "uint256",
+            "internalType": "uint256[2]",
             "name": "_price_cumulative_last",
-            "type": "uint256"
+            "type": "uint256[2]"
           },
           {
             "internalType": "uint256",
@@ -216,11 +232,11 @@
   },
   "sources": {
     "src/dollar/mocks/MockMetaPool.sol": {
-      "keccak256": "0x6051189ee1026087204d4d333d30e29a515b393a783dbdd7591defb0f9920643",
+      "keccak256": "0x34cfdcc91dac404c6b129c6c54c01313a5d0cb69f19099fe1aa6045600620a28",
       "license": "MIT",
       "urls": [
-        "bzz-raw://9c139228955b24df3c43806adc0825fd97093dd4ddb88731df5c4b128e0a3ff4",
-        "dweb:/ipfs/QmWBaRNBHeaZk3Whxa9PocXEYiuZGBNhe9zjz7CGN8eU9g"
+        "bzz-raw://973b7ad0466de76157a6d8c2147c9b0122215ad802c84ea5c1f1ff901544307f",
+        "dweb:/ipfs/QmQCRVzpcGhVwLkoYfM5T1ssrDP5UKH5AH4JXz4itMuMaH"
       ]
     }
   },

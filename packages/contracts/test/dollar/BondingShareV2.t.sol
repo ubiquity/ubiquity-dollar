@@ -4,15 +4,11 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/EnvironmentSetUp.sol";
 
-
-
 contract DepositState is EnvironmentSetUp {
-
     uint256 fourthBal;
     uint256 minBal;
     uint256 maxBal;
     uint256[] creationBlock;
-
 
     function setUp() public virtual override {
         super.setUp();
@@ -20,12 +16,12 @@ contract DepositState is EnvironmentSetUp {
         minBal = metapool.balanceOf(bondingMinAccount);
         maxBal = metapool.balanceOf(bondingMaxAccount);
         address[4] memory depositingAccounts = [bondingMinAccount, fourthAccount, bondingMaxAccount, bondingMaxAccount];
-        uint256[4] memory depositAmounts = [minBal, fourthBal, maxBal/2, maxBal/2];
+        uint256[4] memory depositAmounts = [minBal, fourthBal, maxBal / 2, maxBal / 2];
         uint256[4] memory lockupWeeks = [uint256(1), uint256(52), uint256(208), uint256(208)];
 
-        for(uint i; i < depositingAccounts.length; ++i){
+        for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
-            metapool.approve(address(bondingV2), 2**256-1);
+            metapool.approve(address(bondingV2), 2 ** 256 - 1);
             creationBlock.push(block.number);
             bondingV2.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
@@ -34,7 +30,6 @@ contract DepositState is EnvironmentSetUp {
 }
 
 contract DepositStateTest is DepositState {
-
     uint256[] ids;
     uint256[] amounts;
 
@@ -76,7 +71,7 @@ contract DepositStateTest is DepositState {
         ids.push(4);
         amounts.push(1);
         amounts.push(1);
-        
+
         vm.prank(bondingMaxAccount);
         bondingShareV2.setApprovalForAll(admin, true);
 
@@ -92,7 +87,7 @@ contract DepositStateTest is DepositState {
     }
 
     function testTotalLP() public {
-        uint256 totalLp = fourthBal + minBal + maxBal -1;
+        uint256 totalLp = fourthBal + minBal + maxBal;
         assertEq(bondingShareV2.totalLP(), totalLp);
     }
 

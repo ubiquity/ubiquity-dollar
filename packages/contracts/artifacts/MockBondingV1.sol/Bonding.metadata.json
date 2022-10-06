@@ -814,11 +814,11 @@
       ]
     },
     "src/dollar/TWAPOracle.sol": {
-      "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
+      "keccak256": "0x05aa6cf22fa9d58d87d8d7668754059ec1020ab2081dde041c348b2f4a48ddb0",
       "license": "Apache-2.0",
       "urls": [
-        "bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c",
-        "dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr"
+        "bzz-raw://ae46d50478f8116be1e423d335cac6ae72fa7ebd60aa5f72b1d67dbdd7d17ad7",
+        "dweb:/ipfs/QmeoZ5DhpqHqTC7BWAB2WnDXq6532tjd1YLS3WZPafoGba"
       ]
     },
     "src/dollar/UbiquityAlgorithmicDollar.sol": {
@@ -926,11 +926,11 @@
       ]
     },
     "src/dollar/mocks/MockBondingV1.sol": {
-      "keccak256": "0xf213efb126e71f186bd8d4b5acbc5f5f20cddde69a47c5696ae8c5d93f6d988f",
+      "keccak256": "0x7f04f108ec39bb004d7d0de51507f68e634b97099ccfefb2856314c8c5a2d62b",
       "license": "MIT",
       "urls": [
-        "bzz-raw://e29c9c524206bbbd2b56b1fbe861502d34749930fd0f9349644944b752667624",
-        "dweb:/ipfs/QmbqdsiUzGSCAxeQB1LBDCt3s8qPpsmEMgqTx6jxs7M1Xc"
+        "bzz-raw://741d4e287aa80fd0222ac230d32303f1b77746db5690ccbd7f9a11d5d35212e1",
+        "dweb:/ipfs/QmUPNu7FAVoDoJ5Mtx8rCsbnBhLqiyMSeyuD17Ye8F2zEv"
       ]
     },
     "src/dollar/utils/CollectableDust.sol": {

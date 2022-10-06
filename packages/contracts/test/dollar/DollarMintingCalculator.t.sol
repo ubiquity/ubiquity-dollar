@@ -16,7 +16,8 @@ contract DollarMintingCalculatorTest is TestHelper {
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
         twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).twapOracleAddress();
-        dollarMintingCalculatorAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarMintingCalculatorAddress();
+        dollarMintingCalculatorAddress =
+            UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarMintingCalculatorAddress();
         uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarTokenAddress();
     }
 
@@ -31,11 +32,10 @@ contract DollarMintingCalculatorTest is TestHelper {
         DollarMintingCalculator(dollarMintingCalculatorAddress).getDollarsToMint();
     }
 
-    function test_getDollarsToMintWorks () public {
+    function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
         uint256 totalSupply = MockuADToken(uADAddress).totalSupply();
         uint256 amountToMint = DollarMintingCalculator(dollarMintingCalculatorAddress).getDollarsToMint();
         assertEq(amountToMint, totalSupply);
     }
-
 }

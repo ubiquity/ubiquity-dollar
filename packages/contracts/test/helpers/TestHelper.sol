@@ -5,8 +5,8 @@ import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorit
 import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
 import {UARForDollarsCalculator} from "../../src/dollar/UARForDollarsCalculator.sol";
 import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCalculator.sol";
-import { DollarMintingCalculator} from "../../src/dollar/DollarMintingCalculator.sol";
-import { ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
+import {DollarMintingCalculator} from "../../src/dollar/DollarMintingCalculator.sol";
+import {ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
 import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
@@ -16,7 +16,7 @@ import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
 contract MockCouponsForDollarsCalculator {
-    constructor () {}
+    constructor() {}
 
     function getCouponAmount(uint256 dollarsToBurn) external view returns (uint256) {
         return dollarsToBurn;
@@ -48,19 +48,17 @@ abstract contract TestHelper is Test {
         // deploy governance token
         UbiquityGovernance _uGov = new UbiquityGovernance(address(_manager));
         _manager.setGovernanceTokenAddress(address(_uGov));
-        
+
         // deploy couponsForDollarCalculator
         MockCouponsForDollarsCalculator couponsForDollarsCalculator = new MockCouponsForDollarsCalculator();
         _manager.setCouponCalculatorAddress(address(couponsForDollarsCalculator));
-        
 
         // deploy ubiquityAutoRedeem
         MockAutoRedeem autoRedeem = new MockAutoRedeem(0);
         _manager.setuARTokenAddress(address(autoRedeem));
-        
 
         // deploy UARDollarCalculator
-        UARForDollarsCalculator  _uarDollarCalculator = new UARForDollarsCalculator(address(_manager));
+        UARForDollarsCalculator _uarDollarCalculator = new UARForDollarsCalculator(address(_manager));
         _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
 
         // deploy dollarMintingCalculator

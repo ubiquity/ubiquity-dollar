@@ -593,11 +593,11 @@
       ]
     },
     "src/dollar/mocks/MockDebtCoupon.sol": {
-      "keccak256": "0xe02a4a6a76f675af3848fe0cbaa6aa0357d8f1b997656ccf31cb951b65f605ed",
+      "keccak256": "0xf68062dcb25c53b8f53b8f02651ef66f86085f82c4b4fde01fb0985cdc876a1a",
       "license": "MIT",
       "urls": [
-        "bzz-raw://fb919c2e56c1f48f5f4037b3a91de8fe9da2660529a3bfe179581cfc233353b4",
-        "dweb:/ipfs/QmRNDp9WNsou9DM7tPA8s457qnW2qPfNqGHYdKp41NzVJY"
+        "bzz-raw://4118eaaf20eb3d046c173306d8d00524adec8e7bee0950c4fbe88eeefe137bab",
+        "dweb:/ipfs/Qmf3q6opxSWetf7AfCZgWgq2P18F8CsrVfGQcUx8N8vQdJ"
       ]
     }
   },
