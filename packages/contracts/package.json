@@ -23,7 +23,7 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test --gas-report",
+    "test": "forge test --gas-report --fork-url https://rpc.ankr.com/eth",
     "slither": "ln -s ../../node_modules && slither . --config-file slither.config.json",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
