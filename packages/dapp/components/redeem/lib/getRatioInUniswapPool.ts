@@ -46,8 +46,8 @@ const useRatio = (selectedToken: string): number => {
                         pairAmount = await USDTTokenContract.balanceOf(uCR_USDT_ADDRESS);
                     }
                     console.log(`pair(${selectedToken}) Amount:`, ethers.utils.formatEther(pairAmount), '|| uCR Amount:', ethers.utils.formatEther(uCRAmount))
-                    ratio = pairAmount / uCRAmount; // Pa*Aa = Pb*Ab, ratio = Aa/Ab = Pb/Pa, A-amount, P-price
-                    setRatio(ratio);
+                    ratio = (pairAmount / uCRAmount).toFixed(2); // Pa*Aa = Pb*Ab, ratio = Aa/Ab = Pb/Pa, A-amount, P-price
+                    setRatio(Number(ratio));
                 } catch (error) {
                     console.log("exeption in getEstimatedReturnValue", error);
                     return 0;
