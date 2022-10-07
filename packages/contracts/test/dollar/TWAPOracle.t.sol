@@ -1,9 +1,12 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.3;
+
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract TWAPOracleTest is TestHelper {
+contract TWAPOracleTest is LocalTestHelper {
     address uadTokenAddress = address(0x222);
     address curve3CRVTokenAddress = address(0x333);
     address twapOracleAddress;

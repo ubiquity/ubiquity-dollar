@@ -2,9 +2,9 @@
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../helpers/EnvironmentSetUp.sol";
+import "../helpers/LiveTestHelper.sol";
 
-contract ZeroState is EnvironmentSetUp {
+contract ZeroState is LiveTestHelper {
     event PriceReset(address _tokenWithdrawn, uint256 _amountWithdrawn, uint256 _amountTransfered);
 
     event Deposit(

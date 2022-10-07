@@ -5,9 +5,9 @@ import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorit
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
 import {DollarMintingCalculator} from "../../src/dollar/DollarMintingCalculator.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract DollarMintingCalculatorTest is TestHelper {
+contract DollarMintingCalculatorTest is LocalTestHelper {
     address uADManagerAddress;
     address uADAddress;
     address twapOracleAddress;

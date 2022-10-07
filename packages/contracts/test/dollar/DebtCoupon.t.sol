@@ -4,9 +4,9 @@ pragma solidity ^0.8.3;
 import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract DebtCouponTest is TestHelper {
+contract DebtCouponTest is LocalTestHelper {
     address uADManagerAddress;
     address debtCouponAddress;
 

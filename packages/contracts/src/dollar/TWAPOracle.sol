@@ -35,7 +35,6 @@ contract TWAPOracle {
 
         price0Average = 1 ether;
         price1Average = 1 ether;
-
     }
 
     // calculate average price

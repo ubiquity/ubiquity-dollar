@@ -1,0 +1,499 @@
+{
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Incentivized",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "recipient",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "incentivize",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x608060405234801561001057600080fd5b5061014d806100206000396000f3fe608060405234801561001057600080fd5b506004361061002b5760003560e01c80636e22230d14610030575b600080fd5b61004361003e3660046100cc565b610045565b005b6040805173ffffffffffffffffffffffffffffffffffffffff84811682526020820184905280861692908716917fa45063c6a0668e56dbdbab12fba7371e7720255a754071bca8ab9803a3fd4385910160405180910390a350505050565b803573ffffffffffffffffffffffffffffffffffffffff811681146100c757600080fd5b919050565b600080600080608085870312156100e257600080fd5b6100eb856100a3565b93506100f9602086016100a3565b9250610107604086016100a3565b939692955092936060013592505056fea264697066735822122051d57f95a9e361bff4e47c29088eec3d8ce7170be19cb715813dd24e75a5e61064736f6c63430008090033",
+    "sourceMap": "83:309:78:-:0;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x608060405234801561001057600080fd5b506004361061002b5760003560e01c80636e22230d14610030575b600080fd5b61004361003e3660046100cc565b610045565b005b6040805173ffffffffffffffffffffffffffffffffffffffff84811682526020820184905280861692908716917fa45063c6a0668e56dbdbab12fba7371e7720255a754071bca8ab9803a3fd4385910160405180910390a350505050565b803573ffffffffffffffffffffffffffffffffffffffff811681146100c757600080fd5b919050565b600080600080608085870312156100e257600080fd5b6100eb856100a3565b93506100f9602086016100a3565b9250610107604086016100a3565b939692955092936060013592505056fea264697066735822122051d57f95a9e361bff4e47c29088eec3d8ce7170be19cb715813dd24e75a5e61064736f6c63430008090033",
+    "sourceMap": "83:309:78:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;222:168;;;;;;:::i;:::-;;:::i;:::-;;;334:49;;;;815:55:99;;;797:74;;902:2;887:18;;880:34;;;334:49:78;;;;;;;;;;770:18:99;334:49:78;;;;;;;222:168;;;;:::o;14:196:99:-;82:20;;142:42;131:54;;121:65;;111:93;;200:1;197;190:12;111:93;14:196;;;:::o;215:403::-;301:6;309;317;325;378:3;366:9;357:7;353:23;349:33;346:53;;;395:1;392;385:12;346:53;418:29;437:9;418:29;:::i;:::-;408:39;;466:38;500:2;489:9;485:18;466:38;:::i;:::-;456:48;;523:38;557:2;546:9;542:18;523:38;:::i;:::-;215:403;;;;-1:-1:-1;513:48:99;;608:2;593:18;580:32;;-1:-1:-1;;215:403:99:o",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "incentivize(address,address,address,uint256)": "6e22230d"
+  },
+  "ast": {
+    "absolutePath": "src/dollar/mocks/MockIncentive.sol",
+    "id": 45756,
+    "exportedSymbols": {
+      "MockIncentive": [
+        45755
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "58:334:78",
+    "nodes": [
+      {
+        "id": 45725,
+        "nodeType": "PragmaDirective",
+        "src": "58:23:78",
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".3"
+        ]
+      },
+      {
+        "id": 45755,
+        "nodeType": "ContractDefinition",
+        "src": "83:309:78",
+        "nodes": [
+          {
+            "id": 45735,
+            "nodeType": "EventDefinition",
+            "src": "113:104:78",
+            "anonymous": false,
+            "name": "Incentivized",
+            "nameLocation": "119:12:78",
+            "parameters": {
+              "id": 45734,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 45727,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nameLocation": "148:6:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45735,
+                  "src": "132:22:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 45726,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "132:7:78",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 45729,
+                  "indexed": true,
+                  "mutability": "mutable",
+                  "name": "recipient",
+                  "nameLocation": "172:9:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45735,
+                  "src": "156:25:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 45728,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "156:7:78",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 45731,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "operator",
+                  "nameLocation": "191:8:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45735,
+                  "src": "183:16:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 45730,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "183:7:78",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 45733,
+                  "indexed": false,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "209:6:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45735,
+                  "src": "201:14:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 45732,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "201:7:78",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "131:85:78"
+            }
+          },
+          {
+            "id": 45754,
+            "nodeType": "FunctionDefinition",
+            "src": "222:168:78",
+            "body": {
+              "id": 45753,
+              "nodeType": "Block",
+              "src": "319:71:78",
+              "statements": [
+                {
+                  "eventCall": {
+                    "arguments": [
+                      {
+                        "id": 45747,
+                        "name": "sender",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 45737,
+                        "src": "347:6:78",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 45748,
+                        "name": "recipient",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 45739,
+                        "src": "355:9:78",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 45749,
+                        "name": "operator",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 45741,
+                        "src": "366:8:78",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        }
+                      },
+                      {
+                        "id": 45750,
+                        "name": "amount",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 45743,
+                        "src": "376:6:78",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 45746,
+                      "name": "Incentivized",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 45735,
+                      "src": "334:12:78",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_address_$_t_address_$_t_uint256_$returns$__$",
+                        "typeString": "function (address,address,address,uint256)"
+                      }
+                    },
+                    "id": 45751,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "334:49:78",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 45752,
+                  "nodeType": "EmitStatement",
+                  "src": "329:54:78"
+                }
+              ]
+            },
+            "functionSelector": "6e22230d",
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "incentivize",
+            "nameLocation": "231:11:78",
+            "parameters": {
+              "id": 45744,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 45737,
+                  "mutability": "mutable",
+                  "name": "sender",
+                  "nameLocation": "251:6:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45754,
+                  "src": "243:14:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 45736,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "243:7:78",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 45739,
+                  "mutability": "mutable",
+                  "name": "recipient",
+                  "nameLocation": "267:9:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45754,
+                  "src": "259:17:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 45738,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "259:7:78",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 45741,
+                  "mutability": "mutable",
+                  "name": "operator",
+                  "nameLocation": "286:8:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45754,
+                  "src": "278:16:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 45740,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "278:7:78",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 45743,
+                  "mutability": "mutable",
+                  "name": "amount",
+                  "nameLocation": "304:6:78",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 45754,
+                  "src": "296:14:78",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 45742,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "296:7:78",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "242:69:78"
+            },
+            "returnParameters": {
+              "id": 45745,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "319:0:78"
+            },
+            "scope": 45755,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "MockIncentive",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "linearizedBaseContracts": [
+          45755
+        ],
+        "name": "MockIncentive",
+        "nameLocation": "92:13:78",
+        "scope": 45756,
+        "usedErrors": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 78
+}

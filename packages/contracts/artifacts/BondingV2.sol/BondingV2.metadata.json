@@ -1171,11 +1171,11 @@
       ]
     },
     "src/dollar/TWAPOracle.sol": {
-      "keccak256": "0x05aa6cf22fa9d58d87d8d7668754059ec1020ab2081dde041c348b2f4a48ddb0",
+      "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
       "license": "Apache-2.0",
       "urls": [
-        "bzz-raw://ae46d50478f8116be1e423d335cac6ae72fa7ebd60aa5f72b1d67dbdd7d17ad7",
-        "dweb:/ipfs/QmeoZ5DhpqHqTC7BWAB2WnDXq6532tjd1YLS3WZPafoGba"
+        "bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c",
+        "dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr"
       ]
     },
     "src/dollar/UbiquityAlgorithmicDollar.sol": {

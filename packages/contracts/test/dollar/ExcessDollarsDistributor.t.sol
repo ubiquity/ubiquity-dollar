@@ -8,9 +8,9 @@ import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
 import {ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract ExcessDollarsDistributorTest is TestHelper {
+contract ExcessDollarsDistributorTest is LocalTestHelper {
     address uADManagerAddress;
     address uADAddress;
 

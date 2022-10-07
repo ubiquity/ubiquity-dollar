@@ -2,9 +2,9 @@
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../helpers/EnvironmentSetUp.sol";
+import "../helpers/LiveTestHelper.sol";
 
-contract DepositState is EnvironmentSetUp {
+contract DepositState is LiveTestHelper {
     uint256 fourthBal;
     uint256 minBal;
     uint256 maxBal;

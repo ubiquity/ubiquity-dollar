@@ -30,7 +30,7 @@ import "Uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 
 import "forge-std/Test.sol";
 
-contract EnvironmentSetUp is Test {
+contract LiveTestHelper is Test {
     using stdStorage for StdStorage;
 
     Bonding bondingV1;

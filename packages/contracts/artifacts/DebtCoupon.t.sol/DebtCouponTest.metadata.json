@@ -926,11 +926,11 @@
       ]
     },
     "src/dollar/TWAPOracle.sol": {
-      "keccak256": "0x05aa6cf22fa9d58d87d8d7668754059ec1020ab2081dde041c348b2f4a48ddb0",
+      "keccak256": "0x1c876143280a4a5b727ad1ae1d7f12c92a50942b5c34dbf583b6a9a404ac3e9c",
       "license": "Apache-2.0",
       "urls": [
-        "bzz-raw://ae46d50478f8116be1e423d335cac6ae72fa7ebd60aa5f72b1d67dbdd7d17ad7",
-        "dweb:/ipfs/QmeoZ5DhpqHqTC7BWAB2WnDXq6532tjd1YLS3WZPafoGba"
+        "bzz-raw://f973561cdb4f7961e8aba06789814f3e569be32f884ad8cda4c9859bb793e90c",
+        "dweb:/ipfs/QmbkJ2FnQZGQdMEAbRCeH2PqNyK8VHQLzW7ecYL5TpCzpr"
       ]
     },
     "src/dollar/UARForDollarsCalculator.sol": {
@@ -1070,19 +1070,19 @@
       ]
     },
     "test/dollar/DebtCoupon.t.sol": {
-      "keccak256": "0xafe5f4efe5b6b359f262640f06db456d79fc0c3e4a8bf70afc7d656b1e0e93b2",
+      "keccak256": "0x39763f95369326c5888a1c3500ae385be3d3639dedbbb9727786b7e342035da0",
       "license": "MIT",
       "urls": [
-        "bzz-raw://46b561c641e8d33f62cd4a46292eee309dcd27719e9d488a66db60152e706b49",
-        "dweb:/ipfs/QmQUn3c15YiJxR4z15zxmr6VLNEopeCRLGG267tdyCcUom"
+        "bzz-raw://1c3bcd4a8c140147c1dd3065f0591c75ff42bbeb3d4b077824f38015f255b1a7",
+        "dweb:/ipfs/QmdJ4gM5wbfpJgoVkLwRCPtNTKj6NHbx6RSbxW4i5iV9PK"
       ]
     },
-    "test/helpers/TestHelper.sol": {
-      "keccak256": "0xe61933510387a21a6e516d827363b7acd8c38b5beae275e56fdeea345a0522e2",
+    "test/helpers/LocalTestHelper.sol": {
+      "keccak256": "0xf7fb9099a22093e5152ad1b940b2167dbdb6bbdd2cd30f0ef85e1a303cd6be78",
       "license": "MIT",
       "urls": [
-        "bzz-raw://de1adaeb6a29e09941c17c9f564bc20986c9e8ba949fdddb3a6710d3468d7c8b",
-        "dweb:/ipfs/QmYBj31TiNq8F1FeYFGBwxGZw6g2taRDuee6EsvcN4qZRt"
+        "bzz-raw://120795c290026392631c9d409a280ed0d2f3412016885c7adc0e218ee32edbbe",
+        "dweb:/ipfs/QmUTezwF6PDkXFDoauJX2DPiqhkeTtNJRSaewD7dJv2mhv"
       ]
     }
   },

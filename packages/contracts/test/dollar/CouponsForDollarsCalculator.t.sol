@@ -7,9 +7,9 @@ import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCal
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract CouponsForDollarsCalculatorTest is TestHelper {
+contract CouponsForDollarsCalculatorTest is LocalTestHelper {
     address uADManagerAddress;
     address couponsForDollarsCalculatorAddress;
 

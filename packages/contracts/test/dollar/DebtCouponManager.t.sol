@@ -14,9 +14,9 @@ import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract DebtCouponManagerTest is TestHelper {
+contract DebtCouponManagerTest is LocalTestHelper {
     address uADManagerAddress;
     address uADAddress;
     address uARDollarCalculatorAddress;

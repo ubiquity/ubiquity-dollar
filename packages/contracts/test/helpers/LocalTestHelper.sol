@@ -23,7 +23,7 @@ contract MockCouponsForDollarsCalculator {
     }
 }
 
-abstract contract TestHelper is Test {
+abstract contract LocalTestHelper is Test {
     address public constant NATIVE_ASSET = address(0);
 
     address public admin = address(0x123abc);
