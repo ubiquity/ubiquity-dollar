@@ -101,11 +101,11 @@
   },
   "sources": {
     "src/dollar/mocks/MockIncentive.sol": {
-      "keccak256": "0xc4a5051577e836539bf82fdead620b5834872f99c66411d5348c00a06c7db969",
+      "keccak256": "0xe77d1d31ce0b3b2a9bd96732b7c8099306c4ae1c2890eca8907ecabb163abb8e",
       "license": "MIT",
       "urls": [
-        "bzz-raw://8ff06661dc7571c54e159163ce5b08ab229ab11b29b44382e122e0a7331ff02f",
-        "dweb:/ipfs/QmZLc6WZBAX8E4z5zjzFKxGzW4v7Nfuf89HJrWTwBqHoWZ"
+        "bzz-raw://3441eb2f49e999687295a15c1175d8381469cdd1be05e03b69c504351bcc7698",
+        "dweb:/ipfs/QmYMsjwA8b6YC3a5DANQu3TDY8aDwmpbfrom9JPcvMcUdu"
       ]
     }
   },

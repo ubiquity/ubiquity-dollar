@@ -18,7 +18,7 @@ import "forge-std/console.sol";
 contract MockCouponsForDollarsCalculator {
     constructor() {}
 
-    function getCouponAmount(uint256 dollarsToBurn) external view returns (uint256) {
+    function getCouponAmount(uint256 dollarsToBurn) external pure returns (uint256) {
         return dollarsToBurn;
     }
 }

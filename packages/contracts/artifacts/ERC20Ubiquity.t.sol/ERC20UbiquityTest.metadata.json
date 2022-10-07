@@ -9,6 +9,50 @@
         "anonymous": false,
         "inputs": [
           {
+            "indexed": true,
+            "internalType": "address",
+            "name": "_burned",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "_amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Burning",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "mock_addr1",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "_minter",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "_amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Minting",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
             "indexed": false,
             "internalType": "string",
             "name": "",
@@ -450,6 +494,27 @@
       {
         "inputs": [],
         "name": "setUp",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_mintAndBurn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_setName",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "test_setSymbol",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -978,19 +1043,19 @@
       ]
     },
     "test/dollar/ERC20Ubiquity.t.sol": {
-      "keccak256": "0x38ff510ee95fe955a7b1962cdd641bb45415d0956b58554cb26208767c38d544",
+      "keccak256": "0x2e7945ac598cee45c35c3180ee2ca0966293f9f6996fcb2bfad3dcee2c9f125d",
       "license": "MIT",
       "urls": [
-        "bzz-raw://0993095afda1fdce3c6da33867d7cfb545b05692ac0a73ab92ec315409e54b5b",
-        "dweb:/ipfs/QmRqzG9SHotX4yJqsqngH5B6dBMzYLNdRrVLc2SEWMbpUk"
+        "bzz-raw://d63f539101488f2911ff3792d0267f399f904ef41d063a8b2afedeecc5563737",
+        "dweb:/ipfs/QmdTCzJ4GDNhPhT8nRb2RH9Kr9cDwo3xMgLngLEp2ytW25"
       ]
     },
     "test/helpers/LocalTestHelper.sol": {
-      "keccak256": "0xf7fb9099a22093e5152ad1b940b2167dbdb6bbdd2cd30f0ef85e1a303cd6be78",
+      "keccak256": "0x0608752f2424965330a0e18cd7a78a0af23184122c95279fdd73c1572d652eda",
       "license": "MIT",
       "urls": [
-        "bzz-raw://120795c290026392631c9d409a280ed0d2f3412016885c7adc0e218ee32edbbe",
-        "dweb:/ipfs/QmUTezwF6PDkXFDoauJX2DPiqhkeTtNJRSaewD7dJv2mhv"
+        "bzz-raw://9177ae926534fcf593fb752c600e3d189c53e153e54aae173d235fccd6d6094e",
+        "dweb:/ipfs/QmY36meEn4vhsAnEyVk3F7e1NxshcaF4orMPtbwyM9vrjc"
       ]
     }
   },

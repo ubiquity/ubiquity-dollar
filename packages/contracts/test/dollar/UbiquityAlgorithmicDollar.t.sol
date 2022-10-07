@@ -53,12 +53,15 @@ contract UbiquityAlgorithmicDollarTest is LocalTestHelper {
         vm.stopPrank();
 
         vm.prank(mock_sender);
-        vm.expectCall(incentive_addr, abi.encodeWithSelector(MockIncentive.incentivize.selector, mock_sender, userB, mock_sender, 1));
+        vm.expectCall(
+            incentive_addr, abi.encodeWithSelector(MockIncentive.incentivize.selector, mock_sender, userB, mock_sender, 1)
+        );
         UbiquityAlgorithmicDollar(uad_addr).transfer(userB, 1);
 
         vm.prank(userA);
-        vm.expectCall(incentive_addr, abi.encodeWithSelector(MockIncentive.incentivize.selector, userA, mock_recipient, userA, 1));
+        vm.expectCall(
+            incentive_addr, abi.encodeWithSelector(MockIncentive.incentivize.selector, userA, mock_recipient, userA, 1)
+        );
         UbiquityAlgorithmicDollar(uad_addr).transfer(mock_recipient, 1);
-
     }
 }
