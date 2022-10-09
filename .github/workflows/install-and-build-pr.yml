@@ -42,6 +42,11 @@ jobs:
       - name: Test
         run: yarn test:all
 
+      - name: Slither Analysis
+        uses: crytic/slither-action@v0.2.0
+        with:
+          target: "packages/contracts/src"
+
       - name: Save PR
         env:
           EVENT_NAME: ${{github.event_name}}

@@ -116,19 +116,170 @@
     "removeProtocolToken(address)": "bf0d68e4",
     "sendDust(address,address,uint256)": "2db8c129"
   },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.9+commit.e5eed63a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"DustSent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"ProtocolTokenAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"ProtocolTokenRemoved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"addProtocolToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"}],\"name\":\"removeProtocolToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_to\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"sendDust\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/utils/ICollectableDust.sol\":\"ICollectableDust\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/utils/ICollectableDust.sol\":{\"keccak256\":\"0xe9c4f4b1db5555fdb6bfa154f29796503518a6ddbc1004c1671357c67b997627\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bdf8ef900bfcd308e927e17a28fd8453499ade48449eda56e7216be98ff26172\",\"dweb:/ipfs/QmPs1oQeSN6R2ygbhqdJietPKMF9jRwYBmM3yXZn5efk7w\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.9+commit.e5eed63a"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_to",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "address",
+              "name": "token",
+              "type": "address",
+              "indexed": false
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "DustSent",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ProtocolTokenAdded",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address",
+              "indexed": false
+            }
+          ],
+          "type": "event",
+          "name": "ProtocolTokenRemoved",
+          "anonymous": false
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "addProtocolToken"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "removeProtocolToken"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_to",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "_token",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_amount",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "sendDust"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        ":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
+        ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
+        ":Uniswap/=lib/Uniswap/",
+        ":ds-test/=lib/forge-std/lib/ds-test/src/",
+        ":forge-std/=lib/forge-std/src/",
+        ":solidity-linked-list/=lib/solidity-linked-list/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 20000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/dollar/interfaces/utils/ICollectableDust.sol": "ICollectableDust"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "src/dollar/interfaces/utils/ICollectableDust.sol": {
+        "keccak256": "0xe9c4f4b1db5555fdb6bfa154f29796503518a6ddbc1004c1671357c67b997627",
+        "urls": [
+          "bzz-raw://bdf8ef900bfcd308e927e17a28fd8453499ade48449eda56e7216be98ff26172",
+          "dweb:/ipfs/QmPs1oQeSN6R2ygbhqdJietPKMF9jRwYBmM3yXZn5efk7w"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/utils/ICollectableDust.sol",
-    "id": 41432,
+    "id": 41406,
     "exportedSymbols": {
       "ICollectableDust": [
-        41431
+        41405
       ]
     },
     "nodeType": "SourceUnit",
     "src": "32:410:89",
     "nodes": [
       {
-        "id": 41395,
+        "id": 41369,
         "nodeType": "PragmaDirective",
         "src": "32:23:89",
         "literals": [
@@ -139,30 +290,30 @@
         ]
       },
       {
-        "id": 41431,
+        "id": 41405,
         "nodeType": "ContractDefinition",
         "src": "57:384:89",
         "nodes": [
           {
-            "id": 41403,
+            "id": 41377,
             "nodeType": "EventDefinition",
             "src": "90:59:89",
             "anonymous": false,
             "name": "DustSent",
             "nameLocation": "96:8:89",
             "parameters": {
-              "id": 41402,
+              "id": 41376,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41397,
+                  "id": 41371,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "_to",
                   "nameLocation": "113:3:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41403,
+                  "scope": 41377,
                   "src": "105:11:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -171,7 +322,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41396,
+                    "id": 41370,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "105:7:89",
@@ -185,13 +336,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41399,
+                  "id": 41373,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "token",
                   "nameLocation": "126:5:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41403,
+                  "scope": 41377,
                   "src": "118:13:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -200,7 +351,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41398,
+                    "id": 41372,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "118:7:89",
@@ -214,13 +365,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41401,
+                  "id": 41375,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "amount",
                   "nameLocation": "141:6:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41403,
+                  "scope": 41377,
                   "src": "133:14:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -229,7 +380,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41400,
+                    "id": 41374,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "133:7:89",
@@ -245,25 +396,25 @@
             }
           },
           {
-            "id": 41407,
+            "id": 41381,
             "nodeType": "EventDefinition",
             "src": "154:41:89",
             "anonymous": false,
             "name": "ProtocolTokenAdded",
             "nameLocation": "160:18:89",
             "parameters": {
-              "id": 41406,
+              "id": 41380,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41405,
+                  "id": 41379,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "_token",
                   "nameLocation": "187:6:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41407,
+                  "scope": 41381,
                   "src": "179:14:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -272,7 +423,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41404,
+                    "id": 41378,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "179:7:89",
@@ -289,25 +440,25 @@
             }
           },
           {
-            "id": 41411,
+            "id": 41385,
             "nodeType": "EventDefinition",
             "src": "200:43:89",
             "anonymous": false,
             "name": "ProtocolTokenRemoved",
             "nameLocation": "206:20:89",
             "parameters": {
-              "id": 41410,
+              "id": 41384,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41409,
+                  "id": 41383,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "_token",
                   "nameLocation": "235:6:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41411,
+                  "scope": 41385,
                   "src": "227:14:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -316,7 +467,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41408,
+                    "id": 41382,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "227:7:89",
@@ -333,7 +484,7 @@
             }
           },
           {
-            "id": 41416,
+            "id": 41390,
             "nodeType": "FunctionDefinition",
             "src": "249:51:89",
             "functionSelector": "fa3305c9",
@@ -343,17 +494,17 @@
             "name": "addProtocolToken",
             "nameLocation": "258:16:89",
             "parameters": {
-              "id": 41414,
+              "id": 41388,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41413,
+                  "id": 41387,
                   "mutability": "mutable",
                   "name": "_token",
                   "nameLocation": "283:6:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41416,
+                  "scope": 41390,
                   "src": "275:14:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -362,7 +513,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41412,
+                    "id": 41386,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "275:7:89",
@@ -378,18 +529,18 @@
               "src": "274:16:89"
             },
             "returnParameters": {
-              "id": 41415,
+              "id": 41389,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "299:0:89"
             },
-            "scope": 41431,
+            "scope": 41405,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41421,
+            "id": 41395,
             "nodeType": "FunctionDefinition",
             "src": "306:54:89",
             "functionSelector": "bf0d68e4",
@@ -399,17 +550,17 @@
             "name": "removeProtocolToken",
             "nameLocation": "315:19:89",
             "parameters": {
-              "id": 41419,
+              "id": 41393,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41418,
+                  "id": 41392,
                   "mutability": "mutable",
                   "name": "_token",
                   "nameLocation": "343:6:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41421,
+                  "scope": 41395,
                   "src": "335:14:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -418,7 +569,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41417,
+                    "id": 41391,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "335:7:89",
@@ -434,18 +585,18 @@
               "src": "334:16:89"
             },
             "returnParameters": {
-              "id": 41420,
+              "id": 41394,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "359:0:89"
             },
-            "scope": 41431,
+            "scope": 41405,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41430,
+            "id": 41404,
             "nodeType": "FunctionDefinition",
             "src": "366:73:89",
             "functionSelector": "2db8c129",
@@ -455,17 +606,17 @@
             "name": "sendDust",
             "nameLocation": "375:8:89",
             "parameters": {
-              "id": 41428,
+              "id": 41402,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41423,
+                  "id": 41397,
                   "mutability": "mutable",
                   "name": "_to",
                   "nameLocation": "392:3:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41430,
+                  "scope": 41404,
                   "src": "384:11:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -474,7 +625,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41422,
+                    "id": 41396,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "384:7:89",
@@ -488,12 +639,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 41425,
+                  "id": 41399,
                   "mutability": "mutable",
                   "name": "_token",
                   "nameLocation": "405:6:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41430,
+                  "scope": 41404,
                   "src": "397:14:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -502,7 +653,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41424,
+                    "id": 41398,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "397:7:89",
@@ -516,12 +667,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 41427,
+                  "id": 41401,
                   "mutability": "mutable",
                   "name": "_amount",
                   "nameLocation": "421:7:89",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41430,
+                  "scope": 41404,
                   "src": "413:15:89",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -530,7 +681,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41426,
+                    "id": 41400,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "413:7:89",
@@ -545,12 +696,12 @@
               "src": "383:46:89"
             },
             "returnParameters": {
-              "id": 41429,
+              "id": 41403,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "438:0:89"
             },
-            "scope": 41431,
+            "scope": 41405,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -563,11 +714,11 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          41431
+          41405
         ],
         "name": "ICollectableDust",
         "nameLocation": "67:16:89",
-        "scope": 41432,
+        "scope": 41406,
         "usedErrors": []
       }
     ],
