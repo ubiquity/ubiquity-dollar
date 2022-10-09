@@ -4,6 +4,7 @@ import UniswapV2PairABI from "../config/abis/UniswapV2Pair.json";
 import UniswapV3PoolABI from "../config/abis/UniswapV3Pool.json";
 import ChainlinkPriceFeedABI from "../config/abis/ChainlinkPriceFeed.json";
 import ERC20ABI from "../config/abis/ERC20.json";
+import YieldProxyABI from "../config/abis/YieldProxy.json";
 
 import SimpleBond from "@ubiquity/contracts/artifacts/SimpleBond.sol/SimpleBond.json";
 import UbiquityStick from "@ubiquity/contracts/artifacts/TheUbiquityStick.sol/TheUbiquityStick.json";
@@ -12,7 +13,6 @@ import ERC1155Ubiquity from "@ubiquity/contracts/artifacts/ERC1155Ubiquity.sol/E
 import IJar from "@ubiquity/contracts/artifacts/IJar.sol/IJar.json";
 import DebtCouponManager from "@ubiquity/contracts/artifacts/DebtCouponManager.sol/DebtCouponManager.json";
 import ICurveFactory from "@ubiquity/contracts/artifacts/ICurveFactory.sol/ICurveFactory.json";
-import YieldProxy from "@ubiquity/contracts/artifacts/YieldProxy.sol/YieldProxy.json";
 import BondingShareV2 from "@ubiquity/contracts/artifacts/BondingShareV2.sol/BondingShareV2.json";
 import BondingV2 from "@ubiquity/contracts/artifacts/BondingV2.sol/BondingV2.json";
 import DebtCoupon from "@ubiquity/contracts/artifacts/DebtCoupon.sol/DebtCoupon.json";
@@ -78,7 +78,7 @@ export const getCurveFactoryContract = (address: string, provider: ethers.provid
 };
 
 export const getYieldProxyContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(YieldProxy.abi, address, provider);
+  return getContract(YieldProxyABI, address, provider);
 };
 
 export const getBondingShareV2Contract = (address: string, provider: ethers.providers.Provider) => {
