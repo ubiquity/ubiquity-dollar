@@ -21,10 +21,10 @@ jobs:
       - name: Install solc-select
         run: pip3 install solc-select
 
-      - name: Install solc 0.8.4
+      - name: Install solc 0.8.16
         run: |
-          solc-select install 0.8.4
-          solc-select use 0.8.4
+          solc-select install 0.8.16
+          solc-select use 0.8.16
 
       - name: Install Slither
         run: pip3 install slither-analyzer
@@ -35,4 +35,4 @@ jobs:
           yarn workspace @ubiquity/contracts forge install
 
       - name: Test with Slither
-        run: yarn workspace @ubiquity/contracts run slither
+        run: yarn workspace @ubiquity/contracts run slither:run

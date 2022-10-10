@@ -57,10 +57,8 @@ contract DepositStateTest is DepositState {
         bondingShareV2.setApprovalForAll(admin, true);
 
         bytes memory data;
-
         vm.prank(admin);
         bondingShareV2.safeTransferFrom(bondingMinAccount, secondAccount, 1, 1, data);
-
         ids.push(1);
 
         assertEq(bondingShareV2.holderTokens(secondAccount), ids);
