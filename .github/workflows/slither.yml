@@ -1,4 +1,4 @@
-name: Slither
+name: Static Anaysis with Slither
 
 on: [push, pull_request]
 jobs:
