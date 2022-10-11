@@ -1,7 +1,7 @@
 [profile.default]
 src = 'src'
 test = 'test'
-out = 'artifacts'
+out = 'out'
 libs = ['lib']
 solc_version = '0.8.16'
 extra_output = [

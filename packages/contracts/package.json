@@ -23,8 +23,8 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test --gas-report",
-    "slither": "ln -s ../../node_modules && slither . --config-file slither.config.json",
+    "test": "forge test --fork-url https://rpc.ankr.com/eth",
+    "slither:run": "slither . --compile-force-framework foundry",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
     "deploy": "ts-node ./deploy/deploy.ts",

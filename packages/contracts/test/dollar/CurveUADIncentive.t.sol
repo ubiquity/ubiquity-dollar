@@ -10,9 +10,9 @@ import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {CurveUADIncentive} from "../../src/dollar/CurveUADIncentive.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract CurveUADIncentiveTest is TestHelper {
+contract CurveUADIncentiveTest is LocalTestHelper {
     address uADManagerAddress;
     address curveIncentiveAddress;
     address twapOracleAddress;

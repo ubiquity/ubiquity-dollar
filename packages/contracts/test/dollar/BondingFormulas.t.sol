@@ -5,9 +5,9 @@ import "../../src/dollar/BondingFormulas.sol";
 import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/libs/ABDKMathQuad.sol";
 
-import "../helpers/TestHelper.sol";
+import "../helpers/LocalTestHelper.sol";
 
-contract BondingFormulaTest is TestHelper {
+contract BondingFormulaTest is LocalTestHelper {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
