@@ -3,7 +3,7 @@ src = 'src'
 test = 'test'
 out = 'artifacts'
 libs = ['lib']
-solc_version = '0.8.9'
+solc_version = '0.8.16'
 extra_output = [
   "abi",
   "evm.bytecode",
