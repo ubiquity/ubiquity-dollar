@@ -3,8 +3,8 @@ pragma solidity ^0.8.10;
 
 import 'forge-std/Test.sol';
 
-import {MockERC20} from './utils/mocks/MockERC20.sol';
-import {MockERC4626} from './utils/mocks/MockERC4626.sol';
+import {MockERC20} from '../../src/dollar/mocks/MockERC20.sol';
+import {MockERC4626} from '../../src/dollar/mocks/MockERC4626.sol';
 
 contract ERC4626Test is Test {
   MockERC20 underlying;
