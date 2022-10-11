@@ -1,10 +1,21 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
+import '@openzeppelin/contracts/access/IAccessControl.sol';
+
 /// @title UAD Manager interface
 /// @author Ubiquity Algorithmic Manager
-interface IUbiquityAlgorithmicDollarManager {
+interface IUbiquityAlgorithmicDollarManager is IAccessControl {
     // TODO Add a generic setter for extra addresses that needs to be linked
+
+    function INCENTIVE_MANAGER_ROLE() external view returns (bytes32);
+
+    function UBQ_MINTER_ROLE() external view returns (bytes32);
+
+    function autoRedeemTokenAddress() external view returns (address);
+
+    function treasuryAddress() external view returns (address);    
+
     function setTwapOracleAddress(address _twapOracleAddress) external;
 
     function setuARTokenAddress(address _uarTokenAddress) external;

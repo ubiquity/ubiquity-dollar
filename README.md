@@ -9,6 +9,7 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 ## Installation
 
 Build the smart contracts first
+
 ```bash
 #!/usr/bin/env bash
 # Ubiquity Dollar Installer
@@ -28,7 +29,7 @@ yarn start
 
 2. We use [prettier](https://github.com/prettier/prettier) and [eslint](https://github.com/eslint/eslint) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules or else technical debt may generate quickly.
 
-## Metamask Development Wallet Setup
+## MetaMask Development Wallet Setup
 
 ### Network Settings
 

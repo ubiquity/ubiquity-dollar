@@ -5,13 +5,11 @@ import TokenMonitor from "@/components/monitor/TokenMonitor";
 
 const Monitor: FC = (): JSX.Element => {
   return (
-    <div>
-      <div>
-        <PriceMonitor />
-        <MetapoolMonitor />
-        <TokenMonitor />
-      </div>
-    </div>
+    <>
+      <PriceMonitor />
+      <MetapoolMonitor />
+      <TokenMonitor />
+    </>
   );
 };
 
