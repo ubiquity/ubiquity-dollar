@@ -85,7 +85,7 @@ contract DepositStateTest is DepositState {
     }
 
     // TODO: needs to figured out why it sometimes fails
-    function testFail_TotalLP() public {
+    function test_TotalLP() public {
         uint256 totalLp = fourthBal + minBal + maxBal - 1;
         assertEq(bondingShareV2.totalLP(), totalLp);
     }
