@@ -13,6 +13,7 @@ import { ManagedContracts } from "../lib/hooks/contracts/useManagerManaged";
 const Inventory = () => {
   const [{ walletAddress }] = useWeb3();
   const [balances, refreshBalances] = useBalances();
+  console.log("balances", balances);
   const managedContracts = useManagerManaged();
   const namedContracts = useNamedContracts();
 
