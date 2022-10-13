@@ -8,6 +8,8 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ## Installation
 
+Build the smart contracts first
+
 ```bash
 #!/usr/bin/env bash
 # Ubiquity Dollar Installer
@@ -19,7 +21,15 @@ yarn start
 
 → [localhost:3000](https://localhost:3000/)
 
-## Metamask Development Wallet Setup
+## Committing Code
+
+1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. This can be frustrating for junior developers, but I promise that you'll quickly get used to it!
+
+> The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of.
+
+2. We use [prettier](https://github.com/prettier/prettier) and [eslint](https://github.com/eslint/eslint) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules or else technical debt may generate quickly.
+
+## MetaMask Development Wallet Setup
 
 ### Network Settings
 

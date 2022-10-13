@@ -1,0 +1,13 @@
+{
+  "events": {
+    "config": "",
+    "exit": "",
+    "crash": "",
+    "restart": "clear && printf '\\033[3J'",
+    "start": "clear && printf '\\033[3J'"
+  },
+  "verbose": true,
+  "ignore": ["**/*.json", "fixtures/**", "contracts/*/types/**", "**/*/cache/", "**/*/artifacts/"],
+  "ext": "ts,sh,tsx",
+  "exec": "yarn build:all"
+}
