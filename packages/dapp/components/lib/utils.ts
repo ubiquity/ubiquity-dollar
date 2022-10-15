@@ -136,8 +136,8 @@ export const uCR = new Token(
   1,
   '0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97',
   18,
-  'uAR',
-  'Ubiquity Auto Redeem'
+  'uCR',
+  'Ubiquity Credit'
 );
 
 export const uAD = new Token(
@@ -187,3 +187,46 @@ export function parseAmount(value: string, currency: Currency): CurrencyAmount {
   const typedValueParsed = parseUnits(value, currency.decimals).toString();
   return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed));
 }
+
+export const MY_TOKEN_LIST = [
+  {
+    "name": "Tether USD",
+    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "symbol": "USDT",
+    "decimals": 6,
+    "chainId": 1,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+  },
+  {
+    "name": "USD Coin",
+    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    "symbol": "USDC",
+    "decimals": 6,
+    "chainId": 1,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+  },
+  {
+    "name": "Dai Stablecoin",
+    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "symbol": "DAI",
+    "decimals": 18,
+    "chainId": 1,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+  },
+  {
+    "name": "Ubiquity Algorithmic Dollar",
+    "address": "0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6",
+    "symbol": "uAD",
+    "decimals": 18,
+    "chainId": 1,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6/logo.png"
+  },
+  {
+    "name": "Ubiquity Credit",
+    "address": "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
+    "symbol": "uCR",
+    "decimals": 18,
+    "chainId": 1,
+    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97/logo.png"
+  },
+]
