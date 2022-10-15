@@ -11,7 +11,7 @@ import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
-import useRatio from "./lib/getRatioInUniswapPool";
+import useRouter from "../lib/hooks/useRouter";
 
 const UcrRedeem = () => {
   const [walletAddress] = useWalletAddress();
@@ -21,9 +21,9 @@ const UcrRedeem = () => {
   const deployedContracts = useDeployedContracts();
   const managedContracts = useManagerManaged();
 
-  const [inputVal, setInputVal] = useState("");
+  const [inputVal, setInputVal] = useState("0");
   const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
-  const ratio = useRatio(selectedRedeemToken);
+  const quotePrice = useRouter(selectedRedeemToken, inputVal);
 
   if (!walletAddress || !signer) {
     return <span>Connect wallet</span>;
@@ -59,12 +59,12 @@ const UcrRedeem = () => {
 
   const handleMax = () => {
     const ucrValue = ethers.utils.formatEther(balances.ucr);
-    setInputVal(ucrValue);
+    setInputVal((parseInt(ucrValue)).toString());
   };
 
   function onChangeValue(e: React.ChangeEvent<HTMLInputElement>) {
     setSelectedRedeemToken(e.target.value);
-  }
+  } 
 
   return (
     <div>
@@ -86,9 +86,9 @@ const UcrRedeem = () => {
         <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
         <span onClick={handleMax}>MAX</span>
       </div>
-      {inputVal && (
+      {inputVal && quotePrice && (
         <div>
-          {inputVal} uCR -&gt; {Number(inputVal) * ratio} {selectedRedeemToken}.
+          {inputVal} uCR -&gt; {quotePrice} {selectedRedeemToken}.
         </div>
       )}
       <Button onClick={handleRedeem} disabled={!submitEnabled}>
