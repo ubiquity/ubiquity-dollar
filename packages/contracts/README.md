@@ -1,6 +1,6 @@
 # Ubiquity Smart Contracts
 
-@ubiquity/contracts contains the various Solidity smart contracts used within the Ubiqity Dollar Protocol.
+@ubiquity/contracts contains the various Solidity smart contracts used within the Ubiquity Algrithmic Dollar Protocol.
 
 ## Install
 
