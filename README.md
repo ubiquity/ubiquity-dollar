@@ -6,20 +6,60 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
+## Directory Structure
+
+The repo has been built as a [yarn workspace](https://yarnpkg.com/features/workspaces) monorepo.
+
+<pre>
+root
+├── <a href="./packages">packages</a>
+│   ├── <a href="./packages/contracts">contracts</a>: Smart contracts for Ubiquity Dollar and UbiquitiStick
+│   ├── <a href="./packages/dapp">dapp</a>: Frontend interacting with smart contracts 
+</pre>
+
 ## Installation
 
-Build the smart contracts first
+Smart contract has been developed in [foundry-rs](https://github.com/foundry-rs/foundry). You can get more context about foundry through their [docs](https://book.getfoundry.sh/). Please follow up their installation guide for your OS.
 
 ```bash
-#!/usr/bin/env bash
-# Ubiquity Dollar Installer
-
 git clone https://github.com/ubiquity/ubiquity-dollar.git
 yarn
-yarn start
 ```
 
-→ [localhost:3000](https://localhost:3000/)
+## Build
+
+```bash
+yarn build:all # Build both smart contracts and dapp
+```
+
+To build individual package, you can simply run the build command for each package like the followings
+
+```bash
+yarn workspace @ubiquity/contracts build # Build smart contracts
+yarn workspace @ubiquity/dapp build # Build the frontend
+```
+
+**_NOTE_**: Dapp package depends on the contracts package.
+
+## Test
+
+You can simply test out all the packages by running a command, but right now we only support contract unit test.
+
+```bash
+yarn test:all
+```
+
+You can also run the package-independent commands like the followings.
+
+```bash
+yarn workspace @ubiquity/contracts SCRIPT_NAME
+yarn workspace @ubiquity/dapp SCRIPT_NAME
+
+yarn workspace @ubiquity/contracts test # Run the unit tests for smart contracts
+yarn workspace @ubiquity/dapp start # Run the application which will listen in http://localhost:3000
+...
+
+```
 
 ## Committing Code
 
