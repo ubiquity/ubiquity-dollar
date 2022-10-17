@@ -1,6 +1,6 @@
 import { DeployFuncCallback } from "../shared";
 import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding"
-import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmDollarManager"
+import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmicDollarManager"
 import bondingShareFunc, { optionDefinitions as bondingShareOptions } from "./dollar/BondingShare"
 import bondingShareV2Func, { optionDefinitions as bondingShareV2Options } from "./dollar/BondingShareV2"
 import couponsForDollarsCalculatorFunc, { optionDefinitions as couponsForDollarsCalculatorOptions } from "./dollar/CouponsForDollarsCalculator"
@@ -13,7 +13,7 @@ import masterChefFunc, { optionDefinitions as masterChefOptions } from "./dollar
 import ubiquityGovernanceFunc, { optionDefinitions as ubiquityGovernanceOptions } from "./dollar/UbiquityGovernance"
 import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/UbiquityGovernance"
 import uARForDollarsCalculatorFunc, { optionDefinitions as uARForDollarsCalculatorOptions } from "./dollar/UARForDollarsCalculator"
-import ubiquityAlgorithmDollarFunc, { optionDefinitions as ubiquityAlgorithmDollarOptions } from "./dollar/UbiquityAlgorithmDollar"
+import ubiquityAlgorithmicDollarFunc, { optionDefinitions as ubiquityAlgorithmDollarOptions } from "./dollar/UbiquityAlgorithmicDollar"
 import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions } from "./dollar/UbiquityAutoRedeem"
 import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas"
 import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy"
@@ -79,8 +79,8 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         handler: uARForDollarsCalculatorFunc,
         options: uARForDollarsCalculatorOptions
     },
-    "UbiquityAlgorithmDollar": {
-        handler: ubiquityAlgorithmDollarFunc,
+    "UbiquityAlgorithmicDollar": {
+        handler: ubiquityAlgorithmicDollarFunc,
         options: ubiquityAlgorithmDollarOptions
     },
     "UbiquityAutoRedeem": {

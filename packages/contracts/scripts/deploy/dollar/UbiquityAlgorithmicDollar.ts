@@ -8,7 +8,7 @@ export const optionDefinitions = [
 ]
 
 const func = async (params: DeployFuncParam) => {
-    const contractInstance = "src/dollar/UbiquityAlgorithmDollar.sol:UbiquityAlgorithmDollar";
+    const contractInstance = "src/dollar/UbiquityAlgorithmicDollar.sol:UbiquityAlgorithmicDollar";
     const { env, args } = params;
     const manager = args.manager;
 
