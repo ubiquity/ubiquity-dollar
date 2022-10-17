@@ -43,10 +43,10 @@ const UcrRedeem = () => {
   }, [managedContracts]);
 
   let twapInteger = 0;
-  let abovePeg: boolean = false;
+  let abovePeg = false;
   if (twapPrice) {
     twapInteger = (twapPrice as unknown as number) / 1e18;
-    abovePeg = twapInteger > 1
+    abovePeg = twapInteger > 1;
   }
 
   const redeemUcrForUad = async (amount: BigNumber) => {
@@ -84,10 +84,10 @@ const UcrRedeem = () => {
 
   return (
     <div>
-      {!abovePeg ?
+      {!abovePeg ? (
         <div>
           <h4>TWAP is above peg</h4>
-          <div>uCR->uAD->USDC/DAI/USDT</div>
+          <div>uCR-&gt;uAD-&gt;USDC/DAI/USDT</div>
           <div onChange={onChangeValue}>
             <p>Please select a token to redeem for:</p>
 
@@ -104,7 +104,7 @@ const UcrRedeem = () => {
             <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
             <span onClick={handleMax}>MAX</span>
           </div>
-          {inputVal && quotePrice && lastQuotePrice &&(
+          {inputVal && quotePrice && lastQuotePrice && (
             <div>
               {inputVal} uCR -&gt; {quotePrice} uAD -&gt; {lastQuotePrice} {selectedRedeemToken}.
             </div>
@@ -112,27 +112,27 @@ const UcrRedeem = () => {
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
             Redeem uCR for uAD
           </Button>
-          {lastQuotePrice &&
-          <div>After successfully redeemed uCR for uAD<br />
-            please use below swap widget to get {lastQuotePrice} {selectedRedeemToken}
-          </div>}
+          {lastQuotePrice && (
+            <div>
+              After successfully redeemed uCR for uAD
+              <br />
+              please use below swap widget to get {lastQuotePrice} {selectedRedeemToken}
+            </div>
+          )}
           <div className="Uniswap">
             <SwapWidget
               defaultInputTokenAddress={"0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"}
-              defaultOutputTokenAddress={USDC_ADDRESS} 
+              defaultOutputTokenAddress={USDC_ADDRESS}
               tokenList={SWAP_WIDGET_TOKEN_LIST}
-              />
+            />
           </div>
         </div>
-        :
+      ) : (
         <div className="Uniswap">
           <h4>TWAP is below peg</h4>
-          <SwapWidget
-            defaultInputTokenAddress={"0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97"}
-            tokenList={SWAP_WIDGET_TOKEN_LIST}
-          />
+          <SwapWidget defaultInputTokenAddress={"0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97"} tokenList={SWAP_WIDGET_TOKEN_LIST} />
         </div>
-      }
+      )}
     </div>
   );
 };
