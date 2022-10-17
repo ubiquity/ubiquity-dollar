@@ -28,9 +28,9 @@ import SushiSwapPool from "@ubiquity/dollar/artifacts/contracts/SushiSwapPool.so
 import TWAPOracle from "@ubiquity/dollar/artifacts/contracts/TWAPOracle.sol/TWAPOracle.json";
 import UbiquityAlgorithmicDollarManager from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollarManager.sol/UbiquityAlgorithmicDollarManager.json";
 import UbiquityAlgorithmicDollar from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json";
-import UbiquityAutoRedeem from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
+import UbiquityCredit from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
 import UbiquityFormulas from "@ubiquity/dollar/artifacts/contracts/UbiquityFormulas.sol/UbiquityFormulas.json";
-import UbiquityGovernance from "@ubiquity/dollar/artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
+import UBQ from "@ubiquity/dollar/artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
 import uCRToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
 import uADToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json";
 
@@ -134,16 +134,16 @@ export const getUbiquityAlgorithmicDollarContract = (address: string, provider: 
   return getContract(UbiquityAlgorithmicDollar.abi, address, provider);
 };
 
-export const getUbiquityAutoRedeemContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityAutoRedeem.abi, address, provider);
+export const getUbiquityCreditContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityCredit.abi, address, provider);
 };
 
 export const getUbiquityFormulasContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquityFormulas.abi, address, provider);
 };
 
-export const getUbiquityGovernanceContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityGovernance.abi, address, provider);
+export const getUbqContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UBQ.abi, address, provider);
 };
 
 export const getuCRTokenContract = (address: string, provider: ethers.providers.Provider) => {

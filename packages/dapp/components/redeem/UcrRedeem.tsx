@@ -59,8 +59,8 @@ const UcrRedeem = () => {
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   const handleMax = () => {
-    const ucrValue = ethers.utils.formatEther(balances.ucr);
-    setInputVal(parseInt(ucrValue).toString());
+    const creditTokenValue = ethers.utils.formatEther(balances.ucr);
+    setInputVal(parseInt(creditTokenValue).toString());
   };
 
   function onChangeValue(e: React.ChangeEvent<HTMLInputElement>) {
