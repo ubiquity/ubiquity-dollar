@@ -143,7 +143,7 @@ export function parseAmount(value: string, currency: Currency): CurrencyAmount {
   return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed));
 }
 
-export const MY_TOKEN_LIST = [
+export const SWAP_WIDGET_TOKEN_LIST = [
   {
     name: "Tether USD",
     address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",

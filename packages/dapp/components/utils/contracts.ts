@@ -31,8 +31,6 @@ import UbiquityAlgorithmicDollar from "@ubiquity/dollar/artifacts/contracts/Ubiq
 import UbiquityCredit from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
 import UbiquityFormulas from "@ubiquity/dollar/artifacts/contracts/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UBQ from "@ubiquity/dollar/artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
-import uCRToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
-import uADToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json";
 
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);
@@ -144,14 +142,6 @@ export const getUbiquityFormulasContract = (address: string, provider: ethers.pr
 
 export const getUbqContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UBQ.abi, address, provider);
-};
-
-export const getuCRTokenContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(uCRToken.abi, address, provider);
-};
-
-export const getuADTokenContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(uADToken.abi, address, provider);
 };
 
 export const getUSDCTokenContract = (address: string, provider: ethers.providers.Provider) => {
