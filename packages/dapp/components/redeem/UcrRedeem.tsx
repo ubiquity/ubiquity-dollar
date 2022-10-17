@@ -99,7 +99,10 @@ const UcrRedeem = () => {
       <div>Uniswap SwapWidget (customizable)</div>
       <div>----------------------------------------------------------------------------</div>
       <div className="Uniswap">
-        <SwapWidget tokenList={MY_TOKEN_LIST} />
+        <SwapWidget
+          defaultInputTokenAddress={"0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97"}
+          tokenList={MY_TOKEN_LIST}
+        />
       </div>
     </div>
   );
