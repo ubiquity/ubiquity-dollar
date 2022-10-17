@@ -25,7 +25,7 @@ const UcrRedeem = () => {
 
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
   const [inputVal, setInputVal] = useState("0");
-  const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
+  const [selectedRedeemToken, setSelectedRedeemToken] = useState("USDC");
   const [quotePrice, lastQuotePrice] = useRouter(selectedRedeemToken, inputVal);
 
   if (!walletAddress || !signer) {
