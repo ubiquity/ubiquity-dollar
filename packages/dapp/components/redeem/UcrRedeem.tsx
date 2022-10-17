@@ -22,7 +22,6 @@ const UcrRedeem = () => {
   const managedContracts = useManagerManaged();
 
   const [inputVal, setInputVal] = useState("0");
-  const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
 
   if (!walletAddress || !signer) {
     return <span>Connect wallet</span>;
@@ -61,32 +60,14 @@ const UcrRedeem = () => {
     setInputVal(parseInt(creditTokenValue).toString());
   };
 
-  function onChangeValue(e: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedRedeemToken(e.target.value);
-  }
-
   return (
     <div>
-      <div onChange={onChangeValue}>
-        <p>Please select a token to redeem for:</p>
-        <input type="radio" id="tokenChoice1" name="redeemToken" value="uAD" checked={selectedRedeemToken === "uAD"} readOnly />
-        <label htmlFor="tokenChoice1">uAD</label>
-
-        <input type="radio" id="tokenChoice2" name="redeemToken" value="USDC" checked={selectedRedeemToken === "USDC"} readOnly />
-        <label htmlFor="tokenChoice2">USDC</label>
-
-        <input type="radio" id="tokenChoice3" name="redeemToken" value="DAI" checked={selectedRedeemToken === "DAI"} readOnly />
-        <label htmlFor="tokenChoice3">DAI</label>
-
-        <input type="radio" id="tokenChoice4" name="redeemToken" value="USDT" checked={selectedRedeemToken === "USDT"} readOnly />
-        <label htmlFor="tokenChoice4">USDT</label>
-      </div>
       <div>
         <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
         <span onClick={handleMax}>MAX</span>
       </div>
       <Button onClick={handleRedeem} disabled={!submitEnabled}>
-        Redeem uCR for {selectedRedeemToken}
+        Redeem uCR for uAD
       </Button>
       <div className="Uniswap">
         <SwapWidget
