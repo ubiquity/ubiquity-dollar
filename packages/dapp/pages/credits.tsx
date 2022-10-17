@@ -56,7 +56,6 @@ function RedeemUcr() {
   return (
     <div id="RedeemUcr" className="panel">
       <h2>Redeem Ubiquity Credits</h2>
-      <aside>When TWAP is above peg</aside>
       <div>
         <UcrRedeem />
         <UcrNftRedeem />
