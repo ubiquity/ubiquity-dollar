@@ -26,7 +26,7 @@ jobs:
         run: sudo apt -y install libusb-1.0-0-dev libudev-dev
 
       - name: Install
-        run: npm install
+        run: yarn install
 
       - name: Setup Env
         env:
@@ -37,7 +37,7 @@ jobs:
           echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
 
       - name: Build
-        run: npm build:all
+        run: yarn build:all
 
       - name: Save PR
         env:
