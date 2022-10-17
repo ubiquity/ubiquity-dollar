@@ -31,8 +31,8 @@ import UbiquityAlgorithmicDollar from "@ubiquity/dollar/artifacts/contracts/Ubiq
 import UbiquityAutoRedeem from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
 import UbiquityFormulas from "@ubiquity/dollar/artifacts/contracts/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UbiquityGovernance from "@ubiquity/dollar/artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
-import uCRToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json"
-import uADToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json"
+import uCRToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
+import uADToken from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json";
 
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);

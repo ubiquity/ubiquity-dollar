@@ -1,13 +1,9 @@
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
 import { BigNumber, Contract, ContractTransaction, ethers } from "ethers";
 import { useEffect } from "react";
-import { parseUnits } from '@ethersproject/units';
-import {
-  Token,
-  Currency,
-  CurrencyAmount as CurrencyAmountRaw,
-} from '@uniswap/sdk-core';
-import JSBI from 'jsbi';
+import { parseUnits } from "@ethersproject/units";
+import { Token, Currency, CurrencyAmount as CurrencyAmountRaw } from "@uniswap/sdk-core";
+import JSBI from "jsbi";
 
 export function logGas(txDone: ethers.ContractReceipt) {
   console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);
@@ -132,53 +128,12 @@ export const safeParseEther = (val: string) => {
 };
 
 // Token objects
-export const uCR = new Token(
-  1,
-  '0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97',
-  18,
-  'uCR',
-  'Ubiquity Credit'
-);
-
-export const uAD = new Token(
-  1,
-  '0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6',
-  18,
-  'uAD',
-  'Ubiquity Algorithmic Dollar'
-);
-
-export const WETH = new Token(
-  1,
-  '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-  18,
-  'WETH',
-  'Wrapped Ether'
-);
-
-export const USDC = new Token(
-  1,
-  '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  6,
-  'USDC',
-  'USD//C'
-);
-
-export const USDT = new Token(
-  1,
-  '0xdAC17F958D2ee523a2206206994597C13D831ec7',
-  6,
-  'USDT',
-  'Tether USD'
-);
-
-export const DAI = new Token(
-  1,
-  '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-  18,
-  'DAI',
-  'Dai Stablecoin'
-);
+export const uCR = new Token(1, "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97", 18, "uCR", "Ubiquity Credit");
+export const uAD = new Token(1, "0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6", 18, "uAD", "Ubiquity Algorithmic Dollar");
+export const WETH = new Token(1, "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", 18, "WETH", "Wrapped Ether");
+export const USDC = new Token(1, "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48", 6, "USDC", "USD//C");
+export const USDT = new Token(1, "0xdAC17F958D2ee523a2206206994597C13D831ec7", 6, "USDT", "Tether USD");
+export const DAI = new Token(1, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18, "DAI", "Dai Stablecoin");
 
 export class CurrencyAmount extends CurrencyAmountRaw<Currency> { }
 
@@ -190,43 +145,43 @@ export function parseAmount(value: string, currency: Currency): CurrencyAmount {
 
 export const MY_TOKEN_LIST = [
   {
-    "name": "Tether USD",
-    "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-    "symbol": "USDT",
-    "decimals": 6,
-    "chainId": 1,
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png"
+    name: "Tether USD",
+    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    symbol: "USDT",
+    decimals: 6,
+    chainId: 1,
+    logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png",
   },
   {
-    "name": "USD Coin",
-    "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-    "symbol": "USDC",
-    "decimals": 6,
-    "chainId": 1,
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+    name: "USD Coin",
+    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    symbol: "USDC",
+    decimals: 6,
+    chainId: 1,
+    logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png",
   },
   {
-    "name": "Dai Stablecoin",
-    "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-    "symbol": "DAI",
-    "decimals": 18,
-    "chainId": 1,
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png"
+    name: "Dai Stablecoin",
+    address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    symbol: "DAI",
+    decimals: 18,
+    chainId: 1,
+    logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png",
   },
   {
-    "name": "Ubiquity Algorithmic Dollar",
-    "address": "0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6",
-    "symbol": "uAD",
-    "decimals": 18,
-    "chainId": 1,
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6/logo.png"
+    name: "Ubiquity Algorithmic Dollar",
+    address: "0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6",
+    symbol: "uAD",
+    decimals: 18,
+    chainId: 1,
+    logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6/logo.png",
   },
   {
-    "name": "Ubiquity Credit",
-    "address": "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
-    "symbol": "uCR",
-    "decimals": 18,
-    "chainId": 1,
-    "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97/logo.png"
+    name: "Ubiquity Credit",
+    address: "0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97",
+    symbol: "uCR",
+    decimals: 18,
+    chainId: 1,
+    logoURI: "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x5894cFEbFdEdBe61d01F20140f41c5c49AedAe97/logo.png",
   },
-]
+];

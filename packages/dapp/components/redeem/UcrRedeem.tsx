@@ -1,6 +1,6 @@
 import { BigNumber, Contract, ethers } from "ethers";
 import { useState } from "react";
-import { SwapWidget } from '@uniswap/widgets'
+import { SwapWidget } from "@uniswap/widgets";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
 import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
@@ -12,7 +12,7 @@ import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 import useRouter from "../lib/hooks/useRouter";
-import { MY_TOKEN_LIST } from "@/lib/utils"
+import { MY_TOKEN_LIST } from "@/lib/utils";
 
 const UcrRedeem = () => {
   const [walletAddress] = useWalletAddress();
@@ -60,12 +60,12 @@ const UcrRedeem = () => {
 
   const handleMax = () => {
     const ucrValue = ethers.utils.formatEther(balances.ucr);
-    setInputVal((parseInt(ucrValue)).toString());
+    setInputVal(parseInt(ucrValue).toString());
   };
 
   function onChangeValue(e: React.ChangeEvent<HTMLInputElement>) {
     setSelectedRedeemToken(e.target.value);
-  } 
+  }
 
   return (
     <div>
