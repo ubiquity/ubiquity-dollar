@@ -21,7 +21,7 @@
   "methodIdentifiers": {
     "distributeDollars()": "651156bc"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"distributeDollars\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"A mechanism for distributing excess dollars to relevant places\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IExcessDollarsDistributor.sol\":\"IExcessDollarsDistributor\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"src/dollar/interfaces/IExcessDollarsDistributor.sol\":{\"keccak256\":\"0x7888d486f987f01592820edc5c45e33f8126cc1faf6eaa1886ce204ea87f6950\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cc0ee92ee1e441e0af893d760f34b444cfbef7f87bb12f41f6dc69116d956283\",\"dweb:/ipfs/QmRXiLWeyHgbCUK9hCTMfZerwCVx5uaMv3C9YWJqBC8wkA\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"distributeDollars\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"A mechanism for distributing excess dollars to relevant places\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IExcessDollarsDistributor.sol\":\"IExcessDollarsDistributor\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"src/dollar/interfaces/IExcessDollarsDistributor.sol\":{\"keccak256\":\"0x9017fd1bdbe37469905c85a4e6d71a177881c5e56b411a22acc03802c0c89ed1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6d365e990bdd3c748adc02554f9a0c14784681b8549ec6c69dc58f67d60bc0c0\",\"dweb:/ipfs/QmSeVTgyGZFosFTPo3pccygYoik5iHsqw1iPXspBaUnDKx\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -87,10 +87,10 @@
         "license": "MIT"
       },
       "src/dollar/interfaces/IExcessDollarsDistributor.sol": {
-        "keccak256": "0x7888d486f987f01592820edc5c45e33f8126cc1faf6eaa1886ce204ea87f6950",
+        "keccak256": "0x9017fd1bdbe37469905c85a4e6d71a177881c5e56b411a22acc03802c0c89ed1",
         "urls": [
-          "bzz-raw://cc0ee92ee1e441e0af893d760f34b444cfbef7f87bb12f41f6dc69116d956283",
-          "dweb:/ipfs/QmRXiLWeyHgbCUK9hCTMfZerwCVx5uaMv3C9YWJqBC8wkA"
+          "bzz-raw://6d365e990bdd3c748adc02554f9a0c14784681b8549ec6c69dc58f67d60bc0c0",
+          "dweb:/ipfs/QmSeVTgyGZFosFTPo3pccygYoik5iHsqw1iPXspBaUnDKx"
         ],
         "license": "MIT"
       }
@@ -112,12 +112,12 @@
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:260:74",
+    "src": "32:252:74",
     "nodes": [
       {
         "id": 41278,
         "nodeType": "PragmaDirective",
-        "src": "33:23:74",
+        "src": "32:23:74",
         "literals": [
           "solidity",
           "^",
@@ -128,7 +128,7 @@
       {
         "id": 41279,
         "nodeType": "ImportDirective",
-        "src": "60:68:74",
+        "src": "57:68:74",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
         "nameLocation": "-1:-1:-1",
@@ -140,29 +140,29 @@
       {
         "id": 41284,
         "nodeType": "ContractDefinition",
-        "src": "207:84:74",
+        "src": "201:82:74",
         "nodes": [
           {
             "id": 41283,
             "nodeType": "FunctionDefinition",
-            "src": "250:38:74",
+            "src": "243:38:74",
             "functionSelector": "651156bc",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "distributeDollars",
-            "nameLocation": "259:17:74",
+            "nameLocation": "252:17:74",
             "parameters": {
               "id": 41281,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "276:2:74"
+              "src": "269:2:74"
             },
             "returnParameters": {
               "id": 41282,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "287:0:74"
+              "src": "280:0:74"
             },
             "scope": 41284,
             "stateMutability": "nonpayable",
@@ -178,7 +178,7 @@
         "documentation": {
           "id": 41280,
           "nodeType": "StructuredDocumentation",
-          "src": "132:75:74",
+          "src": "127:74:74",
           "text": "@title A mechanism for distributing excess dollars to relevant places"
         },
         "fullyImplemented": false,
@@ -186,7 +186,7 @@
           41284
         ],
         "name": "IExcessDollarsDistributor",
-        "nameLocation": "217:25:74",
+        "nameLocation": "211:25:74",
         "scope": 41285,
         "usedErrors": []
       }
