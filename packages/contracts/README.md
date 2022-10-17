@@ -1,10 +1,10 @@
-# Ubiquity Smart Contracts
+# Ubiquity Dollar Smart Contracts
 
-@ubiquity/contracts contains the various Solidity smart contracts used within the Ubiquity Algorithmic Dollar Protocol.
+`@ubiquity/contracts` contains the various Solidity smart contracts used within the Ubiquity Algorithmic Dollar Protocol.
 
 ## Install
 
-You need to have [foundry-rs](https://github.com/foundry-rs/foundry) installed locally first.
+You need to have [Foundry](https://github.com/foundry-rs/foundry) installed locally first.
 
 ```bash
 yarn workspace @ubiquity/contracts forge install
@@ -19,7 +19,7 @@ yarn workspace @ubiquity/contracts run build
 ## Test
 
 ```bash
-yarn workspace @ubquity/contracts run test
+yarn workspace @ubiquity/contracts run test
 ```
 
 ## Prettier
@@ -32,10 +32,11 @@ yarn workspace @ubiquity/contracts prettier
 
 Deploy script has been built on top of `forge create` and typescript to manage deployments locally.
 
-```bash
-yarn workspace @ubiquity/contracts deploy DEPLOY_NAME ARGUMENTS
-# e.g. yarn workspace @ubiuqity/contracts deploy Bonding --manager 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98 --siblings 0x0000000000000000000000000000000000000000 --network mainnet
+```sh
+# DEPLOY_NAME - Must be configured in `scripts/manager.ts`
+# ARGUMENTS - Deploy Arguments which has been configured per smart contract. You can find them in each deploy script file.
 
-'DEPLOY_NAME': Must be configured in scripts/manager.ts
-'ARGUMENTS': Deploy Arguments which has been configured per smart contract. You can find them in each deploy script file.
+yarn workspace @ubiquity/contracts deploy DEPLOY_NAME ...ARGUMENTS
+# e.g. yarn workspace @ubiquity/contracts deploy Bonding --manager 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98 --siblings 0x0000000000000000000000000000000000000000 --network mainnet
+
 ```
