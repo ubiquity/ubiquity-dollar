@@ -1,0 +1,40 @@
+body {
+  /* background: #000; */
+  /* color: #fff; */
+}
+
+button,
+input {
+  /* background: #ffffff10; */
+  /* color: #fff; */
+}
+button:hover,
+input:hover {
+  /* background: #ffffff20; */
+}
+#tippy {
+  /* background-color: #ffffff20; */
+}
+
+#Background #color {
+  /* background: radial-gradient(#00000000, #000000ff); */
+}
+
+#Background {
+  /* background: #06061a; */
+  /* -webkit-mask-image: radial-gradient(#00000080 0, #00000040 50%, #000 100%); */
+}
+
+a,
+button {
+  /* color: #fff; */
+}
+
+.panel {
+  /* background: radial-gradient(#00000080, #101010ff); */
+}
+
+#Spinner div {
+  /* border: 1px solid #fff; */
+  /* border-color: #fff transparent transparent transparent; */
+}

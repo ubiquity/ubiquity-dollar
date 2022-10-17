@@ -1,4 +1,5 @@
 import "./styles/ubiquity.css";
+import "./styles/ubiquity-dark-mode.css";
 import "./styles/queries.css";
 import "./styles/proxima.css";
 
