@@ -11,7 +11,6 @@ import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
-import useRouter from "../lib/hooks/useRouter";
 import { SWAP_WIDGET_TOKEN_LIST } from "@/lib/utils";
 
 const UcrRedeem = () => {
@@ -24,7 +23,6 @@ const UcrRedeem = () => {
 
   const [inputVal, setInputVal] = useState("0");
   const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
-  const quotePrice = useRouter(selectedRedeemToken, inputVal);
 
   if (!walletAddress || !signer) {
     return <span>Connect wallet</span>;
@@ -87,11 +85,6 @@ const UcrRedeem = () => {
         <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
         <span onClick={handleMax}>MAX</span>
       </div>
-      {inputVal && quotePrice && (
-        <div>
-          {inputVal} uCR -&gt; {quotePrice} {selectedRedeemToken}.
-        </div>
-      )}
       <Button onClick={handleRedeem} disabled={!submitEnabled}>
         Redeem uCR for {selectedRedeemToken}
       </Button>
