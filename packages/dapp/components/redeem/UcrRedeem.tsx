@@ -41,13 +41,13 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     const { debtCouponManager } = deployedContracts;
     await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken as unknown as Contract, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
-    if (provider && quoteAmount) {
+    refreshBalances();
+    if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
       const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
       await (await routerContract.connect(signer).approveMax(quoteAmount, managedContracts.dollarToken)).wait();
       await useTrade(selectedRedeemToken, quoteAmount);
       refreshBalances();
     }
-    refreshBalances();
   };
 
   const handleRedeem = () => {
@@ -111,24 +111,8 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
             </div>
           )}
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
-            Redeem uCR for uAD {selectedRedeemToken !== "uAD" && `before swapping for ${selectedRedeemToken}`}
+            Redeem uCR for {selectedRedeemToken}
           </Button>
-          {selectedRedeemToken !== "uAD" && (
-            <div>
-              <div>
-                After successfully redeemed uCR for uAD
-                <br />
-                please use below swap widget to get your {selectedRedeemToken}
-              </div>
-              <div className="Uniswap">
-                <SwapWidget
-                  defaultInputTokenAddress={"0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"}
-                  defaultOutputTokenAddress={USDC_ADDRESS}
-                  tokenList={SWAP_WIDGET_TOKEN_LIST}
-                />
-              </div>
-            </div>
-          )}
         </div>
       ) : (
         <div className="Uniswap">
