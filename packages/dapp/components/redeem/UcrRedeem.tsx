@@ -5,7 +5,6 @@ import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
 import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
 import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
-import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
 import useBalances from "../lib/hooks/useBalances";
 import useSigner from "../lib/hooks/useSigner";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";
@@ -15,7 +14,7 @@ import PositiveNumberInput from "../ui/PositiveNumberInput";
 import useRouter from "../lib/hooks/useRouter";
 import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST } from "@/lib/utils";
 
-const UcrRedeem = () => {
+const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
@@ -23,10 +22,10 @@ const UcrRedeem = () => {
   const deployedContracts = useDeployedContracts();
   const managedContracts = useManagerManaged();
 
-  const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
   const [inputVal, setInputVal] = useState("0");
   const [selectedRedeemToken, setSelectedRedeemToken] = useState("USDC");
   const [quotePrice, lastQuotePrice] = useRouter(selectedRedeemToken, inputVal);
+  const currentlyAbovePeg = twapInteger > 1;
 
   if (!walletAddress || !signer) {
     return <span>Connect wallet</span>;
@@ -34,19 +33,6 @@ const UcrRedeem = () => {
 
   if (!managedContracts || !deployedContracts || !balances) {
     return <span>· · ·</span>;
-  }
-
-  useEffectAsync(async () => {
-    if (managedContracts) {
-      setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
-    }
-  }, [managedContracts]);
-
-  let twapInteger = 0;
-  let abovePeg = false;
-  if (twapPrice) {
-    twapInteger = (twapPrice as unknown as number) / 1e18;
-    abovePeg = twapInteger > 1;
   }
 
   const redeemUcrForUad = async (amount: BigNumber) => {
@@ -84,7 +70,7 @@ const UcrRedeem = () => {
 
   return (
     <div>
-      {!abovePeg ? (
+      {!currentlyAbovePeg ? (
         <div>
           <h4>TWAP is above peg</h4>
           <div>uCR-&gt;uAD-&gt;USDC/DAI/USDT</div>

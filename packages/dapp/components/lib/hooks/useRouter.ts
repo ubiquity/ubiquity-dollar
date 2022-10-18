@@ -6,8 +6,8 @@ import { uAD, uCR, USDC, USDT, DAI, parseAmount } from "../utils";
 
 const useRouter = (selectedToken: string, amountIn = "0"): [string | undefined, string | undefined] => {
   const [{ provider, walletAddress }] = useWeb3();
-  const [quotePrice, setQuotePrice] = useState<string>();
-  const [lastQuotePrice, setLastQuotePrice] = useState<string>();
+  const [quotePrice, setQuotePrice] = useState<string | undefined>();
+  const [lastQuotePrice, setLastQuotePrice] = useState<string | undefined>();
 
   async function getQuote() {
     let selectedTokenObject;
