@@ -105,20 +105,22 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
             Redeem uCR for uAD {selectedRedeemToken !== "uAD" && `before swapping for ${selectedRedeemToken}`}
           </Button>
-          {lastQuotePrice && (
+          {selectedRedeemToken !== "uAD" && (
             <div>
-              After successfully redeemed uCR for uAD
-              <br />
-              please use below swap widget to get {lastQuotePrice} {selectedRedeemToken}
+              <div>
+                After successfully redeemed uCR for uAD
+                <br />
+                please use below swap widget to get your {selectedRedeemToken}
+              </div>
+              <div className="Uniswap">
+                <SwapWidget
+                  defaultInputTokenAddress={"0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"}
+                  defaultOutputTokenAddress={USDC_ADDRESS}
+                  tokenList={SWAP_WIDGET_TOKEN_LIST}
+                />
+              </div>
             </div>
           )}
-          <div className="Uniswap">
-            <SwapWidget
-              defaultInputTokenAddress={"0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6"}
-              defaultOutputTokenAddress={USDC_ADDRESS}
-              tokenList={SWAP_WIDGET_TOKEN_LIST}
-            />
-          </div>
         </div>
       ) : (
         <div className="Uniswap">
