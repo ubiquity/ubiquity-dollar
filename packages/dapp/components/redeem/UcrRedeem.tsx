@@ -107,7 +107,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
           )}
           {inputVal && quoteAmount && lastQuoteAmount && (
             <div>
-              {inputVal} uCR -&gt; {quoteAmount} uAD -&gt; {lastQuoteAmount}.
+              {inputVal} uCR -&gt; {quoteAmount} uAD -&gt; {lastQuoteAmount} {selectedRedeemToken}.
             </div>
           )}
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
