@@ -23,7 +23,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const managedContracts = useManagerManaged();
 
   const [inputVal, setInputVal] = useState("0");
-  const [selectedRedeemToken, setSelectedRedeemToken] = useState("USDC");
+  const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
   const [quotePrice, lastQuotePrice] = useRouter(selectedRedeemToken, inputVal);
   const currentlyAbovePeg = twapInteger > 1;
 
@@ -76,27 +76,34 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
           <div>uCR-&gt;uAD-&gt;USDC/DAI/USDT</div>
           <div onChange={onChangeValue}>
             <p>Please select a token to redeem for:</p>
+            <input type="radio" id="tokenChoice1" name="redeemToken" value="uAD" checked={selectedRedeemToken === "uAD"} readOnly />
+            <label htmlFor="tokenChoice1">uAD</label>
 
-            <input type="radio" id="tokenChoice1" name="redeemToken" value="USDC" checked={selectedRedeemToken === "USDC"} readOnly />
-            <label htmlFor="tokenChoice1">USDC</label>
+            <input type="radio" id="tokenChoice2" name="redeemToken" value="USDC" checked={selectedRedeemToken === "USDC"} readOnly />
+            <label htmlFor="tokenChoice2">USDC</label>
 
-            <input type="radio" id="tokenChoice2" name="redeemToken" value="DAI" checked={selectedRedeemToken === "DAI"} readOnly />
-            <label htmlFor="tokenChoice2">DAI</label>
+            <input type="radio" id="tokenChoice3" name="redeemToken" value="DAI" checked={selectedRedeemToken === "DAI"} readOnly />
+            <label htmlFor="tokenChoice3">DAI</label>
 
-            <input type="radio" id="tokenChoice3" name="redeemToken" value="USDT" checked={selectedRedeemToken === "USDT"} readOnly />
-            <label htmlFor="tokenChoice3">USDT</label>
+            <input type="radio" id="tokenChoice4" name="redeemToken" value="USDT" checked={selectedRedeemToken === "USDT"} readOnly />
+            <label htmlFor="tokenChoice4">USDT</label>
           </div>
           <div>
             <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
             <span onClick={handleMax}>MAX</span>
           </div>
+          {inputVal && quotePrice && !lastQuotePrice && (
+            <div>
+              {inputVal} uCR -&gt; {quotePrice} uAD.
+            </div>
+          )}
           {inputVal && quotePrice && lastQuotePrice && (
             <div>
-              {inputVal} uCR -&gt; {quotePrice} uAD -&gt; {lastQuotePrice} {selectedRedeemToken}.
+              {inputVal} uCR -&gt; {quotePrice} uAD -&gt; {lastQuotePrice}.
             </div>
           )}
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
-            Redeem uCR for uAD
+            Redeem uCR for uAD {selectedRedeemToken !== "uAD" && `before swapping for ${selectedRedeemToken}`}
           </Button>
           {lastQuotePrice && (
             <div>

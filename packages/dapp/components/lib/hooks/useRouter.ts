@@ -17,8 +17,10 @@ const useRouter = (selectedToken: string, amountIn = "0"): [string | undefined, 
       selectedTokenObject = USDC;
     } else if (selectedToken === "DAI") {
       selectedTokenObject = DAI;
-    } else {
+    } else if (selectedToken === "USDT") {
       selectedTokenObject = USDT;
+    } else {
+      selectedTokenObject = uAD;
     }
 
     if (provider && walletAddress) {
@@ -33,7 +35,7 @@ const useRouter = (selectedToken: string, amountIn = "0"): [string | undefined, 
 
       console.log("Expected uAD Value : ", route1?.quote.toFixed(2));
 
-      if (route1) {
+      if (route1 && selectedToken !== "uAD") {
         const parsed_uAD_amount = parseAmount(route1.quote.toFixed(2), uAD);
 
         const route2 = await router.route(parsed_uAD_amount, selectedTokenObject, TradeType.EXACT_INPUT, {
