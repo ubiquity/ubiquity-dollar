@@ -22,10 +22,15 @@ contract DebtCoupon is ERC1155Ubiquity {
 
     event MintedCoupons(address recipient, uint256 expiryBlock, uint256 amount);
 
-    event BurnedCoupons(address couponHolder, uint256 expiryBlock, uint256 amount);
+    event BurnedCoupons(
+        address couponHolder, uint256 expiryBlock, uint256 amount
+    );
 
     modifier onlyCouponManager() {
-        require(manager.hasRole(manager.COUPON_MANAGER_ROLE(), msg.sender), "Caller is not a coupon manager");
+        require(
+            manager.hasRole(manager.COUPON_MANAGER_ROLE(), msg.sender),
+            "Caller is not a coupon manager"
+        );
         _;
     }
 
@@ -38,7 +43,11 @@ contract DebtCoupon is ERC1155Ubiquity {
     /// @notice Mint an amount of coupons expiring at a certain block for a certain recipient
     /// @param amount amount of tokens to mint
     /// @param expiryBlockNumber the expiration block number of the coupons to mint
-    function mintCoupons(address recipient, uint256 amount, uint256 expiryBlockNumber) public onlyCouponManager {
+    function mintCoupons(
+        address recipient,
+        uint256 amount,
+        uint256 expiryBlockNumber
+    ) public onlyCouponManager {
         mint(recipient, expiryBlockNumber, amount, "");
         emit MintedCoupons(recipient, expiryBlockNumber, amount);
 
@@ -47,7 +56,8 @@ contract DebtCoupon is ERC1155Ubiquity {
         _sortedBlockNumbers.pushBack(expiryBlockNumber);
 
         //update the total supply for that expiry and total outstanding debt
-        _tokenSupplies[expiryBlockNumber] = _tokenSupplies[expiryBlockNumber] + (amount);
+        _tokenSupplies[expiryBlockNumber] =
+            _tokenSupplies[expiryBlockNumber] + (amount);
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
@@ -56,13 +66,21 @@ contract DebtCoupon is ERC1155Ubiquity {
     /// @param couponOwner the owner of those coupons
     /// @param amount amount of tokens to burn
     /// @param expiryBlockNumber the expiration block number of the coupons to burn
-    function burnCoupons(address couponOwner, uint256 amount, uint256 expiryBlockNumber) public onlyCouponManager {
-        require(balanceOf(couponOwner, expiryBlockNumber) >= amount, "Coupon owner not enough coupons");
+    function burnCoupons(
+        address couponOwner,
+        uint256 amount,
+        uint256 expiryBlockNumber
+    ) public onlyCouponManager {
+        require(
+            balanceOf(couponOwner, expiryBlockNumber) >= amount,
+            "Coupon owner not enough coupons"
+        );
         burn(couponOwner, expiryBlockNumber, amount);
         emit BurnedCoupons(couponOwner, expiryBlockNumber, amount);
 
         //update the total supply for that expiry and total outstanding debt
-        _tokenSupplies[expiryBlockNumber] = _tokenSupplies[expiryBlockNumber] - (amount);
+        _tokenSupplies[expiryBlockNumber] =
+            _tokenSupplies[expiryBlockNumber] - (amount);
         _totalOutstandingDebt = _totalOutstandingDebt - (amount);
     }
 
@@ -80,7 +98,8 @@ contract DebtCoupon is ERC1155Ubiquity {
                 reachedEndOfExpiredKeys = true;
             } else {
                 //update tally and remove key from blocks and map
-                _totalOutstandingDebt = _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                _totalOutstandingDebt =
+                    _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
                 _sortedBlockNumbers.remove(currentBlockNumber);
             }
@@ -98,9 +117,11 @@ contract DebtCoupon is ERC1155Ubiquity {
             if (currentBlockNumber > block.number) {
                 reachedEndOfExpiredKeys = true;
             } else {
-                outstandingDebt = outstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                outstandingDebt =
+                    outstandingDebt - (_tokenSupplies[currentBlockNumber]);
             }
-            (, currentBlockNumber) = _sortedBlockNumbers.getNextNode(currentBlockNumber);
+            (, currentBlockNumber) =
+                _sortedBlockNumbers.getNextNode(currentBlockNumber);
         }
 
         return outstandingDebt;

@@ -11,7 +11,10 @@ contract MockUBQmanager is AccessControl {
     }
 
     function setupMinterRole(address to) public {
-        require(hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Governance token: not minter");
+        require(
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            "Governance token: not minter"
+        );
         _setupRole(UBQ_MINTER_ROLE, to);
     }
 }

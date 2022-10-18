@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import {IUniswapV2Router01} from
+    "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityAlgorithmicDollarManager} from
+    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
-import {ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
+import {ExcessDollarsDistributor} from
+    "../../src/dollar/ExcessDollarsDistributor.sol";
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 
 import "../helpers/LocalTestHelper.sol";
@@ -20,9 +23,12 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
 
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
-        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).twapOracleAddress();
-        uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress).dollarTokenAddress();
-        excessDollarsDistributorAddress = address(new ExcessDollarsDistributor(uADManagerAddress));
+        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            .twapOracleAddress();
+        uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            .dollarTokenAddress();
+        excessDollarsDistributorAddress =
+            address(new ExcessDollarsDistributor(uADManagerAddress));
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {
@@ -32,26 +38,56 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         amountsOut[1] = _expected_swap_amount;
         vm.mockCall(
             _sushiSwapRouter,
-            abi.encodeWithSelector(IUniswapV2Router01.swapExactTokensForTokens.selector),
+            abi.encodeWithSelector(
+                IUniswapV2Router01.swapExactTokensForTokens.selector
+            ),
             abi.encode(amountsOut)
         );
-        vm.mockCall(_sushiSwapRouter, abi.encodeWithSelector(IUniswapV2Router01.addLiquidity.selector), abi.encode());
-    }
-
-    function mockManagerAddresses(address _curve3PoolAddress, address _bondingContractAddress) public {
-        vm.store(uADManagerAddress, bytes32(uint256(13)), bytes32(abi.encodePacked(_bondingContractAddress)));
-        vm.store(uADManagerAddress, bytes32(uint256(15)), bytes32(abi.encodePacked(_curve3PoolAddress)));
-        vm.mockCall(_curve3PoolAddress, abi.encodeWithSelector(IERC20.approve.selector), abi.encode());
-    }
-
-    function mockMetaPool(address _metaPoolAddress, uint256 _expectedLiqAmt, uint256 _expectedExchangeAmt) public {
-        vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress).setStableSwapMetaPoolAddress(_metaPoolAddress);
         vm.mockCall(
-            _metaPoolAddress, abi.encodeWithSelector(IMetaPool.exchange.selector), abi.encode(_expectedExchangeAmt)
+            _sushiSwapRouter,
+            abi.encodeWithSelector(IUniswapV2Router01.addLiquidity.selector),
+            abi.encode()
+        );
+    }
+
+    function mockManagerAddresses(
+        address _curve3PoolAddress,
+        address _bondingContractAddress
+    ) public {
+        vm.store(
+            uADManagerAddress,
+            bytes32(uint256(13)),
+            bytes32(abi.encodePacked(_bondingContractAddress))
+        );
+        vm.store(
+            uADManagerAddress,
+            bytes32(uint256(15)),
+            bytes32(abi.encodePacked(_curve3PoolAddress))
         );
         vm.mockCall(
-            _metaPoolAddress, abi.encodeWithSelector(IMetaPool.add_liquidity.selector), abi.encode(_expectedLiqAmt)
+            _curve3PoolAddress,
+            abi.encodeWithSelector(IERC20.approve.selector),
+            abi.encode()
+        );
+    }
+
+    function mockMetaPool(
+        address _metaPoolAddress,
+        uint256 _expectedLiqAmt,
+        uint256 _expectedExchangeAmt
+    ) public {
+        vm.prank(admin);
+        UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            .setStableSwapMetaPoolAddress(_metaPoolAddress);
+        vm.mockCall(
+            _metaPoolAddress,
+            abi.encodeWithSelector(IMetaPool.exchange.selector),
+            abi.encode(_expectedExchangeAmt)
+        );
+        vm.mockCall(
+            _metaPoolAddress,
+            abi.encodeWithSelector(IMetaPool.add_liquidity.selector),
+            abi.encode(_expectedLiqAmt)
         );
     }
 
@@ -68,10 +104,13 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         MockuADToken(uADAddress).mint(excessDollarsDistributorAddress, 200e18);
 
         // 10% should be transferred to the treasury address
-        uint256 _before_treasury_bal = MockuADToken(uADAddress).balanceOf(treasuryAddress);
+        uint256 _before_treasury_bal =
+            MockuADToken(uADAddress).balanceOf(treasuryAddress);
 
-        ExcessDollarsDistributor(excessDollarsDistributorAddress).distributeDollars();
-        uint256 _after_treasury_bal = MockuADToken(uADAddress).balanceOf(treasuryAddress);
+        ExcessDollarsDistributor(excessDollarsDistributorAddress)
+            .distributeDollars();
+        uint256 _after_treasury_bal =
+            MockuADToken(uADAddress).balanceOf(treasuryAddress);
         assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
     }
 }

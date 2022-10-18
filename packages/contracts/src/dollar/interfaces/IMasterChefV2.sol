@@ -18,15 +18,22 @@ interface IMasterChefV2 {
     }
 
     event Deposit(address indexed user, uint256 amount, uint256 bondingShareID);
-    event Withdraw(address indexed user, uint256 amount, uint256 bondingShareID);
+    event Withdraw(
+        address indexed user, uint256 amount, uint256 bondingShareID
+    );
 
-    function deposit(address sender, uint256 amount, uint256 bondingShareID) external;
+    function deposit(address sender, uint256 amount, uint256 bondingShareID)
+        external;
 
     // Withdraw LP tokens from MasterChef.
-    function withdraw(address sender, uint256 amount, uint256 bondingShareID) external;
+    function withdraw(address sender, uint256 amount, uint256 bondingShareID)
+        external;
 
     // Info about a bondinh share
-    function getBondingShareInfo(uint256 _id) external view returns (uint256[2] memory);
+    function getBondingShareInfo(uint256 _id)
+        external
+        view
+        returns (uint256[2] memory);
 
     // Total amount of shares
     function totalShares() external view returns (uint256);

@@ -20,7 +20,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // - allow one owner (deployer at start) to change tokenURIs (setTokenURI), and change minter (setMinter) and transfer it's owner role to someone else
 // - allow one minter to mint NFT (safeMint)
 
-contract TheUbiquityStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable {
+contract TheUbiquityStick is
+    ERC721,
+    ERC721Burnable,
+    ERC721Enumerable,
+    Ownable
+{
     uint256 public tokenIdNext = 1;
 
     address public minter;
@@ -46,12 +51,22 @@ contract TheUbiquityStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable {
         setMinter(msg.sender);
     }
 
-    function tokenURI(uint256 tokenId) public view override (ERC721) returns (string memory uri) {
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override (ERC721)
+        returns (string memory uri)
+    {
         require(_exists(tokenId), "Nonexistent token");
-        return gold[tokenId] ? _goldTokenURI : (tokenId == INVISIBLE_TOKEN_ID ? _invisibleTokenURI : _tokenURI);
+        return gold[tokenId]
+            ? _goldTokenURI
+            : (tokenId == INVISIBLE_TOKEN_ID ? _invisibleTokenURI : _tokenURI);
     }
 
-    function setTokenURI(uint256 ntype, string memory tokenURI_) public onlyMinter {
+    function setTokenURI(uint256 ntype, string memory tokenURI_)
+        public
+        onlyMinter
+    {
         if (ntype == STANDARD_TYPE) {
             _tokenURI = tokenURI_;
         } else if (ntype == GOLD_TYPE) {
@@ -85,7 +100,13 @@ contract TheUbiquityStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable {
     }
 
     function random() private view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(block.difficulty, block.timestamp, msg.sender, tokenIdNext)));
+        return uint256(
+            keccak256(
+                abi.encodePacked(
+                    block.difficulty, block.timestamp, msg.sender, tokenIdNext
+                )
+            )
+        );
     }
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
@@ -102,7 +123,12 @@ contract TheUbiquityStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 
-    function supportsInterface(bytes4 interfaceId) public view override (ERC721, ERC721Enumerable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override (ERC721, ERC721Enumerable)
+        returns (bool)
+    {
         return super.supportsInterface(interfaceId);
     }
 }

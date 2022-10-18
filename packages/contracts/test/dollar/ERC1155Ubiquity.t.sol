@@ -2,22 +2,26 @@
 pragma solidity ^0.8.3;
 
 import {ERC1155Ubiquity} from "../../src/dollar/ERC1155Ubiquity.sol";
-import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityAlgorithmicDollarManager} from
+    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
-
 
 contract ERC1155UbiquityTest is LocalTestHelper {
     address token_addr;
     address uad_manager_addr;
 
-    event Minting(address indexed mock_addr1, address indexed _minter, uint256 _amount);
+    event Minting(
+        address indexed mock_addr1, address indexed _minter, uint256 _amount
+    );
 
     event Burning(address indexed _burned, uint256 _amount);
 
     function setUp() public {
         uad_manager_addr = helpers_deployUbiquityAlgorithmicDollarManager();
         vm.prank(admin);
-        token_addr = address(new ERC1155Ubiquity(uad_manager_addr, "https://ipfs.io/ipfs/mock"));
+        token_addr = address(
+            new ERC1155Ubiquity(uad_manager_addr, "https://ipfs.io/ipfs/mock")
+        );
     }
 
     function test_mint() public {
@@ -32,7 +36,8 @@ contract ERC1155UbiquityTest is LocalTestHelper {
         ERC1155Ubiquity(token_addr).mint(mock_addr1, 1, 10, data);
         uint256 after_total_supply = ERC1155Ubiquity(token_addr).totalSupply();
         assertEq(after_total_supply - before_total_supply, 10);
-        uint256[] memory holder_tokens = ERC1155Ubiquity(token_addr).holderTokens(mock_addr1);
+        uint256[] memory holder_tokens =
+            ERC1155Ubiquity(token_addr).holderTokens(mock_addr1);
         uint256[] memory expected = new uint256[](1);
         expected[0] = 1;
         assertEq(holder_tokens, expected);
@@ -62,7 +67,8 @@ contract ERC1155UbiquityTest is LocalTestHelper {
         amounts[1] = 100;
         vm.prank(admin);
         ERC1155Ubiquity(token_addr).mintBatch(mock_addr1, ids, amounts, data);
-        uint256[] memory holder_tokens = ERC1155Ubiquity(token_addr).holderTokens(mock_addr1);
+        uint256[] memory holder_tokens =
+            ERC1155Ubiquity(token_addr).holderTokens(mock_addr1);
         uint256[] memory expected = new uint256[](2);
         expected[0] = 2;
         expected[1] = 3;
@@ -75,7 +81,7 @@ contract ERC1155UbiquityTest is LocalTestHelper {
         // mint some tokens to test out `safeTransferFrom`
         bytes memory data = abi.encode("transfer");
         address mock_addr1 = address(0x111);
-        address mock_addr2 = address(0x112);        
+        address mock_addr2 = address(0x112);
         uint256[] memory ids = new uint256[](2);
         ids[0] = 1;
         ids[1] = 2;
@@ -87,19 +93,21 @@ contract ERC1155UbiquityTest is LocalTestHelper {
 
         // safeTransferFrom
         vm.prank(mock_addr1);
-        ERC1155Ubiquity(token_addr).safeTransferFrom(mock_addr1, mock_addr2, 1, 10, data);
-        uint256[] memory holder_tokens = ERC1155Ubiquity(token_addr).holderTokens(mock_addr2);
+        ERC1155Ubiquity(token_addr).safeTransferFrom(
+            mock_addr1, mock_addr2, 1, 10, data
+        );
+        uint256[] memory holder_tokens =
+            ERC1155Ubiquity(token_addr).holderTokens(mock_addr2);
         uint256[] memory expected = new uint256[](1);
         expected[0] = 1;
         assertEq(holder_tokens, expected);
-
     }
 
     function test_safeBatchTransferFrom() public {
         // mint some tokens to test out `safeBatchTransferFrom`
         bytes memory data = abi.encode("transfer");
         address mock_addr1 = address(0x111);
-        address mock_addr2 = address(0x112);        
+        address mock_addr2 = address(0x112);
         uint256[] memory ids = new uint256[](2);
         ids[0] = 1;
         ids[1] = 2;
@@ -114,13 +122,15 @@ contract ERC1155UbiquityTest is LocalTestHelper {
         sending_amounts[0] = 10;
         sending_amounts[1] = 10;
         vm.prank(mock_addr1);
-        ERC1155Ubiquity(token_addr).safeBatchTransferFrom(mock_addr1, mock_addr2, ids, sending_amounts, data);
-        uint256[] memory holder_tokens = ERC1155Ubiquity(token_addr).holderTokens(mock_addr2);
+        ERC1155Ubiquity(token_addr).safeBatchTransferFrom(
+            mock_addr1, mock_addr2, ids, sending_amounts, data
+        );
+        uint256[] memory holder_tokens =
+            ERC1155Ubiquity(token_addr).holderTokens(mock_addr2);
         uint256[] memory expected = new uint256[](2);
         expected[0] = 1;
         expected[1] = 2;
-        assertEq(holder_tokens, expected);        
-
+        assertEq(holder_tokens, expected);
     }
 
     function test_burnAndBurnBatch() public {
@@ -153,5 +163,4 @@ contract ERC1155UbiquityTest is LocalTestHelper {
         after_total_supply = ERC1155Ubiquity(token_addr).totalSupply();
         assertEq(before_total_supply - after_total_supply, 20);
     }
-
 }

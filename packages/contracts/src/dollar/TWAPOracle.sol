@@ -16,7 +16,8 @@ contract TWAPOracle {
         pool = _pool;
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
-            IMetaPool(_pool).coins(0) == _uADtoken0 && IMetaPool(_pool).coins(1) == _curve3CRVtoken1,
+            IMetaPool(_pool).coins(0) == _uADtoken0
+                && IMetaPool(_pool).coins(1) == _curve3CRVtoken1,
             "TWAPOracle: COIN_ORDER_MISMATCH"
         );
 
@@ -39,12 +40,15 @@ contract TWAPOracle {
 
     // calculate average price
     function update() external {
-        (uint256[2] memory priceCumulative, uint256 blockTimestamp) = _currentCumulativePrices();
+        (uint256[2] memory priceCumulative, uint256 blockTimestamp) =
+            _currentCumulativePrices();
 
         if (blockTimestamp - pricesBlockTimestampLast > 0) {
             // get the balances between now and the last price cumulative snapshot
             uint256[2] memory twapBalances = IMetaPool(pool).get_twap_balances(
-                priceCumulativeLast, priceCumulative, blockTimestamp - pricesBlockTimestampLast
+                priceCumulativeLast,
+                priceCumulative,
+                blockTimestamp - pricesBlockTimestampLast
             );
 
             // price to exchange amounIn uAD to 3CRV based on TWAP

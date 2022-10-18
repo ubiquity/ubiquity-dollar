@@ -23,17 +23,26 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     // ----------- Modifiers -----------
     modifier onlyMinter() {
-        require(manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender), "Governance token: not minter");
+        require(
+            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
+            "Governance token: not minter"
+        );
         _;
     }
 
     modifier onlyBurner() {
-        require(manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender), "Governance token: not burner");
+        require(
+            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
+            "Governance token: not burner"
+        );
         _;
     }
 
     modifier onlyPauser() {
-        require(manager.hasRole(manager.PAUSER_ROLE(), msg.sender), "Governance token: not pauser");
+        require(
+            manager.hasRole(manager.PAUSER_ROLE(), msg.sender),
+            "Governance token: not pauser"
+        );
         _;
     }
 
@@ -45,19 +54,23 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     }
 
     // @dev Creates `amount` new tokens for `to`, of token type `id`.
-    function mint(address to, uint256 id, uint256 amount, bytes memory data) public virtual onlyMinter {
+    function mint(address to, uint256 id, uint256 amount, bytes memory data)
+        public
+        virtual
+        onlyMinter
+    {
         _mint(to, id, amount, data);
         _totalSupply += amount;
         _holderBalances[to].add(id);
     }
 
     // @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] variant of {mint}.
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
-        public
-        virtual
-        onlyMinter
-        whenNotPaused
-    {
+    function mintBatch(
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
         for (uint256 i = 0; i < ids.length; ++i) {
             _totalSupply += amounts[i];
@@ -88,10 +101,13 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev See {IERC1155-safeTransferFrom}.
      */
-    function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes memory data)
-        public
-        override
-    {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) public override {
         super.safeTransferFrom(from, to, id, amount, data);
         _holderBalances[to].add(id);
     }
@@ -105,11 +121,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    )
-        public
-        virtual
-        override
-    {
+    ) public virtual override {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
         _holderBalances[to].add(ids);
     }
@@ -124,21 +136,29 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder) public view returns (uint256[] memory) {
+    function holderTokens(address holder)
+        public
+        view
+        returns (uint256[] memory)
+    {
         return _holderBalances[holder];
     }
 
-    function _burn(address account, uint256 id, uint256 amount) internal virtual override whenNotPaused {
-        super._burn(account, id, amount);
-        _totalSupply -= amount;
-    }
-
-    function _burnBatch(address account, uint256[] memory ids, uint256[] memory amounts)
+    function _burn(address account, uint256 id, uint256 amount)
         internal
         virtual
         override
         whenNotPaused
     {
+        super._burn(account, id, amount);
+        _totalSupply -= amount;
+    }
+
+    function _burnBatch(
+        address account,
+        uint256[] memory ids,
+        uint256[] memory amounts
+    ) internal virtual override whenNotPaused {
         super._burnBatch(account, ids, amounts);
         for (uint256 i = 0; i < ids.length; ++i) {
             _totalSupply -= amounts[i];
@@ -152,11 +172,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    )
-        internal
-        virtual
-        override (ERC1155, ERC1155Pausable)
-    {
+    ) internal virtual override (ERC1155, ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

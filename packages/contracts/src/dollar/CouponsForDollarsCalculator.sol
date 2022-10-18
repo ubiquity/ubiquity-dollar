@@ -22,14 +22,23 @@ contract CouponsForDollarsCalculator is ICouponsForDollarsCalculator {
         manager = UbiquityAlgorithmicDollarManager(_manager);
     }
 
-    function getCouponAmount(uint256 dollarsToBurn) external view override returns (uint256) {
+    function getCouponAmount(uint256 dollarsToBurn)
+        external
+        view
+        override
+        returns (uint256)
+    {
         require(
-            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt() < IERC20(manager.dollarTokenAddress()).totalSupply(),
+            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt()
+                < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "Coupon to dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
-        bytes16 totalDebt = DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt().fromUInt();
-        bytes16 r = totalDebt.div(IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt());
+        bytes16 totalDebt = DebtCoupon(manager.debtCouponAddress())
+            .getTotalOutstandingDebt().fromUInt();
+        bytes16 r = totalDebt.div(
+            IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt()
+        );
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));
         bytes16 res = one.div(oneMinusRAllSquared);

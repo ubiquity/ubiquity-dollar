@@ -16,7 +16,11 @@ contract MockMetaPool {
         coins[1] = _token1;
     }
 
-    function get_price_cumulative_last() external view returns (uint256[2] memory) {
+    function get_price_cumulative_last()
+        external
+        view
+        returns (uint256[2] memory)
+    {
         return price_cumulative_last;
     }
 
@@ -28,15 +32,15 @@ contract MockMetaPool {
         uint256[2] memory _first_balances,
         uint256[2] memory _last_balances,
         uint256 _time_elapsed
-    )
-        external
-        view
-        returns (uint256[2] memory)
-    {
+    ) external view returns (uint256[2] memory) {
         return balances;
     }
 
-    function get_dy(int128 i, int128 j, uint256 dx, uint256[2] memory _balances) external view returns (uint256) {
+    function get_dy(int128 i, int128 j, uint256 dx, uint256[2] memory _balances)
+        external
+        view
+        returns (uint256)
+    {
         if (i == 0 && j == 1) {
             return dy_values[1];
         } else if (i == 1 && j == 0) {
@@ -51,9 +55,7 @@ contract MockMetaPool {
         uint256 _last_block_timestamp,
         uint256[2] calldata _twap_balances,
         uint256[2] calldata _dy_values
-    )
-        public
-    {
+    ) public {
         price_cumulative_last = _price_cumulative_last;
         last_block_timestamp = _last_block_timestamp;
         balances = _twap_balances;

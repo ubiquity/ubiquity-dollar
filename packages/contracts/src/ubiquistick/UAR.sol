@@ -8,7 +8,11 @@ import "./interfaces/IUAR.sol";
 contract UAR is IUAR, ERC20, Ownable {
     address public immutable treasuryAddress;
 
-    constructor(string memory name, string memory symbol, address treasuryAddress_) ERC20(name, symbol) {
+    constructor(
+        string memory name,
+        string memory symbol,
+        address treasuryAddress_
+    ) ERC20(name, symbol) {
         treasuryAddress = treasuryAddress_;
     }
 

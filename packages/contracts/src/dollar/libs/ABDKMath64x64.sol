@@ -164,7 +164,8 @@ library ABDKMath64x64 {
         unchecked {
             if (x == _MIN_64x64) {
                 require(
-                    y >= -0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF && y <= 0x1000000000000000000000000000000000000000000000000
+                    y >= -0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                        && y <= 0x1000000000000000000000000000000000000000000000000
                 );
                 return -y << 63;
             } else {
@@ -179,10 +180,18 @@ library ABDKMath64x64 {
                 }
                 uint256 absoluteResult = mulu(x, uint256(y));
                 if (negativeResult) {
-                    require(absoluteResult <= 0x8000000000000000000000000000000000000000000000000000000000000000);
+                    require(
+                        absoluteResult
+                            <=
+                            0x8000000000000000000000000000000000000000000000000000000000000000
+                    );
                     return -int256(absoluteResult); // We rely on overflow behavior here
                 } else {
-                    require(absoluteResult <= 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
+                    require(
+                        absoluteResult
+                            <=
+                            0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                    );
                     return int256(absoluteResult);
                 }
             }
@@ -205,13 +214,20 @@ library ABDKMath64x64 {
 
             require(x >= 0);
 
-            uint256 lo = (uint256(int256(x)) * (y & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)) >> 64;
+            uint256 lo = (
+                uint256(int256(x)) * (y & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF)
+            ) >> 64;
             uint256 hi = uint256(int256(x)) * (y >> 128);
 
             require(hi <= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF);
             hi <<= 64;
 
-            require(hi <= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF - lo);
+            require(
+                hi
+                    <=
+                    0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                        - lo
+            );
             return hi + lo;
         }
     }
@@ -349,7 +365,11 @@ library ABDKMath64x64 {
         unchecked {
             int256 m = int256(x) * int256(y);
             require(m >= 0);
-            require(m < 0x4000000000000000000000000000000000000000000000000000000000000000);
+            require(
+                m
+                    <
+                    0x4000000000000000000000000000000000000000000000000000000000000000
+            );
             return int128(sqrtu(uint256(m)));
         }
     }
@@ -531,7 +551,14 @@ library ABDKMath64x64 {
         unchecked {
             require(x > 0);
 
-            return int128(int256((uint256(int256(log_2(x))) * 0xB17217F7D1CF79ABC9E3B39803F2F6AF) >> 128));
+            return int128(
+                int256(
+                    (
+                        uint256(int256(log_2(x)))
+                            * 0xB17217F7D1CF79ABC9E3B39803F2F6AF
+                    ) >> 128
+                )
+            );
         }
     }
 
@@ -765,7 +792,9 @@ library ABDKMath64x64 {
                 return 0;
             } // Underflow
 
-            return exp_2(int128((int256(x) * 0x171547652B82FE1777D0FFDA0D23A7D12) >> 128));
+            return exp_2(
+                int128((int256(x) * 0x171547652B82FE1777D0FFDA0D23A7D12) >> 128)
+            );
         }
     }
 

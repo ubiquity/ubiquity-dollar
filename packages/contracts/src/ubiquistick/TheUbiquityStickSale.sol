@@ -29,7 +29,8 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
 
     uint256 public constant MAXIMUM_SUPPLY = 1024;
     uint256 public constant MAXIMUM_PER_TX = 10;
-    address private constant ETH_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+    address private constant ETH_ADDRESS =
+        0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     event Mint(address from, uint256 count, uint256 price);
 
@@ -50,16 +51,20 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
     }
 
     // Set the allowance for the specified address
-    function setAllowance(address _address, uint256 _count, uint256 _price) public onlyOwner {
+    function setAllowance(address _address, uint256 _count, uint256 _price)
+        public
+        onlyOwner
+    {
         require(_address != address(0), "Invalid Address");
         _allowances[_address] = Purchase(_count, _price);
     }
 
     // Set the allowance for the specified address
-    function batchSetAllowances(address[] calldata _addresses, uint256[] calldata _counts, uint256[] calldata _prices)
-        external
-        onlyOwner
-    {
+    function batchSetAllowances(
+        address[] calldata _addresses,
+        uint256[] calldata _counts,
+        uint256[] calldata _prices
+    ) external onlyOwner {
         uint256 count = _addresses.length;
 
         for (uint16 i = 0; i < count; i++) {
@@ -68,7 +73,11 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
     }
 
     // Get the allowance for the specified address
-    function allowance(address _address) public view returns (uint256 count, uint256 price) {
+    function allowance(address _address)
+        public
+        view
+        returns (uint256 count, uint256 price)
+    {
         Purchase memory _allowance = _allowances[_address];
         count = _allowance.count;
         price = _allowance.price;
@@ -78,14 +87,17 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
     receive() external payable nonReentrant {
         // Check if tokens are still available for sale
         require(tokenContract.totalSupply() < MAXIMUM_SUPPLY, "Sold Out");
-        uint256 remainingTokenCount = MAXIMUM_SUPPLY - tokenContract.totalSupply();
+        uint256 remainingTokenCount =
+            MAXIMUM_SUPPLY - tokenContract.totalSupply();
 
         // Check if sufficient funds are sent, and that the address is whitelisted
         // and had enough allowance with enough funds
         uint256 count;
         uint256 price;
         (count, price) = allowance(msg.sender);
-        require(count > 0, "Not Whitelisted For The Sale Or Insufficient Allowance");
+        require(
+            count > 0, "Not Whitelisted For The Sale Or Insufficient Allowance"
+        );
 
         if (remainingTokenCount < count) {
             count = remainingTokenCount;

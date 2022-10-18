@@ -15,9 +15,16 @@ contract DepositState is LiveTestHelper {
         fourthBal = metapool.balanceOf(fourthAccount);
         minBal = metapool.balanceOf(bondingMinAccount);
         maxBal = metapool.balanceOf(bondingMaxAccount);
-        address[4] memory depositingAccounts = [bondingMinAccount, fourthAccount, bondingMaxAccount, bondingMaxAccount];
-        uint256[4] memory depositAmounts = [minBal, fourthBal, maxBal / 2, maxBal / 2];
-        uint256[4] memory lockupWeeks = [uint256(1), uint256(52), uint256(208), uint256(208)];
+        address[4] memory depositingAccounts = [
+            bondingMinAccount,
+            fourthAccount,
+            bondingMaxAccount,
+            bondingMaxAccount
+        ];
+        uint256[4] memory depositAmounts =
+            [minBal, fourthBal, maxBal / 2, maxBal / 2];
+        uint256[4] memory lockupWeeks =
+            [uint256(1), uint256(52), uint256(208), uint256(208)];
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
@@ -44,7 +51,9 @@ contract DepositStateTest is DepositState {
 
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
         vm.prank(admin);
-        uint256 id = bondingShareV2.mint(secondAccount, uint256(deposited), uint256(debt), end);
+        uint256 id = bondingShareV2.mint(
+            secondAccount, uint256(deposited), uint256(debt), end
+        );
         BondingShareV2.Bond memory bond = bondingShareV2.getBond(id);
         assertEq(bond.minter, secondAccount);
         assertEq(bond.lpAmount, deposited);
@@ -58,7 +67,9 @@ contract DepositStateTest is DepositState {
 
         bytes memory data;
         vm.prank(admin);
-        bondingShareV2.safeTransferFrom(bondingMinAccount, secondAccount, 1, 1, data);
+        bondingShareV2.safeTransferFrom(
+            bondingMinAccount, secondAccount, 1, 1, data
+        );
         ids.push(1);
 
         assertEq(bondingShareV2.holderTokens(secondAccount), ids);
@@ -76,7 +87,9 @@ contract DepositStateTest is DepositState {
         bytes memory data;
 
         vm.prank(admin);
-        bondingShareV2.safeBatchTransferFrom(bondingMaxAccount, secondAccount, ids, amounts, data);
+        bondingShareV2.safeBatchTransferFrom(
+            bondingMaxAccount, secondAccount, ids, amounts, data
+        );
         assertEq(bondingShareV2.holderTokens(secondAccount), ids);
     }
 
@@ -95,7 +108,9 @@ contract DepositStateTest is DepositState {
             fourthAccount,
             fourthBal,
             creationBlock[1],
-            uFormulas.durationMultiply(fourthBal, 52, bondingV2.bondingDiscountMultiplier()),
+            uFormulas.durationMultiply(
+                fourthBal, 52, bondingV2.bondingDiscountMultiplier()
+            ),
             bondingV2.blockCountInAWeek() * 52,
             fourthBal
         );

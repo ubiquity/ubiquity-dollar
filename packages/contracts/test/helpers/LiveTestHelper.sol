@@ -58,8 +58,10 @@ contract LiveTestHelper is Test {
 
     BondingShare bondingShareV1;
 
-    IUniswapV2Factory factory = IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
-    IUniswapV2Router02 router = IUniswapV2Router02(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F);
+    IUniswapV2Factory factory =
+        IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
+    IUniswapV2Router02 router =
+        IUniswapV2Router02(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F);
 
     IERC20 DAI = IERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     IERC20 USDC = IERC20(0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48);
@@ -67,7 +69,8 @@ contract LiveTestHelper is Test {
     IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
     IERC20 WETH = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
-    ICurveFactory curvePoolFactory = ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
+    ICurveFactory curvePoolFactory =
+        ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
 
     address admin = address(0x1);
     address treasury = address(0x3);
@@ -86,7 +89,8 @@ contract LiveTestHelper is Test {
     address usdcWhaleAddress = 0x72A53cDBBcc1b9efa39c834A540550e23463AAcB;
     address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
 
-    string uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
+    string uri =
+        "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
     uint256 couponLengthBlocks = 100;
 
     address[] migrating;
@@ -138,14 +142,27 @@ contract LiveTestHelper is Test {
         uAD.approve(address(router), 1000000e18);
         uGov.approve(address(router), 100000e18);
         router.addLiquidity(
-            address(uAD), address(uGov), 1000000e18, 100000e18, 990000e18, 99000e18, thirdAccount, block.timestamp + 100
+            address(uAD),
+            address(uGov),
+            1000000e18,
+            100000e18,
+            990000e18,
+            99000e18,
+            thirdAccount,
+            block.timestamp + 100
         );
         vm.stopPrank();
 
         vm.startPrank(admin);
 
-        address[6] memory mintings =
-            [admin, address(manager), fourthAccount, bondingZeroAccount, bondingMinAccount, bondingMaxAccount];
+        address[6] memory mintings = [
+            admin,
+            address(manager),
+            fourthAccount,
+            bondingZeroAccount,
+            bondingMinAccount,
+            bondingMaxAccount
+        ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
             deal(address(uAD), mintings[i], 10000e18);
@@ -158,7 +175,12 @@ contract LiveTestHelper is Test {
 
         vm.stopPrank();
 
-        address[4] memory crvDeal = [address(manager), bondingMaxAccount, bondingMinAccount, fourthAccount];
+        address[4] memory crvDeal = [
+            address(manager),
+            bondingMaxAccount,
+            bondingMinAccount,
+            fourthAccount
+        ];
 
         for (uint256 i; i < crvDeal.length; ++i) {
             vm.prank(curveWhaleAddress);
@@ -166,12 +188,19 @@ contract LiveTestHelper is Test {
         }
 
         vm.startPrank(admin);
-        manager.deployStableSwapPool(address(curvePoolFactory), curve3CrvBasePool, curve3CrvToken, 10, 50000000);
+        manager.deployStableSwapPool(
+            address(curvePoolFactory),
+            curve3CrvBasePool,
+            curve3CrvToken,
+            10,
+            50000000
+        );
         metapool = IMetaPool(manager.stableSwapMetaPoolAddress());
         metapool.transfer(address(bondingV2), 100e18);
         metapool.transfer(secondAccount, 1000e18);
 
-        twapOracle = new TWAPOracle(address(metapool), address(uAD), address(curve3CrvToken));
+        twapOracle =
+        new TWAPOracle(address(metapool), address(uAD), address(curve3CrvToken));
         manager.setTwapOracleAddress(address(twapOracle));
         uarCalc = new UARForDollarsCalculator(address(manager));
         manager.setUARCalculatorAddress(address(uarCalc));
@@ -182,7 +211,8 @@ contract LiveTestHelper is Test {
         dollarMintCalc = new DollarMintingCalculator(address(manager));
         manager.setDollarMintingCalculatorAddress(address(dollarMintCalc));
 
-        debtCouponMgr = new DebtCouponManager(address(manager), couponLengthBlocks);
+        debtCouponMgr =
+            new DebtCouponManager(address(manager), couponLengthBlocks);
 
         manager.grantRole(manager.COUPON_MANAGER_ROLE(), address(debtCouponMgr));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(debtCouponMgr));
@@ -191,8 +221,11 @@ contract LiveTestHelper is Test {
         uAR = new UbiquityAutoRedeem(address(manager));
         manager.setuARTokenAddress(address(uAR));
 
-        excessDollarsDistributor = new ExcessDollarsDistributor(address(manager));
-        manager.setExcessDollarsDistributor(address(debtCouponMgr), address(excessDollarsDistributor));
+        excessDollarsDistributor =
+            new ExcessDollarsDistributor(address(manager));
+        manager.setExcessDollarsDistributor(
+            address(debtCouponMgr), address(excessDollarsDistributor)
+        );
 
         address[] memory tos;
         uint256[] memory amounts;
@@ -250,7 +283,8 @@ contract LiveTestHelper is Test {
         migrateLP = [0, 0, 0];
         locked = [uint256(1), uint256(1), uint256(208)];
 
-        bondingV2 = new BondingV2(address(manager), address(bFormulas), migrating, migrateLP, locked);
+        bondingV2 =
+        new BondingV2(address(manager), address(bFormulas), migrating, migrateLP, locked);
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 

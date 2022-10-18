@@ -5,13 +5,19 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/LiveTestHelper.sol";
 
 contract ZeroState is LiveTestHelper {
-    event Deposit(address indexed user, uint256 amount, uint256 indexed bondingShareId);
+    event Deposit(
+        address indexed user, uint256 amount, uint256 indexed bondingShareId
+    );
 
-    event Withdraw(address indexed user, uint256 amount, uint256 indexed bondingShareId);
+    event Withdraw(
+        address indexed user, uint256 amount, uint256 indexed bondingShareId
+    );
 
     event UGOVPerBlockModified(uint256 indexed uGOVPerBlock);
 
-    event MinPriceDiffToUpdateMultiplierModified(uint256 indexed minPriceDiffToUpdateMultiplier);
+    event MinPriceDiffToUpdateMultiplierModified(
+        uint256 indexed minPriceDiffToUpdateMultiplier
+    );
 
     function setUp() public virtual override {
         super.setUp();
@@ -45,9 +51,13 @@ contract ZeroStateTest is ZeroState {
 
     function testDeposit(uint256 lpAmount) public {
         lpAmount = bound(lpAmount, 1, metapool.balanceOf(fourthAccount));
-        uint256 shares = uFormulas.durationMultiply(lpAmount, 10, bondingV2.bondingDiscountMultiplier());
+        uint256 shares = uFormulas.durationMultiply(
+            lpAmount, 10, bondingV2.bondingDiscountMultiplier()
+        );
         vm.startPrank(admin);
-        uint256 id = bondingShareV2.mint(fourthAccount, lpAmount, shares, block.number + 100);
+        uint256 id = bondingShareV2.mint(
+            fourthAccount, lpAmount, shares, block.number + 100
+        );
         vm.expectEmit(true, false, true, true, address(chefV2));
         emit Deposit(fourthAccount, shares, id);
         chefV2.deposit(fourthAccount, shares, id);
@@ -68,9 +78,13 @@ contract DepositState is ZeroState {
     function setUp() public virtual override {
         super.setUp();
         fourthBal = metapool.balanceOf(fourthAccount);
-        shares = uFormulas.durationMultiply(fourthBal, 10, bondingV2.bondingDiscountMultiplier());
+        shares = uFormulas.durationMultiply(
+            fourthBal, 10, bondingV2.bondingDiscountMultiplier()
+        );
         vm.startPrank(admin);
-        fourthID = bondingShareV2.mint(fourthAccount, fourthBal, shares, block.number + 100);
+        fourthID = bondingShareV2.mint(
+            fourthAccount, fourthBal, shares, block.number + 100
+        );
         chefV2.deposit(fourthAccount, shares, fourthID);
         vm.stopPrank();
     }

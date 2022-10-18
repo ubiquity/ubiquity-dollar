@@ -6,9 +6,15 @@ import "./IERC20Ubiquity.sol";
 /// @title UAD stablecoin interface
 /// @author Ubiquity Algorithmic Dollar
 interface IUbiquityAlgorithmicDollar is IERC20Ubiquity {
-    event IncentiveContractUpdate(address indexed _incentivized, address indexed _incentiveContract);
+    event IncentiveContractUpdate(
+        address indexed _incentivized, address indexed _incentiveContract
+    );
 
-    function setIncentiveContract(address account, address incentive) external;
+    function setIncentiveContract(address account, address incentive)
+        external;
 
-    function incentiveContract(address account) external view returns (address);
+    function incentiveContract(address account)
+        external
+        view
+        returns (address);
 }

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.10;
+
 import "./utils/CollectableDust.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
@@ -70,8 +71,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
     /// @dev a premium can be 0 up to PRECISION i.e a premium of 500 would mean a 5% split
     function setPremium(uint16 premium_) external onlyIncentiveManager {
         require(
-            _premium != premium_ && premium_ < PRECISION,
-            "PYield::outOfRange"
+            _premium != premium_ && premium_ < PRECISION, "PYield::outOfRange"
         );
         _premium = premium_;
     }
@@ -85,10 +85,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
     /// @param _split new premium for uAR split
     /// @dev a _split can be from minSplit up to PRECISION i.e a premium of 500 would mean a 5% split
     function setMinSplit(uint16 _split) external onlyIncentiveManager {
-        require(
-            _split != _minSplit && _split < PRECISION,
-            "PYield::outOfRange"
-        );
+        require(_split != _minSplit && _split < PRECISION, "PYield::outOfRange");
         _minSplit = _split;
     }
 
@@ -119,7 +116,9 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         return IERC20(_strategy).balanceOf(address(this));
     }
 
-    /** @dev See {IERC4626-maxDeposit}. */
+    /**
+     * @dev See {IERC4626-maxDeposit}.
+     */
     function maxDeposit(address) public view override returns (uint256) {
         // limited by the underlying strategy
         return _strategy.maxDeposit(address(this));
@@ -137,10 +136,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         // transfer the strategy asset to the proxy
 
         SafeERC20.safeTransferFrom(
-            strategyAsset,
-            _msgSender(),
-            address(this),
-            assets
+            strategyAsset, _msgSender(), address(this), assets
         );
         // calculate the amount of strategy shares we can get for 'assets' startegy asset
         uint256 stratShares = _strategy.previewDeposit(assets);
@@ -176,12 +172,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
 
         uint256 assets = previewRedeem(shares);
         uint256 remainingStratShares = _withdrawWithSplit(
-            _msgSender(),
-            receiver,
-            owner,
-            assets,
-            shares,
-            split
+            _msgSender(), receiver, owner, assets, shares, split
         );
         _strategy.redeem(remainingStratShares, receiver, address(this));
         return assets;
@@ -202,22 +193,17 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         uint256 shares = previewWithdraw(assets);
 
         uint256 remainingStratShares = _withdrawWithSplit(
-            _msgSender(),
-            receiver,
-            owner,
-            assets,
-            shares,
-            split
+            _msgSender(), receiver, owner, assets, shares, split
         );
         _strategy.redeem(remainingStratShares, receiver, address(this));
         return shares;
     }
 
-    function redeem(
-        uint256 shares,
-        address receiver,
-        address owner
-    ) public override returns (uint256) {
+    function redeem(uint256 shares, address receiver, address owner)
+        public
+        override
+        returns (uint256)
+    {
         return redeemWithSplit(shares, receiver, owner, _minSplit);
     }
 
@@ -233,12 +219,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
 
         uint256 assets = previewRedeem(shares);
         uint256 remainingStratShares = _withdrawWithSplit(
-            _msgSender(),
-            receiver,
-            owner,
-            assets,
-            shares,
-            split
+            _msgSender(), receiver, owner, assets, shares, split
         );
         IERC20 strategyToken = IERC20(address(_strategy));
         SafeERC20.safeTransfer(strategyToken, receiver, remainingStratShares);
@@ -279,25 +260,19 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         IERC20 strategyToken = IERC20(address(_strategy));
         // send the rewards to the treasury
         SafeERC20.safeTransfer(
-            strategyToken,
-            _manager.treasuryAddress(),
-            splitStratShares
+            strategyToken, _manager.treasuryAddress(), splitStratShares
         );
         // get the underlying asset amount corresponding to splitStratShares which are strategy shares
         uint256 stratAsset = _strategy.previewRedeem(splitStratShares);
         // as this asset is a stablecoin we can calculate and mint uCR premium
         uint256 splitWithPremium = (_premium * stratAsset) / PRECISION;
         IERC20Ubiquity(_manager.autoRedeemTokenAddress()).mint(
-            receiver,
-            splitWithPremium
+            receiver, splitWithPremium
         );
 
         emit RedeemSplit(
-            remainingStratShares,
-            splitWithPremium,
-            shares,
-            splitStratShares
-        );
+            remainingStratShares, splitWithPremium, shares, splitStratShares
+            );
         // added for compatibility purposes
         emit Withdraw(caller, receiver, owner, assets, shares);
         return remainingStratShares;
@@ -315,34 +290,26 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
 
         uint256 shares = previewWithdraw(assets);
         uint256 remainingStratShares = _withdrawWithSplit(
-            _msgSender(),
-            receiver,
-            owner,
-            assets,
-            shares,
-            split
+            _msgSender(), receiver, owner, assets, shares, split
         );
         IERC20 strategyToken = IERC20(address(_strategy));
         SafeERC20.safeTransfer(strategyToken, receiver, remainingStratShares);
         return shares;
     }
 
-    /** @dev See {IERC4626-withdraw}. */
-    function withdraw(
-        uint256 assets,
-        address receiver,
-        address owner
-    ) public override returns (uint256) {
+    /**
+     * @dev See {IERC4626-withdraw}.
+     */
+    function withdraw(uint256 assets, address receiver, address owner)
+        public
+        override
+        returns (uint256)
+    {
         require(assets <= maxWithdraw(owner), "PYield::withdraw>max");
 
         uint256 shares = previewWithdraw(assets);
         uint256 remainingStratShares = _withdrawWithSplit(
-            _msgSender(),
-            receiver,
-            owner,
-            assets,
-            shares,
-            _minSplit
+            _msgSender(), receiver, owner, assets, shares, _minSplit
         );
         IERC20 strategyToken = IERC20(address(_strategy));
         SafeERC20.safeTransfer(strategyToken, receiver, remainingStratShares);

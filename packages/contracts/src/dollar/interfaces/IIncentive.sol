@@ -10,5 +10,10 @@ interface IIncentive {
     /// @param receiver the receiver address of uAD
     /// @param operator the operator (msg.sender) of the transfer
     /// @param amount the amount of uAD transferred
-    function incentivize(address sender, address receiver, address operator, uint256 amount) external;
+    function incentivize(
+        address sender,
+        address receiver,
+        address operator,
+        uint256 amount
+    ) external;
 }

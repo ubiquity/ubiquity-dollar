@@ -2,22 +2,25 @@
 pragma solidity ^0.8.3;
 
 import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
-import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityAlgorithmicDollarManager} from
+    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
-
 
 contract ERC20UbiquityTest is LocalTestHelper {
     address token_addr;
     address uad_manager_addr;
 
-    event Minting(address indexed mock_addr1, address indexed _minter, uint256 _amount);
+    event Minting(
+        address indexed mock_addr1, address indexed _minter, uint256 _amount
+    );
 
     event Burning(address indexed _burned, uint256 _amount);
 
     function setUp() public {
         uad_manager_addr = helpers_deployUbiquityAlgorithmicDollarManager();
         vm.prank(admin);
-        token_addr = address(new ERC20Ubiquity(uad_manager_addr, "Test", "Test"));
+        token_addr =
+            address(new ERC20Ubiquity(uad_manager_addr, "Test", "Test"));
     }
 
     function test_setSymbol() public {
@@ -39,7 +42,6 @@ contract ERC20UbiquityTest is LocalTestHelper {
     }
 
     function test_mintAndBurn() public {
-
         // test onlyMinter and mint
         address mock_addr1 = address(0x123);
         address mock_addr2 = address(0x234);
@@ -81,7 +83,9 @@ contract ERC20UbiquityTest is LocalTestHelper {
 
         before_bal = ERC20Ubiquity(token_addr).balanceOf(mock_addr1);
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uad_manager_addr).grantRole(keccak256("UBQ_BURNER_ROLE"), mock_addr2);
+        UbiquityAlgorithmicDollarManager(uad_manager_addr).grantRole(
+            keccak256("UBQ_BURNER_ROLE"), mock_addr2
+        );
 
         vm.prank(mock_addr2);
         vm.expectEmit(true, false, false, true);
@@ -89,6 +93,5 @@ contract ERC20UbiquityTest is LocalTestHelper {
         ERC20Ubiquity(token_addr).burnFrom(mock_addr1, 10);
         after_bal = ERC20Ubiquity(token_addr).balanceOf(mock_addr1);
         assertEq(before_bal - after_bal, 10);
-
     }
 }

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
-import '@openzeppelin/contracts/access/IAccessControl.sol';
+import "@openzeppelin/contracts/access/IAccessControl.sol";
 
 /// @title UAD Manager interface
 /// @author Ubiquity Algorithmic Manager
@@ -14,7 +14,7 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
 
     function autoRedeemTokenAddress() external view returns (address);
 
-    function treasuryAddress() external view returns (address);    
+    function treasuryAddress() external view returns (address);
 
     function setTwapOracleAddress(address _twapOracleAddress) external;
 
@@ -22,21 +22,29 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
 
     function setDebtCouponAddress(address _debtCouponAddress) external;
 
-    function setIncentiveToUAD(address _account, address _incentiveAddress) external;
+    function setIncentiveToUAD(address _account, address _incentiveAddress)
+        external;
 
     function setDollarTokenAddress(address _dollarTokenAddress) external;
 
-    function setGovernanceTokenAddress(address _governanceTokenAddress) external;
+    function setGovernanceTokenAddress(address _governanceTokenAddress)
+        external;
 
     function setSushiSwapPoolAddress(address _sushiSwapPoolAddress) external;
 
     function setUARCalculatorAddress(address _uarCalculatorAddress) external;
 
-    function setCouponCalculatorAddress(address _couponCalculatorAddress) external;
+    function setCouponCalculatorAddress(address _couponCalculatorAddress)
+        external;
 
-    function setDollarMintingCalculatorAddress(address _dollarMintingCalculatorAddress) external;
+    function setDollarMintingCalculatorAddress(
+        address _dollarMintingCalculatorAddress
+    ) external;
 
-    function setExcessDollarsDistributor(address debtCouponManagerAddress, address excessCouponDistributor) external;
+    function setExcessDollarsDistributor(
+        address debtCouponManagerAddress,
+        address excessCouponDistributor
+    ) external;
 
     function setMasterChefAddress(address _masterChefAddress) external;
 
@@ -44,7 +52,8 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
 
     function setBondingShareAddress(address _bondingShareAddress) external;
 
-    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress) external;
+    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
+        external;
 
     /**
      * @notice set the bonding bontract smart contract address
@@ -52,7 +61,8 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
      * for a certain duration to earn uGOV and more curve LP token
      * @param _bondingContractAddress bonding contract address
      */
-    function setBondingContractAddress(address _bondingContractAddress) external;
+    function setBondingContractAddress(address _bondingContractAddress)
+        external;
 
     /**
      * @notice set the treasury address
@@ -78,8 +88,10 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
         address _crv3PoolTokenAddress,
         uint256 _amplificationCoefficient,
         uint256 _fee
-    )
-        external;
+    ) external;
 
-    function getExcessDollarsDistributor(address _debtCouponManagerAddress) external view returns (address);
+    function getExcessDollarsDistributor(address _debtCouponManagerAddress)
+        external
+        view
+        returns (address);
 }

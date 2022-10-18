@@ -5,7 +5,11 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/LiveTestHelper.sol";
 
 contract ZeroState is LiveTestHelper {
-    event PriceReset(address _tokenWithdrawn, uint256 _amountWithdrawn, uint256 _amountTransfered);
+    event PriceReset(
+        address _tokenWithdrawn,
+        uint256 _amountWithdrawn,
+        uint256 _amountTransfered
+    );
 
     event Deposit(
         address indexed _user,
@@ -25,14 +29,21 @@ contract ZeroState is LiveTestHelper {
     );
 
     event AddLiquidityFromBond(
-        address indexed _user, uint256 indexed _id, uint256 _lpAmount, uint256 _bondingShareAmount
+        address indexed _user,
+        uint256 indexed _id,
+        uint256 _lpAmount,
+        uint256 _bondingShareAmount
     );
 
     event BondingDiscountMultiplierUpdated(uint256 _bondingDiscountMultiplier);
     event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
 
     event Migrated(
-        address indexed _user, uint256 indexed _id, uint256 _lpsAmount, uint256 _sharesAmount, uint256 _weeks
+        address indexed _user,
+        uint256 indexed _id,
+        uint256 _lpsAmount,
+        uint256 _sharesAmount,
+        uint256 _weeks
     );
     event DustSent(address _to, address token, uint256 amount);
     event ProtocolTokenAdded(address _token);
@@ -68,9 +79,11 @@ contract ZeroStateTest is ZeroState {
         vm.record();
         bondingV2.addUserToMigrate(fourthAccount, x, y);
 
-        (bytes32[] memory reads, bytes32[] memory writes) = vm.accesses(address(bondingV2));
+        (bytes32[] memory reads, bytes32[] memory writes) =
+            vm.accesses(address(bondingV2));
 
-        address checkAddress = address(bytes20(vm.load(address(bondingV2), writes[1]) << 96));
+        address checkAddress =
+            address(bytes20(vm.load(address(bondingV2), writes[1]) << 96));
         uint256 checkLP = uint256(vm.load(address(bondingV2), writes[3]));
         uint256 checkWeeks = uint256(vm.load(address(bondingV2), writes[6]));
 
@@ -127,11 +140,16 @@ contract ZeroStateTest is ZeroState {
     }
 
     function testSetBondingFormula() public {
-        assertEq(bytes20(address(bFormulas)), bytes20(bondingV2.bondingFormulasAddress()));
+        assertEq(
+            bytes20(address(bFormulas)),
+            bytes20(bondingV2.bondingFormulasAddress())
+        );
         vm.prank(admin);
         bondingV2.setBondingFormulasAddress(secondAccount);
 
-        assertEq(bytes20(secondAccount), bytes20(bondingV2.bondingFormulasAddress()));
+        assertEq(
+            bytes20(secondAccount), bytes20(bondingV2.bondingFormulasAddress())
+        );
     }
 
     function testAddProtocolToken() public {
@@ -166,7 +184,9 @@ contract ZeroStateTest is ZeroState {
             bondingMinAccount,
             bondingShareV2.totalSupply(),
             lpAmount,
-            IUbiquityFormulas(manager.formulasAddress()).durationMultiply(lpAmount, lockup, bondingV2.bondingDiscountMultiplier()),
+            IUbiquityFormulas(manager.formulasAddress()).durationMultiply(
+                lpAmount, lockup, bondingV2.bondingDiscountMultiplier()
+            ),
             lockup,
             (block.number + lockup * bondingV2.blockCountInAWeek())
             );
@@ -217,7 +237,8 @@ contract ZeroStateTest is ZeroState {
 contract DepositState is ZeroState {
     function setUp() public virtual override {
         super.setUp();
-        address[3] memory depositingAccounts = [bondingMinAccount, fourthAccount, bondingMaxAccount];
+        address[3] memory depositingAccounts =
+            [bondingMinAccount, fourthAccount, bondingMaxAccount];
         uint256[3] memory depositAmounts = [
             metapool.balanceOf(bondingMinAccount),
             metapool.balanceOf(fourthAccount),
@@ -255,7 +276,8 @@ contract DepositStateTest is DepositState {
     }
 
     function testCRVPriceReset(uint256 amount) public {
-        amount = bound(amount, 1000e18, crvToken.balanceOf(address(metapool)) / 10);
+        amount =
+            bound(amount, 1000e18, crvToken.balanceOf(address(metapool)) / 10);
         uint256 crvPreBalance = crvToken.balanceOf(address(metapool));
 
         vm.expectEmit(true, false, false, false, address(bondingV2));
@@ -279,7 +301,11 @@ contract DepositStateTest is DepositState {
             bondingMinAccount,
             1,
             amount,
-            uFormulas.durationMultiply(bond.lpAmount + amount, weeksLockup, bondingV2.bondingDiscountMultiplier())
+            uFormulas.durationMultiply(
+                bond.lpAmount + amount,
+                weeksLockup,
+                bondingV2.bondingDiscountMultiplier()
+            )
             );
         vm.prank(bondingMinAccount);
         bondingV2.addLiquidity(uint256(amount), 1, weeksLockup);
@@ -294,7 +320,9 @@ contract DepositStateTest is DepositState {
 
         uint256 preBal = metapool.balanceOf(bondingMinAccount);
         vm.expectEmit(true, false, false, false, address(bondingV2));
-        emit RemoveLiquidityFromBond(bondingMinAccount, 1, amount, amount, amount, amount);
+        emit RemoveLiquidityFromBond(
+            bondingMinAccount, 1, amount, amount, amount, amount
+            );
         vm.prank(bondingMinAccount);
         bondingV2.removeLiquidity(amount, 1);
         uint256 postBal = metapool.balanceOf(bondingMinAccount);

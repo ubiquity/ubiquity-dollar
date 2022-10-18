@@ -41,33 +41,49 @@ contract BondingFormulaTest is LocalTestHelper {
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    )
-        public
-    {
-        assertEq(bondingFormula.lpRewardsRemoveLiquidityNormalization(_bond, _shareInfo, _amount), _amount);
+    ) public {
+        assertEq(
+            bondingFormula.lpRewardsRemoveLiquidityNormalization(
+                _bond, _shareInfo, _amount
+            ),
+            _amount
+        );
     }
 
     function test_lpRewardsAddLiquidityNormalization(
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    )
-        public
-    {
-        assertEq(bondingFormula.lpRewardsAddLiquidityNormalization(_bond, _shareInfo, _amount), _amount);
+    ) public {
+        assertEq(
+            bondingFormula.lpRewardsAddLiquidityNormalization(
+                _bond, _shareInfo, _amount
+            ),
+            _amount
+        );
     }
 
     function test_correctedAmountToWithdraw_returnAmount() public {
         uint256 _totalLpDeposited = 10000;
         uint256 _bondingLpBalance = 20000;
         uint256 _amount = 100;
-        assertEq(bondingFormula.correctedAmountToWithdraw(_totalLpDeposited, _bondingLpBalance, _amount), 100);
+        assertEq(
+            bondingFormula.correctedAmountToWithdraw(
+                _totalLpDeposited, _bondingLpBalance, _amount
+            ),
+            100
+        );
     }
 
     function test_correctedAmountToWithdraw_calcSharedAmount() public {
         uint256 _totalLpDeposited = 10000;
         uint256 _bondingLpBalance = 5000;
         uint256 _amount = 100;
-        assertEq(bondingFormula.correctedAmountToWithdraw(_totalLpDeposited, _bondingLpBalance, _amount), 50);
+        assertEq(
+            bondingFormula.correctedAmountToWithdraw(
+                _totalLpDeposited, _bondingLpBalance, _amount
+            ),
+            50
+        );
     }
 }

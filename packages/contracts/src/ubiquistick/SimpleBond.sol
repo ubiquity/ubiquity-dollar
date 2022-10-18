@@ -55,7 +55,10 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
     /// @notice onlySticker : no NFT stick address defined OR sender has at least one NFT Stick
     modifier onlySticker() {
-        require(sticker == address(0) || IERC721(sticker).balanceOf(msg.sender) > 0, "Not NFT Stick owner");
+        require(
+            sticker == address(0) || IERC721(sticker).balanceOf(msg.sender) > 0,
+            "Not NFT Stick owner"
+        );
         _;
     }
 
@@ -68,7 +71,11 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// Simple Bond constructor
     /// @param tokenRewards_ Rewards token address
     /// @param vestingBlocks_ Vesting duration in blocks
-    constructor(address tokenRewards_, uint256 vestingBlocks_, address treasury_) {
+    constructor(
+        address tokenRewards_,
+        uint256 vestingBlocks_,
+        address treasury_
+    ) {
         require(tokenRewards_ != address(0), "Invalid Reward token");
         tokenRewards = tokenRewards_;
         setVestingBlocks(vestingBlocks_);
@@ -78,7 +85,11 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @notice Set Rewards for specific Token
     /// @param token token address
     /// @param tokenRewardsRatio rewardsRatio for this token
-    function setRewards(address token, uint256 tokenRewardsRatio) public override onlyOwner {
+    function setRewards(address token, uint256 tokenRewardsRatio)
+        public
+        override
+        onlyOwner
+    {
         require(token != address(0), "Invalid Reward token");
         rewardsRatio[token] = tokenRewardsRatio;
 
@@ -87,7 +98,11 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
     /// @notice Set vesting duration
     /// @param vestingBlocks_ vesting duration in blocks
-    function setVestingBlocks(uint256 vestingBlocks_) public override onlyOwner {
+    function setVestingBlocks(uint256 vestingBlocks_)
+        public
+        override
+        onlyOwner
+    {
         require(vestingBlocks_ > 0, "Invalid Vesting blocks number");
         vestingBlocks = vestingBlocks_;
     }
@@ -113,7 +128,13 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @param token bonded token address
     /// @param amount amount of token to bond
     /// @return bondId Bond id
-    function bond(address token, uint256 amount) public override whenNotPaused onlySticker returns (uint256 bondId) {
+    function bond(address token, uint256 amount)
+        public
+        override
+        whenNotPaused
+        onlySticker
+        returns (uint256 bondId)
+    {
         require(rewardsRatio[token] > 0, "Token not allowed");
 
         // @dev throws if not enough allowance or tokens for address
@@ -132,20 +153,28 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         bondId = bonds[msg.sender].length;
         bonds[msg.sender].push(bnd);
 
-        emit LogBond(msg.sender, bnd.token, bnd.amount, bnd.rewards, bnd.block, bondId);
+        emit LogBond(
+            msg.sender, bnd.token, bnd.amount, bnd.rewards, bnd.block, bondId
+            );
     }
 
     /// @notice Claim all rewards
     /// @return claimed Rewards claimed succesfully
     function claim() public override whenNotPaused returns (uint256 claimed) {
-        for (uint256 index = 0; (index < bonds[msg.sender].length); index += 1) {
+        for (uint256 index = 0; (index < bonds[msg.sender].length); index += 1)
+        {
             claimed += claimBond(index);
         }
     }
 
     /// @notice Claim bond rewards
     /// @return claimed Rewards claimed succesfully
-    function claimBond(uint256 index) public override whenNotPaused returns (uint256 claimed) {
+    function claimBond(uint256 index)
+        public
+        override
+        whenNotPaused
+        returns (uint256 claimed)
+    {
         Bond storage bnd = bonds[msg.sender][index];
         uint256 claimAmount = _bondClaimableRewards(bnd);
 
@@ -155,7 +184,9 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
             assert(bnd.claimed <= bnd.rewards);
             IUAR(tokenRewards).raiseCapital(claimAmount);
-            IERC20(tokenRewards).safeTransferFrom(treasury, msg.sender, claimAmount);
+            IERC20(tokenRewards).safeTransferFrom(
+                treasury, msg.sender, claimAmount
+            );
         }
 
         emit LogClaim(msg.sender, index, claimed);
@@ -164,7 +195,11 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @notice Withdraw token from the smartcontract, only for owner
     /// @param  token token withdraw
     /// @param amount amount withdraw
-    function withdraw(address token, uint256 amount) public override onlyOwner {
+    function withdraw(address token, uint256 amount)
+        public
+        override
+        onlyOwner
+    {
         IERC20(token).safeTransfer(treasury, amount);
     }
 
@@ -176,10 +211,18 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         public
         view
         override
-        returns (uint256 rewards, uint256 rewardsClaimed, uint256 rewardsClaimable)
+        returns (
+            uint256 rewards,
+            uint256 rewardsClaimed,
+            uint256 rewardsClaimable
+        )
     {
         for (uint256 index = 0; index < bonds[addr].length; index += 1) {
-            (uint256 bondRewards, uint256 bondClaimedRewards, uint256 bondClaimableRewards) = rewardsBondOf(addr, index);
+            (
+                uint256 bondRewards,
+                uint256 bondClaimedRewards,
+                uint256 bondClaimableRewards
+            ) = rewardsBondOf(addr, index);
             rewards += bondRewards;
             rewardsClaimed += bondClaimedRewards;
             rewardsClaimable += bondClaimableRewards;
@@ -194,7 +237,11 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         public
         view
         override
-        returns (uint256 rewards, uint256 rewardsClaimed, uint256 rewardsClaimable)
+        returns (
+            uint256 rewards,
+            uint256 rewardsClaimed,
+            uint256 rewardsClaimable
+        )
     {
         Bond memory bnd = bonds[addr][index];
         rewards = bnd.rewards;
@@ -209,7 +256,11 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     }
 
     /// @dev calculate claimable rewards during vesting period, or all claimable rewards after, minus already claimed
-    function _bondClaimableRewards(Bond memory bnd) internal view returns (uint256 claimable) {
+    function _bondClaimableRewards(Bond memory bnd)
+        internal
+        view
+        returns (uint256 claimable)
+    {
         assert(block.number >= bnd.block);
 
         uint256 blocks = block.number - bnd.block;

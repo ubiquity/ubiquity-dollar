@@ -14,11 +14,11 @@ contract BondingFormulas {
     /// @param _bond , bonding share
     /// @param _amount , amount of LP tokens
     /// @notice shares = (bond.shares * _amount )  / bond.lpAmount ;
-    function sharesForLP(BondingShareV2.Bond memory _bond, uint256[2] memory _shareInfo, uint256 _amount)
-        public
-        pure
-        returns (uint256 _uLP)
-    {
+    function sharesForLP(
+        BondingShareV2.Bond memory _bond,
+        uint256[2] memory _shareInfo,
+        uint256 _amount
+    ) public pure returns (uint256 _uLP) {
         bytes16 a = _shareInfo[0].fromUInt(); // shares amount
         bytes16 v = _amount.fromUInt();
         bytes16 t = _bond.lpAmount.fromUInt();
@@ -36,11 +36,7 @@ contract BondingFormulas {
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    )
-        public
-        pure
-        returns (uint256)
-    {
+    ) public pure returns (uint256) {
         return _amount;
     }
 
@@ -55,11 +51,7 @@ contract BondingFormulas {
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
-    )
-        public
-        pure
-        returns (uint256)
-    {
+    ) public pure returns (uint256) {
         return _amount;
     }
 
@@ -72,15 +64,17 @@ contract BondingFormulas {
     /// @param _amount , amount of LP tokens
     /// @notice corrected_amount = amount * ( bondingLpBalance / totalLpDeposited)
     ///         if there is more or the same amount of LP than deposited then do nothing
-    function correctedAmountToWithdraw(uint256 _totalLpDeposited, uint256 _bondingLpBalance, uint256 _amount)
-        public
-        pure
-        returns (uint256)
-    {
+    function correctedAmountToWithdraw(
+        uint256 _totalLpDeposited,
+        uint256 _bondingLpBalance,
+        uint256 _amount
+    ) public pure returns (uint256) {
         if (_bondingLpBalance < _totalLpDeposited && _bondingLpBalance > 0) {
             // if there is less LP token inside the bonding contract that what have been deposited
             // we have to reduce proportionnaly the lp amount to withdraw
-            return _amount.fromUInt().mul(_bondingLpBalance.fromUInt()).div(_totalLpDeposited.fromUInt()).toUInt();
+            return _amount.fromUInt().mul(_bondingLpBalance.fromUInt()).div(
+                _totalLpDeposited.fromUInt()
+            ).toUInt();
         }
         return _amount;
     }

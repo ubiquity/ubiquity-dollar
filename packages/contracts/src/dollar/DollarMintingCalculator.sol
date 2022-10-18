@@ -26,7 +26,10 @@ contract DollarMintingCalculator is IDollarMintingCalculator {
         uint256 twapPrice = oracle.consult(manager.dollarTokenAddress());
         require(twapPrice > 1 ether, "DollarMintingCalculator: not > 1");
         return twapPrice.fromUInt().sub(_one).mul(
-            (IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt().div(_one))
+            (
+                IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt()
+                    .div(_one)
+            )
         ).toUInt();
     }
 }
