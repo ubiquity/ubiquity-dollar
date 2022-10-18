@@ -1,6 +1,4 @@
 import { FC, useState } from "react";
-import { ethers } from "ethers";
-
 import MigrateButton from "@/components/redeem/MigrateButton";
 import DollarPrice from "@/components/redeem/DollarPrice";
 import UcrRedeem from "@/components/redeem/UcrRedeem";
