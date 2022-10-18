@@ -1,3 +1,5 @@
+import { OptionDefinition } from "command-line-args";
+
 import { DeployFuncCallback } from "../shared";
 import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding"
 import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmicDollarManager"
@@ -23,7 +25,8 @@ import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR"
 import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP"
 import simpleBondFunc, { optionDefinitions as simpleBondOptions } from "./ubiquistick/SimpleBond"
 
-export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: any }> = {
+
+export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: OptionDefinition[] }> = {
     "Bonding": {
         handler: bondingFunc,
         options: bondingOptions

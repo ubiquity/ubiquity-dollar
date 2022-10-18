@@ -1,8 +1,10 @@
 import { exportDeployment } from "./export";
 import { Networks } from "../shared/constants/networks";
-import { execute } from "./utils/helpers/execute";
 import { ForgeArguments } from "../shared/types";
-export const create = async (args: ForgeArguments): Promise<any> => {
+import { execute, DeploymentResult } from "../shared";
+
+
+export const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult | undefined, stderr: string }> => {
     let flattenConstructorArgs = ``;
     for (const param of args.constructorArguments) {
         flattenConstructorArgs += `${param} `;
@@ -21,8 +23,9 @@ export const create = async (args: ForgeArguments): Promise<any> => {
         executeCmd = prepareCmd
     }
     let stdout;
-    let stderr;
-    let result: any = {};
+    let stderr: string;
+    let result: DeploymentResult | undefined;
+
     try {
         const { stdout: _stdout, stderr: _stderr } = await execute(executeCmd)
         stdout = _stdout;

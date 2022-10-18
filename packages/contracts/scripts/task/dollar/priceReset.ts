@@ -1,8 +1,11 @@
+import { OptionDefinition } from "command-line-args";
+
 import { A_PRECISION, deployments, DEPLOYMENT_OVERRIDES, get_burn_lp_amount, Networks, TaskFuncParam, pressAnyKey } from "../../shared";
 import { ethers, BigNumber } from "ethers"
 import { abi as metaPoolABI } from "../../../out/IMetaPool.sol/IMetaPool.json"
 
-export const optionDefinitions = [
+
+export const optionDefinitions: OptionDefinition[] = [
     { name: 'task', defaultOption: true },
     { name: 'price', alias: 'p', type: Number },
     { name: 'dryrun', alias: 'd', type: Boolean },

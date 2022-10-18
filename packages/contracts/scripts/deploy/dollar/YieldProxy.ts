@@ -1,8 +1,10 @@
+import { OptionDefinition } from "command-line-args";
+
 import { DeployFuncParam, deployments, Networks } from "../../shared";
 import { create } from "../create"
 import { ethers } from "ethers";
 
-export const optionDefinitions = [
+export const optionDefinitions: OptionDefinition[] = [
     { name: 'task', defaultOption: true },
     { name: 'manager', alias: 'm', type: String },
     { name: 'jar', alias: 'j', type: String },
@@ -29,7 +31,7 @@ const func = async (params: DeployFuncParam) => {
 
     const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager, jar_address, fees, UBQRate, bonusYield] });
 
-    const yield_proxy_address = result.deployedTo;
+    const yield_proxy_address = result!.deployedTo;
 
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     console.log("Granting UBQ_MINTER_ROLE...", { yield_proxy_address, uad_manager: manager })

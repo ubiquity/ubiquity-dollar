@@ -1,7 +1,9 @@
+import { OptionDefinition } from "command-line-args";
+
 import { create } from "../create"
 import { DeployFuncParam } from "../../shared";
 
-export const optionDefinitions = [
+export const optionDefinitions: OptionDefinition[] = [
     { name: 'task', defaultOption: true },
     { name: 'admin', alias: 'a', type: String },
     { name: "network", alias: 'n', type: String },

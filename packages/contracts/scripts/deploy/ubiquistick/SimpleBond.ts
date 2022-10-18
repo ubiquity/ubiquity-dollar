@@ -1,8 +1,10 @@
+import { OptionDefinition } from "command-line-args";
+
 import { DeployFuncParam, deployments, Networks } from "../../shared";
 import { create } from "../create"
 import { ethers } from "ethers";
 
-export const optionDefinitions = [
+export const optionDefinitions: OptionDefinition[] = [
     { name: 'task', defaultOption: true },
     { name: 'treasury', alias: 't', type: String },
     { name: 'vestingBlocks', alias: 'v', type: Number },
@@ -28,7 +30,7 @@ const func = async (params: DeployFuncParam) => {
 
     const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [uAR_deployments.address, vestingBlocks, treasury] });
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
-    const simpleBondAddress = result.deployedTo;
+    const simpleBondAddress = result!.deployedTo;
     const simple_bond_deployments = await deployments(chainId.toString(), "SimpleBond");
     const ubiquity_stick_deployments = await deployments(chainId.toString(), "TheUbiquityStick");
     const simpleBondContract = new ethers.Contract(simpleBondAddress, simple_bond_deployments.abi, signer)

@@ -1,8 +1,10 @@
+import { OptionDefinition } from "command-line-args";
+
 import { DeployFuncParam, deployments, Networks } from "../../shared";
 import { create } from "../create"
 import { ethers } from "ethers";
 
-export const optionDefinitions = [
+export const optionDefinitions: OptionDefinition[] = [
     { name: 'task', defaultOption: true },
     { name: 'manager', alias: 'm', type: String },
     { name: "network", alias: 'n', type: String },
@@ -21,7 +23,7 @@ const func = async (params: DeployFuncParam) => {
 
     const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager] });
 
-    const debtCoupon = result.deployedTo;
+    const debtCoupon = result!.deployedTo;
 
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     console.log("Updating governance token address of UbiquityAlgorithmicDollarManager", { debtCoupon, uad_manager: manager })
