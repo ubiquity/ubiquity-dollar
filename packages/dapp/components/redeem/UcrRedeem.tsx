@@ -8,16 +8,14 @@ import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
 import useBalances from "../lib/hooks/useBalances";
 import useSigner from "../lib/hooks/useSigner";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import useWalletAddress from "../lib/hooks/useWalletAddress";
 import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 import useRouter from "../lib/hooks/useRouter";
-import useTrade from "../lib/hooks/useTrade";
-import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
-import { getUniswapV3RouterContract } from "../utils/contracts"
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST } from "@/lib/utils";
 
 const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
-  const [{ provider, walletAddress }] = useWeb3();
+  const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction, doingTransaction] = useTransactionLogger();
@@ -26,7 +24,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
 
   const [inputVal, setInputVal] = useState("0");
   const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
-  const [quoteAmount, lastQuoteAmount] = useRouter(selectedRedeemToken, inputVal);
+  const [quotePrice, lastQuotePrice] = useRouter(selectedRedeemToken, inputVal);
   const currentlyAbovePeg = twapInteger > 1;
 
   if (!walletAddress || !signer) {
@@ -37,16 +35,11 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     return <span>· · ·</span>;
   }
 
-  const redeemUcr = async (amount: BigNumber) => {
+  const redeemUcrForUad = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
     await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken as unknown as Contract, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
-    if (provider && quoteAmount) {
-      const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider)
-      await (await routerContract.connect(signer).approveMax(quoteAmount, managedContracts.dollarToken)).wait();
-      const resp = await useTrade(selectedRedeemToken, quoteAmount)
-      refreshBalances();
-    }
+    refreshBalances();
   };
 
   const handleRedeem = () => {
@@ -54,7 +47,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     if (amount) {
       doTransaction("Redeeming uCR...", async () => {
         setInputVal("");
-        await redeemUcr(amount);
+        await redeemUcrForUad(amount);
       });
     }
   };
@@ -99,14 +92,14 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
             <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
             <span onClick={handleMax}>MAX</span>
           </div>
-          {inputVal && quoteAmount && !lastQuoteAmount && (
+          {inputVal && quotePrice && !lastQuotePrice && (
             <div>
-              {inputVal} uCR -&gt; {quoteAmount} uAD.
+              {inputVal} uCR -&gt; {quotePrice} uAD.
             </div>
           )}
-          {inputVal && quoteAmount && lastQuoteAmount && (
+          {inputVal && quotePrice && lastQuotePrice && (
             <div>
-              {inputVal} uCR -&gt; {quoteAmount} uAD -&gt; {lastQuoteAmount}.
+              {inputVal} uCR -&gt; {quotePrice} uAD -&gt; {lastQuotePrice}.
             </div>
           )}
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
