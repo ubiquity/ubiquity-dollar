@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { FC, useState } from "react";
+import "@uniswap/widgets/fonts.css";
 
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
