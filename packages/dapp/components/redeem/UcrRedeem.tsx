@@ -100,12 +100,12 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
             <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
             <span onClick={handleMax}>MAX</span>
           </div>
-          {inputVal && quoteAmount && !lastQuoteAmount && (
+          {inputVal && selectedRedeemToken === "uAD" && quoteAmount && (
             <div>
               {inputVal} uCR -&gt; {quoteAmount} uAD.
             </div>
           )}
-          {inputVal && quoteAmount && lastQuoteAmount && (
+          {inputVal && selectedRedeemToken !== "uAD" && quoteAmount && lastQuoteAmount && (
             <div>
               {inputVal} uCR -&gt; {quoteAmount} uAD -&gt; {lastQuoteAmount} {selectedRedeemToken}.
             </div>
