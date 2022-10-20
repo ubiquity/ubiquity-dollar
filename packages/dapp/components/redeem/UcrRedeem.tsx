@@ -78,10 +78,9 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
 
   return (
     <div>
-      {!currentlyAbovePeg ? (
+      {currentlyAbovePeg ? (
         <div>
           <h4>TWAP is above peg</h4>
-          <div>uCR-&gt;uAD-&gt;USDC/DAI/USDT</div>
           <div onChange={onChangeValue}>
             <p>Please select a token to redeem for:</p>
             <input type="radio" id="tokenChoice1" name="redeemToken" value="uAD" checked={selectedRedeemToken === "uAD"} readOnly />
