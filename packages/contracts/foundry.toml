@@ -19,4 +19,4 @@ tab_width = 2
 line_length = 80
 tab_width = 4
 bracket_spacing = false
-qutoe_style = 'double'
+quote_style = 'double'
