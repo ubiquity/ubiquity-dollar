@@ -13,7 +13,7 @@ extra_output = [
 optimizer = true
 optimizer_runs = 20_000
 force = false
-# See more config options https://github.com/foundry-rs/foundry/tree/master/conf
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
 [fmt]
 tab_width = 2
 line_length = 80
