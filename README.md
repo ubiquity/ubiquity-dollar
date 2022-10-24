@@ -6,28 +6,73 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
+## Yarn Workspaces
+
+The repo has been built as a [yarn workspace](https://yarnpkg.com/features/workspaces) monorepo.
+
+<pre>
+&lt;root&gt;
+├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages">packages</a>
+│   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts">contracts</a>: Smart contracts for Ubiquity Dollar and UbiquiStick
+│   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/dapp">dapp</a>: User interface
+</pre>
+
 ## Installation
 
-Build the smart contracts first
+- We use [Foundry](https://github.com/foundry-rs/foundry).
+- Here are their [docs](https://book.getfoundry.sh/).
+- Please follow their installation guide for your OS before proceeding.
 
 ```bash
-#!/usr/bin/env bash
-# Ubiquity Dollar Installer
-
 git clone https://github.com/ubiquity/ubiquity-dollar.git
 yarn
-yarn start
 ```
 
-→ [localhost:3000](https://localhost:3000/)
+## Build
+
+```bash
+yarn build:all # builds the smart contracts and user interface
+```
+
+To build individual package, run the build command for each package:
+
+```bash
+yarn workspace @ubiquity/contracts build # Build smart contracts
+yarn workspace @ubiquity/dapp build # Build the user interface
+```
+
+**_NOTE_**: Dapp package depends on the contracts package.
+
+## Test
+
+As of the last time this was updated this supports smart contract unit tests. In the future we will include UI tests.
+
+```bash
+yarn test:all
+```
+
+## Running workspace specific commands
+
+```bash
+# SCRIPT_NAME=XXX
+
+yarn workspace @ubiquity/contracts $SCRIPT_NAME
+yarn workspace @ubiquity/dapp $SCRIPT_NAME
+
+# For example...
+
+yarn workspace @ubiquity/contracts test # Run the smart contract unit tests
+yarn workspace @ubiquity/dapp start # Run the application at http://localhost:3000
+
+```
 
 ## Committing Code
 
-1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. This can be frustrating for junior developers, but I promise that you'll quickly get used to it!
+<!-- 1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. This can be frustrating for junior developers, but I promise that you'll quickly get used to it! -->
 
-> The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of.
+<!-- > The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. -->
 
-2. We use [prettier](https://github.com/prettier/prettier) and [eslint](https://github.com/eslint/eslint) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules or else technical debt may generate quickly.
+We use [prettier](https://github.com/prettier/prettier) and [eslint](https://github.com/eslint/eslint) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
 
 ## MetaMask Development Wallet Setup
 

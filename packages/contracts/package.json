@@ -1,0 +1,60 @@
+{
+  "name": "@ubiquity/contracts",
+  "version": "1.0.1-beta",
+  "private": true,
+  "description": "Ubiquity Algorithmic Dollar smart contracts",
+  "author": "Ubiquity DAO",
+  "license": "Apache-2.0",
+  "homepage": "https://dao.ubq.fi/dollar",
+  "bugs": {
+    "url": "https://github.com/ubiquity/ubiquity-dollar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ubiquity/ubiquity-dollar.git"
+  },
+  "dependencies": {
+    "@types/command-line-args": "5.2.0",
+    "command-line-args": "5.2.1",
+    "dotenv": "^16.0.0",
+    "ethers": "^5.6.9",
+    "ts-node": "10.9.1"
+  },
+  "scripts": {
+    "forge": "forge",
+    "build": "forge build",
+    "test": "forge test --fork-url https://rpc.ankr.com/eth",
+    "slither:run": "slither . --compile-force-framework foundry",
+    "echidna": "echidna-test . --config echidna.config.yml",
+    "prettier": "forge fmt",
+    "deploy": "ts-node ./scripts/deploy/deploy.ts",
+    "task": "ts-node ./scripts/task/task.ts",
+    "clean": "forge clean",
+    "purge": "yarn clean"
+  },
+  "keywords": [
+    "stablecoin",
+    "erc20",
+    "ethereum",
+    "defi",
+    "ubiquity",
+    "dao",
+    "dollar",
+    "decentralization",
+    "token",
+    "algorithmic"
+  ],
+  "lavamoat": {
+    "allowScripts": {
+      "core-js": false,
+      "keccak": false,
+      "secp256k1": false,
+      "web3": false,
+      "bufferutil": false,
+      "utf-8-validate": false,
+      "core-js-pure": false,
+      "postinstall-postinstall": false,
+      "husky": false
+    }
+  }
+}
