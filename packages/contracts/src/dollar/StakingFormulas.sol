@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./StakingShare.sol";
-import "./libs/ABDKMathQuad.sol";
+import "./BondingShareV2.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 contract StakingFormulas {
     using ABDKMathQuad for uint256;
