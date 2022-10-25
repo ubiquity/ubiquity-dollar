@@ -383,7 +383,7 @@
     "supportsInterface(bytes4)": "01ffc9a7",
     "updateTotalDebt()": "f7ffe84a"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"values\",\"type\":\"uint256[]\"}],\"name\":\"TransferBatch\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TransferSingle\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"value\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"URI\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"accounts\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"}],\"name\":\"balanceOfBatch\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"couponOwner\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiryBlockNumber\",\"type\":\"uint256\"}],\"name\":\"burnCoupons\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getTotalOutstandingDebt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiryBlockNumber\",\"type\":\"uint256\"}],\"name\":\"mintCoupons\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeBatchTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"updateTotalDebt\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"balanceOf(address,uint256)\":{\"details\":\"Returns the amount of tokens of token type `id` owned by `account`. Requirements: - `account` cannot be the zero address.\"},\"balanceOfBatch(address[],uint256[])\":{\"details\":\"xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}. Requirements: - `accounts` and `ids` must have the same length.\"},\"isApprovedForAll(address,address)\":{\"details\":\"Returns true if `operator` is approved to transfer ``account``'s tokens. See {setApprovalForAll}.\"},\"safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)\":{\"details\":\"xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}. Emits a {TransferBatch} event. Requirements: - `ids` and `amounts` must have the same length. - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the acceptance magic value.\"},\"safeTransferFrom(address,address,uint256,uint256,bytes)\":{\"details\":\"Transfers `amount` tokens of token type `id` from `from` to `to`. Emits a {TransferSingle} event. Requirements: - `to` cannot be the zero address. - If the caller is not `from`, it must have been approved to spend ``from``'s tokens via {setApprovalForAll}. - `from` must have a balance of tokens of type `id` of at least `amount`. - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.\"},\"setApprovalForAll(address,bool)\":{\"details\":\"Grants or revokes permission to `operator` to transfer the caller's tokens, according to `approved`, Emits an {ApprovalForAll} event. Requirements: - `operator` cannot be the caller.\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas.\"}},\"title\":\"A debt coupon which corresponds to a IDebtRedemption contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IDebtCoupon.sol\":\"IDebtCoupon\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol\":{\"keccak256\":\"0x6392f2cfe3a5ee802227fe7a2dfd47096d881aec89bddd214b35c5b46d3cd941\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bd9c47a375639888e726a99da718890ba16d17d7ad9eacb0ccc892d46d1b3ee0\",\"dweb:/ipfs/Qmb41W5RUjy2sWg49A2rMnxekSeEk6SvGyJL5tyCCSr7un\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"src/dollar/interfaces/IDebtCoupon.sol\":{\"keccak256\":\"0x0ffddb4fcceceb765d3a03e3c81089bb8c6ee681f392d5114b860ab535d90bd8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://63aa7c8581f9ec08071482daefd28aa9d968b233b9dcdbc15d1b931d8c2e624e\",\"dweb:/ipfs/Qmc3GhpaHhPoR4quRyztQYtDsFf4Nz9FWj6n2NZzCWzAoM\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"ApprovalForAll\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"values\",\"type\":\"uint256[]\"}],\"name\":\"TransferBatch\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"}],\"name\":\"TransferSingle\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"value\",\"type\":\"string\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"URI\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"accounts\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"}],\"name\":\"balanceOfBatch\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"couponOwner\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiryBlockNumber\",\"type\":\"uint256\"}],\"name\":\"burnCoupons\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getTotalOutstandingDebt\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"}],\"name\":\"isApprovedForAll\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expiryBlockNumber\",\"type\":\"uint256\"}],\"name\":\"mintCoupons\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"ids\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeBatchTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"from\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"safeTransferFrom\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"approved\",\"type\":\"bool\"}],\"name\":\"setApprovalForAll\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"updateTotalDebt\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"balanceOf(address,uint256)\":{\"details\":\"Returns the amount of tokens of token type `id` owned by `account`. Requirements: - `account` cannot be the zero address.\"},\"balanceOfBatch(address[],uint256[])\":{\"details\":\"xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}. Requirements: - `accounts` and `ids` must have the same length.\"},\"isApprovedForAll(address,address)\":{\"details\":\"Returns true if `operator` is approved to transfer ``account``'s tokens. See {setApprovalForAll}.\"},\"safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)\":{\"details\":\"xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}. Emits a {TransferBatch} event. Requirements: - `ids` and `amounts` must have the same length. - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the acceptance magic value.\"},\"safeTransferFrom(address,address,uint256,uint256,bytes)\":{\"details\":\"Transfers `amount` tokens of token type `id` from `from` to `to`. Emits a {TransferSingle} event. Requirements: - `to` cannot be the zero address. - If the caller is not `from`, it must have been approved to spend ``from``'s tokens via {setApprovalForAll}. - `from` must have a balance of tokens of type `id` of at least `amount`. - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the acceptance magic value.\"},\"setApprovalForAll(address,bool)\":{\"details\":\"Grants or revokes permission to `operator` to transfer the caller's tokens, according to `approved`, Emits an {ApprovalForAll} event. Requirements: - `operator` cannot be the caller.\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas.\"}},\"title\":\"A debt coupon which corresponds to a IDebtRedemption contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IDebtCoupon.sol\":\"IDebtCoupon\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol\":{\"keccak256\":\"0x6392f2cfe3a5ee802227fe7a2dfd47096d881aec89bddd214b35c5b46d3cd941\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bd9c47a375639888e726a99da718890ba16d17d7ad9eacb0ccc892d46d1b3ee0\",\"dweb:/ipfs/Qmb41W5RUjy2sWg49A2rMnxekSeEk6SvGyJL5tyCCSr7un\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"src/dollar/interfaces/IDebtCoupon.sol\":{\"keccak256\":\"0x8711061649cdadac9bb934688db2f9bde20ecf32b9d3f77f747a4551801c7724\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f242ae05004c0088a939ee158dcbb1279eee0541203eb96ae627746df7cbf7a2\",\"dweb:/ipfs/QmVfSSNRBHq8DNELruZvox3yayoriRSGRcrtR2Hy2EAndN\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -784,6 +784,7 @@
         ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
         ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
         ":Uniswap/=lib/Uniswap/",
+        ":abdk-libraries-solidity/=lib/abdk-libraries-solidity/",
         ":ds-test/=lib/forge-std/lib/ds-test/src/",
         ":forge-std/=lib/forge-std/src/",
         ":solidity-linked-list/=lib/solidity-linked-list/"
@@ -818,10 +819,10 @@
         "license": "MIT"
       },
       "src/dollar/interfaces/IDebtCoupon.sol": {
-        "keccak256": "0x0ffddb4fcceceb765d3a03e3c81089bb8c6ee681f392d5114b860ab535d90bd8",
+        "keccak256": "0x8711061649cdadac9bb934688db2f9bde20ecf32b9d3f77f747a4551801c7724",
         "urls": [
-          "bzz-raw://63aa7c8581f9ec08071482daefd28aa9d968b233b9dcdbc15d1b931d8c2e624e",
-          "dweb:/ipfs/Qmc3GhpaHhPoR4quRyztQYtDsFf4Nz9FWj6n2NZzCWzAoM"
+          "bzz-raw://f242ae05004c0088a939ee158dcbb1279eee0541203eb96ae627746df7cbf7a2",
+          "dweb:/ipfs/QmVfSSNRBHq8DNELruZvox3yayoriRSGRcrtR2Hy2EAndN"
         ],
         "license": "MIT"
       }
@@ -830,25 +831,25 @@
   },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IDebtCoupon.sol",
-    "id": 41114,
+    "id": 46307,
     "exportedSymbols": {
       "IDebtCoupon": [
-        41113
+        46306
       ],
       "IERC1155": [
-        26036
+        31229
       ],
       "IERC165": [
-        30025
+        35218
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:570:69",
+    "src": "33:592:70",
     "nodes": [
       {
-        "id": 41082,
+        "id": 46275,
         "nodeType": "PragmaDirective",
-        "src": "32:23:69",
+        "src": "33:23:70",
         "literals": [
           "solidity",
           "^",
@@ -857,72 +858,72 @@
         ]
       },
       {
-        "id": 41083,
+        "id": 46276,
         "nodeType": "ImportDirective",
-        "src": "57:60:69",
+        "src": "60:60:70",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 41114,
-        "sourceUnit": 26037,
+        "scope": 46307,
+        "sourceUnit": 31230,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 41113,
+        "id": 46306,
         "nodeType": "ContractDefinition",
-        "src": "192:409:69",
+        "src": "198:425:70",
         "nodes": [
           {
-            "id": 41089,
+            "id": 46282,
             "nodeType": "FunctionDefinition",
-            "src": "232:36:69",
+            "src": "239:36:70",
             "functionSelector": "f7ffe84a",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "updateTotalDebt",
-            "nameLocation": "241:15:69",
+            "nameLocation": "248:15:70",
             "parameters": {
-              "id": 41087,
+              "id": 46280,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "256:2:69"
+              "src": "263:2:70"
             },
             "returnParameters": {
-              "id": 41088,
+              "id": 46281,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "267:0:69"
+              "src": "274:0:70"
             },
-            "scope": 41113,
+            "scope": 46306,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41098,
+            "id": 46291,
             "nodeType": "FunctionDefinition",
-            "src": "274:124:69",
+            "src": "283:128:70",
             "functionSelector": "738f0cf1",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "burnCoupons",
-            "nameLocation": "283:11:69",
+            "nameLocation": "292:11:70",
             "parameters": {
-              "id": 41096,
+              "id": 46289,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41091,
+                  "id": 46284,
                   "mutability": "mutable",
                   "name": "couponOwner",
-                  "nameLocation": "312:11:69",
+                  "nameLocation": "322:11:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41098,
-                  "src": "304:19:69",
+                  "scope": 46291,
+                  "src": "314:19:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -930,10 +931,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41090,
+                    "id": 46283,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "304:7:69",
+                    "src": "314:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -944,13 +945,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41093,
+                  "id": 46286,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "341:6:69",
+                  "nameLocation": "352:6:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41098,
-                  "src": "333:14:69",
+                  "scope": 46291,
+                  "src": "344:14:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -958,10 +959,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41092,
+                    "id": 46285,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "333:7:69",
+                    "src": "344:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -971,13 +972,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41095,
+                  "id": 46288,
                   "mutability": "mutable",
                   "name": "expiryBlockNumber",
-                  "nameLocation": "365:17:69",
+                  "nameLocation": "377:17:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41098,
-                  "src": "357:25:69",
+                  "scope": 46291,
+                  "src": "369:25:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -985,10 +986,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41094,
+                    "id": 46287,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "357:7:69",
+                    "src": "369:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -997,42 +998,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "294:94:69"
+              "src": "303:98:70"
             },
             "returnParameters": {
-              "id": 41097,
+              "id": 46290,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "397:0:69"
+              "src": "410:0:70"
             },
-            "scope": 41113,
+            "scope": 46306,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41107,
+            "id": 46300,
             "nodeType": "FunctionDefinition",
-            "src": "404:122:69",
+            "src": "419:126:70",
             "functionSelector": "e71fc58f",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "mintCoupons",
-            "nameLocation": "413:11:69",
+            "nameLocation": "428:11:70",
             "parameters": {
-              "id": 41105,
+              "id": 46298,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41100,
+                  "id": 46293,
                   "mutability": "mutable",
                   "name": "recipient",
-                  "nameLocation": "442:9:69",
+                  "nameLocation": "458:9:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41107,
-                  "src": "434:17:69",
+                  "scope": 46300,
+                  "src": "450:17:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1040,10 +1041,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 41099,
+                    "id": 46292,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "434:7:69",
+                    "src": "450:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1054,13 +1055,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41102,
+                  "id": 46295,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "469:6:69",
+                  "nameLocation": "486:6:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41107,
-                  "src": "461:14:69",
+                  "scope": 46300,
+                  "src": "478:14:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1068,10 +1069,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41101,
+                    "id": 46294,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "461:7:69",
+                    "src": "478:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1081,13 +1082,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 41104,
+                  "id": 46297,
                   "mutability": "mutable",
                   "name": "expiryBlockNumber",
-                  "nameLocation": "493:17:69",
+                  "nameLocation": "511:17:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41107,
-                  "src": "485:25:69",
+                  "scope": 46300,
+                  "src": "503:25:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1095,10 +1096,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41103,
+                    "id": 46296,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "485:7:69",
+                    "src": "503:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1107,48 +1108,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "424:92:69"
+              "src": "439:96:70"
             },
             "returnParameters": {
-              "id": 41106,
+              "id": 46299,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "525:0:69"
+              "src": "544:0:70"
             },
-            "scope": 41113,
+            "scope": 46306,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 41112,
+            "id": 46305,
             "nodeType": "FunctionDefinition",
-            "src": "532:67:69",
+            "src": "553:67:70",
             "functionSelector": "db87b1ff",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getTotalOutstandingDebt",
-            "nameLocation": "541:23:69",
+            "nameLocation": "562:23:70",
             "parameters": {
-              "id": 41108,
+              "id": 46301,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "564:2:69"
+              "src": "585:2:70"
             },
             "returnParameters": {
-              "id": 41111,
+              "id": 46304,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 41110,
+                  "id": 46303,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 41112,
-                  "src": "590:7:69",
+                  "scope": 46305,
+                  "src": "611:7:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1156,10 +1157,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 41109,
+                    "id": 46302,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "590:7:69",
+                    "src": "611:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1168,9 +1169,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "589:9:69"
+              "src": "610:9:70"
             },
-            "scope": 41113,
+            "scope": 46306,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -1180,42 +1181,42 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 41085,
+              "id": 46278,
               "name": "IERC1155",
               "nameLocations": [
-                "217:8:69"
+                "223:8:70"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 26036,
-              "src": "217:8:69"
+              "referencedDeclaration": 31229,
+              "src": "223:8:70"
             },
-            "id": 41086,
+            "id": 46279,
             "nodeType": "InheritanceSpecifier",
-            "src": "217:8:69"
+            "src": "223:8:70"
           }
         ],
         "canonicalName": "IDebtCoupon",
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 41084,
+          "id": 46277,
           "nodeType": "StructuredDocumentation",
-          "src": "119:73:69",
+          "src": "124:74:70",
           "text": "@title A debt coupon which corresponds to a IDebtRedemption contract"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          41113,
-          26036,
-          30025
+          46306,
+          31229,
+          35218
         ],
         "name": "IDebtCoupon",
-        "nameLocation": "202:11:69",
-        "scope": 41114,
+        "nameLocation": "208:11:70",
+        "scope": 46307,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 69
+  "id": 70
 }

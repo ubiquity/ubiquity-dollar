@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "../../src/dollar/BondingFormulas.sol";
 import "../../src/dollar/BondingShareV2.sol";
-import "../../src/dollar/libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 import "../helpers/LocalTestHelper.sol";
 

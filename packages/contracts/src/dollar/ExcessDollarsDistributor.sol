@@ -10,7 +10,7 @@ import "./interfaces/IExcessDollarsDistributor.sol";
 import "./interfaces/IMetaPool.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./SushiSwapPool.sol";
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards

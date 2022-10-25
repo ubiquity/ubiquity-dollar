@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IUARForDollarsCalculator.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./DebtCoupon.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)

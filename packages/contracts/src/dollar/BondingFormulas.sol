@@ -2,7 +2,7 @@
 pragma solidity ^0.8.3;
 
 import "./BondingShareV2.sol";
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 contract BondingFormulas {
     using ABDKMathQuad for uint256;

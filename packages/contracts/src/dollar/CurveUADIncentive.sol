@@ -6,7 +6,7 @@ import "./interfaces/IUbiquityGovernance.sol";
 import "./interfaces/IIncentive.sol";
 import "./TWAPOracle.sol";
 import "./UbiquityAlgorithmicDollar.sol";
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title Uniswap trading incentive contract
 /// @author uAD Protocol
