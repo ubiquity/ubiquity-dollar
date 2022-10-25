@@ -747,27 +747,57 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "author": "Ubiquity Algorithmic Dollar",
+    "methods": {
+      "allowance(address,address)": {
+        "details": "Returns the remaining number of tokens that `spender` will be allowed to spend on behalf of `owner` through {transferFrom}. This is zero by default. This value changes when {approve} or {transferFrom} are called."
+      },
+      "approve(address,uint256)": {
+        "details": "Sets `amount` as the allowance of `spender` over the caller's tokens. Returns a boolean value indicating whether the operation succeeded. IMPORTANT: Beware that changing an allowance with this method brings the risk that someone may use both the old and the new allowance by unfortunate transaction ordering. One possible solution to mitigate this race condition is to first reduce the spender's allowance to 0 and set the desired value afterwards: https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729 Emits an {Approval} event."
+      },
+      "balanceOf(address)": {
+        "details": "Returns the amount of tokens owned by `account`."
+      },
+      "totalSupply()": {
+        "details": "Returns the amount of tokens in existence."
+      },
+      "transfer(address,uint256)": {
+        "details": "Moves `amount` tokens from the caller's account to `to`. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+      },
+      "transferFrom(address,address,uint256)": {
+        "details": "Moves `amount` tokens from `from` to `to` using the allowance mechanism. `amount` is then deducted from the caller's allowance. Returns a boolean value indicating whether the operation succeeded. Emits a {Transfer} event."
+      }
+    },
+    "title": "uGOV governance token interface"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IUbiquityGovernance.sol",
-    "id": 46679,
+    "id": 48213,
     "exportedSymbols": {
       "IERC20": [
         32067
       ],
       "IERC20Ubiquity": [
-        44935
+        46469
       ],
       "IUbiquityGovernance": [
-        46678
+        48212
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "40:244:85",
+    "src": "40:244:92",
     "nodes": [
       {
-        "id": 46673,
+        "id": 48207,
         "nodeType": "PragmaDirective",
-        "src": "40:23:85",
+        "src": "40:23:92",
         "literals": [
           "solidity",
           "0.8",
@@ -775,61 +805,61 @@
         ]
       },
       {
-        "id": 46674,
+        "id": 48208,
         "nodeType": "ImportDirective",
-        "src": "67:30:85",
+        "src": "67:30:92",
         "absolutePath": "src/dollar/interfaces/IERC20Ubiquity.sol",
         "file": "./IERC20Ubiquity.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 46679,
-        "sourceUnit": 44936,
+        "scope": 48213,
+        "sourceUnit": 46470,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 46678,
+        "id": 48212,
         "nodeType": "ContractDefinition",
-        "src": "232:50:85",
+        "src": "232:50:92",
         "abstract": false,
         "baseContracts": [
           {
             "baseName": {
-              "id": 46676,
+              "id": 48210,
               "name": "IERC20Ubiquity",
               "nameLocations": [
-                "265:14:85"
+                "265:14:92"
               ],
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 44935,
-              "src": "265:14:85"
+              "referencedDeclaration": 46469,
+              "src": "265:14:92"
             },
-            "id": 46677,
+            "id": 48211,
             "nodeType": "InheritanceSpecifier",
-            "src": "265:14:85"
+            "src": "265:14:92"
           }
         ],
         "canonicalName": "IUbiquityGovernance",
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 46675,
+          "id": 48209,
           "nodeType": "StructuredDocumentation",
-          "src": "101:85:85",
+          "src": "101:85:92",
           "text": "@title uGOV governance token interface\n @author Ubiquity Algorithmic Dollar"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          46678,
-          44935,
+          48212,
+          46469,
           32067
         ],
         "name": "IUbiquityGovernance",
-        "nameLocation": "242:19:85",
-        "scope": 46679,
+        "nameLocation": "242:19:92",
+        "scope": 48213,
         "usedErrors": []
       }
     ],
     "license": "Apache-2.0"
   },
-  "id": 85
+  "id": 92
 }

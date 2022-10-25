@@ -98,27 +98,36 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "title": "A mechanism for distributing excess dollars to relevant places"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IExcessDollarsDistributor.sol",
-    "id": 44944,
+    "id": 46478,
     "exportedSymbols": {
       "IERC1155Receiver": [
         31270
       ],
       "IERC165": [
-        33684
+        35218
       ],
       "IExcessDollarsDistributor": [
-        44943
+        46477
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:260:68",
+    "src": "33:260:75",
     "nodes": [
       {
-        "id": 44937,
+        "id": 46471,
         "nodeType": "PragmaDirective",
-        "src": "33:23:68",
+        "src": "33:23:75",
         "literals": [
           "solidity",
           "0.8",
@@ -126,45 +135,45 @@
         ]
       },
       {
-        "id": 44938,
+        "id": 46472,
         "nodeType": "ImportDirective",
-        "src": "60:68:68",
+        "src": "60:68:75",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44944,
+        "scope": 46478,
         "sourceUnit": 31271,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44943,
+        "id": 46477,
         "nodeType": "ContractDefinition",
-        "src": "207:84:68",
+        "src": "207:84:75",
         "nodes": [
           {
-            "id": 44942,
+            "id": 46476,
             "nodeType": "FunctionDefinition",
-            "src": "250:38:68",
+            "src": "250:38:75",
             "functionSelector": "651156bc",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "distributeDollars",
-            "nameLocation": "259:17:68",
+            "nameLocation": "259:17:75",
             "parameters": {
-              "id": 44940,
+              "id": 46474,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "276:2:68"
+              "src": "276:2:75"
             },
             "returnParameters": {
-              "id": 44941,
+              "id": 46475,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "287:0:68"
+              "src": "287:0:75"
             },
-            "scope": 44943,
+            "scope": 46477,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -176,22 +185,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 44939,
+          "id": 46473,
           "nodeType": "StructuredDocumentation",
-          "src": "132:75:68",
+          "src": "132:75:75",
           "text": "@title A mechanism for distributing excess dollars to relevant places"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          44943
+          46477
         ],
         "name": "IExcessDollarsDistributor",
-        "nameLocation": "217:25:68",
-        "scope": 44944,
+        "nameLocation": "217:25:75",
+        "scope": 46478,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 68
+  "id": 75
 }

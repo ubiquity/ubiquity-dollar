@@ -144,21 +144,29 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev"
+  },
   "ast": {
     "absolutePath": "src/ubiquistick/interfaces/IUBQManager.sol",
-    "id": 51637,
+    "id": 51799,
     "exportedSymbols": {
       "IUBQManager": [
-        51636
+        51798
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "40:232:112",
+    "src": "40:232:116",
     "nodes": [
       {
-        "id": 51621,
+        "id": 51783,
         "nodeType": "PragmaDirective",
-        "src": "40:23:112",
+        "src": "40:23:116",
         "literals": [
           "solidity",
           "^",
@@ -167,33 +175,33 @@
         ]
       },
       {
-        "id": 51636,
+        "id": 51798,
         "nodeType": "ContractDefinition",
-        "src": "67:203:112",
+        "src": "67:203:116",
         "nodes": [
           {
-            "id": 51630,
+            "id": 51792,
             "nodeType": "FunctionDefinition",
-            "src": "96:104:112",
+            "src": "96:104:116",
             "functionSelector": "91d14854",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "hasRole",
-            "nameLocation": "105:7:112",
+            "nameLocation": "105:7:116",
             "parameters": {
-              "id": 51626,
+              "id": 51788,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 51623,
+                  "id": 51785,
                   "mutability": "mutable",
                   "name": "role",
-                  "nameLocation": "121:4:112",
+                  "nameLocation": "121:4:116",
                   "nodeType": "VariableDeclaration",
-                  "scope": 51630,
-                  "src": "113:12:112",
+                  "scope": 51792,
+                  "src": "113:12:116",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -201,10 +209,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 51622,
+                    "id": 51784,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "113:7:112",
+                    "src": "113:7:116",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -214,13 +222,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 51625,
+                  "id": 51787,
                   "mutability": "mutable",
                   "name": "account",
-                  "nameLocation": "135:7:112",
+                  "nameLocation": "135:7:116",
                   "nodeType": "VariableDeclaration",
-                  "scope": 51630,
-                  "src": "127:15:112",
+                  "scope": 51792,
+                  "src": "127:15:116",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -228,10 +236,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 51624,
+                    "id": 51786,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "127:7:112",
+                    "src": "127:7:116",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -241,21 +249,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "112:31:112"
+              "src": "112:31:116"
             },
             "returnParameters": {
-              "id": 51629,
+              "id": 51791,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 51628,
+                  "id": 51790,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 51630,
-                  "src": "194:4:112",
+                  "scope": 51792,
+                  "src": "194:4:116",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -263,10 +271,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 51627,
+                    "id": 51789,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "194:4:112",
+                    "src": "194:4:116",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -275,42 +283,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "193:6:112"
+              "src": "193:6:116"
             },
-            "scope": 51636,
+            "scope": 51798,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 51635,
+            "id": 51797,
             "nodeType": "FunctionDefinition",
-            "src": "208:59:112",
+            "src": "208:59:116",
             "functionSelector": "2f533cb7",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "UBQ_MINTER_ROLE",
-            "nameLocation": "217:15:112",
+            "nameLocation": "217:15:116",
             "parameters": {
-              "id": 51631,
+              "id": 51793,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "232:2:112"
+              "src": "232:2:116"
             },
             "returnParameters": {
-              "id": 51634,
+              "id": 51796,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 51633,
+                  "id": 51795,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 51635,
-                  "src": "258:7:112",
+                  "scope": 51797,
+                  "src": "258:7:116",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -318,10 +326,10 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 51632,
+                    "id": 51794,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
-                    "src": "258:7:112",
+                    "src": "258:7:116",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -330,9 +338,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "257:9:112"
+              "src": "257:9:116"
             },
-            "scope": 51636,
+            "scope": 51798,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -345,15 +353,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          51636
+          51798
         ],
         "name": "IUBQManager",
-        "nameLocation": "77:11:112",
-        "scope": 51637,
+        "nameLocation": "77:11:116",
+        "scope": 51799,
         "usedErrors": []
       }
     ],
     "license": "Apache-2.0"
   },
-  "id": 112
+  "id": 116
 }

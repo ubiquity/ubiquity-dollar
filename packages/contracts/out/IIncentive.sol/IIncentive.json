@@ -137,21 +137,47 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user",
+    "methods": {
+      "incentivize(address,address,address,uint256)": {
+        "notice": "apply incentives on transfer"
+      }
+    },
+    "notice": "Called by uAD token contract when transferring with an incentivized address"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "details": "should be appointed as a Minter or Burner as needed",
+    "methods": {
+      "incentivize(address,address,address,uint256)": {
+        "params": {
+          "amount": "the amount of uAD transferred",
+          "operator": "the operator (msg.sender) of the transfer",
+          "receiver": "the receiver address of uAD",
+          "sender": "the sender address of uAD"
+        }
+      }
+    },
+    "title": "incentive contract interface"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IIncentive.sol",
-    "id": 44960,
+    "id": 46494,
     "exportedSymbols": {
       "IIncentive": [
-        44959
+        46493
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:661:69",
+    "src": "33:661:76",
     "nodes": [
       {
-        "id": 44945,
+        "id": 46479,
         "nodeType": "PragmaDirective",
-        "src": "33:23:69",
+        "src": "33:23:76",
         "literals": [
           "solidity",
           "0.8",
@@ -159,18 +185,18 @@
         ]
       },
       {
-        "id": 44959,
+        "id": 46493,
         "nodeType": "ContractDefinition",
-        "src": "252:440:69",
+        "src": "252:440:76",
         "nodes": [
           {
-            "id": 44958,
+            "id": 46492,
             "nodeType": "FunctionDefinition",
-            "src": "548:141:69",
+            "src": "548:141:76",
             "documentation": {
-              "id": 44947,
+              "id": 46481,
               "nodeType": "StructuredDocumentation",
-              "src": "280:262:69",
+              "src": "280:262:76",
               "text": "@notice apply incentives on transfer\n @param sender the sender address of uAD\n @param receiver the receiver address of uAD\n @param operator the operator (msg.sender) of the transfer\n @param amount the amount of uAD transferred"
             },
             "functionSelector": "6e22230d",
@@ -178,20 +204,20 @@
             "kind": "function",
             "modifiers": [],
             "name": "incentivize",
-            "nameLocation": "557:11:69",
+            "nameLocation": "557:11:76",
             "parameters": {
-              "id": 44956,
+              "id": 46490,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44949,
+                  "id": 46483,
                   "mutability": "mutable",
                   "name": "sender",
-                  "nameLocation": "587:6:69",
+                  "nameLocation": "587:6:76",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44958,
-                  "src": "579:14:69",
+                  "scope": 46492,
+                  "src": "579:14:76",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -199,10 +225,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44948,
+                    "id": 46482,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "579:7:69",
+                    "src": "579:7:76",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -213,13 +239,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44951,
+                  "id": 46485,
                   "mutability": "mutable",
                   "name": "receiver",
-                  "nameLocation": "612:8:69",
+                  "nameLocation": "612:8:76",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44958,
-                  "src": "604:16:69",
+                  "scope": 46492,
+                  "src": "604:16:76",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -227,10 +253,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44950,
+                    "id": 46484,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "604:7:69",
+                    "src": "604:7:76",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -241,13 +267,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44953,
+                  "id": 46487,
                   "mutability": "mutable",
                   "name": "operator",
-                  "nameLocation": "639:8:69",
+                  "nameLocation": "639:8:76",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44958,
-                  "src": "631:16:69",
+                  "scope": 46492,
+                  "src": "631:16:76",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -255,10 +281,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44952,
+                    "id": 46486,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "631:7:69",
+                    "src": "631:7:76",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -269,13 +295,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44955,
+                  "id": 46489,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "666:6:69",
+                  "nameLocation": "666:6:76",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44958,
-                  "src": "658:14:69",
+                  "scope": 46492,
+                  "src": "658:14:76",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -283,10 +309,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44954,
+                    "id": 46488,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "658:7:69",
+                    "src": "658:7:76",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -295,15 +321,15 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "568:111:69"
+              "src": "568:111:76"
             },
             "returnParameters": {
-              "id": 44957,
+              "id": 46491,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "688:0:69"
+              "src": "688:0:76"
             },
-            "scope": 44959,
+            "scope": 46493,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -315,22 +341,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 44946,
+          "id": 46480,
           "nodeType": "StructuredDocumentation",
-          "src": "60:192:69",
+          "src": "60:192:76",
           "text": "@title incentive contract interface\n @notice Called by uAD token contract when transferring with an incentivized address\n @dev should be appointed as a Minter or Burner as needed"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          44959
+          46493
         ],
         "name": "IIncentive",
-        "nameLocation": "262:10:69",
-        "scope": 44960,
+        "nameLocation": "262:10:76",
+        "scope": 46494,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 69
+  "id": 76
 }

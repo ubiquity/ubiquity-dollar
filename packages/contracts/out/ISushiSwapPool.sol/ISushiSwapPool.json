@@ -137,21 +137,29 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/ISushiSwapPool.sol",
-    "id": 46424,
+    "id": 47958,
     "exportedSymbols": {
       "ISushiSwapPool": [
-        46423
+        47957
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "40:221:79",
+    "src": "40:221:86",
     "nodes": [
       {
-        "id": 46409,
+        "id": 47943,
         "nodeType": "PragmaDirective",
-        "src": "40:23:79",
+        "src": "40:23:86",
         "literals": [
           "solidity",
           "0.8",
@@ -159,33 +167,33 @@
         ]
       },
       {
-        "id": 46423,
+        "id": 47957,
         "nodeType": "ContractDefinition",
-        "src": "67:192:79",
+        "src": "67:192:86",
         "nodes": [
           {
-            "id": 46422,
+            "id": 47956,
             "nodeType": "FunctionDefinition",
-            "src": "99:157:79",
+            "src": "99:157:86",
             "functionSelector": "c3dd56b9",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "pairInfo",
-            "nameLocation": "108:8:79",
+            "nameLocation": "108:8:86",
             "parameters": {
-              "id": 46414,
+              "id": 47948,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46411,
+                  "id": 47945,
                   "mutability": "mutable",
                   "name": "tokenA",
-                  "nameLocation": "125:6:79",
+                  "nameLocation": "125:6:86",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46422,
-                  "src": "117:14:79",
+                  "scope": 47956,
+                  "src": "117:14:86",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -193,10 +201,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46410,
+                    "id": 47944,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "117:7:79",
+                    "src": "117:7:86",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -207,13 +215,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46413,
+                  "id": 47947,
                   "mutability": "mutable",
                   "name": "tokenB",
-                  "nameLocation": "141:6:79",
+                  "nameLocation": "141:6:86",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46422,
-                  "src": "133:14:79",
+                  "scope": 47956,
+                  "src": "133:14:86",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -221,10 +229,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46412,
+                    "id": 47946,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "133:7:79",
+                    "src": "133:7:86",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -234,21 +242,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "116:32:79"
+              "src": "116:32:86"
             },
             "returnParameters": {
-              "id": 46421,
+              "id": 47955,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46416,
+                  "id": 47950,
                   "mutability": "mutable",
                   "name": "reserveA",
-                  "nameLocation": "207:8:79",
+                  "nameLocation": "207:8:86",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46422,
-                  "src": "199:16:79",
+                  "scope": 47956,
+                  "src": "199:16:86",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -256,10 +264,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46415,
+                    "id": 47949,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "199:7:79",
+                    "src": "199:7:86",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -269,13 +277,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46418,
+                  "id": 47952,
                   "mutability": "mutable",
                   "name": "reserveB",
-                  "nameLocation": "225:8:79",
+                  "nameLocation": "225:8:86",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46422,
-                  "src": "217:16:79",
+                  "scope": 47956,
+                  "src": "217:16:86",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -283,10 +291,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46417,
+                    "id": 47951,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "217:7:79",
+                    "src": "217:7:86",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -296,13 +304,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46420,
+                  "id": 47954,
                   "mutability": "mutable",
                   "name": "totalSupply",
-                  "nameLocation": "243:11:79",
+                  "nameLocation": "243:11:86",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46422,
-                  "src": "235:19:79",
+                  "scope": 47956,
+                  "src": "235:19:86",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -310,10 +318,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46419,
+                    "id": 47953,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "235:7:79",
+                    "src": "235:7:86",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -322,9 +330,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "198:57:79"
+              "src": "198:57:86"
             },
-            "scope": 46423,
+            "scope": 47957,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -337,15 +345,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          46423
+          47957
         ],
         "name": "ISushiSwapPool",
-        "nameLocation": "77:14:79",
-        "scope": 46424,
+        "nameLocation": "77:14:86",
+        "scope": 47958,
         "usedErrors": []
       }
     ],
     "license": "Apache-2.0"
   },
-  "id": 79
+  "id": 86
 }

@@ -123,27 +123,36 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "title": "A mechanism for calculating coupons received for a dollar amount burnt"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/ICouponsForDollarsCalculator.sol",
-    "id": 44500,
+    "id": 46034,
     "exportedSymbols": {
       "ICouponsForDollarsCalculator": [
-        44499
+        46033
       ],
       "IERC1155Receiver": [
         31270
       ],
       "IERC165": [
-        33684
+        35218
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:340:61",
+    "src": "33:340:68",
     "nodes": [
       {
-        "id": 44489,
+        "id": 46023,
         "nodeType": "PragmaDirective",
-        "src": "33:23:61",
+        "src": "33:23:68",
         "literals": [
           "solidity",
           "0.8",
@@ -151,45 +160,45 @@
         ]
       },
       {
-        "id": 44490,
+        "id": 46024,
         "nodeType": "ImportDirective",
-        "src": "60:68:61",
+        "src": "60:68:68",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44500,
+        "scope": 46034,
         "sourceUnit": 31271,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44499,
+        "id": 46033,
         "nodeType": "ContractDefinition",
-        "src": "215:156:61",
+        "src": "215:156:68",
         "nodes": [
           {
-            "id": 44498,
+            "id": 46032,
             "nodeType": "FunctionDefinition",
-            "src": "261:107:61",
+            "src": "261:107:68",
             "functionSelector": "9172dd23",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getCouponAmount",
-            "nameLocation": "270:15:61",
+            "nameLocation": "270:15:68",
             "parameters": {
-              "id": 44494,
+              "id": 46028,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44493,
+                  "id": 46027,
                   "mutability": "mutable",
                   "name": "dollarsToBurn",
-                  "nameLocation": "294:13:61",
+                  "nameLocation": "294:13:68",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44498,
-                  "src": "286:21:61",
+                  "scope": 46032,
+                  "src": "286:21:68",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -197,10 +206,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44492,
+                    "id": 46026,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "286:7:61",
+                    "src": "286:7:68",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -209,21 +218,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "285:23:61"
+              "src": "285:23:68"
             },
             "returnParameters": {
-              "id": 44497,
+              "id": 46031,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44496,
+                  "id": 46030,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44498,
-                  "src": "359:7:61",
+                  "scope": 46032,
+                  "src": "359:7:68",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -231,10 +240,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44495,
+                    "id": 46029,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "359:7:61",
+                    "src": "359:7:68",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -243,9 +252,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "358:9:61"
+              "src": "358:9:68"
             },
-            "scope": 44499,
+            "scope": 46033,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -257,22 +266,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 44491,
+          "id": 46025,
           "nodeType": "StructuredDocumentation",
-          "src": "132:83:61",
+          "src": "132:83:68",
           "text": "@title A mechanism for calculating coupons received for a dollar amount burnt"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          44499
+          46033
         ],
         "name": "ICouponsForDollarsCalculator",
-        "nameLocation": "225:28:61",
-        "scope": 44500,
+        "nameLocation": "225:28:68",
+        "scope": 46034,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 61
+  "id": 68
 }

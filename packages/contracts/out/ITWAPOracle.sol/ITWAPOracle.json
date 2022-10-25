@@ -121,21 +121,29 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/ITWAPOracle.sol",
-    "id": 46437,
+    "id": 47971,
     "exportedSymbols": {
       "ITWAPOracle": [
-        46436
+        47970
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:170:80",
+    "src": "33:170:87",
     "nodes": [
       {
-        "id": 46425,
+        "id": 47959,
         "nodeType": "PragmaDirective",
-        "src": "33:23:80",
+        "src": "33:23:87",
         "literals": [
           "solidity",
           "0.8",
@@ -143,60 +151,60 @@
         ]
       },
       {
-        "id": 46436,
+        "id": 47970,
         "nodeType": "ContractDefinition",
-        "src": "60:141:80",
+        "src": "60:141:87",
         "nodes": [
           {
-            "id": 46428,
+            "id": 47962,
             "nodeType": "FunctionDefinition",
-            "src": "89:27:80",
+            "src": "89:27:87",
             "functionSelector": "a2e62045",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "update",
-            "nameLocation": "98:6:80",
+            "nameLocation": "98:6:87",
             "parameters": {
-              "id": 46426,
+              "id": 47960,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "104:2:80"
+              "src": "104:2:87"
             },
             "returnParameters": {
-              "id": 46427,
+              "id": 47961,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "115:0:80"
+              "src": "115:0:87"
             },
-            "scope": 46436,
+            "scope": 47970,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 46435,
+            "id": 47969,
             "nodeType": "FunctionDefinition",
-            "src": "124:74:80",
+            "src": "124:74:87",
             "functionSelector": "283583c6",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "consult",
-            "nameLocation": "133:7:80",
+            "nameLocation": "133:7:87",
             "parameters": {
-              "id": 46431,
+              "id": 47965,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46430,
+                  "id": 47964,
                   "mutability": "mutable",
                   "name": "token",
-                  "nameLocation": "149:5:80",
+                  "nameLocation": "149:5:87",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46435,
-                  "src": "141:13:80",
+                  "scope": 47969,
+                  "src": "141:13:87",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -204,10 +212,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46429,
+                    "id": 47963,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "141:7:80",
+                    "src": "141:7:87",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -217,21 +225,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "140:15:80"
+              "src": "140:15:87"
             },
             "returnParameters": {
-              "id": 46434,
+              "id": 47968,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46433,
+                  "id": 47967,
                   "mutability": "mutable",
                   "name": "amountOut",
-                  "nameLocation": "187:9:80",
+                  "nameLocation": "187:9:87",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46435,
-                  "src": "179:17:80",
+                  "scope": 47969,
+                  "src": "179:17:87",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -239,10 +247,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46432,
+                    "id": 47966,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "179:7:80",
+                    "src": "179:7:87",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -251,9 +259,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "178:19:80"
+              "src": "178:19:87"
             },
-            "scope": 46436,
+            "scope": 47970,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -266,15 +274,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          46436
+          47970
         ],
         "name": "ITWAPOracle",
-        "nameLocation": "70:11:80",
-        "scope": 46437,
+        "nameLocation": "70:11:87",
+        "scope": 47971,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 80
+  "id": 87
 }

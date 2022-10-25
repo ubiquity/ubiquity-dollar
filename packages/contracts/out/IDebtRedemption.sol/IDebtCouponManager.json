@@ -383,27 +383,69 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user",
+    "notice": "Allows users to redeem individual debt coupons or batch redeem coupons"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "details": "Implements IERC1155Receiver so that it can deal with redemptions",
+    "methods": {
+      "onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)": {
+        "details": "Handles the receipt of a multiple ERC1155 token types. This function is called at the end of a `safeBatchTransferFrom` after the balances have been updated. NOTE: To accept the transfer(s), this must return `bytes4(keccak256(\"onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)\"))` (i.e. 0xbc197c81, or its own function selector).",
+        "params": {
+          "data": "Additional data with no specified format",
+          "from": "The address which previously owned the token",
+          "ids": "An array containing ids of each token being transferred (order and length must match values array)",
+          "operator": "The address which initiated the batch transfer (i.e. msg.sender)",
+          "values": "An array containing amounts of each token being transferred (order and length must match ids array)"
+        },
+        "returns": {
+          "_0": "`bytes4(keccak256(\"onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)\"))` if transfer is allowed"
+        }
+      },
+      "onERC1155Received(address,address,uint256,uint256,bytes)": {
+        "details": "Handles the receipt of a single ERC1155 token type. This function is called at the end of a `safeTransferFrom` after the balance has been updated. NOTE: To accept the transfer, this must return `bytes4(keccak256(\"onERC1155Received(address,address,uint256,uint256,bytes)\"))` (i.e. 0xf23a6e61, or its own function selector).",
+        "params": {
+          "data": "Additional data with no specified format",
+          "from": "The address which previously owned the token",
+          "id": "The ID of the token being transferred",
+          "operator": "The address which initiated the transfer (i.e. msg.sender)",
+          "value": "The amount of tokens being transferred"
+        },
+        "returns": {
+          "_0": "`bytes4(keccak256(\"onERC1155Received(address,address,uint256,uint256,bytes)\"))` if transfer is allowed"
+        }
+      },
+      "supportsInterface(bytes4)": {
+        "details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+      }
+    },
+    "title": "A debt redemption mechanism for coupon holders"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IDebtRedemption.sol",
-    "id": 44794,
+    "id": 46328,
     "exportedSymbols": {
       "IDebtCouponManager": [
-        44793
+        46327
       ],
       "IERC1155Receiver": [
         31270
       ],
       "IERC165": [
-        33684
+        35218
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:524:64",
+    "src": "33:524:71",
     "nodes": [
       {
-        "id": 44774,
+        "id": 46308,
         "nodeType": "PragmaDirective",
-        "src": "33:23:64",
+        "src": "33:23:71",
         "literals": [
           "solidity",
           "0.8",
@@ -411,45 +453,45 @@
         ]
       },
       {
-        "id": 44775,
+        "id": 46309,
         "nodeType": "ImportDirective",
-        "src": "60:68:64",
+        "src": "60:68:71",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44794,
+        "scope": 46328,
         "sourceUnit": 31271,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44793,
+        "id": 46327,
         "nodeType": "ContractDefinition",
-        "src": "350:205:64",
+        "src": "350:205:71",
         "nodes": [
           {
-            "id": 44787,
+            "id": 46321,
             "nodeType": "FunctionDefinition",
-            "src": "406:74:64",
+            "src": "406:74:71",
             "functionSelector": "e4284d19",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "redeemCoupons",
-            "nameLocation": "415:13:64",
+            "nameLocation": "415:13:71",
             "parameters": {
-              "id": 44785,
+              "id": 46319,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44780,
+                  "id": 46314,
                   "mutability": "mutable",
                   "name": "from",
-                  "nameLocation": "437:4:64",
+                  "nameLocation": "437:4:71",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44787,
-                  "src": "429:12:64",
+                  "scope": 46321,
+                  "src": "429:12:71",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -457,10 +499,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44779,
+                    "id": 46313,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "429:7:64",
+                    "src": "429:7:71",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -471,13 +513,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44782,
+                  "id": 46316,
                   "mutability": "mutable",
                   "name": "id",
-                  "nameLocation": "451:2:64",
+                  "nameLocation": "451:2:71",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44787,
-                  "src": "443:10:64",
+                  "scope": 46321,
+                  "src": "443:10:71",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -485,10 +527,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44781,
+                    "id": 46315,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "443:7:64",
+                    "src": "443:7:71",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -498,13 +540,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44784,
+                  "id": 46318,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "463:6:64",
+                  "nameLocation": "463:6:71",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44787,
-                  "src": "455:14:64",
+                  "scope": 46321,
+                  "src": "455:14:71",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -512,10 +554,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44783,
+                    "id": 46317,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "455:7:64",
+                    "src": "455:7:71",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -524,42 +566,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "428:42:64"
+              "src": "428:42:71"
             },
             "returnParameters": {
-              "id": 44786,
+              "id": 46320,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "479:0:64"
+              "src": "479:0:71"
             },
-            "scope": 44793,
+            "scope": 46327,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 44792,
+            "id": 46326,
             "nodeType": "FunctionDefinition",
-            "src": "488:64:64",
+            "src": "488:64:71",
             "functionSelector": "67a6847d",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "exchangeDollarsForDebtCoupons",
-            "nameLocation": "497:29:64",
+            "nameLocation": "497:29:71",
             "parameters": {
-              "id": 44790,
+              "id": 46324,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44789,
+                  "id": 46323,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "535:6:64",
+                  "nameLocation": "535:6:71",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44792,
-                  "src": "527:14:64",
+                  "scope": 46326,
+                  "src": "527:14:71",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -567,10 +609,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44788,
+                    "id": 46322,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "527:7:64",
+                    "src": "527:7:71",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -579,15 +621,15 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "526:16:64"
+              "src": "526:16:71"
             },
             "returnParameters": {
-              "id": 44791,
+              "id": 46325,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "551:0:64"
+              "src": "551:0:71"
             },
-            "scope": 44793,
+            "scope": 46327,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -597,42 +639,42 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 44777,
+              "id": 46311,
               "name": "IERC1155Receiver",
               "nameLocations": [
-                "382:16:64"
+                "382:16:71"
               ],
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 31270,
-              "src": "382:16:64"
+              "src": "382:16:71"
             },
-            "id": 44778,
+            "id": 46312,
             "nodeType": "InheritanceSpecifier",
-            "src": "382:16:64"
+            "src": "382:16:71"
           }
         ],
         "canonicalName": "IDebtCouponManager",
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 44776,
+          "id": 46310,
           "nodeType": "StructuredDocumentation",
-          "src": "132:218:64",
+          "src": "132:218:71",
           "text": "@title A debt redemption mechanism for coupon holders\n @notice Allows users to redeem individual debt coupons or batch redeem coupons\n @dev Implements IERC1155Receiver so that it can deal with redemptions"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          44793,
+          46327,
           31270,
-          33684
+          35218
         ],
         "name": "IDebtCouponManager",
-        "nameLocation": "360:18:64",
-        "scope": 44794,
+        "nameLocation": "360:18:71",
+        "scope": 46328,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 64
+  "id": 71
 }

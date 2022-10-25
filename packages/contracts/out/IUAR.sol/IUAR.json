@@ -27,7 +27,7 @@
   "methodIdentifiers": {
     "raiseCapital(uint256)": "c621bf8a"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"raiseCapital\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/IUAR.sol\":\"IUAR\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/IUAR.sol\":{\"keccak256\":\"0x51eeeb5dd46c223bf7b4ae0a53100a5f4ea16ae2c3e5b5bb3b05df5cb3b82159\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://48caa1b0ad1fb0e2550f4413e70181b0330c1f0f051d655c4140e842f3507198\",\"dweb:/ipfs/QmdQNQUtUo57nR7eiRHBJ6WwNmLnEnmCSrsKqNR9qJauDf\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"raiseCapital\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/IUAR.sol\":\"IUAR\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/IUAR.sol\":{\"keccak256\":\"0xcaf8a9d450ed06b45f65fe90a71b931e8dcb8f8f41b666b27d02bcce0f1af8a7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://01b23240d21477ba5838a2717febab76ce9ddd35eab66374c4c47bf5b8c18fde\",\"dweb:/ipfs/QmdDgvUTrjw66TLw8CvzUCgBwryT8gejp2Fik5KoJbhtT4\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -65,6 +65,7 @@
         ":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/",
         ":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/",
         ":Uniswap/=lib/Uniswap/",
+        ":abdk-libraries-solidity/=lib/abdk-libraries-solidity/",
         ":ds-test/=lib/forge-std/lib/ds-test/src/",
         ":forge-std/=lib/forge-std/src/",
         ":solidity-linked-list/=lib/solidity-linked-list/"
@@ -83,31 +84,39 @@
     },
     "sources": {
       "src/ubiquistick/interfaces/IUAR.sol": {
-        "keccak256": "0x51eeeb5dd46c223bf7b4ae0a53100a5f4ea16ae2c3e5b5bb3b05df5cb3b82159",
+        "keccak256": "0xcaf8a9d450ed06b45f65fe90a71b931e8dcb8f8f41b666b27d02bcce0f1af8a7",
         "urls": [
-          "bzz-raw://48caa1b0ad1fb0e2550f4413e70181b0330c1f0f051d655c4140e842f3507198",
-          "dweb:/ipfs/QmdQNQUtUo57nR7eiRHBJ6WwNmLnEnmCSrsKqNR9qJauDf"
+          "bzz-raw://01b23240d21477ba5838a2717febab76ce9ddd35eab66374c4c47bf5b8c18fde",
+          "dweb:/ipfs/QmdDgvUTrjw66TLw8CvzUCgBwryT8gejp2Fik5KoJbhtT4"
         ],
         "license": "MIT"
       }
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev"
+  },
   "ast": {
     "absolutePath": "src/ubiquistick/interfaces/IUAR.sol",
-    "id": 55194,
+    "id": 51782,
     "exportedSymbols": {
       "IUAR": [
-        55193
+        51781
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:96:116",
+    "src": "33:101:115",
     "nodes": [
       {
-        "id": 55187,
+        "id": 51775,
         "nodeType": "PragmaDirective",
-        "src": "32:23:116",
+        "src": "33:23:115",
         "literals": [
           "solidity",
           "^",
@@ -116,33 +125,33 @@
         ]
       },
       {
-        "id": 55193,
+        "id": 51781,
         "nodeType": "ContractDefinition",
-        "src": "57:70:116",
+        "src": "60:72:115",
         "nodes": [
           {
-            "id": 55192,
+            "id": 51780,
             "nodeType": "FunctionDefinition",
-            "src": "78:47:116",
+            "src": "82:47:115",
             "functionSelector": "c621bf8a",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "raiseCapital",
-            "nameLocation": "87:12:116",
+            "nameLocation": "91:12:115",
             "parameters": {
-              "id": 55190,
+              "id": 51778,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 55189,
+                  "id": 51777,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "108:6:116",
+                  "nameLocation": "112:6:115",
                   "nodeType": "VariableDeclaration",
-                  "scope": 55192,
-                  "src": "100:14:116",
+                  "scope": 51780,
+                  "src": "104:14:115",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -150,10 +159,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 55188,
+                    "id": 51776,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "100:7:116",
+                    "src": "104:7:115",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -162,15 +171,15 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "99:16:116"
+              "src": "103:16:115"
             },
             "returnParameters": {
-              "id": 55191,
+              "id": 51779,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "124:0:116"
+              "src": "128:0:115"
             },
-            "scope": 55193,
+            "scope": 51781,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -183,15 +192,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          55193
+          51781
         ],
         "name": "IUAR",
-        "nameLocation": "67:4:116",
-        "scope": 55194,
+        "nameLocation": "70:4:115",
+        "scope": 51782,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 116
+  "id": 115
 }

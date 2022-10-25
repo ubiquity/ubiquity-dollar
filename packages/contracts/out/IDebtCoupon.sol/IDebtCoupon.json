@@ -829,27 +829,59 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "methods": {
+      "balanceOf(address,uint256)": {
+        "details": "Returns the amount of tokens of token type `id` owned by `account`. Requirements: - `account` cannot be the zero address."
+      },
+      "balanceOfBatch(address[],uint256[])": {
+        "details": "xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {balanceOf}. Requirements: - `accounts` and `ids` must have the same length."
+      },
+      "isApprovedForAll(address,address)": {
+        "details": "Returns true if `operator` is approved to transfer ``account``'s tokens. See {setApprovalForAll}."
+      },
+      "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": {
+        "details": "xref:ROOT:erc1155.adoc#batch-operations[Batched] version of {safeTransferFrom}. Emits a {TransferBatch} event. Requirements: - `ids` and `amounts` must have the same length. - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the acceptance magic value."
+      },
+      "safeTransferFrom(address,address,uint256,uint256,bytes)": {
+        "details": "Transfers `amount` tokens of token type `id` from `from` to `to`. Emits a {TransferSingle} event. Requirements: - `to` cannot be the zero address. - If the caller is not `from`, it must have been approved to spend ``from``'s tokens via {setApprovalForAll}. - `from` must have a balance of tokens of type `id` of at least `amount`. - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the acceptance magic value."
+      },
+      "setApprovalForAll(address,bool)": {
+        "details": "Grants or revokes permission to `operator` to transfer the caller's tokens, according to `approved`, Emits an {ApprovalForAll} event. Requirements: - `operator` cannot be the caller."
+      },
+      "supportsInterface(bytes4)": {
+        "details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+      }
+    },
+    "title": "A debt coupon which corresponds to a IDebtRedemption contract"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IDebtCoupon.sol",
-    "id": 44773,
+    "id": 46307,
     "exportedSymbols": {
       "IDebtCoupon": [
-        44772
+        46306
       ],
       "IERC1155": [
         31229
       ],
       "IERC165": [
-        33684
+        35218
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:592:63",
+    "src": "33:592:70",
     "nodes": [
       {
-        "id": 44741,
+        "id": 46275,
         "nodeType": "PragmaDirective",
-        "src": "33:23:63",
+        "src": "33:23:70",
         "literals": [
           "solidity",
           "0.8",
@@ -857,72 +889,72 @@
         ]
       },
       {
-        "id": 44742,
+        "id": 46276,
         "nodeType": "ImportDirective",
-        "src": "60:60:63",
+        "src": "60:60:70",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44773,
+        "scope": 46307,
         "sourceUnit": 31230,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44772,
+        "id": 46306,
         "nodeType": "ContractDefinition",
-        "src": "198:425:63",
+        "src": "198:425:70",
         "nodes": [
           {
-            "id": 44748,
+            "id": 46282,
             "nodeType": "FunctionDefinition",
-            "src": "239:36:63",
+            "src": "239:36:70",
             "functionSelector": "f7ffe84a",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "updateTotalDebt",
-            "nameLocation": "248:15:63",
+            "nameLocation": "248:15:70",
             "parameters": {
-              "id": 44746,
+              "id": 46280,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "263:2:63"
+              "src": "263:2:70"
             },
             "returnParameters": {
-              "id": 44747,
+              "id": 46281,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "274:0:63"
+              "src": "274:0:70"
             },
-            "scope": 44772,
+            "scope": 46306,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 44757,
+            "id": 46291,
             "nodeType": "FunctionDefinition",
-            "src": "283:128:63",
+            "src": "283:128:70",
             "functionSelector": "738f0cf1",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "burnCoupons",
-            "nameLocation": "292:11:63",
+            "nameLocation": "292:11:70",
             "parameters": {
-              "id": 44755,
+              "id": 46289,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44750,
+                  "id": 46284,
                   "mutability": "mutable",
                   "name": "couponOwner",
-                  "nameLocation": "322:11:63",
+                  "nameLocation": "322:11:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44757,
-                  "src": "314:19:63",
+                  "scope": 46291,
+                  "src": "314:19:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -930,10 +962,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44749,
+                    "id": 46283,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "314:7:63",
+                    "src": "314:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -944,13 +976,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44752,
+                  "id": 46286,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "352:6:63",
+                  "nameLocation": "352:6:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44757,
-                  "src": "344:14:63",
+                  "scope": 46291,
+                  "src": "344:14:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -958,10 +990,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44751,
+                    "id": 46285,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "344:7:63",
+                    "src": "344:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -971,13 +1003,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44754,
+                  "id": 46288,
                   "mutability": "mutable",
                   "name": "expiryBlockNumber",
-                  "nameLocation": "377:17:63",
+                  "nameLocation": "377:17:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44757,
-                  "src": "369:25:63",
+                  "scope": 46291,
+                  "src": "369:25:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -985,10 +1017,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44753,
+                    "id": 46287,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "369:7:63",
+                    "src": "369:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -997,42 +1029,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "303:98:63"
+              "src": "303:98:70"
             },
             "returnParameters": {
-              "id": 44756,
+              "id": 46290,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "410:0:63"
+              "src": "410:0:70"
             },
-            "scope": 44772,
+            "scope": 46306,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 44766,
+            "id": 46300,
             "nodeType": "FunctionDefinition",
-            "src": "419:126:63",
+            "src": "419:126:70",
             "functionSelector": "e71fc58f",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "mintCoupons",
-            "nameLocation": "428:11:63",
+            "nameLocation": "428:11:70",
             "parameters": {
-              "id": 44764,
+              "id": 46298,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44759,
+                  "id": 46293,
                   "mutability": "mutable",
                   "name": "recipient",
-                  "nameLocation": "458:9:63",
+                  "nameLocation": "458:9:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44766,
-                  "src": "450:17:63",
+                  "scope": 46300,
+                  "src": "450:17:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1040,10 +1072,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 44758,
+                    "id": 46292,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "450:7:63",
+                    "src": "450:7:70",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1054,13 +1086,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44761,
+                  "id": 46295,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "486:6:63",
+                  "nameLocation": "486:6:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44766,
-                  "src": "478:14:63",
+                  "scope": 46300,
+                  "src": "478:14:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1068,10 +1100,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44760,
+                    "id": 46294,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "478:7:63",
+                    "src": "478:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1081,13 +1113,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 44763,
+                  "id": 46297,
                   "mutability": "mutable",
                   "name": "expiryBlockNumber",
-                  "nameLocation": "511:17:63",
+                  "nameLocation": "511:17:70",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44766,
-                  "src": "503:25:63",
+                  "scope": 46300,
+                  "src": "503:25:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1095,10 +1127,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44762,
+                    "id": 46296,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "503:7:63",
+                    "src": "503:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1107,48 +1139,48 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "439:96:63"
+              "src": "439:96:70"
             },
             "returnParameters": {
-              "id": 44765,
+              "id": 46299,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "544:0:63"
+              "src": "544:0:70"
             },
-            "scope": 44772,
+            "scope": 46306,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 44771,
+            "id": 46305,
             "nodeType": "FunctionDefinition",
-            "src": "553:67:63",
+            "src": "553:67:70",
             "functionSelector": "db87b1ff",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getTotalOutstandingDebt",
-            "nameLocation": "562:23:63",
+            "nameLocation": "562:23:70",
             "parameters": {
-              "id": 44767,
+              "id": 46301,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "585:2:63"
+              "src": "585:2:70"
             },
             "returnParameters": {
-              "id": 44770,
+              "id": 46304,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44769,
+                  "id": 46303,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44771,
-                  "src": "611:7:63",
+                  "scope": 46305,
+                  "src": "611:7:70",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1156,10 +1188,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44768,
+                    "id": 46302,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "611:7:63",
+                    "src": "611:7:70",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1168,9 +1200,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "610:9:63"
+              "src": "610:9:70"
             },
-            "scope": 44772,
+            "scope": 46306,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -1180,42 +1212,42 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 44744,
+              "id": 46278,
               "name": "IERC1155",
               "nameLocations": [
-                "223:8:63"
+                "223:8:70"
               ],
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 31229,
-              "src": "223:8:63"
+              "src": "223:8:70"
             },
-            "id": 44745,
+            "id": 46279,
             "nodeType": "InheritanceSpecifier",
-            "src": "223:8:63"
+            "src": "223:8:70"
           }
         ],
         "canonicalName": "IDebtCoupon",
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 44743,
+          "id": 46277,
           "nodeType": "StructuredDocumentation",
-          "src": "124:74:63",
+          "src": "124:74:70",
           "text": "@title A debt coupon which corresponds to a IDebtRedemption contract"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          44772,
+          46306,
           31229,
-          33684
+          35218
         ],
         "name": "IDebtCoupon",
-        "nameLocation": "208:11:63",
-        "scope": 44773,
+        "nameLocation": "208:11:70",
+        "scope": 46307,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 63
+  "id": 70
 }

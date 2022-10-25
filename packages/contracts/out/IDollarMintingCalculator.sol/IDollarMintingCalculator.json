@@ -111,27 +111,36 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user"
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev",
+    "title": "A mechanism for calculating dollars to be minted"
+  },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IDollarMintingCalculator.sol",
-    "id": 44804,
+    "id": 46338,
     "exportedSymbols": {
       "IDollarMintingCalculator": [
-        44803
+        46337
       ],
       "IERC1155Receiver": [
         31270
       ],
       "IERC165": [
-        33684
+        35218
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:267:65",
+    "src": "33:267:72",
     "nodes": [
       {
-        "id": 44795,
+        "id": 46329,
         "nodeType": "PragmaDirective",
-        "src": "33:23:65",
+        "src": "33:23:72",
         "literals": [
           "solidity",
           "0.8",
@@ -139,51 +148,51 @@
         ]
       },
       {
-        "id": 44796,
+        "id": 46330,
         "nodeType": "ImportDirective",
-        "src": "60:68:65",
+        "src": "60:68:72",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol",
         "file": "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 44804,
+        "scope": 46338,
         "sourceUnit": 31271,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 44803,
+        "id": 46337,
         "nodeType": "ContractDefinition",
-        "src": "193:105:65",
+        "src": "193:105:72",
         "nodes": [
           {
-            "id": 44802,
+            "id": 46336,
             "nodeType": "FunctionDefinition",
-            "src": "235:60:65",
+            "src": "235:60:72",
             "functionSelector": "764263cf",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getDollarsToMint",
-            "nameLocation": "244:16:65",
+            "nameLocation": "244:16:72",
             "parameters": {
-              "id": 44798,
+              "id": 46332,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "260:2:65"
+              "src": "260:2:72"
             },
             "returnParameters": {
-              "id": 44801,
+              "id": 46335,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 44800,
+                  "id": 46334,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 44802,
-                  "src": "286:7:65",
+                  "scope": 46336,
+                  "src": "286:7:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -191,10 +200,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 44799,
+                    "id": 46333,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "286:7:65",
+                    "src": "286:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -203,9 +212,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "285:9:65"
+              "src": "285:9:72"
             },
-            "scope": 44803,
+            "scope": 46337,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -217,22 +226,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 44797,
+          "id": 46331,
           "nodeType": "StructuredDocumentation",
-          "src": "132:61:65",
+          "src": "132:61:72",
           "text": "@title A mechanism for calculating dollars to be minted"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          44803
+          46337
         ],
         "name": "IDollarMintingCalculator",
-        "nameLocation": "203:24:65",
-        "scope": 44804,
+        "nameLocation": "203:24:72",
+        "scope": 46338,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 65
+  "id": 72
 }
