@@ -52,7 +52,7 @@
     "UBQ_MINTER_ROLE()": "2f533cb7",
     "hasRole(bytes32,address)": "91d14854"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"UBQ_MINTER_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/IUBQManager.sol\":\"IUBQManager\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/IUBQManager.sol\":{\"keccak256\":\"0x48b2d73edff69038df22870c318269141ee3612e0f362f716e369336f4de354e\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://c2fccf933430233f6820935791ddbfa49403c125952fe1529ca0a904b10e8821\",\"dweb:/ipfs/QmVf6qZsFw9m8GVwvCzZwrqD7vhmnwWwxonw7meBYUx7yN\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"UBQ_MINTER_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/IUBQManager.sol\":\"IUBQManager\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/IUBQManager.sol\":{\"keccak256\":\"0x0e3a3cb3d4362cc7c476c758b266b089b5f90003c26de240a6ad68a0234442f5\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://12e372bfe3dea2cb77f859d57419405414a3525fef917fc1b14b7d953235a798\",\"dweb:/ipfs/QmTomsvaB89KVDt2xAmKcdjec2pqb9h8J3Gy14qUavGMp4\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -134,10 +134,10 @@
     },
     "sources": {
       "src/ubiquistick/interfaces/IUBQManager.sol": {
-        "keccak256": "0x48b2d73edff69038df22870c318269141ee3612e0f362f716e369336f4de354e",
+        "keccak256": "0x0e3a3cb3d4362cc7c476c758b266b089b5f90003c26de240a6ad68a0234442f5",
         "urls": [
-          "bzz-raw://c2fccf933430233f6820935791ddbfa49403c125952fe1529ca0a904b10e8821",
-          "dweb:/ipfs/QmVf6qZsFw9m8GVwvCzZwrqD7vhmnwWwxonw7meBYUx7yN"
+          "bzz-raw://12e372bfe3dea2cb77f859d57419405414a3525fef917fc1b14b7d953235a798",
+          "dweb:/ipfs/QmTomsvaB89KVDt2xAmKcdjec2pqb9h8J3Gy14qUavGMp4"
         ],
         "license": "Apache-2.0"
       }
@@ -169,9 +169,8 @@
         "src": "40:23:116",
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".9"
+          ".16"
         ]
       },
       {

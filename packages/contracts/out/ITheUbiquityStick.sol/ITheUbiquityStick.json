@@ -46,7 +46,7 @@
     "batchSafeMint(address,uint256)": "5832bcfe",
     "totalSupply()": "18160ddd"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"batchSafeMint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/ITheUbiquityStick.sol\":\"ITheUbiquityStick\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/ITheUbiquityStick.sol\":{\"keccak256\":\"0x45f8d514f6923d9ee72c5c616a220890daf89ead55f4a1d3d46a077ed0bc1e21\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f3d5e5a869752b6b95b078958f414a167b70aa5b2217ba48a205b34da042802a\",\"dweb:/ipfs/QmU1QD2JzRgs8ikgfRejLVQYdJAwED5F6sE5gL2AwuuuCz\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"batchSafeMint\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalSupply\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/ubiquistick/interfaces/ITheUbiquityStick.sol\":\"ITheUbiquityStick\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/ubiquistick/interfaces/ITheUbiquityStick.sol\":{\"keccak256\":\"0x92f577dcd73e044d678fe4c74140e56f949a3ed4a7c76b39ad3129770d02eb84\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dbd8710aa85bfca6d00b4d9d1aa085a5cfa7be4c596115ed2bb6eede053a408d\",\"dweb:/ipfs/QmXpoSDfWCmPrv8L6h44Qy4zhUGR3zKaN2pcdnAm47T6vN\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -121,10 +121,10 @@
     },
     "sources": {
       "src/ubiquistick/interfaces/ITheUbiquityStick.sol": {
-        "keccak256": "0x45f8d514f6923d9ee72c5c616a220890daf89ead55f4a1d3d46a077ed0bc1e21",
+        "keccak256": "0x92f577dcd73e044d678fe4c74140e56f949a3ed4a7c76b39ad3129770d02eb84",
         "urls": [
-          "bzz-raw://f3d5e5a869752b6b95b078958f414a167b70aa5b2217ba48a205b34da042802a",
-          "dweb:/ipfs/QmU1QD2JzRgs8ikgfRejLVQYdJAwED5F6sE5gL2AwuuuCz"
+          "bzz-raw://dbd8710aa85bfca6d00b4d9d1aa085a5cfa7be4c596115ed2bb6eede053a408d",
+          "dweb:/ipfs/QmXpoSDfWCmPrv8L6h44Qy4zhUGR3zKaN2pcdnAm47T6vN"
         ],
         "license": "MIT"
       }
@@ -156,9 +156,8 @@
         "src": "33:23:114",
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".9"
+          ".16"
         ]
       },
       {
