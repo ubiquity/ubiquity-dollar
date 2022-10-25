@@ -24,7 +24,7 @@
     "forge": "forge",
     "build": "forge build",
     "test": "forge test --fork-url https://rpc.ankr.com/eth",
-    "slither:run": "slither . --compile-force-framework foundry",
+    "slither:run": "slither . --compile-force-framework foundry --config-file slither.config.json",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
     "deploy": "ts-node ./scripts/deploy/deploy.ts",
