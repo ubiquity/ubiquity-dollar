@@ -42,7 +42,7 @@
   "methodIdentifiers": {
     "incentivize(address,address,address,uint256)": "6e22230d"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"incentivize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"should be appointed as a Minter or Burner as needed\",\"kind\":\"dev\",\"methods\":{\"incentivize(address,address,address,uint256)\":{\"params\":{\"amount\":\"the amount of uAD transferred\",\"operator\":\"the operator (msg.sender) of the transfer\",\"receiver\":\"the receiver address of uAD\",\"sender\":\"the sender address of uAD\"}}},\"title\":\"incentive contract interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"incentivize(address,address,address,uint256)\":{\"notice\":\"apply incentives on transfer\"}},\"notice\":\"Called by uAD token contract when transferring with an incentivized address\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IIncentive.sol\":\"IIncentive\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IIncentive.sol\":{\"keccak256\":\"0xb7ffc5244839162274dae22af0bfc8537b71f6f9e1d93dad8bf30a18803159f5\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://aa326a79b014062917f05aebf0a6ed9dff7e6da1f42216bf5d26dbf663f0be22\",\"dweb:/ipfs/QmUweKgvEtrp3eutdMfnzy6PQpMdTJuU2rQ4LuRb5shUq4\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"operator\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"incentivize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"should be appointed as a Minter or Burner as needed\",\"kind\":\"dev\",\"methods\":{\"incentivize(address,address,address,uint256)\":{\"params\":{\"amount\":\"the amount of uAD transferred\",\"operator\":\"the operator (msg.sender) of the transfer\",\"receiver\":\"the receiver address of uAD\",\"sender\":\"the sender address of uAD\"}}},\"title\":\"incentive contract interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"incentivize(address,address,address,uint256)\":{\"notice\":\"apply incentives on transfer\"}},\"notice\":\"Called by uAD token contract when transferring with an incentivized address\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IIncentive.sol\":\"IIncentive\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IIncentive.sol\":{\"keccak256\":\"0x551ea4cab730e79c6e78f8a46deba03b1de55b0ab4a3bb34dbc23a8d59ed2c4d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6af2da234efb70b563a37e3b0a3074d1c6075806e2778336194ec7a681ce712a\",\"dweb:/ipfs/QmTJi4d64xtSSeZJQNXEvPiJxGVzVWhXpBp8kEHB34GisC\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -127,10 +127,10 @@
     },
     "sources": {
       "src/dollar/interfaces/IIncentive.sol": {
-        "keccak256": "0xb7ffc5244839162274dae22af0bfc8537b71f6f9e1d93dad8bf30a18803159f5",
+        "keccak256": "0x551ea4cab730e79c6e78f8a46deba03b1de55b0ab4a3bb34dbc23a8d59ed2c4d",
         "urls": [
-          "bzz-raw://aa326a79b014062917f05aebf0a6ed9dff7e6da1f42216bf5d26dbf663f0be22",
-          "dweb:/ipfs/QmUweKgvEtrp3eutdMfnzy6PQpMdTJuU2rQ4LuRb5shUq4"
+          "bzz-raw://6af2da234efb70b563a37e3b0a3074d1c6075806e2778336194ec7a681ce712a",
+          "dweb:/ipfs/QmTJi4d64xtSSeZJQNXEvPiJxGVzVWhXpBp8kEHB34GisC"
         ],
         "license": "MIT"
       }
@@ -139,39 +139,38 @@
   },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IIncentive.sol",
-    "id": 46494,
+    "id": 44960,
     "exportedSymbols": {
       "IIncentive": [
-        46493
+        44959
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:661:76",
+    "src": "33:661:69",
     "nodes": [
       {
-        "id": 46479,
+        "id": 44945,
         "nodeType": "PragmaDirective",
-        "src": "33:23:76",
+        "src": "33:23:69",
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".3"
+          ".16"
         ]
       },
       {
-        "id": 46493,
+        "id": 44959,
         "nodeType": "ContractDefinition",
-        "src": "252:440:76",
+        "src": "252:440:69",
         "nodes": [
           {
-            "id": 46492,
+            "id": 44958,
             "nodeType": "FunctionDefinition",
-            "src": "548:141:76",
+            "src": "548:141:69",
             "documentation": {
-              "id": 46481,
+              "id": 44947,
               "nodeType": "StructuredDocumentation",
-              "src": "280:262:76",
+              "src": "280:262:69",
               "text": "@notice apply incentives on transfer\n @param sender the sender address of uAD\n @param receiver the receiver address of uAD\n @param operator the operator (msg.sender) of the transfer\n @param amount the amount of uAD transferred"
             },
             "functionSelector": "6e22230d",
@@ -179,20 +178,20 @@
             "kind": "function",
             "modifiers": [],
             "name": "incentivize",
-            "nameLocation": "557:11:76",
+            "nameLocation": "557:11:69",
             "parameters": {
-              "id": 46490,
+              "id": 44956,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46483,
+                  "id": 44949,
                   "mutability": "mutable",
                   "name": "sender",
-                  "nameLocation": "587:6:76",
+                  "nameLocation": "587:6:69",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46492,
-                  "src": "579:14:76",
+                  "scope": 44958,
+                  "src": "579:14:69",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -200,10 +199,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46482,
+                    "id": 44948,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "579:7:76",
+                    "src": "579:7:69",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -214,13 +213,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46485,
+                  "id": 44951,
                   "mutability": "mutable",
                   "name": "receiver",
-                  "nameLocation": "612:8:76",
+                  "nameLocation": "612:8:69",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46492,
-                  "src": "604:16:76",
+                  "scope": 44958,
+                  "src": "604:16:69",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -228,10 +227,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46484,
+                    "id": 44950,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "604:7:76",
+                    "src": "604:7:69",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -242,13 +241,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46487,
+                  "id": 44953,
                   "mutability": "mutable",
                   "name": "operator",
-                  "nameLocation": "639:8:76",
+                  "nameLocation": "639:8:69",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46492,
-                  "src": "631:16:76",
+                  "scope": 44958,
+                  "src": "631:16:69",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -256,10 +255,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46486,
+                    "id": 44952,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "631:7:76",
+                    "src": "631:7:69",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -270,13 +269,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46489,
+                  "id": 44955,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "666:6:76",
+                  "nameLocation": "666:6:69",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46492,
-                  "src": "658:14:76",
+                  "scope": 44958,
+                  "src": "658:14:69",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -284,10 +283,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46488,
+                    "id": 44954,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "658:7:76",
+                    "src": "658:7:69",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -296,15 +295,15 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "568:111:76"
+              "src": "568:111:69"
             },
             "returnParameters": {
-              "id": 46491,
+              "id": 44957,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "688:0:76"
+              "src": "688:0:69"
             },
-            "scope": 46493,
+            "scope": 44959,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
@@ -316,22 +315,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 46480,
+          "id": 44946,
           "nodeType": "StructuredDocumentation",
-          "src": "60:192:76",
+          "src": "60:192:69",
           "text": "@title incentive contract interface\n @notice Called by uAD token contract when transferring with an incentivized address\n @dev should be appointed as a Minter or Burner as needed"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          46493
+          44959
         ],
         "name": "IIncentive",
-        "nameLocation": "262:10:76",
-        "scope": 46494,
+        "nameLocation": "262:10:69",
+        "scope": 44960,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 76
+  "id": 69
 }

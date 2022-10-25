@@ -165,7 +165,7 @@
     "totalShares()": "3a98ef39",
     "withdraw(address,uint256,uint256)": "b5c5f672"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_id\",\"type\":\"uint256\"}],\"name\":\"getBondingShareInfo\",\"outputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"\",\"type\":\"uint256[2]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"pendingUGOV\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IMasterChefV2.sol\":\"IMasterChefV2\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/AccessControl.sol\":{\"keccak256\":\"0x07cf8d783adf28649b2ec21c55dd14941b5c779e87d19b6233fa1cb0debe2f71\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3752ae12fdcfa26302c48e93103a6951e545842f836c368860f5191d7eee2b46\",\"dweb:/ipfs/QmeJMaAv99yh5WJHcHnt24diZREjMab4wBptkETwxNfyaq\"]},\"lib/openzeppelin-contracts/contracts/access/IAccessControl.sol\":{\"keccak256\":\"0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a\",\"dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh\"]},\"lib/openzeppelin-contracts/contracts/security/Pausable.sol\":{\"keccak256\":\"0x0849d93b16c9940beb286a7864ed02724b248b93e0d80ef6355af5ef15c64773\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ddabb16009cd17eaca3143feadf450ac13e72919ebe2ca50e00f61cb78bc004\",\"dweb:/ipfs/QmSPwPxX7d6TTWakN5jy5wsaGkS1y9TW8fuhGSraMkLk2B\"]},\"lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol\":{\"keccak256\":\"0x6e3ba605a09b2cf6ab80fa9e4159b1e9f0f49bd8927032c3251a099e96ed54bc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://05bb933ff14dd2a81c37c1d7b4992df8034107ca5edd60cf8e5a20dc566d3b72\",\"dweb:/ipfs/QmbDdZDWqkRdLtG6AFutDNzF9d2vyVFDJmVSbnVKQ6nPHH\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol\":{\"keccak256\":\"0xe720b214fc3173cebcba734efb258dd89ae27733f18f5abc4deca28e33a05854\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fec2446774323fe4d3979f42f9abef398e4258b3064aa4f2752ca1a4abf8964d\",\"dweb:/ipfs/Qmc8Yhvd3C3N1HwA9WbWwb2RELtkChUErwQMuZBg9fmEGR\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol\":{\"keccak256\":\"0x6392f2cfe3a5ee802227fe7a2dfd47096d881aec89bddd214b35c5b46d3cd941\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bd9c47a375639888e726a99da718890ba16d17d7ad9eacb0ccc892d46d1b3ee0\",\"dweb:/ipfs/Qmb41W5RUjy2sWg49A2rMnxekSeEk6SvGyJL5tyCCSr7un\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Burnable.sol\":{\"keccak256\":\"0x2759d25ad3d3d96e0886d461dee4b14b8249355ba970a2f106ef45c2c352ecad\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ef7141c2ad980f33a4c11346460c53022e28af52bab49ba585c95328a628d01\",\"dweb:/ipfs/QmZbTT4QfoKrWVgcWv8vWnS8UJV9wR6Gev8V7CvggSyGQX\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Pausable.sol\":{\"keccak256\":\"0xdad22b949de979bb2ad9001c044b2aeaacf8a25e3de09ed6f022a9469f936d5b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f2e9219d44b0ab528f8dc32f06897c5d7260e9f7190db830a017265ac0d22585\",\"dweb:/ipfs/QmYWP5r1Zkr5HRVm7cJG72vMqiDUwe9PbCmZZo9xc44V8K\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol\":{\"keccak256\":\"0xa66d18b9a85458d28fc3304717964502ae36f7f8a2ff35bc83f6f85d74b03574\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e46c80ea068989111d6103e5521223f9ef337e93de76deed8b03f75c6f7b2797\",\"dweb:/ipfs/QmNoSE6knNfFncdDDLTb3fGR6oSQty1srG96Vsx3E9wQdw\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x3270d2a7a042dda9cf85dddd16e6106c2c9ad784c0972315630b2a148215fa7d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b394e20d57877a825c24c1841e219d6ab1e41decec060ea935422ac9b7a25f8a\",\"dweb:/ipfs/QmVTaGCMR4Gi9w1LUVVcjEJHrHF2qcr1avFkLtsLD6sEAr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol\":{\"keccak256\":\"0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95\",\"dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\":{\"keccak256\":\"0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6\",\"dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf\"]},\"lib/openzeppelin-contracts/contracts/utils/Address.sol\":{\"keccak256\":\"0x9720545d8ea1f76222f98683f861f919e9c28bd5d5503caa7e3620a21b6aaa24\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fe3dac0e0258d8396c33fd27c277699a9bfac198f2cb45632c4f5df2c2ca895a\",\"dweb:/ipfs/QmfEWsX7aGpWN9wooHiQo1XjiGM1h6iXeaeMTAJ1TUcnts\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"lib/openzeppelin-contracts/contracts/utils/Strings.sol\":{\"keccak256\":\"0xbaa90c891304799f6aa4039eae4b59afc0b59ce3bcc647f3fc2bbf5a04b17f1e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cc3f5b077759f92f28ba4182d9410aa8fd586d7efc5f76bdd22228bf2d227f0\",\"dweb:/ipfs/QmbLPLb31LxAyB7GWir5AssC1TYVHqhBsN6R7APj2UV9fv\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol\":{\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d\",\"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"lib/openzeppelin-contracts/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x768fcac57789d8edb0b4c8e02bad17b15faeebbc3c8b2c8ec473b485cc0b59fe\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://422e724988089c9f08fab930fe24ae9fd593cd069d488a36084ba5a3d46fcfcf\",\"dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP\"]},\"src/dollar/BondingShareV2.sol\":{\"keccak256\":\"0x0b70072398cb3a2c7dd97b7870612ed9e81e81fe0df7a40ae9769b8d1d4f7218\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b9c66f188ac3a3c89907fea77fad784fa88008118a278989c5606ec2683a4b70\",\"dweb:/ipfs/QmWvEUnGszUNQ2W3p9N5FfhAwQnSkdTdgjUcHKX8ikvnhq\"]},\"src/dollar/MasterChefV2.sol\":{\"keccak256\":\"0x59325dfddf458ae5d3f1efcb40ae2cf324600c591e443e165af540466f1073b2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a1e9d8265dcbd46e4299ebf3a981b6be2d67725c7fe8842a98ff4e551908987\",\"dweb:/ipfs/QmZujaPgL74D9ykmcMBVRvuzCDpxHS4R1RgTjkoRaHGJLJ\"]},\"src/dollar/TWAPOracle.sol\":{\"keccak256\":\"0xf005727ea42566c1ec77b796a4215599c6702bf66258d418c489eef28433aab6\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://8660e5e45d3d10e295d18d4c562d4f4322d8675ec55822c0051c906b8a85c92c\",\"dweb:/ipfs/QmZh8WZwL5SXSMcTQsELWj5DgBazgXmJ2nfbDcQ2thdpfu\"]},\"src/dollar/UbiquityAlgorithmicDollarManager.sol\":{\"keccak256\":\"0x0c49291bb47ca3f944dadba2541a775f6406c4aa42d71e78915049e23431c6bf\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ccf8f30b5d2f999a42d9fa52dd37a3a40e8e851f2a5c58052227df91d2174d08\",\"dweb:/ipfs/QmUPktHubRZHU9qHKeHRgU8aNYsyk71FuWpGn1Z2HFULPQ\"]},\"src/dollar/interfaces/ICurveFactory.sol\":{\"keccak256\":\"0xdae411db84171bc2d1deec3f5f8d141ca6517478268f11f134f5d20e86225558\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e34dace61c24f5d509352802dc1c3886fa1383b593da8c9109656aa02a687711\",\"dweb:/ipfs/QmdddUgLSZ6vqyHVdsfLSugtSfynDYVNqT4CYfHtfuip5Y\"]},\"src/dollar/interfaces/IERC1155Ubiquity.sol\":{\"keccak256\":\"0xc740e2bf49eb5b7e61d7c6757f0bc8e9d70178794dfc6266a3bf3e8df28395d4\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://33202134658ee49d0ffd395ece0f31f87ae68837d3eb9403aa1366edff36e5ef\",\"dweb:/ipfs/QmUX4SK2eQG2Rm58vj382JD372HxTZ5P4cHHxUJWXhMogJ\"]},\"src/dollar/interfaces/IERC20Ubiquity.sol\":{\"keccak256\":\"0x5a3241ad1bbb87bb41930a8981a0fcadf2c60c18dcaf893465a28e3f77569c41\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://1dc5290615ee5a71bc5467ba4d0975d11ecb7cae2b7d5bd79ee9fb8441ece78f\",\"dweb:/ipfs/QmecPv3YLZzADcYNPeT82RTfQR1uETQcS6bMY5fJ2ux1ed\"]},\"src/dollar/interfaces/IMasterChefV2.sol\":{\"keccak256\":\"0x0a1a05d2fd7d8b3adb252a1a1aff5abbd203205092bce08eb1d68bf5adfe7709\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://2f2ce4a9c2be05c06bed14266873be56edb062c722fb7dc24fd15f4f53ad548a\",\"dweb:/ipfs/QmUB9PWi1D7BvKm8oDUNocWNMtPDdETUkJvJcV3znMeNnn\"]},\"src/dollar/interfaces/IMetaPool.sol\":{\"keccak256\":\"0x4bebae6bf0c10d2cee9d444fb0a3d90384e987d4f23d579c80df363fd75ae2b0\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://f6d1bad5127d5f7722ca26447b30bef56a0196c07fd55737aaf84aa8e8dc480f\",\"dweb:/ipfs/QmT4EvG6czqBfWkvuT7E11C1qqty796nFbDH25f5PQkeKb\"]},\"src/dollar/interfaces/ITWAPOracle.sol\":{\"keccak256\":\"0x27a82b57efb754a82f8bf34d718013ee8eeebced4eec5d7a972af6670d2e17c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d43a835c251f646d9b7b5a9ad6374196767da82f8fedc49a4a26813e7f36ccf0\",\"dweb:/ipfs/QmNiYz7RaHwDNFpsMgeu8yVzsBKkDqcVrZxQCf5fpyYYcm\"]},\"src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol\":{\"keccak256\":\"0xb125bc04f4eeb88a29fc566b1d30b23f1d58a076c7c5c3eba4368636dff8b4ae\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://5de51b2e2e75513662ec77dbc325e58d4a418dfd4b4bbe7620e507a63d43f6a3\",\"dweb:/ipfs/QmRLAthPu7NGwJ4JQAN3TLGMhiBCqPRnedGvnAHyVZqmEF\"]},\"src/dollar/interfaces/IUbiquityFormulas.sol\":{\"keccak256\":\"0xedca2f7c5de52c894ce37bd212848fd2a69e03c0503f6297a7b4f5941489f973\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e8094fd6dedc4fbfddf689ddc531108bf270207cef8fbbff738fd72312e8048e\",\"dweb:/ipfs/QmPFww8r2L7jNKc6HGYk1rMcwPJuVMPrDvFEL2qrwUNi1f\"]},\"src/dollar/utils/SafeAddArray.sol\":{\"keccak256\":\"0x0a7d40e0e3ac2f18c3f8abbe8d2414f2a27f5138256e2a2df1f59e1c999bd9e9\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://40cafe653e8278b32516df63aa818a074f2ad0eefbbb2db346697907d192a7a1\",\"dweb:/ipfs/QmYW4Qk39ztc1vYTYwJJve2jdSMRFyw6Fx4RyCdfwKo7HU\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"Deposit\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"Withdraw\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_id\",\"type\":\"uint256\"}],\"name\":\"getBondingShareInfo\",\"outputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"\",\"type\":\"uint256[2]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"}],\"name\":\"pendingUGOV\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalShares\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bondingShareID\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IMasterChefV2.sol\":\"IMasterChefV2\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/access/AccessControl.sol\":{\"keccak256\":\"0x07cf8d783adf28649b2ec21c55dd14941b5c779e87d19b6233fa1cb0debe2f71\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3752ae12fdcfa26302c48e93103a6951e545842f836c368860f5191d7eee2b46\",\"dweb:/ipfs/QmeJMaAv99yh5WJHcHnt24diZREjMab4wBptkETwxNfyaq\"]},\"lib/openzeppelin-contracts/contracts/access/IAccessControl.sol\":{\"keccak256\":\"0x59ce320a585d7e1f163cd70390a0ef2ff9cec832e2aa544293a00692465a7a57\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bb2c137c343ef0c4c7ce7b18c1d108afdc9d315a04e48307288d2d05adcbde3a\",\"dweb:/ipfs/QmUxhrAQM3MM3FF5j7AtcXLXguWCJBHJ14BRdVtuoQc8Fh\"]},\"lib/openzeppelin-contracts/contracts/security/Pausable.sol\":{\"keccak256\":\"0x0849d93b16c9940beb286a7864ed02724b248b93e0d80ef6355af5ef15c64773\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ddabb16009cd17eaca3143feadf450ac13e72919ebe2ca50e00f61cb78bc004\",\"dweb:/ipfs/QmSPwPxX7d6TTWakN5jy5wsaGkS1y9TW8fuhGSraMkLk2B\"]},\"lib/openzeppelin-contracts/contracts/security/ReentrancyGuard.sol\":{\"keccak256\":\"0x6e3ba605a09b2cf6ab80fa9e4159b1e9f0f49bd8927032c3251a099e96ed54bc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://05bb933ff14dd2a81c37c1d7b4992df8034107ca5edd60cf8e5a20dc566d3b72\",\"dweb:/ipfs/QmbDdZDWqkRdLtG6AFutDNzF9d2vyVFDJmVSbnVKQ6nPHH\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/ERC1155.sol\":{\"keccak256\":\"0xe720b214fc3173cebcba734efb258dd89ae27733f18f5abc4deca28e33a05854\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fec2446774323fe4d3979f42f9abef398e4258b3064aa4f2752ca1a4abf8964d\",\"dweb:/ipfs/Qmc8Yhvd3C3N1HwA9WbWwb2RELtkChUErwQMuZBg9fmEGR\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155.sol\":{\"keccak256\":\"0x6392f2cfe3a5ee802227fe7a2dfd47096d881aec89bddd214b35c5b46d3cd941\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bd9c47a375639888e726a99da718890ba16d17d7ad9eacb0ccc892d46d1b3ee0\",\"dweb:/ipfs/Qmb41W5RUjy2sWg49A2rMnxekSeEk6SvGyJL5tyCCSr7un\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/IERC1155Receiver.sol\":{\"keccak256\":\"0xeb373f1fdc7b755c6a750123a9b9e3a8a02c1470042fd6505d875000a80bde0b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0e28648f994abf1d6bc345644a361cc0b7efa544f8bc0c8ec26011fed85a91ec\",\"dweb:/ipfs/QmVVE7AiRjKaQYYji7TkjmTeVzGpNmms5eoxqTCfvvpj6D\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Burnable.sol\":{\"keccak256\":\"0x2759d25ad3d3d96e0886d461dee4b14b8249355ba970a2f106ef45c2c352ecad\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4ef7141c2ad980f33a4c11346460c53022e28af52bab49ba585c95328a628d01\",\"dweb:/ipfs/QmZbTT4QfoKrWVgcWv8vWnS8UJV9wR6Gev8V7CvggSyGQX\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/ERC1155Pausable.sol\":{\"keccak256\":\"0xdad22b949de979bb2ad9001c044b2aeaacf8a25e3de09ed6f022a9469f936d5b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f2e9219d44b0ab528f8dc32f06897c5d7260e9f7190db830a017265ac0d22585\",\"dweb:/ipfs/QmYWP5r1Zkr5HRVm7cJG72vMqiDUwe9PbCmZZo9xc44V8K\"]},\"lib/openzeppelin-contracts/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol\":{\"keccak256\":\"0xa66d18b9a85458d28fc3304717964502ae36f7f8a2ff35bc83f6f85d74b03574\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e46c80ea068989111d6103e5521223f9ef337e93de76deed8b03f75c6f7b2797\",\"dweb:/ipfs/QmNoSE6knNfFncdDDLTb3fGR6oSQty1srG96Vsx3E9wQdw\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol\":{\"keccak256\":\"0x3270d2a7a042dda9cf85dddd16e6106c2c9ad784c0972315630b2a148215fa7d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b394e20d57877a825c24c1841e219d6ab1e41decec060ea935422ac9b7a25f8a\",\"dweb:/ipfs/QmVTaGCMR4Gi9w1LUVVcjEJHrHF2qcr1avFkLtsLD6sEAr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol\":{\"keccak256\":\"0x9750c6b834f7b43000631af5cc30001c5f547b3ceb3635488f140f60e897ea6b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a7d5b1ef5d8d5889ad2ed89d8619c09383b80b72ab226e0fe7bde1636481e34\",\"dweb:/ipfs/QmebXWgtEfumQGBdVeM6c71McLixYXQP5Bk6kKXuoY4Bmr\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"keccak256\":\"0x8de418a5503946cabe331f35fe242d3201a73f67f77aaeb7110acb1f30423aca\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5a376d3dda2cb70536c0a45c208b29b34ac560c4cb4f513a42079f96ba47d2dd\",\"dweb:/ipfs/QmZQg6gn1sUpM8wHzwNvSnihumUCAhxD119MpXeKp8B9s8\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol\":{\"keccak256\":\"0xf41ca991f30855bf80ffd11e9347856a517b977f0a6c2d52e6421a99b7840329\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b2717fd2bdac99daa960a6de500754ea1b932093c946388c381da48658234b95\",\"dweb:/ipfs/QmP6QVMn6UeA3ByahyJbYQr5M6coHKBKsf3ySZSfbyA8R7\"]},\"lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol\":{\"keccak256\":\"0x032807210d1d7d218963d7355d62e021a84bf1b3339f4f50be2f63b53cccaf29\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://11756f42121f6541a35a8339ea899ee7514cfaa2e6d740625fcc844419296aa6\",\"dweb:/ipfs/QmekMuk6BY4DAjzeXr4MSbKdgoqqsZnA8JPtuyWc6CwXHf\"]},\"lib/openzeppelin-contracts/contracts/utils/Address.sol\":{\"keccak256\":\"0x9720545d8ea1f76222f98683f861f919e9c28bd5d5503caa7e3620a21b6aaa24\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fe3dac0e0258d8396c33fd27c277699a9bfac198f2cb45632c4f5df2c2ca895a\",\"dweb:/ipfs/QmfEWsX7aGpWN9wooHiQo1XjiGM1h6iXeaeMTAJ1TUcnts\"]},\"lib/openzeppelin-contracts/contracts/utils/Context.sol\":{\"keccak256\":\"0xe2e337e6dde9ef6b680e07338c493ebea1b5fd09b43424112868e9cc1706bca7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6df0ddf21ce9f58271bdfaa85cde98b200ef242a05a3f85c2bc10a8294800a92\",\"dweb:/ipfs/QmRK2Y5Yc6BK7tGKkgsgn3aJEQGi5aakeSPZvS65PV8Xp3\"]},\"lib/openzeppelin-contracts/contracts/utils/Strings.sol\":{\"keccak256\":\"0xbaa90c891304799f6aa4039eae4b59afc0b59ce3bcc647f3fc2bbf5a04b17f1e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1cc3f5b077759f92f28ba4182d9410aa8fd586d7efc5f76bdd22228bf2d227f0\",\"dweb:/ipfs/QmbLPLb31LxAyB7GWir5AssC1TYVHqhBsN6R7APj2UV9fv\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/ERC165.sol\":{\"keccak256\":\"0xd10975de010d89fd1c78dc5e8a9a7e7f496198085c151648f20cba166b32582b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fb0048dee081f6fffa5f74afc3fb328483c2a30504e94a0ddd2a5114d731ec4d\",\"dweb:/ipfs/QmZptt1nmYoA5SgjwnSgWqgUSDgm4q52Yos3xhnMv3MV43\"]},\"lib/openzeppelin-contracts/contracts/utils/introspection/IERC165.sol\":{\"keccak256\":\"0x447a5f3ddc18419d41ff92b3773fb86471b1db25773e07f877f548918a185bf1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be161e54f24e5c6fae81a12db1a8ae87bc5ae1b0ddc805d82a1440a68455088f\",\"dweb:/ipfs/QmP7C3CHdY9urF4dEMb9wmsp1wMxHF6nhA2yQE5SKiPAdy\"]},\"lib/openzeppelin-contracts/contracts/utils/math/Math.sol\":{\"keccak256\":\"0x768fcac57789d8edb0b4c8e02bad17b15faeebbc3c8b2c8ec473b485cc0b59fe\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://422e724988089c9f08fab930fe24ae9fd593cd069d488a36084ba5a3d46fcfcf\",\"dweb:/ipfs/QmQ64LQm7jCherXKciXHZmy1Xcd6oub1Lx96WVbfZaxATP\"]},\"src/dollar/BondingShareV2.sol\":{\"keccak256\":\"0x523eda2ea658484ccdafa508e33289795ec2e60bccdb5e0a4dc641c929204625\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://002280d4091517454cd20384e0653e9c5bc90a49acab7b2db17a0ef470148dfd\",\"dweb:/ipfs/QmXdPbK94EV2Si49RiX56mVu3o6gW2byS4kkFrFm89uaC3\"]},\"src/dollar/MasterChefV2.sol\":{\"keccak256\":\"0x59325dfddf458ae5d3f1efcb40ae2cf324600c591e443e165af540466f1073b2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a1e9d8265dcbd46e4299ebf3a981b6be2d67725c7fe8842a98ff4e551908987\",\"dweb:/ipfs/QmZujaPgL74D9ykmcMBVRvuzCDpxHS4R1RgTjkoRaHGJLJ\"]},\"src/dollar/TWAPOracle.sol\":{\"keccak256\":\"0xa813e35d211728c8dd9123936b92bef225b805c1e661aac95248ce7e7ae5934a\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://4884d494190ffcc5bdbb4825dc5f2d0becaddc9a58b70e68a7a16e1896980430\",\"dweb:/ipfs/QmY8Po7Je132vt5AzzFm8EygGUKVwawPwH8Ysn4oyKtZr9\"]},\"src/dollar/UbiquityAlgorithmicDollarManager.sol\":{\"keccak256\":\"0x22697712d9d41011057b637f3723767c0b3da366171782f4de931de060d7edd1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8bf48d4b916ea851b53fd438a0a18e45e592576ad5467c0d827c6b382f2e7515\",\"dweb:/ipfs/QmNPZkw9HsnxzzVtRQS6TYhi2KufJX7W6jJYBooyYt3gUs\"]},\"src/dollar/interfaces/ICurveFactory.sol\":{\"keccak256\":\"0x8d57797f96d0ebc5fa2f46cd51a92a6ed1416178308edb1c1813d3d9dd3983ba\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a0a46bc1aca5af8228127abebff081ce766cd6f2bc900fdaff5ee2a010d7566a\",\"dweb:/ipfs/QmaXK1G6zq6XPqMTJC1mxibaeksxfffKwUGVrow2Xfm2fc\"]},\"src/dollar/interfaces/IERC1155Ubiquity.sol\":{\"keccak256\":\"0x75f4c8623df8d4efd034f53c803092f909fec7dac86253c677576de2c0ddfadf\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://aeac1649dc46e15b27647b1404f7ed494c693a5170540660482906cb2404242b\",\"dweb:/ipfs/QmVbx6gmT92Qa63JyYCoWhsA8XABBt8uGgBNmFdAnpKDJr\"]},\"src/dollar/interfaces/IERC20Ubiquity.sol\":{\"keccak256\":\"0xef437eec5a0c55328ca3ac15db3ceabf0acf0f4287b9010a830dfcf950139ac0\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://12794771b87d2ec0e75125402643314216c4bd661227273decd38f69640c088a\",\"dweb:/ipfs/QmRNcidFtRyRGzVtBYxyCPuM2bFb2npHVfBKmEzsFX8XHM\"]},\"src/dollar/interfaces/IMasterChefV2.sol\":{\"keccak256\":\"0x30da846fae2733b810669fcc7d7bbf333b026e8e95ea01db418934731db6e5cd\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://9acc8f73b062733fdf496268c2a037fc12072976131714cc047c59a4281bd600\",\"dweb:/ipfs/QmQpFeqdsacJpove13X6RjUZ1CSjfbM6xwWzcZdh8CvWJR\"]},\"src/dollar/interfaces/IMetaPool.sol\":{\"keccak256\":\"0x03b3904f30fabfeb0924fbef234e86cc6d9bda64ae0f43c657d11a900ff835d4\",\"license\":\"UNLICENSED\",\"urls\":[\"bzz-raw://f0761ccdf37f5b721c5444b6b51bfa7b0eaf7ce20b82093db820827a555e64d8\",\"dweb:/ipfs/QmUJrqcDqaF27yStTFmuUazr7B6BNVUHdeHw99RzuEFwVb\"]},\"src/dollar/interfaces/ITWAPOracle.sol\":{\"keccak256\":\"0x58ec4a8edc6cb4a02956237e2c7fdf46052dfae8845299455d2021e77558ee5b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://92bf0af2975e2621eac1bac704b906a9d7339b9ee39b4ec0a79e841f41e433a5\",\"dweb:/ipfs/QmTUjE4yxKNLfCdYfNx2FGtof5gbTdNrJAoTMWRjj77vpY\"]},\"src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol\":{\"keccak256\":\"0x92b30505af5da49463e7cd4a27cf6ee2914b701859516d280b62655a86c2a769\",\"license\":\"Apache-2.0\",\"urls\":[\"bzz-raw://93cae61a0fc3a8b1216d98703f27f808254787b18e64fac87ad5234caf4eac61\",\"dweb:/ipfs/QmTBWWiYtWefUqoSQaNbEDKSrLiFQVzXMCjiexYifCa1zN\"]},\"src/dollar/interfaces/IUbiquityFormulas.sol\":{\"keccak256\":\"0xb9ad275280d477ad29576ed4cdc638bb3e674a66c2a1d42bb936c261d07372b0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e6616f247a8d826723eb46953743c50d16974b4828350b0f80adcdac7947c32b\",\"dweb:/ipfs/QmeftEPcPYzjKRhZUUE3hGbHJc8szKUckjNxGyTysht7c3\"]},\"src/dollar/utils/SafeAddArray.sol\":{\"keccak256\":\"0x58caebada5dc3803b5bcc7222dde5450f091ccb8cbc7410e4ec14f81599c9c2e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9ab9f9f46e3d4e5f093bda0b756bd739f4b889cfb17665f60d89c82beb44ee3b\",\"dweb:/ipfs/Qmd44o7oiKvTx8xni4rhTnjJBgtum14BttC61G4T3W9P6r\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -523,10 +523,10 @@
         "license": "MIT"
       },
       "src/dollar/BondingShareV2.sol": {
-        "keccak256": "0x0b70072398cb3a2c7dd97b7870612ed9e81e81fe0df7a40ae9769b8d1d4f7218",
+        "keccak256": "0x523eda2ea658484ccdafa508e33289795ec2e60bccdb5e0a4dc641c929204625",
         "urls": [
-          "bzz-raw://b9c66f188ac3a3c89907fea77fad784fa88008118a278989c5606ec2683a4b70",
-          "dweb:/ipfs/QmWvEUnGszUNQ2W3p9N5FfhAwQnSkdTdgjUcHKX8ikvnhq"
+          "bzz-raw://002280d4091517454cd20384e0653e9c5bc90a49acab7b2db17a0ef470148dfd",
+          "dweb:/ipfs/QmXdPbK94EV2Si49RiX56mVu3o6gW2byS4kkFrFm89uaC3"
         ],
         "license": "MIT"
       },
@@ -539,90 +539,90 @@
         "license": "MIT"
       },
       "src/dollar/TWAPOracle.sol": {
-        "keccak256": "0xf005727ea42566c1ec77b796a4215599c6702bf66258d418c489eef28433aab6",
+        "keccak256": "0xa813e35d211728c8dd9123936b92bef225b805c1e661aac95248ce7e7ae5934a",
         "urls": [
-          "bzz-raw://8660e5e45d3d10e295d18d4c562d4f4322d8675ec55822c0051c906b8a85c92c",
-          "dweb:/ipfs/QmZh8WZwL5SXSMcTQsELWj5DgBazgXmJ2nfbDcQ2thdpfu"
+          "bzz-raw://4884d494190ffcc5bdbb4825dc5f2d0becaddc9a58b70e68a7a16e1896980430",
+          "dweb:/ipfs/QmY8Po7Je132vt5AzzFm8EygGUKVwawPwH8Ysn4oyKtZr9"
         ],
         "license": "Apache-2.0"
       },
       "src/dollar/UbiquityAlgorithmicDollarManager.sol": {
-        "keccak256": "0x0c49291bb47ca3f944dadba2541a775f6406c4aa42d71e78915049e23431c6bf",
+        "keccak256": "0x22697712d9d41011057b637f3723767c0b3da366171782f4de931de060d7edd1",
         "urls": [
-          "bzz-raw://ccf8f30b5d2f999a42d9fa52dd37a3a40e8e851f2a5c58052227df91d2174d08",
-          "dweb:/ipfs/QmUPktHubRZHU9qHKeHRgU8aNYsyk71FuWpGn1Z2HFULPQ"
+          "bzz-raw://8bf48d4b916ea851b53fd438a0a18e45e592576ad5467c0d827c6b382f2e7515",
+          "dweb:/ipfs/QmNPZkw9HsnxzzVtRQS6TYhi2KufJX7W6jJYBooyYt3gUs"
         ],
         "license": "MIT"
       },
       "src/dollar/interfaces/ICurveFactory.sol": {
-        "keccak256": "0xdae411db84171bc2d1deec3f5f8d141ca6517478268f11f134f5d20e86225558",
+        "keccak256": "0x8d57797f96d0ebc5fa2f46cd51a92a6ed1416178308edb1c1813d3d9dd3983ba",
         "urls": [
-          "bzz-raw://e34dace61c24f5d509352802dc1c3886fa1383b593da8c9109656aa02a687711",
-          "dweb:/ipfs/QmdddUgLSZ6vqyHVdsfLSugtSfynDYVNqT4CYfHtfuip5Y"
+          "bzz-raw://a0a46bc1aca5af8228127abebff081ce766cd6f2bc900fdaff5ee2a010d7566a",
+          "dweb:/ipfs/QmaXK1G6zq6XPqMTJC1mxibaeksxfffKwUGVrow2Xfm2fc"
         ],
         "license": "MIT"
       },
       "src/dollar/interfaces/IERC1155Ubiquity.sol": {
-        "keccak256": "0xc740e2bf49eb5b7e61d7c6757f0bc8e9d70178794dfc6266a3bf3e8df28395d4",
+        "keccak256": "0x75f4c8623df8d4efd034f53c803092f909fec7dac86253c677576de2c0ddfadf",
         "urls": [
-          "bzz-raw://33202134658ee49d0ffd395ece0f31f87ae68837d3eb9403aa1366edff36e5ef",
-          "dweb:/ipfs/QmUX4SK2eQG2Rm58vj382JD372HxTZ5P4cHHxUJWXhMogJ"
+          "bzz-raw://aeac1649dc46e15b27647b1404f7ed494c693a5170540660482906cb2404242b",
+          "dweb:/ipfs/QmVbx6gmT92Qa63JyYCoWhsA8XABBt8uGgBNmFdAnpKDJr"
         ],
         "license": "Apache-2.0"
       },
       "src/dollar/interfaces/IERC20Ubiquity.sol": {
-        "keccak256": "0x5a3241ad1bbb87bb41930a8981a0fcadf2c60c18dcaf893465a28e3f77569c41",
+        "keccak256": "0xef437eec5a0c55328ca3ac15db3ceabf0acf0f4287b9010a830dfcf950139ac0",
         "urls": [
-          "bzz-raw://1dc5290615ee5a71bc5467ba4d0975d11ecb7cae2b7d5bd79ee9fb8441ece78f",
-          "dweb:/ipfs/QmecPv3YLZzADcYNPeT82RTfQR1uETQcS6bMY5fJ2ux1ed"
+          "bzz-raw://12794771b87d2ec0e75125402643314216c4bd661227273decd38f69640c088a",
+          "dweb:/ipfs/QmRNcidFtRyRGzVtBYxyCPuM2bFb2npHVfBKmEzsFX8XHM"
         ],
         "license": "Apache-2.0"
       },
       "src/dollar/interfaces/IMasterChefV2.sol": {
-        "keccak256": "0x0a1a05d2fd7d8b3adb252a1a1aff5abbd203205092bce08eb1d68bf5adfe7709",
+        "keccak256": "0x30da846fae2733b810669fcc7d7bbf333b026e8e95ea01db418934731db6e5cd",
         "urls": [
-          "bzz-raw://2f2ce4a9c2be05c06bed14266873be56edb062c722fb7dc24fd15f4f53ad548a",
-          "dweb:/ipfs/QmUB9PWi1D7BvKm8oDUNocWNMtPDdETUkJvJcV3znMeNnn"
+          "bzz-raw://9acc8f73b062733fdf496268c2a037fc12072976131714cc047c59a4281bd600",
+          "dweb:/ipfs/QmQpFeqdsacJpove13X6RjUZ1CSjfbM6xwWzcZdh8CvWJR"
         ],
         "license": "UNLICENSED"
       },
       "src/dollar/interfaces/IMetaPool.sol": {
-        "keccak256": "0x4bebae6bf0c10d2cee9d444fb0a3d90384e987d4f23d579c80df363fd75ae2b0",
+        "keccak256": "0x03b3904f30fabfeb0924fbef234e86cc6d9bda64ae0f43c657d11a900ff835d4",
         "urls": [
-          "bzz-raw://f6d1bad5127d5f7722ca26447b30bef56a0196c07fd55737aaf84aa8e8dc480f",
-          "dweb:/ipfs/QmT4EvG6czqBfWkvuT7E11C1qqty796nFbDH25f5PQkeKb"
+          "bzz-raw://f0761ccdf37f5b721c5444b6b51bfa7b0eaf7ce20b82093db820827a555e64d8",
+          "dweb:/ipfs/QmUJrqcDqaF27yStTFmuUazr7B6BNVUHdeHw99RzuEFwVb"
         ],
         "license": "UNLICENSED"
       },
       "src/dollar/interfaces/ITWAPOracle.sol": {
-        "keccak256": "0x27a82b57efb754a82f8bf34d718013ee8eeebced4eec5d7a972af6670d2e17c7",
+        "keccak256": "0x58ec4a8edc6cb4a02956237e2c7fdf46052dfae8845299455d2021e77558ee5b",
         "urls": [
-          "bzz-raw://d43a835c251f646d9b7b5a9ad6374196767da82f8fedc49a4a26813e7f36ccf0",
-          "dweb:/ipfs/QmNiYz7RaHwDNFpsMgeu8yVzsBKkDqcVrZxQCf5fpyYYcm"
+          "bzz-raw://92bf0af2975e2621eac1bac704b906a9d7339b9ee39b4ec0a79e841f41e433a5",
+          "dweb:/ipfs/QmTUjE4yxKNLfCdYfNx2FGtof5gbTdNrJAoTMWRjj77vpY"
         ],
         "license": "MIT"
       },
       "src/dollar/interfaces/IUbiquityAlgorithmicDollar.sol": {
-        "keccak256": "0xb125bc04f4eeb88a29fc566b1d30b23f1d58a076c7c5c3eba4368636dff8b4ae",
+        "keccak256": "0x92b30505af5da49463e7cd4a27cf6ee2914b701859516d280b62655a86c2a769",
         "urls": [
-          "bzz-raw://5de51b2e2e75513662ec77dbc325e58d4a418dfd4b4bbe7620e507a63d43f6a3",
-          "dweb:/ipfs/QmRLAthPu7NGwJ4JQAN3TLGMhiBCqPRnedGvnAHyVZqmEF"
+          "bzz-raw://93cae61a0fc3a8b1216d98703f27f808254787b18e64fac87ad5234caf4eac61",
+          "dweb:/ipfs/QmTBWWiYtWefUqoSQaNbEDKSrLiFQVzXMCjiexYifCa1zN"
         ],
         "license": "Apache-2.0"
       },
       "src/dollar/interfaces/IUbiquityFormulas.sol": {
-        "keccak256": "0xedca2f7c5de52c894ce37bd212848fd2a69e03c0503f6297a7b4f5941489f973",
+        "keccak256": "0xb9ad275280d477ad29576ed4cdc638bb3e674a66c2a1d42bb936c261d07372b0",
         "urls": [
-          "bzz-raw://e8094fd6dedc4fbfddf689ddc531108bf270207cef8fbbff738fd72312e8048e",
-          "dweb:/ipfs/QmPFww8r2L7jNKc6HGYk1rMcwPJuVMPrDvFEL2qrwUNi1f"
+          "bzz-raw://e6616f247a8d826723eb46953743c50d16974b4828350b0f80adcdac7947c32b",
+          "dweb:/ipfs/QmeftEPcPYzjKRhZUUE3hGbHJc8szKUckjNxGyTysht7c3"
         ],
         "license": "MIT"
       },
       "src/dollar/utils/SafeAddArray.sol": {
-        "keccak256": "0x0a7d40e0e3ac2f18c3f8abbe8d2414f2a27f5138256e2a2df1f59e1c999bd9e9",
+        "keccak256": "0x58caebada5dc3803b5bcc7222dde5450f091ccb8cbc7410e4ec14f81599c9c2e",
         "urls": [
-          "bzz-raw://40cafe653e8278b32516df63aa818a074f2ad0eefbbb2db346697907d192a7a1",
-          "dweb:/ipfs/QmYW4Qk39ztc1vYTYwJJve2jdSMRFyw6Fx4RyCdfwKo7HU"
+          "bzz-raw://9ab9f9f46e3d4e5f093bda0b756bd739f4b889cfb17665f60d89c82beb44ee3b",
+          "dweb:/ipfs/Qmd44o7oiKvTx8xni4rhTnjJBgtum14BttC61G4T3W9P6r"
         ],
         "license": "MIT"
       }
@@ -631,19 +631,19 @@
   },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IMasterChefV2.sol",
-    "id": 46611,
+    "id": 45130,
     "exportedSymbols": {
       "AccessControl": [
         29368
       ],
       "Address": [
-        34985
+        33451
       ],
       "BondingShareV2": [
-        38008
+        36474
       ],
       "Context": [
-        35007
+        33473
       ],
       "ERC1155": [
         31107
@@ -655,7 +655,7 @@
         31387
       ],
       "ERC165": [
-        35206
+        33672
       ],
       "ERC20": [
         31989
@@ -664,7 +664,7 @@
         29441
       ],
       "ICurveFactory": [
-        46273
+        44739
       ],
       "IERC1155": [
         31229
@@ -676,10 +676,10 @@
         31270
       ],
       "IERC1155Ubiquity": [
-        46412
+        44878
       ],
       "IERC165": [
-        35218
+        33684
       ],
       "IERC20": [
         32067
@@ -691,28 +691,28 @@
         32840
       ],
       "IERC20Ubiquity": [
-        46469
+        44935
       ],
       "IMasterChefV2": [
-        46610
+        45129
       ],
       "IMetaPool": [
-        47184
+        45703
       ],
       "ITWAPOracle": [
-        47841
+        46436
       ],
       "IUbiquityAlgorithmicDollar": [
-        47881
+        46476
       ],
       "IUbiquityFormulas": [
-        48076
+        46671
       ],
       "MasterChefV2": [
-        43567
+        42033
       ],
       "Math": [
-        36083
+        34549
       ],
       "Pausable": [
         29830
@@ -721,79 +721,78 @@
         29884
       ],
       "SafeAddArray": [
-        50070
+        48390
       ],
       "SafeERC20": [
         33121
       ],
       "Strings": [
-        35182
+        33648
       ],
       "TWAPOracle": [
-        44744
+        43210
       ],
       "UbiquityAlgorithmicDollarManager": [
-        45665
+        44131
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "115:1404:78",
+    "src": "115:1404:72",
     "nodes": [
       {
-        "id": 46542,
+        "id": 45061,
         "nodeType": "PragmaDirective",
-        "src": "115:23:78",
+        "src": "115:23:72",
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".3"
+          ".16"
         ]
       },
       {
-        "id": 46543,
+        "id": 45062,
         "nodeType": "ImportDirective",
-        "src": "142:56:78",
+        "src": "142:56:72",
         "absolutePath": "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol",
         "file": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 46611,
+        "scope": 45130,
         "sourceUnit": 32068,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 46544,
+        "id": 45063,
         "nodeType": "ImportDirective",
-        "src": "202:29:78",
+        "src": "202:29:72",
         "absolutePath": "src/dollar/MasterChefV2.sol",
         "file": "../MasterChefV2.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 46611,
-        "sourceUnit": 43568,
+        "scope": 45130,
+        "sourceUnit": 42034,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 46610,
+        "id": 45129,
         "nodeType": "ContractDefinition",
-        "src": "235:1219:78",
+        "src": "235:1219:72",
         "nodes": [
           {
-            "id": 46549,
+            "id": 45068,
             "nodeType": "StructDefinition",
-            "src": "266:170:78",
+            "src": "266:170:72",
             "canonicalName": "IMasterChefV2.BondingShareInfo",
             "members": [
               {
                 "constant": false,
-                "id": 46546,
+                "id": 45065,
                 "mutability": "mutable",
                 "name": "amount",
-                "nameLocation": "309:6:78",
+                "nameLocation": "309:6:72",
                 "nodeType": "VariableDeclaration",
-                "scope": 46549,
-                "src": "301:14:78",
+                "scope": 45068,
+                "src": "301:14:72",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -801,10 +800,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 46545,
+                  "id": 45064,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "301:7:78",
+                  "src": "301:7:72",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -814,13 +813,13 @@
               },
               {
                 "constant": false,
-                "id": 46548,
+                "id": 45067,
                 "mutability": "mutable",
                 "name": "rewardDebt",
-                "nameLocation": "379:10:78",
+                "nameLocation": "379:10:72",
                 "nodeType": "VariableDeclaration",
-                "scope": 46549,
-                "src": "371:18:78",
+                "scope": 45068,
+                "src": "371:18:72",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -828,10 +827,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 46547,
+                  "id": 45066,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "371:7:78",
+                  "src": "371:7:72",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -841,25 +840,25 @@
               }
             ],
             "name": "BondingShareInfo",
-            "nameLocation": "273:16:78",
-            "scope": 46610,
+            "nameLocation": "273:16:72",
+            "scope": 45129,
             "visibility": "public"
           },
           {
-            "id": 46554,
+            "id": 45073,
             "nodeType": "StructDefinition",
-            "src": "444:200:78",
+            "src": "444:200:72",
             "canonicalName": "IMasterChefV2.PoolInfo",
             "members": [
               {
                 "constant": false,
-                "id": 46551,
+                "id": 45070,
                 "mutability": "mutable",
                 "name": "lastRewardBlock",
-                "nameLocation": "479:15:78",
+                "nameLocation": "479:15:72",
                 "nodeType": "VariableDeclaration",
-                "scope": 46554,
-                "src": "471:23:78",
+                "scope": 45073,
+                "src": "471:23:72",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -867,10 +866,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 46550,
+                  "id": 45069,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "471:7:78",
+                  "src": "471:7:72",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -880,13 +879,13 @@
               },
               {
                 "constant": false,
-                "id": 46553,
+                "id": 45072,
                 "mutability": "mutable",
                 "name": "accuGOVPerShare",
-                "nameLocation": "566:15:78",
+                "nameLocation": "566:15:72",
                 "nodeType": "VariableDeclaration",
-                "scope": 46554,
-                "src": "558:23:78",
+                "scope": 45073,
+                "src": "558:23:72",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -894,10 +893,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 46552,
+                  "id": 45071,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "558:7:78",
+                  "src": "558:7:72",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -907,32 +906,32 @@
               }
             ],
             "name": "PoolInfo",
-            "nameLocation": "451:8:78",
-            "scope": 46610,
+            "nameLocation": "451:8:72",
+            "scope": 45129,
             "visibility": "public"
           },
           {
-            "id": 46562,
+            "id": 45081,
             "nodeType": "EventDefinition",
-            "src": "652:76:78",
+            "src": "652:76:72",
             "anonymous": false,
             "eventSelector": "90890809c654f11d6e72a28fa60149770a0d11ec6c92319d6ceb2bb0a4ea1a15",
             "name": "Deposit",
-            "nameLocation": "658:7:78",
+            "nameLocation": "658:7:72",
             "parameters": {
-              "id": 46561,
+              "id": 45080,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46556,
+                  "id": 45075,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "user",
-                  "nameLocation": "682:4:78",
+                  "nameLocation": "682:4:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46562,
-                  "src": "666:20:78",
+                  "scope": 45081,
+                  "src": "666:20:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -940,10 +939,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46555,
+                    "id": 45074,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "666:7:78",
+                    "src": "666:7:72",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -954,14 +953,14 @@
                 },
                 {
                   "constant": false,
-                  "id": 46558,
+                  "id": 45077,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "696:6:78",
+                  "nameLocation": "696:6:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46562,
-                  "src": "688:14:78",
+                  "scope": 45081,
+                  "src": "688:14:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -969,10 +968,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46557,
+                    "id": 45076,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "688:7:78",
+                    "src": "688:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -982,14 +981,14 @@
                 },
                 {
                   "constant": false,
-                  "id": 46560,
+                  "id": 45079,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "bondingShareID",
-                  "nameLocation": "712:14:78",
+                  "nameLocation": "712:14:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46562,
-                  "src": "704:22:78",
+                  "scope": 45081,
+                  "src": "704:22:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -997,10 +996,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46559,
+                    "id": 45078,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "704:7:78",
+                    "src": "704:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1009,31 +1008,31 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "665:62:78"
+              "src": "665:62:72"
             }
           },
           {
-            "id": 46570,
+            "id": 45089,
             "nodeType": "EventDefinition",
-            "src": "734:93:78",
+            "src": "734:93:72",
             "anonymous": false,
             "eventSelector": "f279e6a1f5e320cca91135676d9cb6e44ca8a08c0b88342bcdb1144f6511b568",
             "name": "Withdraw",
-            "nameLocation": "740:8:78",
+            "nameLocation": "740:8:72",
             "parameters": {
-              "id": 46569,
+              "id": 45088,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46564,
+                  "id": 45083,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "user",
-                  "nameLocation": "775:4:78",
+                  "nameLocation": "775:4:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46570,
-                  "src": "759:20:78",
+                  "scope": 45089,
+                  "src": "759:20:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1041,10 +1040,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46563,
+                    "id": 45082,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "759:7:78",
+                    "src": "759:7:72",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1055,14 +1054,14 @@
                 },
                 {
                   "constant": false,
-                  "id": 46566,
+                  "id": 45085,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "789:6:78",
+                  "nameLocation": "789:6:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46570,
-                  "src": "781:14:78",
+                  "scope": 45089,
+                  "src": "781:14:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1070,10 +1069,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46565,
+                    "id": 45084,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "781:7:78",
+                    "src": "781:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1083,14 +1082,14 @@
                 },
                 {
                   "constant": false,
-                  "id": 46568,
+                  "id": 45087,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "bondingShareID",
-                  "nameLocation": "805:14:78",
+                  "nameLocation": "805:14:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46570,
-                  "src": "797:22:78",
+                  "scope": 45089,
+                  "src": "797:22:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1098,10 +1097,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46567,
+                    "id": 45086,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "797:7:78",
+                    "src": "797:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1110,32 +1109,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "748:78:78"
+              "src": "748:78:72"
             }
           },
           {
-            "id": 46579,
+            "id": 45098,
             "nodeType": "FunctionDefinition",
-            "src": "835:91:78",
+            "src": "835:91:72",
             "functionSelector": "0efe6a8b",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "deposit",
-            "nameLocation": "844:7:78",
+            "nameLocation": "844:7:72",
             "parameters": {
-              "id": 46577,
+              "id": 45096,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46572,
+                  "id": 45091,
                   "mutability": "mutable",
                   "name": "sender",
-                  "nameLocation": "860:6:78",
+                  "nameLocation": "860:6:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46579,
-                  "src": "852:14:78",
+                  "scope": 45098,
+                  "src": "852:14:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1143,10 +1142,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46571,
+                    "id": 45090,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "852:7:78",
+                    "src": "852:7:72",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1157,13 +1156,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46574,
+                  "id": 45093,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "876:6:78",
+                  "nameLocation": "876:6:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46579,
-                  "src": "868:14:78",
+                  "scope": 45098,
+                  "src": "868:14:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1171,10 +1170,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46573,
+                    "id": 45092,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "868:7:78",
+                    "src": "868:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1184,13 +1183,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46576,
+                  "id": 45095,
                   "mutability": "mutable",
                   "name": "bondingShareID",
-                  "nameLocation": "892:14:78",
+                  "nameLocation": "892:14:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46579,
-                  "src": "884:22:78",
+                  "scope": 45098,
+                  "src": "884:22:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1198,10 +1197,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46575,
+                    "id": 45094,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "884:7:78",
+                    "src": "884:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1210,42 +1209,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "851:56:78"
+              "src": "851:56:72"
             },
             "returnParameters": {
-              "id": 46578,
+              "id": 45097,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "925:0:78"
+              "src": "925:0:72"
             },
-            "scope": 46610,
+            "scope": 45129,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 46588,
+            "id": 45107,
             "nodeType": "FunctionDefinition",
-            "src": "978:92:78",
+            "src": "978:92:72",
             "functionSelector": "b5c5f672",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "withdraw",
-            "nameLocation": "987:8:78",
+            "nameLocation": "987:8:72",
             "parameters": {
-              "id": 46586,
+              "id": 45105,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46581,
+                  "id": 45100,
                   "mutability": "mutable",
                   "name": "sender",
-                  "nameLocation": "1004:6:78",
+                  "nameLocation": "1004:6:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46588,
-                  "src": "996:14:78",
+                  "scope": 45107,
+                  "src": "996:14:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1253,10 +1252,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46580,
+                    "id": 45099,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "996:7:78",
+                    "src": "996:7:72",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1267,13 +1266,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46583,
+                  "id": 45102,
                   "mutability": "mutable",
                   "name": "amount",
-                  "nameLocation": "1020:6:78",
+                  "nameLocation": "1020:6:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46588,
-                  "src": "1012:14:78",
+                  "scope": 45107,
+                  "src": "1012:14:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1281,10 +1280,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46582,
+                    "id": 45101,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1012:7:78",
+                    "src": "1012:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1294,13 +1293,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 46585,
+                  "id": 45104,
                   "mutability": "mutable",
                   "name": "bondingShareID",
-                  "nameLocation": "1036:14:78",
+                  "nameLocation": "1036:14:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46588,
-                  "src": "1028:22:78",
+                  "scope": 45107,
+                  "src": "1028:22:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1308,10 +1307,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46584,
+                    "id": 45103,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1028:7:78",
+                    "src": "1028:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1320,42 +1319,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "995:56:78"
+              "src": "995:56:72"
             },
             "returnParameters": {
-              "id": 46587,
+              "id": 45106,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1069:0:78"
+              "src": "1069:0:72"
             },
-            "scope": 46610,
+            "scope": 45129,
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 46597,
+            "id": 45116,
             "nodeType": "FunctionDefinition",
-            "src": "1113:111:78",
+            "src": "1113:111:72",
             "functionSelector": "7b80a5c0",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getBondingShareInfo",
-            "nameLocation": "1122:19:78",
+            "nameLocation": "1122:19:72",
             "parameters": {
-              "id": 46591,
+              "id": 45110,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46590,
+                  "id": 45109,
                   "mutability": "mutable",
                   "name": "_id",
-                  "nameLocation": "1150:3:78",
+                  "nameLocation": "1150:3:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46597,
-                  "src": "1142:11:78",
+                  "scope": 45116,
+                  "src": "1142:11:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1363,10 +1362,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46589,
+                    "id": 45108,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1142:7:78",
+                    "src": "1142:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1375,21 +1374,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1141:13:78"
+              "src": "1141:13:72"
             },
             "returnParameters": {
-              "id": 46596,
+              "id": 45115,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46595,
+                  "id": 45114,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46597,
-                  "src": "1205:17:78",
+                  "scope": 45116,
+                  "src": "1205:17:72",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
@@ -1398,26 +1397,26 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 46592,
+                      "id": 45111,
                       "name": "uint256",
                       "nodeType": "ElementaryTypeName",
-                      "src": "1205:7:78",
+                      "src": "1205:7:72",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
                         "typeString": "uint256"
                       }
                     },
-                    "id": 46594,
+                    "id": 45113,
                     "length": {
                       "hexValue": "32",
-                      "id": 46593,
+                      "id": 45112,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
                       "kind": "number",
                       "lValueRequested": false,
                       "nodeType": "Literal",
-                      "src": "1213:1:78",
+                      "src": "1213:1:72",
                       "typeDescriptions": {
                         "typeIdentifier": "t_rational_2_by_1",
                         "typeString": "int_const 2"
@@ -1425,7 +1424,7 @@
                       "value": "2"
                     },
                     "nodeType": "ArrayTypeName",
-                    "src": "1205:10:78",
+                    "src": "1205:10:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_array$_t_uint256_$2_storage_ptr",
                       "typeString": "uint256[2]"
@@ -1434,42 +1433,42 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1204:19:78"
+              "src": "1204:19:72"
             },
-            "scope": 46610,
+            "scope": 45129,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 46602,
+            "id": 45121,
             "nodeType": "FunctionDefinition",
-            "src": "1263:55:78",
+            "src": "1263:55:72",
             "functionSelector": "3a98ef39",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "totalShares",
-            "nameLocation": "1272:11:78",
+            "nameLocation": "1272:11:72",
             "parameters": {
-              "id": 46598,
+              "id": 45117,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1283:2:78"
+              "src": "1283:2:72"
             },
             "returnParameters": {
-              "id": 46601,
+              "id": 45120,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46600,
+                  "id": 45119,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46602,
-                  "src": "1309:7:78",
+                  "scope": 45121,
+                  "src": "1309:7:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1477,10 +1476,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46599,
+                    "id": 45118,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1309:7:78",
+                    "src": "1309:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1489,36 +1488,36 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1308:9:78"
+              "src": "1308:9:72"
             },
-            "scope": 46610,
+            "scope": 45129,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
           },
           {
-            "id": 46609,
+            "id": 45128,
             "nodeType": "FunctionDefinition",
-            "src": "1383:68:78",
+            "src": "1383:68:72",
             "functionSelector": "f22b1ded",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "pendingUGOV",
-            "nameLocation": "1392:11:78",
+            "nameLocation": "1392:11:72",
             "parameters": {
-              "id": 46605,
+              "id": 45124,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46604,
+                  "id": 45123,
                   "mutability": "mutable",
                   "name": "_user",
-                  "nameLocation": "1412:5:78",
+                  "nameLocation": "1412:5:72",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46609,
-                  "src": "1404:13:78",
+                  "scope": 45128,
+                  "src": "1404:13:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1526,10 +1525,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 46603,
+                    "id": 45122,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1404:7:78",
+                    "src": "1404:7:72",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1539,21 +1538,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1403:15:78"
+              "src": "1403:15:72"
             },
             "returnParameters": {
-              "id": 46608,
+              "id": 45127,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 46607,
+                  "id": 45126,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 46609,
-                  "src": "1442:7:78",
+                  "scope": 45128,
+                  "src": "1442:7:72",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1561,10 +1560,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 46606,
+                    "id": 45125,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1442:7:78",
+                    "src": "1442:7:72",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -1573,9 +1572,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "1441:9:78"
+              "src": "1441:9:72"
             },
-            "scope": 46610,
+            "scope": 45129,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -1588,15 +1587,15 @@
         "contractKind": "interface",
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          46610
+          45129
         ],
         "name": "IMasterChefV2",
-        "nameLocation": "245:13:78",
-        "scope": 46611,
+        "nameLocation": "245:13:72",
+        "scope": 45130,
         "usedErrors": []
       }
     ],
     "license": "UNLICENSED"
   },
-  "id": 78
+  "id": 72
 }

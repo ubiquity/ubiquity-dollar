@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import {ERC1155Ubiquity} from "../../src/dollar/ERC1155Ubiquity.sol";
 import {UbiquityAlgorithmicDollarManager} from

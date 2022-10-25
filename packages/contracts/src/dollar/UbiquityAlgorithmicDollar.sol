@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "./interfaces/IIncentive.sol";
 import "./ERC20Ubiquity.sol";

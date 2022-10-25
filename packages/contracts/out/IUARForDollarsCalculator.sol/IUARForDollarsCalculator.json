@@ -38,7 +38,7 @@
   "methodIdentifiers": {
     "getUARAmount(uint256,uint256)": "3667d859"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"dollarsToBurn\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"blockHeightDebt\",\"type\":\"uint256\"}],\"name\":\"getUARAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"A mechanism for calculating uAR received for a dollar amount burnt\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IUARForDollarsCalculator.sol\":\"IUARForDollarsCalculator\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IUARForDollarsCalculator.sol\":{\"keccak256\":\"0x009d3114013c79d2652f20b7ae1b041336b7edc2701225852cc7380a82bc014e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://46de60d8a85c20fd496b45292c46508ad88e2761bf6c7854999a0262a35bdcfd\",\"dweb:/ipfs/QmUbXpsjRgJKKgsaRDJxqbXC7xH6xSXb427ritASWJsLqa\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.16+commit.07a7930e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"dollarsToBurn\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"blockHeightDebt\",\"type\":\"uint256\"}],\"name\":\"getUARAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"A mechanism for calculating uAR received for a dollar amount burnt\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/dollar/interfaces/IUARForDollarsCalculator.sol\":\"IUARForDollarsCalculator\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":20000},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":@uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts/\",\":@uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts/\",\":Uniswap/=lib/Uniswap/\",\":abdk-libraries-solidity/=lib/abdk-libraries-solidity/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":solidity-linked-list/=lib/solidity-linked-list/\"]},\"sources\":{\"src/dollar/interfaces/IUARForDollarsCalculator.sol\":{\"keccak256\":\"0x495d4becf2618750774d852cc6f6d3a51e54b9b20f30ccdae09823f64fb0b8f4\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://7d9bb350dc891d07de0fe4a5e584dd29a670e6db974eecfaba151a82c1631085\",\"dweb:/ipfs/QmTSnps68xkDJ6UYKSPQvvmV3YTk6bWuyPPjveUtU3u5S5\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.16+commit.07a7930e"
@@ -107,10 +107,10 @@
     },
     "sources": {
       "src/dollar/interfaces/IUARForDollarsCalculator.sol": {
-        "keccak256": "0x009d3114013c79d2652f20b7ae1b041336b7edc2701225852cc7380a82bc014e",
+        "keccak256": "0x495d4becf2618750774d852cc6f6d3a51e54b9b20f30ccdae09823f64fb0b8f4",
         "urls": [
-          "bzz-raw://46de60d8a85c20fd496b45292c46508ad88e2761bf6c7854999a0262a35bdcfd",
-          "dweb:/ipfs/QmUbXpsjRgJKKgsaRDJxqbXC7xH6xSXb427ritASWJsLqa"
+          "bzz-raw://7d9bb350dc891d07de0fe4a5e584dd29a670e6db974eecfaba151a82c1631085",
+          "dweb:/ipfs/QmTSnps68xkDJ6UYKSPQvvmV3YTk6bWuyPPjveUtU3u5S5"
         ],
         "license": "MIT"
       }
@@ -119,54 +119,53 @@
   },
   "ast": {
     "absolutePath": "src/dollar/interfaces/IUARForDollarsCalculator.sol",
-    "id": 47855,
+    "id": 46450,
     "exportedSymbols": {
       "IUARForDollarsCalculator": [
-        47854
+        46449
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "33:282:85",
+    "src": "33:282:81",
     "nodes": [
       {
-        "id": 47843,
+        "id": 46438,
         "nodeType": "PragmaDirective",
-        "src": "33:23:85",
+        "src": "33:23:81",
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".3"
+          ".16"
         ]
       },
       {
-        "id": 47854,
+        "id": 46449,
         "nodeType": "ContractDefinition",
-        "src": "139:174:85",
+        "src": "139:174:81",
         "nodes": [
           {
-            "id": 47853,
+            "id": 46448,
             "nodeType": "FunctionDefinition",
-            "src": "181:129:85",
+            "src": "181:129:81",
             "functionSelector": "3667d859",
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "getUARAmount",
-            "nameLocation": "190:12:85",
+            "nameLocation": "190:12:81",
             "parameters": {
-              "id": 47849,
+              "id": 46444,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 47846,
+                  "id": 46441,
                   "mutability": "mutable",
                   "name": "dollarsToBurn",
-                  "nameLocation": "211:13:85",
+                  "nameLocation": "211:13:81",
                   "nodeType": "VariableDeclaration",
-                  "scope": 47853,
-                  "src": "203:21:85",
+                  "scope": 46448,
+                  "src": "203:21:81",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -174,10 +173,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 47845,
+                    "id": 46440,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "203:7:85",
+                    "src": "203:7:81",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -187,13 +186,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 47848,
+                  "id": 46443,
                   "mutability": "mutable",
                   "name": "blockHeightDebt",
-                  "nameLocation": "234:15:85",
+                  "nameLocation": "234:15:81",
                   "nodeType": "VariableDeclaration",
-                  "scope": 47853,
-                  "src": "226:23:85",
+                  "scope": 46448,
+                  "src": "226:23:81",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -201,10 +200,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 47847,
+                    "id": 46442,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "226:7:85",
+                    "src": "226:7:81",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -213,21 +212,21 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "202:48:85"
+              "src": "202:48:81"
             },
             "returnParameters": {
-              "id": 47852,
+              "id": 46447,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 47851,
+                  "id": 46446,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 47853,
-                  "src": "301:7:85",
+                  "scope": 46448,
+                  "src": "301:7:81",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -235,10 +234,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 47850,
+                    "id": 46445,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "301:7:85",
+                    "src": "301:7:81",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -247,9 +246,9 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "300:9:85"
+              "src": "300:9:81"
             },
-            "scope": 47854,
+            "scope": 46449,
             "stateMutability": "view",
             "virtual": false,
             "visibility": "external"
@@ -261,22 +260,22 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "documentation": {
-          "id": 47844,
+          "id": 46439,
           "nodeType": "StructuredDocumentation",
-          "src": "60:79:85",
+          "src": "60:79:81",
           "text": "@title A mechanism for calculating uAR received for a dollar amount burnt"
         },
         "fullyImplemented": false,
         "linearizedBaseContracts": [
-          47854
+          46449
         ],
         "name": "IUARForDollarsCalculator",
-        "nameLocation": "149:24:85",
-        "scope": 47855,
+        "nameLocation": "149:24:81",
+        "scope": 46450,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 85
+  "id": 81
 }
