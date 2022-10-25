@@ -5,6 +5,6 @@
   "exclude_medium": false,
   "exclude_high": false,
   "disable_color": false,
-  "filter_paths": "lib|test|src/dollars/mocks",
+  "filter_paths": "lib|test|src/dollar/mocks",
   "legacy_ast": false
 }
