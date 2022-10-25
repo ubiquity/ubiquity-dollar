@@ -65,6 +65,15 @@
     },
     "version": 1
   },
+  "userdoc": {
+    "version": 1,
+    "kind": "user",
+    "notice": "Smart contract library of mathematical functions operating with IEEE 754 quadruple-precision binary floating-point numbers (quadruple precision numbers).  As long as quadruple precision numbers are 16-bytes long, they are represented by bytes16 type."
+  },
+  "devdoc": {
+    "version": 1,
+    "kind": "dev"
+  },
   "ast": {
     "absolutePath": "lib/abdk-libraries-solidity/ABDKMathQuad.sol",
     "id": 5894,
