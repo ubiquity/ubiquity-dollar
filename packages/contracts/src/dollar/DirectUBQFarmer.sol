@@ -20,12 +20,12 @@ import "./interfaces/IUbiquityAlgorithmicDollarManager.sol";
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    address public Token2;//USDT decimal 6
-    address public Token1;//USDC decimal 6
-    address public Token0;//DAI
-    address public Ubiquity3PoolLP;
-    address public UbiquityDollar;
-    address public DepositZapUbiquityDollar;
+    address public token2;//USDT decimal 6
+    address public token1;//USDC decimal 6
+    address public token0;//DAI
+    address public ubiquity3PoolLP;
+    address public ubiquityDollar;
+    address public depositZapUbiquityDollar;
 
     IUbiquityAlgorithmicDollarManager public manager;
 
@@ -47,14 +47,14 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     constructor(address _manager, address base3Pool, address depositZap) {
         manager = IUbiquityAlgorithmicDollarManager(_manager); // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
-        Ubiquity3PoolLP = manager.stableSwapMetaPoolAddress(); // 0x20955CB69Ae1515962177D164dfC9522feef567E
-        UbiquityDollar = manager.dollarTokenAddress(); // 0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6
-        DepositZapUbiquityDollar = depositZap; // 0xA79828DF1850E8a3A3064576f380D90aECDD3359;
+        ubiquity3PoolLP = manager.stableSwapMetaPoolAddress(); // 0x20955CB69Ae1515962177D164dfC9522feef567E
+        ubiquityDollar = manager.dollarTokenAddress(); // 0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6
+        depositZapUbiquityDollar = depositZap; // 0xA79828DF1850E8a3A3064576f380D90aECDD3359;
         //Ideally, DepositZap contract in CurveFi should have interface to fetch 3 base token, but they do not.
         //Hence fetching 3 token from 3basePool contract, which is 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7
-        Token0 = IStableSwap3Pool(base3Pool).coins(0); //DAI: 0x6B175474E89094C44Da98b954EedeAC495271d0F
-        Token1 = IStableSwap3Pool(base3Pool).coins(1); //USDC: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
-        Token2 = IStableSwap3Pool(base3Pool).coins(2); //USDT: 0xdAC17F958D2ee523a2206206994597C13D831ec7
+        token0 = IStableSwap3Pool(base3Pool).coins(0); //DAI: 0x6B175474E89094C44Da98b954EedeAC495271d0F
+        token1 = IStableSwap3Pool(base3Pool).coins(1); //USDC: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+        token2 = IStableSwap3Pool(base3Pool).coins(2); //USDT: 0xdAC17F958D2ee523a2206206994597C13D831ec7
     }
 
     //TODO create updateConfig method
@@ -102,28 +102,28 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //require(IERC20(token).transferFrom(msg.sender, address(this), amount), "sender cannot transfer specified fund");
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
 
-        address Staking = manager.bondingContractAddress();
-        address BondingShareV2 = manager.bondingShareAddress();
+        address staking = manager.bondingContractAddress();
+        address stakingShare = manager.bondingShareAddress();
 
         uint256 lpAmount;//UAD3CRVf
         //[UAD, DAI, USDC, USDT]
         uint256[4] memory tokenAmounts = [
-            token == UbiquityDollar ? amount : 0,
-            token == Token0 ? amount : 0,
-            token == Token1 ? amount : 0,
-            token == Token2 ? amount : 0
+            token == ubiquityDollar ? amount : 0,
+            token == token0 ? amount : 0,
+            token == token1 ? amount : 0,
+            token == token2 ? amount : 0
         ];
 
         //STEP1: add DAI, USDC, USDT or uAD into metapool liquidity and get UAD3CRVf
-        IERC20(token).safeIncreaseAllowance(DepositZapUbiquityDollar, amount);
-        lpAmount = IDepositZap(DepositZapUbiquityDollar).add_liquidity(Ubiquity3PoolLP, tokenAmounts, 0);
+        IERC20(token).safeIncreaseAllowance(depositZapUbiquityDollar, amount);
+        lpAmount = IDepositZap(depositZapUbiquityDollar).add_liquidity(ubiquity3PoolLP, tokenAmounts, 0);
 
         //STEP2: stake UAD3CRVf to BondingV2
         //TODO approve token to be transferred to Bonding V2 contract
-        IERC20(Ubiquity3PoolLP).safeIncreaseAllowance(Staking, lpAmount);
-        bondingShareId = IBondingV2(Staking).deposit(lpAmount, durationWeeks);
+        IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
+        bondingShareId = IBondingV2(staking).deposit(lpAmount, durationWeeks);
 
-        IBondingShareV2(BondingShareV2).safeTransferFrom(address(this), msg.sender, bondingShareId, 1, '0x');
+        IBondingShareV2(stakingShare).safeTransferFrom(address(this), msg.sender, bondingShareId, 1, '0x');
 
         emit Deposit(msg.sender, token, amount, durationWeeks, bondingShareId);
 
@@ -144,34 +144,34 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
         // DAI / USDC / USDT / UAD
         require(isMetaPoolCoin(token), "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar");
-        address Staking = manager.bondingContractAddress();
-        address StakingShare = manager.bondingShareAddress();
+        address staking = manager.bondingContractAddress();
+        address stakingShare = manager.bondingShareAddress();
 
-        uint256[] memory stakingShareIds = IBondingShareV2(StakingShare).holderTokens(msg.sender);
+        uint256[] memory stakingShareIds = IBondingShareV2(stakingShare).holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
         //bond.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "sender is not true bond owner");
 
         //transfer bondingShare NFT token from msg.sender to this address
-        IBondingShareV2(StakingShare).safeTransferFrom(msg.sender, address(this), stakingShareId, 1, '0x');
+        IBondingShareV2(stakingShare).safeTransferFrom(msg.sender, address(this), stakingShareId, 1, '0x');
 
         // Get Bond
-        IBondingShareV2.Bond memory bond = IBondingShareV2(StakingShare).getBond(stakingShareId);
+        IBondingShareV2.Bond memory bond = IBondingShareV2(stakingShare).getBond(stakingShareId);
 
         // STEP 1 : Withdraw Ubiquity Bonding Shares to get back uAD3CRV-f LPs
         //address bonding = ubiquityManager.bondingContractAddress();
-        IBondingShareV2(StakingShare).setApprovalForAll(Staking, true);
-        IBondingV2(Staking).removeLiquidity(bond.lpAmount, stakingShareId);
-        IBondingShareV2(StakingShare).setApprovalForAll(Staking, false);
+        IBondingShareV2(stakingShare).setApprovalForAll(staking, true);
+        IBondingV2(staking).removeLiquidity(bond.lpAmount, stakingShareId);
+        IBondingShareV2(stakingShare).setApprovalForAll(staking, false);
 
-        uint256 lpTokenAmount = IERC20(Ubiquity3PoolLP).balanceOf(address(this));
+        uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));
         uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress()).balanceOf(address(this));
 
 
         // STEP2 : Withdraw  3Crv LPs from meta pool to get back UAD, DAI, USDC or USDT
-        uint128 tokenIndex = token == UbiquityDollar ? 0 : (token == Token0 ? 1 : (token == Token1 ? 2 : 3));
-        IERC20(Ubiquity3PoolLP).approve(DepositZapUbiquityDollar, lpTokenAmount);
-        tokenAmount = IDepositZap(DepositZapUbiquityDollar).remove_liquidity_one_coin(Ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0); //[UAD, DAI, USDC, USDT]
+        uint128 tokenIndex = token == ubiquityDollar ? 0 : (token == token0 ? 1 : (token == token1 ? 2 : 3));
+        IERC20(ubiquity3PoolLP).approve(depositZapUbiquityDollar, lpTokenAmount);
+        tokenAmount = IDepositZap(depositZapUbiquityDollar).remove_liquidity_one_coin(ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0); //[UAD, DAI, USDC, USDT]
 
         IERC20(token).safeTransfer(msg.sender, tokenAmount);
         IERC20(manager.governanceTokenAddress()).safeTransfer(msg.sender, governanceTokenAmount);
@@ -191,7 +191,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     function isMetaPoolCoin(address token) public view returns (bool) {
-        return (token == Token2 || token == Token1 || token == Token0 || token == UbiquityDollar);
+        return (token == token2 || token == token1 || token == token0 || token == ubiquityDollar);
     }
 
 }
