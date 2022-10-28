@@ -90,7 +90,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address token,
         uint256 amount,
         uint256 durationWeeks
-    ) external nonReentrant returns (uint256 bondingShareId) {
+    ) external nonReentrant returns (uint256 stakingShareId) {
 
 
         // DAI / USDC / USDT / UAD
@@ -121,11 +121,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //STEP2: stake UAD3CRVf to BondingV2
         //TODO approve token to be transferred to Bonding V2 contract
         IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
-        bondingShareId = IBondingV2(staking).deposit(lpAmount, durationWeeks);
+        stakingShareId = IBondingV2(staking).deposit(lpAmount, durationWeeks);
 
-        IBondingShareV2(stakingShare).safeTransferFrom(address(this), msg.sender, bondingShareId, 1, '0x');
+        IBondingShareV2(stakingShare).safeTransferFrom(address(this), msg.sender, stakingShareId, 1, '0x');
 
-        emit Deposit(msg.sender, token, amount, durationWeeks, bondingShareId);
+        emit Deposit(msg.sender, token, amount, durationWeeks, stakingShareId);
 
     }
 
@@ -134,7 +134,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @notice Ubiquity BondingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / uAD)
      * @notice STEP 1 : Ubiquity BondingShare  => uAD3CRV-f
      * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / uAD)
-     * @param bondingShareId Bonding Share Id to withdraw
+     * @param stakingShareId Bonding Share Id to withdraw
      * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or uAD
      */
     function withdraw(
