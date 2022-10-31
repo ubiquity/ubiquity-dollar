@@ -1,0 +1,15 @@
+[submodule "packages/contracts/lib/Uniswap/v2-periphery"]
+	path = packages/contracts/lib/Uniswap/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery.git
+[submodule "packages/contracts/lib/Uniswap/v2-core"]
+	path = packages/contracts/lib/Uniswap/v2-core
+	url = https://github.com/Uniswap/v2-core.git
+[submodule "packages/contracts/lib/solidity-linked-list"]
+	path = packages/contracts/lib/solidity-linked-list
+	url = https://github.com/vittominacori/solidity-linked-list
+[submodule "packages/contracts/lib/openzeppelin-contracts"]
+	path = packages/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "packages/contracts/lib/forge-std"]
+	path = packages/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std

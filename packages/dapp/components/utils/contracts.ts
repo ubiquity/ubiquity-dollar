@@ -9,29 +9,31 @@ import USDCTokenABI from "../config/abis/USDCToken.json";
 import DAITokenABI from "../config/abis/DAIToken.json";
 import USDTTokenABI from "../config/abis/USDTToken.json";
 
-import SimpleBond from "@ubiquity/ubiquistick/artifacts/contracts/SimpleBond.sol/SimpleBond.json";
-import UbiquityStick from "@ubiquity/ubiquistick/artifacts/contracts/TheUbiquityStick.sol/TheUbiquityStick.json";
-import UbiquityStickSale from "@ubiquity/ubiquistick/artifacts/contracts/TheUbiquityStickSale.sol/TheUbiquityStickSale.json";
-import ERC1155Ubiquity from "@ubiquity/dollar/artifacts/contracts/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
-import IJar from "@ubiquity/dollar/artifacts/contracts/interfaces/IJar.sol/IJar.json";
-import DebtCouponManager from "@ubiquity/dollar/artifacts/contracts/DebtCouponManager.sol/DebtCouponManager.json";
-import ICurveFactory from "@ubiquity/dollar/artifacts/contracts/interfaces/ICurveFactory.sol/ICurveFactory.json";
-import YieldProxy from "@ubiquity/dollar/artifacts/contracts/YieldProxy.sol/YieldProxy.json";
-import BondingShareV2 from "@ubiquity/dollar/artifacts/contracts/BondingShareV2.sol/BondingShareV2.json";
-import BondingV2 from "@ubiquity/dollar/artifacts/contracts/BondingV2.sol/BondingV2.json";
-import DebtCoupon from "@ubiquity/dollar/artifacts/contracts/DebtCoupon.sol/DebtCoupon.json";
-import DollarMintingCalculator from "@ubiquity/dollar/artifacts/contracts/DollarMintingCalculator.sol/DollarMintingCalculator.json";
-import ICouponsForDollarsCalculator from "@ubiquity/dollar/artifacts/contracts/interfaces/ICouponsForDollarsCalculator.sol/ICouponsForDollarsCalculator.json";
-import IMetaPool from "@ubiquity/dollar/artifacts/contracts/interfaces/IMetaPool.sol/IMetaPool.json";
-import IUARForDollarsCalculator from "@ubiquity/dollar/artifacts/contracts/interfaces/IUARForDollarsCalculator.sol/IUARForDollarsCalculator.json";
-import MasterChefv2 from "@ubiquity/dollar/artifacts/contracts/MasterChefV2.sol/MasterChefV2.json";
-import SushiSwapPool from "@ubiquity/dollar/artifacts/contracts/SushiSwapPool.sol/SushiSwapPool.json";
-import TWAPOracle from "@ubiquity/dollar/artifacts/contracts/TWAPOracle.sol/TWAPOracle.json";
-import UbiquityAlgorithmicDollarManager from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollarManager.sol/UbiquityAlgorithmicDollarManager.json";
-import UbiquityAlgorithmicDollar from "@ubiquity/dollar/artifacts/contracts/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json";
-import UbiquityCredit from "@ubiquity/dollar/artifacts/contracts/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
-import UbiquityFormulas from "@ubiquity/dollar/artifacts/contracts/UbiquityFormulas.sol/UbiquityFormulas.json";
-import UBQ from "@ubiquity/dollar/artifacts/contracts/UbiquityGovernance.sol/UbiquityGovernance.json";
+import YieldProxyABI from "../config/abis/YieldProxy.json";
+
+import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
+import UbiquityStick from "@ubiquity/contracts/out/TheUbiquityStick.sol/TheUbiquityStick.json";
+import UbiquityStickSale from "@ubiquity/contracts/out/TheUbiquityStickSale.sol/TheUbiquityStickSale.json";
+import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
+import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
+import DebtCouponManager from "@ubiquity/contracts/out/DebtCouponManager.sol/DebtCouponManager.json";
+import ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
+import BondingShareV2 from "@ubiquity/contracts/out/BondingShareV2.sol/BondingShareV2.json";
+import BondingV2 from "@ubiquity/contracts/out/BondingV2.sol/BondingV2.json";
+import DebtCoupon from "@ubiquity/contracts/out/DebtCoupon.sol/DebtCoupon.json";
+import DollarMintingCalculator from "@ubiquity/contracts/out/DollarMintingCalculator.sol/DollarMintingCalculator.json";
+import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICouponsForDollarsCalculator.sol/ICouponsForDollarsCalculator.json";
+import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
+import IUARForDollarsCalculator from "@ubiquity/contracts/out/IUARForDollarsCalculator.sol/IUARForDollarsCalculator.json";
+import MasterChefv2 from "@ubiquity/contracts/out/MasterChefV2.sol/MasterChefV2.json";
+import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
+import TWAPOracle from "@ubiquity/contracts/out/TWAPOracle.sol/TWAPOracle.json";
+import UbiquityAlgorithmicDollarManager from "@ubiquity/contracts/out/UbiquityAlgorithmicDollarManager.sol/UbiquityAlgorithmicDollarManager.json";
+import UbiquityAlgorithmicDollar from "@ubiquity/contracts/out/UbiquityAlgorithmicDollar.sol/UbiquityAlgorithmicDollar.json";
+import UbiquityCredit from "@ubiquity/contracts/out/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
+import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
+import UBQ from "@ubiquity/contracts/out/UbiquityGovernance.sol/UbiquityGovernance.json";
+
 
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);
@@ -86,7 +88,7 @@ export const getCurveFactoryContract = (address: string, provider: ethers.provid
 };
 
 export const getYieldProxyContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(YieldProxy.abi, address, provider);
+  return getContract(YieldProxyABI, address, provider);
 };
 
 export const getBondingShareV2Contract = (address: string, provider: ethers.providers.Provider) => {

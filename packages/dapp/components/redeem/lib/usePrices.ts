@@ -12,7 +12,8 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
 
   async function refreshPrices() {
     if (managedContracts && deployedContracts) {
-      const newTwapPrice = await managedContracts.dollarTwapOracle.consult(await deployedContracts.manager.dollarTokenAddress());
+      const dollarTokenAddress = await deployedContracts.manager.dollarTokenAddress();
+      const newTwapPrice = await managedContracts.dollarTwapOracle.consult(dollarTokenAddress);
       const newSpotPrice = await managedContracts.dollarMetapool["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
       setTwapPrice(newTwapPrice);
       setSpotPrice(newSpotPrice);
