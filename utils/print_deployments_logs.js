@@ -1,4 +1,4 @@
-export default async ({ github, context, fs }) => {
+module.exports = async ({ github, context, fs }) => {
   const pullRequestInfo = fs.readFileSync("./pr_number").toString("utf-8");
   console.log({ pullRequestInfo });
   const infoSubstring = pullRequestInfo.split(",");
