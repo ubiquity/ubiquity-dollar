@@ -11,9 +11,9 @@ import {
   getSushiSwapPoolContract,
   getTWAPOracleContract,
   getUbiquityAlgorithmicDollarContract,
-  getUbiquityAutoRedeemContract,
+  getUbiquityCreditContract,
   getUbiquityFormulasContract,
-  getUbiquityGovernanceContract,
+  getUbqContract,
   getUniswapV2FactoryContract,
 } from "@/components/utils/contracts";
 import { Contract } from "ethers";
@@ -85,8 +85,8 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
     dollarMetapool: getIMetaPoolContract(dollar3poolMarket, provider),
     dollarTwapOracle: getTWAPOracleContract(twapOracle, provider),
     dollarMintingCalculator: getDollarMintingCalculatorContract(dollarMintCalc, provider),
-    creditToken: getUbiquityAutoRedeemContract(creditToken, provider),
-    governanceToken: getUbiquityGovernanceContract(governanceToken, provider),
+    creditToken: getUbiquityCreditContract(creditToken, provider),
+    governanceToken: getUbqContract(governanceToken, provider),
     _3crvToken: getERC20Contract(_3crvToken, provider),
     stakingToken: getBondingShareV2Contract(stakingToken, provider),
     creditNft: getDebtCouponContract(creditNft, provider),
