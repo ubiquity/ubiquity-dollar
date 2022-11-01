@@ -1,4 +1,4 @@
-# !/bin/bash
+#!/bin/bash
 
 # rust setup
 echo "Download and Install rustup"

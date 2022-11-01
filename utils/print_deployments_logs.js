@@ -11,7 +11,7 @@ export default async ({ github, context, fs }) => {
   const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
 
   if (uniqueDeployUrl) {
-    body = `Deployed: ${uniqueDeployUrl}`;
+    body = `[Deployment: ${new Date()}](${uniqueDeployUrl})`;
   }
 
   if (eventName == "pull_request") {
