@@ -44,7 +44,7 @@ jobs:
         run: exit 0; yarn workspace @ubiquity/contracts forge install
 
       - name: Build
-        run: exit 0; yarn build:all
+        run: yarn build:all
 
       - name: Test
         run: exit 0; yarn test:all
