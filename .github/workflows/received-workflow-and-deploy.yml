@@ -36,7 +36,7 @@ jobs:
       - name: Print Logs
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # github-token: ${{ secrets.GITHUB_TOKEN }}
           application-id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APPLICATION_ID }}
           application-private-key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
           script: |
