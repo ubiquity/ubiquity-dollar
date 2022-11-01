@@ -1,4 +1,4 @@
-name: Receive workflow and Deploy
+name: Receive Workflow and Deploy
 
 on:
   workflow_run:
