@@ -407,16 +407,6 @@ aside {
   color: #bfbfbf;
 }
 
-#MintUcr,
-#RedeemUcr {
-  opacity: 0.25;
-  cursor: not-allowed;
-}
-#MintUcr > div,
-#RedeemUcr > div {
-  pointer-events: none;
-}
-
 #CreditOperations[data-twap^="0."] #MintUcr,
 #CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
