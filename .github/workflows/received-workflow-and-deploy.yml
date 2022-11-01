@@ -37,6 +37,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          application-id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APPLICATION_ID }}
+          application-private-key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
           script: |
             const fs = require("fs");
             const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
