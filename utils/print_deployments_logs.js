@@ -7,8 +7,12 @@ export default async ({ github, context, fs }) => {
   const commitSha = infoSubstring[2].split("=")[1];
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
+  let body = deploymentsLog;
   const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
-  const body = `Deployed: ${uniqueDeployUrl}`;
+
+  if (uniqueDeployUrl) {
+    body = `Deployed: ${uniqueDeployUrl}`;
+  }
 
   if (eventName == "pull_request") {
     console.log("Creating a comment for the pull request");
