@@ -1,6 +1,5 @@
 module.exports = async ({ github, context, fs, workflow_run_id, workspace }) => {
   console.log("download_artifact.....");
-  console.log({ github, context });
   const artifacts = await github.actions.listWorkflowRunArtifacts({
     owner: context.repo.owner,
     repo: context.repo.repo,
