@@ -16,6 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
       - name: "Download artifact"
         uses: actions/github-script@v3.1.0
         with:
