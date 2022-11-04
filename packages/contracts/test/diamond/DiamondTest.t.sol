@@ -32,7 +32,7 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
     function testAddManagerFacetFunctions() public {
         // check if functions added to diamond
         bytes4[] memory fromLoupeFacet = ILoupe.facetFunctionSelectors(address(managerFacet));
-        bytes4[] memory selectorsInManagerFacet = new bytes4[](5);
+        bytes4[] memory selectorsInManagerFacet = new bytes4[](6);
         selectorsInManagerFacet[0] = getSelector(
             "setTwapOracleAddress(address)"
         );
@@ -48,6 +48,9 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
         selectorsInManagerFacet[4] = getSelector(
             "getExcessDollarsDistributor(address)"
         );
+        selectorsInManagerFacet[5] = getSelector(
+            "initialize(address)"
+        );
         assertTrue(sameMembers(fromLoupeFacet, selectorsInManagerFacet));
     }
 
@@ -56,7 +59,7 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
         ManagerFacet(address(diamond)).getExcessDollarsDistributor(contract1);
     }
 
-    function testCanCallManagerFacetAdminFunction_OnlyWith_Admin() public prankAs(address(this)) {
+    function testCanCallManagerFacetAdminFunction_OnlyWith_Admin() public prankAs(owner) {
          // try to call function with access control on new Facet 
         ManagerFacet(address(diamond)).setuARTokenAddress(contract1);
     }

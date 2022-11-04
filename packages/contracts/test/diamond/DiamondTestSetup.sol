@@ -87,7 +87,7 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         managerFacet = new ManagerFacet(owner);
 
         // bytes4[] memory fromGenSelectors  = generateSelectors("ManagerFacet"); // all length is 51
-        bytes4[] memory selectorsInManagerFacet = new bytes4[](5);
+        bytes4[] memory selectorsInManagerFacet = new bytes4[](6);
         selectorsInManagerFacet[0] = getSelector(
             "setTwapOracleAddress(address)"
         );
@@ -102,6 +102,9 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         );
         selectorsInManagerFacet[4] = getSelector(
             "getExcessDollarsDistributor(address)"
+        );
+        selectorsInManagerFacet[5] = getSelector(
+            "initialize(address)"
         );
 
         bytes4[] memory fromGenSelectors = selectorsInManagerFacet;
@@ -118,6 +121,8 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         vm.startPrank(owner);
         ICut.diamondCut(facetCut, address(0x0), "");
 		vm.stopPrank();
+
+        ManagerFacet(address(diamond)).initialize(owner);
     }
 }
 
