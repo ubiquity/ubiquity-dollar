@@ -24,6 +24,11 @@ import theUbiquityStickSaleFunc, { optionDefinitions as theUbiquityStickSaleOpti
 import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR"
 import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP"
 import simpleBondFunc, { optionDefinitions as simpleBondOptions } from "./ubiquistick/SimpleBond"
+import diamondCutFacetFunc, { optionDefinitions as diamondCutFacetOptions } from "./diamond/DiamondCutFacet"
+import diamondFunc, { optionDefinitions as diamondOptions } from "./diamond/Diamond"
+import diamondInitFunc, { optionDefinitions as diamondInitOptions } from "./diamond/DiamondInit"
+import diamondLoupeFacetFunc, { optionDefinitions as diamondLoupeFacetOptions } from "./diamond/DiamondLoupeFacet"
+import ownershipFacetFunc, { optionDefinitions as ownershipFacetOptions } from "./diamond/OwnershipFacet"
 
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: OptionDefinition[] }> = {
@@ -32,7 +37,8 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         options: bondingOptions
     },
     "UbiquityAlgorithmicDollarManager": {
-        handler: uAdManagerFunc, options: uadManagerOptions
+        handler: uAdManagerFunc,
+        options: uadManagerOptions
     },
     "BondingShare": {
         handler: bondingShareFunc,
@@ -117,5 +123,25 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "SimpleBond": {
         handler: simpleBondFunc,
         options: simpleBondOptions
-    }
+    },
+    "diamondCutFacet": {
+        handler: diamondCutFacetFunc,
+        options: diamondCutFacetOptions
+    },
+    "diamond": {
+        handler: diamondFunc,
+        options: diamondOptions
+    },
+    "diamondInit": {
+        handler: diamondInitFunc,
+        options: diamondInitOptions
+    },
+    "diamondLoupeFacet": {
+        handler: diamondLoupeFacetFunc,
+        options: diamondLoupeFacetOptions
+    },
+    "ownershipFacet": {
+        handler: ownershipFacetFunc,
+        options: ownershipFacetOptions
+    },
 }
