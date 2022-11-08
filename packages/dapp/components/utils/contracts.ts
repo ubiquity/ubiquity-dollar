@@ -63,9 +63,9 @@ export const getERC1155UbiquityContract = (address: string, provider: ethers.pro
   return getContract(ERC1155Ubiquity.abi, address, provider);
 };
 
-// export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => {
-//   return getContract(SimpleBond.abi, address, provider);
-// };
+export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(SimpleBond.abi, address, provider);
+};
 
 export const getUbiquitystickContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquityStick.abi, address, provider);
