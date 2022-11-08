@@ -5,6 +5,6 @@
   "exclude_medium": false,
   "exclude_high": false,
   "disable_color": false,
-  "filter_paths": "lib|test|src/dollar/mocks|src/dollar/ubiquistick",
+  "filter_paths": "lib|test|src/dollar/mocks|src/ubiquistick",
   "legacy_ast": false
 }

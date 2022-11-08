@@ -254,12 +254,11 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         debtCoupon.burnCoupons(msg.sender, amount, id);
 
         // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. debt holder
-        UbiquityAutoRedeem autoRedeemToken =
-            UbiquityAutoRedeem(manager.autoRedeemTokenAddress());
-        autoRedeemToken.mint(address(this), amount);
-        autoRedeemToken.transfer(msg.sender, amount);
+        address autoRedeemTokenAddress = manager.autoRedeemTokenAddress();
+        UbiquityAutoRedeem(autoRedeemTokenAddress).mint(address(this), amount);
+        IERC20Ubiquity(autoRedeemTokenAddress).safeTransfer(msg.sender, amount);
 
-        return autoRedeemToken.balanceOf(msg.sender);
+        return UbiquityAutoRedeem(autoRedeemTokenAddress).balanceOf(msg.sender);
     }
 
     /// @dev Exchange auto redeem pool token for uAD tokens.
@@ -281,13 +280,12 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
             "User doesn't have enough auto redeem pool tokens."
         );
 
-        UbiquityAlgorithmicDollar uAD =
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress());
-        uint256 maxRedeemableUAR = uAD.balanceOf(address(this));
+        address uAD_addr = manager.dollarTokenAddress();
+        uint256 maxRedeemableUAR = IERC20Ubiquity(uAD_addr).balanceOf(address(this));
 
         if (maxRedeemableUAR <= 0) {
             mintClaimableDollars();
-            maxRedeemableUAR = uAD.balanceOf(address(this));
+            maxRedeemableUAR = IERC20Ubiquity(uAD_addr).balanceOf(address(this));
         }
 
         uint256 uarToRedeem = amount;
@@ -295,7 +293,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
             uarToRedeem = maxRedeemableUAR;
         }
         autoRedeemToken.burnFrom(msg.sender, uarToRedeem);
-        uAD.transfer(msg.sender, uarToRedeem);
+        IERC20Ubiquity(uAD_addr).safeTransfer(msg.sender, uarToRedeem);
 
         return amount - uarToRedeem;
     }
@@ -345,7 +343,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
 
         // debtCouponManager must be an operator to transfer on behalf of msg.sender
         debtCoupon.burnCoupons(msg.sender, couponsToRedeem, id);
-        uAD.transfer(msg.sender, couponsToRedeem);
+        IERC20Ubiquity(address(uAD)).safeTransfer(msg.sender, couponsToRedeem);
 
         return amount - (couponsToRedeem);
     }
@@ -382,7 +380,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            uAD.transfer(
+            IERC20Ubiquity(address(uAD)).safeTransfer(
                 manager.getExcessDollarsDistributor(address(this)),
                 excessDollars
             );
