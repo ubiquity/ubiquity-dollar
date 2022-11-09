@@ -6,8 +6,14 @@ import { execute, DeploymentResult } from "../shared";
 
 export const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult | undefined, stderr: string }> => {
     let flattenConstructorArgs = ``;
-    for (const param of args.constructorArguments) {
-        flattenConstructorArgs += `${param} `;
+    let prepareCmd: string;
+    if (args.constructorArguments.length !== 0) {
+        for (const param of args.constructorArguments) {
+            flattenConstructorArgs += `${param} `;
+        }
+        prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance}`;
+    } else {
+        prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --private-key ${args.privateKey} ${args.contractInstance}`;
     }
 
     const chainId = Networks[args.network] ?? undefined;
@@ -15,7 +21,6 @@ export const create = async (args: ForgeArguments): Promise<{ result: Deployment
         throw new Error(`Unsupported network: ${args.network} Please configure it out first`);
     }
 
-    const prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance}`;
     let executeCmd: string;
     if (args.etherscanApiKey) {
         executeCmd = `${prepareCmd} --etherscan-api-key ${args.etherscanApiKey} --verify`
