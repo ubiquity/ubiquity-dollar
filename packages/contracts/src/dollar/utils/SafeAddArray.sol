@@ -7,30 +7,6 @@ pragma solidity 0.8.16;
  *
  */
 library SafeAddArray {
-    /**
-     * @dev Returns the addition of two unsigned integers, reverting on
-     * overflow.
-     *
-     */
-    function add(bytes32[] storage array, bytes32 value) internal {
-        for (uint256 i; i < array.length; i++) {
-            if (array[i] == value) {
-                return;
-            }
-        }
-        array.push(value);
-    }
-
-    function add(string[] storage array, string memory value) internal {
-        bytes32 hashValue = keccak256(bytes(value));
-        for (uint256 i; i < array.length; i++) {
-            if (keccak256(bytes(array[i])) == hashValue) {
-                return;
-            }
-        }
-        array.push(value);
-    }
-
     function add(uint256[] storage array, uint256 value) internal {
         for (uint256 i; i < array.length; i++) {
             if (array[i] == value) {

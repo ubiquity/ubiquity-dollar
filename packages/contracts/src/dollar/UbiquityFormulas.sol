@@ -2,8 +2,9 @@
 pragma solidity 0.8.16;
 
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import {IUbiquityFormulas} from "./interfaces/IUbiquityFormulas.sol";
 
-contract UbiquityFormulas {
+contract UbiquityFormulas is IUbiquityFormulas {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
