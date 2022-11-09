@@ -23,7 +23,7 @@ const func = async (params: DeployFuncParam) => {
         throw new Error(`Unsupported network: ${args.network} Please configure it out first`);
     }
     // If testenv is true, it means that the ownership is transferred in the deployment step
-    // Must be careful when you deploy contracts to the mainnets.
+    // Must be careful when you deploy contracts to the mainnet(s).
     const testenv = args.testenv ?? true;
     const uAR_deployments = await deployments(chainId.toString(), "UAR");
 

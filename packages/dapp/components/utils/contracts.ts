@@ -25,7 +25,7 @@ import DollarMintingCalculator from "@ubiquity/contracts/out/DollarMintingCalcul
 import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICouponsForDollarsCalculator.sol/ICouponsForDollarsCalculator.json";
 import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import IUARForDollarsCalculator from "@ubiquity/contracts/out/IUARForDollarsCalculator.sol/IUARForDollarsCalculator.json";
-import MasterChefv2 from "@ubiquity/contracts/out/MasterChefV2.sol/MasterChefV2.json";
+import MasterChefV2 from "@ubiquity/contracts/out/MasterChefV2.sol/MasterChefV2.json";
 import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import TWAPOracle from "@ubiquity/contracts/out/TWAPOracle.sol/TWAPOracle.json";
 import UbiquityAlgorithmicDollarManager from "@ubiquity/contracts/out/UbiquityAlgorithmicDollarManager.sol/UbiquityAlgorithmicDollarManager.json";
@@ -67,7 +67,7 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
   return getContract(SimpleBond.abi, address, provider);
 };
 
-export const getUbiquitystickContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquityStick.abi, address, provider);
 };
 
@@ -123,8 +123,8 @@ export const getIMetaPoolContract = (address: string, provider: ethers.providers
   return getContract(IMetaPool.abi, address, provider);
 };
 
-export const getMasterChefv2Contract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(MasterChefv2.abi, address, provider);
+export const getMasterChefV2Contract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(MasterChefV2.abi, address, provider);
 };
 
 export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) => {

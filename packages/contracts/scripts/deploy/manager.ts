@@ -94,7 +94,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         handler: ubiquityFormulaFunc,
         options: ubiquityFormulaOptions
     },
-    "YielProxy": {
+    "YieldProxy": {
         handler: yieldProxyFunc,
         options: yieldProxyOptions
     },

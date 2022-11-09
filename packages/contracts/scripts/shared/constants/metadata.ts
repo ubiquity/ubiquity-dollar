@@ -14,7 +14,7 @@ export const goldData = {
     "animation_url": "https://ipfs.io/ipfs/bafybeidwnet3lhus52e37tkfccjmtvrv5rrtxaanjjzc5q46kkdpr6ciqi"
 }
 
-export const invisData = {
+export const invisibleData = {
     "name": "The UbiquiStick™ - Invisible Edition",
     "description": "Introducing The UbiquiStick™ from Ubiquity DAO. Congratulations, this is a one-of-one. This allows you to enter the Ubiquity DAO bonds in beta.",
     "type": "invisible",

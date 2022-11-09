@@ -22,10 +22,10 @@ const main = async () => {
     }
 
     const deployHandler = DEPLOY_FUNCS[name].handler;
-    const cmdline_parse_options = DEPLOY_FUNCS[name].options;
+    const commandLineParseOptions = DEPLOY_FUNCS[name].options;
     let args;
     try {
-        args = CommandLineArgs(cmdline_parse_options);
+        args = CommandLineArgs(commandLineParseOptions);
     } catch (error: any) {
         console.error(`Argument parse failed!, error: ${error}`)
         return;

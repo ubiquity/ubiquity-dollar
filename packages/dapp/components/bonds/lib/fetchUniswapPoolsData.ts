@@ -50,11 +50,11 @@ async function fetchUniswapPoolsData(pools: UniswapDataRequest[], provider: NonN
     };
   };
 
-  const unipoolsData = (await Promise.all(pools.map(({ address, version }) => getUniPoolFullData(address, version === "v2")))).reduce((acc, unipoolData) => {
-    return { ...acc, [unipoolData.poolAddress]: unipoolData };
+  const uniswapPoolsData = (await Promise.all(pools.map(({ address, version }) => getUniPoolFullData(address, version === "v2")))).reduce((acc, uniswapPoolData) => {
+    return { ...acc, [uniswapPoolData.poolAddress]: uniswapPoolData };
   }, {});
 
-  return unipoolsData;
+  return uniswapPoolsData;
 }
 
 export default fetchUniswapPoolsData;
