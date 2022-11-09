@@ -6,6 +6,14 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
+## Contributing
+
+- We welcome everybody to participate in improving the codebase. 
+
+- We offer incentives for contributors to solve issues. 
+
+- Please learn how to contribute via our bounty program [here](https://github.com/ubiquity/ubiquity-dollar/wiki/Bounty-Rules/).
+
 ## Yarn Workspaces
 
 The repo has been built as a [yarn workspace](https://yarnpkg.com/features/workspaces) monorepo.
