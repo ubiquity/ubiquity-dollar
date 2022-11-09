@@ -24,11 +24,10 @@
     "**/*.log",
     "**/*.svg",
     "**/*.lock",
-    "**/node_modules/**",
-    "**/packages/contracts/**"
+    "**/packages/contracts/**",
+    "**/node_modules/**"
   ],
   "words": [
-    "solhint",
     "Arrakis",
     "Chainlink",
     "DOLA",
@@ -42,9 +41,10 @@
     "stablecoins",
     "twap",
     "typechain",
-    "ubiquitydao",
     "UbiquiStick",
     "UbiquiSticks",
+    "ubiquitydao",
+    "solhint",
     "bytecode",
     "Bytecode",
     "testenv",
