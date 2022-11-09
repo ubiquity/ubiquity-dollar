@@ -44,7 +44,7 @@ export const create = async (args: ForgeArguments): Promise<{ result: Deployment
         const regex = /{(?:[^{}]*|(R))*}/g;
         const found = stdout.match(regex);
         if (found && JSON.parse(found[0])?.deployedTo) {
-            const { abi } = await import(`../out/${args.name}.sol/${args.name}.json`)
+            const { abi } = await import(`../../out/${args.name}.sol/${args.name}.json`)
             const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
             result = { deployedTo, deployer, transactionHash };
             await exportDeployment(args.name, chainId.toString(), args.network, abi, deployedTo, deployer, transactionHash);
