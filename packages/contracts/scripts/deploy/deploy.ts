@@ -11,7 +11,7 @@ const main = async () => {
         throw new Error("You MUST put the script name in command arguments at least")
     }
 
-    const envPath = path.join(__dirname, "../.env");
+    const envPath = path.join(__dirname, "../../.env");
     if (!fs.existsSync(envPath)) {
         throw new Error("Env file not found")
     }
