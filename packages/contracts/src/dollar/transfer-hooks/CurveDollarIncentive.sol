@@ -153,11 +153,9 @@ contract CurveDollarIncentive is IIncentive {
             return 0;
         }
 
-        uint256 res = _one.sub(curPrice.fromUInt()).mul(
-            (amount.fromUInt().div(_one))
-        ).toUInt();
+        bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
-        return res;
+        return res.div(_one).toUInt();
     }
 
     function _updateOracle() internal {
