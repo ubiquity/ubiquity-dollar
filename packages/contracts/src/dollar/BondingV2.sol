@@ -20,10 +20,9 @@ import "./utils/CollectableDust.sol";
 contract BondingV2 is CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
-    bytes public data = "";
     UbiquityAlgorithmicDollarManager public manager;
     uint256 public constant ONE = uint256(1 ether); // 3Crv has 18 decimals
-    uint256 public bondingDiscountMultiplier = uint256(1000000 gwei); // 0.001
+    uint256 public bondingDiscountMultiplier = uint256(1e15); // 0.001
     uint256 public blockCountInAWeek = 45361;
     uint256 public accLpRewardPerShare = 0;
 
