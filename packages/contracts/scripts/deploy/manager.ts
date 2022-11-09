@@ -124,23 +124,23 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         handler: simpleBondFunc,
         options: simpleBondOptions
     },
-    "diamondCutFacet": {
+    "DiamondCutFacet": {
         handler: diamondCutFacetFunc,
         options: diamondCutFacetOptions
     },
-    "diamond": {
+    "Diamond": {
         handler: diamondFunc,
         options: diamondOptions
     },
-    "diamondInit": {
+    "DiamondInit": {
         handler: diamondInitFunc,
         options: diamondInitOptions
     },
-    "diamondLoupeFacet": {
+    "DiamondLoupeFacet": {
         handler: diamondLoupeFacetFunc,
         options: diamondLoupeFacetOptions
     },
-    "ownershipFacet": {
+    "OwnershipFacet": {
         handler: ownershipFacetFunc,
         options: ownershipFacetOptions
     },
