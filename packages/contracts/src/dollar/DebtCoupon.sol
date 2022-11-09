@@ -4,11 +4,12 @@ pragma solidity 0.8.16;
 import "./ERC1155Ubiquity.sol";
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
+import {IDebtCoupon} from "./interfaces/IDebtCoupon.sol";
 
 /// @title A coupon redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
-contract DebtCoupon is ERC1155Ubiquity {
+contract DebtCoupon is ERC1155Ubiquity, IDebtCoupon {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     //not public as if called externally can give inaccurate value. see method

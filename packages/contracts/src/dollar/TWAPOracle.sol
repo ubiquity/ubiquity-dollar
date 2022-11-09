@@ -2,13 +2,14 @@
 pragma solidity 0.8.16;
 
 import "./interfaces/IMetaPool.sol";
+import {ITWAPOracle} from "./interfaces/ITWAPOracle.sol";
 
-contract TWAPOracle {
+contract TWAPOracle is ITWAPOracle {
     address public immutable pool;
     address public immutable token0;
     address public immutable token1;
-    uint256 public price0Average;
-    uint256 public price1Average;
+    uint256 public uADPrice;
+    uint256 public curve3CRVAverage;
     uint256 public pricesBlockTimestampLast;
     uint256[2] public priceCumulativeLast;
 
@@ -34,8 +35,8 @@ contract TWAPOracle {
         priceCumulativeLast = IMetaPool(_pool).get_price_cumulative_last();
         pricesBlockTimestampLast = IMetaPool(_pool).block_timestamp_last();
 
-        price0Average = 1 ether;
-        price1Average = 1 ether;
+        uADPrice = 1 ether;
+        curve3CRVAverage = 1 ether;
     }
 
     // calculate average price
@@ -52,9 +53,9 @@ contract TWAPOracle {
             );
 
             // price to exchange amounIn uAD to 3CRV based on TWAP
-            price0Average = IMetaPool(pool).get_dy(0, 1, 1 ether, twapBalances);
+            uADPrice = IMetaPool(pool).get_dy(0, 1, 1 ether, twapBalances);
             // price to exchange amounIn 3CRV to uAD  based on TWAP
-            price1Average = IMetaPool(pool).get_dy(1, 0, 1 ether, twapBalances);
+            curve3CRVAverage = IMetaPool(pool).get_dy(1, 0, 1 ether, twapBalances);
             // we update the priceCumulative
             priceCumulativeLast = priceCumulative;
             pricesBlockTimestampLast = blockTimestamp;
@@ -66,11 +67,11 @@ contract TWAPOracle {
     function consult(address token) external view returns (uint256 amountOut) {
         if (token == token0) {
             // price to exchange 1 uAD to 3CRV based on TWAP
-            amountOut = price0Average;
+            amountOut = uADPrice;
         } else {
             require(token == token1, "TWAPOracle: INVALID_TOKEN");
             // price to exchange 1 3CRV to uAD  based on TWAP
-            amountOut = price1Average;
+            amountOut = curve3CRVAverage;
         }
     }
 
