@@ -41,7 +41,7 @@ contract CouponsForDollarsCalculator is ICouponsForDollarsCalculator {
         );
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));
-        bytes16 res = one.div(oneMinusRAllSquared);
-        return res.mul(dollarsToBurn.fromUInt()).toUInt();
+        bytes16 res = one.mul(dollarsToBurn.fromUInt());
+        return res.div(oneMinusRAllSquared).toUInt();
     }
 }

@@ -281,7 +281,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         );
 
         address uAD_addr = manager.dollarTokenAddress();
-        uint256 maxRedeemableUAR = IERC20Ubiquity(uAD_addr).balanceOf(address(this));
+        uint256 maxRedeemableUAR =
+            IERC20Ubiquity(uAD_addr).balanceOf(address(this));
 
         if (maxRedeemableUAR <= 0) {
             mintClaimableDollars();

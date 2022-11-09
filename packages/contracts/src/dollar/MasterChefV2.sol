@@ -193,9 +193,8 @@ contract MasterChefV2 is ReentrancyGuard {
 
         if (block.number > pool.lastRewardBlock && _totalShares != 0) {
             uint256 multiplier = _getMultiplier();
-            uint256 uGOVReward = (multiplier * uGOVPerBlock) / 1e18;
             accuGOVPerShare =
-                accuGOVPerShare + ((uGOVReward * 1e12) / _totalShares);
+                accuGOVPerShare + (multiplier * uGOVPerBlock / _totalShares / 1e6);
         }
         return (user.amount * accuGOVPerShare) / 1e12 - user.rewardDebt;
     }
@@ -278,7 +277,7 @@ contract MasterChefV2 is ReentrancyGuard {
             manager.treasuryAddress(), uGOVReward / uGOVDivider
         );
         pool.accuGOVPerShare =
-            pool.accuGOVPerShare + ((uGOVReward * 1e12) / _totalShares);
+            pool.accuGOVPerShare + (multiplier * uGOVPerBlock / _totalShares / 1e6);
         pool.lastRewardBlock = block.number;
     }
 
