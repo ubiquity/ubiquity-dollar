@@ -29,7 +29,7 @@ import diamondFunc, { optionDefinitions as diamondOptions } from "./diamond/Diam
 import diamondInitFunc, { optionDefinitions as diamondInitOptions } from "./diamond/DiamondInit"
 import diamondLoupeFacetFunc, { optionDefinitions as diamondLoupeFacetOptions } from "./diamond/DiamondLoupeFacet"
 import ownershipFacetFunc, { optionDefinitions as ownershipFacetOptions } from "./diamond/OwnershipFacet"
-
+import managerFacetFunc, { optionDefinitions as managerFacetOptions } from "./diamond/ManagerFacet"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: OptionDefinition[] }> = {
     "Bonding": {
@@ -143,5 +143,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
     "OwnershipFacet": {
         handler: ownershipFacetFunc,
         options: ownershipFacetOptions
+    },
+    "ManagerFacet": {
+        handler: managerFacetFunc,
+        options: managerFacetOptions
     },
 }

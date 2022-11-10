@@ -86,7 +86,7 @@ async function deployDiamond() {
         return;
     }
 
-    let provider = ethers.getDefaultProvider(args.network, { etherscan: env.etherscanApiKey });
+    let provider = ethers.getDefaultProvider(args.network);
     let wallet = new ethers.Wallet(env.privateKey, provider);
 
     const diamondCutFacetContract = "src/diamond/facets/DiamondCutFacet.sol:DiamondCutFacet";
