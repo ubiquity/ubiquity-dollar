@@ -97,7 +97,7 @@ async function deployDiamond() {
 
     const { stderr: diamondCutFacetError, result: diamondCutFacetResult } = await create({ ...env, name: "DiamondCutFacet", network: args.network, contractInstance: diamondCutFacetContract, constructorArguments: [] });
     if (!diamondCutFacetError && diamondCutFacetResult != undefined) {
-        const { stderr: diamondError, result: diamondResult } = await create({ ...env, name: "Diamond", network: args.network, contractInstance: diamondContract, constructorArguments: [env.owner, diamondCutFacetResult.deployedTo] });
+        const { stderr: diamondError, result: diamondResult } = await create({ ...env, name: "Diamond", network: args.network, contractInstance: diamondContract, constructorArguments: [wallet.address, diamondCutFacetResult.deployedTo] });
         if (!diamondError && diamondResult != undefined) {
             const { stderr: diamondInitError, result: diamondInitResult } = await create({ ...env, name: "DiamondInit", network: args.network, contractInstance: diamondInitContract, constructorArguments: [] });
             if (!diamondInitError && diamondInitResult != undefined) {

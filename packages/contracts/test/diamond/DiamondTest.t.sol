@@ -33,24 +33,12 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
         // check if functions added to diamond
         bytes4[] memory fromLoupeFacet = ILoupe.facetFunctionSelectors(address(managerFacet));
         bytes4[] memory selectorsInManagerFacet = new bytes4[](6);
-        selectorsInManagerFacet[0] = getSelector(
-            "setTwapOracleAddress(address)"
-        );
-        selectorsInManagerFacet[1] = getSelector(
-            "setuARTokenAddress(address)"
-        );
-        selectorsInManagerFacet[2] = getSelector(
-            "setDebtCouponAddress(address)"
-        );
-        selectorsInManagerFacet[3] = getSelector(
-            "setIncentiveToUAD(address)"
-        );
-        selectorsInManagerFacet[4] = getSelector(
-            "getExcessDollarsDistributor(address)"
-        );
-        selectorsInManagerFacet[5] = getSelector(
-            "initialize(address)"
-        );
+        selectorsInManagerFacet[0] = managerFacet.setTwapOracleAddress.selector;
+        selectorsInManagerFacet[1] = managerFacet.setuARTokenAddress.selector;
+        selectorsInManagerFacet[2] = managerFacet.setDebtCouponAddress.selector;
+        selectorsInManagerFacet[3] = managerFacet.setIncentiveToUAD.selector;
+        selectorsInManagerFacet[4] = managerFacet.getExcessDollarsDistributor.selector;
+        selectorsInManagerFacet[5] = managerFacet.initialize.selector;
         assertTrue(sameMembers(fromLoupeFacet, selectorsInManagerFacet));
     }
 
@@ -69,9 +57,7 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
 
         // get supportsInterface selector
         bytes4[] memory functionSelectors =  new bytes4[](1);
-        bytes4 selectorSupportsInterface = getSelector(
-            "supportsInterface(bytes4)"
-        );
+        bytes4 selectorSupportsInterface = managerFacet.supportsInterface.selector;
         functionSelectors[0] = selectorSupportsInterface;
 
         // struct to replace function

@@ -45,12 +45,6 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
 		return newAddress_;
 	}
 
-	function getSelector(
-		string memory _func
-	) internal pure returns (bytes4) {
-		return bytes4(keccak256(bytes(_func)));
-	}
-
 	// return array of function selectors for given facet name
     function generateSelectors(
 		string memory _facetName
