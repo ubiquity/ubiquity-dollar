@@ -50,7 +50,7 @@ const Inventory = () => {
 
   function showIfBalanceExists(key: keyof Balances | keyof typeof namedContracts, name: keyof typeof tokenSvg, id: string) {
     const usdcFix = function () {
-      if (key == "usdc") return 6;
+      if (key == "usdc" || key == "usdt") return 6;
       else return 18;
     };
 
