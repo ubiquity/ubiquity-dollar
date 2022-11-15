@@ -43,7 +43,7 @@ contract BondingV2 is CollectableDust, Pausable {
     event PriceReset(
         address _tokenWithdrawn,
         uint256 _amountWithdrawn,
-        uint256 _amountTransferred
+        uint256 _amountTransfered
     );
 
     event Deposit(
@@ -59,7 +59,7 @@ contract BondingV2 is CollectableDust, Pausable {
         uint256 indexed _id,
         uint256 _lpAmount,
         uint256 _lpAmountTransferred,
-        uint256 _lpRewards,
+        uint256 _lprewards,
         uint256 _bondingShareAmount
     );
 
