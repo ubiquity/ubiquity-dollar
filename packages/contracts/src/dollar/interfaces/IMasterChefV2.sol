@@ -29,7 +29,7 @@ interface IMasterChefV2 {
     function withdraw(address sender, uint256 amount, uint256 bondingShareID)
         external;
 
-    // Info about a bondinh share
+    // Info about a bonding share
     function getBondingShareInfo(uint256 _id)
         external
         view
