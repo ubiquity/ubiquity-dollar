@@ -2,6 +2,9 @@
 pragma solidity ^0.8.0;
 
 import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
+import { IDiamondLoupe } from "../interfaces/IDiamondLoupe.sol";
+import { IERC165 } from "../interfaces/IERC165.sol";
+import { IERC173 } from "../interfaces/IERC173.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard
@@ -61,6 +64,33 @@ library LibDiamond {
     }
 
     event DiamondCut(IDiamondCut.FacetCut[] _diamondCut, address _init, bytes _calldata);
+
+    function addDiamondFunctions(
+        address _diamondCutFacet,
+        address _diamondLoupeFacet,
+        address _ownershipFacet
+    ) internal {
+        IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](3);
+        bytes4[] memory functionSelectors = new bytes4[](1);
+        functionSelectors[0] = IDiamondCut.diamondCut.selector;
+        cut[0] = IDiamondCut.FacetCut({facetAddress: _diamondCutFacet, action: IDiamondCut.FacetCutAction.Add, functionSelectors: functionSelectors});
+        functionSelectors = new bytes4[](5);
+        functionSelectors[0] = IDiamondLoupe.facets.selector;
+        functionSelectors[1] = IDiamondLoupe.facetFunctionSelectors.selector;
+        functionSelectors[2] = IDiamondLoupe.facetAddresses.selector;
+        functionSelectors[3] = IDiamondLoupe.facetAddress.selector;
+        functionSelectors[4] = IERC165.supportsInterface.selector;
+        cut[1] = IDiamondCut.FacetCut({
+            facetAddress: _diamondLoupeFacet,
+            action: IDiamondCut.FacetCutAction.Add,
+            functionSelectors: functionSelectors
+        });
+        functionSelectors = new bytes4[](2);
+        functionSelectors[0] = IERC173.transferOwnership.selector;
+        functionSelectors[1] = IERC173.owner.selector;
+        cut[2] = IDiamondCut.FacetCut({facetAddress: _ownershipFacet, action: IDiamondCut.FacetCutAction.Add, functionSelectors: functionSelectors});
+        diamondCut(cut, address(0), "");
+    }
 
     // Internal function version of diamondCut
     function diamondCut(
