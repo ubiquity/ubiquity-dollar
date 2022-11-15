@@ -92,7 +92,7 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
     }
 
     function testFails_distributeDollarsWorks() public {
-        // TODO: To mock up the array of uint256[] for sushiswap/uniswap routerv2, we use vm.mockCall.
+        // TODO: To mock up the array of uint256[] for sushiswap/uniswap routerV2, we use vm.mockCall.
         // function mockCall(address where, bytes calldata data, bytes calldata retdata) external;
         // The problem here is that it doesn't return uint256[] even if we configure it like abi.encode(retVal) => retVal: uint256[]
         // Once we figure it out, we should remove Fails from function name.

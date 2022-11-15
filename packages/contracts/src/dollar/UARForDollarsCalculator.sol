@@ -40,7 +40,7 @@ contract UARForDollarsCalculator is IUARForDollarsCalculator {
         return _coef;
     }
 
-    // dollarsToBurn * (blockheight_debt/blockheight_burn) * _coef
+    // dollarsToBurn * (blockHeight_debt/blockHeight_burn) * _coef
     function getUARAmount(uint256 dollarsToBurn, uint256 blockHeightDebt)
         external
         view

@@ -694,9 +694,8 @@ library ABDKMathQuad {
                         }
 
                         if (xExponent == 0x7FFF) {
-                            return xSign
-                                ? _NEGATIVE_INFINITY
-                                : _POSITIVE_INFINITY;
+                            return
+                                xSign ? _NEGATIVE_INFINITY : _POSITIVE_INFINITY;
                         } else {
                             if (xSignifier < 0x10000000000000000000000000000) {
                                 xExponent = 0;
@@ -767,9 +766,8 @@ library ABDKMathQuad {
                         }
 
                         if (xExponent == 0x7FFF) {
-                            return xSign
-                                ? _NEGATIVE_INFINITY
-                                : _POSITIVE_INFINITY;
+                            return
+                                xSign ? _NEGATIVE_INFINITY : _POSITIVE_INFINITY;
                         } else {
                             return bytes16(
                                 uint128(
@@ -1952,9 +1950,8 @@ library ABDKMathQuad {
                     resultExponent = 0;
                 }
 
-                return bytes16(
-                    uint128((resultExponent << 112) | resultSignifier)
-                );
+                return
+                    bytes16(uint128((resultExponent << 112) | resultSignifier));
             }
         }
     }

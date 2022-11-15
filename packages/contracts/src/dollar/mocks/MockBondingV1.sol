@@ -52,7 +52,7 @@ contract Bonding is CollectableDust {
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    /// @dev uADPriceReset remove uAD unilateraly from the curve LP share sitting inside
+    /// @dev uADPriceReset remove uAD unilaterally from the curve LP share sitting inside
     ///      the bonding contract and send the uAD received to the treasury.
     ///      This will have the immediate effect of pushing the uAD price HIGHER
     /// @param amount of LP token to be removed for uAD
@@ -75,7 +75,7 @@ contract Bonding is CollectableDust {
         );
     }
 
-    /// @dev crvPriceReset remove 3CRV unilateraly from the curve LP share sitting inside
+    /// @dev crvPriceReset remove 3CRV unilaterally from the curve LP share sitting inside
     ///      the bonding contract and send the 3CRV received to the treasury
     ///      This will have the immediate effect of pushing the uAD price LOWER
     /// @param amount of LP token to be removed for 3CRV tokens

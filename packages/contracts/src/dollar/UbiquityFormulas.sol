@@ -9,7 +9,7 @@ contract UbiquityFormulas {
 
     /// @dev formula duration multiply
     /// @param _uLP , amount of LP tokens
-    /// @param _weeks , mimimun duration of staking period
+    /// @param _weeks , minimum duration of staking period
     /// @param _multiplier , bonding discount multiplier = 0.0001
     /// @return _shares , amount of shares
     /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP

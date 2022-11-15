@@ -51,9 +51,9 @@ contract TWAPOracle {
                 blockTimestamp - pricesBlockTimestampLast
             );
 
-            // price to exchange amounIn uAD to 3CRV based on TWAP
+            // price to exchange amountIn uAD to 3CRV based on TWAP
             price0Average = IMetaPool(pool).get_dy(0, 1, 1 ether, twapBalances);
-            // price to exchange amounIn 3CRV to uAD  based on TWAP
+            // price to exchange amountIn 3CRV to uAD  based on TWAP
             price1Average = IMetaPool(pool).get_dy(1, 0, 1 ether, twapBalances);
             // we update the priceCumulative
             priceCumulativeLast = priceCumulative;

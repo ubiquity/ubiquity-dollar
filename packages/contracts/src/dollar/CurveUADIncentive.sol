@@ -64,7 +64,7 @@ contract CurveUADIncentive is IIncentive {
 
     /// @notice set an address to be exempted from Uniswap trading incentives
     /// @param account the address to update
-    /// @param isExempt a flag for whether to exempt or unexempt
+    /// @param isExempt a flag for whether to flat as exempt or not
     function setExemptAddress(address account, bool isExempt)
         external
         onlyAdmin

@@ -45,7 +45,7 @@ contract MasterChefV2 is ReentrancyGuard {
 
     // uGOV tokens created per block.
     uint256 public uGOVPerBlock;
-    // Bonus muliplier for early uGOV makers.
+    // Bonus multiplier for early uGOV makers.
     uint256 public uGOVmultiplier = 1e18;
     uint256 public minPriceDiffToUpdateMultiplier = 1e15;
     uint256 public lastPrice = 1e18;

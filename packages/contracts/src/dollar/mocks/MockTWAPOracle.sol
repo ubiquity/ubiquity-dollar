@@ -28,11 +28,11 @@ contract MockTWAPOracle {
 
     function consult(address token) external view returns (uint256 amountOut) {
         if (token == token0) {
-            // price to exchange amounIn uAD to 3CRV based on TWAP
+            // price to exchange amountIn uAD to 3CRV based on TWAP
             amountOut = price0Average;
         } else {
             require(token == token1, "TWAPOracle: INVALID_TOKEN");
-            // price to exchange amounIn 3CRV to uAD  based on TWAP
+            // price to exchange amountIn 3CRV to uAD  based on TWAP
             amountOut = price1Average;
         }
     }
