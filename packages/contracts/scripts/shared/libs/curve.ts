@@ -10,7 +10,7 @@ export const RATE_MULTIPLIER = utils.parseEther("1");
 
 const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
     let S = constants.Zero;
-    let previousD = constants.Zero;
+    let Dprev = constants.Zero;
 
     for (const x of _xp) {
         S = S.add(x);
@@ -30,7 +30,7 @@ const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
             D_P = D_P.mul(D).div(x.mul(N_COINS));
         }
 
-        previousD = D;
+        Dprev = D;
         const factor1 = Ann.mul(S).div(A_PRECISION).add(D_P.mul(N_COINS)).mul(D);
         const factor2 = Ann.sub(A_PRECISION)
             .mul(D)
@@ -38,12 +38,12 @@ const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
             .add(D_P.mul(N_COINS + 1));
         D = factor1.div(factor2);
 
-        if (D.gt(previousD)) {
-            if (D.sub(previousD).lte(1)) {
+        if (D.gt(Dprev)) {
+            if (D.sub(Dprev).lte(1)) {
                 return D;
             }
         } else {
-            if (previousD.sub(D).lte(1)) {
+            if (Dprev.sub(D).lte(1)) {
                 return D;
             }
         }
