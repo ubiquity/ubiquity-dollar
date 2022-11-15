@@ -43,7 +43,6 @@ contract ERC20UbiquityTest is LocalTestHelper {
         assertEq(ERC20Ubiquity(token_addr).name(), "Test");
         assertEq(ERC20Ubiquity(token_addr).symbol(), "Test");
         assertEq(address(ERC20Ubiquity(token_addr).manager()), uad_manager_addr);
-        assertEq(ERC20Ubiquity(token_addr).DOMAIN_SEPARATOR(), 0xa4e44b8251719cd84da0b54adf012df7fac7d337d5d77db9ce210938952bdf7d);
     }
 
     function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
@@ -124,7 +123,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
                         spender,
                         1e18,
                         ERC20Ubiquity(token_addr).nonces(owner),
-                        1 days
+                        block.timestamp + 1 days
                     )
                 )
             )
@@ -137,7 +136,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
             owner,
             spender,
             1e18,
-            1 days,
+            block.timestamp + 1 days,
             v,
             r,
             s
@@ -162,25 +161,26 @@ contract ERC20UbiquityTest is LocalTestHelper {
                         spender,
                         1e18,
                         ERC20Ubiquity(token_addr).nonces(owner),
-                        1 days
+                        block.timestamp + 1 days
                     )
                 )
             )
         );
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
         // run permit
+        uint noncesBefore = ERC20Ubiquity(token_addr).nonces(owner);
         vm.prank(spender);
         ERC20Ubiquity(token_addr).permit(
             owner,
             spender,
             1e18,
-            1 days,
+            block.timestamp + 1 days,
             v,
             r,
             s
         );
         assertEq(ERC20Ubiquity(token_addr).allowance(owner, spender), 1e18);
-        assertEq(ERC20Ubiquity(token_addr).nonces(owner), 1);
+        assertEq(ERC20Ubiquity(token_addr).nonces(owner), noncesBefore + 1);
     }
 
     function testBurn_ShouldRevert_IfContractIsPaused() public {
