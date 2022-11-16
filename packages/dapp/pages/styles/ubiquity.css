@@ -59,7 +59,7 @@ input:hover {
   /* background: radial-gradient(#000000ff, #101010ff); */
 }
 #Inventory > div {
-  overflow: scroll;
+  overflow: auto;
 }
 #Inventory > div > div {
   display: flex;
@@ -172,8 +172,6 @@ video {
   left: 0;
   bottom: 0;
   width: 100%;
-  overflow: scroll;
-  overflow-x: hidden;
 }
 #Inventory > div:nth-child(2) > div > div > div {
   display: table;
