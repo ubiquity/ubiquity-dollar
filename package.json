@@ -37,6 +37,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,sol}": [
+      "prettier --write",
+      "eslint --fix",
       "cspell"
     ]
   },
