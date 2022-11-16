@@ -162,7 +162,7 @@ contract MasterChefV2 is ReentrancyGuard {
     }
 
     /// @dev get pending uGOV rewards from MasterChef.
-    /// @return amount of pending rewards transfered to msg.sender
+    /// @return amount of pending rewards transferred to msg.sender
     /// @notice only send pending rewards
     function getRewards(uint256 bondingShareID) external returns (uint256) {
         require(

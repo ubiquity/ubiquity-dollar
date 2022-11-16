@@ -247,7 +247,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         // calls the vault, which is assumed not malicious.
         //
         // Conclusion: we need to do the transfer after the burn so that any reentrancy would happen after the
-        // shares are burned and after the assets are transfered, which is a valid state.
+        // shares are burned and after the assets are transferred, which is a valid state.
 
         // proxy shares (i.e pDAI) correspond to an amount of proxy asset (i.e sDAI)
         // which are actually strategy shares that correspond to an amount of strategy asset (i.e DAI)

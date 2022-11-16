@@ -14,14 +14,14 @@ contract MockTWAPOracle {
     constructor(
         address _pool,
         address _uADtoken0,
-        address _curve3CRVtoken1,
+        address _curve3CRVToken1,
         uint256 _price0Average,
         uint256 _price1Average
     ) {
         pool = _pool;
 
         token0 = _uADtoken0;
-        token1 = _curve3CRVtoken1;
+        token1 = _curve3CRVToken1;
         price0Average = _price0Average;
         price1Average = _price1Average;
     }

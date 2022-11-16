@@ -39,7 +39,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         new ERC20Ubiquity(uad_manager_addr, "Test", "Test");
     }
 
-    function testConstructor_ShoulSetConstructorParams() public {
+    function testConstructor_ShouldSetConstructorParams() public {
         assertEq(ERC20Ubiquity(token_addr).name(), "Test");
         assertEq(ERC20Ubiquity(token_addr).symbol(), "Test");
         assertEq(address(ERC20Ubiquity(token_addr).manager()), uad_manager_addr);
