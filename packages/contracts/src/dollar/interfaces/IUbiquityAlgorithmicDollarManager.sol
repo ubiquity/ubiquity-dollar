@@ -56,7 +56,7 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
         external;
 
     /**
-     * @notice set the bonding contract smart contract address
+     * @notice set the bonding bontract smart contract address
      * @dev bonding contract participants deposit  curve LP token
      * for a certain duration to earn uGOV and more curve LP token
      * @param _bondingContractAddress bonding contract address

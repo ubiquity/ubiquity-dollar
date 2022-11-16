@@ -51,6 +51,7 @@
     "**/packages/contracts/dollar/lib/**",
     "**/packages/contracts/scripts/shared/libs/**",
     "**/packages/contracts/src/dollar/libs/**",
+    "**/packages/contracts/src/dollar/interfaces/**",
     "**/packages/dapp/dist/**",
     "**/cspell.json",
     "**/node_modules/**"

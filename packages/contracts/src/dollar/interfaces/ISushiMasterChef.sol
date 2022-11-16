@@ -28,7 +28,7 @@ interface ISushiMasterChef {
     // Withdraw LP tokens from MasterChef.
     function withdraw(uint256 _pid, uint256 _amount) external;
 
-    // Update reward variables for all pools. Be careful of gas spending!
+    // Update reward vairables for all pools. Be careful of gas spending!
     function massUpdatePools() external;
 
     // Update reward variables of the given pool to be up-to-date.
@@ -61,7 +61,7 @@ interface ISushiMasterChef {
         view
         returns (ISushiMasterChef.PoolInfo memory);
 
-    // Total allocation points. Must be the sum of all allocation points in all pools.
+    // Total allocation poitns. Must be the sum of all allocation points in all pools.
     function totalAllocPoint() external view returns (uint256);
 
     function poolLength() external view returns (uint256);
