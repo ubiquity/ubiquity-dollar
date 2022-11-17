@@ -24,7 +24,7 @@ const func = async (params: DeployFuncParam) => {
 
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     const ubiquityStickSaleAddress = result!.deployedTo;
-    const ubiquityStickDeployments = await deployments(chainId.toString(), "TheUbiquityStick");
+    const ubiquityStickDeployments = await deployments(chainId.toString(), "UbiquiStick");
     const ubiquityStickContract = new ethers.Contract(ubiquityStickDeployments.address, ubiquityStickDeployments.abi, signer)
     console.log("Granting minter role to TheUbiquityStickSale contract...");
     let tx = await ubiquityStickContract.setMinter(ubiquityStickSaleAddress);

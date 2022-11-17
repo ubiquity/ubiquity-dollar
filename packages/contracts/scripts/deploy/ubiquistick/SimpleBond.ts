@@ -32,7 +32,7 @@ const func = async (params: DeployFuncParam) => {
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     const simpleBondAddress = result!.deployedTo;
     const simple_bond_deployments = await deployments(chainId.toString(), "SimpleBond");
-    const ubiquity_stick_deployments = await deployments(chainId.toString(), "TheUbiquityStick");
+    const ubiquity_stick_deployments = await deployments(chainId.toString(), "UbiquiStick");
     const simpleBondContract = new ethers.Contract(simpleBondAddress, simple_bond_deployments.abi, signer)
     console.log("Setting up the sticker...");
     let tx = await simpleBondContract.setSticker(ubiquity_stick_deployments.address);

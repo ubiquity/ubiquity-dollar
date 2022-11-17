@@ -19,7 +19,7 @@ import ubiquityAlgorithmicDollarFunc, { optionDefinitions as ubiquityAlgorithmDo
 import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions } from "./dollar/UbiquityAutoRedeem"
 import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas"
 import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy"
-import theUbiquityStickFunc, { optionDefinitions as theUbiquityStickOptions } from "./ubiquistick/TheUbiquityStick"
+import theUbiquityStickFunc, { optionDefinitions as theUbiquityStickOptions } from "./ubiquistick/UbiquiStick"
 import theUbiquityStickSaleFunc, { optionDefinitions as theUbiquityStickSaleOptions } from "./ubiquistick/TheUbiquityStickSale"
 import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR"
 import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP"
@@ -98,7 +98,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         handler: yieldProxyFunc,
         options: yieldProxyOptions
     },
-    "TheUbiquityStick": {
+    "UbiquiStick": {
         handler: theUbiquityStickFunc,
         options: theUbiquityStickOptions
     },

@@ -12,7 +12,7 @@ import USDTTokenABI from "../config/abis/USDTToken.json";
 import YieldProxyABI from "../config/abis/YieldProxy.json";
 
 import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
-import UbiquityStick from "@ubiquity/contracts/out/TheUbiquityStick.sol/TheUbiquityStick.json";
+import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import UbiquityStickSale from "@ubiquity/contracts/out/TheUbiquityStickSale.sol/TheUbiquityStickSale.json";
 import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
@@ -68,7 +68,7 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
 };
 
 export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityStick.abi, address, provider);
+  return getContract(UbiquiStick.abi, address, provider);
 };
 
 export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => {

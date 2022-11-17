@@ -24,7 +24,7 @@ export type Contracts = {
 
 const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
   const [TheUbiquityStickAddress, TheUbiquityStickSaleAddress, SimpleBondAddress] = useDeployedAddress(
-    "TheUbiquityStick",
+    "UbiquiStick",
     "TheUbiquityStickSale",
     "SimpleBond"
   );

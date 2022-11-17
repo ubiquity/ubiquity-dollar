@@ -18,7 +18,7 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
         uint256 price;
     }
 
-    // TheUbiquityStick token contract interface
+    // UbiquiStick token contract interface
     ITheUbiquityStick public tokenContract;
 
     // Stores the allowed minting count and token price for each whitelisted address
