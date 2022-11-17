@@ -16,7 +16,6 @@ import "./interfaces/IBondingShareV2.sol";
 import "./interfaces/IStableSwap3Pool.sol";
 import "./interfaces/IUbiquityAlgorithmicDollarManager.sol";
 
-
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
@@ -101,7 +100,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //Note, due to USDT implementation, normal transferFrom does not work and have an error of "function returned an unexpected amount of data"
         //require(IERC20(token).transferFrom(msg.sender, address(this), amount), "sender cannot transfer specified fund");
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
-
+        
         address staking = manager.bondingContractAddress();
         address stakingShare = manager.bondingShareAddress();
 
@@ -113,7 +112,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             token == token1 ? amount : 0,
             token == token2 ? amount : 0
         ];
-
+        
         //STEP1: add DAI, USDC, USDT or uAD into metapool liquidity and get UAD3CRVf
         IERC20(token).safeIncreaseAllowance(depositZapUbiquityDollar, amount);
         lpAmount = IDepositZap(depositZapUbiquityDollar).add_liquidity(ubiquity3PoolLP, tokenAmounts, 0);
@@ -126,7 +125,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IBondingShareV2(stakingShare).safeTransferFrom(address(this), msg.sender, stakingShareId, 1, '0x');
 
         emit Deposit(msg.sender, token, amount, durationWeeks, stakingShareId);
-
+        
     }
 
     /**
@@ -141,7 +140,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint256 stakingShareId,
         address token
     ) external nonReentrant returns (uint256 tokenAmount) {
-
+        
         // DAI / USDC / USDT / UAD
         require(isMetaPoolCoin(token), "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar");
         address staking = manager.bondingContractAddress();
@@ -151,33 +150,32 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //Need to verify msg.sender by holderToken history.
         //bond.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "sender is not true bond owner");
-
+        
         //transfer bondingShare NFT token from msg.sender to this address
         IBondingShareV2(stakingShare).safeTransferFrom(msg.sender, address(this), stakingShareId, 1, '0x');
-
+        
         // Get Bond
         IBondingShareV2.Bond memory bond = IBondingShareV2(stakingShare).getBond(stakingShareId);
-
+        
         // STEP 1 : Withdraw Ubiquity Bonding Shares to get back uAD3CRV-f LPs
         //address bonding = ubiquityManager.bondingContractAddress();
         IBondingShareV2(stakingShare).setApprovalForAll(staking, true);
         IBondingV2(staking).removeLiquidity(bond.lpAmount, stakingShareId);
         IBondingShareV2(stakingShare).setApprovalForAll(staking, false);
-
+        
         uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));
         uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress()).balanceOf(address(this));
-
+        
 
         // STEP2 : Withdraw  3Crv LPs from meta pool to get back UAD, DAI, USDC or USDT
         uint128 tokenIndex = token == ubiquityDollar ? 0 : (token == token0 ? 1 : (token == token1 ? 2 : 3));
         IERC20(ubiquity3PoolLP).approve(depositZapUbiquityDollar, lpTokenAmount);
         tokenAmount = IDepositZap(depositZapUbiquityDollar).remove_liquidity_one_coin(ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0); //[UAD, DAI, USDC, USDT]
-
+        
         IERC20(token).safeTransfer(msg.sender, tokenAmount);
         IERC20(manager.governanceTokenAddress()).safeTransfer(msg.sender, governanceTokenAmount);
 
         emit Withdraw(msg.sender, stakingShareId, token, tokenAmount);
-
     }
 
     function isIdIncluded(uint256[] memory idList, uint256 id) internal pure returns (bool){
