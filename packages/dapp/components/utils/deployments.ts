@@ -1,6 +1,5 @@
 import ContractDeployments from "@ubiquity/contracts/deployments.json";
 
-
 const _contractDeployments = (): Record<string, any> => {
   return ContractDeployments;
 };

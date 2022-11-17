@@ -50,9 +50,12 @@ async function fetchUniswapPoolsData(pools: UniswapDataRequest[], provider: NonN
     };
   };
 
-  const uniswapPoolsData = (await Promise.all(pools.map(({ address, version }) => getUniPoolFullData(address, version === "v2")))).reduce((acc, uniswapPoolData) => {
-    return { ...acc, [uniswapPoolData.poolAddress]: uniswapPoolData };
-  }, {});
+  const uniswapPoolsData = (await Promise.all(pools.map(({ address, version }) => getUniPoolFullData(address, version === "v2")))).reduce(
+    (acc, uniswapPoolData) => {
+      return { ...acc, [uniswapPoolData.poolAddress]: uniswapPoolData };
+    },
+    {}
+  );
 
   return uniswapPoolsData;
 }

@@ -23,11 +23,7 @@ export type Contracts = {
 };
 
 const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
-  const [TheUbiquityStickAddress, TheUbiquityStickSaleAddress, SimpleBondAddress] = useDeployedAddress(
-    "UbiquiStick",
-    "TheUbiquityStickSale",
-    "SimpleBond"
-  );
+  const [TheUbiquityStickAddress, TheUbiquityStickSaleAddress, SimpleBondAddress] = useDeployedAddress("UbiquiStick", "TheUbiquityStickSale", "SimpleBond");
   const [{ provider, walletAddress }] = useWeb3();
   const [contracts, setContracts] = useState<Contracts | null>(null);
   const [tokensContracts, setTokensContracts] = useState<Contract[]>([]);

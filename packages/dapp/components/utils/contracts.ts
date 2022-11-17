@@ -34,7 +34,6 @@ import UbiquityCredit from "@ubiquity/contracts/out/UbiquityAutoRedeem.sol/Ubiqu
 import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UBQ from "@ubiquity/contracts/out/UbiquityGovernance.sol/UbiquityGovernance.json";
 
-
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);
 };
