@@ -25,7 +25,7 @@ type Web3Actions = {
   disconnect: () => Promise<void>;
 };
 
-const loaded = new Promise((resolve) => window?.addEventListener("load", resolve));
+const loaded = new Promise((resolve) => typeof window !== "undefined" && window?.addEventListener("load", resolve));
 
 const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 const DEFAULT_WEB3_STATE: Web3State = {
