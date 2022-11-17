@@ -23,13 +23,13 @@ function ErrorHandler({ error }: { error: Error }) {
 }
 
 export default function Layout({ children }: LayoutProps) {
-  useEffect(() => {
-    const { ethereum } = window;
-    if (ethereum) {
-      ethereum.on("accountsChanged", window.location.reload);
-      ethereum.on("chainChanged", window.location.reload);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const { ethereum } = window;
+  //   if (ethereum) {
+  //     ethereum.on("accountsChanged", window.location.reload);
+  //     ethereum.on("chainChanged", window.location.reload);
+  //   }
+  // }, []);
 
   return (
     <div id="Foreground">

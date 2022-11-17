@@ -25,6 +25,8 @@ type Web3Actions = {
   disconnect: () => Promise<void>;
 };
 
+const loaded = new Promise((resolve) => window.addEventListener("load", resolve));
+
 const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 const DEFAULT_WEB3_STATE: Web3State = {
   metamaskInstalled,
@@ -58,12 +60,23 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
   }, []);
 
   async function connectMetaMask() {
+    await loaded;
+    if (window.ethereum) {
+      window.ethereum.autoRefreshOnNetworkChange = true;
+      try {
+        window.ethereum.enable();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    console.log("metamaskInstalled", metamaskInstalled, window.ethereum);
     if (metamaskInstalled) {
       const newProvider = new ethers.providers.Web3Provider(window.ethereum);
+      console.log(newProvider);
       setWeb3State({ ...web3State, connecting: true });
       const addresses = (await newProvider.send("eth_requestAccounts", [])) as string[];
+      console.log("Connected wallet ", addresses);
       if (addresses.length > 0) {
-        console.log("Connected wallet ", addresses[0]);
         const newWalletAddress = addresses[0];
         const newSigner = newProvider.getSigner(newWalletAddress);
         setStoredWallet(newWalletAddress);
@@ -76,6 +89,9 @@ export const UseWeb3Provider: React.FC<ChildrenShim> = ({ children }) => {
           walletAddress: newWalletAddress,
           signer: newSigner,
         });
+      } else if (window.ethereum) {
+        const newProvider = new ethers.providers.Web3Provider(window.ethereum);
+        console.log(newProvider);
       } else {
         alert("No accounts found");
         setWeb3State({ ...web3State, connecting: false });

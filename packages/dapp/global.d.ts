@@ -1,8 +1,10 @@
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import * as ethers from "ethers";
 
 declare global {
   interface Window {
     ethereum?: MetaMaskInpageProvider;
+    web3: ethers.providers.ExternalProvider;
   }
 }
 declare module "*.svg" {
