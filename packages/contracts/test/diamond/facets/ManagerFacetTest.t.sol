@@ -6,17 +6,17 @@ import "../DiamondTestSetup.sol";
 
 contract TestManagerFacet is AddManagerFacetSetup {
 
-    function testCanCallGeneralFunctions_In_ManagerFacet() public {
+    function testCanCallGeneralFunctions() public {
          // try to call function on new Facet
         ManagerFacet(address(diamond)).getExcessDollarsDistributor(contract1);
     }
 
-    function testCanCallAdminFunction_OnlyWith_AdminRole_In_ManagerFacet() public prankAs(admin) {
+    function testCanCallAdminFunction_OnlyWith_AdminRole() public prankAs(admin) {
          // try to call function with access control on new Facet 
         ManagerFacet(address(diamond)).setCreditTokenAddress(contract1);
     }
 
-    function testShouldUpdateDiamondStorage_In_ManagerFacet() public prankAs(admin) {
+    function testShouldUpdateDiamondStorage() public prankAs(admin) {
          // try to call function with access control on new Facet 
         ManagerFacet(address(diamond)).setCreditTokenAddress(contract1);
         assertEq(ManagerFacet(address(diamond)).getCreditTokenAddress(), contract1);
