@@ -1,3 +1,3 @@
-<!-- You must link the issue number -->
-
 Resolves #
+
+<!-- You must link the issue number -->
