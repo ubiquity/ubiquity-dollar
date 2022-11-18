@@ -1,7 +1,14 @@
-<!-- This is required to link the issue number -->
+<!-- You must link the issue number -->
 
-resolves #
+Resolves #
 
-<!-- This is required to get paid -->
+<!-- You must link your payment wallet address -->
 
-- My wallet address is: `0x`
+`0x`
+
+<!--
+    - Both the original issue and your wallet address are required for our accounting in order to collect your bounty.
+    - You are welcome to use new wallet addresses for each bounty.
+    - You must use a self hosted Ethereum wallet in order to receive the payment token (usually DAI, but occasionally USDC) and governance token bonuses (UBQ)
+    - We are not responsible for incorrect wallet addresses or issues with wallet software.
+-->
