@@ -14,7 +14,7 @@ const func = async (params: DeployFuncParam) => {
     const { env, args } = params;
     const manager = args.manager;
 
-    const { stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager] });
+    const { stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [] });
     return !stderr ? "succeeded" : "failed"
 }
 export default func;

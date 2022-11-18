@@ -80,7 +80,6 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         ICut.diamondCut(facetCut, address(0x0), "");
         ManagerFacet(address(diamond)).initialize(owner);
 		vm.stopPrank();
-
     }
 }
 
@@ -124,8 +123,7 @@ abstract contract CacheBugSetup is DiamondSetup {
             functionSelectors: newSelectors
         });
 
-        vm.startPrank(owner);
+        vm.prank(owner);
         ICut.diamondCut(facetCut, address(0x0), "");
-		vm.stopPrank();
     }
 }

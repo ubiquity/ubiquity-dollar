@@ -24,11 +24,7 @@ import theUbiquityStickSaleFunc, { optionDefinitions as theUbiquityStickSaleOpti
 import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR"
 import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP"
 import simpleBondFunc, { optionDefinitions as simpleBondOptions } from "./ubiquistick/SimpleBond"
-import diamondCutFacetFunc, { optionDefinitions as diamondCutFacetOptions } from "./diamond/DiamondCutFacet"
 import diamondFunc, { optionDefinitions as diamondOptions } from "./diamond/Diamond"
-import diamondInitFunc, { optionDefinitions as diamondInitOptions } from "./diamond/DiamondInit"
-import diamondLoupeFacetFunc, { optionDefinitions as diamondLoupeFacetOptions } from "./diamond/DiamondLoupeFacet"
-import ownershipFacetFunc, { optionDefinitions as ownershipFacetOptions } from "./diamond/OwnershipFacet"
 import managerFacetFunc, { optionDefinitions as managerFacetOptions } from "./diamond/ManagerFacet"
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options: OptionDefinition[] }> = {
@@ -124,25 +120,9 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback, options
         handler: simpleBondFunc,
         options: simpleBondOptions
     },
-    "DiamondCutFacet": {
-        handler: diamondCutFacetFunc,
-        options: diamondCutFacetOptions
-    },
     "Diamond": {
         handler: diamondFunc,
         options: diamondOptions
-    },
-    "DiamondInit": {
-        handler: diamondInitFunc,
-        options: diamondInitOptions
-    },
-    "DiamondLoupeFacet": {
-        handler: diamondLoupeFacetFunc,
-        options: diamondLoupeFacetOptions
-    },
-    "OwnershipFacet": {
-        handler: ownershipFacetFunc,
-        options: ownershipFacetOptions
     },
     "ManagerFacet": {
         handler: managerFacetFunc,
