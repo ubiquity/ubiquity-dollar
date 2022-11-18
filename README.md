@@ -8,9 +8,9 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ## Contributing
 
-- We welcome everybody to participate in improving the codebase. 
+- We welcome everybody to participate in improving the codebase.
 
-- We offer incentives for contributors to solve issues. 
+- We offer incentives for contributors to solve issues.
 
 - Please learn how to contribute via our bounty program [here](https://github.com/ubiquity/ubiquity-dollar/wiki/Bounty-Rules/).
 
@@ -68,7 +68,6 @@ yarn workspace @ubiquity/contracts $SCRIPT_NAME
 yarn workspace @ubiquity/dapp $SCRIPT_NAME
 
 # For example...
-
 yarn workspace @ubiquity/contracts test # Run the smart contract unit tests
 yarn workspace @ubiquity/dapp start # Run the application at http://localhost:3000
 
