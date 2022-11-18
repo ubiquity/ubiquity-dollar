@@ -2,9 +2,9 @@
 
 Resolves #
 
-<!-- You must link your payment wallet address -->
+<!-- You must replace this with your payment wallet address -->
 
-`0x`
+`0x0000000000000000000000000000000000000000`
 
 <!--
     - Both the original issue and your wallet address are required for our accounting in order to collect your bounty.
