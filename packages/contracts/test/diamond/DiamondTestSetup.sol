@@ -42,34 +42,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
         facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet"];
 
         // deploy diamond
-        diamond = new Diamond(owner, address(dCutFacet));
-
-        //upgrade diamond with facets
-
-        //build cut struct
-        FacetCut[] memory cut = new FacetCut[](2);
-
-        cut[0] = FacetCut({
-            facetAddress: address(dLoupe),
-            action: FacetCutAction.Add,
-            functionSelectors: generateSelectors("DiamondLoupeFacet")
-        });
-
-        cut[1] = FacetCut({
-            facetAddress: address(ownerF),
-            action: FacetCutAction.Add,
-            functionSelectors: generateSelectors("OwnershipFacet")
-        });
-
+        vm.startPrank(owner);
+        diamond = new Diamond(owner);
+		vm.stopPrank();
 
         // initialise interfaces
         ILoupe = IDiamondLoupe(address(diamond));
         ICut = IDiamondCut(address(diamond));
-
-        //upgrade diamond
-        vm.startPrank(owner);
-        ICut.diamondCut(cut, address(0x0), "");
-		vm.stopPrank();
 
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
@@ -84,19 +63,9 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
     function setUp() public virtual override {
         super.setUp();
         //deploy ManagerFacet
-        managerFacet = new ManagerFacet(owner);
+        managerFacet = new ManagerFacet();
 
-        // bytes4[] memory fromGenSelectors  = generateSelectors("ManagerFacet"); // all length is 51
-        bytes4[] memory selectorsInManagerFacet = new bytes4[](6);
-
-        selectorsInManagerFacet[0] = managerFacet.setTwapOracleAddress.selector;
-        selectorsInManagerFacet[1] = managerFacet.setuARTokenAddress.selector;
-        selectorsInManagerFacet[2] = managerFacet.setDebtCouponAddress.selector;
-        selectorsInManagerFacet[3] = managerFacet.setIncentiveToUAD.selector;
-        selectorsInManagerFacet[4] = managerFacet.getExcessDollarsDistributor.selector;
-        selectorsInManagerFacet[5] = managerFacet.initialize.selector;
-
-        bytes4[] memory fromGenSelectors = selectorsInManagerFacet;
+        bytes4[] memory fromGenSelectors  = removeElement(managerFacet.supportsInterface.selector, generateSelectors("ManagerFacet"));
 
         // array of functions to add
         FacetCut[] memory facetCut = new FacetCut[](1);
@@ -109,9 +78,9 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         // add functions to diamond
         vm.startPrank(owner);
         ICut.diamondCut(facetCut, address(0x0), "");
+        ManagerFacet(address(diamond)).initialize(owner);
 		vm.stopPrank();
 
-        ManagerFacet(address(diamond)).initialize(owner);
     }
 }
 
@@ -119,57 +88,44 @@ abstract contract CacheBugSetup is DiamondSetup {
 
     ManagerFacet managerFacet;
 
-    bytes4 ownerSel = hex'8da5cb5b';
+    bytes4 ownerSelector = hex'8da5cb5b';
     bytes4[] selectors;
 
     function setUp() public virtual override {
         super.setUp();
-        managerFacet = new ManagerFacet(owner);
+        managerFacet = new ManagerFacet();
 
-        selectors.push(hex'19e3b533');
-        selectors.push(hex'0716c2ae');
-        selectors.push(hex'11046047');
-        selectors.push(hex'cf3bbe18');
-        selectors.push(hex'24c1d5a7');
-        selectors.push(hex'cbb835f6');
-        selectors.push(hex'cbb835f7');
-        selectors.push(hex'cbb835f8');
-        selectors.push(hex'cbb835f9');
-        selectors.push(hex'cbb835fa');
-        selectors.push(hex'cbb835fb');
+       bytes4[] memory fromGenSelectors  = removeElement(managerFacet.supportsInterface.selector, generateSelectors("ManagerFacet"));
 
-        FacetCut[] memory cut = new FacetCut[](1);
-        bytes4[] memory selectorsAdd = new bytes4[](11);
-
-        for(uint i = 0; i < selectorsAdd.length; i++){
-            selectorsAdd[i] = selectors[i];
-        }
-
-        cut[0] = FacetCut({
+        // array of functions to add
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
             facetAddress: address(managerFacet),
             action: FacetCutAction.Add,
-            functionSelectors: selectorsAdd
+            functionSelectors: fromGenSelectors
         });
 
-        // add managerFacet to diamond
+        // add functions to diamond
         vm.startPrank(owner);
-        ICut.diamondCut(cut, address(0x0), "");
+        ICut.diamondCut(facetCut, address(0x0), "");
+        ManagerFacet(address(diamond)).initialize(owner);
 		vm.stopPrank();
 
         // Remove selectors from diamond
         bytes4[] memory newSelectors = new bytes4[](3);
-        newSelectors[0] = ownerSel;
-        newSelectors[1] = selectors[5];
-        newSelectors[2] = selectors[10];
 
-        cut[0] = FacetCut({
+        newSelectors[0] = ownerSelector;
+        newSelectors[1] = managerFacet.setDollarTokenAddress.selector;
+        newSelectors[2] = managerFacet.getCreditTokenAddress.selector;
+
+        facetCut[0] = FacetCut({
             facetAddress: address(0x0),
             action: FacetCutAction.Remove,
             functionSelectors: newSelectors
         });
 
         vm.startPrank(owner);
-        ICut.diamondCut(cut, address(0x0), "");
+        ICut.diamondCut(facetCut, address(0x0), "");
 		vm.stopPrank();
     }
 }

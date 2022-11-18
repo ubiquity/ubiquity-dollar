@@ -32,14 +32,8 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
     function testAddManagerFacetFunctions() public {
         // check if functions added to diamond
         bytes4[] memory fromLoupeFacet = ILoupe.facetFunctionSelectors(address(managerFacet));
-        bytes4[] memory selectorsInManagerFacet = new bytes4[](6);
-        selectorsInManagerFacet[0] = managerFacet.setTwapOracleAddress.selector;
-        selectorsInManagerFacet[1] = managerFacet.setuARTokenAddress.selector;
-        selectorsInManagerFacet[2] = managerFacet.setDebtCouponAddress.selector;
-        selectorsInManagerFacet[3] = managerFacet.setIncentiveToUAD.selector;
-        selectorsInManagerFacet[4] = managerFacet.getExcessDollarsDistributor.selector;
-        selectorsInManagerFacet[5] = managerFacet.initialize.selector;
-        assertTrue(sameMembers(fromLoupeFacet, selectorsInManagerFacet));
+        bytes4[] memory fromGenSelectors  = removeElement(managerFacet.supportsInterface.selector, generateSelectors("ManagerFacet"));
+        assertTrue(sameMembers(fromLoupeFacet, fromGenSelectors));
     }
 
     function testCanCallManagerFacetFunction() public {
@@ -49,16 +43,15 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
 
     function testCanCallManagerFacetAdminFunction_OnlyWith_Admin() public prankAs(owner) {
          // try to call function with access control on new Facet 
-        ManagerFacet(address(diamond)).setuARTokenAddress(contract1);
+        ManagerFacet(address(diamond)).setCreditTokenAddress(contract1);
     }
 
-    // Replace supportsInterface function in DiamondLoupeFacet with one in ManagerFacet(imported from Openzepplin contract)
+    // Replace supportsInterface function in DiamondLoupeFacet with one in ManagerFacet
     function test6ReplaceSupportsInterfaceFunction() public prankAs(owner) {
 
         // get supportsInterface selector
         bytes4[] memory functionSelectors =  new bytes4[](1);
-        bytes4 selectorSupportsInterface = managerFacet.supportsInterface.selector;
-        functionSelectors[0] = selectorSupportsInterface;
+        functionSelectors[0] = managerFacet.supportsInterface.selector;
 
         // struct to replace function
         FacetCut[] memory cutTest1 = new FacetCut[](1);
@@ -82,18 +75,13 @@ contract TestCacheBug is CacheBugSetup {
     function testNoCacheBug() public {
         bytes4[] memory fromLoupeSelectors = ILoupe.facetFunctionSelectors(address(managerFacet));
 
-        assertTrue(containsElement(fromLoupeSelectors, selectors[0]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[1]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[2]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[3]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[4]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[6]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[7]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[8]));
-        assertTrue(containsElement(fromLoupeSelectors, selectors[9]));
+        assertTrue(containsElement(fromLoupeSelectors, managerFacet.getDollarTokenAddress.selector));
+        assertTrue(containsElement(fromLoupeSelectors, managerFacet.setCreditTokenAddress.selector));
+        assertTrue(containsElement(fromLoupeSelectors, managerFacet.getExcessDollarsDistributor.selector));
+        assertTrue(containsElement(fromLoupeSelectors, managerFacet.initialize.selector));
 
-        assertFalse(containsElement(fromLoupeSelectors, ownerSel));
-        assertFalse(containsElement(fromLoupeSelectors, selectors[10]));
-        assertFalse(containsElement(fromLoupeSelectors, selectors[5]));
+        assertFalse(containsElement(fromLoupeSelectors, ownerSelector));
+        assertFalse(containsElement(fromLoupeSelectors, managerFacet.setDollarTokenAddress.selector));
+        assertFalse(containsElement(fromLoupeSelectors, managerFacet.getCreditTokenAddress.selector));
     }
 }
