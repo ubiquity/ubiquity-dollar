@@ -16,3 +16,6 @@
 [submodule "packages/contracts/lib/solidity-stringutils"]
 	path = packages/contracts/lib/solidity-stringutils
 	url = https://github.com/Arachnid/solidity-stringutils
+[submodule "lib/solidstate-solidity"]
+	path = lib/solidstate-solidity
+	url = https://github.com/solidstate-network/solidstate-solidity
