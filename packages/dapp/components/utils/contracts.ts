@@ -13,7 +13,7 @@ import YieldProxyABI from "../config/abis/YieldProxy.json";
 
 import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
 import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
-import UbiquityStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
+import UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import DebtCouponManager from "@ubiquity/contracts/out/DebtCouponManager.sol/DebtCouponManager.json";
@@ -66,12 +66,12 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
   return getContract(SimpleBond.abi, address, provider);
 };
 
-export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquiStick.abi, address, provider);
 };
 
-export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityStickSale.abi, address, provider);
+export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquiStickSale.abi, address, provider);
 };
 
 export const getIJarContract = (address: string, provider: ethers.providers.Provider) => {

@@ -7,8 +7,8 @@ import {
   getChainlinkPriceFeedContract,
   getERC20Contract,
   getSimpleBondContract,
-  getUbiquityStickContract,
-  getUbiquityStickSaleContract,
+  getUbiquiStickContract,
+  getUbiquiStickSaleContract,
 } from "@/components/utils/contracts";
 import { Contract } from "ethers";
 
@@ -23,7 +23,7 @@ export type Contracts = {
 };
 
 const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
-  const [TheUbiquityStickAddress, TheUbiquityStickSaleAddress, SimpleBondAddress] = useDeployedAddress("UbiquiStick", "TheUbiquityStickSale", "SimpleBond");
+  const [UbiquiStickAddress, UbiquiStickSaleAddress, SimpleBondAddress] = useDeployedAddress("UbiquiStick", "UbiquiStickSale", "SimpleBond");
   const [{ provider, walletAddress }] = useWeb3();
   const [contracts, setContracts] = useState<Contracts | null>(null);
   const [tokensContracts, setTokensContracts] = useState<Contract[]>([]);
@@ -39,8 +39,8 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
       const simpleBond = getSimpleBondContract(SimpleBondAddress, provider);
       const rewardToken = await simpleBond.tokenRewards();
       const contracts = {
-        ubiquiStick: getUbiquityStickContract(TheUbiquityStickAddress, provider),
-        ubiquiStickSale: getUbiquityStickSaleContract(TheUbiquityStickSaleAddress, provider),
+        ubiquiStick: getUbiquiStickContract(UbiquiStickAddress, provider),
+        ubiquiStickSale: getUbiquiStickSaleContract(UbiquiStickSaleAddress, provider),
         simpleBond,
         rewardToken: getERC20Contract(rewardToken, provider),
         chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),
