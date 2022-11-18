@@ -36,19 +36,8 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
         assertTrue(sameMembers(fromLoupeFacet, fromGenSelectors));
     }
 
-    function testCanCallManagerFacetFunction() public {
-         // try to call function on new Facet
-        ManagerFacet(address(diamond)).getExcessDollarsDistributor(contract1);
-    }
-
-    function testCanCallManagerFacetAdminFunction_OnlyWith_Admin() public prankAs(owner) {
-         // try to call function with access control on new Facet 
-        ManagerFacet(address(diamond)).setCreditTokenAddress(contract1);
-    }
-
     // Replace supportsInterface function in DiamondLoupeFacet with one in ManagerFacet
-    function test6ReplaceSupportsInterfaceFunction() public prankAs(owner) {
-
+    function testReplaceSupportsInterfaceFunction() public prankAs(owner) {
         // get supportsInterface selector
         bytes4[] memory functionSelectors =  new bytes4[](1);
         functionSelectors[0] = managerFacet.supportsInterface.selector;

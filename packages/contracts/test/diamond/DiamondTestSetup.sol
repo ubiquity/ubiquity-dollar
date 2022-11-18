@@ -25,6 +25,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     address[] facetAddressList;
 
     address owner;
+    address admin;
     address user1;
     address contract1;
 
@@ -32,6 +33,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     function setUp() public virtual {
 
         owner = generateAddress("Owner", false, 10 ether);
+        admin = generateAddress("Admin", false, 10 ether);
         user1 = generateAddress("User1", false, 10 ether);
         contract1 = generateAddress("Contract1", true, 10 ether);
 
@@ -78,7 +80,7 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         // add functions to diamond
         vm.startPrank(owner);
         ICut.diamondCut(facetCut, address(0x0), "");
-        ManagerFacet(address(diamond)).initialize(owner);
+        ManagerFacet(address(diamond)).initialize(admin);
 		vm.stopPrank();
     }
 }
@@ -107,7 +109,7 @@ abstract contract CacheBugSetup is DiamondSetup {
         // add functions to diamond
         vm.startPrank(owner);
         ICut.diamondCut(facetCut, address(0x0), "");
-        ManagerFacet(address(diamond)).initialize(owner);
+        ManagerFacet(address(diamond)).initialize(admin);
 		vm.stopPrank();
 
         // Remove selectors from diamond
