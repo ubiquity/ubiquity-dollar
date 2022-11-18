@@ -30,9 +30,9 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
     bool public debtCycle;
     uint256 public blockHeightDebt;
     uint256 public couponLengthBlocks;
-    uint256 public expiredCouponConvertionRate = 2;
+    uint256 public expiredCouponConversionRate = 2;
 
-    event ExpiredCouponConvertionRateChanged(
+    event ExpiredCouponConversionRateChanged(
         uint256 newRate, uint256 previousRate
     );
 
@@ -56,14 +56,14 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         couponLengthBlocks = _couponLengthBlocks;
     }
 
-    function setExpiredCouponConvertionRate(uint256 rate)
+    function setExpiredCouponConversionRate(uint256 rate)
         external
         onlyCouponManager
     {
-        emit ExpiredCouponConvertionRateChanged(
-            rate, expiredCouponConvertionRate
+        emit ExpiredCouponConversionRateChanged(
+            rate, expiredCouponConversionRate
             );
-        expiredCouponConvertionRate = rate;
+        expiredCouponConversionRate = rate;
     }
 
     function setCouponLength(uint256 _couponLengthBlocks)
@@ -229,7 +229,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         // Mint UGOV tokens to this contract. Transfer UGOV tokens to msg.sender i.e. debt holder
         IERC20Ubiquity uGOVToken =
             IERC20Ubiquity(manager.governanceTokenAddress());
-        uGovAmount = amount / expiredCouponConvertionRate;
+        uGovAmount = amount / expiredCouponConversionRate;
         uGOVToken.mint(msg.sender, uGovAmount);
     }
 

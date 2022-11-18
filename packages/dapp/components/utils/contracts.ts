@@ -12,8 +12,8 @@ import USDTTokenABI from "../config/abis/USDTToken.json";
 import YieldProxyABI from "../config/abis/YieldProxy.json";
 
 import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
-import UbiquityStick from "@ubiquity/contracts/out/TheUbiquityStick.sol/TheUbiquityStick.json";
-import UbiquityStickSale from "@ubiquity/contracts/out/TheUbiquityStickSale.sol/TheUbiquityStickSale.json";
+import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
+import UbiquityStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import DebtCouponManager from "@ubiquity/contracts/out/DebtCouponManager.sol/DebtCouponManager.json";
@@ -25,7 +25,7 @@ import DollarMintingCalculator from "@ubiquity/contracts/out/DollarMintingCalcul
 import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICouponsForDollarsCalculator.sol/ICouponsForDollarsCalculator.json";
 import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import IUARForDollarsCalculator from "@ubiquity/contracts/out/IUARForDollarsCalculator.sol/IUARForDollarsCalculator.json";
-import MasterChefv2 from "@ubiquity/contracts/out/MasterChefV2.sol/MasterChefV2.json";
+import MasterChefV2 from "@ubiquity/contracts/out/MasterChefV2.sol/MasterChefV2.json";
 import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import TWAPOracle from "@ubiquity/contracts/out/TWAPOracle.sol/TWAPOracle.json";
 import UbiquityAlgorithmicDollarManager from "@ubiquity/contracts/out/UbiquityAlgorithmicDollarManager.sol/UbiquityAlgorithmicDollarManager.json";
@@ -33,7 +33,6 @@ import UbiquityAlgorithmicDollar from "@ubiquity/contracts/out/UbiquityAlgorithm
 import UbiquityCredit from "@ubiquity/contracts/out/UbiquityAutoRedeem.sol/UbiquityAutoRedeem.json";
 import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UBQ from "@ubiquity/contracts/out/UbiquityGovernance.sol/UbiquityGovernance.json";
-
 
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);
@@ -67,8 +66,8 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
   return getContract(SimpleBond.abi, address, provider);
 };
 
-export const getUbiquitystickContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityStick.abi, address, provider);
+export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquiStick.abi, address, provider);
 };
 
 export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
@@ -123,8 +122,8 @@ export const getIMetaPoolContract = (address: string, provider: ethers.providers
   return getContract(IMetaPool.abi, address, provider);
 };
 
-export const getMasterChefv2Contract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(MasterChefv2.abi, address, provider);
+export const getMasterChefV2Contract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(MasterChefV2.abi, address, provider);
 };
 
 export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) => {

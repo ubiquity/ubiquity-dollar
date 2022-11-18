@@ -25,14 +25,14 @@ contract Bonding is CollectableDust {
     uint256 public bondingDiscountMultiplier = uint256(1000000 gwei); // 0.001
     uint256 public redeemStreamTime = 86400; // 1 day in seconds
     uint256 public blockCountInAWeek = 45361;
-    uint256 public blockRonding = 100;
+    uint256 public blockBonding = 100;
     uint256 public uGOVPerBlock = 1;
 
     event MaxBondingPriceUpdated(uint256 _maxBondingPrice);
     event SablierUpdated(address _sablier);
     event BondingDiscountMultiplierUpdated(uint256 _bondingDiscountMultiplier);
     event RedeemStreamTimeUpdated(uint256 _redeemStreamTime);
-    event BlockRondingUpdated(uint256 _blockRonding);
+    event BlockBondingUpdated(uint256 _blockBonding);
     event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
     event UGOVPerBlockUpdated(uint256 _uGOVPerBlock);
 
@@ -52,7 +52,7 @@ contract Bonding is CollectableDust {
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    /// @dev uADPriceReset remove uAD unilateraly from the curve LP share sitting inside
+    /// @dev uADPriceReset remove uAD unilaterally from the curve LP share sitting inside
     ///      the bonding contract and send the uAD received to the treasury.
     ///      This will have the immediate effect of pushing the uAD price HIGHER
     /// @param amount of LP token to be removed for uAD
@@ -75,7 +75,7 @@ contract Bonding is CollectableDust {
         );
     }
 
-    /// @dev crvPriceReset remove 3CRV unilateraly from the curve LP share sitting inside
+    /// @dev crvPriceReset remove 3CRV unilaterally from the curve LP share sitting inside
     ///      the bonding contract and send the 3CRV received to the treasury
     ///      This will have the immediate effect of pushing the uAD price LOWER
     /// @param amount of LP token to be removed for 3CRV tokens
@@ -144,12 +144,12 @@ contract Bonding is CollectableDust {
         emit RedeemStreamTimeUpdated(_redeemStreamTime);
     }
 
-    function setBlockRonding(uint256 _blockRonding)
+    function setBlockBonding(uint256 _blockBonding)
         external
         onlyBondingManager
     {
-        blockRonding = _blockRonding;
-        emit BlockRondingUpdated(_blockRonding);
+        blockBonding = _blockBonding;
+        emit BlockBondingUpdated(_blockBonding);
     }
 
     function setBlockCountInAWeek(uint256 _blockCountInAWeek)
@@ -191,10 +191,10 @@ contract Bonding is CollectableDust {
 
         // 1 week = 45361 blocks = 2371753*7/366
         // n = (block + duration * 45361)
-        // id = n - n % blockRonding
-        // blockRonding = 100 => 2 ending zeros
+        // id = n - n % blockBonding
+        // blockBonding = 100 => 2 ending zeros
         uint256 n = block.number + _weeks * blockCountInAWeek;
-        _id = n - (n % blockRonding);
+        _id = n - (n % blockBonding);
         _mint(_sharesAmount, _id);
         // set masterchef for uGOV rewards
         IMasterChefV2(manager.masterChefAddress()).deposit(

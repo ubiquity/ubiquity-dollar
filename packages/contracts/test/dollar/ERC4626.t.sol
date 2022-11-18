@@ -280,7 +280,7 @@ contract ERC4626Test is Test {
 
         // 5. Bob mints 2000 shares (costs 3001 assets)
         // NOTE: Bob's assets spent got rounded up
-        // NOTE: Alices's vault assets got rounded up
+        // NOTE: Alice's vault assets got rounded up
         vm.prank(bob);
         vault.mint(2000, bob);
 

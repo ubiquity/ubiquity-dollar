@@ -45,7 +45,7 @@ contract MasterChefV2 is ReentrancyGuard {
 
     // uGOV tokens created per block.
     uint256 public uGOVPerBlock;
-    // Bonus muliplier for early uGOV makers.
+    // Bonus multiplier for early uGOV makers.
     uint256 public uGOVmultiplier = 1e18;
     uint256 public minPriceDiffToUpdateMultiplier = 1e15;
     uint256 public lastPrice = 1e18;
@@ -162,7 +162,7 @@ contract MasterChefV2 is ReentrancyGuard {
     }
 
     /// @dev get pending uGOV rewards from MasterChef.
-    /// @return amount of pending rewards transfered to msg.sender
+    /// @return amount of pending rewards transferred to msg.sender
     /// @notice only send pending rewards
     function getRewards(uint256 bondingShareID) external returns (uint256) {
         require(

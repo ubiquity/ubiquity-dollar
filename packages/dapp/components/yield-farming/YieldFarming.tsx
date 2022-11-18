@@ -78,7 +78,7 @@ export const YieldFarmingContainer = ({ managedContracts, namedContracts: contra
   };
 
   return (
-    <YieldFarmingSubcontainer
+    <YieldFarmingSubContainer
       yieldProxyData={yieldProxyData}
       depositInfo={depositInfo}
       isProcessing={doingTransaction}
@@ -88,7 +88,7 @@ export const YieldFarmingContainer = ({ managedContracts, namedContracts: contra
   );
 };
 
-type YieldFarmingSubcontainerProps = {
+type YieldFarmingSubContainerProps = {
   yieldProxyData: YieldProxyData | null;
   depositInfo: YieldProxyDepositInfo | null;
   isProcessing: boolean;
@@ -100,7 +100,7 @@ const fm = (n: BigNumber, d = 18) => +ethers.utils.formatUnits(n, d);
 const USDC_JAR_APY = { min: 10.1, max: 19.65 };
 const TVL = { usdc: 1.2, ubq: 2.5, uad: 0.6 };
 
-export const YieldFarmingSubcontainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubcontainerProps) => {
+export const YieldFarmingSubContainer = ({ actions, yieldProxyData, depositInfo, isProcessing, balance }: YieldFarmingSubContainerProps) => {
   return (
     <div className="panel">
       <h2>Vaults (Beta)</h2>

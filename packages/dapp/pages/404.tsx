@@ -28,9 +28,7 @@ const Custom404 = () => {
           </li>
         </ul>
       </div>
-      <div>
-        404
-      </div>
+      <div>404</div>
     </div>
   );
 };

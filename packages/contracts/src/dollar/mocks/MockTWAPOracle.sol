@@ -14,25 +14,25 @@ contract MockTWAPOracle {
     constructor(
         address _pool,
         address _uADtoken0,
-        address _curve3CRVtoken1,
+        address _curve3CRVToken1,
         uint256 _price0Average,
         uint256 _price1Average
     ) {
         pool = _pool;
 
         token0 = _uADtoken0;
-        token1 = _curve3CRVtoken1;
+        token1 = _curve3CRVToken1;
         price0Average = _price0Average;
         price1Average = _price1Average;
     }
 
     function consult(address token) external view returns (uint256 amountOut) {
         if (token == token0) {
-            // price to exchange amounIn uAD to 3CRV based on TWAP
+            // price to exchange amountIn uAD to 3CRV based on TWAP
             amountOut = price0Average;
         } else {
             require(token == token1, "TWAPOracle: INVALID_TOKEN");
-            // price to exchange amounIn 3CRV to uAD  based on TWAP
+            // price to exchange amountIn 3CRV to uAD  based on TWAP
             amountOut = price1Average;
         }
     }

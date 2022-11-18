@@ -14,7 +14,7 @@ contract DebtCoupon is ERC1155Ubiquity {
     //not public as if called externally can give inaccurate value. see method
     uint256 private _totalOutstandingDebt;
 
-    //represents tokenSupply of each expiry (since 1155 doesnt have this)
+    //represents tokenSupply of each expiry (since 1155 doesn't have this)
     mapping(uint256 => uint256) private _tokenSupplies;
 
     //ordered list of coupon expiries
@@ -51,8 +51,8 @@ contract DebtCoupon is ERC1155Ubiquity {
         mint(recipient, expiryBlockNumber, amount, "");
         emit MintedCoupons(recipient, expiryBlockNumber, amount);
 
-        //insert new relevant block number if it doesnt exist in our list
-        // (linkedlist implementation wont insert if dupe)
+        //insert new relevant block number if it doesn't exist in our list
+        // (linked list implementation won't insert if dupe)
         _sortedBlockNumbers.pushBack(expiryBlockNumber);
 
         //update the total supply for that expiry and total outstanding debt
