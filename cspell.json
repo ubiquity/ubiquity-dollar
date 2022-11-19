@@ -53,6 +53,7 @@
     "**/node_modules/**"
   ],
   "words": [
+    "!UbiquityStick",
     "Arrakis",
     "Chainlink",
     "DOLA",
