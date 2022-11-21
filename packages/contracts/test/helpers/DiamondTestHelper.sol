@@ -5,8 +5,8 @@ import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
 import "forge-std/console.sol";
 import "solidity-stringutils/strings.sol";
-import "../../src/diamond/interfaces/IDiamondCut.sol";
-import "../../src/diamond/interfaces/IDiamondLoupe.sol";
+import "../../src/manager/interfaces/IDiamondCut.sol";
+import "../../src/manager/interfaces/IDiamondLoupe.sol";
 
 contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
 	using strings for *;

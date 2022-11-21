@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../../src/diamond/interfaces/IDiamondCut.sol";
-import "../../src/diamond/facets/DiamondCutFacet.sol";
-import "../../src/diamond/facets/DiamondLoupeFacet.sol";
-import "../../src/diamond/facets/OwnershipFacet.sol";
-import "../../src/diamond/facets/ManagerFacet.sol";
-import "../../src/diamond/Diamond.sol";
+import "../../src/manager/interfaces/IDiamondCut.sol";
+import "../../src/manager/facets/DiamondCutFacet.sol";
+import "../../src/manager/facets/DiamondLoupeFacet.sol";
+import "../../src/manager/facets/OwnershipFacet.sol";
+import "../../src/manager/facets/ManagerFacet.sol";
+import "../../src/manager/Diamond.sol";
 import "../helpers/DiamondTestHelper.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
