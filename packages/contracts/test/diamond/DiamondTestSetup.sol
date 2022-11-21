@@ -28,6 +28,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     address admin;
     address user1;
     address contract1;
+    address contract2;
 
     // deploys diamond and connects facets
     function setUp() public virtual {
@@ -36,6 +37,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         admin = generateAddress("Admin", false, 10 ether);
         user1 = generateAddress("User1", false, 10 ether);
         contract1 = generateAddress("Contract1", true, 10 ether);
+        contract2 = generateAddress("Contract2", true, 10 ether);
 
         //deploy facets
         dCutFacet = new DiamondCutFacet();
