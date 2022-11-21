@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import {LibDiamond} from "./LibDiamond.sol";
-import "solidstate/contracts/access/access_control/AccessControl.sol";
-import { AccessControlStorage } from "solidstate/contracts/access/access_control/AccessControlStorage.sol";
+import "../access/AccessControl.sol";
+import { AccessControlStorage } from "../libraries/AccessControlStorage.sol";
 
 bytes32 constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");
 bytes32 constant UBQ_BURNER_ROLE = keccak256("UBQ_BURNER_ROLE");

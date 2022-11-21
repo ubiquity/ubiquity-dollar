@@ -11,7 +11,7 @@ import {
     INCENTIVE_MANAGER_ROLE,
     UBQ_TOKEN_MANAGER_ROLE    
 } from "../libraries/LibAppStorage.sol";
-import { AccessControlStorage } from "solidstate/contracts/access/access_control/AccessControlStorage.sol";
+import { AccessControlStorage } from "../libraries/AccessControlStorage.sol";
 import { IERC20 } from "../interfaces/IERC20.sol";
 
 import "../interfaces/IUbiquityAlgorithmicDollar.sol";
