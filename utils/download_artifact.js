@@ -1,6 +1,6 @@
 module.exports = async ({ github, context, fs, workflow_run_id, workspace }) => {
   console.log("download_artifact.....");
-  const artifacts = await github.actions.listWorkflowRunArtifacts({
+  const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
     owner: context.repo.owner,
     repo: context.repo.repo,
     run_id: workflow_run_id,
@@ -8,7 +8,7 @@ module.exports = async ({ github, context, fs, workflow_run_id, workspace }) => 
   const matchArtifact = artifacts.data.artifacts.filter((artifact) => {
     return artifact.name == "pr";
   })[0];
-  const download = await github.actions.downloadArtifact({
+  const download = await github.rest.actions.downloadArtifact({
     owner: context.repo.owner,
     repo: context.repo.repo,
     artifact_id: matchArtifact.id,
