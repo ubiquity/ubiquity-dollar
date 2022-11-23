@@ -23,7 +23,7 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test --fork-url https://rpc.ankr.com/eth --ffi",
+    "test": "forge test --fork-url https://rpc.ankr.com/eth",
     "slither:run": "slither . --compile-force-framework foundry",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
