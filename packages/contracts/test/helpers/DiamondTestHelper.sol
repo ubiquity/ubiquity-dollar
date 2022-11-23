@@ -4,13 +4,10 @@ pragma solidity ^0.8.3;
 import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
 import "forge-std/console.sol";
-import "solidity-stringutils/strings.sol";
 import "../../src/manager/interfaces/IDiamondCut.sol";
 import "../../src/manager/interfaces/IDiamondLoupe.sol";
 
 contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
-	using strings for *;
-	
 	uint256 private seed;
 
 	modifier prankAs(address caller) {
@@ -44,33 +41,6 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
 
 		return newAddress_;
 	}
-
-	// return array of function selectors for given facet name
-    function generateSelectors(
-		string memory _facetName
-	) internal returns (bytes4[] memory selectors) {
-        //get string of contract methods
-        string[] memory cmd = new string[](4);
-        cmd[0] = "forge";
-        cmd[1] = "inspect";
-        cmd[2] = _facetName;
-        cmd[3] = "methods";
-        bytes memory res = vm.ffi(cmd);
-        string memory st = string(res);
-
-        // extract function signatures and take first 4 bytes of keccak
-        strings.slice memory s = st.toSlice();
-        strings.slice memory delim = ":".toSlice();
-        strings.slice memory delim2 = ",".toSlice();
-        selectors = new bytes4[]((s.count(delim)));
-        for(uint i = 0; i < selectors.length; i++) {
-            s.split('"'.toSlice());
-            selectors[i] = bytes4(s.split(delim).until('"'.toSlice()).keccak());
-            s.split(delim2);
-
-        }
-        return selectors;
-    }
 
 	// remove index from bytes4[] array
     function removeElement(
@@ -159,6 +129,10 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
             }
         }
         return selectors;
+    }
+
+    function compareStrings(string memory a, string memory b) public view returns (bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
     }
 
     // implement dummy override functions

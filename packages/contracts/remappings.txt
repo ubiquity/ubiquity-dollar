@@ -4,4 +4,3 @@ ds-test/=lib/forge-std/lib/ds-test/src/
 solidity-linked-list/=lib/solidity-linked-list
 @uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts
 @uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts
-solidity-stringutils/=lib/solidity-stringutils/src/
