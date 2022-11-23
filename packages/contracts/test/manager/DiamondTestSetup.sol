@@ -7,6 +7,7 @@ import "../../src/manager/facets/DiamondLoupeFacet.sol";
 import "../../src/manager/facets/OwnershipFacet.sol";
 import "../../src/manager/facets/ManagerFacet.sol";
 import "../../src/manager/Diamond.sol";
+import "../../src/manager/upgradeInitializers/DiamondInit.sol";
 import "../helpers/DiamondTestHelper.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
@@ -14,8 +15,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
     // contract types of facets to be deployed
     Diamond diamond;
     DiamondCutFacet dCutFacet;
-    DiamondLoupeFacet dLoupe;
-    OwnershipFacet ownerF;
+    DiamondLoupeFacet dLoupeFacet;
+    OwnershipFacet dOwnerFacet;
 
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
@@ -58,15 +59,17 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         //deploy facets
         dCutFacet = new DiamondCutFacet();
-        dLoupe = new DiamondLoupeFacet();
-        ownerF = new OwnershipFacet();
+        dLoupeFacet = new DiamondLoupeFacet();
+        dOwnerFacet = new OwnershipFacet();
+        DiamondInit dInit = new DiamondInit();
+
         facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet"];
 
         // diamod arguments
         DiamondArgs memory _args = DiamondArgs({
             owner: owner,
-            init: address(0),
-            initCalldata: " "
+            init: address(dInit),
+            initCalldata: abi.encodeWithSelector(DiamondInit.init.selector)
         });
 
         FacetCut[] memory diamondCut = new FacetCut[](3);
@@ -79,7 +82,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         diamondCut[1] = (
             FacetCut({
-            facetAddress: address(dLoupe),
+            facetAddress: address(dLoupeFacet),
             action: FacetCutAction.Add,
             functionSelectors: selectorsOfDiamondLoupeFacet
             })
@@ -87,7 +90,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         diamondCut[2] = (
             FacetCut({
-            facetAddress: address(ownerF),
+            facetAddress: address(dOwnerFacet),
             action: FacetCutAction.Add,
             functionSelectors: selectorsOfOwnershipFacet
             })
