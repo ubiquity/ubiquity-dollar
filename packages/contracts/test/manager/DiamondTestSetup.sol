@@ -45,9 +45,40 @@ abstract contract DiamondSetup is DiamondTestHelper {
         ownerF = new OwnershipFacet();
         facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet"];
 
+        // diamod arguments
+        DiamondArgs memory _args = DiamondArgs({
+            owner: owner,
+            init: address(0),
+            initCalldata: " "
+        });
+
+        FacetCut[] memory diamondCut = new FacetCut[](3);
+
+        diamondCut[0] = FacetCut ({
+            facetAddress: address(dCutFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: generateSelectors("DiamondCutFacet")
+        });
+
+        diamondCut[1] = (
+            FacetCut({
+            facetAddress: address(dLoupe),
+            action: FacetCutAction.Add,
+            functionSelectors: generateSelectors("DiamondLoupeFacet")
+            })
+        );
+
+        diamondCut[2] = (
+            FacetCut({
+            facetAddress: address(ownerF),
+            action: FacetCutAction.Add,
+            functionSelectors: generateSelectors("OwnershipFacet")
+            })
+        );
+
         // deploy diamond
         vm.startPrank(owner);
-        diamond = new Diamond(owner);
+        diamond = new Diamond(_args, diamondCut);
 		vm.stopPrank();
 
         // initialise interfaces
