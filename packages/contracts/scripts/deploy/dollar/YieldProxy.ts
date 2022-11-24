@@ -12,7 +12,7 @@ export const optionDefinitions: OptionDefinition[] = [
 ]
 
 const func = async (params: DeployFuncParam) => {
-    const contractInstance = "src/dollar/YielProxy.sol:YielProxy";
+    const contractInstance = "src/dollar/YieldProxy.sol:YieldProxy";
     const { env, args } = params;
     const chainId = Networks[args.network] ?? undefined;
     if (!chainId) {

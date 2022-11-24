@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 import "../../src/ubiquistick/SimpleBond.sol";
-import "../../src/ubiquistick/TheUbiquityStick.sol";
+import "../../src/ubiquistick/UbiquiStick.sol";
 
 import "forge-std/Test.sol";
 
@@ -19,7 +19,7 @@ contract ZeroState is Test {
     ERC20 rewardToken;
     ERC20 bondToken;
     ERC20 fakeToken;
-    TheUbiquityStick stick;
+    UbiquiStick stick;
     SimpleBond bond;
 
     event LogSetRewards(address token, uint256 rewardsRatio);
@@ -45,7 +45,7 @@ contract ZeroState is Test {
         rewardToken = new ERC20("rToken", "RT");
         bondToken = new ERC20("bToken", "BT");
         fakeToken = new ERC20("fToken", "FT");
-        stick = new TheUbiquityStick();
+        stick = new UbiquiStick();
         bond = new SimpleBond(address(rewardToken), 100, treasury);
         vm.stopPrank();
     }

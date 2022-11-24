@@ -50,7 +50,7 @@ const Inventory = () => {
 
   function showIfBalanceExists(key: keyof Balances | keyof typeof namedContracts, name: keyof typeof tokenSvg, id: string) {
     const usdcFix = function () {
-      if (key == "usdc") return 6;
+      if (key == "usdc" || key == "usdt") return 6;
       else return 18;
     };
 
@@ -136,13 +136,13 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
 };
 
 const tokenSvg = {
-  uAD: () => icons.svgs.uad,
-  uCR: () => icons.svgs.ucr,
-  "uCR-NFT": () => icons.svgs.ucrNft,
-  UBQ: () => icons.svgs.ubq,
-  USDC: () => icons.svgs.usdc,
-  DAI: () => icons.svgs.dai,
-  USDT: () => icons.svgs.usdt,
+  uAD: () => icons.SVGs.uad,
+  uCR: () => icons.SVGs.ucr,
+  "uCR-NFT": () => icons.SVGs.ucrNft,
+  UBQ: () => icons.SVGs.ubq,
+  USDC: () => icons.SVGs.usdc,
+  DAI: () => icons.SVGs.dai,
+  USDT: () => icons.SVGs.usdt,
   "3crv": () => <img src={icons.base64s["3crv"]} />,
   "uAD3CRV-f": () => <img src={icons.base64s["uad3crv-f"]} />,
 };

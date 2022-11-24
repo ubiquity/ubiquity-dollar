@@ -22,10 +22,10 @@ const main = async () => {
     }
 
     const taskHandler = TASK_FUNCS[name].handler;
-    const cmdline_parse_options = TASK_FUNCS[name].options;
+    const commandLineParseOptions = TASK_FUNCS[name].options;
     let args;
     try {
-        args = CommandLineArgs(cmdline_parse_options);
+        args = CommandLineArgs(commandLineParseOptions);
     } catch (error: any) {
         console.error(`Argument parse failed!, error: ${error}`)
         return;

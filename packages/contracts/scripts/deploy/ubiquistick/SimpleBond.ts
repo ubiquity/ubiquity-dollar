@@ -23,7 +23,7 @@ const func = async (params: DeployFuncParam) => {
         throw new Error(`Unsupported network: ${args.network} Please configure it out first`);
     }
     // If testenv is true, it means that the ownership is transferred in the deployment step
-    // Must be careful when you deploy contracts to the mainnets.
+    // Must be careful when you deploy contracts to the mainnet.
     const testenv = args.testenv ?? true;
     const uAR_deployments = await deployments(chainId.toString(), "UAR");
 
@@ -32,7 +32,7 @@ const func = async (params: DeployFuncParam) => {
     const signer = new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
     const simpleBondAddress = result!.deployedTo;
     const simple_bond_deployments = await deployments(chainId.toString(), "SimpleBond");
-    const ubiquity_stick_deployments = await deployments(chainId.toString(), "TheUbiquityStick");
+    const ubiquity_stick_deployments = await deployments(chainId.toString(), "UbiquiStick");
     const simpleBondContract = new ethers.Contract(simpleBondAddress, simple_bond_deployments.abi, signer)
     console.log("Setting up the sticker...");
     let tx = await simpleBondContract.setSticker(ubiquity_stick_deployments.address);
