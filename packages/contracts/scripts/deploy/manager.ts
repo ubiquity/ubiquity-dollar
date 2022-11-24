@@ -1,6 +1,7 @@
 import { OptionDefinition } from "command-line-args";
 
 import { DeployFuncCallback } from "../shared";
+
 import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding"
 import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmicDollarManager"
 import bondingShareFunc, { optionDefinitions as bondingShareOptions } from "./dollar/BondingShare"

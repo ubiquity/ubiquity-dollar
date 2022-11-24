@@ -58,7 +58,7 @@ contract BondingFormulas {
     /* solhint-enable no-unused-vars */
 
     /// @dev formula to calculate the corrected amount to withdraw based on the proportion of
-    ///      lp deposited against actual LP token on thge bonding contract
+    ///      lp deposited against actual LP token on the bonding contract
     /// @param _totalLpDeposited , Total amount of LP deposited by users
     /// @param _bondingLpBalance , actual bonding contract LP tokens balance minus lp rewards
     /// @param _amount , amount of LP tokens
@@ -71,7 +71,7 @@ contract BondingFormulas {
     ) public pure returns (uint256) {
         if (_bondingLpBalance < _totalLpDeposited && _bondingLpBalance > 0) {
             // if there is less LP token inside the bonding contract that what have been deposited
-            // we have to reduce proportionnaly the lp amount to withdraw
+            // we have to reduce proportionally the lp amount to withdraw
             return _amount.fromUInt().mul(_bondingLpBalance.fromUInt()).div(
                 _totalLpDeposited.fromUInt()
             ).toUInt();

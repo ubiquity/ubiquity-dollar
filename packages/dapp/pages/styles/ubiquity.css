@@ -426,3 +426,24 @@ aside {
 #CreditOperations[data-twap^="1."] #RedeemUcr > div {
   pointer-events: unset;
 }
+
+/* Page 404 styles */
+#Page404 {
+  display: flex;
+}
+#Page404 a {
+  text-decoration: underline;
+}
+#Page404 > div:nth-child(1) {
+  padding: 16px;
+  text-align: left;
+}
+#Page404 > div:nth-child(1) > p:nth-child(1) {
+  font-size: 2rem;
+}
+#Page404 > div:nth-child(2) {
+  align-items: center;
+  display: flex;
+  font-size: 4rem;
+  padding: 16px;
+}

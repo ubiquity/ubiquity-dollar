@@ -6,6 +6,14 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
+## Contributing
+
+- We welcome everybody to participate in improving the codebase. 
+
+- We offer incentives for contributors to solve issues. 
+
+- Please learn how to contribute via our bounty program [here](https://github.com/ubiquity/ubiquity-dollar/wiki/Bounty-Rules/).
+
 ## Yarn Workspaces
 
 The repo has been built as a [yarn workspace](https://yarnpkg.com/features/workspaces) monorepo.
@@ -85,17 +93,24 @@ Make sure you are using the following network configuration:
 
 ### Shared Private Keys
 
-- All Hardhat developers know about these keys. These keys are derived from the `test test test test test test test test test test test junk` mnemonic in the Hardhat docs.
+- These keys are derived from the `upset concert service toy elephant spoil gun yellow girl provide click beauty`.
 - Do not send assets of value to these wallets.
 
-```
-0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
-0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d
-0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a
-0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6
-0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a
-0x8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba
-```
+
+| PATH              | ADDRESS                                     | PRIVATE KEY                                                        |
+| :---------------- | :------------------------------------------ | :----------------------------------------------------------------- |
+| m/44'/60'/0'/0/0	| 0xa18E35a6E821AaDC80AFD132FFa72879f999F2fc  | 0x4454691749f69f1224e443731757b75005d0335d38cd3900d7f74e64625c6091 |
+| m/44'/60'/0'/0/1	| 0x959d25B75324fBE0ADc75a454Df286eaBc7B45a7  | 0x61aefdfdd9dc3f84b6e9e061dd51781b126a78f54836ae77d9b9b81017d801b6 |
+| m/44'/60'/0'/0/2	| 0x1cDd6EfC312982F337E45cBA1050422908564358  |	0x934eaa469cf07f77eef7eba88279d7be916887e7be42bbf8abeac1e300c02d5e |
+| m/44'/60'/0'/0/3	| 0x1853E2B5F1135e888a85b1C0Cf54D5Fa4E82d5A1  | 0xa6eebebb2e7a4adc76a4710e980af27f550a55b2753bf3e9badaf635c34f9f91 |
+| m/44'/60'/0'/0/4	| 0x7f1F7e985F85891Be5E38fCC6242fFCF81a08576  | 0xf50d765fff48f95cca730165913c8e645f13f8bc5a14e8cb2edf125748ef1afe |
+| m/44'/60'/0'/0/5	| 0xd7a01fd8a68723baB8dBbE162504D8b4Fb49e2c9  | 0x727d650cc0c833f8ae2bff91d14e2fc4b23cee28e6d961c5307666e58a12b163 |
+| m/44'/60'/0'/0/6	| 0xC16AD476ab93b80C16fD6F00cDD79E4F9A7b7a76  | 0xa65196f91a8b6007808c508beda7f755ca808f899c4254865766e5aecb837528 |
+| m/44'/60'/0'/0/7	| 0x4A3DdEfFB0d2C1f69C083f578301896757B2b232  | 0x13d5a3866730f686dc8bf248710106a8e660bc861739cadf71c5dd261f90b533 |
+| m/44'/60'/0'/0/8	| 0x9Bf996d84AAecBb2E06dc5F277B7A26EBCA52A67  | 0x61eafce90092133ec543caa90c085af57c850df1b400f0af5cd0bf34fcddb052 |
+| m/44'/60'/0'/0/9	| 0x71454ff148c22f6D2Fc50C13aF0B702Aaa134189  | 0x3c82c68b4df60547a5fb926bf8d9513f4a6cf07604cb6429778ef6dce4eb48fb |
+| m/44'/60'/0'/0/10	| 0x53e93feD0C06D78ec86cEfC58b619BD6B5F93Ade  | 0x79c924066175ae04a3ef3cd88d293e1c2f7fd7a860c5ddb8f09077bd4225c757 |
+
 
 ### Ubiquity Dollar Contracts Setup
 
