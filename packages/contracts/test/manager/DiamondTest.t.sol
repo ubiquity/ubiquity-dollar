@@ -5,6 +5,12 @@ import "./DiamondTestSetup.sol";
 
 contract TestDiamond is DiamondSetup {
 
+    function testShouldSupportInspectingFacetsAndFunctions() public {
+        bool isSupported = IERC165(address(diamond))
+            .supportsInterface(type(IDiamondLoupe).interfaceId);
+        assertEq(isSupported, true);
+    }
+
     function testHasThreeFacets() public {
         assertEq(facetAddressList.length, 3);
     }
