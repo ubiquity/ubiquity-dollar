@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "./interfaces/IDebtRedemption.sol";
 import "./interfaces/ICreditRedemptionCalculator.sol";
-import "./interfaces/ICouponsForDollarsCalculator.sol";
+import "./interfaces/ICreditNFTRedemptionCalculator.sol";
 import "./interfaces/IDollarMintCalculator.sol";
 import "./interfaces/IDollarMintExcess.sol";
 import "./TWAPOracleDollar3pool.sol";
@@ -96,8 +96,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        ICouponsForDollarsCalculator couponCalculator =
-            ICouponsForDollarsCalculator(manager.couponCalculatorAddress());
+        ICreditNFTRedemptionCalculator couponCalculator =
+            ICreditNFTRedemptionCalculator(manager.couponCalculatorAddress());
         uint256 couponsToMint = couponCalculator.getCouponAmount(amount);
 
         // we burn user's dollars.
@@ -156,8 +156,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         view
         returns (uint256)
     {
-        ICouponsForDollarsCalculator couponCalculator =
-            ICouponsForDollarsCalculator(manager.couponCalculatorAddress());
+        ICreditNFTRedemptionCalculator couponCalculator =
+            ICreditNFTRedemptionCalculator(manager.couponCalculatorAddress());
         return couponCalculator.getCouponAmount(amount);
     }
 

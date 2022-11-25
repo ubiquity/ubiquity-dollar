@@ -6,8 +6,8 @@ import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
 import {UbiquityDollarToken} from
     "../../src/dollar/UbiquityDollarToken.sol";
-import {CouponsForDollarsCalculator} from
-    "../../src/dollar/CouponsForDollarsCalculator.sol";
+import {CreditNFTRedemptionCalculator} from
+    "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";

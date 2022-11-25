@@ -16,7 +16,7 @@ import "../../src/dollar/UbiquityChef.sol";
 import "../../src/dollar/CreditRedemptionCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
-import "../../src/dollar/CouponsForDollarsCalculator.sol";
+import "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import "../../src/dollar/DollarMintCalculator.sol";
 import "../../src/dollar/mocks/MockDebtCoupon.sol";
 import "../../src/dollar/DebtCouponManager.sol";
@@ -44,7 +44,7 @@ contract LiveTestHelper is Test {
     TWAPOracleDollar3pool twapOracle;
     UbiquityChef chefV2;
     CreditRedemptionCalculator uarCalc;
-    CouponsForDollarsCalculator couponCalc;
+    CreditNFTRedemptionCalculator couponCalc;
     DollarMintCalculator dollarMintCalc;
     MockDebtCoupon debtCoupon;
     DebtCouponManager debtCouponMgr;
@@ -205,7 +205,7 @@ contract LiveTestHelper is Test {
         uarCalc = new CreditRedemptionCalculator(address(manager));
         manager.setUARCalculatorAddress(address(uarCalc));
 
-        couponCalc = new CouponsForDollarsCalculator(address(manager));
+        couponCalc = new CreditNFTRedemptionCalculator(address(manager));
         manager.setCouponCalculatorAddress(address(couponCalc));
 
         dollarMintCalc = new DollarMintCalculator(address(manager));

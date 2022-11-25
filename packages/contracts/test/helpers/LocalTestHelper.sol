@@ -6,8 +6,8 @@ import {UbiquityDollarManager} from
 import {UbiquityGovernanceToken} from "../../src/dollar/UbiquityGovernanceToken.sol";
 import {CreditRedemptionCalculator} from
     "../../src/dollar/CreditRedemptionCalculator.sol";
-import {CouponsForDollarsCalculator} from
-    "../../src/dollar/CouponsForDollarsCalculator.sol";
+import {CreditNFTRedemptionCalculator} from
+    "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import {DollarMintCalculator} from
     "../../src/dollar/DollarMintCalculator.sol";
 import {DollarMintExcess} from
@@ -20,7 +20,7 @@ import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-contract MockCouponsForDollarsCalculator {
+contract MockCreditNFTRedemptionCalculator {
     constructor() {}
 
     function getCouponAmount(uint256 dollarsToBurn)
@@ -64,8 +64,8 @@ abstract contract LocalTestHelper is Test {
         _manager.setGovernanceTokenAddress(address(_uGov));
 
         // deploy couponsForDollarCalculator
-        MockCouponsForDollarsCalculator couponsForDollarsCalculator =
-            new MockCouponsForDollarsCalculator();
+        MockCreditNFTRedemptionCalculator couponsForDollarsCalculator =
+            new MockCreditNFTRedemptionCalculator();
         _manager.setCouponCalculatorAddress(
             address(couponsForDollarsCalculator)
         );

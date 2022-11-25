@@ -4,21 +4,21 @@ pragma solidity ^0.8.3;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
-import {CouponsForDollarsCalculator} from
-    "../../src/dollar/CouponsForDollarsCalculator.sol";
+import {CreditNFTRedemptionCalculator} from
+    "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
-contract CouponsForDollarsCalculatorTest is LocalTestHelper {
+contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
     address uADManagerAddress;
     address couponsForDollarsCalculatorAddress;
 
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityDollarManager();
         couponsForDollarsCalculatorAddress =
-            address(new CouponsForDollarsCalculator(uADManagerAddress));
+            address(new CreditNFTRedemptionCalculator(uADManagerAddress));
     }
 
     function test_getCouponAmount_revertsIfDebtTooHigh() public {
@@ -32,7 +32,7 @@ contract CouponsForDollarsCalculatorTest is LocalTestHelper {
         ).setTotalOutstandingDebt(totalSupply + 1);
 
         vm.expectRevert("Coupon to dollar: DEBT_TOO_HIGH");
-        CouponsForDollarsCalculator(couponsForDollarsCalculatorAddress)
+        CreditNFTRedemptionCalculator(couponsForDollarsCalculatorAddress)
             .getCouponAmount(0);
     }
 
@@ -46,7 +46,7 @@ contract CouponsForDollarsCalculatorTest is LocalTestHelper {
                 .debtCouponAddress()
         ).setTotalOutstandingDebt(totalSupply / 2);
         assertEq(
-            CouponsForDollarsCalculator(couponsForDollarsCalculatorAddress)
+            CreditNFTRedemptionCalculator(couponsForDollarsCalculatorAddress)
                 .getCouponAmount(10000),
             40000
         );
