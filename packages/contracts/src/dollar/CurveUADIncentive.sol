@@ -135,7 +135,7 @@ contract CurveUADIncentive is IIncentive {
 
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of UGOV
-            IUbiquityGovernance(manager.governanceTokenAddress()).mint(
+            IUbiquityGovernanceToken(manager.governanceTokenAddress()).mint(
                 target, incentive
             );
         }

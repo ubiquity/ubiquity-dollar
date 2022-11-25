@@ -213,7 +213,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
             expiryBlockNumber, 1e18
         );
         uint256 uGovBalance =
-            UbiquityGovernance(uGovAddress).balanceOf(mockMessageSender);
+            UbiquityGovernanceToken(uGovAddress).balanceOf(mockMessageSender);
         assertEq(uGovBalance, 5e17);
     }
 

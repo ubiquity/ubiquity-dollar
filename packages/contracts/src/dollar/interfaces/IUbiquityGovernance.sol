@@ -6,4 +6,4 @@ import "./IERC20Ubiquity.sol";
 /// @title uGOV governance token interface
 /// @author Ubiquity Algorithmic Dollar
 // solhint-disable-next-line no-empty-blocks
-interface IUbiquityGovernance is IERC20Ubiquity {}
+interface IUbiquityGovernanceToken is IERC20Ubiquity {}

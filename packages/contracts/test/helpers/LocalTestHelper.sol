@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import {UbiquityAlgorithmicDollarManager} from
     "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
+import {UbiquityGovernanceToken} from "../../src/dollar/UbiquityGovernanceToken.sol";
 import {UARForDollarsCalculator} from
     "../../src/dollar/UARForDollarsCalculator.sol";
 import {CouponsForDollarsCalculator} from
@@ -60,7 +60,7 @@ abstract contract LocalTestHelper is Test {
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token
-        UbiquityGovernance _uGov = new UbiquityGovernance(address(_manager));
+        UbiquityGovernanceToken _uGov = new UbiquityGovernanceToken(address(_manager));
         _manager.setGovernanceTokenAddress(address(_uGov));
 
         // deploy couponsForDollarCalculator

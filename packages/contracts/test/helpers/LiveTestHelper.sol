@@ -7,7 +7,7 @@ import "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/BondingFormulas.sol";
 import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
-import "../../src/dollar/UbiquityGovernance.sol";
+import "../../src/dollar/UbiquityGovernanceToken.sol";
 import "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import "../../src/dollar/mocks/MockuADToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
@@ -54,7 +54,7 @@ contract LiveTestHelper is Test {
     IMetaPool metapool;
 
     MockuADToken uAD;
-    UbiquityGovernance uGov;
+    UbiquityGovernanceToken uGov;
 
     BondingShare bondingShareV1;
 
@@ -119,7 +119,7 @@ contract LiveTestHelper is Test {
         uFormulas = new UbiquityFormulas();
         manager.setFormulasAddress(address(uFormulas));
 
-        uGov = new UbiquityGovernance(address(manager));
+        uGov = new UbiquityGovernanceToken(address(manager));
         manager.setGovernanceTokenAddress(address(uGov));
         //manager.grantRole(manager.BONDING_MANAGER_ROLE(), admin);
 
