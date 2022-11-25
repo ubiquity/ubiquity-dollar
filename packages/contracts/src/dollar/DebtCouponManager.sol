@@ -7,7 +7,7 @@ import "./interfaces/IUARForDollarsCalculator.sol";
 import "./interfaces/ICouponsForDollarsCalculator.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
 import "./interfaces/IExcessDollarsDistributor.sol";
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./UbiquityDollarToken.sol";
 import "./UbiquityAutoRedeem.sol";
@@ -391,8 +391,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
     }
 
     function _getTwapPrice() internal returns (uint256) {
-        TWAPOracle(manager.twapOracleAddress()).update();
-        return TWAPOracle(manager.twapOracleAddress()).consult(
+        TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
+        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }

@@ -8,7 +8,7 @@ import {UbiquityDollarToken} from
     "../../src/dollar/UbiquityDollarToken.sol";
 import {CouponsForDollarsCalculator} from
     "../../src/dollar/CouponsForDollarsCalculator.sol";
-import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
+import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {CurveUADIncentive} from "../../src/dollar/CurveUADIncentive.sol";
@@ -37,12 +37,12 @@ contract CurveUADIncentiveTest is LocalTestHelper {
     function mockInternalFuncs(uint256 _twapPrice) public {
         vm.mockCall(
             twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracle.update.selector),
+            abi.encodeWithSelector(TWAPOracleDollar3pool.update.selector),
             abi.encode()
         );
         vm.mockCall(
             twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracle.consult.selector),
+            abi.encodeWithSelector(TWAPOracleDollar3pool.consult.selector),
             abi.encode(_twapPrice)
         );
     }

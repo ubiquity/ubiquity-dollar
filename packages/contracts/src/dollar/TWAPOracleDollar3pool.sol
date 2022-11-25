@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "./interfaces/IMetaPool.sol";
 
-contract TWAPOracle {
+contract TWAPOracleDollar3pool {
     address public immutable pool;
     address public immutable token0;
     address public immutable token1;

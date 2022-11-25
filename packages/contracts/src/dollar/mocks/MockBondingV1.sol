@@ -10,7 +10,7 @@ import "../UbiquityDollarToken.sol";
 import "../UbiquityAlgorithmicDollarManager.sol";
 import "../interfaces/ISablier.sol";
 import "../interfaces/IMasterChefV2.sol";
-import "../interfaces/ITWAPOracle.sol";
+import "../interfaces/ITWAPOracleDollar3pool.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../utils/CollectableDust.sol";
 
@@ -68,7 +68,7 @@ contract Bonding is CollectableDust {
             (metaPool.calc_withdraw_one_coin(amount, 0) * 99) / 100;
         // update twap
         metaPool.remove_liquidity_one_coin(amount, 0, expected);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         IERC20(manager.dollarTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             IERC20(manager.dollarTokenAddress()).balanceOf(address(this))
@@ -91,7 +91,7 @@ contract Bonding is CollectableDust {
             (metaPool.calc_withdraw_one_coin(amount, 1) * 99) / 100;
         // update twap
         metaPool.remove_liquidity_one_coin(amount, 1, expected);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         IERC20(manager.curve3PoolTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             IERC20(manager.curve3PoolTokenAddress()).balanceOf(address(this))
@@ -254,7 +254,7 @@ contract Bonding is CollectableDust {
     }
 
     function currentTokenPrice() public view returns (uint256) {
-        return ITWAPOracle(manager.twapOracleAddress()).consult(
+        return ITWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }
@@ -271,6 +271,6 @@ contract Bonding is CollectableDust {
     }
 
     function _updateOracle() internal {
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
 }

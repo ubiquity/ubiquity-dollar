@@ -11,7 +11,7 @@ import "../../src/dollar/UbiquityGovernance.sol";
 import "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import "../../src/dollar/mocks/MockuADToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
-import "../../src/dollar/TWAPOracle.sol";
+import "../../src/dollar/TWAPOracleDollar3pool.sol";
 import "../../src/dollar/MasterChefV2.sol";
 import "../../src/dollar/UARForDollarsCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
@@ -41,7 +41,7 @@ contract LiveTestHelper is Test {
     UbiquityAlgorithmicDollarManager manager;
 
     UbiquityFormulas uFormulas;
-    TWAPOracle twapOracle;
+    TWAPOracleDollar3pool twapOracle;
     MasterChefV2 chefV2;
     UARForDollarsCalculator uarCalc;
     CouponsForDollarsCalculator couponCalc;
@@ -200,7 +200,7 @@ contract LiveTestHelper is Test {
         metapool.transfer(secondAccount, 1000e18);
 
         twapOracle =
-        new TWAPOracle(address(metapool), address(uAD), address(curve3CrvToken));
+        new TWAPOracleDollar3pool(address(metapool), address(uAD), address(curve3CrvToken));
         manager.setTwapOracleAddress(address(twapOracle));
         uarCalc = new UARForDollarsCalculator(address(manager));
         manager.setUARCalculatorAddress(address(uarCalc));

@@ -14,7 +14,7 @@ import {ExcessDollarsDistributor} from
     "../../src/dollar/ExcessDollarsDistributor.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
-import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
+import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
 import "forge-std/Test.sol";
@@ -55,8 +55,8 @@ abstract contract LocalTestHelper is Test {
         _manager.setDollarTokenAddress(address(_uAD));
 
         // deploy twapPrice oracle
-        MockTWAPOracle _twapOracle =
-        new MockTWAPOracle(address(0x100), address(_uAD), address(0x101), 100, 100);
+        MockTWAPOracleDollar3pool _twapOracle =
+        new MockTWAPOracleDollar3pool(address(0x100), address(_uAD), address(0x101), 100, 100);
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token

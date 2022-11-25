@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
-import "./interfaces/ITWAPOracle.sol";
+import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./BondingShareV2.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 
@@ -299,7 +299,7 @@ contract MasterChefV2 is ReentrancyGuard {
     }
 
     function _getTwapPrice() internal view returns (uint256) {
-        return ITWAPOracle(manager.twapOracleAddress()).consult(
+        return ITWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }

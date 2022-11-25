@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/IUbiquityGovernance.sol";
 import "./interfaces/IIncentive.sol";
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 import "./UbiquityDollarToken.sol";
 import "./libs/ABDKMathQuad.sol";
 
@@ -161,11 +161,11 @@ contract CurveUADIncentive is IIncentive {
     }
 
     function _updateOracle() internal {
-        TWAPOracle(manager.twapOracleAddress()).update();
+        TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracle(manager.twapOracleAddress()).consult(
+        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }

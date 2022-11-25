@@ -13,7 +13,7 @@ import "./BondingShareV2.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/ISablier.sol";
 import "./interfaces/IMasterChefV2.sol";
-import "./interfaces/ITWAPOracle.sol";
+import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./utils/CollectableDust.sol";
 
@@ -170,7 +170,7 @@ contract BondingV2 is CollectableDust, Pausable {
         IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
         // remove one coin
         uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(amount, 0, 0);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         uint256 toTransfer =
             IERC20(manager.dollarTokenAddress()).balanceOf(address(this));
         IERC20(manager.dollarTokenAddress()).transfer(
@@ -189,7 +189,7 @@ contract BondingV2 is CollectableDust, Pausable {
         // remove one coin
         uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(amount, 1, 0);
         // update twap
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         uint256 toTransfer =
             IERC20(manager.curve3PoolTokenAddress()).balanceOf(address(this));
         IERC20(manager.curve3PoolTokenAddress()).transfer(
@@ -261,7 +261,7 @@ contract BondingV2 is CollectableDust, Pausable {
             1 <= _weeks && _weeks <= 208,
             "Bonding: duration must be between 1 and 208 weeks"
         );
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
 
         // update the accumulated lp rewards per shares
         _updateLpPerShare();
@@ -589,7 +589,7 @@ contract BondingV2 is CollectableDust, Pausable {
             "Bonding: Redeem not allowed before bonding time"
         );
 
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         bs = IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id);
     }
 }

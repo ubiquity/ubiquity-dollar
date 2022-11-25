@@ -6,7 +6,7 @@ import {IUniswapV2Router01} from
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityAlgorithmicDollarManager} from
     "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
+import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {ExcessDollarsDistributor} from
     "../../src/dollar/ExcessDollarsDistributor.sol";
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";

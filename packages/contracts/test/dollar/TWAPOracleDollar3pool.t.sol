@@ -3,10 +3,10 @@ pragma solidity ^0.8.3;
 
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
-import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
+import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import "../helpers/LocalTestHelper.sol";
 
-contract TWAPOracleTest is LocalTestHelper {
+contract TWAPOracleDollar3poolTest is LocalTestHelper {
     address uadTokenAddress = address(0x222);
     address curve3CRVTokenAddress = address(0x333);
     address twapOracleAddress;
@@ -16,7 +16,7 @@ contract TWAPOracleTest is LocalTestHelper {
         metaPoolAddress =
             address(new MockMetaPool(uadTokenAddress, curve3CRVTokenAddress));
         twapOracleAddress = address(
-            new TWAPOracle(metaPoolAddress, uadTokenAddress, curve3CRVTokenAddress)
+            new TWAPOracleDollar3pool(metaPoolAddress, uadTokenAddress, curve3CRVTokenAddress)
         );
     }
 
@@ -34,12 +34,12 @@ contract TWAPOracleTest is LocalTestHelper {
             _dy_values
         );
 
-        TWAPOracle(twapOracleAddress).update();
+        TWAPOracleDollar3pool(twapOracleAddress).update();
 
         uint256 amount0Out =
-            TWAPOracle(twapOracleAddress).consult(uadTokenAddress);
+            TWAPOracleDollar3pool(twapOracleAddress).consult(uadTokenAddress);
         uint256 amount1Out =
-            TWAPOracle(twapOracleAddress).consult(curve3CRVTokenAddress);
+            TWAPOracleDollar3pool(twapOracleAddress).consult(curve3CRVTokenAddress);
         assertEq(amount0Out, 100e18);
         assertEq(amount1Out, 100e18);
     }

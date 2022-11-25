@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import {UbiquityAlgorithmicDollarManager} from
     "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
+import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {DollarMintingCalculator} from
     "../../src/dollar/DollarMintingCalculator.sol";
 
@@ -29,12 +29,12 @@ contract DollarMintingCalculatorTest is LocalTestHelper {
     function mockTwapFuncs(uint256 _twapPrice) public {
         vm.mockCall(
             twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracle.update.selector),
+            abi.encodeWithSelector(TWAPOracleDollar3pool.update.selector),
             abi.encode()
         );
         vm.mockCall(
             twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracle.consult.selector),
+            abi.encodeWithSelector(TWAPOracleDollar3pool.consult.selector),
             abi.encode(_twapPrice)
         );
     }

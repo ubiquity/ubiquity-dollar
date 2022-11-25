@@ -10,7 +10,7 @@ import "./interfaces/IUbiquityDollarToken.sol";
 import "./interfaces/ICurveFactory.sol";
 import "./interfaces/IMetaPool.sol";
 
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 
 /// @title A central config for the uAD system. Also acts as a central
 /// access control manager.
@@ -77,7 +77,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         twapOracleAddress = _twapOracleAddress;
         // to be removed
 
-        TWAPOracle oracle = TWAPOracle(twapOracleAddress);
+        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(twapOracleAddress);
         oracle.update();
     }
 

@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 import "./libs/ABDKMathQuad.sol";
 
 /// @title A mock coupon calculator that always returns a constant
@@ -22,7 +22,7 @@ contract DollarMintingCalculator is IDollarMintingCalculator {
 
     /// @notice returns (TWAP_PRICE  -1) * UAD_Total_Supply
     function getDollarsToMint() external view override returns (uint256) {
-        TWAPOracle oracle = TWAPOracle(manager.twapOracleAddress());
+        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(manager.twapOracleAddress());
         uint256 twapPrice = oracle.consult(manager.dollarTokenAddress());
         require(twapPrice > 1 ether, "DollarMintingCalculator: not > 1");
         return twapPrice.fromUInt().sub(_one).mul(
