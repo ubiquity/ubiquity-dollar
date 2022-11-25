@@ -2,13 +2,13 @@
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./interfaces/IUARForDollarsCalculator.sol";
+import "./interfaces/ICreditRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "./libs/ABDKMathQuad.sol";
 import "./DebtCoupon.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
-contract UARForDollarsCalculator is IUARForDollarsCalculator {
+contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

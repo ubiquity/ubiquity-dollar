@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "./interfaces/IDebtRedemption.sol";
-import "./interfaces/IUARForDollarsCalculator.sol";
+import "./interfaces/ICreditRedemptionCalculator.sol";
 import "./interfaces/ICouponsForDollarsCalculator.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
 import "./interfaces/IExcessDollarsDistributor.sol";
@@ -132,8 +132,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        IUARForDollarsCalculator uarCalculator =
-            IUARForDollarsCalculator(manager.uarCalculatorAddress());
+        ICreditRedemptionCalculator uarCalculator =
+            ICreditRedemptionCalculator(manager.uarCalculatorAddress());
         uint256 uarToMint = uarCalculator.getUARAmount(amount, blockHeightDebt);
 
         // we burn user's dollars.
@@ -168,8 +168,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         view
         returns (uint256)
     {
-        IUARForDollarsCalculator uarCalculator =
-            IUARForDollarsCalculator(manager.uarCalculatorAddress());
+        ICreditRedemptionCalculator uarCalculator =
+            ICreditRedemptionCalculator(manager.uarCalculatorAddress());
         return uarCalculator.getUARAmount(amount, blockHeightDebt);
     }
 

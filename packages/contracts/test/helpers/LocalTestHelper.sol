@@ -4,8 +4,8 @@ pragma solidity ^0.8.3;
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/UbiquityGovernanceToken.sol";
-import {UARForDollarsCalculator} from
-    "../../src/dollar/UARForDollarsCalculator.sol";
+import {CreditRedemptionCalculator} from
+    "../../src/dollar/CreditRedemptionCalculator.sol";
 import {CouponsForDollarsCalculator} from
     "../../src/dollar/CouponsForDollarsCalculator.sol";
 import {DollarMintingCalculator} from
@@ -75,8 +75,8 @@ abstract contract LocalTestHelper is Test {
         _manager.setuARTokenAddress(address(autoRedeem));
 
         // deploy UARDollarCalculator
-        UARForDollarsCalculator _uarDollarCalculator =
-            new UARForDollarsCalculator(address(_manager));
+        CreditRedemptionCalculator _uarDollarCalculator =
+            new CreditRedemptionCalculator(address(_manager));
         _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
 
         // deploy dollarMintingCalculator

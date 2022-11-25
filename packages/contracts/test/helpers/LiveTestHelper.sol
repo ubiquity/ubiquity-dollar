@@ -13,7 +13,7 @@ import "../../src/dollar/mocks/MockDollarToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
 import "../../src/dollar/TWAPOracleDollar3pool.sol";
 import "../../src/dollar/MasterChefV2.sol";
-import "../../src/dollar/UARForDollarsCalculator.sol";
+import "../../src/dollar/CreditRedemptionCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
 import "../../src/dollar/CouponsForDollarsCalculator.sol";
@@ -43,7 +43,7 @@ contract LiveTestHelper is Test {
     UbiquityFormulas uFormulas;
     TWAPOracleDollar3pool twapOracle;
     MasterChefV2 chefV2;
-    UARForDollarsCalculator uarCalc;
+    CreditRedemptionCalculator uarCalc;
     CouponsForDollarsCalculator couponCalc;
     DollarMintingCalculator dollarMintCalc;
     MockDebtCoupon debtCoupon;
@@ -202,7 +202,7 @@ contract LiveTestHelper is Test {
         twapOracle =
         new TWAPOracleDollar3pool(address(metapool), address(uAD), address(curve3CrvToken));
         manager.setTwapOracleAddress(address(twapOracle));
-        uarCalc = new UARForDollarsCalculator(address(manager));
+        uarCalc = new CreditRedemptionCalculator(address(manager));
         manager.setUARCalculatorAddress(address(uarCalc));
 
         couponCalc = new CouponsForDollarsCalculator(address(manager));

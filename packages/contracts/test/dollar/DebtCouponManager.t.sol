@@ -4,8 +4,8 @@ pragma solidity ^0.8.3;
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
 import {DebtCouponManager} from "../../src/dollar/DebtCouponManager.sol";
-import {UARForDollarsCalculator} from
-    "../../src/dollar/UARForDollarsCalculator.sol";
+import {CreditRedemptionCalculator} from
+    "../../src/dollar/CreditRedemptionCalculator.sol";
 import {DollarMintingCalculator} from
     "../../src/dollar/DollarMintingCalculator.sol";
 import {UbiquityCreditToken} from "../../src/dollar/UbiquityCreditToken.sol";
@@ -74,7 +74,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.mockCall(
             uARDollarCalculatorAddress,
             abi.encodeWithSelector(
-                UARForDollarsCalculator.getUARAmount.selector
+                CreditRedemptionCalculator.getUARAmount.selector
             ),
             abi.encode(_uarAmount)
         );
