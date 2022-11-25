@@ -8,7 +8,7 @@ import {UARForDollarsCalculator} from
     "../../src/dollar/UARForDollarsCalculator.sol";
 import {DollarMintingCalculator} from
     "../../src/dollar/DollarMintingCalculator.sol";
-import {UbiquityAutoRedeem} from "../../src/dollar/UbiquityAutoRedeem.sol";
+import {UbiquityCreditToken} from "../../src/dollar/UbiquityCreditToken.sol";
 import {ExcessDollarsDistributor} from
     "../../src/dollar/ExcessDollarsDistributor.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
@@ -16,7 +16,7 @@ import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol"
 
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
-import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
+import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
@@ -251,7 +251,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
             expiryBlockNumber, 1e18
         );
-        uint256 redeemBalance = UbiquityAutoRedeem(autoRedeemTokenAddress)
+        uint256 redeemBalance = UbiquityCreditToken(autoRedeemTokenAddress)
             .balanceOf(mockMessageSender);
         assertEq(redeemBalance, 1e18);
     }
@@ -276,7 +276,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         mockTwapFuncs(2e18);
         mockDollarMintingCalcFuncs(1e18);
         address account1 = address(0x123);
-        MockAutoRedeem(autoRedeemTokenAddress).mint(account1, 100e18);
+        MockCreditToken(autoRedeemTokenAddress).mint(account1, 100e18);
         vm.prank(account1);
         uint256 unredeemed = DebtCouponManager(debtCouponManagerAddress)
             .burnAutoRedeemTokensForDollars(10e18);
@@ -320,7 +320,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         MockDebtCoupon(debtCouponAddress).mintCoupons(
             account1, 100, expiryBlockNumber
         );
-        MockAutoRedeem(autoRedeemTokenAddress).mint(
+        MockCreditToken(autoRedeemTokenAddress).mint(
             debtCouponManagerAddress, 20000e18
         );
 
@@ -382,7 +382,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         MockDebtCoupon(debtCouponAddress).mintCoupons(
             account1, 100, expiryBlockNumber
         );
-        MockAutoRedeem(autoRedeemTokenAddress).mint(
+        MockCreditToken(autoRedeemTokenAddress).mint(
             debtCouponManagerAddress, 10000e18
         );
 

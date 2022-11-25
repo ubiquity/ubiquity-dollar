@@ -15,7 +15,7 @@ import {ExcessDollarsDistributor} from
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
+import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
@@ -71,7 +71,7 @@ abstract contract LocalTestHelper is Test {
         );
 
         // deploy ubiquityAutoRedeem
-        MockAutoRedeem autoRedeem = new MockAutoRedeem(0);
+        MockCreditToken autoRedeem = new MockCreditToken(0);
         _manager.setuARTokenAddress(address(autoRedeem));
 
         // deploy UARDollarCalculator

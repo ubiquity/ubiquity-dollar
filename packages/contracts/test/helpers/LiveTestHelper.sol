@@ -20,7 +20,7 @@ import "../../src/dollar/CouponsForDollarsCalculator.sol";
 import "../../src/dollar/DollarMintingCalculator.sol";
 import "../../src/dollar/mocks/MockDebtCoupon.sol";
 import "../../src/dollar/DebtCouponManager.sol";
-import "../../src/dollar/UbiquityAutoRedeem.sol";
+import "../../src/dollar/UbiquityCreditToken.sol";
 import "../../src/dollar/ExcessDollarsDistributor.sol";
 import "../../src/dollar/SushiSwapPool.sol";
 import "../../src/dollar/interfaces/IERC1155Ubiquity.sol";
@@ -48,7 +48,7 @@ contract LiveTestHelper is Test {
     DollarMintingCalculator dollarMintCalc;
     MockDebtCoupon debtCoupon;
     DebtCouponManager debtCouponMgr;
-    UbiquityAutoRedeem uAR;
+    UbiquityCreditToken uAR;
     ExcessDollarsDistributor excessDollarsDistributor;
     SushiSwapPool sushiUGOVPool;
     IMetaPool metapool;
@@ -218,7 +218,7 @@ contract LiveTestHelper is Test {
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(debtCouponMgr));
         manager.grantRole(manager.UBQ_BURNER_ROLE(), address(debtCouponMgr));
 
-        uAR = new UbiquityAutoRedeem(address(manager));
+        uAR = new UbiquityCreditToken(address(manager));
         manager.setuARTokenAddress(address(uAR));
 
         excessDollarsDistributor =
