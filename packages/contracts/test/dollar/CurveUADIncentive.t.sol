@@ -4,8 +4,8 @@ pragma solidity ^0.8.3;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityAlgorithmicDollarManager} from
     "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import {UbiquityAlgorithmicDollar} from
-    "../../src/dollar/UbiquityAlgorithmicDollar.sol";
+import {UbiquityDollarToken} from
+    "../../src/dollar/UbiquityDollarToken.sol";
 import {CouponsForDollarsCalculator} from
     "../../src/dollar/CouponsForDollarsCalculator.sol";
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
@@ -208,7 +208,7 @@ contract CurveUADIncentiveTest is LocalTestHelper {
 
         // 4. burn the penalty amount of tokens from the target address
         vm.prank(admin);
-        UbiquityAlgorithmicDollar(uAD_addr).mint(mockSender, 10000e18);
+        UbiquityDollarToken(uAD_addr).mint(mockSender, 10000e18);
         init_balance = uADToken.balanceOf(mockSender);
         assertEq(init_balance, 10000e18);
         mockInternalFuncs(5e17);

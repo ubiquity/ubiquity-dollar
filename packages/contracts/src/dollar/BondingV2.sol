@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./interfaces/IMetaPool.sol";
 import "./interfaces/IUbiquityFormulas.sol";
-import "./UbiquityAlgorithmicDollar.sol";
+import "./UbiquityDollarToken.sol";
 import "./BondingFormulas.sol";
 import "./BondingShareV2.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";

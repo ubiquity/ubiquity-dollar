@@ -5,7 +5,7 @@ import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/IUbiquityGovernance.sol";
 import "./interfaces/IIncentive.sol";
 import "./TWAPOracle.sol";
-import "./UbiquityAlgorithmicDollar.sol";
+import "./UbiquityDollarToken.sol";
 import "./libs/ABDKMathQuad.sol";
 
 /// @title Uniswap trading incentive contract
@@ -111,11 +111,11 @@ contract CurveUADIncentive is IIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityAlgorithmicDollar(manager.dollarTokenAddress())
+                UbiquityDollarToken(manager.dollarTokenAddress())
                     .balanceOf(target) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(
+            UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
                 target, penalty
             ); // burn from the recipient
         }

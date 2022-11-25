@@ -9,7 +9,7 @@ import "./interfaces/IDollarMintingCalculator.sol";
 import "./interfaces/IExcessDollarsDistributor.sol";
 import "./TWAPOracle.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./UbiquityAlgorithmicDollar.sol";
+import "./UbiquityDollarToken.sol";
 import "./UbiquityAutoRedeem.sol";
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./DebtCoupon.sol";
@@ -101,7 +101,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         uint256 couponsToMint = couponCalculator.getCouponAmount(amount);
 
         // we burn user's dollars.
-        UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(
+        UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
             msg.sender, amount
         );
 
@@ -137,7 +137,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         uint256 uarToMint = uarCalculator.getUARAmount(amount, blockHeightDebt);
 
         // we burn user's dollars.
-        UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(
+        UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
             msg.sender, amount
         );
         // mint uAR
@@ -281,8 +281,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
             "User doesn't have enough auto redeem pool tokens."
         );
 
-        UbiquityAlgorithmicDollar uAD =
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress());
+        UbiquityDollarToken uAD =
+            UbiquityDollarToken(manager.dollarTokenAddress());
         uint256 maxRedeemableUAR = uAD.balanceOf(address(this));
 
         if (maxRedeemableUAR <= 0) {
@@ -322,8 +322,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         );
 
         mintClaimableDollars();
-        UbiquityAlgorithmicDollar uAD =
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress());
+        UbiquityDollarToken uAD =
+            UbiquityDollarToken(manager.dollarTokenAddress());
         UbiquityAutoRedeem autoRedeemToken =
             UbiquityAutoRedeem(manager.autoRedeemTokenAddress());
         // uAR have a priority on uDEBT coupon holder
@@ -362,8 +362,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         //update the dollars for this cycle
         dollarsMintedThisCycle = totalMintableDollars;
 
-        UbiquityAlgorithmicDollar uAD =
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress());
+        UbiquityDollarToken uAD =
+            UbiquityDollarToken(manager.dollarTokenAddress());
         // uAD  dollars should  be minted to address(this)
         uAD.mint(address(this), dollarsToMint);
         UbiquityAutoRedeem autoRedeemToken =

@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../interfaces/IMetaPool.sol";
 import "../interfaces/IUbiquityFormulas.sol";
-import "../UbiquityAlgorithmicDollar.sol";
+import "../UbiquityDollarToken.sol";
 import "../UbiquityAlgorithmicDollarManager.sol";
 import "../interfaces/ISablier.sol";
 import "../interfaces/IMasterChefV2.sol";
