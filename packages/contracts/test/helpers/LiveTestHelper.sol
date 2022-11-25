@@ -21,7 +21,7 @@ import "../../src/dollar/DollarMintingCalculator.sol";
 import "../../src/dollar/mocks/MockDebtCoupon.sol";
 import "../../src/dollar/DebtCouponManager.sol";
 import "../../src/dollar/UbiquityCreditToken.sol";
-import "../../src/dollar/ExcessDollarsDistributor.sol";
+import "../../src/dollar/DollarMintExcess.sol";
 import "../../src/dollar/SushiSwapPool.sol";
 import "../../src/dollar/interfaces/IERC1155Ubiquity.sol";
 
@@ -49,7 +49,7 @@ contract LiveTestHelper is Test {
     MockDebtCoupon debtCoupon;
     DebtCouponManager debtCouponMgr;
     UbiquityCreditToken uAR;
-    ExcessDollarsDistributor excessDollarsDistributor;
+    DollarMintExcess excessDollarsDistributor;
     SushiSwapPool sushiUGOVPool;
     IMetaPool metapool;
 
@@ -222,7 +222,7 @@ contract LiveTestHelper is Test {
         manager.setuARTokenAddress(address(uAR));
 
         excessDollarsDistributor =
-            new ExcessDollarsDistributor(address(manager));
+            new DollarMintExcess(address(manager));
         manager.setExcessDollarsDistributor(
             address(debtCouponMgr), address(excessDollarsDistributor)
         );

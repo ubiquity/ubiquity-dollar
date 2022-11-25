@@ -6,7 +6,7 @@ import "./interfaces/IERC20Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
-import "./interfaces/IExcessDollarsDistributor.sol";
+import "./interfaces/IDollarMintExcess.sol";
 import "./interfaces/IMetaPool.sol";
 import "./UbiquityDollarManager.sol";
 import "./SushiSwapPool.sol";
@@ -14,7 +14,7 @@ import "./libs/ABDKMathQuad.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards
-contract ExcessDollarsDistributor is IExcessDollarsDistributor {
+contract DollarMintExcess is IDollarMintExcess {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;

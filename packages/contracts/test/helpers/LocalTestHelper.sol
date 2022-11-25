@@ -10,8 +10,8 @@ import {CouponsForDollarsCalculator} from
     "../../src/dollar/CouponsForDollarsCalculator.sol";
 import {DollarMintingCalculator} from
     "../../src/dollar/DollarMintingCalculator.sol";
-import {ExcessDollarsDistributor} from
-    "../../src/dollar/ExcessDollarsDistributor.sol";
+import {DollarMintExcess} from
+    "../../src/dollar/DollarMintExcess.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";

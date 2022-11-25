@@ -6,7 +6,7 @@ import "./interfaces/IDebtRedemption.sol";
 import "./interfaces/ICreditRedemptionCalculator.sol";
 import "./interfaces/ICouponsForDollarsCalculator.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
-import "./interfaces/IExcessDollarsDistributor.sol";
+import "./interfaces/IDollarMintExcess.sol";
 import "./TWAPOracleDollar3pool.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./UbiquityDollarToken.sol";
@@ -377,8 +377,8 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
             uint256 excessDollars =
                 currentRedeemableBalance - (totalOutstandingDebt);
 
-            IExcessDollarsDistributor dollarsDistributor =
-            IExcessDollarsDistributor(
+            IDollarMintExcess dollarsDistributor =
+            IDollarMintExcess(
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute

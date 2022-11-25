@@ -9,8 +9,8 @@ import {CreditRedemptionCalculator} from
 import {DollarMintingCalculator} from
     "../../src/dollar/DollarMintingCalculator.sol";
 import {UbiquityCreditToken} from "../../src/dollar/UbiquityCreditToken.sol";
-import {ExcessDollarsDistributor} from
-    "../../src/dollar/ExcessDollarsDistributor.sol";
+import {DollarMintExcess} from
+    "../../src/dollar/DollarMintExcess.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 
@@ -325,13 +325,13 @@ contract DebtCouponManagerTest is LocalTestHelper {
         );
 
         // set excess dollar distributor for debtCouponAddress
-        ExcessDollarsDistributor _excessDollarsDistributor =
-            new ExcessDollarsDistributor(uADManagerAddress);
+        DollarMintExcess _excessDollarsDistributor =
+            new DollarMintExcess(uADManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
             abi.encodeWithSelector(
-                ExcessDollarsDistributor.distributeDollars.selector
+                DollarMintExcess.distributeDollars.selector
             ),
             abi.encode()
         );
@@ -355,13 +355,13 @@ contract DebtCouponManagerTest is LocalTestHelper {
         // MockAutoRedeem(autoRedeemTokenAddress).mint(debtCouponManagerAddress, 20000e18);
 
         // set excess dollar distributor for debtCouponAddress
-        ExcessDollarsDistributor _excessDollarsDistributor =
-            new ExcessDollarsDistributor(uADManagerAddress);
+        DollarMintExcess _excessDollarsDistributor =
+            new DollarMintExcess(uADManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
             abi.encodeWithSelector(
-                ExcessDollarsDistributor.distributeDollars.selector
+                DollarMintExcess.distributeDollars.selector
             ),
             abi.encode()
         );
@@ -387,13 +387,13 @@ contract DebtCouponManagerTest is LocalTestHelper {
         );
 
         // set excess dollar distributor for debtCouponAddress
-        ExcessDollarsDistributor _excessDollarsDistributor =
-            new ExcessDollarsDistributor(uADManagerAddress);
+        DollarMintExcess _excessDollarsDistributor =
+            new DollarMintExcess(uADManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
             abi.encodeWithSelector(
-                ExcessDollarsDistributor.distributeDollars.selector
+                DollarMintExcess.distributeDollars.selector
             ),
             abi.encode()
         );
@@ -407,13 +407,13 @@ contract DebtCouponManagerTest is LocalTestHelper {
     function test_mintClaimableDollars() public {
         mockDollarMintingCalcFuncs(50);
         // set excess dollar distributor for debtCouponAddress
-        ExcessDollarsDistributor _excessDollarsDistributor =
-            new ExcessDollarsDistributor(uADManagerAddress);
+        DollarMintExcess _excessDollarsDistributor =
+            new DollarMintExcess(uADManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
             abi.encodeWithSelector(
-                ExcessDollarsDistributor.distributeDollars.selector
+                DollarMintExcess.distributeDollars.selector
             ),
             abi.encode()
         );

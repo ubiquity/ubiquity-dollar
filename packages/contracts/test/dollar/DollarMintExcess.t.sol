@@ -7,13 +7,13 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
-import {ExcessDollarsDistributor} from
-    "../../src/dollar/ExcessDollarsDistributor.sol";
+import {DollarMintExcess} from
+    "../../src/dollar/DollarMintExcess.sol";
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
-contract ExcessDollarsDistributorTest is LocalTestHelper {
+contract DollarMintExcessTest is LocalTestHelper {
     address uADManagerAddress;
     address uADAddress;
 
@@ -28,7 +28,7 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         uADAddress = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
         excessDollarsDistributorAddress =
-            address(new ExcessDollarsDistributor(uADManagerAddress));
+            address(new DollarMintExcess(uADManagerAddress));
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {
@@ -107,7 +107,7 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         uint256 _before_treasury_bal =
             MockDollarToken(uADAddress).balanceOf(treasuryAddress);
 
-        ExcessDollarsDistributor(excessDollarsDistributorAddress)
+        DollarMintExcess(excessDollarsDistributorAddress)
             .distributeDollars();
         uint256 _after_treasury_bal =
             MockDollarToken(uADAddress).balanceOf(treasuryAddress);
