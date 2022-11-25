@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/IAccessControl.sol";
 
 /// @title UAD Manager interface
 /// @author Ubiquity Algorithmic Manager
-interface IUbiquityAlgorithmicDollarManager is IAccessControl {
+interface IUbiquityDollarManager is IAccessControl {
     // TODO Add a generic setter for extra addresses that needs to be linked
 
     function INCENTIVE_MANAGER_ROLE() external view returns (bytes32);

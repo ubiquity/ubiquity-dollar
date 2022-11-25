@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/UbiquityGovernanceToken.sol";
 import {UARForDollarsCalculator} from
     "../../src/dollar/UARForDollarsCalculator.sol";
@@ -38,12 +38,12 @@ abstract contract LocalTestHelper is Test {
     address public admin = address(0x123abc);
     address public treasuryAddress = address(0x111222333);
 
-    function helpers_deployUbiquityAlgorithmicDollarManager()
+    function helpers_deployUbiquityDollarManager()
         public
         returns (address)
     {
-        UbiquityAlgorithmicDollarManager _manager =
-            new UbiquityAlgorithmicDollarManager(admin);
+        UbiquityDollarManager _manager =
+            new UbiquityDollarManager(admin);
 
         vm.startPrank(admin);
         // deploy debt token

@@ -30,7 +30,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     address base3PoolAddress = address(0x5);
 
     function setUp() public {
-        uadManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
+        uadManagerAddress = helpers_deployUbiquityDollarManager();
         // deploy mocked tokens
         token0 = new MockERC20('DAI', 'DAI', 18);
         token1 = new MockERC20('USDC', 'USDC', 6);
@@ -38,7 +38,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         // deploy stable swap meta pool
         stableSwapMetaPool = new MockERC20("Stable swap meta pool token", "Stable swap meta pool token", 18);
         vm.prank(admin);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
+        IUbiquityDollarManager(uadManagerAddress).setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
         // mock base3Pool to return mocked token addresses
         vm.mockCall(
             base3PoolAddress,
@@ -66,7 +66,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testConstructor_ShouldInitContract() public {
         assertEq(address(directGovernanceFarmer.manager()), uadManagerAddress);
         assertEq(directGovernanceFarmer.ubiquity3PoolLP(), address(stableSwapMetaPool));
-        assertEq(directGovernanceFarmer.ubiquityDollar(), IUbiquityAlgorithmicDollarManager(uadManagerAddress).dollarTokenAddress());
+        assertEq(directGovernanceFarmer.ubiquityDollar(), IUbiquityDollarManager(uadManagerAddress).dollarTokenAddress());
         assertEq(directGovernanceFarmer.depositZapUbiquityDollar(), depositZapAddress);
         assertEq(directGovernanceFarmer.token0(), address(token0));
         assertEq(directGovernanceFarmer.token1(), address(token1));
@@ -111,8 +111,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -157,7 +157,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
 
         vm.mockCall(
             stakingShareAddress,
@@ -177,8 +177,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);

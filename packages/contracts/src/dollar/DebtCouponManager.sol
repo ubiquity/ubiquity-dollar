@@ -11,7 +11,7 @@ import "./TWAPOracleDollar3pool.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./UbiquityDollarToken.sol";
 import "./UbiquityCreditToken.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./DebtCoupon.sol";
 
 /// @title A basic debt issuing and redemption mechanism for coupon holders
@@ -22,7 +22,7 @@ import "./DebtCoupon.sol";
 contract DebtCouponManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     //the amount of dollars we minted this cycle, so we can calculate delta.
     // should be reset to 0 when cycle ends
@@ -52,7 +52,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
     /// @param _couponLengthBlocks how many blocks coupons last. can't be changed
     /// once set (unless migrated)
     constructor(address _manager, uint256 _couponLengthBlocks) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         couponLengthBlocks = _couponLengthBlocks;
     }
 

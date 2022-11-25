@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./interfaces/IUbiquityGovernance.sol";
 import "./interfaces/IIncentive.sol";
 import "./TWAPOracleDollar3pool.sol";
@@ -15,7 +15,7 @@ contract CurveUADIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
     bool public isSellPenaltyOn = true;
     bool public isBuyIncentiveOn = true;
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
@@ -42,7 +42,7 @@ contract CurveUADIncentive is IIncentive {
     /// @notice CurveIncentive constructor
     /// @param _manager uAD Manager
     constructor(address _manager) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
     function incentivize(

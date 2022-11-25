@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {DollarMintingCalculator} from
     "../../src/dollar/DollarMintingCalculator.sol";
@@ -16,13 +16,13 @@ contract DollarMintingCalculatorTest is LocalTestHelper {
     address dollarMintingCalculatorAddress;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
-        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        uADManagerAddress = helpers_deployUbiquityDollarManager();
+        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
             .twapOracleAddress();
-        dollarMintingCalculatorAddress = UbiquityAlgorithmicDollarManager(
+        dollarMintingCalculatorAddress = UbiquityDollarManager(
             uADManagerAddress
         ).dollarMintingCalculatorAddress();
-        uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        uADAddress = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
     }
 

@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 
 /// @title ERC20 Ubiquity preset
@@ -19,7 +19,7 @@ contract ERC20Ubiquity is
     ERC20Burnable,
     ERC20Pausable
 {
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public DOMAIN_SEPARATOR;
@@ -69,7 +69,7 @@ contract ERC20Ubiquity is
     {
         _tokenName = name_;
         _symbol = symbol_;
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         // sender must be UbiquityAlgorithmicDollarManager roleAdmin
         // because he will get the admin, minter and pauser role on uAD and we want to
         // manage all permissions through the manager

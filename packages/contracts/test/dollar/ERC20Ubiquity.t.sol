@@ -2,8 +2,8 @@
 pragma solidity ^0.8.3;
 
 import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract ERC20UbiquityHarness is ERC20Ubiquity {
@@ -27,7 +27,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
     event Burning(address indexed _burned, uint256 _amount);
 
     function setUp() public {
-        uad_manager_addr = helpers_deployUbiquityAlgorithmicDollarManager();
+        uad_manager_addr = helpers_deployUbiquityDollarManager();
         vm.prank(admin);
         token_addr =
             address(new ERC20Ubiquity(uad_manager_addr, "Test", "Test"));
@@ -219,7 +219,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         // create burner role
         address burner = address(0x2);
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uad_manager_addr).grantRole(
+        UbiquityDollarManager(uad_manager_addr).grantRole(
             keccak256("UBQ_BURNER_ROLE"), burner
         );
         // admin pauses contract
@@ -240,7 +240,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         // create burner role
         address burner = address(0x2);
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uad_manager_addr).grantRole(
+        UbiquityDollarManager(uad_manager_addr).grantRole(
             keccak256("UBQ_BURNER_ROLE"), burner
         );
         // burn 50 tokens for user

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {DebtCouponManager} from "../../src/dollar/DebtCouponManager.sol";
 import {UARForDollarsCalculator} from
     "../../src/dollar/UARForDollarsCalculator.sol";
@@ -33,26 +33,26 @@ contract DebtCouponManagerTest is LocalTestHelper {
     address dollarMintingCalculatorAddress;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
+        uADManagerAddress = helpers_deployUbiquityDollarManager();
 
         debtCouponManagerAddress = address(
             new DebtCouponManager(uADManagerAddress, couponLengthBlocks)
         );
-        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
             .twapOracleAddress();
-        uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        uADAddress = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
-        uARDollarCalculatorAddress = UbiquityAlgorithmicDollarManager(
+        uARDollarCalculatorAddress = UbiquityDollarManager(
             uADManagerAddress
         ).uarCalculatorAddress();
-        debtCouponAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        debtCouponAddress = UbiquityDollarManager(uADManagerAddress)
             .debtCouponAddress();
-        uGovAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        uGovAddress = UbiquityDollarManager(uADManagerAddress)
             .governanceTokenAddress();
-        autoRedeemTokenAddress = UbiquityAlgorithmicDollarManager(
+        autoRedeemTokenAddress = UbiquityDollarManager(
             uADManagerAddress
         ).autoRedeemTokenAddress();
-        dollarMintingCalculatorAddress = UbiquityAlgorithmicDollarManager(
+        dollarMintingCalculatorAddress = UbiquityDollarManager(
             uADManagerAddress
         ).dollarMintingCalculatorAddress();
     }
@@ -94,7 +94,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         address _excessDollarsDistributor
     ) public {
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        UbiquityDollarManager(uADManagerAddress)
             .setExcessDollarsDistributor(
             debtCouponManagerAddress, _excessDollarsDistributor
         );
@@ -203,7 +203,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         MockDebtCoupon(debtCouponAddress).mintCoupons(
             mockMessageSender, 2e18, expiryBlockNumber
         );
-        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(
+        UbiquityDollarManager(uADManagerAddress).grantRole(
             keccak256("UBQ_MINTER_ROLE"), debtCouponManagerAddress
         );
         vm.stopPrank();
@@ -242,7 +242,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         MockDebtCoupon(debtCouponAddress).mintCoupons(
             mockMessageSender, 2e18, expiryBlockNumber
         );
-        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(
+        UbiquityDollarManager(uADManagerAddress).grantRole(
             keccak256("UBQ_MINTER_ROLE"), debtCouponManagerAddress
         );
         vm.stopPrank();

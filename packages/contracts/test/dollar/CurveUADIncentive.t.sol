@@ -2,8 +2,8 @@
 pragma solidity ^0.8.3;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {UbiquityDollarToken} from
     "../../src/dollar/UbiquityDollarToken.sol";
 import {CouponsForDollarsCalculator} from
@@ -24,13 +24,13 @@ contract CurveUADIncentiveTest is LocalTestHelper {
     event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
+        uADManagerAddress = helpers_deployUbiquityDollarManager();
         curveIncentiveAddress =
             address(new CurveUADIncentive(uADManagerAddress));
-        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
             .twapOracleAddress();
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        UbiquityDollarManager(uADManagerAddress)
             .setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
     }
 
@@ -56,7 +56,7 @@ contract CurveUADIncentiveTest is LocalTestHelper {
 
     function test_incentivize_revertsIfSenderEqualToReceiver() public {
         vm.prank(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .dollarTokenAddress()
         );
         vm.expectRevert("CurveIncentive: cannot send self");
@@ -66,14 +66,14 @@ contract CurveUADIncentiveTest is LocalTestHelper {
     }
 
     function test_incentivize_buy() public {
-        address stableSwapPoolAddress = UbiquityAlgorithmicDollarManager(
+        address stableSwapPoolAddress = UbiquityDollarManager(
             uADManagerAddress
         ).stableSwapMetaPoolAddress();
         IERC20 govToken = IERC20(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .governanceTokenAddress()
         );
-        address uAD_addr = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        address uAD_addr = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
         address mockReceiver = address(0x111);
 
@@ -131,7 +131,7 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         init_balance = govToken.balanceOf(mockReceiver);
         mockInternalFuncs(5e17);
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(
+        UbiquityDollarManager(uADManagerAddress).grantRole(
             keccak256("UBQ_MINTER_ROLE"), curveIncentiveAddress
         );
         vm.prank(uAD_addr);
@@ -144,14 +144,14 @@ contract CurveUADIncentiveTest is LocalTestHelper {
     }
 
     function test_incentivize_sell() public {
-        address stableSwapPoolAddress = UbiquityAlgorithmicDollarManager(
+        address stableSwapPoolAddress = UbiquityDollarManager(
             uADManagerAddress
         ).stableSwapMetaPoolAddress();
         IERC20 govToken = IERC20(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .governanceTokenAddress()
         );
-        address uAD_addr = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        address uAD_addr = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
         IERC20 uADToken = IERC20(uAD_addr);
         address mockSender = address(0x222);

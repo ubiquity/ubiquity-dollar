@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/IUARForDollarsCalculator.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./libs/ABDKMathQuad.sol";
 import "./DebtCoupon.sol";
 
@@ -12,7 +12,7 @@ contract UARForDollarsCalculator is IUARForDollarsCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
     uint256 private _coef = 1 ether;
 
     modifier onlyAdmin() {
@@ -25,7 +25,7 @@ contract UARForDollarsCalculator is IUARForDollarsCalculator {
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
     constructor(address _manager) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
     /// @notice set the constant for uAR calculation

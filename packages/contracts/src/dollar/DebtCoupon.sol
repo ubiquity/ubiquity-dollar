@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "./ERC1155Ubiquity.sol";
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 
 /// @title A coupon redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
@@ -36,7 +36,7 @@ contract DebtCoupon is ERC1155Ubiquity {
 
     //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
     constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         _totalOutstandingDebt = 0;
     }
 

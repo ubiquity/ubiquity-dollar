@@ -18,7 +18,7 @@ import "./TWAPOracleDollar3pool.sol";
 /// be changed by the admin (governance)
 /// @dev This should be used as a central access control manager which other
 /// contracts use to check permissions
-contract UbiquityAlgorithmicDollarManager is AccessControl {
+contract UbiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
     bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");

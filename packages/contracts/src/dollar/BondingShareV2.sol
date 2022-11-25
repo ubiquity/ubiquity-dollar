@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
@@ -24,7 +24,7 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 lpAmount;
     }
 
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     mapping(uint256 => Bond) private _bonds;
@@ -60,7 +60,7 @@ contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
      * @dev constructor
      */
     constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
     /// @dev update bond LP amount , LP rewards debt and end block.

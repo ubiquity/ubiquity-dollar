@@ -2,8 +2,8 @@
 pragma solidity ^0.8.3;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {CouponsForDollarsCalculator} from
     "../../src/dollar/CouponsForDollarsCalculator.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
@@ -16,18 +16,18 @@ contract CouponsForDollarsCalculatorTest is LocalTestHelper {
     address couponsForDollarsCalculatorAddress;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
+        uADManagerAddress = helpers_deployUbiquityDollarManager();
         couponsForDollarsCalculatorAddress =
             address(new CouponsForDollarsCalculator(uADManagerAddress));
     }
 
     function test_getCouponAmount_revertsIfDebtTooHigh() public {
         uint256 totalSupply = IERC20(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .dollarTokenAddress()
         ).totalSupply();
         MockDebtCoupon(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .debtCouponAddress()
         ).setTotalOutstandingDebt(totalSupply + 1);
 
@@ -38,11 +38,11 @@ contract CouponsForDollarsCalculatorTest is LocalTestHelper {
 
     function test_getCouponAmount() public {
         uint256 totalSupply = IERC20(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .dollarTokenAddress()
         ).totalSupply();
         MockDebtCoupon(
-            UbiquityAlgorithmicDollarManager(uADManagerAddress)
+            UbiquityDollarManager(uADManagerAddress)
                 .debtCouponAddress()
         ).setTotalOutstandingDebt(totalSupply / 2);
         assertEq(

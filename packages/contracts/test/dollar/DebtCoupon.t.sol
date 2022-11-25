@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 
 import "../helpers/LocalTestHelper.sol";
@@ -18,7 +18,7 @@ contract DebtCouponTest is LocalTestHelper {
     );
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
+        uADManagerAddress = helpers_deployUbiquityDollarManager();
         debtCouponAddress = address(new DebtCoupon(uADManagerAddress));
     }
 

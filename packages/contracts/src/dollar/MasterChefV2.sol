@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IERC20Ubiquity.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./BondingShareV2.sol";
 import "./interfaces/IUbiquityFormulas.sol";
@@ -41,7 +41,7 @@ contract MasterChefV2 is ReentrancyGuard {
     uint256 private _totalShares;
 
     // Ubiquity Manager
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     // uGOV tokens created per block.
     uint256 public uGOVPerBlock;
@@ -92,7 +92,7 @@ contract MasterChefV2 is ReentrancyGuard {
         uint256[] memory _amounts,
         uint256[] memory _bondingShareIDs
     ) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         pool.lastRewardBlock = block.number;
         pool.accuGOVPerShare = 0; // uint256(1e12);
         uGOVDivider = 5; // 100 / 5 = 20% extra minted ugov for treasury

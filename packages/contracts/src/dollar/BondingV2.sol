@@ -10,7 +10,7 @@ import "./interfaces/IUbiquityFormulas.sol";
 import "./UbiquityDollarToken.sol";
 import "./BondingFormulas.sol";
 import "./BondingShareV2.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./interfaces/ISablier.sol";
 import "./interfaces/IMasterChefV2.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
@@ -21,7 +21,7 @@ contract BondingV2 is CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
     bytes public data = "";
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
     uint256 public constant ONE = uint256(1 ether); // 3Crv has 18 decimals
     uint256 public bondingDiscountMultiplier = uint256(1000000 gwei); // 0.001
     uint256 public blockCountInAWeek = 45361;
@@ -113,7 +113,7 @@ contract BondingV2 is CollectableDust, Pausable {
         uint256[] memory _lpBalances,
         uint256[] memory _weeks
     ) CollectableDust() Pausable() {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         bondingFormulasAddress = _bondingFormulasAddress;
         migrator = msg.sender;
 

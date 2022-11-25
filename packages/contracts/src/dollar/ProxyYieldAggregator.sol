@@ -5,7 +5,7 @@ import "./utils/CollectableDust.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./interfaces/IUbiquityAlgorithmicDollarManager.sol";
+import "./interfaces/IUbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 
 contract ProxyYieldAggregator is Pausable, ERC4626 {
@@ -27,7 +27,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         uint256 totalStrategyAssets
     );
 
-    IUbiquityAlgorithmicDollarManager private _manager;
+    IUbiquityDollarManager private _manager;
 
     IERC4626 private _strategy;
     uint16 private _premium; // e.g 4200 = 42%
@@ -60,7 +60,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         Pausable()
     {
         // all contracts are registered in the UBQManager
-        _manager = IUbiquityAlgorithmicDollarManager(manager_);
+        _manager = IUbiquityDollarManager(manager_);
         _strategy = strategy_;
         _premium = premium_;
         _minSplit = minSplit_;

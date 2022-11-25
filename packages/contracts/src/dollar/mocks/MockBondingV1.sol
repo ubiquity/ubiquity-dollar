@@ -7,7 +7,7 @@ import "../interfaces/IERC1155Ubiquity.sol";
 import "../interfaces/IMetaPool.sol";
 import "../interfaces/IUbiquityFormulas.sol";
 import "../UbiquityDollarToken.sol";
-import "../UbiquityAlgorithmicDollarManager.sol";
+import "../UbiquityDollarManager.sol";
 import "../interfaces/ISablier.sol";
 import "../interfaces/IMasterChefV2.sol";
 import "../interfaces/ITWAPOracleDollar3pool.sol";
@@ -18,7 +18,7 @@ contract Bonding is CollectableDust {
     using SafeERC20 for IERC20;
 
     bytes public data = "";
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     uint256 public constant ONE = uint256(1 ether); // 3Crv has 18 decimals
     ISablier public sablier;
@@ -45,7 +45,7 @@ contract Bonding is CollectableDust {
     }
 
     constructor(address _manager, address _sablier) CollectableDust() {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         sablier = ISablier(_sablier);
     }
 

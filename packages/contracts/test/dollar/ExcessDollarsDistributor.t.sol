@@ -4,8 +4,8 @@ pragma solidity ^0.8.3;
 import {IUniswapV2Router01} from
     "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityDollarManager} from
+    "../../src/dollar/UbiquityDollarManager.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {ExcessDollarsDistributor} from
     "../../src/dollar/ExcessDollarsDistributor.sol";
@@ -22,10 +22,10 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
     address _sushiSwapRouter = 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
-        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        uADManagerAddress = helpers_deployUbiquityDollarManager();
+        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
             .twapOracleAddress();
-        uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        uADAddress = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
         excessDollarsDistributorAddress =
             address(new ExcessDollarsDistributor(uADManagerAddress));
@@ -77,7 +77,7 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         uint256 _expectedExchangeAmt
     ) public {
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        UbiquityDollarManager(uADManagerAddress)
             .setStableSwapMetaPoolAddress(_metaPoolAddress);
         vm.mockCall(
             _metaPoolAddress,

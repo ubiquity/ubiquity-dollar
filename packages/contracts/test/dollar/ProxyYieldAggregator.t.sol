@@ -13,8 +13,8 @@ contract ProxyYieldAggregatorTest is Test {
     ERC20 dai = ERC20(0x6B175474E89094C44Da98b954EedeAC495271d0F);
     address daiWhale = 0x1B7BAa734C00298b9429b518D621753Bb0f6efF2;
 
-    IUbiquityAlgorithmicDollarManager manager =
-    IUbiquityAlgorithmicDollarManager(
+    IUbiquityDollarManager manager =
+    IUbiquityDollarManager(
         0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
     );
     uint16 minSplit = 500; // 5%

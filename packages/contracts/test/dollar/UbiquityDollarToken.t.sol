@@ -22,10 +22,10 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
 
     function setUp() public {
         incentive_addr = address(new MockIncentive());
-        uad_manager_address = helpers_deployUbiquityAlgorithmicDollarManager();
+        uad_manager_address = helpers_deployUbiquityDollarManager();
         vm.startPrank(admin);
         uad_addr = address(new UbiquityDollarToken(uad_manager_address));
-        UbiquityAlgorithmicDollarManager(uad_manager_address).grantRole(
+        UbiquityDollarManager(uad_manager_address).grantRole(
             keccak256("UBQ_TOKEN_MANAGER_ROLE"), admin
         );
         vm.stopPrank();

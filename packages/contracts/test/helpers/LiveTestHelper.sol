@@ -8,7 +8,7 @@ import "../../src/dollar/BondingFormulas.sol";
 import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
 import "../../src/dollar/UbiquityGovernanceToken.sol";
-import "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import "../../src/dollar/UbiquityDollarManager.sol";
 import "../../src/dollar/mocks/MockDollarToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
 import "../../src/dollar/TWAPOracleDollar3pool.sol";
@@ -38,7 +38,7 @@ contract LiveTestHelper is Test {
     BondingFormulas bFormulas;
     BondingShareV2 bondingShareV2;
 
-    UbiquityAlgorithmicDollarManager manager;
+    UbiquityDollarManager manager;
 
     UbiquityFormulas uFormulas;
     TWAPOracleDollar3pool twapOracle;
@@ -100,7 +100,7 @@ contract LiveTestHelper is Test {
     function setUp() public virtual {
         vm.startPrank(admin);
 
-        manager = new UbiquityAlgorithmicDollarManager(admin);
+        manager = new UbiquityDollarManager(admin);
         address managerAddress = address(manager);
 
         bondingV1 = new Bonding(address(manager), sablier);

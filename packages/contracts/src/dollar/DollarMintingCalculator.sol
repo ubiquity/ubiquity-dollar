@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./UbiquityDollarManager.sol";
 import "./interfaces/IDollarMintingCalculator.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./TWAPOracleDollar3pool.sol";
@@ -13,11 +13,11 @@ contract DollarMintingCalculator is IDollarMintingCalculator {
     using ABDKMathQuad for bytes16;
 
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     /// @param _manager the address of the manager contract so we can fetch variables
     constructor(address _manager) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
     /// @notice returns (TWAP_PRICE  -1) * UAD_Total_Supply
