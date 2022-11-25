@@ -9,7 +9,7 @@ import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
 import "../../src/dollar/UbiquityGovernanceToken.sol";
 import "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import "../../src/dollar/mocks/MockuADToken.sol";
+import "../../src/dollar/mocks/MockDollarToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
 import "../../src/dollar/TWAPOracleDollar3pool.sol";
 import "../../src/dollar/MasterChefV2.sol";
@@ -53,7 +53,7 @@ contract LiveTestHelper is Test {
     SushiSwapPool sushiUGOVPool;
     IMetaPool metapool;
 
-    MockuADToken uAD;
+    MockDollarToken uAD;
     UbiquityGovernanceToken uGov;
 
     BondingShare bondingShareV1;
@@ -110,7 +110,7 @@ contract LiveTestHelper is Test {
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingV1));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingShareV1));
 
-        uAD = new MockuADToken(10000);
+        uAD = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(uAD));
 
         debtCoupon = new MockDebtCoupon(100);

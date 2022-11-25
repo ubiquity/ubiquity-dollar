@@ -14,7 +14,7 @@ import {ExcessDollarsDistributor} from
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 
-import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
+import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
@@ -139,8 +139,8 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.startPrank(mockSender);
 
         // Mint some dollarTokens to mockSender and then approve all
-        MockuADToken(uADAddress).mint(mockSender, 10000e18);
-        MockuADToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
+        MockDollarToken(uADAddress).mint(mockSender, 10000e18);
+        MockDollarToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
 
         uint256 expiryBlockNumber = DebtCouponManager(debtCouponManagerAddress)
             .exchangeDollarsForDebtCoupons(100);
@@ -165,8 +165,8 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.startPrank(mockSender);
 
         // Mint some dollarTokens to mockSender and then approve all
-        MockuADToken(uADAddress).mint(mockSender, 10000e18);
-        MockuADToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
+        MockDollarToken(uADAddress).mint(mockSender, 10000e18);
+        MockDollarToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
 
         mockUARCalculatorFuncs(10e18);
         uint256 uARAmount = DebtCouponManager(debtCouponManagerAddress)
@@ -419,10 +419,10 @@ contract DebtCouponManagerTest is LocalTestHelper {
         );
 
         uint256 beforeBalance =
-            MockuADToken(uADAddress).balanceOf(debtCouponManagerAddress);
+            MockDollarToken(uADAddress).balanceOf(debtCouponManagerAddress);
         DebtCouponManager(debtCouponManagerAddress).mintClaimableDollars();
         uint256 afterBalance =
-            MockuADToken(uADAddress).balanceOf(debtCouponManagerAddress);
+            MockDollarToken(uADAddress).balanceOf(debtCouponManagerAddress);
         assertEq(afterBalance - beforeBalance, 50);
     }
 }

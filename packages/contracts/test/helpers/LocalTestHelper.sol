@@ -13,7 +13,7 @@ import {DollarMintingCalculator} from
 import {ExcessDollarsDistributor} from
     "../../src/dollar/ExcessDollarsDistributor.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
-import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
+import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
@@ -51,7 +51,7 @@ abstract contract LocalTestHelper is Test {
         _manager.setDebtCouponAddress(address(_debtCoupon));
 
         // deploy uAD token
-        MockuADToken _uAD = new MockuADToken(10000e18);
+        MockDollarToken _uAD = new MockDollarToken(10000e18);
         _manager.setDollarTokenAddress(address(_uAD));
 
         // deploy twapPrice oracle

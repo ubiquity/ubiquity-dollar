@@ -48,7 +48,7 @@ contract DollarMintingCalculatorTest is LocalTestHelper {
 
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
-        uint256 totalSupply = MockuADToken(uADAddress).totalSupply();
+        uint256 totalSupply = MockDollarToken(uADAddress).totalSupply();
         uint256 amountToMint = DollarMintingCalculator(
             dollarMintingCalculatorAddress
         ).getDollarsToMint();
