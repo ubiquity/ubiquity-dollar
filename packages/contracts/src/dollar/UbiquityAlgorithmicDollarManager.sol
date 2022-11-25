@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import "./interfaces/IUbiquityAlgorithmicDollar.sol";
+import "./interfaces/IUbiquityDollarToken.sol";
 import "./interfaces/ICurveFactory.sol";
 import "./interfaces/IMetaPool.sol";
 
@@ -96,7 +96,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         external
         onlyAdmin
     {
-        IUbiquityAlgorithmicDollar(dollarTokenAddress).setIncentiveContract(
+        IUbiquityDollarToken(dollarTokenAddress).setIncentiveContract(
             _account, _incentiveAddress
         );
     }
