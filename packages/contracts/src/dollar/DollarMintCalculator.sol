@@ -2,13 +2,13 @@
 pragma solidity ^0.8.3;
 
 import "./UbiquityDollarManager.sol";
-import "./interfaces/IDollarMintingCalculator.sol";
+import "./interfaces/IDollarMintCalculator.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./TWAPOracleDollar3pool.sol";
 import "./libs/ABDKMathQuad.sol";
 
 /// @title A mock coupon calculator that always returns a constant
-contract DollarMintingCalculator is IDollarMintingCalculator {
+contract DollarMintCalculator is IDollarMintCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

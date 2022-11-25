@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "./interfaces/IDebtRedemption.sol";
 import "./interfaces/ICreditRedemptionCalculator.sol";
 import "./interfaces/ICouponsForDollarsCalculator.sol";
-import "./interfaces/IDollarMintingCalculator.sol";
+import "./interfaces/IDollarMintCalculator.sol";
 import "./interfaces/IDollarMintExcess.sol";
 import "./TWAPOracleDollar3pool.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -355,7 +355,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         debtCoupon.updateTotalDebt();
 
         // uint256 twapPrice = _getTwapPrice(); //unused variable. Why here?
-        uint256 totalMintableDollars = IDollarMintingCalculator(
+        uint256 totalMintableDollars = IDollarMintCalculator(
             manager.dollarMintingCalculatorAddress()
         ).getDollarsToMint();
         uint256 dollarsToMint = totalMintableDollars - (dollarsMintedThisCycle);

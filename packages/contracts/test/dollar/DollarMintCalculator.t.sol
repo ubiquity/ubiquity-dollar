@@ -4,12 +4,12 @@ pragma solidity ^0.8.3;
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
-import {DollarMintingCalculator} from
-    "../../src/dollar/DollarMintingCalculator.sol";
+import {DollarMintCalculator} from
+    "../../src/dollar/DollarMintCalculator.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
-contract DollarMintingCalculatorTest is LocalTestHelper {
+contract DollarMintCalculatorTest is LocalTestHelper {
     address uADManagerAddress;
     address uADAddress;
     address twapOracleAddress;
@@ -42,14 +42,14 @@ contract DollarMintingCalculatorTest is LocalTestHelper {
     function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("DollarMintingCalculator: not > 1");
-        DollarMintingCalculator(dollarMintingCalculatorAddress).getDollarsToMint(
+        DollarMintCalculator(dollarMintingCalculatorAddress).getDollarsToMint(
         );
     }
 
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
         uint256 totalSupply = MockDollarToken(uADAddress).totalSupply();
-        uint256 amountToMint = DollarMintingCalculator(
+        uint256 amountToMint = DollarMintCalculator(
             dollarMintingCalculatorAddress
         ).getDollarsToMint();
         assertEq(amountToMint, totalSupply);

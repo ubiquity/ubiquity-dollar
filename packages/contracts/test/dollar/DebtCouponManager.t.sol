@@ -6,8 +6,8 @@ import {UbiquityDollarManager} from
 import {DebtCouponManager} from "../../src/dollar/DebtCouponManager.sol";
 import {CreditRedemptionCalculator} from
     "../../src/dollar/CreditRedemptionCalculator.sol";
-import {DollarMintingCalculator} from
-    "../../src/dollar/DollarMintingCalculator.sol";
+import {DollarMintCalculator} from
+    "../../src/dollar/DollarMintCalculator.sol";
 import {UbiquityCreditToken} from "../../src/dollar/UbiquityCreditToken.sol";
 import {DollarMintExcess} from
     "../../src/dollar/DollarMintExcess.sol";
@@ -84,7 +84,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.mockCall(
             dollarMintingCalculatorAddress,
             abi.encodeWithSelector(
-                DollarMintingCalculator.getDollarsToMint.selector
+                DollarMintCalculator.getDollarsToMint.selector
             ),
             abi.encode(_dollarsToMint)
         );

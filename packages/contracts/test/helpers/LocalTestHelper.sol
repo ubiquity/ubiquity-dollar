@@ -8,8 +8,8 @@ import {CreditRedemptionCalculator} from
     "../../src/dollar/CreditRedemptionCalculator.sol";
 import {CouponsForDollarsCalculator} from
     "../../src/dollar/CouponsForDollarsCalculator.sol";
-import {DollarMintingCalculator} from
-    "../../src/dollar/DollarMintingCalculator.sol";
+import {DollarMintCalculator} from
+    "../../src/dollar/DollarMintCalculator.sol";
 import {DollarMintExcess} from
     "../../src/dollar/DollarMintExcess.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
@@ -80,8 +80,8 @@ abstract contract LocalTestHelper is Test {
         _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
 
         // deploy dollarMintingCalculator
-        DollarMintingCalculator _mintingCalculator =
-            new DollarMintingCalculator(address(_manager));
+        DollarMintCalculator _mintingCalculator =
+            new DollarMintCalculator(address(_manager));
         _manager.setDollarMintingCalculatorAddress(address(_mintingCalculator));
 
         // set treasury address

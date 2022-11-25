@@ -17,7 +17,7 @@ import "../../src/dollar/CreditRedemptionCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
 import "../../src/dollar/CouponsForDollarsCalculator.sol";
-import "../../src/dollar/DollarMintingCalculator.sol";
+import "../../src/dollar/DollarMintCalculator.sol";
 import "../../src/dollar/mocks/MockDebtCoupon.sol";
 import "../../src/dollar/DebtCouponManager.sol";
 import "../../src/dollar/UbiquityCreditToken.sol";
@@ -45,7 +45,7 @@ contract LiveTestHelper is Test {
     UbiquityChef chefV2;
     CreditRedemptionCalculator uarCalc;
     CouponsForDollarsCalculator couponCalc;
-    DollarMintingCalculator dollarMintCalc;
+    DollarMintCalculator dollarMintCalc;
     MockDebtCoupon debtCoupon;
     DebtCouponManager debtCouponMgr;
     UbiquityCreditToken uAR;
@@ -208,7 +208,7 @@ contract LiveTestHelper is Test {
         couponCalc = new CouponsForDollarsCalculator(address(manager));
         manager.setCouponCalculatorAddress(address(couponCalc));
 
-        dollarMintCalc = new DollarMintingCalculator(address(manager));
+        dollarMintCalc = new DollarMintCalculator(address(manager));
         manager.setDollarMintingCalculatorAddress(address(dollarMintCalc));
 
         debtCouponMgr =
