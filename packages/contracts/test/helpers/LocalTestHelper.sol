@@ -12,7 +12,7 @@ import {DollarMintCalculator} from
     "../../src/dollar/DollarMintCalculator.sol";
 import {DollarMintExcess} from
     "../../src/dollar/DollarMintExcess.sol";
-import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
@@ -47,7 +47,7 @@ abstract contract LocalTestHelper is Test {
 
         vm.startPrank(admin);
         // deploy debt token
-        MockDebtCoupon _debtCoupon = new MockDebtCoupon(100);
+        MockCreditNFT _debtCoupon = new MockCreditNFT(100);
         _manager.setDebtCouponAddress(address(_debtCoupon));
 
         // deploy uAD token

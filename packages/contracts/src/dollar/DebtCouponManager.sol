@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./UbiquityDollarToken.sol";
 import "./UbiquityCreditToken.sol";
 import "./UbiquityDollarManager.sol";
-import "./DebtCoupon.sol";
+import "./CreditNFT.sol";
 
 /// @title A basic debt issuing and redemption mechanism for coupon holders
 /// @notice Allows users to burn their uAD in exchange for coupons
@@ -85,7 +85,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint coupons");
 
-        DebtCoupon debtCoupon = DebtCoupon(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
         debtCoupon.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
@@ -121,7 +121,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint uAR");
 
-        DebtCoupon debtCoupon = DebtCoupon(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
         debtCoupon.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
@@ -216,7 +216,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         returns (uint256 uGovAmount)
     {
         // Check whether debt coupon hasn't expired --> Burn debt coupons.
-        DebtCoupon debtCoupon = DebtCoupon(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
 
         require(id <= block.number, "Coupon has not expired");
         require(
@@ -243,7 +243,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         returns (uint256)
     {
         // Check whether debt coupon hasn't expired --> Burn debt coupons.
-        DebtCoupon debtCoupon = DebtCoupon(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
 
         require(id > block.timestamp, "Coupon has expired");
         require(
@@ -313,7 +313,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
         if (debtCycle) {
             debtCycle = false;
         }
-        DebtCoupon debtCoupon = DebtCoupon(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
 
         require(id > block.number, "Coupon has expired");
         require(
@@ -351,7 +351,7 @@ contract DebtCouponManager is ERC165, IERC1155Receiver {
     }
 
     function mintClaimableDollars() public {
-        DebtCoupon debtCoupon = DebtCoupon(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
         debtCoupon.updateTotalDebt();
 
         // uint256 twapPrice = _getTwapPrice(); //unused variable. Why here?

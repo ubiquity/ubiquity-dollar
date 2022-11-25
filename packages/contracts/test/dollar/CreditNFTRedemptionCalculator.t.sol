@@ -6,8 +6,8 @@ import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
 import {CreditNFTRedemptionCalculator} from
     "../../src/dollar/CreditNFTRedemptionCalculator.sol";
-import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
-import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {CreditNFT} from "../../src/dollar/CreditNFT.sol";
+import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
@@ -26,7 +26,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
             UbiquityDollarManager(uADManagerAddress)
                 .dollarTokenAddress()
         ).totalSupply();
-        MockDebtCoupon(
+        MockCreditNFT(
             UbiquityDollarManager(uADManagerAddress)
                 .debtCouponAddress()
         ).setTotalOutstandingDebt(totalSupply + 1);
@@ -41,7 +41,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
             UbiquityDollarManager(uADManagerAddress)
                 .dollarTokenAddress()
         ).totalSupply();
-        MockDebtCoupon(
+        MockCreditNFT(
             UbiquityDollarManager(uADManagerAddress)
                 .debtCouponAddress()
         ).setTotalOutstandingDebt(totalSupply / 2);

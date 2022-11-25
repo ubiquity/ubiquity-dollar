@@ -11,11 +11,11 @@ import {DollarMintCalculator} from
 import {UbiquityCreditToken} from "../../src/dollar/UbiquityCreditToken.sol";
 import {DollarMintExcess} from
     "../../src/dollar/DollarMintExcess.sol";
-import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
+import {CreditNFT} from "../../src/dollar/CreditNFT.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
-import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "../helpers/LocalTestHelper.sol";
@@ -185,7 +185,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     function test_burnExpiredCouponsForUGOVRevertsIfNotEnoughBalance() public {
         address mockMessageSender = address(0x123);
         vm.prank(admin);
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             mockMessageSender, 100, 500
         );
         vm.roll(1000);
@@ -200,7 +200,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(uADManagerAddress).grantRole(
@@ -239,7 +239,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(uADManagerAddress).grantRole(
@@ -302,7 +302,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             account1, 100, expiryBlockNumber
         );
         vm.expectRevert("User not enough coupons");
@@ -317,7 +317,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             account1, 100, expiryBlockNumber
         );
         MockCreditToken(autoRedeemTokenAddress).mint(
@@ -349,7 +349,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         mockDollarMintingCalcFuncs(0);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             account1, 100, expiryBlockNumber
         );
         // MockAutoRedeem(autoRedeemTokenAddress).mint(debtCouponManagerAddress, 20000e18);
@@ -379,7 +379,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         mockDollarMintingCalcFuncs(20000e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockDebtCoupon(debtCouponAddress).mintCoupons(
+        MockCreditNFT(debtCouponAddress).mintCoupons(
             account1, 100, expiryBlockNumber
         );
         MockCreditToken(autoRedeemTokenAddress).mint(

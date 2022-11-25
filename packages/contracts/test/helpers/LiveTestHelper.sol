@@ -18,7 +18,7 @@ import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
 import "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import "../../src/dollar/DollarMintCalculator.sol";
-import "../../src/dollar/mocks/MockDebtCoupon.sol";
+import "../../src/dollar/mocks/MockCreditNFT.sol";
 import "../../src/dollar/DebtCouponManager.sol";
 import "../../src/dollar/UbiquityCreditToken.sol";
 import "../../src/dollar/DollarMintExcess.sol";
@@ -46,7 +46,7 @@ contract LiveTestHelper is Test {
     CreditRedemptionCalculator uarCalc;
     CreditNFTRedemptionCalculator couponCalc;
     DollarMintCalculator dollarMintCalc;
-    MockDebtCoupon debtCoupon;
+    MockCreditNFT debtCoupon;
     DebtCouponManager debtCouponMgr;
     UbiquityCreditToken uAR;
     DollarMintExcess excessDollarsDistributor;
@@ -113,7 +113,7 @@ contract LiveTestHelper is Test {
         uAD = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(uAD));
 
-        debtCoupon = new MockDebtCoupon(100);
+        debtCoupon = new MockCreditNFT(100);
         manager.setDebtCouponAddress(address(debtCoupon));
 
         uFormulas = new UbiquityFormulas();

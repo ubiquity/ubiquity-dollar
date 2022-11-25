@@ -3,11 +3,11 @@ pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
-import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
+import {CreditNFT} from "../../src/dollar/CreditNFT.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
-contract DebtCouponTest is LocalTestHelper {
+contract CreditNFTTest is LocalTestHelper {
     address uADManagerAddress;
     address debtCouponAddress;
 
@@ -19,12 +19,12 @@ contract DebtCouponTest is LocalTestHelper {
 
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityDollarManager();
-        debtCouponAddress = address(new DebtCoupon(uADManagerAddress));
+        debtCouponAddress = address(new CreditNFT(uADManagerAddress));
     }
 
     function test_mintCouponsRevertsIfNotCouponManager() public {
         vm.expectRevert("Caller is not a coupon manager");
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x123), 1, 100);
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x123), 1, 100);
     }
 
     function test_mintCouponsWorks() public {
@@ -33,25 +33,25 @@ contract DebtCouponTest is LocalTestHelper {
         uint256 mintAmount = 1;
 
         uint256 init_balance =
-            DebtCoupon(debtCouponAddress).balanceOf(receiver, expiryBlockNumber);
+            CreditNFT(debtCouponAddress).balanceOf(receiver, expiryBlockNumber);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
         emit MintedCoupons(receiver, expiryBlockNumber, 1);
-        DebtCoupon(debtCouponAddress).mintCoupons(
+        CreditNFT(debtCouponAddress).mintCoupons(
             receiver, mintAmount, expiryBlockNumber
         );
         uint256 last_balance =
-            DebtCoupon(debtCouponAddress).balanceOf(receiver, expiryBlockNumber);
+            CreditNFT(debtCouponAddress).balanceOf(receiver, expiryBlockNumber);
         assertEq(last_balance - init_balance, mintAmount);
 
         uint256[] memory holderTokens =
-            DebtCoupon(debtCouponAddress).holderTokens(receiver);
+            CreditNFT(debtCouponAddress).holderTokens(receiver);
         assertEq(holderTokens[0], expiryBlockNumber);
     }
 
     function test_burnCouponsRevertsIfNotCouponManager() public {
         vm.expectRevert("Caller is not a coupon manager");
-        DebtCoupon(debtCouponAddress).burnCoupons(address(0x123), 1, 100);
+        CreditNFT(debtCouponAddress).burnCoupons(address(0x123), 1, 100);
     }
 
     function test_burnCouponRevertsWorks() public {
@@ -60,21 +60,21 @@ contract DebtCouponTest is LocalTestHelper {
         uint256 burnAmount = 1;
 
         vm.prank(admin);
-        DebtCoupon(debtCouponAddress).mintCoupons(
+        CreditNFT(debtCouponAddress).mintCoupons(
             couponOwner, 10, expiryBlockNumber
         );
-        uint256 init_balance = DebtCoupon(debtCouponAddress).balanceOf(
+        uint256 init_balance = CreditNFT(debtCouponAddress).balanceOf(
             couponOwner, expiryBlockNumber
         );
         vm.prank(couponOwner);
-        DebtCoupon(debtCouponAddress).setApprovalForAll(admin, true);
+        CreditNFT(debtCouponAddress).setApprovalForAll(admin, true);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
         emit BurnedCoupons(couponOwner, expiryBlockNumber, 1);
-        DebtCoupon(debtCouponAddress).burnCoupons(
+        CreditNFT(debtCouponAddress).burnCoupons(
             couponOwner, burnAmount, expiryBlockNumber
         );
-        uint256 last_balance = DebtCoupon(debtCouponAddress).balanceOf(
+        uint256 last_balance = CreditNFT(debtCouponAddress).balanceOf(
             couponOwner, expiryBlockNumber
         );
         assertEq(init_balance - last_balance, burnAmount);
@@ -82,31 +82,31 @@ contract DebtCouponTest is LocalTestHelper {
 
     function test_updateTotalDebt() public {
         vm.startPrank(admin);
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x222), 10, 20000);
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x333), 10, 30000);
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x222), 10, 20000);
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x333), 10, 30000);
         vm.stopPrank();
 
         // sets block.number
         vm.roll(15000);
-        DebtCoupon(debtCouponAddress).updateTotalDebt();
+        CreditNFT(debtCouponAddress).updateTotalDebt();
         uint256 outStandingTotalDebt =
-            DebtCoupon(debtCouponAddress).getTotalOutstandingDebt();
+            CreditNFT(debtCouponAddress).getTotalOutstandingDebt();
         assertEq(outStandingTotalDebt, 20);
     }
 
     function test_getTotalOutstandingDebt() public {
         vm.startPrank(admin);
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x222), 10, 20000);
-        DebtCoupon(debtCouponAddress).mintCoupons(address(0x333), 10, 30000);
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x222), 10, 20000);
+        CreditNFT(debtCouponAddress).mintCoupons(address(0x333), 10, 30000);
         vm.stopPrank();
 
         // sets block.number
         vm.roll(25000);
-        DebtCoupon(debtCouponAddress).updateTotalDebt();
+        CreditNFT(debtCouponAddress).updateTotalDebt();
         uint256 outStandingTotalDebt =
-            DebtCoupon(debtCouponAddress).getTotalOutstandingDebt();
+            CreditNFT(debtCouponAddress).getTotalOutstandingDebt();
         assertEq(outStandingTotalDebt, 10);
     }
 }

@@ -8,7 +8,7 @@ import "./UbiquityDollarManager.sol";
 /// @title A coupon redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
-contract DebtCoupon is ERC1155Ubiquity {
+contract CreditNFT is ERC1155Ubiquity {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     //not public as if called externally can give inaccurate value. see method

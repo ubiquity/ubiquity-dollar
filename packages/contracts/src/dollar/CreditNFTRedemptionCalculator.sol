@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./interfaces/ICreditNFTRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "./libs/ABDKMathQuad.sol";
-import "./DebtCoupon.sol";
+import "./CreditNFT.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
@@ -29,12 +29,12 @@ contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
         returns (uint256)
     {
         require(
-            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt()
+            CreditNFT(manager.debtCouponAddress()).getTotalOutstandingDebt()
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "Coupon to dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
-        bytes16 totalDebt = DebtCoupon(manager.debtCouponAddress())
+        bytes16 totalDebt = CreditNFT(manager.debtCouponAddress())
             .getTotalOutstandingDebt().fromUInt();
         bytes16 r = totalDebt.div(
             IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt()

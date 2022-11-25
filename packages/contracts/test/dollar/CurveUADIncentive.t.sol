@@ -9,8 +9,8 @@ import {UbiquityDollarToken} from
 import {CreditNFTRedemptionCalculator} from
     "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
-import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
-import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {CreditNFT} from "../../src/dollar/CreditNFT.sol";
+import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
 import {CurveUADIncentive} from "../../src/dollar/CurveUADIncentive.sol";
 
 import "../helpers/LocalTestHelper.sol";
