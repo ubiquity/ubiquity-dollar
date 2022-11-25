@@ -9,7 +9,7 @@ import "../interfaces/IUbiquityFormulas.sol";
 import "../UbiquityDollarToken.sol";
 import "../UbiquityDollarManager.sol";
 import "../interfaces/ISablier.sol";
-import "../interfaces/IMasterChefV2.sol";
+import "../interfaces/IUbiquityChef.sol";
 import "../interfaces/ITWAPOracleDollar3pool.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../utils/CollectableDust.sol";
@@ -197,7 +197,7 @@ contract Bonding is CollectableDust {
         _id = n - (n % blockBonding);
         _mint(_sharesAmount, _id);
         // set masterchef for uGOV rewards
-        IMasterChefV2(manager.masterChefAddress()).deposit(
+        IUbiquityChef(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
         );
     }
@@ -222,7 +222,7 @@ contract Bonding is CollectableDust {
         _updateOracle();
         // get masterchef for uGOV rewards To ensure correct computation
         // it needs to be done BEFORE burning the shares
-        IMasterChefV2(manager.masterChefAddress()).withdraw(
+        IUbiquityChef(manager.masterChefAddress()).withdraw(
             msg.sender, _sharesAmount, _id
         );
 

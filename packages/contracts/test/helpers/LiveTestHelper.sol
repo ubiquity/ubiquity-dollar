@@ -12,7 +12,7 @@ import "../../src/dollar/UbiquityDollarManager.sol";
 import "../../src/dollar/mocks/MockDollarToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
 import "../../src/dollar/TWAPOracleDollar3pool.sol";
-import "../../src/dollar/MasterChefV2.sol";
+import "../../src/dollar/UbiquityChef.sol";
 import "../../src/dollar/CreditRedemptionCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
@@ -42,7 +42,7 @@ contract LiveTestHelper is Test {
 
     UbiquityFormulas uFormulas;
     TWAPOracleDollar3pool twapOracle;
-    MasterChefV2 chefV2;
+    UbiquityChef chefV2;
     CreditRedemptionCalculator uarCalc;
     CouponsForDollarsCalculator couponCalc;
     DollarMintingCalculator dollarMintCalc;
@@ -231,7 +231,7 @@ contract LiveTestHelper is Test {
         uint256[] memory amounts;
         uint256[] memory ids;
 
-        chefV2 = new MasterChefV2(managerAddress, tos, amounts, ids);
+        chefV2 = new UbiquityChef(managerAddress, tos, amounts, ids);
 
         manager.setMasterChefAddress(address(chefV2));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(chefV2));

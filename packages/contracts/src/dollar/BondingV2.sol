@@ -12,7 +12,7 @@ import "./BondingFormulas.sol";
 import "./BondingShareV2.sol";
 import "./UbiquityDollarManager.sol";
 import "./interfaces/ISablier.sol";
-import "./interfaces/IMasterChefV2.sol";
+import "./interfaces/IUbiquityChef.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./utils/CollectableDust.sol";
@@ -278,7 +278,7 @@ contract BondingV2 is CollectableDust, Pausable {
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
 
         // set masterchef for uGOV rewards
-        IMasterChefV2(manager.masterChefAddress()).deposit(
+        IUbiquityChef(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
         );
 
@@ -317,7 +317,7 @@ contract BondingV2 is CollectableDust, Pausable {
         bond.lpAmount += _amount;
 
         // redeem all shares
-        IMasterChefV2(manager.masterChefAddress()).withdraw(
+        IUbiquityChef(manager.masterChefAddress()).withdraw(
             msg.sender, sharesToRemove, _id
         );
 
@@ -326,7 +326,7 @@ contract BondingV2 is CollectableDust, Pausable {
             .durationMultiply(bond.lpAmount, _weeks, bondingDiscountMultiplier);
 
         // deposit new shares
-        IMasterChefV2(manager.masterChefAddress()).deposit(
+        IUbiquityChef(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
         );
         // calculate end locking period block number
@@ -337,7 +337,7 @@ contract BondingV2 is CollectableDust, Pausable {
         // should be done after masterchef withdraw
         _updateLpPerShare();
         bond.lpRewardDebt = (
-            IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
+            IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
                 * accLpRewardPerShare
         ) / 1e12;
 
@@ -370,7 +370,7 @@ contract BondingV2 is CollectableDust, Pausable {
         // bond.shares = bond.shares - sharesToRemove;
         // get masterchef for uGOV rewards To ensure correct computation
         // it needs to be done BEFORE updating the bonding share
-        IMasterChefV2(manager.masterChefAddress()).withdraw(
+        IUbiquityChef(manager.masterChefAddress()).withdraw(
             msg.sender, sharesToRemove, _id
         );
 
@@ -396,7 +396,7 @@ contract BondingV2 is CollectableDust, Pausable {
         // user.amount.mul(pool.accSushiPerShare).div(1e12);
         // should be done after masterchef withdraw
         bond.lpRewardDebt = (
-            IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
+            IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
                 * accLpRewardPerShare
         ) / 1e12;
 
@@ -421,7 +421,7 @@ contract BondingV2 is CollectableDust, Pausable {
         BondingShareV2 bonding = BondingShareV2(manager.bondingShareAddress());
         BondingShareV2.Bond memory bond = bonding.getBond(_id);
         uint256[2] memory bs =
-            IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id);
+            IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id);
 
         uint256 lpBalance =
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
@@ -436,7 +436,7 @@ contract BondingV2 is CollectableDust, Pausable {
                 curAccLpRewardPerShare = accLpRewardPerShare
                     + (
                         (newLpRewards * 1e12)
-                            / IMasterChefV2(manager.masterChefAddress()).totalShares()
+                            / IUbiquityChef(manager.masterChefAddress()).totalShares()
                     );
             }
             // we multiply the shares amount by the accumulated lpRewards per share
@@ -484,7 +484,7 @@ contract BondingV2 is CollectableDust, Pausable {
 
     function currentShareValue() public view returns (uint256 priceShare) {
         uint256 totalShares =
-            IMasterChefV2(manager.masterChefAddress()).totalShares();
+            IUbiquityChef(manager.masterChefAddress()).totalShares();
         // priceShare = totalLP / totalShares
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
             BondingShareV2(manager.bondingShareAddress()).totalLP(),
@@ -522,7 +522,7 @@ contract BondingV2 is CollectableDust, Pausable {
         // to keep the _updateLpPerShare calculation consistent
         totalLpToMigrate -= _lpsAmount;
         // set masterchef for uGOV rewards
-        IMasterChefV2(manager.masterChefAddress()).deposit(
+        IUbiquityChef(manager.masterChefAddress()).deposit(
             user, _sharesAmount, _id
         );
 
@@ -537,7 +537,7 @@ contract BondingV2 is CollectableDust, Pausable {
         // the excess LP is the current balance
         // minus the total deposited LP + LP that needs to be migrated
         uint256 totalShares =
-            IMasterChefV2(manager.masterChefAddress()).totalShares();
+            IUbiquityChef(manager.masterChefAddress()).totalShares();
         if (lpBalance >= (bond.totalLP() + totalLpToMigrate) && totalShares > 0)
         {
             uint256 currentLpRewards =
@@ -590,6 +590,6 @@ contract BondingV2 is CollectableDust, Pausable {
         );
 
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
-        bs = IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id);
+        bs = IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id);
     }
 }
