@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "../../src/dollar/BondingV2.sol";
+import "../../src/dollar/Staking.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";
 import "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/StakingFormulas.sol";
@@ -34,7 +34,7 @@ contract LiveTestHelper is Test {
     using stdStorage for StdStorage;
 
     Bonding bondingV1;
-    BondingV2 bondingV2;
+    Staking bondingV2;
     StakingFormulas bFormulas;
     StakingShare bondingShareV2;
 
@@ -284,7 +284,7 @@ contract LiveTestHelper is Test {
         locked = [uint256(1), uint256(1), uint256(208)];
 
         bondingV2 =
-        new BondingV2(address(manager), address(bFormulas), migrating, migrateLP, locked);
+        new Staking(address(manager), address(bFormulas), migrating, migrateLP, locked);
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 

@@ -94,7 +94,7 @@ contract ZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
-        BondingV2 broken = new BondingV2(address(manager),
+        Staking broken = new Staking(address(manager),
             address(bFormulas),
             ogsEmpty,
             balances,
@@ -105,7 +105,7 @@ contract ZeroStateTest is ZeroState {
     function testCannotDeployDifferentLength1() public {
         balances.push(1);
         vm.expectRevert("balances array not same length");
-        BondingV2 broken = new BondingV2(
+        Staking broken = new Staking(
             address(manager),
             address(bFormulas),
             ogs,
@@ -117,7 +117,7 @@ contract ZeroStateTest is ZeroState {
     function testCannotDeployDifferentLength2() public {
         lockup.push(1);
         vm.expectRevert("weeks array not same length");
-        BondingV2 broken = new BondingV2(
+        Staking broken = new Staking(
             address(manager),
             address(bFormulas),
             ogs,

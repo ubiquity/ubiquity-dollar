@@ -17,7 +17,7 @@ import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./utils/CollectableDust.sol";
 
-contract BondingV2 is CollectableDust, Pausable {
+contract Staking is CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
     bytes public data = "";

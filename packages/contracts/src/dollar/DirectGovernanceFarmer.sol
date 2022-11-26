@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IDepositZap.sol";
-import "./interfaces/IBondingV2.sol";
+import "./interfaces/IStaking.sol";
 import "./interfaces/IStakingShare.sol";
 import "./interfaces/IStableSwap3Pool.sol";
 import "./interfaces/IUbiquityDollarManager.sol";
@@ -120,7 +120,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //STEP2: stake UAD3CRVf to BondingV2
         //TODO approve token to be transferred to Bonding V2 contract
         IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
-        stakingShareId = IBondingV2(staking).deposit(lpAmount, durationWeeks);
+        stakingShareId = IStaking(staking).deposit(lpAmount, durationWeeks);
 
         IStakingShare(stakingShare).safeTransferFrom(address(this), msg.sender, stakingShareId, 1, '0x');
 
@@ -160,7 +160,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         // STEP 1 : Withdraw Ubiquity Bonding Shares to get back uAD3CRV-f LPs
         //address bonding = ubiquityManager.bondingContractAddress();
         IStakingShare(stakingShare).setApprovalForAll(staking, true);
-        IBondingV2(staking).removeLiquidity(bond.lpAmount, stakingShareId);
+        IStaking(staking).removeLiquidity(bond.lpAmount, stakingShareId);
         IStakingShare(stakingShare).setApprovalForAll(staking, false);
         
         uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));

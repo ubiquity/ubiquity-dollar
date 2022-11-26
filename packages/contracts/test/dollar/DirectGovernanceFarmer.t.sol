@@ -130,7 +130,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         vm.mockCall(
             stakingAddress,
-            abi.encodeWithSelector(IBondingV2.deposit.selector),
+            abi.encodeWithSelector(IStaking.deposit.selector),
             abi.encode(1)
         );
         vm.mockCall(
@@ -196,7 +196,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         vm.mockCall(
             stakingAddress,
-            abi.encodeWithSelector(IBondingV2.deposit.selector),
+            abi.encodeWithSelector(IStaking.deposit.selector),
             abi.encode(1)
         );
         vm.mockCall(
