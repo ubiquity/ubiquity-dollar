@@ -2,7 +2,7 @@
 pragma solidity ^0.8.3;
 
 import "../../src/dollar/StakingFormulas.sol";
-import "../../src/dollar/BondingShareV2.sol";
+import "../../src/dollar/StakingShare.sol";
 import "../../src/dollar/libs/ABDKMathQuad.sol";
 
 import "../helpers/LocalTestHelper.sol";
@@ -18,7 +18,7 @@ contract StakingFormulasTest is LocalTestHelper {
     }
 
     function test_sharesForLP() public {
-        BondingShareV2.Bond memory _bond = BondingShareV2.Bond({
+        StakingShare.Bond memory _bond = StakingShare.Bond({
             // address of the minter
             minter: address(0x11111),
             // lp amount deposited by the user
@@ -38,7 +38,7 @@ contract StakingFormulasTest is LocalTestHelper {
     }
 
     function test_lpRewardsRemoveLiquidityNormalization(
-        BondingShareV2.Bond memory _bond,
+        StakingShare.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public {
@@ -51,7 +51,7 @@ contract StakingFormulasTest is LocalTestHelper {
     }
 
     function test_lpRewardsAddLiquidityNormalization(
-        BondingShareV2.Bond memory _bond,
+        StakingShare.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public {

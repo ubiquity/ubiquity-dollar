@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IDepositZap.sol";
 import "./interfaces/IBondingV2.sol";
-import "./interfaces/IBondingShareV2.sol";
+import "./interfaces/IStakingShare.sol";
 import "./interfaces/IStableSwap3Pool.sol";
 import "./interfaces/IUbiquityDollarManager.sol";
 
@@ -122,7 +122,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
         stakingShareId = IBondingV2(staking).deposit(lpAmount, durationWeeks);
 
-        IBondingShareV2(stakingShare).safeTransferFrom(address(this), msg.sender, stakingShareId, 1, '0x');
+        IStakingShare(stakingShare).safeTransferFrom(address(this), msg.sender, stakingShareId, 1, '0x');
 
         emit Deposit(msg.sender, token, amount, durationWeeks, stakingShareId);
         
@@ -146,22 +146,22 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address staking = manager.bondingContractAddress();
         address stakingShare = manager.bondingShareAddress();
 
-        uint256[] memory stakingShareIds = IBondingShareV2(stakingShare).holderTokens(msg.sender);
+        uint256[] memory stakingShareIds = IStakingShare(stakingShare).holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
         //bond.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "sender is not true bond owner");
         
         //transfer bondingShare NFT token from msg.sender to this address
-        IBondingShareV2(stakingShare).safeTransferFrom(msg.sender, address(this), stakingShareId, 1, '0x');
+        IStakingShare(stakingShare).safeTransferFrom(msg.sender, address(this), stakingShareId, 1, '0x');
         
         // Get Bond
-        IBondingShareV2.Bond memory bond = IBondingShareV2(stakingShare).getBond(stakingShareId);
+        IStakingShare.Bond memory bond = IStakingShare(stakingShare).getBond(stakingShareId);
         
         // STEP 1 : Withdraw Ubiquity Bonding Shares to get back uAD3CRV-f LPs
         //address bonding = ubiquityManager.bondingContractAddress();
-        IBondingShareV2(stakingShare).setApprovalForAll(staking, true);
+        IStakingShare(stakingShare).setApprovalForAll(staking, true);
         IBondingV2(staking).removeLiquidity(bond.lpAmount, stakingShareId);
-        IBondingShareV2(stakingShare).setApprovalForAll(staking, false);
+        IStakingShare(stakingShare).setApprovalForAll(staking, false);
         
         uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));
         uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress()).balanceOf(address(this));

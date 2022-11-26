@@ -43,7 +43,7 @@ contract DepositStateTest is DepositState {
     function testUpdateBond(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
         bondingShareV2.updateBond(1, uint256(amount), uint256(debt), end);
-        BondingShareV2.Bond memory bond = bondingShareV2.getBond(1);
+        StakingShare.Bond memory bond = bondingShareV2.getBond(1);
         assertEq(bond.lpAmount, amount);
         assertEq(bond.lpRewardDebt, debt);
         assertEq(bond.endBlock, end);
@@ -54,7 +54,7 @@ contract DepositStateTest is DepositState {
         uint256 id = bondingShareV2.mint(
             secondAccount, uint256(deposited), uint256(debt), end
         );
-        BondingShareV2.Bond memory bond = bondingShareV2.getBond(id);
+        StakingShare.Bond memory bond = bondingShareV2.getBond(id);
         assertEq(bond.minter, secondAccount);
         assertEq(bond.lpAmount, deposited);
         assertEq(bond.lpRewardDebt, debt);
@@ -104,7 +104,7 @@ contract DepositStateTest is DepositState {
     // }
 
     function testGetBond() public {
-        BondingShareV2.Bond memory bond = BondingShareV2.Bond(
+        StakingShare.Bond memory bond = StakingShare.Bond(
             fourthAccount,
             fourthBal,
             creationBlock[1],
@@ -115,7 +115,7 @@ contract DepositStateTest is DepositState {
             fourthBal
         );
 
-        BondingShareV2.Bond memory bond_ = bondingShareV2.getBond(2);
+        StakingShare.Bond memory bond_ = bondingShareV2.getBond(2);
         bytes32 bond1 = bytes32(abi.encode(bond));
         bytes32 bond2 = bytes32(abi.encode(bond_));
         assertEq(bond1, bond2);

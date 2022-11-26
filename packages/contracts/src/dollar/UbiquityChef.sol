@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 import "./UbiquityDollarManager.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
-import "./BondingShareV2.sol";
+import "./StakingShare.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 
 import "./interfaces/IERC1155Ubiquity.sol";

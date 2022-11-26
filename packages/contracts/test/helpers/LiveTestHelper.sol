@@ -5,7 +5,7 @@ import "../../src/dollar/BondingV2.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";
 import "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/StakingFormulas.sol";
-import "../../src/dollar/BondingShareV2.sol";
+import "../../src/dollar/StakingShare.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
 import "../../src/dollar/UbiquityGovernanceToken.sol";
 import "../../src/dollar/UbiquityDollarManager.sol";
@@ -36,7 +36,7 @@ contract LiveTestHelper is Test {
     Bonding bondingV1;
     BondingV2 bondingV2;
     StakingFormulas bFormulas;
-    BondingShareV2 bondingShareV2;
+    StakingShare bondingShareV2;
 
     UbiquityDollarManager manager;
 
@@ -274,7 +274,7 @@ contract LiveTestHelper is Test {
         ///uint256 bondingMaxBal = metapool.balanceOf(bondingMaxAccount);
 
         vm.startPrank(admin);
-        bondingShareV2 = new BondingShareV2(address(manager), uri);
+        bondingShareV2 = new StakingShare(address(manager), uri);
         manager.setBondingShareAddress(address(bondingShareV2));
 
         bFormulas = new StakingFormulas();

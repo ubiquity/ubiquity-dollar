@@ -9,7 +9,7 @@ import "./interfaces/IMetaPool.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 import "./UbiquityDollarToken.sol";
 import "./StakingFormulas.sol";
-import "./BondingShareV2.sol";
+import "./StakingShare.sol";
 import "./UbiquityDollarManager.sol";
 import "./interfaces/ISablier.sol";
 import "./interfaces/IUbiquityChef.sol";
@@ -296,7 +296,7 @@ contract BondingV2 is CollectableDust, Pausable {
         external
         whenNotPaused
     {
-        (uint256[2] memory bs, BondingShareV2.Bond memory bond) =
+        (uint256[2] memory bs, StakingShare.Bond memory bond) =
             _checkForLiquidity(_id);
 
         // calculate pending LP rewards
@@ -341,7 +341,7 @@ contract BondingV2 is CollectableDust, Pausable {
                 * accLpRewardPerShare
         ) / 1e12;
 
-        BondingShareV2(manager.bondingShareAddress()).updateBond(
+        StakingShare(manager.bondingShareAddress()).updateBond(
             _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
         );
         emit AddLiquidityFromBond(msg.sender, _id, bond.lpAmount, _sharesAmount);
@@ -355,7 +355,7 @@ contract BondingV2 is CollectableDust, Pausable {
         external
         whenNotPaused
     {
-        (uint256[2] memory bs, BondingShareV2.Bond memory bond) =
+        (uint256[2] memory bs, StakingShare.Bond memory bond) =
             _checkForLiquidity(_id);
         require(bond.lpAmount >= _amount, "Bonding: amount too big");
         // we should decrease the UBQ rewards proportionally to the LP removed
@@ -375,7 +375,7 @@ contract BondingV2 is CollectableDust, Pausable {
         );
 
         // redeem of the extra LP
-        // bonding lp balance - BondingShareV2.totalLP
+        // bonding lp balance - StakingShare.totalLP
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
@@ -384,7 +384,7 @@ contract BondingV2 is CollectableDust, Pausable {
 
         uint256 correctedAmount = StakingFormulas(this.bondingFormulasAddress())
             .correctedAmountToWithdraw(
-            BondingShareV2(manager.bondingShareAddress()).totalLP(),
+            StakingShare(manager.bondingShareAddress()).totalLP(),
             metapool.balanceOf(address(this)) - lpRewards,
             _amount
         );
@@ -400,7 +400,7 @@ contract BondingV2 is CollectableDust, Pausable {
                 * accLpRewardPerShare
         ) / 1e12;
 
-        BondingShareV2(manager.bondingShareAddress()).updateBond(
+        StakingShare(manager.bondingShareAddress()).updateBond(
             _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
         );
 
@@ -418,8 +418,8 @@ contract BondingV2 is CollectableDust, Pausable {
 
     // View function to see pending lpRewards on frontend.
     function pendingLpRewards(uint256 _id) external view returns (uint256) {
-        BondingShareV2 bonding = BondingShareV2(manager.bondingShareAddress());
-        BondingShareV2.Bond memory bond = bonding.getBond(_id);
+        StakingShare bonding = StakingShare(manager.bondingShareAddress());
+        StakingShare.Bond memory bond = bonding.getBond(_id);
         uint256[2] memory bs =
             IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id);
 
@@ -487,7 +487,7 @@ contract BondingV2 is CollectableDust, Pausable {
             IUbiquityChef(manager.masterChefAddress()).totalShares();
         // priceShare = totalLP / totalShares
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
-            BondingShareV2(manager.bondingShareAddress()).totalLP(),
+            StakingShare(manager.bondingShareAddress()).totalLP(),
             totalShares,
             ONE
         );
@@ -531,7 +531,7 @@ contract BondingV2 is CollectableDust, Pausable {
 
     /// @dev update the accumulated excess LP per share
     function _updateLpPerShare() internal {
-        BondingShareV2 bond = BondingShareV2(manager.bondingShareAddress());
+        StakingShare bond = StakingShare(manager.bondingShareAddress());
         uint256 lpBalance =
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
         // the excess LP is the current balance
@@ -567,14 +567,14 @@ contract BondingV2 is CollectableDust, Pausable {
         );
         // set the lp rewards debts so that this bonding share only get lp rewards from this day
         uint256 lpRewardDebt = (shares * accLpRewardPerShare) / 1e12;
-        return BondingShareV2(manager.bondingShareAddress()).mint(
+        return StakingShare(manager.bondingShareAddress()).mint(
             to, lpAmount, lpRewardDebt, endBlock
         );
     }
 
     function _checkForLiquidity(uint256 _id)
         internal
-        returns (uint256[2] memory bs, BondingShareV2.Bond memory bond)
+        returns (uint256[2] memory bs, StakingShare.Bond memory bond)
     {
         require(
             IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
@@ -582,7 +582,7 @@ contract BondingV2 is CollectableDust, Pausable {
             ) == 1,
             "Bonding: caller is not owner"
         );
-        BondingShareV2 bonding = BondingShareV2(manager.bondingShareAddress());
+        StakingShare bonding = StakingShare(manager.bondingShareAddress());
         bond = bonding.getBond(_id);
         require(
             block.number > bond.endBlock,
