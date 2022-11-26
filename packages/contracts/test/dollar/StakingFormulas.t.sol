@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "../../src/dollar/BondingFormulas.sol";
+import "../../src/dollar/StakingFormulas.sol";
 import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/libs/ABDKMathQuad.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
-contract BondingFormulaTest is LocalTestHelper {
+contract StakingFormulasTest is LocalTestHelper {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    BondingFormulas bondingFormula;
+    StakingFormulas bondingFormula;
 
     function setUp() public {
-        bondingFormula = new BondingFormulas();
+        bondingFormula = new StakingFormulas();
     }
 
     function test_sharesForLP() public {

@@ -8,7 +8,7 @@ import "./interfaces/IERC1155Ubiquity.sol";
 import "./interfaces/IMetaPool.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 import "./UbiquityDollarToken.sol";
-import "./BondingFormulas.sol";
+import "./StakingFormulas.sol";
 import "./BondingShareV2.sol";
 import "./UbiquityDollarManager.sol";
 import "./interfaces/ISablier.sol";
@@ -306,7 +306,7 @@ contract BondingV2 is CollectableDust, Pausable {
             lpRewardForShares(sharesToRemove, bond.lpRewardDebt);
 
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
+        pendingLpReward = StakingFormulas(this.bondingFormulasAddress())
             .lpRewardsAddLiquidityNormalization(bond, bs, pendingLpReward);
         // add these LP Rewards to the deposited amount of LP token
         bond.lpAmount += pendingLpReward;
@@ -360,7 +360,7 @@ contract BondingV2 is CollectableDust, Pausable {
         require(bond.lpAmount >= _amount, "Bonding: amount too big");
         // we should decrease the UBQ rewards proportionally to the LP removed
         // sharesToRemove = (bonding shares * _amount )  / bond.lpAmount ;
-        uint256 sharesToRemove = BondingFormulas(this.bondingFormulasAddress())
+        uint256 sharesToRemove = StakingFormulas(this.bondingFormulasAddress())
             .sharesForLP(bond, bs, _amount);
 
         //get all its pending LP Rewards
@@ -379,10 +379,10 @@ contract BondingV2 is CollectableDust, Pausable {
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
+        pendingLpReward = StakingFormulas(this.bondingFormulasAddress())
             .lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
 
-        uint256 correctedAmount = BondingFormulas(this.bondingFormulasAddress())
+        uint256 correctedAmount = StakingFormulas(this.bondingFormulasAddress())
             .correctedAmountToWithdraw(
             BondingShareV2(manager.bondingShareAddress()).totalLP(),
             metapool.balanceOf(address(this)) - lpRewards,

@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "../../src/dollar/BondingV2.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";
 import "../../src/dollar/mocks/MockShareV1.sol";
-import "../../src/dollar/BondingFormulas.sol";
+import "../../src/dollar/StakingFormulas.sol";
 import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
 import "../../src/dollar/UbiquityGovernanceToken.sol";
@@ -35,7 +35,7 @@ contract LiveTestHelper is Test {
 
     Bonding bondingV1;
     BondingV2 bondingV2;
-    BondingFormulas bFormulas;
+    StakingFormulas bFormulas;
     BondingShareV2 bondingShareV2;
 
     UbiquityDollarManager manager;
@@ -277,7 +277,7 @@ contract LiveTestHelper is Test {
         bondingShareV2 = new BondingShareV2(address(manager), uri);
         manager.setBondingShareAddress(address(bondingShareV2));
 
-        bFormulas = new BondingFormulas();
+        bFormulas = new StakingFormulas();
 
         migrating = [bondingZeroAccount, bondingMinAccount, bondingMaxAccount];
         migrateLP = [0, 0, 0];
