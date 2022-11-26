@@ -19,7 +19,7 @@ import "./CreditNFT.sol";
 /// redeemable in the future
 /// @notice Allows users to redeem individual debt coupons or batch redeem
 /// coupons on a first-come first-serve basis
-contract DebtCouponManager is ERC165, IERC1155Receiver {
+contract CreditNFTManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
     UbiquityDollarManager public manager;

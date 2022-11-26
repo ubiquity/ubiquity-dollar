@@ -19,7 +19,7 @@ import "../../src/dollar/interfaces/IMasterChef.sol";
 import "../../src/dollar/CreditNFTRedemptionCalculator.sol";
 import "../../src/dollar/DollarMintCalculator.sol";
 import "../../src/dollar/mocks/MockCreditNFT.sol";
-import "../../src/dollar/DebtCouponManager.sol";
+import "../../src/dollar/CreditNFTManager.sol";
 import "../../src/dollar/UbiquityCreditToken.sol";
 import "../../src/dollar/DollarMintExcess.sol";
 import "../../src/dollar/SushiSwapPool.sol";
@@ -47,7 +47,7 @@ contract LiveTestHelper is Test {
     CreditNFTRedemptionCalculator couponCalc;
     DollarMintCalculator dollarMintCalc;
     MockCreditNFT debtCoupon;
-    DebtCouponManager debtCouponMgr;
+    CreditNFTManager debtCouponMgr;
     UbiquityCreditToken uAR;
     DollarMintExcess excessDollarsDistributor;
     SushiSwapPool sushiUGOVPool;
@@ -212,7 +212,7 @@ contract LiveTestHelper is Test {
         manager.setDollarMintingCalculatorAddress(address(dollarMintCalc));
 
         debtCouponMgr =
-            new DebtCouponManager(address(manager), couponLengthBlocks);
+            new CreditNFTManager(address(manager), couponLengthBlocks);
 
         manager.grantRole(manager.COUPON_MANAGER_ROLE(), address(debtCouponMgr));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(debtCouponMgr));

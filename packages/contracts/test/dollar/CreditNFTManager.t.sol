@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from
     "../../src/dollar/UbiquityDollarManager.sol";
-import {DebtCouponManager} from "../../src/dollar/DebtCouponManager.sol";
+import {CreditNFTManager} from "../../src/dollar/CreditNFTManager.sol";
 import {CreditRedemptionCalculator} from
     "../../src/dollar/CreditRedemptionCalculator.sol";
 import {DollarMintCalculator} from
@@ -20,7 +20,7 @@ import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
-contract DebtCouponManagerTest is LocalTestHelper {
+contract CreditNFTManagerTest is LocalTestHelper {
     address uADManagerAddress;
     address uADAddress;
     address uARDollarCalculatorAddress;
@@ -36,7 +36,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         uADManagerAddress = helpers_deployUbiquityDollarManager();
 
         debtCouponManagerAddress = address(
-            new DebtCouponManager(uADManagerAddress, couponLengthBlocks)
+            new CreditNFTManager(uADManagerAddress, couponLengthBlocks)
         );
         twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
             .twapOracleAddress();
@@ -102,14 +102,14 @@ contract DebtCouponManagerTest is LocalTestHelper {
 
     function test_setExpiredCouponConversionRate() public {
         vm.expectRevert("Caller is not a coupon manager");
-        DebtCouponManager(debtCouponManagerAddress)
+        CreditNFTManager(debtCouponManagerAddress)
             .setExpiredCouponConversionRate(100);
 
         vm.prank(admin);
-        DebtCouponManager(debtCouponManagerAddress)
+        CreditNFTManager(debtCouponManagerAddress)
             .setExpiredCouponConversionRate(100);
         assertEq(
-            DebtCouponManager(debtCouponManagerAddress)
+            CreditNFTManager(debtCouponManagerAddress)
                 .expiredCouponConversionRate(),
             100
         );
@@ -117,12 +117,12 @@ contract DebtCouponManagerTest is LocalTestHelper {
 
     function test_setCouponLength() public {
         vm.expectRevert("Caller is not a coupon manager");
-        DebtCouponManager(debtCouponManagerAddress).setCouponLength(100);
+        CreditNFTManager(debtCouponManagerAddress).setCouponLength(100);
 
         vm.prank(admin);
-        DebtCouponManager(debtCouponManagerAddress).setCouponLength(100);
+        CreditNFTManager(debtCouponManagerAddress).setCouponLength(100);
         assertEq(
-            DebtCouponManager(debtCouponManagerAddress).couponLengthBlocks(),
+            CreditNFTManager(debtCouponManagerAddress).couponLengthBlocks(),
             100
         );
     }
@@ -130,7 +130,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     function test_exchangeDollarsForDebtCoupons() public {
         mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint coupons");
-        DebtCouponManager(debtCouponManagerAddress)
+        CreditNFTManager(debtCouponManagerAddress)
             .exchangeDollarsForDebtCoupons(100);
 
         mockTwapFuncs(5e17);
@@ -142,7 +142,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         MockDollarToken(uADAddress).mint(mockSender, 10000e18);
         MockDollarToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
 
-        uint256 expiryBlockNumber = DebtCouponManager(debtCouponManagerAddress)
+        uint256 expiryBlockNumber = CreditNFTManager(debtCouponManagerAddress)
             .exchangeDollarsForDebtCoupons(100);
         assertEq(expiryBlockNumber, 10000 + couponLengthBlocks);
 
@@ -155,7 +155,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     {
         mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint uAR");
-        DebtCouponManager(debtCouponManagerAddress).exchangeDollarsForUAR(100);
+        CreditNFTManager(debtCouponManagerAddress).exchangeDollarsForUAR(100);
     }
 
     function test_exchangeDollarsForUARWorks() public {
@@ -169,7 +169,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         MockDollarToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
 
         mockUARCalculatorFuncs(10e18);
-        uint256 uARAmount = DebtCouponManager(debtCouponManagerAddress)
+        uint256 uARAmount = CreditNFTManager(debtCouponManagerAddress)
             .exchangeDollarsForUAR(100);
         assertEq(uARAmount, 10e18);
     }
@@ -177,7 +177,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     function test_burnExpiredCouponsForUGOVRevertsIfNotExpired() public {
         vm.roll(1000);
         vm.expectRevert("Coupon has not expired");
-        DebtCouponManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
+        CreditNFTManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
             2000, 1e18
         );
     }
@@ -191,7 +191,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.roll(1000);
         vm.prank(mockMessageSender);
         vm.expectRevert("User not enough coupons");
-        DebtCouponManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
+        CreditNFTManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
             500, 1e18
         );
     }
@@ -209,7 +209,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.stopPrank();
         vm.roll(1000);
         vm.prank(mockMessageSender);
-        DebtCouponManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
+        CreditNFTManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
             expiryBlockNumber, 1e18
         );
         uint256 uGovBalance =
@@ -220,7 +220,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     function test_burnCouponsForAutoRedemptionRevertsIfExpired() public {
         vm.warp(1000);
         vm.expectRevert("Coupon has expired");
-        DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
+        CreditNFTManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
             500, 1e18
         );
     }
@@ -230,7 +230,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     {
         vm.warp(1000);
         vm.expectRevert("User not enough coupons");
-        DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
+        CreditNFTManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
             1001, 1e18
         );
     }
@@ -248,7 +248,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.stopPrank();
         vm.prank(mockMessageSender);
         vm.warp(expiryBlockNumber - 1);
-        DebtCouponManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
+        CreditNFTManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
             expiryBlockNumber, 1e18
         );
         uint256 redeemBalance = UbiquityCreditToken(autoRedeemTokenAddress)
@@ -261,14 +261,14 @@ contract DebtCouponManagerTest is LocalTestHelper {
     {
         mockTwapFuncs(5e17);
         vm.expectRevert("Price must be above 1 to auto redeem");
-        DebtCouponManager(debtCouponManagerAddress)
+        CreditNFTManager(debtCouponManagerAddress)
             .burnAutoRedeemTokensForDollars(100);
     }
 
     function test_burnAutoRedeemTokensForDollarsIfNotEnoughBalance() public {
         mockTwapFuncs(2e18);
         vm.expectRevert("User doesn't have enough auto redeem pool tokens.");
-        DebtCouponManager(debtCouponManagerAddress)
+        CreditNFTManager(debtCouponManagerAddress)
             .burnAutoRedeemTokensForDollars(100);
     }
 
@@ -278,7 +278,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         address account1 = address(0x123);
         MockCreditToken(autoRedeemTokenAddress).mint(account1, 100e18);
         vm.prank(account1);
-        uint256 unredeemed = DebtCouponManager(debtCouponManagerAddress)
+        uint256 unredeemed = CreditNFTManager(debtCouponManagerAddress)
             .burnAutoRedeemTokensForDollars(10e18);
         assertEq(unredeemed, 10e18 - 1e18);
     }
@@ -286,7 +286,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
     function test_redeemCouponsRevertsIfPriceLowerThan1Ether() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("Price must be above 1 to redeem coupons");
-        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
             123123123, 100
         );
     }
@@ -295,7 +295,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         mockTwapFuncs(2e18);
         vm.roll(10000);
         vm.expectRevert("Coupon has expired");
-        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(5555, 100);
+        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(5555, 100);
     }
 
     function test_redeemCouponsRevertsIfNotEnoughBalance() public {
@@ -308,7 +308,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.expectRevert("User not enough coupons");
         vm.prank(account1);
         vm.roll(expiryBlockNumber - 1);
-        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
             expiryBlockNumber, 200
         );
     }
@@ -339,7 +339,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.prank(account1);
         vm.expectRevert("There aren't enough uAD to redeem currently");
         vm.roll(expiryBlockNumber - 1);
-        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
             expiryBlockNumber, 99
         );
     }
@@ -369,7 +369,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         vm.prank(account1);
         vm.expectRevert("There aren't any uAD to redeem currently");
         vm.roll(expiryBlockNumber - 1);
-        DebtCouponManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
             expiryBlockNumber, 99
         );
     }
@@ -399,7 +399,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
         );
         vm.prank(account1);
         vm.roll(expiryBlockNumber - 1);
-        uint256 unredeemedCoupons = DebtCouponManager(debtCouponManagerAddress)
+        uint256 unredeemedCoupons = CreditNFTManager(debtCouponManagerAddress)
             .redeemCoupons(expiryBlockNumber, 99);
         assertEq(unredeemedCoupons, 0);
     }
@@ -420,7 +420,7 @@ contract DebtCouponManagerTest is LocalTestHelper {
 
         uint256 beforeBalance =
             MockDollarToken(uADAddress).balanceOf(debtCouponManagerAddress);
-        DebtCouponManager(debtCouponManagerAddress).mintClaimableDollars();
+        CreditNFTManager(debtCouponManagerAddress).mintClaimableDollars();
         uint256 afterBalance =
             MockDollarToken(uADAddress).balanceOf(debtCouponManagerAddress);
         assertEq(afterBalance - beforeBalance, 50);
