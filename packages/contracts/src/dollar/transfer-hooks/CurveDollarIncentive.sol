@@ -1,17 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "./UbiquityDollarManager.sol";
-import "./interfaces/IUbiquityGovernance.sol";
-import "./interfaces/IIncentive.sol";
-import "./TWAPOracleDollar3pool.sol";
-import "./UbiquityDollarToken.sol";
-import "./libs/ABDKMathQuad.sol";
+import "../UbiquityDollarManager.sol";
+import "../interfaces/IUbiquityGovernance.sol";
+import "../interfaces/IIncentive.sol";
+import "../TWAPOracleDollar3pool.sol";
+import "../UbiquityDollarToken.sol";
+import "../libs/ABDKMathQuad.sol";
 
 /// @title Uniswap trading incentive contract
 /// @author uAD Protocol
 /// @dev incentives
-contract CurveUADIncentive is IIncentive {
+contract CurveDollarIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
