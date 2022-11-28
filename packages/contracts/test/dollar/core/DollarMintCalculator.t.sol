@@ -2,12 +2,12 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
-import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
+    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 import {DollarMintCalculator} from
-    "../../src/dollar/DollarMintCalculator.sol";
+    "../../../src/dollar/core/DollarMintCalculator.sol";
 
-import "../helpers/LocalTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
 
 contract DollarMintCalculatorTest is LocalTestHelper {
     address uADManagerAddress;

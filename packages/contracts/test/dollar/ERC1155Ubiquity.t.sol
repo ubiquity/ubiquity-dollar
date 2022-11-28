@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import {ERC1155Ubiquity} from "../../src/dollar/ERC1155Ubiquity.sol";
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
+    "../../src/dollar/core/UbiquityDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract ERC1155UbiquityTest is LocalTestHelper {

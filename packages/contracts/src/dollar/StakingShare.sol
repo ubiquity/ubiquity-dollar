@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "./UbiquityDollarManager.sol";
+import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {

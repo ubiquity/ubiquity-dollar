@@ -2,13 +2,13 @@
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
-import "./interfaces/ICreditNFTManager.sol";
-import "./interfaces/ICreditRedemptionCalculator.sol";
-import "./interfaces/ICreditNFTRedemptionCalculator.sol";
-import "./interfaces/IDollarMintCalculator.sol";
-import "./interfaces/IDollarMintExcess.sol";
-import "./TWAPOracleDollar3pool.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "../interfaces/ICreditNFTManager.sol";
+import "../interfaces/ICreditRedemptionCalculator.sol";
+import "../interfaces/ICreditNFTRedemptionCalculator.sol";
+import "../interfaces/IDollarMintCalculator.sol";
+import "../interfaces/IDollarMintExcess.sol";
+import "./TWAPOracleDollar3pool.sol";
 import "./UbiquityDollarToken.sol";
 import "./UbiquityCreditToken.sol";
 import "./UbiquityDollarManager.sol";

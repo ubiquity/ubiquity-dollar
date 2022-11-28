@@ -2,10 +2,10 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityDollarToken} from
-    "../../src/dollar/UbiquityDollarToken.sol";
-import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
+    "../../../src/dollar/core/UbiquityDollarToken.sol";
+import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
 
-import "../helpers/LocalTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
 
 contract UbiquityDollarTokenTest is LocalTestHelper {
     address incentive_addr;

@@ -3,12 +3,11 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./core/UbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
-import "./UbiquityDollarManager.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./StakingShare.sol";
 import "./interfaces/IUbiquityFormulas.sol";
-
 import "./interfaces/IERC1155Ubiquity.sol";
 
 contract UbiquityChef is ReentrancyGuard {

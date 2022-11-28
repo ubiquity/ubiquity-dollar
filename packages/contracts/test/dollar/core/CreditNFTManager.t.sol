@@ -2,23 +2,23 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
-import {CreditNFTManager} from "../../src/dollar/CreditNFTManager.sol";
+    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {CreditNFTManager} from "../../../src/dollar/core/CreditNFTManager.sol";
 import {CreditRedemptionCalculator} from
-    "../../src/dollar/CreditRedemptionCalculator.sol";
+    "../../../src/dollar/core/CreditRedemptionCalculator.sol";
 import {DollarMintCalculator} from
-    "../../src/dollar/DollarMintCalculator.sol";
-import {UbiquityCreditToken} from "../../src/dollar/UbiquityCreditToken.sol";
+    "../../../src/dollar/core/DollarMintCalculator.sol";
+import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 import {DollarMintExcess} from
-    "../../src/dollar/DollarMintExcess.sol";
-import {CreditNFT} from "../../src/dollar/CreditNFT.sol";
-import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
+    "../../../src/dollar/core/DollarMintExcess.sol";
+import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 
-import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
-import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
-import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
+import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
+import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
+import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
 
-import "../helpers/LocalTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
 
 contract CreditNFTManagerTest is LocalTestHelper {
     address uADManagerAddress;

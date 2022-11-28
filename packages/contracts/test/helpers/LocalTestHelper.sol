@@ -2,16 +2,16 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
-import {UbiquityGovernanceToken} from "../../src/dollar/UbiquityGovernanceToken.sol";
+    "../../src/dollar/core/UbiquityDollarManager.sol";
+import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {CreditRedemptionCalculator} from
-    "../../src/dollar/CreditRedemptionCalculator.sol";
+    "../../src/dollar/core/CreditRedemptionCalculator.sol";
 import {CreditNFTRedemptionCalculator} from
-    "../../src/dollar/CreditNFTRedemptionCalculator.sol";
+    "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
 import {DollarMintCalculator} from
-    "../../src/dollar/DollarMintCalculator.sol";
+    "../../src/dollar/core/DollarMintCalculator.sol";
 import {DollarMintExcess} from
-    "../../src/dollar/DollarMintExcess.sol";
+    "../../src/dollar/core/DollarMintExcess.sol";
 import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";

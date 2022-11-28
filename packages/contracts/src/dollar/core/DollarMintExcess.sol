@@ -2,15 +2,15 @@
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./interfaces/IERC20Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
-import "./interfaces/IDollarMintExcess.sol";
-import "./interfaces/IMetaPool.sol";
+import "../interfaces/IERC20Ubiquity.sol";
+import "../interfaces/IDollarMintExcess.sol";
+import "../interfaces/IMetaPool.sol";
+import "../SushiSwapPool.sol";
+import "../libs/ABDKMathQuad.sol";
 import "./UbiquityDollarManager.sol";
-import "./SushiSwapPool.sol";
-import "./libs/ABDKMathQuad.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards

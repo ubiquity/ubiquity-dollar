@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
-import "./interfaces/IMetaPool.sol";
+import "../interfaces/IMetaPool.sol";
 
 contract TWAPOracleDollar3pool {
     address public immutable pool;

@@ -4,18 +4,18 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
+import "./core/UbiquityDollarToken.sol";
+import "./core/UbiquityDollarManager.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./interfaces/IMetaPool.sol";
 import "./interfaces/IUbiquityFormulas.sol";
-import "./UbiquityDollarToken.sol";
-import "./StakingFormulas.sol";
-import "./StakingShare.sol";
-import "./UbiquityDollarManager.sol";
 import "./interfaces/ISablier.sol";
 import "./interfaces/IUbiquityChef.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./utils/CollectableDust.sol";
+import "./StakingFormulas.sol";
+import "./StakingShare.sol";
 
 contract Staking is CollectableDust, Pausable {
     using SafeERC20 for IERC20;

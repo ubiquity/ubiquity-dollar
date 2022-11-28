@@ -5,13 +5,13 @@ import {IUniswapV2Router01} from
     "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
-import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
+    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 import {DollarMintExcess} from
-    "../../src/dollar/DollarMintExcess.sol";
-import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
+    "../../../src/dollar/core/DollarMintExcess.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 
-import "../helpers/LocalTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
 
 contract DollarMintExcessTest is LocalTestHelper {
     address uADManagerAddress;

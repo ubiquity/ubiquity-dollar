@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.3;
 
-import "./ERC20Ubiquity.sol";
+import "../ERC20Ubiquity.sol";
 
 contract UbiquityCreditToken is ERC20Ubiquity {
     constructor(address _manager)

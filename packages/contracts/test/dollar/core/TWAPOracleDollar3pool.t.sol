@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
-import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
-import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
-import "../helpers/LocalTestHelper.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import "../../helpers/LocalTestHelper.sol";
 
 contract TWAPOracleDollar3poolTest is LocalTestHelper {
     address uadTokenAddress = address(0x222);

@@ -2,10 +2,10 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
-import {CreditNFT} from "../../src/dollar/CreditNFT.sol";
+    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
 
-import "../helpers/LocalTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
 
 contract CreditNFTTest is LocalTestHelper {
     address uADManagerAddress;

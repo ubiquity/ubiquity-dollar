@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
 import {UbiquityDollarManager} from
-    "../../src/dollar/UbiquityDollarManager.sol";
+    "../../src/dollar/core/UbiquityDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract ERC20UbiquityHarness is ERC20Ubiquity {
