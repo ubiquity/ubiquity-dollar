@@ -19,7 +19,7 @@ contract SushiSwapPool {
         );
         require(
             manager.governanceTokenAddress() != address(0),
-            "uGOV Address not set"
+            "Governance token address not set"
         );
         // check if pair already exist
         address pool = factory.getPair(
