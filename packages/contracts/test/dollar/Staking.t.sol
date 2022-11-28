@@ -15,27 +15,27 @@ contract ZeroState is LiveTestHelper {
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
-        uint256 _bondingShareAmount,
+        uint256 _stakingShareAmount,
         uint256 _weeks,
         uint256 _endBlock
     );
-    event RemoveLiquidityFromBond(
+    event RemoveLiquidityFromStake(
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
         uint256 _lpAmountTransferred,
         uint256 _lpRewards,
-        uint256 _bondingShareAmount
+        uint256 _stakingShareAmount
     );
 
-    event AddLiquidityFromBond(
+    event AddLiquidityFromStake(
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
-        uint256 _bondingShareAmount
+        uint256 _stakingShareAmount
     );
 
-    event BondingDiscountMultiplierUpdated(uint256 _bondingDiscountMultiplier);
+    event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
     event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
 
     event Migrated(
@@ -139,16 +139,16 @@ contract ZeroStateTest is ZeroState {
         assertEq(false, bondingV2.migrating());
     }
 
-    function testSetBondingFormula() public {
+    function testSetStakingFormula() public {
         assertEq(
             bytes20(address(bFormulas)),
-            bytes20(bondingV2.bondingFormulasAddress())
+            bytes20(bondingV2.stakingFormulasAddress())
         );
         vm.prank(admin);
-        bondingV2.setBondingFormulasAddress(secondAccount);
+        bondingV2.setStakingFormulasAddress(secondAccount);
 
         assertEq(
-            bytes20(secondAccount), bytes20(bondingV2.bondingFormulasAddress())
+            bytes20(secondAccount), bytes20(bondingV2.stakingFormulasAddress())
         );
     }
 
@@ -159,12 +159,12 @@ contract ZeroStateTest is ZeroState {
         bondingV2.addProtocolToken(address(DAI));
     }
 
-    function testSetBondingDiscountMultiplier(uint256 x) public {
+    function testSetStakingDiscountMultiplier(uint256 x) public {
         vm.expectEmit(true, false, false, true);
-        emit BondingDiscountMultiplierUpdated(x);
+        emit StakingDiscountMultiplierUpdated(x);
         vm.prank(admin);
-        bondingV2.setBondingDiscountMultiplier(x);
-        assertEq(x, bondingV2.bondingDiscountMultiplier());
+        bondingV2.setStakingDiscountMultiplier(x);
+        assertEq(x, bondingV2.stakingDiscountMultiplier());
     }
 
     function testSetBlockCountInAWeek(uint256 x) public {
@@ -185,7 +185,7 @@ contract ZeroStateTest is ZeroState {
             bondingShareV2.totalSupply(),
             lpAmount,
             IUbiquityFormulas(manager.formulasAddress()).durationMultiply(
-                lpAmount, lockup, bondingV2.bondingDiscountMultiplier()
+                lpAmount, lockup, bondingV2.stakingDiscountMultiplier()
             ),
             lockup,
             (block.number + lockup * bondingV2.blockCountInAWeek())
@@ -220,15 +220,15 @@ contract ZeroStateTest is ZeroState {
         assertLt(bsMinAmount[0], bsMaxAmount[0]);
     }
 
-    function testCannotBondMoreThan4Years(uint256 _weeks) public {
+    function testCannotStakeMoreThan4Years(uint256 _weeks) public {
         _weeks = bound(_weeks, 209, 2 ** 256 - 1);
-        vm.expectRevert("Bonding: duration must be between 1 and 208 weeks");
+        vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
         bondingV2.deposit(1, _weeks);
     }
 
     function testCannotDepositZeroWeeks() public {
-        vm.expectRevert("Bonding: duration must be between 1 and 208 weeks");
+        vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
         bondingV2.deposit(1, 0);
     }
@@ -260,19 +260,19 @@ contract DepositStateTest is DepositState {
     address[] path1;
     address[] path2;
 
-    function testUADPriceReset(uint256 amount) public {
+    function testDollarPriceReset(uint256 amount) public {
         amount = bound(amount, 1000e18, uAD.balanceOf(address(metapool)) / 10);
 
-        uint256 uADPreBalance = uAD.balanceOf(address(metapool));
+        uint256 dollarPreBalance = uAD.balanceOf(address(metapool));
 
         vm.expectEmit(true, false, false, false, address(bondingV2));
         emit PriceReset(address(uAD), 1000e18, 1000e18);
         vm.prank(admin);
-        bondingV2.uADPriceReset(amount);
+        bondingV2.dollarPriceReset(amount);
 
-        uint256 uADPostBalance = uAD.balanceOf(address(metapool));
+        uint256 dollarPostBalance = uAD.balanceOf(address(metapool));
 
-        assertLt(uADPostBalance, uADPreBalance);
+        assertLt(dollarPostBalance, dollarPreBalance);
     }
 
     function testCRVPriceReset(uint256 amount) public {
@@ -292,19 +292,19 @@ contract DepositStateTest is DepositState {
     function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {
         weeksLockup = bound(weeksLockup, 1, 208);
         amount = bound(amount, 1e18, 2 ** 128 - 1);
-        StakingShare.Stake memory bond = bondingShareV2.getStake(1);
+        StakingShare.Stake memory stake = bondingShareV2.getStake(1);
         uint256[2] memory preShares = chefV2.getBondingShareInfo(1);
         deal(address(metapool), bondingMinAccount, uint256(amount));
         vm.roll(20000000);
         vm.expectEmit(true, true, false, false, address(bondingV2));
-        emit AddLiquidityFromBond(
+        emit AddLiquidityFromStake(
             bondingMinAccount,
             1,
             amount,
             uFormulas.durationMultiply(
-                bond.lpAmount + amount,
+                stake.lpAmount + amount,
                 weeksLockup,
-                bondingV2.bondingDiscountMultiplier()
+                bondingV2.stakingDiscountMultiplier()
             )
             );
         vm.prank(bondingMinAccount);
@@ -315,12 +315,12 @@ contract DepositStateTest is DepositState {
 
     function testRemoveLiquidity(uint256 amount) public {
         vm.roll(20000000);
-        StakingShare.Stake memory bond = bondingShareV2.getStake(1);
-        amount = bound(amount, 1, bond.lpAmount);
+        StakingShare.Stake memory stake = bondingShareV2.getStake(1);
+        amount = bound(amount, 1, stake.lpAmount);
 
         uint256 preBal = metapool.balanceOf(bondingMinAccount);
         vm.expectEmit(true, false, false, false, address(bondingV2));
-        emit RemoveLiquidityFromBond(
+        emit RemoveLiquidityFromStake(
             bondingMinAccount, 1, amount, amount, amount, amount
             );
         vm.prank(bondingMinAccount);
@@ -341,22 +341,22 @@ contract DepositStateTest is DepositState {
 
     function testCannotRemoveMoreLiquidityThanBalance(uint256 amount) public {
         vm.roll(20000000);
-        StakingShare.Stake memory bond = bondingShareV2.getStake(2);
-        amount = bound(amount, bond.lpAmount + 1, 2 ** 256 - 1);
-        vm.expectRevert("Bonding: amount too big");
+        StakingShare.Stake memory stake = bondingShareV2.getStake(2);
+        amount = bound(amount, stake.lpAmount + 1, 2 ** 256 - 1);
+        vm.expectRevert("Staking: amount too big");
         vm.prank(fourthAccount);
         bondingV2.removeLiquidity(amount, 2);
     }
 
-    function testCannotCallOthersBond() public {
+    function testCannotCallOthersStake() public {
         vm.roll(20000000);
-        vm.expectRevert("Bonding: caller is not owner");
+        vm.expectRevert("Staking: caller is not owner");
         vm.prank(bondingMinAccount);
         bondingV2.removeLiquidity(1, 2);
     }
 
-    function testCannotWithdrawBeforeBondExpires() public {
-        vm.expectRevert("Bonding: Redeem not allowed before bonding time");
+    function testCannotWithdrawBeforeStakeExpires() public {
+        vm.expectRevert("Staking: Redeem not allowed before staking time");
         vm.prank(bondingMaxAccount);
         bondingV2.removeLiquidity(1, 3);
     }

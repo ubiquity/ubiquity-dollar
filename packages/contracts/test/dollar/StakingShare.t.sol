@@ -109,7 +109,7 @@ contract DepositStateTest is DepositState {
             fourthBal,
             creationBlock[1],
             uFormulas.durationMultiply(
-                fourthBal, 52, bondingV2.bondingDiscountMultiplier()
+                fourthBal, 52, bondingV2.stakingDiscountMultiplier()
             ),
             bondingV2.blockCountInAWeek() * 52,
             fourthBal

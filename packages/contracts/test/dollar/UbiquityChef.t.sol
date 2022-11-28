@@ -52,7 +52,7 @@ contract ZeroStateTest is ZeroState {
     function testDeposit(uint256 lpAmount) public {
         lpAmount = bound(lpAmount, 1, metapool.balanceOf(fourthAccount));
         uint256 shares = uFormulas.durationMultiply(
-            lpAmount, 10, bondingV2.bondingDiscountMultiplier()
+            lpAmount, 10, bondingV2.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         uint256 id = bondingShareV2.mint(
@@ -79,7 +79,7 @@ contract DepositState is ZeroState {
         super.setUp();
         fourthBal = metapool.balanceOf(fourthAccount);
         shares = uFormulas.durationMultiply(
-            fourthBal, 10, bondingV2.bondingDiscountMultiplier()
+            fourthBal, 10, bondingV2.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         fourthID = bondingShareV2.mint(
