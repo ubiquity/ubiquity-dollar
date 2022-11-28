@@ -18,7 +18,7 @@ contract StakingFormulasTest is LocalTestHelper {
     }
 
     function test_sharesForLP() public {
-        StakingShare.Bond memory _bond = StakingShare.Bond({
+        StakingShare.Stake memory _bond = StakingShare.Stake({
             // address of the minter
             minter: address(0x11111),
             // lp amount deposited by the user
@@ -38,7 +38,7 @@ contract StakingFormulasTest is LocalTestHelper {
     }
 
     function test_lpRewardsRemoveLiquidityNormalization(
-        StakingShare.Bond memory _bond,
+        StakingShare.Stake memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public {
@@ -51,7 +51,7 @@ contract StakingFormulasTest is LocalTestHelper {
     }
 
     function test_lpRewardsAddLiquidityNormalization(
-        StakingShare.Bond memory _bond,
+        StakingShare.Stake memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public {

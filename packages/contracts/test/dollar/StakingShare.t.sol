@@ -40,13 +40,13 @@ contract DepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
-    function testUpdateBond(uint128 amount, uint128 debt, uint256 end) public {
+    function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
-        bondingShareV2.updateBond(1, uint256(amount), uint256(debt), end);
-        StakingShare.Bond memory bond = bondingShareV2.getBond(1);
-        assertEq(bond.lpAmount, amount);
-        assertEq(bond.lpRewardDebt, debt);
-        assertEq(bond.endBlock, end);
+        bondingShareV2.updateStake(1, uint256(amount), uint256(debt), end);
+        StakingShare.Stake memory stake = bondingShareV2.getStake(1);
+        assertEq(stake.lpAmount, amount);
+        assertEq(stake.lpRewardDebt, debt);
+        assertEq(stake.endBlock, end);
     }
 
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
@@ -54,11 +54,11 @@ contract DepositStateTest is DepositState {
         uint256 id = bondingShareV2.mint(
             secondAccount, uint256(deposited), uint256(debt), end
         );
-        StakingShare.Bond memory bond = bondingShareV2.getBond(id);
-        assertEq(bond.minter, secondAccount);
-        assertEq(bond.lpAmount, deposited);
-        assertEq(bond.lpRewardDebt, debt);
-        assertEq(bond.endBlock, end);
+        StakingShare.Stake memory stake = bondingShareV2.getStake(id);
+        assertEq(stake.minter, secondAccount);
+        assertEq(stake.lpAmount, deposited);
+        assertEq(stake.lpRewardDebt, debt);
+        assertEq(stake.endBlock, end);
     }
 
     function testTransferFrom() public {
@@ -103,8 +103,8 @@ contract DepositStateTest is DepositState {
     //     assertEq(bondingShareV2.totalLP(), totalLp);
     // }
 
-    function testGetBond() public {
-        StakingShare.Bond memory bond = StakingShare.Bond(
+    function testGetStake() public {
+        StakingShare.Stake memory stake = StakingShare.Stake(
             fourthAccount,
             fourthBal,
             creationBlock[1],
@@ -115,10 +115,10 @@ contract DepositStateTest is DepositState {
             fourthBal
         );
 
-        StakingShare.Bond memory bond_ = bondingShareV2.getBond(2);
-        bytes32 bond1 = bytes32(abi.encode(bond));
-        bytes32 bond2 = bytes32(abi.encode(bond_));
-        assertEq(bond1, bond2);
+        StakingShare.Stake memory stake_ = bondingShareV2.getStake(2);
+        bytes32 stake1 = bytes32(abi.encode(stake));
+        bytes32 stake2 = bytes32(abi.encode(stake_));
+        assertEq(stake1, stake2);
     }
 
     function testHolderTokens() public {

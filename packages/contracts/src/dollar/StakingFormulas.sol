@@ -15,7 +15,7 @@ contract StakingFormulas {
     /// @param _amount , amount of LP tokens
     /// @notice shares = (bond.shares * _amount )  / bond.lpAmount ;
     function sharesForLP(
-        StakingShare.Bond memory _bond,
+        StakingShare.Stake memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256 _uLP) {
@@ -33,7 +33,7 @@ contract StakingFormulas {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsRemoveLiquidityNormalization(
-        StakingShare.Bond memory _bond,
+        StakingShare.Stake memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {
@@ -48,7 +48,7 @@ contract StakingFormulas {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsAddLiquidityNormalization(
-        StakingShare.Bond memory _bond,
+        StakingShare.Stake memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {

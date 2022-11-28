@@ -11,7 +11,7 @@ import "./utils/SafeAddArray.sol";
 contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
 
-    struct Bond {
+    struct Stake {
         // address of the minter
         address minter;
         // lp amount deposited by the user
@@ -27,7 +27,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     UbiquityDollarManager public manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
-    mapping(uint256 => Bond) private _bonds;
+    mapping(uint256 => Stake) private _stakes;
     uint256 private _totalLP;
     uint256 private _totalSupply;
 
@@ -63,19 +63,19 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         manager = UbiquityDollarManager(_manager);
     }
 
-    /// @dev update bond LP amount , LP rewards debt and end block.
-    /// @param _bondId bonding share id
+    /// @dev update stake LP amount , LP rewards debt and end block.
+    /// @param _stakeId staking share id
     /// @param _lpAmount amount of LP token deposited
-    /// @param _lpRewardDebt amount of excess LP token inside the bonding contract
+    /// @param _lpRewardDebt amount of excess LP token inside the staking contract
     /// @param _endBlock end locking period block number
-    function updateBond(
-        uint256 _bondId,
+    function updateStake(
+        uint256 _stakeId,
         uint256 _lpAmount,
         uint256 _lpRewardDebt,
         uint256 _endBlock
     ) external onlyMinter whenNotPaused {
-        Bond storage bond = _bonds[_bondId];
-        uint256 curLpAmount = bond.lpAmount;
+        Stake storage stake = _stakes[_stakeId];
+        uint256 curLpAmount = stake.lpAmount;
         if (curLpAmount > _lpAmount) {
             // we are removing LP
             _totalLP -= curLpAmount - _lpAmount;
@@ -83,15 +83,15 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
             // we are adding LP
             _totalLP += _lpAmount - curLpAmount;
         }
-        bond.lpAmount = _lpAmount;
-        bond.lpRewardDebt = _lpRewardDebt;
-        bond.endBlock = _endBlock;
+        stake.lpAmount = _lpAmount;
+        stake.lpRewardDebt = _lpRewardDebt;
+        stake.endBlock = _endBlock;
     }
 
     // @dev Creates `amount` new tokens for `to`, of token type `id`.
     /// @param to owner address
     /// @param lpDeposited amount of LP token deposited
-    /// @param lpRewardDebt amount of excess LP token inside the bonding contract
+    /// @param lpRewardDebt amount of excess LP token inside the staking contract
     /// @param endBlock block number when the locking period ends
     function mint(
         address to,
@@ -103,13 +103,13 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         _mint(to, id, 1, bytes(""));
         _totalSupply += 1;
         _holderBalances[to].add(id);
-        Bond storage _bond = _bonds[id];
-        _bond.minter = to;
-        _bond.lpFirstDeposited = lpDeposited;
-        _bond.lpAmount = lpDeposited;
-        _bond.lpRewardDebt = lpRewardDebt;
-        _bond.creationBlock = block.number;
-        _bond.endBlock = endBlock;
+        Stake storage _stake = _stakes[id];
+        _stake.minter = to;
+        _stake.lpFirstDeposited = lpDeposited;
+        _stake.lpAmount = lpDeposited;
+        _stake.lpRewardDebt = lpRewardDebt;
+        _stake.creationBlock = block.number;
+        _stake.endBlock = endBlock;
         _totalLP += lpDeposited;
     }
 
@@ -176,10 +176,10 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     }
 
     /**
-     * @dev return bond details.
+     * @dev return stake details.
      */
-    function getBond(uint256 id) public view returns (Bond memory) {
-        return _bonds[id];
+    function getStake(uint256 id) public view returns (Stake memory) {
+        return _stakes[id];
     }
 
     /**
@@ -201,8 +201,8 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     {
         require(amount == 1, "amount <> 1");
         super._burn(account, id, 1);
-        Bond storage _bond = _bonds[id];
-        require(_bond.lpAmount == 0, "LP <> 0");
+        Stake storage _stake = _stakes[id];
+        require(_stake.lpAmount == 0, "LP <> 0");
         _totalSupply -= 1;
     }
 

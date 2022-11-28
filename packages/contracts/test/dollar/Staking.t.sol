@@ -292,7 +292,7 @@ contract DepositStateTest is DepositState {
     function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {
         weeksLockup = bound(weeksLockup, 1, 208);
         amount = bound(amount, 1e18, 2 ** 128 - 1);
-        StakingShare.Bond memory bond = bondingShareV2.getBond(1);
+        StakingShare.Stake memory bond = bondingShareV2.getStake(1);
         uint256[2] memory preShares = chefV2.getBondingShareInfo(1);
         deal(address(metapool), bondingMinAccount, uint256(amount));
         vm.roll(20000000);
@@ -315,7 +315,7 @@ contract DepositStateTest is DepositState {
 
     function testRemoveLiquidity(uint256 amount) public {
         vm.roll(20000000);
-        StakingShare.Bond memory bond = bondingShareV2.getBond(1);
+        StakingShare.Stake memory bond = bondingShareV2.getStake(1);
         amount = bound(amount, 1, bond.lpAmount);
 
         uint256 preBal = metapool.balanceOf(bondingMinAccount);
@@ -341,7 +341,7 @@ contract DepositStateTest is DepositState {
 
     function testCannotRemoveMoreLiquidityThanBalance(uint256 amount) public {
         vm.roll(20000000);
-        StakingShare.Bond memory bond = bondingShareV2.getBond(2);
+        StakingShare.Stake memory bond = bondingShareV2.getStake(2);
         amount = bound(amount, bond.lpAmount + 1, 2 ** 256 - 1);
         vm.expectRevert("Bonding: amount too big");
         vm.prank(fourthAccount);

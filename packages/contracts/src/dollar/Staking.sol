@@ -296,7 +296,7 @@ contract Staking is CollectableDust, Pausable {
         external
         whenNotPaused
     {
-        (uint256[2] memory bs, StakingShare.Bond memory bond) =
+        (uint256[2] memory bs, StakingShare.Stake memory bond) =
             _checkForLiquidity(_id);
 
         // calculate pending LP rewards
@@ -341,7 +341,7 @@ contract Staking is CollectableDust, Pausable {
                 * accLpRewardPerShare
         ) / 1e12;
 
-        StakingShare(manager.bondingShareAddress()).updateBond(
+        StakingShare(manager.bondingShareAddress()).updateStake(
             _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
         );
         emit AddLiquidityFromBond(msg.sender, _id, bond.lpAmount, _sharesAmount);
@@ -355,7 +355,7 @@ contract Staking is CollectableDust, Pausable {
         external
         whenNotPaused
     {
-        (uint256[2] memory bs, StakingShare.Bond memory bond) =
+        (uint256[2] memory bs, StakingShare.Stake memory bond) =
             _checkForLiquidity(_id);
         require(bond.lpAmount >= _amount, "Bonding: amount too big");
         // we should decrease the UBQ rewards proportionally to the LP removed
@@ -400,7 +400,7 @@ contract Staking is CollectableDust, Pausable {
                 * accLpRewardPerShare
         ) / 1e12;
 
-        StakingShare(manager.bondingShareAddress()).updateBond(
+        StakingShare(manager.bondingShareAddress()).updateStake(
             _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
         );
 
@@ -419,7 +419,7 @@ contract Staking is CollectableDust, Pausable {
     // View function to see pending lpRewards on frontend.
     function pendingLpRewards(uint256 _id) external view returns (uint256) {
         StakingShare bonding = StakingShare(manager.bondingShareAddress());
-        StakingShare.Bond memory bond = bonding.getBond(_id);
+        StakingShare.Stake memory bond = bonding.getStake(_id);
         uint256[2] memory bs =
             IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id);
 
@@ -574,7 +574,7 @@ contract Staking is CollectableDust, Pausable {
 
     function _checkForLiquidity(uint256 _id)
         internal
-        returns (uint256[2] memory bs, StakingShare.Bond memory bond)
+        returns (uint256[2] memory bs, StakingShare.Stake memory bond)
     {
         require(
             IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
@@ -583,7 +583,7 @@ contract Staking is CollectableDust, Pausable {
             "Bonding: caller is not owner"
         );
         StakingShare bonding = StakingShare(manager.bondingShareAddress());
-        bond = bonding.getBond(_id);
+        bond = bonding.getStake(_id);
         require(
             block.number > bond.endBlock,
             "Bonding: Redeem not allowed before bonding time"
