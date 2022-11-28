@@ -25,12 +25,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
     DirectGovernanceFarmer directGovernanceFarmer;
     MockERC20 stableSwapMetaPool;
-    address uadManagerAddress;
+    address dollarManagerAddress;
     address depositZapAddress = address(0x4);
     address base3PoolAddress = address(0x5);
 
     function setUp() public {
-        uadManagerAddress = helpers_deployUbiquityDollarManager();
+        dollarManagerAddress = helpers_deployUbiquityDollarManager();
         // deploy mocked tokens
         token0 = new MockERC20('DAI', 'DAI', 18);
         token1 = new MockERC20('USDC', 'USDC', 6);
@@ -38,7 +38,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         // deploy stable swap meta pool
         stableSwapMetaPool = new MockERC20("Stable swap meta pool token", "Stable swap meta pool token", 18);
         vm.prank(admin);
-        IUbiquityDollarManager(uadManagerAddress).setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
+        IUbiquityDollarManager(dollarManagerAddress).setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
         // mock base3Pool to return mocked token addresses
         vm.mockCall(
             base3PoolAddress,
@@ -57,16 +57,16 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         // create direct governance farmer contract instance
         directGovernanceFarmer = new DirectGovernanceFarmer(
-            uadManagerAddress, 
+            dollarManagerAddress, 
             base3PoolAddress, 
             depositZapAddress
         );
     }
 
     function testConstructor_ShouldInitContract() public {
-        assertEq(address(directGovernanceFarmer.manager()), uadManagerAddress);
+        assertEq(address(directGovernanceFarmer.manager()), dollarManagerAddress);
         assertEq(directGovernanceFarmer.ubiquity3PoolLP(), address(stableSwapMetaPool));
-        assertEq(directGovernanceFarmer.ubiquityDollar(), IUbiquityDollarManager(uadManagerAddress).dollarTokenAddress());
+        assertEq(directGovernanceFarmer.ubiquityDollar(), IUbiquityDollarManager(dollarManagerAddress).dollarTokenAddress());
         assertEq(directGovernanceFarmer.depositZapUbiquityDollar(), depositZapAddress);
         assertEq(directGovernanceFarmer.token0(), address(token0));
         assertEq(directGovernanceFarmer.token1(), address(token1));
@@ -111,8 +111,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -157,7 +157,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setBondingShareAddress(stakingShareAddress);
 
         vm.mockCall(
             stakingShareAddress,
@@ -177,8 +177,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -241,7 +241,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncluded_ReturnTrue_IfIdIsInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-            uadManagerAddress, 
+            dollarManagerAddress, 
             base3PoolAddress, 
             depositZapAddress
         );
@@ -254,7 +254,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncluded_ReturnFalse_IfIdIsNotInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-            uadManagerAddress, 
+            dollarManagerAddress, 
             base3PoolAddress, 
             depositZapAddress
         );

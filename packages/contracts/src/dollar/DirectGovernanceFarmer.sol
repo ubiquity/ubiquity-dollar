@@ -3,7 +3,7 @@ pragma solidity >= 0.8.3;
 
 /**
  * @title Ubiquity.
- * @dev Ubiquity Dollar (uAD).
+ * @dev Ubiquity Dollar.
  */
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -78,10 +78,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Deposit into Ubiquity protocol
-     * @notice Stable coin (DAI / USDC / USDT / uAD) => uAD3CRV-f => Ubiquity BondingShare
-     * @notice STEP 1 : Change (DAI / USDC / USDT / uAD) to 3CRV at uAD3CRV MetaPool
+     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity BondingShare
+     * @notice STEP 1 : Change (DAI / USDC / USDT / Ubiquity dollar) to 3CRV at uAD3CRV MetaPool
      * @notice STEP 2 : uAD3CRV-f => Ubiquity BondingShare
-     * @param token Token deposited : DAI, USDC, USDT or uAD
+     * @param token Token deposited : DAI, USDC, USDT or Ubiquity Dollar
      * @param amount Amount of tokens to deposit (For max: `uint256(-1)`)
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
      */
@@ -92,7 +92,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     ) external nonReentrant returns (uint256 stakingShareId) {
 
 
-        // DAI / USDC / USDT / UAD
+        // DAI / USDC / USDT / Ubiquity Dollar
         require(isMetaPoolCoin(token), "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar");
         require(amount > 0, "amount must be positive vale");
         require(durationWeeks >= 1 && durationWeeks <= 208, "duration weeks must be between 1 and 208");
@@ -105,7 +105,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address stakingShare = manager.bondingShareAddress();
 
         uint256 lpAmount;//UAD3CRVf
-        //[UAD, DAI, USDC, USDT]
+        //[Ubiquity Dollar, DAI, USDC, USDT]
         uint256[4] memory tokenAmounts = [
             token == ubiquityDollar ? amount : 0,
             token == token0 ? amount : 0,
@@ -113,7 +113,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             token == token2 ? amount : 0
         ];
         
-        //STEP1: add DAI, USDC, USDT or uAD into metapool liquidity and get UAD3CRVf
+        //STEP1: add DAI, USDC, USDT or Ubiquity Dollar into metapool liquidity and get UAD3CRVf
         IERC20(token).safeIncreaseAllowance(depositZapUbiquityDollar, amount);
         lpAmount = IDepositZap(depositZapUbiquityDollar).add_liquidity(ubiquity3PoolLP, tokenAmounts, 0);
 
@@ -130,18 +130,18 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Withdraw from Ubiquity protocol
-     * @notice Ubiquity BondingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / uAD)
+     * @notice Ubiquity BondingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @notice STEP 1 : Ubiquity BondingShare  => uAD3CRV-f
-     * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / uAD)
+     * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @param stakingShareId Bonding Share Id to withdraw
-     * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or uAD
+     * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or Ubiquity Dollar
      */
     function withdraw(
         uint256 stakingShareId,
         address token
     ) external nonReentrant returns (uint256 tokenAmount) {
         
-        // DAI / USDC / USDT / UAD
+        // DAI / USDC / USDT / Ubiquity Dollar
         require(isMetaPoolCoin(token), "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar");
         address staking = manager.bondingContractAddress();
         address stakingShare = manager.bondingShareAddress();
@@ -167,10 +167,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress()).balanceOf(address(this));
         
 
-        // STEP2 : Withdraw  3Crv LPs from meta pool to get back UAD, DAI, USDC or USDT
+        // STEP2 : Withdraw  3Crv LPs from meta pool to get back Ubiquity Dollar, DAI, USDC or USDT
         uint128 tokenIndex = token == ubiquityDollar ? 0 : (token == token0 ? 1 : (token == token1 ? 2 : 3));
         IERC20(ubiquity3PoolLP).approve(depositZapUbiquityDollar, lpTokenAmount);
-        tokenAmount = IDepositZap(depositZapUbiquityDollar).remove_liquidity_one_coin(ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0); //[UAD, DAI, USDC, USDT]
+        tokenAmount = IDepositZap(depositZapUbiquityDollar).remove_liquidity_one_coin(ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0); //[Ubiquity Dollar, DAI, USDC, USDT]
         
         IERC20(token).safeTransfer(msg.sender, tokenAmount);
         IERC20(manager.governanceTokenAddress()).safeTransfer(msg.sender, governanceTokenAmount);
