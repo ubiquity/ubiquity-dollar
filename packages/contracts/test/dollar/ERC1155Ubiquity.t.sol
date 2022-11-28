@@ -8,7 +8,7 @@ import "../helpers/LocalTestHelper.sol";
 
 contract ERC1155UbiquityTest is LocalTestHelper {
     address token_addr;
-    address uad_manager_addr;
+    address dollar_manager_addr;
 
     event Minting(
         address indexed mock_addr1, address indexed _minter, uint256 _amount
@@ -17,10 +17,10 @@ contract ERC1155UbiquityTest is LocalTestHelper {
     event Burning(address indexed _burned, uint256 _amount);
 
     function setUp() public {
-        uad_manager_addr = helpers_deployUbiquityDollarManager();
+        dollar_manager_addr = helpers_deployUbiquityDollarManager();
         vm.prank(admin);
         token_addr = address(
-            new ERC1155Ubiquity(uad_manager_addr, "https://ipfs.io/ipfs/mock")
+            new ERC1155Ubiquity(dollar_manager_addr, "https://ipfs.io/ipfs/mock")
         );
     }
 
