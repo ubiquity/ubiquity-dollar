@@ -10,19 +10,19 @@ import {DollarMintCalculator} from
 import "../../helpers/LocalTestHelper.sol";
 
 contract DollarMintCalculatorTest is LocalTestHelper {
-    address uADManagerAddress;
-    address uADAddress;
+    address dollarManagerAddress;
+    address dollarAddress;
     address twapOracleAddress;
-    address dollarMintingCalculatorAddress;
+    address dollarMintCalculatorAddress;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityDollarManager();
-        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
+        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+        twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
             .twapOracleAddress();
-        dollarMintingCalculatorAddress = UbiquityDollarManager(
-            uADManagerAddress
+        dollarMintCalculatorAddress = UbiquityDollarManager(
+            dollarManagerAddress
         ).dollarMintCalculatorAddress();
-        uADAddress = UbiquityDollarManager(uADManagerAddress)
+        dollarAddress = UbiquityDollarManager(dollarManagerAddress)
             .dollarTokenAddress();
     }
 
@@ -41,16 +41,16 @@ contract DollarMintCalculatorTest is LocalTestHelper {
 
     function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {
         mockTwapFuncs(5e17);
-        vm.expectRevert("DollarMintingCalculator: not > 1");
-        DollarMintCalculator(dollarMintingCalculatorAddress).getDollarsToMint(
+        vm.expectRevert("DollarMintCalculator: not > 1");
+        DollarMintCalculator(dollarMintCalculatorAddress).getDollarsToMint(
         );
     }
 
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
-        uint256 totalSupply = MockDollarToken(uADAddress).totalSupply();
+        uint256 totalSupply = MockDollarToken(dollarAddress).totalSupply();
         uint256 amountToMint = DollarMintCalculator(
-            dollarMintingCalculatorAddress
+            dollarMintCalculatorAddress
         ).getDollarsToMint();
         assertEq(amountToMint, totalSupply);
     }
