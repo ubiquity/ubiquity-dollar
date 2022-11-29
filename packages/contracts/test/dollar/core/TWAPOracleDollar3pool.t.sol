@@ -7,16 +7,16 @@ import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3p
 import "../../helpers/LocalTestHelper.sol";
 
 contract TWAPOracleDollar3poolTest is LocalTestHelper {
-    address uadTokenAddress = address(0x222);
+    address dollarTokenAddress = address(0x222);
     address curve3CRVTokenAddress = address(0x333);
     address twapOracleAddress;
     address metaPoolAddress;
 
     function setUp() public {
         metaPoolAddress =
-            address(new MockMetaPool(uadTokenAddress, curve3CRVTokenAddress));
+            address(new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress));
         twapOracleAddress = address(
-            new TWAPOracleDollar3pool(metaPoolAddress, uadTokenAddress, curve3CRVTokenAddress)
+            new TWAPOracleDollar3pool(metaPoolAddress, dollarTokenAddress, curve3CRVTokenAddress)
         );
     }
 
@@ -37,7 +37,7 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
         TWAPOracleDollar3pool(twapOracleAddress).update();
 
         uint256 amount0Out =
-            TWAPOracleDollar3pool(twapOracleAddress).consult(uadTokenAddress);
+            TWAPOracleDollar3pool(twapOracleAddress).consult(dollarTokenAddress);
         uint256 amount1Out =
             TWAPOracleDollar3pool(twapOracleAddress).consult(curve3CRVTokenAddress);
         assertEq(amount0Out, 100e18);
