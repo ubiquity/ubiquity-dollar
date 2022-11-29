@@ -18,7 +18,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     modifier onlyAdmin() {
         require(
             manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
-            "UARCalc: not admin"
+            "CreditCalc: not admin"
         );
         _;
     }
@@ -28,20 +28,20 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         manager = UbiquityDollarManager(_manager);
     }
 
-    /// @notice set the constant for uAR calculation
-    /// @param coef new constant for uAR calculation in ETH format
+    /// @notice set the constant for Credit Token calculation
+    /// @param coef new constant for Credit Token calculation in ETH format
     /// @dev a coef of 1 ether means 1
     function setConstant(uint256 coef) external onlyAdmin {
         _coef = coef;
     }
 
-    /// @notice get the constant for uAR calculation
+    /// @notice get the constant for Credit Token calculation
     function getConstant() external view returns (uint256) {
         return _coef;
     }
 
     // dollarsToBurn * (blockHeight_debt/blockHeight_burn) * _coef
-    function getUARAmount(uint256 dollarsToBurn, uint256 blockHeightDebt)
+    function getCreditAmount(uint256 dollarsToBurn, uint256 blockHeightDebt)
         external
         view
         override
@@ -50,7 +50,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         require(
             CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt()
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
-            "uAR to Dollar: DEBT_TOO_HIGH"
+            "Credit to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 coef = _coef.fromUInt().div((uint256(1 ether)).fromUInt());
         bytes16 curBlock = uint256(block.number).fromUInt();

@@ -74,7 +74,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
         vm.mockCall(
             uARDollarCalculatorAddress,
             abi.encodeWithSelector(
-                CreditRedemptionCalculator.getUARAmount.selector
+                CreditRedemptionCalculator.getCreditAmount.selector
             ),
             abi.encode(_uarAmount)
         );

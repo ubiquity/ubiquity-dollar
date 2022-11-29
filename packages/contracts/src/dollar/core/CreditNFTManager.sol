@@ -134,7 +134,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         ICreditRedemptionCalculator uarCalculator =
             ICreditRedemptionCalculator(manager.creditCalculatorAddress());
-        uint256 uarToMint = uarCalculator.getUARAmount(amount, blockHeightDebt);
+        uint256 uarToMint = uarCalculator.getCreditAmount(amount, blockHeightDebt);
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
@@ -170,7 +170,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     {
         ICreditRedemptionCalculator uarCalculator =
             ICreditRedemptionCalculator(manager.creditCalculatorAddress());
-        return uarCalculator.getUARAmount(amount, blockHeightDebt);
+        return uarCalculator.getCreditAmount(amount, blockHeightDebt);
     }
 
     /// @dev should be called by this contract only when getting coupons to be burnt
