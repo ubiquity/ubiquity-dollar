@@ -46,43 +46,43 @@ abstract contract LocalTestHelper is Test {
             new UbiquityDollarManager(admin);
 
         vm.startPrank(admin);
-        // deploy debt token
-        MockCreditNFT _debtCoupon = new MockCreditNFT(100);
-        _manager.setDebtCouponAddress(address(_debtCoupon));
+        // deploy credit NFT token
+        MockCreditNFT _creditNFT = new MockCreditNFT(100);
+        _manager.setDebtCouponAddress(address(_creditNFT));
 
-        // deploy uAD token
-        MockDollarToken _uAD = new MockDollarToken(10000e18);
-        _manager.setDollarTokenAddress(address(_uAD));
+        // deploy dollar token
+        MockDollarToken _dollarToken = new MockDollarToken(10000e18);
+        _manager.setDollarTokenAddress(address(_dollarToken));
 
         // deploy twapPrice oracle
         MockTWAPOracleDollar3pool _twapOracle =
-        new MockTWAPOracleDollar3pool(address(0x100), address(_uAD), address(0x101), 100, 100);
+        new MockTWAPOracleDollar3pool(address(0x100), address(_dollarToken), address(0x101), 100, 100);
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token
-        UbiquityGovernanceToken _uGov = new UbiquityGovernanceToken(address(_manager));
-        _manager.setGovernanceTokenAddress(address(_uGov));
+        UbiquityGovernanceToken _govToken = new UbiquityGovernanceToken(address(_manager));
+        _manager.setGovernanceTokenAddress(address(_govToken));
 
-        // deploy couponsForDollarCalculator
-        MockCreditNFTRedemptionCalculator couponsForDollarsCalculator =
+        // deploy CreditNFTRedemptionCalculator
+        MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator =
             new MockCreditNFTRedemptionCalculator();
         _manager.setCouponCalculatorAddress(
-            address(couponsForDollarsCalculator)
+            address(_creditNFTRedemptionCalculator)
         );
 
-        // deploy ubiquityAutoRedeem
-        MockCreditToken autoRedeem = new MockCreditToken(0);
-        _manager.setuARTokenAddress(address(autoRedeem));
+        // deploy credit token
+        MockCreditToken _creditToken = new MockCreditToken(0);
+        _manager.setuARTokenAddress(address(_creditToken));
 
-        // deploy UARDollarCalculator
-        CreditRedemptionCalculator _uarDollarCalculator =
+        // deploy CreditRedemptionCalculator
+        CreditRedemptionCalculator _creditRedemptionCalculator =
             new CreditRedemptionCalculator(address(_manager));
-        _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
+        _manager.setUARCalculatorAddress(address(_creditRedemptionCalculator));
 
-        // deploy dollarMintingCalculator
-        DollarMintCalculator _mintingCalculator =
+        // deploy DollarMintCalculator
+        DollarMintCalculator _dollarMintCalculator =
             new DollarMintCalculator(address(_manager));
-        _manager.setDollarMintingCalculatorAddress(address(_mintingCalculator));
+        _manager.setDollarMintingCalculatorAddress(address(_dollarMintCalculator));
 
         // set treasury address
         _manager.setTreasuryAddress(treasuryAddress);
