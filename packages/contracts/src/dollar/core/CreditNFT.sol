@@ -5,7 +5,7 @@ import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "../ERC1155Ubiquity.sol";
 import "./UbiquityDollarManager.sol";
 
-/// @title A coupon redeemable for dollars with an expiry block number
+/// @title A Credit NFT redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
 contract CreditNFT is ERC1155Ubiquity {
@@ -20,13 +20,13 @@ contract CreditNFT is ERC1155Ubiquity {
     //ordered list of coupon expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
-    event MintedCoupons(address recipient, uint256 expiryBlock, uint256 amount);
+    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
 
-    event BurnedCoupons(
-        address couponHolder, uint256 expiryBlock, uint256 amount
+    event BurnedCreditNFT(
+        address creditNFTHolder, uint256 expiryBlock, uint256 amount
     );
 
-    modifier onlyCouponManager() {
+    modifier onlyCreditNFTManager() {
         require(
             manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
             "Caller is not a Credit NFT manager"
@@ -40,16 +40,16 @@ contract CreditNFT is ERC1155Ubiquity {
         _totalOutstandingDebt = 0;
     }
 
-    /// @notice Mint an amount of coupons expiring at a certain block for a certain recipient
+    /// @notice Mint an amount of Credit NFT expiring at a certain block for a certain recipient
     /// @param amount amount of tokens to mint
-    /// @param expiryBlockNumber the expiration block number of the coupons to mint
-    function mintCoupons(
+    /// @param expiryBlockNumber the expiration block number of the Credit NFT to mint
+    function mintCreditNFT(
         address recipient,
         uint256 amount,
         uint256 expiryBlockNumber
-    ) public onlyCouponManager {
+    ) public onlyCreditNFTManager {
         mint(recipient, expiryBlockNumber, amount, "");
-        emit MintedCoupons(recipient, expiryBlockNumber, amount);
+        emit MintedCreditNFT(recipient, expiryBlockNumber, amount);
 
         //insert new relevant block number if it doesn't exist in our list
         // (linked list implementation won't insert if dupe)
@@ -61,22 +61,22 @@ contract CreditNFT is ERC1155Ubiquity {
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
-    /// @notice Burn an amount of coupons expiring at a certain block from
+    /// @notice Burn an amount of Credit NFT expiring at a certain block from
     /// a certain holder's balance
-    /// @param couponOwner the owner of those coupons
+    /// @param creditNFTOwner the owner of those Credit NFT
     /// @param amount amount of tokens to burn
-    /// @param expiryBlockNumber the expiration block number of the coupons to burn
-    function burnCoupons(
-        address couponOwner,
+    /// @param expiryBlockNumber the expiration block number of the Credit NFT to burn
+    function burnCreditNFT(
+        address creditNFTOwner,
         uint256 amount,
         uint256 expiryBlockNumber
-    ) public onlyCouponManager {
+    ) public onlyCreditNFTManager {
         require(
-            balanceOf(couponOwner, expiryBlockNumber) >= amount,
-            "Coupon owner not enough coupons"
+            balanceOf(creditNFTOwner, expiryBlockNumber) >= amount,
+            "Credit NFT owner not enough coupons"
         );
-        burn(couponOwner, expiryBlockNumber, amount);
-        emit BurnedCoupons(couponOwner, expiryBlockNumber, amount);
+        burn(creditNFTOwner, expiryBlockNumber, amount);
+        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, amount);
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =

@@ -9,13 +9,10 @@ contract MockCreditNFT is ERC1155 {
     uint256 public checkPoint;
     mapping(address => mapping(uint256 => uint256)) _balances;
 
-    event MintedCoupons(
-        address indexed receiver,
-        uint256 couponsToMint,
-        uint256 expiryBlockNumber
-    );
-    event BurntCoupons(
-        address indexed owner, uint256 amount, uint256 expiryBlockNumber
+    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
+
+    event BurnedCreditNFT(
+        address creditNFTHolder, uint256 expiryBlock, uint256 amount
     );
 
     //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
@@ -35,14 +32,14 @@ contract MockCreditNFT is ERC1155 {
         checkPoint = block.number;
     }
 
-    function mintCoupons(
+    function mintCreditNFT(
         address receiver,
-        uint256 couponsToMint,
+        uint256 amount,
         uint256 expiryBlockNumber
     ) public {
         _balances[receiver][expiryBlockNumber] =
-            _balances[receiver][expiryBlockNumber] + couponsToMint;
-        emit MintedCoupons(receiver, couponsToMint, expiryBlockNumber);
+            _balances[receiver][expiryBlockNumber] + amount;
+        emit MintedCreditNFT(receiver, expiryBlockNumber, amount);
     }
 
     function balanceOf(address receiver, uint256 id)
@@ -54,14 +51,14 @@ contract MockCreditNFT is ERC1155 {
         return _balances[receiver][id];
     }
 
-    function burnCoupons(
-        address couponOwner,
+    function burnCreditNFT(
+        address creditNFTOwner,
         uint256 amount,
         uint256 expiryBlockNumber
     ) public {
-        uint256 _balance = _balances[couponOwner][expiryBlockNumber];
+        uint256 _balance = _balances[creditNFTOwner][expiryBlockNumber];
         require(_balance >= amount, "Insufficient balance");
-        _balances[couponOwner][expiryBlockNumber] = _balance - amount;
-        emit BurntCoupons(couponOwner, amount, expiryBlockNumber);
+        _balances[creditNFTOwner][expiryBlockNumber] = _balance - amount;
+        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, amount);
     }
 }

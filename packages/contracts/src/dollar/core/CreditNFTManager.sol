@@ -106,7 +106,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         );
 
         uint256 expiryBlockNumber = block.number + (couponLengthBlocks);
-        debtCoupon.mintCoupons(msg.sender, couponsToMint, expiryBlockNumber);
+        debtCoupon.mintCreditNFT(msg.sender, couponsToMint, expiryBlockNumber);
 
         //give the caller the block number of the minted nft
         return expiryBlockNumber;
@@ -224,7 +224,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             "User not enough coupons"
         );
 
-        debtCoupon.burnCoupons(msg.sender, amount, id);
+        debtCoupon.burnCreditNFT(msg.sender, amount, id);
 
         // Mint UGOV tokens to this contract. Transfer UGOV tokens to msg.sender i.e. debt holder
         IERC20Ubiquity uGOVToken =
@@ -251,7 +251,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             "User not enough coupons"
         );
 
-        debtCoupon.burnCoupons(msg.sender, amount, id);
+        debtCoupon.burnCreditNFT(msg.sender, amount, id);
 
         // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. debt holder
         UbiquityCreditToken autoRedeemToken =
@@ -344,7 +344,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         );
 
         // debtCouponManager must be an operator to transfer on behalf of msg.sender
-        debtCoupon.burnCoupons(msg.sender, couponsToRedeem, id);
+        debtCoupon.burnCreditNFT(msg.sender, couponsToRedeem, id);
         uAD.transfer(msg.sender, couponsToRedeem);
 
         return amount - (couponsToRedeem);
