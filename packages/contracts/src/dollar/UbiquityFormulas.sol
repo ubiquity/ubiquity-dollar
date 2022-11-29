@@ -10,7 +10,7 @@ contract UbiquityFormulas {
     /// @dev formula duration multiply
     /// @param _uLP , amount of LP tokens
     /// @param _weeks , minimum duration of staking period
-    /// @param _multiplier , bonding discount multiplier = 0.0001
+    /// @param _multiplier , staking discount multiplier = 0.0001
     /// @return _shares , amount of shares
     /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
     //          D32 = D^3/2
@@ -32,7 +32,7 @@ contract UbiquityFormulas {
     /// @dev formula bonding
     /// @param _shares , amount of shares
     /// @param _currentShareValue , current share value
-    /// @param _targetPrice , target uAD price
+    /// @param _targetPrice , target Ubiquity Dollar price
     /// @return _uBOND , amount of bonding shares
     /// @notice UBOND = _shares / _currentShareValue * _targetPrice
     // newShares = A / V * T
@@ -70,7 +70,7 @@ contract UbiquityFormulas {
     /// @dev formula bond price
     /// @param _totalULP , total LP tokens
     /// @param _totalUBOND , total bond shares
-    /// @param _targetPrice ,  target uAD price
+    /// @param _targetPrice ,  target Ubiquity Dollar price
     /// @return _priceUBOND , bond share price
     /// @notice
     // IF _totalUBOND = 0  priceBOND = TARGET_PRICE

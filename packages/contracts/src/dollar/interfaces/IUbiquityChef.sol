@@ -7,30 +7,30 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../UbiquityChef.sol";
 
 interface IUbiquityChef {
-    struct BondingShareInfo {
+    struct StakingShareInfo {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
     }
 
     struct PoolInfo {
-        uint256 lastRewardBlock; // Last block number that SUSHI distribution occurs.
-        uint256 accuGOVPerShare; // Accumulated SUSHI per share, times 1e12. See below.
+        uint256 lastRewardBlock; // Last block number that Governance Token distribution occurs.
+        uint256 accuGOVPerShare; // Accumulated Governance Token per share, times 1e12. See below.
     }
 
-    event Deposit(address indexed user, uint256 amount, uint256 bondingShareID);
+    event Deposit(address indexed user, uint256 amount, uint256 stakingShareID);
     event Withdraw(
-        address indexed user, uint256 amount, uint256 bondingShareID
+        address indexed user, uint256 amount, uint256 stakingShareID
     );
 
-    function deposit(address sender, uint256 amount, uint256 bondingShareID)
+    function deposit(address sender, uint256 amount, uint256 stakingShareID)
         external;
 
     // Withdraw LP tokens from MasterChef.
-    function withdraw(address sender, uint256 amount, uint256 bondingShareID)
+    function withdraw(address sender, uint256 amount, uint256 stakingShareID)
         external;
 
-    // Info about a bondinh share
-    function getBondingShareInfo(uint256 _id)
+    // Info about a staking share
+    function getStakingShareInfo(uint256 _id)
         external
         view
         returns (uint256[2] memory);

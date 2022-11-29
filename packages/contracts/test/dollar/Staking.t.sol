@@ -214,8 +214,8 @@ contract ZeroStateTest is ZeroState {
         //uint256 bsMinAmount = bondingShareV2.balanceOf(bondingMinAccount, 2);
         vm.stopPrank();
 
-        uint256[2] memory bsMaxAmount = chefV2.getBondingShareInfo(1);
-        uint256[2] memory bsMinAmount = chefV2.getBondingShareInfo(2);
+        uint256[2] memory bsMaxAmount = chefV2.getStakingShareInfo(1);
+        uint256[2] memory bsMinAmount = chefV2.getStakingShareInfo(2);
 
         assertLt(bsMinAmount[0], bsMaxAmount[0]);
     }
@@ -293,7 +293,7 @@ contract DepositStateTest is DepositState {
         weeksLockup = bound(weeksLockup, 1, 208);
         amount = bound(amount, 1e18, 2 ** 128 - 1);
         StakingShare.Stake memory stake = bondingShareV2.getStake(1);
-        uint256[2] memory preShares = chefV2.getBondingShareInfo(1);
+        uint256[2] memory preShares = chefV2.getStakingShareInfo(1);
         deal(address(metapool), bondingMinAccount, uint256(amount));
         vm.roll(20000000);
         vm.expectEmit(true, true, false, false, address(bondingV2));
@@ -309,7 +309,7 @@ contract DepositStateTest is DepositState {
             );
         vm.prank(bondingMinAccount);
         bondingV2.addLiquidity(uint256(amount), 1, weeksLockup);
-        uint256[2] memory postShares = chefV2.getBondingShareInfo(1);
+        uint256[2] memory postShares = chefV2.getStakingShareInfo(1);
         assertGt(postShares[0], preShares[0]);
     }
 

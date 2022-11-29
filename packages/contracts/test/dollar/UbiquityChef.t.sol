@@ -6,11 +6,11 @@ import "../helpers/LiveTestHelper.sol";
 
 contract ZeroState is LiveTestHelper {
     event Deposit(
-        address indexed user, uint256 amount, uint256 indexed bondingShareId
+        address indexed user, uint256 amount, uint256 indexed stakingShareId
     );
 
     event Withdraw(
-        address indexed user, uint256 amount, uint256 indexed bondingShareId
+        address indexed user, uint256 amount, uint256 indexed stakingShareId
     );
 
     event UGOVPerBlockModified(uint256 indexed uGOVPerBlock);
@@ -64,7 +64,7 @@ contract ZeroStateTest is ZeroState {
         vm.stopPrank();
         (, uint256 accuGov) = chefV2.pool();
         uint256[2] memory info1 = [shares, (shares * accuGov) / 1e12];
-        uint256[2] memory info2 = chefV2.getBondingShareInfo(id);
+        uint256[2] memory info2 = chefV2.getStakingShareInfo(id);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }
@@ -150,9 +150,9 @@ contract DepositStateTest is DepositState {
         assertEq(userPending, pendingUgov);
     }
 
-    function testGetBondingShareInfo() public {
+    function testGetStakingShareInfo() public {
         uint256[2] memory info1 = [shares, 0];
-        uint256[2] memory info2 = chefV2.getBondingShareInfo(1);
+        uint256[2] memory info2 = chefV2.getStakingShareInfo(1);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }

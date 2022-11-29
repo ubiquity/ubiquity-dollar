@@ -337,7 +337,7 @@ contract Staking is CollectableDust, Pausable {
         // should be done after masterchef withdraw
         _updateLpPerShare();
         stake.lpRewardDebt = (
-            IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
+            IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id)[0]
                 * accLpRewardPerShare
         ) / 1e12;
 
@@ -396,7 +396,7 @@ contract Staking is CollectableDust, Pausable {
         // user.amount.mul(pool.accSushiPerShare).div(1e12);
         // should be done after masterchef withdraw
         stake.lpRewardDebt = (
-            IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
+            IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id)[0]
                 * accLpRewardPerShare
         ) / 1e12;
 
@@ -421,7 +421,7 @@ contract Staking is CollectableDust, Pausable {
         StakingShare staking = StakingShare(manager.bondingShareAddress());
         StakingShare.Stake memory stake = staking.getStake(_id);
         uint256[2] memory bs =
-            IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id);
+            IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id);
 
         uint256 lpBalance =
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
@@ -590,6 +590,6 @@ contract Staking is CollectableDust, Pausable {
         );
 
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
-        bs = IUbiquityChef(manager.masterChefAddress()).getBondingShareInfo(_id);
+        bs = IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id);
     }
 }
