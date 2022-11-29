@@ -83,7 +83,7 @@ contract Staking is CollectableDust, Pausable {
 
     modifier onlyStakingManager() {
         require(
-            manager.hasRole(manager.BONDING_MANAGER_ROLE(), msg.sender),
+            manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
             "not manager"
         );
         _;
@@ -341,7 +341,7 @@ contract Staking is CollectableDust, Pausable {
                 * accLpRewardPerShare
         ) / 1e12;
 
-        StakingShare(manager.bondingShareAddress()).updateStake(
+        StakingShare(manager.stakingShareAddress()).updateStake(
             _id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
         );
         emit AddLiquidityFromStake(msg.sender, _id, stake.lpAmount, _sharesAmount);
@@ -384,7 +384,7 @@ contract Staking is CollectableDust, Pausable {
 
         uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
             .correctedAmountToWithdraw(
-            StakingShare(manager.bondingShareAddress()).totalLP(),
+            StakingShare(manager.stakingShareAddress()).totalLP(),
             metapool.balanceOf(address(this)) - lpRewards,
             _amount
         );
@@ -400,7 +400,7 @@ contract Staking is CollectableDust, Pausable {
                 * accLpRewardPerShare
         ) / 1e12;
 
-        StakingShare(manager.bondingShareAddress()).updateStake(
+        StakingShare(manager.stakingShareAddress()).updateStake(
             _id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
         );
 
@@ -418,7 +418,7 @@ contract Staking is CollectableDust, Pausable {
 
     // View function to see pending lpRewards on frontend.
     function pendingLpRewards(uint256 _id) external view returns (uint256) {
-        StakingShare staking = StakingShare(manager.bondingShareAddress());
+        StakingShare staking = StakingShare(manager.stakingShareAddress());
         StakingShare.Stake memory stake = staking.getStake(_id);
         uint256[2] memory bs =
             IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id);
@@ -487,7 +487,7 @@ contract Staking is CollectableDust, Pausable {
             IUbiquityChef(manager.masterChefAddress()).totalShares();
         // priceShare = totalLP / totalShares
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
-            StakingShare(manager.bondingShareAddress()).totalLP(),
+            StakingShare(manager.stakingShareAddress()).totalLP(),
             totalShares,
             ONE
         );
@@ -531,7 +531,7 @@ contract Staking is CollectableDust, Pausable {
 
     /// @dev update the accumulated excess LP per share
     function _updateLpPerShare() internal {
-        StakingShare stake = StakingShare(manager.bondingShareAddress());
+        StakingShare stake = StakingShare(manager.stakingShareAddress());
         uint256 lpBalance =
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
         // the excess LP is the current balance
@@ -567,7 +567,7 @@ contract Staking is CollectableDust, Pausable {
         );
         // set the lp rewards debts so that this staking share only get lp rewards from this day
         uint256 lpRewardDebt = (shares * accLpRewardPerShare) / 1e12;
-        return StakingShare(manager.bondingShareAddress()).mint(
+        return StakingShare(manager.stakingShareAddress()).mint(
             to, lpAmount, lpRewardDebt, endBlock
         );
     }
@@ -577,12 +577,12 @@ contract Staking is CollectableDust, Pausable {
         returns (uint256[2] memory bs, StakingShare.Stake memory stake)
     {
         require(
-            IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
                 msg.sender, _id
             ) == 1,
             "Staking: caller is not owner"
         );
-        StakingShare staking = StakingShare(manager.bondingShareAddress());
+        StakingShare staking = StakingShare(manager.stakingShareAddress());
         stake = staking.getStake(_id);
         require(
             block.number > stake.endBlock,

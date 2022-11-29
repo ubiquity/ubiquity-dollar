@@ -23,7 +23,7 @@ contract CreditNFTTest is LocalTestHelper {
     }
 
     function test_mintCouponsRevertsIfNotCouponManager() public {
-        vm.expectRevert("Caller is not a coupon manager");
+        vm.expectRevert("Caller is not a Credit NFT manager");
         CreditNFT(debtCouponAddress).mintCoupons(address(0x123), 1, 100);
     }
 
@@ -50,7 +50,7 @@ contract CreditNFTTest is LocalTestHelper {
     }
 
     function test_burnCouponsRevertsIfNotCouponManager() public {
-        vm.expectRevert("Caller is not a coupon manager");
+        vm.expectRevert("Caller is not a Credit NFT manager");
         CreditNFT(debtCouponAddress).burnCoupons(address(0x123), 1, 100);
     }
 

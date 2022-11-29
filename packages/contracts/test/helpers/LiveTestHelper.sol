@@ -105,26 +105,26 @@ contract LiveTestHelper is Test {
 
         stakingV1 = new Bonding(address(manager), sablier);
         stakingShareV1 = new BondingShare(address(manager));
-        manager.setBondingShareAddress(address(stakingShareV1));
-        manager.setBondingContractAddress(address(stakingV1));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingShareV1));
+        manager.setStakingShareAddress(address(stakingShareV1));
+        manager.setStakingContractAddress(address(stakingV1));
+        manager.grantRole(manager.GOV_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOV_TOKEN_MINTER_ROLE(), address(stakingShareV1));
 
         dollarToken = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(dollarToken));
 
         creditNFT = new MockCreditNFT(100);
-        manager.setDebtCouponAddress(address(creditNFT));
+        manager.setCreditNFTAddress(address(creditNFT));
 
         ubiquityFormulas = new UbiquityFormulas();
         manager.setFormulasAddress(address(ubiquityFormulas));
 
         govToken = new UbiquityGovernanceToken(address(manager));
         manager.setGovernanceTokenAddress(address(govToken));
-        //manager.grantRole(manager.BONDING_MANAGER_ROLE(), admin);
+        //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
 
         stakingV1.setBlockCountInAWeek(420);
-        manager.setBondingContractAddress(address(stakingV1));
+        manager.setStakingContractAddress(address(stakingV1));
 
         stakingShareV1.setApprovalForAll(address(stakingV1), true);
 
@@ -168,8 +168,8 @@ contract LiveTestHelper is Test {
             deal(address(dollarToken), mintings[i], 10000e18);
         }
 
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOV_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOV_TOKEN_BURNER_ROLE(), address(stakingV1));
 
         deal(address(dollarToken), curveWhaleAddress, 10e18);
 
@@ -203,23 +203,23 @@ contract LiveTestHelper is Test {
         new TWAPOracleDollar3pool(address(metapool), address(dollarToken), address(curve3CrvToken));
         manager.setTwapOracleAddress(address(twapOracle));
         creditRedemptionCalc = new CreditRedemptionCalculator(address(manager));
-        manager.setUARCalculatorAddress(address(creditRedemptionCalc));
+        manager.setCreditCalculatorAddress(address(creditRedemptionCalc));
 
         creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(address(manager));
-        manager.setCouponCalculatorAddress(address(creditNFTRedemptionCalc));
+        manager.setCreditNFTCalculatorAddress(address(creditNFTRedemptionCalc));
 
         dollarMintCalc = new DollarMintCalculator(address(manager));
-        manager.setDollarMintingCalculatorAddress(address(dollarMintCalc));
+        manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
         creditNFTManager =
             new CreditNFTManager(address(manager), creditNFTLengthBlocks);
 
-        manager.grantRole(manager.COUPON_MANAGER_ROLE(), address(creditNFTManager));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(creditNFTManager));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.CREDIT_NFT_MANAGER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.GOV_TOKEN_MINTER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.GOV_TOKEN_BURNER_ROLE(), address(creditNFTManager));
 
         creditToken = new UbiquityCreditToken(address(manager));
-        manager.setuARTokenAddress(address(creditToken));
+        manager.setCreditTokenAddress(address(creditToken));
 
         dollarMintExcess =
             new DollarMintExcess(address(manager));
@@ -234,9 +234,9 @@ contract LiveTestHelper is Test {
         ubiquityChef = new UbiquityChef(managerAddress, tos, amounts, ids);
 
         manager.setMasterChefAddress(address(ubiquityChef));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(ubiquityChef));
-        manager.grantRole(manager.UBQ_TOKEN_MANAGER_ROLE(), admin);
-        manager.grantRole(manager.UBQ_TOKEN_MANAGER_ROLE(), managerAddress);
+        manager.grantRole(manager.GOV_TOKEN_MINTER_ROLE(), address(ubiquityChef));
+        manager.grantRole(manager.GOV_TOKEN_MANAGER_ROLE(), admin);
+        manager.grantRole(manager.GOV_TOKEN_MANAGER_ROLE(), managerAddress);
 
         ubiquityChef.setUGOVPerBlock(10e18);
 
@@ -275,7 +275,7 @@ contract LiveTestHelper is Test {
 
         vm.startPrank(admin);
         stakingShare = new StakingShare(address(manager), uri);
-        manager.setBondingShareAddress(address(stakingShare));
+        manager.setStakingShareAddress(address(stakingShare));
 
         stakingFormulas = new StakingFormulas();
 
@@ -290,13 +290,13 @@ contract LiveTestHelper is Test {
 
         staking.setMigrating(true);
 
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(staking));
+        manager.grantRole(manager.GOV_TOKEN_MINTER_ROLE(), address(staking));
         staking.setBlockCountInAWeek(420);
 
-        manager.setBondingContractAddress(address(staking));
+        manager.setStakingContractAddress(address(staking));
 
-        manager.revokeRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
-        manager.revokeRole(manager.UBQ_BURNER_ROLE(), address(stakingV1));
+        manager.revokeRole(manager.GOV_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.revokeRole(manager.GOV_TOKEN_BURNER_ROLE(), address(stakingV1));
         vm.stopPrank();
 
         vm.prank(secondAccount);

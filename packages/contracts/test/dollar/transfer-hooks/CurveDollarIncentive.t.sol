@@ -132,7 +132,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         mockInternalFuncs(5e17);
         vm.prank(admin);
         UbiquityDollarManager(dollarManagerAddress).grantRole(
-            keccak256("UBQ_MINTER_ROLE"), curveIncentiveAddress
+            keccak256("GOV_TOKEN_MINTER_ROLE"), curveIncentiveAddress
         );
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(

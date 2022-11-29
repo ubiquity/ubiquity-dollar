@@ -48,7 +48,7 @@ abstract contract LocalTestHelper is Test {
         vm.startPrank(admin);
         // deploy credit NFT token
         MockCreditNFT _creditNFT = new MockCreditNFT(100);
-        _manager.setDebtCouponAddress(address(_creditNFT));
+        _manager.setCreditNFTAddress(address(_creditNFT));
 
         // deploy dollar token
         MockDollarToken _dollarToken = new MockDollarToken(10000e18);
@@ -66,23 +66,23 @@ abstract contract LocalTestHelper is Test {
         // deploy CreditNFTRedemptionCalculator
         MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator =
             new MockCreditNFTRedemptionCalculator();
-        _manager.setCouponCalculatorAddress(
+        _manager.setCreditNFTCalculatorAddress(
             address(_creditNFTRedemptionCalculator)
         );
 
         // deploy credit token
         MockCreditToken _creditToken = new MockCreditToken(0);
-        _manager.setuARTokenAddress(address(_creditToken));
+        _manager.setCreditTokenAddress(address(_creditToken));
 
         // deploy CreditRedemptionCalculator
         CreditRedemptionCalculator _creditRedemptionCalculator =
             new CreditRedemptionCalculator(address(_manager));
-        _manager.setUARCalculatorAddress(address(_creditRedemptionCalculator));
+        _manager.setCreditCalculatorAddress(address(_creditRedemptionCalculator));
 
         // deploy DollarMintCalculator
         DollarMintCalculator _dollarMintCalculator =
             new DollarMintCalculator(address(_manager));
-        _manager.setDollarMintingCalculatorAddress(address(_dollarMintCalculator));
+        _manager.setDollarMintCalculatorAddress(address(_dollarMintCalculator));
 
         // set treasury address
         _manager.setTreasuryAddress(treasuryAddress);

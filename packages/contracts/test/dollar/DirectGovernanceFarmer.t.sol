@@ -111,8 +111,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityDollarManager(dollarManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(stakingAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -157,7 +157,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
 
         vm.mockCall(
             stakingShareAddress,
@@ -177,8 +177,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityDollarManager(dollarManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(stakingAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);

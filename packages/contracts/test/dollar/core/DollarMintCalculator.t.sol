@@ -21,7 +21,7 @@ contract DollarMintCalculatorTest is LocalTestHelper {
             .twapOracleAddress();
         dollarMintingCalculatorAddress = UbiquityDollarManager(
             uADManagerAddress
-        ).dollarMintingCalculatorAddress();
+        ).dollarMintCalculatorAddress();
         uADAddress = UbiquityDollarManager(uADManagerAddress)
             .dollarTokenAddress();
     }

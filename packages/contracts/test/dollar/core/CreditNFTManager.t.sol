@@ -44,17 +44,17 @@ contract CreditNFTManagerTest is LocalTestHelper {
             .dollarTokenAddress();
         uARDollarCalculatorAddress = UbiquityDollarManager(
             uADManagerAddress
-        ).uarCalculatorAddress();
+        ).creditCalculatorAddress();
         debtCouponAddress = UbiquityDollarManager(uADManagerAddress)
-            .debtCouponAddress();
+            .creditNFTAddress();
         uGovAddress = UbiquityDollarManager(uADManagerAddress)
             .governanceTokenAddress();
         autoRedeemTokenAddress = UbiquityDollarManager(
             uADManagerAddress
-        ).autoRedeemTokenAddress();
+        ).creditTokenAddress();
         dollarMintingCalculatorAddress = UbiquityDollarManager(
             uADManagerAddress
-        ).dollarMintingCalculatorAddress();
+        ).dollarMintCalculatorAddress();
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {
@@ -101,7 +101,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
     }
 
     function test_setExpiredCouponConversionRate() public {
-        vm.expectRevert("Caller is not a coupon manager");
+        vm.expectRevert("Caller is not a Credit NFT manager");
         CreditNFTManager(debtCouponManagerAddress)
             .setExpiredCouponConversionRate(100);
 
@@ -116,7 +116,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
     }
 
     function test_setCouponLength() public {
-        vm.expectRevert("Caller is not a coupon manager");
+        vm.expectRevert("Caller is not a Credit NFT manager");
         CreditNFTManager(debtCouponManagerAddress).setCouponLength(100);
 
         vm.prank(admin);
@@ -204,7 +204,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(uADManagerAddress).grantRole(
-            keccak256("UBQ_MINTER_ROLE"), debtCouponManagerAddress
+            keccak256("GOV_TOKEN_MINTER_ROLE"), debtCouponManagerAddress
         );
         vm.stopPrank();
         vm.roll(1000);
@@ -243,7 +243,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(uADManagerAddress).grantRole(
-            keccak256("UBQ_MINTER_ROLE"), debtCouponManagerAddress
+            keccak256("GOV_TOKEN_MINTER_ROLE"), debtCouponManagerAddress
         );
         vm.stopPrank();
         vm.prank(mockMessageSender);

@@ -71,15 +71,15 @@ contract UbiquityChef is ReentrancyGuard {
     // ----------- Modifiers -----------
     modifier onlyTokenManager() {
         require(
-            manager.hasRole(manager.UBQ_TOKEN_MANAGER_ROLE(), msg.sender),
-            "MasterChef: not UBQ manager"
+            manager.hasRole(manager.GOV_TOKEN_MANAGER_ROLE(), msg.sender),
+            "MasterChef: not Governance Token manager"
         );
         _;
     }
 
     modifier onlyStakingContract() {
         require(
-            msg.sender == manager.bondingContractAddress(),
+            msg.sender == manager.stakingContractAddress(),
             "MasterChef: not Staking Contract"
         );
         _;
@@ -165,7 +165,7 @@ contract UbiquityChef is ReentrancyGuard {
     /// @notice only send pending rewards
     function getRewards(uint256 stakingShareID) external returns (uint256) {
         require(
-            IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
                 msg.sender, stakingShareID
             ) == 1,
             "MS: caller is not owner"

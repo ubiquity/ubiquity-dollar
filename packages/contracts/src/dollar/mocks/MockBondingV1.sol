@@ -38,7 +38,7 @@ contract Bonding is CollectableDust {
 
     modifier onlyBondingManager() {
         require(
-            manager.hasRole(manager.BONDING_MANAGER_ROLE(), msg.sender),
+            manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
             "Caller is not a bonding manager"
         );
         _;
@@ -213,7 +213,7 @@ contract Bonding is CollectableDust {
         );
 
         require(
-            IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
                 msg.sender, _id
             ) >= _sharesAmount,
             "Bonding: caller does not have enough shares"
@@ -228,7 +228,7 @@ contract Bonding is CollectableDust {
 
         uint256 _currentShareValue = currentShareValue();
 
-        IERC1155Ubiquity(manager.bondingShareAddress()).burn(
+        IERC1155Ubiquity(manager.stakingShareAddress()).burn(
             msg.sender, _id, _sharesAmount
         );
 
@@ -246,7 +246,7 @@ contract Bonding is CollectableDust {
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
 
         uint256 totalShares =
-            IERC1155Ubiquity(manager.bondingShareAddress()).totalSupply();
+            IERC1155Ubiquity(manager.stakingShareAddress()).totalSupply();
 
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
             totalLP, totalShares, ONE
@@ -265,7 +265,7 @@ contract Bonding is CollectableDust {
             _currentShareValue != 0, "Bonding: share value should not be null"
         );
 
-        IERC1155Ubiquity(manager.bondingShareAddress()).mint(
+        IERC1155Ubiquity(manager.stakingShareAddress()).mint(
             msg.sender, _id, _sharesAmount, data
         );
     }

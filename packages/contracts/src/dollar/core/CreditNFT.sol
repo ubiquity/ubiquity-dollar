@@ -28,8 +28,8 @@ contract CreditNFT is ERC1155Ubiquity {
 
     modifier onlyCouponManager() {
         require(
-            manager.hasRole(manager.COUPON_MANAGER_ROLE(), msg.sender),
-            "Caller is not a coupon manager"
+            manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
+            "Caller is not a Credit NFT manager"
         );
         _;
     }

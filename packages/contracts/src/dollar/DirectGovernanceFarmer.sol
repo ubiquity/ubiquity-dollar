@@ -101,8 +101,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //require(IERC20(token).transferFrom(msg.sender, address(this), amount), "sender cannot transfer specified fund");
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
         
-        address staking = manager.bondingContractAddress();
-        address stakingShare = manager.bondingShareAddress();
+        address staking = manager.stakingContractAddress();
+        address stakingShare = manager.stakingShareAddress();
 
         uint256 lpAmount;//UAD3CRVf
         //[Ubiquity Dollar, DAI, USDC, USDT]
@@ -143,8 +143,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         
         // DAI / USDC / USDT / Ubiquity Dollar
         require(isMetaPoolCoin(token), "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar");
-        address staking = manager.bondingContractAddress();
-        address stakingShare = manager.bondingShareAddress();
+        address staking = manager.stakingContractAddress();
+        address stakingShare = manager.stakingShareAddress();
 
         uint256[] memory stakingShareIds = IStakingShare(stakingShare).holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
@@ -158,7 +158,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IStakingShare.Bond memory bond = IStakingShare(stakingShare).getBond(stakingShareId);
         
         // STEP 1 : Withdraw Ubiquity Bonding Shares to get back uAD3CRV-f LPs
-        //address bonding = ubiquityManager.bondingContractAddress();
+        //address staking = ubiquityManager.stakingContractAddress();
         IStakingShare(stakingShare).setApprovalForAll(staking, true);
         IStaking(staking).removeLiquidity(bond.lpAmount, stakingShareId);
         IStakingShare(stakingShare).setApprovalForAll(staking, false);

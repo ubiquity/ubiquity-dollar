@@ -3,26 +3,26 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/access/IAccessControl.sol";
 
-/// @title UAD Manager interface
-/// @author Ubiquity Algorithmic Manager
+/// @title Ubiquity Dollar Manager interface
+/// @author Ubiquity Dollar Manager
 interface IUbiquityDollarManager is IAccessControl {
     // TODO Add a generic setter for extra addresses that needs to be linked
 
     function INCENTIVE_MANAGER_ROLE() external view returns (bytes32);
 
-    function UBQ_MINTER_ROLE() external view returns (bytes32);
+    function GOV_TOKEN_MINTER_ROLE() external view returns (bytes32);
 
-    function autoRedeemTokenAddress() external view returns (address);
+    function creditTokenAddress() external view returns (address);
 
     function treasuryAddress() external view returns (address);
 
     function setTwapOracleAddress(address _twapOracleAddress) external;
 
-    function setuARTokenAddress(address _uarTokenAddress) external;
+    function setCreditTokenAddress(address _creditTokenAddress) external;
 
-    function setDebtCouponAddress(address _debtCouponAddress) external;
+    function setCreditNFTAddress(address _creditNFTAddress) external;
 
-    function setIncentiveToUAD(address _account, address _incentiveAddress)
+    function setIncentiveToDollar(address _account, address _incentiveAddress)
         external;
 
     function setDollarTokenAddress(address _dollarTokenAddress) external;
@@ -32,36 +32,36 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setSushiSwapPoolAddress(address _sushiSwapPoolAddress) external;
 
-    function setUARCalculatorAddress(address _uarCalculatorAddress) external;
+    function setCreditCalculatorAddress(address _creditCalculatorAddress) external;
 
-    function setCouponCalculatorAddress(address _couponCalculatorAddress)
+    function setCreditNFTCalculatorAddress(address _creditNFTCalculatorAddress)
         external;
 
-    function setDollarMintingCalculatorAddress(
-        address _dollarMintingCalculatorAddress
+    function setDollarMintCalculatorAddress(
+        address _dollarMintCalculatorAddress
     ) external;
 
     function setExcessDollarsDistributor(
-        address debtCouponManagerAddress,
-        address excessCouponDistributor
+        address creditNFTManagerAddress,
+        address dollarMintExcess
     ) external;
 
     function setMasterChefAddress(address _masterChefAddress) external;
 
     function setFormulasAddress(address _formulasAddress) external;
 
-    function setBondingShareAddress(address _bondingShareAddress) external;
+    function setStakingShareAddress(address _stakingShareAddress) external;
 
     function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
         external;
 
     /**
-     * @notice set the bonding bontract smart contract address
-     * @dev bonding contract participants deposit  curve LP token
-     * for a certain duration to earn uGOV and more curve LP token
-     * @param _bondingContractAddress bonding contract address
+     * @notice set the staking smart contract address
+     * @dev staking contract participants deposit  curve LP token
+     * for a certain duration to earn Governance Token and more curve LP token
+     * @param _stakingContractAddress staking contract address
      */
-    function setBondingContractAddress(address _bondingContractAddress)
+    function setStakingContractAddress(address _stakingContractAddress)
         external;
 
     /**
@@ -72,7 +72,7 @@ interface IUbiquityDollarManager is IAccessControl {
     function setTreasuryAddress(address _treasuryAddress) external;
 
     /**
-     * @notice deploy a new Curve metapools for uAD Token uAD/3Pool
+     * @notice deploy a new Curve metapools for Ubiquity Dollar Token UbiquityDollar/3Pool
      * @dev  From the curve documentation for uncollateralized algorithmic
      * stablecoins amplification should be 5-10
      * @param _curveFactory MetaPool factory address
@@ -90,14 +90,14 @@ interface IUbiquityDollarManager is IAccessControl {
         uint256 _fee
     ) external;
 
-    function getExcessDollarsDistributor(address _debtCouponManagerAddress)
+    function getExcessDollarsDistributor(address _creditNFTManagerAddress)
         external
         view
         returns (address);
 
-    function bondingContractAddress() external view returns (address);
+    function stakingContractAddress() external view returns (address);
 
-    function bondingShareAddress() external view returns (address);
+    function stakingShareAddress() external view returns (address);
 
     function stableSwapMetaPoolAddress() external view returns (address);
 

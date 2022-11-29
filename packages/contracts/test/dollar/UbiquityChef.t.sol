@@ -22,7 +22,7 @@ contract ZeroState is LiveTestHelper {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);
-        manager.setBondingContractAddress(admin);
+        manager.setStakingContractAddress(admin);
     }
 }
 

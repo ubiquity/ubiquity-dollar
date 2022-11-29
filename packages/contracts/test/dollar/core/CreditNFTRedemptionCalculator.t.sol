@@ -28,7 +28,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
         ).totalSupply();
         MockCreditNFT(
             UbiquityDollarManager(uADManagerAddress)
-                .debtCouponAddress()
+                .creditNFTAddress()
         ).setTotalOutstandingDebt(totalSupply + 1);
 
         vm.expectRevert("Coupon to dollar: DEBT_TOO_HIGH");
@@ -43,7 +43,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
         ).totalSupply();
         MockCreditNFT(
             UbiquityDollarManager(uADManagerAddress)
-                .debtCouponAddress()
+                .creditNFTAddress()
         ).setTotalOutstandingDebt(totalSupply / 2);
         assertEq(
             CreditNFTRedemptionCalculator(couponsForDollarsCalculatorAddress)

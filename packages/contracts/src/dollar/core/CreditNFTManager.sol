@@ -42,8 +42,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
     modifier onlyCouponManager() {
         require(
-            manager.hasRole(manager.COUPON_MANAGER_ROLE(), msg.sender),
-            "Caller is not a coupon manager"
+            manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
+            "Caller is not a Credit NFT manager"
         );
         _;
     }
@@ -85,7 +85,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint coupons");
 
-        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
         debtCoupon.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
@@ -97,7 +97,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         }
 
         ICreditNFTRedemptionCalculator couponCalculator =
-            ICreditNFTRedemptionCalculator(manager.couponCalculatorAddress());
+            ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
         uint256 couponsToMint = couponCalculator.getCouponAmount(amount);
 
         // we burn user's dollars.
@@ -121,7 +121,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint uAR");
 
-        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
         debtCoupon.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
@@ -133,7 +133,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         }
 
         ICreditRedemptionCalculator uarCalculator =
-            ICreditRedemptionCalculator(manager.uarCalculatorAddress());
+            ICreditRedemptionCalculator(manager.creditCalculatorAddress());
         uint256 uarToMint = uarCalculator.getUARAmount(amount, blockHeightDebt);
 
         // we burn user's dollars.
@@ -142,7 +142,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         );
         // mint uAR
         UbiquityCreditToken autoRedeemToken =
-            UbiquityCreditToken(manager.autoRedeemTokenAddress());
+            UbiquityCreditToken(manager.creditTokenAddress());
         autoRedeemToken.mint(msg.sender, uarToMint);
 
         //give minted uAR amount
@@ -157,7 +157,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         returns (uint256)
     {
         ICreditNFTRedemptionCalculator couponCalculator =
-            ICreditNFTRedemptionCalculator(manager.couponCalculatorAddress());
+            ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
         return couponCalculator.getCouponAmount(amount);
     }
 
@@ -169,7 +169,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         returns (uint256)
     {
         ICreditRedemptionCalculator uarCalculator =
-            ICreditRedemptionCalculator(manager.uarCalculatorAddress());
+            ICreditRedemptionCalculator(manager.creditCalculatorAddress());
         return uarCalculator.getUARAmount(amount, blockHeightDebt);
     }
 
@@ -181,7 +181,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         uint256,
         bytes calldata
     ) external view override returns (bytes4) {
-        if (manager.hasRole(manager.COUPON_MANAGER_ROLE(), operator)) {
+        if (manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), operator)) {
             //allow the transfer since it originated from this contract
             return bytes4(
                 keccak256(
@@ -216,7 +216,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         returns (uint256 uGovAmount)
     {
         // Check whether debt coupon hasn't expired --> Burn debt coupons.
-        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
 
         require(id <= block.number, "Coupon has not expired");
         require(
@@ -243,7 +243,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         returns (uint256)
     {
         // Check whether debt coupon hasn't expired --> Burn debt coupons.
-        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
 
         require(id > block.timestamp, "Coupon has expired");
         require(
@@ -255,7 +255,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. debt holder
         UbiquityCreditToken autoRedeemToken =
-            UbiquityCreditToken(manager.autoRedeemTokenAddress());
+            UbiquityCreditToken(manager.creditTokenAddress());
         autoRedeemToken.mint(address(this), amount);
         autoRedeemToken.transfer(msg.sender, amount);
 
@@ -275,7 +275,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             debtCycle = false;
         }
         UbiquityCreditToken autoRedeemToken =
-            UbiquityCreditToken(manager.autoRedeemTokenAddress());
+            UbiquityCreditToken(manager.creditTokenAddress());
         require(
             autoRedeemToken.balanceOf(msg.sender) >= amount,
             "User doesn't have enough auto redeem pool tokens."
@@ -313,7 +313,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         if (debtCycle) {
             debtCycle = false;
         }
-        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
 
         require(id > block.number, "Coupon has expired");
         require(
@@ -325,7 +325,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         UbiquityDollarToken uAD =
             UbiquityDollarToken(manager.dollarTokenAddress());
         UbiquityCreditToken autoRedeemToken =
-            UbiquityCreditToken(manager.autoRedeemTokenAddress());
+            UbiquityCreditToken(manager.creditTokenAddress());
         // uAR have a priority on uDEBT coupon holder
         require(
             autoRedeemToken.totalSupply() <= uAD.balanceOf(address(this)),
@@ -351,12 +351,12 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     }
 
     function mintClaimableDollars() public {
-        CreditNFT debtCoupon = CreditNFT(manager.debtCouponAddress());
+        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
         debtCoupon.updateTotalDebt();
 
         // uint256 twapPrice = _getTwapPrice(); //unused variable. Why here?
         uint256 totalMintableDollars = IDollarMintCalculator(
-            manager.dollarMintingCalculatorAddress()
+            manager.dollarMintCalculatorAddress()
         ).getDollarsToMint();
         uint256 dollarsToMint = totalMintableDollars - (dollarsMintedThisCycle);
         //update the dollars for this cycle
@@ -367,7 +367,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         // uAD  dollars should  be minted to address(this)
         uAD.mint(address(this), dollarsToMint);
         UbiquityCreditToken autoRedeemToken =
-            UbiquityCreditToken(manager.autoRedeemTokenAddress());
+            UbiquityCreditToken(manager.creditTokenAddress());
 
         uint256 currentRedeemableBalance = uAD.balanceOf(address(this));
         uint256 totalOutstandingDebt =

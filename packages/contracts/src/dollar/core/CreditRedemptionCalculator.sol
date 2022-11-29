@@ -48,7 +48,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         returns (uint256)
     {
         require(
-            CreditNFT(manager.debtCouponAddress()).getTotalOutstandingDebt()
+            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt()
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "uAR to Dollar: DEBT_TOO_HIGH"
         );
