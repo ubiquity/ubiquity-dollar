@@ -9,8 +9,8 @@ import "../../helpers/LocalTestHelper.sol";
 
 contract UbiquityDollarTokenTest is LocalTestHelper {
     address incentive_addr;
-    address uad_addr;
-    address uad_manager_address;
+    address dollar_addr;
+    address dollar_manager_address;
 
     address mock_sender = address(0x111);
     address mock_recipient = address(0x222);
@@ -22,10 +22,10 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
 
     function setUp() public {
         incentive_addr = address(new MockIncentive());
-        uad_manager_address = helpers_deployUbiquityDollarManager();
+        dollar_manager_address = helpers_deployUbiquityDollarManager();
         vm.startPrank(admin);
-        uad_addr = address(new UbiquityDollarToken(uad_manager_address));
-        UbiquityDollarManager(uad_manager_address).grantRole(
+        dollar_addr = address(new UbiquityDollarToken(dollar_manager_address));
+        UbiquityDollarManager(dollar_manager_address).grantRole(
             keccak256("UBQ_TOKEN_MANAGER_ROLE"), admin
         );
         vm.stopPrank();
@@ -34,14 +34,14 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
     function test_setIncentiveContract() public {
         vm.prank(mock_sender);
         vm.expectRevert("Dollar: must have admin role");
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
             mock_sender, incentive_addr
         );
 
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit IncentiveContractUpdate(mock_sender, incentive_addr);
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
             mock_sender, incentive_addr
         );
     }
@@ -50,24 +50,24 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         address userA = address(0x100001);
         address userB = address(0x100001);
         vm.startPrank(admin);
-        UbiquityDollarToken(uad_addr).mint(userA, 100);
-        UbiquityDollarToken(uad_addr).mint(userB, 100);
-        UbiquityDollarToken(uad_addr).mint(mock_sender, 100);
+        UbiquityDollarToken(dollar_addr).mint(userA, 100);
+        UbiquityDollarToken(dollar_addr).mint(userB, 100);
+        UbiquityDollarToken(dollar_addr).mint(mock_sender, 100);
 
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
             mock_sender, incentive_addr
         );
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
             mock_recipient, incentive_addr
         );
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
             mock_operator, incentive_addr
         );
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
             address(0), incentive_addr
         );
-        UbiquityDollarToken(uad_addr).setIncentiveContract(
-            uad_addr, incentive_addr
+        UbiquityDollarToken(dollar_addr).setIncentiveContract(
+            dollar_addr, incentive_addr
         );
         vm.stopPrank();
 
@@ -82,7 +82,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
                 1
             )
         );
-        UbiquityDollarToken(uad_addr).transfer(userB, 1);
+        UbiquityDollarToken(dollar_addr).transfer(userB, 1);
 
         vm.prank(userA);
         vm.expectCall(
@@ -95,6 +95,6 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
                 1
             )
         );
-        UbiquityDollarToken(uad_addr).transfer(mock_recipient, 1);
+        UbiquityDollarToken(dollar_addr).transfer(mock_recipient, 1);
     }
 }
