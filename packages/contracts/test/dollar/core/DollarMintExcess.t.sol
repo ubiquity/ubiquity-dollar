@@ -14,21 +14,21 @@ import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract DollarMintExcessTest is LocalTestHelper {
-    address uADManagerAddress;
-    address uADAddress;
+    address dollarManagerAddress;
+    address dollarAddress;
 
     address twapOracleAddress;
     address excessDollarsDistributorAddress;
     address _sushiSwapRouter = 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityDollarManager();
-        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
+        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+        twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
             .twapOracleAddress();
-        uADAddress = UbiquityDollarManager(uADManagerAddress)
+        dollarAddress = UbiquityDollarManager(dollarManagerAddress)
             .dollarTokenAddress();
         excessDollarsDistributorAddress =
-            address(new DollarMintExcess(uADManagerAddress));
+            address(new DollarMintExcess(dollarManagerAddress));
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {
@@ -52,15 +52,15 @@ contract DollarMintExcessTest is LocalTestHelper {
 
     function mockManagerAddresses(
         address _curve3PoolAddress,
-        address _bondingContractAddress
+        address _stakingContractAddress
     ) public {
         vm.store(
-            uADManagerAddress,
+            dollarManagerAddress,
             bytes32(uint256(13)),
-            bytes32(abi.encodePacked(_bondingContractAddress))
+            bytes32(abi.encodePacked(_stakingContractAddress))
         );
         vm.store(
-            uADManagerAddress,
+            dollarManagerAddress,
             bytes32(uint256(15)),
             bytes32(abi.encodePacked(_curve3PoolAddress))
         );
@@ -77,7 +77,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         uint256 _expectedExchangeAmt
     ) public {
         vm.prank(admin);
-        UbiquityDollarManager(uADManagerAddress)
+        UbiquityDollarManager(dollarManagerAddress)
             .setStableSwapMetaPoolAddress(_metaPoolAddress);
         vm.mockCall(
             _metaPoolAddress,
@@ -101,16 +101,16 @@ contract DollarMintExcessTest is LocalTestHelper {
         mockSushiSwapRouter(10e18);
         mockMetaPool(address(0x55555), 10e18, 10e18);
         mockManagerAddresses(address(0x123), address(0x456));
-        MockDollarToken(uADAddress).mint(excessDollarsDistributorAddress, 200e18);
+        MockDollarToken(dollarAddress).mint(excessDollarsDistributorAddress, 200e18);
 
         // 10% should be transferred to the treasury address
         uint256 _before_treasury_bal =
-            MockDollarToken(uADAddress).balanceOf(treasuryAddress);
+            MockDollarToken(dollarAddress).balanceOf(treasuryAddress);
 
         DollarMintExcess(excessDollarsDistributorAddress)
             .distributeDollars();
         uint256 _after_treasury_bal =
-            MockDollarToken(uADAddress).balanceOf(treasuryAddress);
+            MockDollarToken(dollarAddress).balanceOf(treasuryAddress);
         assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
     }
 }

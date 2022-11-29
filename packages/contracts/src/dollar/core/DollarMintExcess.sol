@@ -37,7 +37,7 @@ contract DollarMintExcess is IDollarMintExcess {
         if (excessDollars > _minAmountToDistribute) {
             address treasuryAddress = manager.treasuryAddress();
 
-            // curve uAD-3CRV liquidity pool
+            // curve UbiquityDollar-3CRV liquidity pool
             uint256 tenPercent =
                 excessDollars.fromUInt().div(uint256(10).fromUInt()).toUInt();
             uint256 fiftyPercent =
@@ -45,17 +45,17 @@ contract DollarMintExcess is IDollarMintExcess {
             IERC20Ubiquity(manager.dollarTokenAddress()).safeTransfer(
                 treasuryAddress, fiftyPercent
             );
-            // convert uAD to uGOV-UAD LP on sushi and burn them
+            // convert Ubiquity Dollar to GovernanceToken-UbiquityDollar LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
-            // convert remaining uAD to curve LP tokens
-            // and transfer the curve LP tokens to the bonding contract
+            // convert remaining Ubiquity Dollar to curve LP tokens
+            // and transfer the curve LP tokens to the staking contract
             _convertToCurveLPAndTransfer(
                 excessDollars - fiftyPercent - tenPercent
             );
         }
     }
 
-    // swap half amount to uGOV
+    // swap half amount to Governance Token
     function _swapDollarsForGovernance(bytes16 amountIn)
         internal
         returns (uint256)
@@ -70,9 +70,9 @@ contract DollarMintExcess is IDollarMintExcess {
         return amounts[1];
     }
 
-    // buy-back and burn uGOV
+    // buy-back and burn Governance Token
     function _governanceBuyBackLPAndBurn(uint256 amount) internal {
-        bytes16 amountUAD = (amount.fromUInt()).div(uint256(2).fromUInt());
+        bytes16 amountDollars = (amount.fromUInt()).div(uint256(2).fromUInt());
 
         // we need to approve sushi router
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
@@ -81,21 +81,21 @@ contract DollarMintExcess is IDollarMintExcess {
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             address(_router), amount
         );
-        uint256 amountUGOV = _swapDollarsForGovernance(amountUAD);
+        uint256 amountGovTokens = _swapDollarsForGovernance(amountDollars);
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router), 0
         );
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
-            address(_router), amountUGOV
+            address(_router), amountGovTokens
         );
 
         // deposit liquidity and transfer to zero address (burn)
         _router.addLiquidity(
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
-            amountUAD.toUInt(),
-            amountUGOV,
+            amountDollars.toUInt(),
+            amountGovTokens,
             0,
             0,
             address(0),
@@ -105,13 +105,13 @@ contract DollarMintExcess is IDollarMintExcess {
 
     // @dev convert to curve LP
     // @param amount to convert to curve LP by swapping to 3CRV
-    //        and deposit the 3CRV as liquidity to get uAD-3CRV LP tokens
-    //        the LP token are sent to the bonding contract
+    //        and deposit the 3CRV as liquidity to get UbiquityDollar-3CRV LP tokens
+    //        the LP token are sent to the staking contract
     function _convertToCurveLPAndTransfer(uint256 amount)
         internal
         returns (uint256)
     {
-        // we need to approve  metaPool
+        // we need to approve metaPool
         IERC20Ubiquity(manager.dollarTokenAddress()).approve(
             manager.stableSwapMetaPoolAddress(), 0
         );
@@ -119,7 +119,7 @@ contract DollarMintExcess is IDollarMintExcess {
             manager.stableSwapMetaPoolAddress(), amount
         );
 
-        // swap  amount of uAD => 3CRV
+        // swap amount of Ubiquity Dollar => 3CRV
         uint256 amount3CRVReceived = IMetaPool(
             manager.stableSwapMetaPoolAddress()
         ).exchange(0, 1, amount, 0);
