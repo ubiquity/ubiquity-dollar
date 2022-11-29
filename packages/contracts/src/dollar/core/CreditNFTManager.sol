@@ -98,7 +98,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         ICreditNFTRedemptionCalculator couponCalculator =
             ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
-        uint256 couponsToMint = couponCalculator.getCouponAmount(amount);
+        uint256 couponsToMint = couponCalculator.getCreditNFTAmount(amount);
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
@@ -158,7 +158,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     {
         ICreditNFTRedemptionCalculator couponCalculator =
             ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
-        return couponCalculator.getCouponAmount(amount);
+        return couponCalculator.getCreditNFTAmount(amount);
     }
 
     /// @dev uses the current uAR for dollars calculation to get uAR for dollars

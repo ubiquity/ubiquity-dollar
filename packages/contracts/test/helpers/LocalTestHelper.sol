@@ -23,7 +23,7 @@ import "forge-std/console.sol";
 contract MockCreditNFTRedemptionCalculator {
     constructor() {}
 
-    function getCouponAmount(uint256 dollarsToBurn)
+    function getCreditNFTAmount(uint256 dollarsToBurn)
         external
         pure
         returns (uint256)
