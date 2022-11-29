@@ -13,13 +13,13 @@ contract DepositState is LiveTestHelper {
     function setUp() public virtual override {
         super.setUp();
         fourthBal = metapool.balanceOf(fourthAccount);
-        minBal = metapool.balanceOf(bondingMinAccount);
-        maxBal = metapool.balanceOf(bondingMaxAccount);
+        minBal = metapool.balanceOf(stakingMinAccount);
+        maxBal = metapool.balanceOf(stakingMaxAccount);
         address[4] memory depositingAccounts = [
-            bondingMinAccount,
+            stakingMinAccount,
             fourthAccount,
-            bondingMaxAccount,
-            bondingMaxAccount
+            stakingMaxAccount,
+            stakingMaxAccount
         ];
         uint256[4] memory depositAmounts =
             [minBal, fourthBal, maxBal / 2, maxBal / 2];
@@ -28,9 +28,9 @@ contract DepositState is LiveTestHelper {
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
-            metapool.approve(address(bondingV2), 2 ** 256 - 1);
+            metapool.approve(address(staking), 2 ** 256 - 1);
             creationBlock.push(block.number);
-            bondingV2.deposit(depositAmounts[i], lockupWeeks[i]);
+            staking.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
         }
     }
@@ -42,8 +42,8 @@ contract DepositStateTest is DepositState {
 
     function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
-        bondingShareV2.updateStake(1, uint256(amount), uint256(debt), end);
-        StakingShare.Stake memory stake = bondingShareV2.getStake(1);
+        stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
+        StakingShare.Stake memory stake = stakingShare.getStake(1);
         assertEq(stake.lpAmount, amount);
         assertEq(stake.lpRewardDebt, debt);
         assertEq(stake.endBlock, end);
@@ -51,10 +51,10 @@ contract DepositStateTest is DepositState {
 
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
         vm.prank(admin);
-        uint256 id = bondingShareV2.mint(
+        uint256 id = stakingShare.mint(
             secondAccount, uint256(deposited), uint256(debt), end
         );
-        StakingShare.Stake memory stake = bondingShareV2.getStake(id);
+        StakingShare.Stake memory stake = stakingShare.getStake(id);
         assertEq(stake.minter, secondAccount);
         assertEq(stake.lpAmount, deposited);
         assertEq(stake.lpRewardDebt, debt);
@@ -62,17 +62,17 @@ contract DepositStateTest is DepositState {
     }
 
     function testTransferFrom() public {
-        vm.prank(bondingMinAccount);
-        bondingShareV2.setApprovalForAll(admin, true);
+        vm.prank(stakingMinAccount);
+        stakingShare.setApprovalForAll(admin, true);
 
         bytes memory data;
         vm.prank(admin);
-        bondingShareV2.safeTransferFrom(
-            bondingMinAccount, secondAccount, 1, 1, data
+        stakingShare.safeTransferFrom(
+            stakingMinAccount, secondAccount, 1, 1, data
         );
         ids.push(1);
 
-        assertEq(bondingShareV2.holderTokens(secondAccount), ids);
+        assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
     function testBatchTransfer() public {
@@ -81,20 +81,20 @@ contract DepositStateTest is DepositState {
         amounts.push(1);
         amounts.push(1);
 
-        vm.prank(bondingMaxAccount);
-        bondingShareV2.setApprovalForAll(admin, true);
+        vm.prank(stakingMaxAccount);
+        stakingShare.setApprovalForAll(admin, true);
 
         bytes memory data;
 
         vm.prank(admin);
-        bondingShareV2.safeBatchTransferFrom(
-            bondingMaxAccount, secondAccount, ids, amounts, data
+        stakingShare.safeBatchTransferFrom(
+            stakingMaxAccount, secondAccount, ids, amounts, data
         );
-        assertEq(bondingShareV2.holderTokens(secondAccount), ids);
+        assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
     function testTotalSupply() public {
-        assertEq(bondingShareV2.totalSupply(), 4);
+        assertEq(stakingShare.totalSupply(), 4);
     }
 
     // // TODO: needs to figured out why it sometimes fails
@@ -108,14 +108,14 @@ contract DepositStateTest is DepositState {
             fourthAccount,
             fourthBal,
             creationBlock[1],
-            uFormulas.durationMultiply(
-                fourthBal, 52, bondingV2.stakingDiscountMultiplier()
+            ubiquityFormulas.durationMultiply(
+                fourthBal, 52, staking.stakingDiscountMultiplier()
             ),
-            bondingV2.blockCountInAWeek() * 52,
+            staking.blockCountInAWeek() * 52,
             fourthBal
         );
 
-        StakingShare.Stake memory stake_ = bondingShareV2.getStake(2);
+        StakingShare.Stake memory stake_ = stakingShare.getStake(2);
         bytes32 stake1 = bytes32(abi.encode(stake));
         bytes32 stake2 = bytes32(abi.encode(stake_));
         assertEq(stake1, stake2);
@@ -123,7 +123,7 @@ contract DepositStateTest is DepositState {
 
     function testHolderTokens() public {
         ids.push(1);
-        uint256[] memory ids_ = bondingShareV2.holderTokens(bondingMinAccount);
+        uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
         assertEq(ids, ids_);
     }
 }
