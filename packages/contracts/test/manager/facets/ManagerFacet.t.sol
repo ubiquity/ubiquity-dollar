@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../DiamondTestSetup.sol";
-
+import "../../../src/dollar/interfaces/ICurveFactory.sol";
 
 contract TestManagerFacet is AddManagerFacetSetup {
 
@@ -98,5 +98,19 @@ contract TestManagerFacet is AddManagerFacetSetup {
         address dollarTokenAddress = generateAddress("dollarTokenAddress", true, 10 ether);
         ManagerFacet(address(diamond)).setDollarTokenAddress(dollarTokenAddress);
         ManagerFacet(address(diamond)).setIncentiveToUAD(user1, contract1);
+    }
+
+    function testShouldDeployStableSwapPool() public prankAs(admin) {
+        ICurveFactory curvePoolFactory = ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
+        address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
+        address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
+
+        ManagerFacet(address(diamond)).deployStableSwapPool(
+            address(curvePoolFactory),
+            curve3CrvBasePool,
+            curve3CrvToken,
+            10,
+            50000000
+        );
     }
 }
