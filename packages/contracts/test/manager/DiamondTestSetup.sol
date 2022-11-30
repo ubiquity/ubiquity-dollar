@@ -16,7 +16,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     Diamond diamond;
     DiamondCutFacet dCutFacet;
     DiamondLoupeFacet dLoupeFacet;
-    OwnershipFacet dOwnerFacet;
+    OwnershipFacet ownerFacet;
 
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
@@ -60,7 +60,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         //deploy facets
         dCutFacet = new DiamondCutFacet();
         dLoupeFacet = new DiamondLoupeFacet();
-        dOwnerFacet = new OwnershipFacet();
+        ownerFacet = new OwnershipFacet();
         DiamondInit dInit = new DiamondInit();
 
         facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet"];
@@ -90,7 +90,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         diamondCut[2] = (
             FacetCut({
-            facetAddress: address(dOwnerFacet),
+            facetAddress: address(ownerFacet),
             action: FacetCutAction.Add,
             functionSelectors: selectorsOfOwnershipFacet
             })
@@ -114,11 +114,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
 abstract contract AddManagerFacetSetup is DiamondSetup {
 
     ManagerFacet managerFacet;
-
+    ManagerFacet IManagerFacet;
+    
     function setUp() public virtual override {
         super.setUp();
         //deploy ManagerFacet
         managerFacet = new ManagerFacet();
+        IManagerFacet = ManagerFacet(address(diamond));
 
         selectorsOfManagerFacet.push(managerFacet.setDollarTokenAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.setCreditTokenAddress.selector);
@@ -167,7 +169,7 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         // add functions to diamond
         vm.startPrank(owner);
         ICut.diamondCut(facetCut, address(0x0), "");
-        ManagerFacet(address(diamond)).initialize(admin);
+        IManagerFacet.initialize(admin);
 		vm.stopPrank();
     }
 }
