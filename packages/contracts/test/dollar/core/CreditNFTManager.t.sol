@@ -21,39 +21,39 @@ import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract CreditNFTManagerTest is LocalTestHelper {
-    address uADManagerAddress;
-    address uADAddress;
-    address uARDollarCalculatorAddress;
-    address debtCouponManagerAddress;
-    uint256 couponLengthBlocks = 100;
+    address dollarManagerAddress;
+    address dollarTokenAddress;
+    address creditCalculatorAddress;
+    address creditNFTManagerAddress;
+    uint256 creditNFTLengthBlocks = 100;
     address twapOracleAddress;
-    address debtCouponAddress;
-    address uGovAddress;
-    address autoRedeemTokenAddress;
-    address dollarMintingCalculatorAddress;
+    address creditNFTAddress;
+    address govTokenAddress;
+    address creditTokenAddress;
+    address dollarMintCalculatorAddress;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityDollarManager();
+        dollarManagerAddress = helpers_deployUbiquityDollarManager();
 
-        debtCouponManagerAddress = address(
-            new CreditNFTManager(uADManagerAddress, couponLengthBlocks)
+        creditNFTManagerAddress = address(
+            new CreditNFTManager(dollarManagerAddress, creditNFTLengthBlocks)
         );
-        twapOracleAddress = UbiquityDollarManager(uADManagerAddress)
+        twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
             .twapOracleAddress();
-        uADAddress = UbiquityDollarManager(uADManagerAddress)
+        dollarTokenAddress = UbiquityDollarManager(dollarManagerAddress)
             .dollarTokenAddress();
-        uARDollarCalculatorAddress = UbiquityDollarManager(
-            uADManagerAddress
+        creditCalculatorAddress = UbiquityDollarManager(
+            dollarManagerAddress
         ).creditCalculatorAddress();
-        debtCouponAddress = UbiquityDollarManager(uADManagerAddress)
+        creditNFTAddress = UbiquityDollarManager(dollarManagerAddress)
             .creditNFTAddress();
-        uGovAddress = UbiquityDollarManager(uADManagerAddress)
+        govTokenAddress = UbiquityDollarManager(dollarManagerAddress)
             .governanceTokenAddress();
-        autoRedeemTokenAddress = UbiquityDollarManager(
-            uADManagerAddress
+        creditTokenAddress = UbiquityDollarManager(
+            dollarManagerAddress
         ).creditTokenAddress();
-        dollarMintingCalculatorAddress = UbiquityDollarManager(
-            uADManagerAddress
+        dollarMintCalculatorAddress = UbiquityDollarManager(
+            dollarManagerAddress
         ).dollarMintCalculatorAddress();
     }
 
@@ -70,19 +70,19 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
     }
 
-    function mockUARCalculatorFuncs(uint256 _uarAmount) public {
+    function mockCreditCalculatorFuncs(uint256 _creditAmount) public {
         vm.mockCall(
-            uARDollarCalculatorAddress,
+            creditCalculatorAddress,
             abi.encodeWithSelector(
                 CreditRedemptionCalculator.getCreditAmount.selector
             ),
-            abi.encode(_uarAmount)
+            abi.encode(_creditAmount)
         );
     }
 
-    function mockDollarMintingCalcFuncs(uint256 _dollarsToMint) public {
+    function mockDollarMintCalcFuncs(uint256 _dollarsToMint) public {
         vm.mockCall(
-            dollarMintingCalculatorAddress,
+            dollarMintCalculatorAddress,
             abi.encodeWithSelector(
                 DollarMintCalculator.getDollarsToMint.selector
             ),
@@ -94,44 +94,44 @@ contract CreditNFTManagerTest is LocalTestHelper {
         address _excessDollarsDistributor
     ) public {
         vm.prank(admin);
-        UbiquityDollarManager(uADManagerAddress)
+        UbiquityDollarManager(dollarManagerAddress)
             .setExcessDollarsDistributor(
-            debtCouponManagerAddress, _excessDollarsDistributor
+            creditNFTManagerAddress, _excessDollarsDistributor
         );
     }
 
-    function test_setExpiredCouponConversionRate() public {
+    function test_setExpiredCreditNFTConversionRate() public {
         vm.expectRevert("Caller is not a Credit NFT manager");
-        CreditNFTManager(debtCouponManagerAddress)
-            .setExpiredCouponConversionRate(100);
+        CreditNFTManager(creditNFTManagerAddress)
+            .setExpiredCreditNFTConversionRate(100);
 
         vm.prank(admin);
-        CreditNFTManager(debtCouponManagerAddress)
-            .setExpiredCouponConversionRate(100);
+        CreditNFTManager(creditNFTManagerAddress)
+            .setExpiredCreditNFTConversionRate(100);
         assertEq(
-            CreditNFTManager(debtCouponManagerAddress)
-                .expiredCouponConversionRate(),
+            CreditNFTManager(creditNFTManagerAddress)
+                .expiredCreditNFTConversionRate(),
             100
         );
     }
 
-    function test_setCouponLength() public {
+    function test_setCreditNFTLength() public {
         vm.expectRevert("Caller is not a Credit NFT manager");
-        CreditNFTManager(debtCouponManagerAddress).setCouponLength(100);
+        CreditNFTManager(creditNFTManagerAddress).setCreditNFTLength(100);
 
         vm.prank(admin);
-        CreditNFTManager(debtCouponManagerAddress).setCouponLength(100);
+        CreditNFTManager(creditNFTManagerAddress).setCreditNFTLength(100);
         assertEq(
-            CreditNFTManager(debtCouponManagerAddress).couponLengthBlocks(),
+            CreditNFTManager(creditNFTManagerAddress).creditNFTLengthBlocks(),
             100
         );
     }
 
-    function test_exchangeDollarsForDebtCoupons() public {
+    function test_exchangeDollarsForCreditNFT() public {
         mockTwapFuncs(2e18);
-        vm.expectRevert("Price must be below 1 to mint coupons");
-        CreditNFTManager(debtCouponManagerAddress)
-            .exchangeDollarsForDebtCoupons(100);
+        vm.expectRevert("Price must be below 1 to mint Credit NFT");
+        CreditNFTManager(creditNFTManagerAddress)
+            .exchangeDollarsForCreditNFT(100);
 
         mockTwapFuncs(5e17);
         address mockSender = address(0x123);
@@ -139,194 +139,194 @@ contract CreditNFTManagerTest is LocalTestHelper {
         vm.startPrank(mockSender);
 
         // Mint some dollarTokens to mockSender and then approve all
-        MockDollarToken(uADAddress).mint(mockSender, 10000e18);
-        MockDollarToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
+        MockDollarToken(dollarTokenAddress).mint(mockSender, 10000e18);
+        MockDollarToken(dollarTokenAddress).approve(creditNFTManagerAddress, 10000e18);
 
-        uint256 expiryBlockNumber = CreditNFTManager(debtCouponManagerAddress)
-            .exchangeDollarsForDebtCoupons(100);
-        assertEq(expiryBlockNumber, 10000 + couponLengthBlocks);
+        uint256 expiryBlockNumber = CreditNFTManager(creditNFTManagerAddress)
+            .exchangeDollarsForCreditNFT(100);
+        assertEq(expiryBlockNumber, 10000 + creditNFTLengthBlocks);
 
         // TODO: We need to add more asserts here for strong sanitation checks
-        // like check the difference in debtCoupon/dollarToken balance
+        // like check the difference in creditNFT/dollarToken balance
     }
 
-    function test_exchangeDollarsForUARRevertsIfPriceHigherThan1Ether()
+    function test_exchangeDollarsForCreditRevertsIfPriceHigherThan1Ether()
         public
     {
         mockTwapFuncs(2e18);
-        vm.expectRevert("Price must be below 1 to mint uAR");
-        CreditNFTManager(debtCouponManagerAddress).exchangeDollarsForUAR(100);
+        vm.expectRevert("Price must be below 1 to mint Credit");
+        CreditNFTManager(creditNFTManagerAddress).exchangeDollarsForCredit(100);
     }
 
-    function test_exchangeDollarsForUARWorks() public {
+    function test_exchangeDollarsForCreditWorks() public {
         mockTwapFuncs(5e17);
         address mockSender = address(0x123);
         vm.roll(10000);
         vm.startPrank(mockSender);
 
         // Mint some dollarTokens to mockSender and then approve all
-        MockDollarToken(uADAddress).mint(mockSender, 10000e18);
-        MockDollarToken(uADAddress).approve(debtCouponManagerAddress, 10000e18);
+        MockDollarToken(dollarTokenAddress).mint(mockSender, 10000e18);
+        MockDollarToken(dollarTokenAddress).approve(creditNFTManagerAddress, 10000e18);
 
-        mockUARCalculatorFuncs(10e18);
-        uint256 uARAmount = CreditNFTManager(debtCouponManagerAddress)
-            .exchangeDollarsForUAR(100);
-        assertEq(uARAmount, 10e18);
+        mockCreditCalculatorFuncs(10e18);
+        uint256 creditAmount = CreditNFTManager(creditNFTManagerAddress)
+            .exchangeDollarsForCredit(100);
+        assertEq(creditAmount, 10e18);
     }
 
-    function test_burnExpiredCouponsForUGOVRevertsIfNotExpired() public {
+    function test_burnExpiredCreditNFTForGovRevertsIfNotExpired() public {
         vm.roll(1000);
-        vm.expectRevert("Coupon has not expired");
-        CreditNFTManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
+        vm.expectRevert("Credit NFT has not expired");
+        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGov(
             2000, 1e18
         );
     }
 
-    function test_burnExpiredCouponsForUGOVRevertsIfNotEnoughBalance() public {
+    function test_burnExpiredCreditNFTForGovRevertsIfNotEnoughBalance() public {
         address mockMessageSender = address(0x123);
         vm.prank(admin);
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             mockMessageSender, 100, 500
         );
         vm.roll(1000);
         vm.prank(mockMessageSender);
-        vm.expectRevert("User not enough coupons");
-        CreditNFTManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
+        vm.expectRevert("User not enough Credit NFT");
+        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGov(
             500, 1e18
         );
     }
 
-    function test_burnExpiredCouponsForUGOVWorks() public {
+    function test_burnExpiredCreditNFTForGovWorks() public {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             mockMessageSender, 2e18, expiryBlockNumber
         );
-        UbiquityDollarManager(uADManagerAddress).grantRole(
-            keccak256("GOV_TOKEN_MINTER_ROLE"), debtCouponManagerAddress
+        UbiquityDollarManager(dollarManagerAddress).grantRole(
+            keccak256("GOV_TOKEN_MINTER_ROLE"), creditNFTManagerAddress
         );
         vm.stopPrank();
         vm.roll(1000);
         vm.prank(mockMessageSender);
-        CreditNFTManager(debtCouponManagerAddress).burnExpiredCouponsForUGOV(
+        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGov(
             expiryBlockNumber, 1e18
         );
-        uint256 uGovBalance =
-            UbiquityGovernanceToken(uGovAddress).balanceOf(mockMessageSender);
-        assertEq(uGovBalance, 5e17);
+        uint256 govBalance =
+            UbiquityGovernanceToken(govTokenAddress).balanceOf(mockMessageSender);
+        assertEq(govBalance, 5e17);
     }
 
-    function test_burnCouponsForAutoRedemptionRevertsIfExpired() public {
+    function test_burnCreditNFTForCreditRevertsIfExpired() public {
         vm.warp(1000);
-        vm.expectRevert("Coupon has expired");
-        CreditNFTManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
+        vm.expectRevert("Credit NFT has expired");
+        CreditNFTManager(creditNFTManagerAddress).burnCreditNFTForCredit(
             500, 1e18
         );
     }
 
-    function test_burnCouponsForAutoRedemptionRevertsIfNotEnoughBalance()
+    function test_burnCreditNFTForCreditRevertsIfNotEnoughBalance()
         public
     {
         vm.warp(1000);
-        vm.expectRevert("User not enough coupons");
-        CreditNFTManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
+        vm.expectRevert("User not enough Credit NFT");
+        CreditNFTManager(creditNFTManagerAddress).burnCreditNFTForCredit(
             1001, 1e18
         );
     }
 
-    function test_burnCouponsForAutoRedemptionWorks() public {
+    function test_burnCreditNFTForCreditWorks() public {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             mockMessageSender, 2e18, expiryBlockNumber
         );
-        UbiquityDollarManager(uADManagerAddress).grantRole(
-            keccak256("GOV_TOKEN_MINTER_ROLE"), debtCouponManagerAddress
+        UbiquityDollarManager(dollarManagerAddress).grantRole(
+            keccak256("GOV_TOKEN_MINTER_ROLE"), creditNFTManagerAddress
         );
         vm.stopPrank();
         vm.prank(mockMessageSender);
         vm.warp(expiryBlockNumber - 1);
-        CreditNFTManager(debtCouponManagerAddress).burnCouponsForAutoRedemption(
+        CreditNFTManager(creditNFTManagerAddress).burnCreditNFTForCredit(
             expiryBlockNumber, 1e18
         );
-        uint256 redeemBalance = UbiquityCreditToken(autoRedeemTokenAddress)
+        uint256 redeemBalance = UbiquityCreditToken(creditTokenAddress)
             .balanceOf(mockMessageSender);
         assertEq(redeemBalance, 1e18);
     }
 
-    function test_burnAutoRedeemTokensForDollarsRevertsIfPriceLowerThan1Ether()
+    function test_burnCreditTokensForDollarsRevertsIfPriceLowerThan1Ether()
         public
     {
         mockTwapFuncs(5e17);
-        vm.expectRevert("Price must be above 1 to auto redeem");
-        CreditNFTManager(debtCouponManagerAddress)
-            .burnAutoRedeemTokensForDollars(100);
+        vm.expectRevert("Price must be above 1");
+        CreditNFTManager(creditNFTManagerAddress)
+            .burnCreditTokensForDollars(100);
     }
 
-    function test_burnAutoRedeemTokensForDollarsIfNotEnoughBalance() public {
+    function test_burnCreditTokensForDollarsIfNotEnoughBalance() public {
         mockTwapFuncs(2e18);
-        vm.expectRevert("User doesn't have enough auto redeem pool tokens.");
-        CreditNFTManager(debtCouponManagerAddress)
-            .burnAutoRedeemTokensForDollars(100);
+        vm.expectRevert("User doesn't have enough Credit pool tokens.");
+        CreditNFTManager(creditNFTManagerAddress)
+            .burnCreditTokensForDollars(100);
     }
 
-    function test_burnAutoRedeemTokensForDollarsWorks() public {
+    function test_burnCreditTokensForDollarsWorks() public {
         mockTwapFuncs(2e18);
-        mockDollarMintingCalcFuncs(1e18);
+        mockDollarMintCalcFuncs(1e18);
         address account1 = address(0x123);
-        MockCreditToken(autoRedeemTokenAddress).mint(account1, 100e18);
+        MockCreditToken(creditTokenAddress).mint(account1, 100e18);
         vm.prank(account1);
-        uint256 unredeemed = CreditNFTManager(debtCouponManagerAddress)
-            .burnAutoRedeemTokensForDollars(10e18);
+        uint256 unredeemed = CreditNFTManager(creditNFTManagerAddress)
+            .burnCreditTokensForDollars(10e18);
         assertEq(unredeemed, 10e18 - 1e18);
     }
 
-    function test_redeemCouponsRevertsIfPriceLowerThan1Ether() public {
+    function test_redeemCreditNFTRevertsIfPriceLowerThan1Ether() public {
         mockTwapFuncs(5e17);
-        vm.expectRevert("Price must be above 1 to redeem coupons");
-        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
+        vm.expectRevert("Price must be above 1 to redeem Credit NFT");
+        CreditNFTManager(creditNFTManagerAddress).redeemCreditNFT(
             123123123, 100
         );
     }
 
-    function test_redeemCouponsRevertsIfCouponExpired() public {
+    function test_redeemCreditNFTRevertsIfCreditNFTExpired() public {
         mockTwapFuncs(2e18);
         vm.roll(10000);
-        vm.expectRevert("Coupon has expired");
-        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(5555, 100);
+        vm.expectRevert("Credit NFT has expired");
+        CreditNFTManager(creditNFTManagerAddress).redeemCreditNFT(5555, 100);
     }
 
-    function test_redeemCouponsRevertsIfNotEnoughBalance() public {
+    function test_redeemCreditNFTRevertsIfNotEnoughBalance() public {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             account1, 100, expiryBlockNumber
         );
-        vm.expectRevert("User not enough coupons");
+        vm.expectRevert("User not enough Credit NFT");
         vm.prank(account1);
         vm.roll(expiryBlockNumber - 1);
-        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(creditNFTManagerAddress).redeemCreditNFT(
             expiryBlockNumber, 200
         );
     }
 
-    function test_redeemCouponsRevertsIfNotEnoughUAD() public {
+    function test_redeemCreditNFTRevertsIfNotEnoughDollars() public {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             account1, 100, expiryBlockNumber
         );
-        MockCreditToken(autoRedeemTokenAddress).mint(
-            debtCouponManagerAddress, 20000e18
+        MockCreditToken(creditTokenAddress).mint(
+            creditNFTManagerAddress, 20000e18
         );
 
-        // set excess dollar distributor for debtCouponAddress
+        // set excess dollar distributor for creditNFTAddress
         DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(uADManagerAddress);
+            new DollarMintExcess(dollarManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -337,26 +337,26 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
 
         vm.prank(account1);
-        vm.expectRevert("There aren't enough uAD to redeem currently");
+        vm.expectRevert("There aren't enough Dollar to redeem currently");
         vm.roll(expiryBlockNumber - 1);
-        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(creditNFTManagerAddress).redeemCreditNFT(
             expiryBlockNumber, 99
         );
     }
 
-    function test_redeemCouponsRevertsIfZeroAmountOfUAD() public {
+    function test_redeemCreditNFTRevertsIfZeroAmountOfDollars() public {
         mockTwapFuncs(2e18);
-        mockDollarMintingCalcFuncs(0);
+        mockDollarMintCalcFuncs(0);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             account1, 100, expiryBlockNumber
         );
-        // MockAutoRedeem(autoRedeemTokenAddress).mint(debtCouponManagerAddress, 20000e18);
+        // MockAutoRedeem(creditTokenAddress).mint(creditNFTManagerAddress, 20000e18);
 
-        // set excess dollar distributor for debtCouponAddress
+        // set excess dollar distributor for creditNFTAddress
         DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(uADManagerAddress);
+            new DollarMintExcess(dollarManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -367,28 +367,28 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
 
         vm.prank(account1);
-        vm.expectRevert("There aren't any uAD to redeem currently");
+        vm.expectRevert("There aren't any Dollar to redeem currently");
         vm.roll(expiryBlockNumber - 1);
-        CreditNFTManager(debtCouponManagerAddress).redeemCoupons(
+        CreditNFTManager(creditNFTManagerAddress).redeemCreditNFT(
             expiryBlockNumber, 99
         );
     }
 
-    function test_redeemCouponsWorks() public {
+    function test_redeemCreditNFTWorks() public {
         mockTwapFuncs(2e18);
-        mockDollarMintingCalcFuncs(20000e18);
+        mockDollarMintCalcFuncs(20000e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(debtCouponAddress).mintCreditNFT(
+        MockCreditNFT(creditNFTAddress).mintCreditNFT(
             account1, 100, expiryBlockNumber
         );
-        MockCreditToken(autoRedeemTokenAddress).mint(
-            debtCouponManagerAddress, 10000e18
+        MockCreditToken(creditTokenAddress).mint(
+            creditNFTManagerAddress, 10000e18
         );
 
         // set excess dollar distributor for debtCouponAddress
         DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(uADManagerAddress);
+            new DollarMintExcess(dollarManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -399,16 +399,16 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
         vm.prank(account1);
         vm.roll(expiryBlockNumber - 1);
-        uint256 unredeemedCoupons = CreditNFTManager(debtCouponManagerAddress)
-            .redeemCoupons(expiryBlockNumber, 99);
-        assertEq(unredeemedCoupons, 0);
+        uint256 unredeemedCreditNFT = CreditNFTManager(creditNFTManagerAddress)
+            .redeemCreditNFT(expiryBlockNumber, 99);
+        assertEq(unredeemedCreditNFT, 0);
     }
 
     function test_mintClaimableDollars() public {
-        mockDollarMintingCalcFuncs(50);
-        // set excess dollar distributor for debtCouponAddress
+        mockDollarMintCalcFuncs(50);
+        // set excess dollar distributor for creditNFTAddress
         DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(uADManagerAddress);
+            new DollarMintExcess(dollarManagerAddress);
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -419,10 +419,10 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
 
         uint256 beforeBalance =
-            MockDollarToken(uADAddress).balanceOf(debtCouponManagerAddress);
-        CreditNFTManager(debtCouponManagerAddress).mintClaimableDollars();
+            MockDollarToken(dollarTokenAddress).balanceOf(creditNFTManagerAddress);
+        CreditNFTManager(creditNFTManagerAddress).mintClaimableDollars();
         uint256 afterBalance =
-            MockDollarToken(uADAddress).balanceOf(debtCouponManagerAddress);
+            MockDollarToken(dollarTokenAddress).balanceOf(creditNFTManagerAddress);
         assertEq(afterBalance - beforeBalance, 50);
     }
 }

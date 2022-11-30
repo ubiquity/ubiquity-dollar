@@ -14,11 +14,11 @@ import "./UbiquityCreditToken.sol";
 import "./UbiquityDollarManager.sol";
 import "./CreditNFT.sol";
 
-/// @title A basic debt issuing and redemption mechanism for coupon holders
-/// @notice Allows users to burn their uAD in exchange for coupons
+/// @title A basic credit issuing and redemption mechanism for Credit NFT holders
+/// @notice Allows users to burn their Ubiquity Dollar in exchange for Credit NFT
 /// redeemable in the future
-/// @notice Allows users to redeem individual debt coupons or batch redeem
-/// coupons on a first-come first-serve basis
+/// @notice Allows users to redeem individual Credit NFT or batch redeem
+/// Credit NFT on a first-come first-serve basis
 contract CreditNFTManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
@@ -29,18 +29,18 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     uint256 public dollarsMintedThisCycle;
     bool public debtCycle;
     uint256 public blockHeightDebt;
-    uint256 public couponLengthBlocks;
-    uint256 public expiredCouponConversionRate = 2;
+    uint256 public creditNFTLengthBlocks;
+    uint256 public expiredCreditNFTConversionRate = 2;
 
-    event ExpiredCouponConversionRateChanged(
+    event ExpiredCreditNFTConversionRateChanged(
         uint256 newRate, uint256 previousRate
     );
 
-    event CouponLengthChanged(
-        uint256 newCouponLengthBlocks, uint256 previousCouponLengthBlocks
+    event CreditNFTLengthChanged(
+        uint256 newCreditNFTLengthBlocks, uint256 previousCreditNFTLengthBlocks
     );
 
-    modifier onlyCouponManager() {
+    modifier onlyCreditNFTManager() {
         require(
             manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
             "Caller is not a Credit NFT manager"
@@ -49,44 +49,44 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     }
 
     /// @param _manager the address of the manager contract so we can fetch variables
-    /// @param _couponLengthBlocks how many blocks coupons last. can't be changed
+    /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
     /// once set (unless migrated)
-    constructor(address _manager, uint256 _couponLengthBlocks) {
+    constructor(address _manager, uint256 _creditNFTLengthBlocks) {
         manager = UbiquityDollarManager(_manager);
-        couponLengthBlocks = _couponLengthBlocks;
+        creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 
-    function setExpiredCouponConversionRate(uint256 rate)
+    function setExpiredCreditNFTConversionRate(uint256 rate)
         external
-        onlyCouponManager
+        onlyCreditNFTManager
     {
-        emit ExpiredCouponConversionRateChanged(
-            rate, expiredCouponConversionRate
+        emit ExpiredCreditNFTConversionRateChanged(
+            rate, expiredCreditNFTConversionRate
             );
-        expiredCouponConversionRate = rate;
+        expiredCreditNFTConversionRate = rate;
     }
 
-    function setCouponLength(uint256 _couponLengthBlocks)
+    function setCreditNFTLength(uint256 _creditNFTLengthBlocks)
         external
-        onlyCouponManager
+        onlyCreditNFTManager
     {
-        emit CouponLengthChanged(_couponLengthBlocks, couponLengthBlocks);
-        couponLengthBlocks = _couponLengthBlocks;
+        emit CreditNFTLengthChanged(_creditNFTLengthBlocks, creditNFTLengthBlocks);
+        creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 
-    /// @dev called when a user wants to burn UAD for debt coupon.
+    /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
     ///      should only be called when oracle is below a dollar
-    /// @param amount the amount of dollars to exchange for coupons
-    function exchangeDollarsForDebtCoupons(uint256 amount)
+    /// @param amount the amount of dollars to exchange for Credit NFT
+    function exchangeDollarsForCreditNFT(uint256 amount)
         external
         returns (uint256)
     {
         uint256 twapPrice = _getTwapPrice();
 
-        require(twapPrice < 1 ether, "Price must be below 1 to mint coupons");
+        require(twapPrice < 1 ether, "Price must be below 1 to mint Credit NFT");
 
-        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
-        debtCoupon.updateTotalDebt();
+        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
+        creditNFT.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
@@ -96,33 +96,33 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        ICreditNFTRedemptionCalculator couponCalculator =
+        ICreditNFTRedemptionCalculator creditNFTCalculator =
             ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
-        uint256 couponsToMint = couponCalculator.getCreditNFTAmount(amount);
+        uint256 creditNFTToMint = creditNFTCalculator.getCreditNFTAmount(amount);
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
             msg.sender, amount
         );
 
-        uint256 expiryBlockNumber = block.number + (couponLengthBlocks);
-        debtCoupon.mintCreditNFT(msg.sender, couponsToMint, expiryBlockNumber);
+        uint256 expiryBlockNumber = block.number + (creditNFTLengthBlocks);
+        creditNFT.mintCreditNFT(msg.sender, creditNFTToMint, expiryBlockNumber);
 
         //give the caller the block number of the minted nft
         return expiryBlockNumber;
     }
 
-    /// @dev called when a user wants to burn UAD for uAR.
+    /// @dev called when a user wants to burn Dollar for Credit.
     ///      should only be called when oracle is below a dollar
-    /// @param amount the amount of dollars to exchange for uAR
-    /// @return amount of auto redeem tokens minted
-    function exchangeDollarsForUAR(uint256 amount) external returns (uint256) {
+    /// @param amount the amount of dollars to exchange for Credit
+    /// @return amount of Credit tokens minted
+    function exchangeDollarsForCredit(uint256 amount) external returns (uint256) {
         uint256 twapPrice = _getTwapPrice();
 
-        require(twapPrice < 1 ether, "Price must be below 1 to mint uAR");
+        require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
 
-        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
-        debtCoupon.updateTotalDebt();
+        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
+        creditNFT.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
@@ -132,48 +132,48 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        ICreditRedemptionCalculator uarCalculator =
+        ICreditRedemptionCalculator creditCalculator =
             ICreditRedemptionCalculator(manager.creditCalculatorAddress());
-        uint256 uarToMint = uarCalculator.getCreditAmount(amount, blockHeightDebt);
+        uint256 creditToMint = creditCalculator.getCreditAmount(amount, blockHeightDebt);
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
             msg.sender, amount
         );
-        // mint uAR
-        UbiquityCreditToken autoRedeemToken =
+        // mint Credit
+        UbiquityCreditToken creditToken =
             UbiquityCreditToken(manager.creditTokenAddress());
-        autoRedeemToken.mint(msg.sender, uarToMint);
+        creditToken.mint(msg.sender, creditToMint);
 
-        //give minted uAR amount
-        return uarToMint;
+        //give minted Credit amount
+        return creditToMint;
     }
 
-    /// @dev uses the current coupons for dollars calculation to get coupons for dollars
-    /// @param amount the amount of dollars to exchange for coupons
-    function getCouponsReturnedForDollars(uint256 amount)
+    /// @dev uses the current Credit NFT for dollars calculation to get Credit NFT for dollars
+    /// @param amount the amount of dollars to exchange for Credit NFT
+    function getCreditNFTReturnedForDollars(uint256 amount)
         external
         view
         returns (uint256)
     {
-        ICreditNFTRedemptionCalculator couponCalculator =
+        ICreditNFTRedemptionCalculator creditNFTCalculator =
             ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
-        return couponCalculator.getCreditNFTAmount(amount);
+        return creditNFTCalculator.getCreditNFTAmount(amount);
     }
 
-    /// @dev uses the current uAR for dollars calculation to get uAR for dollars
-    /// @param amount the amount of dollars to exchange for uAR
-    function getUARReturnedForDollars(uint256 amount)
+    /// @dev uses the current Credit for dollars calculation to get Credit for dollars
+    /// @param amount the amount of dollars to exchange for Credit
+    function getCreditReturnedForDollars(uint256 amount)
         external
         view
         returns (uint256)
     {
-        ICreditRedemptionCalculator uarCalculator =
+        ICreditRedemptionCalculator creditCalculator =
             ICreditRedemptionCalculator(manager.creditCalculatorAddress());
-        return uarCalculator.getCreditAmount(amount, blockHeightDebt);
+        return creditCalculator.getCreditAmount(amount, blockHeightDebt);
     }
 
-    /// @dev should be called by this contract only when getting coupons to be burnt
+    /// @dev should be called by this contract only when getting Credit NFT to be burnt
     function onERC1155Received(
         address operator,
         address,
@@ -207,152 +207,152 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         return "";
     }
 
-    /// @dev let debt holder burn expired coupons for UGOV. Doesn't make TWAP > 1 check.
-    /// @param id the timestamp of the coupon
-    /// @param amount the amount of coupons to redeem
-    /// @return uGovAmount amount of UGOV tokens minted to debt holder
-    function burnExpiredCouponsForUGOV(uint256 id, uint256 amount)
+    /// @dev let Credit NFT holder burn expired Credit NFT for Governance Token. Doesn't make TWAP > 1 check.
+    /// @param id the timestamp of the Credit NFT
+    /// @param amount the amount of Credit NFT to redeem
+    /// @return govAmount amount of Governance Token minted to Credit NFT holder
+    function burnExpiredCreditNFTForGov(uint256 id, uint256 amount)
         public
-        returns (uint256 uGovAmount)
+        returns (uint256 govAmount)
     {
-        // Check whether debt coupon hasn't expired --> Burn debt coupons.
-        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
+        // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
+        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
 
-        require(id <= block.number, "Coupon has not expired");
+        require(id <= block.number, "Credit NFT has not expired");
         require(
-            debtCoupon.balanceOf(msg.sender, id) >= amount,
-            "User not enough coupons"
+            creditNFT.balanceOf(msg.sender, id) >= amount,
+            "User not enough Credit NFT"
         );
 
-        debtCoupon.burnCreditNFT(msg.sender, amount, id);
+        creditNFT.burnCreditNFT(msg.sender, amount, id);
 
-        // Mint UGOV tokens to this contract. Transfer UGOV tokens to msg.sender i.e. debt holder
-        IERC20Ubiquity uGOVToken =
+        // Mint Governance Token to this contract. Transfer Governance Token to msg.sender i.e. Credit NFT holder
+        IERC20Ubiquity govToken =
             IERC20Ubiquity(manager.governanceTokenAddress());
-        uGovAmount = amount / expiredCouponConversionRate;
-        uGOVToken.mint(msg.sender, uGovAmount);
+        govAmount = amount / expiredCreditNFTConversionRate;
+        govToken.mint(msg.sender, govAmount);
     }
 
     // TODO should we leave it ?
-    /// @dev Lets debt holder burn coupons for auto redemption. Doesn't make TWAP > 1 check.
-    /// @param id the timestamp of the coupon
-    /// @param amount the amount of coupons to redeem
-    /// @return amount of auto redeem pool tokens (i.e. LP tokens) minted to debt holder
-    function burnCouponsForAutoRedemption(uint256 id, uint256 amount)
+    /// @dev Lets Credit NFT holder burn Credit NFT for Credit. Doesn't make TWAP > 1 check.
+    /// @param id the timestamp of the Credit NFT
+    /// @param amount the amount of Credit NFT to redeem
+    /// @return amount of Credit pool tokens (i.e. LP tokens) minted to Credit NFT holder
+    function burnCreditNFTForCredit(uint256 id, uint256 amount)
         public
         returns (uint256)
     {
-        // Check whether debt coupon hasn't expired --> Burn debt coupons.
-        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
+        // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
+        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
 
-        require(id > block.timestamp, "Coupon has expired");
+        require(id > block.timestamp, "Credit NFT has expired");
         require(
-            debtCoupon.balanceOf(msg.sender, id) >= amount,
-            "User not enough coupons"
+            creditNFT.balanceOf(msg.sender, id) >= amount,
+            "User not enough Credit NFT"
         );
 
-        debtCoupon.burnCreditNFT(msg.sender, amount, id);
+        creditNFT.burnCreditNFT(msg.sender, amount, id);
 
-        // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. debt holder
-        UbiquityCreditToken autoRedeemToken =
+        // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. Credit NFT holder
+        UbiquityCreditToken creditToken =
             UbiquityCreditToken(manager.creditTokenAddress());
-        autoRedeemToken.mint(address(this), amount);
-        autoRedeemToken.transfer(msg.sender, amount);
+        creditToken.mint(address(this), amount);
+        creditToken.transfer(msg.sender, amount);
 
-        return autoRedeemToken.balanceOf(msg.sender);
+        return creditToken.balanceOf(msg.sender);
     }
 
-    /// @dev Exchange auto redeem pool token for uAD tokens.
-    /// @param amount Amount of uAR tokens to burn in exchange for uAD tokens.
-    /// @return amount of unredeemed uAR
-    function burnAutoRedeemTokensForDollars(uint256 amount)
+    /// @dev Exchange Credit pool token for Dollar tokens.
+    /// @param amount Amount of Credit tokens to burn in exchange for Dollar tokens.
+    /// @return amount of unredeemed Credit
+    function burnCreditTokensForDollars(uint256 amount)
         public
         returns (uint256)
     {
         uint256 twapPrice = _getTwapPrice();
-        require(twapPrice > 1 ether, "Price must be above 1 to auto redeem");
+        require(twapPrice > 1 ether, "Price must be above 1");
         if (debtCycle) {
             debtCycle = false;
         }
-        UbiquityCreditToken autoRedeemToken =
+        UbiquityCreditToken creditToken =
             UbiquityCreditToken(manager.creditTokenAddress());
         require(
-            autoRedeemToken.balanceOf(msg.sender) >= amount,
-            "User doesn't have enough auto redeem pool tokens."
+            creditToken.balanceOf(msg.sender) >= amount,
+            "User doesn't have enough Credit pool tokens."
         );
 
-        UbiquityDollarToken uAD =
+        UbiquityDollarToken dollarToken =
             UbiquityDollarToken(manager.dollarTokenAddress());
-        uint256 maxRedeemableUAR = uAD.balanceOf(address(this));
+        uint256 maxRedeemableCredit = dollarToken.balanceOf(address(this));
 
-        if (maxRedeemableUAR <= 0) {
+        if (maxRedeemableCredit <= 0) {
             mintClaimableDollars();
-            maxRedeemableUAR = uAD.balanceOf(address(this));
+            maxRedeemableCredit = dollarToken.balanceOf(address(this));
         }
 
-        uint256 uarToRedeem = amount;
-        if (amount > maxRedeemableUAR) {
-            uarToRedeem = maxRedeemableUAR;
+        uint256 creditToRedeem = amount;
+        if (amount > maxRedeemableCredit) {
+            creditToRedeem = maxRedeemableCredit;
         }
-        autoRedeemToken.burnFrom(msg.sender, uarToRedeem);
-        uAD.transfer(msg.sender, uarToRedeem);
+        creditToken.burnFrom(msg.sender, creditToRedeem);
+        dollarToken.transfer(msg.sender, creditToRedeem);
 
-        return amount - uarToRedeem;
+        return amount - creditToRedeem;
     }
 
-    /// @param id the block number of the coupon
-    /// @param amount the amount of coupons to redeem
-    /// @return amount of unredeemed coupons
-    function redeemCoupons(uint256 id, uint256 amount)
+    /// @param id the block number of the Credit NFT
+    /// @param amount the amount of Credit NFT to redeem
+    /// @return amount of unredeemed Credit NFT
+    function redeemCreditNFT(uint256 id, uint256 amount)
         public
         returns (uint256)
     {
         uint256 twapPrice = _getTwapPrice();
 
-        require(twapPrice > 1 ether, "Price must be above 1 to redeem coupons");
+        require(twapPrice > 1 ether, "Price must be above 1 to redeem Credit NFT");
         if (debtCycle) {
             debtCycle = false;
         }
-        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
+        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
 
-        require(id > block.number, "Coupon has expired");
+        require(id > block.number, "Credit NFT has expired");
         require(
-            debtCoupon.balanceOf(msg.sender, id) >= amount,
-            "User not enough coupons"
+            creditNFT.balanceOf(msg.sender, id) >= amount,
+            "User not enough Credit NFT"
         );
 
         mintClaimableDollars();
-        UbiquityDollarToken uAD =
+        UbiquityDollarToken dollarToken =
             UbiquityDollarToken(manager.dollarTokenAddress());
-        UbiquityCreditToken autoRedeemToken =
+        UbiquityCreditToken creditToken =
             UbiquityCreditToken(manager.creditTokenAddress());
-        // uAR have a priority on uDEBT coupon holder
+        // Credit have a priority on Credit NFT holder
         require(
-            autoRedeemToken.totalSupply() <= uAD.balanceOf(address(this)),
-            "There aren't enough uAD to redeem currently"
+            creditToken.totalSupply() <= dollarToken.balanceOf(address(this)),
+            "There aren't enough Dollar to redeem currently"
         );
-        uint256 maxRedeemableCoupons =
-            uAD.balanceOf(address(this)) - autoRedeemToken.totalSupply();
-        uint256 couponsToRedeem = amount;
+        uint256 maxRedeemableCreditNFT =
+            dollarToken.balanceOf(address(this)) - creditToken.totalSupply();
+        uint256 creditNFTToRedeem = amount;
 
-        if (amount > maxRedeemableCoupons) {
-            couponsToRedeem = maxRedeemableCoupons;
+        if (amount > maxRedeemableCreditNFT) {
+            creditNFTToRedeem = maxRedeemableCreditNFT;
         }
         require(
-            uAD.balanceOf(address(this)) > 0,
-            "There aren't any uAD to redeem currently"
+            dollarToken.balanceOf(address(this)) > 0,
+            "There aren't any Dollar to redeem currently"
         );
 
-        // debtCouponManager must be an operator to transfer on behalf of msg.sender
-        debtCoupon.burnCreditNFT(msg.sender, couponsToRedeem, id);
-        uAD.transfer(msg.sender, couponsToRedeem);
+        // creditNFTManager must be an operator to transfer on behalf of msg.sender
+        creditNFT.burnCreditNFT(msg.sender, creditNFTToRedeem, id);
+        dollarToken.transfer(msg.sender, creditNFTToRedeem);
 
-        return amount - (couponsToRedeem);
+        return amount - (creditNFTToRedeem);
     }
 
     function mintClaimableDollars() public {
-        CreditNFT debtCoupon = CreditNFT(manager.creditNFTAddress());
-        debtCoupon.updateTotalDebt();
+        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
+        creditNFT.updateTotalDebt();
 
         // uint256 twapPrice = _getTwapPrice(); //unused variable. Why here?
         uint256 totalMintableDollars = IDollarMintCalculator(
@@ -362,16 +362,16 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         //update the dollars for this cycle
         dollarsMintedThisCycle = totalMintableDollars;
 
-        UbiquityDollarToken uAD =
+        UbiquityDollarToken dollarToken =
             UbiquityDollarToken(manager.dollarTokenAddress());
-        // uAD  dollars should  be minted to address(this)
-        uAD.mint(address(this), dollarsToMint);
-        UbiquityCreditToken autoRedeemToken =
+        // Dollar should be minted to address(this)
+        dollarToken.mint(address(this), dollarsToMint);
+        UbiquityCreditToken creditToken =
             UbiquityCreditToken(manager.creditTokenAddress());
 
-        uint256 currentRedeemableBalance = uAD.balanceOf(address(this));
+        uint256 currentRedeemableBalance = dollarToken.balanceOf(address(this));
         uint256 totalOutstandingDebt =
-            debtCoupon.getTotalOutstandingDebt() + autoRedeemToken.totalSupply();
+            creditNFT.getTotalOutstandingDebt() + creditToken.totalSupply();
 
         if (currentRedeemableBalance > totalOutstandingDebt) {
             uint256 excessDollars =
@@ -382,7 +382,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            uAD.transfer(
+            dollarToken.transfer(
                 manager.getExcessDollarsDistributor(address(this)),
                 excessDollars
             );
