@@ -66,21 +66,21 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         bytes calldata data
     ) public virtual returns (bytes4) {
         // Called when receiving ERC1155 token at staking.
-        // operator: BondingV2 contract
+        // operator: Staking contract
         // from: address(0x)
-        // id: bonding share ID
+        // id: staking share ID
         // value: 1
         // data: 0x
-        // msg.sender: BondingShareV2 contract
+        // msg.sender: Staking contract
         return this.onERC1155Received.selector;
     }
 
 
     /**
      * @dev Deposit into Ubiquity protocol
-     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity BondingShare
+     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingShare
      * @notice STEP 1 : Change (DAI / USDC / USDT / Ubiquity dollar) to 3CRV at uAD3CRV MetaPool
-     * @notice STEP 2 : uAD3CRV-f => Ubiquity BondingShare
+     * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingShare
      * @param token Token deposited : DAI, USDC, USDT or Ubiquity Dollar
      * @param amount Amount of tokens to deposit (For max: `uint256(-1)`)
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
@@ -117,8 +117,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IERC20(token).safeIncreaseAllowance(depositZapUbiquityDollar, amount);
         lpAmount = IDepositZap(depositZapUbiquityDollar).add_liquidity(ubiquity3PoolLP, tokenAmounts, 0);
 
-        //STEP2: stake UAD3CRVf to BondingV2
-        //TODO approve token to be transferred to Bonding V2 contract
+        //STEP2: stake UAD3CRVf to Staking
+        //TODO approve token to be transferred to Staking contract
         IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
         stakingShareId = IStaking(staking).deposit(lpAmount, durationWeeks);
 
@@ -130,10 +130,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Withdraw from Ubiquity protocol
-     * @notice Ubiquity BondingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
-     * @notice STEP 1 : Ubiquity BondingShare  => uAD3CRV-f
+     * @notice Ubiquity StakingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
+     * @notice STEP 1 : Ubiquity StakingShare  => uAD3CRV-f
      * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
-     * @param stakingShareId Bonding Share Id to withdraw
+     * @param stakingShareId Staking Share Id to withdraw
      * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or Ubiquity Dollar
      */
     function withdraw(
@@ -148,19 +148,19 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
         uint256[] memory stakingShareIds = IStakingShare(stakingShare).holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
-        //bond.minter is this contract address so that cannot use it for verification.
+        //stake.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "sender is not true bond owner");
         
         //transfer bondingShare NFT token from msg.sender to this address
         IStakingShare(stakingShare).safeTransferFrom(msg.sender, address(this), stakingShareId, 1, '0x');
         
-        // Get Bond
-        IStakingShare.Bond memory bond = IStakingShare(stakingShare).getBond(stakingShareId);
+        // Get Stake
+        IStakingShare.Stake memory stake = IStakingShare(stakingShare).getStake(stakingShareId);
         
-        // STEP 1 : Withdraw Ubiquity Bonding Shares to get back uAD3CRV-f LPs
+        // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
         //address staking = ubiquityManager.stakingContractAddress();
         IStakingShare(stakingShare).setApprovalForAll(staking, true);
-        IStaking(staking).removeLiquidity(bond.lpAmount, stakingShareId);
+        IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
         IStakingShare(stakingShare).setApprovalForAll(staking, false);
         
         uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));

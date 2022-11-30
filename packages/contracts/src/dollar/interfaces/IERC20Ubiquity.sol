@@ -3,8 +3,8 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-/// @title ERC20 Ubiquiti preset interface
-/// @author Ubiquity Algorithmic Dollar
+/// @title ERC20 Ubiquity preset interface
+/// @author Ubiquity Dollar
 interface IERC20Ubiquity is IERC20 {
     // ----------- Events -----------
     event Minting(

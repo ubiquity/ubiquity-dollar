@@ -220,12 +220,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(stakingShareIds)
         );
 
-        IStakingShare.Bond memory bond;
-        bond.lpAmount = 100e18;
+        IStakingShare.Stake memory stake;
+        stake.lpAmount = 100e18;
         vm.mockCall(
             stakingShareAddress,
-            abi.encodeWithSelector(IStakingShare.getBond.selector),
-            abi.encode(bond)
+            abi.encodeWithSelector(IStakingShare.getStake.selector),
+            abi.encode(stake)
         );
 
         vm.mockCall(

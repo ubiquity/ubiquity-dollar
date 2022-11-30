@@ -4,10 +4,10 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "./IERC1155Ubiquity.sol";
 
-/// @title ERC1155 Ubiquiti preset interface
-/// @author Ubiquity Algorithmic Dollar
+/// @title ERC1155 Ubiquity preset interface
+/// @author Ubiquity Dollar
 interface IStakingShare is IERC1155Ubiquity {
-    struct Bond {
+    struct Stake {
         // address of the minter
         address minter;
         // lp amount deposited by the user
@@ -20,5 +20,5 @@ interface IStakingShare is IERC1155Ubiquity {
         uint256 lpAmount;
     }
 
-    function getBond(uint256 id) external view returns (Bond memory);
+    function getStake(uint256 id) external view returns (Stake memory);
 }
