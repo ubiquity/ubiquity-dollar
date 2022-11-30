@@ -104,5 +104,4 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
     function dollarTokenAddress() external view returns (address);
 
     function governanceTokenAddress() external view returns (address);
-
 }

@@ -135,43 +135,44 @@ contract UbiquiStick is
         return super.supportsInterface(interfaceId);
     }
 
-    function setApprovalForAll(address operator, bool approved) 
-        public 
-        override(ERC721, IERC721) 
-        onlyAllowedOperatorApproval(operator) 
+    function setApprovalForAll(address operator, bool approved)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperatorApproval(operator)
     {
         super.setApprovalForAll(operator, approved);
     }
 
-    function approve(address operator, uint256 tokenId) 
-        public 
-        override(ERC721, IERC721) 
-        onlyAllowedOperatorApproval(operator) 
+    function approve(address operator, uint256 tokenId)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperatorApproval(operator)
     {
         super.approve(operator, tokenId);
     }
 
-    function transferFrom(address from, address to, uint256 tokenId) 
-        public 
-        override(ERC721, IERC721) 
-        onlyAllowedOperator(from) 
+    function transferFrom(address from, address to, uint256 tokenId)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperator(from)
     {
         super.transferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId) 
-        public 
-        override(ERC721, IERC721) 
-        onlyAllowedOperator(from) 
+    function safeTransferFrom(address from, address to, uint256 tokenId)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperator(from)
     {
         super.safeTransferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data)
-        public
-        override(ERC721, IERC721)
-        onlyAllowedOperator(from)
-    {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory data
+    ) public override (ERC721, IERC721) onlyAllowedOperator(from) {
         super.safeTransferFrom(from, to, tokenId, data);
     }
 }
