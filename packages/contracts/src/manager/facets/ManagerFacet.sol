@@ -12,9 +12,11 @@ import {
     UBQ_TOKEN_MANAGER_ROLE    
 } from "../libraries/LibAppStorage.sol";
 import { AccessControlStorage } from "../libraries/AccessControlStorage.sol";
-import { IERC20 } from "../interfaces/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import "../interfaces/IUbiquityAlgorithmicDollar.sol";
+import "../../dollar/interfaces/IUbiquityAlgorithmicDollar.sol";
 import "../../dollar/interfaces/ICurveFactory.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
 import "../../dollar/TWAPOracle.sol";
@@ -149,8 +151,8 @@ contract ManagerFacet is Modifiers {
         // Create new StableSwap meta pool (uAD <-> 3Crv)
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
-            IERC20(s.dollarTokenAddress).name(),
-            IERC20(s.dollarTokenAddress).symbol(),
+            ERC20(s.dollarTokenAddress).name(),
+            ERC20(s.dollarTokenAddress).symbol(),
             s.dollarTokenAddress,
             _amplificationCoefficient,
             _fee
