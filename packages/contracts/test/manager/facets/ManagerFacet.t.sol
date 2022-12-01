@@ -110,8 +110,6 @@ contract TestManagerFacet is AddManagerFacetSetup {
 
     function testShouldDeployStableSwapPool() public {
 
-        console.logString('0');
-
         vm.startPrank(admin);
 
         MockuADToken uAD;
@@ -124,17 +122,16 @@ contract TestManagerFacet is AddManagerFacetSetup {
         IManagerFacet.setGovernanceTokenAddress(address(uGov));
         IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
 
-        address thirdAccount = address(0x5);
-        address fourthAccount = address(0x6);
-        address bondingZeroAccount = address(0x8);
-        address bondingMinAccount = address(0x9);
-        address bondingMaxAccount = address(0x10);
+        address secondAccount = address(0x3);
+        address bondingZeroAccount = address(0x4);
+        address bondingMinAccount = address(0x5);
+        address bondingMaxAccount = address(0x6);
         address curveWhaleAddress = 0x4486083589A063ddEF47EE2E4467B5236C508fDe;
 
         address[6] memory mintings = [
             admin,
             address(diamond),
-            fourthAccount,
+            secondAccount,
             bondingZeroAccount,
             bondingMinAccount,
             bondingMaxAccount
@@ -144,8 +141,6 @@ contract TestManagerFacet is AddManagerFacetSetup {
             deal(address(uAD), mintings[i], 10000e18);
         }
 
-        console.logString('1');
-
         address bondingV1Address = generateAddress("bondingV1", true, 10 ether);
         IManagerFacet.grantRole(UBQ_MINTER_ROLE, bondingV1Address);
         IManagerFacet.grantRole(UBQ_BURNER_ROLE, bondingV1Address);
@@ -154,13 +149,11 @@ contract TestManagerFacet is AddManagerFacetSetup {
 
         vm.stopPrank();
 
-        console.logString('2');
-
         address[4] memory crvDeal = [
             address(diamond),
             bondingMaxAccount,
             bondingMinAccount,
-            fourthAccount
+            secondAccount
         ];
 
         for (uint256 i; i < crvDeal.length; ++i) {
@@ -174,8 +167,6 @@ contract TestManagerFacet is AddManagerFacetSetup {
         address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
         address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
 
-        console.logString('3');
-
         IManagerFacet.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
@@ -184,13 +175,10 @@ contract TestManagerFacet is AddManagerFacetSetup {
             50000000
         );
 
-        console.logString('4');
-
         IMetaPool metapool = IMetaPool(IManagerFacet.getStableSwapMetaPoolAddress());
         address bondingV2Address = generateAddress("bondingV2", true, 10 ether);
         metapool.transfer(address(bondingV2Address), 100e18);
         vm.stopPrank();
 
-        console.logString('5');
     }
 }
