@@ -4,10 +4,14 @@ pragma solidity ^0.8.3;
 
 interface IMetaPool {
     event Transfer(
-        address indexed sender, address indexed receiver, uint256 value
+        address indexed sender,
+        address indexed receiver,
+        uint256 value
     );
     event Approval(
-        address indexed owner, address indexed spender, uint256 value
+        address indexed owner,
+        address indexed spender,
+        uint256 value
     );
     event TokenExchange(
         address indexed buyer,
@@ -52,11 +56,16 @@ interface IMetaPool {
     event CommitNewAdmin(uint256 indexed deadline, address indexed admin);
     event NewAdmin(address indexed admin);
     event CommitNewFee(
-        uint256 indexed deadline, uint256 fee, uint256 admin_fee
+        uint256 indexed deadline,
+        uint256 fee,
+        uint256 admin_fee
     );
     event NewFee(uint256 fee, uint256 admin_fee);
     event RampA(
-        uint256 old_A, uint256 new_A, uint256 initial_time, uint256 future_time
+        uint256 old_A,
+        uint256 new_A,
+        uint256 initial_time,
+        uint256 future_time
     );
     event StopRampA(uint256 A, uint256 t);
 
@@ -74,18 +83,15 @@ interface IMetaPool {
 
     function transfer(address _to, uint256 _value) external returns (bool);
 
-    function transferFrom(address _from, address _to, uint256 _value)
-        external
-        returns (bool);
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    ) external returns (bool);
 
-    function approve(address _spender, uint256 _value)
-        external
-        returns (bool);
+    function approve(address _spender, uint256 _value) external returns (bool);
 
-    function get_previous_balances()
-        external
-        view
-        returns (uint256[2] memory);
+    function get_previous_balances() external view returns (uint256[2] memory);
 
     function get_balances() external view returns (uint256[2] memory);
 
@@ -125,20 +131,28 @@ interface IMetaPool {
         address _receiver
     ) external returns (uint256);
 
-    function get_dy(int128 i, int128 j, uint256 dx)
+    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount)
         external
-        view
         returns (uint256);
 
-    function get_dy(int128 i, int128 j, uint256 dx, uint256[2] memory _balances)
-        external
-        view
-        returns (uint256);
+    function get_dy(
+        int128 i,
+        int128 j,
+        uint256 dx
+    ) external view returns (uint256);
 
-    function get_dy_underlying(int128 i, int128 j, uint256 dx)
-        external
-        view
-        returns (uint256);
+    function get_dy(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256[2] memory _balances
+    ) external view returns (uint256);
+
+    function get_dy_underlying(
+        int128 i,
+        int128 j,
+        uint256 dx
+    ) external view returns (uint256);
 
     function get_dy_underlying(
         int128 i,
@@ -147,13 +161,19 @@ interface IMetaPool {
         uint256[2] memory _balances
     ) external view returns (uint256);
 
-    function exchange(int128 i, int128 j, uint256 dx, uint256 min_dy)
-        external
-        returns (uint256);
+    function exchange(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256 min_dy
+    ) external returns (uint256);
 
-    function exchange_underlying(int128 i, int128 j, uint256 dx, uint256 min_dy)
-        external
-        returns (uint256);
+    function exchange_underlying(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256 min_dy
+    ) external returns (uint256);
 
     function exchange_underlying(
         int128 i,

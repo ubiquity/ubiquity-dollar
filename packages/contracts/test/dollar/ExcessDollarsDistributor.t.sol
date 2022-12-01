@@ -1,14 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {IUniswapV2Router01} from
-    "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
-import {ExcessDollarsDistributor} from
-    "../../src/dollar/ExcessDollarsDistributor.sol";
+import {ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
 import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 
 import "../helpers/LocalTestHelper.sol";
@@ -27,8 +24,9 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
             .twapOracleAddress();
         uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
             .dollarTokenAddress();
-        excessDollarsDistributorAddress =
-            address(new ExcessDollarsDistributor(uADManagerAddress));
+        excessDollarsDistributorAddress = address(
+            new ExcessDollarsDistributor(uADManagerAddress)
+        );
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {
@@ -86,7 +84,9 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         );
         vm.mockCall(
             _metaPoolAddress,
-            abi.encodeWithSelector(IMetaPool.add_liquidity.selector),
+            abi.encodeWithSelector(
+                bytes4(keccak256("add_liquidity(uint256[2],uint256,address)"))
+            ),
             abi.encode(_expectedLiqAmt)
         );
     }
@@ -104,13 +104,15 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         MockuADToken(uADAddress).mint(excessDollarsDistributorAddress, 200e18);
 
         // 10% should be transferred to the treasury address
-        uint256 _before_treasury_bal =
-            MockuADToken(uADAddress).balanceOf(treasuryAddress);
+        uint256 _before_treasury_bal = MockuADToken(uADAddress).balanceOf(
+            treasuryAddress
+        );
 
         ExcessDollarsDistributor(excessDollarsDistributorAddress)
             .distributeDollars();
-        uint256 _after_treasury_bal =
-            MockuADToken(uADAddress).balanceOf(treasuryAddress);
+        uint256 _after_treasury_bal = MockuADToken(uADAddress).balanceOf(
+            treasuryAddress
+        );
         assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
     }
 }
