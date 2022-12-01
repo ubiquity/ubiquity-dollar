@@ -155,6 +155,7 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         selectorsOfManagerFacet.push(managerFacet.getStableSwapMetaPoolAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.getBondingContractAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.getTreasuryAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.grantRole.selector);
 
         selectorsOfManagerFacet.push(managerFacet.initialize.selector);
 
