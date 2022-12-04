@@ -11,7 +11,7 @@ contract TestDiamond is DiamondSetup {
         assertEq(isSupported, true);
     }
 
-    function testHasThreeFacets() public {
+    function testHasFourFacets() public {
         assertEq(facetAddressList.length, 4);
     }
 
@@ -54,25 +54,4 @@ contract TestDiamond is DiamondSetup {
         }
     }
 
-    // Replace supportsInterface function in DiamondLoupeFacet with one in ManagerFacet
-    function testReplaceSupportsInterfaceFunction() public prankAs(owner) {
-        // get supportsInterface selector
-        bytes4[] memory functionSelectors =  new bytes4[](1);
-        functionSelectors[0] = managerFacet.supportsInterface.selector;
-
-        // struct to replace function
-        FacetCut[] memory cutTest1 = new FacetCut[](1);
-        cutTest1[0] =
-            FacetCut({
-            facetAddress: address(managerFacet),
-            action: FacetCutAction.Replace,
-            functionSelectors: functionSelectors
-        });
-
-        // replace function by function on Manager facet
-        ICut.diamondCut(cutTest1, address(0x0), "");
-
-        // check supportsInterface method connected to managerFacet
-        assertEq(address(managerFacet), ILoupe.facetAddress(functionSelectors[0]));
-    }
 }

@@ -246,6 +246,4 @@ contract ManagerFacet is Modifiers {
     function getTreasuryAddress() external view returns (address) {
         return s.treasuryAddress;
     }
-
-    function supportsInterface(bytes4 _interfaceID) external view returns (bool) {}
 }
