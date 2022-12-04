@@ -12,7 +12,7 @@ import {
     UBQ_BURNER_ROLE
 } from "../../../src/manager/libraries/LibAppStorage.sol";
 
-contract TestManagerFacet is AddManagerFacetSetup {
+contract TestManagerFacet is DiamondSetup {
 
     function testCanCallGeneralFunctions() public {
         IManagerFacet.getExcessDollarsDistributor(contract1);
@@ -106,6 +106,14 @@ contract TestManagerFacet is AddManagerFacetSetup {
         address dollarTokenAddress = generateAddress("dollarTokenAddress", true, 10 ether);
         IManagerFacet.setDollarTokenAddress(dollarTokenAddress);
         IManagerFacet.setIncentiveToUAD(user1, contract1);
+    }
+
+    function testShouldSetMinterRoleWhenInitializing() public prankAs(admin) {
+        assertEq(IManagerFacet.hasRole(UBQ_MINTER_ROLE, admin), true);
+    }
+
+    function testShouldInitializeDollarTokenAddress() public prankAs(admin) {
+        assertEq(IManagerFacet.getDollarTokenAddress(), address(diamond));
     }
 
     function testShouldDeployStableSwapPool() public {

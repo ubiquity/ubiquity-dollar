@@ -17,10 +17,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
     DiamondCutFacet dCutFacet;
     DiamondLoupeFacet dLoupeFacet;
     OwnershipFacet ownerFacet;
+    ManagerFacet managerFacet;
+    DiamondInit dInit;
 
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
+    ManagerFacet IManagerFacet;
 
     string[] facetNames;
     address[] facetAddressList;
@@ -57,71 +60,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfOwnershipFacet.push(IERC173.transferOwnership.selector);
         selectorsOfOwnershipFacet.push(IERC173.owner.selector);
 
-        //deploy facets
-        dCutFacet = new DiamondCutFacet();
-        dLoupeFacet = new DiamondLoupeFacet();
-        ownerFacet = new OwnershipFacet();
-        DiamondInit dInit = new DiamondInit();
-
-        facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet"];
-
-        // diamod arguments
-        DiamondArgs memory _args = DiamondArgs({
-            owner: owner,
-            init: address(dInit),
-            initCalldata: abi.encodeWithSelector(DiamondInit.init.selector)
-        });
-
-        FacetCut[] memory diamondCut = new FacetCut[](3);
-
-        diamondCut[0] = FacetCut ({
-            facetAddress: address(dCutFacet),
-            action: FacetCutAction.Add,
-            functionSelectors: selectorsOfDiamondCutFacet
-        });
-
-        diamondCut[1] = (
-            FacetCut({
-            facetAddress: address(dLoupeFacet),
-            action: FacetCutAction.Add,
-            functionSelectors: selectorsOfDiamondLoupeFacet
-            })
-        );
-
-        diamondCut[2] = (
-            FacetCut({
-            facetAddress: address(ownerFacet),
-            action: FacetCutAction.Add,
-            functionSelectors: selectorsOfOwnershipFacet
-            })
-        );
-
-        // deploy diamond
-        vm.startPrank(owner);
-        diamond = new Diamond(_args, diamondCut);
-		vm.stopPrank();
-
-        // initialise interfaces
-        ILoupe = IDiamondLoupe(address(diamond));
-        ICut = IDiamondCut(address(diamond));
-
-        // get all addresses
-        facetAddressList = ILoupe.facetAddresses();
-    }
-}
-
-// tests proper upgrade of diamond when adding a facet
-abstract contract AddManagerFacetSetup is DiamondSetup {
-
-    ManagerFacet managerFacet;
-    ManagerFacet IManagerFacet;
-    
-    function setUp() public virtual override {
-        super.setUp();
-        //deploy ManagerFacet
-        managerFacet = new ManagerFacet();
-        IManagerFacet = ManagerFacet(address(diamond));
-
         selectorsOfManagerFacet.push(managerFacet.setDollarTokenAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.setCreditTokenAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.setDebtCouponAddress.selector);
@@ -156,71 +94,70 @@ abstract contract AddManagerFacetSetup is DiamondSetup {
         selectorsOfManagerFacet.push(managerFacet.getBondingContractAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.getTreasuryAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.grantRole.selector);
+        selectorsOfManagerFacet.push(managerFacet.hasRole.selector);
 
-        selectorsOfManagerFacet.push(managerFacet.initialize.selector);
-
-        // array of functions to add
-        FacetCut[] memory facetCut = new FacetCut[](1);
-        facetCut[0] = FacetCut({
-            facetAddress: address(managerFacet),
-            action: FacetCutAction.Add,
-            functionSelectors: selectorsOfManagerFacet
-        });
-
-        // add functions to diamond
-        vm.startPrank(owner);
-        ICut.diamondCut(facetCut, address(0x0), "");
-        IManagerFacet.initialize(admin);
-		vm.stopPrank();
-    }
-}
-
-abstract contract CacheBugSetup is DiamondSetup {
-
-    ManagerFacet managerFacet;
-
-    bytes4 ownerSelector = hex'8da5cb5b';
-    bytes4[] selectors;
-
-    function setUp() public virtual override {
-        super.setUp();
+        //deploy facets
+        dCutFacet = new DiamondCutFacet();
+        dLoupeFacet = new DiamondLoupeFacet();
+        ownerFacet = new OwnershipFacet();
         managerFacet = new ManagerFacet();
+        dInit = new DiamondInit();
+        
 
-        selectorsOfManagerFacet.push(managerFacet.setDollarTokenAddress.selector);
-        selectorsOfManagerFacet.push(managerFacet.setCreditTokenAddress.selector);
-        selectorsOfManagerFacet.push(managerFacet.getDollarTokenAddress.selector);
-        selectorsOfManagerFacet.push(managerFacet.getCreditTokenAddress.selector);
-        selectorsOfManagerFacet.push(managerFacet.getExcessDollarsDistributor.selector);
-        selectorsOfManagerFacet.push(managerFacet.initialize.selector);
+        facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet", "ManagerFacet"];
 
-        // array of functions to add
-        FacetCut[] memory facetCut = new FacetCut[](1);
-        facetCut[0] = FacetCut({
-            facetAddress: address(managerFacet),
-            action: FacetCutAction.Add,
-            functionSelectors: selectorsOfManagerFacet
+        // diamod arguments
+        DiamondArgs memory _args = DiamondArgs({
+            owner: owner,
+            init: address(dInit),
+            initCalldata: abi.encodeWithSignature("init(address)", admin)
         });
 
-        // add functions to diamond
+        FacetCut[] memory diamondCut = new FacetCut[](4);
+
+        diamondCut[0] = (
+            FacetCut ({
+                facetAddress: address(dCutFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfDiamondCutFacet
+            })
+        );
+
+        diamondCut[1] = (
+            FacetCut({
+                facetAddress: address(dLoupeFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfDiamondLoupeFacet
+            })
+        );
+
+        diamondCut[2] = (
+            FacetCut({
+                facetAddress: address(ownerFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfOwnershipFacet
+            })
+        );
+
+        diamondCut[3] = (
+            FacetCut({
+                facetAddress: address(managerFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfManagerFacet
+            })
+        );
+
+        // deploy diamond
         vm.startPrank(owner);
-        ICut.diamondCut(facetCut, address(0x0), "");
-        ManagerFacet(address(diamond)).initialize(admin);
+        diamond = new Diamond(_args, diamondCut);
 		vm.stopPrank();
 
-        // Remove selectors from diamond
-        bytes4[] memory newSelectors = new bytes4[](3);
+        // initialise interfaces
+        ILoupe = IDiamondLoupe(address(diamond));
+        ICut = IDiamondCut(address(diamond));
+        IManagerFacet = ManagerFacet(address(diamond));
 
-        newSelectors[0] = ownerSelector;
-        newSelectors[1] = managerFacet.setDollarTokenAddress.selector;
-        newSelectors[2] = managerFacet.getCreditTokenAddress.selector;
-
-        facetCut[0] = FacetCut({
-            facetAddress: address(0x0),
-            action: FacetCutAction.Remove,
-            functionSelectors: newSelectors
-        });
-
-        vm.prank(owner);
-        ICut.diamondCut(facetCut, address(0x0), "");
+        // get all addresses
+        facetAddressList = ILoupe.facetAddresses();
     }
 }

@@ -6,22 +6,42 @@ import { IDiamondLoupe } from "../interfaces/IDiamondLoupe.sol";
 import { IDiamondCut } from "../interfaces/IDiamondCut.sol";
 import { IERC173 } from "../interfaces/IERC173.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
+import {
+    Modifiers,
+    UBQ_MINTER_ROLE,
+    PAUSER_ROLE,
+    COUPON_MANAGER_ROLE,
+    BONDING_MANAGER_ROLE,
+    INCENTIVE_MANAGER_ROLE,
+    UBQ_TOKEN_MANAGER_ROLE    
+} from "../libraries/LibAppStorage.sol";
+import { AccessControlStorage } from "../libraries/AccessControlStorage.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
 // of your diamond. Add parameters to the init funciton if you need to.
 
-contract DiamondInit {    
+contract DiamondInit is Modifiers {    
 
     // You can add parameters to this function in order to pass in 
     // data to set your own state variables
-    function init() external {
+    function init(address _admin) external {
         // adding ERC165 data
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         ds.supportedInterfaces[type(IERC165).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
         ds.supportedInterfaces[type(IERC173).interfaceId] = true;
+
+        _grantRole(AccessControlStorage.DEFAULT_ADMIN_ROLE, _admin);
+        _grantRole(UBQ_MINTER_ROLE, _admin);
+        _grantRole(PAUSER_ROLE, _admin);
+        _grantRole(COUPON_MANAGER_ROLE, _admin);
+        _grantRole(BONDING_MANAGER_ROLE, _admin);
+        _grantRole(INCENTIVE_MANAGER_ROLE, _admin);
+        _grantRole(UBQ_TOKEN_MANAGER_ROLE, address(this));
+
+        s.dollarTokenAddress = address(this);
 
         // add your own state variables 
         // EIP-2535 specifies that the `diamondCut` function takes two optional 

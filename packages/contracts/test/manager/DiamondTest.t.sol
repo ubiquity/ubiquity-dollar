@@ -12,7 +12,7 @@ contract TestDiamond is DiamondSetup {
     }
 
     function testHasThreeFacets() public {
-        assertEq(facetAddressList.length, 3);
+        assertEq(facetAddressList.length, 4);
     }
 
     function testFacetsHaveCorrectSelectors() public {
@@ -31,34 +31,27 @@ contract TestDiamond is DiamondSetup {
     }
 
     function testSelectorsAssociatedWithCorrectFacet() public {
+        console.log('facetAddressList', facetAddressList.length);
         for (uint i = 0; i < facetAddressList.length; i++) {
+            console.log('facetNames', i, facetNames[i]);
             if(compareStrings(facetNames[i], 'DiamondCutFacet')) {
-                for (uint j = 0; i < selectorsOfDiamondCutFacet.length; i++) {
+                for (uint j = 0; j < selectorsOfDiamondCutFacet.length; j++) {
                     assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfDiamondCutFacet[j]));
                 }
             } else if (compareStrings(facetNames[i], 'DiamondLoupeFacet')) {
-                for (uint j = 0; i < selectorsOfDiamondLoupeFacet.length; i++) {
+                for (uint j = 0; j < selectorsOfDiamondLoupeFacet.length; j++) {
                     assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfDiamondLoupeFacet[j]));
                 }
             } else if (compareStrings(facetNames[i], 'OwnershipFacet')) {
-                for (uint j = 0; i < selectorsOfOwnershipFacet.length; i++) {
+                for (uint j = 0; j < selectorsOfOwnershipFacet.length; j++) {
                     assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfOwnershipFacet[j]));
                 }
             } else if (compareStrings(facetNames[i], 'ManagerFacet')) {
-                for (uint j = 0; i < selectorsOfManagerFacet.length; i++) {
+                for (uint j = 0; j < selectorsOfManagerFacet.length; j++) {
                     assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfManagerFacet[j]));
                 }
             }
         }
-    }
-}
-
-contract TestAddManagerFacet is AddManagerFacetSetup {
-
-    function testAddManagerFacetFunctions() public {
-        // check if functions added to diamond
-        bytes4[] memory fromLoupeFacet = ILoupe.facetFunctionSelectors(address(managerFacet));
-        assertTrue(sameMembers(fromLoupeFacet, selectorsOfManagerFacet));
     }
 
     // Replace supportsInterface function in DiamondLoupeFacet with one in ManagerFacet
@@ -81,21 +74,5 @@ contract TestAddManagerFacet is AddManagerFacetSetup {
 
         // check supportsInterface method connected to managerFacet
         assertEq(address(managerFacet), ILoupe.facetAddress(functionSelectors[0]));
-    }
-}
-
-contract TestCacheBug is CacheBugSetup {
-
-    function testNoCacheBug() public {
-        bytes4[] memory fromLoupeSelectors = ILoupe.facetFunctionSelectors(address(managerFacet));
-
-        assertTrue(containsElement(fromLoupeSelectors, managerFacet.getDollarTokenAddress.selector));
-        assertTrue(containsElement(fromLoupeSelectors, managerFacet.setCreditTokenAddress.selector));
-        assertTrue(containsElement(fromLoupeSelectors, managerFacet.getExcessDollarsDistributor.selector));
-        assertTrue(containsElement(fromLoupeSelectors, managerFacet.initialize.selector));
-
-        assertFalse(containsElement(fromLoupeSelectors, ownerSelector));
-        assertFalse(containsElement(fromLoupeSelectors, managerFacet.setDollarTokenAddress.selector));
-        assertFalse(containsElement(fromLoupeSelectors, managerFacet.getCreditTokenAddress.selector));
     }
 }

@@ -23,16 +23,6 @@ import "../../dollar/TWAPOracle.sol";
 
 contract ManagerFacet is Modifiers {
 
-    function initialize(address _admin) external onlyOwner {
-        _grantRole(AccessControlStorage.DEFAULT_ADMIN_ROLE, _admin);
-        _grantRole(UBQ_MINTER_ROLE, _admin);
-        _grantRole(PAUSER_ROLE, _admin);
-        _grantRole(COUPON_MANAGER_ROLE, _admin);
-        _grantRole(BONDING_MANAGER_ROLE, _admin);
-        _grantRole(INCENTIVE_MANAGER_ROLE, _admin);
-        _grantRole(UBQ_TOKEN_MANAGER_ROLE, address(this));
-    }
-
     function setDollarTokenAddress(address _dollarTokenAddress)
         external
         onlyAdmin
