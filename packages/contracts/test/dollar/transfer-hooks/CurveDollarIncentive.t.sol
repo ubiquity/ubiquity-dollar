@@ -69,7 +69,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
-        IERC20 govToken = IERC20(
+        IERC20 governanceToken = IERC20(
             UbiquityDollarManager(dollarManagerAddress)
                 .governanceTokenAddress()
         );
@@ -78,7 +78,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         address mockReceiver = address(0x111);
 
         // 1. do nothing if the target address is included to exempt list
-        uint256 init_balance = govToken.balanceOf(mockReceiver);
+        uint256 init_balance = governanceToken.balanceOf(mockReceiver);
         vm.prank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
             mockReceiver, true
@@ -89,11 +89,11 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
             stableSwapPoolAddress, mockReceiver, address(0), 100e18
         );
 
-        uint256 last_balance = govToken.balanceOf(mockReceiver);
+        uint256 last_balance = governanceToken.balanceOf(mockReceiver);
         assertEq(last_balance, init_balance);
 
         // 2. do nothing if buyIncentive is off
-        init_balance = govToken.balanceOf(mockReceiver);
+        init_balance = governanceToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
             mockReceiver, false
@@ -106,12 +106,12 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
             stableSwapPoolAddress, mockReceiver, address(0), 100e18
         );
 
-        last_balance = govToken.balanceOf(mockReceiver);
+        last_balance = governanceToken.balanceOf(mockReceiver);
         assertEq(last_balance, init_balance);
 
         // 3. do nothing if no incentive
         mockInternalFuncs(1e18);
-        init_balance = govToken.balanceOf(mockReceiver);
+        init_balance = governanceToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
             mockReceiver, false
@@ -124,11 +124,11 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
             stableSwapPoolAddress, mockReceiver, address(0), 100e18
         );
 
-        last_balance = govToken.balanceOf(mockReceiver);
+        last_balance = governanceToken.balanceOf(mockReceiver);
         assertEq(last_balance, init_balance);
 
         // 4. mint the incentive amount of tokens to the target address
-        init_balance = govToken.balanceOf(mockReceiver);
+        init_balance = governanceToken.balanceOf(mockReceiver);
         mockInternalFuncs(5e17);
         vm.prank(admin);
         UbiquityDollarManager(dollarManagerAddress).grantRole(
@@ -139,7 +139,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
             stableSwapPoolAddress, mockReceiver, address(0), 100e18
         );
 
-        last_balance = govToken.balanceOf(mockReceiver);
+        last_balance = governanceToken.balanceOf(mockReceiver);
         assertEq(last_balance - init_balance, 50e18);
     }
 
@@ -147,7 +147,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
-        IERC20 govToken = IERC20(
+        IERC20 governanceToken = IERC20(
             UbiquityDollarManager(dollarManagerAddress)
                 .governanceTokenAddress()
         );

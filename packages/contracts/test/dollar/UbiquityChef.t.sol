@@ -97,7 +97,7 @@ contract DepositStateTest is DepositState {
 
     function testWithdraw(uint256 amount, uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
-        uint256 preBal = govToken.balanceOf(fourthAccount);
+        uint256 preBal = governanceToken.balanceOf(fourthAccount);
         (uint256 lastRewardBlock,) = ubiquityChef.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
@@ -111,7 +111,7 @@ contract DepositStateTest is DepositState {
         emit Withdraw(fourthAccount, amount, fourthID);
         vm.prank(admin);
         ubiquityChef.withdraw(fourthAccount, amount, fourthID);
-        assertEq(preBal + userReward, govToken.balanceOf(fourthAccount));
+        assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
     }
 
     function testGetRewards(uint256 blocks) public {

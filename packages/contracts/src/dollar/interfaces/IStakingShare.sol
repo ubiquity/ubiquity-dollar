@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "./IERC1155Ubiquity.sol";
 
 /// @title ERC1155 Ubiquity preset interface
-/// @author Ubiquity Dollar
+/// @author Ubiquity DAO
 interface IStakingShare is IERC1155Ubiquity {
     struct Stake {
         // address of the minter

@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title ERC20 Ubiquity preset interface
-/// @author Ubiquity Dollar
+/// @author Ubiquity DAO
 interface IERC20Ubiquity is IERC20 {
     // ----------- Events -----------
     event Minting(

@@ -8,7 +8,7 @@ import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 /// @title ERC1155 Ubiquity preset
-/// @author Ubiquity Dollar
+/// @author Ubiquity DAO
 /// @notice ERC1155 with :
 /// - ERC1155 minter, burner and pauser
 /// - TotalSupply per id

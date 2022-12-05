@@ -45,7 +45,7 @@ contract DollarMintExcess is IDollarMintExcess {
             IERC20Ubiquity(manager.dollarTokenAddress()).safeTransfer(
                 treasuryAddress, fiftyPercent
             );
-            // convert Ubiquity Dollar to GovernanceToken-UbiquityDollar LP on sushi and burn them
+            // convert Ubiquity Dollar to GovernanceToken-DollarToken LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
             // convert remaining Ubiquity Dollar to curve LP tokens
             // and transfer the curve LP tokens to the staking contract
@@ -81,13 +81,13 @@ contract DollarMintExcess is IDollarMintExcess {
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             address(_router), amount
         );
-        uint256 amountGovTokens = _swapDollarsForGovernance(amountDollars);
+        uint256 amountGovernanceTokens = _swapDollarsForGovernance(amountDollars);
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router), 0
         );
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
-            address(_router), amountGovTokens
+            address(_router), amountGovernanceTokens
         );
 
         // deposit liquidity and transfer to zero address (burn)
@@ -95,7 +95,7 @@ contract DollarMintExcess is IDollarMintExcess {
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
             amountDollars.toUInt(),
-            amountGovTokens,
+            amountGovernanceTokens,
             0,
             0,
             address(0),

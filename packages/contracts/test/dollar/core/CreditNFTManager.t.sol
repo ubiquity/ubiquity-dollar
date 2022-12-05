@@ -28,7 +28,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
     uint256 creditNFTLengthBlocks = 100;
     address twapOracleAddress;
     address creditNFTAddress;
-    address govTokenAddress;
+    address governanceTokenAddress;
     address creditTokenAddress;
     address dollarMintCalculatorAddress;
 
@@ -47,7 +47,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
         ).creditCalculatorAddress();
         creditNFTAddress = UbiquityDollarManager(dollarManagerAddress)
             .creditNFTAddress();
-        govTokenAddress = UbiquityDollarManager(dollarManagerAddress)
+        governanceTokenAddress = UbiquityDollarManager(dollarManagerAddress)
             .governanceTokenAddress();
         creditTokenAddress = UbiquityDollarManager(
             dollarManagerAddress
@@ -174,15 +174,15 @@ contract CreditNFTManagerTest is LocalTestHelper {
         assertEq(creditAmount, 10e18);
     }
 
-    function test_burnExpiredCreditNFTForGovRevertsIfNotExpired() public {
+    function test_burnExpiredCreditNFTForGovernanceRevertsIfNotExpired() public {
         vm.roll(1000);
         vm.expectRevert("Credit NFT has not expired");
-        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGov(
+        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGovernance(
             2000, 1e18
         );
     }
 
-    function test_burnExpiredCreditNFTForGovRevertsIfNotEnoughBalance() public {
+    function test_burnExpiredCreditNFTForGovernanceRevertsIfNotEnoughBalance() public {
         address mockMessageSender = address(0x123);
         vm.prank(admin);
         MockCreditNFT(creditNFTAddress).mintCreditNFT(
@@ -191,12 +191,12 @@ contract CreditNFTManagerTest is LocalTestHelper {
         vm.roll(1000);
         vm.prank(mockMessageSender);
         vm.expectRevert("User not enough Credit NFT");
-        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGov(
+        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGovernance(
             500, 1e18
         );
     }
 
-    function test_burnExpiredCreditNFTForGovWorks() public {
+    function test_burnExpiredCreditNFTForGovernanceWorks() public {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
@@ -209,12 +209,12 @@ contract CreditNFTManagerTest is LocalTestHelper {
         vm.stopPrank();
         vm.roll(1000);
         vm.prank(mockMessageSender);
-        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGov(
+        CreditNFTManager(creditNFTManagerAddress).burnExpiredCreditNFTForGovernance(
             expiryBlockNumber, 1e18
         );
-        uint256 govBalance =
-            UbiquityGovernanceToken(govTokenAddress).balanceOf(mockMessageSender);
-        assertEq(govBalance, 5e17);
+        uint256 governanceBalance =
+            UbiquityGovernanceToken(governanceTokenAddress).balanceOf(mockMessageSender);
+        assertEq(governanceBalance, 5e17);
     }
 
     function test_burnCreditNFTForCreditRevertsIfExpired() public {

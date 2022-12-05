@@ -210,10 +210,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @dev let Credit NFT holder burn expired Credit NFT for Governance Token. Doesn't make TWAP > 1 check.
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
-    /// @return govAmount amount of Governance Token minted to Credit NFT holder
-    function burnExpiredCreditNFTForGov(uint256 id, uint256 amount)
+    /// @return governanceAmount amount of Governance Token minted to Credit NFT holder
+    function burnExpiredCreditNFTForGovernance(uint256 id, uint256 amount)
         public
-        returns (uint256 govAmount)
+        returns (uint256 governanceAmount)
     {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
         CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
@@ -227,10 +227,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         creditNFT.burnCreditNFT(msg.sender, amount, id);
 
         // Mint Governance Token to this contract. Transfer Governance Token to msg.sender i.e. Credit NFT holder
-        IERC20Ubiquity govToken =
+        IERC20Ubiquity governanceToken =
             IERC20Ubiquity(manager.governanceTokenAddress());
-        govAmount = amount / expiredCreditNFTConversionRate;
-        govToken.mint(msg.sender, govAmount);
+        governanceAmount = amount / expiredCreditNFTConversionRate;
+        governanceToken.mint(msg.sender, governanceAmount);
     }
 
     // TODO should we leave it ?

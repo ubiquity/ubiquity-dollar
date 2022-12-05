@@ -9,7 +9,7 @@ import "../interfaces/IIncentive.sol";
 import "../libs/ABDKMathQuad.sol";
 
 /// @title Curve trading incentive contract
-/// @author Ubiquity Protocol
+/// @author Ubiquity DAO
 /// @dev incentives
 contract CurveDollarIncentive is IIncentive {
     using ABDKMathQuad for uint256;

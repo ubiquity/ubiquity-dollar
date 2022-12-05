@@ -60,8 +60,8 @@ abstract contract LocalTestHelper is Test {
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token
-        UbiquityGovernanceToken _govToken = new UbiquityGovernanceToken(address(_manager));
-        _manager.setGovernanceTokenAddress(address(_govToken));
+        UbiquityGovernanceToken _governanceToken = new UbiquityGovernanceToken(address(_manager));
+        _manager.setGovernanceTokenAddress(address(_governanceToken));
 
         // deploy CreditNFTRedemptionCalculator
         MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator =

@@ -8,7 +8,7 @@ import "./core/UbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 
 /// @title ERC20 Ubiquity preset
-/// @author Ubiquity Dollar
+/// @author Ubiquity DAO
 /// @notice ERC20 with :
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit

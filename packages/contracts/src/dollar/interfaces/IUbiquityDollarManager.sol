@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/access/IAccessControl.sol";
 
 /// @title Ubiquity Dollar Manager interface
-/// @author Ubiquity Dollar Manager
+/// @author Ubiquity DAO
 interface IUbiquityDollarManager is IAccessControl {
     // TODO Add a generic setter for extra addresses that needs to be linked
 

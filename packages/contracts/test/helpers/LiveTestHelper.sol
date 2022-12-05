@@ -50,11 +50,11 @@ contract LiveTestHelper is Test {
     CreditNFTManager creditNFTManager;
     UbiquityCreditToken creditToken;
     DollarMintExcess dollarMintExcess;
-    SushiSwapPool sushiUGOVPool;
+    SushiSwapPool sushiGovernancePool;
     IMetaPool metapool;
 
     MockDollarToken dollarToken;
-    UbiquityGovernanceToken govToken;
+    UbiquityGovernanceToken governanceToken;
 
     BondingShare stakingShareV1;
 
@@ -119,8 +119,8 @@ contract LiveTestHelper is Test {
         ubiquityFormulas = new UbiquityFormulas();
         manager.setFormulasAddress(address(ubiquityFormulas));
 
-        govToken = new UbiquityGovernanceToken(address(manager));
-        manager.setGovernanceTokenAddress(address(govToken));
+        governanceToken = new UbiquityGovernanceToken(address(manager));
+        manager.setGovernanceTokenAddress(address(governanceToken));
         //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
 
         stakingV1.setBlockCountInAWeek(420);
@@ -130,20 +130,20 @@ contract LiveTestHelper is Test {
 
         manager.setTreasuryAddress(treasury);
 
-        deal(address(govToken), thirdAccount, 100000e18);
+        deal(address(governanceToken), thirdAccount, 100000e18);
         deal(address(dollarToken), thirdAccount, 1000000e18);
 
-        sushiUGOVPool = new SushiSwapPool(address(manager));
-        manager.setSushiSwapPoolAddress(address(sushiUGOVPool));
+        sushiGovernancePool = new SushiSwapPool(address(manager));
+        manager.setSushiSwapPoolAddress(address(sushiGovernancePool));
 
         vm.stopPrank();
 
         vm.startPrank(thirdAccount);
         dollarToken.approve(address(router), 1000000e18);
-        govToken.approve(address(router), 100000e18);
+        governanceToken.approve(address(router), 100000e18);
         router.addLiquidity(
             address(dollarToken),
-            address(govToken),
+            address(governanceToken),
             1000000e18,
             100000e18,
             990000e18,
