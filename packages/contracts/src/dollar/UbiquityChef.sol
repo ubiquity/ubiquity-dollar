@@ -71,7 +71,7 @@ contract UbiquityChef is ReentrancyGuard {
     // ----------- Modifiers -----------
     modifier onlyTokenManager() {
         require(
-            manager.hasRole(manager.GOV_TOKEN_MANAGER_ROLE(), msg.sender),
+            manager.hasRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), msg.sender),
             "MasterChef: not Governance Token manager"
         );
         _;

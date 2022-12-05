@@ -220,7 +220,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         address burner = address(0x2);
         vm.prank(admin);
         UbiquityDollarManager(dollar_manager_addr).grantRole(
-            keccak256("GOV_TOKEN_BURNER_ROLE"), burner
+            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"), burner
         );
         // admin pauses contract
         vm.prank(admin);
@@ -241,7 +241,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         address burner = address(0x2);
         vm.prank(admin);
         UbiquityDollarManager(dollar_manager_addr).grantRole(
-            keccak256("GOV_TOKEN_BURNER_ROLE"), burner
+            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"), burner
         );
         // burn 50 tokens for user
         vm.prank(burner);

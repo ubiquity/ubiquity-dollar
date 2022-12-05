@@ -10,7 +10,7 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function INCENTIVE_MANAGER_ROLE() external view returns (bytes32);
 
-    function GOV_TOKEN_MINTER_ROLE() external view returns (bytes32);
+    function GOVERNANCE_TOKEN_MINTER_ROLE() external view returns (bytes32);
 
     function creditTokenAddress() external view returns (address);
 
