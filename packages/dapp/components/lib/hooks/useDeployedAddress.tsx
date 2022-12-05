@@ -1,11 +1,13 @@
 // @dev you need to run a build to generate these fixtures.
 import contractDeployments from "@ubiquity/contracts/deployments.json";
+import { useNetwork } from "wagmi";
 
 const LOCAL_CHAIN = 31337;
 const deployedContracts: Record<string, any> = contractDeployments;
 
 const useDeployedAddress = (...names: string[]): string[] => {
-  const chainId: number = typeof window === "undefined" ? null : window?.ethereum?.networkVersion || LOCAL_CHAIN;
+  const { chain } = useNetwork();
+  const chainId: number = chain?.id || LOCAL_CHAIN;
   if (chainId) {
     const record = deployedContracts[chainId.toString()] ?? {};
 
