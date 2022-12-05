@@ -13,7 +13,7 @@ contract ZeroState is LiveTestHelper {
         address indexed user, uint256 amount, uint256 indexed stakingShareId
     );
 
-    event UGOVPerBlockModified(uint256 indexed uGOVPerBlock);
+    event GovernancePerBlockModified(uint256 indexed governancePerBlock);
 
     event MinPriceDiffToUpdateMultiplierModified(
         uint256 indexed minPriceDiffToUpdateMultiplier
@@ -27,18 +27,18 @@ contract ZeroState is LiveTestHelper {
 }
 
 contract ZeroStateTest is ZeroState {
-    function testSetUGOVPerBlock(uint256 uGOVPerBlock) public {
+    function testSetGovernancePerBlock(uint256 governancePerBlock) public {
         vm.expectEmit(true, false, false, true, address(ubiquityChef));
-        emit UGOVPerBlockModified(uGOVPerBlock);
+        emit GovernancePerBlockModified(governancePerBlock);
         vm.prank(admin);
-        ubiquityChef.setUGOVPerBlock(uGOVPerBlock);
-        assertEq(ubiquityChef.uGOVPerBlock(), uGOVPerBlock);
+        ubiquityChef.setGovernancePerBlock(governancePerBlock);
+        assertEq(ubiquityChef.governancePerBlock(), governancePerBlock);
     }
 
-    function testSetUGOVDiv(uint256 div) public {
+    function testSetGovernanceDiv(uint256 div) public {
         vm.prank(admin);
-        ubiquityChef.setUGOVShareForTreasury(div);
-        assertEq(ubiquityChef.uGOVDivider(), div);
+        ubiquityChef.setGovernanceShareForTreasury(div);
+        assertEq(ubiquityChef.governanceDivider(), div);
     }
 
     function testSetMinPriceDiff(uint256 minPriceDiff) public {
@@ -62,8 +62,8 @@ contract ZeroStateTest is ZeroState {
         emit Deposit(fourthAccount, shares, id);
         ubiquityChef.deposit(fourthAccount, shares, id);
         vm.stopPrank();
-        (, uint256 accuGov) = ubiquityChef.pool();
-        uint256[2] memory info1 = [shares, (shares * accuGov) / 1e12];
+        (, uint256 accGovernance) = ubiquityChef.pool();
+        uint256[2] memory info1 = [shares, (shares * accGovernance) / 1e12];
         uint256[2] memory info2 = ubiquityChef.getStakingShareInfo(id);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
@@ -103,9 +103,9 @@ contract DepositStateTest is DepositState {
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
         uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 uGOVPerShare = (reward * 1e12) / shares;
-        uint256 userReward = (shares * uGOVPerShare) / 1e12;
-        console.log("uGov Reward to User", userReward);
+        uint256 governancePerShare = (reward * 1e12) / shares;
+        uint256 userReward = (shares * governancePerShare) / 1e12;
+        console.log("Governance Reward to User", userReward);
         amount = bound(amount, 1, shares);
         vm.expectEmit(true, true, true, true, address(ubiquityChef));
         emit Withdraw(fourthAccount, amount, fourthID);
@@ -122,8 +122,8 @@ contract DepositStateTest is DepositState {
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
         uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 uGOVPerShare = (reward * 1e12) / shares;
-        uint256 userReward = (shares * uGOVPerShare) / 1e12;
+        uint256 governancePerShare = (reward * 1e12) / shares;
+        uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
         uint256 rewardSent = ubiquityChef.getRewards(1);
         assertEq(userReward, rewardSent);
@@ -135,7 +135,7 @@ contract DepositStateTest is DepositState {
         ubiquityChef.getRewards(1);
     }
 
-    function testPendingUGOV(uint256 blocks) public {
+    function testPendingGovernance(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
         (uint256 lastRewardBlock,) = ubiquityChef.pool();
@@ -143,11 +143,11 @@ contract DepositStateTest is DepositState {
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
         uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 uGOVPerShare = (reward * 1e12) / shares;
-        uint256 userPending = (shares * uGOVPerShare) / 1e12;
+        uint256 governancePerShare = (reward * 1e12) / shares;
+        uint256 userPending = (shares * governancePerShare) / 1e12;
 
-        uint256 pendingUgov = ubiquityChef.pendingUGOV(1);
-        assertEq(userPending, pendingUgov);
+        uint256 pendingGovernance = ubiquityChef.pendingGovernance(1);
+        assertEq(userPending, pendingGovernance);
     }
 
     function testGetStakingShareInfo() public {

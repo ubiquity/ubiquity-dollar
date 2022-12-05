@@ -90,15 +90,15 @@ contract UbiquityFormulas {
         _priceUBOND = r.mul(t).toUInt();
     }
 
-    /// @dev formula ugov multiply
-    /// @param _multiplier , initial ugov min multiplier
+    /// @dev formula Governance Token multiply
+    /// @param _multiplier , initial Governance Token min multiplier
     /// @param _price , current share price
-    /// @return _newMultiplier , new ugov min multiplier
+    /// @return _newMultiplier , new Governance Token min multiplier
     /// @notice new_multiplier = multiplier * ( 1.05 / (1 + abs( 1 - price ) ) )
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function ugovMultiply(uint256 _multiplier, uint256 _price)
+    function governanceMultiply(uint256 _multiplier, uint256 _price)
         public
         pure
         returns (uint256 _newMultiplier)

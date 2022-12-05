@@ -238,7 +238,7 @@ contract LiveTestHelper is Test {
         manager.grantRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), admin);
         manager.grantRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), managerAddress);
 
-        ubiquityChef.setUGOVPerBlock(10e18);
+        ubiquityChef.setGovernancePerBlock(10e18);
 
         vm.stopPrank();
 
