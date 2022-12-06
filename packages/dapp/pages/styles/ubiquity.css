@@ -458,3 +458,8 @@ aside {
 #CommitURL:hover {
   opacity: 1;
 }
+
+#__CONNECTKIT__ svg {
+  max-height: unset;
+  vertical-align: unset;
+}
