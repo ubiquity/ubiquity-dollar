@@ -53,15 +53,17 @@ export default function Layout({ children }: LayoutProps) {
           <Inventory />
         </div>
 
-        {/* frontend version with a URL to commit hash, VERCEL_GIT_COMMIT_SHA is only available in production build */}
-        <div id="CommitURL">
-          <a
-            href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.VERCEL_GIT_COMMIT_SHA}`}
-            target="_blank"
-          >
-            {packageConfig.version}
-          </a>
-        </div>
+        {/* frontend version with a URL to commit hash, COMMIT_REF is only available in production netlify build */}
+        {process.env.COMMIT_REF && (
+          <div id="CommitURL">
+            <a
+              href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.COMMIT_REF}`}
+              target="_blank"
+            >
+              {process.env.COMMIT_REF.substring(0,8)}
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );
