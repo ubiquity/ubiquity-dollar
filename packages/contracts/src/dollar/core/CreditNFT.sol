@@ -53,7 +53,7 @@ contract CreditNFT is ERC1155Ubiquity {
 
         //insert new relevant block number if it doesn't exist in our list
         // (linked list implementation won't insert if dupe)
-        _sortedBlockNumbers.pushBack(expiryBlockNumber);
+        require(_sortedBlockNumbers.pushBack(expiryBlockNumber));
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
@@ -94,14 +94,14 @@ contract CreditNFT is ERC1155Ubiquity {
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {
             if (currentBlockNumber > block.number) {
                 //put the key back in since we popped, and end loop
-                _sortedBlockNumbers.pushFront(currentBlockNumber);
+                require(_sortedBlockNumbers.pushFront(currentBlockNumber));
                 reachedEndOfExpiredKeys = true;
             } else {
                 //update tally and remove key from blocks and map
                 _totalOutstandingDebt =
                     _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
-                _sortedBlockNumbers.remove(currentBlockNumber);
+                require(_sortedBlockNumbers.remove(currentBlockNumber));
             }
             currentBlockNumber = _sortedBlockNumbers.popFront();
         }
