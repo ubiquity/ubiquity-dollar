@@ -29,14 +29,14 @@ contract MockMetaPool {
     }
 
     function get_twap_balances(
-        uint256[2] memory _first_balances,
-        uint256[2] memory _last_balances,
-        uint256 _time_elapsed
+        //uint256[2] memory _first_balances,
+        //uint256[2] memory _last_balances,
+        //uint256 _time_elapsed
     ) external view returns (uint256[2] memory) {
         return balances;
     }
 
-    function get_dy(int128 i, int128 j, uint256 dx, uint256[2] memory _balances)
+    function get_dy(int128 i, int128 j)
         external
         view
         returns (uint256)
