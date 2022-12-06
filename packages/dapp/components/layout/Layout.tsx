@@ -5,6 +5,7 @@ import Icon from "../ui/Icon";
 import Inventory from "./Inventory";
 import Sidebar from "./Sidebar";
 import TransactionsDisplay from "./TransactionsDisplay";
+import packageConfig from "../../package.json";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -50,6 +51,16 @@ export default function Layout({ children }: LayoutProps) {
 
         <div>
           <Inventory />
+        </div>
+
+        {/* frontend version with a URL to commit hash, VERCEL_GIT_COMMIT_SHA is only available in production build */}
+        <div id="CommitURL">
+          <a
+            href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.VERCEL_GIT_COMMIT_SHA}`}
+            target="_blank"
+          >
+            {packageConfig.version}
+          </a>
         </div>
       </div>
     </div>
