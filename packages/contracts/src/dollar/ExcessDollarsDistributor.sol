@@ -91,7 +91,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
         );
 
         // deposit liquidity and transfer to zero address (burn)
-        _router.addLiquidity(
+        require(_router.addLiquidity(
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
             amountUAD.toUInt(),
@@ -100,7 +100,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
             0,
             address(0),
             block.timestamp + 100
-        );
+        ) > 0 );
     }
 
     // @dev convert to curve LP
@@ -112,10 +112,10 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
         returns (uint256)
     {
         // we need to approve  metaPool
-        IERC20Ubiquity(manager.dollarTokenAddress()).approve(
+        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             manager.stableSwapMetaPoolAddress(), 0
         );
-        IERC20Ubiquity(manager.dollarTokenAddress()).approve(
+        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             manager.stableSwapMetaPoolAddress(), amount
         );
 
@@ -125,12 +125,12 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
         ).exchange(0, 1, amount, 0);
 
         // approve metapool to transfer our 3CRV
-        IERC20(manager.curve3PoolTokenAddress()).approve(
+        require(IERC20(manager.curve3PoolTokenAddress()).approve(
             manager.stableSwapMetaPoolAddress(), 0
-        );
-        IERC20(manager.curve3PoolTokenAddress()).approve(
+        ));
+        require(IERC20(manager.curve3PoolTokenAddress()).approve(
             manager.stableSwapMetaPoolAddress(), amount3CRVReceived
-        );
+        ));
 
         // deposit liquidity
         uint256 res = IMetaPool(manager.stableSwapMetaPoolAddress())

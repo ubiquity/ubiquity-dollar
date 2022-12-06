@@ -52,11 +52,11 @@ contract UARForDollarsCalculator is IUARForDollarsCalculator {
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "uAR to Dollar: DEBT_TOO_HIGH"
         );
-        bytes16 coef = _coef.fromUInt().div((uint256(1 ether)).fromUInt());
+        //bytes16 coef = _coef.fromUInt().div((uint256(1 ether)).fromUInt());
         bytes16 curBlock = uint256(block.number).fromUInt();
         bytes16 multiplier = blockHeightDebt.fromUInt().div(curBlock);
         // x^a = e^(a*lnx(x)) so multiplier^(_coef) = e^(_coef*lnx(multiplier))
-        bytes16 op = (coef.mul(multiplier.ln())).exp();
+        bytes16 op = (_coef.fromUInt().mul(multiplier.ln())).exp().div((uint256(1 ether)).fromUInt());
         uint256 res = dollarsToBurn.fromUInt().mul(op).toUInt();
         return res;
     }

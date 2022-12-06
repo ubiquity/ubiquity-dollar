@@ -223,15 +223,15 @@ contract MasterChefV2 is ReentrancyGuard {
         internal
     {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
+        uint256 pending;
         _updatePool();
         if (bs.amount > 0) {
-            uint256 pending =
-                ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
-            _safeUGOVTransfer(to, pending);
+            pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
         }
         bs.amount += _amount;
         bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
         _totalShares += _amount;
+        _safeUGOVTransfer(to, pending);
         emit Deposit(to, _amount, _bondingShareID);
     }
 
@@ -270,6 +270,9 @@ contract MasterChefV2 is ReentrancyGuard {
         }
         uint256 multiplier = _getMultiplier();
         uint256 uGOVReward = (multiplier * uGOVPerBlock) / 1e18;
+        pool.accuGOVPerShare =
+            pool.accuGOVPerShare + ((uGOVReward * 1e12) / _totalShares);
+        pool.lastRewardBlock = block.number;
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             address(this), uGOVReward
         );
@@ -277,9 +280,7 @@ contract MasterChefV2 is ReentrancyGuard {
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             manager.treasuryAddress(), uGOVReward / uGOVDivider
         );
-        pool.accuGOVPerShare =
-            pool.accuGOVPerShare + ((uGOVReward * 1e12) / _totalShares);
-        pool.lastRewardBlock = block.number;
+        
     }
 
     // Safe uGOV transfer function, just in case if rounding

@@ -26,19 +26,20 @@ contract BondingFormulas {
         _uLP = a.mul(v).div(t).toUInt();
     }
 
+    
     /// @dev formula may add a decreasing rewards if locking end is near when removing liquidity
     /// @param _bond , bonding share
     /// @param _amount , amount of LP tokens
     /// @notice rewards = _amount;
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
-    function lpRewardsRemoveLiquidityNormalization(
+    /*function lpRewardsRemoveLiquidityNormalization(
         BondingShareV2.Bond memory _bond,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {
         return _amount;
-    }
+    }*/
 
     /* solhint-enable no-unused-vars */
     /// @dev formula may add a decreasing rewards if locking end is near when adding liquidity

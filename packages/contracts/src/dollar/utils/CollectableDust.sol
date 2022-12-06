@@ -24,7 +24,7 @@ abstract contract CollectableDust is ICollectableDust {
             !_protocolTokens.contains(_token),
             "collectable-dust::token-is-part-of-the-protocol"
         );
-        _protocolTokens.add(_token);
+        require(_protocolTokens.add(_token));
         emit ProtocolTokenAdded(_token);
     }
 

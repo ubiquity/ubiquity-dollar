@@ -21,6 +21,8 @@ import "./TWAPOracle.sol";
 contract UbiquityAlgorithmicDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
+    event DeloyedMetaPool(address indexed metapool, uint256 lpMinted, uint256 fee);
+
     bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");
     bytes32 public constant UBQ_BURNER_ROLE = keccak256("UBQ_BURNER_ROLE");
 
@@ -253,7 +255,10 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
 
         // set curve 3Pool address
         curve3PoolTokenAddress = _crv3PoolTokenAddress;
-        IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
+
+        uint256 lpMinted = IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
+
+        emit DeloyedMetaPool(metapool, lpMinted, _fee);
     }
 
     function getExcessDollarsDistributor(address _debtCouponManagerAddress)

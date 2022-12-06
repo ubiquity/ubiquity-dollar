@@ -118,6 +118,7 @@ contract UbiquiStick is
 
     function _beforeConsecutiveTokenTransfer(address, address, uint256, uint96)
         internal
+        pure
         override (ERC721, ERC721Enumerable)
     {
         revert("ERC721Enumerable: consecutive transfers not supported");
