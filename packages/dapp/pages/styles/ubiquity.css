@@ -445,3 +445,8 @@ aside {
   font-size: 4rem;
   padding: 16px;
 }
+
+#__CONNECTKIT__ svg {
+  max-height: unset;
+  vertical-align: unset;
+}
