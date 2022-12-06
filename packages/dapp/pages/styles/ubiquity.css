@@ -44,6 +44,12 @@ button:hover,
 input:hover {
   background: #ffffff20;
 }
+.react-select__control {
+  background-color: #ffffff10;
+}
+.react-select__control:hover {
+  background-color: #ffffff20;
+}
 #background {
   background-position: center;
   vertical-align: middle;
