@@ -31,9 +31,7 @@ contract TestDiamond is DiamondSetup {
     }
 
     function testSelectorsAssociatedWithCorrectFacet() public {
-        console.log('facetAddressList', facetAddressList.length);
         for (uint i = 0; i < facetAddressList.length; i++) {
-            console.log('facetNames', i, facetNames[i]);
             if(compareStrings(facetNames[i], 'DiamondCutFacet')) {
                 for (uint j = 0; j < selectorsOfDiamondCutFacet.length; j++) {
                     assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfDiamondCutFacet[j]));
