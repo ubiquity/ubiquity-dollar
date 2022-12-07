@@ -50,6 +50,21 @@ input:hover {
 .react-select__control:hover {
   background-color: #ffffff20;
 }
+.panel button:disabled:hover {
+  background: #ffffff05;
+}
+.panel button:disabled {
+  background: #ffffff00;
+  cursor: not-allowed;
+}
+.tokenAmountInput input:focus-visible {
+  outline: none;
+}
+.tokenInputImage svg {
+  height: 32px;
+  width: 32px;
+}
+
 #background {
   background-position: center;
   vertical-align: middle;

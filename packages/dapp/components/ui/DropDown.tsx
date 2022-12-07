@@ -1,25 +1,15 @@
 import React from "react";
 import SelectUnstyled from "react-select";
-/* type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
-type ButtonLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const Button: React.FC<ButtonProps> = ({ children, ...rest }) => {
-  return (
-    <button {...rest}>
-      <span>{children}</span>
-    </button>
-  );
-};
+/* // drop down options e.g
+ const Tokens: { label: string; value: number; image: () => JSX.Element }[] = [
+   {
+     label: "uAD",
+     value: 355,
+     image: icons.SVGs.uad,
+  } 
+] */
 
-export const ButtonLink: React.FC<ButtonLinkProps> = ({ children, ...rest }) => {
-  return (
-    <a {...rest}>
-      <Button>{children}</Button>
-    </a>
-  );
-};
-
- */
 export const DropDown = ({
   text = "select · · ·",
   dropdownOptions,

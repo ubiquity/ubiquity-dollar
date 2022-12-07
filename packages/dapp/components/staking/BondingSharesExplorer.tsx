@@ -8,6 +8,7 @@ import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 // Contracts: bonding, metaPool, bondingToken, masterChef
 
 import DepositShare from "./DepositShare";
+import DepositStables from "./DepositStables";
 import useBalances from "../lib/hooks/useBalances";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import Button from "../ui/Button";
@@ -40,6 +41,7 @@ type Actions = {
   onWithdrawLp: (payload: { id: number; amount: null | number }) => void;
   onClaimUbq: (id: number) => void;
   onStake: (payload: { amount: BigNumber; weeks: BigNumber }) => void;
+  onApeIn: (payload: { amounts: BigNumber[]; weeks: BigNumber }) => void;
 };
 
 const USD_TO_LP = 0.7460387929;
@@ -156,6 +158,27 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
       },
       [model]
     ),
+    onApeIn: useCallback(
+      async ({ amounts, weeks }) => {
+        if (!model || model.processing) return;
+        console.log(`Staking ${amounts[0]} for ${weeks} weeks`);
+        setModel({ ...model, processing: true });
+        doTransaction("Staking...", async () => {});
+        const allowance = await metaPool.allowance(walletAddress, bonding.address);
+        console.log("allowance", ethers.utils.formatEther(allowance));
+        console.log("lpsAmount", ethers.utils.formatEther(amounts[0]));
+        if (allowance.lt(amounts[0])) {
+          await performTransaction(metaPool.connect(signer).approve(bonding.address, amounts[0]));
+          const allowance2 = await metaPool.allowance(walletAddress, bonding.address);
+          console.log("allowance2", ethers.utils.formatEther(allowance2));
+        }
+        await performTransaction(bonding.connect(signer).deposit(amounts[0], weeks));
+
+        fetchSharesInformation();
+        refreshBalances();
+      },
+      [model]
+    ),
   };
 
   return <BondingSharesExplorer model={model} actions={actions} />;
@@ -165,7 +188,7 @@ export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | 
   return <>{model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}</>;
 });
 
-export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake, processing, walletLpBalance }: Model & Actions) => {
+export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake, onApeIn, processing, walletLpBalance }: Model & Actions) => {
   const totalUserShares = shares.reduce((sum, val) => {
     return sum.add(val.sharesBalance);
   }, BigNumber.from(0));
@@ -181,7 +204,8 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) || ugov.gt(0));
 
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <DepositStables onApeIn={onApeIn} disabled={processing} maxLp={walletLpBalance} />
       <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
       <table id="Staking">
         <thead>
