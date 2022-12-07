@@ -91,7 +91,7 @@ contract CreditNFT is ERC1155Ubiquity {
     function updateTotalDebt() public {
         bool reachedEndOfExpiredKeys = false;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
-        uint256 outstandingDebt -=sc55['/]
+        uint256 outstandingDebt = _totalOutstandingDebt;
 
         //if list is empty, currentBlockNumber will be 0
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {
@@ -101,13 +101,14 @@ contract CreditNFT is ERC1155Ubiquity {
                 reachedEndOfExpiredKeys = true;
             } else {
                 //update tally and remove key from blocks and map
-                _totalOutstandingDebt =
-                    _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                outstandingDebt =
+                    outstandingDebt - (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
-                require(_sortedBlockNumbers.remove(currentBlockNumber));
+                _sortedBlockNumbers.remove(currentBlockNumber);
             }
             currentBlockNumber = _sortedBlockNumbers.popFront();
         }
+        _totalOutstandingDebt = outstandingDebt;
     }
 
     /// @notice Returns outstanding debt by fetching current tally and removing any expired debt
