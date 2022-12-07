@@ -13,17 +13,17 @@ contract TWAPOracle is ITWAPOracle {
     uint256 public pricesBlockTimestampLast;
     uint256[2] public priceCumulativeLast;
 
-    constructor(address _pool, address _uADtoken0, address _curve3CRVtoken1) {
+    constructor(address _pool, address _uADtoken0, address _curve3CRVToken1) {
         pool = _pool;
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
             IMetaPool(_pool).coins(0) == _uADtoken0
-                && IMetaPool(_pool).coins(1) == _curve3CRVtoken1,
+                && IMetaPool(_pool).coins(1) == _curve3CRVToken1,
             "TWAPOracle: COIN_ORDER_MISMATCH"
         );
 
         token0 = _uADtoken0;
-        token1 = _curve3CRVtoken1;
+        token1 = _curve3CRVToken1;
 
         uint256 _reserve0 = uint112(IMetaPool(_pool).balances(0));
         uint256 _reserve1 = uint112(IMetaPool(_pool).balances(1));

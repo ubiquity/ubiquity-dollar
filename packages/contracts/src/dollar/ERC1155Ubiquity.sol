@@ -11,7 +11,7 @@ import "./utils/SafeAddArray.sol";
 /// @author Ubiquity Algorithmic Dollar
 /// @notice ERC1155 with :
 /// - ERC1155 minter, burner and pauser
-/// - TotatSupply per id
+/// - TotalSupply per id
 /// - Ubiquity Manager access control
 contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];

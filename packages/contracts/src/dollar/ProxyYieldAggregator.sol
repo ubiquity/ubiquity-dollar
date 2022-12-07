@@ -138,7 +138,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         SafeERC20.safeTransferFrom(
             strategyAsset, _msgSender(), address(this), assets
         );
-        // calculate the amount of strategy shares we can get for 'assets' startegy asset
+        // calculate the amount of strategy shares we can get for 'assets' strategy asset
         uint256 stratShares = _strategy.previewDeposit(assets);
 
         // deposit the asset to the strategy and get the strategy token our underlying asset
@@ -247,10 +247,10 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         // calls the vault, which is assumed not malicious.
         //
         // Conclusion: we need to do the transfer after the burn so that any reentrancy would happen after the
-        // shares are burned and after the assets are transfered, which is a valid state.
+        // shares are burned and after the assets are transferred, which is a valid state.
 
         // proxy shares (i.e pDAI) correspond to an amount of proxy asset (i.e sDAI)
-        // which are actually strategy shares that correspond to an amount of stratgey asset (i.e DAI)
+        // which are actually strategy shares that correspond to an amount of strategy asset (i.e DAI)
         _burn(owner, shares);
         /*   uint stratAssetAmount = strategyToken.balanceOf(address(this)); */
 

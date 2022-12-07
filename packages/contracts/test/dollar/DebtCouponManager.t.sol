@@ -100,17 +100,17 @@ contract DebtCouponManagerTest is LocalTestHelper {
         );
     }
 
-    function test_setExpiredCouponConvertionRate() public {
+    function test_setExpiredCouponConversionRate() public {
         vm.expectRevert("Caller is not a coupon manager");
         DebtCouponManager(debtCouponManagerAddress)
-            .setExpiredCouponConvertionRate(100);
+            .setExpiredCouponConversionRate(100);
 
         vm.prank(admin);
         DebtCouponManager(debtCouponManagerAddress)
-            .setExpiredCouponConvertionRate(100);
+            .setExpiredCouponConversionRate(100);
         assertEq(
             DebtCouponManager(debtCouponManagerAddress)
-                .expiredCouponConvertionRate(),
+                .expiredCouponConversionRate(),
             100
         );
     }

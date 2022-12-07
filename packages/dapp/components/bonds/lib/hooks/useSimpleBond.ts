@@ -40,7 +40,7 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: Contract[])
 
       const newTokensRatios = Object.fromEntries(allPools.map((pool, i) => [pool.tokenAddress, ratios[i]]));
 
-      const newUnipoolFullData = await fetchUniswapPoolsData(
+      const newUniswapPoolFullData = await fetchUniswapPoolsData(
         allPools.map(({ poolAddress, tokenAddress }) => ({ address: poolAddress, version: poolAddress === tokenAddress ? "v2" : "v3" })),
         provider
       );
@@ -57,21 +57,21 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: Contract[])
         const multiplier = multiplierFromRatio(reward);
         const apr = aprFromRatio(reward);
 
-        const uniPoolData = newUnipoolFullData[poolsByToken[address].poolAddress];
-        const liquidity1 = +ethers.utils.formatUnits(uniPoolData.balance1, uniPoolData.decimal1);
-        const liquidity2 = +ethers.utils.formatUnits(uniPoolData.balance2, uniPoolData.decimal2);
+        const uniswapPoolData = newUniswapPoolFullData[poolsByToken[address].poolAddress];
+        const liquidity1 = +ethers.utils.formatUnits(uniswapPoolData.balance1, uniswapPoolData.decimal1);
+        const liquidity2 = +ethers.utils.formatUnits(uniswapPoolData.balance2, uniswapPoolData.decimal2);
 
         acc[address] = {
           poolTokenBalance,
           apr,
-          token1: uniPoolData.token1,
-          token2: uniPoolData.token2,
+          token1: uniswapPoolData.token1,
+          token2: uniswapPoolData.token2,
           liquidity1,
           liquidity2,
-          symbol1: uniPoolData.symbol1,
-          symbol2: uniPoolData.symbol2,
-          name1: uniPoolData.name1,
-          name2: uniPoolData.name2,
+          symbol1: uniswapPoolData.symbol1,
+          symbol2: uniswapPoolData.symbol2,
+          name1: uniswapPoolData.name1,
+          name2: uniswapPoolData.name2,
           decimals,
           multiplier,
         };
@@ -113,7 +113,7 @@ const useSimpleBond = (contracts: Contracts | null, tokensContracts: Contract[])
 
       const newRewardTokenBalance = +ethers.utils.formatUnits(await contracts.rewardToken.balanceOf(walletAddress), await contracts.rewardToken.decimals());
 
-      // Get wether the Ubiquistick is still neccesary
+      // Get wether the Ubiquistick is still necessary
 
       setNeedsStick((await contracts.simpleBond.sticker()) !== ZERO_ADDRESS);
 

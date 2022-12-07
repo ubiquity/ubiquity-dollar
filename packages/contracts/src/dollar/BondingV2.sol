@@ -42,7 +42,7 @@ contract BondingV2 is CollectableDust, Pausable {
     event PriceReset(
         address _tokenWithdrawn,
         uint256 _amountWithdrawn,
-        uint256 _amountTransfered
+        uint256 _amountTransferred
     );
 
     event Deposit(
@@ -58,7 +58,7 @@ contract BondingV2 is CollectableDust, Pausable {
         uint256 indexed _id,
         uint256 _lpAmount,
         uint256 _lpAmountTransferred,
-        uint256 _lprewards,
+        uint256 _lpRewards,
         uint256 _bondingShareAmount
     );
 
@@ -160,7 +160,7 @@ contract BondingV2 is CollectableDust, Pausable {
         migrating = _migrating;
     }
 
-    /// @dev uADPriceReset remove uAD unilateraly from the curve LP share sitting inside
+    /// @dev uADPriceReset remove uAD unilaterally from the curve LP share sitting inside
     ///      the bonding contract and send the uAD received to the treasury.
     ///      This will have the immediate effect of pushing the uAD price HIGHER
     /// @param amount of LP token to be removed for uAD
@@ -178,7 +178,7 @@ contract BondingV2 is CollectableDust, Pausable {
         emit PriceReset(manager.dollarTokenAddress(), coinWithdrawn, toTransfer);
     }
 
-    /// @dev crvPriceReset remove 3CRV unilateraly from the curve LP share sitting inside
+    /// @dev crvPriceReset remove 3CRV unilaterally from the curve LP share sitting inside
     ///      the bonding contract and send the 3CRV received to the treasury
     ///      This will have the immediate effect of pushing the uAD price LOWER
     /// @param amount of LP token to be removed for 3CRV tokens

@@ -8,7 +8,7 @@ contract ZeroState is LiveTestHelper {
     event PriceReset(
         address _tokenWithdrawn,
         uint256 _amountWithdrawn,
-        uint256 _amountTransfered
+        uint256 _amountTransferred
     );
 
     event Deposit(
@@ -24,7 +24,7 @@ contract ZeroState is LiveTestHelper {
         uint256 indexed _id,
         uint256 _lpAmount,
         uint256 _lpAmountTransferred,
-        uint256 _lprewards,
+        uint256 _lpRewards,
         uint256 _bondingShareAmount
     );
 
@@ -107,9 +107,9 @@ contract ZeroStateTest is ZeroState {
         vm.expectRevert("balances array not same length");
         new BondingV2(
             address(manager),
-            address(bFormulas), 
-            ogs, 
-            balances, 
+            address(bFormulas),
+            ogs,
+            balances,
             lockup
         );
     }
@@ -119,9 +119,9 @@ contract ZeroStateTest is ZeroState {
         vm.expectRevert("weeks array not same length");
         new BondingV2(
             address(manager),
-            address(bFormulas), 
-            ogs, 
-            balances, 
+            address(bFormulas),
+            ogs,
+            balances,
             lockup
         );
     }

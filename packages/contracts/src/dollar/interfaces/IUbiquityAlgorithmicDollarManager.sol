@@ -94,4 +94,15 @@ interface IUbiquityAlgorithmicDollarManager is IAccessControl {
         external
         view
         returns (address);
+
+    function bondingContractAddress() external view returns (address);
+
+    function bondingShareAddress() external view returns (address);
+
+    function stableSwapMetaPoolAddress() external view returns (address);
+
+    function dollarTokenAddress() external view returns (address);
+
+    function governanceTokenAddress() external view returns (address);
+
 }

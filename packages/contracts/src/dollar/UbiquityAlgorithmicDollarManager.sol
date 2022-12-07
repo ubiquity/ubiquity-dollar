@@ -48,7 +48,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
     address public autoRedeemTokenAddress; // uAR
     address public uarCalculatorAddress; // uAR calculator
 
-    //key = address of couponmanager, value = excessdollardistributor
+    //key = address of couponManager, value = excessDollarDistributor
     mapping(address => address) private _excessDollarDistributors;
 
     modifier onlyAdmin() {
@@ -176,7 +176,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
     }
 
     /**
-     * @notice set the bonding bontract smart contract address
+     * @notice set the bonding contract smart contract address
      * @dev bonding contract participants deposit  curve LP token
      * for a certain duration to earn uGOV and more curve LP token
      * @param _bondingContractAddress bonding contract address

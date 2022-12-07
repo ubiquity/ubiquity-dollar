@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // With this "The UbiquiStick" NFT contract you can :
-// - get all ERC721 functionnality https://eips.ethereum.org/EIPS/eip-721
+// - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
 //   - including check that someone as a NFT of the collection with « balanceOf »
 //   - including check who is TokenID owner with « ownerOf »
 //   - including optional ERC721Metadata
@@ -20,7 +20,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // - allow one owner (deployer at start) to change tokenURIs (setTokenURI), and change minter (setMinter) and transfer it's owner role to someone else
 // - allow one minter to mint NFT (safeMint)
 
-contract TheUbiquityStick is
+contract UbiquiStick is
     ERC721,
     ERC721Burnable,
     ERC721Enumerable,

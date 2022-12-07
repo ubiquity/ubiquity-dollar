@@ -59,7 +59,7 @@ input:hover {
   /* background: radial-gradient(#000000ff, #101010ff); */
 }
 #Inventory > div {
-  overflow: scroll;
+  overflow: auto;
 }
 #Inventory > div > div {
   display: flex;
@@ -172,8 +172,6 @@ video {
   left: 0;
   bottom: 0;
   width: 100%;
-  overflow: scroll;
-  overflow-x: hidden;
 }
 #Inventory > div:nth-child(2) > div > div > div {
   display: table;
@@ -407,6 +405,16 @@ aside {
   color: #bfbfbf;
 }
 
+#MintUcr,
+#RedeemUcr {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+#MintUcr > div,
+#RedeemUcr > div {
+  pointer-events: none;
+}
+
 #CreditOperations[data-twap^="0."] #MintUcr,
 #CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
@@ -415,4 +423,30 @@ aside {
 #CreditOperations[data-twap^="0."] #MintUcr > div,
 #CreditOperations[data-twap^="1."] #RedeemUcr > div {
   pointer-events: unset;
+}
+
+/* Page 404 styles */
+#Page404 {
+  display: flex;
+}
+#Page404 a {
+  text-decoration: underline;
+}
+#Page404 > div:nth-child(1) {
+  padding: 16px;
+  text-align: left;
+}
+#Page404 > div:nth-child(1) > p:nth-child(1) {
+  font-size: 2rem;
+}
+#Page404 > div:nth-child(2) {
+  align-items: center;
+  display: flex;
+  font-size: 4rem;
+  padding: 16px;
+}
+
+#__CONNECTKIT__ svg {
+  max-height: unset;
+  vertical-align: unset;
 }

@@ -77,14 +77,14 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
   const cycleStartDate = 1637625600000;
   const uarDeprecationRate = 0.0001;
   const uarCurrentRewardPct = 0.05;
-  const udebtDeprecationRate = 0.0015;
-  const udebtCurrentRewardPct = 0.05;
-  const udebtExpirationTime = 1640217600000;
-  const udebtUbqRedemptionRate = 0.25;
+  const uDebtDeprecationRate = 0.0015;
+  const uDebtCurrentRewardPct = 0.05;
+  const uDebtExpirationTime = 1640217600000;
+  const uDebtUbqRedemptionRate = 0.25;
   const uadTotalSupply = 233000;
-  const ubondTotalSupply = 10000;
+  const uBondTotalSupply = 10000;
   const uarTotalSupply = 30000;
-  const udebtTotalSupply = 12000;
+  const uDebtTotalSupply = 12000;
   const coupons: Coupons = {
     uDEBT: [
       { amount: 1000, expiration: 1640390400000, swap: { amount: 800, unit: "uAR" } },
@@ -106,15 +106,15 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
           cycleStartDate={cycleStartDate}
           uarDeprecationRate={uarDeprecationRate}
           uarCurrentRewardPct={uarCurrentRewardPct}
-          udebtDeprecationRate={udebtDeprecationRate}
-          udebtCurrentRewardPct={udebtCurrentRewardPct}
-          udebtExpirationTime={udebtExpirationTime}
-          udebtUbqRedemptionRate={udebtUbqRedemptionRate}
+          uDebtDeprecationRate={uDebtDeprecationRate}
+          uDebtCurrentRewardPct={uDebtCurrentRewardPct}
+          uDebtExpirationTime={uDebtExpirationTime}
+          uDebtUbqRedemptionRate={uDebtUbqRedemptionRate}
           priceIncreaseFormula={priceIncreaseFormula}
           uadTotalSupply={uadTotalSupply}
-          ubondTotalSupply={ubondTotalSupply}
+          uBondTotalSupply={uBondTotalSupply}
           uarTotalSupply={uarTotalSupply}
-          udebtTotalSupply={udebtTotalSupply}
+          uDebtTotalSupply={uDebtTotalSupply}
           coupons={coupons}
         />
       )}
@@ -129,14 +129,14 @@ type DebtCouponProps = {
   cycleStartDate: number;
   uarDeprecationRate: number;
   uarCurrentRewardPct: number;
-  udebtDeprecationRate: number;
-  udebtCurrentRewardPct: number;
-  udebtExpirationTime: number;
-  udebtUbqRedemptionRate: number;
+  uDebtDeprecationRate: number;
+  uDebtCurrentRewardPct: number;
+  uDebtExpirationTime: number;
+  uDebtUbqRedemptionRate: number;
   uadTotalSupply: number;
-  ubondTotalSupply: number;
+  uBondTotalSupply: number;
   uarTotalSupply: number;
-  udebtTotalSupply: number;
+  uDebtTotalSupply: number;
   coupons: Coupons | null;
   priceIncreaseFormula: (amount: number) => Promise<number>;
 };
@@ -148,14 +148,14 @@ const DebtCoupon = memo(
     cycleStartDate,
     uarDeprecationRate,
     uarCurrentRewardPct,
-    udebtDeprecationRate,
-    udebtCurrentRewardPct,
-    udebtExpirationTime,
-    udebtUbqRedemptionRate,
+    uDebtDeprecationRate,
+    uDebtCurrentRewardPct,
+    uDebtExpirationTime,
+    uDebtUbqRedemptionRate,
     uadTotalSupply,
-    ubondTotalSupply,
+    uBondTotalSupply,
     uarTotalSupply,
-    udebtTotalSupply,
+    uDebtTotalSupply,
     coupons,
     priceIncreaseFormula,
   }: DebtCouponProps) => {
@@ -185,12 +185,12 @@ const DebtCoupon = memo(
       }
     }, [cycleStartDate]);
 
-    const calculatedUdebtExpirationTime = useMemo(() => {
-      if (udebtExpirationTime) {
-        const diff = udebtExpirationTime - Date.now();
+    const calculatedUDebtExpirationTime = useMemo(() => {
+      if (uDebtExpirationTime) {
+        const diff = uDebtExpirationTime - Date.now();
         return formatTimeDiff(diff);
       }
-    }, [udebtExpirationTime]);
+    }, [uDebtExpirationTime]);
 
     const handleInputUAD = async (e: ChangeEvent) => {
       setErrMsg("");
@@ -242,10 +242,10 @@ const DebtCoupon = memo(
             <PumpCycle
               uarDeprecationRate={uarDeprecationRate}
               uarCurrentRewardPct={uarCurrentRewardPct}
-              udebtDeprecationRate={udebtDeprecationRate}
-              udebtCurrentRewardPct={udebtCurrentRewardPct}
-              udebtUbqRedemptionRate={udebtUbqRedemptionRate}
-              calculatedUdebtExpirationTime={calculatedUdebtExpirationTime}
+              uDebtDeprecationRate={uDebtDeprecationRate}
+              uDebtCurrentRewardPct={uDebtCurrentRewardPct}
+              uDebtUbqRedemptionRate={uDebtUbqRedemptionRate}
+              calculatedUDebtExpirationTime={calculatedUDebtExpirationTime}
             />
             <UadBurning
               handleInputUAD={handleInputUAD}
@@ -260,9 +260,9 @@ const DebtCoupon = memo(
         ) : (
           <Coupons
             uadTotalSupply={uadTotalSupply}
-            ubondTotalSupply={ubondTotalSupply}
+            uBondTotalSupply={uBondTotalSupply}
             uarTotalSupply={uarTotalSupply}
-            udebtTotalSupply={udebtTotalSupply}
+            uDebtTotalSupply={uDebtTotalSupply}
             coupons={coupons}
             actions={actions}
           />
@@ -274,21 +274,21 @@ const DebtCoupon = memo(
 
 type CouponsProps = {
   uadTotalSupply: number;
-  ubondTotalSupply: number;
+  uBondTotalSupply: number;
   uarTotalSupply: number;
-  udebtTotalSupply: number;
+  uDebtTotalSupply: number;
   coupons: Coupons | null;
   actions: Actions;
 };
 
-export const Coupons = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupply, udebtTotalSupply, coupons, actions }: CouponsProps) => {
+export const Coupons = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupply, uDebtTotalSupply, coupons, actions }: CouponsProps) => {
   return (
     <>
       <RewardCycleInfo
         uadTotalSupply={uadTotalSupply}
-        ubondTotalSupply={ubondTotalSupply}
+        uBondTotalSupply={uBondTotalSupply}
         uarTotalSupply={uarTotalSupply}
-        udebtTotalSupply={udebtTotalSupply}
+        uDebtTotalSupply={uDebtTotalSupply}
       />
       <div>
         <span>Your Coupons</span>
@@ -306,13 +306,13 @@ type CouponRedeemProps = {
 
 export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
   const [uarAmount, setUarAmount] = useState("");
-  const [ubondAmount, setUbondAmount] = useState("");
-  const shouldDisableInput = (type: string) => {
+  const [uBondAmount, setUBondAmount] = useState("");
+  const shouldDisableInput = (type: keyof Coupons) => {
     if (!coupons) {
       return true;
-    } else if (type === "uar") {
+    } else if (type === "uAR") {
       return !coupons.uAR || coupons.uAR <= 0;
-    } else if (type === "ubond") {
+    } else if (type === "uBOND") {
       return !coupons.uBOND || coupons.uBOND <= 0;
     }
     return false;
@@ -327,16 +327,16 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
     setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
   };
 
-  const handleInputUBOND = async (e: ChangeEvent) => {
+  const handleInputUBond = async (e: ChangeEvent) => {
     if (!coupons || !coupons.uBOND) {
       return;
     }
     const amountEl = e.target as HTMLInputElement;
     const amountValue = amountEl?.value;
-    setUbondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
+    setUBondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
   };
 
-  const uarToUdebtFormula = (amount: string) => {
+  const uarToUDebtFormula = (amount: string) => {
     const parsedValue = parseFloat(amount);
     return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
   };
@@ -350,7 +350,7 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
               <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
             </div>
             <div>
-              <input type="number" value={ubondAmount} disabled={shouldDisableInput("ubond")} onChange={handleInputUBOND} />
+              <input type="number" value={uBondAmount} disabled={shouldDisableInput("uBOND")} onChange={handleInputUBond} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
@@ -361,7 +361,7 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
               <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
             </div>
             <div>
-              <input type="number" value={uarAmount} disabled={shouldDisableInput("uar")} onChange={handleInputUAR} />
+              <input type="number" value={uarAmount} disabled={shouldDisableInput("uAR")} onChange={handleInputUAR} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
@@ -372,7 +372,7 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
               <span>Deprecation rate 10% / week</span>
             </div>
             <div>
-              <span>{uarToUdebtFormula(uarAmount).toLocaleString()} uDEBT</span>
+              <span>{uarToUDebtFormula(uarAmount).toLocaleString()} uDEBT</span>
               <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
             </div>
           </div>
@@ -384,12 +384,12 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
 
 type RewardCycleInfoProps = {
   uadTotalSupply: number;
-  ubondTotalSupply: number;
+  uBondTotalSupply: number;
   uarTotalSupply: number;
-  udebtTotalSupply: number;
+  uDebtTotalSupply: number;
 };
 
-export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupply, udebtTotalSupply }: RewardCycleInfoProps) => {
+export const RewardCycleInfo = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupply, uDebtTotalSupply }: RewardCycleInfoProps) => {
   return (
     <>
       <div>
@@ -422,7 +422,7 @@ export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupp
           <div>
             <div>
               <div>uBOND</div>
-              <div>{ubondTotalSupply.toLocaleString()}</div>
+              <div>{uBondTotalSupply.toLocaleString()}</div>
             </div>
             <div>
               <div>uAR</div>
@@ -430,7 +430,7 @@ export const RewardCycleInfo = ({ uadTotalSupply, ubondTotalSupply, uarTotalSupp
             </div>
             <div>
               <div>uDEBT</div>
-              <div>{udebtTotalSupply.toLocaleString()}</div>
+              <div>{uDebtTotalSupply.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -489,19 +489,19 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
 type PumpCycleProps = {
   uarDeprecationRate: number;
   uarCurrentRewardPct: number;
-  udebtDeprecationRate: number;
-  udebtCurrentRewardPct: number;
-  udebtUbqRedemptionRate: number;
-  calculatedUdebtExpirationTime: string | undefined;
+  uDebtDeprecationRate: number;
+  uDebtCurrentRewardPct: number;
+  uDebtUbqRedemptionRate: number;
+  calculatedUDebtExpirationTime: string | undefined;
 };
 
 export const PumpCycle = ({
   uarDeprecationRate,
   uarCurrentRewardPct,
-  udebtDeprecationRate,
-  udebtCurrentRewardPct,
-  udebtUbqRedemptionRate,
-  calculatedUdebtExpirationTime,
+  uDebtDeprecationRate,
+  uDebtCurrentRewardPct,
+  uDebtUbqRedemptionRate,
+  calculatedUDebtExpirationTime,
 }: PumpCycleProps) => {
   return (
     <>
@@ -538,15 +538,15 @@ export const PumpCycle = ({
             <tbody>
               <tr>
                 <td>Deprecation rate</td>
-                <td>{udebtDeprecationRate * 100}%</td>
+                <td>{uDebtDeprecationRate * 100}%</td>
               </tr>
               <tr>
                 <td>Current reward %</td>
-                <td>{udebtCurrentRewardPct * 100}%</td>
+                <td>{uDebtCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
                 <td>Expires?</td>
-                <td>After {calculatedUdebtExpirationTime}</td>
+                <td>After {calculatedUDebtExpirationTime}</td>
               </tr>
             </tbody>
           </table>
@@ -554,7 +554,7 @@ export const PumpCycle = ({
             <span>Convertible to fungible</span>
           </div>
           <div>
-            <span>Can be redeemed for UBQ at {udebtUbqRedemptionRate * 100}% rate</span>
+            <span>Can be redeemed for UBQ at {uDebtUbqRedemptionRate * 100}% rate</span>
           </div>
           <a href="">Learn more</a>
         </div>
