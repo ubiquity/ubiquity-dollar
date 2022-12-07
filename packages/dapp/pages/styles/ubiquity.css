@@ -44,6 +44,13 @@ button:hover,
 input:hover {
   background: #ffffff20;
 }
+button[disabled="disabled"],
+button:disabled,
+input[disabled="disabled"],
+input:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 #background {
   background-position: center;
   vertical-align: middle;
