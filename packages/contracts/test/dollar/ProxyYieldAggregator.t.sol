@@ -243,7 +243,7 @@ contract ProxyYieldAggregatorTest is Test {
         assertEq(zozoVault.balanceOf(address(this)), 0);
         uint16 currentSplit = 1000;
         // start redeem
-        proxyYieldAggregator.reedemStrategyAsset(
+        proxyYieldAggregator.redeemStrategyAsset(
             pDAIbalance, address(this), address(this), currentSplit
         );
 

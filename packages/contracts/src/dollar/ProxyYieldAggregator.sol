@@ -142,7 +142,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         uint256 stratShares = _strategy.previewDeposit(assets);
 
         // deposit the asset to the strategy and get the strategy token our underlying asset
-        strategyAsset.approve(address(_strategy), assets);
+        require(strategyAsset.approve(address(_strategy), assets));
         uint256 stratAssets = _strategy.mint(stratShares, address(this));
 
         // register the new strategy shares inside the proxy
@@ -160,12 +160,12 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
     /**
      * @dev Redeem proxy shares for underlying strategy asset i.e provide pDAI and return DAI
      */
-    function reedemStrategyAsset(
+    function redeemStrategyAsset(
         uint256 shares,
         address receiver,
         address owner,
         uint16 split
-    ) external returns (uint256) {
+    ) external returns (uint256 assetsRedeemed) {
         require(split >= _minSplit, "PYield::split<min");
         require(split <= PRECISION, "PYield::split>max");
         require(shares <= maxRedeem(owner), "PYield::redeem>max");
@@ -174,8 +174,9 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         uint256 remainingStratShares = _withdrawWithSplit(
             _msgSender(), receiver, owner, assets, shares, split
         );
-        _strategy.redeem(remainingStratShares, receiver, address(this));
-        return assets;
+        
+        assetsRedeemed = _strategy.redeem(remainingStratShares, receiver, address(this));
+        
     }
 
     /**

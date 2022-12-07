@@ -124,10 +124,12 @@ contract BondingV2 is CollectableDust, Pausable {
         _toMigrateOriginals = _originals;
         _toMigrateLpBalances = _lpBalances;
         _toMigrateWeeks = _weeks;
+        uint256 migratingBalances;
         for (uint256 i = 0; i < lgt; ++i) {
             toMigrateId[_originals[i]] = i + 1;
-            totalLpToMigrate += _lpBalances[i];
+            migratingBalances += _lpBalances[i];
         }
+        totalLpToMigrate += migratingBalances;
     }
 
     // solhint-disable-next-line no-empty-blocks
@@ -264,10 +266,7 @@ contract BondingV2 is CollectableDust, Pausable {
 
         // update the accumulated lp rewards per shares
         _updateLpPerShare();
-        // transfer lp token to the bonding contract
-        IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
-            msg.sender, address(this), _lpsAmount
-        );
+       
 
         // calculate the amount of share based on the amount of lp deposited and the duration
         uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
@@ -279,6 +278,11 @@ contract BondingV2 is CollectableDust, Pausable {
         // set masterchef for uGOV rewards
         IMasterChefV2(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
+        );
+
+        // transfer lp token to the bonding contract
+        IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
+            msg.sender, address(this), _lpsAmount
         );
 
         emit Deposit(
@@ -310,10 +314,13 @@ contract BondingV2 is CollectableDust, Pausable {
         // add these LP Rewards to the deposited amount of LP token
         bond.lpAmount += pendingLpReward;
         lpRewards -= pendingLpReward;
-        IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
-            msg.sender, address(this), _amount
-        );
         bond.lpAmount += _amount;
+        // calculate end locking period block number
+        // 1 week = 45361 blocks = 2371753*7/366
+        // n = (block + duration * 45361)
+        bond.endBlock = block.number + _weeks * blockCountInAWeek;
+
+        
 
         // redeem all shares
         IMasterChefV2(manager.masterChefAddress()).withdraw(
@@ -328,10 +335,7 @@ contract BondingV2 is CollectableDust, Pausable {
         IMasterChefV2(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
         );
-        // calculate end locking period block number
-        // 1 week = 45361 blocks = 2371753*7/366
-        // n = (block + duration * 45361)
-        bond.endBlock = block.number + _weeks * blockCountInAWeek;
+
 
         // should be done after masterchef withdraw
         _updateLpPerShare();
@@ -343,6 +347,11 @@ contract BondingV2 is CollectableDust, Pausable {
         BondingShareV2(manager.bondingShareAddress()).updateBond(
             _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
         );
+
+        IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
+            msg.sender, address(this), _amount
+        );
+
         emit AddLiquidityFromBond(msg.sender, _id, bond.lpAmount, _sharesAmount);
     }
 
@@ -378,8 +387,11 @@ contract BondingV2 is CollectableDust, Pausable {
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
-            .lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
+        //pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
+            //.lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
+
+        lpRewards -= pendingLpReward;
+        bond.lpAmount -= _amount;
 
         uint256 correctedAmount = BondingFormulas(this.bondingFormulasAddress())
             .correctedAmountToWithdraw(
@@ -388,8 +400,7 @@ contract BondingV2 is CollectableDust, Pausable {
             _amount
         );
 
-        lpRewards -= pendingLpReward;
-        bond.lpAmount -= _amount;
+        
 
         // bond.lpRewardDebt = (bonding shares * accLpRewardPerShare) /  1e18;
         // user.amount.mul(pool.accSushiPerShare).div(1e12);
@@ -514,12 +525,13 @@ contract BondingV2 is CollectableDust, Pausable {
 
         // update the accumulated lp rewards per shares
         _updateLpPerShare();
-        // calculate end locking period block number
-        uint256 endBlock = block.number + _weeks * blockCountInAWeek;
-        _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
         // reduce the total LP to migrate after the minting
         // to keep the _updateLpPerShare calculation consistent
         totalLpToMigrate -= _lpsAmount;
+        // calculate end locking period block number
+        uint256 endBlock = block.number + _weeks * blockCountInAWeek;
+        _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
+        
         // set masterchef for uGOV rewards
         IMasterChefV2(manager.masterChefAddress()).deposit(
             user, _sharesAmount, _id
@@ -572,23 +584,24 @@ contract BondingV2 is CollectableDust, Pausable {
     }
 
     function _checkForLiquidity(uint256 _id)
-        internal
+        internal view
         returns (uint256[2] memory bs, BondingShareV2.Bond memory bond)
-    {
+    {   
+        BondingShareV2 bonding = BondingShareV2(manager.bondingShareAddress());
         require(
-            IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
+            bonding.balanceOf(
                 msg.sender, _id
             ) == 1,
             "Bonding: caller is not owner"
         );
-        BondingShareV2 bonding = BondingShareV2(manager.bondingShareAddress());
+        
         bond = bonding.getBond(_id);
         require(
             block.number > bond.endBlock,
             "Bonding: Redeem not allowed before bonding time"
         );
 
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        //ITWAPOracle(manager.twapOracleAddress()).update();
         bs = IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id);
     }
 }

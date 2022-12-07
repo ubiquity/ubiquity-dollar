@@ -54,7 +54,7 @@ contract DebtCoupon is ERC1155Ubiquity, IDebtCoupon {
 
         //insert new relevant block number if it doesn't exist in our list
         // (linked list implementation won't insert if dupe)
-        _sortedBlockNumbers.pushBack(expiryBlockNumber);
+        require(_sortedBlockNumbers.pushBack(expiryBlockNumber));
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
@@ -90,22 +90,24 @@ contract DebtCoupon is ERC1155Ubiquity, IDebtCoupon {
     function updateTotalDebt() public {
         bool reachedEndOfExpiredKeys = false;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
+        uint256 outstandingDebt = _totalOutstandingDebt;
 
         //if list is empty, currentBlockNumber will be 0
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {
             if (currentBlockNumber > block.number) {
                 //put the key back in since we popped, and end loop
-                _sortedBlockNumbers.pushFront(currentBlockNumber);
+                require(_sortedBlockNumbers.pushFront(currentBlockNumber));
                 reachedEndOfExpiredKeys = true;
             } else {
                 //update tally and remove key from blocks and map
-                _totalOutstandingDebt =
-                    _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                outstandingDebt =
+                    outstandingDebt - (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
                 _sortedBlockNumbers.remove(currentBlockNumber);
             }
             currentBlockNumber = _sortedBlockNumbers.popFront();
         }
+        _totalOutstandingDebt = outstandingDebt;
     }
 
     /// @notice Returns outstanding debt by fetching current tally and removing any expired debt

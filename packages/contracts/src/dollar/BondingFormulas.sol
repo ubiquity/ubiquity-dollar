@@ -26,6 +26,7 @@ contract BondingFormulas {
         _uLP = a.mul(v).div(t).toUInt();
     }
 
+    
     /// @dev formula may add a decreasing rewards if locking end is near when removing liquidity
     /// @param _bond , bonding share
     /// @param _amount , amount of LP tokens

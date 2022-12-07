@@ -79,7 +79,7 @@ contract ZeroStateTest is ZeroState {
         vm.record();
         bondingV2.addUserToMigrate(fourthAccount, x, y);
 
-        (bytes32[] memory reads, bytes32[] memory writes) =
+        ( , bytes32[] memory writes) =
             vm.accesses(address(bondingV2));
 
         address checkAddress =
