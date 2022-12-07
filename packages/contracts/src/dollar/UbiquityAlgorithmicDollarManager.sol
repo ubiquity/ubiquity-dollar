@@ -258,7 +258,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
 
         uint256 lpMinted = IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
 
-        emit DeloyedMetaPool(metapool, lpMinted, _fee);
+        emit DeloyedMetaPool(metaPool, lpMinted, _fee);
     }
 
     function getExcessDollarsDistributor(address _debtCouponManagerAddress)

@@ -250,11 +250,11 @@ contract MasterChefV2 is ReentrancyGuard {
                 lastPrice - currentPrice > minPriceDiffToUpdateMultiplier;
         }
 
-        if (isPriceDiffEnough) {
+        require (isPriceDiffEnough);
             uGOVmultiplier = IUbiquityFormulas(manager.formulasAddress())
                 .ugovMultiply(uGOVmultiplier, currentPrice);
             lastPrice = currentPrice;
-        }
+        
     }
 
     // Update reward variables of the given pool to be up-to-date.

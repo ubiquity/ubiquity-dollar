@@ -71,7 +71,7 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
     }
 
     // buy-back and burn uGOV
-    function _governanceBuyBackLPAndBurn(uint256 amount) internal {
+    function _governanceBuyBackLPAndBurn(uint256 amount) internal returns(uint256 amountA, uint256 amountB, uint256 liquidity){
         bytes16 amountUAD = (amount.fromUInt()).div(uint256(2).fromUInt());
 
         // we need to approve sushi router
@@ -91,16 +91,17 @@ contract ExcessDollarsDistributor is IExcessDollarsDistributor {
         );
 
         // deposit liquidity and transfer to zero address (burn)
-        require(_router.addLiquidity(
-            manager.dollarTokenAddress(),
-            manager.governanceTokenAddress(),
-            amountUAD.toUInt(),
-            amountUGOV,
-            0,
-            0,
-            address(0),
-            block.timestamp + 100
-        ) > 0 );
+        (amountA, amountB, liquidity) = 
+            _router.addLiquidity(
+                manager.dollarTokenAddress(),
+                manager.governanceTokenAddress(),
+                amountUAD.toUInt(),
+                amountUGOV,
+                0,
+                0,
+                address(0),
+                block.timestamp + 100
+        );
     }
 
     // @dev convert to curve LP

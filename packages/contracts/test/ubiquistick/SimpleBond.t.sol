@@ -172,7 +172,7 @@ contract BondedStateTest is BondedState {
 
     function testClaimBond(uint256 blocks) public {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
-        uint256 preBal = rewardToken.balanceOf(secondAccount);
+        //uint256 preBal = rewardToken.balanceOf(secondAccount);
         vm.warp(block.number + blocks);
         (, uint256 amount0,,, uint256 block0) = bond.bonds(secondAccount, 0);
         uint256 expected = amount0 * 50 / 1e9 * (block.number - block0) / 100;

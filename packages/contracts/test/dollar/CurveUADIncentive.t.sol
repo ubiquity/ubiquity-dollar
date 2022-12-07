@@ -147,10 +147,10 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         address stableSwapPoolAddress = UbiquityAlgorithmicDollarManager(
             uADManagerAddress
         ).stableSwapMetaPoolAddress();
-        IERC20 govToken = IERC20(
+        /*IERC20 govToken = IERC20(
             UbiquityAlgorithmicDollarManager(uADManagerAddress)
                 .governanceTokenAddress()
-        );
+        );*/
         address uAD_addr = UbiquityAlgorithmicDollarManager(uADManagerAddress)
             .dollarTokenAddress();
         IERC20 uADToken = IERC20(uAD_addr);

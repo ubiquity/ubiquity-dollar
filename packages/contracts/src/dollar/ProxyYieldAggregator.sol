@@ -174,7 +174,8 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         uint256 remainingStratShares = _withdrawWithSplit(
             _msgSender(), receiver, owner, assets, shares, split
         );
-        uint256 assetsRedeemed = _strategy.redeem(remainingStratShares, receiver, address(this));
+        
+        assetsRedeemed = _strategy.redeem(remainingStratShares, receiver, address(this));
         
     }
 

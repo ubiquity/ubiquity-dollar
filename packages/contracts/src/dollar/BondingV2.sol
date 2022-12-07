@@ -388,8 +388,8 @@ contract BondingV2 is CollectableDust, Pausable {
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
-            .lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
+        //pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
+            //.lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
 
         lpRewards -= pendingLpReward;
         bond.lpAmount -= _amount;
@@ -585,7 +585,7 @@ contract BondingV2 is CollectableDust, Pausable {
     }
 
     function _checkForLiquidity(uint256 _id)
-        internal
+        internal view
         returns (uint256[2] memory bs, BondingShareV2.Bond memory bond)
     {   
         BondingShareV2 bonding = BondingShareV2(manager.bondingShareAddress());
