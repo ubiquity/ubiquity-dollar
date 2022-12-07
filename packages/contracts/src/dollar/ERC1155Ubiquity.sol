@@ -72,9 +72,11 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
+        uint256 amountMinted;
         for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply += amounts[i];
+            amountMinted += amounts[i];
         }
+        _totalSupply += amountMinted;
         _holderBalances[to].add(ids);
     }
 

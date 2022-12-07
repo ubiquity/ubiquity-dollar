@@ -89,6 +89,7 @@ contract DebtCoupon is ERC1155Ubiquity {
     function updateTotalDebt() public {
         bool reachedEndOfExpiredKeys = false;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
+        uint256 outstandingDebt -=sc55['/]
 
         //if list is empty, currentBlockNumber will be 0
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {

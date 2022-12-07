@@ -125,10 +125,12 @@ contract BondingV2 is CollectableDust, Pausable {
         _toMigrateOriginals = _originals;
         _toMigrateLpBalances = _lpBalances;
         _toMigrateWeeks = _weeks;
+        uint256 migratingBalances;
         for (uint256 i = 0; i < lgt; ++i) {
             toMigrateId[_originals[i]] = i + 1;
-            totalLpToMigrate += _lpBalances[i];
+            migratingBalances += _lpBalances[i];
         }
+        totalLpToMigrate += migratingBalances;
     }
 
     // solhint-disable-next-line no-empty-blocks
