@@ -120,14 +120,14 @@ contract TestManagerFacet is DiamondSetup {
 
         vm.startPrank(admin);
 
-        MockuADToken uAD;
-        MockUbiquityGovernance uGov;
+        MockuADToken dollarToken;
+        MockUbiquityGovernance governanceToken;
 
-        uAD = new MockuADToken(10000);
-        uGov = new MockUbiquityGovernance(10000);
+        dollarToken = new MockuADToken(10000);
+        governanceToken = new MockUbiquityGovernance(10000);
 
-        IManagerFacet.setDollarTokenAddress(address(uAD));
-        IManagerFacet.setGovernanceTokenAddress(address(uGov));
+        IManagerFacet.setDollarTokenAddress(address(dollarToken));
+        IManagerFacet.setGovernanceTokenAddress(address(governanceToken));
         IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
 
         address secondAccount = address(0x3);
@@ -146,14 +146,14 @@ contract TestManagerFacet is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(uAD), mintings[i], 10000e18);
+            deal(address(dollarToken), mintings[i], 10000e18);
         }
 
         address bondingV1Address = generateAddress("bondingV1", true, 10 ether);
         IManagerFacet.grantRole(UBQ_MINTER_ROLE, bondingV1Address);
         IManagerFacet.grantRole(UBQ_BURNER_ROLE, bondingV1Address);
 
-        deal(address(uAD), curveWhaleAddress, 10e18);
+        deal(address(dollarToken), curveWhaleAddress, 10e18);
 
         vm.stopPrank();
 
