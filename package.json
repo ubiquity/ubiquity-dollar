@@ -25,6 +25,7 @@
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
     "build:dapp": "yarn workspace @ubiquity/dapp run build",
+    "dev:dapp": "yarn workspace @ubiquity/dapp run start",
     "test:all": "yarn workspaces foreach run test",
     "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "prettier:all": "yarn workspaces foreach run prettier",
