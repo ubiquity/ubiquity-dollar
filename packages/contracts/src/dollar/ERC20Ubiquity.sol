@@ -4,11 +4,11 @@ pragma solidity ^0.8.3;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "./core/UbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 
 /// @title ERC20 Ubiquity preset
-/// @author Ubiquity Algorithmic Dollar
+/// @author Ubiquity DAO
 /// @notice ERC20 with :
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
@@ -19,7 +19,7 @@ contract ERC20Ubiquity is
     ERC20Burnable,
     ERC20Pausable
 {
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public DOMAIN_SEPARATOR;
@@ -34,7 +34,7 @@ contract ERC20Ubiquity is
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
+            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -42,7 +42,7 @@ contract ERC20Ubiquity is
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
+            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
             "Governance token: not burner"
         );
         _;
@@ -69,9 +69,9 @@ contract ERC20Ubiquity is
     {
         _tokenName = name_;
         _symbol = symbol_;
-        manager = UbiquityAlgorithmicDollarManager(_manager);
-        // sender must be UbiquityAlgorithmicDollarManager roleAdmin
-        // because he will get the admin, minter and pauser role on uAD and we want to
+        manager = UbiquityDollarManager(_manager);
+        // sender must be UbiquityDollarManager roleAdmin
+        // because he will get the admin, minter and pauser role on Ubiquity Dollar and we want to
         // manage all permissions through the manager
         require(
             manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender),
@@ -109,9 +109,9 @@ contract ERC20Ubiquity is
         _tokenName = newName;
     }
 
-    /// @notice permit spending of uAD. owner has signed a message allowing
-    ///         spender to transfer up to amount uAD
-    /// @param owner the uAD holder
+    /// @notice permit spending of Ubiquity Dollar. owner has signed a message allowing
+    ///         spender to transfer up to amount Ubiquity Dollar
+    /// @param owner the Ubiquity Dollar holder
     /// @param spender the approved operator
     /// @param value the amount approved
     /// @param deadline the deadline after which the approval is no longer valid
@@ -150,7 +150,7 @@ contract ERC20Ubiquity is
         _approve(owner, spender, value);
     }
 
-    /// @notice burn UAD tokens from caller
+    /// @notice burn Ubiquity Dollar tokens from caller
     /// @param amount the amount to burn
     function burn(uint256 amount)
         public
@@ -161,7 +161,7 @@ contract ERC20Ubiquity is
         emit Burning(msg.sender, amount);
     }
 
-    /// @notice burn uAD tokens from specified account
+    /// @notice burn Ubiquity Dollar tokens from specified account
     /// @param account the account to burn from
     /// @param amount the amount to burn
     function burnFrom(address account, uint256 amount)

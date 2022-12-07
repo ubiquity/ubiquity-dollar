@@ -1,62 +1,62 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "../../src/dollar/BondingV2.sol";
+import "../../src/dollar/Staking.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";
 import "../../src/dollar/mocks/MockShareV1.sol";
-import "../../src/dollar/BondingFormulas.sol";
-import "../../src/dollar/BondingShareV2.sol";
+import "../../src/dollar/StakingFormulas.sol";
+import "../../src/dollar/StakingShare.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
-import "../../src/dollar/UbiquityGovernance.sol";
-import "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import "../../src/dollar/mocks/MockuADToken.sol";
+import "../../src/dollar/core/UbiquityGovernanceToken.sol";
+import "../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../src/dollar/mocks/MockDollarToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
-import "../../src/dollar/TWAPOracle.sol";
-import "../../src/dollar/MasterChefV2.sol";
-import "../../src/dollar/UARForDollarsCalculator.sol";
+import "../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import "../../src/dollar/UbiquityChef.sol";
+import "../../src/dollar/core/CreditRedemptionCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
-import "../../src/dollar/CouponsForDollarsCalculator.sol";
-import "../../src/dollar/DollarMintingCalculator.sol";
-import "../../src/dollar/mocks/MockDebtCoupon.sol";
-import "../../src/dollar/DebtCouponManager.sol";
-import "../../src/dollar/UbiquityAutoRedeem.sol";
-import "../../src/dollar/ExcessDollarsDistributor.sol";
+import "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import "../../src/dollar/core/DollarMintCalculator.sol";
+import "../../src/dollar/mocks/MockCreditNFT.sol";
+import "../../src/dollar/core/CreditNFTManager.sol";
+import "../../src/dollar/core/UbiquityCreditToken.sol";
+import "../../src/dollar/core/DollarMintExcess.sol";
 import "../../src/dollar/SushiSwapPool.sol";
 import "../../src/dollar/interfaces/IERC1155Ubiquity.sol";
 
-import "Uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
-import "Uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
+import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 
 import "forge-std/Test.sol";
 
 contract LiveTestHelper is Test {
     using stdStorage for StdStorage;
 
-    Bonding bondingV1;
-    BondingV2 bondingV2;
-    BondingFormulas bFormulas;
-    BondingShareV2 bondingShareV2;
+    Bonding stakingV1;
+    Staking staking;
+    StakingFormulas stakingFormulas;
+    StakingShare stakingShare;
 
-    UbiquityAlgorithmicDollarManager manager;
+    UbiquityDollarManager manager;
 
-    UbiquityFormulas uFormulas;
-    TWAPOracle twapOracle;
-    MasterChefV2 chefV2;
-    UARForDollarsCalculator uarCalc;
-    CouponsForDollarsCalculator couponCalc;
-    DollarMintingCalculator dollarMintCalc;
-    MockDebtCoupon debtCoupon;
-    DebtCouponManager debtCouponMgr;
-    UbiquityAutoRedeem uAR;
-    ExcessDollarsDistributor excessDollarsDistributor;
-    SushiSwapPool sushiUGOVPool;
+    UbiquityFormulas ubiquityFormulas;
+    TWAPOracleDollar3pool twapOracle;
+    UbiquityChef ubiquityChef;
+    CreditRedemptionCalculator creditRedemptionCalc;
+    CreditNFTRedemptionCalculator creditNFTRedemptionCalc;
+    DollarMintCalculator dollarMintCalc;
+    MockCreditNFT creditNFT;
+    CreditNFTManager creditNFTManager;
+    UbiquityCreditToken creditToken;
+    DollarMintExcess dollarMintExcess;
+    SushiSwapPool sushiGovernancePool;
     IMetaPool metapool;
 
-    MockuADToken uAD;
-    UbiquityGovernance uGov;
+    MockDollarToken dollarToken;
+    UbiquityGovernanceToken governanceToken;
 
-    BondingShare bondingShareV1;
+    BondingShare stakingShareV1;
 
     IUniswapV2Factory factory =
         IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
@@ -78,9 +78,9 @@ contract LiveTestHelper is Test {
     address thirdAccount = address(0x5);
     address fourthAccount = address(0x6);
     address fifthAccount = address(0x7);
-    address bondingZeroAccount = address(0x8);
-    address bondingMinAccount = address(0x9);
-    address bondingMaxAccount = address(0x10);
+    address stakingZeroAccount = address(0x8);
+    address stakingMinAccount = address(0x9);
+    address stakingMaxAccount = address(0x10);
 
     address sablier = 0xA4fc358455Febe425536fd1878bE67FfDBDEC59a;
     address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
@@ -91,7 +91,7 @@ contract LiveTestHelper is Test {
 
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-    uint256 couponLengthBlocks = 100;
+    uint256 creditNFTLengthBlocks = 100;
 
     address[] migrating;
     uint256[] migrateLP;
@@ -100,50 +100,50 @@ contract LiveTestHelper is Test {
     function setUp() public virtual {
         vm.startPrank(admin);
 
-        manager = new UbiquityAlgorithmicDollarManager(admin);
+        manager = new UbiquityDollarManager(admin);
         address managerAddress = address(manager);
 
-        bondingV1 = new Bonding(address(manager), sablier);
-        bondingShareV1 = new BondingShare(address(manager));
-        manager.setBondingShareAddress(address(bondingShareV1));
-        manager.setBondingContractAddress(address(bondingV1));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingV1));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingShareV1));
+        stakingV1 = new Bonding(address(manager), sablier);
+        stakingShareV1 = new BondingShare(address(manager));
+        manager.setStakingShareAddress(address(stakingShareV1));
+        manager.setStakingContractAddress(address(stakingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingShareV1));
 
-        uAD = new MockuADToken(10000);
-        manager.setDollarTokenAddress(address(uAD));
+        dollarToken = new MockDollarToken(10000);
+        manager.setDollarTokenAddress(address(dollarToken));
 
-        debtCoupon = new MockDebtCoupon(100);
-        manager.setDebtCouponAddress(address(debtCoupon));
+        creditNFT = new MockCreditNFT(100);
+        manager.setCreditNFTAddress(address(creditNFT));
 
-        uFormulas = new UbiquityFormulas();
-        manager.setFormulasAddress(address(uFormulas));
+        ubiquityFormulas = new UbiquityFormulas();
+        manager.setFormulasAddress(address(ubiquityFormulas));
 
-        uGov = new UbiquityGovernance(address(manager));
-        manager.setGovernanceTokenAddress(address(uGov));
-        //manager.grantRole(manager.BONDING_MANAGER_ROLE(), admin);
+        governanceToken = new UbiquityGovernanceToken(address(manager));
+        manager.setGovernanceTokenAddress(address(governanceToken));
+        //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
 
-        bondingV1.setBlockCountInAWeek(420);
-        manager.setBondingContractAddress(address(bondingV1));
+        stakingV1.setBlockCountInAWeek(420);
+        manager.setStakingContractAddress(address(stakingV1));
 
-        bondingShareV1.setApprovalForAll(address(bondingV1), true);
+        stakingShareV1.setApprovalForAll(address(stakingV1), true);
 
         manager.setTreasuryAddress(treasury);
 
-        deal(address(uGov), thirdAccount, 100000e18);
-        deal(address(uAD), thirdAccount, 1000000e18);
+        deal(address(governanceToken), thirdAccount, 100000e18);
+        deal(address(dollarToken), thirdAccount, 1000000e18);
 
-        sushiUGOVPool = new SushiSwapPool(address(manager));
-        manager.setSushiSwapPoolAddress(address(sushiUGOVPool));
+        sushiGovernancePool = new SushiSwapPool(address(manager));
+        manager.setSushiSwapPoolAddress(address(sushiGovernancePool));
 
         vm.stopPrank();
 
         vm.startPrank(thirdAccount);
-        uAD.approve(address(router), 1000000e18);
-        uGov.approve(address(router), 100000e18);
+        dollarToken.approve(address(router), 1000000e18);
+        governanceToken.approve(address(router), 100000e18);
         router.addLiquidity(
-            address(uAD),
-            address(uGov),
+            address(dollarToken),
+            address(governanceToken),
             1000000e18,
             100000e18,
             990000e18,
@@ -159,26 +159,26 @@ contract LiveTestHelper is Test {
             admin,
             address(manager),
             fourthAccount,
-            bondingZeroAccount,
-            bondingMinAccount,
-            bondingMaxAccount
+            stakingZeroAccount,
+            stakingMinAccount,
+            stakingMaxAccount
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(uAD), mintings[i], 10000e18);
+            deal(address(dollarToken), mintings[i], 10000e18);
         }
 
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingV1));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(bondingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(stakingV1));
 
-        deal(address(uAD), curveWhaleAddress, 10e18);
+        deal(address(dollarToken), curveWhaleAddress, 10e18);
 
         vm.stopPrank();
 
         address[4] memory crvDeal = [
             address(manager),
-            bondingMaxAccount,
-            bondingMinAccount,
+            stakingMaxAccount,
+            stakingMinAccount,
             fourthAccount
         ];
 
@@ -196,64 +196,64 @@ contract LiveTestHelper is Test {
             50000000
         );
         metapool = IMetaPool(manager.stableSwapMetaPoolAddress());
-        metapool.transfer(address(bondingV2), 100e18);
+        metapool.transfer(address(staking), 100e18);
         metapool.transfer(secondAccount, 1000e18);
 
         twapOracle =
-        new TWAPOracle(address(metapool), address(uAD), address(curve3CrvToken));
+        new TWAPOracleDollar3pool(address(metapool), address(dollarToken), address(curve3CrvToken));
         manager.setTwapOracleAddress(address(twapOracle));
-        uarCalc = new UARForDollarsCalculator(address(manager));
-        manager.setUARCalculatorAddress(address(uarCalc));
+        creditRedemptionCalc = new CreditRedemptionCalculator(address(manager));
+        manager.setCreditCalculatorAddress(address(creditRedemptionCalc));
 
-        couponCalc = new CouponsForDollarsCalculator(address(manager));
-        manager.setCouponCalculatorAddress(address(couponCalc));
+        creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(address(manager));
+        manager.setCreditNFTCalculatorAddress(address(creditNFTRedemptionCalc));
 
-        dollarMintCalc = new DollarMintingCalculator(address(manager));
-        manager.setDollarMintingCalculatorAddress(address(dollarMintCalc));
+        dollarMintCalc = new DollarMintCalculator(address(manager));
+        manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
-        debtCouponMgr =
-            new DebtCouponManager(address(manager), couponLengthBlocks);
+        creditNFTManager =
+            new CreditNFTManager(address(manager), creditNFTLengthBlocks);
 
-        manager.grantRole(manager.COUPON_MANAGER_ROLE(), address(debtCouponMgr));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(debtCouponMgr));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(debtCouponMgr));
+        manager.grantRole(manager.CREDIT_NFT_MANAGER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(creditNFTManager));
 
-        uAR = new UbiquityAutoRedeem(address(manager));
-        manager.setuARTokenAddress(address(uAR));
+        creditToken = new UbiquityCreditToken(address(manager));
+        manager.setCreditTokenAddress(address(creditToken));
 
-        excessDollarsDistributor =
-            new ExcessDollarsDistributor(address(manager));
+        dollarMintExcess =
+            new DollarMintExcess(address(manager));
         manager.setExcessDollarsDistributor(
-            address(debtCouponMgr), address(excessDollarsDistributor)
+            address(creditNFTManager), address(dollarMintExcess)
         );
 
         address[] memory tos;
         uint256[] memory amounts;
         uint256[] memory ids;
 
-        chefV2 = new MasterChefV2(managerAddress, tos, amounts, ids);
+        ubiquityChef = new UbiquityChef(managerAddress, tos, amounts, ids);
 
-        manager.setMasterChefAddress(address(chefV2));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(chefV2));
-        manager.grantRole(manager.UBQ_TOKEN_MANAGER_ROLE(), admin);
-        manager.grantRole(manager.UBQ_TOKEN_MANAGER_ROLE(), managerAddress);
+        manager.setMasterChefAddress(address(ubiquityChef));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(ubiquityChef));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), admin);
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), managerAddress);
 
-        chefV2.setUGOVPerBlock(10e18);
+        ubiquityChef.setGovernancePerBlock(10e18);
 
         vm.stopPrank();
 
-        vm.startPrank(bondingMinAccount);
-        uAD.approve(address(metapool), 10000e18);
+        vm.startPrank(stakingMinAccount);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
-        vm.startPrank(bondingMaxAccount);
-        uAD.approve(address(metapool), 10000e18);
+        vm.startPrank(stakingMaxAccount);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
         vm.startPrank(fourthAccount);
-        uAD.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
@@ -261,48 +261,48 @@ contract LiveTestHelper is Test {
 
         uint256 dyuAD2LP = metapool.calc_token_amount(amounts_, true);
 
-        vm.prank(bondingMinAccount);
-        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, bondingMinAccount);
+        vm.prank(stakingMinAccount);
+        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, stakingMinAccount);
 
-        vm.prank(bondingMaxAccount);
-        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, bondingMaxAccount);
+        vm.prank(stakingMaxAccount);
+        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, stakingMaxAccount);
 
         vm.prank(fourthAccount);
         metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, fourthAccount);
 
-        ///uint256 bondingMinBal = metapool.balanceOf(bondingMinAccount);
-        ///uint256 bondingMaxBal = metapool.balanceOf(bondingMaxAccount);
+        ///uint256 bondingMinBal = metapool.balanceOf(stakingMinAccount);
+        ///uint256 bondingMaxBal = metapool.balanceOf(stakingMaxAccount);
 
         vm.startPrank(admin);
-        bondingShareV2 = new BondingShareV2(address(manager), uri);
-        manager.setBondingShareAddress(address(bondingShareV2));
+        stakingShare = new StakingShare(address(manager), uri);
+        manager.setStakingShareAddress(address(stakingShare));
 
-        bFormulas = new BondingFormulas();
+        stakingFormulas = new StakingFormulas();
 
-        migrating = [bondingZeroAccount, bondingMinAccount, bondingMaxAccount];
+        migrating = [stakingZeroAccount, stakingMinAccount, stakingMaxAccount];
         migrateLP = [0, 0, 0];
         locked = [uint256(1), uint256(1), uint256(208)];
 
-        bondingV2 =
-        new BondingV2(address(manager), address(bFormulas), migrating, migrateLP, locked);
+        staking =
+        new Staking(address(manager), address(stakingFormulas), migrating, migrateLP, locked);
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 
-        bondingV2.setMigrating(true);
+        staking.setMigrating(true);
 
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingV2));
-        bondingV2.setBlockCountInAWeek(420);
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(staking));
+        staking.setBlockCountInAWeek(420);
 
-        manager.setBondingContractAddress(address(bondingV2));
+        manager.setStakingContractAddress(address(staking));
 
-        manager.revokeRole(manager.UBQ_MINTER_ROLE(), address(bondingV1));
-        manager.revokeRole(manager.UBQ_BURNER_ROLE(), address(bondingV1));
+        manager.revokeRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.revokeRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(stakingV1));
         vm.stopPrank();
 
         vm.prank(secondAccount);
-        bondingShareV1.setApprovalForAll(address(bondingV1), true);
+        stakingShareV1.setApprovalForAll(address(stakingV1), true);
 
         vm.prank(thirdAccount);
-        bondingShareV1.setApprovalForAll(address(bondingV1), true);
+        stakingShareV1.setApprovalForAll(address(stakingV1), true);
     }
 }
