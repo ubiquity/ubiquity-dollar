@@ -5,7 +5,6 @@ import Icon from "../ui/Icon";
 import Inventory from "./Inventory";
 import Sidebar from "./Sidebar";
 import TransactionsDisplay from "./TransactionsDisplay";
-import packageConfig from "../../package.json";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -53,14 +52,14 @@ export default function Layout({ children }: LayoutProps) {
           <Inventory />
         </div>
 
-        {/* frontend version with a URL to commit hash, COMMIT_REF is only available in production netlify build */}
-        {process.env.COMMIT_REF && (
+        {/* frontend version with a URL to commit hash, NEXT_PUBLIC_COMMIT_REF is only available in production netlify build */}
+        {process.env.NEXT_PUBLIC_COMMIT_REF && (
           <div id="CommitURL">
             <a
-              href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.COMMIT_REF}`}
+              href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.NEXT_PUBLIC_COMMIT_REF}`}
               target="_blank"
             >
-              {process.env.COMMIT_REF.substring(0,8)}
+              {process.env.NEXT_PUBLIC_COMMIT_REF.substring(0,8)}
             </a>
           </div>
         )}
