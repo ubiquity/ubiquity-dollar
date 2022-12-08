@@ -28,6 +28,7 @@
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
     "deploy": "ts-node ./scripts/deploy/deploy.ts",
+    "deploy:diamond": "ts-node ./scripts/deploy/manager/DiamondInAll.ts",
     "task": "ts-node ./scripts/task/task.ts",
     "clean": "forge clean",
     "purge": "yarn clean"
