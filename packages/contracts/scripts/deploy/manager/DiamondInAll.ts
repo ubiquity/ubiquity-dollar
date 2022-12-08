@@ -33,18 +33,36 @@ export type ForgeArguments = {
     rpcUrl: string,
     privateKey: string,
     contractInstance: string,
-    constructorArguments: [DiamondArgs, cutType[]] | string[],
+    constructorArguments?: [DiamondArgs, cutType[]],
     etherscanApiKey?: string,
 }
 
 const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult | undefined, stderr: string }> => {
-    let flattenConstructorArgs = ``;
+    let flattenConstructorArgs = `(`;
     let prepareCmd: string;
-    if (args.constructorArguments.length !== 0) {
-        for (const param of args.constructorArguments) {
-            flattenConstructorArgs += `${param} `;
+    if (args.constructorArguments) {
+        let diamondArgs = args.constructorArguments[0];
+        let diamondCut = args.constructorArguments[1];
+
+        flattenConstructorArgs += `${diamondArgs.owner},${diamondArgs.init},${diamondArgs.initCalldata}) [`;
+
+        for (let i = 0; i < diamondCut.length; i++) {
+            flattenConstructorArgs += `(${diamondCut[i].facetAddress},${diamondCut[i].action},[`;
+
+            let functionSelectors = diamondCut[i].functionSelectors;
+            for (let j = 0; j < functionSelectors.length; j++) {
+                flattenConstructorArgs += `${functionSelectors[j]}`;
+                if (j !== functionSelectors.length - 1) {
+                    flattenConstructorArgs += `,`;
+                }
+            }
+            flattenConstructorArgs += `])`;
+            if (i !== diamondCut.length - 1) {
+                flattenConstructorArgs += `,`;
+            }
         }
-        prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance}`;
+        flattenConstructorArgs += `]`;
+        prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --private-key ${args.privateKey} ${args.contractInstance} --constructor-args ${flattenConstructorArgs}`;
     } else {
         prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --private-key ${args.privateKey} ${args.contractInstance}`;
     }
@@ -110,15 +128,15 @@ async function deployDiamond() {
     const ownershipFacetContract = "src/manager/facets/OwnershipFacet.sol:OwnershipFacet";
     const managerFacetContract = "src/manager/facets/ManagerFacet.sol:ManagerFacet";
 
-    const { stderr: diamondCutFacetError, result: diamondCutFacetResult } = await create({ ...env, name: "DiamondCutFacet", network: args.network, contractInstance: diamondCutFacetContract, constructorArguments: [] });
+    const { stderr: diamondCutFacetError, result: diamondCutFacetResult } = await create({ ...env, name: "DiamondCutFacet", network: args.network, contractInstance: diamondCutFacetContract });
     if (!diamondCutFacetError && diamondCutFacetResult != undefined) {
-        const { stderr: diamondInitError, result: diamondInitResult } = await create({ ...env, name: "DiamondInit", network: args.network, contractInstance: diamondInitContract, constructorArguments: [] });
+        const { stderr: diamondInitError, result: diamondInitResult } = await create({ ...env, name: "DiamondInit", network: args.network, contractInstance: diamondInitContract });
         if (!diamondInitError && diamondInitResult != undefined) {
-            const { stderr: diamondLoupeFacetError, result: diamondLoupeFacetResult } = await create({ ...env, name: "DiamondLoupeFacet", network: args.network, contractInstance: diamondLoupeFacetContract, constructorArguments: [] });
+            const { stderr: diamondLoupeFacetError, result: diamondLoupeFacetResult } = await create({ ...env, name: "DiamondLoupeFacet", network: args.network, contractInstance: diamondLoupeFacetContract });
             if (!diamondLoupeFacetError && diamondLoupeFacetResult != undefined) {
-                const { stderr: ownershipFacetError, result: ownershipFacetResult } = await create({ ...env, name: "OwnershipFacet", network: args.network, contractInstance: ownershipFacetContract, constructorArguments: [] });
+                const { stderr: ownershipFacetError, result: ownershipFacetResult } = await create({ ...env, name: "OwnershipFacet", network: args.network, contractInstance: ownershipFacetContract });
                 if (!ownershipFacetError && ownershipFacetResult != undefined) {
-                    const { stderr: managerFacetError, result: managerFacetResult } = await create({ ...env, name: "ManagerFacet", network: args.network, contractInstance: managerFacetContract, constructorArguments: [] });
+                    const { stderr: managerFacetError, result: managerFacetResult } = await create({ ...env, name: "ManagerFacet", network: args.network, contractInstance: managerFacetContract });
                     if (!managerFacetError && managerFacetResult != undefined) {
                         const cut = [] as cutType[];
                         const diamondCutFacetCut = {
