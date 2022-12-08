@@ -30,7 +30,6 @@ async function printSelectors(contractName: string, artifactFolderPath = "../../
     return acc;
   }, []);
 
-  console.log(`Selectors of ${contractName}: `, signatures)
   console.log(`Selectors of ${contractName}: `, selectors);
   console.log(`Length: `, selectors.length);
 }
