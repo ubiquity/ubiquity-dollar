@@ -3,14 +3,14 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "../core/UbiquityDollarToken.sol";
+import "../core/UbiquityDollarManager.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../interfaces/IMetaPool.sol";
 import "../interfaces/IUbiquityFormulas.sol";
-import "../UbiquityAlgorithmicDollar.sol";
-import "../UbiquityAlgorithmicDollarManager.sol";
 import "../interfaces/ISablier.sol";
-import "../interfaces/IMasterChefV2.sol";
-import "../interfaces/ITWAPOracle.sol";
+import "../interfaces/IUbiquityChef.sol";
+import "../interfaces/ITWAPOracleDollar3pool.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../utils/CollectableDust.sol";
 
@@ -18,7 +18,7 @@ contract Bonding is CollectableDust {
     using SafeERC20 for IERC20;
 
     bytes public data = "";
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     uint256 public constant ONE = uint256(1 ether); // 3Crv has 18 decimals
     ISablier public sablier;
@@ -38,14 +38,14 @@ contract Bonding is CollectableDust {
 
     modifier onlyBondingManager() {
         require(
-            manager.hasRole(manager.BONDING_MANAGER_ROLE(), msg.sender),
+            manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
             "Caller is not a bonding manager"
         );
         _;
     }
 
     constructor(address _manager, address _sablier) CollectableDust() {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
         sablier = ISablier(_sablier);
     }
 
@@ -68,7 +68,7 @@ contract Bonding is CollectableDust {
             (metaPool.calc_withdraw_one_coin(amount, 0) * 99) / 100;
         // update twap
         metaPool.remove_liquidity_one_coin(amount, 0, expected);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         IERC20(manager.dollarTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             IERC20(manager.dollarTokenAddress()).balanceOf(address(this))
@@ -91,7 +91,7 @@ contract Bonding is CollectableDust {
             (metaPool.calc_withdraw_one_coin(amount, 1) * 99) / 100;
         // update twap
         metaPool.remove_liquidity_one_coin(amount, 1, expected);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         IERC20(manager.curve3PoolTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             IERC20(manager.curve3PoolTokenAddress()).balanceOf(address(this))
@@ -197,7 +197,7 @@ contract Bonding is CollectableDust {
         _id = n - (n % blockBonding);
         _mint(_sharesAmount, _id);
         // set masterchef for uGOV rewards
-        IMasterChefV2(manager.masterChefAddress()).deposit(
+        IUbiquityChef(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
         );
     }
@@ -213,7 +213,7 @@ contract Bonding is CollectableDust {
         );
 
         require(
-            IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
                 msg.sender, _id
             ) >= _sharesAmount,
             "Bonding: caller does not have enough shares"
@@ -222,13 +222,13 @@ contract Bonding is CollectableDust {
         _updateOracle();
         // get masterchef for uGOV rewards To ensure correct computation
         // it needs to be done BEFORE burning the shares
-        IMasterChefV2(manager.masterChefAddress()).withdraw(
+        IUbiquityChef(manager.masterChefAddress()).withdraw(
             msg.sender, _sharesAmount, _id
         );
 
         uint256 _currentShareValue = currentShareValue();
 
-        IERC1155Ubiquity(manager.bondingShareAddress()).burn(
+        IERC1155Ubiquity(manager.stakingShareAddress()).burn(
             msg.sender, _id, _sharesAmount
         );
 
@@ -246,7 +246,7 @@ contract Bonding is CollectableDust {
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
 
         uint256 totalShares =
-            IERC1155Ubiquity(manager.bondingShareAddress()).totalSupply();
+            IERC1155Ubiquity(manager.stakingShareAddress()).totalSupply();
 
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
             totalLP, totalShares, ONE
@@ -254,7 +254,7 @@ contract Bonding is CollectableDust {
     }
 
     function currentTokenPrice() public view returns (uint256) {
-        return ITWAPOracle(manager.twapOracleAddress()).consult(
+        return ITWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }
@@ -265,12 +265,12 @@ contract Bonding is CollectableDust {
             _currentShareValue != 0, "Bonding: share value should not be null"
         );
 
-        IERC1155Ubiquity(manager.bondingShareAddress()).mint(
+        IERC1155Ubiquity(manager.stakingShareAddress()).mint(
             msg.sender, _id, _sharesAmount, data
         );
     }
 
     function _updateOracle() internal {
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
 }
