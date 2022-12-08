@@ -5,20 +5,19 @@ import "../DiamondTestSetup.sol";
 import "../../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../../src/dollar/interfaces/IMetaPool.sol";
 import "../../../src/dollar/mocks/MockUbiquityGovernance.sol";
-import "../../../src/dollar/mocks/MockuADToken.sol";
+import "../../../src/dollar/mocks/MockDollarToken.sol";
 
-import {
-    UBQ_MINTER_ROLE,
-    UBQ_BURNER_ROLE
-} from "../../../src/manager/libraries/LibAppStorage.sol";
+import {UBQ_MINTER_ROLE, UBQ_BURNER_ROLE} from "../../../src/manager/libraries/LibAppStorage.sol";
 
 contract TestManagerFacet is DiamondSetup {
-
     function testCanCallGeneralFunctions() public {
         IManagerFacet.getExcessDollarsDistributor(contract1);
     }
 
-    function testCanCallAdminFunction_OnlyWith_AdminRole() public prankAs(admin) {
+    function testCanCallAdminFunction_OnlyWith_AdminRole()
+        public
+        prankAs(admin)
+    {
         IManagerFacet.setCreditTokenAddress(contract1);
     }
 
@@ -41,7 +40,7 @@ contract TestManagerFacet is DiamondSetup {
         IManagerFacet.setDebtCouponAddress(contract1);
         assertEq(IManagerFacet.getDebtCouponAddress(), contract1);
     }
-    
+
     function testShouldSetGovernanceTokenAddress() public prankAs(admin) {
         IManagerFacet.setGovernanceTokenAddress(contract1);
         assertEq(IManagerFacet.getGovernanceTokenAddress(), contract1);
@@ -61,15 +60,21 @@ contract TestManagerFacet is DiamondSetup {
         IManagerFacet.setCouponCalculatorAddress(contract1);
         assertEq(IManagerFacet.getCouponCalculatorAddress(), contract1);
     }
-    
-    function testShouldSetDollarMintingCalculatorAddress() public prankAs(admin) {
+
+    function testShouldSetDollarMintingCalculatorAddress()
+        public
+        prankAs(admin)
+    {
         IManagerFacet.setDollarMintingCalculatorAddress(contract1);
         assertEq(IManagerFacet.getDollarMintingCalculatorAddress(), contract1);
     }
 
     function testShouldSetExcessDollarsDistributor() public prankAs(admin) {
         IManagerFacet.setExcessDollarsDistributor(contract1, contract2);
-        assertEq(IManagerFacet.getExcessDollarsDistributor(contract1), contract2);
+        assertEq(
+            IManagerFacet.getExcessDollarsDistributor(contract1),
+            contract2
+        );
     }
 
     function testShouldSetMasterChefAddress() public prankAs(admin) {
@@ -103,7 +108,11 @@ contract TestManagerFacet is DiamondSetup {
     }
 
     function testShouldSetIncentiveToUAD() public prankAs(admin) {
-        address dollarTokenAddress = generateAddress("dollarTokenAddress", true, 10 ether);
+        address dollarTokenAddress = generateAddress(
+            "dollarTokenAddress",
+            true,
+            10 ether
+        );
         IManagerFacet.setDollarTokenAddress(dollarTokenAddress);
         IManagerFacet.setIncentiveToUAD(user1, contract1);
     }
@@ -117,13 +126,12 @@ contract TestManagerFacet is DiamondSetup {
     }
 
     function testShouldDeployStableSwapPool() public {
-
         vm.startPrank(admin);
 
-        MockuADToken dollarToken;
+        MockDollarToken dollarToken;
         MockUbiquityGovernance governanceToken;
 
-        dollarToken = new MockuADToken(10000);
+        dollarToken = new MockDollarToken(10000);
         governanceToken = new MockUbiquityGovernance(10000);
 
         IManagerFacet.setDollarTokenAddress(address(dollarToken));
@@ -171,7 +179,9 @@ contract TestManagerFacet is DiamondSetup {
 
         vm.startPrank(admin);
 
-        ICurveFactory curvePoolFactory = ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
+        ICurveFactory curvePoolFactory = ICurveFactory(
+            0x0959158b6040D32d04c301A72CBFD6b39E21c9AE
+        );
         address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
         address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
 
@@ -183,10 +193,11 @@ contract TestManagerFacet is DiamondSetup {
             50000000
         );
 
-        IMetaPool metapool = IMetaPool(IManagerFacet.getStableSwapMetaPoolAddress());
+        IMetaPool metapool = IMetaPool(
+            IManagerFacet.getStableSwapMetaPoolAddress()
+        );
         address bondingV2Address = generateAddress("bondingV2", true, 10 ether);
         metapool.transfer(address(bondingV2Address), 100e18);
         vm.stopPrank();
-
     }
 }

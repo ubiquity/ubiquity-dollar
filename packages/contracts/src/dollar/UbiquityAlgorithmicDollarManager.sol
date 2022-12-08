@@ -10,7 +10,7 @@ import "./interfaces/IUbiquityAlgorithmicDollar.sol";
 import "./interfaces/ICurveFactory.sol";
 import "./interfaces/IMetaPool.sol";
 
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 
 /// @title A central config for the uAD system. Also acts as a central
 /// access control manager.
@@ -77,7 +77,7 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         twapOracleAddress = _twapOracleAddress;
         // to be removed
 
-        TWAPOracle oracle = TWAPOracle(twapOracleAddress);
+        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(twapOracleAddress);
         oracle.update();
     }
 
@@ -97,7 +97,8 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         onlyAdmin
     {
         IUbiquityAlgorithmicDollar(dollarTokenAddress).setIncentiveContract(
-            _account, _incentiveAddress
+            _account,
+            _incentiveAddress
         );
     }
 
@@ -146,8 +147,9 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         address debtCouponManagerAddress,
         address excessCouponDistributor
     ) external onlyAdmin {
-        _excessDollarDistributors[debtCouponManagerAddress] =
-            excessCouponDistributor;
+        _excessDollarDistributors[
+            debtCouponManagerAddress
+        ] = excessCouponDistributor;
     }
 
     function setMasterChefAddress(address _masterChefAddress)
@@ -227,22 +229,27 @@ contract UbiquityAlgorithmicDollarManager is AccessControl {
         stableSwapMetaPoolAddress = metaPool;
 
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount =
-            IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
-        uint256 uADTokenAmount =
-            IERC20(dollarTokenAddress).balanceOf(address(this));
+        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
+            address(this)
+        );
+        uint256 uADTokenAmount = IERC20(dollarTokenAddress).balanceOf(
+            address(this)
+        );
 
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, 0);
-        IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, crv3PoolTokenAmount);
+        IERC20(_crv3PoolTokenAddress).safeApprove(
+            metaPool,
+            crv3PoolTokenAmount
+        );
 
         IERC20(dollarTokenAddress).safeApprove(metaPool, 0);
         IERC20(dollarTokenAddress).safeApprove(metaPool, uADTokenAmount);
 
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == dollarTokenAddress
-                && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            IMetaPool(metaPool).coins(0) == dollarTokenAddress &&
+                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "uADMGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool

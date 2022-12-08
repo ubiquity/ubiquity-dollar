@@ -9,9 +9,9 @@ import "../../src/dollar/BondingShareV2.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
 import "../../src/dollar/UbiquityGovernance.sol";
 import "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import "../../src/dollar/mocks/MockuADToken.sol";
+import "../../src/dollar/mocks/MockDollarToken.sol";
 import "../../src/dollar/UbiquityFormulas.sol";
-import "../../src/dollar/TWAPOracle.sol";
+import "../../src/dollar/TWAPOracleDollar3pool.sol";
 import "../../src/dollar/MasterChefV2.sol";
 import "../../src/dollar/UARForDollarsCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
@@ -41,7 +41,7 @@ contract LiveTestHelper is Test {
     UbiquityAlgorithmicDollarManager manager;
 
     UbiquityFormulas uFormulas;
-    TWAPOracle twapOracle;
+    TWAPOracleDollar3pool twapOracle;
     MasterChefV2 chefV2;
     UARForDollarsCalculator uarCalc;
     CouponsForDollarsCalculator couponCalc;
@@ -53,7 +53,7 @@ contract LiveTestHelper is Test {
     SushiSwapPool sushiUGOVPool;
     IMetaPool metapool;
 
-    MockuADToken uAD;
+    MockDollarToken uAD;
     UbiquityGovernance uGov;
 
     BondingShare bondingShareV1;
@@ -110,7 +110,7 @@ contract LiveTestHelper is Test {
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingV1));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(bondingShareV1));
 
-        uAD = new MockuADToken(10000);
+        uAD = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(uAD));
 
         debtCoupon = new MockDebtCoupon(100);
@@ -199,8 +199,11 @@ contract LiveTestHelper is Test {
         metapool.transfer(address(bondingV2), 100e18);
         metapool.transfer(secondAccount, 1000e18);
 
-        twapOracle =
-        new TWAPOracle(address(metapool), address(uAD), address(curve3CrvToken));
+        twapOracle = new TWAPOracleDollar3pool(
+            address(metapool),
+            address(uAD),
+            address(curve3CrvToken)
+        );
         manager.setTwapOracleAddress(address(twapOracle));
         uarCalc = new UARForDollarsCalculator(address(manager));
         manager.setUARCalculatorAddress(address(uarCalc));
@@ -211,20 +214,27 @@ contract LiveTestHelper is Test {
         dollarMintCalc = new DollarMintingCalculator(address(manager));
         manager.setDollarMintingCalculatorAddress(address(dollarMintCalc));
 
-        debtCouponMgr =
-            new DebtCouponManager(address(manager), couponLengthBlocks);
+        debtCouponMgr = new DebtCouponManager(
+            address(manager),
+            couponLengthBlocks
+        );
 
-        manager.grantRole(manager.COUPON_MANAGER_ROLE(), address(debtCouponMgr));
+        manager.grantRole(
+            manager.COUPON_MANAGER_ROLE(),
+            address(debtCouponMgr)
+        );
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(debtCouponMgr));
         manager.grantRole(manager.UBQ_BURNER_ROLE(), address(debtCouponMgr));
 
         uAR = new UbiquityAutoRedeem(address(manager));
         manager.setuARTokenAddress(address(uAR));
 
-        excessDollarsDistributor =
-            new ExcessDollarsDistributor(address(manager));
+        excessDollarsDistributor = new ExcessDollarsDistributor(
+            address(manager)
+        );
         manager.setExcessDollarsDistributor(
-            address(debtCouponMgr), address(excessDollarsDistributor)
+            address(debtCouponMgr),
+            address(excessDollarsDistributor)
         );
 
         address[] memory tos;
@@ -262,13 +272,21 @@ contract LiveTestHelper is Test {
         uint256 dyuAD2LP = metapool.calc_token_amount(amounts_, true);
 
         vm.prank(bondingMinAccount);
-        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, bondingMinAccount);
+        metapool.add_liquidity(
+            amounts_,
+            (dyuAD2LP * 99) / 100,
+            bondingMinAccount
+        );
 
         vm.prank(bondingMaxAccount);
-        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, bondingMaxAccount);
+        metapool.add_liquidity(
+            amounts_,
+            (dyuAD2LP * 99) / 100,
+            bondingMaxAccount
+        );
 
         vm.prank(fourthAccount);
-        metapool.add_liquidity(amounts_, dyuAD2LP * 99 / 100, fourthAccount);
+        metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
         ///uint256 bondingMinBal = metapool.balanceOf(bondingMinAccount);
         ///uint256 bondingMaxBal = metapool.balanceOf(bondingMaxAccount);
@@ -283,8 +301,13 @@ contract LiveTestHelper is Test {
         migrateLP = [0, 0, 0];
         locked = [uint256(1), uint256(1), uint256(208)];
 
-        bondingV2 =
-        new BondingV2(address(manager), address(bFormulas), migrating, migrateLP, locked);
+        bondingV2 = new BondingV2(
+            address(manager),
+            address(bFormulas),
+            migrating,
+            migrateLP,
+            locked
+        );
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 

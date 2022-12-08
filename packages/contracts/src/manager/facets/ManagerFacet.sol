@@ -1,17 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {
-    AppStorage,
-    Modifiers,
-    UBQ_MINTER_ROLE,
-    PAUSER_ROLE,
-    COUPON_MANAGER_ROLE,
-    BONDING_MANAGER_ROLE,
-    INCENTIVE_MANAGER_ROLE,
-    UBQ_TOKEN_MANAGER_ROLE    
-} from "../libraries/LibAppStorage.sol";
-import { AccessControlStorage } from "../libraries/AccessControlStorage.sol";
+import {AppStorage, Modifiers, UBQ_MINTER_ROLE, PAUSER_ROLE, COUPON_MANAGER_ROLE, BONDING_MANAGER_ROLE, INCENTIVE_MANAGER_ROLE, UBQ_TOKEN_MANAGER_ROLE} from "../libraries/LibAppStorage.sol";
+import {AccessControlStorage} from "../libraries/AccessControlStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -19,10 +10,9 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../../dollar/interfaces/IUbiquityAlgorithmicDollar.sol";
 import "../../dollar/interfaces/ICurveFactory.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
-import "../../dollar/TWAPOracle.sol";
+import "../../dollar/TWAPOracleDollar3pool.sol";
 
 contract ManagerFacet is Modifiers {
-
     function setDollarTokenAddress(address _dollarTokenAddress)
         external
         onlyAdmin
@@ -82,8 +72,9 @@ contract ManagerFacet is Modifiers {
         address debtCouponManagerAddress,
         address excessCouponDistributor
     ) external onlyAdmin {
-        s._excessDollarDistributors[debtCouponManagerAddress] =
-            excessCouponDistributor;
+        s._excessDollarDistributors[
+            debtCouponManagerAddress
+        ] = excessCouponDistributor;
     }
 
     function setMasterChefAddress(address _masterChefAddress)
@@ -127,7 +118,8 @@ contract ManagerFacet is Modifiers {
         onlyAdmin
     {
         IUbiquityAlgorithmicDollar(s.dollarTokenAddress).setIncentiveContract(
-            _account, _incentiveAddress
+            _account,
+            _incentiveAddress
         );
     }
 
@@ -150,10 +142,12 @@ contract ManagerFacet is Modifiers {
         s.stableSwapMetaPoolAddress = metaPool;
 
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount =
-            IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
-        uint256 uADTokenAmount =
-            IERC20(s.dollarTokenAddress).balanceOf(address(this));
+        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
+            address(this)
+        );
+        uint256 uADTokenAmount = IERC20(s.dollarTokenAddress).balanceOf(
+            address(this)
+        );
 
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
@@ -164,8 +158,8 @@ contract ManagerFacet is Modifiers {
 
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == s.dollarTokenAddress
-                && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            IMetaPool(metaPool).coins(0) == s.dollarTokenAddress &&
+                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "uADMGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
@@ -211,7 +205,11 @@ contract ManagerFacet is Modifiers {
         return s.couponCalculatorAddress;
     }
 
-    function getDollarMintingCalculatorAddress() external view returns (address) {
+    function getDollarMintingCalculatorAddress()
+        external
+        view
+        returns (address)
+    {
         return s.dollarMintingCalculatorAddress;
     }
 

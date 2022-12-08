@@ -10,7 +10,7 @@ import "../UbiquityAlgorithmicDollar.sol";
 import "../UbiquityAlgorithmicDollarManager.sol";
 import "../interfaces/ISablier.sol";
 import "../interfaces/IMasterChefV2.sol";
-import "../interfaces/ITWAPOracle.sol";
+import "../interfaces/ITWAPOracleDollar3pool.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../utils/CollectableDust.sol";
 
@@ -61,14 +61,15 @@ contract Bonding is CollectableDust {
         IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
         // safe approve
         IERC20(manager.stableSwapMetaPoolAddress()).safeApprove(
-            address(this), amount
+            address(this),
+            amount
         );
         // remove one coin
-        uint256 expected =
-            (metaPool.calc_withdraw_one_coin(amount, 0) * 99) / 100;
+        uint256 expected = (metaPool.calc_withdraw_one_coin(amount, 0) * 99) /
+            100;
         // update twap
         metaPool.remove_liquidity_one_coin(amount, 0, expected);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         IERC20(manager.dollarTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             IERC20(manager.dollarTokenAddress()).balanceOf(address(this))
@@ -84,14 +85,15 @@ contract Bonding is CollectableDust {
         IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
         // safe approve
         IERC20(manager.stableSwapMetaPoolAddress()).safeApprove(
-            address(this), amount
+            address(this),
+            amount
         );
         // remove one coin
-        uint256 expected =
-            (metaPool.calc_withdraw_one_coin(amount, 1) * 99) / 100;
+        uint256 expected = (metaPool.calc_withdraw_one_coin(amount, 1) * 99) /
+            100;
         // update twap
         metaPool.remove_liquidity_one_coin(amount, 1, expected);
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
         IERC20(manager.curve3PoolTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             IERC20(manager.curve3PoolTokenAddress()).balanceOf(address(this))
@@ -115,11 +117,11 @@ contract Bonding is CollectableDust {
         _removeProtocolToken(_token);
     }
 
-    function sendDust(address _to, address _token, uint256 _amount)
-        external
-        override
-        onlyBondingManager
-    {
+    function sendDust(
+        address _to,
+        address _token,
+        uint256 _amount
+    ) external override onlyBondingManager {
         _sendDust(_to, _token, _amount);
     }
 
@@ -183,7 +185,9 @@ contract Bonding is CollectableDust {
         _updateOracle();
 
         IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
-            msg.sender, address(this), _lpsAmount
+            msg.sender,
+            address(this),
+            _lpsAmount
         );
 
         uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
@@ -198,7 +202,9 @@ contract Bonding is CollectableDust {
         _mint(_sharesAmount, _id);
         // set masterchef for uGOV rewards
         IMasterChefV2(manager.masterChefAddress()).deposit(
-            msg.sender, _sharesAmount, _id
+            msg.sender,
+            _sharesAmount,
+            _id
         );
     }
 
@@ -214,7 +220,8 @@ contract Bonding is CollectableDust {
 
         require(
             IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
-                msg.sender, _id
+                msg.sender,
+                _id
             ) >= _sharesAmount,
             "Bonding: caller does not have enough shares"
         );
@@ -223,54 +230,68 @@ contract Bonding is CollectableDust {
         // get masterchef for uGOV rewards To ensure correct computation
         // it needs to be done BEFORE burning the shares
         IMasterChefV2(manager.masterChefAddress()).withdraw(
-            msg.sender, _sharesAmount, _id
+            msg.sender,
+            _sharesAmount,
+            _id
         );
 
         uint256 _currentShareValue = currentShareValue();
 
         IERC1155Ubiquity(manager.bondingShareAddress()).burn(
-            msg.sender, _id, _sharesAmount
+            msg.sender,
+            _id,
+            _sharesAmount
         );
 
         // if (redeemStreamTime == 0) {
         IERC20(manager.stableSwapMetaPoolAddress()).safeTransfer(
             msg.sender,
             IUbiquityFormulas(manager.formulasAddress()).redeemBonds(
-                _sharesAmount, _currentShareValue, ONE
+                _sharesAmount,
+                _currentShareValue,
+                ONE
             )
         );
     }
 
     function currentShareValue() public view returns (uint256 priceShare) {
-        uint256 totalLP =
-            IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
+        uint256 totalLP = IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(
+            address(this)
+        );
 
-        uint256 totalShares =
-            IERC1155Ubiquity(manager.bondingShareAddress()).totalSupply();
+        uint256 totalShares = IERC1155Ubiquity(manager.bondingShareAddress())
+            .totalSupply();
 
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
-            totalLP, totalShares, ONE
+            totalLP,
+            totalShares,
+            ONE
         );
     }
 
     function currentTokenPrice() public view returns (uint256) {
-        return ITWAPOracle(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
+        return
+            ITWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
+                manager.dollarTokenAddress()
+            );
     }
 
     function _mint(uint256 _sharesAmount, uint256 _id) internal {
         uint256 _currentShareValue = currentShareValue();
         require(
-            _currentShareValue != 0, "Bonding: share value should not be null"
+            _currentShareValue != 0,
+            "Bonding: share value should not be null"
         );
 
         IERC1155Ubiquity(manager.bondingShareAddress()).mint(
-            msg.sender, _id, _sharesAmount, data
+            msg.sender,
+            _id,
+            _sharesAmount,
+            data
         );
     }
 
     function _updateOracle() internal {
-        ITWAPOracle(manager.twapOracleAddress()).update();
+        ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
 }

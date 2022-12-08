@@ -1,20 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
 import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
-import {UARForDollarsCalculator} from
-    "../../src/dollar/UARForDollarsCalculator.sol";
-import {CouponsForDollarsCalculator} from
-    "../../src/dollar/CouponsForDollarsCalculator.sol";
-import {DollarMintingCalculator} from
-    "../../src/dollar/DollarMintingCalculator.sol";
-import {ExcessDollarsDistributor} from
-    "../../src/dollar/ExcessDollarsDistributor.sol";
+import {UARForDollarsCalculator} from "../../src/dollar/UARForDollarsCalculator.sol";
+import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCalculator.sol";
+import {DollarMintingCalculator} from "../../src/dollar/DollarMintingCalculator.sol";
+import {ExcessDollarsDistributor} from "../../src/dollar/ExcessDollarsDistributor.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
-import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
-import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
+import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
+import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
 import "forge-std/Test.sol";
@@ -42,8 +37,9 @@ abstract contract LocalTestHelper is Test {
         public
         returns (address)
     {
-        UbiquityAlgorithmicDollarManager _manager =
-            new UbiquityAlgorithmicDollarManager(admin);
+        UbiquityAlgorithmicDollarManager _manager = new UbiquityAlgorithmicDollarManager(
+                admin
+            );
 
         vm.startPrank(admin);
         // deploy debt token
@@ -51,12 +47,17 @@ abstract contract LocalTestHelper is Test {
         _manager.setDebtCouponAddress(address(_debtCoupon));
 
         // deploy uAD token
-        MockuADToken _uAD = new MockuADToken(10000e18);
+        MockDollarToken _uAD = new MockDollarToken(10000e18);
         _manager.setDollarTokenAddress(address(_uAD));
 
         // deploy twapPrice oracle
-        MockTWAPOracle _twapOracle =
-        new MockTWAPOracle(address(0x100), address(_uAD), address(0x101), 100, 100);
+        MockTWAPOracleDollar3pool _twapOracle = new MockTWAPOracleDollar3pool(
+            address(0x100),
+            address(_uAD),
+            address(0x101),
+            100,
+            100
+        );
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token
@@ -64,8 +65,7 @@ abstract contract LocalTestHelper is Test {
         _manager.setGovernanceTokenAddress(address(_uGov));
 
         // deploy couponsForDollarCalculator
-        MockCouponsForDollarsCalculator couponsForDollarsCalculator =
-            new MockCouponsForDollarsCalculator();
+        MockCouponsForDollarsCalculator couponsForDollarsCalculator = new MockCouponsForDollarsCalculator();
         _manager.setCouponCalculatorAddress(
             address(couponsForDollarsCalculator)
         );
@@ -75,13 +75,15 @@ abstract contract LocalTestHelper is Test {
         _manager.setuARTokenAddress(address(autoRedeem));
 
         // deploy UARDollarCalculator
-        UARForDollarsCalculator _uarDollarCalculator =
-            new UARForDollarsCalculator(address(_manager));
+        UARForDollarsCalculator _uarDollarCalculator = new UARForDollarsCalculator(
+                address(_manager)
+            );
         _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
 
         // deploy dollarMintingCalculator
-        DollarMintingCalculator _mintingCalculator =
-            new DollarMintingCalculator(address(_manager));
+        DollarMintingCalculator _mintingCalculator = new DollarMintingCalculator(
+                address(_manager)
+            );
         _manager.setDollarMintingCalculatorAddress(address(_mintingCalculator));
 
         // set treasury address

@@ -2,13 +2,10 @@
 pragma solidity ^0.8.3;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import {UbiquityAlgorithmicDollar} from
-    "../../src/dollar/UbiquityAlgorithmicDollar.sol";
-import {CouponsForDollarsCalculator} from
-    "../../src/dollar/CouponsForDollarsCalculator.sol";
-import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
+import {UbiquityAlgorithmicDollarManager} from "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityAlgorithmicDollar} from "../../src/dollar/UbiquityAlgorithmicDollar.sol";
+import {CouponsForDollarsCalculator} from "../../src/dollar/CouponsForDollarsCalculator.sol";
+import {TWAPOracleDollar3pool} from "../../src/dollar/TWAPOracleDollar3pool.sol";
 import {DebtCoupon} from "../../src/dollar/DebtCoupon.sol";
 import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
 import {CurveUADIncentive} from "../../src/dollar/CurveUADIncentive.sol";
@@ -25,8 +22,9 @@ contract CurveUADIncentiveTest is LocalTestHelper {
 
     function setUp() public {
         uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
-        curveIncentiveAddress =
-            address(new CurveUADIncentive(uADManagerAddress));
+        curveIncentiveAddress = address(
+            new CurveUADIncentive(uADManagerAddress)
+        );
         twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
             .twapOracleAddress();
         vm.prank(admin);
@@ -37,12 +35,12 @@ contract CurveUADIncentiveTest is LocalTestHelper {
     function mockInternalFuncs(uint256 _twapPrice) public {
         vm.mockCall(
             twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracle.update.selector),
+            abi.encodeWithSelector(TWAPOracleDollar3pool.update.selector),
             abi.encode()
         );
         vm.mockCall(
             twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracle.consult.selector),
+            abi.encodeWithSelector(TWAPOracleDollar3pool.consult.selector),
             abi.encode(_twapPrice)
         );
     }
@@ -50,7 +48,10 @@ contract CurveUADIncentiveTest is LocalTestHelper {
     function test_incentivize_revertsIfCallerNotUAD() public {
         vm.expectRevert("CurveIncentive: Caller is not uAD");
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            address(0x111), address(0x112), admin, 100
+            address(0x111),
+            address(0x112),
+            admin,
+            100
         );
     }
 
@@ -61,7 +62,10 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         );
         vm.expectRevert("CurveIncentive: cannot send self");
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            address(0x111), address(0x111), admin, 100
+            address(0x111),
+            address(0x111),
+            admin,
+            100
         );
     }
 
@@ -81,12 +85,16 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         uint256 init_balance = govToken.balanceOf(mockReceiver);
         vm.prank(admin);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            mockReceiver, true
+            mockReceiver,
+            true
         );
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         uint256 last_balance = govToken.balanceOf(mockReceiver);
@@ -96,14 +104,18 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         init_balance = govToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            mockReceiver, false
+            mockReceiver,
+            false
         );
         CurveUADIncentive(curveIncentiveAddress).switchBuyIncentive();
         vm.stopPrank();
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         last_balance = govToken.balanceOf(mockReceiver);
@@ -114,14 +126,18 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         init_balance = govToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            mockReceiver, false
+            mockReceiver,
+            false
         );
         CurveUADIncentive(curveIncentiveAddress).switchBuyIncentive();
         vm.stopPrank();
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         last_balance = govToken.balanceOf(mockReceiver);
@@ -132,11 +148,15 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         mockInternalFuncs(5e17);
         vm.prank(admin);
         UbiquityAlgorithmicDollarManager(uADManagerAddress).grantRole(
-            keccak256("UBQ_MINTER_ROLE"), curveIncentiveAddress
+            keccak256("UBQ_MINTER_ROLE"),
+            curveIncentiveAddress
         );
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         last_balance = govToken.balanceOf(mockReceiver);
@@ -160,12 +180,16 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         uint256 init_balance = uADToken.balanceOf(mockSender);
         vm.prank(admin);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            mockSender, true
+            mockSender,
+            true
         );
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         uint256 last_balance = uADToken.balanceOf(mockSender);
@@ -175,14 +199,18 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         init_balance = uADToken.balanceOf(mockSender);
         vm.startPrank(admin);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            mockSender, false
+            mockSender,
+            false
         );
         CurveUADIncentive(curveIncentiveAddress).switchSellPenalty();
         vm.stopPrank();
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         last_balance = uADToken.balanceOf(mockSender);
@@ -193,14 +221,18 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         init_balance = uADToken.balanceOf(mockSender);
         vm.startPrank(admin);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            mockSender, false
+            mockSender,
+            false
         );
         CurveUADIncentive(curveIncentiveAddress).switchSellPenalty();
         vm.stopPrank();
 
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         last_balance = uADToken.balanceOf(mockSender);
@@ -214,7 +246,10 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         mockInternalFuncs(5e17);
         vm.prank(uAD_addr);
         CurveUADIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         last_balance = uADToken.balanceOf(mockSender);
@@ -225,7 +260,8 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         address exemptAddress = address(0x123);
         vm.expectRevert("CurveIncentive: not admin");
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            exemptAddress, true
+            exemptAddress,
+            true
         );
 
         assertEq(
@@ -238,7 +274,8 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         vm.expectEmit(true, true, false, true);
         emit ExemptAddressUpdate(exemptAddress, true);
         CurveUADIncentive(curveIncentiveAddress).setExemptAddress(
-            exemptAddress, true
+            exemptAddress,
+            true
         );
         assertEq(
             CurveUADIncentive(curveIncentiveAddress).isExemptAddress(
@@ -253,12 +290,14 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         CurveUADIncentive(curveIncentiveAddress).switchSellPenalty();
 
         assertEq(
-            CurveUADIncentive(curveIncentiveAddress).isSellPenaltyOn(), true
+            CurveUADIncentive(curveIncentiveAddress).isSellPenaltyOn(),
+            true
         );
         vm.prank(admin);
         CurveUADIncentive(curveIncentiveAddress).switchSellPenalty();
         assertEq(
-            CurveUADIncentive(curveIncentiveAddress).isSellPenaltyOn(), false
+            CurveUADIncentive(curveIncentiveAddress).isSellPenaltyOn(),
+            false
         );
     }
 
@@ -267,12 +306,14 @@ contract CurveUADIncentiveTest is LocalTestHelper {
         CurveUADIncentive(curveIncentiveAddress).switchBuyIncentive();
 
         assertEq(
-            CurveUADIncentive(curveIncentiveAddress).isBuyIncentiveOn(), true
+            CurveUADIncentive(curveIncentiveAddress).isBuyIncentiveOn(),
+            true
         );
         vm.prank(admin);
         CurveUADIncentive(curveIncentiveAddress).switchBuyIncentive();
         assertEq(
-            CurveUADIncentive(curveIncentiveAddress).isBuyIncentiveOn(), false
+            CurveUADIncentive(curveIncentiveAddress).isBuyIncentiveOn(),
+            false
         );
     }
 }

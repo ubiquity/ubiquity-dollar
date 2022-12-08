@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "./UbiquityAlgorithmicDollarManager.sol";
 import "./interfaces/IUbiquityGovernance.sol";
 import "./interfaces/IIncentive.sol";
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 import "./UbiquityAlgorithmicDollar.sol";
 import "./libs/ABDKMathQuad.sol";
 
@@ -116,7 +116,8 @@ contract CurveUADIncentive is IIncentive {
                 "Dollar: balance too low to get penalized"
             );
             UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(
-                target, penalty
+                target,
+                penalty
             ); // burn from the recipient
         }
     }
@@ -136,7 +137,8 @@ contract CurveUADIncentive is IIncentive {
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of UGOV
             IUbiquityGovernance(manager.governanceTokenAddress()).mint(
-                target, incentive
+                target,
+                incentive
             );
         }
     }
@@ -153,20 +155,22 @@ contract CurveUADIncentive is IIncentive {
             return 0;
         }
 
-        uint256 res = _one.sub(curPrice.fromUInt()).mul(
-            (amount.fromUInt().div(_one))
-        ).toUInt();
+        uint256 res = _one
+            .sub(curPrice.fromUInt())
+            .mul((amount.fromUInt().div(_one)))
+            .toUInt();
         // returns (1- TWAP_Price) * amount.
         return res;
     }
 
     function _updateOracle() internal {
-        TWAPOracle(manager.twapOracleAddress()).update();
+        TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracle(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
+        return
+            TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
+                manager.dollarTokenAddress()
+            );
     }
 }
