@@ -27,10 +27,8 @@ const DepositStables = ({ onApeIn, disabled }: DepositStablesProps) => {
   const [weeks, setWeeks] = useState("");
 
   function validateAmounts(): string[] | null {
-    console.log("validateAmounts");
     const errorsLabel = [];
     if (UADAmount || DAIAmount || USDCAmount || USDTAmount) {
-      console.log("validateAmounts UADAmount", UADAmount);
       if (UADAmount) {
         try {
           const amountUADBig = ethers.utils.parseEther(UADAmount);
@@ -101,13 +99,12 @@ const DepositStables = ({ onApeIn, disabled }: DepositStablesProps) => {
     setUSDTAmount(inputVal);
   };
   const onClickStake = () => {
-    console.log("🐵 🐒 🦍 🦧 APE IN !");
     onApeIn({
       amounts: [
-        ethers.utils.parseUnits(USDTAmount, 6),
         ethers.utils.parseEther(UADAmount),
         ethers.utils.parseEther(DAIAmount),
         ethers.utils.parseUnits(USDCAmount, 6),
+        ethers.utils.parseUnits(USDTAmount, 6),
       ],
       weeks: BigNumber.from(weeks),
     });
@@ -185,17 +182,6 @@ const DepositStables = ({ onApeIn, disabled }: DepositStablesProps) => {
         <Button disabled={disabled || hasErrors || !amountsParsed} onClick={onClickStake}>
           Ape In 🐵
         </Button>
-      </div>
-      <div>
-        <p>disabled: {disabled ? "true" : "false"}</p>
-        <p>
-          hasErrors: {hasErrors ? "true" : "false"} error:{error}
-        </p>
-        <p>!amountsParsed: {!amountsParsed ? "true" : "false"}</p>
-        <p>uad:{UADAmount}</p>
-        <p>dai:{DAIAmount}</p>
-        <p>usdc:{USDCAmount}</p>
-        <p>usdt:{USDTAmount}</p>
       </div>
       <div>{error && error.map((element, i) => <p key={i}>{element}</p>)}</div>
     </div>

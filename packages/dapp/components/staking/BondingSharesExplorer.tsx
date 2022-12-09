@@ -47,13 +47,13 @@ type Actions = {
 const USD_TO_LP = 0.7460387929;
 const LP_TO_USD = 1 / USD_TO_LP;
 
-export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+export const BondingSharesExplorerContainer = ({ managedContracts, namedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
   const [model, setModel] = useState<Model | null>(null);
   const [, doTransaction] = useTransactionLogger();
   const [, refreshBalances] = useBalances();
 
-  const { staking: bonding, masterChef, stakingToken: bondingToken, dollarMetapool: metaPool } = managedContracts;
-
+  const { staking: bonding, masterChef, stakingToken: bondingToken, dollarMetapool: metaPool, dollarToken: dollar } = managedContracts;
+  const { dai, usdc, usdt } = namedContracts;
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation() {
     console.time("BondingShareExplorerContainer contract loading");
@@ -161,18 +161,47 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
     onApeIn: useCallback(
       async ({ amounts, weeks }) => {
         if (!model || model.processing) return;
-        console.log(`Staking ${amounts[0]} for ${weeks} weeks`);
+        console.log(`Staking ${amounts[0]} $uAD  ${amounts[1]} $DAI ${amounts[2]} $USDT  ${amounts[3]} $USDT  for ${weeks} weeks`);
         setModel({ ...model, processing: true });
-        doTransaction("Staking...", async () => {});
-        const allowance = await metaPool.allowance(walletAddress, bonding.address);
-        console.log("allowance", ethers.utils.formatEther(allowance));
-        console.log("lpsAmount", ethers.utils.formatEther(amounts[0]));
-        if (allowance.lt(amounts[0])) {
-          await performTransaction(metaPool.connect(signer).approve(bonding.address, amounts[0]));
-          const allowance2 = await metaPool.allowance(walletAddress, bonding.address);
-          console.log("allowance2", ethers.utils.formatEther(allowance2));
+        doTransaction("ApeIn 🐵 🐒 🦍 🦧...", async () => {});
+        // allowances
+        if (amounts[0].gt(0)) {
+          const dollarAllowance = await dollar.allowance(walletAddress, bonding.address);
+          console.log("$uAD allowance", ethers.utils.formatEther(dollarAllowance));
+          if (dollarAllowance.lt(amounts[0])) {
+            await performTransaction(dollar.connect(signer).approve(bonding.address, amounts[0]));
+            const allowance2 = await dollar.allowance(walletAddress, bonding.address);
+            console.log("$uAD new allowance", ethers.utils.formatEther(allowance2));
+          }
         }
-        await performTransaction(bonding.connect(signer).deposit(amounts[0], weeks));
+        if (amounts[1].gt(0)) {
+          const daiAllowance = await dai.allowance(walletAddress, bonding.address);
+          console.log("$DAI allowance", ethers.utils.formatEther(daiAllowance));
+          if (daiAllowance.lt(amounts[1])) {
+            await performTransaction(dai.connect(signer).approve(bonding.address, amounts[1]));
+            const allowance2 = await dai.allowance(walletAddress, bonding.address);
+            console.log("$DAI new allowance", ethers.utils.formatEther(allowance2));
+          }
+        }
+        if (amounts[2].gt(0)) {
+          const usdcAllowance = await usdc.allowance(walletAddress, bonding.address);
+          console.log("$USDC allowance", ethers.utils.formatEther(usdcAllowance));
+          if (usdcAllowance.lt(amounts[2])) {
+            await performTransaction(usdc.connect(signer).approve(bonding.address, amounts[2]));
+            const allowance2 = await usdc.allowance(walletAddress, bonding.address);
+            console.log("$USDC new allowance", ethers.utils.formatEther(allowance2));
+          }
+        }
+        if (amounts[3].gt(0)) {
+          const usdtAllowance = await usdt.allowance(walletAddress, bonding.address);
+          console.log("$USDT allowance", ethers.utils.formatEther(usdtAllowance));
+          if (usdtAllowance.lt(amounts[3])) {
+            await performTransaction(usdt.connect(signer).approve(bonding.address, amounts[3]));
+            const allowance2 = await usdt.allowance(walletAddress, bonding.address);
+            console.log("$USDT new allowance", ethers.utils.formatEther(allowance2));
+          }
+        }
+        await performTransaction(bonding.connect(signer).deposit(amounts, weeks));
 
         fetchSharesInformation();
         refreshBalances();
