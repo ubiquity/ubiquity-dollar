@@ -101,7 +101,7 @@ contract CreditNFT is ERC1155Ubiquity {
                 //update tally and remove key from blocks and map
                 outstandingDebt =
                     outstandingDebt - (_tokenSupplies[currentBlockNumber]);
-                delete _tokenSupplies[currentBlockNumber];
+                _tokenSupplies[currentBlockNumber] = 0;
                 require( currentBlockNumber == _sortedBlockNumbers.remove(currentBlockNumber));
                 
             }
