@@ -52,7 +52,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "Credit to Dollar: DEBT_TOO_HIGH"
         );
-        bytes16 wad = 1e18.fromUInt();
+        bytes16 wad = uint256(1e18).fromUInt();
         bytes16 curBlock = uint256(block.number).fromUInt();
         bytes16 multiplier = blockHeightDebt.fromUInt().div(curBlock);
         // x^a = e^(a*lnx(x)) so multiplier^(_coef) = e^(_coef*lnx(multiplier))
