@@ -2,12 +2,14 @@
 pragma solidity ^0.8.9;
 
 import "../../src/ubiquistick/UbiquiStick.sol";
-import "../../lib/operator-filter-registry/src/OperatorFilterRegistryErrorsAndEvents.sol";
+import "operator-filter-registry/OperatorFilterRegistryErrorsAndEvents.sol";
 import "forge-std/Test.sol";
 
 contract UbiquiStickTest is Test {
+    // contract instance
     UbiquiStick ust;
 
+    // addresses to test with
     address mintTo;
     address transferTo;
     address bannedOperator;
@@ -16,6 +18,7 @@ contract UbiquiStickTest is Test {
     // events
     event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
     event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 
     function setUp() public {
         ust = new UbiquiStick();
@@ -25,7 +28,7 @@ contract UbiquiStickTest is Test {
         allowedOperator = 0x4feE7B061C97C9c496b01DbcE9CDb10c02f0a0Be; // Rarible NFT Transfer Proxy (for Approvals)
     }
 
-    // Mint
+    // MINT
     function testMint() public {
         assertEq(ust.balanceOf(mintTo), 0);
         ust.safeMint(mintTo);
@@ -34,6 +37,26 @@ contract UbiquiStickTest is Test {
     }
 
     // APPROVALS
+    function testApproveForBannedOperator() public {
+        // mint NFT to vitalik's address
+        ust.safeMint(mintTo);
+
+        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.prank(mintTo);
+        ust.approve(bannedOperator, 1);
+    }
+
+    function testSetApprovalsAllForBannedOperator() public {
+        // mint NFT to vitalik's address
+        ust.safeMint(mintTo);
+
+        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.prank(mintTo);
+        ust.setApprovalForAll(bannedOperator, true);
+    }
+
     function testApproveForAllowedOperator() public {
         // mint NFT to vitalik's address
         ust.safeMint(mintTo);
@@ -44,16 +67,6 @@ contract UbiquiStickTest is Test {
         emit Approval(mintTo, allowedOperator, 1);
         ust.approve(allowedOperator, 1);
         vm.stopPrank();
-    }
-
-    function testApproveForBannedOperator() public {
-        // mint NFT to vitalik's address
-        ust.safeMint(mintTo);
-
-        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
-        vm.prank(mintTo);
-        ust.approve(bannedOperator, 1);
     }
 
     function testSetApprovalsAllForAllowedOperator() public {
@@ -68,16 +81,6 @@ contract UbiquiStickTest is Test {
         vm.stopPrank();
     }
 
-    function testSetApprovalsAllForBannedOperator() public {
-        // mint NFT to vitalik's address
-        ust.safeMint(mintTo);
-
-        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
-        vm.prank(mintTo);
-        ust.setApprovalForAll(bannedOperator, true);
-    }
-
     // TRANSFERS
     function testTransferFromForBannedOperator() public {
         // mint NFT to vitalik's address
@@ -88,10 +91,40 @@ contract UbiquiStickTest is Test {
         vm.prank(mintTo);
         ust.approve(bannedOperator, 1);
 
-        // transferFrom vitalik's address to banned operator should also fail with the AddressFiltered(address filtered) error
+        // transferFrom vitalik's address to Beeple's address should also fail with the AddressFiltered(address filtered) error
         vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
         vm.prank(bannedOperator);
         ust.transferFrom(mintTo, transferTo, 1);
+    }
+
+    function testSafeTransferFromForBannedOperator() public {
+        // mint NFT to vitalik's address
+        ust.safeMint(mintTo);
+
+        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.prank(mintTo);
+        ust.approve(bannedOperator, 1);
+
+        // safeTransferFrom vitalik's address to Beeple's address should also fail with the AddressFiltered(address filtered) error
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.prank(bannedOperator);
+        ust.safeTransferFrom(mintTo, transferTo, 1);
+    }
+
+    function testSafeTransferFromWithDataForBannedOperator() public {
+        // mint NFT to vitalik's address
+        ust.safeMint(mintTo);
+
+        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.prank(mintTo);
+        ust.approve(bannedOperator, 1);
+
+        // safeTransferFrom vitalik's address to Beeple's address should also fail with the AddressFiltered(address filtered) error
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.prank(bannedOperator);
+        ust.safeTransferFrom(mintTo, transferTo, 1, new bytes(0));
     }
 
     function testTransferFromForAllowedOperator() public {
@@ -106,23 +139,14 @@ contract UbiquiStickTest is Test {
         vm.stopPrank();
 
         // Approved allowed operator should be able to transfer NFT to Beeple's address
-        vm.prank(allowedOperator);
+        vm.startPrank(allowedOperator);
+        uint256 beforeBalance = ust.balanceOf(transferTo);
+        vm.expectEmit(true, true, true, true);
+        emit Transfer(mintTo, transferTo, 1);
         ust.transferFrom(mintTo, transferTo, 1);
-    }
-
-    function testSafeTransferFromForBannedOperator() public {
-        // mint NFT to vitalik's address
-        ust.safeMint(mintTo);
-
-        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
-        vm.prank(mintTo);
-        ust.approve(bannedOperator, 1);
-
-        // safeTransferFrom vitalik's address to banned operator should also fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
-        vm.prank(bannedOperator);
-        ust.safeTransferFrom(mintTo, transferTo, 1);
+        uint256 afterBalance = ust.balanceOf(transferTo);
+        assertEq(afterBalance - beforeBalance, 1);
+        vm.stopPrank();
     }
 
     function testSafeTransferFromForAllowedOperator() public {
@@ -137,23 +161,14 @@ contract UbiquiStickTest is Test {
         vm.stopPrank();
 
         // Approved allowed operator should be able to transfer NFT to Beeple's address
-        vm.prank(allowedOperator);
+        vm.startPrank(allowedOperator);
+        uint256 beforeBalance = ust.balanceOf(transferTo);
+        vm.expectEmit(true, true, true, true);
+        emit Transfer(mintTo, transferTo, 1);
         ust.safeTransferFrom(mintTo, transferTo, 1);
-    }
-
-    function testSafeTransferFromWithDataForBannedOperator() public {
-        // mint NFT to vitalik's address
-        ust.safeMint(mintTo);
-
-        // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
-        vm.prank(mintTo);
-        ust.approve(bannedOperator, 1);
-
-        // safeTransferFrom vitalik's address to banned operator should also fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
-        vm.prank(bannedOperator);
-        ust.safeTransferFrom(mintTo, transferTo, 1, new bytes(0));
+        uint256 afterBalance = ust.balanceOf(transferTo);
+        assertEq(afterBalance - beforeBalance, 1);
+        vm.stopPrank();
     }
 
     function testSafeTransferFromWithDataForAllowedOperator() public {
@@ -168,8 +183,14 @@ contract UbiquiStickTest is Test {
         vm.stopPrank();
 
         // Approved allowed operator should be able to transfer NFT to Beeple's address
-        vm.prank(allowedOperator);
+        vm.startPrank(allowedOperator);
+        uint256 beforeBalance = ust.balanceOf(transferTo);
+        vm.expectEmit(true, true, true, true);
+        emit Transfer(mintTo, transferTo, 1);
         ust.safeTransferFrom(mintTo, transferTo, 1, new bytes(0));
+        uint256 afterBalance = ust.balanceOf(transferTo);
+        assertEq(afterBalance - beforeBalance, 1);
+        vm.stopPrank();
     }
 
 }
