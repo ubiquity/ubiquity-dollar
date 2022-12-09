@@ -57,7 +57,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     //TODO create updateConfig method
-
+    /// Needs to check that Operator is Authorized, From is Valid, ID exists
     function onERC1155Received(
         address operator,
         address from,
@@ -169,7 +169,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
         // STEP2 : Withdraw  3Crv LPs from meta pool to get back UAD, DAI, USDC or USDT
         uint128 tokenIndex = token == ubiquityDollar ? 0 : (token == token0 ? 1 : (token == token1 ? 2 : 3));
-        IERC20(ubiquity3PoolLP).approve(depositZapUbiquityDollar, lpTokenAmount);
+        require(IERC20(ubiquity3PoolLP).approve(depositZapUbiquityDollar, lpTokenAmount));
         tokenAmount = IDepositZap(depositZapUbiquityDollar).remove_liquidity_one_coin(ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0); //[UAD, DAI, USDC, USDT]
         
         IERC20(token).safeTransfer(msg.sender, tokenAmount);

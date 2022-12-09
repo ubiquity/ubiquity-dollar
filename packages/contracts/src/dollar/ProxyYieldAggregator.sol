@@ -187,7 +187,7 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         address receiver,
         address owner,
         uint16 split
-    ) external returns (uint256) {
+    ) external returns (uint256 assetsWithdrawn) {
         require(split >= _minSplit, "PYield::split<min");
         require(split <= PRECISION, "PYield::split>max");
         require(assets <= maxWithdraw(owner), "PYield::withdraw>max");
@@ -196,8 +196,8 @@ contract ProxyYieldAggregator is Pausable, ERC4626 {
         uint256 remainingStratShares = _withdrawWithSplit(
             _msgSender(), receiver, owner, assets, shares, split
         );
-        _strategy.redeem(remainingStratShares, receiver, address(this));
-        return shares;
+        assetsWithdrawn = _strategy.redeem(remainingStratShares, receiver, address(this));
+        
     }
 
     function redeem(uint256 shares, address receiver, address owner)

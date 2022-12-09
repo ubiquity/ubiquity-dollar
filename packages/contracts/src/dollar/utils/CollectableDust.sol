@@ -37,20 +37,20 @@ abstract contract CollectableDust is ICollectableDust {
         emit ProtocolTokenRemoved(_token);
     }
 
-    function _sendDust(address _to, address _token, uint256 _amount) internal {
+    function _sendDust(address to, address token, uint256 amount) internal {
         require(
-            _to != address(0),
+            to != address(0),
             "collectable-dust::cant-send-dust-to-zero-address"
         );
         require(
-            !_protocolTokens.contains(_token),
+            !_protocolTokens.contains(token),
             "collectable-dust::token-is-part-of-the-protocol"
         );
-        if (_token == ETH_ADDRESS) {
-            payable(_to).transfer(_amount);
+        if (token == ETH_ADDRESS) {
+            payable(to).transfer(amount);
         } else {
-            IERC20(_token).safeTransfer(_to, _amount);
+            IERC20(token).safeTransfer(to, amount);
         }
-        emit DustSent(_to, _token, _amount);
+        emit DustSent(to, token, amount);
     }
 }

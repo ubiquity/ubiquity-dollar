@@ -223,13 +223,14 @@ contract MasterChefV2 is ReentrancyGuard {
     {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
         uint256 pending = 0;
-        _updatePool();
+        
         if (bs.amount > 0) {
             pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
         }
         bs.amount += _amount;
         bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
         _totalShares += _amount;
+        _updatePool();
         _safeUGOVTransfer(to, pending);
         emit Deposit(to, _amount, _bondingShareID);
     }
@@ -248,11 +249,12 @@ contract MasterChefV2 is ReentrancyGuard {
             isPriceDiffEnough =
                 lastPrice - currentPrice > minPriceDiffToUpdateMultiplier;
         }
-        IUbiquityFormulas formulas = IUbiquityFormulas(manager.formulasAddress());
-        if(isPriceDiffEnough){
-            uGOVmultiplier = formulas.ugovMultiply(uGOVmultiplier, currentPrice);
+        
+        if(isPriceDiffEnough ) {
+            uGOVmultiplier = _uGOVMultiply(uGOVmultiplier, currentPrice);
             lastPrice = currentPrice;
         }
+        
     }
 
     // Update reward variables of the given pool to be up-to-date.
@@ -271,6 +273,10 @@ contract MasterChefV2 is ReentrancyGuard {
         pool.accuGOVPerShare =
             pool.accuGOVPerShare + (uGOVReward / _totalShares);
         pool.lastRewardBlock = block.number;
+        
+        pool.accuGOVPerShare =
+            pool.accuGOVPerShare + (multiplier * uGOVPerBlock / _totalShares / 1e6);
+        pool.lastRewardBlock = block.number;
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             address(this), uGOVReward
         );
@@ -278,9 +284,6 @@ contract MasterChefV2 is ReentrancyGuard {
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             manager.treasuryAddress(), uGOVReward / uGOVDivider
         );
-        pool.accuGOVPerShare =
-            pool.accuGOVPerShare + (multiplier * uGOVPerBlock / _totalShares / 1e6);
-        pool.lastRewardBlock = block.number;
     }
 
     // Safe uGOV transfer function, just in case if rounding
@@ -303,5 +306,10 @@ contract MasterChefV2 is ReentrancyGuard {
         return ITWAPOracle(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
+    }
+
+    function _uGOVMultiply(uint256 uGOVmultiplier_, uint256 currentPrice) internal view returns(uint256 multiplier) {
+        IUbiquityFormulas formulas = IUbiquityFormulas(manager.formulasAddress());
+        multiplier = formulas.ugovMultiply(uGOVmultiplier_, currentPrice);
     }
 }

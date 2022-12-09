@@ -18,7 +18,7 @@ import "./interfaces/IERC1155Ubiquity.sol";
 import "./interfaces/IBondingV2.sol";
 import "./utils/CollectableDust.sol";
 
-contract BondingV2 is CollectableDust, Pausable {
+contract BondingV2 is IBondingV2, CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
     UbiquityAlgorithmicDollarManager public manager;
@@ -308,10 +308,12 @@ contract BondingV2 is CollectableDust, Pausable {
         _updateLpPerShare();
         uint256 pendingLpReward =
             lpRewardForShares(sharesToRemove, bond.lpRewardDebt);
-
+        // Following step would just return the same pendingLpReward as input so commenting out
+        /*
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
             .lpRewardsAddLiquidityNormalization(bond, bs, pendingLpReward);
+        */
         // add these LP Rewards to the deposited amount of LP token
         bond.lpAmount += pendingLpReward;
         lpRewards -= pendingLpReward;
@@ -342,8 +344,8 @@ contract BondingV2 is CollectableDust, Pausable {
         _updateLpPerShare();
         bond.lpRewardDebt = (
             IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
-                * accLpRewardPerShare
-        ) / 1e12;
+                * accLpRewardPerShare) / 1e12;
+       
 
         BondingShareV2(manager.bondingShareAddress()).updateBond(
             _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
@@ -603,7 +605,6 @@ contract BondingV2 is CollectableDust, Pausable {
             "Bonding: Redeem not allowed before bonding time"
         );
 
-        //ITWAPOracle(manager.twapOracleAddress()).update();
         bs = IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id);
     }
 }
