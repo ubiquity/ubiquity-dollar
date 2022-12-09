@@ -1,4 +1,4 @@
-import { BigNumber, Contract, ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { memo, useEffect, useState } from "react";
 
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";

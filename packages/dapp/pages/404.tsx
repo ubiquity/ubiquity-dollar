@@ -9,22 +9,34 @@ const Custom404 = () => {
         </p>
         <ul>
           <li>
-            <a href="//github.com/ubiquity/ubiquity-dollar/wiki" target="_blank">Docs</a>
+            <a href="//github.com/ubiquity/ubiquity-dollar/wiki" target="_blank">
+              Docs
+            </a>
           </li>
           <li>
-            <a href="//dao.ubq.fi/faq" target="_blank">FAQ</a>
+            <a href="//dao.ubq.fi/faq" target="_blank">
+              FAQ
+            </a>
           </li>
           <li>
-            <a href="//github.com/ubiquity/ubiquity-dollar" target="_blank">Github</a>
+            <a href="//github.com/ubiquity/ubiquity-dollar" target="_blank">
+              Github
+            </a>
           </li>
           <li>
-            <a href="//discord.gg/SjymJ5maJ4" target="_blank">Discord</a>
+            <a href="//discord.gg/SjymJ5maJ4" target="_blank">
+              Discord
+            </a>
           </li>
           <li>
-            <a href="//t.me/ubiquitydao" target="_blank">Telegram</a>
+            <a href="//t.me/ubiquitydao" target="_blank">
+              Telegram
+            </a>
           </li>
           <li>
-            <a href="//twitter.com/UbiquityDAO" target="_blank">Twitter</a>
+            <a href="//twitter.com/UbiquityDAO" target="_blank">
+              Twitter
+            </a>
           </li>
         </ul>
       </div>
