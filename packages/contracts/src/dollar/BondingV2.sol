@@ -15,6 +15,7 @@ import "./interfaces/ISablier.sol";
 import "./interfaces/IMasterChefV2.sol";
 import "./interfaces/ITWAPOracle.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
+import "./interfaces/IBondingV2";
 import "./utils/CollectableDust.sol";
 
 contract BondingV2 is CollectableDust, Pausable {
@@ -374,8 +375,9 @@ contract BondingV2 is CollectableDust, Pausable {
         //get all its pending LP Rewards
         _updateLpPerShare();
         uint256 pendingLpReward = lpRewardForShares(bs[0], bond.lpRewardDebt);
+        lpRewards -= pendingLpReward;
         // update bonding shares
-        // bond.shares = bond.shares - sharesToRemove;
+        bond.shares = bond.shares - sharesToRemove;
         // get masterchef for uGOV rewards To ensure correct computation
         // it needs to be done BEFORE updating the bonding share
         IMasterChefV2(manager.masterChefAddress()).withdraw(
@@ -390,7 +392,7 @@ contract BondingV2 is CollectableDust, Pausable {
         //pendingLpReward = BondingFormulas(this.bondingFormulasAddress())
             //.lpRewardsRemoveLiquidityNormalization(bond, bs, pendingLpReward);
 
-        lpRewards -= pendingLpReward;
+        
         bond.lpAmount -= _amount;
 
         uint256 correctedAmount = BondingFormulas(this.bondingFormulasAddress())

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >= 0.8.3;
+pragma solidity >= 0.8.16;
 
 interface IBondingV2 {
     function deposit(uint256 _lpsAmount, uint256 _weeks) external returns (uint256 _id);

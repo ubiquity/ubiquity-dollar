@@ -222,7 +222,7 @@ contract MasterChefV2 is ReentrancyGuard {
         internal
     {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
-        uint256 pending;
+        uint256 pending = 0;
         _updatePool();
         if (bs.amount > 0) {
             pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
@@ -248,12 +248,11 @@ contract MasterChefV2 is ReentrancyGuard {
             isPriceDiffEnough =
                 lastPrice - currentPrice > minPriceDiffToUpdateMultiplier;
         }
-
-        require (isPriceDiffEnough);
-            uGOVmultiplier = IUbiquityFormulas(manager.formulasAddress())
-                .ugovMultiply(uGOVmultiplier, currentPrice);
+        IUbiquityFormulas formulas = IUbiquityFormulas(manager.formulasAddress());
+        if(isPriceDiffEnough){
+            uGOVmultiplier = formulas.ugovMultiply(uGOVmultiplier, currentPrice);
             lastPrice = currentPrice;
-        
+        }
     }
 
     // Update reward variables of the given pool to be up-to-date.
@@ -268,9 +267,9 @@ contract MasterChefV2 is ReentrancyGuard {
             return;
         }
         uint256 multiplier = _getMultiplier();
-        uint256 uGOVReward = (multiplier * uGOVPerBlock) / 1e18;
+        uint256 uGOVReward = (multiplier * uGOVPerBlock) / 1e6;
         pool.accuGOVPerShare =
-            pool.accuGOVPerShare + ((uGOVReward * 1e12) / _totalShares);
+            pool.accuGOVPerShare + (uGOVReward / _totalShares);
         pool.lastRewardBlock = block.number;
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             address(this), uGOVReward
