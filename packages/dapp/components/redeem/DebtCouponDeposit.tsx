@@ -1,4 +1,4 @@
-import { BigNumber, Contract } from "ethers";
+import { BigNumber } from "ethers";
 import { useState } from "react";
 
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
@@ -34,8 +34,8 @@ const UcrNftGenerator = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken as unknown as Contract, amount, signer, debtCouponManager.address);
-    await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken, amount, signer, debtCouponManager.address);
+    await (await debtCouponManager.connect(signer).exchangeDollarsForCreditNFT(amount)).wait();
     refreshBalances();
   };
 
@@ -54,7 +54,7 @@ const UcrNftGenerator = () => {
     const amount = extractValidAmount(val);
     if (amount) {
       setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCouponAmount(amount));
+      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCreditNFTAmount(amount));
     }
   };
 

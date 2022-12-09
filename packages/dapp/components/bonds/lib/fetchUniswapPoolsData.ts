@@ -1,11 +1,12 @@
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import { getERC20Contract, getUniswapV2FactoryContract, getUniswapV3PoolContract } from "@/components/utils/contracts";
+import { ERC20 } from "@/types/contracts";
 
 export type UniswapData = {
   poolAddress: string;
-  contract1: Contract;
-  contract2: Contract;
+  contract1: ERC20;
+  contract2: ERC20;
   token1: string;
   token2: string;
   decimal1: number;

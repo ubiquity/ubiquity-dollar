@@ -39,12 +39,12 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
 
   const redeemUcr = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken as unknown as Contract, amount, signer, debtCouponManager.address);
-    await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
+    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken, amount, signer, debtCouponManager.address);
+    await (await debtCouponManager.connect(signer).burnCreditTokensForDollars(amount)).wait();
     refreshBalances();
     if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
       const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
-      await (await routerContract.connect(signer).approveMax(quoteAmount, managedContracts.dollarToken)).wait();
+      await (await routerContract.connect(signer).approveMax(managedContracts.dollarToken.address)).wait();
       await useTrade(selectedRedeemToken, quoteAmount);
       refreshBalances();
     }

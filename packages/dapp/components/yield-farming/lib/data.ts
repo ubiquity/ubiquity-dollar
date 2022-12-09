@@ -1,4 +1,5 @@
-import { BigNumber, ethers, Contract } from "ethers";
+import { IJar, YieldProxy } from "@/types/contracts";
+import { BigNumber, ethers } from "ethers";
 
 const isDev = process.env.NODE_ENV == "development";
 const debug = isDev;
@@ -9,8 +10,8 @@ const YP_DECIMALS = 6;
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 
 type YieldProxyContracts = {
-  yieldProxy: Contract;
-  jarUsdc: Contract;
+  yieldProxy: YieldProxy;
+  jarUsdc: IJar;
 };
 
 export type YieldProxyData = {

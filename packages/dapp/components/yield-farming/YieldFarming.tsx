@@ -51,8 +51,8 @@ export const YieldFarmingContainer = ({ managedContracts, namedContracts: contra
         console.log(`Depositing: USDC ${usdc} | UBQ ${ubq} | uAD ${uad}`);
         if (
           (await ensureERC20Allowance("USDC", contracts.usdc, bigUsdc, signer, contracts.yieldProxy.address, 6)) &&
-          (await ensureERC20Allowance("UBQ", managedContracts.governanceToken as unknown as Contract, bigUbq, signer, contracts.yieldProxy.address)) &&
-          (await ensureERC20Allowance("uAD", managedContracts.dollarToken as unknown as Contract, bigUad, signer, contracts.yieldProxy.address)) &&
+          (await ensureERC20Allowance("UBQ", managedContracts.governanceToken, bigUbq, signer, contracts.yieldProxy.address)) &&
+          (await ensureERC20Allowance("uAD", managedContracts.dollarToken, bigUad, signer, contracts.yieldProxy.address)) &&
           (await performTransaction(contracts.yieldProxy.connect(signer).deposit(bigUsdc, bigUad, bigUbq)))
         ) {
           await refreshYieldProxyData();

@@ -5,12 +5,13 @@
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "next build && next export --outdir dist",
+    "build": "yarn typechain && next build && next export --outdir dist",
     "start": "next dev",
     "clean": "rimraf ./dist",
-    "purge": "yarn clean && rimraf ./node_modules ./dist ./next",
+    "purge": "yarn clean && rimraf ./node_modules ./dist ./next ./types/contracts",
     "lint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "typechain": "typechain --target ethers-v5 --out-dir types/contracts '../contracts/out/[!test.sol]**/*.json' './components/config/abis/*.json'"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
