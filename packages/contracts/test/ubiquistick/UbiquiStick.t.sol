@@ -22,6 +22,7 @@ contract UbiquiStickTest is Test {
 
     function setUp() public {
         ust = new UbiquiStick();
+
         mintTo = 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045;  // Vitalik's address
         transferTo = 0xc6b0562605D35eE710138402B878ffe6F2E23807; // Beeple's address
         bannedOperator = 0x2B2e8cDA09bBA9660dCA5cB6233787738Ad68329; // SudoSwap LSSVMPairRouter
@@ -144,9 +145,11 @@ contract UbiquiStickTest is Test {
         vm.expectEmit(true, true, true, true);
         emit Transfer(mintTo, transferTo, 1);
         ust.transferFrom(mintTo, transferTo, 1);
+        vm.stopPrank();
+
         uint256 afterBalance = ust.balanceOf(transferTo);
         assertEq(afterBalance - beforeBalance, 1);
-        vm.stopPrank();
+      
     }
 
     function testSafeTransferFromForAllowedOperator() public {
@@ -166,9 +169,10 @@ contract UbiquiStickTest is Test {
         vm.expectEmit(true, true, true, true);
         emit Transfer(mintTo, transferTo, 1);
         ust.safeTransferFrom(mintTo, transferTo, 1);
+        vm.stopPrank();
+
         uint256 afterBalance = ust.balanceOf(transferTo);
         assertEq(afterBalance - beforeBalance, 1);
-        vm.stopPrank();
     }
 
     function testSafeTransferFromWithDataForAllowedOperator() public {
@@ -188,9 +192,10 @@ contract UbiquiStickTest is Test {
         vm.expectEmit(true, true, true, true);
         emit Transfer(mintTo, transferTo, 1);
         ust.safeTransferFrom(mintTo, transferTo, 1, new bytes(0));
+        vm.stopPrank();
+
         uint256 afterBalance = ust.balanceOf(transferTo);
         assertEq(afterBalance - beforeBalance, 1);
-        vm.stopPrank();
     }
 
 }
