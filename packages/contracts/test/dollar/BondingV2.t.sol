@@ -94,7 +94,7 @@ contract ZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
-        new BondingV2(address(manager),
+        new BondingV2(UbiquityAlgorithmicDollarManager(manager),
             address(bFormulas),
             ogsEmpty,
             balances,
@@ -106,7 +106,7 @@ contract ZeroStateTest is ZeroState {
         balances.push(1);
         vm.expectRevert("balances array not same length");
         new BondingV2(
-            address(manager),
+            UbiquityAlgorithmicDollarManager(manager),
             address(bFormulas),
             ogs,
             balances,
@@ -118,7 +118,7 @@ contract ZeroStateTest is ZeroState {
         lockup.push(1);
         vm.expectRevert("weeks array not same length");
         new BondingV2(
-            address(manager),
+            UbiquityAlgorithmicDollarManager(manager),
             address(bFormulas),
             ogs,
             balances,

@@ -34,51 +34,51 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
     address public migrator; // temporary address to handle migration
     address[] private _toMigrateOriginals;
     uint256[] private _toMigrateLpBalances;
-    uint256[] private _toMigrateWeeks;
+    uint256[] private _toMigrateLockupPeriods;
 
     // toMigrateId[address] > 0 when address is to migrate, or 0 in all other cases
     mapping(address => uint256) public toMigrateId;
     bool public migrating = false;
 
     event PriceReset(
-        address _tokenWithdrawn,
-        uint256 _amountWithdrawn,
-        uint256 _amountTransferred
+        address tokenWithdrawn,
+        uint256 amountWithdrawn,
+        uint256 amountTransferred
     );
 
     event Deposit(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpAmount,
-        uint256 _bondingShareAmount,
-        uint256 _weeks,
-        uint256 _endBlock
+        address indexed user,
+        uint256 indexed id,
+        uint256 lpAmount,
+        uint256 bondingShareAmount,
+        uint256 lockupPeriod,
+        uint256 endBlock
     );
     event RemoveLiquidityFromBond(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpAmount,
-        uint256 _lpAmountTransferred,
-        uint256 _lpRewards,
-        uint256 _bondingShareAmount
+        address indexed user,
+        uint256 indexed id,
+        uint256 lpAmount,
+        uint256 lpAmountTransferred,
+        uint256 lpRewards,
+        uint256 bondingShareAmount
     );
 
     event AddLiquidityFromBond(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpAmount,
-        uint256 _bondingShareAmount
+        address indexed user,
+        uint256 indexed id,
+        uint256 lpAmount,
+        uint256 bondingShareAmount
     );
 
-    event BondingDiscountMultiplierUpdated(uint256 _bondingDiscountMultiplier);
-    event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
+    event BondingDiscountMultiplierUpdated(uint256 bondingDiscountMultiplier);
+    event BlockCountInAWeekUpdated(uint256 blockCountInAWeek);
 
     event Migrated(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpsAmount,
-        uint256 _sharesAmount,
-        uint256 _weeks
+        address indexed user,
+        uint256 indexed id,
+        uint256 lpsAmount,
+        uint256 sharesAmount,
+        uint256 lockupPeriod
     );
 
     modifier onlyBondingManager() {
@@ -107,24 +107,24 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
     }
 
     constructor(
-        address _manager,
-        address _bondingFormulasAddress,
+        UbiquityAlgorithmicDollarManager manager_,
+        address bondingFormulasAddress_,
         address[] memory _originals,
         uint256[] memory _lpBalances,
-        uint256[] memory _weeks
+        uint256[] memory _lockupPeriods
     ) CollectableDust() Pausable() {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
-        bondingFormulasAddress = _bondingFormulasAddress;
+        manager = manager_;
+        bondingFormulasAddress = bondingFormulasAddress_;
         migrator = msg.sender;
 
         uint256 lgt = _originals.length;
         require(lgt > 0, "address array empty");
         require(lgt == _lpBalances.length, "balances array not same length");
-        require(lgt == _weeks.length, "weeks array not same length");
+        require(lgt == _lockupPeriods.length, "weeks array not same length");
 
         _toMigrateOriginals = _originals;
         _toMigrateLpBalances = _lpBalances;
-        _toMigrateWeeks = _weeks;
+        _toMigrateLockupPeriods = _lockupPeriods;
         uint256 migratingBalances;
         for (uint256 i = 0; i < lgt; ++i) {
             toMigrateId[_originals[i]] = i + 1;
@@ -141,17 +141,17 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
     ///      otherwise they will have extra LP rewards
     /// @param _original address of v1 user
     /// @param _lpBalance LP Balance of v1 user
-    /// @param _weeks weeks lockup of v1 user
+    /// @param lockupPeriod weeks lockup of v1 user
     /// @notice user will then be able to migrate.
     function addUserToMigrate(
         address _original,
         uint256 _lpBalance,
-        uint256 _weeks
+        uint256 lockupPeriod
     ) external onlyMigrator {
         _toMigrateOriginals.push(_original);
         _toMigrateLpBalances.push(_lpBalance);
         totalLpToMigrate += _lpBalance;
-        _toMigrateWeeks.push(_weeks);
+        _toMigrateLockupPeriods.push(lockupPeriod);
         toMigrateId[_original] = _toMigrateOriginals.length;
     }
 
@@ -252,15 +252,15 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
 
     /// @dev deposit uAD-3CRV LP tokens for a duration to receive bonding shares
     /// @param _lpsAmount of LP token to send
-    /// @param _weeks during lp token will be held
+    /// @param lockupPeriod during lp token will be held
     /// @notice weeks act as a multiplier for the amount of bonding shares to be received
-    function deposit(uint256 _lpsAmount, uint256 _weeks)
+    function deposit(uint256 _lpsAmount, uint256 lockupPeriod)
         external
         whenNotPaused
         returns (uint256 _id)
     {
         require(
-            1 <= _weeks && _weeks <= 208,
+            1 <= lockupPeriod && lockupPeriod <= 208,
             "Bonding: duration must be between 1 and 208 weeks"
         );
         ITWAPOracle(manager.twapOracleAddress()).update();
@@ -271,9 +271,9 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
 
         // calculate the amount of share based on the amount of lp deposited and the duration
         uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
-            .durationMultiply(_lpsAmount, _weeks, bondingDiscountMultiplier);
+            .durationMultiply(_lpsAmount, lockupPeriod, bondingDiscountMultiplier);
         // calculate end locking period block number
-        uint256 _endBlock = block.number + _weeks * blockCountInAWeek;
+        uint256 _endBlock = block.number + lockupPeriod * blockCountInAWeek;
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
 
         // set masterchef for uGOV rewards
@@ -287,21 +287,21 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
         );
 
         emit Deposit(
-            msg.sender, _id, _lpsAmount, _sharesAmount, _weeks, _endBlock
+            msg.sender, _id, _lpsAmount, _sharesAmount, lockupPeriod, _endBlock
             );
     }
 
     /// @dev Add an amount of uAD-3CRV LP tokens
-    /// @param _amount of LP token to deposit
-    /// @param _id bonding shares id
-    /// @param _weeks during lp token will be held
+    /// @param amount of LP token to deposit
+    /// @param id bonding shares id
+    /// @param lockupPeriod during lp token will be held
     /// @notice bonding shares are ERC1155 (aka NFT) because they have an expiration date
-    function addLiquidity(uint256 _amount, uint256 _id, uint256 _weeks)
+    function addLiquidity(uint256 amount, uint256 id, uint256 lockupPeriod)
         external
         whenNotPaused
     {
         (uint256[2] memory bs, BondingShareV2.Bond memory bond) =
-            _checkForLiquidity(_id);
+            _checkForLiquidity(id);
 
         // calculate pending LP rewards
         uint256 sharesToRemove = bs[0];
@@ -317,45 +317,39 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
         // add these LP Rewards to the deposited amount of LP token
         bond.lpAmount += pendingLpReward;
         lpRewards -= pendingLpReward;
-        bond.lpAmount += _amount;
+        bond.lpAmount += amount;
         // calculate end locking period block number
         // 1 week = 45361 blocks = 2371753*7/366
         // n = (block + duration * 45361)
-        bond.endBlock = block.number + _weeks * blockCountInAWeek;
+        bond.endBlock = block.number + lockupPeriod * blockCountInAWeek;
+
+        // calculate the amount of share based on the new amount of lp deposited and the duration
+        uint256 sharesAmount = 
+            IUbiquityFormulas(manager.formulasAddress()).durationMultiply(amount, lockupPeriod, bondingDiscountMultiplier);
 
         
 
-        // redeem all shares
-        IMasterChefV2(manager.masterChefAddress()).withdraw(
-            msg.sender, sharesToRemove, _id
-        );
 
-        // calculate the amount of share based on the new amount of lp deposited and the duration
-        uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
-            .durationMultiply(bond.lpAmount, _weeks, bondingDiscountMultiplier);
+        
+        _updateLpPerShare();
+        bond.lpRewardDebt = (
+            IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(id)[0]
+                * accLpRewardPerShare) / 1e12;
+
+        BondingShareV2(manager.bondingShareAddress()).updateBond(
+            id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
+        );
+        
+        IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
+            msg.sender, address(this), amount
+        );
 
         // deposit new shares
         IMasterChefV2(manager.masterChefAddress()).deposit(
-            msg.sender, _sharesAmount, _id
+            msg.sender, sharesAmount, id
         );
 
-
-        // should be done after masterchef withdraw
-        _updateLpPerShare();
-        bond.lpRewardDebt = (
-            IMasterChefV2(manager.masterChefAddress()).getBondingShareInfo(_id)[0]
-                * accLpRewardPerShare) / 1e12;
-       
-
-        BondingShareV2(manager.bondingShareAddress()).updateBond(
-            _id, bond.lpAmount, bond.lpRewardDebt, bond.endBlock
-        );
-
-        IERC20(manager.stableSwapMetaPoolAddress()).safeTransferFrom(
-            msg.sender, address(this), _amount
-        );
-
-        emit AddLiquidityFromBond(msg.sender, _id, bond.lpAmount, _sharesAmount);
+        emit AddLiquidityFromBond(msg.sender, id, bond.lpAmount, sharesAmount);
     }
 
     /// @dev Remove an amount of uAD-3CRV LP tokens
@@ -478,7 +472,7 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
         _migrate(
             _toMigrateOriginals[_id - 1],
             _toMigrateLpBalances[_id - 1],
-            _toMigrateWeeks[_id - 1]
+            _toMigrateLockupPeriods[_id - 1]
         );
     }
 
@@ -509,14 +503,14 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
 
     /// @dev migrate let a user migrate from V1
     /// @notice user will then be able to migrate
-    function _migrate(address user, uint256 _lpsAmount, uint256 _weeks)
+    function _migrate(address user, uint256 _lpsAmount, uint256 lockupPeriod)
         internal
         returns (uint256 _id)
     {
         require(toMigrateId[user] > 0, "not v1 address");
         require(_lpsAmount > 0, "LP amount is zero");
         require(
-            1 <= _weeks && _weeks <= 208,
+            1 <= lockupPeriod && lockupPeriod <= 208,
             "Duration must be between 1 and 208 weeks"
         );
 
@@ -525,7 +519,7 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
 
         // calculate the amount of share based on the amount of lp deposited and the duration
         uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
-            .durationMultiply(_lpsAmount, _weeks, bondingDiscountMultiplier);
+            .durationMultiply(_lpsAmount, lockupPeriod, bondingDiscountMultiplier);
 
         // update the accumulated lp rewards per shares
         _updateLpPerShare();
@@ -533,7 +527,7 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
         // to keep the _updateLpPerShare calculation consistent
         totalLpToMigrate -= _lpsAmount;
         // calculate end locking period block number
-        uint256 endBlock = block.number + _weeks * blockCountInAWeek;
+        uint256 endBlock = block.number + lockupPeriod * blockCountInAWeek;
         _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
         
         // set masterchef for uGOV rewards
@@ -541,7 +535,7 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
             user, _sharesAmount, _id
         );
 
-        emit Migrated(user, _id, _lpsAmount, _sharesAmount, _weeks);
+        emit Migrated(user, _id, _lpsAmount, _sharesAmount, lockupPeriod);
     }
 
     /// @dev update the accumulated excess LP per share

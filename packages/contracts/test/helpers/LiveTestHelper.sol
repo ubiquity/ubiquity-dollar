@@ -284,7 +284,7 @@ contract LiveTestHelper is Test {
         locked = [uint256(1), uint256(1), uint256(208)];
 
         bondingV2 =
-        new BondingV2(address(manager), address(bFormulas), migrating, migrateLP, locked);
+        new BondingV2(UbiquityAlgorithmicDollarManager(manager), address(bFormulas), migrating, migrateLP, locked);
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 
