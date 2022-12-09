@@ -71,7 +71,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     //TODO create updateConfig method
-
+    /// Needs to check that Operator is Authorized, From is Valid, ID exists
     function onERC1155Received(
         address operator,
         address from,
