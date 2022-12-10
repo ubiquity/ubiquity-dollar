@@ -202,11 +202,11 @@ contract BondingV2 is IBondingV2, CollectableDust, Pausable {
             );
     }
 
-    function setBondingFormulasAddress(address _bondingFormulasAddress)
+    function setBondingFormulasAddress(address bondingFormulasAddress_)
         external
         onlyBondingManager
     {
-        bondingFormulasAddress = _bondingFormulasAddress;
+        bondingFormulasAddress = bondingFormulasAddress_;
     }
 
     /// Collectable Dust

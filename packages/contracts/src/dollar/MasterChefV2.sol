@@ -105,8 +105,10 @@ contract MasterChefV2 is ReentrancyGuard {
             "_bondingShareIDs array not same length"
         );
 
+        uint256 sharesDeposited = _totalShares;
         for (uint256 i = 0; i < lgt; ++i) {
-            _deposit(_tos[i], _amounts[i], _bondingShareIDs[i]);
+            _migrateDeposit(_tos[i], _amounts[i], _bondingShareIDs[i]);
+            sharesDeposited += _amounts[i];
         }
     }
 
@@ -235,6 +237,27 @@ contract MasterChefV2 is ReentrancyGuard {
         emit Deposit(to, _amount, _bondingShareID);
     }
 
+    ///@notice used in constructor for migrating over deposits from old version
+    ///@dev reduces costs of deployment vs using regular _deposit
+    ///@param _to address of bond holder
+    ///@param _amount number of bond shares for bond
+    ///@param _bondingShareID id of bond
+    function _migrateDeposit(address _to, uint256 _amount, uint256 _bondingShareID)
+        internal 
+    {
+        BondingShareInfo storage bs = _bsInfo[_bondingShareID];
+        uint256 pending = 0;
+        if (bs.amount > 0) {
+            pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
+        }
+        bs.amount += _amount;
+        bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
+        
+        _updatePool();
+        _safeUGOVTransfer(_to, pending);
+        emit Deposit(_to, _amount, _bondingShareID);
+    }
+
     // UPDATE uGOV multiplier
     function _updateUGOVMultiplier() internal {
         // (1.05/(1+abs(1-TWAP_PRICE)))
@@ -263,11 +286,11 @@ contract MasterChefV2 is ReentrancyGuard {
 
     // Update reward variables of the given pool to be up-to-date.
     function _updatePool() internal {
+        _updateUGOVMultiplier();
         if (block.number <= pool.lastRewardBlock) {
             return;
         }
-        _updateUGOVMultiplier();
-
+        
         if (_totalShares == 0) {
             pool.lastRewardBlock = block.number;
             return;
