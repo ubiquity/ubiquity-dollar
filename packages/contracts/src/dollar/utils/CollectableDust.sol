@@ -47,7 +47,8 @@ abstract contract CollectableDust is ICollectableDust {
             "collectable-dust::token-is-part-of-the-protocol"
         );
         if (token == ETH_ADDRESS) {
-            payable(to).transfer(amount);
+            (bool sent, ) = payable(to).call{value: amount}("");
+            require(sent, "Failed to transfer Ether");
         } else {
             IERC20(token).safeTransfer(to, amount);
         }
