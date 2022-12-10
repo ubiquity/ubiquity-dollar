@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.3;
+pragma solidity >=0.8.16;
 
 /**
  * @title Ubiquity.
@@ -37,7 +37,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     );
     event DepositMultiple(
         address indexed sender,
-        uint256[4] amount,
+        uint256[4] amounts,
         uint256 durationWeeks,
         uint256 stakingShareId
     );
@@ -47,6 +47,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint256 stakingShareId,
         address token,
         uint256 amount
+    );
+    event WithdrawAll(
+        address indexed sender,
+        uint256 stakingShareId,
+        uint256[4] amounts
     );
 
     constructor(
@@ -250,6 +255,77 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             durationWeeks,
             stakingShareId
         );
+    }
+
+    /**
+     * @dev Withdraw from Ubiquity protocol
+     * @notice Ubiquity StakingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
+     * @notice STEP 1 : Ubiquity StakingShare  => uAD3CRV-f
+     * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
+     * @param stakingShareId Staking Share Id to withdraw
+     */
+
+    function withdraw(uint256 stakingShareId)
+        external
+        nonReentrant
+        returns (uint256[4] memory tokenAmounts)
+    {
+        address staking = manager.stakingContractAddress();
+        address stakingShare = manager.stakingShareAddress();
+
+        uint256[] memory stakingShareIds = IStakingShare(stakingShare)
+            .holderTokens(msg.sender);
+        //Need to verify msg.sender by holderToken history.
+        //stake.minter is this contract address so that cannot use it for verification.
+        require(isIdIncluded(stakingShareIds, stakingShareId), "!bond owner");
+
+        //transfer bondingShare NFT token from msg.sender to this address
+        IStakingShare(stakingShare).safeTransferFrom(
+            msg.sender,
+            address(this),
+            stakingShareId,
+            1,
+            "0x"
+        );
+
+        // Get Stake
+        IStakingShare.Stake memory stake = IStakingShare(stakingShare).getStake(
+            stakingShareId
+        );
+
+        // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
+        //address staking = ubiquityManager.stakingContractAddress();
+        IStakingShare(stakingShare).setApprovalForAll(staking, true);
+        IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
+        IStakingShare(stakingShare).setApprovalForAll(staking, false);
+
+        uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(
+            address(this)
+        );
+        uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress())
+            .balanceOf(address(this));
+
+        // STEP2 : Withdraw  3Crv LPs from meta pool to get back Ubiquity Dollar, DAI, USDC or USDT
+
+        IERC20(ubiquity3PoolLP).approve(
+            depositZapUbiquityDollar,
+            lpTokenAmount
+        );
+        tokenAmounts = IDepositZap(depositZapUbiquityDollar).remove_liquidity(
+            ubiquity3PoolLP,
+            lpTokenAmount,
+            [uint256(0), uint256(0), uint256(0), uint256(0)]
+        ); //[Ubiquity Dollar, DAI, USDC, USDT]
+        IERC20(ubiquityDollar).safeTransfer(msg.sender, tokenAmounts[0]);
+        IERC20(token0).safeTransfer(msg.sender, tokenAmounts[1]);
+        IERC20(token1).safeTransfer(msg.sender, tokenAmounts[2]);
+        IERC20(token2).safeTransfer(msg.sender, tokenAmounts[3]);
+        IERC20(manager.governanceTokenAddress()).safeTransfer(
+            msg.sender,
+            governanceTokenAmount
+        );
+
+        emit WithdrawAll(msg.sender, stakingShareId, tokenAmounts);
     }
 
     /**
