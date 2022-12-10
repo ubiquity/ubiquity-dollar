@@ -446,8 +446,8 @@ aside {
   padding: 16px;
 }
 
-/* Commit hash URL block styles */
-#CommitURL {
+/* Build info with commit hash URL block styles */
+#BuildInfo {
   opacity: 0.5;
   font-size: 12px;
   color: #fff;
@@ -455,7 +455,7 @@ aside {
   right: 12px;
   bottom: 12px;
 }
-#CommitURL:hover {
+#BuildInfo:hover {
   opacity: 1;
 }
 

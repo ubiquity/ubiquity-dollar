@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import Icon from "../ui/Icon";
+import BuildInfo from "./BuildInfo";
 import Inventory from "./Inventory";
 import Sidebar from "./Sidebar";
 import TransactionsDisplay from "./TransactionsDisplay";
@@ -51,18 +52,9 @@ export default function Layout({ children }: LayoutProps) {
         <div>
           <Inventory />
         </div>
-
-        {/* frontend version with a URL to commit hash, NEXT_PUBLIC_COMMIT_REF is only available in production netlify build */}
-        {process.env.NEXT_PUBLIC_COMMIT_REF && (
-          <div id="CommitURL">
-            <a
-              href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.NEXT_PUBLIC_COMMIT_REF}`}
-              target="_blank"
-            >
-              {process.env.NEXT_PUBLIC_COMMIT_REF.substring(0,8)}
-            </a>
-          </div>
-        )}
+        
+        {/* project build info (URL to deployed commit) */}
+        <BuildInfo />
       </div>
     </div>
   );
