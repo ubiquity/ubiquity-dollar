@@ -150,9 +150,8 @@ contract MasterChefV2 is ReentrancyGuard {
         onlyBondingContract
     {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
-        _updatePool();
         require(bs.amount >= _amount, "MC: amount too high");
-        
+        _updatePool();
         uint256 pending =
             ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
         // send UGOV to Bonding Share holder
@@ -168,7 +167,6 @@ contract MasterChefV2 is ReentrancyGuard {
     /// @return amount of pending rewards transferred to msg.sender
     /// @notice only send pending rewards
     function getRewards(uint256 bondingShareID) external returns (uint256) {
-        _updatePool();
         require(
             IERC1155Ubiquity(manager.bondingShareAddress()).balanceOf(
                 msg.sender, bondingShareID
@@ -178,7 +176,7 @@ contract MasterChefV2 is ReentrancyGuard {
 
         // calculate user reward
         BondingShareInfo storage user = _bsInfo[bondingShareID];
-        
+        _updatePool();
         uint256 pending =
             ((user.amount * pool.accuGOVPerShare) / 1e12) - user.rewardDebt;
         _safeUGOVTransfer(msg.sender, pending);
@@ -228,14 +226,13 @@ contract MasterChefV2 is ReentrancyGuard {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
         uint256 pending = 0;
         _totalShares += _amount;
-        _updatePool();
         if (bs.amount > 0) {
             pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
         }
         bs.amount += _amount;
         bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
         
-        
+        _updatePool();
         _safeUGOVTransfer(to, pending);
         emit Deposit(to, _amount, _bondingShareID);
     }
@@ -250,14 +247,13 @@ contract MasterChefV2 is ReentrancyGuard {
     {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
         uint256 pending = 0;
-        _updatePool();
         if (bs.amount > 0) {
             pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
         }
         bs.amount += _amount;
         bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
         
-        
+        _updatePool();
         _safeUGOVTransfer(_to, pending);
         emit Deposit(_to, _amount, _bondingShareID);
     }
