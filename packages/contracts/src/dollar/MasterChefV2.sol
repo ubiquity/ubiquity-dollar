@@ -223,13 +223,13 @@ contract MasterChefV2 is ReentrancyGuard {
     {
         BondingShareInfo storage bs = _bsInfo[_bondingShareID];
         uint256 pending = 0;
-        
+        _totalShares += _amount;
         if (bs.amount > 0) {
             pending = ((bs.amount * pool.accuGOVPerShare) / 1e12) - bs.rewardDebt;
         }
         bs.amount += _amount;
         bs.rewardDebt = (bs.amount * pool.accuGOVPerShare) / 1e12;
-        _totalShares += _amount;
+        
         _updatePool();
         _safeUGOVTransfer(to, pending);
         emit Deposit(to, _amount, _bondingShareID);
@@ -239,8 +239,10 @@ contract MasterChefV2 is ReentrancyGuard {
     function _updateUGOVMultiplier() internal {
         // (1.05/(1+abs(1-TWAP_PRICE)))
         uint256 currentPrice = _getTwapPrice();
-
+        uint256 uGOVmultiplier_ = uGOVmultiplier;
+        uint256 lastPrice_ = lastPrice;
         bool isPriceDiffEnough = false;
+
         // a minimum price variation is needed to update the multiplier
         if (currentPrice > lastPrice) {
             isPriceDiffEnough =
@@ -251,9 +253,11 @@ contract MasterChefV2 is ReentrancyGuard {
         }
         
         if(isPriceDiffEnough ) {
-            uGOVmultiplier = _uGOVMultiply(uGOVmultiplier, currentPrice);
-            lastPrice = currentPrice;
+            uGOVmultiplier_ = _uGOVMultiply(uGOVmultiplier_, currentPrice);
+            lastPrice_ = currentPrice;
         }
+        lastPrice = lastPrice_;
+        uGOVmultiplier = uGOVmultiplier_;
         
     }
 
