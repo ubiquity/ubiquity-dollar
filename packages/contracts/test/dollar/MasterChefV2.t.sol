@@ -98,35 +98,24 @@ contract DepositStateTest is DepositState {
     function testWithdraw(uint256 amount, uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
         uint256 preBal = uGov.balanceOf(fourthAccount);
-        (uint256 lastRewardBlock,) = chefV2.pool();
-        uint256 currentBlock = block.number;
-        vm.roll(currentBlock + blocks);
-        uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 uGOVPerShare = (reward * 1e12) / shares;
-        uint256 userReward = (shares * uGOVPerShare) / 1e12;
-        console.log("uGov Reward to User", userReward);
+        uint256[2] memory bsInfo = chefV2.getBondingShareInfo(fourthID);
+        vm.roll(block.number + blocks);
+        
         amount = bound(amount, 1, shares);
         vm.expectEmit(true, true, true, true, address(chefV2));
         emit Withdraw(fourthAccount, amount, fourthID);
         vm.prank(admin);
         chefV2.withdraw(fourthAccount, amount, fourthID);
-        assertEq(preBal + userReward, uGov.balanceOf(fourthAccount));
+        assertGt(uGov.balanceOf(fourthAccount), preBal);
     }
 
     function testGetRewards(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
-
-        (uint256 lastRewardBlock,) = chefV2.pool();
-        uint256 currentBlock = block.number;
-        vm.roll(currentBlock + blocks);
-        uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 uGOVPerShare = (reward * 1e12) / shares;
-        uint256 userReward = (shares * uGOVPerShare) / 1e12;
+        uint256 preBal = uGov.balanceOf(fourthAccount);
+        vm.roll(block.number + blocks);
         vm.prank(fourthAccount);
         uint256 rewardSent = chefV2.getRewards(1);
-        assertEq(userReward, rewardSent);
+        assertEq(preBal + rewardSent, uGov.balanceOf(fourthAccount));
     }
 
     function testCannotGetRewardsOtherAccount() public {

@@ -85,13 +85,14 @@ contract DebtCouponTest is LocalTestHelper {
         DebtCoupon(debtCouponAddress).mintCoupons(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
         DebtCoupon(debtCouponAddress).mintCoupons(address(0x222), 10, 20000);
         DebtCoupon(debtCouponAddress).mintCoupons(address(0x333), 10, 30000);
-        vm.stopPrank();
+        
 
         // sets block.number
         vm.roll(15000);
         DebtCoupon(debtCouponAddress).updateTotalDebt();
         uint256 outStandingTotalDebt =
             DebtCoupon(debtCouponAddress).getTotalOutstandingDebt();
+            vm.stopPrank();
         assertEq(outStandingTotalDebt, 20);
     }
 
@@ -100,13 +101,15 @@ contract DebtCouponTest is LocalTestHelper {
         DebtCoupon(debtCouponAddress).mintCoupons(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
         DebtCoupon(debtCouponAddress).mintCoupons(address(0x222), 10, 20000);
         DebtCoupon(debtCouponAddress).mintCoupons(address(0x333), 10, 30000);
-        vm.stopPrank();
+        
 
         // sets block.number
         vm.roll(25000);
         DebtCoupon(debtCouponAddress).updateTotalDebt();
         uint256 outStandingTotalDebt =
             DebtCoupon(debtCouponAddress).getTotalOutstandingDebt();
+            vm.stopPrank();
         assertEq(outStandingTotalDebt, 10);
+        
     }
 }

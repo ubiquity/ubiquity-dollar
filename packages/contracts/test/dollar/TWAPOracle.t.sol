@@ -9,15 +9,15 @@ import "../helpers/LocalTestHelper.sol";
 contract TWAPOracleTest is LocalTestHelper {
     address uadTokenAddress = address(0x222);
     address curve3CRVTokenAddress = address(0x333);
-    address twapOracleAddress;
-    address metaPoolAddress;
+    TWAPOracle twapOracle;
+    MockMetaPool metaPool;
 
     function setUp() public {
-        metaPoolAddress =
-            address(new MockMetaPool(uadTokenAddress, curve3CRVTokenAddress));
-        twapOracleAddress = address(
-            new TWAPOracle(metaPoolAddress, uadTokenAddress, curve3CRVTokenAddress)
-        );
+        metaPool =
+            new MockMetaPool(uadTokenAddress, curve3CRVTokenAddress);
+        twapOracle = 
+            new TWAPOracle(address(metaPool), uadTokenAddress, curve3CRVTokenAddress)
+        ;
     }
 
     function test_overall() public {
@@ -27,19 +27,19 @@ contract TWAPOracleTest is LocalTestHelper {
         uint256 _last_block_timestamp = 20000;
         uint256[2] memory _twap_balances = [uint256(100e18), uint256(100e18)];
         uint256[2] memory _dy_values = [uint256(100e18), uint256(100e18)];
-        MockMetaPool(metaPoolAddress).updateMockParams(
+        metaPool.updateMockParams(
             _price_cumulative_last,
             _last_block_timestamp,
             _twap_balances,
             _dy_values
         );
 
-        TWAPOracle(twapOracleAddress).update();
+        twapOracle.update();
 
         uint256 amount0Out =
-            TWAPOracle(twapOracleAddress).consult(uadTokenAddress);
+            twapOracle.consult(uadTokenAddress);
         uint256 amount1Out =
-            TWAPOracle(twapOracleAddress).consult(curve3CRVTokenAddress);
+            twapOracle.consult(curve3CRVTokenAddress);
         assertEq(amount0Out, 100e18);
         assertEq(amount1Out, 100e18);
     }
