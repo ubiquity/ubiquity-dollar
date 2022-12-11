@@ -25,12 +25,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
     DirectGovernanceFarmer directGovernanceFarmer;
     MockERC20 stableSwapMetaPool;
-    address dollarManagerAddress;
+    address uadManagerAddress;
     address depositZapAddress = address(0x4);
     address base3PoolAddress = address(0x5);
 
     function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+        uadManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
         // deploy mocked tokens
         token0 = new MockERC20('DAI', 'DAI', 18);
         token1 = new MockERC20('USDC', 'USDC', 6);
@@ -38,7 +38,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         // deploy stable swap meta pool
         stableSwapMetaPool = new MockERC20("Stable swap meta pool token", "Stable swap meta pool token", 18);
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
         // mock base3Pool to return mocked token addresses
         vm.mockCall(
             base3PoolAddress,
@@ -57,16 +57,16 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         // create direct governance farmer contract instance
         directGovernanceFarmer = new DirectGovernanceFarmer(
-            dollarManagerAddress, 
+            uadManagerAddress, 
             base3PoolAddress, 
             depositZapAddress
         );
     }
 
     function testConstructor_ShouldInitContract() public {
-        assertEq(address(directGovernanceFarmer.manager()), dollarManagerAddress);
+        assertEq(address(directGovernanceFarmer.manager()), uadManagerAddress);
         assertEq(directGovernanceFarmer.ubiquity3PoolLP(), address(stableSwapMetaPool));
-        assertEq(directGovernanceFarmer.ubiquityDollar(), IUbiquityDollarManager(dollarManagerAddress).dollarTokenAddress());
+        assertEq(directGovernanceFarmer.ubiquityDollar(), IUbiquityAlgorithmicDollarManager(uadManagerAddress).dollarTokenAddress());
         assertEq(directGovernanceFarmer.depositZapUbiquityDollar(), depositZapAddress);
         assertEq(directGovernanceFarmer.token0(), address(token0));
         assertEq(directGovernanceFarmer.token1(), address(token1));
@@ -111,8 +111,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(stakingAddress);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -130,7 +130,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         vm.mockCall(
             stakingAddress,
-            abi.encodeWithSelector(IStaking.deposit.selector),
+            abi.encodeWithSelector(IBondingV2.deposit.selector),
             abi.encode(1)
         );
         vm.mockCall(
@@ -157,7 +157,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
 
         vm.mockCall(
             stakingShareAddress,
@@ -177,8 +177,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(stakingAddress);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -196,7 +196,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         vm.mockCall(
             stakingAddress,
-            abi.encodeWithSelector(IStaking.deposit.selector),
+            abi.encodeWithSelector(IBondingV2.deposit.selector),
             abi.encode(1)
         );
         vm.mockCall(
@@ -220,12 +220,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(stakingShareIds)
         );
 
-        IStakingShare.Stake memory stake;
-        stake.lpAmount = 100e18;
+        IBondingShareV2.Bond memory bond;
+        bond.lpAmount = 100e18;
         vm.mockCall(
             stakingShareAddress,
-            abi.encodeWithSelector(IStakingShare.getStake.selector),
-            abi.encode(stake)
+            abi.encodeWithSelector(IBondingShareV2.getBond.selector),
+            abi.encode(bond)
         );
 
         vm.mockCall(
@@ -241,7 +241,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncluded_ReturnTrue_IfIdIsInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-            dollarManagerAddress, 
+            uadManagerAddress, 
             base3PoolAddress, 
             depositZapAddress
         );
@@ -254,7 +254,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncluded_ReturnFalse_IfIdIsNotInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-            dollarManagerAddress, 
+            uadManagerAddress, 
             base3PoolAddress, 
             depositZapAddress
         );

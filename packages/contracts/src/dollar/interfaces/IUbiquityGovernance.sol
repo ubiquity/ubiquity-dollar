@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "./IERC20Ubiquity.sol";
 
-/// @title Governance token interface
-/// @author Ubiquity DAO
+/// @title uGOV governance token interface
+/// @author Ubiquity Algorithmic Dollar
 // solhint-disable-next-line no-empty-blocks
-interface IUbiquityGovernanceToken is IERC20Ubiquity {}
+interface IUbiquityGovernance is IERC20Ubiquity {}

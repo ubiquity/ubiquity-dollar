@@ -7,5 +7,5 @@ interface IUBQManager {
         view
         returns (bool);
 
-    function GOVERNANCE_TOKEN_MINTER_ROLE() external view returns (bytes32);
+    function UBQ_MINTER_ROLE() external view returns (bytes32);
 }

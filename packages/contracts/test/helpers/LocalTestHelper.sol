@@ -1,29 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarManager} from
-    "../../src/dollar/core/UbiquityDollarManager.sol";
-import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
-import {CreditRedemptionCalculator} from
-    "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {CreditNFTRedemptionCalculator} from
-    "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
-import {DollarMintCalculator} from
-    "../../src/dollar/core/DollarMintCalculator.sol";
-import {DollarMintExcess} from
-    "../../src/dollar/core/DollarMintExcess.sol";
-import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
-import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
-import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
+import {UbiquityAlgorithmicDollarManager} from
+    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityGovernance} from "../../src/dollar/UbiquityGovernance.sol";
+import {UARForDollarsCalculator} from
+    "../../src/dollar/UARForDollarsCalculator.sol";
+import {CouponsForDollarsCalculator} from
+    "../../src/dollar/CouponsForDollarsCalculator.sol";
+import {DollarMintingCalculator} from
+    "../../src/dollar/DollarMintingCalculator.sol";
+import {ExcessDollarsDistributor} from
+    "../../src/dollar/ExcessDollarsDistributor.sol";
+import {MockDebtCoupon} from "../../src/dollar/mocks/MockDebtCoupon.sol";
+import {MockuADToken} from "../../src/dollar/mocks/MockuADToken.sol";
+import {MockTWAPOracle} from "../../src/dollar/mocks/MockTWAPOracle.sol";
+import {MockAutoRedeem} from "../../src/dollar/mocks/MockAutoRedeem.sol";
 
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-contract MockCreditNFTRedemptionCalculator {
+contract MockCouponsForDollarsCalculator {
     constructor() {}
 
-    function getCreditNFTAmount(uint256 dollarsToBurn)
+    function getCouponAmount(uint256 dollarsToBurn)
         external
         pure
         returns (uint256)
@@ -38,51 +38,51 @@ abstract contract LocalTestHelper is Test {
     address public admin = address(0x123abc);
     address public treasuryAddress = address(0x111222333);
 
-    function helpers_deployUbiquityDollarManager()
+    function helpers_deployUbiquityAlgorithmicDollarManager()
         public
         returns (address)
     {
-        UbiquityDollarManager _manager =
-            new UbiquityDollarManager(admin);
+        UbiquityAlgorithmicDollarManager _manager =
+            new UbiquityAlgorithmicDollarManager(admin);
 
         vm.startPrank(admin);
-        // deploy credit NFT token
-        MockCreditNFT _creditNFT = new MockCreditNFT(100);
-        _manager.setCreditNFTAddress(address(_creditNFT));
+        // deploy debt token
+        MockDebtCoupon _debtCoupon = new MockDebtCoupon(100);
+        _manager.setDebtCouponAddress(address(_debtCoupon));
 
-        // deploy dollar token
-        MockDollarToken _dollarToken = new MockDollarToken(10000e18);
-        _manager.setDollarTokenAddress(address(_dollarToken));
+        // deploy uAD token
+        MockuADToken _uAD = new MockuADToken(10000e18);
+        _manager.setDollarTokenAddress(address(_uAD));
 
         // deploy twapPrice oracle
-        MockTWAPOracleDollar3pool _twapOracle =
-        new MockTWAPOracleDollar3pool(address(0x100), address(_dollarToken), address(0x101), 100, 100);
+        MockTWAPOracle _twapOracle =
+        new MockTWAPOracle(address(0x100), address(_uAD), address(0x101), 100, 100);
         _manager.setTwapOracleAddress(address(_twapOracle));
 
         // deploy governance token
-        UbiquityGovernanceToken _governanceToken = new UbiquityGovernanceToken(address(_manager));
-        _manager.setGovernanceTokenAddress(address(_governanceToken));
+        UbiquityGovernance _uGov = new UbiquityGovernance(address(_manager));
+        _manager.setGovernanceTokenAddress(address(_uGov));
 
-        // deploy CreditNFTRedemptionCalculator
-        MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator =
-            new MockCreditNFTRedemptionCalculator();
-        _manager.setCreditNFTCalculatorAddress(
-            address(_creditNFTRedemptionCalculator)
+        // deploy couponsForDollarCalculator
+        MockCouponsForDollarsCalculator couponsForDollarsCalculator =
+            new MockCouponsForDollarsCalculator();
+        _manager.setCouponCalculatorAddress(
+            address(couponsForDollarsCalculator)
         );
 
-        // deploy credit token
-        MockCreditToken _creditToken = new MockCreditToken(0);
-        _manager.setCreditTokenAddress(address(_creditToken));
+        // deploy ubiquityAutoRedeem
+        MockAutoRedeem autoRedeem = new MockAutoRedeem(0);
+        _manager.setuARTokenAddress(address(autoRedeem));
 
-        // deploy CreditRedemptionCalculator
-        CreditRedemptionCalculator _creditRedemptionCalculator =
-            new CreditRedemptionCalculator(address(_manager));
-        _manager.setCreditCalculatorAddress(address(_creditRedemptionCalculator));
+        // deploy UARDollarCalculator
+        UARForDollarsCalculator _uarDollarCalculator =
+            new UARForDollarsCalculator(address(_manager));
+        _manager.setUARCalculatorAddress(address(_uarDollarCalculator));
 
-        // deploy DollarMintCalculator
-        DollarMintCalculator _dollarMintCalculator =
-            new DollarMintCalculator(address(_manager));
-        _manager.setDollarMintCalculatorAddress(address(_dollarMintCalculator));
+        // deploy dollarMintingCalculator
+        DollarMintingCalculator _mintingCalculator =
+            new DollarMintingCalculator(address(_manager));
+        _manager.setDollarMintingCalculatorAddress(address(_mintingCalculator));
 
         // set treasury address
         _manager.setTreasuryAddress(treasuryAddress);

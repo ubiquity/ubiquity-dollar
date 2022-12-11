@@ -10,7 +10,7 @@ contract UbiquityFormulas {
     /// @dev formula duration multiply
     /// @param _uLP , amount of LP tokens
     /// @param _weeks , minimum duration of staking period
-    /// @param _multiplier , staking discount multiplier = 0.0001
+    /// @param _multiplier , bonding discount multiplier = 0.0001
     /// @return _shares , amount of shares
     /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
     //          D32 = D^3/2
@@ -32,7 +32,7 @@ contract UbiquityFormulas {
     /// @dev formula bonding
     /// @param _shares , amount of shares
     /// @param _currentShareValue , current share value
-    /// @param _targetPrice , target Ubiquity Dollar price
+    /// @param _targetPrice , target uAD price
     /// @return _uBOND , amount of bonding shares
     /// @notice UBOND = _shares / _currentShareValue * _targetPrice
     // newShares = A / V * T
@@ -70,7 +70,7 @@ contract UbiquityFormulas {
     /// @dev formula bond price
     /// @param _totalULP , total LP tokens
     /// @param _totalUBOND , total bond shares
-    /// @param _targetPrice ,  target Ubiquity Dollar price
+    /// @param _targetPrice ,  target uAD price
     /// @return _priceUBOND , bond share price
     /// @notice
     // IF _totalUBOND = 0  priceBOND = TARGET_PRICE
@@ -90,15 +90,15 @@ contract UbiquityFormulas {
         _priceUBOND = r.mul(t).toUInt();
     }
 
-    /// @dev formula Governance Token multiply
-    /// @param _multiplier , initial Governance Token min multiplier
+    /// @dev formula ugov multiply
+    /// @param _multiplier , initial ugov min multiplier
     /// @param _price , current share price
-    /// @return _newMultiplier , new Governance Token min multiplier
+    /// @return _newMultiplier , new ugov min multiplier
     /// @notice new_multiplier = multiplier * ( 1.05 / (1 + abs( 1 - price ) ) )
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function governanceMultiply(uint256 _multiplier, uint256 _price)
+    function ugovMultiply(uint256 _multiplier, uint256 _price)
         public
         pure
         returns (uint256 _newMultiplier)
