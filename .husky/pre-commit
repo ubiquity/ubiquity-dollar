@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# NOTICE: temporary disabled because it is not clear what is the best way to lint
-# yarn lint-staged --verbose
+yarn lint-staged --verbose
