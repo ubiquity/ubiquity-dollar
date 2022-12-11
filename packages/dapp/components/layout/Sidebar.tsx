@@ -20,7 +20,7 @@ const Sidebar = () => {
                         <Icon icon="uad" />
                       </div>
                       <div>
-                        <span>Ubiquity Dollar</span>
+                        <span>Ubiquity Dollar (Beta)</span>
                       </div>
                     </div>
                   </a>
