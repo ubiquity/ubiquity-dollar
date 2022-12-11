@@ -52,7 +52,7 @@ export default function Layout({ children }: LayoutProps) {
         <div>
           <Inventory />
         </div>
-        
+
         {/* project build info (URL to deployed commit) */}
         <BuildInfo />
       </div>
