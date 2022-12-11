@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import Icon from "../ui/Icon";
+import BuildInfo from "./BuildInfo";
 import Inventory from "./Inventory";
 import Sidebar from "./Sidebar";
 import TransactionsDisplay from "./TransactionsDisplay";
@@ -51,6 +52,9 @@ export default function Layout({ children }: LayoutProps) {
         <div>
           <Inventory />
         </div>
+        
+        {/* project build info (URL to deployed commit) */}
+        <BuildInfo />
       </div>
     </div>
   );
