@@ -52,7 +52,8 @@ contract CreditClockTest is LocalTestHelper {
         creditClock.getRate(block.number);
     }
 
-    function testFailGetRateOldBlock() public view {
+    function testGetRateOldBlock() public {
+        vm.expectRevert("CreditClock: block number must not be in the past.");
         creditClock.getRate(block.number - 1);
     }
 
