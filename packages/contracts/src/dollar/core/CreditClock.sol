@@ -61,7 +61,7 @@ contract CreditClock {
         return n.mul(b.log_2()).pow_2();
     }
 
-    /// @dev Calculates rate a certain number of blocks after rate per block is set.
+    /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ blockDelta) ) )
     /// @param _rateStartValue ABDKMathQuad The initial value of the rate.
     /// @param _ratePerBlock ABDKMathQuad The rate per block.
     /// @param blockDelta How many blocks after the rate was set.
@@ -81,7 +81,7 @@ contract CreditClock {
         );
     }
 
-    /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ (blockNumber - rateStartBlock) ) )
+    /// @dev Calculates rate at a specific block number.
     /// @param blockNumber Block number to get the rate for. 0 for current block.
     /// @return rate ABDKMathQuad The rate calculated for the block number.
     function getRate(uint256 blockNumber)
