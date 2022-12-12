@@ -17,6 +17,13 @@ contract DebtClockTest is LocalTestHelper {
         debtClock = new DebtClock(manager, uint256(50).fromUInt(), uint256(3).fromUInt());
     }
 
+    function testConstructor() public {
+        require(debtClock.manager() == manager);
+        require(debtClock.rateStartBlock() == block.number);
+        require(debtClock.rateStartValue() == uint256(50).fromUInt());
+        require(debtClock.ratePerBlock() == uint256(3).fromUInt());
+    }
+
     function testSetRatePerBlock() public {
         debtClock.setRatePerBlock(uint256(1 ether).fromUInt());
 
