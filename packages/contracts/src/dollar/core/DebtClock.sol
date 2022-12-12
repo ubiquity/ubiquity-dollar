@@ -35,7 +35,7 @@ contract DebtClock {
         onlyAdmin
     {
         rateStartBlock = block.number;
-        rateStartValue = rate(0);
+        rateStartValue = rate(block.number);
         ratePerBlock = _ratePerBlock;
     }
 
