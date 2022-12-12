@@ -1,7 +1,7 @@
 import { OptionDefinition } from "command-line-args";
 
-import { DeployFuncParam } from "../../shared";
-import { create } from "../create";
+import { DeployFuncParam } from "../../../shared";
+import { create } from "../../create";
 
 export const optionDefinitions: OptionDefinition[] = [
     { name: "task", defaultOption: true },
