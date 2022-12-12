@@ -1,24 +1,32 @@
 import { OptionDefinition } from "command-line-args";
 
 import { DeployFuncCallback } from "../shared";
-import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding";
-import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmicDollarManager";
-import bondingShareFunc, { optionDefinitions as bondingShareOptions } from "./dollar/BondingShare";
-import bondingShareV2Func, { optionDefinitions as bondingShareV2Options } from "./dollar/BondingShareV2";
-import couponsForDollarsCalculatorFunc, { optionDefinitions as couponsForDollarsCalculatorOptions } from "./dollar/CouponsForDollarsCalculator";
-import curveUADIncentiveFunc, { optionDefinitions as curveUADIncentiveOptions } from "./dollar/CurveUADIncentive";
-import debtCouponFunc, { optionDefinitions as debtCouponOptions } from "./dollar/DebtCoupon";
-import debtCouponManagerFunc, { optionDefinitions as debtCouponManagerOptions } from "./dollar/DebtCouponManager";
-import dollarMintingCalculatorFunc, { optionDefinitions as dollarMintingCalculatorOptions } from "./dollar/DollarMintingCalculator";
-import excessDollarsDistributorFunc, { optionDefinitions as excessDollarsDistributorOptions } from "./dollar/ExcessDollarDistributor";
-import masterChefFunc, { optionDefinitions as masterChefOptions } from "./dollar/MasterChef";
-import ubiquityGovernanceFunc, { optionDefinitions as ubiquityGovernanceOptions } from "./dollar/UbiquityGovernance";
-import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/UbiquityGovernance";
+import creditNFTFunc, { optionDefinitions as creditNFTOptions } from "./dollar/core/CreditNFT";
+import creditNFTManagerFunc, { optionDefinitions as creditNFTManagerOptions } from "./dollar/core/CreditNFTManager";
+import creditNFTRedemptionCalculatorFunc, { optionDefinitions as creditNFTRedemptionCalculatorOptions } from "./dollar/core/CreditNFTRedemptionCalculator";
+import creditRedemptionCalculatorFunc, { optionDefinitions as creditRedemptionCalculatorOptions } from "./dollar/core/CreditRedemptionCalculator";
+import dollarMintCalculatorFunc, { optionDefinitions as dollarMintCalculatorOptions } from "./dollar/core/DollarMintCalculator";
+import dollarMintExcessFunc, { optionDefinitions as dollarMintExcessOptions } from "./dollar/core/DollarMintExcess";
+import twapOracleDollar3poolFunc, { optionDefinitions as twapOracleDollar3poolOptions } from "./dollar/core/TWAPOracleDollar3pool";
+import ubiquityCreditTokenFunc, { optionDefinitions as ubiquityCreditTokenOptions } from "./dollar/core/UbiquityCreditToken";
+import ubiquityDollarManagerFunc, { optionDefinitions as ubiquityDollarManagerOptions } from "./dollar/core/UbiquityDollarManager";
+import ubiquityDollarTokenFunc, { optionDefinitions as ubiquityDollarTokenOptions } from "./dollar/core/UbiquityDollarToken";
+import ubiquityGovernanceTokenFunc, { optionDefinitions as ubiquityGovernanceTokenOptions } from "./dollar/core/UbiquityGovernanceToken";
+
+import directGovernanceFarmerFunc, { optionDefinitions as directGovernanceFarmerOptions } from "./dollar/DirectGovernanceFarmer";
+import erc20UbiquityFunc, { optionDefinitions as erc20UbiquityOptions } from "./dollar/ERC20Ubiquity";
+import erc1155UbiquityFunc, { optionDefinitions as erc1155UbiquityOptions } from "./dollar/ERC1155Ubiquity";
+import stakingFunc, { optionDefinitions as stakingOptions } from "./dollar/Staking";
+import stakingFormulasFunc, { optionDefinitions as stakingFormulasOptions } from "./dollar/StakingFormulas";
+import stakingShareFunc, { optionDefinitions as stakingShareOptions } from "./dollar/StakingShare";
+import ubiquityChefFunc, { optionDefinitions as ubiquityChefOptions } from "./dollar/UbiquityChef";
+import ubiquityFormulasFunc, { optionDefinitions as ubiquityFormulasOptions } from "./dollar/UbiquityFormulas";
+import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/SushiSwapPool";
+/* 
 import uARForDollarsCalculatorFunc, { optionDefinitions as uARForDollarsCalculatorOptions } from "./dollar/UARForDollarsCalculator";
 import ubiquityAlgorithmicDollarFunc, { optionDefinitions as ubiquityAlgorithmDollarOptions } from "./dollar/UbiquityAlgorithmicDollar";
 import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions } from "./dollar/UbiquityAutoRedeem";
-import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas";
-import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy";
+ */
 import ubiquiStickFunc, { optionDefinitions as ubiquiStickOptions } from "./ubiquistick/UbiquiStick";
 import ubiquiStickSaleFunc, { optionDefinitions as ubiquiStickSaleOptions } from "./ubiquistick/UbiquiStickSale";
 import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR";
@@ -26,77 +34,86 @@ import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP";
 import simpleBondFunc, { optionDefinitions as simpleBondOptions } from "./ubiquistick/SimpleBond";
 
 export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options: OptionDefinition[] }> = {
-  Bonding: {
-    handler: bondingFunc,
-    options: bondingOptions,
+  DirectGovernanceFarmer: {
+    handler: directGovernanceFarmerFunc,
+    options: directGovernanceFarmerOptions,
   },
-  UbiquityAlgorithmicDollarManager: {
-    handler: uAdManagerFunc,
-    options: uadManagerOptions,
+  Erc20Ubiquity: {
+    handler: erc20UbiquityFunc,
+    options: erc20UbiquityOptions,
   },
-  BondingShare: {
-    handler: bondingShareFunc,
-    options: bondingShareOptions,
+  ERC1155Ubiquity: {
+    handler: erc1155UbiquityFunc,
+    options: erc1155UbiquityOptions,
   },
-  BondingShareV2: {
-    handler: bondingShareV2Func,
-    options: bondingShareV2Options,
+  Staking: {
+    handler: stakingFunc,
+    options: stakingOptions,
   },
-  CouponsForDollarsCalculator: {
-    handler: couponsForDollarsCalculatorFunc,
-    options: couponsForDollarsCalculatorOptions,
+  StakingFormulas: {
+    handler: stakingFormulasFunc,
+    options: stakingFormulasOptions,
   },
-  CurveUADIncentive: {
-    handler: curveUADIncentiveFunc,
-    options: curveUADIncentiveOptions,
+  StakingShare: {
+    handler: stakingShareFunc,
+    options: stakingShareOptions,
   },
-  DebtCoupon: {
-    handler: debtCouponFunc,
-    options: debtCouponOptions,
+  ubiquityChefFunc: {
+    handler: ubiquityChefFunc,
+    options: ubiquityChefOptions,
   },
-  DebtCouponManager: {
-    handler: debtCouponManagerFunc,
-    options: debtCouponManagerOptions,
-  },
-  DollarMintingCalculator: {
-    handler: dollarMintingCalculatorFunc,
-    options: dollarMintingCalculatorOptions,
-  },
-  ExcessDollarDistributor: {
-    handler: excessDollarsDistributorFunc,
-    options: excessDollarsDistributorOptions,
-  },
-  MasterChef: {
-    handler: masterChefFunc,
-    options: masterChefOptions,
-  },
-  UbiquityGovernance: {
-    handler: ubiquityGovernanceFunc,
-    options: ubiquityGovernanceOptions,
+  UbiquityFormulas: {
+    handler: ubiquityFormulasFunc,
+    options: ubiquityFormulasOptions,
   },
   SushiSwapPool: {
     handler: sushiSwapPoolFunc,
     options: sushiSwapPoolOptions,
   },
-  UARForDollarsCalculator: {
-    handler: uARForDollarsCalculatorFunc,
-    options: uARForDollarsCalculatorOptions,
+
+  CreditNFT: {
+    handler: creditNFTFunc,
+    options: creditNFTOptions,
   },
-  UbiquityAlgorithmicDollar: {
-    handler: ubiquityAlgorithmicDollarFunc,
-    options: ubiquityAlgorithmDollarOptions,
+  CreditNFTManager: {
+    handler: creditNFTManagerFunc,
+    options: creditNFTManagerOptions,
   },
-  UbiquityAutoRedeem: {
-    handler: ubiquityAutoRedeemFunc,
-    options: ubiquityAutoRedeemOptions,
+  CreditRedemptionCalculatorFunc: {
+    handler: creditRedemptionCalculatorFunc,
+    options: creditRedemptionCalculatorOptions,
   },
-  UbiquityFormulas: {
-    handler: ubiquityFormulaFunc,
-    options: ubiquityFormulaOptions,
+  CreditNFTRedemptionCalculator: {
+    handler: creditNFTRedemptionCalculatorFunc,
+    options: creditNFTRedemptionCalculatorOptions,
   },
-  YieldProxy: {
-    handler: yieldProxyFunc,
-    options: yieldProxyOptions,
+  DollarMintCalculator: {
+    handler: dollarMintCalculatorFunc,
+    options: dollarMintCalculatorOptions,
+  },
+  DollarMintExcessFunc: {
+    handler: dollarMintExcessFunc,
+    options: dollarMintExcessOptions,
+  },
+  TWAPOracleDollar3pool: {
+    handler: twapOracleDollar3poolFunc,
+    options: twapOracleDollar3poolOptions,
+  },
+  UbiquityCreditTokenFunc: {
+    handler: ubiquityCreditTokenFunc,
+    options: ubiquityCreditTokenOptions,
+  },
+  UbiquityDollarManager: {
+    handler: ubiquityDollarManagerFunc,
+    options: ubiquityDollarManagerOptions,
+  },
+  UbiquityDollarToken: {
+    handler: ubiquityDollarTokenFunc,
+    options: ubiquityDollarTokenOptions,
+  },
+  UbiquityGovernanceTokenFunc: {
+    handler: ubiquityGovernanceTokenFunc,
+    options: ubiquityGovernanceTokenOptions,
   },
   UbiquiStick: {
     handler: ubiquiStickFunc,

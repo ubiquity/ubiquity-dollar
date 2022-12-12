@@ -10,11 +10,11 @@ export const optionDefinitions: OptionDefinition[] = [
 ];
 
 const func = async (params: DeployFuncParam) => {
-  const contractInstance = "src/dollar/CurveUADIncentive.sol:CurveUADIncentive";
+  const contractInstance = "src/dollar/core/DollarMintExcess.sol:DollarMintExcess";
   const { env, args } = params;
   const manager = args.manager;
 
-  const { stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager] });
+  const { result, stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [manager] });
   return !stderr ? "succeeded" : "failed";
 };
 export default func;
