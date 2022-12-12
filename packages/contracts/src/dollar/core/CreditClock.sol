@@ -67,6 +67,7 @@ contract CreditClock {
         pure
         returns (bytes16)
     {
+        // b ^ n == 2^(n*log²(b))
         return n.mul(b.log_2()).pow_2();
     }
 
