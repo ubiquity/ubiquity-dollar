@@ -69,7 +69,7 @@ const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult 
 
     const chainId = Networks[args.network] ?? undefined;
     if (!chainId) {
-        throw new Error(`Unsupported network: ${args.network} Please configure it out first`);
+        throw new Error(`Unsupported network: ${args.network}.`);
     }
 
     let executeCmd: string;
@@ -97,7 +97,7 @@ const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult 
         if (found && JSON.parse(found[0])?.deployedTo) {
             const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
             result = { deployedTo, deployer, transactionHash };
-            console.log(`Deployed ${args.name} contract successfully. res: ${deployedTo}`);
+            console.log(`Deployed ${args.name} contract successfully. Address: ${deployedTo}`);
         }
     }
     return { result, stderr }

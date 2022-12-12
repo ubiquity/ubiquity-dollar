@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "../DiamondTestSetup.sol";
 import "../../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../../src/dollar/interfaces/IMetaPool.sol";
-import "../../../src/dollar/mocks/MockGovernanceToken.sol";
 import "../../../src/dollar/mocks/MockDollarToken.sol";
 import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 
@@ -133,13 +132,10 @@ contract TestManagerFacet is DiamondSetup {
         vm.startPrank(admin);
 
         MockDollarToken dollarToken;
-        MockGovernanceToken governanceToken;
 
         dollarToken = new MockDollarToken(10000);
-        governanceToken = new MockGovernanceToken(10000);
 
         IManagerFacet.setDollarTokenAddress(address(dollarToken));
-        IManagerFacet.setGovernanceTokenAddress(address(governanceToken));
         IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
 
         address secondAccount = address(0x3);
