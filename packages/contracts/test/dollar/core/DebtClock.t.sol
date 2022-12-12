@@ -14,7 +14,7 @@ contract DebtClockTest is LocalTestHelper {
 
     function setUp() public {
         manager = new UbiquityDollarManager(address(this));
-        debtClock = new DebtClock(manager);
+        debtClock = new DebtClock(manager, uint256(50).fromUInt(), uint256(3).fromUInt());
     }
 
     function testSetRatePerBlock() public {
@@ -22,5 +22,5 @@ contract DebtClockTest is LocalTestHelper {
 
         require(debtClock.rateStartBlock() == block.number);
     }
- 
+
 }
