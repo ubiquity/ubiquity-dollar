@@ -37,6 +37,7 @@ contract DebtClock {
         ratePerBlock = _ratePerBlock;
     }
 
+    /// @dev Sets rate to apply from this block onward.
     /// @param _ratePerBlock New rate per block to apply from this block onward.
     function setRatePerBlock(bytes16 _ratePerBlock)
         external
@@ -50,7 +51,7 @@ contract DebtClock {
     /// @dev Calculates b raised to the power of n.
     /// @param b ABDKMathQuad
     /// @param n ABDKMathQuad
-    /// @return ABDKMathQuad
+    /// @return ABDKMathQuad b ^ n
     function pow(bytes16 b, bytes16 n)
         private
         pure
@@ -59,7 +60,7 @@ contract DebtClock {
         return n.mul(b.log_2()).pow_2();
     }
 
-    /// @dev Calcualate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ (blockNumber - rateStartBlock) ) )
+    /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ (blockNumber - rateStartBlock) ) )
     /// @param blockNumber Block number to get the rate for. 0 for current block.
     /// @return rate The rate calculated for the block number.
     function rate(uint256 blockNumber)
