@@ -32,4 +32,22 @@ contract DebtClockTest is LocalTestHelper {
         require(debtClock.ratePerBlock() == uint256(1).fromUInt());
     }
 
+    function testCalculateRate() public view {
+        require(debtClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 0).toUInt() == 8000);
+        require(debtClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 1).toUInt() == 2000);
+        require(debtClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 2).toUInt() == 500);
+        require(debtClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 3).toUInt() == 125);
+
+        require(debtClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 0).toUInt() == 16000);
+        require(debtClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 1).toUInt() == 4000);
+        require(debtClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 2).toUInt() == 1000);
+        require(debtClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 3).toUInt() == 250);
+    }
+
+    function testGetRate() public {
+        debtClock.setRatePerBlock(uint256(1).fromUInt());
+        require(debtClock.getRate(0) == uint256(50).fromUInt());
+        require(debtClock.getRate(block.number) == uint256(50).fromUInt());
+    }
+
 }

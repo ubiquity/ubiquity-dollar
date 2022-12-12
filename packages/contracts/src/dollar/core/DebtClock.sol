@@ -38,8 +38,8 @@ contract DebtClock {
         external
         onlyAdmin
     {
+        rateStartValue = calculateRate(rateStartValue, ratePerBlock, block.number - rateStartBlock);
         rateStartBlock = block.number;
-        rateStartValue = rate(block.number);
         ratePerBlock = _ratePerBlock;
     }
 
@@ -55,13 +55,28 @@ contract DebtClock {
         return n.mul(b.log_2()).pow_2();
     }
 
+    function calculateRate(bytes16 _rateStartValue, bytes16 _ratePerBlock, uint blockDelta)
+        public
+        pure
+        returns (bytes16 rate)
+    {
+        rate = _rateStartValue.mul(
+            uint256(1).fromUInt().div(
+                pow(
+                    uint256(1).fromUInt().add(_ratePerBlock),
+                    (blockDelta).fromUInt()
+                )
+            )
+        );
+    }
+
     /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ (blockNumber - rateStartBlock) ) )
     /// @param blockNumber Block number to get the rate for. 0 for current block.
-    /// @return ABDKMathQuad The rate calculated for the block number.
-    function rate(uint256 blockNumber)
-        public
+    /// @return rate ABDKMathQuad The rate calculated for the block number.
+    function getRate(uint256 blockNumber)
+        external
         view
-        returns (bytes16)
+        returns (bytes16 rate)
     {
         if (blockNumber == 0) {
             blockNumber = block.number;
@@ -70,14 +85,7 @@ contract DebtClock {
             if (blockNumber < block.number) revert ("DebtClock: block number must not be in the past.");
         }
 
-        return rateStartValue.mul(
-            uint256(1).fromUInt().div(
-                pow(
-                    uint256(1).fromUInt().add(ratePerBlock),
-                    (blockNumber - rateStartBlock).fromUInt()
-                )
-            )
-        );
+        rate = calculateRate(rateStartValue, ratePerBlock, blockNumber - rateStartBlock);
     }
 
 }
