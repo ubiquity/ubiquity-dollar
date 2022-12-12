@@ -23,8 +23,11 @@ contract DebtClock {
     }
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
-    constructor(UbiquityDollarManager _manager) {
+    constructor(UbiquityDollarManager _manager, bytes16 _rateStartValue, bytes16 _ratePerBlock) {
         manager = _manager;
+        rateStartBlock = block.number;
+        rateStartValue = _rateStartValue;
+        ratePerBlock = _ratePerBlock;
     }
 
     function setRatePerBlock(bytes16 _ratePerBlock)
