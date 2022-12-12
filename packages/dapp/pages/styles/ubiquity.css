@@ -408,6 +408,7 @@ aside {
 #MintUcr,
 #RedeemUcr {
   opacity: 0.25;
+  display: none;
   cursor: not-allowed;
 }
 #MintUcr > div,
@@ -418,6 +419,7 @@ aside {
 #CreditOperations[data-twap^="0."] #MintUcr,
 #CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
+  display: inline-block;
   cursor: unset;
 }
 #CreditOperations[data-twap^="0."] #MintUcr > div,
