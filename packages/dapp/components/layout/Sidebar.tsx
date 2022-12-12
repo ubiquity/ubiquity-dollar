@@ -36,9 +36,9 @@ const Sidebar = () => {
           </ul>
 
           <ul>
-            <Item text="Docs" href="https://dao.ubq.fi/docs" icon="📑"></Item>
-            <Item text="DAO" href="https://dao.ubq.fi/" icon="🤝"></Item>
-            <Item text="Blog" href="https://medium.com/ubiquity-dao" icon="📰"></Item>
+            <Item text="Docs" href="https://github.com/ubiquity/ubiquity-dollar/wiki" icon="📑"></Item>
+            <Item text="Blog" href="https://dao.ubq.fi/" icon="📰"></Item>
+            <Item text="Security" href="https://dao.ubq.fi/security-bounty-program" icon="🚨"></Item>
           </ul>
           <ul>
             <li>

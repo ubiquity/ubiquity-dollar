@@ -23,7 +23,7 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test --fork-url https://cloudflare-eth.com",
+    "test": "ts-node ./scripts/runner/runner.ts",
     "slither:run": "slither . --compile-force-framework foundry",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
