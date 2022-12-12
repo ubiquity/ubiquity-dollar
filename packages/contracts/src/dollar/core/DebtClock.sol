@@ -57,11 +57,11 @@ contract DebtClock {
 
     /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ (blockNumber - rateStartBlock) ) )
     /// @param blockNumber Block number to get the rate for. 0 for current block.
-    /// @return rate ABDKMathQuad The rate calculated for the block number.
+    /// @return ABDKMathQuad The rate calculated for the block number.
     function rate(uint256 blockNumber)
         public
         view
-        returns (bytes16 rate)
+        returns (bytes16)
     {
         if (blockNumber == 0) {
             blockNumber = block.number;
@@ -70,10 +70,10 @@ contract DebtClock {
             if (blockNumber < block.number) revert ("DebtClock: block number must not be in the past.");
         }
 
-        rate = rateStartValue.mul(
-            uint256(1 ether).fromUInt().div(
+        return rateStartValue.mul(
+            uint256(1).fromUInt().div(
                 pow(
-                    uint256(1 ether).fromUInt().add(ratePerBlock),
+                    uint256(1).fromUInt().add(ratePerBlock),
                     (blockNumber - rateStartBlock).fromUInt()
                 )
             )
