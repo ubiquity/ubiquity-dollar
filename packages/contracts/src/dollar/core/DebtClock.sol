@@ -23,8 +23,8 @@ contract DebtClock {
     }
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function setRatePerBlock(bytes16 _ratePerBlock)
@@ -45,7 +45,7 @@ contract DebtClock {
         view
         returns (bytes16)
     {
-        if (blockNumber  == 0) blockNumber = block.number;
+        if (blockNumber == 0) blockNumber = block.number;
 
         return rateStartValue.mul(
             uint256(1 ether).fromUInt().div(

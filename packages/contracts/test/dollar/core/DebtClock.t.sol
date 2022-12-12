@@ -9,14 +9,18 @@ contract DebtClockTest is LocalTestHelper {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
+    UbiquityDollarManager manager;
     DebtClock debtClock;
 
     function setUp() public {
-        debtClock = new DebtClock(address(this));
+        manager = new UbiquityDollarManager(address(this));
+        debtClock = new DebtClock(manager);
     }
 
-    function testTest() public {
-        require(true);
-    }
+    function testSetRatePerBlock() public {
+        debtClock.setRatePerBlock(uint256(1 ether).fromUInt());
 
+        require(debtClock.rateStartBlock() == block.number);
+    }
+ 
 }
