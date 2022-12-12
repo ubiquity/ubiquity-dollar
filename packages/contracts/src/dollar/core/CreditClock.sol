@@ -8,7 +8,7 @@ contract CreditClock {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager private immutable manager;
 
     uint256 public rateStartBlock;
     bytes16 public rateStartValue;

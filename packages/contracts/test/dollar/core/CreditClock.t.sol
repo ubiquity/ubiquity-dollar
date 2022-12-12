@@ -18,7 +18,6 @@ contract CreditClockTest is LocalTestHelper {
     }
 
     function testConstructor() public view {
-        require(creditClock.manager() == manager);
         require(creditClock.rateStartBlock() == block.number);
         require(creditClock.rateStartValue() == uint256(50).fromUInt());
         require(creditClock.ratePerBlock() == uint256(3).fromUInt());
