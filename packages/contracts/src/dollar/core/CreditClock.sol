@@ -4,7 +4,7 @@ pragma solidity ^0.8.3;
 import "../libs/ABDKMathQuad.sol";
 import "./UbiquityDollarManager.sol";
 
-contract DebtClock {
+contract CreditClock {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
@@ -17,7 +17,7 @@ contract DebtClock {
     modifier onlyAdmin() {
         require(
             manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
-            "DebtClock: not admin"
+            "CreditClock: not admin"
         );
         _;
     }
@@ -87,7 +87,7 @@ contract DebtClock {
             blockNumber = block.number;
         }
         else {
-            if (blockNumber < block.number) revert ("DebtClock: block number must not be in the past.");
+            if (blockNumber < block.number) revert ("CreditClock: block number must not be in the past.");
         }
 
         rate = calculateRate(rateStartValue, ratePerBlock, blockNumber - rateStartBlock);
