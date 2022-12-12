@@ -22,7 +22,9 @@ contract DebtClock {
         _;
     }
 
-    /// @param _manager the address of the manager/config contract so we can fetch variables
+    /// @param _manager The address of the manager/config contract so we can fetch variables.
+    /// @param _rateStartValue ABDKMathQuad Initial rate.
+    /// @param _ratePerBlock ABDKMathQuad Initial rate change per block.
     constructor(UbiquityDollarManager _manager, bytes16 _rateStartValue, bytes16 _ratePerBlock) {
         manager = _manager;
         rateStartBlock = block.number;
@@ -30,6 +32,7 @@ contract DebtClock {
         ratePerBlock = _ratePerBlock;
     }
 
+    /// @param _ratePerBlock New rate per block to apply from this block onward.
     function setRatePerBlock(bytes16 _ratePerBlock)
         external
         onlyAdmin
@@ -39,10 +42,21 @@ contract DebtClock {
         ratePerBlock = _ratePerBlock;
     }
 
-    function pow(bytes16 x, bytes16 y) private pure returns(bytes16 result) {
-       result = y.mul(x.log_2()).pow_2();
+    /// @dev Calculates b raised to the power of n.
+    /// @param b ABDKMathQuad
+    /// @param n ABDKMathQuad
+    /// @return ABDKMathQuad
+    function pow(bytes16 b, bytes16 n)
+        private
+        pure
+        returns (bytes16)
+    {
+        return n.mul(b.log_2()).pow_2();
     }
 
+    /// @dev Calcualate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ (blockNumber - rateStartBlock) ) )
+    /// @param blockNumber Block number to get the rate for. 0 for current block.
+    /// @return rate The rate calculated for the block number.
     function rate(uint256 blockNumber)
         public
         view
