@@ -8,9 +8,13 @@ contract CreditClock {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
+    // Manager contract.
     UbiquityDollarManager private immutable manager;
 
-    // The block height from where we start applying the rate
+    // ABDKMathQuad with value of 1.
+    bytes16 private immutable one = uint256(1).fromUInt();
+
+    // The block height from where we start applying the rate.
     uint256 public rateStartBlock;
 
     // This is the exchange rate of uAR for the start block.
@@ -73,13 +77,13 @@ contract CreditClock {
     /// @return rate ABDKMathQuad The rate calculated.
     function calculateRate(bytes16 _rateStartValue, bytes16 _ratePerBlock, uint blockDelta)
         public
-        pure
+        view
         returns (bytes16 rate)
     {
         rate = _rateStartValue.mul(
-            uint256(1).fromUInt().div(
+            one.div(
                 pow(
-                    uint256(1).fromUInt().add(_ratePerBlock),
+                    one.add(_ratePerBlock),
                     (blockDelta).fromUInt()
                 )
             )
