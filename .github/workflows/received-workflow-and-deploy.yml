@@ -8,7 +8,7 @@ on:
 
 jobs:
   receive-pr-and-deploy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
