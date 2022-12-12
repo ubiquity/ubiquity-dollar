@@ -37,14 +37,14 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     address dollarManagerAddress;
     address depositZapAddress = address(0x4);
     address base3PoolAddress = address(0x5);
-    event Deposit(
+    event DepositSingle(
         address indexed sender,
         address token,
         uint256 amount,
         uint256 durationWeeks,
         uint256 stakingShareId
     );
-    event DepositMultiple(
+    event DepositMulti(
         address indexed sender,
         uint256[4] amount,
         uint256 durationWeeks,
@@ -139,21 +139,21 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.expectRevert(
             "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar"
         );
-        directGovernanceFarmer.deposit(address(0), 1, 1);
+        directGovernanceFarmer.depositSingle(address(0), 1, 1);
     }
 
     function testDeposit_ShouldRevert_IfAmountIsNotPositive() public {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert("amount must be positive vale");
-        directGovernanceFarmer.deposit(address(token0), 0, 1);
+        directGovernanceFarmer.depositSingle(address(token0), 0, 1);
     }
 
     function testDeposit_ShouldRevert_IfDurationIsNotValid() public {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert("duration weeks must be between 1 and 208");
-        directGovernanceFarmer.deposit(address(token0), 1, 0);
+        directGovernanceFarmer.depositSingle(address(token0), 1, 0);
     }
 
     function testDeposit_ShouldDepositTokens() public {
@@ -203,9 +203,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         vm.expectEmit(true, true, true, true, address(directGovernanceFarmer));
-        emit Deposit(userAddress, address(token0), uint256(100e18), 1, 1);
+        emit DepositSingle(userAddress, address(token0), uint256(100e18), 1, 1);
         // user deposits 100 DAI for 1 week
-        uint256 stakingShareId = directGovernanceFarmer.deposit(
+        uint256 stakingShareId = directGovernanceFarmer.depositSingle(
             address(token0),
             100e18,
             1
@@ -221,7 +221,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.prank(userAddress);
         vm.expectRevert("amounts==0");
         // uint256[4] calldata amounts = ;
-        directGovernanceFarmer.deposit(
+        directGovernanceFarmer.depositMulti(
             [uint256(0), uint256(0), uint256(0), uint256(0)],
             1
         );
@@ -233,7 +233,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert("duration weeks must be between 1 and 208");
-        directGovernanceFarmer.deposit(
+        directGovernanceFarmer.depositMulti(
             [uint256(1), uint256(0), uint256(0), uint256(0)],
             0
         );
@@ -312,7 +312,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         vm.expectEmit(true, true, true, true, address(directGovernanceFarmer));
-        emit DepositMultiple(
+        emit DepositMulti(
             userAddress,
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8,
@@ -320,7 +320,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         // user deposits 100 uAD 99 DAI 98 USDC 97 USDT
-        uint256 stakingShareId = directGovernanceFarmer.deposit(
+        uint256 stakingShareId = directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8
         );
@@ -417,7 +417,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         // user deposits 100 uAD, 99 DAI 98 USDC 97 USDT for 1 week
-        directGovernanceFarmer.deposit(
+        directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             1
         );
@@ -543,7 +543,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         // user deposits 100 DAI for 1 week
-        directGovernanceFarmer.deposit(address(token0), 100e18, 1);
+        directGovernanceFarmer.depositSingle(address(token0), 100e18, 1);
 
         // wait 1 week + 1 day
         vm.warp(block.timestamp + 8 days);

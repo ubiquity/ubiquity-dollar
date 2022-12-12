@@ -28,14 +28,14 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     IUbiquityDollarManager public manager;
 
-    event Deposit(
+    event DepositSingle(
         address indexed sender,
         address token,
         uint256 amount,
         uint256 durationWeeks,
         uint256 stakingShareId
     );
-    event DepositMultiple(
+    event DepositMulti(
         address indexed sender,
         uint256[4] amounts,
         uint256 durationWeeks,
@@ -98,7 +98,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param amount Amount of tokens to deposit (For max: `uint256(-1)`)
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
      */
-    function deposit(
+    function depositSingle(
         address token,
         uint256 amount,
         uint256 durationWeeks
@@ -150,7 +150,13 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             1,
             bytes("")
         );
-        emit Deposit(msg.sender, token, amount, durationWeeks, stakingShareId);
+        emit DepositSingle(
+            msg.sender,
+            token,
+            amount,
+            durationWeeks,
+            stakingShareId
+        );
     }
 
     /**
@@ -161,11 +167,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param tokenAmounts Amount of tokens to deposit (For max: `uint256(-1)`) it MUST follow this order [Ubiquity Dollar, DAI, USDC, USDT]
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
      */
-    function deposit(uint256[4] calldata tokenAmounts, uint256 durationWeeks)
-        external
-        nonReentrant
-        returns (uint256 stakingShareId)
-    {
+    function depositMulti(
+        uint256[4] calldata tokenAmounts,
+        uint256 durationWeeks
+    ) external nonReentrant returns (uint256 stakingShareId) {
         // at least one should be non zero Ubiquity Dollar / DAI / USDC / USDT
         require(
             tokenAmounts[0] > 0 ||
@@ -249,7 +254,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             1,
             bytes("")
         );
-        emit DepositMultiple(
+        emit DepositMulti(
             msg.sender,
             tokenAmounts,
             durationWeeks,
