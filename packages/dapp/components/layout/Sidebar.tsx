@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Icon, { IconsNames } from "../ui/Icon";
+import BuildInfo from "./BuildInfo";
 import WalletConnect from "./WalletConnect";
 
 const PROD = process.env.NODE_ENV == "production";
@@ -57,6 +58,9 @@ const Sidebar = () => {
           <ul>
             <li>
               <WalletConnect />
+            </li>
+            <li>
+              <BuildInfo />
             </li>
           </ul>
         </div>
