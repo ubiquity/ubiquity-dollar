@@ -70,7 +70,9 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         external
         onlyCreditNFTManager
     {
-        emit CreditNFTLengthChanged(_creditNFTLengthBlocks, creditNFTLengthBlocks);
+        emit CreditNFTLengthChanged(
+            _creditNFTLengthBlocks, creditNFTLengthBlocks
+            );
         creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 
@@ -116,7 +118,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit
     /// @return amount of Credit tokens minted
-    function exchangeDollarsForCredit(uint256 amount) external returns (uint256) {
+    function exchangeDollarsForCredit(uint256 amount)
+        external
+        returns (uint256)
+    {
         uint256 twapPrice = _getTwapPrice();
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
@@ -134,7 +139,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         ICreditRedemptionCalculator creditCalculator =
             ICreditRedemptionCalculator(manager.creditCalculatorAddress());
-        uint256 creditToMint = creditCalculator.getCreditAmount(amount, blockHeightDebt);
+        uint256 creditToMint =
+            creditCalculator.getCreditAmount(amount, blockHeightDebt);
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
@@ -309,7 +315,9 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     {
         uint256 twapPrice = _getTwapPrice();
 
-        require(twapPrice > 1 ether, "Price must be above 1 to redeem Credit NFT");
+        require(
+            twapPrice > 1 ether, "Price must be above 1 to redeem Credit NFT"
+        );
         if (debtCycle) {
             debtCycle = false;
         }
@@ -377,8 +385,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             uint256 excessDollars =
                 currentRedeemableBalance - (totalOutstandingDebt);
 
-            IDollarMintExcess dollarsDistributor =
-            IDollarMintExcess(
+            IDollarMintExcess dollarsDistributor = IDollarMintExcess(
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute
