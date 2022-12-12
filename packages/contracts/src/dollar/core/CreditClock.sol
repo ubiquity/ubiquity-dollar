@@ -14,6 +14,10 @@ contract CreditClock {
     bytes16 public rateStartValue;
     bytes16 public ratePerBlock;
 
+    event SetRatePerBlock(
+        uint256 rateStartBlock, bytes16 rateStartValue, bytes16 ratePerBlock
+    );
+
     modifier onlyAdmin() {
         require(
             manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
@@ -41,6 +45,8 @@ contract CreditClock {
         rateStartValue = calculateRate(rateStartValue, ratePerBlock, block.number - rateStartBlock);
         rateStartBlock = block.number;
         ratePerBlock = _ratePerBlock;
+
+        emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
     }
 
     /// @dev Calculates b raised to the power of n.
