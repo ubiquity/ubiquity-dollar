@@ -44,8 +44,15 @@ contract DebtClockTest is LocalTestHelper {
         require(debtClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 3).toUInt() == 250);
     }
 
-    function testGetRate() public {
-        debtClock.setRatePerBlock(uint256(1).fromUInt());
+    function testControlGetRateOldBlock() public view {
+        debtClock.getRate(block.number);
+    }
+
+    function testFailGetRateOldBlock() public view {
+        debtClock.getRate(block.number - 1);
+    }
+
+    function testGetRate() public view {
         require(debtClock.getRate(0) == uint256(50).fromUInt());
         require(debtClock.getRate(block.number) == uint256(50).fromUInt());
     }
