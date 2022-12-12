@@ -10,9 +10,9 @@ contract DebtClock {
 
     UbiquityDollarManager public manager;
 
-    uint256 rateStartBlock;
-    bytes16 rateStartValue;
-    bytes16 ratePerBlock;
+    uint256 public rateStartBlock;
+    bytes16 public rateStartValue;
+    bytes16 public ratePerBlock;
 
     modifier onlyAdmin() {
         require(
