@@ -23,6 +23,12 @@ contract CreditClockTest is LocalTestHelper {
         require(creditClock.ratePerBlock() == uint256(3).fromUInt());
     }
 
+    function testSetRatePerBlockNotAdmin() public {
+        vm.prank(address(0x123abc));
+        vm.expectRevert("CreditClock: not admin");
+        creditClock.setRatePerBlock(uint256(1).fromUInt());
+    }
+
     function testSetRatePerBlock() public {
         creditClock.setRatePerBlock(uint256(1).fromUInt());
 
@@ -46,10 +52,6 @@ contract CreditClockTest is LocalTestHelper {
         require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 1).toUInt() == 200);
         require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 2).toUInt() == 20);
         require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 3).toUInt() == 2);
-    }
-
-    function testControlGetRateOldBlock() public view {
-        creditClock.getRate(block.number);
     }
 
     function testGetRateOldBlock() public {
