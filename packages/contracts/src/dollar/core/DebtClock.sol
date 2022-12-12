@@ -17,7 +17,7 @@ contract DebtClock {
     modifier onlyAdmin() {
         require(
             manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
-            "CreditCalc: not admin"
+            "DebtClock: not admin"
         );
         _;
     }
