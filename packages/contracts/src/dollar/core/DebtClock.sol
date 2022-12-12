@@ -22,11 +22,6 @@ contract DebtClock {
         _;
     }
 
-    modifier notOldBlock(uint256 blockNumber) {
-        require (blockNumber >= block.number, "DebtClock: block number must not be in the past.");
-        _;
-    }
-
     /// @param _manager The address of the manager/config contract so we can fetch variables.
     /// @param _rateStartValue ABDKMathQuad Initial rate.
     /// @param _ratePerBlock ABDKMathQuad Initial rate change per block.
@@ -66,10 +61,14 @@ contract DebtClock {
     function rate(uint256 blockNumber)
         public
         view
-        notOldBlock(blockNumber)
         returns (bytes16)
     {
-        if (blockNumber == 0) blockNumber = block.number;
+        if (blockNumber == 0) {
+            blockNumber = block.number;
+        }
+        else {
+            if (blockNumber < block.number) revert ("DebtClock: block number must not be in the past.");
+        }
 
         return rateStartValue.mul(
             uint256(1 ether).fromUInt().div(
