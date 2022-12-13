@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity ^0.8.3;
 
 import "../../src/dollar/Staking.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";

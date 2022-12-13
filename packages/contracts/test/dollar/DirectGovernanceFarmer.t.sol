@@ -503,12 +503,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
-            stakingAddress
-        );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
-            stakingShareAddress
-        );
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
+        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);
@@ -583,10 +579,10 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncluded_ReturnTrue_IfIdIsInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                dollarManagerAddress,
-                base3PoolAddress,
-                depositZapAddress
-            );
+            uadManagerAddress, 
+            base3PoolAddress, 
+            depositZapAddress
+        );
         // run assertions
         uint256[] memory list = new uint256[](1);
         list[0] = 1;
@@ -596,10 +592,10 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncluded_ReturnFalse_IfIdIsNotInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                dollarManagerAddress,
-                base3PoolAddress,
-                depositZapAddress
-            );
+            uadManagerAddress, 
+            base3PoolAddress, 
+            depositZapAddress
+        );
         // run assertions
         uint256[] memory list = new uint256[](1);
         assertFalse(
