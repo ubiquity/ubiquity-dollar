@@ -1,34 +1,34 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity ^0.8.3;
 
 import {IUniswapV2Router01} from
     "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityAlgorithmicDollarManager} from
-    "../../src/dollar/UbiquityAlgorithmicDollarManager.sol";
-import {TWAPOracle} from "../../src/dollar/TWAPOracle.sol";
-import {ExcessDollarsDistributor} from
-    "../../src/dollar/ExcessDollarsDistributor.sol";
-import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
+import {UbiquityDollarManager} from
+    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import {DollarMintExcess} from
+    "../../../src/dollar/core/DollarMintExcess.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 
-import "../helpers/LocalTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
 
-contract ExcessDollarsDistributorTest is LocalTestHelper {
-    address uADManagerAddress;
-    address uADAddress;
+contract DollarMintExcessTest is LocalTestHelper {
+    address dollarManagerAddress;
+    address dollarAddress;
 
     address twapOracleAddress;
     address excessDollarsDistributorAddress;
     address _sushiSwapRouter = 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
 
     function setUp() public {
-        uADManagerAddress = helpers_deployUbiquityAlgorithmicDollarManager();
-        twapOracleAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+        twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
             .twapOracleAddress();
-        uADAddress = UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        dollarAddress = UbiquityDollarManager(dollarManagerAddress)
             .dollarTokenAddress();
         excessDollarsDistributorAddress =
-            address(new ExcessDollarsDistributor(uADManagerAddress));
+            address(new DollarMintExcess(dollarManagerAddress));
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {
@@ -52,15 +52,15 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
 
     function mockManagerAddresses(
         address _curve3PoolAddress,
-        address _bondingContractAddress
+        address _stakingContractAddress
     ) public {
         vm.store(
-            uADManagerAddress,
+            dollarManagerAddress,
             bytes32(uint256(13)),
-            bytes32(abi.encodePacked(_bondingContractAddress))
+            bytes32(abi.encodePacked(_stakingContractAddress))
         );
         vm.store(
-            uADManagerAddress,
+            dollarManagerAddress,
             bytes32(uint256(15)),
             bytes32(abi.encodePacked(_curve3PoolAddress))
         );
@@ -77,7 +77,7 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         uint256 _expectedExchangeAmt
     ) public {
         vm.prank(admin);
-        UbiquityAlgorithmicDollarManager(uADManagerAddress)
+        UbiquityDollarManager(dollarManagerAddress)
             .setStableSwapMetaPoolAddress(_metaPoolAddress);
         vm.mockCall(
             _metaPoolAddress,
@@ -101,16 +101,16 @@ contract ExcessDollarsDistributorTest is LocalTestHelper {
         mockSushiSwapRouter(10e18);
         mockMetaPool(address(0x55555), 10e18, 10e18);
         mockManagerAddresses(address(0x123), address(0x456));
-        MockuADToken(uADAddress).mint(excessDollarsDistributorAddress, 200e18);
+        MockDollarToken(dollarAddress).mint(excessDollarsDistributorAddress, 200e18);
 
         // 10% should be transferred to the treasury address
         uint256 _before_treasury_bal =
-            MockuADToken(uADAddress).balanceOf(treasuryAddress);
+            MockDollarToken(dollarAddress).balanceOf(treasuryAddress);
 
-        ExcessDollarsDistributor(excessDollarsDistributorAddress)
+        DollarMintExcess(excessDollarsDistributorAddress)
             .distributeDollars();
         uint256 _after_treasury_bal =
-            MockuADToken(uADAddress).balanceOf(treasuryAddress);
+            MockDollarToken(dollarAddress).balanceOf(treasuryAddress);
         assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
     }
 }

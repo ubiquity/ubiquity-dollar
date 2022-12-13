@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-contract MockTWAPOracle {
+contract MockTWAPOracleDollar3pool {
     address public immutable pool;
     address public immutable token0;
     address public immutable token1;

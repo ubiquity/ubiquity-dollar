@@ -4,9 +4,9 @@ pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "../MasterChefV2.sol";
+import "../UbiquityChef.sol";
 
-interface IMasterChefV2 {
+interface IUbiquityChef {
     struct BondingShareInfo {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.

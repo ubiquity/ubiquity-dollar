@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
-contract MockDebtCoupon is ERC1155 {
+contract MockCreditNFT is ERC1155 {
     uint256 private _totalOutstandingDebt;
     uint256 public checkPoint;
     mapping(address => mapping(uint256 => uint256)) _balances;

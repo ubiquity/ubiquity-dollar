@@ -6,7 +6,7 @@ import "./IERC1155Ubiquity.sol";
 
 /// @title ERC1155 Ubiquiti preset interface
 /// @author Ubiquity Algorithmic Dollar
-interface IBondingShareV2 is IERC1155Ubiquity {
+interface IStakingShare is IERC1155Ubiquity {
     struct Bond {
         // address of the minter
         address minter;

@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./UbiquityAlgorithmicDollarManager.sol";
-import "./interfaces/IUbiquityGovernance.sol";
-import "./interfaces/IIncentive.sol";
-import "./TWAPOracle.sol";
-import "./UbiquityAlgorithmicDollar.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "../core/TWAPOracleDollar3pool.sol";
+import "../core/UbiquityDollarManager.sol";
+import "../core/UbiquityDollarToken.sol";
+import "../interfaces/IUbiquityGovernance.sol";
+import "../interfaces/IIncentive.sol";
+import "abdk/ABDKMathQuad.sol";
 
-/// @title Uniswap trading incentive contract
-/// @author uAD Protocol
+/// @title Curve trading incentive contract
+/// @author Ubiquity DAO
 /// @dev incentives
 contract CurveDollarIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
     bool public isSellPenaltyOn = true;
     bool public isBuyIncentiveOn = true;
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
@@ -31,18 +31,18 @@ contract CurveDollarIncentive is IIncentive {
         _;
     }
 
-    modifier onlyUAD() {
+    modifier onlyDollar() {
         require(
             msg.sender == manager.dollarTokenAddress(),
-            "CurveIncentive: Caller is not uAD"
+            "CurveIncentive: Caller is not Ubiquity Dollar"
         );
         _;
     }
 
     /// @notice CurveIncentive constructor
-    /// @param _manager uAD Manager
+    /// @param _manager Ubiquity Dollar Manager
     constructor(address _manager) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
     function incentivize(
@@ -50,7 +50,7 @@ contract CurveDollarIncentive is IIncentive {
         address receiver,
         address,
         uint256 amountIn
-    ) external override onlyUAD {
+    ) external override onlyDollar {
         require(sender != receiver, "CurveIncentive: cannot send self");
 
         if (sender == manager.stableSwapMetaPoolAddress()) {
@@ -62,7 +62,7 @@ contract CurveDollarIncentive is IIncentive {
         }
     }
 
-    /// @notice set an address to be exempted from Uniswap trading incentives
+    /// @notice set an address to be exempted from Curve trading incentives
     /// @param account the address to update
     /// @param isExempt a flag for whether to flag as exempt or not
     function setExemptAddress(address account, bool isExempt)
@@ -99,10 +99,10 @@ contract CurveDollarIncentive is IIncentive {
         From curve doc :Tokens that take a fee upon a successful transfer may cause the curve pool
         to break or act in unexpected ways.
         fei does it differently because they can make sure only one contract has the ability to sell
-        uAD and they control the whole liquidity pool on uniswap.
+        Ubiquity Dollar and they control the whole liquidity pool on curve.
         here to avoid problem with the curve pool we execute the transfer as specified and then we
         take the penalty so if penalty + amount > balance then we revert
-        swapping uAD for 3CRV (or underlying) (aka selling uAD) will burn x% of uAD
+        swapping Ubiquity Dollar for 3CRV (or underlying) (aka selling Ubiquity Dollar) will burn x% of Ubiquity Dollar
         Where x = (1- TWAP_Price) *100.
         */
 
@@ -111,11 +111,11 @@ contract CurveDollarIncentive is IIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityAlgorithmicDollar(manager.dollarTokenAddress())
+                UbiquityDollarToken(manager.dollarTokenAddress())
                     .balanceOf(target) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
-            UbiquityAlgorithmicDollar(manager.dollarTokenAddress()).burnFrom(
+            UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
                 target, penalty
             ); // burn from the recipient
         }
@@ -129,20 +129,20 @@ contract CurveDollarIncentive is IIncentive {
         }
 
         uint256 incentive = _getPercentDeviationFromUnderPeg(amountIn);
-        /* swapping 3CRV (or underlying) for uAD (aka buying uAD) will mint x% of uGOV.
+        /* swapping 3CRV (or underlying) for Ubiquity Dollar (aka buying Ubiquity Dollar) will mint x% of Governance Token.
              Where x = (1- TWAP_Price) * amountIn.
-            E.g. uAD = 0.8, you buy 1000 uAD, you get (1-0.8)*1000 = 200 uGOV */
+            E.g. Ubiquity Dollar = 0.8, you buy 1000 Ubiquity Dollar, you get (1-0.8)*1000 = 200 Governance Token */
 
         if (incentive != 0) {
-            // this means CurveIncentive should be a minter of UGOV
-            IUbiquityGovernance(manager.governanceTokenAddress()).mint(
+            // this means CurveIncentive should be a minter of Governance Token
+            IUbiquityGovernanceToken(manager.governanceTokenAddress()).mint(
                 target, incentive
             );
         }
     }
 
     /// @notice returns the percentage of deviation from the peg multiplied by amount
-    //          when uAD is <1$
+    //          when Ubiquity Dollar is <1$
     function _getPercentDeviationFromUnderPeg(uint256 amount)
         internal
         returns (uint256)
@@ -153,17 +153,19 @@ contract CurveDollarIncentive is IIncentive {
             return 0;
         }
 
-        bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
+        uint256 res = _one.sub(curPrice.fromUInt()).mul(
+            (amount.fromUInt().div(_one))
+        ).toUInt();
         // returns (1- TWAP_Price) * amount.
-        return res.div(_one).toUInt();
+        return res;
     }
 
     function _updateOracle() internal {
-        TWAPOracle(manager.twapOracleAddress()).update();
+        TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracle(manager.twapOracleAddress()).consult(
+        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }
