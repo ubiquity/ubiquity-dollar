@@ -2,7 +2,6 @@
 pragma solidity >= 0.8.3;
 
 interface IDepositZap {
-
     function add_liquidity(
         address _pool,
         uint256[4] calldata _amounts, //Ubiquity Dollar, DAI, USDC, USDT
