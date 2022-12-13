@@ -81,7 +81,8 @@ contract DollarMintExcess is IDollarMintExcess {
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             address(_router), amount
         );
-        uint256 amountGovernanceTokens = _swapDollarsForGovernance(amountDollars);
+        uint256 amountGovernanceTokens =
+            _swapDollarsForGovernance(amountDollars);
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router), 0
