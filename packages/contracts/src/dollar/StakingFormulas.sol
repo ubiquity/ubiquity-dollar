@@ -2,7 +2,7 @@
 pragma solidity 0.8.16;
 
 import "./StakingShare.sol";
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 contract StakingFormulas {
     using ABDKMathQuad for uint256;
@@ -26,6 +26,7 @@ contract StakingFormulas {
         _uLP = a.mul(v).div(t).toUInt();
     }
 
+    
     /// @dev formula may add a decreasing rewards if locking end is near when removing liquidity
     /// @param _stake , staking share
     /// @param _amount , amount of LP tokens

@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "../../src/dollar/StakingFormulas.sol";
 import "../../src/dollar/StakingShare.sol";
-import "../../src/dollar/libs/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 import "../helpers/LocalTestHelper.sol";
 

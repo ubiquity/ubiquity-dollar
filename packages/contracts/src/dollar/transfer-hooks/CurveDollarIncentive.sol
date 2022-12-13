@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
+pragma solidity 0.8.16;
 
 import "../core/TWAPOracleDollar3pool.sol";
 import "../core/UbiquityDollarManager.sol";
 import "../core/UbiquityDollarToken.sol";
 import "../interfaces/IUbiquityGovernance.sol";
 import "../interfaces/IIncentive.sol";
-import "../libs/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 /// @title Curve trading incentive contract
 /// @author Ubiquity DAO
@@ -161,13 +162,6 @@ contract CurveDollarIncentive is IIncentive {
     function _updateOracle() internal {
         TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
     }
-
-    function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
-    }
-}
 
     function _getTWAPPrice() internal view returns (uint256) {
         return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(

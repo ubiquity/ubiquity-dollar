@@ -102,7 +102,7 @@ contract UbiquityFormulas is IUbiquityFormulas {
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function ugovMultiply(uint256 _multiplier, uint256 _price)
+    function ugovMultiply(uint256 multiplier, uint256 price)
         public
         pure
         returns (uint256 newMultiplier)

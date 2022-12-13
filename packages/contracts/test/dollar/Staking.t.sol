@@ -361,10 +361,3 @@ contract DepositStateTest is DepositState {
         staking.removeLiquidity(1, 3);
     }
 }
-
-    function testCannotWithdrawBeforeStakeExpires() public {
-        vm.expectRevert("Staking: Redeem not allowed before staking time");
-        vm.prank(stakingMaxAccount);
-        staking.removeLiquidity(1, 3);
-    }
-}
