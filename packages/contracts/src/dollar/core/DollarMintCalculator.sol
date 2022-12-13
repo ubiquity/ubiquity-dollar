@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./UbiquityAlgorithmicDollarManager.sol";
-import "./interfaces/IDollarMintingCalculator.sol";
+import "./UbiquityDollarManager.sol";
+import "../interfaces/IDollarMintCalculator.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title A mock coupon calculator that always returns a constant

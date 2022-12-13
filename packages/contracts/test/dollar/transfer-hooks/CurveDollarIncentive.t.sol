@@ -276,3 +276,14 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         );
     }
 }
+
+        assertEq(
+            CurveDollarIncentive(curveIncentiveAddress).isBuyIncentiveOn(), true
+        );
+        vm.prank(admin);
+        CurveDollarIncentive(curveIncentiveAddress).switchBuyIncentive();
+        assertEq(
+            CurveDollarIncentive(curveIncentiveAddress).isBuyIncentiveOn(), false
+        );
+    }
+}

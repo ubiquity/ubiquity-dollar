@@ -426,3 +426,12 @@ contract CreditNFTManagerTest is LocalTestHelper {
         assertEq(afterBalance - beforeBalance, 50);
     }
 }
+
+        uint256 beforeBalance =
+            MockDollarToken(dollarTokenAddress).balanceOf(creditNFTManagerAddress);
+        CreditNFTManager(creditNFTManagerAddress).mintClaimableDollars();
+        uint256 afterBalance =
+            MockDollarToken(dollarTokenAddress).balanceOf(creditNFTManagerAddress);
+        assertEq(afterBalance - beforeBalance, 50);
+    }
+}

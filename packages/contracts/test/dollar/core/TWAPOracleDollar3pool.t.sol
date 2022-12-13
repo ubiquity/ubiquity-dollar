@@ -44,3 +44,12 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
         assertEq(amount1Out, 100e18);
     }
 }
+
+        uint256 amount0Out =
+            TWAPOracleDollar3pool(twapOracleAddress).consult(dollarTokenAddress);
+        uint256 amount1Out =
+            TWAPOracleDollar3pool(twapOracleAddress).consult(curve3CRVTokenAddress);
+        assertEq(amount0Out, 100e18);
+        assertEq(amount1Out, 100e18);
+    }
+}

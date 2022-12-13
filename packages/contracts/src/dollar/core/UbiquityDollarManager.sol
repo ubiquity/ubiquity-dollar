@@ -6,11 +6,11 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import "./interfaces/IUbiquityAlgorithmicDollar.sol";
-import "./interfaces/ICurveFactory.sol";
-import "./interfaces/IMetaPool.sol";
+import "../interfaces/IUbiquityDollarToken.sol";
+import "../interfaces/ICurveFactory.sol";
+import "../interfaces/IMetaPool.sol";
 
-import "./TWAPOracle.sol";
+import "./TWAPOracleDollar3pool.sol";
 
 /// @title A central config for the uAD system. Also acts as a central
 /// access control manager.
