@@ -10,7 +10,7 @@ import "./StakingShare.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 
-contract MasterChefV2 is ReentrancyGuard {
+contract UbiquityChef is ReentrancyGuard {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
 
