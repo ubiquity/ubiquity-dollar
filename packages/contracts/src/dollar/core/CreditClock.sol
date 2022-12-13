@@ -53,7 +53,7 @@ contract CreditClock {
         external
         onlyAdmin
     {
-        rateStartValue = calculateRate(rateStartValue, ratePerBlock, block.number - rateStartBlock);
+        rateStartValue = getRate(block.number);
         rateStartBlock = block.number;
         ratePerBlock = _ratePerBlock;
 
@@ -73,31 +73,11 @@ contract CreditClock {
         return n.mul(b.log_2()).pow_2();
     }
 
-    /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ blockDelta) ) )
-    /// @param _rateStartValue ABDKMathQuad The initial value of the rate.
-    /// @param _ratePerBlock ABDKMathQuad The rate per block.
-    /// @param blockDelta How many blocks after the rate was set.
-    /// @return rate ABDKMathQuad The rate calculated.
-    function calculateRate(bytes16 _rateStartValue, bytes16 _ratePerBlock, uint blockDelta)
-        public
-        view
-        returns (bytes16 rate)
-    {
-        rate = _rateStartValue.mul(
-            one.div(
-                pow(
-                    one.add(_ratePerBlock),
-                    (blockDelta).fromUInt()
-                )
-            )
-        );
-    }
-
-    /// @dev Calculates rate at a specific block number.
+    /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ blockNumber - rateStartBlock) ) )
     /// @param blockNumber Block number to get the rate for. 0 for current block.
     /// @return rate ABDKMathQuad The rate calculated for the block number.
     function getRate(uint256 blockNumber)
-        external
+        public
         view
         returns (bytes16 rate)
     {
@@ -108,7 +88,14 @@ contract CreditClock {
             if (blockNumber < block.number) revert ("CreditClock: block number must not be in the past.");
         }
 
-        rate = calculateRate(rateStartValue, ratePerBlock, blockNumber - rateStartBlock);
+        rate = rateStartValue.mul(
+            one.div(
+                pow(
+                    one.add(ratePerBlock),
+                    (blockNumber - rateStartBlock).fromUInt()
+                )
+            )
+        );
     }
 
 }
