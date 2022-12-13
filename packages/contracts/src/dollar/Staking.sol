@@ -17,7 +17,7 @@ import "./utils/CollectableDust.sol";
 import "./StakingFormulas.sol";
 import "./StakingShare.sol";
 
-contract Staking is CollectableDust, Pausable {
+contract BondingV2 is IStaking, CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
     bytes public data = "";
