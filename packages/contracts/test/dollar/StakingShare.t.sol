@@ -127,3 +127,10 @@ contract DepositStateTest is DepositState {
         assertEq(ids, ids_);
     }
 }
+
+    function testHolderTokens() public {
+        ids.push(1);
+        uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
+        assertEq(ids, ids_);
+    }
+}

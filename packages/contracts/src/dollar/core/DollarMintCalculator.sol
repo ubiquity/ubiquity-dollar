@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/IDollarMintCalculator.sol";
-import "../libs/ABDKMathQuad.sol";
-import "./TWAPOracleDollar3pool.sol";
 import "./UbiquityDollarManager.sol";
+import "../interfaces/IDollarMintCalculator.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./TWAPOracleDollar3pool.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title Calculates amount of dollars ready to be minted when twapPrice > 1
 contract DollarMintCalculator is IDollarMintCalculator {

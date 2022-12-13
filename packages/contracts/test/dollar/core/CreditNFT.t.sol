@@ -112,3 +112,12 @@ contract CreditNFTTest is LocalTestHelper {
         assertEq(outStandingTotalDebt, 10);
     }
 }
+
+        // sets block.number
+        vm.roll(25000);
+        CreditNFT(creditNFTAddress).updateTotalDebt();
+        uint256 outStandingTotalDebt =
+            CreditNFT(creditNFTAddress).getTotalOutstandingDebt();
+        assertEq(outStandingTotalDebt, 10);
+    }
+}

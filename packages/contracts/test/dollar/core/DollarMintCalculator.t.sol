@@ -54,3 +54,13 @@ contract DollarMintCalculatorTest is LocalTestHelper {
         assertEq(amountToMint, totalSupply);
     }
 }
+
+    function test_getDollarsToMintWorks() public {
+        mockTwapFuncs(2e18);
+        uint256 totalSupply = MockDollarToken(dollarAddress).totalSupply();
+        uint256 amountToMint = DollarMintCalculator(
+            dollarMintCalculatorAddress
+        ).getDollarsToMint();
+        assertEq(amountToMint, totalSupply);
+    }
+}
