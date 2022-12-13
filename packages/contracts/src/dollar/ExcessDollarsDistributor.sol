@@ -14,7 +14,7 @@ import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards
-contract DollarMintExcess is IExcessDollarsDistributor {
+contract ExcessDollarsDistributor is IExcessDollarsDistributor {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;

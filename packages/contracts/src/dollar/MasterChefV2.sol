@@ -11,7 +11,7 @@ import "./interfaces/IUbiquityFormulas.sol";
 
 import "./interfaces/IERC1155Ubiquity.sol";
 
-contract UbiquityChef is ReentrancyGuard {
+contract MasterChefV2 is ReentrancyGuard {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
 

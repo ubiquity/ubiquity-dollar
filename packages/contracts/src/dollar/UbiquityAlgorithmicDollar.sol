@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "./interfaces/IIncentive.sol";
 import "./ERC20Ubiquity.sol";
 
-contract UbiquityDollarToken is ERC20Ubiquity {
+contract UbiquityAlgorithmicDollar is ERC20Ubiquity {
     /// @notice get associated incentive contract, 0 address if N/A
     mapping(address => address) public incentiveContract;
 

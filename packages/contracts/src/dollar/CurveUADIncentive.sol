@@ -11,7 +11,7 @@ import "abdk-libraries-solidity/ABDKMathQuad.sol";
 /// @title Uniswap trading incentive contract
 /// @author uAD Protocol
 /// @dev incentives
-contract CurveDollarIncentive is IIncentive {
+contract CurveUADIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

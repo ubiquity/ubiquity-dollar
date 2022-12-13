@@ -9,7 +9,7 @@ import {IDebtCoupon} from "./interfaces/IDebtCoupon.sol";
 /// @title A coupon redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
-contract CreditNFT is ERC1155Ubiquity, IDebtCoupon {
+contract DebtCoupon is ERC1155Ubiquity, IDebtCoupon {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     //not public as if called externally can give inaccurate value. see method

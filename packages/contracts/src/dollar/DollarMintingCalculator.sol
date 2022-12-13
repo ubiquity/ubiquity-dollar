@@ -8,7 +8,7 @@ import "./TWAPOracle.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title A mock coupon calculator that always returns a constant
-contract DollarMintCalculator is IDollarMintingCalculator {
+contract DollarMintingCalculator is IDollarMintingCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

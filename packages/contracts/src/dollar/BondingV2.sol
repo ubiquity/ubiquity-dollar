@@ -18,7 +18,7 @@ import "./interfaces/IERC1155Ubiquity.sol";
 import "./interfaces/IBondingV2.sol";
 import "./utils/CollectableDust.sol";
 
-contract Staking is IBondingV2, CollectableDust, Pausable {
+contract BondingV2 is IBondingV2, CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
     UbiquityAlgorithmicDollarManager public manager;
