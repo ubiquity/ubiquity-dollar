@@ -12,15 +12,15 @@ contract CreditClockTest is LocalTestHelper {
     UbiquityDollarManager manager;
     CreditClock creditClock;
 
+    bytes16 private immutable one = uint256(1).fromUInt();
+
+    event SetRatePerBlock(
+        uint256 rateStartBlock, bytes16 rateStartValue, bytes16 ratePerBlock
+    );
+
     function setUp() public {
         manager = new UbiquityDollarManager(address(this));
-        creditClock = new CreditClock(manager, uint256(50).fromUInt(), uint256(3).fromUInt());
-    }
-
-    function testConstructor() public view {
-        require(creditClock.rateStartBlock() == block.number);
-        require(creditClock.rateStartValue() == uint256(50).fromUInt());
-        require(creditClock.ratePerBlock() == uint256(3).fromUInt());
+        creditClock = new CreditClock(manager, uint256(1000000).fromUInt(), uint256(1).fromUInt().div(uint256(100).fromUInt()));
     }
 
     function testSetRatePerBlockNotAdmin() public {
@@ -29,39 +29,115 @@ contract CreditClockTest is LocalTestHelper {
         creditClock.setRatePerBlock(uint256(1).fromUInt());
     }
 
-    function testSetRatePerBlock() public {
-        creditClock.setRatePerBlock(uint256(1).fromUInt());
-
-        require(creditClock.rateStartBlock() == block.number);
-        require(creditClock.rateStartValue() == uint256(50).fromUInt());
-        require(creditClock.ratePerBlock() == uint256(1).fromUInt());
-    }
-
-    function testCalculateRate() public view {
-        require(creditClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 0).toUInt() == 8000);
-        require(creditClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 1).toUInt() == 2000);
-        require(creditClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 2).toUInt() == 500);
-        require(creditClock.calculateRate(uint256(8000).fromUInt(), uint256(3).fromUInt(), 3).toUInt() == 125);
-
-        require(creditClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 0).toUInt() == 16000);
-        require(creditClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 1).toUInt() == 4000);
-        require(creditClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 2).toUInt() == 1000);
-        require(creditClock.calculateRate(uint256(16000).fromUInt(), uint256(3).fromUInt(), 3).toUInt() == 250);
-
-        require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 0).toUInt() == 2000);
-        require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 1).toUInt() == 200);
-        require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 2).toUInt() == 20);
-        require(creditClock.calculateRate(uint256(2000).fromUInt(), uint256(9).fromUInt(), 3).toUInt() == 2);
-    }
-
     function testGetRateOldBlock() public {
         vm.expectRevert("CreditClock: block number must not be in the past.");
         creditClock.getRate(block.number - 1);
     }
 
-    function testGetRate() public view {
-        require(creditClock.getRate(0) == uint256(50).fromUInt());
-        require(creditClock.getRate(block.number) == uint256(50).fromUInt());
+    /// @dev Calculates b raised to the power of n.
+    /// @param b ABDKMathQuad
+    /// @param n ABDKMathQuad
+    /// @return ABDKMathQuad b ^ n
+    function pow(bytes16 b, bytes16 n)
+        private
+        pure
+        returns (bytes16)
+    {
+        // b ^ n == 2^(n*log²(b))
+        return n.mul(b.log_2()).pow_2();
+    }
+
+    /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ blockDelta) ) )
+    /// @param _rateStartValue ABDKMathQuad The initial value of the rate.
+    /// @param _ratePerBlock ABDKMathQuad The rate per block.
+    /// @param blockDelta How many blocks after the rate was set.
+    /// @return rate ABDKMathQuad The rate calculated.
+    function calculateRate(bytes16 _rateStartValue, bytes16 _ratePerBlock, uint blockDelta)
+        public
+        view
+        returns (bytes16 rate)
+    {
+        rate = _rateStartValue.mul(
+            one.div(
+                pow(
+                    one.add(_ratePerBlock),
+                    (blockDelta).fromUInt()
+                )
+            )
+        );
+    }
+
+    function testGetRate() public {
+        uint rateStartBlock = block.number;
+        bytes16 rateStartValue = uint256(1000000).fromUInt();
+        bytes16 ratePerBlock = uint256(1).fromUInt().div(uint256(100).fromUInt());
+
+        require(creditClock.rateStartBlock() == rateStartBlock);
+        require(creditClock.rateStartValue() == rateStartValue);
+        require(creditClock.ratePerBlock() == ratePerBlock);
+
+        require(creditClock.getRate(0) == rateStartValue);
+
+        for (uint256 i = 0; i < 1000; i++) {
+            require(creditClock.getRate(rateStartBlock + i) == calculateRate(rateStartValue, ratePerBlock, i));
+        }
+
+        rateStartBlock += 3578;
+        rateStartValue = calculateRate(rateStartValue, ratePerBlock, 3578);
+        ratePerBlock = uint256(2).fromUInt().div(uint256(100).fromUInt());
+
+        vm.expectEmit(false, false, false, true);
+        emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
+        vm.roll(rateStartBlock);
+        creditClock.setRatePerBlock(ratePerBlock);
+
+        require(creditClock.rateStartBlock() == rateStartBlock);
+        require(creditClock.rateStartValue() == rateStartValue);
+        require(creditClock.ratePerBlock() == ratePerBlock);
+
+        require(creditClock.getRate(0) == rateStartValue);
+
+        for (uint256 i = 0; i < 1000; i++) {
+            require(creditClock.getRate(rateStartBlock + i) == calculateRate(rateStartValue, ratePerBlock, i));
+        }
+
+        rateStartBlock += 8447483;
+        rateStartValue = calculateRate(rateStartValue, ratePerBlock, 8447483);
+        ratePerBlock = uint256(3).fromUInt().div(uint256(100).fromUInt());
+
+        vm.expectEmit(false, false, false, true);
+        emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
+        vm.roll(rateStartBlock);
+        creditClock.setRatePerBlock(ratePerBlock);
+
+        require(creditClock.rateStartBlock() == rateStartBlock);
+        require(creditClock.rateStartValue() == rateStartValue);
+        require(creditClock.ratePerBlock() == ratePerBlock);
+
+        require(creditClock.getRate(0) == rateStartValue);
+
+        for (uint256 i = 0; i < 1000; i++) {
+            require(creditClock.getRate(rateStartBlock + i) == calculateRate(rateStartValue, ratePerBlock, i));
+        }
+
+        rateStartBlock += 1345;
+        rateStartValue = calculateRate(rateStartValue, ratePerBlock, 1345);
+        ratePerBlock = uint256(17).fromUInt().div(uint256(100).fromUInt());
+
+        vm.expectEmit(false, false, false, true);
+        emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
+        vm.roll(rateStartBlock);
+        creditClock.setRatePerBlock(ratePerBlock);
+
+        require(creditClock.rateStartBlock() == rateStartBlock);
+        require(creditClock.rateStartValue() == rateStartValue);
+        require(creditClock.ratePerBlock() == ratePerBlock);
+
+        require(creditClock.getRate(0) == rateStartValue);
+
+        for (uint256 i = 0; i < 1000; i++) {
+            require(creditClock.getRate(rateStartBlock + i) == calculateRate(rateStartValue, ratePerBlock, i));
+        }
     }
 
 }
