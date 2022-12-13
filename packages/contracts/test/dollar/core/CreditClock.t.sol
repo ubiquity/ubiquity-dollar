@@ -67,7 +67,7 @@ contract CreditClockTest is LocalTestHelper {
         );
     }
 
-    function testGetRate() public {
+    function test() public {
         uint rateStartBlock = block.number;
         bytes16 rateStartValue = uint256(1000000).fromUInt();
         bytes16 ratePerBlock = uint256(1).fromUInt().div(uint256(100).fromUInt());
