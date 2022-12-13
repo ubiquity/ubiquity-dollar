@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "../../src/ubiquistick/UbiquiStick.sol";
+import "../../src/ubiquistick/TheUbiquiStick.sol";
 import "operator-filter-registry/OperatorFilterRegistryErrorsAndEvents.sol";
 import "forge-std/Test.sol";
 
 contract UbiquiStickTest is Test {
     // contract instance
-    UbiquiStick ust;
+    TheUbiquiStick ust;
 
     // addresses to test with
     address mintTo;
@@ -21,7 +21,7 @@ contract UbiquiStickTest is Test {
     event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
 
     function setUp() public {
-        ust = new UbiquiStick();
+        ust = new TheUbiquiStick();
 
         mintTo = 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045;  // Vitalik's address
         transferTo = 0xc6b0562605D35eE710138402B878ffe6F2E23807; // Beeple's address

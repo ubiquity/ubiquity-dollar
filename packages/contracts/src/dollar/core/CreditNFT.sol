@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "../ERC1155Ubiquity.sol";
+import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "./UbiquityDollarManager.sol";
+import "../interfaces/ICreditNFT.sol";
 
 /// @title A Credit NFT redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
-contract CreditNFT is ERC1155Ubiquity {
+contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     //not public as if called externally can give inaccurate value. see method
@@ -17,14 +18,14 @@ contract CreditNFT is ERC1155Ubiquity {
     //represents tokenSupply of each expiry (since 1155 doesn't have this)
     mapping(uint256 => uint256) private _tokenSupplies;
 
-    //ordered list of coupon expiries
+    //ordered list of creditNFT expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
     event MintedCreditNFT(
         address recipient, uint256 expiryBlock, uint256 amount
     );
 
-    event BurnedCreditNFT(
+    event BurnedCreditNFTs(
         address creditNFTHolder, uint256 expiryBlock, uint256 amount
     );
 

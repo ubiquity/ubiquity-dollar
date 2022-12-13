@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -57,7 +57,8 @@ contract UbiquityDollarManager is AccessControl {
 
     modifier onlyAdmin() {
         require(
-            hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "MGR: Caller is not admin"
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            "uADMGR: Caller is not admin"
         );
         _;
     }
@@ -84,11 +85,8 @@ contract UbiquityDollarManager is AccessControl {
         oracle.update();
     }
 
-    function setCreditTokenAddress(address _creditTokenAddress)
-        external
-        onlyAdmin
-    {
-        creditTokenAddress = _creditTokenAddress;
+    function setuARTokenAddress(address _uarTokenAddress) external onlyAdmin {
+        autoRedeemTokenAddress = _uarTokenAddress;
     }
 
     function setCreditNFTAddress(address _creditNFTAddress)
@@ -152,7 +150,8 @@ contract UbiquityDollarManager is AccessControl {
         address creditNFTManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        _excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
+        _excessDollarDistributors[debtCouponManagerAddress] =
+            excessCouponDistributor;
     }
 
     function setMasterChefAddress(address _masterChefAddress)

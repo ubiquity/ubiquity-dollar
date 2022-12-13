@@ -1,21 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarManager} from
-    "../../src/dollar/core/UbiquityDollarManager.sol";
-import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
-import {CreditRedemptionCalculator} from
-    "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {CreditNFTRedemptionCalculator} from
-    "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
-import {DollarMintCalculator} from
-    "../../src/dollar/core/DollarMintCalculator.sol";
-import {DollarMintExcess} from
-    "../../src/dollar/core/DollarMintExcess.sol";
-import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
-import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
-import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
+import "../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../src/dollar/core/UbiquityGovernanceToken.sol";
+import "../../src/dollar/core/CreditRedemptionCalculator.sol";
+import "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import "../../src/dollar/core/DollarMintCalculator.sol";
+import "../../src/dollar/core/DollarMintExcess.sol";
+import "../../src/dollar/mocks/MockCreditNFT.sol";
+import "../../src/dollar/mocks/MockDollarToken.sol";
+import "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
+import "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "forge-std/Test.sol";
 import "forge-std/console.sol";

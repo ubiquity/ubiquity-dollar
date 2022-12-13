@@ -7,7 +7,7 @@ interface IUbiquityFormulas {
         pure
         returns (uint256 _shares);
 
-    function bonding(
+    function staking(
         uint256 _shares,
         uint256 _currentShareValue,
         uint256 _targetPrice
@@ -19,7 +19,7 @@ interface IUbiquityFormulas {
         uint256 _targetPrice
     ) external pure returns (uint256 _uLP);
 
-    function bondPrice(
+    function sharePrice(
         uint256 _totalULP,
         uint256 _totalUBOND,
         uint256 _targetPrice

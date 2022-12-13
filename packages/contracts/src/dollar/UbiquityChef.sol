@@ -71,19 +71,26 @@ contract UbiquityChef is ReentrancyGuard {
     // ----------- Modifiers -----------
     modifier onlyTokenManager() {
         require(
-            manager.hasRole(manager.UBQ_TOKEN_MANAGER_ROLE(), msg.sender),
-            "MasterChef: not UBQ manager"
+            manager.hasRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), msg.sender),
+            "MasterChef: not GOVERNANCE manager"
         );
         _;
     }
 
     modifier onlyStakingContract() {
         require(
-            msg.sender == manager.StakingContractAddress(),
+            msg.sender == manager.stakingContractAddress(),
             "MasterChef: not Staking Contract"
-        );D_StakingShareIDs
-    ) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        );
+        _;
+    }
+    constructor(
+        UbiquityDollarManager manager_,
+        address[] memory _tos,
+        uint256[] memory _amounts,
+        uint256[] memory _stakingShareIDs
+    ){
+        manager = manager_;
         pool.lastRewardBlock = block.number;
         pool.accGovernancePerShare = 0; // uint256(1e12);
         governanceDivider = 5; // 100 / 5 = 20% extra minted governance for treasury
@@ -92,13 +99,13 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 lgt = _tos.length;
         require(lgt == _amounts.length, "_amounts array not same length");
         require(
-            lgt == _StakingShareIDs.length,
-            "_StakingShareIDs array not same length"
+            lgt == _stakingShareIDs.length,
+            "_stakingShareIDs array not same length"
         );
 
         uint256 sharesDeposited = _totalShares;
         for (uint256 i = 0; i < lgt; ++i) {
-            _migrateDeposit(_tos[i], _amounts[i], _StakingShareIDs[i]);
+            _migrateDeposit(_tos[i], _amounts[i], _stakingShareIDs[i]);
             sharesDeposited += _amounts[i];
         }
     }
@@ -129,21 +136,21 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // Deposit LP tokens to MasterChef for governance allocation.
-    function deposit(address to, uint256 _amount, uint256 _StakingShareID)
+    function deposit(address to, uint256 _amount, uint256 _stakingShareID)
         external
         nonReentrant
         onlyStakingContract
     {
-        _deposit(to, _amount, _StakingShareID);
+        _deposit(to, _amount, _stakingShareID);
     }
 
     // Withdraw LP tokens from MasterChef.
-    function withdraw(address to, uint256 _amount, uint256 _StakingShareID)
+    function withdraw(address to, uint256 _amount, uint256 _stakingShareID)
         external
         nonReentrant
         onlyStakingContract
     {
-        StakingShareInfo storage stakingShare = _stakingShareInfo[_StakingShareID];
+        StakingShareInfo storage stakingShare = _stakingShareInfo[_stakingShareID];
         require(stakingShare.amount >= _amount, "MC: amount too high");
         _updatePool();
         uint256 pending =
@@ -154,7 +161,7 @@ contract UbiquityChef is ReentrancyGuard {
         stakingShare.amount -= _amount;
         stakingShare.rewardDebt = (stakingShare.amount * pool.accGovernancePerShare) / 1e12;
         _totalShares -= _amount;
-        emit Withdraw(to, _amount, _StakingShareID);
+        emit Withdraw(to, _amount, _stakingShareID);
     }
 
     /// @dev get pending governance rewards from MasterChef.
@@ -162,7 +169,7 @@ contract UbiquityChef is ReentrancyGuard {
     /// @notice only send pending rewards
     function getRewards(uint256 StakingShareID) external returns (uint256) {
         require(
-            IERC1155Ubiquity(manager.StakingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
                 msg.sender, StakingShareID
             ) == 1,
             "MS: caller is not owner"
@@ -215,10 +222,10 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // _Deposit LP tokens to MasterChef for governance allocation.
-    function _deposit(address to, uint256 _amount, uint256 _StakingShareID)
+    function _deposit(address to, uint256 _amount, uint256 _stakingShareID)
         internal
     {
-        StakingShareInfo storage stakingShare = _stakingShareInfo[_StakingShareID];
+        StakingShareInfo storage stakingShare = _stakingShareInfo[_stakingShareID];
         uint256 pending = 0;
         _totalShares += _amount;
         if (stakingShare.amount > 0) {
@@ -238,7 +245,7 @@ contract UbiquityChef is ReentrancyGuard {
         
         _updatePool();
         _safeGovernanceTransfer(_to, pending);
-        emit Deposit(_to, _amount, _StakingShareID);
+        emit Deposit(_to, _amount, _stakingShareID);
     }
 
     // UPDATE governance multiplier
@@ -280,12 +287,12 @@ contract UbiquityChef is ReentrancyGuard {
         }
         uint256 multiplier = _getMultiplier();
         uint256 governanceReward = (multiplier * governancePerBlock) / 1e6;
-        pool.accgovernancePerShare =
-            pool.accgovernancePerShare + (governanceReward / _totalShares);
+        pool.accGovernancePerShare =
+            pool.accGovernancePerShare + (governanceReward / _totalShares);
         pool.lastRewardBlock = block.number;
         
-        pool.accgovernancePerShare =
-            pool.accgovernancePerShare + (multiplier * governancePerBlock / _totalShares / 1e6);
+        pool.accGovernancePerShare =
+            pool.accGovernancePerShare + (multiplier * governancePerBlock / _totalShares / 1e6);
         pool.lastRewardBlock = block.number;
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             address(this), governanceReward
@@ -316,7 +323,7 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     function _getTwapPrice() internal view returns (uint256) {
-        return ITWAPOracle(manager.twapOracleAddress()).consult(
+        return ITWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
             manager.dollarTokenAddress()
         );
     }

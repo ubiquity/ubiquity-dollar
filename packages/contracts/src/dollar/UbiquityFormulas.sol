@@ -37,7 +37,7 @@ contract UbiquityFormulas is IUbiquityFormulas {
     /// @return uBOND , amount of bonding shares
     /// @notice UBOND = shares * targetPrice / currentShareValue
     // newShares = A * T / V
-    function bonding(
+    function staking(
         uint256 shares,
         uint256 currentShareValue,
         uint256 targetPrice
@@ -78,7 +78,7 @@ contract UbiquityFormulas is IUbiquityFormulas {
     // ELSE                priceBOND = totalLP / totalShares * TARGET_PRICE
     // R = T == 0 ? 1 : LP / S
     // P = R * T
-    function bondPrice(
+    function sharePrice(
         uint256 totalULP,
         uint256 totalUBOND,
         uint256 targetPrice
@@ -94,15 +94,15 @@ contract UbiquityFormulas is IUbiquityFormulas {
         }
     }
 
-    /// @dev formula ugov multiply
-    /// @param multiplier , initial ugov min multiplier
+    /// @dev formula governance multiply
+    /// @param multiplier , initial governance min multiplier
     /// @param price , current share price
-    /// @return newMultiplier , new ugov min multiplier
+    /// @return newMultiplier , new governance min multiplier
     /// @notice newMultiplier = multiplier * ( 1.05 / (1 + abs( 1 - price ) ) )
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function ugovMultiply(uint256 multiplier, uint256 price)
+    function governanceMultiply(uint256 multiplier, uint256 price)
         public
         pure
         returns (uint256 newMultiplier)

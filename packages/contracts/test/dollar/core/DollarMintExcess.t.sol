@@ -1,15 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {IUniswapV2Router01} from
-    "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
-import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import {DollarMintExcess} from
-    "../../../src/dollar/core/DollarMintExcess.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import  "../../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import "../../../src/dollar/core/DollarMintExcess.sol";
+import "../../../src/dollar/interfaces/IMetaPool.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 

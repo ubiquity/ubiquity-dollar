@@ -2,7 +2,7 @@
 pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./interfaces/ICreditNFTRedemptionCalculator.sol";
+import "../interfaces/ICreditNFTRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
@@ -16,17 +16,17 @@ contract CreditNFTRedemptionCalculator is ICouponsForDollarsCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityAlgorithmicDollarManager public manager;
+    UbiquityDollarManager public manager;
 
     /*   using ABDKMath64x64 for uint256;
     using ABDKMath64x64 for int128;*/
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
     constructor(address _manager) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
-    function getCouponAmount(uint256 dollarsToBurn)
+    function getCreditNFTAmount(uint256 dollarsToBurn)
         external
         view
         override
