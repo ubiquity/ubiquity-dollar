@@ -2,8 +2,8 @@
 pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/ICreditRedemtpionCalculator.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "../interfaces/ICreditRedemptionCalculator.sol";
+import "./UbiquityDollarManager.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
 
@@ -25,7 +25,7 @@ contract CreditRedemptionCalculator is IUARForDollarsCalculator {
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
     constructor(address _manager) {
-        manager = UbiquityAlgorithmicDollarManager(_manager);
+        manager = UbiquityDollarManager(_manager);
     }
 
     /// @notice set the constant for uAR calculation
