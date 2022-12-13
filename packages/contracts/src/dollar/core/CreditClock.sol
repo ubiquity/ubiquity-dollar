@@ -43,6 +43,8 @@ contract CreditClock {
         rateStartBlock = block.number;
         rateStartValue = _rateStartValue;
         ratePerBlock = _ratePerBlock;
+
+        emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
     }
 
     /// @dev Sets rate to apply from this block onward.
