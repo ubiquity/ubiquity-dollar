@@ -11,7 +11,7 @@ import "../libs/ABDKMathQuad.sol";
 /// @title Curve trading incentive contract
 /// @author Ubiquity DAO
 /// @dev incentives
-contract CurveDollarIncentive is IIncentive {
+contract CurveUADIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
