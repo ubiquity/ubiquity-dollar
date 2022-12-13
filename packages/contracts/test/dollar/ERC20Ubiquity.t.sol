@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
-import {UbiquityDollarManager} from
-    "../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../src/dollar/ERC20Ubiquity.sol";
+import "../../src/dollar/core/UbiquityDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract ERC20UbiquityHarness is ERC20Ubiquity {

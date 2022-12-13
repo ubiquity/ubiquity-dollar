@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
-import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
+import "../../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../../src/dollar/core/CreditNFT.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
@@ -101,15 +100,6 @@ contract CreditNFTTest is LocalTestHelper {
         CreditNFT(creditNFTAddress).mintCreditNFT(address(0x222), 10, 20000);
         CreditNFT(creditNFTAddress).mintCreditNFT(address(0x333), 10, 30000);
         vm.stopPrank();
-
-        // sets block.number
-        vm.roll(25000);
-        CreditNFT(creditNFTAddress).updateTotalDebt();
-        uint256 outStandingTotalDebt =
-            CreditNFT(creditNFTAddress).getTotalOutstandingDebt();
-        assertEq(outStandingTotalDebt, 10);
-    }
-}
 
         // sets block.number
         vm.roll(25000);

@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "../interfaces/IMetaPool.sol";
 import "../interfaces/ITWAPOracleDollar3pool.sol";
 
-contract TWAPOracleDollar3pool is ITWAPOracle {
+contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
     address public immutable pool;
     address public immutable token0;
     address public immutable token1;

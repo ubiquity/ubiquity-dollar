@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -12,63 +12,61 @@ import "../interfaces/IMetaPool.sol";
 
 import "./TWAPOracleDollar3pool.sol";
 
-/// @title A central config for the uAD system. Also acts as a central
+/// @title A central config for the Ubiquity Dollar system. Also acts as a central
 /// access control manager.
 /// @notice For storing constants. For storing variables and allowing them to
 /// be changed by the admin (governance)
 /// @dev This should be used as a central access control manager which other
 /// contracts use to check permissions
-contract UbuiquityDollarManager is AccessControl {
+contract UbiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
-    event DeloyedMetaPool(address indexed metapool, uint256 lpMinted, uint256 fee);
-
-    bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");
-    bytes32 public constant UBQ_BURNER_ROLE = keccak256("UBQ_BURNER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant COUPON_MANAGER_ROLE = keccak256("COUPON_MANAGER");
-    bytes32 public constant BONDING_MANAGER_ROLE = keccak256("BONDING_MANAGER");
+    bytes32 public constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
+    bytes32 public constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
     bytes32 public constant INCENTIVE_MANAGER_ROLE =
         keccak256("INCENTIVE_MANAGER");
-    bytes32 public constant UBQ_TOKEN_MANAGER_ROLE =
-        keccak256("UBQ_TOKEN_MANAGER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
+        keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE");
     address public twapOracleAddress;
-    address public debtCouponAddress;
-    address public dollarTokenAddress; // uAD
-    address public couponCalculatorAddress;
-    address public dollarMintingCalculatorAddress;
-    address public bondingShareAddress;
-    address public bondingContractAddress;
+    address public creditNFTAddress;
+    address public dollarTokenAddress;
+    address public creditNFTCalculatorAddress;
+    address public dollarMintCalculatorAddress;
+    address public stakingShareAddress;
+    address public stakingContractAddress;
     address public stableSwapMetaPoolAddress;
     address public curve3PoolTokenAddress; // 3CRV
     address public treasuryAddress;
-    address public governanceTokenAddress; // uGOV
-    address public sushiSwapPoolAddress; // sushi pool uAD-uGOV
+    address public governanceTokenAddress;
+    address public sushiSwapPoolAddress; // sushi pool UbiquityDollar-GovernanceToken
     address public masterChefAddress;
     address public formulasAddress;
-    address public autoRedeemTokenAddress; // uAR
-    address public uarCalculatorAddress; // uAR calculator
+    address public creditTokenAddress;
+    address public creditCalculatorAddress;
 
-    //key = address of couponManager, value = excessDollarDistributor
+    //key = address of CreditNFTManager, value = DollarMintExcess
     mapping(address => address) private _excessDollarDistributors;
 
     modifier onlyAdmin() {
         require(
             hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "uADMGR: Caller is not admin"
+            "MGR: Caller is not admin"
         );
         _;
     }
 
     constructor(address _admin) {
         _setupRole(DEFAULT_ADMIN_ROLE, _admin);
-        _setupRole(UBQ_MINTER_ROLE, _admin);
+        _setupRole(GOVERNANCE_TOKEN_MINTER_ROLE, _admin);
         _setupRole(PAUSER_ROLE, _admin);
-        _setupRole(COUPON_MANAGER_ROLE, _admin);
-        _setupRole(BONDING_MANAGER_ROLE, _admin);
+        _setupRole(CREDIT_NFT_MANAGER_ROLE, _admin);
+        _setupRole(STAKING_MANAGER_ROLE, _admin);
         _setupRole(INCENTIVE_MANAGER_ROLE, _admin);
-        _setupRole(UBQ_TOKEN_MANAGER_ROLE, address(this));
+        _setupRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(this));
     }
 
     // TODO Add a generic setter for extra addresses that needs to be linked
@@ -79,26 +77,26 @@ contract UbuiquityDollarManager is AccessControl {
         twapOracleAddress = _twapOracleAddress;
         // to be removed
 
-        TWAPOracle oracle = TWAPOracle(twapOracleAddress);
+        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(twapOracleAddress);
         oracle.update();
     }
 
-    function setuARTokenAddress(address _uarTokenAddress) external onlyAdmin {
-        autoRedeemTokenAddress = _uarTokenAddress;
+    function setCreditTokenAddress(address _creditTokenAddress) external onlyAdmin {
+        creditTokenAddress = _creditTokenAddress;
     }
 
-    function setDebtCouponAddress(address _debtCouponAddress)
+    function setCreditNFTAddress(address _creditNFTAddress)
         external
         onlyAdmin
     {
-        debtCouponAddress = _debtCouponAddress;
+        creditNFTAddress = _creditNFTAddress;
     }
 
-    function setIncentiveToUAD(address _account, address _incentiveAddress)
+    function setIncentiveToDollar(address _account, address _incentiveAddress)
         external
         onlyAdmin
     {
-        IUbiquityAlgorithmicDollar(dollarTokenAddress).setIncentiveContract(
+        IUbiquityDollarToken(dollarTokenAddress).setIncentiveContract(
             _account, _incentiveAddress
         );
     }
@@ -124,32 +122,32 @@ contract UbuiquityDollarManager is AccessControl {
         sushiSwapPoolAddress = _sushiSwapPoolAddress;
     }
 
-    function setUARCalculatorAddress(address _uarCalculatorAddress)
+    function setCreditCalculatorAddress(address _creditCalculatorAddress)
         external
         onlyAdmin
     {
-        uarCalculatorAddress = _uarCalculatorAddress;
+        creditCalculatorAddress = _creditCalculatorAddress;
     }
 
-    function setCouponCalculatorAddress(address _couponCalculatorAddress)
+    function setCreditNFTCalculatorAddress(address _creditNFTCalculatorAddress)
         external
         onlyAdmin
     {
-        couponCalculatorAddress = _couponCalculatorAddress;
+        creditNFTCalculatorAddress = _creditNFTCalculatorAddress;
     }
 
-    function setDollarMintingCalculatorAddress(
-        address _dollarMintingCalculatorAddress
+    function setDollarMintCalculatorAddress(
+        address _dollarMintCalculatorAddress
     ) external onlyAdmin {
-        dollarMintingCalculatorAddress = _dollarMintingCalculatorAddress;
+        dollarMintCalculatorAddress = _dollarMintCalculatorAddress;
     }
 
     function setExcessDollarsDistributor(
-        address debtCouponManagerAddress,
-        address excessCouponDistributor
+        address creditNFTManagerAddress,
+        address dollarMintExcess
     ) external onlyAdmin {
-        _excessDollarDistributors[debtCouponManagerAddress] =
-            excessCouponDistributor;
+        _excessDollarDistributors[creditNFTManagerAddress] =
+            dollarMintExcess;
     }
 
     function setMasterChefAddress(address _masterChefAddress)
@@ -163,11 +161,11 @@ contract UbuiquityDollarManager is AccessControl {
         formulasAddress = _formulasAddress;
     }
 
-    function setBondingShareAddress(address _bondingShareAddress)
+    function setStakingShareAddress(address _stakingShareAddress)
         external
         onlyAdmin
     {
-        bondingShareAddress = _bondingShareAddress;
+        stakingShareAddress = _stakingShareAddress;
     }
 
     function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
@@ -178,16 +176,16 @@ contract UbuiquityDollarManager is AccessControl {
     }
 
     /**
-     * @notice set the bonding contract smart contract address
-     * @dev bonding contract participants deposit  curve LP token
-     * for a certain duration to earn uGOV and more curve LP token
-     * @param _bondingContractAddress bonding contract address
+     * @notice set the staking smart contract address
+     * @dev staking contract participants deposit  curve LP token
+     * for a certain duration to earn Governance Tokens and more curve LP token
+     * @param _stakingContractAddress staking contract address
      */
-    function setBondingContractAddress(address _bondingContractAddress)
+    function setStakingContractAddress(address _stakingContractAddress)
         external
         onlyAdmin
     {
-        bondingContractAddress = _bondingContractAddress;
+        stakingContractAddress = _stakingContractAddress;
     }
 
     /**
@@ -200,7 +198,7 @@ contract UbuiquityDollarManager is AccessControl {
     }
 
     /**
-     * @notice deploy a new Curve metapools for uAD Token uAD/3Pool
+     * @notice deploy a new Curve metapools for Dollar Token Dollar/3Pool
      * @dev  From the curve documentation for uncollateralized algorithmic
      * stablecoins amplification should be 5-10
      * @param _curveFactory MetaPool factory address
@@ -231,7 +229,7 @@ contract UbuiquityDollarManager is AccessControl {
         // Approve the newly-deployed meta pool to transfer this contract's funds
         uint256 crv3PoolTokenAmount =
             IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
-        uint256 uADTokenAmount =
+        uint256 dollarTokenAmount =
             IERC20(dollarTokenAddress).balanceOf(address(this));
 
         // safe approve revert if approve from non-zero to non-zero allowance
@@ -239,13 +237,13 @@ contract UbuiquityDollarManager is AccessControl {
         IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, crv3PoolTokenAmount);
 
         IERC20(dollarTokenAddress).safeApprove(metaPool, 0);
-        IERC20(dollarTokenAddress).safeApprove(metaPool, uADTokenAmount);
+        IERC20(dollarTokenAddress).safeApprove(metaPool, dollarTokenAmount);
 
-        // coin at index 0 is uAD and index 1 is 3CRV
+        // coin at index 0 is Ubiquity Dollar and index 1 is 3CRV
         require(
             IMetaPool(metaPool).coins(0) == dollarTokenAddress
                 && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
-            "uADMGR: COIN_ORDER_MISMATCH"
+            "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
         uint256[2] memory amounts = [
@@ -255,17 +253,14 @@ contract UbuiquityDollarManager is AccessControl {
 
         // set curve 3Pool address
         curve3PoolTokenAddress = _crv3PoolTokenAddress;
-
-        uint256 lpMinted = IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
-
-        emit DeloyedMetaPool(metaPool, lpMinted, _fee);
+        IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
     }
 
-    function getExcessDollarsDistributor(address _debtCouponManagerAddress)
+    function getExcessDollarsDistributor(address _creditNFTManagerAddress)
         external
         view
         returns (address)
     {
-        return _excessDollarDistributors[_debtCouponManagerAddress];
+        return _excessDollarDistributors[_creditNFTManagerAddress];
     }
 }

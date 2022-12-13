@@ -8,7 +8,7 @@ import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
-contract CreditRedemptionCalculator is IUARForDollarsCalculator {
+contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
@@ -48,7 +48,7 @@ contract CreditRedemptionCalculator is IUARForDollarsCalculator {
         returns (uint256)
     {
         require(
-            DebtCoupon(manager.debtCouponAddress()).getTotalOutstandingDebt()
+            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt()
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
             "uAR to Dollar: DEBT_TOO_HIGH"
         );
