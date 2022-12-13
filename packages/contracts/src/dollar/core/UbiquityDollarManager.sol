@@ -18,7 +18,7 @@ import "./TWAPOracle.sol";
 /// be changed by the admin (governance)
 /// @dev This should be used as a central access control manager which other
 /// contracts use to check permissions
-contract UbiquityAlgorithmicDollarManager is AccessControl {
+contract UbuiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
     event DeloyedMetaPool(address indexed metapool, uint256 lpMinted, uint256 fee);

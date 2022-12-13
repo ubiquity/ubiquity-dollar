@@ -8,7 +8,7 @@ import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./DebtCoupon.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
-contract CouponsForDollarsCalculator is ICouponsForDollarsCalculator {
+contract CreditNFTRedemptionCalculator is ICouponsForDollarsCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
