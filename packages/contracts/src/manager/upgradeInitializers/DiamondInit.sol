@@ -32,8 +32,6 @@ contract DiamondInit is Modifiers {
         _grantRole(INCENTIVE_MANAGER_ROLE, _admin);
         _grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(this));
 
-        s.dollarTokenAddress = address(this);
-
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
         // arguments: address _init and bytes calldata _calldata
