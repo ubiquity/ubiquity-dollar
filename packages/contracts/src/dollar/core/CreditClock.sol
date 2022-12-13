@@ -60,19 +60,6 @@ contract CreditClock {
         emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
     }
 
-    /// @dev Calculates b raised to the power of n.
-    /// @param b ABDKMathQuad
-    /// @param n ABDKMathQuad
-    /// @return ABDKMathQuad b ^ n
-    function pow(bytes16 b, bytes16 n)
-        private
-        pure
-        returns (bytes16)
-    {
-        // b ^ n == 2^(n*log²(b))
-        return n.mul(b.log_2()).pow_2();
-    }
-
     /// @dev Calculate rateStartValue * ( 1 / ( (1 + ratePerBlock) ^ blockNumber - rateStartBlock) ) )
     /// @param blockNumber Block number to get the rate for. 0 for current block.
     /// @return rate ABDKMathQuad The rate calculated for the block number.
@@ -90,10 +77,10 @@ contract CreditClock {
 
         rate = rateStartValue.mul(
             one.div(
-                pow(
-                    one.add(ratePerBlock),
-                    (blockNumber - rateStartBlock).fromUInt()
-                )
+                // b ^ n == 2^(n*log²(b))
+                (blockNumber - rateStartBlock).fromUInt().mul(
+                    one.add(ratePerBlock).log_2()
+                ).pow_2()
             )
         );
     }
