@@ -2,8 +2,8 @@
 pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/ICreditRedemtpionCalculator.sol";
-import "./UbiquityAlgorithmicDollarManager.sol";
+import "../interfaces/ICreditRedemptionCalculator.sol";
+import "./UbiquityDollarManager.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
 
