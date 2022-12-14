@@ -6,6 +6,8 @@ import "../../src/manager/facets/DiamondCutFacet.sol";
 import "../../src/manager/facets/DiamondLoupeFacet.sol";
 import "../../src/manager/facets/OwnershipFacet.sol";
 import "../../src/manager/facets/ManagerFacet.sol";
+import "../../src/manager/facets/AccessControlFacet.sol";
+import "../../src/manager/facets/TWAPOracleDollar3poolFacet.sol";
 import "../../src/manager/Diamond.sol";
 import "../../src/manager/upgradeInitializers/DiamondInit.sol";
 import "../helpers/DiamondTestHelper.sol";
@@ -18,11 +20,15 @@ abstract contract DiamondSetup is DiamondTestHelper {
     OwnershipFacet ownerFacet;
     ManagerFacet managerFacet;
     DiamondInit dInit;
+    AccessControlFacet accessControlFacet;
+    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
 
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
-    ManagerFacet IManagerFacet;
+    ManagerFacet IManager;
+    TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
+    AccessControlFacet IAccessControl;
 
     string[] facetNames;
     address[] facetAddressList;
@@ -37,6 +43,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfOwnershipFacet;
     bytes4[] selectorsOfManagerFacet;
+    bytes4[] selectorsOfAccessControlFacet;
+    bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
 
     // deploys diamond and connects facets
     function setUp() public virtual {
@@ -47,8 +55,10 @@ abstract contract DiamondSetup is DiamondTestHelper {
         contract2 = generateAddress("Contract2", true, 10 ether);
 
         // set all function selectors
+        // Diamond Cutselectors
         selectorsOfDiamondCutFacet.push(IDiamondCut.diamondCut.selector);
 
+        // Diamond Loupe selectors
         selectorsOfDiamondLoupeFacet.push(IDiamondLoupe.facets.selector);
         selectorsOfDiamondLoupeFacet.push(
             IDiamondLoupe.facetFunctionSelectors.selector
@@ -59,9 +69,11 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfDiamondLoupeFacet.push(IDiamondLoupe.facetAddress.selector);
         selectorsOfDiamondLoupeFacet.push(IERC165.supportsInterface.selector);
 
+        // Ownership selectors
         selectorsOfOwnershipFacet.push(IERC173.transferOwnership.selector);
         selectorsOfOwnershipFacet.push(IERC173.owner.selector);
 
+        // Manager selectors
         selectorsOfManagerFacet.push(
             managerFacet.setTwapOracleAddress.selector
         );
@@ -152,21 +164,47 @@ abstract contract DiamondSetup is DiamondTestHelper {
             managerFacet.getStakingContractAddress.selector
         );
         selectorsOfManagerFacet.push(managerFacet.getTreasuryAddress.selector);
-        selectorsOfManagerFacet.push(managerFacet.grantRole.selector);
-        selectorsOfManagerFacet.push(managerFacet.hasRole.selector);
+        // Access Control selectors
+        selectorsOfAccessControlFacet.push(
+            accessControlFacet.grantRole.selector
+        );
+        selectorsOfAccessControlFacet.push(accessControlFacet.hasRole.selector);
+        selectorsOfAccessControlFacet.push(
+            accessControlFacet.renounceRole.selector
+        );
+        selectorsOfAccessControlFacet.push(
+            accessControlFacet.getRoleAdmin.selector
+        );
+        selectorsOfAccessControlFacet.push(
+            accessControlFacet.revokeRole.selector
+        );
 
+        // TWAP Oracle selectors
+        selectorsOfTWAPOracleDollar3poolFacet.push(
+            twapOracleDollar3PoolFacet.setPool.selector
+        );
+        selectorsOfTWAPOracleDollar3poolFacet.push(
+            twapOracleDollar3PoolFacet.update.selector
+        );
+        selectorsOfTWAPOracleDollar3poolFacet.push(
+            twapOracleDollar3PoolFacet.consult.selector
+        );
         //deploy facets
         dCutFacet = new DiamondCutFacet();
         dLoupeFacet = new DiamondLoupeFacet();
         ownerFacet = new OwnershipFacet();
         managerFacet = new ManagerFacet();
+        accessControlFacet = new AccessControlFacet();
+        twapOracleDollar3PoolFacet = new TWAPOracleDollar3poolFacet();
         dInit = new DiamondInit();
 
         facetNames = [
             "DiamondCutFacet",
             "DiamondLoupeFacet",
             "OwnershipFacet",
-            "ManagerFacet"
+            "ManagerFacet",
+            "AccessControlFacet",
+            "TWAPOracleDollar3poolFacet"
         ];
 
         // diamond arguments
@@ -210,6 +248,21 @@ abstract contract DiamondSetup is DiamondTestHelper {
             })
         );
 
+        diamondCut[4] = (
+            FacetCut({
+                facetAddress: address(accessControlFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfAccessControlFacet
+            })
+        );
+        diamondCut[5] = (
+            FacetCut({
+                facetAddress: address(twapOracleDollar3PoolFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
+            })
+        );
+
         // deploy diamond
         vm.startPrank(owner);
         diamond = new Diamond(_args, diamondCut);
@@ -218,8 +271,10 @@ abstract contract DiamondSetup is DiamondTestHelper {
         // initialize interfaces
         ILoupe = IDiamondLoupe(address(diamond));
         ICut = IDiamondCut(address(diamond));
-        IManagerFacet = ManagerFacet(address(diamond));
-
+        IManager = ManagerFacet(address(diamond));
+        IManager = ManagerFacet(address(diamond));
+        IAccessControl = AccessControlFacet(address(diamond));
+        ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
     }
