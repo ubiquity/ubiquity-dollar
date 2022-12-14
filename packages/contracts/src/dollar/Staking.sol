@@ -344,7 +344,9 @@ contract Staking is CollectableDust, Pausable {
         StakingShare(manager.stakingShareAddress()).updateStake(
             _id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
         );
-        emit AddLiquidityFromStake(msg.sender, _id, stake.lpAmount, _sharesAmount);
+        emit AddLiquidityFromStake(
+            msg.sender, _id, stake.lpAmount, _sharesAmount
+            );
     }
 
     /// @dev Remove an amount of UbiquityDollar-3CRV LP tokens
@@ -538,8 +540,9 @@ contract Staking is CollectableDust, Pausable {
         // minus the total deposited LP + LP that needs to be migrated
         uint256 totalShares =
             IUbiquityChef(manager.masterChefAddress()).totalShares();
-        if (lpBalance >= (stake.totalLP() + totalLpToMigrate) && totalShares > 0)
-        {
+        if (
+            lpBalance >= (stake.totalLP() + totalLpToMigrate) && totalShares > 0
+        ) {
             uint256 currentLpRewards =
                 lpBalance - (stake.totalLP() + totalLpToMigrate);
 

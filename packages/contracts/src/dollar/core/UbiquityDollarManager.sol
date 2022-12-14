@@ -21,12 +21,16 @@ import "./TWAPOracleDollar3pool.sol";
 contract UbiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
-    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
-    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE =
+        keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE =
+        keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
-    bytes32 public constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
+    bytes32 public constant CREDIT_NFT_MANAGER_ROLE =
+        keccak256("CREDIT_NFT_MANAGER_ROLE");
+    bytes32 public constant STAKING_MANAGER_ROLE =
+        keccak256("STAKING_MANAGER_ROLE");
     bytes32 public constant INCENTIVE_MANAGER_ROLE =
         keccak256("INCENTIVE_MANAGER");
     bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
@@ -53,8 +57,7 @@ contract UbiquityDollarManager is AccessControl {
 
     modifier onlyAdmin() {
         require(
-            hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "MGR: Caller is not admin"
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "MGR: Caller is not admin"
         );
         _;
     }
@@ -81,7 +84,10 @@ contract UbiquityDollarManager is AccessControl {
         oracle.update();
     }
 
-    function setCreditTokenAddress(address _creditTokenAddress) external onlyAdmin {
+    function setCreditTokenAddress(address _creditTokenAddress)
+        external
+        onlyAdmin
+    {
         creditTokenAddress = _creditTokenAddress;
     }
 
@@ -146,8 +152,7 @@ contract UbiquityDollarManager is AccessControl {
         address creditNFTManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        _excessDollarDistributors[creditNFTManagerAddress] =
-            dollarMintExcess;
+        _excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
     }
 
     function setMasterChefAddress(address _masterChefAddress)

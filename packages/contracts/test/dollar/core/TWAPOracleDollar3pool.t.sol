@@ -3,7 +3,8 @@ pragma solidity ^0.8.3;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import {TWAPOracleDollar3pool} from
+    "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract TWAPOracleDollar3poolTest is LocalTestHelper {
@@ -38,8 +39,9 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
 
         uint256 amount0Out =
             TWAPOracleDollar3pool(twapOracleAddress).consult(dollarTokenAddress);
-        uint256 amount1Out =
-            TWAPOracleDollar3pool(twapOracleAddress).consult(curve3CRVTokenAddress);
+        uint256 amount1Out = TWAPOracleDollar3pool(twapOracleAddress).consult(
+            curve3CRVTokenAddress
+        );
         assertEq(amount0Out, 100e18);
         assertEq(amount1Out, 100e18);
     }
