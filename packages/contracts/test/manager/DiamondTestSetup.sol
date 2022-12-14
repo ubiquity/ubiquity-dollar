@@ -207,14 +207,18 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "TWAPOracleDollar3poolFacet"
         ];
 
-        // diamond arguments
+        DiamondInit.Args memory initArgs = DiamondInit.Args({admin: admin});
+        // diamod arguments
         DiamondArgs memory _args = DiamondArgs({
             owner: owner,
             init: address(dInit),
-            initCalldata: abi.encodeWithSignature("init(address)", admin)
+            initCalldata: abi.encodeWithSelector(
+                DiamondInit.init.selector,
+                initArgs
+            )
         });
 
-        FacetCut[] memory diamondCut = new FacetCut[](4);
+        FacetCut[] memory diamondCut = new FacetCut[](6);
 
         diamondCut[0] = (
             FacetCut({

@@ -17,9 +17,6 @@ import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 contract DiamondInit is Modifiers {
     struct Args {
         address admin;
-        // twap oracle
-        address pool;
-        address curve3CRVToken1;
     }
 
     // You can add parameters to this function in order to pass in
@@ -42,10 +39,6 @@ contract DiamondInit is Modifiers {
         LibAccessControl._grantRole(STAKING_MANAGER_ROLE, _args.admin);
         LibAccessControl._grantRole(INCENTIVE_MANAGER_ROLE, _args.admin);
         LibAccessControl._grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, _args.admin);
-
-        // twap oracle inital configuration
-
-        LibTWAPOracle._setPool(_args.pool, _args.curve3CRVToken1);
 
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
