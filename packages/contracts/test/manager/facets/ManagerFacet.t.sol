@@ -11,7 +11,7 @@ import {GOVERNANCE_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE} from "../../
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions() public {
-        IManagerFacet.getExcessDollarsDistributor(contract1);
+        IManager.getExcessDollarsDistributor(contract1);
     }
 
     function testSetTwapOracleAddress_ShouldSucceed() public prankAs(admin) {
@@ -25,8 +25,8 @@ contract RemoteTestManagerFacet is DiamondSetup {
             100,
             100
         );
-        IManagerFacet.setTwapOracleAddress(address(_twapOracle));
-        assertEq(IManagerFacet.getTwapOracleAddress(), address(_twapOracle));
+        IManager.setTwapOracleAddress(address(_twapOracle));
+        assertEq(IManager.getTwapOracleAddress(), address(_twapOracle));
     }
 
     function testSetDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
@@ -143,7 +143,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
         prankAs(admin)
     {
         assertEq(
-            IManagerFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
+            IAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
             true
         );
     }
@@ -155,7 +155,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
         dollarToken = new MockDollarToken(10000);
 
-        IManagerFacet.setDollarTokenAddress(address(dollarToken));
+        IManager.setDollarTokenAddress(address(dollarToken));
         IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
 
         address secondAccount = address(0x3);
@@ -178,8 +178,14 @@ contract RemoteTestManagerFacet is DiamondSetup {
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IManagerFacet.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
-        IManagerFacet.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            stakingV1Address
+        );
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            stakingV1Address
+        );
 
         deal(address(dollarToken), curveWhaleAddress, 10e18);
 
@@ -205,7 +211,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
         address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
         address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
 
-        IManagerFacet.deployStableSwapPool(
+        IManager.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
             curve3CrvToken,

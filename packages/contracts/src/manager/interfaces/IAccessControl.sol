@@ -2,12 +2,10 @@
 
 pragma solidity 0.8.16;
 
-import {IAccessControlInternal} from "./IAccessControlInternal.sol";
-
 /**
  * @title AccessControl interface
  */
-interface IAccessControl is IAccessControlInternal {
+interface IAccessControl {
     /*
      * @notice query whether role is assigned to account
      * @param role role to query
