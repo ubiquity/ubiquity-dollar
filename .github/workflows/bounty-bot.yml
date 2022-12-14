@@ -17,10 +17,9 @@ jobs:
         uses: tibdex/github-app-token@v1.7.0
         id: get_installation_token
         with:
-        # This should be changed to remove _DEV from the end when the UbiquiBot is ready for production
-          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID_DEV }}
-          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY_DEV }}
-          
+          app_id: ${{ secrets.UBIQUITY_DOLLAR_APP_ID }}
+          private_key: ${{ secrets.UBIQUITY_DOLLAR_PRIVATE_KEY }}
+
       - name: Ubiquity Bounty Bot
         uses: ubiquity/bounty-bot@v0.0.1-beta1
         with: 
