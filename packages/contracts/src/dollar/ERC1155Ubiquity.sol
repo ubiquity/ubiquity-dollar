@@ -24,7 +24,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -32,7 +32,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
             "Governance token: not burner"
         );
         _;

@@ -13,7 +13,7 @@ interface IUbiquityFormulas {
         uint256 _targetPrice
     ) external pure returns (uint256 _uBOND);
 
-    function redeemBonds(
+    function redeemShares(
         uint256 _uBOND,
         uint256 _currentShareValue,
         uint256 _targetPrice

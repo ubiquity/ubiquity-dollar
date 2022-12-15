@@ -56,8 +56,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         uint256[4] amounts
     );
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         dollar = ERC20Ubiquity(
             UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         );

@@ -65,7 +65,7 @@ contract UbiquityDollarManager is AccessControl {
 
     constructor(address _admin) {
         _setupRole(DEFAULT_ADMIN_ROLE, _admin);
-        _setupRole(GOVERNANCE_TOKEN_MINTER_ROLE, _admin);
+        _setupRole(UBQ_MINTER_ROLE, _admin);
         _setupRole(PAUSER_ROLE, _admin);
         _setupRole(CREDIT_NFT_MANAGER_ROLE, _admin);
         _setupRole(STAKING_MANAGER_ROLE, _admin);

@@ -23,8 +23,9 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
 
     event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         curveIncentiveAddress =
             address(new CurveDollarIncentive(dollarManagerAddress));
         twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
@@ -66,6 +67,8 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
     }
 
     function test_incentivize_buy() public {
+        vm.startPrank(admin);
+        manager.grantRole(manager.UBQ_MINTER_ROLE(), curveIncentiveAddress);
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
@@ -79,11 +82,11 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = governanceToken.balanceOf(mockReceiver);
-        vm.prank(admin);
+        
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
             mockReceiver, true
         );
-
+        vm.stopPrank();
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
             stableSwapPoolAddress, mockReceiver, address(0), 100e18

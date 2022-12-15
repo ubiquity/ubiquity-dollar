@@ -56,7 +56,7 @@ contract UbiquityFormulas is IUbiquityFormulas {
     /// @return uLP , amount of LP tokens
     /// @notice uLP = uBOND * currentShareValue / targetPrice
     // uLP = A * V / T
-    function redeemBonds(
+    function redeemShares(
         uint256 uBOND,
         uint256 currentShareValue,
         uint256 targetPrice

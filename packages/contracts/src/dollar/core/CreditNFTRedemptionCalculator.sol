@@ -33,12 +33,12 @@ contract CreditNFTRedemptionCalculator is ICouponsForDollarsCalculator {
         returns (uint256)
     {
         require(
-            CreditNFT(manager.debtCouponAddress()).getTotalOutstandingDebt()
+            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt()
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
-            "Coupon to dollar: DEBT_TOO_HIGH"
+            "CreditNFT to dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
-        bytes16 totalDebt = CreditNFT(manager.debtCouponAddress())
+        bytes16 totalDebt = CreditNFT(manager.creditNFTAddress())
             .getTotalOutstandingDebt().fromUInt();
         bytes16 r = totalDebt.div(
             IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt()

@@ -235,7 +235,7 @@ contract Bonding is CollectableDust {
         // if (redeemStreamTime == 0) {
         IERC20(manager.stableSwapMetaPoolAddress()).safeTransfer(
             msg.sender,
-            IUbiquityFormulas(manager.formulasAddress()).redeemBonds(
+            IUbiquityFormulas(manager.formulasAddress()).redeemShares(
                 _sharesAmount, _currentShareValue, ONE
             )
         );
@@ -248,7 +248,7 @@ contract Bonding is CollectableDust {
         uint256 totalShares =
             IERC1155Ubiquity(manager.stakingShareAddress()).totalSupply();
 
-        priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
+        priceShare = IUbiquityFormulas(manager.formulasAddress()).sharePrice(
             totalLP, totalShares, ONE
         );
     }

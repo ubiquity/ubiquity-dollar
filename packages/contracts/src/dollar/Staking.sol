@@ -58,7 +58,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 lockupPeriod,
         uint256 endBlock
     );
-    event RemoveLiquidityFromShare(
+    event RemoveLiquidityFromStake(
         address indexed user,
         uint256 indexed id,
         uint256 lpAmount,
@@ -67,14 +67,14 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 stakingShareAmount
     );
 
-    event AddLiquidityFromShare(
+    event AddLiquidityFromStake(
         address indexed user,
         uint256 indexed id,
         uint256 lpAmount,
         uint256 stakingShareAmount
     );
 
-    event ShareingDiscountMultiplierUpdated(uint256 stakingDiscountMultiplier);
+    event StakingDiscountMultiplierUpdated(uint256 stakingDiscountMultiplier);
     event BlockCountInAWeekUpdated(uint256 blockCountInAWeek);
 
     event Migrated(
@@ -265,7 +265,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     {
         require(
             1 <= lockupPeriod && lockupPeriod <= 208,
-            "Shareing: duration must be between 1 and 208 weeks"
+            "Staking: duration must be between 1 and 208 weeks"
         );
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
 
@@ -353,7 +353,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
             msg.sender, sharesAmount, id
         );
 
-        emit AddLiquidityFromShare(msg.sender, id, stake.lpAmount, sharesAmount);
+        emit AddLiquidityFromStake(msg.sender, id, stake.lpAmount, sharesAmount);
     }
 
     /// @dev Remove an amount of UbiquityDollar-3CRV LP tokens
@@ -368,7 +368,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     {
         (uint256[2] memory stakeInfo, StakingShare.Stake memory stake) =
             _checkForLiquidity(_id);
-        require(stake.lpAmount >= _amount, "Shareing: amount too big");
+        require(stake.lpAmount >= _amount, "Staking: amount too big");
         // we should decrease the UBQ rewards proportionally to the LP removed
         // sharesToRemove = (staking shares * _amount )  / stake.lpAmount ;
         uint256 sharesToRemove = StakingFormulas(this.stakingFormulasAddress())
@@ -606,10 +606,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
             "Staking: caller is not owner"
         );
         
-        StakingShare.Stake memory stake = stakingShare.getStake(_id);
+        stake = stakingShare.getStake(_id);
         require(
             block.number > stake.endBlock,
-            "Shareing: Redeem not allowed before staking time"
+            "Staking: Redeem not allowed before staking time"
         );
 
         stakeInfo = IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id);
