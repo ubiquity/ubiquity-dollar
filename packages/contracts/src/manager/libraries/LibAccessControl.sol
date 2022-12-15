@@ -6,6 +6,8 @@ import {EnumerableSet} from "./EnumerableSet.sol";
 import {EnumerableSet} from "../libraries/EnumerableSet.sol";
 import {AddressUtils} from "../libraries/AddressUtils.sol";
 import {UintUtils} from "../libraries/UintUtils.sol";
+import {LibAppStorage} from "./LibAppStorage.sol";
+import "./Constants.sol";
 
 library LibAccessControl {
     using AddressUtils for address;
@@ -20,11 +22,6 @@ library LibAccessControl {
     struct Layout {
         mapping(bytes32 => RoleData) roles;
     }
-
-    bytes32 internal constant DEFAULT_ADMIN_ROLE = 0x00;
-
-    bytes32 internal constant STORAGE_SLOT =
-        keccak256("ubiquity.contracts.access.control.storage");
 
     event RoleAdminChanged(
         bytes32 indexed role,
@@ -43,6 +40,15 @@ library LibAccessControl {
         address indexed account,
         address indexed sender
     );
+    /**
+     * @dev Emitted when the pause is triggered by `account`.
+     */
+    event Paused(address account);
+
+    /**
+     * @dev Emitted when the pause is lifted by `account`.
+     */
+    event Unpaused(address account);
 
     function accessControlStorage() internal pure returns (Layout storage l) {
         bytes32 slot = STORAGE_SLOT;
@@ -52,8 +58,15 @@ library LibAccessControl {
     }
 
     modifier onlyRole(bytes32 role) {
-        _checkRole(role);
+        checkRole(role);
         _;
+    }
+
+    /**
+     * @dev Returns true if the contract is paused, and false otherwise.
+     */
+    function paused() internal view returns (bool) {
+        return LibAppStorage.appStorage().paused;
     }
 
     /*
@@ -62,7 +75,7 @@ library LibAccessControl {
      * @param account account to query
      * @return whether role is assigned to account
      */
-    function _hasRole(bytes32 role, address account)
+    function hasRole(bytes32 role, address account)
         internal
         view
         returns (bool)
@@ -74,8 +87,8 @@ library LibAccessControl {
      * @notice revert if sender does not have given role
      * @param role role to query
      */
-    function _checkRole(bytes32 role) internal view {
-        _checkRole(role, msg.sender);
+    function checkRole(bytes32 role) internal view {
+        checkRole(role, msg.sender);
     }
 
     /**
@@ -83,8 +96,8 @@ library LibAccessControl {
      * @param role role to query
      * @param account to query
      */
-    function _checkRole(bytes32 role, address account) internal view {
-        if (!_hasRole(role, account)) {
+    function checkRole(bytes32 role, address account) internal view {
+        if (!hasRole(role, account)) {
             revert(
                 string(
                     abi.encodePacked(
@@ -103,7 +116,7 @@ library LibAccessControl {
      * @param role role to query
      * @return admin role
      */
-    function _getRoleAdmin(bytes32 role) internal view returns (bytes32) {
+    function getRoleAdmin(bytes32 role) internal view returns (bytes32) {
         return accessControlStorage().roles[role].adminRole;
     }
 
@@ -112,8 +125,8 @@ library LibAccessControl {
      * @param role role to set
      * @param adminRole admin role to set
      */
-    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal {
-        bytes32 previousAdminRole = _getRoleAdmin(role);
+    function setRoleAdmin(bytes32 role, bytes32 adminRole) internal {
+        bytes32 previousAdminRole = getRoleAdmin(role);
         accessControlStorage().roles[role].adminRole = adminRole;
         emit RoleAdminChanged(role, previousAdminRole, adminRole);
     }
@@ -123,7 +136,7 @@ library LibAccessControl {
      * @param role role to assign
      * @param account recipient of role assignment
      */
-    function _grantRole(bytes32 role, address account) internal {
+    function grantRole(bytes32 role, address account) internal {
         accessControlStorage().roles[role].members.add(account);
         emit RoleGranted(role, account, msg.sender);
     }
@@ -133,7 +146,7 @@ library LibAccessControl {
      * @param role role to unassign
      * @parm account
      */
-    function _revokeRole(bytes32 role, address account) internal {
+    function revokeRole(bytes32 role, address account) internal {
         accessControlStorage().roles[role].members.remove(account);
         emit RoleRevoked(role, account, msg.sender);
     }
@@ -142,7 +155,31 @@ library LibAccessControl {
      * @notice relinquish role
      * @param role role to relinquish
      */
-    function _renounceRole(bytes32 role) internal {
-        _revokeRole(role, msg.sender);
+    function renounceRole(bytes32 role) internal {
+        revokeRole(role, msg.sender);
+    }
+
+    /**
+     * @dev Triggers stopped state.
+     *
+     * Requirements:
+     *
+     * - The contract must not be paused.
+     */
+    function pause() internal {
+        LibAppStorage.appStorage().paused = true;
+        emit Paused(msg.sender);
+    }
+
+    /**
+     * @dev Returns to normal state.
+     *
+     * Requirements:
+     *
+     * - The contract must be paused.
+     */
+    function unpause() internal {
+        LibAppStorage.appStorage().paused = false;
+        emit Unpaused(msg.sender);
     }
 }

@@ -6,8 +6,7 @@ import "../../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../../src/dollar/interfaces/IMetaPool.sol";
 import "../../../src/dollar/mocks/MockDollarToken.sol";
 import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-
-import {GOVERNANCE_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE} from "../../../src/manager/libraries/LibAppStorage.sol";
+import "../../../src/manager/libraries/LibAccessControl.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions() public {
@@ -15,23 +14,11 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testSetTwapOracleAddress_ShouldSucceed() public prankAs(admin) {
-        MockDollarToken dollarToken;
-        dollarToken = new MockDollarToken(10000);
-        // deploy twapPrice oracle
-        MockTWAPOracleDollar3pool _twapOracle = new MockTWAPOracleDollar3pool(
-            address(0x100),
-            address(dollarToken),
-            address(0x101),
-            100,
-            100
-        );
-        IManager.setTwapOracleAddress(address(_twapOracle));
-        assertEq(IManager.getTwapOracleAddress(), address(_twapOracle));
+        assertEq(IManager.getTwapOracleAddress(), address(diamond));
     }
 
     function testSetDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
-        IManagerFacet.setDollarTokenAddress(contract1);
-        assertEq(IManagerFacet.getDollarTokenAddress(), contract1);
+        assertEq(IManager.getDollarTokenAddress(), address(diamond));
     }
 
     function testSetCreditTokenAddress_ShouldSucceed() public prankAs(admin) {
@@ -129,13 +116,11 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testSetIncentiveToDollar_ShouldSucceed() public prankAs(admin) {
-        address dollarTokenAddress = generateAddress(
-            "dollarTokenAddress",
-            true,
-            10 ether
+        assertEq(
+            IAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
+            true
         );
-        IManagerFacet.setDollarTokenAddress(dollarTokenAddress);
-        IManagerFacet.setIncentiveToDollar(user1, contract1);
+        IManager.setIncentiveToDollar(user1, contract1);
     }
 
     function testSetMinterRoleWhenInitializing_ShouldSucceed()
@@ -149,13 +134,11 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testDeployStableSwapPool_ShouldSucceed() public {
+        assertEq(IUbiquityDollarToken.decimals(), 18);
         vm.startPrank(admin);
 
-        MockDollarToken dollarToken;
+        IUbiquityDollarToken.mint(admin, 10000);
 
-        dollarToken = new MockDollarToken(10000);
-
-        IManager.setDollarTokenAddress(address(dollarToken));
         IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
 
         address secondAccount = address(0x3);
@@ -174,7 +157,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(dollarToken), mintings[i], 10000e18);
+            deal(address(IUbiquityDollarToken), mintings[i], 10000e18);
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
@@ -187,7 +170,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
             stakingV1Address
         );
 
-        deal(address(dollarToken), curveWhaleAddress, 10e18);
+        deal(address(IUbiquityDollarToken), curveWhaleAddress, 10e18);
 
         vm.stopPrank();
 
