@@ -214,7 +214,7 @@ contract UbiquityDollarManager is AccessControl {
         address _crv3PoolTokenAddress,
         uint256 _amplificationCoefficient,
         uint256 _fee
-    ) external onlyAdmin {
+    ) external onlyAdmin returns(uint256 lpMinted){
         // Create new StableSwap meta pool (uAD <-> 3Crv)
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
@@ -253,7 +253,7 @@ contract UbiquityDollarManager is AccessControl {
 
         // set curve 3Pool address
         curve3PoolTokenAddress = _crv3PoolTokenAddress;
-        IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
+        lpMinted = IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
     }
 
     function getExcessDollarsDistributor(address _creditNFTManagerAddress)

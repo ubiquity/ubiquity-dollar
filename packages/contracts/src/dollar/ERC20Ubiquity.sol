@@ -178,10 +178,7 @@ contract ERC20Ubiquity is
     function mint(address to, uint256 amount)
         public
         override
-        onlyMinter
-        whenNotPaused
-    {
-        _mint(to, amount);
+        onlyMintercreditToken.trans
         emit Minting(to, msg.sender, amount);
     }
 

@@ -257,7 +257,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         UbiquityCreditToken creditToken =
             UbiquityCreditToken(manager.creditTokenAddress());
         creditToken.mint(address(this), amount);
-        creditToken.transfer(msg.sender, amount);
+        require(creditToken.transfer(msg.sender, amount), "CreditNFTManager: Credit Token Transfer Failed");
 
         return creditToken.balanceOf(msg.sender);
     }
@@ -295,7 +295,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             creditToRedeem = maxRedeemableCredit;
         }
         creditToken.burnFrom(msg.sender, creditToRedeem);
-        dollarToken.transfer(msg.sender, creditToRedeem);
+        require(creditToken.transfer(msg.sender, amount), "CreditNFTManager: Credit Token Transfer Failed");
 
         return amount - creditToRedeem;
     }
@@ -345,7 +345,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         // creditNFTManager must be an operator to transfer on behalf of msg.sender
         creditNFT.burnCreditNFT(msg.sender, creditNFTToRedeem, id);
-        dollarToken.transfer(msg.sender, creditNFTToRedeem);
+        require(creditToken.transfer(msg.sender, amount), "CreditNFTManager: Credit Token Transfer Failed");
 
         return amount - (creditNFTToRedeem);
     }
@@ -382,10 +382,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            dollarToken.transfer(
+            require(dollarToken.transfer(
                 manager.getExcessDollarsDistributor(address(this)),
                 excessDollars
-            );
+            ), "UbiquityDollar: Transfer failed");
             dollarsDistributor.distributeDollars();
         }
     }

@@ -35,5 +35,8 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
+  },
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
   }
 }
