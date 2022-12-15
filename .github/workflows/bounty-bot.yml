@@ -18,7 +18,7 @@ jobs:
         id: get_installation_token
         with:
           app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
-          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY_0XCODERCRANE }}
+          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
       - name: Ubiquity Bounty Bot
         uses: ubiquity/bounty-bot@v0.0.1-beta
