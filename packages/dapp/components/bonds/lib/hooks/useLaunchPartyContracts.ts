@@ -39,8 +39,8 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
       const simpleBond = getSimpleBondContract(SimpleBondAddress, provider);
       const rewardToken = await simpleBond.tokenRewards();
       const contracts = {
-        ubiquiStick: getUbiquiStickContract(UbiquiStickAddress, provider),
-        ubiquiStickSale: getUbiquiStickSaleContract(UbiquiStickSaleAddress, provider),
+        ubiquiStick: getUbiquityStickContract(UbiquiStickAddress, provider),
+        ubiquiStickSale: getUbiquityStickSaleContract(UbiquiStickSaleAddress, provider),
         simpleBond,
         rewardToken: getERC20Contract(rewardToken, provider),
         chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),
