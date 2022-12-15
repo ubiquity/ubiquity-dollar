@@ -3,20 +3,11 @@ pragma solidity ^0.8.0;
 
 import {LibDiamond} from "./LibDiamond.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
+import "./Constants.sol";
 
-bytes32 constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256(
-    "GOVERNANCE_TOKEN_MINTER_ROLE"
-);
-bytes32 constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256(
-    "GOVERNANCE_TOKEN_BURNER_ROLE"
-);
-bytes32 constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-bytes32 constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
-bytes32 constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
-bytes32 constant INCENTIVE_MANAGER_ROLE = keccak256("INCENTIVE_MANAGER");
-bytes32 constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256(
-    "GOVERNANCE_TOKEN_MANAGER_ROLE"
-);
+// keccak256("Permit(address owner,address spender,
+//                   uint256 value,uint256 nonce,uint256 deadline)");
+bytes32 constant PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
 
 struct AppStorage {
     // reentrancy guard
@@ -24,10 +15,8 @@ struct AppStorage {
     uint256 ENTERED;
     uint256 reentrancyStatus;
     // others
-    address twapOracleAddress;
-    address creditNftAddress;
-    address dollarTokenAddress;
-    address creditNftCalculatorAddress;
+    address creditNFTAddress;
+    address creditNFTCalculatorAddress;
     address dollarMintCalculatorAddress;
     address stakingShareAddress;
     address stakingContractAddress;
@@ -41,10 +30,12 @@ struct AppStorage {
     address creditTokenAddress;
     address creditCalculatorAddress;
     mapping(address => address) _excessDollarDistributors;
+    // pausable
+    bool paused;
 }
 
 library LibAppStorage {
-    function diamondStorage() internal pure returns (AppStorage storage ds) {
+    function appStorage() internal pure returns (AppStorage storage ds) {
         assembly {
             ds.slot := 0
         }
@@ -88,12 +79,48 @@ contract Modifiers {
 
     modifier onlyAdmin() {
         require(
-            LibAccessControl._hasRole(
-                LibAccessControl.DEFAULT_ADMIN_ROLE,
-                msg.sender
-            ),
+            LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "MGR: Caller is not admin"
         );
+        _;
+    }
+    modifier onlyMinter() {
+        require(
+            LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            "Governance token: not minter"
+        );
+        _;
+    }
+
+    modifier onlyBurner() {
+        require(
+            LibAccessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            "Governance token: not burner"
+        );
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is not paused.
+     *
+     * Requirements:
+     *
+     * - The contract must not be paused.
+     */
+    modifier whenNotPaused() {
+        require(!LibAccessControl.paused(), "Pausable: paused");
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is paused.
+     *
+     * Requirements:
+     *
+     * - The contract must be paused.
+     */
+    modifier whenPaused() {
+        require(LibAccessControl.paused(), "Pausable: not paused");
         _;
     }
 }
