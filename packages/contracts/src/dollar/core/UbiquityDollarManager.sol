@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
@@ -25,8 +25,10 @@ contract UbiquityDollarManager is AccessControl {
     bytes32 public constant UBQ_BURNER_ROLE = keccak256("UBQ_BURNER_ROLE");
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
-    bytes32 public constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
+    bytes32 public constant CREDIT_NFT_MANAGER_ROLE =
+        keccak256("CREDIT_NFT_MANAGER_ROLE");
+    bytes32 public constant STAKING_MANAGER_ROLE =
+        keccak256("STAKING_MANAGER_ROLE");
     bytes32 public constant INCENTIVE_MANAGER_ROLE =
         keccak256("INCENTIVE_MANAGER");
     bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
@@ -81,14 +83,14 @@ contract UbiquityDollarManager is AccessControl {
         oracle.update();
     }
 
-    function setCreditTokenAddress(address _creditTokenAddress) external onlyAdmin {
-        creditTokenAddress = _creditTokenAddress;
-    }
-
-    function setCreditNFTAddress(address _creditNFTAddress)
+    function setCreditTokenAddress(address _creditTokenAddress)
         external
         onlyAdmin
     {
+        creditTokenAddress = _creditTokenAddress;
+    }
+
+    function setCreditNFTAddress(address _creditNFTAddress) external onlyAdmin {
         creditNFTAddress = _creditNFTAddress;
     }
 
@@ -97,7 +99,8 @@ contract UbiquityDollarManager is AccessControl {
         onlyAdmin
     {
         IUbiquityDollarToken(dollarTokenAddress).setIncentiveContract(
-            _account, _incentiveAddress
+            _account,
+            _incentiveAddress
         );
     }
 
@@ -146,8 +149,7 @@ contract UbiquityDollarManager is AccessControl {
         address creditNFTManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        _excessDollarDistributors[creditNFTManagerAddress] =
-            dollarMintExcess;
+        _excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
     }
 
     function setMasterChefAddress(address _masterChefAddress)
@@ -214,7 +216,7 @@ contract UbiquityDollarManager is AccessControl {
         address _crv3PoolTokenAddress,
         uint256 _amplificationCoefficient,
         uint256 _fee
-    ) external onlyAdmin returns(uint256 lpMinted){
+    ) external onlyAdmin returns (uint256 lpMinted) {
         // Create new StableSwap meta pool (uAD <-> 3Crv)
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
@@ -227,22 +229,27 @@ contract UbiquityDollarManager is AccessControl {
         stableSwapMetaPoolAddress = metaPool;
 
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount =
-            IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
-        uint256 dollarTokenAmount =
-            IERC20(dollarTokenAddress).balanceOf(address(this));
+        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
+            address(this)
+        );
+        uint256 dollarTokenAmount = IERC20(dollarTokenAddress).balanceOf(
+            address(this)
+        );
 
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, 0);
-        IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, crv3PoolTokenAmount);
+        IERC20(_crv3PoolTokenAddress).safeApprove(
+            metaPool,
+            crv3PoolTokenAmount
+        );
 
         IERC20(dollarTokenAddress).safeApprove(metaPool, 0);
         IERC20(dollarTokenAddress).safeApprove(metaPool, dollarTokenAmount);
 
         // coin at index 0 is Ubiquity Dollar and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == dollarTokenAddress
-                && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            IMetaPool(metaPool).coins(0) == dollarTokenAddress &&
+                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
