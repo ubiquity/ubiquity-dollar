@@ -32,7 +32,7 @@ import UbiquityAlgorithmicDollarManager from "@ubiquity/contracts/out/UbiquityDo
 import UbiquityAlgorithmicDollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
 import UbiquityCredit from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
 import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
-import UBQ from "@ubiquity/contracts/out/UbiquityGovernance.sol/UbiquityGovernance.json";
+import UBQ from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);
