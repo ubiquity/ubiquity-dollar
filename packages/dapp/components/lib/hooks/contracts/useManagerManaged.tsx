@@ -84,7 +84,7 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
     dollarToken: getUbiquityAlgorithmicDollarContract(dollarToken, provider),
     dollarMetapool: getIMetaPoolContract(dollar3poolMarket, provider),
     dollarTwapOracle: getTWAPOracleContract(twapOracle, provider),
-    dollarMintingCalculator: getDollarMintCalculatorContract(dollarMintCalc, provider),
+    dollarMintCalculator: getDollarMintCalculatorContract(dollarMintCalc, provider),
     creditToken: getUbiquityCreditContract(creditToken, provider),
     governanceToken: getUbqContract(governanceToken, provider),
     _3crvToken: getERC20Contract(_3crvToken, provider),

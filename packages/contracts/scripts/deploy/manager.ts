@@ -58,7 +58,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: stakingShareFunc,
     options: stakingShareOptions,
   },
-  ubiquityChef: {
+  UbiquityChef: {
     handler: ubiquityChefFunc,
     options: ubiquityChefOptions,
   },
@@ -70,7 +70,6 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: sushiSwapPoolFunc,
     options: sushiSwapPoolOptions,
   },
-
   CreditNFT: {
     handler: creditNFTFunc,
     options: creditNFTOptions,
