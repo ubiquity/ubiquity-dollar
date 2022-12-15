@@ -37,7 +37,11 @@ abstract contract CollectableDust is ICollectableDust {
         emit ProtocolTokenRemoved(_token);
     }
 
-    function _sendDust(address to, address token, uint256 amount) internal {
+    function _sendDust(
+        address to,
+        address token,
+        uint256 amount
+    ) internal {
         require(
             to != address(0),
             "collectable-dust::cant-send-dust-to-zero-address"
@@ -47,6 +51,7 @@ abstract contract CollectableDust is ICollectableDust {
             "collectable-dust::token-is-part-of-the-protocol"
         );
         if (token == ETH_ADDRESS) {
+            // slither-disable-next-line
             (bool sent, ) = payable(to).call{value: amount}("");
             require(sent, "Failed to transfer Ether");
         } else {
