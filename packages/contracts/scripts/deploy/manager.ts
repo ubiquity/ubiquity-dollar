@@ -58,7 +58,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: stakingShareFunc,
     options: stakingShareOptions,
   },
-  ubiquityChefFunc: {
+  ubiquityChef: {
     handler: ubiquityChefFunc,
     options: ubiquityChefOptions,
   },
@@ -79,7 +79,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: creditNFTManagerFunc,
     options: creditNFTManagerOptions,
   },
-  CreditRedemptionCalculatorFunc: {
+  CreditRedemptionCalculator: {
     handler: creditRedemptionCalculatorFunc,
     options: creditRedemptionCalculatorOptions,
   },
@@ -91,7 +91,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: dollarMintCalculatorFunc,
     options: dollarMintCalculatorOptions,
   },
-  DollarMintExcessFunc: {
+  DollarMintExcess: {
     handler: dollarMintExcessFunc,
     options: dollarMintExcessOptions,
   },
@@ -99,7 +99,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: twapOracleDollar3poolFunc,
     options: twapOracleDollar3poolOptions,
   },
-  UbiquityCreditTokenFunc: {
+  UbiquityCreditTokenF: {
     handler: ubiquityCreditTokenFunc,
     options: ubiquityCreditTokenOptions,
   },
@@ -111,7 +111,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: ubiquityDollarTokenFunc,
     options: ubiquityDollarTokenOptions,
   },
-  UbiquityGovernanceTokenFunc: {
+  UbiquityGovernanceToken: {
     handler: ubiquityGovernanceTokenFunc,
     options: ubiquityGovernanceTokenOptions,
   },
