@@ -7,8 +7,8 @@ import {
   getChainlinkPriceFeedContract,
   getERC20Contract,
   getSimpleBondContract,
-  getUbiquiStickContract,
-  getUbiquiStickSaleContract,
+  getUbiquityStickContract,
+  getUbiquityStickSaleContract,
 } from "@/components/utils/contracts";
 import { Contract } from "ethers";
 
