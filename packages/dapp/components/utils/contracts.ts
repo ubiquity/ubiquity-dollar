@@ -67,7 +67,7 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
   return getContract(SimpleBond.abi, address, provider);
 };
 
-export const getUbiquitystickContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquityStick.abi, address, provider);
 };
 
