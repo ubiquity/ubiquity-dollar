@@ -51,7 +51,7 @@ abstract contract CollectableDust is ICollectableDust {
             "collectable-dust::token-is-part-of-the-protocol"
         );
         if (token == ETH_ADDRESS) {
-            // slither-disable-next-line
+            // slither-disable-next-line low-level-calls
             (bool sent, ) = payable(to).call{value: amount}("");
             require(sent, "Failed to transfer Ether");
         } else {
