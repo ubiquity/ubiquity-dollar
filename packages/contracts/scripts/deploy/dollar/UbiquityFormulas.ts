@@ -11,9 +11,13 @@ export const optionDefinitions: OptionDefinition[] = [
 const func = async (params: DeployFuncParam) => {
   const contractInstance = "src/dollar/UbiquityFormulas.sol:UbiquityFormulas";
   const { env, args } = params;
-  const manager = args.manager;
-
-  const { stderr } = await create({ ...env, name: args.task, network: args.network, contractInstance, constructorArguments: [] });
+  const { result, stderr } = await create({
+    ...env,
+    name: args.task,
+    network: args.network,
+    contractInstance,
+    constructorArguments: [],
+  });
   return !stderr ? "succeeded" : "failed";
 };
 export default func;
