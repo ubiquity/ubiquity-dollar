@@ -15,8 +15,9 @@ contract ERC1155UbiquityTest is LocalTestHelper {
 
     event Burning(address indexed _burned, uint256 _amount);
 
-    function setUp() public {
-        dollar_manager_addr = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollar_manager_addr = address(manager);
         vm.prank(admin);
         token_addr = address(
             new ERC1155Ubiquity(dollar_manager_addr, "https://ipfs.io/ipfs/mock")

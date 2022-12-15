@@ -10,19 +10,20 @@ contract CreditNFTTest is LocalTestHelper {
     address dollarManagerAddress;
     address creditNFTAddress;
 
-    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
+    event MintedCreditNFTs(address recipient, uint256 expiryBlock, uint256 amount);
 
-    event BurnedCreditNFT(
+    event BurnedCreditNFTs(
         address creditNFTHolder, uint256 expiryBlock, uint256 amount
     );
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         creditNFTAddress = address(new CreditNFT(dollarManagerAddress));
     }
 
     function test_mintCreditNFTRevertsIfNotCreditNFTManager() public {
-        vm.expectRevert("Caller is not a Credit NFT manager");
+        vm.expectRevert("Caller is not a creditNFT manager");
         CreditNFT(creditNFTAddress).mintCreditNFT(address(0x123), 1, 100);
     }
 
@@ -35,7 +36,7 @@ contract CreditNFTTest is LocalTestHelper {
             CreditNFT(creditNFTAddress).balanceOf(receiver, expiryBlockNumber);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
-        emit MintedCreditNFT(receiver, expiryBlockNumber, 1);
+        emit MintedCreditNFTs(receiver, expiryBlockNumber, 1);
         CreditNFT(creditNFTAddress).mintCreditNFT(
             receiver, mintAmount, expiryBlockNumber
         );
@@ -49,7 +50,7 @@ contract CreditNFTTest is LocalTestHelper {
     }
 
     function test_burnCreditNFTRevertsIfNotCreditNFTManager() public {
-        vm.expectRevert("Caller is not a Credit NFT manager");
+        vm.expectRevert("Caller is not a creditNFT manager");
         CreditNFT(creditNFTAddress).burnCreditNFT(address(0x123), 1, 100);
     }
 
@@ -69,7 +70,7 @@ contract CreditNFTTest is LocalTestHelper {
         CreditNFT(creditNFTAddress).setApprovalForAll(admin, true);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
-        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, 1);
+        emit BurnedCreditNFTs(creditNFTOwner, expiryBlockNumber, 1);
         CreditNFT(creditNFTAddress).burnCreditNFT(
             creditNFTOwner, burnAmount, expiryBlockNumber
         );

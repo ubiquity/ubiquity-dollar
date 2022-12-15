@@ -13,8 +13,9 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
     address dollarManagerAddress;
     address creditNFTCalculatorAddress;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         creditNFTCalculatorAddress =
             address(new CreditNFTRedemptionCalculator(dollarManagerAddress));
     }
@@ -29,7 +30,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
                 .creditNFTAddress()
         ).setTotalOutstandingDebt(totalSupply + 1);
 
-        vm.expectRevert("CreditNFT to Dollar: DEBT_TOO_HIGH");
+        vm.expectRevert("CreditNFT to dollar: DEBT_TOO_HIGH");
         CreditNFTRedemptionCalculator(creditNFTCalculatorAddress)
             .getCreditNFTAmount(0);
     }

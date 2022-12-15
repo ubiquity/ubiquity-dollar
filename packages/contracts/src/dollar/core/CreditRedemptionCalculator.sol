@@ -41,7 +41,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     }
 
     // dollarsToBurn * (blockHeight_debt/blockHeight_burn) * _coef
-    function getUARAmount(uint256 dollarsToBurn, uint256 blockHeightDebt)
+    function getCreditAmount(uint256 dollarsToBurn, uint256 blockHeightDebt)
         external
         view
         override
@@ -50,7 +50,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         require(
             CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt()
                 < IERC20(manager.dollarTokenAddress()).totalSupply(),
-            "uAR to Dollar: DEBT_TOO_HIGH"
+            "Credit to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 wad = uint256(1e18).fromUInt();
         bytes16 curBlock = uint256(block.number).fromUInt();

@@ -33,57 +33,65 @@ abstract contract LocalTestHelper is Test {
     address public admin = address(0x123abc);
     address public treasuryAddress = address(0x111222333);
 
-    function helpers_deployUbiquityDollarManager()
+    UbiquityDollarManager manager;
+    MockCreditNFT creditNFT;
+    MockDollarToken dollarToken;
+    MockTWAPOracleDollar3pool twapOracle;
+    UbiquityGovernanceToken governanceToken;
+    MockCreditNFTRedemptionCalculator creditNFTRedemptionCalculator;
+    MockCreditToken creditToken;
+    CreditRedemptionCalculator creditRedemptionCalculator;
+    DollarMintCalculator dollarMintCalculator;
+
+    function setUp()
         public
-        returns (address)
+        virtual 
     {
-        UbiquityDollarManager _manager =
+        manager =
             new UbiquityDollarManager(admin);
 
         vm.startPrank(admin);
         // deploy credit NFT token
-        MockCreditNFT _creditNFT = new MockCreditNFT(100);
-        _manager.setCreditNFTAddress(address(_creditNFT));
+        creditNFT = new MockCreditNFT(100);
+        manager.setCreditNFTAddress(address(creditNFT));
 
         // deploy dollar token
-        MockDollarToken _dollarToken = new MockDollarToken(10000e18);
-        _manager.setDollarTokenAddress(address(_dollarToken));
+        dollarToken = new MockDollarToken(10000e18);
+        manager.setDollarTokenAddress(address(dollarToken));
 
         // deploy twapPrice oracle
-        MockTWAPOracleDollar3pool _twapOracle =
-        new MockTWAPOracleDollar3pool(address(0x100), address(_dollarToken), address(0x101), 100, 100);
-        _manager.setTwapOracleAddress(address(_twapOracle));
+        twapOracle =
+        new MockTWAPOracleDollar3pool(address(0x100), address(dollarToken), address(0x101), 100, 100);
+        manager.setTwapOracleAddress(address(twapOracle));
 
         // deploy governance token
-        UbiquityGovernanceToken _governanceToken = new UbiquityGovernanceToken(address(_manager));
-        _manager.setGovernanceTokenAddress(address(_governanceToken));
+        governanceToken = new UbiquityGovernanceToken(address(manager));
+        manager.setGovernanceTokenAddress(address(governanceToken));
 
         // deploy CreditNFTRedemptionCalculator
-        MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator =
+        creditNFTRedemptionCalculator =
             new MockCreditNFTRedemptionCalculator();
-        _manager.setCreditNFTCalculatorAddress(
-            address(_creditNFTRedemptionCalculator)
+        manager.setCreditNFTCalculatorAddress(
+            address(creditNFTRedemptionCalculator)
         );
 
         // deploy credit token
-        MockCreditToken _creditToken = new MockCreditToken(0);
-        _manager.setCreditTokenAddress(address(_creditToken));
+        creditToken = new MockCreditToken(0);
+        manager.setCreditTokenAddress(address(creditToken));
 
         // deploy CreditRedemptionCalculator
-        CreditRedemptionCalculator _creditRedemptionCalculator =
-            new CreditRedemptionCalculator(address(_manager));
-        _manager.setCreditCalculatorAddress(address(_creditRedemptionCalculator));
+        creditRedemptionCalculator =
+            new CreditRedemptionCalculator(address(manager));
+        manager.setCreditCalculatorAddress(address(creditRedemptionCalculator));
 
         // deploy DollarMintCalculator
-        DollarMintCalculator _dollarMintCalculator =
-            new DollarMintCalculator(address(_manager));
-        _manager.setDollarMintCalculatorAddress(address(_dollarMintCalculator));
+        dollarMintCalculator =
+            new DollarMintCalculator(address(manager));
+        manager.setDollarMintCalculatorAddress(address(dollarMintCalculator));
 
         // set treasury address
-        _manager.setTreasuryAddress(treasuryAddress);
+        manager.setTreasuryAddress(treasuryAddress);
 
         vm.stopPrank();
-
-        return address(_manager);
     }
 }

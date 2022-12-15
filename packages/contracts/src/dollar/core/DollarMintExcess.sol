@@ -136,7 +136,7 @@ contract DollarMintExcess is IDollarMintExcess {
         // deposit liquidity
         uint256 res = IMetaPool(manager.stableSwapMetaPoolAddress())
             .add_liquidity(
-            [0, amount3CRVReceived], 0, manager.bondingContractAddress()
+            [0, amount3CRVReceived], 0, manager.stakingContractAddress()
         );
         // update TWAP price
         return res;

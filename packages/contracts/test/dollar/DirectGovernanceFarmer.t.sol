@@ -6,8 +6,8 @@ import "../../src/dollar/mocks/MockERC20.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract DirectGovernanceFarmerHarness is DirectGovernanceFarmer {
-    constructor(address _manager, address base3Pool, address depositZap) 
-        DirectGovernanceFarmer(_manager, base3Pool, depositZap)
+    constructor(address manager, address base3Pool, address depositZap) 
+        DirectGovernanceFarmer(manager, base3Pool, depositZap)
     {}
 
     function exposed_isIdIncluded(uint256[] memory idList, uint256 id) external pure returns (bool) {
@@ -29,8 +29,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     address depositZapAddress = address(0x4);
     address base3PoolAddress = address(0x5);
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         // deploy mocked tokens
         token0 = new MockERC20('DAI', 'DAI', 18);
         token1 = new MockERC20('USDC', 'USDC', 6);

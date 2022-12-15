@@ -18,8 +18,9 @@ contract DollarMintExcessTest is LocalTestHelper {
     address excessDollarsDistributorAddress;
     address _sushiSwapRouter = 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
             .twapOracleAddress();
         dollarAddress = UbiquityDollarManager(dollarManagerAddress)

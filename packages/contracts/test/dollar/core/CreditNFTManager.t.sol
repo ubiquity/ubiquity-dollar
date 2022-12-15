@@ -28,8 +28,9 @@ contract CreditNFTManagerTest is LocalTestHelper {
     address creditTokenAddress;
     address dollarMintCalculatorAddress;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
 
         creditNFTManagerAddress = address(
             new CreditNFTManager(dollarManagerAddress, creditNFTLengthBlocks)
@@ -200,7 +201,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(dollarManagerAddress).grantRole(
-            keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"), creditNFTManagerAddress
+            keccak256("UBQ_MINTER_ROLE"), creditNFTManagerAddress
         );
         vm.stopPrank();
         vm.roll(1000);

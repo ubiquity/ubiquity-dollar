@@ -36,7 +36,6 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 lastRewardBlock; // Last block number that governances distribution occurs.
         uint256 accGovernancePerShare; // Accumulated governances per share, times 1e12. See below.
     }
-
     uint256 private _totalShares;
 
     // Ubiquity Manager
@@ -72,7 +71,7 @@ contract UbiquityChef is ReentrancyGuard {
     modifier onlyTokenManager() {
         require(
             manager.hasRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), msg.sender),
-            "MasterChef: not GOVERNANCE manager"
+            "UbiquityChef: not GOVERNANCE manager"
         );
         _;
     }
@@ -80,7 +79,7 @@ contract UbiquityChef is ReentrancyGuard {
     modifier onlyStakingContract() {
         require(
             msg.sender == manager.stakingContractAddress(),
-            "MasterChef: not Staking Contract"
+            "UbiquityChef: not Staking Contract"
         );
         _;
     }
@@ -132,7 +131,7 @@ contract UbiquityChef is ReentrancyGuard {
             );
     }
 
-    // Deposit LP tokens to MasterChef for governance allocation.
+    // Deposit LP tokens to UbiquityChef for governance allocation.
     function deposit(address to, uint256 _amount, uint256 _stakingShareID)
         external
         nonReentrant
@@ -141,7 +140,7 @@ contract UbiquityChef is ReentrancyGuard {
         _deposit(to, _amount, _stakingShareID);
     }
 
-    // Withdraw LP tokens from MasterChef.
+    // Withdraw LP tokens from UbiquityChef.
     function withdraw(address to, uint256 _amount, uint256 _stakingShareID)
         external
         nonReentrant
@@ -161,7 +160,7 @@ contract UbiquityChef is ReentrancyGuard {
         emit Withdraw(to, _amount, _stakingShareID);
     }
 
-    /// @dev get pending governance rewards from MasterChef.
+    /// @dev get pending governance rewards from UbiquityChef.
     /// @return amount of pending rewards transferred to msg.sender
     /// @notice only send pending rewards
     function getRewards(uint256 StakingShareID) external returns (uint256) {
@@ -217,7 +216,7 @@ contract UbiquityChef is ReentrancyGuard {
         return _totalShares;
     }
 
-    // _Deposit LP tokens to MasterChef for governance allocation.
+    // _Deposit LP tokens to UbiquityChef for governance allocation.
     function _deposit(address to, uint256 _amount, uint256 _stakingShareID)
         internal
     {

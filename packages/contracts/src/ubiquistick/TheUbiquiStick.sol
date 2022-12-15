@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "operator-filter-registry/DefaultOperatorFilterer.sol";
+
 
 // With this "The UbiquiStick" NFT contract you can :
-// - get all ERC721 functionnality https://eips.ethereum.org/EIPS/eip-721
-//   - including check that someone as a NFT of the collection with « balanceOf »
-//   - including check who is TokenID owner with « ownerOf »
+// - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
+//   - including check that someone as a NFT of the collection with « balanceOf »
+//   - including check who is TokenID owner with « ownerOf »
 //   - including optional ERC721Metadata
 //     but without metadata JSON schema
 //     with 3 types of NFTs : standard, gold and invisible, each one having same metadata
@@ -24,7 +26,8 @@ contract TheUbiquiStick is
     ERC721,
     ERC721Burnable,
     ERC721Enumerable,
-    Ownable
+    Ownable,
+    DefaultOperatorFilterer
 {
     uint256 public tokenIdNext = 1;
 
@@ -118,7 +121,6 @@ contract TheUbiquiStick is
 
     function _beforeConsecutiveTokenTransfer(address, address, uint256, uint96)
         internal
-        pure
         override (ERC721, ERC721Enumerable)
     {
         revert("ERC721Enumerable: consecutive transfers not supported");
@@ -132,4 +134,47 @@ contract TheUbiquiStick is
     {
         return super.supportsInterface(interfaceId);
     }
+
+     function setApprovalForAll(address operator, bool approved)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperatorApproval(operator)
+    {
+        super.setApprovalForAll(operator, approved);
+    }
+
+    function approve(address operator, uint256 tokenId)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperatorApproval(operator)
+    {
+        super.approve(operator, tokenId);
+    }
+
+    function transferFrom(address from, address to, uint256 tokenId)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperator(from)
+    {
+        super.transferFrom(from, to, tokenId);
+    }
+
+    function safeTransferFrom(address from, address to, uint256 tokenId)
+        public
+        override (ERC721, IERC721)
+        onlyAllowedOperator(from)
+    {
+        super.safeTransferFrom(from, to, tokenId);
+    }
+
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId,
+        bytes memory data
+    ) public override (ERC721, IERC721) onlyAllowedOperator(from) {
+        super.safeTransferFrom(from, to, tokenId, data);
+    }
+
+
 }

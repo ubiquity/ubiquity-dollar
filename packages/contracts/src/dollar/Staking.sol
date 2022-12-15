@@ -54,7 +54,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 lockupPeriod,
         uint256 endBlock
     );
-    event RemoveLiquidityFromShare(
+    event RemoveLiquidityFromStake(
         address indexed user,
         uint256 indexed id,
         uint256 lpAmount,
@@ -63,14 +63,14 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 stakingShareAmount
     );
 
-    event AddLiquidityFromShare(
+    event AddLiquidityFromStake(
         address indexed user,
         uint256 indexed id,
         uint256 lpAmount,
         uint256 stakingShareAmount
     );
 
-    event ShareingDiscountMultiplierUpdated(uint256 stakingDiscountMultiplier);
+    event StakingDiscountMultiplierUpdated(uint256 stakingDiscountMultiplier);
     event BlockCountInAWeekUpdated(uint256 blockCountInAWeek);
 
     event Migrated(
@@ -81,7 +81,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 lockupPeriod
     );
 
-    modifier onlyShareingManager() {
+    modifier onlyStakingManager() {
         require(
             manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
             "not manager"
@@ -168,7 +168,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     ///      This will have the immediate effect of pushing the uAD price HIGHER
     /// @param amount of LP token to be removed for uAD
     /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
-    function uADPriceReset(uint256 amount) external onlyShareingManager {
+    function dollarPriceReset(uint256 amount) external onlyStakingManager {
         IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
         // remove one coin
         uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(amount, 0, 0);
@@ -186,7 +186,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     ///      This will have the immediate effect of pushing the uAD price LOWER
     /// @param amount of LP token to be removed for 3CRV tokens
     /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
-    function crvPriceReset(uint256 amount) external onlyShareingManager {
+    function crvPriceReset(uint256 amount) external onlyStakingManager {
         IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
         // remove one coin
         uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(amount, 1, 0);
@@ -204,7 +204,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     function setStakingFormulasAddress(address stakingFormulasAddress_)
         external
-        onlyShareingManager
+        onlyStakingManager
     {
         stakingFormulasAddress = stakingFormulasAddress_;
     }
@@ -213,7 +213,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     function addProtocolToken(address _token)
         external
         override
-        onlyShareingManager
+        onlyStakingManager
     {
         _addProtocolToken(_token);
     }
@@ -221,7 +221,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     function removeProtocolToken(address _token)
         external
         override
-        onlyShareingManager
+        onlyStakingManager
     {
         _removeProtocolToken(_token);
     }
@@ -229,22 +229,22 @@ contract Staking is IStaking, CollectableDust, Pausable {
     function sendDust(address _to, address _token, uint256 _amount)
         external
         override
-        onlyShareingManager
+        onlyStakingManager
     {
         _sendDust(_to, _token, _amount);
     }
 
-    function setShareingDiscountMultiplier(uint256 _stakingDiscountMultiplier)
+    function setStakingDiscountMultiplier(uint256 _stakingDiscountMultiplier)
         external
-        onlyShareingManager
+        onlyStakingManager
     {
         stakingDiscountMultiplier = _stakingDiscountMultiplier;
-        emit ShareingDiscountMultiplierUpdated(_stakingDiscountMultiplier);
+        emit StakingDiscountMultiplierUpdated(_stakingDiscountMultiplier);
     }
 
     function setBlockCountInAWeek(uint256 _blockCountInAWeek)
         external
-        onlyShareingManager
+        onlyStakingManager
     {
         blockCountInAWeek = _blockCountInAWeek;
         emit BlockCountInAWeekUpdated(_blockCountInAWeek);
@@ -261,7 +261,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     {
         require(
             1 <= lockupPeriod && lockupPeriod <= 208,
-            "Shareing: duration must be between 1 and 208 weeks"
+            "Staking: duration must be between 1 and 208 weeks"
         );
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
 
@@ -346,7 +346,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
             msg.sender, sharesAmount, id
         );
 
-        emit AddLiquidityFromShare(msg.sender, id, stake.lpAmount, sharesAmount);
+        emit AddLiquidityFromStake(msg.sender, id, stake.lpAmount, sharesAmount);
     }
 
     /// @dev Remove an amount of uAD-3CRV LP tokens
@@ -359,7 +359,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     {
         (uint256[2] memory stakeInfo, StakingShare.Stake memory stake) =
             _checkForLiquidity(_id);
-        require(stake.lpAmount >= _amount, "Shareing: amount too big");
+        require(stake.lpAmount >= _amount, "Staking: amount too big");
         // we should decrease the UBQ rewards proportionally to the LP removed
         // sharesToRemove = (staking shares * _amount )  / stake.lpAmount ;
         uint256 sharesToRemove = StakingFormulas(this.stakingFormulasAddress())
@@ -411,7 +411,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         // lastly redeem lp tokens
         metapool.safeTransfer(msg.sender, correctedAmount + pendingLpReward);
-        emit RemoveLiquidityFromShare(
+        emit RemoveLiquidityFromStake(
             msg.sender,
             _id,
             _amount,
@@ -569,7 +569,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     ) internal returns (uint256) {
         uint256 _currentShareValue = currentShareValue();
         require(
-            _currentShareValue != 0, "Shareing: share value should not be null"
+            _currentShareValue != 0, "Staking: share value should not be null"
         );
         // set the lp rewards debts so that this staking share only get lp rewards from this day
         uint256 lpRewardDebt = (shares * accLpRewardPerShare) / 1e12;
@@ -587,13 +587,13 @@ contract Staking is IStaking, CollectableDust, Pausable {
             stakingShare.balanceOf(
                 msg.sender, _id
             ) == 1,
-            "Shareing: caller is not owner"
+            "Staking: caller is not owner"
         );
         
-        StakingShare.Stake memory stake = stakingShare.getStake(_id);
+        stake = stakingShare.getStake(_id);
         require(
             block.number > stake.endBlock,
-            "Shareing: Redeem not allowed before staking time"
+            "Staking: Redeem not allowed before staking time"
         );
 
         stakeInfo = IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id);
