@@ -99,7 +99,7 @@ export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options
     handler: twapOracleDollar3poolFunc,
     options: twapOracleDollar3poolOptions,
   },
-  UbiquityCreditTokenF: {
+  UbiquityCreditToken: {
     handler: ubiquityCreditTokenFunc,
     options: ubiquityCreditTokenOptions,
   },
