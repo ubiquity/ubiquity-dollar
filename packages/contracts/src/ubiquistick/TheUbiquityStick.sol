@@ -22,7 +22,7 @@ import "operator-filter-registry/DefaultOperatorFilterer.sol";
 // - allow one owner (deployer at start) to change tokenURIs (setTokenURI), and change minter (setMinter) and transfer it's owner role to someone else
 // - allow one minter to mint NFT (safeMint)
 
-contract TheUbiquiStick is
+contract TheUbiquityStick is
     ERC721,
     ERC721Burnable,
     ERC721Enumerable,
