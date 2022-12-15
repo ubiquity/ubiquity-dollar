@@ -32,7 +32,8 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setSushiSwapPoolAddress(address _sushiSwapPoolAddress) external;
 
-    function setCreditCalculatorAddress(address _creditCalculatorAddress) external;
+    function setCreditCalculatorAddress(address _creditCalculatorAddress)
+        external;
 
     function setCreditNFTCalculatorAddress(address _creditNFTCalculatorAddress)
         external;
@@ -104,5 +105,4 @@ interface IUbiquityDollarManager is IAccessControl {
     function dollarTokenAddress() external view returns (address);
 
     function governanceTokenAddress() external view returns (address);
-
 }

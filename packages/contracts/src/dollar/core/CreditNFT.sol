@@ -20,7 +20,9 @@ contract CreditNFT is ERC1155Ubiquity {
     //ordered list of coupon expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
-    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
+    event MintedCreditNFT(
+        address recipient, uint256 expiryBlock, uint256 amount
+    );
 
     event BurnedCreditNFT(
         address creditNFTHolder, uint256 expiryBlock, uint256 amount

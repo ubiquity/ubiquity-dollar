@@ -1,0 +1,26 @@
+name: Calculate Bounty Based on Issue Labels
+on:
+  issues:
+    types:
+      - labeled
+      - unlabeled
+
+jobs:
+  calculate_bounty_job:
+    # ignore events invoked by bots
+    if: >-
+      github.event.pull_request.payload.sender.type != 'Bot'
+    runs-on: ubuntu-latest
+    name: Calculate Bounty with UbiquiBot
+    steps:
+      - name: Get GitHub App token
+        uses: tibdex/github-app-token@v1.7.0
+        id: get_installation_token
+        with:
+          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
+          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+
+      - name: Ubiquity Bounty Bot
+        uses: ubiquity/bounty-bot@v0.0.1-beta
+        with: 
+          GITHUB_TOKEN: ${{ steps.get_installation_token.outputs.token }}
