@@ -37,18 +37,23 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     address dollarManagerAddress;
     address depositZapAddress = address(0x4);
     address base3PoolAddress = address(0x5);
-    event Deposit(
+    event DepositSingle(
         address indexed sender,
         address token,
         uint256 amount,
         uint256 durationWeeks,
         uint256 stakingShareId
     );
-    event DepositMultiple(
+    event DepositMulti(
         address indexed sender,
         uint256[4] amount,
         uint256 durationWeeks,
         uint256 stakingShareId
+    );
+    event WithdrawAll(
+        address indexed sender,
+        uint256 stakingShareId,
+        uint256[4] amounts
     );
 
     function setUp() public {
@@ -134,21 +139,21 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.expectRevert(
             "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar"
         );
-        directGovernanceFarmer.deposit(address(0), 1, 1);
+        directGovernanceFarmer.depositSingle(address(0), 1, 1);
     }
 
     function testDeposit_ShouldRevert_IfAmountIsNotPositive() public {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert("amount must be positive vale");
-        directGovernanceFarmer.deposit(address(token0), 0, 1);
+        directGovernanceFarmer.depositSingle(address(token0), 0, 1);
     }
 
     function testDeposit_ShouldRevert_IfDurationIsNotValid() public {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert("duration weeks must be between 1 and 208");
-        directGovernanceFarmer.deposit(address(token0), 1, 0);
+        directGovernanceFarmer.depositSingle(address(token0), 1, 0);
     }
 
     function testDeposit_ShouldDepositTokens() public {
@@ -198,9 +203,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         vm.expectEmit(true, true, true, true, address(directGovernanceFarmer));
-        emit Deposit(userAddress, address(token0), uint256(100e18), 1, 1);
+        emit DepositSingle(userAddress, address(token0), uint256(100e18), 1, 1);
         // user deposits 100 DAI for 1 week
-        uint256 stakingShareId = directGovernanceFarmer.deposit(
+        uint256 stakingShareId = directGovernanceFarmer.depositSingle(
             address(token0),
             100e18,
             1
@@ -216,7 +221,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.prank(userAddress);
         vm.expectRevert("amounts==0");
         // uint256[4] calldata amounts = ;
-        directGovernanceFarmer.deposit(
+        directGovernanceFarmer.depositMulti(
             [uint256(0), uint256(0), uint256(0), uint256(0)],
             1
         );
@@ -228,7 +233,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert("duration weeks must be between 1 and 208");
-        directGovernanceFarmer.deposit(
+        directGovernanceFarmer.depositMulti(
             [uint256(1), uint256(0), uint256(0), uint256(0)],
             0
         );
@@ -307,19 +312,156 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         vm.expectEmit(true, true, true, true, address(directGovernanceFarmer));
-        emit DepositMultiple(
+        emit DepositMulti(
             userAddress,
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8,
             12
         );
 
-        // user deposits 100 DAI for 1 week
-        uint256 stakingShareId = directGovernanceFarmer.deposit(
+        // user deposits 100 uAD 99 DAI 98 USDC 97 USDT
+        uint256 stakingShareId = directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8
         );
         assertEq(stakingShareId, 12);
+        assertEq(dollar.balanceOf(userAddress), 0);
+        assertEq(token0.balanceOf(userAddress), 0);
+        assertEq(token1.balanceOf(userAddress), 0);
+        assertEq(token2.balanceOf(userAddress), 0);
+    }
+
+    function testWithdraw__Multiple_ShouldRevert_IfSenderIsNotBondOwner()
+        public
+    {
+        address userAddress = address(0x100);
+        address stakingShareAddress = address(0x102);
+
+        // admin sets staking share addresses
+        vm.prank(admin);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+            stakingShareAddress
+        );
+
+        vm.mockCall(
+            stakingShareAddress,
+            abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
+            abi.encode([0])
+        );
+
+        vm.prank(userAddress);
+        vm.expectRevert("!bond owner");
+        directGovernanceFarmer.withdraw(1);
+    }
+
+    function testWithdraw_Multiple_ShouldWithdraw() public {
+        address userAddress = address(0x100);
+        address stakingAddress = address(0x101);
+        address stakingShareAddress = address(0x102);
+
+        // admin sets staking and staking share addresses
+        vm.startPrank(admin);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+            stakingAddress
+        );
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+            stakingShareAddress
+        );
+        vm.stopPrank();
+
+        vm.startPrank(userAddress);
+
+        // mint 100 uAD to user
+        dollar.mint(userAddress, 100e18);
+        // user allows DirectGovernanceFarmerHarness to spend user's uAD
+        dollar.approve(address(directGovernanceFarmer), 100e18);
+        assertEq(dollar.balanceOf(userAddress), 100e18);
+        // mint 100 DAI to user
+        token0.mint(userAddress, 99e18);
+        // user allows DirectGovernanceFarmerHarness to spend user's DAI
+        token0.approve(address(directGovernanceFarmer), 99e18);
+        assertEq(token0.balanceOf(userAddress), 99e18);
+        // mint 100 USDC to user
+        token1.mint(userAddress, 98e18);
+        // user allows DirectGovernanceFarmerHarness to spend user's USDC
+        token1.approve(address(directGovernanceFarmer), 98e18);
+        assertEq(token1.balanceOf(userAddress), 98e18);
+        // mint 100 USDT to user
+        token2.mint(userAddress, 97e18);
+        // user allows DirectGovernanceFarmerHarness to spend user's USDT
+        token2.approve(address(directGovernanceFarmer), 97e18);
+        assertEq(token2.balanceOf(userAddress), 97e18);
+
+        // prepare mocks for deposit
+        vm.mockCall(
+            depositZapAddress,
+            abi.encodeWithSelector(IDepositZap.add_liquidity.selector),
+            abi.encode(100e18)
+        );
+        vm.mockCall(
+            stakingAddress,
+            abi.encodeWithSelector(IStaking.deposit.selector),
+            abi.encode(1)
+        );
+        vm.mockCall(
+            stakingShareAddress,
+            abi.encodeWithSignature(
+                "safeTransferFrom(address,address,uint256,uint256,bytes)",
+                address(directGovernanceFarmer),
+                userAddress,
+                1,
+                1,
+                "0x"
+            ),
+            ""
+        );
+
+        // user deposits 100 uAD, 99 DAI 98 USDC 97 USDT for 1 week
+        directGovernanceFarmer.depositMulti(
+            [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
+            1
+        );
+
+        // wait 1 week + 1 day
+        vm.warp(block.timestamp + 8 days);
+
+        // prepare mocks for withdraw
+        uint256[] memory stakingShareIds = new uint256[](1);
+        stakingShareIds[0] = 1;
+        vm.mockCall(
+            stakingShareAddress,
+            abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
+            abi.encode(stakingShareIds)
+        );
+
+        IStakingShare.Stake memory stake;
+        stake.lpAmount = 100e18;
+        vm.mockCall(
+            stakingShareAddress,
+            abi.encodeWithSelector(IStakingShare.getStake.selector),
+            abi.encode(stake)
+        );
+
+        vm.mockCall(
+            depositZapAddress,
+            abi.encodeWithSelector(IDepositZap.remove_liquidity.selector),
+            abi.encode([100e18, 99e18, 98e18, 97e18])
+        );
+        vm.expectEmit(true, true, true, true, address(directGovernanceFarmer));
+        emit WithdrawAll(
+            userAddress,
+            1,
+            [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)]
+        );
+        uint256[4] memory tokenAmounts = directGovernanceFarmer.withdraw(1);
+        assertEq(tokenAmounts[0], 100e18);
+        assertEq(tokenAmounts[1], 99e18);
+        assertEq(tokenAmounts[2], 98e18);
+        assertEq(tokenAmounts[3], 97e18);
+        assertEq(dollar.balanceOf(userAddress), 100e18);
+        assertEq(token0.balanceOf(userAddress), 99e18);
+        assertEq(token1.balanceOf(userAddress), 98e18);
+        assertEq(token2.balanceOf(userAddress), 97e18);
     }
 
     // END Multiple
@@ -401,7 +543,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         // user deposits 100 DAI for 1 week
-        directGovernanceFarmer.deposit(address(token0), 100e18, 1);
+        directGovernanceFarmer.depositSingle(address(token0), 100e18, 1);
 
         // wait 1 week + 1 day
         vm.warp(block.timestamp + 8 days);
