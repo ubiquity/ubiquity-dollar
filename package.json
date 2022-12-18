@@ -13,6 +13,7 @@
     "@commitlint/config-conventional": "^17.3.0",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
+    "cspell": "^6.17.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -38,7 +39,7 @@
     "*.{js,jsx,ts,tsx,json,sol}": [
       "prettier --write",
       "eslint --fix",
-      "cspell"
+      "cspell --no-must-find-files"
     ]
   },
   "packageManager": "yarn@3.2.3"
