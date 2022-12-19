@@ -7,7 +7,7 @@ export default function BuildInfo() {
   return (
     <div id="BuildInfo">
       <a href={`https://github.com/ubiquity/ubiquity-dollar/commit/${process.env.GIT_COMMIT_REF}`} target="_blank">
-        {process.env.GIT_COMMIT_REF}
+        Build {process.env.GIT_COMMIT_REF}
       </a>
     </div>
   );
