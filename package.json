@@ -25,7 +25,7 @@
     "yarn-audit-fix": "^9.3.7"
   },
   "scripts": {
-    "audit": "yarn workspaces foreach run improved-yarn-audit --ignore-dev-deps",
+    "audit": "yarn workspaces foreach run improved-yarn-audit",
     "build:all": "yarn workspaces foreach run build",
     "build:dapp": "yarn workspace @ubiquity/dapp run build",
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
