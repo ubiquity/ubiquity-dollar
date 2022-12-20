@@ -1,4 +1,4 @@
-name: Yarn Audit
+name: Install and run Yarn Audit
 
 on:
   pull_request:
@@ -23,11 +23,8 @@ jobs:
       - name: Install Yarn
         run: yarn install
 
-      - name: Install Improved Yarn Audit Package
-        run: yarn add improved-yarn-audit
+      - name: Install Yarn Audit Package
+        run: yarn add yarn-audit-fix -D
 
-      - name: Audit 
-        run: yarn workspaces foreach run improved-yarn-audit \
-              --ignore-dev-deps \
-              --min-severity moderate \
-              --fail-on-missing-exclusions
+      - name: Audit and Attempt Fix
+        run: yarn run yarn-audit-fix
