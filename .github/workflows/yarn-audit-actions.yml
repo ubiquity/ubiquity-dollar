@@ -1,10 +1,11 @@
 name: Yarn Audit
 
 on:
-  workflow_run:
-    workflows: ["Receive Workflow and Deploy"]
-    types:
-      - completed
+  pull_request:
+  push:
+  create:
+    tag:
+      - "v*"
 
 jobs:
   build:
