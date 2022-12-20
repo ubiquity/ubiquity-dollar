@@ -23,6 +23,12 @@ const DollarPrice = () => {
           <span>TWAP</span>
         </div>
       </Tooltip>
+      <div style={{ margin: "12px auto 0", fontSize: "12px", opacity: 0.5, backgroundColor: "#ffffff10", padding: "8px 16px", borderRadius: "4px" }}>
+        <aside>
+          ⚠️ Notice: we are working on raising liquidity and collateral with our partners at <a href="https://apeswap.finance/">ApeSwap</a> in early 2023.
+          Please standby for a fully collateralized dollar.
+        </aside>
+      </div>
     </div>
   );
 };
