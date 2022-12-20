@@ -7,22 +7,22 @@ on:
       - completed
 
 jobs:
-  yarn-audit-and-fix:
-  runs-on: ubuntu-22.04
-  steps:
-    - uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
 
-    - name: Yarn Audit and Fix
-      uses: pragatheeswarans/yarn-audit-action@v1.0.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        assignee: 'ubiquity-dollar'
-        label: 'audit issues'
-        title: 'Yarn Audit Security Issue'
-        description: 'There are some high priority issues with your packages. Please check them.'
-        paths: |
-          ../
-          ../packages/contracts
-          ../packages/dapp
+      - name: Yarn Audit
+        uses: pragatheeswarans/yarn-audit-action@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          assignee: 'ubiquity-dollar'
+          label: 'audit issues'
+          title: 'Yarn Audit Security Issue'
+          description: 'There are some high priority issues with your packages. Please check them.'
+          paths: |
+            ../
+            ../packages/contracts
+            ../packages/dapp
 
 
