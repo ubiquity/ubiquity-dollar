@@ -21,7 +21,8 @@
     "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "yarn-audit-fix": "^9.3.7"
   },
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
