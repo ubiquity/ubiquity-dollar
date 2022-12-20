@@ -8,23 +8,26 @@ on:
       - "v*"
 
 jobs:
-  build:
+  build-and-audit:
     runs-on: ubuntu-22.04
+
     steps:
-      - name: Fetch Repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3.1.0
 
-      - name: Yarn Audit
-        uses: pragatheeswarans/yarn-audit-action@v1.0.0
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          assignee: 'ubiquity-dollar'
-          label: 'audit issues'
-          title: 'Yarn Audit Security Issue'
-          description: 'There are some high priority issues with your packages. Please check them.'
-          paths: |
-            ../
-            ../packages/contracts
-            ../packages/dapp
+          node-version: "18"
 
+      - name: Install Yarn
+        run: yarn install
 
+      - name: Install Improved Yarn Audit Package
+        run: yarn add improved-yarn-audit
+
+      - name: Audit 
+        run: yarn run improved-yarn-audit \
+              --ignore-dev-deps \
+              --min-severity moderate \
+              --fail-on-missing-exclusions
