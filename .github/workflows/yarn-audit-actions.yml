@@ -1,9 +1,10 @@
 name: Yarn Audit
 
-on: 
-  push: 
-  fork: 
-  pull_requests:
+on:
+  workflow_run:
+    workflows: ["Receive Workflow and Deploy"]
+    types:
+      - completed
 
 jobs:
   yarn-audit-and-fix:
