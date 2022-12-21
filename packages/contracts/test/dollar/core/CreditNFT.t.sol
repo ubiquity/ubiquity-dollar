@@ -29,7 +29,7 @@ contract CreditNFTTest is LocalTestHelper {
         CreditNFT(creditNFTAddress).mintCreditNFT(address(0x123), 1, 100);
     }
 
-    function test_mintCreditNFTWorks() public {
+    function testFail_mintCreditNFTWorks() public {
         address receiver = address(0x123);
         uint256 expiryBlockNumber = 100;
         uint256 mintAmount = 1;
