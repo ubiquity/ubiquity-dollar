@@ -126,4 +126,21 @@ contract DepositStateTest is DepositState {
         uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
         assertEq(ids, ids_);
     }
+
+    function testSetUri() public {
+        string memory stringTest = "{'name':'Bonding Share','description':," 
+        "'Ubiquity Bonding Share V2',"
+        "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
+        vm.prank(admin);
+        stakingShare.setUri(stringTest);
+        assertEq(stakingShare.uri(1), stringTest, 'the uri is not set correctly by the method');
+    }
+
+    function testCannotSetUriFromNonAllowedAddress() public{
+        string memory stringTest ="{'a parsed json':'value'}";
+        vm.expectRevert();
+        vm.prank(fifthAccount);
+        stakingShare.setUri(stringTest);
+    }
 }
+   
