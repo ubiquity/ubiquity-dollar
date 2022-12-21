@@ -106,14 +106,13 @@ contract DepositStateTest is DepositState {
         vm.prank(admin);
         ubiquityChef.withdraw(fourthAccount, amount, fourthID);
         assertLt(preBal, governanceToken.balanceOf(fourthAccount));
-        
     }
 
     function testGetRewards(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         vm.roll(block.number + blocks);
-      
+
         vm.prank(fourthAccount);
         uint256 rewardSent = ubiquityChef.getRewards(1);
         assertLt(preBal, preBal + rewardSent);

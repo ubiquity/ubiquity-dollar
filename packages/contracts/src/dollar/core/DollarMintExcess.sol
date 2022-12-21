@@ -129,8 +129,10 @@ contract DollarMintExcess is IDollarMintExcess {
         IERC20(manager.curve3PoolTokenAddress()).approve(
             manager.stableSwapMetaPoolAddress(), 0
         );
-        IERC20(manager.curve3PoolTokenAddress()).approve(
-            manager.stableSwapMetaPoolAddress(), amount3CRVReceived
+        require(
+            IERC20(manager.curve3PoolTokenAddress()).approve(
+                manager.stableSwapMetaPoolAddress(), amount3CRVReceived
+            )
         );
 
         // deposit liquidity

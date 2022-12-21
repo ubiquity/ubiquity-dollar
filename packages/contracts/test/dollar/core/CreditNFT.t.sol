@@ -10,7 +10,7 @@ contract CreditNFTTest is LocalTestHelper {
     address dollarManagerAddress;
     address creditNFTAddress;
 
-    event MintedCreditNFT(
+    event MintedCreditNFTs(
         address recipient, uint256 expiryBlock, uint256 amount
     );
 

@@ -13,7 +13,7 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
     address twapOracleAddress;
     address metaPoolAddress;
 
-    function setUp() public override{
+    function setUp() public override {
         metaPoolAddress =
             address(new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress));
         twapOracleAddress = address(
@@ -46,5 +46,3 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
         assertEq(amount1Out, 100e18);
     }
 }
-
-        

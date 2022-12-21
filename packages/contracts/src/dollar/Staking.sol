@@ -294,8 +294,13 @@ contract Staking is IStaking, CollectableDust, Pausable {
         );
 
         emit Deposit(
-            msg.sender, _id, _lpsAmount, _sharesAmount, _weeks, _endBlock
-            );
+            msg.sender,
+            _id,
+            _lpsAmount,
+            _sharesAmount,
+            lockupPeriod,
+            _endBlock
+        );
     }
     
 
@@ -338,7 +343,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         _updateLpPerShare();
         stake.lpRewardDebt = (
             IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(id)[0]
-                * accLpRewardPerShare) / 1e12;
+            * accLpRewardPerShare) / 1e12;
 
         StakingShare(manager.stakingShareAddress()).updateStake(
             id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
@@ -376,7 +381,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         //get all its pending LP Rewards
         _updateLpPerShare();
-        uint256 pendingLpReward = lpRewardForShares(stakeInfo[0], stake.lpRewardDebt);
+        uint256 pendingLpReward = lpRewardForShares(
+            stakeInfo[0], 
+            stake.lpRewardDebt
+        );
         lpRewards -= pendingLpReward;
         // update staking shares
         //stake.shares = stake.shares - sharesToRemove;
@@ -400,11 +408,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
             .correctedAmountToWithdraw(
-            StakingShare(manager.stakingShareAddress()).totalLP(),
-            StakingShare(manager.stakingShareAddress()).totalLP(),
-            metapool.balanceOf(address(this)) - lpRewards,
-            _amount
-        );
+                StakingShare(manager.stakingShareAddress()).totalLP(),
+                metapool.balanceOf(address(this)) - lpRewards,
+                _amount 
+            );
 
         
 
@@ -417,9 +424,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
         ) / 1e12;
 
         StakingShare(manager.stakingShareAddress()).updateStake(
-            _id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
-        StakingShare(manager.stakingShareAddress()).updateStake(
-            _id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
+            _id, 
+            stake.lpAmount,
+            stake.lpRewardDebt,
+            stake.endBlock
         );
 
         // lastly redeem lp tokens
@@ -513,9 +521,13 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     /// @dev migrate let a user migrate from V1
     /// @notice user will then be able to migrate
-    function _migrate(address user, uint256 _lpsAmount, uint256 _weeks)
-        internal
-        returns (uint256 _id)
+    function _migrate(
+        address user,
+        uint256 _lpsAmount,
+        uint256 lockupPeriod
+    ) 
+        internal 
+        returns (uint256 _id) 
     {
         require(toMigrateId[user] > 0, "not v1 address");
         require(_lpsAmount > 0, "LP amount is zero");
@@ -558,18 +570,19 @@ contract Staking is IStaking, CollectableDust, Pausable {
             IERC20(manager.stableSwapMetaPoolAddress()).balanceOf(address(this));
         // the excess LP is the current balance
         // minus the total deposited LP + LP that needs to be migrated
-        uint256 totalShares =
-            IUbiquityChef(manager.masterChefAddress()).totalShares();
-        if (lpBalance >= (stakingShare.totalLP() + totalLpToMigrate) && totalShares > 0)
-        {
-            uint256 currentLpRewards =
-                lpBalance - (stakingShare.totalLP() + totalLpToMigrate);
+        uint256 totalShares = IUbiquityChef(manager.masterChefAddress()).totalShares();
+        if (
+            lpBalance >= (stakingShare.totalLP() + totalLpToMigrate) &&
+            totalShares > 0
+        ) {
+            uint256 currentLpRewards = lpBalance -
+                (stakingShare.totalLP() + totalLpToMigrate);
 
             // is there new LP rewards to be distributed ?
             if (currentLpRewards > lpRewards) {
                 // we calculate the new accumulated LP rewards per share
-                accLpRewardPerShare = accLpRewardPerShare
-                    + (((currentLpRewards - lpRewards) * 1e12) / totalShares);
+                accLpRewardPerShare = 
+                    accLpRewardPerShare + (((currentLpRewards - lpRewards) * 1e12) / totalShares);
 
                 // update the staking contract lpRewards
                 lpRewards = currentLpRewards;
