@@ -7,8 +7,8 @@ import {
   getChainlinkPriceFeedContract,
   getERC20Contract,
   getSimpleBondContract,
-  getUbiquiStickContract,
-  getUbiquiStickSaleContract,
+  getUbiquityStickContract,
+  getUbiquityStickSaleContract,
 } from "@/components/utils/contracts";
 import { Contract } from "ethers";
 
@@ -39,8 +39,8 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
       const simpleBond = getSimpleBondContract(SimpleBondAddress, provider);
       const rewardToken = await simpleBond.tokenRewards();
       const contracts = {
-        ubiquiStick: getUbiquiStickContract(UbiquiStickAddress, provider),
-        ubiquiStickSale: getUbiquiStickSaleContract(UbiquiStickSaleAddress, provider),
+        ubiquiStick: getUbiquityStickContract(UbiquiStickAddress, provider),
+        ubiquiStickSale: getUbiquityStickSaleContract(UbiquiStickSaleAddress, provider),
         simpleBond,
         rewardToken: getERC20Contract(rewardToken, provider),
         chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),
@@ -48,7 +48,6 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
 
       setContracts(contracts);
       setTokensContracts(allPools.map((pool) => getERC20Contract(pool.tokenAddress, provider)));
-
       setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === walletAddress.toLowerCase());
       setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === walletAddress.toLowerCase());
     })();

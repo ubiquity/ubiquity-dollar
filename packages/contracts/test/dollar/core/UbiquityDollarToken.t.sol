@@ -20,9 +20,10 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         address indexed _incentivized, address indexed _incentiveContract
     );
 
-    function setUp() public {
+    function setUp() public override {
         incentive_addr = address(new MockIncentive());
-        dollar_manager_address = helpers_deployUbiquityDollarManager();
+        super.setUp();
+        dollar_manager_address = address(manager);
         vm.startPrank(admin);
         dollar_addr = address(new UbiquityDollarToken(dollar_manager_address));
         UbiquityDollarManager(dollar_manager_address).grantRole(

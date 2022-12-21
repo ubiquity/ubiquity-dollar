@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.16;
 
 // FORK from Land DAO -> https://github.com/Land-DAO/nft-contracts/blob/main/contracts/LandSale.sol
 
@@ -8,9 +8,9 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./interfaces/IUbiquiStick.sol";
+import "./interfaces/ITheUbiquiStick.sol";
 
-contract UbiquiStickSale is Ownable, ReentrancyGuard {
+contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     struct Purchase {
@@ -18,8 +18,8 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         uint256 price;
     }
 
-    // UbiquiStick token contract interface
-    IUbiquiStick public tokenContract;
+    // TheUbiquityStick token contract interface
+    ITheUbiquiStick public tokenContract;
 
     // Stores the allowed minting count and token price for each whitelisted address
     mapping(address => Purchase) private _allowances;
@@ -42,7 +42,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
 
     function setTokenContract(address _newTokenContract) external onlyOwner {
         require(_newTokenContract != address(0), "Invalid Address");
-        tokenContract = IUbiquiStick(_newTokenContract);
+        tokenContract = ITheUbiquiStick(_newTokenContract);
     }
 
     function setFundsAddress(address _address) external onlyOwner {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 interface ISushiSwapPool {
     function pairInfo(address tokenA, address tokenB)

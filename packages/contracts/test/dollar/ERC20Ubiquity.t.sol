@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
-import {UbiquityDollarManager} from
-    "../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../src/dollar/ERC20Ubiquity.sol";
+import "../../src/dollar/core/UbiquityDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract ERC20UbiquityHarness is ERC20Ubiquity {
@@ -28,8 +27,9 @@ contract ERC20UbiquityTest is LocalTestHelper {
 
     event Burning(address indexed _burned, uint256 _amount);
 
-    function setUp() public {
-        dollar_manager_addr = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollar_manager_addr = address(manager);
         vm.prank(admin);
         token_addr =
             address(new ERC20Ubiquity(dollar_manager_addr, "Test", "Test"));
@@ -204,7 +204,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         address burner = address(0x2);
         vm.prank(admin);
         UbiquityDollarManager(dollar_manager_addr).grantRole(
-            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"), burner
+            keccak256("UBQ_BURNER_ROLE"), burner
         );
         // admin pauses contract
         vm.prank(admin);
@@ -225,7 +225,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         address burner = address(0x2);
         vm.prank(admin);
         UbiquityDollarManager(dollar_manager_addr).grantRole(
-            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"), burner
+            keccak256("UBQ_BURNER_ROLE"), burner
         );
         // burn 50 tokens for user
         vm.prank(burner);
@@ -245,7 +245,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         vm.startPrank(admin);
         ERC20Ubiquity(token_addr).pause();
         address mockAddress = address(0x1);
-        vm.expectRevert("Pausable: paused");
+        vm.expectRevert("ERC20Pausable: token transfer while paused");
         ERC20Ubiquity(token_addr).mint(mockAddress, 100);
         vm.stopPrank();
     }
@@ -298,8 +298,11 @@ contract ERC20UbiquityTest is LocalTestHelper {
     function testTransfer_ShouldRevert_IfContractIsPaused() public {
         // deploy contract with exposed internal methods
         vm.prank(admin);
-        ERC20UbiquityHarness erc20Ubiquity =
-            new ERC20UbiquityHarness(dollar_manager_addr, "Test", "Test");
+        ERC20UbiquityHarness erc20Ubiquity = new ERC20UbiquityHarness(
+            dollar_manager_addr,
+            "Test",
+            "Test"
+        );
         // admin pauses contract
         vm.prank(admin);
         erc20Ubiquity.pause();
@@ -313,8 +316,11 @@ contract ERC20UbiquityTest is LocalTestHelper {
     function testTransfer_ShouldTransferTokens() public {
         // deploy contract with exposed internal methods
         vm.prank(admin);
-        ERC20UbiquityHarness erc20Ubiquity =
-            new ERC20UbiquityHarness(dollar_manager_addr, "Test", "Test");
+        ERC20UbiquityHarness erc20Ubiquity = new ERC20UbiquityHarness(
+            dollar_manager_addr,
+            "Test",
+            "Test"
+        );
         // mint tokens to admin
         vm.prank(admin);
         erc20Ubiquity.mint(admin, 100);

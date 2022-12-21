@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "../../src/dollar/StakingFormulas.sol";
 import "../../src/dollar/StakingShare.sol";
-import "../../src/dollar/libs/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 import "../helpers/LocalTestHelper.sol";
 
@@ -13,7 +13,7 @@ contract StakingFormulasTest is LocalTestHelper {
 
     StakingFormulas stakingFormulas;
 
-    function setUp() public {
+    function setUp() public override {
         stakingFormulas = new StakingFormulas();
     }
 

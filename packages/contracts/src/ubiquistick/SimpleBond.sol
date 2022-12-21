@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -11,9 +11,9 @@ import "./interfaces/IUAR.sol";
 
 /// @title Simple Bond
 /// @author zapaz.eth
-/// @notice SimpleBond is a simple Bond mechanism, allowing to sell tokens bonded and get rewards tokens
+/// @notice SimpleBond is a simple Bond mecanism, allowing to sell tokens bonded and get rewards tokens
 /// @notice The reward token is fully claimable only after the vesting period
-/// @dev Bond is Ownable, access controlled by onlyOwner
+/// @dev Bond is Ownable, access controled by onlyOwner
 /// @dev Use SafeERC20
 contract SimpleBond is ISimpleBond, Ownable, Pausable {
     using SafeERC20 for IERC20;
@@ -138,7 +138,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         require(rewardsRatio[token] > 0, "Token not allowed");
 
         // @dev throws if not enough allowance or tokens for address
-        // @dev must set token allowance for this smart contract previously
+        // @dev must set token allowance for this smartcontract previously
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
 
         Bond memory bnd;
@@ -159,7 +159,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     }
 
     /// @notice Claim all rewards
-    /// @return claimed Rewards claimed successfully
+    /// @return claimed Rewards claimed succesfully
     function claim() public override whenNotPaused returns (uint256 claimed) {
         for (uint256 index = 0; (index < bonds[msg.sender].length); index += 1)
         {
@@ -168,7 +168,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     }
 
     /// @notice Claim bond rewards
-    /// @return claimed Rewards claimed successfully
+    /// @return claimed Rewards claimed succesfully
     function claimBond(uint256 index)
         public
         override
@@ -192,7 +192,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         emit LogClaim(msg.sender, index, claimed);
     }
 
-    /// @notice Withdraw token from the smart contract, only for owner
+    /// @notice Withdraw token from the smartcontract, only for owner
     /// @param  token token withdraw
     /// @param amount amount withdraw
     function withdraw(address token, uint256 amount)

@@ -1,23 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
-import {CreditNFTManager} from "../../../src/dollar/core/CreditNFTManager.sol";
-import {CreditRedemptionCalculator} from
-    "../../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {DollarMintCalculator} from
-    "../../../src/dollar/core/DollarMintCalculator.sol";
-import {UbiquityCreditToken} from
-    "../../../src/dollar/core/UbiquityCreditToken.sol";
-import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
-import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
-import {TWAPOracleDollar3pool} from
-    "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import "../../../src/dollar/core/UbiquityDollarManager.sol";
+import "../../../src/dollar/core/CreditNFTManager.sol";
+import "../../../src/dollar/core/CreditRedemptionCalculator.sol";
+import "../../../src/dollar/core/DollarMintCalculator.sol";
+import "../../../src/dollar/core/UbiquityCreditToken.sol";
+import "../../../src/dollar/core/DollarMintExcess.sol";
+import "../../../src/dollar/core/CreditNFT.sol";
+import "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
-import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
+import "../../../src/dollar/mocks/MockDollarToken.sol";
+import "../../../src/dollar/mocks/MockCreditNFT.sol";
+import "../../../src/dollar/mocks/MockCreditToken.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
@@ -33,8 +28,9 @@ contract CreditNFTManagerTest is LocalTestHelper {
     address creditTokenAddress;
     address dollarMintCalculatorAddress;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
 
         creditNFTManagerAddress = address(
             new CreditNFTManager(dollarManagerAddress, creditNFTLengthBlocks)
@@ -209,7 +205,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(dollarManagerAddress).grantRole(
-            keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"), creditNFTManagerAddress
+            keccak256("UBQ_MINTER_ROLE"), creditNFTManagerAddress
         );
         vm.stopPrank();
         vm.roll(1000);
@@ -281,11 +277,19 @@ contract CreditNFTManagerTest is LocalTestHelper {
         mockTwapFuncs(2e18);
         mockDollarMintCalcFuncs(1e18);
         address account1 = address(0x123);
-        MockCreditToken(creditTokenAddress).mint(account1, 100e18);
-        vm.prank(account1);
-        uint256 unredeemed = CreditNFTManager(creditNFTManagerAddress)
-            .burnCreditTokensForDollars(10e18);
-        assertEq(unredeemed, 10e18 - 1e18);
+        uint256 preBal = dollarToken.balanceOf(account1);
+        vm.prank(admin);
+        manager.setCreditTokenAddress(creditTokenAddress);
+        deal(creditTokenAddress, account1, 100e18);
+        deal(dollarTokenAddress, address(creditNFTManager), 10000000e18);
+        vm.startPrank(account1);
+        MockCreditToken(creditTokenAddress).approve(
+            creditNFTManagerAddress, 2 ^ (256 - 1)
+        );
+        uint256 unredeemed = creditNFTManager.burnCreditTokensForDollars(10e18);
+        vm.stopPrank();
+        assertEq(unredeemed, 10e18 - 10e18);
+        assertEq(preBal + 10e18, dollarToken.balanceOf(account1));
     }
 
     function test_redeemCreditNFTRevertsIfPriceLowerThan1Ether() public {
@@ -330,8 +334,9 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
 
         // set excess dollar distributor for creditNFTAddress
-        DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(dollarManagerAddress);
+        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
+            dollarManagerAddress
+        );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -358,8 +363,9 @@ contract CreditNFTManagerTest is LocalTestHelper {
         // MockAutoRedeem(creditTokenAddress).mint(creditNFTManagerAddress, 20000e18);
 
         // set excess dollar distributor for creditNFTAddress
-        DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(dollarManagerAddress);
+        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
+            dollarManagerAddress
+        );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -388,8 +394,9 @@ contract CreditNFTManagerTest is LocalTestHelper {
         );
 
         // set excess dollar distributor for debtCouponAddress
-        DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(dollarManagerAddress);
+        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
+            dollarManagerAddress
+        );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),
@@ -406,8 +413,9 @@ contract CreditNFTManagerTest is LocalTestHelper {
     function test_mintClaimableDollars() public {
         mockDollarMintCalcFuncs(50);
         // set excess dollar distributor for creditNFTAddress
-        DollarMintExcess _excessDollarsDistributor =
-            new DollarMintExcess(dollarManagerAddress);
+        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
+            dollarManagerAddress
+        );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
             address(_excessDollarsDistributor),

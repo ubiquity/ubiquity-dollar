@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
@@ -13,7 +13,7 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
     address twapOracleAddress;
     address metaPoolAddress;
 
-    function setUp() public {
+    function setUp() public override {
         metaPoolAddress =
             address(new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress));
         twapOracleAddress = address(

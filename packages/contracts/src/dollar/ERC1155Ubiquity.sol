@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
@@ -24,7 +24,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -32,7 +32,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
             "Governance token: not burner"
         );
         _;
@@ -72,9 +72,11 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
+        uint256 amountMinted;
         for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply += amounts[i];
+            amountMinted += amounts[i];
         }
+        _totalSupply += amountMinted;
         _holderBalances[to].add(ids);
     }
 

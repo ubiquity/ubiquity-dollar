@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 interface IUbiquityFormulas {
     function durationMultiply(uint256 _uLP, uint256 _weeks, uint256 _multiplier)
@@ -7,19 +7,19 @@ interface IUbiquityFormulas {
         pure
         returns (uint256 _shares);
 
-    function bonding(
+    function staking(
         uint256 _shares,
         uint256 _currentShareValue,
         uint256 _targetPrice
     ) external pure returns (uint256 _uBOND);
 
-    function redeemBonds(
+    function redeemShares(
         uint256 _uBOND,
         uint256 _currentShareValue,
         uint256 _targetPrice
     ) external pure returns (uint256 _uLP);
 
-    function bondPrice(
+    function sharePrice(
         uint256 _totalULP,
         uint256 _totalUBOND,
         uint256 _targetPrice
