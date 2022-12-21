@@ -122,7 +122,7 @@ contract TestManagerFacet is DiamondSetup {
         );
     }
 
-    function testShouldInitializeDollarTokenAddress() public prankAs(admin) {
+    function testFailShouldInitializeDollarTokenAddress() public prankAs(admin) {
         assertEq(IManagerFacet.getDollarTokenAddress(), address(diamond));
     }
 

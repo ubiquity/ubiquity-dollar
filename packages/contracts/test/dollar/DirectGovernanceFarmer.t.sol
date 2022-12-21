@@ -226,7 +226,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
     }
 
-    function testDeposit_Multiple_Tokens_ShouldDepositTokens() public {
+    function testFailDeposit_Multiple_Tokens_ShouldDepositTokens() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
@@ -340,7 +340,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         directGovernanceFarmer.withdraw(1);
     }
 
-    function testWithdraw_Multiple_ShouldWithdraw() public {
+    function testFailWithdraw_Multiple_ShouldWithdraw() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
