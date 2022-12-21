@@ -39,6 +39,14 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         );
         _;
     }
+    
+    modifier onlyStakingManager() {
+        require(
+            manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
+            "Governance token: not staking manager"
+        );
+        _;
+    }
 
     modifier onlyBurner() {
         require(
@@ -226,5 +234,13 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) internal virtual override (ERC1155, ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+    
+    /**
+    *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     */
+    
+    function setUri(string memory newUri) external onlyStakingManager{
+        _uri = newUri;
     }
 }
