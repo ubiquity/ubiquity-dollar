@@ -40,7 +40,9 @@ contract DepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
-    function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
+    function testUpdateStake(uint128 amount, uint128 debt, uint256 end)
+        public
+    {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -125,5 +127,25 @@ contract DepositStateTest is DepositState {
         ids.push(1);
         uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
         assertEq(ids, ids_);
+    }
+
+    function testSetUri() public {
+        string memory stringTest = "{'name':'Bonding Share','description':,"
+            "'Ubiquity Bonding Share V2',"
+            "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
+        vm.prank(admin);
+        stakingShare.setUri(stringTest);
+        assertEq(
+            stakingShare.uri(1),
+            stringTest,
+            "the uri is not set correctly by the method"
+        );
+    }
+
+    function testCannotSetUriFromNonAllowedAddress() public {
+        string memory stringTest = "{'a parsed json':'value'}";
+        vm.expectRevert();
+        vm.prank(fifthAccount);
+        stakingShare.setUri(stringTest);
     }
 }
