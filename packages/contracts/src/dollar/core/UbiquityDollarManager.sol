@@ -55,8 +55,7 @@ contract UbiquityDollarManager is AccessControl {
 
     modifier onlyAdmin() {
         require(
-            hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "MGR: Caller is not admin"
+            hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "MGR: Caller is not admin"
         );
         _;
     }
@@ -90,7 +89,10 @@ contract UbiquityDollarManager is AccessControl {
         creditTokenAddress = _creditTokenAddress;
     }
 
-    function setCreditNFTAddress(address _creditNFTAddress) external onlyAdmin {
+    function setCreditNFTAddress(address _creditNFTAddress)
+        external
+        onlyAdmin
+    {
         creditNFTAddress = _creditNFTAddress;
     }
 
@@ -99,8 +101,7 @@ contract UbiquityDollarManager is AccessControl {
         onlyAdmin
     {
         IUbiquityDollarToken(dollarTokenAddress).setIncentiveContract(
-            _account,
-            _incentiveAddress
+            _account, _incentiveAddress
         );
     }
 
@@ -229,27 +230,22 @@ contract UbiquityDollarManager is AccessControl {
         stableSwapMetaPoolAddress = metaPool;
 
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
-            address(this)
-        );
-        uint256 dollarTokenAmount = IERC20(dollarTokenAddress).balanceOf(
-            address(this)
-        );
+        uint256 crv3PoolTokenAmount =
+            IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
+        uint256 dollarTokenAmount =
+            IERC20(dollarTokenAddress).balanceOf(address(this));
 
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, 0);
-        IERC20(_crv3PoolTokenAddress).safeApprove(
-            metaPool,
-            crv3PoolTokenAmount
-        );
+        IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, crv3PoolTokenAmount);
 
         IERC20(dollarTokenAddress).safeApprove(metaPool, 0);
         IERC20(dollarTokenAddress).safeApprove(metaPool, dollarTokenAmount);
 
         // coin at index 0 is Ubiquity Dollar and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == dollarTokenAddress &&
-                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            IMetaPool(metaPool).coins(0) == dollarTokenAddress
+                && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool

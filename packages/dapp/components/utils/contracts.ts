@@ -12,8 +12,8 @@ import USDTTokenABI from "../config/abis/USDTToken.json";
 import YieldProxyABI from "../config/abis/YieldProxy.json";
 
 import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
-import UbiquityStick from "@ubiquity/contracts/out/TheUbiquityStick.sol/TheUbiquityStick.json";
-import UbiquityStickSale from "@ubiquity/contracts/out/TheUbiquityStickSale.sol/TheUbiquityStickSale.json";
+import UbiquiStick from "@ubiquity/contracts/out/TheUbiquityStick.sol/TheUbiquityStick.json";
+import UbiquiStickSale from "@ubiquity/contracts/out/TheUbiquityStickSale.sol/TheUbiquityStickSale.json";
 import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import DebtCouponManager from "@ubiquity/contracts/out/CreditNFTManager.sol/CreditNFTManager.json";
@@ -33,7 +33,6 @@ import UbiquityAlgorithmicDollar from "@ubiquity/contracts/out/UbiquityDollarTok
 import UbiquityCredit from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
 import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UBQ from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
-
 
 const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
   return new ethers.Contract(address, abi, provider);
@@ -68,11 +67,11 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
 };
 
 export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityStick.abi, address, provider);
+  return getContract(UbiquiStick.abi, address, provider);
 };
 
 export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UbiquityStickSale.abi, address, provider);
+  return getContract(UbiquiStickSale.abi, address, provider);
 };
 
 export const getIJarContract = (address: string, provider: ethers.providers.Provider) => {

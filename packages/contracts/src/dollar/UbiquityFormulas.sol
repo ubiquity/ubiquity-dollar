@@ -86,8 +86,8 @@ contract UbiquityFormulas is IUbiquityFormulas {
         bytes16 lp = totalULP.fromUInt();
         bytes16 s = totalUBOND.fromUInt();
         bytes16 t = targetPrice.fromUInt();
-        
-        if(totalUBOND == 0){ 
+
+        if (totalUBOND == 0) {
             priceUBOND = uint256(1).fromUInt().mul(t).toUInt();
         } else {
             priceUBOND = lp.mul(t).div(s).toUInt();

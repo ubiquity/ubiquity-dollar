@@ -13,16 +13,12 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
     uint256 public pricesBlockTimestampLast;
     uint256[2] public priceCumulativeLast;
 
-    constructor(
-        address _pool,
-        address _uADtoken0,
-        address _curve3CRVToken1
-    ) {
+    constructor(address _pool, address _uADtoken0, address _curve3CRVToken1) {
         pool = _pool;
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
-            IMetaPool(_pool).coins(0) == _uADtoken0 &&
-                IMetaPool(_pool).coins(1) == _curve3CRVToken1,
+            IMetaPool(_pool).coins(0) == _uADtoken0
+                && IMetaPool(_pool).coins(1) == _curve3CRVToken1,
             "TWAPOracle: COIN_ORDER_MISMATCH"
         );
 
@@ -45,10 +41,8 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
 
     // calculate average price
     function update() external {
-        (
-            uint256[2] memory priceCumulative,
-            uint256 blockTimestamp
-        ) = _currentCumulativePrices();
+        (uint256[2] memory priceCumulative, uint256 blockTimestamp) =
+            _currentCumulativePrices();
 
         if (blockTimestamp - pricesBlockTimestampLast > 0) {
             // get the balances between now and the last price cumulative snapshot
@@ -61,12 +55,8 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
             // price to exchange amounIn uAD to 3CRV based on TWAP
             uADPrice = IMetaPool(pool).get_dy(0, 1, 1 ether, twapBalances);
             // price to exchange amounIn 3CRV to uAD  based on TWAP
-            curve3CRVAverage = IMetaPool(pool).get_dy(
-                1,
-                0,
-                1 ether,
-                twapBalances
-            );
+            curve3CRVAverage =
+                IMetaPool(pool).get_dy(1, 0, 1 ether, twapBalances);
             // we update the priceCumulative
             priceCumulativeLast = priceCumulative;
             pricesBlockTimestampLast = blockTimestamp;

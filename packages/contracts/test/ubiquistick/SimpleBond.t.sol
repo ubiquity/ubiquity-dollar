@@ -65,7 +65,7 @@ contract ZeroStateTest is ZeroState {
     }
 
     function testSetVestingBlocks(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**256 - 1);
+        blocks = bound(blocks, 1, 2 ** 256 - 1);
         vm.prank(admin);
         bond.setVestingBlocks(blocks);
         assertEq(bond.vestingBlocks(), blocks);
@@ -87,16 +87,16 @@ contract StickerState is ZeroState {
         stick.safeMint(firstAccount);
         stick.safeMint(secondAccount);
         vm.stopPrank();
-        deal(address(bondToken), firstAccount, 2**256 - 1);
-        deal(address(bondToken), secondAccount, 2**256 - 1);
+        deal(address(bondToken), firstAccount, 2 ** 256 - 1);
+        deal(address(bondToken), secondAccount, 2 ** 256 - 1);
     }
 }
 
 contract StickerStateTest is StickerState {
     function testBond(uint256 amount) public {
-        amount = bound(amount, 1, 2**128 - 1);
+        amount = bound(amount, 1, 2 ** 128 - 1);
         vm.startPrank(firstAccount);
-        bondToken.approve(address(bond), 2**256 - 1);
+        bondToken.approve(address(bond), 2 ** 256 - 1);
         vm.expectEmit(true, true, true, true, address(bond));
         emit LogBond(
             firstAccount,
@@ -105,11 +105,11 @@ contract StickerStateTest is StickerState {
             ((50 * amount) / 1e9),
             block.number,
             0
-        );
+            );
         bond.bond(address(bondToken), amount);
         vm.stopPrank();
         assertEq(bond.bondsCount(firstAccount), 1);
-        (, uint256 amount_, , , ) = bond.bonds(firstAccount, 0);
+        (, uint256 amount_,,,) = bond.bonds(firstAccount, 0);
         assertEq(amount, amount_);
     }
 
@@ -128,13 +128,13 @@ contract BondedState is StickerState {
         super.setUp();
 
         vm.startPrank(firstAccount);
-        bondToken.approve(address(bond), 2**256 - 1);
+        bondToken.approve(address(bond), 2 ** 256 - 1);
         firstIDs.push(bond.bond(address(bondToken), 1e24));
         firstIDs.push(bond.bond(address(bondToken), 1e24));
         firstIDs.push(bond.bond(address(bondToken), 1e24));
         vm.stopPrank();
         vm.startPrank(secondAccount);
-        bondToken.approve(address(bond), 2**256 - 1);
+        bondToken.approve(address(bond), 2 ** 256 - 1);
         secondIDs.push(bond.bond(address(bondToken), 1e25));
         secondIDs.push(bond.bond(address(bondToken), 1e25));
         secondIDs.push(bond.bond(address(bondToken), 1e25));
@@ -150,12 +150,12 @@ contract BondedStateTest is BondedState {
     uint256[5] blocks_;
 
     function testClaim(uint256 blocks) public {
-        blocks = bound(blocks, 0, 2**128 - 1);
+        blocks = bound(blocks, 0, 2 ** 128 - 1);
         uint256 preBal = rewardToken.balanceOf(firstAccount);
         vm.warp(block.number + blocks);
-        (, uint256 amount0, , , uint256 block0) = bond.bonds(firstAccount, 0);
-        (, uint256 amount1, , , uint256 block1) = bond.bonds(firstAccount, 1);
-        (, uint256 amount2, , , uint256 block2) = bond.bonds(firstAccount, 2);
+        (, uint256 amount0,,, uint256 block0) = bond.bonds(firstAccount, 0);
+        (, uint256 amount1,,, uint256 block1) = bond.bonds(firstAccount, 1);
+        (, uint256 amount2,,, uint256 block2) = bond.bonds(firstAccount, 2);
 
         uint256 expected;
 
@@ -171,12 +171,12 @@ contract BondedStateTest is BondedState {
     }
 
     function testClaimBond(uint256 blocks) public {
-        blocks = bound(blocks, 0, 2**128 - 1);
+        blocks = bound(blocks, 0, 2 ** 128 - 1);
         uint256 preBal = rewardToken.balanceOf(secondAccount);
         vm.warp(block.number + blocks);
-        (, uint256 amount0, , , uint256 block0) = bond.bonds(secondAccount, 0);
-        uint256 expected = (((amount0 * 50) / 1e9) * (block.number - block0)) /
-            100;
+        (, uint256 amount0,,, uint256 block0) = bond.bonds(secondAccount, 0);
+        uint256 expected =
+            (((amount0 * 50) / 1e9) * (block.number - block0)) / 100;
         vm.expectEmit(true, true, true, true, address(bond));
         emit LogClaim(secondAccount, 0, expected);
         vm.prank(secondAccount);
@@ -195,15 +195,13 @@ contract BondedStateTest is BondedState {
     }
 
     function testRewardsOf(uint256 blocks) public {
-        blocks = bound(blocks, 0, 2**128 - 1);
+        blocks = bound(blocks, 0, 2 ** 128 - 1);
 
         vm.warp(block.number + blocks);
 
         for (uint256 i; i < amounts.length; ++i) {
-            (, uint256 amount, uint256 reward, , uint256 block_) = bond.bonds(
-                secondAccount,
-                i
-            );
+            (, uint256 amount, uint256 reward,, uint256 block_) =
+                bond.bonds(secondAccount, i);
             amounts[i] = amount;
             rewards[i] = reward;
             blocks_[i] = block_;
@@ -219,32 +217,28 @@ contract BondedStateTest is BondedState {
 
         for (uint256 i; i < amounts.length; ++i) {
             claimableExpected +=
-                (((amounts[i] * 50) / 1e9) * (block.number - blocks_[i])) /
-                100;
+                (((amounts[i] * 50) / 1e9) * (block.number - blocks_[i])) / 100;
         }
 
-        (
-            uint256 rewards_,
-            uint256 rewardsClaimed,
-            uint256 rewardsClaimable
-        ) = bond.rewardsOf(secondAccount);
+        (uint256 rewards_, uint256 rewardsClaimed, uint256 rewardsClaimable) =
+            bond.rewardsOf(secondAccount);
         assertEq(rewardsExpected, rewards_);
         assertEq(0, rewardsClaimed);
         assertEq(claimableExpected, rewardsClaimable);
     }
 
     function testRewardsBondOf(uint256 blocks, uint256 i) public {
-        blocks = bound(blocks, 0, 2**128 - 1);
+        blocks = bound(blocks, 0, 2 ** 128 - 1);
         i = bound(i, 0, 4);
         vm.warp(block.number + blocks);
 
-        (, uint256 amount, uint256 rewardExpected, , uint256 block_) = bond
-            .bonds(secondAccount, i);
+        (, uint256 amount, uint256 rewardExpected,, uint256 block_) =
+            bond.bonds(secondAccount, i);
 
-        uint256 claimableExpected = (((amount * 50) / 1e9) *
-            (block.number - block_)) / 100;
-        (uint256 reward, uint256 rewardClaimed, uint256 rewardClaimable) = bond
-            .rewardsBondOf(secondAccount, i);
+        uint256 claimableExpected =
+            (((amount * 50) / 1e9) * (block.number - block_)) / 100;
+        (uint256 reward, uint256 rewardClaimed, uint256 rewardClaimable) =
+            bond.rewardsBondOf(secondAccount, i);
         assertEq(rewardExpected, reward);
         assertEq(rewardClaimed, 0);
         assertEq(rewardClaimable, claimableExpected);

@@ -17,7 +17,7 @@ library SafeAddArray {
     }
 
     function add(uint256[] storage array, uint256[] memory values) internal {
-        for (uint256 i = 0 ; i < values.length; i++) {
+        for (uint256 i = 0; i < values.length; i++) {
             bool exist = false;
             for (uint256 j = 0; j < array.length; j++) {
                 if (array[j] == values[i]) {
