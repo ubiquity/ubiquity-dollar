@@ -112,8 +112,9 @@ contract CurveDollarIncentive is IIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityDollarToken(manager.dollarTokenAddress())
-                    .balanceOf(target) >= penalty + amount,
+                UbiquityDollarToken(manager.dollarTokenAddress()).balanceOf(
+                    target
+                ) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
             UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(

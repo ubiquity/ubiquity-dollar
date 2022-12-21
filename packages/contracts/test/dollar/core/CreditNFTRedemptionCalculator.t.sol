@@ -22,12 +22,10 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
 
     function test_getCreditNFTAmount_revertsIfDebtTooHigh() public {
         uint256 totalSupply = IERC20(
-            UbiquityDollarManager(dollarManagerAddress)
-                .dollarTokenAddress()
+            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         ).totalSupply();
         MockCreditNFT(
-            UbiquityDollarManager(dollarManagerAddress)
-                .creditNFTAddress()
+            UbiquityDollarManager(dollarManagerAddress).creditNFTAddress()
         ).setTotalOutstandingDebt(totalSupply + 1);
 
         vm.expectRevert("CreditNFT to dollar: DEBT_TOO_HIGH");
@@ -37,12 +35,10 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
 
     function test_getCreditNFTAmount() public {
         uint256 totalSupply = IERC20(
-            UbiquityDollarManager(dollarManagerAddress)
-                .dollarTokenAddress()
+            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         ).totalSupply();
         MockCreditNFT(
-            UbiquityDollarManager(dollarManagerAddress)
-                .creditNFTAddress()
+            UbiquityDollarManager(dollarManagerAddress).creditNFTAddress()
         ).setTotalOutstandingDebt(totalSupply / 2);
         assertEq(
             CreditNFTRedemptionCalculator(creditNFTCalculatorAddress)

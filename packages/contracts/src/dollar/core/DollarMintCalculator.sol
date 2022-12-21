@@ -22,7 +22,8 @@ contract DollarMintCalculator is IDollarMintCalculator {
 
     /// @notice returns (TWAP_PRICE  -1) * UAD_Total_Supply
     function getDollarsToMint() external view override returns (uint256) {
-        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(manager.twapOracleAddress());
+        TWAPOracleDollar3pool oracle =
+            TWAPOracleDollar3pool(manager.twapOracleAddress());
         uint256 twapPrice = oracle.consult(manager.dollarTokenAddress());
         require(twapPrice > 1 ether, "DollarMintCalculator: not > 1");
         bytes16 totalSupplyOfDollarToken = IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt();

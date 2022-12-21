@@ -24,7 +24,8 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     {
         require(
             ERC20Ubiquity.manager.hasRole(
-                ERC20Ubiquity.manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), msg.sender
+                ERC20Ubiquity.manager.GOVERNANCE_TOKEN_MANAGER_ROLE(),
+                msg.sender
             ),
             "Dollar: must have admin role"
         );

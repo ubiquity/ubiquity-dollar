@@ -9,7 +9,9 @@ contract MockCreditNFT is ERC1155 {
     uint256 public checkPoint;
     mapping(address => mapping(uint256 => uint256)) _balances;
 
-    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
+    event MintedCreditNFT(
+        address recipient, uint256 expiryBlock, uint256 amount
+    );
 
     event BurnedCreditNFT(
         address creditNFTHolder, uint256 expiryBlock, uint256 amount

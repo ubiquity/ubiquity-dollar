@@ -261,7 +261,9 @@ contract DepositStateTest is DepositState {
     address[] path2;
 
     function testDollarPriceReset(uint256 amount) public {
-        amount = bound(amount, 1000e18, dollarToken.balanceOf(address(metapool)) / 10);
+        amount = bound(
+            amount, 1000e18, dollarToken.balanceOf(address(metapool)) / 10
+        );
 
         uint256 dollarPreBalance = dollarToken.balanceOf(address(metapool));
 

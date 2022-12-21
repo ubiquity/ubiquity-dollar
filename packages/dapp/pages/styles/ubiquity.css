@@ -418,6 +418,7 @@ aside {
 #CreditOperations[data-twap^="0."] #MintUcr,
 #CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
+  display: inline-block;
   cursor: unset;
 }
 #CreditOperations[data-twap^="0."] #MintUcr > div,
@@ -449,11 +450,7 @@ aside {
 /* Build info with commit hash URL block styles */
 #BuildInfo {
   opacity: 0.5;
-  font-size: 12px;
   color: #fff;
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
 }
 #BuildInfo:hover {
   opacity: 1;
