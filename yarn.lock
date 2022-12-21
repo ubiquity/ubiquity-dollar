@@ -3168,7 +3168,6 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-tsc: ^2.0.0
     husky: ^8.0.2
-    improved-yarn-audit: ^3.0.0
     lint-staged: ^13.0.3
     nodemon: ^2.0.19
     rimraf: 3.0.2
@@ -7786,15 +7785,6 @@ __metadata:
     parent-module: ^1.0.0
     resolve-from: ^4.0.0
   checksum: 2cacfad06e652b1edc50be650f7ec3be08c5e5a6f6d12d035c440a42a8cc028e60a5b99ca08a77ab4d6b1346da7d971915828f33cdab730d3d42f08242d09baa
-  languageName: node
-  linkType: hard
-
-"improved-yarn-audit@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "improved-yarn-audit@npm:3.0.0"
-  bin:
-    improved-yarn-audit: bin/improved-yarn-audit
-  checksum: 5ca18647f138f435203b88b0f57334e088cc64567d51f9eff069026fcb4aebd0486e96d59f44ed91ed9f2df9f8b6cce683adba5e9e734bc37f11b9c11b8b64f2
   languageName: node
   linkType: hard
 

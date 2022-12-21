@@ -19,7 +19,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
     "husky": "^8.0.2",
-    "improved-yarn-audit": "^3.0.0",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
     "rimraf": "3.0.2",

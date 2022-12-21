@@ -20,11 +20,5 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Install Yarn
-        run: yarn install
-
-      - name: Install Yarn Audit Package
-        run: yarn add yarn-audit-fix -D
-
       - name: Audit and Attempt Fix
-        run: yarn run yarn-audit-fix
+        run: yes | npx yarn-audit-fix
