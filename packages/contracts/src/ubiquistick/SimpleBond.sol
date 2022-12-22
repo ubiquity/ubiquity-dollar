@@ -138,7 +138,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         require(rewardsRatio[token] > 0, "Token not allowed");
 
         // @dev throws if not enough allowance or tokens for address
-        // @dev must set token allowance for this smartcontract previously
+        // @dev must set token allowance for this smart contract previously
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
 
         Bond memory bnd;
@@ -192,7 +192,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         emit LogClaim(msg.sender, index, claimed);
     }
 
-    /// @notice Withdraw token from the smartcontract, only for owner
+    /// @notice Withdraw token from the smart contract, only for owner
     /// @param  token token withdraw
     /// @param amount amount withdraw
     function withdraw(address token, uint256 amount)
