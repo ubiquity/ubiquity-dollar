@@ -8,9 +8,9 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./interfaces/ITheUbiquiStick.sol";
+import "./interfaces/IUbiquiStick.sol";
 
-contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
+contract TheUbiquiStickSale is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     struct Purchase {
@@ -18,8 +18,8 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
         uint256 price;
     }
 
-    // TheUbiquityStick token contract interface
-    ITheUbiquiStick public tokenContract;
+    // UbiquiStick token contract interface
+    IUbiquiStick public tokenContract;
 
     // Stores the allowed minting count and token price for each whitelisted address
     mapping(address => Purchase) private _allowances;
@@ -42,7 +42,7 @@ contract TheUbiquityStickSale is Ownable, ReentrancyGuard {
 
     function setTokenContract(address _newTokenContract) external onlyOwner {
         require(_newTokenContract != address(0), "Invalid Address");
-        tokenContract = ITheUbiquiStick(_newTokenContract);
+        tokenContract = IUbiquiStick(_newTokenContract);
     }
 
     function setFundsAddress(address _address) external onlyOwner {

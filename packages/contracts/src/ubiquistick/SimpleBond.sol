@@ -11,9 +11,9 @@ import "./interfaces/IUAR.sol";
 
 /// @title Simple Bond
 /// @author zapaz.eth
-/// @notice SimpleBond is a simple Bond mecanism, allowing to sell tokens bonded and get rewards tokens
+/// @notice SimpleBond is a simple Bond mechanism, allowing to sell tokens bonded and get rewards tokens
 /// @notice The reward token is fully claimable only after the vesting period
-/// @dev Bond is Ownable, access controled by onlyOwner
+/// @dev Bond is Ownable, access controlled by onlyOwner
 /// @dev Use SafeERC20
 contract SimpleBond is ISimpleBond, Ownable, Pausable {
     using SafeERC20 for IERC20;
@@ -159,7 +159,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     }
 
     /// @notice Claim all rewards
-    /// @return claimed Rewards claimed succesfully
+    /// @return claimed Rewards claimed successfully
     function claim() public override whenNotPaused returns (uint256 claimed) {
         for (uint256 index = 0; (index < bonds[msg.sender].length); index += 1)
         {
@@ -168,7 +168,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     }
 
     /// @notice Claim bond rewards
-    /// @return claimed Rewards claimed succesfully
+    /// @return claimed Rewards claimed successfully
     function claimBond(uint256 index)
         public
         override

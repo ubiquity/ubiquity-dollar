@@ -66,11 +66,11 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
   return getContract(SimpleBond.abi, address, provider);
 };
 
-export const getUbiquityStickContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquiStick.abi, address, provider);
 };
 
-export const getUbiquityStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
   return getContract(UbiquiStickSale.abi, address, provider);
 };
 

@@ -19,7 +19,7 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 amount; // Staking rights.
         uint256 rewardDebt; // Reward debt. See explanation below.
             //
-            // We do some fancy math here. Basically, any point in time, the amount of governances
+            // We do some fancy math here. Basically, any point in time, the amount of governance tokens
             // entitled to a user but is pending to be distributed is:
             //
             //   pending reward = (user.amount * pool.accGovernancePerShare) - user.rewardDebt
@@ -33,8 +33,8 @@ contract UbiquityChef is ReentrancyGuard {
     // Info of each pool.
 
     struct PoolInfo {
-        uint256 lastRewardBlock; // Last block number that governances distribution occurs.
-        uint256 accGovernancePerShare; // Accumulated governances per share, times 1e12. See below.
+        uint256 lastRewardBlock; // Last block number that governance tokens distribution occurs.
+        uint256 accGovernancePerShare; // Accumulated governance tokens per share, times 1e12. See below.
     }
 
     uint256 private _totalShares;
@@ -189,7 +189,7 @@ contract UbiquityChef is ReentrancyGuard {
         return pending;
     }
 
-    // View function to see pending governances on frontend.
+    // View function to see pending governance tokens on frontend.
     function pendingGovernance(uint256 StakingShareID)
         external
         view
@@ -326,7 +326,7 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // Safe governance transfer function, just in case if rounding
-    // error causes pool to not have enough governances.
+    // error causes pool to not have enough governance tokens.
     function _safeGovernanceTransfer(address _to, uint256 _amount) internal {
         IERC20Ubiquity governance = IERC20Ubiquity(manager.governanceTokenAddress());
         uint256 governanceBal = governance.balanceOf(address(this));
