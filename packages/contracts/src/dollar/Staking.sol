@@ -275,7 +275,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 _endBlock = block.number + lockupPeriod * blockCountInAWeek;
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
 
-        // set ubiquitychef for uGOV rewards
+        // set UbiquityChef for uGOV rewards
         IUbiquityChef(manager.masterChefAddress()).deposit(
             msg.sender, _sharesAmount, _id
         );
@@ -371,7 +371,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         lpRewards -= pendingLpReward;
         // update staking shares
         //stake.shares = stake.shares - sharesToRemove;
-        // get ubiquitychef for uGOV rewards To ensure correct computation
+        // get UbiquityChef for uGOV rewards To ensure correct computation
         // it needs to be done BEFORE updating the staking share
         IUbiquityChef(manager.masterChefAddress()).withdraw(
             msg.sender, sharesToRemove, _id
@@ -396,7 +396,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         // stake.lpRewardDebt = (staking shares * accLpRewardPerShare) /  1e18;
         // user.amount.mul(pool.accSushiPerShare).div(1e12);
-        // should be done after ubiquitychef withdraw
+        // should be done after UbiquityChef withdraw
         stake.lpRewardDebt = (
             IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id)[0]
                 * accLpRewardPerShare
@@ -524,7 +524,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 endBlock = block.number + lockupPeriod * blockCountInAWeek;
         _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
 
-        // set ubiquitychef for uGOV rewards
+        // set UbiquityChef for uGOV rewards
         IUbiquityChef(manager.masterChefAddress()).deposit(
             user, _sharesAmount, _id
         );
