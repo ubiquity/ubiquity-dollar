@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "../ERC1155SetURI/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
+import "../ERC1155SetURI/ERC1155BurnableSetUri.sol";
+import "../ERC1155SetURI/ERC1155PausableSetUri.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
-contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract StakingShare is ERC1155SetUri, ERC1155BurnableSetUri, ERC1155PausableSetUri {
     using SafeAddArray for uint256[];
 
     struct Stake {
@@ -67,7 +67,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
+    constructor(address _manager, string memory uri) ERC1155SetUri(uri) {
         manager = UbiquityDollarManager(_manager);
     }
 
@@ -232,7 +232,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override (ERC1155, ERC1155Pausable) {
+    ) internal virtual override (ERC1155SetUri, ERC1155PausableSetUri) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
     
