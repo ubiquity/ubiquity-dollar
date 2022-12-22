@@ -7,8 +7,8 @@ import {
   getChainlinkPriceFeedContract,
   getERC20Contract,
   getSimpleBondContract,
-  getUbiquityStickContract,
-  getUbiquityStickSaleContract,
+  getUbiquiStickContract,
+  getUbiquiStickSaleContract,
 } from "@/components/utils/contracts";
 import { Contract } from "ethers";
 
@@ -39,8 +39,8 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
       const simpleBond = getSimpleBondContract(SimpleBondAddress, provider);
       const rewardToken = await simpleBond.tokenRewards();
       const contracts = {
-        ubiquiStick: getUbiquityStickContract(UbiquiStickAddress, provider),
-        ubiquiStickSale: getUbiquityStickSaleContract(UbiquiStickSaleAddress, provider),
+        ubiquiStick: getUbiquiStickContract(UbiquiStickAddress, provider),
+        ubiquiStickSale: getUbiquiStickSaleContract(UbiquiStickSaleAddress, provider),
         simpleBond,
         rewardToken: getERC20Contract(rewardToken, provider),
         chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),

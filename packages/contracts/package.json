@@ -57,5 +57,8 @@
       "postinstall-postinstall": false,
       "husky": false
     }
+  },
+  "devDependencies": {
+    "cspell": "latest"
   }
 }

@@ -52,9 +52,9 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
                 blockTimestamp - pricesBlockTimestampLast
             );
 
-            // price to exchange amounIn uAD to 3CRV based on TWAP
+            // price to exchange amountIn uAD to 3CRV based on TWAP
             uADPrice = IMetaPool(pool).get_dy(0, 1, 1 ether, twapBalances);
-            // price to exchange amounIn 3CRV to uAD  based on TWAP
+            // price to exchange amountIn 3CRV to uAD  based on TWAP
             curve3CRVAverage =
                 IMetaPool(pool).get_dy(1, 0, 1 ether, twapBalances);
             // we update the priceCumulative
