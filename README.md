@@ -1,8 +1,10 @@
 # Ubiquity Dollar
 
-Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). Ubiquity's Algorithmic Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies.
+Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies (as well as its collateral in 2023).
 
-The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
+- The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
+
+- The source code for those can be found [here](https://github.com/ubiquity/uad-contracts). 
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
@@ -76,7 +78,7 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 ## Committing Code
 
-1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. This can be frustrating for junior developers, but I promise that you'll quickly get used to it!
+1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. 
 
 The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. 
 
@@ -109,19 +111,5 @@ Make sure you are using the following network configuration:
 | m/44'/60'/0'/0/8  | 0x9Bf996d84AAecBb2E06dc5F277B7A26EBCA52A67 | 0x61eafce90092133ec543caa90c085af57c850df1b400f0af5cd0bf34fcddb052 |
 | m/44'/60'/0'/0/9  | 0x71454ff148c22f6D2Fc50C13aF0B702Aaa134189 | 0x3c82c68b4df60547a5fb926bf8d9513f4a6cf07604cb6429778ef6dce4eb48fb |
 | m/44'/60'/0'/0/10 | 0x53e93feD0C06D78ec86cEfC58b619BD6B5F93Ade | 0x79c924066175ae04a3ef3cd88d293e1c2f7fd7a860c5ddb8f09077bd4225c757 |
-
-### Ubiquity Dollar Contracts Setup
-
-This section is for the Ubiquity Dollar core protocol smart contracts (not the UbiquiStick NFT or UI related code.)
-
-You need to create `.env` file inside the contracts folder with at least the `API_KEY_ALCHEMY` and the `MNEMONIC` filled. Indeed `MNEMONIC` will be used to deploy locally and the first account will be the admin on all the smart contracts.
-
-Run the faucet to get tokens to your address. You will need the `UAD_MANAGER_ADDRESS` that you can find in the output of the `yarn start`
-
-```bash
-YOUR_ETH_ADDRESS= # enter address here
-UAD_MANAGER_ADDRESS= # enter address here
-yarn hardhat --network localhost faucet --receiver $YOUR_ETH_ADDRESS --manager $UAD_MANAGER_ADDRESS
-```
 
 Sine stabilitate nihil habemus.
