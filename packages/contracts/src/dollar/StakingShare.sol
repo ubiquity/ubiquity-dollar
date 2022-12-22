@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "./ERC1155SetURI/ERC1155SetUri.sol";
+import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./ERC1155SetURI/ERC1155BurnableSetUri.sol";
-import "./ERC1155SetURI/ERC1155PausableSetUri.sol";
+import "./ERC1155SetUri/ERC1155BurnableSetUri.sol";
+import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
