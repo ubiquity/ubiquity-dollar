@@ -11,6 +11,8 @@
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
+    "@lavamoat/allow-scripts": "^2.3.0",
+    "@lavamoat/preinstall-always-fail": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "cspell": "^6.17.0",
@@ -19,6 +21,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
     "husky": "^8.0.2",
+    "lavamoat": "^6.4.0",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
     "rimraf": "3.0.2",
@@ -34,7 +37,9 @@
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:cloudflare": "bash ./utils/build_cloudflare.sh",
     "build:ci:netlify": "yarn build:all",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "lavamoat-policy": "lavamoat app.js --autopolicy",
+    "start": "lavamoat app.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,sol}": [
@@ -43,5 +48,13 @@
       "cspell --no-must-find-files"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.2.3",
+  "lavamoat": {
+    "allowScripts": {
+      "$root$": false,
+      "@lavamoat/preinstall-always-fail": false,
+      "core-js": false,
+      "keccak": false
+    }
+  }
 }
