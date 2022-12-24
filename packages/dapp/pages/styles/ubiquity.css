@@ -460,3 +460,92 @@ aside {
   max-height: unset;
   vertical-align: unset;
 }
+
+/* Spin */
+.spin::after {
+  content: "> Press to Start";
+  font-size: 12px;
+  font-family: DIN;
+  position: absolute;
+  padding: 8px;
+  text-transform: uppercase;
+  color: #fff;
+  text-rendering: geometricPrecision;
+  border-radius: 8px;
+  padding: 0;
+  left: 0;
+  right: 0;
+  letter-spacing: 1px;
+  text-align: center;
+  filter: drop-shadow(0 0 16px #fff);
+  top: calc(100% + 12px);
+}
+body.Active .spin::after {
+  content: none;
+}
+.spin:hover {
+  opacity: 1;
+}
+.spin > div.before > div {
+  border-width: 1px;
+  border-style: outset;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: rotation-b 16s linear 0s infinite;
+}
+.spin > div.after > div {
+  border-width: 1px;
+  border-style: double;
+  border-top-color: transparent;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  opacity: 0.25;
+  animation: rotation-a 16s linear 0s infinite;
+}
+body.Active .spin > div.after > div,
+body.Active .spin > div.before > div {
+  border-width: 2vw;
+}
+body.Active .spin > div.after > div {
+  animation: rotation-a 64s linear 0s infinite;
+}
+body.Active .spin > div.before > div {
+  animation: rotation-b 64s linear 0s infinite;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000, transpare);
+}
+.spin > div > div {
+  border-radius: 50%;
+  height: 100%;
+}
+.spin > div {
+  vertical-align: middle;
+  display: table;
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+body.Active .spin > div > div {
+  color: #ffffff40;
+}
+body.Active .spin #aP {
+  fill: transparent;
+}
+.spin #aP {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+.spin {
+  transition: 1s all cubic-bezier(0.25, 0, 0, 1);
+  border-radius: 50%;
+  position: relative;
+  width: 160px;
+  height: 160px;
+  text-align: center;
+  cursor: pointer;
+}
+body.Active .spin {
+  width: 66vh;
+  height: 66vh;
+}
