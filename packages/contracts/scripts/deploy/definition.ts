@@ -1,0 +1,27 @@
+import { OptionDefinition } from "command-line-args";
+
+export const optionDefinitions: OptionDefinition[] = [
+  { name: "task", defaultOption: true },
+  { name: "manager", alias: "m", type: String },
+  { name: "network", alias: "n", type: String },
+  { name: "creditNFTLengthBlocks", alias: "c", type: Number },
+  { name: "pool", alias: "p", type: String },
+  { name: "dollarToken0", alias: "d", type: String },
+  { name: "curve3CRVToken1", alias: "k", type: String },
+  { name: "admin", alias: "a", type: String },
+  { name: "base3Pool", alias: "b", type: String },
+  { name: "depositZap", alias: "z", type: String },
+  { name: "name", alias: "e", type: String },
+  { name: "symbol", alias: "s", type: String },
+  { name: "uri", alias: "u", type: String },
+  { name: "stakingFormulasAddress", alias: "f", type: String },
+  { name: "originals", alias: "g", type: String },
+  { name: "lpBalances", alias: "l", type: String },
+  { name: "weeks", alias: "w", type: String },
+  { name: "tos", alias: "o", type: String },
+  { name: "amounts", alias: "x", type: String },
+  { name: "stakingShareIDs", alias: "i", type: String },
+  { name: "treasury", alias: "r", type: String },
+  { name: "vestingBlocks", alias: "v", type: Number },
+  { name: "testenv", alias: "t", type: Boolean },
+];

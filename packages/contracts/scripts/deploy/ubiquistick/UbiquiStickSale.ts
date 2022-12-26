@@ -1,18 +1,10 @@
-import { OptionDefinition } from "command-line-args";
-
-import { DeployFuncParam, deployments, Networks } from "../../shared";
-import { create } from "../create";
+import { CMDType, deployments, Networks } from "../../shared";
+import { create, getENV } from "../create";
 import { ethers } from "ethers";
 
-export const optionDefinitions: OptionDefinition[] = [
-  { name: "task", defaultOption: true },
-  { name: "treasury", alias: "t", type: String },
-  { name: "network", alias: "n", type: String },
-];
-
-const func = async (params: DeployFuncParam) => {
+const ubiquiStickSaleHandler = async (args: CMDType) => {
+  const env = await getENV();
   const contractInstance = "src/ubiquistick/UbiquiStickSale.sol:UbiquiStickSale";
-  const { env, args } = params;
   const treasury = args.treasury;
 
   const chainId = Networks[args.network] ?? undefined;
@@ -45,4 +37,4 @@ const func = async (params: DeployFuncParam) => {
   console.log("Setting token address done, hash: ", receipt.transactionHash);
   return !stderr ? "succeeded" : "failed";
 };
-export default func;
+export default ubiquiStickSaleHandler;

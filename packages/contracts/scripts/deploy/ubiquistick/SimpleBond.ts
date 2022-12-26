@@ -1,8 +1,7 @@
-import { OptionDefinition } from "command-line-args";
-
-import { DeployFuncParam, deployments, Networks } from "../../shared";
-import { create } from "../create";
 import { ethers } from "ethers";
+import { OptionDefinition } from "command-line-args";
+import { CMDType, deployments, Networks } from "../../shared";
+import { create, getENV } from "../create";
 
 export const optionDefinitions: OptionDefinition[] = [
   { name: "task", defaultOption: true },
@@ -12,9 +11,9 @@ export const optionDefinitions: OptionDefinition[] = [
   { name: "network", alias: "n", type: String },
 ];
 
-const func = async (params: DeployFuncParam) => {
+const simpleBondHandler = async (args: CMDType) => {
+  const env = await getENV();
   const contractInstance = "src/ubiquistick/SimpleBond.sol:SimpleBond";
-  const { env, args } = params;
   const treasury = args.treasury;
   const vestingBlocks = args.vestingBlocks ?? 32300; // about 5 days
 
@@ -57,4 +56,4 @@ const func = async (params: DeployFuncParam) => {
 
   return !stderr ? "succeeded" : "failed";
 };
-export default func;
+export default simpleBondHandler;
