@@ -21,7 +21,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
     "husky": "^8.0.2",
-    "lavamoat": "^6.4.0",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
     "rimraf": "3.0.2",
@@ -37,9 +36,7 @@
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:cloudflare": "bash ./utils/build_cloudflare.sh",
     "build:ci:netlify": "yarn build:all",
-    "postinstall": "husky install",
-    "lavamoat-policy": "lavamoat app.js --autopolicy",
-    "start": "lavamoat app.js"
+    "postinstall": "husky install"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,sol}": [
@@ -52,9 +49,15 @@
   "lavamoat": {
     "allowScripts": {
       "$root$": false,
-      "@lavamoat/preinstall-always-fail": false,
-      "core-js": false,
-      "keccak": false
+      "bufferutil": false,
+      "utf-8-validate": false,
+      "styled-components": false,
+      "keccak": false,
+      "dtrace-provider": false,
+      "bigint-buffer": false,
+      "secp256k1": false,
+      "classic-level": false,
+      "@lavamoat/preinstall-always-fail": false
     }
   }
 }

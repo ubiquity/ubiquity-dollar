@@ -55,12 +55,7 @@
       "utf-8-validate": false,
       "core-js-pure": false,
       "postinstall-postinstall": false,
-      "husky": false,
-      "ethers>@ethersproject/providers>ws>bufferutil": false,
-      "ethers>@ethersproject/providers>ws>utf-8-validate": false
+      "husky": false
     }
-  },
-  "devDependencies": {
-    "@lavamoat/allow-scripts": "^2.3.0"
   }
 }
