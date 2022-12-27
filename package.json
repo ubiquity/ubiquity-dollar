@@ -52,13 +52,14 @@
       "@lavamoat/preinstall-always-fail": false,
       "bufferutil": true,
       "utf-8-validate": true,
-      "styled-components": true,
+      "styled-components": false,
       "keccak": true,
       "dtrace-provider": true,
       "bigint-buffer": true,
       "secp256k1": true,
       "classic-level": true,
-      "@ubiquity/monorepo": true
+      "@ubiquity/monorepo": true,
+      "napi-macros/example": true
     }
   }
 }
