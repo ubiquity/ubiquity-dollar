@@ -31,7 +31,7 @@ jobs:
           version: nightly
 
       - name: Install
-        run: yarn install && yarn allow-scripts
+        run: yarn install --mode=skip-build && yarn allow-scripts
 
       - name: Setup Env
         env:
