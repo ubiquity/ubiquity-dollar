@@ -49,7 +49,16 @@
   "lavamoat": {
     "allowScripts": {
       "$root$": true,
-      "@lavamoat/preinstall-always-fail": false
+      "@lavamoat/preinstall-always-fail": false,
+      "bufferutil": true,
+      "utf-8-validate": true,
+      "styled-components": true,
+      "keccak": true,
+      "dtrace-provider": true,
+      "bigint-buffer": true,
+      "secp256k1": true,
+      "classic-level": true,
+      "@ubiquity/monorepo": true
     }
   }
 }
