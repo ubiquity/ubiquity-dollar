@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarTokenFacet} from "../../../src/manager/facets/UbiquityDollarTokenFacet.sol";
+import {UbiquityDollarTokenFacet} from "../../../src/diamond/facets/UbiquityDollarTokenFacet.sol";
 
 import "../DiamondTestSetup.sol";
 

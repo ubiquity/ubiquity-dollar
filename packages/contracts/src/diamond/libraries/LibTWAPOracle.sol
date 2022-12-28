@@ -5,9 +5,9 @@ import "../../dollar/interfaces/IMetaPool.sol";
 
 library LibTWAPOracle {
     struct TWAPOracleStorage {
-        address pool;
+        address pool; // stable swap metapool address : Ubiquity Dollar <=> 3 Pool
         // address token0; will always be address(this)
-        address token1;
+        address token1; // curve 3pool token address
         uint256 price0Average;
         uint256 price1Average;
         uint256 pricesBlockTimestampLast;
@@ -17,7 +17,7 @@ library LibTWAPOracle {
     bytes32 public constant TWAP_ORACLE_STORAGE_POSITION =
         keccak256("diamond.standard.twap.oracle.storage");
 
-    function _setPool(address _pool, address _curve3CRVToken1) internal {
+    function setPool(address _pool, address _curve3CRVToken1) internal {
         require(
             IMetaPool(_pool).coins(0) == address(this),
             "TWAPOracle: FIRST_COIN_NOT_DOLLAR"
@@ -46,12 +46,12 @@ library LibTWAPOracle {
         ts.price1Average = 1 ether;
     }
 
-    function _update() internal {
+    function update() internal {
         TWAPOracleStorage storage ts = twapOracleStorage();
         (
             uint256[2] memory priceCumulative,
             uint256 blockTimestamp
-        ) = _currentCumulativePrices();
+        ) = currentCumulativePrices();
 
         if (blockTimestamp - ts.pricesBlockTimestampLast > 0) {
             // get the balances between now and the last price cumulative snapshot
@@ -82,7 +82,7 @@ library LibTWAPOracle {
         }
     }
 
-    function _consult(address token) internal view returns (uint256 amountOut) {
+    function consult(address token) internal view returns (uint256 amountOut) {
         TWAPOracleStorage memory ts = twapOracleStorage();
         if (token == address(this)) {
             // price to exchange 1 Ubiquity Dollar to 3CRV based on TWAP
@@ -94,7 +94,7 @@ library LibTWAPOracle {
         }
     }
 
-    function _currentCumulativePrices()
+    function currentCumulativePrices()
         internal
         view
         returns (uint256[2] memory priceCumulative, uint256 blockTimestamp)
