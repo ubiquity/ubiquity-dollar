@@ -4,7 +4,7 @@ import { createHandler } from "./create";
 import ubiquiStickSaleHandler from "./ubiquistick/UbiquiStickSale";
 
 const dollarPath = "src/dollar";
-const cPath = "src/dollar/core";
+const corePath = "src/dollar/core";
 const ubiquiStickPath = "src/ubiquistick";
 
 const LPTokenName = "LP token";
