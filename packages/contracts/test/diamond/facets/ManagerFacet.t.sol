@@ -6,7 +6,7 @@ import "../../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../../src/dollar/interfaces/IMetaPool.sol";
 import "../../../src/dollar/mocks/MockDollarToken.sol";
 import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import "../../../src/manager/libraries/LibAccessControl.sol";
+import "../../../src/diamond/libraries/LibAccessControl.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions() public {
@@ -93,7 +93,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
     function testShouldsetIncentiveToDollar() public prankAs(admin) {
         assertEq(
-            IAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
+            IAccessCtrl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
             true
         );
         IManager.setIncentiveToDollar(user1, contract1);
@@ -101,7 +101,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
     function testShouldSetMinterRoleWhenInitializing() public prankAs(admin) {
         assertEq(
-            IAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
+            IAccessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
             true
         );
     }
@@ -134,14 +134,8 @@ contract RemoteTestManagerFacet is DiamondSetup {
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IAccessControl.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            stakingV1Address
-        );
-        IAccessControl.grantRole(
-            GOVERNANCE_TOKEN_BURNER_ROLE,
-            stakingV1Address
-        );
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
 
         deal(address(IUbiquityDollarToken), curveWhaleAddress, 10e18);
 

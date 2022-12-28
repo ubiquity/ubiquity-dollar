@@ -5,10 +5,6 @@ import {LibDiamond} from "./LibDiamond.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
 import "./Constants.sol";
 
-// keccak256("Permit(address owner,address spender,
-//                   uint256 value,uint256 nonce,uint256 deadline)");
-bytes32 constant PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
-
 struct AppStorage {
     // reentrancy guard
     uint256 NOT_ENTERED;
@@ -121,6 +117,29 @@ contract Modifiers {
      */
     modifier whenPaused() {
         require(LibAccessControl.paused(), "Pausable: not paused");
+        _;
+    }
+
+    modifier onlyStakingManager() {
+        require(
+            LibAccessControl.hasRole(STAKING_MANAGER_ROLE, msg.sender),
+            "not manager"
+        );
+        _;
+    }
+
+    modifier onlyPauser() {
+        require(
+            LibAccessControl.hasRole(PAUSER_ROLE, msg.sender),
+            "not pauser"
+        );
+        _;
+    }
+    modifier onlyTokenManager() {
+        require(
+            LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
+            "MasterChef: not Governance Token manager"
+        );
         _;
     }
 }

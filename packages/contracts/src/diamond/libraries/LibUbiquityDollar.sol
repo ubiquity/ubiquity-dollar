@@ -4,8 +4,8 @@ pragma solidity 0.8.16;
 import {PERMIT_TYPEHASH} from "./LibAppStorage.sol";
 import "../../dollar/interfaces/IIncentive.sol";
 
-library LibUbiquityDollarToken {
-    struct UbiquityDollarTokenStorage {
+library LibUbiquityDollar {
+    struct UbiquityDollarStorage {
         /// @notice get associated incentive contract, 0 address if N/A
         mapping(address => address) incentiveContract;
         mapping(address => uint256) balances;
@@ -57,7 +57,7 @@ library LibUbiquityDollarToken {
     function ubiquityDollarStorage()
         internal
         pure
-        returns (UbiquityDollarTokenStorage storage ds)
+        returns (UbiquityDollarStorage storage ds)
     {
         bytes32 position = UBIQUITY_DOLLAR_STORAGE_POSITION;
         assembly {
@@ -70,7 +70,7 @@ library LibUbiquityDollarToken {
         string memory symbol,
         uint8 decimals
     ) internal {
-        UbiquityDollarTokenStorage storage us = ubiquityDollarStorage();
+        UbiquityDollarStorage storage us = ubiquityDollarStorage();
         us.name = name;
         us.symbol = symbol;
         us.decimals = decimals;
@@ -121,7 +121,7 @@ library LibUbiquityDollarToken {
     ) internal {
         // solhint-disable-next-line not-rely-on-time
         require(deadline >= block.timestamp, "Dollar: EXPIRED");
-        UbiquityDollarTokenStorage storage us = ubiquityDollarStorage();
+        UbiquityDollarStorage storage us = ubiquityDollarStorage();
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",
@@ -175,20 +175,20 @@ library LibUbiquityDollarToken {
 
     function mint(address account, uint256 amount) internal {
         require(account != address(0), "ERC20: mint to the zero address");
-        UbiquityDollarTokenStorage storage us = ubiquityDollarStorage();
+        UbiquityDollarStorage storage us = ubiquityDollarStorage();
         us.totalSupply += amount;
         unchecked {
             // Overflow not possible: balance + amount is at most totalSupply + amount, which is checked above.
             us.balances[account] += amount;
         }
 
-        emit Transfer(address(0), account, amount);
+        emit Minting(account, msg.sender, amount);
     }
 
     function burn(address account, uint256 amount) internal {
         require(account != address(0), "ERC20: burn from the zero address");
 
-        UbiquityDollarTokenStorage storage us = ubiquityDollarStorage();
+        UbiquityDollarStorage storage us = ubiquityDollarStorage();
 
         uint256 accountBalance = us.balances[account];
         require(accountBalance >= amount, "ERC20: burn amount exceeds balance");
@@ -198,7 +198,7 @@ library LibUbiquityDollarToken {
             us.totalSupply -= amount;
         }
 
-        emit Transfer(account, address(0), amount);
+        emit Burning(account, amount);
     }
 
     function transferFrom(
@@ -321,7 +321,7 @@ library LibUbiquityDollarToken {
         address recipient,
         uint256 amount
     ) internal {
-        UbiquityDollarTokenStorage storage us = ubiquityDollarStorage();
+        UbiquityDollarStorage storage us = ubiquityDollarStorage();
         // incentive on sender
         address senderIncentive = us.incentiveContract[sender];
         if (senderIncentive != address(0)) {

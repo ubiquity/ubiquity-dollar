@@ -9,17 +9,17 @@ contract TWAPOracleDollar3poolFacet is Modifiers {
         external
         onlyOwner
     {
-        return LibTWAPOracle._setPool(_pool, _curve3CRVToken1);
+        return LibTWAPOracle.setPool(_pool, _curve3CRVToken1);
     }
 
     // calculate average price
     function update() external {
-        LibTWAPOracle._update();
+        LibTWAPOracle.update();
     }
 
     // note this will always return 0 before update has been called successfully
     // for the first time.
     function consult(address token) external view returns (uint256 amountOut) {
-        return LibTWAPOracle._consult(token);
+        return LibTWAPOracle.consult(token);
     }
 }

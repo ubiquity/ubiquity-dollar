@@ -10,7 +10,11 @@ import "../libraries/LibAccessControl.sol";
 
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
-import {LibUbiquityDollarToken} from "../libraries/LibUbiquityDollarToken.sol";
+import {LibUbiquityDollar} from "../libraries/LibUbiquityDollar.sol";
+import {LibStaking} from "../libraries/LibStaking.sol";
+import {LibUbiquityChef} from "../libraries/LibUbiquityChef.sol";
+
+import "forge-std/console.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
@@ -22,6 +26,9 @@ contract DiamondInit is Modifiers {
         string dollarName;
         string dollarSymbol;
         uint8 dollarDecimals;
+        address[] tos;
+        uint256[] amounts;
+        uint256[] stakingShareIDs;
     }
 
     // You can add parameters to this function in order to pass in
@@ -44,12 +51,26 @@ contract DiamondInit is Modifiers {
         AppStorage storage appStore = LibAppStorage.appStorage();
 
         appStore.paused = false;
-        // SET UBIQUITY TOKENS NAME AND SYMBOL
-        LibUbiquityDollarToken.initialize(
+        // Dollar
+        LibUbiquityDollar.initialize(
             _args.dollarName,
             _args.dollarSymbol,
             _args.dollarDecimals
         );
+        console.log("init 1");
+        // staking
+        LibStaking.StakingData storage ls = LibStaking.stakingStorage();
+        ls.stakingDiscountMultiplier = uint256(1000000 gwei); // 0.001
+        ls.blockCountInAWeek = 45361;
+        console.log("init 2");
+        // ubiquity chef
+        LibUbiquityChef.initialize(
+            _args.tos,
+            _args.amounts,
+            _args.stakingShareIDs
+        );
+        console.log("init 3");
+
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
         // arguments: address _init and bytes calldata _calldata

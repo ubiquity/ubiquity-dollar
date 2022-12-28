@@ -7,12 +7,13 @@ import {EnumerableSet} from "../libraries/EnumerableSet.sol";
 import {AddressUtils} from "../libraries/AddressUtils.sol";
 import {UintUtils} from "../libraries/UintUtils.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
-import "./Constants.sol";
 
 library LibAccessControl {
     using AddressUtils for address;
     using EnumerableSet for EnumerableSet.AddressSet;
     using UintUtils for uint256;
+    bytes32 constant ACCESS_CONTROL_STORAGE_SLOT =
+        keccak256("ubiquity.contracts.access.control.storage");
 
     struct RoleData {
         EnumerableSet.AddressSet members;
@@ -51,7 +52,7 @@ library LibAccessControl {
     event Unpaused(address account);
 
     function accessControlStorage() internal pure returns (Layout storage l) {
-        bytes32 slot = STORAGE_SLOT;
+        bytes32 slot = ACCESS_CONTROL_STORAGE_SLOT;
         assembly {
             l.slot := slot
         }
