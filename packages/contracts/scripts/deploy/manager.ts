@@ -3,7 +3,7 @@ import { CMDType, Deploy_Manager_Type } from "../shared";
 import { createHandler } from "./create";
 import ubiquiStickSaleHandler from "./ubiquistick/UbiquiStickSale";
 
-const dPath = "src/dollar";
+const dollarPath = "src/dollar";
 const cPath = "src/dollar/core";
 const ubiquiStickPath = "src/ubiquistick";
 
