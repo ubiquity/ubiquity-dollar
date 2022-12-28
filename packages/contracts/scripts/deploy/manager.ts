@@ -5,7 +5,7 @@ import ubiquiStickSaleHandler from "./ubiquistick/UbiquiStickSale";
 
 const dPath = "src/dollar";
 const cPath = "src/dollar/core";
-const uPath = "src/ubiquistick";
+const ubiquiStickPath = "src/ubiquistick";
 
 const LPTokenName = "LP token";
 const LPTokenSymbol = "LP";
