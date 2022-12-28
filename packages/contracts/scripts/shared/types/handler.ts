@@ -20,7 +20,7 @@ export type ArgsType = {
 };
 
 export type Deploy_Manager_Type = {
-  [indexed: string]: (args: any) => void;
+  [index: string]: (args: any) => void;
 };
 
 export type CMDType = commandLineArgs.CommandLineOptions;
