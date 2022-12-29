@@ -356,49 +356,57 @@ contract ERC4626Test is Test {
         assertEq(underlying.balanceOf(address(vault)), 0);
     }
 
-    function testFailDepositWithNotEnoughApproval() public {
+    function testDepositShouldRevertWithNotEnoughApproval() public {
         underlying.mint(address(this), 0.5e18);
         underlying.approve(address(vault), 0.5e18);
         assertEq(underlying.allowance(address(this), address(vault)), 0.5e18);
 
+        vm.expectRevert('ERC20: insufficient allowance');
         vault.deposit(1e18, address(this));
     }
 
-    function testFailWithdrawWithNotEnoughUnderlyingAmount() public {
+    function testWithdrawShouldRevertWithNotEnoughUnderlyingAmount() public {
         underlying.mint(address(this), 0.5e18);
         underlying.approve(address(vault), 0.5e18);
 
         vault.deposit(0.5e18, address(this));
 
+        vm.expectRevert('ERC4626: withdraw more than max');
         vault.withdraw(1e18, address(this), address(this));
     }
 
-    function testFailRedeemWithNotEnoughShareAmount() public {
+    function testRedeemShouldRevertWithNotEnoughShareAmount() public {
         underlying.mint(address(this), 0.5e18);
         underlying.approve(address(vault), 0.5e18);
 
         vault.deposit(0.5e18, address(this));
 
+        vm.expectRevert('ERC20: burn amount exceeds balance');
         vault.redeem(1e18, address(this), address(this));
     }
 
-    function testFailWithdrawWithNoUnderlyingAmount() public {
+    function testWithdrawShouldRevertWithNoUnderlyingAmount() public {
+        vm.expectRevert('ERC4626: withdraw more than max');
         vault.withdraw(1e18, address(this), address(this));
     }
 
-    function testFailRedeemWithNoShareAmount() public {
+    function testRedeemShouldRevertWithNoShareAmount() public {
+        vm.expectRevert('ERC20: burn amount exceeds balance');
         vault.redeem(1e18, address(this), address(this));
     }
 
-    function testFailDepositWithNoApproval() public {
+    function testDepositShouldRevertWithNoApproval() public {
+        vm.expectRevert('ERC20: insufficient allowance');
         vault.deposit(1e18, address(this));
     }
 
-    function testFailMintWithNoApproval() public {
+    function testMintShouldRevertWithNoApproval() public {
+        vm.expectRevert('ERC20: insufficient allowance');
         vault.mint(1e18, address(this));
     }
 
-    function testFailDepositZero() public {
+    function testDepositShouldRevertOnZeroDeposit() public {
+        vm.expectRevert('ZERO_SHARES');
         vault.deposit(0, address(this));
     }
 
@@ -411,7 +419,8 @@ contract ERC4626Test is Test {
         assertEq(vault.totalAssets(), 0);
     }
 
-    function testFailRedeemZero() public {
+    function testRedeemShouldRevertOnZeroRedeem() public {
+        vm.expectRevert('ZERO_ASSETS');
         vault.redeem(0, address(this), address(this));
     }
 
