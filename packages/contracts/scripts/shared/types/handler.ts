@@ -15,12 +15,14 @@ export type TaskFuncParam = {
 
 export type TaskFuncCallBack = (params: TaskFuncParam) => Promise<any>;
 
-export type ArgsType = {
+export type InputParams = {
   [index: string]: string;
 };
 
-export type Deploy_Manager_Type = {
+export type DeployCallbackFn = {
   [index: string]: (args: any) => void;
 };
 
-export type CMDType = commandLineArgs.CommandLineOptions;
+export type AbiType = object[];
+
+export type CommandLineOption = commandLineArgs.CommandLineOptions;

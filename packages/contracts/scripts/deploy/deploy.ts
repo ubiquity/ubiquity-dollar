@@ -22,8 +22,7 @@ const main = async () => {
   }
 
   const deployHandler = Deploy_Manager[name];
-  const result = await deployHandler(args);
-  console.log(`Deployed ${name} contract successfully. res: ${result}`);
+  await deployHandler(args);
 };
 
 main();
