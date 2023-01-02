@@ -11,6 +11,8 @@
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
+    "@lavamoat/allow-scripts": "^2.3.0",
+    "@lavamoat/preinstall-always-fail": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "cspell": "^6.17.0",
@@ -43,5 +45,21 @@
       "cspell --no-must-find-files"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.2.3",
+  "lavamoat": {
+    "allowScripts": {
+      "$root$": true,
+      "@lavamoat/preinstall-always-fail": false,
+      "bufferutil": true,
+      "utf-8-validate": true,
+      "styled-components": false,
+      "keccak": true,
+      "dtrace-provider": true,
+      "bigint-buffer": true,
+      "secp256k1": true,
+      "classic-level": true,
+      "@ubiquity/monorepo": true,
+      "napi-macros/example": true
+    }
+  }
 }
