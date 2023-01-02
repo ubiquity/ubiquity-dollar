@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "operator-filter-registry/DefaultOperatorFilterer.sol";
 
-
 // With this "The UbiquiStick" NFT contract you can :
 // - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
 //   - including check that someone as a NFT of the collection with « balanceOf »
@@ -135,7 +134,7 @@ contract UbiquiStick is
         return super.supportsInterface(interfaceId);
     }
 
-     function setApprovalForAll(address operator, bool approved)
+    function setApprovalForAll(address operator, bool approved)
         public
         override (ERC721, IERC721)
         onlyAllowedOperatorApproval(operator)
@@ -175,6 +174,4 @@ contract UbiquiStick is
     ) public override (ERC721, IERC721) onlyAllowedOperator(from) {
         super.safeTransferFrom(from, to, tokenId, data);
     }
-
-
 }

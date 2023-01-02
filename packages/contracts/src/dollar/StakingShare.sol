@@ -8,7 +8,11 @@ import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
-contract StakingShare is ERC1155SetUri, ERC1155BurnableSetUri, ERC1155PausableSetUri {
+contract StakingShare is
+    ERC1155SetUri,
+    ERC1155BurnableSetUri,
+    ERC1155PausableSetUri
+{
     using SafeAddArray for uint256[];
 
     struct Stake {
@@ -39,7 +43,7 @@ contract StakingShare is ERC1155SetUri, ERC1155BurnableSetUri, ERC1155PausableSe
         );
         _;
     }
-    
+
     modifier onlyStakingManager() {
         require(
             manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
@@ -235,12 +239,12 @@ contract StakingShare is ERC1155SetUri, ERC1155BurnableSetUri, ERC1155PausableSe
     ) internal virtual override (ERC1155SetUri, ERC1155PausableSetUri) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
-    
+
     /**
-    *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     * @dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
      */
-    
-    function setUri(string memory newUri) external onlyStakingManager{
+
+    function setUri(string memory newUri) external onlyStakingManager {
         _uri = newUri;
     }
 }

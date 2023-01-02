@@ -35,6 +35,9 @@ contract UbiquityDollarManager is AccessControl {
         keccak256("INCENTIVE_MANAGER");
     bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
         keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE");
+
+    bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");
+
     address public twapOracleAddress;
     address public creditNFTAddress;
     address public dollarTokenAddress;
@@ -51,6 +54,7 @@ contract UbiquityDollarManager is AccessControl {
     address public formulasAddress;
     address public creditTokenAddress;
     address public creditCalculatorAddress;
+    address public bondingCurveAddress;
 
     //key = address of CreditNFTManager, value = DollarMintExcess
     mapping(address => address) private _excessDollarDistributors;
@@ -70,6 +74,7 @@ contract UbiquityDollarManager is AccessControl {
         _setupRole(STAKING_MANAGER_ROLE, _admin);
         _setupRole(INCENTIVE_MANAGER_ROLE, _admin);
         _setupRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(this));
+        _setupRole(UBQ_MINTER_ROLE, _admin);
     }
 
     // TODO Add a generic setter for extra addresses that needs to be linked
@@ -200,6 +205,18 @@ contract UbiquityDollarManager is AccessControl {
      */
     function setTreasuryAddress(address _treasuryAddress) external onlyAdmin {
         treasuryAddress = _treasuryAddress;
+    }
+
+    /**
+     * @notice set the bonding curve contract address
+     * @dev the bonding curve exchanges UBQ for UbistickNFT and is used to maintain the protocol
+     * @param _bondingCurveAddress treasury fund address
+     */
+    function _setBondingCurveAddress(address _bondingCurveAddress)
+        external
+        onlyAdmin
+    {
+        bondingCurveAddress = _bondingCurveAddress;
     }
 
     /**

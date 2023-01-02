@@ -6,7 +6,15 @@ import {IDiamondLoupe} from "../interfaces/IDiamondLoupe.sol";
 import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
 import {IERC173} from "../interfaces/IERC173.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
-import {Modifiers, GOVERNANCE_TOKEN_MINTER_ROLE, PAUSER_ROLE, CREDIT_NFT_MANAGER_ROLE, STAKING_MANAGER_ROLE, INCENTIVE_MANAGER_ROLE, GOVERNANCE_TOKEN_MANAGER_ROLE} from "../libraries/LibAppStorage.sol";
+import {
+    Modifiers,
+    GOVERNANCE_TOKEN_MINTER_ROLE,
+    PAUSER_ROLE,
+    CREDIT_NFT_MANAGER_ROLE,
+    STAKING_MANAGER_ROLE,
+    INCENTIVE_MANAGER_ROLE,
+    GOVERNANCE_TOKEN_MANAGER_ROLE
+} from "../libraries/LibAppStorage.sol";
 import {AccessControlStorage} from "../libraries/AccessControlStorage.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond

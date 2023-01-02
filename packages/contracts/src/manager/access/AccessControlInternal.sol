@@ -35,9 +35,8 @@ abstract contract AccessControlInternal is IAccessControlInternal {
         virtual
         returns (bool)
     {
-        return AccessControlStorage.layout().roles[role].members.contains(
-            account
-        );
+        return
+            AccessControlStorage.layout().roles[role].members.contains(account);
     }
 
     /**
