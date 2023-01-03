@@ -46,7 +46,9 @@
     "Vitalik's",
     "Beeple's",
     "LSSVM",
-    "Rarible"
+    "Rarible",
+    "UbiquiStick",
+    "Ubiqui"
   ],
   "ignorePaths": [
     "**/*.json",
