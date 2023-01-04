@@ -85,7 +85,7 @@ module.exports = async ({ github, context, fs }) => {
     const commentsArray = [];
 
     while (hasMore) {
-      const issueComments = await github.rest.issues.listComments({
+      const { data: issueComments } = await github.rest.issues.listComments({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: pullRequestNumber,
@@ -95,7 +95,7 @@ module.exports = async ({ github, context, fs }) => {
       pageNumber++;
 
       if (issueComments.length > 0) {
-        commentsArray.push(issueComments);
+        commentsArray.push(...issueComments);
       } else {
         hasMore = false;
       }
