@@ -29,6 +29,8 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 
 ## Codebase Diagram
 
+[Interactive Version](https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=ubiquity%2Fubiquity-dollar)
+
 ![Visualization of the codebase](./utils/diagram.svg)
 
 ## Installation
