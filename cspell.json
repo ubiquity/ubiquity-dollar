@@ -105,6 +105,7 @@
     "collateralized",
     "alloc",
     "ubiquiti",
-    "buildhome"
+    "buildhome",
+    "ubiquibot"
   ]
 }
