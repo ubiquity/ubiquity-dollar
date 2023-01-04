@@ -4,7 +4,7 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 
 - The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
 
-- The source code for those can be found [here](https://github.com/ubiquity/uad-contracts). 
+- The source code for those can be found [here](https://github.com/ubiquity/uad-contracts).
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
@@ -26,6 +26,18 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 │   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts">contracts</a>: Smart contracts for Ubiquity Dollar and UbiquiStick
 │   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/dapp">dapp</a>: User interface
 </pre>
+
+## Codebase Diagram
+
+[Interactive Version](https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=ubiquity%2Fubiquity-dollar)
+
+### Smart Contracts 
+
+![Visualization of the smart contracts codebase](./utils/diagram-contracts.svg)
+
+### User Interface
+
+![Visualization of the user interface codebase](./utils/diagram-ui.svg)
 
 ## Installation
 
@@ -78,9 +90,9 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 ## Committing Code
 
-1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. 
+1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages.
 
-The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. 
+The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of.
 
 We use [prettier](https://github.com/prettier/prettier) and [eslint](https://github.com/eslint/eslint) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
 
@@ -111,5 +123,7 @@ Make sure you are using the following network configuration:
 | m/44'/60'/0'/0/8  | 0x9Bf996d84AAecBb2E06dc5F277B7A26EBCA52A67 | 0x61eafce90092133ec543caa90c085af57c850df1b400f0af5cd0bf34fcddb052 |
 | m/44'/60'/0'/0/9  | 0x71454ff148c22f6D2Fc50C13aF0B702Aaa134189 | 0x3c82c68b4df60547a5fb926bf8d9513f4a6cf07604cb6429778ef6dce4eb48fb |
 | m/44'/60'/0'/0/10 | 0x53e93feD0C06D78ec86cEfC58b619BD6B5F93Ade | 0x79c924066175ae04a3ef3cd88d293e1c2f7fd7a860c5ddb8f09077bd4225c757 |
+
+---
 
 Sine stabilitate nihil habemus.

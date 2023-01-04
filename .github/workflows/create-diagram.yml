@@ -1,0 +1,26 @@
+name: Create diagram
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - development
+jobs:
+  get_data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Update Diagram (Contracts)
+        uses: githubocto/repo-visualizer@main
+        with:
+          excluded_paths: "ignore,.github"
+          output_file: "utils/diagram-contracts.svg"
+          root_path: "packages/contracts/"
+          commit_message: "docs(diagram): contracts"
+      - name: Update Diagram (User Interface)
+        uses: githubocto/repo-visualizer@main
+        with:
+          excluded_paths: "ignore,.github"
+          output_file: "utils/diagram-ui.svg"
+          root_path: "packages/dapp/"
+          commit_message: "docs(diagram): ui"
