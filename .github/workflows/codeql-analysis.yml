@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'javascript' ]
+        language: [ 'javascript', 'typescript' ]
         # CodeQL currently supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Modified to support codebase. Currently no support for Solidity Language
 
@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Init CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
 
