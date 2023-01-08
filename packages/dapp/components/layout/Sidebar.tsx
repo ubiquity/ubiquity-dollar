@@ -70,7 +70,7 @@ const Sidebar = () => {
 };
 
 const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; alt: string }) => (
-  <a href={href} target="_blank" title={alt}>
+  <a href={href} target="_blank" rel="noopener noreferrer" title={alt}>
     <div>
       <Icon icon={icon} />
     </div>
