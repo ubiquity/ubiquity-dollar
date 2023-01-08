@@ -25,7 +25,7 @@ contract UbiquiStickTest is Test {
 
         mintTo = 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045;  // Vitalik's address
         transferTo = 0xc6b0562605D35eE710138402B878ffe6F2E23807; // Beeple's address
-        bannedOperator = 0x2B2e8cDA09bBA9660dCA5cB6233787738Ad68329; // SudoSwap LSSVMPairRouter
+        bannedOperator = 0x00000000000111AbE46ff893f3B2fdF1F759a8A8; // Blur NFT Marketplace (banned by the OperatorFilterRegistry contract at https://etherscan.io/address/0x000000000000AAeB6D7670E522A718067333cd4E)
         allowedOperator = 0x4feE7B061C97C9c496b01DbcE9CDb10c02f0a0Be; // Rarible NFT Transfer Proxy (for Approvals)
     }
 
