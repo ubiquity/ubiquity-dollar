@@ -228,7 +228,6 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     function sendDust(address _to, address _token, uint256 _amount)
         external
-        override
         onlyStakingManager
     {
         _sendDust(_to, _token, _amount);
