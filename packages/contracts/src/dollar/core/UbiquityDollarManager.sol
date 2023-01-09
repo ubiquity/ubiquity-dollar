@@ -79,7 +79,7 @@ contract UbiquityDollarManager is AccessControl {
         // to be removed
 
         TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(twapOracleAddress);
-        oracle.update();
+        ///oracle.update();
     }
 
     function setCreditTokenAddress(address _creditTokenAddress)
