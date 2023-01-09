@@ -36,8 +36,8 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool{
         require(_reserve0 != 0 && _reserve1 != 0, "TWAPOracle: NO_RESERVES");
         // ensure that pair balance is perfect
         require(_reserve0 == _reserve1, "TWAPOracle: PAIR_UNBALANCED");
-        priceCumulativeLast = IMetaPool(_pool).get_price_cumulative_last();
-        pricesBlockTimestampLast = IMetaPool(_pool).block_timestamp_last();
+        ///priceCumulativeLast = IMetaPool(_pool).get_price_cumulative_last();
+        ///pricesBlockTimestampLast = IMetaPool(_pool).block_timestamp_last();
 
         price0Average = 1 ether;
         price1Average = 1 ether;

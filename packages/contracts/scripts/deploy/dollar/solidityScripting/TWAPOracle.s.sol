@@ -9,12 +9,12 @@ contract TWAPScript is GovernanceScript {
 		uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 		vm.startBroadcast(deployerPrivateKey);
 
-		MockTWAPOracleDollar3pool twapOracle = new MockTWAPOracleDollar3pool( 
+		
+
+		TWAPOracleDollar3pool twapOracle = new TWAPOracleDollar3pool( 
 			metapool, 
 			address(dollar), 
-			address(USDCrvToken),
-			1e18,
-			1e18
+			address(USDCrvToken)
 		); 
 
 		manager.setTwapOracleAddress(address(twapOracle));

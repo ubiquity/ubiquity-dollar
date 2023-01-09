@@ -21,9 +21,6 @@ import "src/dollar/StakingShare.sol";
 import "src/dollar/UbiquityChef.sol";
 import "src/dollar/UbiquityFormulas.sol";
 
-import "src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import "src/dollar/mocks/MockERC20.sol";
-
 import "../../../../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 import "forge-std/Script.sol";

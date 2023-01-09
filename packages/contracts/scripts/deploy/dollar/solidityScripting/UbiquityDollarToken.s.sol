@@ -18,9 +18,6 @@ contract DollarScript is ManagerScript{
         
         dollar.mint(address(manager), 10000e18);
 
-        
-
-        
         manager.deployStableSwapPool(
             curveFactory,
             basepool,
@@ -30,12 +27,6 @@ contract DollarScript is ManagerScript{
         );
         
         metapool = manager.stableSwapMetaPoolAddress();
-
-        uint256[2] memory minAmounts = [uint256(0),uint256(0)];
-        
-        IMetaPool(metapool).remove_liquidity(100e18, minAmounts);
-        
-        
         
         vm.stopBroadcast();
     }
