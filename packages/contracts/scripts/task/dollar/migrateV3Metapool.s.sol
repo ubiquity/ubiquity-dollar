@@ -53,7 +53,23 @@ contract migrateFunds is Script {
 			require(v3Metapool.balanceOf(address(staking)) > 0);
 
 			twapOracle = new TWAPOracleDollar3pool(address(v3Metapool), address(uAD), address(USD3CRVToken));
-			manager.setTwapOracleAddress(address(twapOracle));
+			manager.setTwapOracleAddress(address(twapOracle));	
+
+			metaBalance = v2Metapool.balanceOf(admin);
+			v2Metapool.remove_liquidity(metaBalance,[uint256(0), uint256(0)]);
+
+			usd3Bal = USD3CRVToken.balanceOf(admin);
+			uADBal = uAD.balanceOf(admin);
+
+			USD3CRVToken.approve(address(v3Metapool), 0);
+			USD3CRVToken.approve(address(v3Metapool), usd3Bal);
+
+			uAD.approve(address(v3Metapool), 0);
+			uAD.approve(address(v3Metapool), uADBal);
+
+			v3Metapool.add_liquidity([uADBal, usd3Bal], 0, admin);
+
+
         	
         	vm.stopBroadcast();
 	}
