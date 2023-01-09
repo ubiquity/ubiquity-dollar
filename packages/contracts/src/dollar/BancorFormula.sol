@@ -19,6 +19,18 @@ contract BancorFormula is BancorPower {
 
     bytes16 private immutable ONE = (uint256(1)).fromUInt();
     uint32 private constant MAX_WEIGHT = 1000000;
+    uint32 private immutable EULER = 0;
+
+    function _calculatePurchasePrice(
+        uint256 _maxPrice,
+        uint256 _growthRate,
+        uint256 _inflectionPoint,
+        uint256 _tokenID
+    ) internal view returns(uint256) {
+
+        bytes16 res = _tokenID.fromUInt().sub(_inflectionPoint.fromUInt());
+
+    }
 
     /**
      * @dev given a token supply, connector balance, weight and a deposit amount (in the connector token),
