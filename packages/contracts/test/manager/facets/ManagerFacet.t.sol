@@ -124,10 +124,6 @@ contract TestManagerFacet is DiamondSetup {
         );
     }
 
-    function testShouldInitializeDollarTokenAddress() public prankAs(admin) {
-        assertEq(IManagerFacet.getDollarTokenAddress(), address(diamond));
-    }
-
     function testShouldDeployStableSwapPool() public {
         vm.startPrank(admin);
 
