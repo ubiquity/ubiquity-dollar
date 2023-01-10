@@ -26,7 +26,7 @@ contract metapoolMigrate is Test {
     uint256 metaBalance;
 
     function setUp() public {
-        mainnet = vm.createSelectFork(vm.envString("RPC_URL"));
+        ///mainnet = vm.createSelectFork(vm.envString("RPC_URL"));
         snapshot = vm.snapshot();
     }
 
