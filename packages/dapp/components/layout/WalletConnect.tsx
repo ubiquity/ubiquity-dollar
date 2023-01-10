@@ -12,7 +12,7 @@ const WalletConnect = () => {
           {isConnected ? (
             <div>
               <Button onClick={() => disconnect()}>Disconnect</Button>
-              <a href={`https://etherscan.io/address/${address}`} target="_blank" id="Address">
+              <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer" id="Address">
                 {ensName || truncatedAddress}
               </a>
             </div>

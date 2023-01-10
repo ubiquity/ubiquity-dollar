@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Icon, { IconsNames } from "../ui/Icon";
+import BuildInfo from "./BuildInfo";
 import WalletConnect from "./WalletConnect";
 
 const PROD = process.env.NODE_ENV == "production";
@@ -20,7 +21,7 @@ const Sidebar = () => {
                         <Icon icon="uad" />
                       </div>
                       <div>
-                        <span>Ubiquity Dollar</span>
+                        <span>Ubiquity Dollar (Beta)</span>
                       </div>
                     </div>
                   </a>
@@ -58,6 +59,9 @@ const Sidebar = () => {
             <li>
               <WalletConnect />
             </li>
+            <li>
+              <BuildInfo />
+            </li>
           </ul>
         </div>
       </div>
@@ -66,7 +70,7 @@ const Sidebar = () => {
 };
 
 const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; alt: string }) => (
-  <a href={href} target="_blank" title={alt}>
+  <a href={href} target="_blank" rel="noopener noreferrer" title={alt}>
     <div>
       <Icon icon={icon} />
     </div>

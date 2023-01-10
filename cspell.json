@@ -102,8 +102,10 @@
     "Funcs",
     "Reentrancy",
     "uncollateralized",
+    "collateralized",
     "alloc",
     "ubiquiti",
-    "buildhome"
+    "buildhome",
+    "ubiquibot"
   ]
 }
