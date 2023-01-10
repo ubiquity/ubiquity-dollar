@@ -22,6 +22,8 @@ contract metapoolMigrate is Test {
 
     uint256 mainnet;
     uint256 snapshot;
+    uint256 metaBalanceV3;
+    uint256 metaBalance;
 
     function setUp() public {
         mainnet = vm.createSelectFork(vm.envString("RPC_URL"));
@@ -29,55 +31,14 @@ contract metapoolMigrate is Test {
     }
 
     function testMigrateCompare() public {
-        vm.startPrank(admin);
+        
 
         uint256 v2uADBal = uAD.balanceOf(address(v2Metapool));
         uint256 v23CRVBal = USD3CRV.balanceOf(address(v2Metapool));
 
         uint256 v2LP = v2Metapool.balanceOf(address(staking)) + v2Metapool.balanceOf(admin);
 
-        uint256 metaBalance = v2Metapool.balanceOf(address(staking));
-        staking.sendDust(admin, address(v2Metapool), metaBalance);
-
-        v2Metapool.remove_liquidity(metaBalance,[uint256(0), uint256(0)]);
-
-        uint256 usd3Bal = USD3CRV.balanceOf(admin);
-        uint256 uADBal = uAD.balanceOf(admin);
-
-        uint256 deposit;
-
-        if(usd3Bal <= uADBal){
-            deposit = usd3Bal;
-        } else {
-            deposit = uADBal;
-        }
-
-        USD3CRV.approve(address(v3Metapool), 0);
-        USD3CRV.approve(address(v3Metapool), deposit);
-
-        uAD.approve(address(v3Metapool), 0);
-        uAD.approve(address(v3Metapool), deposit);
-
-        v3Metapool.add_liquidity([deposit, deposit], 0, address(staking));
-        uint256 metaBalanceV3 = v3Metapool.balanceOf(address(staking));
-
-        require(metaBalanceV3 > 0);
-
-        manager.setStableSwapMetaPoolAddress(address(v3Metapool));
-
-        uint256 treasuryLP = v2Metapool.balanceOf(admin);
-        v2Metapool.remove_liquidity(treasuryLP,[uint256(0), uint256(0)]);
-
-        usd3Bal = USD3CRV.balanceOf(admin);
-        uADBal = uAD.balanceOf(admin);
-
-        USD3CRV.approve(address(v3Metapool), 0);
-        USD3CRV.approve(address(v3Metapool), usd3Bal);
-
-        uAD.approve(address(v3Metapool), 0);
-        uAD.approve(address(v3Metapool), uADBal);
-
-        v3Metapool.add_liquidity([uADBal, usd3Bal], 0, admin);
+        migrate();
 
         uint256 v3LP = v3Metapool.balanceOf(address(staking)) + v3Metapool.balanceOf(admin);
         uint256 v3uADBal = uAD.balanceOf(address(v3Metapool));
@@ -92,28 +53,66 @@ contract metapoolMigrate is Test {
         console.log("V3 uAD Bal: ", v3uADBal);
         console.log("V3 3CRV Bal: ", v33CRVBal);
 
-        vm.stopPrank();
+        
     }
 
     function testV2WithdrawVsV3() public {
         address user = 0x4007CE2083c7F3E18097aeB3A39bb8eC149a341d;
         uint256[] memory tokens =bonds.holderTokens(user);
 
-
+        uint256 uADPreBal = uAD.balanceOf(user);
         BondingShareV2.Bond memory bond =bonds.getBond(tokens[0]);
         uint256 withdraw = bond.lpAmount;
 
         vm.roll(block.number + 10483200);
 
-        vm.prank(user);
+        vm.startPrank(user);
         staking.removeLiquidity(withdraw, tokens[0]);
-
         uint256 v2Bal = v2Metapool.balanceOf(user);
+        v2Metapool.remove_liquidity(v2Bal,[uint256(0), uint256(0)]);
+        vm.stopPrank();
+
+        uint256 useruADV2 = uAD.balanceOf(user) - uADPreBal;
+        uint256 user3CRVV2 = USD3CRV.balanceOf(user);
+
+        
 
         vm.revertTo(snapshot);
 
+        migrate();
+
+
+        vm.roll(block.number + 10483200);
+        BondingShareV2.Bond memory bondV3 =bonds.getBond(tokens[0]);
+        uint256 withdrawV3 = bondV3.lpAmount;
+        vm.startPrank(user);
+        staking.removeLiquidity(withdrawV3, tokens[0]);
+        uint256 v3Bal = v3Metapool.balanceOf(user);
+        
+        v3Metapool.remove_liquidity(v3Bal,[uint256(0), uint256(0)]);
+        vm.stopPrank();
+
+        uint256 useruADV3 = uAD.balanceOf(user) - uADPreBal;
+        uint256 user3CRVV3 = USD3CRV.balanceOf(user);
+
+        uint256 v3uADbal = uAD.balanceOf(address(v3Metapool));
+        uint256 v33CRVBal = USD3CRV.balanceOf(address(v3Metapool));
+        
+
+        console.log("V2 Withdraw: ", v2Bal);
+        console.log("V3 Withdraw: ", v3Bal);
+        console.log("V2 0 Withdraw: ", useruADV2);
+        console.log("V2 1 Withdraw: ", user3CRVV2);
+        console.log("V3 0 Withdraw: ", useruADV3);
+        console.log("V3 1 Withdraw: ", user3CRVV3);
+        console.log("V3 Pool 0 bal: ", v3uADbal);
+        console.log("V3 Pool 1 bal: ", v33CRVBal);
+
+    }
+
+    function migrate() internal {
         vm.startPrank(admin);
-        uint256 metaBalance = v2Metapool.balanceOf(address(staking));
+        metaBalance = v2Metapool.balanceOf(address(staking));
         staking.sendDust(admin, address(v2Metapool), metaBalance);
 
         v2Metapool.remove_liquidity(metaBalance,[uint256(0), uint256(0)]);
@@ -136,24 +135,34 @@ contract metapoolMigrate is Test {
         uAD.approve(address(v3Metapool), deposit);
 
         v3Metapool.add_liquidity([deposit, deposit], 0, address(staking));
-        uint256 metaBalanceV3 = v3Metapool.balanceOf(address(staking));
+        metaBalanceV3 = v3Metapool.balanceOf(address(staking));
 
         require(metaBalanceV3 > 0);
 
         manager.setStableSwapMetaPoolAddress(address(v3Metapool));
+
+        uint256 treasuryLP = v2Metapool.balanceOf(admin);
+        v2Metapool.remove_liquidity(treasuryLP,[uint256(0), uint256(0)]);
+
+        usd3Bal = USD3CRV.balanceOf(admin);
+        uADBal = uAD.balanceOf(admin);
+
+        uint256 depositV3;
+
+        if(usd3Bal < uADBal){
+            depositV3 = usd3Bal;
+        } else {
+            deposit = uADBal;
+        }
+
+        USD3CRV.approve(address(v3Metapool), 0);
+        USD3CRV.approve(address(v3Metapool), depositV3);
+
+        uAD.approve(address(v3Metapool), 0);
+        uAD.approve(address(v3Metapool), depositV3);
+
+        v3Metapool.add_liquidity([depositV3, depositV3], 0, admin);
         vm.stopPrank();
-
-        vm.roll(block.number + 10483200);
-        BondingShareV2.Bond memory bondV3 =bonds.getBond(tokens[0]);
-        uint256 withdrawV3 = bondV3.lpAmount;
-        vm.prank(user);
-        staking.removeLiquidity(withdrawV3, tokens[0]);
-
-        uint256 v3Bal = v3Metapool.balanceOf(user);
-
-        console.log("V2 Withdraw: ", v2Bal);
-        console.log("V3 Withdraw: ", v3Bal);
-
     }
 
 }
