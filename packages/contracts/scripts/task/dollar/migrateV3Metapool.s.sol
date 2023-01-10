@@ -61,15 +61,21 @@ contract migrateFunds is Script {
 			usd3Bal = USD3CRVToken.balanceOf(admin);
 			uADBal = uAD.balanceOf(admin);
 
-			USD3CRVToken.approve(address(v3Metapool), 0);
-			USD3CRVToken.approve(address(v3Metapool), usd3Bal);
+			uint256 depositV3;
+
+			if(usd3Bal < uADBal){
+				depositV3 = usd3Bal;
+			} else {
+				deposit = uADBal;
+			}
+
+			USD3CRV.approve(address(v3Metapool), 0);
+			USD3CRV.approve(address(v3Metapool), depositV3);
 
 			uAD.approve(address(v3Metapool), 0);
-			uAD.approve(address(v3Metapool), uADBal);
+			uAD.approve(address(v3Metapool), depositV3);
 
-			v3Metapool.add_liquidity([uADBal, usd3Bal], 0, admin);
-
-
+			v3Metapool.add_liquidity([depositV3, depositV3], 0, admin);
         	
         	vm.stopBroadcast();
 	}
