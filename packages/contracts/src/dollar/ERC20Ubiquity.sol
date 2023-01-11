@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -13,12 +13,7 @@ import "./interfaces/IERC20Ubiquity.sol";
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
-contract ERC20Ubiquity is
-    IERC20Ubiquity,
-    ERC20,
-    ERC20Burnable,
-    ERC20Pausable
-{
+contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     UbiquityDollarManager public manager;
 
     // solhint-disable-next-line var-name-mixedcase
@@ -34,7 +29,7 @@ contract ERC20Ubiquity is
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -42,7 +37,7 @@ contract ERC20Ubiquity is
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
             "Governance token: not burner"
         );
         _;
@@ -64,9 +59,11 @@ contract ERC20Ubiquity is
         _;
     }
 
-    constructor(address _manager, string memory name_, string memory symbol_)
-        ERC20(name_, symbol_)
-    {
+    constructor(
+        address _manager,
+        string memory name_,
+        string memory symbol_
+    ) ERC20(name_, symbol_) {
         _tokenName = name_;
         _symbol = symbol_;
         manager = UbiquityDollarManager(_manager);
@@ -154,7 +151,7 @@ contract ERC20Ubiquity is
     /// @param amount the amount to burn
     function burn(uint256 amount)
         public
-        override (ERC20Burnable, IERC20Ubiquity)
+        override(ERC20Burnable, IERC20Ubiquity)
         whenNotPaused
     {
         super.burn(amount);
@@ -166,7 +163,7 @@ contract ERC20Ubiquity is
     /// @param amount the amount to burn
     function burnFrom(address account, uint256 amount)
         public
-        override (ERC20Burnable, IERC20Ubiquity)
+        override(ERC20Burnable, IERC20Ubiquity)
         onlyBurner
         whenNotPaused // to suppress ? if BURNER_ROLE should do it even paused ?
     {
@@ -175,12 +172,7 @@ contract ERC20Ubiquity is
     }
 
     // @dev Creates `amount` new tokens for `to`.
-    function mint(address to, uint256 amount)
-        public
-        override
-        onlyMinter
-        whenNotPaused
-    {
+    function mint(address to, uint256 amount) public override onlyMinter {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }
@@ -198,7 +190,7 @@ contract ERC20Ubiquity is
     /**
      * @dev Returns the name of the token.
      */
-    function name() public view override (ERC20) returns (string memory) {
+    function name() public view override(ERC20) returns (string memory) {
         return _tokenName;
     }
 
@@ -206,24 +198,23 @@ contract ERC20Ubiquity is
      * @dev Returns the symbol of the token, usually a shorter version of the
      * name.
      */
-    function symbol() public view override (ERC20) returns (string memory) {
+    function symbol() public view override(ERC20) returns (string memory) {
         return _symbol;
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 amount)
-        internal
-        virtual
-        override (ERC20, ERC20Pausable)
-    {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual override(ERC20, ERC20Pausable) {
         super._beforeTokenTransfer(from, to, amount);
     }
 
-    function _transfer(address sender, address recipient, uint256 amount)
-        internal
-        virtual
-        override
-        whenNotPaused
-    {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal virtual override whenNotPaused {
         super._transfer(sender, recipient, amount);
     }
 }

@@ -23,8 +23,8 @@
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "ts-node ./scripts/runner/runner.ts",
-    "slither:run": "slither . --compile-force-framework foundry",
+    "test": "forge test --fork-url https://cloudflare-eth.com",
+    "slither:run": "slither . --compile-force-framework foundry --config-file slither.config.json",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
     "deploy": "ts-node ./scripts/deploy/deploy.ts",
@@ -57,5 +57,8 @@
       "postinstall-postinstall": false,
       "husky": false
     }
+  },
+  "devDependencies": {
+    "cspell": "latest"
   }
 }

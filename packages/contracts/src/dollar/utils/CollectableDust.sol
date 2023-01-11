@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
@@ -24,7 +24,7 @@ abstract contract CollectableDust is ICollectableDust {
             !_protocolTokens.contains(_token),
             "collectable-dust::token-is-part-of-the-protocol"
         );
-        _protocolTokens.add(_token);
+        require(_protocolTokens.add(_token));
         emit ProtocolTokenAdded(_token);
     }
 
@@ -33,24 +33,25 @@ abstract contract CollectableDust is ICollectableDust {
             _protocolTokens.contains(_token),
             "collectable-dust::token-not-part-of-the-protocol"
         );
-        _protocolTokens.remove(_token);
+        require(_protocolTokens.remove(_token));
         emit ProtocolTokenRemoved(_token);
     }
 
-    function _sendDust(address _to, address _token, uint256 _amount) internal {
+    function _sendDust(address to, address token, uint256 amount) internal {
         require(
-            _to != address(0),
-            "collectable-dust::cant-send-dust-to-zero-address"
+            to != address(0), "collectable-dust::cant-send-dust-to-zero-address"
         );
         require(
-            !_protocolTokens.contains(_token),
+            !_protocolTokens.contains(token),
             "collectable-dust::token-is-part-of-the-protocol"
         );
-        if (_token == ETH_ADDRESS) {
-            payable(_to).transfer(_amount);
+        if (token == ETH_ADDRESS) {
+            // slither-disable-next-line low-level-calls
+            (bool sent,) = payable(to).call{value: amount}("");
+            require(sent, "Failed to transfer Ether");
         } else {
-            IERC20(_token).safeTransfer(_to, _amount);
+            IERC20(token).safeTransfer(to, amount);
         }
-        emit DustSent(_to, _token, _amount);
+        emit DustSent(to, token, amount);
     }
 }

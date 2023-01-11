@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./core/UbiquityDollarManager.sol";
 
 contract SushiSwapPool {
-    IUniswapV2Factory public factory =
+    IUniswapV2Factory constant factory =
         IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
 
     UbiquityDollarManager public manager;

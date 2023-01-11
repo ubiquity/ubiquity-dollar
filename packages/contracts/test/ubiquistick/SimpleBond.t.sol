@@ -102,7 +102,7 @@ contract StickerStateTest is StickerState {
             firstAccount,
             address(bondToken),
             amount,
-            (50 * amount / 1e9),
+            ((50 * amount) / 1e9),
             block.number,
             0
             );
@@ -159,9 +159,9 @@ contract BondedStateTest is BondedState {
 
         uint256 expected;
 
-        expected += amount0 * 50 / 1e9 * (block.number - block0) / 100;
-        expected += amount1 * 50 / 1e9 * (block.number - block1) / 100;
-        expected += amount2 * 50 / 1e9 * (block.number - block2) / 100;
+        expected += (((amount0 * 50) / 1e9) * (block.number - block0)) / 100;
+        expected += (((amount1 * 50) / 1e9) * (block.number - block1)) / 100;
+        expected += (((amount2 * 50) / 1e9) * (block.number - block2)) / 100;
 
         vm.prank(firstAccount);
         uint256 claimed = bond.claim();
@@ -175,7 +175,8 @@ contract BondedStateTest is BondedState {
         uint256 preBal = rewardToken.balanceOf(secondAccount);
         vm.warp(block.number + blocks);
         (, uint256 amount0,,, uint256 block0) = bond.bonds(secondAccount, 0);
-        uint256 expected = amount0 * 50 / 1e9 * (block.number - block0) / 100;
+        uint256 expected =
+            (((amount0 * 50) / 1e9) * (block.number - block0)) / 100;
         vm.expectEmit(true, true, true, true, address(bond));
         emit LogClaim(secondAccount, 0, expected);
         vm.prank(secondAccount);
@@ -216,7 +217,7 @@ contract BondedStateTest is BondedState {
 
         for (uint256 i; i < amounts.length; ++i) {
             claimableExpected +=
-                amounts[i] * 50 / 1e9 * (block.number - blocks_[i]) / 100;
+                (((amounts[i] * 50) / 1e9) * (block.number - blocks_[i])) / 100;
         }
 
         (uint256 rewards_, uint256 rewardsClaimed, uint256 rewardsClaimable) =
@@ -235,7 +236,7 @@ contract BondedStateTest is BondedState {
             bond.bonds(secondAccount, i);
 
         uint256 claimableExpected =
-            amount * 50 / 1e9 * (block.number - block_) / 100;
+            (((amount * 50) / 1e9) * (block.number - block_)) / 100;
         (uint256 reward, uint256 rewardClaimed, uint256 rewardClaimable) =
             bond.rewardsBondOf(secondAccount, i);
         assertEq(rewardExpected, reward);

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditNFTRedemptionCalculator.sol";
-import "../libs/ABDKMathQuad.sol";
-import "./CreditNFT.sol";
 import "./UbiquityDollarManager.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "./CreditNFT.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
@@ -41,7 +41,7 @@ contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
         );
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));
-        bytes16 res = one.div(oneMinusRAllSquared);
-        return res.mul(dollarsToBurn.fromUInt()).toUInt();
+        bytes16 res = one.mul(dollarsToBurn.fromUInt());
+        return res.div(oneMinusRAllSquared).toUInt();
     }
 }

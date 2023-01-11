@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -34,7 +34,7 @@ contract StakingShare is ERC1155SetUri, ERC1155BurnableSetUri, ERC1155PausableSe
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -50,7 +50,7 @@ contract StakingShare is ERC1155SetUri, ERC1155BurnableSetUri, ERC1155PausableSe
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
+            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
             "Governance token: not burner"
         );
         _;

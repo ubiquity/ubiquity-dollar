@@ -53,18 +53,14 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfDiamondLoupeFacet.push(
             IDiamondLoupe.facetFunctionSelectors.selector
         );
-        selectorsOfDiamondLoupeFacet.push(
-            IDiamondLoupe.facetAddresses.selector
-        );
+        selectorsOfDiamondLoupeFacet.push(IDiamondLoupe.facetAddresses.selector);
         selectorsOfDiamondLoupeFacet.push(IDiamondLoupe.facetAddress.selector);
         selectorsOfDiamondLoupeFacet.push(IERC165.supportsInterface.selector);
 
         selectorsOfOwnershipFacet.push(IERC173.transferOwnership.selector);
         selectorsOfOwnershipFacet.push(IERC173.owner.selector);
 
-        selectorsOfManagerFacet.push(
-            managerFacet.setTwapOracleAddress.selector
-        );
+        selectorsOfManagerFacet.push(managerFacet.setTwapOracleAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.setDollarTokenAddress.selector
         );
@@ -90,9 +86,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(
             managerFacet.setExcessDollarsDistributor.selector
         );
-        selectorsOfManagerFacet.push(
-            managerFacet.setMasterChefAddress.selector
-        );
+        selectorsOfManagerFacet.push(managerFacet.setMasterChefAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.setFormulasAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.setStakingShareAddress.selector
@@ -104,15 +98,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
             managerFacet.setStakingContractAddress.selector
         );
         selectorsOfManagerFacet.push(managerFacet.setTreasuryAddress.selector);
-        selectorsOfManagerFacet.push(
-            managerFacet.setIncentiveToDollar.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacet.deployStableSwapPool.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacet.getTwapOracleAddress.selector
-        );
+        selectorsOfManagerFacet.push(managerFacet.setIncentiveToDollar.selector);
+        selectorsOfManagerFacet.push(managerFacet.deployStableSwapPool.selector);
+        selectorsOfManagerFacet.push(managerFacet.getTwapOracleAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.getDollarTokenAddress.selector
         );
@@ -138,9 +126,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(
             managerFacet.getExcessDollarsDistributor.selector
         );
-        selectorsOfManagerFacet.push(
-            managerFacet.getMasterChefAddress.selector
-        );
+        selectorsOfManagerFacet.push(managerFacet.getMasterChefAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.getFormulasAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.getStakingShareAddress.selector
