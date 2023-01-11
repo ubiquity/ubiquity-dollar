@@ -21,8 +21,8 @@ contract DollarMintCalculatorTest is LocalTestHelper {
         dollarMintCalculatorAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).dollarMintCalculatorAddress();
-        dollarAddress =
-            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress();
+        dollarAddress = UbiquityDollarManager(dollarManagerAddress)
+            .dollarTokenAddress();
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {
@@ -47,8 +47,8 @@ contract DollarMintCalculatorTest is LocalTestHelper {
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
         uint256 totalSupply = MockDollarToken(dollarAddress).totalSupply();
-        uint256 amountToMint =
-            DollarMintCalculator(dollarMintCalculatorAddress).getDollarsToMint();
+        uint256 amountToMint = DollarMintCalculator(dollarMintCalculatorAddress)
+            .getDollarsToMint();
         assertEq(amountToMint, totalSupply);
     }
 }

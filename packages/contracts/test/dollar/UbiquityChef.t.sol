@@ -138,11 +138,4 @@ contract DepositStateTest is DepositState {
         uint256 pendingGovernance = ubiquityChef.pendingGovernance(1);
         assertEq(userPending, pendingGovernance);
     }
-
-    function testGetStakingShareInfo() public {
-        uint256[2] memory info1 = [shares, 0];
-        uint256[2] memory info2 = ubiquityChef.getStakingShareInfo(1);
-        assertEq(info1[0], info2[0]);
-        assertEq(info1[1], info2[1]);
-    }
 }

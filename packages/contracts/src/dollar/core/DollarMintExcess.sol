@@ -37,7 +37,7 @@ contract DollarMintExcess is IDollarMintExcess {
         if (excessDollars > _minAmountToDistribute) {
             address treasuryAddress = manager.treasuryAddress();
 
-            // curve UbiquityDollar-3CRV liquidity pool
+            // curve uAD-3CRV liquidity pool
             uint256 tenPercent =
                 excessDollars.fromUInt().div(uint256(10).fromUInt()).toUInt();
             uint256 fiftyPercent =
@@ -45,17 +45,17 @@ contract DollarMintExcess is IDollarMintExcess {
             IERC20Ubiquity(manager.dollarTokenAddress()).safeTransfer(
                 treasuryAddress, fiftyPercent
             );
-            // convert Ubiquity Dollar to GovernanceToken-DollarToken LP on sushi and burn them
+            // convert uAD to uGOV-UAD LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
-            // convert remaining Ubiquity Dollar to curve LP tokens
-            // and transfer the curve LP tokens to the staking contract
+            // convert remaining uAD to curve LP tokens
+            // and transfer the curve LP tokens to the bonding contract
             _convertToCurveLPAndTransfer(
                 excessDollars - fiftyPercent - tenPercent
             );
         }
     }
 
-    // swap half amount to Governance Token
+    // swap half amount to uGOV
     function _swapDollarsForGovernance(bytes16 amountIn)
         internal
         returns (uint256)
@@ -70,9 +70,12 @@ contract DollarMintExcess is IDollarMintExcess {
         return amounts[1];
     }
 
-    // buy-back and burn Governance Token
-    function _governanceBuyBackLPAndBurn(uint256 amount) internal {
-        bytes16 amountDollars = (amount.fromUInt()).div(uint256(2).fromUInt());
+    // buy-back and burn uGOV
+    function _governanceBuyBackLPAndBurn(uint256 amount)
+        internal
+        returns (uint256 amountA, uint256 amountB, uint256 liquidity)
+    {
+        bytes16 amountUAD = (amount.fromUInt()).div(uint256(2).fromUInt());
 
         // we need to approve sushi router
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
@@ -81,22 +84,21 @@ contract DollarMintExcess is IDollarMintExcess {
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             address(_router), amount
         );
-        uint256 amountGovernanceTokens =
-            _swapDollarsForGovernance(amountDollars);
+        uint256 amountUGOV = _swapDollarsForGovernance(amountUAD);
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router), 0
         );
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
-            address(_router), amountGovernanceTokens
+            address(_router), amountUGOV
         );
 
         // deposit liquidity and transfer to zero address (burn)
-        _router.addLiquidity(
+        (amountA, amountB, liquidity) = _router.addLiquidity(
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
-            amountDollars.toUInt(),
-            amountGovernanceTokens,
+            amountUAD.toUInt(),
+            amountUGOV,
             0,
             0,
             address(0),
@@ -106,28 +108,30 @@ contract DollarMintExcess is IDollarMintExcess {
 
     // @dev convert to curve LP
     // @param amount to convert to curve LP by swapping to 3CRV
-    //        and deposit the 3CRV as liquidity to get UbiquityDollar-3CRV LP tokens
-    //        the LP token are sent to the staking contract
+    //        and deposit the 3CRV as liquidity to get uAD-3CRV LP tokens
+    //        the LP token are sent to the bonding contract
     function _convertToCurveLPAndTransfer(uint256 amount)
         internal
         returns (uint256)
     {
-        // we need to approve metaPool
-        IERC20Ubiquity(manager.dollarTokenAddress()).approve(
+        // we need to approve  metaPool
+        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             manager.stableSwapMetaPoolAddress(), 0
         );
-        IERC20Ubiquity(manager.dollarTokenAddress()).approve(
+        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             manager.stableSwapMetaPoolAddress(), amount
         );
 
-        // swap amount of Ubiquity Dollar => 3CRV
+        // swap  amount of uAD => 3CRV
         uint256 amount3CRVReceived = IMetaPool(
             manager.stableSwapMetaPoolAddress()
         ).exchange(0, 1, amount, 0);
 
         // approve metapool to transfer our 3CRV
-        IERC20(manager.curve3PoolTokenAddress()).approve(
-            manager.stableSwapMetaPoolAddress(), 0
+        require(
+            IERC20(manager.curve3PoolTokenAddress()).approve(
+                manager.stableSwapMetaPoolAddress(), 0
+            )
         );
         require(
             IERC20(manager.curve3PoolTokenAddress()).approve(

@@ -336,17 +336,15 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint128 tokenIndex = token == ubiquityDollar
             ? 0
             : (token == token0 ? 1 : (token == token1 ? 2 : 3));
-        IERC20(ubiquity3PoolLP).approve(
-            depositZapUbiquityDollar,
-            lpTokenAmount
+        require(
+            IERC20(ubiquity3PoolLP).approve(
+                depositZapUbiquityDollar, lpTokenAmount
+            )
         );
         tokenAmount = IDepositZap(depositZapUbiquityDollar)
             .remove_liquidity_one_coin(
-                ubiquity3PoolLP,
-                lpTokenAmount,
-                int128(tokenIndex),
-                0
-            ); //[Ubiquity Dollar, DAI, USDC, USDT]
+            ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0
+        ); //[UAD, DAI, USDC, USDT]
 
         IERC20(token).safeTransfer(msg.sender, tokenAmount);
         IERC20(manager.governanceTokenAddress()).safeTransfer(

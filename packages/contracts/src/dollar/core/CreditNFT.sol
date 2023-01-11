@@ -6,7 +6,7 @@ import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "./UbiquityDollarManager.sol";
 import "../interfaces/ICreditNFT.sol";
 
-/// @title A Credit NFT redeemable for dollars with an expiry block number
+/// @title A creditNFT redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
 contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
@@ -32,7 +32,7 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
     modifier onlyCreditNFTManager() {
         require(
             manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
-            "Caller is not a Credit NFT manager"
+            "Caller is not a creditNFT manager"
         );
         _;
     }
@@ -43,9 +43,9 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
         _totalOutstandingDebt = 0;
     }
 
-    /// @notice Mint an amount of Credit NFT expiring at a certain block for a certain recipient
+    /// @notice Mint an amount of creditNFTs expiring at a certain block for a certain recipient
     /// @param amount amount of tokens to mint
-    /// @param expiryBlockNumber the expiration block number of the Credit NFT to mint
+    /// @param expiryBlockNumber the expiration block number of the creditNFTs to mint
     function mintCreditNFT(
         address recipient,
         uint256 amount,
@@ -64,11 +64,11 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
-    /// @notice Burn an amount of Credit NFT expiring at a certain block from
+    /// @notice Burn an amount of creditNFTs expiring at a certain block from
     /// a certain holder's balance
-    /// @param creditNFTOwner the owner of those Credit NFT
+    /// @param creditNFTOwner the owner of those creditNFTs
     /// @param amount amount of tokens to burn
-    /// @param expiryBlockNumber the expiration block number of the Credit NFT to burn
+    /// @param expiryBlockNumber the expiration block number of the creditNFTs to burn
     function burnCreditNFT(
         address creditNFTOwner,
         uint256 amount,
@@ -76,10 +76,10 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
     ) public onlyCreditNFTManager {
         require(
             balanceOf(creditNFTOwner, expiryBlockNumber) >= amount,
-            "Credit NFT owner not enough coupons"
+            "CreditNFT owner not enough creditNFTs"
         );
         burn(creditNFTOwner, expiryBlockNumber, amount);
-        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, amount);
+        emit BurnedCreditNFTs(creditNFTOwner, expiryBlockNumber, amount);
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
@@ -106,7 +106,6 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
                     outstandingDebt - (_tokenSupplies[currentBlockNumber]);
                 _tokenSupplies[currentBlockNumber] = 0;
                 uint256 node = _sortedBlockNumbers.remove(currentBlockNumber);
-                
             }
             currentBlockNumber = _sortedBlockNumbers.popFront();
         }

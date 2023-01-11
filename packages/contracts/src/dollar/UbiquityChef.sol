@@ -320,18 +320,17 @@ contract UbiquityChef is ReentrancyGuard {
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             manager.treasuryAddress(), governanceReward / governanceDivider
         );
-        pool.accGovernancePerShare =
-            pool.accGovernancePerShare + ((governanceReward * 1e12) / _totalShares);
+        pool.accGovernancePerShare = pool.accGovernancePerShare + ((governanceReward * 1e12) / _totalShares);
         pool.lastRewardBlock = block.number;
     }
 
     // Safe governance transfer function, just in case if rounding
     // error causes pool to not have enough governance tokens.
     function _safeGovernanceTransfer(address _to, uint256 _amount) internal {
-        IERC20Ubiquity governance = IERC20Ubiquity(manager.governanceTokenAddress());
-        uint256 governanceBal = governance.balanceOf(address(this));
+        IERC20Ubiquity governanceToken = IERC20Ubiquity(manager.governanceTokenAddress());
+        uint256 governanceBalance = governanceToken.balanceOf(address(this));
         if (_amount > governanceBalance) {
-            governance.safeTransfer(_to, governanceBalance);
+            governanceToken.safeTransfer(_to, governanceBalance);
         } else {
             governance.safeTransfer(_to, _amount);
         }

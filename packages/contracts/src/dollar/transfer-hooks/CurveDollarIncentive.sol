@@ -6,7 +6,7 @@ import "../core/UbiquityDollarManager.sol";
 import "../core/UbiquityDollarToken.sol";
 import "../interfaces/IUbiquityGovernance.sol";
 import "../interfaces/IIncentive.sol";
-import "../libs/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 /// @title Curve trading incentive contract
 /// @author Ubiquity DAO

@@ -21,10 +21,8 @@ import "./TWAPOracleDollar3pool.sol";
 contract UbiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
-    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE =
-        keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
-    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE =
-        keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
+    bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");
+    bytes32 public constant UBQ_BURNER_ROLE = keccak256("UBQ_BURNER_ROLE");
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant CREDIT_NFT_MANAGER_ROLE =

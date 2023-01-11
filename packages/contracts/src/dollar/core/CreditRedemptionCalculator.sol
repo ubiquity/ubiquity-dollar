@@ -18,7 +18,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     modifier onlyAdmin() {
         require(
             manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
-            "CreditCalc: not admin"
+            "UARCalc: not admin"
         );
         _;
     }
@@ -28,14 +28,14 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         manager = UbiquityDollarManager(_manager);
     }
 
-    /// @notice set the constant for Credit Token calculation
-    /// @param coef new constant for Credit Token calculation in ETH format
+    /// @notice set the constant for uAR calculation
+    /// @param coef new constant for uAR calculation in ETH format
     /// @dev a coef of 1 ether means 1
     function setConstant(uint256 coef) external onlyAdmin {
         _coef = coef;
     }
 
-    /// @notice get the constant for Credit Token calculation
+    /// @notice get the constant for uAR calculation
     function getConstant() external view returns (uint256) {
         return _coef;
     }
