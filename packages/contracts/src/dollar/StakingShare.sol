@@ -24,7 +24,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 lpAmount;
     }
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     mapping(uint256 => Stake) private _stakes;
@@ -59,8 +59,8 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager, string memory uri) ERC1155(uri) {
+        manager = _manager;
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.

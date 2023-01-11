@@ -69,7 +69,7 @@ abstract contract LocalTestHelper is Test {
         manager.setTwapOracleAddress(address(twapOracle));
 
         // deploy governance token
-        governanceToken = new UbiquityGovernanceToken(address(manager));
+        governanceToken = new UbiquityGovernanceToken(manager);
         manager.setGovernanceTokenAddress(address(governanceToken));
 
         // deploy CreditNFTRedemptionCalculator
@@ -84,18 +84,18 @@ abstract contract LocalTestHelper is Test {
 
         // deploy CreditRedemptionCalculator
         creditRedemptionCalculator = new CreditRedemptionCalculator(
-            address(manager)
+            manager
         );
         manager.setCreditCalculatorAddress(address(creditRedemptionCalculator));
 
         // deploy DollarMintCalculator
-        dollarMintCalculator = new DollarMintCalculator(address(manager));
+        dollarMintCalculator = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(dollarMintCalculator));
 
         // deploy CreditNFTManager
-        creditNFTManager = new CreditNFTManager(address(manager), 100);
+        creditNFTManager = new CreditNFTManager(manager, 100);
 
-        dollarMintExcess = new DollarMintExcess(address(manager));
+        dollarMintExcess = new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(
             address(creditNFTManager),
             address(dollarMintExcess)

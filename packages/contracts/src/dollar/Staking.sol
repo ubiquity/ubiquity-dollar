@@ -21,7 +21,7 @@ import "./utils/CollectableDust.sol";
 contract Staking is IStaking, CollectableDust, Pausable {
     using SafeERC20 for IERC20;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     uint256 public constant ONE = uint256(1 ether); // 3Crv has 18 decimals
     uint256 public stakingDiscountMultiplier = uint256(1e15); // 0.001
     uint256 public blockCountInAWeek = 45361;
@@ -29,7 +29,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     uint256 public lpRewards;
     uint256 public totalLpToMigrate;
-    address public stakingFormulasAddress;
+    StakingFormulas public stakingFormulas;
 
     address public migrator; // temporary address to handle migration
     address[] private _toMigrateOriginals;
@@ -108,13 +108,13 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     constructor(
         UbiquityDollarManager manager_,
-        address stakingFormulasAddress_,
+        StakingFormulas stakingFormulas_,
         address[] memory _originals,
         uint256[] memory _lpBalances,
         uint256[] memory _lockups
     ) CollectableDust() Pausable() {
         manager = manager_;
-        stakingFormulasAddress = stakingFormulasAddress_;
+        stakingFormulas = stakingFormulas_;
         migrator = msg.sender;
 
         uint256 lgt = _originals.length;
@@ -202,11 +202,11 @@ contract Staking is IStaking, CollectableDust, Pausable {
             );
     }
 
-    function setStakingFormulasAddress(address stakingFormulasAddress_)
+    function setStakingFormulas(StakingFormulas stakingFormulas_)
         external
         onlyStakingManager
     {
-        stakingFormulasAddress = stakingFormulasAddress_;
+        stakingFormulas = stakingFormulas_;
     }
 
     /// Collectable Dust
@@ -306,11 +306,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 pendingLpReward =
             lpRewardForShares(sharesToRemove, stake.lpRewardDebt);
         // Following step would just return the same pendingLpReward as input so commenting out
-        /*
-        // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsAddLiquidityNormalization(share, stakeInfo, pendingLpReward);
-        */
+       
         // add these LP Rewards to the deposited amount of LP token
         stake.lpAmount += pendingLpReward;
         lpRewards -= pendingLpReward;
@@ -359,8 +355,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         require(stake.lpAmount >= _amount, "Staking: amount too big");
         // we should decrease the UBQ rewards proportionally to the LP removed
         // sharesToRemove = (staking shares * _amount )  / stake.lpAmount ;
-        uint256 sharesToRemove = StakingFormulas(this.stakingFormulasAddress())
-            .sharesForLP(stake, stakeInfo, _amount);
+        uint256 sharesToRemove = stakingFormulas.sharesForLP(stake, stakeInfo, _amount);
 
         //get all its pending LP Rewards
         _updateLpPerShare();
@@ -380,11 +375,9 @@ contract Staking is IStaking, CollectableDust, Pausable {
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsRemoveLiquidityNormalization(stake, stakeInfo, pendingLpReward);
+        pendingLpReward = stakingFormulas.lpRewardsRemoveLiquidityNormalization(stake, stakeInfo, pendingLpReward);
 
-        uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
-            .correctedAmountToWithdraw(
+        uint256 correctedAmount = stakingFormulas.correctedAmountToWithdraw(
                 StakingShare(manager.stakingShareAddress()).totalLP(),
                 metapool.balanceOf(address(this)) - lpRewards,
                 _amount 

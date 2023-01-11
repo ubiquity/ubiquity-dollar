@@ -26,7 +26,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         dollarAddress =
             UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress();
         excessDollarsDistributorAddress =
-            address(new DollarMintExcess(dollarManagerAddress));
+            address(new DollarMintExcess(manager));
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {

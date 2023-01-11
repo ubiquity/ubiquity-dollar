@@ -14,7 +14,7 @@ import "./interfaces/IDepositZap.sol";
 import "./interfaces/IStaking.sol";
 import "./interfaces/IStakingShare.sol";
 import "./interfaces/IStableSwap3Pool.sol";
-import "./interfaces/IUbiquityDollarManager.sol";
+import "./core/UbiquityDollarManager.sol";
 
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
@@ -26,7 +26,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     address public ubiquityDollar;
     address public depositZapUbiquityDollar;
 
-    IUbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     event DepositSingle(
         address indexed sender,
@@ -52,8 +52,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address indexed sender, uint256 stakingShareId, uint256[4] amounts
     );
 
-    constructor(address _manager, address base3Pool, address depositZap) {
-        manager = IUbiquityDollarManager(_manager); // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
+    constructor(UbiquityDollarManager _manager, address base3Pool, address depositZap) {
+        manager = _manager; // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
         ubiquity3PoolLP = manager.stableSwapMetaPoolAddress(); // 0x20955CB69Ae1515962177D164dfC9522feef567E
         ubiquityDollar = manager.dollarTokenAddress(); // 0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6
         depositZapUbiquityDollar = depositZap; // 0xA79828DF1850E8a3A3064576f380D90aECDD3359;

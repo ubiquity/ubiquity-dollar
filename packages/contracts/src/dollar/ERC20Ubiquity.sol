@@ -14,7 +14,7 @@ import "./interfaces/IERC20Ubiquity.sol";
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
 contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public DOMAIN_SEPARATOR;
@@ -60,13 +60,13 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     }
 
     constructor(
-        address _manager,
+        UbiquityDollarManager _manager,
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {
         _tokenName = name_;
         _symbol = symbol_;
-        manager = UbiquityDollarManager(_manager);
+        manager = _manager;
         // sender must be UbiquityDollarManager roleAdmin
         // because he will get the admin, minter and pauser role on Ubiquity Dollar and we want to
         // manage all permissions through the manager

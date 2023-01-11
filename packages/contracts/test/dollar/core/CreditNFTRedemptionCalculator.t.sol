@@ -17,7 +17,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
         super.setUp();
         dollarManagerAddress = address(manager);
         creditNFTCalculatorAddress =
-            address(new CreditNFTRedemptionCalculator(dollarManagerAddress));
+            address(new CreditNFTRedemptionCalculator(manager));
     }
 
     function test_getCreditNFTAmount_revertsIfDebtTooHigh() public {

@@ -40,7 +40,7 @@ contract UbiquityChef is ReentrancyGuard {
     uint256 private _totalShares;
 
     // Ubiquity Manager
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     // governance tokens created per block.
     uint256 public governancePerBlock;

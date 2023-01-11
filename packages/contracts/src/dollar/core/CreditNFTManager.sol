@@ -22,7 +22,7 @@ import "./CreditNFT.sol";
 contract CreditNFTManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     //the amount of dollars we minted this cycle, so we can calculate delta.
     // should be reset to 0 when cycle ends
@@ -51,8 +51,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param _manager the address of the manager contract so we can fetch variables
     /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
     /// once set (unless migrated)
-    constructor(address _manager, uint256 _creditNFTLengthBlocks) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager, uint256 _creditNFTLengthBlocks) {
+        manager = _manager;
         creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 

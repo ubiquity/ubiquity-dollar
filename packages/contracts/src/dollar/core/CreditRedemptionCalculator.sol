@@ -7,12 +7,13 @@ import "./UbiquityDollarManager.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
 
+
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     uint256 private _coef = 1 ether;
 
     modifier onlyAdmin() {
@@ -24,8 +25,8 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     }
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     /// @notice set the constant for uAR calculation

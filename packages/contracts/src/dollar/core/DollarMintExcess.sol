@@ -20,14 +20,14 @@ contract DollarMintExcess is IDollarMintExcess {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     uint256 private immutable _minAmountToDistribute = 100 ether;
     IUniswapV2Router01 private immutable _router =
         IUniswapV2Router01(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F); // SushiV2Router02
 
     /// @param _manager the address of the manager contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function distributeDollars() external override {

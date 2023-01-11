@@ -14,14 +14,14 @@ contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     /*   using ABDKMath64x64 for uint256;
     using ABDKMath64x64 for int128;*/
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function getCreditNFTAmount(uint256 dollarsToBurn)

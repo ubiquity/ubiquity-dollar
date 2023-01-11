@@ -20,8 +20,7 @@ contract CreditNFTTest is LocalTestHelper {
 
     function setUp() public override {
         super.setUp();
-        dollarManagerAddress = address(manager);
-        creditNFTAddress = address(new CreditNFT(dollarManagerAddress));
+        creditNFTAddress = address(new CreditNFT(manager));
     }
 
     function test_mintCreditNFTRevertsIfNotCreditNFTManager() public {

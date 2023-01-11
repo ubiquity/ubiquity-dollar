@@ -13,11 +13,11 @@ contract DollarMintCalculator is IDollarMintCalculator {
     using ABDKMathQuad for bytes16;
 
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     /// @param _manager the address of the manager contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     /// @notice returns (TWAP_PRICE  -1) * UAD_Total_Supply

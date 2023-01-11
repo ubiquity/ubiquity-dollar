@@ -2,9 +2,10 @@
 pragma solidity 0.8.16;
 
 import "../ERC20Ubiquity.sol";
+import "src/dollar/core/UbiquityDollarManager.sol";
 
 contract UbiquityCreditToken is ERC20Ubiquity {
-    constructor(address _manager)
+    constructor(UbiquityDollarManager _manager)
         ERC20Ubiquity(_manager, "Ubiquity Auto Redeem", "uAR")
     {} // solhint-disable-line no-empty-blocks
 

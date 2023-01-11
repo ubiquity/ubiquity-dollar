@@ -103,8 +103,8 @@ contract LiveTestHelper is Test {
         manager = new UbiquityDollarManager(admin);
         address managerAddress = address(manager);
 
-        stakingV1 = new Bonding(address(manager), sablier);
-        stakingShareV1 = new BondingShare(address(manager));
+        stakingV1 = new Bonding(managerAddress, sablier);
+        stakingShareV1 = new BondingShare(manager);
         manager.setStakingShareAddress(address(stakingShareV1));
         manager.setStakingContractAddress(address(stakingV1));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
@@ -119,7 +119,7 @@ contract LiveTestHelper is Test {
         ubiquityFormulas = new UbiquityFormulas();
         manager.setFormulasAddress(address(ubiquityFormulas));
 
-        governanceToken = new UbiquityGovernanceToken(address(manager));
+        governanceToken = new UbiquityGovernanceToken(manager);
         manager.setGovernanceTokenAddress(address(governanceToken));
         //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
 
@@ -133,7 +133,7 @@ contract LiveTestHelper is Test {
         deal(address(governanceToken), thirdAccount, 100000e18);
         deal(address(dollarToken), thirdAccount, 1000000e18);
 
-        sushiGovernancePool = new SushiSwapPool(address(manager));
+        sushiGovernancePool = new SushiSwapPool(manager);
         manager.setSushiSwapPoolAddress(address(sushiGovernancePool));
 
         vm.stopPrank();
@@ -202,27 +202,27 @@ contract LiveTestHelper is Test {
         twapOracle =
         new TWAPOracleDollar3pool(address(metapool), address(dollarToken), address(curve3CrvToken));
         manager.setTwapOracleAddress(address(twapOracle));
-        creditRedemptionCalc = new CreditRedemptionCalculator(address(manager));
+        creditRedemptionCalc = new CreditRedemptionCalculator(manager);
         manager.setCreditCalculatorAddress(address(creditRedemptionCalc));
 
-        creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(address(manager));
+        creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(manager);
         manager.setCreditNFTCalculatorAddress(address(creditNFTRedemptionCalc));
 
-        dollarMintCalc = new DollarMintCalculator(address(manager));
+        dollarMintCalc = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
         creditNFTManager =
-            new CreditNFTManager(address(manager), creditNFTLengthBlocks);
+            new CreditNFTManager(manager, creditNFTLengthBlocks);
 
         manager.grantRole(manager.CREDIT_NFT_MANAGER_ROLE(), address(creditNFTManager));
         manager.grantRole(manager.UBQ_MINTER_ROLE(), address(creditNFTManager));
         manager.grantRole(manager.UBQ_BURNER_ROLE(), address(creditNFTManager));
 
-        creditToken = new UbiquityCreditToken(address(manager));
+        creditToken = new UbiquityCreditToken(manager);
         manager.setCreditTokenAddress(address(creditToken));
 
         dollarMintExcess =
-            new DollarMintExcess(address(manager));
+            new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(
             address(creditNFTManager), address(dollarMintExcess)
         );
@@ -274,7 +274,7 @@ contract LiveTestHelper is Test {
         ///uint256 bondingMaxBal = metapool.balanceOf(stakingMaxAccount);
 
         vm.startPrank(admin);
-        stakingShare = new StakingShare(address(manager), uri);
+        stakingShare = new StakingShare(manager, uri);
         manager.setStakingShareAddress(address(stakingShare));
 
         stakingFormulas = new StakingFormulas();
@@ -284,7 +284,7 @@ contract LiveTestHelper is Test {
         locked = [uint256(1), uint256(1), uint256(208)];
 
         staking =
-        new Staking(manager, address(stakingFormulas), migrating, migrateLP, locked);
+        new Staking(manager, stakingFormulas, migrating, migrateLP, locked);
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 

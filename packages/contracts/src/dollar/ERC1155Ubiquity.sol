@@ -16,7 +16,7 @@ import "./utils/SafeAddArray.sol";
 contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     uint256 private _totalSupply;
@@ -49,8 +49,8 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager manager_, string memory uri) ERC1155(uri) {
+        manager = manager_;
     }
 
     // @dev Creates `amount` new tokens for `to`, of token type `id`.

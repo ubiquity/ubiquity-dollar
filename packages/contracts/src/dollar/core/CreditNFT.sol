@@ -38,8 +38,7 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
     }
 
     //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
-    constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager manager_) ERC1155Ubiquity(manager_, "URI") {
         _totalOutstandingDebt = 0;
     }
 
