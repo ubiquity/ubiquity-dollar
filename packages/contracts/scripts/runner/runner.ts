@@ -71,6 +71,10 @@ const procFork = async () => {
       shouldSkip = true;
     }
   });
+  command.on("close", (code: number) => {
+    // if linux command exit code is not success (0) then throw an error
+    if (code !== 0) throw new Error("Failing tests");
+  });
 };
 
 procFork();

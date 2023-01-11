@@ -30,7 +30,12 @@ module.exports = async ({ github, context, fs }) => {
     const timeArray = [];
     const timeObj = {};
     bodyArray.forEach((element) => {
-      const timestamp = new Date(element.match(/:.*\(UTC\)/).trim()).getTime();
+      const timestamp = new Date(
+        element
+          .match(/Deployment:.*\(UTC\)/)[0]
+          .replace("Deployment:", "")
+          .trim()
+      ).getTime();
       timeArray.push(timestamp);
       timeObj[timestamp] = element;
     });
