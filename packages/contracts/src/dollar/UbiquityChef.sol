@@ -183,7 +183,8 @@ contract UbiquityChef is ReentrancyGuard {
         // calculate user reward
         StakingShareInfo storage user = _stakingShareInfo[StakingShareID];
         _updatePool();
-        uint256 pending = ((user.amount * pool.accGovernancePerShare) / 1e12) - user.rewardDebt;
+        uint256 pending = ((user.amount * pool.accGovernancePerShare) / 1e12)
+            - user.rewardDebt;
         _safeGovernanceTransfer(msg.sender, pending);
         user.rewardDebt = (user.amount * pool.accGovernancePerShare) / 1e12;
         return pending;
@@ -320,19 +321,18 @@ contract UbiquityChef is ReentrancyGuard {
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             manager.treasuryAddress(), governanceReward / governanceDivider
         );
-        pool.accGovernancePerShare = pool.accGovernancePerShare + ((governanceReward * 1e12) / _totalShares);
-        pool.lastRewardBlock = block.number;
     }
 
     // Safe governance transfer function, just in case if rounding
     // error causes pool to not have enough governance tokens.
     function _safeGovernanceTransfer(address _to, uint256 _amount) internal {
-        IERC20Ubiquity governanceToken = IERC20Ubiquity(manager.governanceTokenAddress());
-        uint256 governanceBalance = governanceToken.balanceOf(address(this));
-        if (_amount > governanceBalance) {
-            governanceToken.safeTransfer(_to, governanceBalance);
+        IERC20Ubiquity governance =
+            IERC20Ubiquity(manager.governanceTokenAddress());
+        uint256 governanceBal = governance.balanceOf(address(this));
+        if (_amount > governanceBal) {
+            governance.safeTransfer(_to, governanceBal);
         } else {
-            governanceToken.safeTransfer(_to, _amount);
+            governance.safeTransfer(_to, _amount);
         }
     }
 
