@@ -332,7 +332,7 @@ contract UbiquityChef is ReentrancyGuard {
         if (_amount > governanceBalance) {
             governanceToken.safeTransfer(_to, governanceBalance);
         } else {
-            governance.safeTransfer(_to, _amount);
+            governanceToken.safeTransfer(_to, _amount);
         }
     }
 

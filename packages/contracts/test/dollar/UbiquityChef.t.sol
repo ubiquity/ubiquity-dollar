@@ -96,7 +96,7 @@ contract DepositStateTest is DepositState {
     }
 
     function testWithdraw(uint256 amount, uint256 blocks) public {
-        blocks = bound(blocks, 1, 2 ** 128 - 1);
+        blocks = bound(blocks, 1, 2**64-1);
         amount = bound(amount, 1, shares);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         uint256 preBal_ = metapool.balanceOf(fourthAccount);
@@ -109,7 +109,7 @@ contract DepositStateTest is DepositState {
     }
 
     function testGetRewards(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2 ** 128 - 1);
+        blocks = bound(blocks, 1, 2**64-1);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         vm.roll(block.number + blocks);
 

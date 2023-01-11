@@ -8,11 +8,9 @@ import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
-<<<<<<<< HEAD:packages/contracts/src/dollar/core/CreditNFTRedemptionCalculator.sol
+
 contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
-========
-contract CreditNFTRedemptionCalculator is ICouponsForDollarsCalculator {
->>>>>>>> a5e8435e (Change Contract names to reflect Refactor):packages/contracts/src/dollar/core/CreditNFTRemptionCalculator.sol
+
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

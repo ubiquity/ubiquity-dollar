@@ -226,7 +226,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
     }
 
-    function testFailDeposit_Multiple_Tokens_ShouldDepositTokens() public {
+    function testDeposit_Multiple_Tokens_ShouldDepositTokens() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
@@ -340,7 +340,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         directGovernanceFarmer.withdraw(1);
     }
 
-    function testFailWithdraw_Multiple_ShouldWithdraw() public {
+    function testWithdraw_Multiple_ShouldWithdraw() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
@@ -488,8 +488,8 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingContractAddress(stakingAddress);
-        IUbiquityAlgorithmicDollarManager(uadManagerAddress).setBondingShareAddress(stakingShareAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(stakingAddress);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(stakingShareAddress);
         vm.stopPrank();
 
         vm.startPrank(userAddress);

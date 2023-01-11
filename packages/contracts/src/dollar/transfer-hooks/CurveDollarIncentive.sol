@@ -169,10 +169,3 @@ contract CurveDollarIncentive is IIncentive {
         );
     }
 }
-
-    function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
-    }
-}

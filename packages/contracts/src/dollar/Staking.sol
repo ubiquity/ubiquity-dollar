@@ -34,7 +34,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     address public migrator; // temporary address to handle migration
     address[] private _toMigrateOriginals;
     uint256[] private _toMigrateLpBalances;
-    uint256[] private _toMigrateLockupPeriods;
+    uint256[] private _toMigrateLockups;
 
     // toMigrateId[address] > 0 when address is to migrate, or 0 in all other cases
     mapping(address => uint256) public toMigrateId;
@@ -51,7 +51,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 indexed id,
         uint256 lpAmount,
         uint256 stakingShareAmount,
-        uint256 lockupPeriod,
+        uint256 lockup,
         uint256 endBlock
     );
     event RemoveLiquidityFromStake(
@@ -78,7 +78,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 indexed id,
         uint256 lpsAmount,
         uint256 sharesAmount,
-        uint256 lockupPeriod
+        uint256 lockup
     );
 
     modifier onlyStakingManager() {
@@ -111,7 +111,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         address stakingFormulasAddress_,
         address[] memory _originals,
         uint256[] memory _lpBalances,
-        uint256[] memory _lockupPeriods
+        uint256[] memory _lockups
     ) CollectableDust() Pausable() {
         manager = manager_;
         stakingFormulasAddress = stakingFormulasAddress_;
@@ -120,11 +120,11 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 lgt = _originals.length;
         require(lgt > 0, "address array empty");
         require(lgt == _lpBalances.length, "balances array not same length");
-        require(lgt == _lockupPeriods.length, "weeks array not same length");
+        require(lgt == _lockups.length, "weeks array not same length");
 
         _toMigrateOriginals = _originals;
         _toMigrateLpBalances = _lpBalances;
-        _toMigrateLockupPeriods = _lockupPeriods;
+        _toMigrateLockups = _lockups;
         uint256 migratingBalances;
         for (uint256 i = 0; i < lgt; ++i) {
             toMigrateId[_originals[i]] = i + 1;
@@ -141,17 +141,17 @@ contract Staking is IStaking, CollectableDust, Pausable {
     ///      otherwise they will have extra LP rewards
     /// @param _original address of v1 user
     /// @param _lpBalance LP Balance of v1 user
-    /// @param lockupPeriod weeks lockup of v1 user
+    /// @param lockup weeks lockup of v1 user
     /// @notice user will then be able to migrate.
     function addUserToMigrate(
         address _original,
         uint256 _lpBalance,
-        uint256 lockupPeriod
+        uint256 lockup
     ) external onlyMigrator {
         _toMigrateOriginals.push(_original);
         _toMigrateLpBalances.push(_lpBalance);
         totalLpToMigrate += _lpBalance;
-        _toMigrateLockupPeriods.push(lockupPeriod);
+        _toMigrateLockups.push(lockup);
         toMigrateId[_original] = _toMigrateOriginals.length;
     }
 
@@ -252,15 +252,15 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     /// @dev deposit uAD-3CRV LP tokens for a duration to receive staking shares
     /// @param _lpsAmount of LP token to send
-    /// @param lockupPeriod during lp token will be held
+    /// @param lockup during lp token will be held
     /// @notice weeks act as a multiplier for the amount of staking shares to be received
-    function deposit(uint256 _lpsAmount, uint256 lockupPeriod)
+    function deposit(uint256 _lpsAmount, uint256 lockup)
         external
         whenNotPaused
         returns (uint256 _id)
     {
         require(
-            1 <= lockupPeriod && lockupPeriod <= 208,
+            1 <= lockup && lockup <= 208,
             "Staking: duration must be between 1 and 208 weeks"
         );
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
@@ -270,9 +270,9 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         // calculate the amount of share based on the amount of lp deposited and the duration
         uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
-            .durationMultiply(_lpsAmount, lockupPeriod, stakingDiscountMultiplier);
+            .durationMultiply(_lpsAmount, lockup, stakingDiscountMultiplier);
         // calculate end locking period block number
-        uint256 _endBlock = block.number + lockupPeriod * blockCountInAWeek;
+        uint256 _endBlock = block.number + lockup * blockCountInAWeek;
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
 
         // set UbiquityChef for uGOV rewards
@@ -285,15 +285,15 @@ contract Staking is IStaking, CollectableDust, Pausable {
             msg.sender, address(this), _lpsAmount
         );
 
-        emit Deposit(msg.sender, _id, _lpsAmount, _sharesAmount, _weeks, _endBlock);
+        emit Deposit(msg.sender, _id, _lpsAmount, _sharesAmount, lockup, _endBlock);
     }
 
     /// @dev Add an amount of UbiquityDollar-3CRV LP tokens
-    /// @param _amount of LP token to deposit
-    /// @param _id staking shares id
-    /// @param lockupPeriod during lp token will be held
+    /// @param amount of LP token to deposit
+    /// @param id staking shares id
+    /// @param lockup during lp token will be held
     /// @notice staking shares are ERC1155 (aka NFT) because they have an expiration date
-    function addLiquidity(uint256 amount, uint256 id, uint256 lockupPeriod)
+    function addLiquidity(uint256 amount, uint256 id, uint256 lockup)
         external
         whenNotPaused
     {
@@ -318,15 +318,15 @@ contract Staking is IStaking, CollectableDust, Pausable {
         // calculate end locking period block number
         // 1 week = 45361 blocks = 2371753*7/366
         // n = (block + duration * 45361)
-        stake.endBlock = block.number + lockupPeriod * blockCountInAWeek;
+        stake.endBlock = block.number + lockup * blockCountInAWeek;
 
         // calculate the amount of share based on the new amount of lp deposited and the duration
         uint256 sharesAmount = 
-            IUbiquityFormulas(manager.formulasAddress()).durationMultiply(amount, lockupPeriod, stakingDiscountMultiplier);
+            IUbiquityFormulas(manager.formulasAddress()).durationMultiply(amount, lockup, stakingDiscountMultiplier);
         
         _updateLpPerShare();
         stake.lpRewardDebt = 
-            (IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(_id)[0] * accLpRewardPerShare) / 1e12;
+            (IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(id)[0] * accLpRewardPerShare) / 1e12;
 
         StakingShare(manager.stakingShareAddress()).updateStake(
             id, stake.lpAmount, stake.lpRewardDebt, stake.endBlock
@@ -381,7 +381,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsRemoveLiquidityNormalization(stake, bs, pendingLpReward);
+            .lpRewardsRemoveLiquidityNormalization(stake, stakeInfo, pendingLpReward);
 
         uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
             .correctedAmountToWithdraw(
@@ -467,7 +467,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         _migrate(
             _toMigrateOriginals[_id - 1],
             _toMigrateLpBalances[_id - 1],
-            _toMigrateLockupPeriods[_id - 1]
+            _toMigrateLockups[_id - 1]
         );
     }
 
@@ -498,11 +498,11 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     /// @dev migrate let a user migrate from V1
     /// @notice user will then be able to migrate
-    function _migrate(address user, uint256 _lpsAmount, uint256 _weeks) internal returns (uint256 _id) {
+    function _migrate(address user, uint256 _lpsAmount, uint256 lockup) internal returns (uint256 _id) {
         require(toMigrateId[user] > 0, "not v1 address");
         require(_lpsAmount > 0, "LP amount is zero");
         require(
-            1 <= lockupPeriod && lockupPeriod <= 208,
+            1 <= lockup && lockup <= 208,
             "Duration must be between 1 and 208 weeks"
         );
 
@@ -511,7 +511,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
         // calculate the amount of share based on the amount of lp deposited and the duration
         uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
-            .durationMultiply(_lpsAmount, lockupPeriod, stakingDiscountMultiplier);
+            .durationMultiply(_lpsAmount, lockup, stakingDiscountMultiplier);
 
         // update the accumulated lp rewards per shares
         _updateLpPerShare();
@@ -519,7 +519,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         // to keep the _updateLpPerShare calculation consistent
         totalLpToMigrate -= _lpsAmount;
         // calculate end locking period block number
-        uint256 endBlock = block.number + lockupPeriod * blockCountInAWeek;
+        uint256 endBlock = block.number + lockup * blockCountInAWeek;
         _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
 
         // set UbiquityChef for uGOV rewards
@@ -527,7 +527,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
             user, _sharesAmount, _id
         );
 
-        emit Migrated(user, _id, _lpsAmount, _sharesAmount, lockupPeriod);
+        emit Migrated(user, _id, _lpsAmount, _sharesAmount, lockup);
     }
 
     /// @dev update the accumulated excess LP per share
@@ -574,7 +574,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         );
     }
 
-    function _checkForLiquidity(uint256 _id) internal view returns (uint256[2] memory bs, StakingShare.Stake memory stake) {
+    function _checkForLiquidity(uint256 _id) internal view returns (uint256[2] memory stakeInfo, StakingShare.Stake memory stake) {
         require(
             IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(msg.sender, _id) == 1, 
             "Staking: caller is not owner"
