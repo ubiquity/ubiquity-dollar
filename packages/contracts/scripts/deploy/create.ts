@@ -1,19 +1,28 @@
+import fs from "fs";
+import path from "path";
 import { exportDeployment } from "./export";
 import { Networks } from "../shared/constants/networks";
-import { ForgeArguments } from "../shared/types";
+import { InputParams, ForgeArguments, AbiType } from "../shared/types";
 import { execute, DeploymentResult } from "../shared";
+import { loadEnv } from "../shared";
+import { ethers } from "ethers";
 
 export const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult | undefined; stderr: string }> => {
   let flattenConstructorArgs = ``;
-  for (const param of args.constructorArguments) {
-    flattenConstructorArgs += `${param} `;
+  if (args.constructorArguments.length > 0) {
+    args.constructorArguments.forEach((elem) => {
+      const param = Array.isArray(elem) ? `[${elem}]` : elem;
+      flattenConstructorArgs += `${param} `;
+    });
+    flattenConstructorArgs = `--constructor-args ${flattenConstructorArgs}`;
   }
+
   const chainId = Networks[args.network] ?? undefined;
   if (!chainId) {
     throw new Error(`Unsupported network: ${args.network} Please configure it out first`);
   }
 
-  const prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --constructor-args ${flattenConstructorArgs} --private-key ${args.privateKey} ${args.contractInstance}`;
+  const prepareCmd = `forge create ${args.contractInstance} --json --rpc-url ${args.rpcUrl} ${flattenConstructorArgs} --private-key ${args.privateKey}`;
   let executeCmd: string;
   if (args.etherscanApiKey) {
     executeCmd = `${prepareCmd} --etherscan-api-key ${args.etherscanApiKey} --verify`;
@@ -47,5 +56,40 @@ export const create = async (args: ForgeArguments): Promise<{ result: Deployment
   console.log("result: ", stdout);
   console.log("error: ", stderr);
 
+  return { result, stderr };
+};
+
+export const getENV = () => {
+  const envPath = path.join(__dirname, "../../.env");
+  if (!fs.existsSync(envPath)) {
+    throw new Error("Env file not found");
+  }
+  const env = loadEnv(envPath);
+  return env;
+};
+
+export const getSigner = async () => {
+  const env = await getENV();
+  const signer = await new ethers.Wallet(env.privateKey, new ethers.providers.JsonRpcProvider(env.rpcUrl));
+  return signer;
+};
+
+export const getContract = async (address: string, abi: AbiType) => {
+  const signer = await getSigner();
+  const CI = new ethers.Contract(address, abi, signer);
+  return CI;
+};
+
+export const createHandler = async (constructorParams: string[], args: InputParams, contractInstance: string) => {
+  const env = await getENV();
+  const { result, stderr } = await create({
+    ...env,
+    name: args.task,
+    network: args.network,
+    contractInstance,
+    constructorArguments: [...constructorParams],
+  });
+
+  console.log(!stderr ? `Deployed contract successfully. res: ${result}` : stderr);
   return { result, stderr };
 };
