@@ -13,7 +13,7 @@ contract DollarScript is ManagerScript{
         vm.startBroadcast(deployerPrivateKey);
 
         
-        dollar = new UbiquityDollarToken(address(manager));
+        dollar = new UbiquityDollarToken(manager);
         manager.setDollarTokenAddress(address(dollar));
         
         dollar.mint(address(manager), 10000e18);

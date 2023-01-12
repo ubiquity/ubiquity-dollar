@@ -12,4 +12,4 @@ cast send 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490 0xa9059cbb00000000000000000
 cast rpc anvil_stopImpersonatingAccount 0x72A916702BD97923E55D78ea5A3F413dEC7F7F85 -r http://localhost:8545
 
 # Deploys Protocol to Anvil Localchain
-forge script ../../scripts/deploy/dollar/solidityScripting/DevelopmentDeploy.s.sol --fork-url http://localhost:8545 --broadcast
+forge script scripts/deploy/dollar/solidityScripting/08_DevelopmentDeploy.s.sol:DevelopmentDeploy --fork-url http://localhost:8545 --broadcast

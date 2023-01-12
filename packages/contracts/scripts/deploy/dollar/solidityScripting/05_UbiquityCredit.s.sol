@@ -9,26 +9,26 @@ contract CreditScript is TWAPScript {
 		uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        UbiquityCreditToken credit = new UbiquityCreditToken(address(manager));
+        UbiquityCreditToken credit = new UbiquityCreditToken(manager);
         manager.setCreditTokenAddress(address(credit));
 
-        DollarMintCalculator mintCalculator = new DollarMintCalculator(address(manager));
+        DollarMintCalculator mintCalculator = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(mintCalculator));
 
-        DollarMintExcess excess = new DollarMintExcess(address(manager));
+        DollarMintExcess excess = new DollarMintExcess(manager);
 
-        CreditRedemptionCalculator creditCalculator = new CreditRedemptionCalculator(address(manager));
+        CreditRedemptionCalculator creditCalculator = new CreditRedemptionCalculator(manager);
         manager.setCreditCalculatorAddress(address(creditCalculator));
         
-        CreditNFTRedemptionCalculator nftCalculator = new CreditNFTRedemptionCalculator(address(manager));
+        CreditNFTRedemptionCalculator nftCalculator = new CreditNFTRedemptionCalculator(manager);
         manager.setCreditNFTCalculatorAddress(address(nftCalculator));
 
-        CreditNFTManager nftManager = new CreditNFTManager(address(manager), 10);
+        CreditNFTManager nftManager = new CreditNFTManager(manager, 10);
 		manager.grantRole(manager.CREDIT_NFT_MANAGER_ROLE(), address(nftManager));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(nftManager));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(nftManager));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(nftManager));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(nftManager));
 
-        CreditNFT creditNFT = new CreditNFT(address(manager));
+        CreditNFT creditNFT = new CreditNFT(manager);
         manager.setCreditNFTAddress(address(creditNFT));
 
         vm.stopBroadcast();

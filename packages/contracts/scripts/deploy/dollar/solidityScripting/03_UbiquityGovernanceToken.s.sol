@@ -9,7 +9,7 @@ contract GovernanceScript is DollarScript {
 		uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 		vm.startBroadcast(deployerPrivateKey);
 
-		UbiquityGovernanceToken governance = new UbiquityGovernanceToken(address(manager));
+		UbiquityGovernanceToken governance = new UbiquityGovernanceToken(manager);
 		manager.setGovernanceTokenAddress(address(governance));
 		
 		vm.stopBroadcast();
