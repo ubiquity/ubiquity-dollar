@@ -403,7 +403,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
                     manager.getExcessDollarsDistributor(address(this)),
                     excessDollars
                 ),
-                "UbiquityDollar: Transfer failed"
+                "Dollar: Transfer failed"
             );
             dollarsDistributor.distributeDollars();
         }
