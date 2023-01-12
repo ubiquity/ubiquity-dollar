@@ -23,9 +23,12 @@ const procFork = async () => {
     }
   });
   command.on("close", (code: number) => {
-    anvil.kill();
+    anvil.kill("SIGINT");
     // if linux command exit code is not success (0) then throw an error
-    if (code !== 0) throw new Error("Failing tests");
+    if (code !== 0) {
+      throw new Error(`Failing tests ${code}`);
+    }
+    process.exit();
   });
 };
 
