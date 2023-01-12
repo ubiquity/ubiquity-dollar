@@ -31,7 +31,9 @@
     "deploy:diamond": "ts-node ./scripts/deploy/manager/DiamondInAll.ts",
     "task": "ts-node ./scripts/task/task.ts",
     "clean": "forge clean",
-    "purge": "yarn clean"
+    "purge": "yarn clean",
+    "anvil": "ts-node ./scripts/anvil/anvil.ts",
+    "run deploy:development": "bash ./scripts/bash/2_DevelopmentDeploy.sh"
   },
   "keywords": [
     "stablecoin",

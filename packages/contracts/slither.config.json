@@ -6,5 +6,6 @@
   "exclude_high": false,
   "disable_color": false,
   "filter_paths": "lib|test|src/dollar/mocks|src/ubiquistick",
-  "legacy_ast": false
+  "legacy_ast": false,
+  "solc_remaps": ["ds-test/=libs/ds-test/src/", "forge-std/=lib/forge-std/src/"]
 }
