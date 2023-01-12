@@ -24,11 +24,11 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         super.setUp();
         dollarManagerAddress = address(manager);
         curveIncentiveAddress =
-            address(new CurveDollarIncentive(dollarManagerAddress));
+            address(new CurveDollarIncentive(manager));
         twapOracleAddress =
-            UbiquityDollarManager(dollarManagerAddress).twapOracleAddress();
+            manager.twapOracleAddress();
         vm.prank(admin);
-        UbiquityDollarManager(dollarManagerAddress).setStableSwapMetaPoolAddress(
+        manager.setStableSwapMetaPoolAddress(
             stableSwapMetaPoolAddress
         );
     }
@@ -55,7 +55,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
 
     function test_incentivize_revertsIfSenderEqualToReceiver() public {
         vm.prank(
-            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
+            manager.dollarTokenAddress()
         );
         vm.expectRevert("CurveIncentive: cannot send self");
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
@@ -70,10 +70,10 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
         IERC20 governanceToken = IERC20(
-            UbiquityDollarManager(dollarManagerAddress).governanceTokenAddress()
+            manager.governanceTokenAddress()
         );
         address dollarAddress =
-            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress();
+            manager.dollarTokenAddress();
         address mockReceiver = address(0x111);
 
         // 1. do nothing if the target address is included to exempt list
@@ -130,7 +130,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         init_balance = governanceToken.balanceOf(mockReceiver);
         mockInternalFuncs(5e17);
         vm.prank(admin);
-        UbiquityDollarManager(dollarManagerAddress).grantRole(
+        manager.grantRole(
             keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"), curveIncentiveAddress
         );
         vm.prank(dollarAddress);
@@ -147,10 +147,10 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
         IERC20 governanceToken = IERC20(
-            UbiquityDollarManager(dollarManagerAddress).governanceTokenAddress()
+            manager.governanceTokenAddress()
         );
         address dollarAddress =
-            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress();
+            manager.dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);
         address mockSender = address(0x222);
 

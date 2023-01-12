@@ -15,7 +15,7 @@ contract CurveDollarIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     bool public isSellPenaltyOn = true;
     bool public isBuyIncentiveOn = true;
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
@@ -41,8 +41,8 @@ contract CurveDollarIncentive is IIncentive {
 
     /// @notice CurveIncentive constructor
     /// @param _manager Ubiquity Dollar Manager
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function incentivize(

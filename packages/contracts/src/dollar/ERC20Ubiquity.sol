@@ -17,7 +17,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     UbiquityDollarManager public immutable manager;
 
     // solhint-disable-next-line var-name-mixedcase
-    bytes32 public DOMAIN_SEPARATOR;
+    bytes32 public immutable DOMAIN_SEPARATOR;
     // keccak256("Permit(address owner,address spender,
     //                   uint256 value,uint256 nonce,uint256 deadline)");
     bytes32 public constant PERMIT_TYPEHASH =

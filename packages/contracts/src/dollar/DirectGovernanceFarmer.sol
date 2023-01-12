@@ -19,12 +19,12 @@ import "./core/UbiquityDollarManager.sol";
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    address public token2; //USDT decimal 6
-    address public token1; //USDC decimal 6
-    address public token0; //DAI
-    address public ubiquity3PoolLP;
-    address public ubiquityDollar;
-    address public depositZapUbiquityDollar;
+    address public immutable token2; //USDT decimal 6
+    address public immutable token1; //USDC decimal 6
+    address public immutable token0; //DAI
+    address public immutable ubiquity3PoolLP;
+    address public immutable ubiquityDollar;
+    address public immutable depositZapUbiquityDollar;
 
     UbiquityDollarManager public immutable manager;
 
