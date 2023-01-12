@@ -328,9 +328,9 @@ contract UbiquityChef is ReentrancyGuard {
     function _safeGovernanceTransfer(address _to, uint256 _amount) internal {
         IERC20Ubiquity governance =
             IERC20Ubiquity(manager.governanceTokenAddress());
-        uint256 governanceBal = governance.balanceOf(address(this));
-        if (_amount > governanceBal) {
-            governance.safeTransfer(_to, governanceBal);
+        uint256 governanceBalance = governance.balanceOf(address(this));
+        if (_amount > governanceBalance) {
+            governance.safeTransfer(_to, governanceBalance);
         } else {
             governance.safeTransfer(_to, _amount);
         }
