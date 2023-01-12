@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./Constants.sol";
+import "./00_Constants.sol";
 
 contract ManagerScript is Constants {
     UbiquityDollarManager manager; 

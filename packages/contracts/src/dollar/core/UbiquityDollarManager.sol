@@ -21,18 +21,14 @@ import "./TWAPOracleDollar3pool.sol";
 contract UbiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
-    bytes32 public constant UBQ_MINTER_ROLE = keccak256("UBQ_MINTER_ROLE");
-    bytes32 public constant UBQ_BURNER_ROLE = keccak256("UBQ_BURNER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant CREDIT_NFT_MANAGER_ROLE =
-        keccak256("CREDIT_NFT_MANAGER_ROLE");
-    bytes32 public constant STAKING_MANAGER_ROLE =
-        keccak256("STAKING_MANAGER_ROLE");
-    bytes32 public constant INCENTIVE_MANAGER_ROLE =
-        keccak256("INCENTIVE_MANAGER");
-    bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
-        keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE");
+    bytes32 public constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
+    bytes32 public constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
+    bytes32 public constant INCENTIVE_MANAGER_ROLE = keccak256("INCENTIVE_MANAGER");
+    bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE");
     address public twapOracleAddress;
     address public creditNFTAddress;
     address public dollarTokenAddress;
@@ -62,7 +58,7 @@ contract UbiquityDollarManager is AccessControl {
 
     constructor(address _admin) {
         _setupRole(DEFAULT_ADMIN_ROLE, _admin);
-        _setupRole(UBQ_MINTER_ROLE, _admin);
+        _setupRole(GOVERNANCE_TOKEN_MINTER_ROLE, _admin);
         _setupRole(PAUSER_ROLE, _admin);
         _setupRole(CREDIT_NFT_MANAGER_ROLE, _admin);
         _setupRole(STAKING_MANAGER_ROLE, _admin);

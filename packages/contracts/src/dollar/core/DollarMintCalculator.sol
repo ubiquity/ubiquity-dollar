@@ -5,7 +5,7 @@ import "./UbiquityDollarManager.sol";
 import "../interfaces/IDollarMintCalculator.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./TWAPOracleDollar3pool.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 /// @title A mock coupon calculator that always returns a constant
 contract DollarMintCalculator is IDollarMintCalculator {
@@ -20,7 +20,7 @@ contract DollarMintCalculator is IDollarMintCalculator {
         manager = _manager;
     }
 
-    /// @notice returns (TWAP_PRICE  -1) * UAD_Total_Supply
+    /// @notice returns (TWAP_PRICE  -1) * Dollar_Total_Supply
     function getDollarsToMint() external view override returns (uint256) {
         TWAPOracleDollar3pool oracle =
             TWAPOracleDollar3pool(manager.twapOracleAddress());

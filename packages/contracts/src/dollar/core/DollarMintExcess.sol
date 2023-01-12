@@ -9,7 +9,6 @@ import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import "../interfaces/IDollarMintExcess.sol";
 import "../interfaces/IMetaPool.sol";
 import "./UbiquityDollarManager.sol";
-//import "./SushiSwapPool.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
@@ -37,7 +36,7 @@ contract DollarMintExcess is IDollarMintExcess {
         if (excessDollars > _minAmountToDistribute) {
             address treasuryAddress = manager.treasuryAddress();
 
-            // curve uAD-3CRV liquidity pool
+            // curve UbiquityDollar-3CRV liquidity pool
             uint256 tenPercent =
                 excessDollars.fromUInt().div(uint256(10).fromUInt()).toUInt();
             uint256 fiftyPercent =
@@ -45,9 +44,9 @@ contract DollarMintExcess is IDollarMintExcess {
             IERC20Ubiquity(manager.dollarTokenAddress()).safeTransfer(
                 treasuryAddress, fiftyPercent
             );
-            // convert uAD to uGOV-UAD LP on sushi and burn them
+            // convert DollarToken to GovernanceToken-DollarToken LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
-            // convert remaining uAD to curve LP tokens
+            // convert remaining Ubiquity Dollar to curve LP tokens
             // and transfer the curve LP tokens to the bonding contract
             _convertToCurveLPAndTransfer(
                 excessDollars - fiftyPercent - tenPercent
@@ -55,7 +54,7 @@ contract DollarMintExcess is IDollarMintExcess {
         }
     }
 
-    // swap half amount to uGOV
+    // swap half amount to GovernanceToken
     function _swapDollarsForGovernance(bytes16 amountIn)
         internal
         returns (uint256)
@@ -70,7 +69,7 @@ contract DollarMintExcess is IDollarMintExcess {
         return amounts[1];
     }
 
-    // buy-back and burn uGOV
+    // buy-back and burn GovernanceToken
     function _governanceBuyBackLPAndBurn(uint256 amount)
         internal
         returns (uint256 amountA, uint256 amountB, uint256 liquidity)
@@ -84,13 +83,13 @@ contract DollarMintExcess is IDollarMintExcess {
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             address(_router), amount
         );
-        uint256 amountUGOV = _swapDollarsForGovernance(amountUAD);
+        uint256 amountGovernanceToken = _swapDollarsForGovernance(amountUAD);
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router), 0
         );
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
-            address(_router), amountUGOV
+            address(_router), amountGovernanceToken
         );
 
         // deposit liquidity and transfer to zero address (burn)
@@ -98,7 +97,7 @@ contract DollarMintExcess is IDollarMintExcess {
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
             amountUAD.toUInt(),
-            amountUGOV,
+            amountGovernanceToken,
             0,
             0,
             address(0),
@@ -108,7 +107,7 @@ contract DollarMintExcess is IDollarMintExcess {
 
     // @dev convert to curve LP
     // @param amount to convert to curve LP by swapping to 3CRV
-    //        and deposit the 3CRV as liquidity to get uAD-3CRV LP tokens
+    //        and deposit the 3CRV as liquidity to get DollarToken-3CRV LP tokens
     //        the LP token are sent to the bonding contract
     function _convertToCurveLPAndTransfer(uint256 amount)
         internal
@@ -122,7 +121,7 @@ contract DollarMintExcess is IDollarMintExcess {
             manager.stableSwapMetaPoolAddress(), amount
         );
 
-        // swap  amount of uAD => 3CRV
+        // swap  amount of Ubiquity Dollar => 3CRV
         uint256 amount3CRVReceived = IMetaPool(
             manager.stableSwapMetaPoolAddress()
         ).exchange(0, 1, amount, 0);

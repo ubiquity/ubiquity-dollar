@@ -205,7 +205,7 @@ contract CreditNFTManagerTest is LocalTestHelper {
             mockMessageSender, 2e18, expiryBlockNumber
         );
         UbiquityDollarManager(dollarManagerAddress).grantRole(
-            keccak256("UBQ_MINTER_ROLE"), creditNFTManagerAddress
+            keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"), creditNFTManagerAddress
         );
         vm.stopPrank();
         vm.roll(1000);

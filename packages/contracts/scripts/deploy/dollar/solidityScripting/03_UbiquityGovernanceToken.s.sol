@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./UbiquityDollarToken.s.sol";
+import "./02_UbiquityDollarToken.s.sol";
 
 contract GovernanceScript is DollarScript {
 	function run() public virtual override {

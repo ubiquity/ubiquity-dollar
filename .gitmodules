@@ -19,6 +19,3 @@
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
-[submodule "packages/contracts/lib/abdk-libraries-solidity"]
-	path = packages/contracts/lib/abdk-libraries-solidity
-	url = https://github.com/abdk-consulting/abdk-libraries-solidity

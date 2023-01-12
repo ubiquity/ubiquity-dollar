@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./Formulas.s.sol";
+import "./06_Formulas.s.sol";
 
 contract StakingScript is FormulaScript {
 	function run() public virtual override {

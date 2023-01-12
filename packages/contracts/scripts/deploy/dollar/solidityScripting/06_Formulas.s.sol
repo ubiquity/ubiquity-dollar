@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./UbiquityCredit.s.sol";
+import "./05_UbiquityCredit.s.sol";
 
 contract FormulaScript is CreditScript {
 

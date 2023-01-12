@@ -1,29 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "../../src/dollar/Staking.sol";
-import "../../src/dollar/mocks/MockBondingV1.sol";
-import "../../src/dollar/mocks/MockShareV1.sol";
-import "../../src/dollar/StakingFormulas.sol";
-import "../../src/dollar/StakingShare.sol";
-import "../../src/dollar/interfaces/IMetaPool.sol";
-import "../../src/dollar/core/UbiquityGovernanceToken.sol";
-import "../../src/dollar/core/UbiquityDollarManager.sol";
-import "../../src/dollar/mocks/MockDollarToken.sol";
-import "../../src/dollar/UbiquityFormulas.sol";
-import "../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import "../../src/dollar/UbiquityChef.sol";
-import "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import "../../src/dollar/interfaces/ICurveFactory.sol";
-import "../../src/dollar/interfaces/IMasterChef.sol";
-import "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
-import "../../src/dollar/core/DollarMintCalculator.sol";
-import "../../src/dollar/mocks/MockCreditNFT.sol";
-import "../../src/dollar/core/CreditNFTManager.sol";
-import "../../src/dollar/core/UbiquityCreditToken.sol";
-import "../../src/dollar/core/DollarMintExcess.sol";
-import "../../src/dollar/SushiSwapPool.sol";
-import "../../src/dollar/interfaces/IERC1155Ubiquity.sol";
+import "src/dollar/Staking.sol";
+import "src/dollar/mocks/MockBondingV1.sol";
+import "src/dollar/mocks/MockShareV1.sol";
+import "src/dollar/StakingFormulas.sol";
+import "src/dollar/StakingShare.sol";
+import "src/dollar/interfaces/IMetaPool.sol";
+import "src/dollar/core/UbiquityGovernanceToken.sol";
+import "src/dollar/core/UbiquityDollarManager.sol";
+import "src/dollar/mocks/MockDollarToken.sol";
+import "src/dollar/UbiquityFormulas.sol";
+import "src/dollar/core/TWAPOracleDollar3pool.sol";
+import "src/dollar/UbiquityChef.sol";
+import "src/dollar/core/CreditRedemptionCalculator.sol";
+import "src/dollar/interfaces/ICurveFactory.sol";
+import "src/dollar/interfaces/IMasterChef.sol";
+import "src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import "src/dollar/core/DollarMintCalculator.sol";
+import "src/dollar/mocks/MockCreditNFT.sol";
+import "src/dollar/core/CreditNFTManager.sol";
+import "src/dollar/core/UbiquityCreditToken.sol";
+import "src/dollar/core/DollarMintExcess.sol";
+import "src/dollar/SushiSwapPool.sol";
+import "src/dollar/interfaces/IERC1155Ubiquity.sol";
 
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
@@ -107,8 +107,8 @@ contract LiveTestHelper is Test {
         stakingShareV1 = new BondingShare(manager);
         manager.setStakingShareAddress(address(stakingShareV1));
         manager.setStakingContractAddress(address(stakingV1));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingShareV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingShareV1));
 
         dollarToken = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(dollarToken));
@@ -168,8 +168,8 @@ contract LiveTestHelper is Test {
             deal(address(dollarToken), mintings[i], 10000e18);
         }
 
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(stakingV1));
 
         deal(address(dollarToken), curveWhaleAddress, 10e18);
 
@@ -215,8 +215,8 @@ contract LiveTestHelper is Test {
             new CreditNFTManager(manager, creditNFTLengthBlocks);
 
         manager.grantRole(manager.CREDIT_NFT_MANAGER_ROLE(), address(creditNFTManager));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(creditNFTManager));
-        manager.grantRole(manager.UBQ_BURNER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(creditNFTManager));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(creditNFTManager));
 
         creditToken = new UbiquityCreditToken(manager);
         manager.setCreditTokenAddress(address(creditToken));
@@ -234,7 +234,7 @@ contract LiveTestHelper is Test {
         ubiquityChef = new UbiquityChef(manager, tos, amounts, ids);
 
         manager.setMasterChefAddress(address(ubiquityChef));
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(ubiquityChef));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(ubiquityChef));
         manager.grantRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), admin);
         manager.grantRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), managerAddress);
 
@@ -290,13 +290,13 @@ contract LiveTestHelper is Test {
 
         staking.setMigrating(true);
 
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), address(staking));
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(staking));
         staking.setBlockCountInAWeek(420);
 
         manager.setStakingContractAddress(address(staking));
 
-        manager.revokeRole(manager.UBQ_MINTER_ROLE(), address(stakingV1));
-        manager.revokeRole(manager.UBQ_BURNER_ROLE(), address(stakingV1));
+        manager.revokeRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        manager.revokeRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(stakingV1));
         vm.stopPrank();
 
         vm.prank(secondAccount);

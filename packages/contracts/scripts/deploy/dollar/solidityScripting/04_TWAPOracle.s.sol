@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./UbiquityGovernanceToken.s.sol";
+import "./03_UbiquityGovernanceToken.s.sol";
 
 contract TWAPScript is GovernanceScript {
 	function run() public virtual override {

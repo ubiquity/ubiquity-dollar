@@ -369,8 +369,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     function isMetaPoolCoin(address token) public view returns (bool) {
         return (
-            token == token2 || token == token1 || token == token0
-                || token == ubiquityDollar
+            token == token2 || 
+            token == token1 || 
+            token == token0 || 
+            token == ubiquityDollar
         );
     }
 }

@@ -144,9 +144,10 @@ contract ZeroStateTest is ZeroState {
             bytes20(address(stakingFormulas)),
             bytes20(address(staking.stakingFormulas()))
         );
-        vm.prank(admin);
+        vm.startPrank(admin);
         StakingFormulas steak = new StakingFormulas();
         staking.setStakingFormulas(steak);
+        vm.stopPrank();
 
         assertEq(
             bytes20(address(steak)), bytes20(address(staking.stakingFormulas()))

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./UbiquityDollarManager.s.sol";
+import "./01_UbiquityDollarManager.s.sol";
 
 contract DollarScript is ManagerScript{
     UbiquityDollarToken dollar;

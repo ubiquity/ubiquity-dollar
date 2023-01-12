@@ -65,7 +65,7 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
 
     function test_incentivize_buy() public {
         vm.startPrank(admin);
-        manager.grantRole(manager.UBQ_MINTER_ROLE(), curveIncentiveAddress);
+        manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), curveIncentiveAddress);
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./TWAPOracle.s.sol";
+import "./04_TWAPOracle.s.sol";
 
 contract CreditScript is TWAPScript {
 	function run() public virtual override {

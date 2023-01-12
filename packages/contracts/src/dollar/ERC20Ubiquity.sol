@@ -29,7 +29,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.UBQ_MINTER_ROLE(), msg.sender),
+            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -37,7 +37,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.UBQ_BURNER_ROLE(), msg.sender),
+            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
             "Governance token: not burner"
         );
         _;

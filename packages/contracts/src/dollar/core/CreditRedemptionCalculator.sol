@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
 
 
@@ -19,7 +19,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
     modifier onlyAdmin() {
         require(
             manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
-            "UARCalc: not admin"
+            "CreditCalculator: not admin"
         );
         _;
     }
@@ -29,14 +29,14 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         manager = _manager;
     }
 
-    /// @notice set the constant for uAR calculation
-    /// @param coef new constant for uAR calculation in ETH format
+    /// @notice set the constant for Credit token calculation
+    /// @param coef new constant for Credit token calculation in ETH format
     /// @dev a coef of 1 ether means 1
     function setConstant(uint256 coef) external onlyAdmin {
         _coef = coef;
     }
 
-    /// @notice get the constant for uAR calculation
+    /// @notice get the constant for Credit token calculation
     function getConstant() external view returns (uint256) {
         return _coef;
     }
