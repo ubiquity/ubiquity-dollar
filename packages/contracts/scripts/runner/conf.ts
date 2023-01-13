@@ -7,6 +7,8 @@ export const RPC_LIST: string[] = [
   "https://api.securerpc.com/v1",
 ];
 
+export const LOCAL_RPC = "http://127.0.0.1:8545";
+
 export const RPC_BODY = JSON.stringify({
   jsonrpc: "2.0",
   method: "eth_getBlockByNumber",

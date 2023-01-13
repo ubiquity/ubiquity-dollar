@@ -14,7 +14,7 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 
 - We offer incentives for contributors to solve issues.
 
-- Please learn how to contribute via our bounty program [here](https://github.com/ubiquity/ubiquity-dollar/wiki/Bounty-Rules/).
+- Please learn how to contribute via our bounty program [here](https://dao.ubq.fi/devpool).
 
 ## Yarn Workspaces
 
