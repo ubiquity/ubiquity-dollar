@@ -66,13 +66,13 @@ contract Vault is BancorFormula {
 
     function deposit(uint256 _collateralDeposited, address _recipient)
         external
-        returns (uint256 tokensReturned)
+        returns (uint256 _price)
     {
-        tokensReturned = _calculatePurchaseReturnFromZero(
-            _collateralDeposited, weight, ACCURACY, intersect
-        );
+        _price = _calculatePurchasePrice(tokenIds);
 
-        bytes memory tokenValue = _toBytes(tokensReturned);
+        require(_collateralDeposited >= _price, "Not enough collateral");
+
+        bytes memory tokenValue = _toBytes(_price);
 
         poolBalance += _collateralDeposited;
         collateral.transferFrom(msg.sender, address(this), _collateralDeposited);
