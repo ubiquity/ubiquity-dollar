@@ -68,7 +68,7 @@ contract BondingCurve is BancorFormula {
         external
         returns (uint256 _price)
     {
-        _price = _calculatePurchasePrice(tokenIds);
+        _price = _getPrice(tokenIds);
 
         require(_collateralDeposited >= _price, "Not enough collateral");
 
@@ -99,5 +99,9 @@ contract BondingCurve is BancorFormula {
         collateral.transfer(msg.sender, _amount);
 
         emit Withdraw(msg.sender, _amount);
+    }
+
+    function _getPrice(uint256 _tokenID) internal view returns (uint256 _price) {
+        _price = _calculatePurchasePrice(_tokenID);
     }
 }
