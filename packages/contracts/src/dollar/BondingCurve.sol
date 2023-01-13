@@ -12,7 +12,7 @@ import "./core/UbiquityDollarManager.sol";
  * Inspired from Bancor protocol and simondlr
  * https://github.com/bancorprotocol/contracts
  */
-contract Vault is BancorFormula {
+contract BondingCurve is BancorFormula {
     uint256 constant ACCURACY = 10 ** 18;
 
     /// @dev Token issued by the bonding curve
