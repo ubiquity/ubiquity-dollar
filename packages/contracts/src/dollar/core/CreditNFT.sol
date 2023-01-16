@@ -65,7 +65,7 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
 
     /// @notice Burn an amount of CreditNFTs expiring at a certain block from
     /// a certain holder's balance
-    /// @param CreditNFTOwner the owner of those CreditNFTs
+    /// @param creditNFTOwner the owner of those CreditNFTs
     /// @param amount amount of tokens to burn
     /// @param expiryBlockNumber the expiration block number of the CreditNFTs to burn
     function burnCreditNFT(
