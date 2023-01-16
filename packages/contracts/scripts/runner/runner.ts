@@ -1,13 +1,11 @@
 import { spawn } from "child_process";
-import { LOCAL_RPC, RETRY_COUNT, RETRY_DELAY } from "./conf";
+import { RETRY_COUNT, RETRY_DELAY } from "./conf";
 
 let shouldSkip = false;
 let retryCount = 0;
 const procFork = async () => {
-  const optimalRPC = LOCAL_RPC;
-  const anvil = spawn("anvil");
-  console.log(`using ${optimalRPC} for unit-testing...`);
-  const command = spawn("forge", ["test", "--fork-url", optimalRPC as string]);
+  console.log(`using default anvil for unit-testing...`);
+  const command = spawn("forge", ["test"]);
   shouldSkip = false;
   command.stdout.on("data", (output: unknown) => {
     console.log(output?.toString());
@@ -24,14 +22,13 @@ const procFork = async () => {
   });
 
   command.on("close", async (code: number) => {
-    console.log(`command closed on process`);
-    await anvil.kill("SIGKILL");
+    console.log(`command closing on process`);
     // if linux command exit code is not success (0) then throw an error
     if (code !== 0) {
       throw new Error(`Failing tests ${code}`);
+    } else {
+      process.exit(0);
     }
-    console.log(`command exiting on process`);
-    process.exit(0);
   });
 };
 
