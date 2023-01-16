@@ -21,7 +21,7 @@ import ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFacto
 import BondingShareV2 from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import BondingV2 from "@ubiquity/contracts/out/Staking.sol/Staking.json";
 import DebtCoupon from "@ubiquity/contracts/out/CreditNFT.sol/CreditNFT.json";
-import DollarMintingCalculator from "@ubiquity/contracts/out/DollarMintCalculator.sol/DollarMintCalculator.json";
+import DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculator.sol/DollarMintCalculator.json";
 import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNFTRedemptionCalculator.sol/ICreditNFTRedemptionCalculator.json";
 import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import IUARForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
@@ -106,8 +106,8 @@ export const getTWAPOracleContract = (address: string, provider: ethers.provider
   return getContract(TWAPOracle.abi, address, provider);
 };
 
-export const getDollarMintingCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(DollarMintingCalculator.abi, address, provider);
+export const getDollarMintCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(DollarMintCalculator.abi, address, provider);
 };
 
 export const getICouponsForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {

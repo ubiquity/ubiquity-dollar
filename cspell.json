@@ -36,7 +36,20 @@
     "ADMGR",
     "coef",
     "structs",
-    "tlsv"
+    "tlsv",
+    "connectkit",
+    "wagmi",
+    "newuri",
+    "calldatacopy",
+    "calldatasize",
+    "delegatecall",
+    "returndatacopy",
+    "returndatasize",
+    "inheritdoc",
+    "mload",
+    "returndata",
+    "newarray",
+    "getSighash"
   ],
   "ignorePaths": [
     "**/*.json",
@@ -102,8 +115,14 @@
     "Funcs",
     "Reentrancy",
     "uncollateralized",
+    "collateralized",
     "alloc",
     "ubiquiti",
-    "buildhome"
+    "buildhome",
+    "ubiquibot",
+    "Enjin",
+    "Vitalik",
+    "Beeple",
+    "Rarible"
   ]
 }

@@ -79,11 +79,13 @@ contract ZeroStateTest is ZeroState {
         vm.record();
         staking.addUserToMigrate(fourthAccount, x, y);
 
-        (bytes32[] memory reads, bytes32[] memory writes) =
-            vm.accesses(address(staking));
+        (bytes32[] memory reads, bytes32[] memory writes) = vm.accesses(
+            address(staking)
+        );
 
-        address checkAddress =
-            address(bytes20(vm.load(address(staking), writes[1]) << 96));
+        address checkAddress = address(
+            bytes20(vm.load(address(staking), writes[1]) << 96)
+        );
         uint256 checkLP = uint256(vm.load(address(staking), writes[3]));
         uint256 checkWeeks = uint256(vm.load(address(staking), writes[6]));
 
@@ -94,7 +96,8 @@ contract ZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
-        Staking broken = new Staking(address(manager),
+        Staking broken = new Staking(
+            address(manager),
             address(stakingFormulas),
             ogsEmpty,
             balances,
@@ -148,7 +151,8 @@ contract ZeroStateTest is ZeroState {
         staking.setStakingFormulasAddress(secondAccount);
 
         assertEq(
-            bytes20(secondAccount), bytes20(staking.stakingFormulasAddress())
+            bytes20(secondAccount),
+            bytes20(staking.stakingFormulasAddress())
         );
     }
 
@@ -185,11 +189,13 @@ contract ZeroStateTest is ZeroState {
             stakingShare.totalSupply(),
             lpAmount,
             IUbiquityFormulas(manager.formulasAddress()).durationMultiply(
-                lpAmount, lockup, staking.stakingDiscountMultiplier()
+                lpAmount,
+                lockup,
+                staking.stakingDiscountMultiplier()
             ),
             lockup,
             (block.number + lockup * staking.blockCountInAWeek())
-            );
+        );
         vm.startPrank(stakingMinAccount);
         metapool.approve(address(staking), 2 ** 256 - 1);
         staking.deposit(lpAmount, lockup);
@@ -237,8 +243,11 @@ contract ZeroStateTest is ZeroState {
 contract DepositState is ZeroState {
     function setUp() public virtual override {
         super.setUp();
-        address[3] memory depositingAccounts =
-            [stakingMinAccount, fourthAccount, stakingMaxAccount];
+        address[3] memory depositingAccounts = [
+            stakingMinAccount,
+            fourthAccount,
+            stakingMaxAccount
+        ];
         uint256[3] memory depositAmounts = [
             metapool.balanceOf(stakingMinAccount),
             metapool.balanceOf(fourthAccount),
@@ -261,7 +270,11 @@ contract DepositStateTest is DepositState {
     address[] path2;
 
     function testDollarPriceReset(uint256 amount) public {
-        amount = bound(amount, 1000e18, dollarToken.balanceOf(address(metapool)) / 10);
+        amount = bound(
+            amount,
+            1000e18,
+            dollarToken.balanceOf(address(metapool)) / 10
+        );
 
         uint256 dollarPreBalance = dollarToken.balanceOf(address(metapool));
 
@@ -276,8 +289,11 @@ contract DepositStateTest is DepositState {
     }
 
     function testCRVPriceReset(uint256 amount) public {
-        amount =
-            bound(amount, 1000e18, crvToken.balanceOf(address(metapool)) / 10);
+        amount = bound(
+            amount,
+            1000e18,
+            crvToken.balanceOf(address(metapool)) / 10
+        );
         uint256 crvPreBalance = crvToken.balanceOf(address(metapool));
 
         vm.expectEmit(true, false, false, false, address(staking));
@@ -306,7 +322,7 @@ contract DepositStateTest is DepositState {
                 weeksLockup,
                 staking.stakingDiscountMultiplier()
             )
-            );
+        );
         vm.prank(stakingMinAccount);
         staking.addLiquidity(uint256(amount), 1, weeksLockup);
         uint256[2] memory postShares = ubiquityChef.getStakingShareInfo(1);
@@ -321,8 +337,13 @@ contract DepositStateTest is DepositState {
         uint256 preBal = metapool.balanceOf(stakingMinAccount);
         vm.expectEmit(true, false, false, false, address(staking));
         emit RemoveLiquidityFromStake(
-            stakingMinAccount, 1, amount, amount, amount, amount
-            );
+            stakingMinAccount,
+            1,
+            amount,
+            amount,
+            amount,
+            amount
+        );
         vm.prank(stakingMinAccount);
         staking.removeLiquidity(amount, 1);
         uint256 postBal = metapool.balanceOf(stakingMinAccount);

@@ -152,7 +152,6 @@ video {
 }
 #MainContent > div {
   display: inline-block;
-  text-align: right;
 }
 
 #Sidebar ul {
@@ -177,6 +176,10 @@ video {
 #WalletConnect {
   position: relative;
   padding: var(--button-pad);
+}
+
+.wallet-connect__connect {
+  visibility: hidden;
 }
 
 #WalletConnect button {
@@ -413,13 +416,193 @@ td {
   display: inline-block;
 } */
 
-#WalletNotConnected {
-  background-image: url("/ethereum-wallet.svg");
-  background-repeat: no-repeat;
-  background-position: center;
+@keyframes logo-ani {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.125;
+  }
 }
-#WalletNotConnected > h2 {
-  backdrop-filter: blur(8px);
+@keyframes rotation-b {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes rotation-a {
+  from {
+    transform: rotate(0) scale(0.9375, 0.9375);
+  }
+  to {
+    transform: rotate(360deg) scale(0.9375, 0.9375);
+  }
+}
+@keyframes rotation {
+  0% {
+    opacity: 0;
+    width: 240px;
+    transform: rotate(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    width: 380px;
+    transform: rotate(360deg);
+  }
+}
+#WalletNotConnected {
+  all: unset;
+  transition: 1s all cubic-bezier(0.25, 0, 0, 1);
+  overflow: hidden;
+  opacity: 1;
+  background: transparent;
+  margin: 24px auto;
+  margin-right: 3px;
+  border-radius: 4px;
+  padding: 12px 48px 24px;
+  display: inline-block;
+  vertical-align: top;
+  user-select: none;
+}
+.WalletNotConnected__spin {
+  transition: 1s all cubic-bezier(0.25, 0, 0, 1);
+  opacity: 0.5;
+  border-radius: 50%;
+  position: relative;
+  width: 160px;
+  height: 160px;
+  text-align: center;
+  cursor: pointer;
+}
+.WalletNotConnected__spin > div {
+  vertical-align: middle;
+  display: table;
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+.WalletNotConnected__spin > div > div {
+  border-radius: 50%;
+  height: 100%;
+}
+.WalletNotConnected__spin {
+  transition: 1s all cubic-bezier(0.25, 0, 0, 1);
+  opacity: 0.5;
+  border-radius: 50%;
+  position: relative;
+  width: 160px;
+  height: 160px;
+  text-align: center;
+  cursor: pointer;
+}
+.WalletNotConnected__spin:hover {
+  opacity: 1;
+}
+.WalletNotConnected__before > div {
+  border-width: 1px;
+  border-style: outset;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  animation: rotation-b 16s linear 0s infinite;
+}
+.WalletNotConnected__after > div {
+  border-width: 1px;
+  border-style: double;
+  border-top-color: transparent;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  opacity: 0.25;
+  animation: rotation-a 16s linear 0s infinite;
+}
+.WalletNotConnected__logo {
+  opacity: 1;
+  position: absolute;
+  padding: 32px;
+  line-height: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  font-size: calc((2 * 128px) / 3);
+  font-weight: 100;
+  text-rendering: geometricPrecision;
+  white-space: pre;
+  text-align: left;
+}
+.WalletNotConnected__svg {
+  margin: 0;
+  stroke: none;
+  fill: #fff;
+  max-width: none;
+  max-height: none;
+  height: 96px;
+  width: 96px;
+}
+.WalletNotConnected__text {
+  text-transform: uppercase;
+  font-size: 12px;
+  position: absolute;
+  padding: 8px;
+  text-transform: uppercase;
+  color: #fff;
+  text-rendering: geometricPrecision;
+  border-radius: 8px;
+  padding: 0;
+  left: 0;
+  right: 0;
+  letter-spacing: 1px;
+  text-align: center;
+  filter: drop-shadow(0 0 16px #fff);
+  top: calc(100% + 12px);
+}
+
+.WalletNotConnected__transition-enter {
+  opacity: 0;
+}
+.WalletNotConnected__transition-exit {
+  opacity: 1;
+}
+.WalletNotConnected__transition-enter-active {
+  opacity: 1;
+}
+.WalletNotConnected__transition-exit-active {
+  opacity: 0;
+}
+.WalletNotConnected__transition-enter-active,
+.WalletNotConnected__transition-exit-active {
+  transition: opacity 1000ms;
+}
+
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__after > div,
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__after > div {
+  animation: rotation-a 64s linear 0s infinite;
+}
+
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__before > div,
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__before > div {
+  animation: rotation-b 64s linear 0s infinite;
+}
+
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__svg,
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__svg {
+  fill-opacity: 0.75;
+  fill: transparent;
+}
+
+#WalletNotConnected.WalletNotConnected__transition-exit-active,
+#WalletNotConnected.WalletNotConnected__transition-enter-active {
+  transform: scale(4);
+  opacity: 0;
+}
+
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__text,
+#WalletNotConnected.WalletNotConnected__transition-enter-active  .WalletNotConnected__text{
+  opacity: 0;
 }
 
 aside {
@@ -439,6 +622,7 @@ aside {
 #CreditOperations[data-twap^="0."] #MintUcr,
 #CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
+  display: inline-block;
   cursor: unset;
 }
 #CreditOperations[data-twap^="0."] #MintUcr > div,
@@ -465,6 +649,15 @@ aside {
   display: flex;
   font-size: 4rem;
   padding: 16px;
+}
+
+/* Build info with commit hash URL block styles */
+#BuildInfo {
+  opacity: 0.5;
+  color: #fff;
+}
+#BuildInfo:hover {
+  opacity: 1;
 }
 
 #__CONNECTKIT__ svg {

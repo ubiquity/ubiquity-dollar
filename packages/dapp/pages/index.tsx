@@ -4,14 +4,12 @@ import "@uniswap/widgets/fonts.css";
 
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
-import useWalletAddress from "@/components/lib/hooks/useWalletAddress";
 import DollarPrice from "@/components/redeem/DollarPrice";
 import MigrateButton from "@/components/redeem/MigrateButton";
-import WalletNotConnected from "@/components/ui/WalletNotConnected";
+import WalletConnectionWall from "@/components/ui/WalletConnectionWall";
 
 const index: FC = (): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
-  const [walletAddress] = useWalletAddress();
   const managedContracts = useManagerManaged();
 
   useEffectAsync(async () => {
@@ -20,13 +18,11 @@ const index: FC = (): JSX.Element => {
     }
   }, [managedContracts]);
 
-  return walletAddress ? (
-    <>
+  return (
+    <WalletConnectionWall>
       <DollarPrice />
       <MigrateButton />
-    </>
-  ) : (
-    WalletNotConnected
+    </WalletConnectionWall>
   );
 };
 

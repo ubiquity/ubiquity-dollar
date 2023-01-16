@@ -20,10 +20,16 @@ contract CreditNFT is ERC1155Ubiquity {
     //ordered list of coupon expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
-    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
+    event MintedCreditNFT(
+        address recipient,
+        uint256 expiryBlock,
+        uint256 amount
+    );
 
     event BurnedCreditNFT(
-        address creditNFTHolder, uint256 expiryBlock, uint256 amount
+        address creditNFTHolder,
+        uint256 expiryBlock,
+        uint256 amount
     );
 
     modifier onlyCreditNFTManager() {
@@ -57,7 +63,8 @@ contract CreditNFT is ERC1155Ubiquity {
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
-            _tokenSupplies[expiryBlockNumber] + (amount);
+            _tokenSupplies[expiryBlockNumber] +
+            (amount);
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
@@ -80,7 +87,8 @@ contract CreditNFT is ERC1155Ubiquity {
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
-            _tokenSupplies[expiryBlockNumber] - (amount);
+            _tokenSupplies[expiryBlockNumber] -
+            (amount);
         _totalOutstandingDebt = _totalOutstandingDebt - (amount);
     }
 
@@ -99,7 +107,8 @@ contract CreditNFT is ERC1155Ubiquity {
             } else {
                 //update tally and remove key from blocks and map
                 _totalOutstandingDebt =
-                    _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                    _totalOutstandingDebt -
+                    (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
                 _sortedBlockNumbers.remove(currentBlockNumber);
             }
@@ -118,10 +127,12 @@ contract CreditNFT is ERC1155Ubiquity {
                 reachedEndOfExpiredKeys = true;
             } else {
                 outstandingDebt =
-                    outstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                    outstandingDebt -
+                    (_tokenSupplies[currentBlockNumber]);
             }
-            (, currentBlockNumber) =
-                _sortedBlockNumbers.getNextNode(currentBlockNumber);
+            (, currentBlockNumber) = _sortedBlockNumbers.getNextNode(
+                currentBlockNumber
+            );
         }
 
         return outstandingDebt;

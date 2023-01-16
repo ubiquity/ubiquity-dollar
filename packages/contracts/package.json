@@ -18,17 +18,18 @@
     "command-line-args": "5.2.1",
     "dotenv": "^16.0.0",
     "ethers": "^5.6.9",
-    "ts-node": "10.9.1"
+    "tsx": "^3.12.2"
   },
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "forge test --fork-url https://cloudflare-eth.com",
+    "test": "tsx ./scripts/runner/runner.ts",
     "slither:run": "slither . --compile-force-framework foundry",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
-    "deploy": "ts-node ./scripts/deploy/deploy.ts",
-    "task": "ts-node ./scripts/task/task.ts",
+    "deploy": "tsx ./scripts/deploy/deploy.ts",
+    "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
+    "task": "tsx ./scripts/task/task.ts",
     "clean": "forge clean",
     "purge": "yarn clean"
   },
@@ -56,5 +57,9 @@
       "postinstall-postinstall": false,
       "husky": false
     }
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "typescript": "^4.9.4"
   }
 }

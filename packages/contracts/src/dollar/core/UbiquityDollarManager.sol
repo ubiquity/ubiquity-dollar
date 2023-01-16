@@ -21,12 +21,16 @@ import "./TWAPOracleDollar3pool.sol";
 contract UbiquityDollarManager is AccessControl {
     using SafeERC20 for IERC20;
 
-    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
-    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_MINTER_ROLE =
+        keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
+    bytes32 public constant GOVERNANCE_TOKEN_BURNER_ROLE =
+        keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    bytes32 public constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
-    bytes32 public constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
+    bytes32 public constant CREDIT_NFT_MANAGER_ROLE =
+        keccak256("CREDIT_NFT_MANAGER_ROLE");
+    bytes32 public constant STAKING_MANAGER_ROLE =
+        keccak256("STAKING_MANAGER_ROLE");
     bytes32 public constant INCENTIVE_MANAGER_ROLE =
         keccak256("INCENTIVE_MANAGER");
     bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
@@ -70,10 +74,9 @@ contract UbiquityDollarManager is AccessControl {
     }
 
     // TODO Add a generic setter for extra addresses that needs to be linked
-    function setTwapOracleAddress(address _twapOracleAddress)
-        external
-        onlyAdmin
-    {
+    function setTwapOracleAddress(
+        address _twapOracleAddress
+    ) external onlyAdmin {
         twapOracleAddress = _twapOracleAddress;
         // to be removed
 
@@ -81,58 +84,53 @@ contract UbiquityDollarManager is AccessControl {
         oracle.update();
     }
 
-    function setCreditTokenAddress(address _creditTokenAddress) external onlyAdmin {
+    function setCreditTokenAddress(
+        address _creditTokenAddress
+    ) external onlyAdmin {
         creditTokenAddress = _creditTokenAddress;
     }
 
-    function setCreditNFTAddress(address _creditNFTAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditNFTAddress(address _creditNFTAddress) external onlyAdmin {
         creditNFTAddress = _creditNFTAddress;
     }
 
-    function setIncentiveToDollar(address _account, address _incentiveAddress)
-        external
-        onlyAdmin
-    {
+    function setIncentiveToDollar(
+        address _account,
+        address _incentiveAddress
+    ) external onlyAdmin {
         IUbiquityDollarToken(dollarTokenAddress).setIncentiveContract(
-            _account, _incentiveAddress
+            _account,
+            _incentiveAddress
         );
     }
 
-    function setDollarTokenAddress(address _dollarTokenAddress)
-        external
-        onlyAdmin
-    {
+    function setDollarTokenAddress(
+        address _dollarTokenAddress
+    ) external onlyAdmin {
         dollarTokenAddress = _dollarTokenAddress;
     }
 
-    function setGovernanceTokenAddress(address _governanceTokenAddress)
-        external
-        onlyAdmin
-    {
+    function setGovernanceTokenAddress(
+        address _governanceTokenAddress
+    ) external onlyAdmin {
         governanceTokenAddress = _governanceTokenAddress;
     }
 
-    function setSushiSwapPoolAddress(address _sushiSwapPoolAddress)
-        external
-        onlyAdmin
-    {
+    function setSushiSwapPoolAddress(
+        address _sushiSwapPoolAddress
+    ) external onlyAdmin {
         sushiSwapPoolAddress = _sushiSwapPoolAddress;
     }
 
-    function setCreditCalculatorAddress(address _creditCalculatorAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditCalculatorAddress(
+        address _creditCalculatorAddress
+    ) external onlyAdmin {
         creditCalculatorAddress = _creditCalculatorAddress;
     }
 
-    function setCreditNFTCalculatorAddress(address _creditNFTCalculatorAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditNFTCalculatorAddress(
+        address _creditNFTCalculatorAddress
+    ) external onlyAdmin {
         creditNFTCalculatorAddress = _creditNFTCalculatorAddress;
     }
 
@@ -146,14 +144,12 @@ contract UbiquityDollarManager is AccessControl {
         address creditNFTManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        _excessDollarDistributors[creditNFTManagerAddress] =
-            dollarMintExcess;
+        _excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
     }
 
-    function setMasterChefAddress(address _masterChefAddress)
-        external
-        onlyAdmin
-    {
+    function setMasterChefAddress(
+        address _masterChefAddress
+    ) external onlyAdmin {
         masterChefAddress = _masterChefAddress;
     }
 
@@ -161,17 +157,15 @@ contract UbiquityDollarManager is AccessControl {
         formulasAddress = _formulasAddress;
     }
 
-    function setStakingShareAddress(address _stakingShareAddress)
-        external
-        onlyAdmin
-    {
+    function setStakingShareAddress(
+        address _stakingShareAddress
+    ) external onlyAdmin {
         stakingShareAddress = _stakingShareAddress;
     }
 
-    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
-        external
-        onlyAdmin
-    {
+    function setStableSwapMetaPoolAddress(
+        address _stableSwapMetaPoolAddress
+    ) external onlyAdmin {
         stableSwapMetaPoolAddress = _stableSwapMetaPoolAddress;
     }
 
@@ -181,10 +175,9 @@ contract UbiquityDollarManager is AccessControl {
      * for a certain duration to earn Governance Tokens and more curve LP token
      * @param _stakingContractAddress staking contract address
      */
-    function setStakingContractAddress(address _stakingContractAddress)
-        external
-        onlyAdmin
-    {
+    function setStakingContractAddress(
+        address _stakingContractAddress
+    ) external onlyAdmin {
         stakingContractAddress = _stakingContractAddress;
     }
 
@@ -227,22 +220,27 @@ contract UbiquityDollarManager is AccessControl {
         stableSwapMetaPoolAddress = metaPool;
 
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount =
-            IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
-        uint256 dollarTokenAmount =
-            IERC20(dollarTokenAddress).balanceOf(address(this));
+        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
+            address(this)
+        );
+        uint256 dollarTokenAmount = IERC20(dollarTokenAddress).balanceOf(
+            address(this)
+        );
 
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, 0);
-        IERC20(_crv3PoolTokenAddress).safeApprove(metaPool, crv3PoolTokenAmount);
+        IERC20(_crv3PoolTokenAddress).safeApprove(
+            metaPool,
+            crv3PoolTokenAmount
+        );
 
         IERC20(dollarTokenAddress).safeApprove(metaPool, 0);
         IERC20(dollarTokenAddress).safeApprove(metaPool, dollarTokenAmount);
 
         // coin at index 0 is Ubiquity Dollar and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == dollarTokenAddress
-                && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            IMetaPool(metaPool).coins(0) == dollarTokenAddress &&
+                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
@@ -256,11 +254,9 @@ contract UbiquityDollarManager is AccessControl {
         IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
     }
 
-    function getExcessDollarsDistributor(address _creditNFTManagerAddress)
-        external
-        view
-        returns (address)
-    {
+    function getExcessDollarsDistributor(
+        address _creditNFTManagerAddress
+    ) external view returns (address) {
         return _excessDollarDistributors[_creditNFTManagerAddress];
     }
 }

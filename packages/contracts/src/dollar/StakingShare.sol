@@ -1,14 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
+import "./ERC1155SetUri/ERC1155BurnableSetUri.sol";
+import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
-contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract StakingShare is
+    ERC1155SetUri,
+    ERC1155BurnableSetUri,
+    ERC1155PausableSetUri
+{
     using SafeAddArray for uint256[];
 
     struct Stake {
@@ -40,6 +44,14 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         _;
     }
 
+    modifier onlyStakingManager() {
+        require(
+            manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
+            "Governance token: not staking manager"
+        );
+        _;
+    }
+
     modifier onlyBurner() {
         require(
             manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
@@ -59,7 +71,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
+    constructor(address _manager, string memory uri) ERC1155SetUri(uri) {
         manager = UbiquityDollarManager(_manager);
     }
 
@@ -185,20 +197,17 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(
+        address holder
+    ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
     }
 
-    function _burn(address account, uint256 id, uint256 amount)
-        internal
-        virtual
-        override
-        whenNotPaused
-    {
+    function _burn(
+        address account,
+        uint256 id,
+        uint256 amount
+    ) internal virtual override whenNotPaused {
         require(amount == 1, "amount <> 1");
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
@@ -224,7 +233,15 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override (ERC1155, ERC1155Pausable) {
+    ) internal virtual override(ERC1155SetUri, ERC1155PausableSetUri) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     */
+
+    function setUri(string memory newUri) external onlyStakingManager {
+        _uri = newUri;
     }
 }

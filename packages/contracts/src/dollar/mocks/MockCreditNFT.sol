@@ -9,10 +9,16 @@ contract MockCreditNFT is ERC1155 {
     uint256 public checkPoint;
     mapping(address => mapping(uint256 => uint256)) _balances;
 
-    event MintedCreditNFT(address recipient, uint256 expiryBlock, uint256 amount);
+    event MintedCreditNFT(
+        address recipient,
+        uint256 expiryBlock,
+        uint256 amount
+    );
 
     event BurnedCreditNFT(
-        address creditNFTHolder, uint256 expiryBlock, uint256 amount
+        address creditNFTHolder,
+        uint256 expiryBlock,
+        uint256 amount
     );
 
     //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
@@ -38,16 +44,15 @@ contract MockCreditNFT is ERC1155 {
         uint256 expiryBlockNumber
     ) public {
         _balances[receiver][expiryBlockNumber] =
-            _balances[receiver][expiryBlockNumber] + amount;
+            _balances[receiver][expiryBlockNumber] +
+            amount;
         emit MintedCreditNFT(receiver, expiryBlockNumber, amount);
     }
 
-    function balanceOf(address receiver, uint256 id)
-        public
-        view
-        override
-        returns (uint256)
-    {
+    function balanceOf(
+        address receiver,
+        uint256 id
+    ) public view override returns (uint256) {
         return _balances[receiver][id];
     }
 

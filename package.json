@@ -9,15 +9,24 @@
     "packages/contracts"
   ],
   "devDependencies": {
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
+    "@lavamoat/allow-scripts": "^2.3.0",
+    "@types/prettier": "^2",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
+    "cspell": "^6.17.0",
     "eslint": "^8.23.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
+    "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
-    "rimraf": "3.0.2"
+    "prettier": "^2.8.2",
+    "prettier-plugin-solidity": "^1.1.1",
+    "rimraf": "3.0.2",
+    "yarn-audit-fix": "^9.3.7"
   },
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
@@ -28,20 +37,35 @@
     "prettier:all": "yarn workspaces foreach run prettier",
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:cloudflare": "bash ./utils/build_cloudflare.sh",
-    "build:ci:netlify": "yarn build:all"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged"
-    }
+    "build:ci:netlify": "yarn build:all",
+    "postinstall": "husky install"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,sol}": [
+    "*.{js,jsx,ts,tsx,json}": [
       "prettier --write",
       "eslint --fix",
-      "cspell"
+      "cspell --no-must-find-files"
+    ],
+    "*.sol": [
+      "prettier --write",
+      "cspell --no-must-find-files"
     ]
   },
-  "packageManager": "yarn@3.2.3"
+  "packageManager": "yarn@3.2.3",
+  "lavamoat": {
+    "allowScripts": {
+      "$root$": true,
+      "bufferutil": true,
+      "utf-8-validate": true,
+      "styled-components": false,
+      "keccak": true,
+      "dtrace-provider": true,
+      "bigint-buffer": true,
+      "secp256k1": true,
+      "classic-level": true,
+      "@ubiquity/monorepo": true,
+      "napi-macros/example": true,
+      "husky": true
+    }
+  }
 }

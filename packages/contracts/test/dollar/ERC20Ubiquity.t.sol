@@ -2,16 +2,21 @@
 pragma solidity ^0.8.3;
 
 import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
-import {UbiquityDollarManager} from
-    "../../src/dollar/core/UbiquityDollarManager.sol";
+import {UbiquityDollarManager} from "../../src/dollar/core/UbiquityDollarManager.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract ERC20UbiquityHarness is ERC20Ubiquity {
-    constructor(address _manager, string memory name_, string memory symbol_)
-        ERC20Ubiquity(_manager, name_, symbol_)
-    {}
+    constructor(
+        address _manager,
+        string memory name_,
+        string memory symbol_
+    ) ERC20Ubiquity(_manager, name_, symbol_) {}
 
-    function exposed_transfer(address sender, address recipient, uint256 amount) external {
+    function exposed_transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) external {
         _transfer(sender, recipient, amount);
     }
 }
@@ -21,7 +26,9 @@ contract ERC20UbiquityTest is LocalTestHelper {
     address dollar_manager_addr;
 
     event Minting(
-        address indexed mock_addr1, address indexed _minter, uint256 _amount
+        address indexed mock_addr1,
+        address indexed _minter,
+        uint256 _amount
     );
 
     event Burning(address indexed _burned, uint256 _amount);
@@ -29,8 +36,9 @@ contract ERC20UbiquityTest is LocalTestHelper {
     function setUp() public {
         dollar_manager_addr = helpers_deployUbiquityDollarManager();
         vm.prank(admin);
-        token_addr =
-            address(new ERC20Ubiquity(dollar_manager_addr, "Test", "Test"));
+        token_addr = address(
+            new ERC20Ubiquity(dollar_manager_addr, "Test", "Test")
+        );
     }
 
     function testConstructor_ShouldRevert_IfSenderIsNotAdmin() public {
@@ -42,7 +50,10 @@ contract ERC20UbiquityTest is LocalTestHelper {
     function testConstructor_ShouldSetConstructorParams() public {
         assertEq(ERC20Ubiquity(token_addr).name(), "Test");
         assertEq(ERC20Ubiquity(token_addr).symbol(), "Test");
-        assertEq(address(ERC20Ubiquity(token_addr).manager()), dollar_manager_addr);
+        assertEq(
+            address(ERC20Ubiquity(token_addr).manager()),
+            dollar_manager_addr
+        );
     }
 
     function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
@@ -69,8 +80,8 @@ contract ERC20UbiquityTest is LocalTestHelper {
 
     function testPermit_ShouldRevert_IfDeadlineExpired() public {
         // create owner and spender addresses
-        uint ownerPrivateKey = 0x1;
-        uint spenderPrivateKey = 0x2;
+        uint256 ownerPrivateKey = 0x1;
+        uint256 spenderPrivateKey = 0x2;
         address owner = vm.addr(ownerPrivateKey);
         address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
@@ -94,21 +105,13 @@ contract ERC20UbiquityTest is LocalTestHelper {
         // run permit
         vm.prank(spender);
         vm.expectRevert("Dollar: EXPIRED");
-        ERC20Ubiquity(token_addr).permit(
-            owner,
-            spender,
-            1e18,
-            0,
-            v,
-            r,
-            s
-        );
+        ERC20Ubiquity(token_addr).permit(owner, spender, 1e18, 0, v, r, s);
     }
 
     function testPermit_ShouldRevert_IfSignatureIsInvalid() public {
         // create owner and spender addresses
-        uint ownerPrivateKey = 0x1;
-        uint spenderPrivateKey = 0x2;
+        uint256 ownerPrivateKey = 0x1;
+        uint256 spenderPrivateKey = 0x2;
         address owner = vm.addr(ownerPrivateKey);
         address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
@@ -145,8 +148,8 @@ contract ERC20UbiquityTest is LocalTestHelper {
 
     function testPermit_ShouldIncreaseSpenderAllowance() public {
         // create owner and spender addresses
-        uint ownerPrivateKey = 0x1;
-        uint spenderPrivateKey = 0x2;
+        uint256 ownerPrivateKey = 0x1;
+        uint256 spenderPrivateKey = 0x2;
         address owner = vm.addr(ownerPrivateKey);
         address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
@@ -168,7 +171,7 @@ contract ERC20UbiquityTest is LocalTestHelper {
         );
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
         // run permit
-        uint noncesBefore = ERC20Ubiquity(token_addr).nonces(owner);
+        uint256 noncesBefore = ERC20Ubiquity(token_addr).nonces(owner);
         vm.prank(spender);
         ERC20Ubiquity(token_addr).permit(
             owner,
@@ -220,7 +223,8 @@ contract ERC20UbiquityTest is LocalTestHelper {
         address burner = address(0x2);
         vm.prank(admin);
         UbiquityDollarManager(dollar_manager_addr).grantRole(
-            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"), burner
+            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"),
+            burner
         );
         // admin pauses contract
         vm.prank(admin);
@@ -241,7 +245,8 @@ contract ERC20UbiquityTest is LocalTestHelper {
         address burner = address(0x2);
         vm.prank(admin);
         UbiquityDollarManager(dollar_manager_addr).grantRole(
-            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"), burner
+            keccak256("GOVERNANCE_TOKEN_BURNER_ROLE"),
+            burner
         );
         // burn 50 tokens for user
         vm.prank(burner);
@@ -268,7 +273,9 @@ contract ERC20UbiquityTest is LocalTestHelper {
 
     function testMint_ShouldMintTokens() public {
         address mockAddress = address(0x1);
-        uint balanceBefore = ERC20Ubiquity(token_addr).balanceOf(mockAddress);
+        uint256 balanceBefore = ERC20Ubiquity(token_addr).balanceOf(
+            mockAddress
+        );
         vm.prank(admin);
         vm.expectEmit(true, true, false, true);
         emit Minting(mockAddress, admin, 100);
@@ -314,7 +321,11 @@ contract ERC20UbiquityTest is LocalTestHelper {
     function testTransfer_ShouldRevert_IfContractIsPaused() public {
         // deploy contract with exposed internal methods
         vm.prank(admin);
-        ERC20UbiquityHarness erc20Ubiquity = new ERC20UbiquityHarness(dollar_manager_addr, "Test", "Test");
+        ERC20UbiquityHarness erc20Ubiquity = new ERC20UbiquityHarness(
+            dollar_manager_addr,
+            "Test",
+            "Test"
+        );
         // admin pauses contract
         vm.prank(admin);
         erc20Ubiquity.pause();
@@ -328,7 +339,11 @@ contract ERC20UbiquityTest is LocalTestHelper {
     function testTransfer_ShouldTransferTokens() public {
         // deploy contract with exposed internal methods
         vm.prank(admin);
-        ERC20UbiquityHarness erc20Ubiquity = new ERC20UbiquityHarness(dollar_manager_addr, "Test", "Test");
+        ERC20UbiquityHarness erc20Ubiquity = new ERC20UbiquityHarness(
+            dollar_manager_addr,
+            "Test",
+            "Test"
+        );
         // mint tokens to admin
         vm.prank(admin);
         erc20Ubiquity.mint(admin, 100);

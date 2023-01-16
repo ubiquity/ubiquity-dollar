@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
 import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import {DollarMintCalculator} from
-    "../../../src/dollar/core/DollarMintCalculator.sol";
+import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
@@ -42,16 +40,14 @@ contract DollarMintCalculatorTest is LocalTestHelper {
     function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("DollarMintCalculator: not > 1");
-        DollarMintCalculator(dollarMintCalculatorAddress).getDollarsToMint(
-        );
+        DollarMintCalculator(dollarMintCalculatorAddress).getDollarsToMint();
     }
 
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
         uint256 totalSupply = MockDollarToken(dollarAddress).totalSupply();
-        uint256 amountToMint = DollarMintCalculator(
-            dollarMintCalculatorAddress
-        ).getDollarsToMint();
+        uint256 amountToMint = DollarMintCalculator(dollarMintCalculatorAddress)
+            .getDollarsToMint();
         assertEq(amountToMint, totalSupply);
     }
 }

@@ -37,6 +37,6 @@ Deploy script has been built on top of `forge create` and typescript to manage d
 # ARGUMENTS - Deploy Arguments which has been configured per smart contract. You can find them in each deploy script file.
 
 yarn workspace @ubiquity/contracts deploy DEPLOY_NAME ...ARGUMENTS
-# e.g. yarn workspace @ubiquity/contracts deploy Bonding --manager 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98 --siblings 0x0000000000000000000000000000000000000000 --network mainnet
+# e.g. yarn workspace @ubiquity/contracts deploy CreditNFT --manager 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98 --network mainnet
 
 ```

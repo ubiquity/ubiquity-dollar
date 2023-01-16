@@ -65,10 +65,10 @@ contract CurveDollarIncentive is IIncentive {
     /// @notice set an address to be exempted from Curve trading incentives
     /// @param account the address to update
     /// @param isExempt a flag for whether to flag as exempt or not
-    function setExemptAddress(address account, bool isExempt)
-        external
-        onlyAdmin
-    {
+    function setExemptAddress(
+        address account,
+        bool isExempt
+    ) external onlyAdmin {
         _exempt[account] = isExempt;
         emit ExemptAddressUpdate(account, isExempt);
     }
@@ -111,12 +111,14 @@ contract CurveDollarIncentive is IIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityDollarToken(manager.dollarTokenAddress())
-                    .balanceOf(target) >= penalty + amount,
+                UbiquityDollarToken(manager.dollarTokenAddress()).balanceOf(
+                    target
+                ) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
             UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
-                target, penalty
+                target,
+                penalty
             ); // burn from the recipient
         }
     }
@@ -136,26 +138,27 @@ contract CurveDollarIncentive is IIncentive {
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of Governance Token
             IUbiquityGovernanceToken(manager.governanceTokenAddress()).mint(
-                target, incentive
+                target,
+                incentive
             );
         }
     }
 
     /// @notice returns the percentage of deviation from the peg multiplied by amount
     //          when Ubiquity Dollar is <1$
-    function _getPercentDeviationFromUnderPeg(uint256 amount)
-        internal
-        returns (uint256)
-    {
+    function _getPercentDeviationFromUnderPeg(
+        uint256 amount
+    ) internal returns (uint256) {
         _updateOracle();
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
         }
 
-        uint256 res = _one.sub(curPrice.fromUInt()).mul(
-            (amount.fromUInt().div(_one))
-        ).toUInt();
+        uint256 res = _one
+            .sub(curPrice.fromUInt())
+            .mul((amount.fromUInt().div(_one)))
+            .toUInt();
         // returns (1- TWAP_Price) * amount.
         return res;
     }
@@ -165,8 +168,9 @@ contract CurveDollarIncentive is IIncentive {
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
+        return
+            TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
+                manager.dollarTokenAddress()
+            );
     }
 }
