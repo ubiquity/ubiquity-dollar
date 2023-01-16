@@ -36,7 +36,9 @@
     "ADMGR",
     "coef",
     "structs",
-    "tlsv"
+    "tlsv",
+    "connectkit",
+    "wagmi"
   ],
   "ignorePaths": [
     "**/*.json",
