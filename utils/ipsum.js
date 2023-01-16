@@ -1,4 +1,4 @@
-const A = "B";
+const A = "CDF";
 
 module.exports = {
   A,
