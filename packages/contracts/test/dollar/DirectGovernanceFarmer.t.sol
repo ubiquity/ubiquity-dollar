@@ -120,7 +120,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.expectRevert(
             "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar"
         );
-        directGovernanceFarmer.deposit(address(0), 1, 1);
+        directGovernanceFarmer.depositSingle(address(0), 1, 1);
     }
 
     function testDeposit_ShouldRevert_IfAmountIsNotPositive() public {
@@ -184,7 +184,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         // user deposits 100 DAI for 1 week
-        uint stakingShareId = directGovernanceFarmer.deposit(
+        uint stakingShareId = directGovernanceFarmer.depositSingle(
             address(token0),
             100e18,
             1
