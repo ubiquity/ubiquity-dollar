@@ -7,7 +7,9 @@ import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
 import {IERC173} from "../interfaces/IERC173.sol";
 import "../libraries/LibAppStorage.sol";
 import "../libraries/LibAccessControl.sol";
-
+import {StakingShare} from "../../dollar/StakingShare.sol";
+//import {UbiquityGovernanceToken} from "../../dollar/core/UbiquityGovernanceToken.sol";
+import {UbiquityGovernanceTokenForDiamond} from "../token/UbiquityGovernanceTokenForDiamond.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {LibUbiquityDollar} from "../libraries/LibUbiquityDollar.sol";
@@ -29,6 +31,7 @@ contract DiamondInit is Modifiers {
         address[] tos;
         uint256[] amounts;
         uint256[] stakingShareIDs;
+        uint256 governancePerBlock;
     }
 
     // You can add parameters to this function in order to pass in
@@ -51,6 +54,7 @@ contract DiamondInit is Modifiers {
         AppStorage storage appStore = LibAppStorage.appStorage();
 
         appStore.paused = false;
+        appStore.treasuryAddress = _args.admin;
         // Dollar
         LibUbiquityDollar.initialize(
             _args.dollarName,
@@ -62,12 +66,28 @@ contract DiamondInit is Modifiers {
         LibStaking.StakingData storage ls = LibStaking.stakingStorage();
         ls.stakingDiscountMultiplier = uint256(1000000 gwei); // 0.001
         ls.blockCountInAWeek = 45361;
+        // add staking shares
+
+        string
+            memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
+        appStore.stakingShareAddress = address(
+            new StakingShare(address(this), uri)
+        );
+        console.log("address this:%s msg.sender:%s", address(this), msg.sender);
+        console.log("init 1.1");
+        // adding governance token
+        appStore.governanceTokenAddress = address(
+            new UbiquityGovernanceTokenForDiamond(address(this))
+        );
+
         console.log("init 2");
-        // ubiquity chef
+        // ubiquity chef before doing that we should have a metapool address
+
         LibUbiquityChef.initialize(
             _args.tos,
             _args.amounts,
-            _args.stakingShareIDs
+            _args.stakingShareIDs,
+            _args.governancePerBlock
         );
         console.log("init 3");
 

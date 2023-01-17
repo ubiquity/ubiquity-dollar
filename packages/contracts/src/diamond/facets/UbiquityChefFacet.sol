@@ -35,6 +35,36 @@ contract UbiquityChefFacet is Modifiers {
         return LibUbiquityChef.getRewards(stakingShareID);
     }
 
+    /**
+     * @dev get the governance Per Block.
+     */
+    function governancePerBlock() external view returns (uint256) {
+        return LibUbiquityChef.governancePerBlock();
+    }
+
+    /**
+     * @dev get the governance divider.
+     */
+    function governanceDivider() external view returns (uint256) {
+        return LibUbiquityChef.governanceDivider();
+    }
+
+    /**
+     * @dev get the pool information.
+     */
+    function pool() external view returns (uint256, uint256) {
+        LibUbiquityChef.PoolInfo memory _pool = LibUbiquityChef.pool();
+
+        return (_pool.lastRewardBlock, _pool.accGovernancePerShare);
+    }
+
+    /**
+     * @dev get the minimum price differrence to update the multiplier.
+     */
+    function minPriceDiffToUpdateMultiplier() external view returns (uint256) {
+        return LibUbiquityChef.minPriceDiffToUpdateMultiplier();
+    }
+
     // View function to see pending Governance Tokens on frontend.
     function pendingGovernance(uint256 stakingShareID)
         external

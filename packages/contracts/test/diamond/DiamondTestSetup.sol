@@ -26,6 +26,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     OwnershipFacet ownerFacet;
     ManagerFacet managerFacet;
     DiamondInit dInit;
+    // actual implementation of facets
     AccessControlFacet accessControlFacet;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityDollarTokenFacet dollarTokenFacet;
@@ -39,7 +40,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     ManagerFacet IManager;
     TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
     AccessControlFacet IAccessCtrl;
-    UbiquityDollarTokenFacet IUbiquityDollarToken;
+    UbiquityDollarTokenFacet IDollarFacet;
 
     CollectableDustFacet ICollectableDustFacet;
     UbiquityChefFacet IUbiquityChefFacet;
@@ -143,48 +144,38 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(
             managerFacet.deployStableSwapPool.selector
         );
+        selectorsOfManagerFacet.push(managerFacet.twapOracleAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.dollarTokenAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.creditTokenAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.creditNFTAddress.selector);
         selectorsOfManagerFacet.push(
-            managerFacet.getTwapOracleAddress.selector
+            managerFacet.governanceTokenAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getDollarTokenAddress.selector
+            managerFacet.sushiSwapPoolAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getCreditTokenAddress.selector
-        );
-        selectorsOfManagerFacet.push(managerFacet.getCreditNftAddress.selector);
-        selectorsOfManagerFacet.push(
-            managerFacet.getGovernanceTokenAddress.selector
+            managerFacet.creditCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getSushiSwapPoolAddress.selector
+            managerFacet.creditNFTCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getCreditCalculatorAddress.selector
+            managerFacet.dollarMintCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getCreditNftCalculatorAddress.selector
+            managerFacet.excessDollarsDistributor.selector
+        );
+        selectorsOfManagerFacet.push(managerFacet.masterChefAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.formulasAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.stakingShareAddress.selector);
+        selectorsOfManagerFacet.push(
+            managerFacet.stableSwapMetaPoolAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getDollarMintCalculatorAddress.selector
+            managerFacet.stakingContractAddress.selector
         );
-        selectorsOfManagerFacet.push(
-            managerFacet.getExcessDollarsDistributor.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacet.getMasterChefAddress.selector
-        );
-        selectorsOfManagerFacet.push(managerFacet.getFormulasAddress.selector);
-        selectorsOfManagerFacet.push(
-            managerFacet.getStakingShareAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacet.getStableSwapMetaPoolAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacet.getStakingContractAddress.selector
-        );
-        selectorsOfManagerFacet.push(managerFacet.getTreasuryAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.treasuryAddress.selector);
 
         // Access Control
         selectorsOfAccessControlFacet.push(
@@ -288,6 +279,15 @@ abstract contract DiamondSetup is DiamondTestHelper {
             ubiquityChefFacet.setGovernancePerBlock.selector
         );
         selectorsOfUbiquityChefFacet.push(
+            ubiquityChefFacet.governancePerBlock.selector
+        );
+        selectorsOfUbiquityChefFacet.push(
+            ubiquityChefFacet.governanceDivider.selector
+        );
+        selectorsOfUbiquityChefFacet.push(
+            ubiquityChefFacet.minPriceDiffToUpdateMultiplier.selector
+        );
+        selectorsOfUbiquityChefFacet.push(
             ubiquityChefFacet.setGovernanceShareForTreasury.selector
         );
         selectorsOfUbiquityChefFacet.push(
@@ -305,11 +305,16 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfUbiquityChefFacet.push(
             ubiquityChefFacet.totalShares.selector
         );
+        selectorsOfUbiquityChefFacet.push(ubiquityChefFacet.pool.selector);
+
         // Staking
         selectorsOfStakingFacet.push(stakingFacet.dollarPriceReset.selector);
         selectorsOfStakingFacet.push(stakingFacet.crvPriceReset.selector);
         selectorsOfStakingFacet.push(
             stakingFacet.setStakingDiscountMultiplier.selector
+        );
+        selectorsOfStakingFacet.push(
+            stakingFacet.stakingDiscountMultiplier.selector
         );
         selectorsOfStakingFacet.push(
             stakingFacet.setBlockCountInAWeek.selector
@@ -333,6 +338,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         selectorsOfStakingFormulasFacet.push(
             stakingFormulasFacet.correctedAmountToWithdraw.selector
+        );
+        selectorsOfStakingFormulasFacet.push(
+            stakingFormulasFacet.durationMultiply.selector
         );
 
         //deploy facets
@@ -370,7 +378,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
             dollarDecimals: 18,
             tos: new address[](0),
             amounts: new uint256[](0),
-            stakingShareIDs: new uint256[](0)
+            stakingShareIDs: new uint256[](0),
+            governancePerBlock: 10e18
         });
         // diamod arguments
         DiamondArgs memory _args = DiamondArgs({
@@ -468,6 +477,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         // deploy diamond
         vm.startPrank(owner);
+        console.log("!!!!!diamond owner:%s", _args.owner);
         diamond = new Diamond(_args, cuts);
         vm.stopPrank();
 
@@ -478,13 +488,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IManager = ManagerFacet(address(diamond));
         IAccessCtrl = AccessControlFacet(address(diamond));
         ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
-        IUbiquityDollarToken = UbiquityDollarTokenFacet(address(diamond));
+        IDollarFacet = UbiquityDollarTokenFacet(address(diamond));
         ICollectableDustFacet = CollectableDustFacet(address(diamond));
         IUbiquityChefFacet = UbiquityChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
 
-        assertEq(IUbiquityDollarToken.decimals(), 18);
+        assertEq(IDollarFacet.decimals(), 18);
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
     }

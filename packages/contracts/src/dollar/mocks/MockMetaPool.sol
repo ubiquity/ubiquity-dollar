@@ -62,4 +62,12 @@ contract MockMetaPool {
         balances = _twap_balances;
         dy_values = _dy_values;
     }
+
+    function add_liquidity(
+        uint256[2] memory _amounts,
+        uint256 _min_mint_amount,
+        address _receiver
+    ) external returns (uint256) {
+        return 100e18;
+    }
 }
