@@ -66,13 +66,13 @@ library LibUbiquityDollar {
     }
 
     function initialize(
-        string memory name,
-        string memory symbol,
+        string memory _name,
+        string memory _symbol,
         uint8 decimals
     ) internal {
         UbiquityDollarStorage storage us = ubiquityDollarStorage();
-        us.name = name;
-        us.symbol = symbol;
+        us.name = _name;
+        us.symbol = _symbol;
         us.decimals = decimals;
         uint256 chainId;
         // solhint-disable-next-line no-inline-assembly
@@ -86,7 +86,7 @@ library LibUbiquityDollar {
                     // solhint-disable-next-line max-line-length
                     "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
                 ),
-                keccak256(bytes(name)),
+                keccak256(bytes(_name)),
                 keccak256(bytes("1")),
                 chainId,
                 address(this)
@@ -102,11 +102,11 @@ library LibUbiquityDollar {
         ubiquityDollarStorage().name = newName;
     }
 
-    function name() internal returns (string memory) {
+    function name() internal view returns (string memory) {
         return ubiquityDollarStorage().name;
     }
 
-    function symbol() internal returns (string memory) {
+    function symbol() internal view returns (string memory) {
         return ubiquityDollarStorage().symbol;
     }
 

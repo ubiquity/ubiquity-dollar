@@ -8,6 +8,7 @@ import "../libraries/LibAccessControl.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {ERC20ForFacet} from "../token/ERC20ForFacet.sol";
 import "../libraries/Constants.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title ERC20 Ubiquity preset
 /// @author Ubiquity DAO
@@ -79,6 +80,44 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
     }
 
     /**
+     * @dev See {IERC20-transfer}.
+     *
+     * Requirements:
+     *
+     * - `recipient` cannot be the zero address.
+     * - the caller must have a balance of at least `amount`.
+     */
+    function transfer(address recipient, uint256 amount)
+        public
+        override(ERC20ForFacet, IERC20)
+        whenNotPaused
+        returns (bool)
+    {
+        return super.transfer(recipient, amount);
+    }
+
+    /**
+     * @dev See {IERC20-transferFrom}.
+     *
+     * Emits an {Approval} event indicating the updated allowance. This is not
+     * required by the EIP. See the note at the beginning of {ERC20}.
+     *
+     * Requirements:
+     *
+     * - `sender` and `recipient` cannot be the zero address.
+     * - `sender` must have a balance of at least `amount`.
+     * - the caller must have allowance for ``sender``'s tokens of at least
+     * `amount`.
+     */
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) public override(ERC20ForFacet, IERC20) whenNotPaused returns (bool) {
+        return super.transferFrom(from, to, amount);
+    }
+
+    /**
      * @dev Destroys `amount` tokens from the caller.
      *
      * See {ERC20-_burn}.
@@ -116,11 +155,11 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
         LibUbiquityDollar.mint(to, amount);
     }
 
-    function nonces(address sender) external returns (uint256) {
+    function nonces(address sender) external view returns (uint256) {
         return LibUbiquityDollar.ubiquityDollarStorage().nonces[sender];
     }
 
-    function DOMAIN_SEPARATOR() external returns (bytes32) {
+    function DOMAIN_SEPARATOR() external view returns (bytes32) {
         return LibUbiquityDollar.ubiquityDollarStorage().DOMAIN_SEPARATOR;
     }
 }

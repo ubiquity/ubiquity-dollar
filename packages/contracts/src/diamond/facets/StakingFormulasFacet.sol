@@ -77,4 +77,20 @@ contract StakingFormulasFacet {
                 _amount
             );
     }
+
+    /// @dev formula duration multiply
+    /// @param _uLP , amount of LP tokens
+    /// @param _weeks , minimum duration of staking period
+    /// @param _multiplier , staking discount multiplier = 0.0001
+    /// @return _shares , amount of shares
+    /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
+    //          D32 = D^3/2
+    //          S = m * D32 * A + A
+    function durationMultiply(
+        uint256 _uLP,
+        uint256 _weeks,
+        uint256 _multiplier
+    ) external pure returns (uint256 _shares) {
+        return LibStakingFormulas.durationMultiply(_uLP, _weeks, _multiplier);
+    }
 }

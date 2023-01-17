@@ -17,47 +17,31 @@ contract UbiquityDollarTokenFacetTest is DiamondSetup {
 
     function test_setIncentiveContract() public {
         vm.prank(mock_sender);
-        vm.expectRevert("Dollar: must have admin role");
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(mock_sender, incentive_addr);
+        vm.expectRevert("MGR: Caller is not admin");
+        IDollarFacet.setIncentiveContract(mock_sender, incentive_addr);
 
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit IncentiveContractUpdate(mock_sender, incentive_addr);
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(mock_sender, incentive_addr);
+        IDollarFacet.setIncentiveContract(mock_sender, incentive_addr);
     }
 
     function test_transferIncentive() public {
         address userA = address(0x100001);
         address userB = address(0x100001);
         vm.startPrank(admin);
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken)).mint(
-            userA,
-            100
-        );
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken)).mint(
-            userB,
-            100
-        );
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken)).mint(
-            mock_sender,
-            100
-        );
+        IDollarFacet.mint(userA, 100);
+        IDollarFacet.mint(userB, 100);
+        IDollarFacet.mint(mock_sender, 100);
 
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(mock_sender, incentive_addr);
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(mock_recipient, incentive_addr);
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(mock_operator, incentive_addr);
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(address(0), incentive_addr);
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken))
-            .setIncentiveContract(
-                address(IUbiquityDollarToken),
-                incentive_addr
-            );
+        IDollarFacet.setIncentiveContract(mock_sender, incentive_addr);
+        IDollarFacet.setIncentiveContract(mock_recipient, incentive_addr);
+        IDollarFacet.setIncentiveContract(mock_operator, incentive_addr);
+        IDollarFacet.setIncentiveContract(address(0), incentive_addr);
+        IDollarFacet.setIncentiveContract(
+            address(IDollarFacet),
+            incentive_addr
+        );
         vm.stopPrank();
 
         vm.prank(mock_sender);
@@ -71,10 +55,7 @@ contract UbiquityDollarTokenFacetTest is DiamondSetup {
                 1
             )
         );
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken)).transfer(
-            userB,
-            1
-        );
+        IDollarFacet.transfer(userB, 1);
 
         vm.prank(userA);
         vm.expectCall(
@@ -87,9 +68,6 @@ contract UbiquityDollarTokenFacetTest is DiamondSetup {
                 1
             )
         );
-        UbiquityDollarTokenFacet(address(IUbiquityDollarToken)).transfer(
-            mock_recipient,
-            1
-        );
+        IDollarFacet.transfer(mock_recipient, 1);
     }
 }

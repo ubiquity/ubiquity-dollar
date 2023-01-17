@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "./core/UbiquityDollarManager.sol";
-import "./interfaces/IERC20Ubiquity.sol";
+import "../interfaces/IAccessControl.sol";
+import "../libraries/Constants.sol";
+import "../../dollar/interfaces/IERC20Ubiquity.sol";
+
 import "forge-std/console.sol";
 
 /// @title ERC20 Ubiquity preset
@@ -14,15 +16,16 @@ import "forge-std/console.sol";
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
-contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
-    UbiquityDollarManager public manager;
+contract ERC20UbiquityForDiamond is
+    IERC20Ubiquity,
+    ERC20,
+    ERC20Burnable,
+    ERC20Pausable
+{
+    IAccessControl public accessCtrl;
 
     // solhint-disable-next-line var-name-mixedcase
-    bytes32 public immutable DOMAIN_SEPARATOR;
-    // keccak256("Permit(address owner,address spender,
-    //                   uint256 value,uint256 nonce,uint256 deadline)");
-    bytes32 public constant PERMIT_TYPEHASH =
-        0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9;
+    bytes32 public DOMAIN_SEPARATOR;
     mapping(address => uint256) public nonces;
     string private _tokenName;
     string private _symbol;
@@ -30,7 +33,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
+            accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -38,7 +41,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
+            accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
             "Governance token: not burner"
         );
         _;
@@ -46,7 +49,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
 
     modifier onlyPauser() {
         require(
-            manager.hasRole(manager.PAUSER_ROLE(), msg.sender),
+            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
             "Governance token: not pauser"
         );
         _;
@@ -54,28 +57,25 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
 
     modifier onlyAdmin() {
         require(
-            manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender),
+            accessCtrl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "ERC20: deployer must be manager admin"
         );
         _;
     }
 
     constructor(
-        UbiquityDollarManager _manager,
+        address _diamond,
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {
         _tokenName = name_;
         _symbol = symbol_;
-        manager = _manager;
-        // sender must be UbiquityDollarManager roleAdmin
-        // because he will get the admin, minter and pauser role on Ubiquity Dollar and we want to
-        // manage all permissions through the manager
-        require(
-            manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender),
-            "ERC20: deployer must be manager admin"
+        accessCtrl = IAccessControl(_diamond);
+        console.log(
+            "ERC20UbiquityForDiamond constructor sender: %s ",
+            msg.sender
         );
-        console.log("ERC20Ubiquity 3");
+
         uint256 chainId;
         // solhint-disable-next-line no-inline-assembly
         assembly {
@@ -151,9 +151,11 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
 
     /// @notice burn Ubiquity Dollar tokens from caller
     /// @param amount the amount to burn
-    function burn(
-        uint256 amount
-    ) public override(ERC20Burnable, IERC20Ubiquity) whenNotPaused {
+    function burn(uint256 amount)
+        public
+        override(ERC20Burnable, IERC20Ubiquity)
+        whenNotPaused
+    {
         super.burn(amount);
         emit Burning(msg.sender, amount);
     }
@@ -161,10 +163,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     /// @notice burn Ubiquity Dollar tokens from specified account
     /// @param account the account to burn from
     /// @param amount the amount to burn
-    function burnFrom(
-        address account,
-        uint256 amount
-    )
+    function burnFrom(address account, uint256 amount)
         public
         override(ERC20Burnable, IERC20Ubiquity)
         onlyBurner
@@ -175,10 +174,12 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     }
 
     // @dev Creates `amount` new tokens for `to`.
-    function mint(
-        address to,
-        uint256 amount
-    ) public override onlyMinter whenNotPaused {
+    function mint(address to, uint256 amount)
+        public
+        override
+        onlyMinter
+        whenNotPaused
+    {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }

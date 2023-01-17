@@ -29,24 +29,24 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
         vm.expectRevert("MGR: Caller is not admin");
-        IUbiquityDollarToken.setSymbol("ANY_SYMBOL");
+        IDollarFacet.setSymbol("ANY_SYMBOL");
     }
 
     function testSetSymbol_ShouldSetSymbol() public {
         vm.prank(admin);
-        IUbiquityDollarToken.setSymbol("ANY_SYMBOL");
-        assertEq(IUbiquityDollarToken.symbol(), "ANY_SYMBOL");
+        IDollarFacet.setSymbol("ANY_SYMBOL");
+        assertEq(IDollarFacet.symbol(), "ANY_SYMBOL");
     }
 
     function testSetName_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
-        vm.expectRevert("ERC20: deployer must be manager admin");
-        IUbiquityDollarToken.setName("ANY_NAME");
+        vm.expectRevert("MGR: Caller is not admin");
+        IDollarFacet.setName("ANY_NAME");
     }
 
     function testSetName_ShouldSetName() public {
         vm.prank(admin);
-        IUbiquityDollarToken.setName("ANY_NAME");
-        assertEq(IUbiquityDollarToken.name(), "ANY_NAME");
+        IDollarFacet.setName("ANY_NAME");
+        assertEq(IDollarFacet.name(), "ANY_NAME");
     }
 
     function testPermit_ShouldRevert_IfDeadlineExpired() public {
@@ -59,14 +59,14 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",
-                IUbiquityDollarToken.DOMAIN_SEPARATOR(),
+                IDollarFacet.DOMAIN_SEPARATOR(),
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
                         curOwner,
                         spender,
                         1e18,
-                        IUbiquityDollarToken.nonces(curOwner),
+                        IDollarFacet.nonces(curOwner),
                         0
                     )
                 )
@@ -76,7 +76,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // run permit
         vm.prank(spender);
         vm.expectRevert("Dollar: EXPIRED");
-        IUbiquityDollarToken.permit(curOwner, spender, 1e18, 0, v, r, s);
+        IDollarFacet.permit(curOwner, spender, 1e18, 0, v, r, s);
     }
 
     function testPermit_ShouldRevert_IfSignatureIsInvalid() public {
@@ -89,14 +89,14 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",
-                IUbiquityDollarToken.DOMAIN_SEPARATOR(),
+                IDollarFacet.DOMAIN_SEPARATOR(),
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
                         owner,
                         spender,
                         1e18,
-                        IUbiquityDollarToken.nonces(owner),
+                        IDollarFacet.nonces(owner),
                         block.timestamp + 1 days
                     )
                 )
@@ -106,7 +106,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // run permit
         vm.prank(spender);
         vm.expectRevert("Dollar: INVALID_SIGNATURE");
-        IUbiquityDollarToken.permit(
+        IDollarFacet.permit(
             owner,
             spender,
             1e18,
@@ -127,14 +127,14 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         bytes32 digest = keccak256(
             abi.encodePacked(
                 "\x19\x01",
-                IUbiquityDollarToken.DOMAIN_SEPARATOR(),
+                IDollarFacet.DOMAIN_SEPARATOR(),
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
                         owner,
                         spender,
                         1e18,
-                        IUbiquityDollarToken.nonces(owner),
+                        IDollarFacet.nonces(owner),
                         block.timestamp + 1 days
                     )
                 )
@@ -142,9 +142,9 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         );
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
         // run permit
-        uint256 noncesBefore = IUbiquityDollarToken.nonces(owner);
+        uint256 noncesBefore = IDollarFacet.nonces(owner);
         vm.prank(spender);
-        IUbiquityDollarToken.permit(
+        IDollarFacet.permit(
             owner,
             spender,
             1e18,
@@ -153,43 +153,43 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
             r,
             s
         );
-        assertEq(IUbiquityDollarToken.allowance(owner, spender), 1e18);
-        assertEq(IUbiquityDollarToken.nonces(owner), noncesBefore + 1);
+        assertEq(IDollarFacet.allowance(owner, spender), 1e18);
+        assertEq(IDollarFacet.nonces(owner), noncesBefore + 1);
     }
 
     function testBurn_ShouldRevert_IfContractIsPaused() public {
         vm.prank(admin);
         IAccessCtrl.pause();
         vm.expectRevert("Pausable: paused");
-        IUbiquityDollarToken.burn(50);
+        IDollarFacet.burn(50);
     }
 
     function testBurn_ShouldBurnTokens() public {
         // mint 100 tokens to user
         address mockAddress = address(0x1);
         vm.prank(admin);
-        IUbiquityDollarToken.mint(mockAddress, 100);
-        assertEq(IUbiquityDollarToken.balanceOf(mockAddress), 100);
+        IDollarFacet.mint(mockAddress, 100);
+        assertEq(IDollarFacet.balanceOf(mockAddress), 100);
         // burn 50 tokens from user
         vm.prank(mockAddress);
         vm.expectEmit(true, true, true, true);
         emit Burning(mockAddress, 50);
-        IUbiquityDollarToken.burn(50);
-        assertEq(IUbiquityDollarToken.balanceOf(mockAddress), 50);
+        IDollarFacet.burn(50);
+        assertEq(IDollarFacet.balanceOf(mockAddress), 50);
     }
 
     function testBurnFrom_ShouldRevert_IfCalledNotByTheBurnerRole() public {
         address mockAddress = address(0x1);
         vm.expectRevert("Governance token: not burner");
-        IUbiquityDollarToken.burnFrom(mockAddress, 50);
+        IDollarFacet.burnFrom(mockAddress, 50);
     }
 
     function testBurnFrom_ShouldRevert_IfContractIsPaused() public {
         // mint 100 tokens to user
         address mockAddress = address(0x1);
         vm.prank(admin);
-        IUbiquityDollarToken.mint(mockAddress, 100);
-        assertEq(IUbiquityDollarToken.balanceOf(mockAddress), 100);
+        IDollarFacet.mint(mockAddress, 100);
+        assertEq(IDollarFacet.balanceOf(mockAddress), 100);
         // create burner role
         address burner = address(0x2);
         vm.prank(admin);
@@ -203,15 +203,15 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // burn 50 tokens for user
         vm.prank(burner);
         vm.expectRevert("Pausable: paused");
-        IUbiquityDollarToken.burnFrom(mockAddress, 50);
+        IDollarFacet.burnFrom(mockAddress, 50);
     }
 
     function testBurnFrom_ShouldBurnTokensFromAddress() public {
         // mint 100 tokens to user
         address mockAddress = address(0x1);
         vm.prank(admin);
-        IUbiquityDollarToken.mint(mockAddress, 100);
-        assertEq(IUbiquityDollarToken.balanceOf(mockAddress), 100);
+        IDollarFacet.mint(mockAddress, 100);
+        assertEq(IDollarFacet.balanceOf(mockAddress), 100);
         // create burner role
         address burner = address(0x2);
         vm.prank(admin);
@@ -223,14 +223,14 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(burner);
         vm.expectEmit(true, true, true, true);
         emit Burning(mockAddress, 50);
-        IUbiquityDollarToken.burnFrom(mockAddress, 50);
-        assertEq(IUbiquityDollarToken.balanceOf(mockAddress), 50);
+        IDollarFacet.burnFrom(mockAddress, 50);
+        assertEq(IDollarFacet.balanceOf(mockAddress), 50);
     }
 
     function testMint_ShouldRevert_IfCalledNotByTheMinterRole() public {
         address mockAddress = address(0x1);
         vm.expectRevert("Governance token: not minter");
-        IUbiquityDollarToken.mint(mockAddress, 100);
+        IDollarFacet.mint(mockAddress, 100);
     }
 
     function testMint_ShouldRevert_IfContractIsPaused() public {
@@ -238,23 +238,23 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         IAccessCtrl.pause();
         address mockAddress = address(0x1);
         vm.expectRevert("Pausable: paused");
-        IUbiquityDollarToken.mint(mockAddress, 100);
+        IDollarFacet.mint(mockAddress, 100);
         vm.stopPrank();
     }
 
     function testMint_ShouldMintTokens() public {
         address mockAddress = address(0x1);
-        uint256 balanceBefore = IUbiquityDollarToken.balanceOf(mockAddress);
+        uint256 balanceBefore = IDollarFacet.balanceOf(mockAddress);
         vm.prank(admin);
         vm.expectEmit(true, true, false, true);
         emit Minting(mockAddress, admin, 100);
-        IUbiquityDollarToken.mint(mockAddress, 100);
-        uint256 balanceAfter = IUbiquityDollarToken.balanceOf(mockAddress);
+        IDollarFacet.mint(mockAddress, 100);
+        uint256 balanceAfter = IDollarFacet.balanceOf(mockAddress);
         assertEq(balanceAfter - balanceBefore, 100);
     }
 
     function testPause_ShouldRevert_IfCalledNotByThePauserRole() public {
-        vm.expectRevert("Governance token: not pauser");
+        vm.expectRevert("MGR: Caller is not admin");
         IAccessCtrl.pause();
     }
 
@@ -266,7 +266,10 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testUnpause_ShouldRevert_IfCalledNotByThePauserRole() public {
-        vm.expectRevert("Governance token: not pauser");
+        // admin pauses contract
+        vm.prank(admin);
+        IAccessCtrl.pause();
+        vm.expectRevert("MGR: Caller is not admin");
         IAccessCtrl.unpause();
     }
 
@@ -280,11 +283,11 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testName_ShouldReturnTokenName() public {
-        assertEq(IUbiquityDollarToken.name(), "Test");
+        assertEq(IDollarFacet.name(), "Ubiquity Algorithmic Dollar");
     }
 
     function testSymbol_ShouldReturnSymbolName() public {
-        assertEq(IUbiquityDollarToken.symbol(), "Test");
+        assertEq(IDollarFacet.symbol(), "uAD");
     }
 
     function testTransfer_ShouldRevert_IfContractIsPaused() public {
@@ -295,18 +298,101 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         address userAddress = address(0x1);
         vm.prank(admin);
         vm.expectRevert("Pausable: paused");
-        IUbiquityDollarToken.transfer(userAddress, 10);
+        IDollarFacet.transfer(userAddress, 10);
+    }
+
+    function testTransferFrom_ShouldRevert_IfContractIsPaused() public {
+        // transfer tokens to user
+        address userAddress = address(0x1);
+        address user2Address = address(0x12);
+        vm.prank(admin);
+        IDollarFacet.mint(userAddress, 100);
+        // admin pauses contract
+        vm.prank(admin);
+        IAccessCtrl.pause();
+        vm.prank(userAddress);
+        IDollarFacet.approve(user2Address, 100);
+        vm.expectRevert("Pausable: paused");
+        vm.prank(user2Address);
+        IDollarFacet.transferFrom(userAddress, user2Address, 100);
     }
 
     function testTransfer_ShouldTransferTokens() public {
         // mint tokens to admin
         vm.prank(admin);
-        IUbiquityDollarToken.mint(admin, 100);
+        IDollarFacet.mint(admin, 100);
         // transfer tokens to user
         address userAddress = address(0x1);
-        assertEq(IUbiquityDollarToken.balanceOf(userAddress), 0);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
         vm.prank(admin);
-        IUbiquityDollarToken.transfer(userAddress, 10);
-        assertEq(IUbiquityDollarToken.balanceOf(userAddress), 10);
+        IDollarFacet.transfer(userAddress, 10);
+        assertEq(IDollarFacet.balanceOf(userAddress), 10);
+    }
+
+    // test transferFrom function should transfer tokens from address
+    function testTransferFrom_ShouldTransferTokensFromAddress() public {
+        // mint tokens to admin
+        vm.prank(admin);
+        IDollarFacet.mint(admin, 100);
+        // transfer tokens to user
+        address userAddress = address(0x1);
+        address user2Address = address(0x12);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
+        vm.prank(admin);
+        IDollarFacet.transfer(userAddress, 100);
+        assertEq(IDollarFacet.balanceOf(userAddress), 100);
+        // approve user2 to transfer tokens from user
+        vm.prank(userAddress);
+        IDollarFacet.approve(user2Address, 100);
+        // transfer tokens from user to user2
+        vm.prank(user2Address);
+        IDollarFacet.transferFrom(userAddress, user2Address, 100);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
+        assertEq(IDollarFacet.balanceOf(user2Address), 100);
+    }
+
+    // test approve function should approve address to transfer tokens
+    function testApprove_ShouldApproveAddressToTransferTokens() public {
+        // mint tokens to admin
+        vm.prank(admin);
+        IDollarFacet.mint(admin, 100);
+        // transfer tokens to user
+        address userAddress = address(0x1);
+        address user2Address = address(0x12);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
+        vm.prank(admin);
+        IDollarFacet.transfer(userAddress, 100);
+        assertEq(IDollarFacet.balanceOf(userAddress), 100);
+        // approve user2 to transfer tokens from user
+        vm.prank(userAddress);
+        IDollarFacet.approve(user2Address, 100);
+        // transfer tokens from user to user2
+        vm.prank(user2Address);
+        IDollarFacet.transferFrom(userAddress, user2Address, 100);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
+        assertEq(IDollarFacet.balanceOf(user2Address), 100);
+    }
+
+    // test allowance function should return allowance
+    function testAllowance_ShouldReturnAllowance() public {
+        // mint tokens to admin
+        vm.prank(admin);
+        IDollarFacet.mint(admin, 100);
+        // transfer tokens to user
+        address userAddress = address(0x1);
+        address user2Address = address(0x12);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
+        vm.prank(admin);
+        IDollarFacet.transfer(userAddress, 100);
+        assertEq(IDollarFacet.balanceOf(userAddress), 100);
+        // approve user2 to transfer tokens from user
+        vm.prank(userAddress);
+        IDollarFacet.approve(user2Address, 100);
+        // transfer tokens from user to user2
+        vm.prank(user2Address);
+        IDollarFacet.transferFrom(userAddress, user2Address, 100);
+        assertEq(IDollarFacet.balanceOf(userAddress), 0);
+        assertEq(IDollarFacet.balanceOf(user2Address), 100);
+        assertEq(IDollarFacet.allowance(userAddress, user2Address), 0);
     }
 }

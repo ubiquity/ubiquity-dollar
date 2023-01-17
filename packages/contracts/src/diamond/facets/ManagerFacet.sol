@@ -11,6 +11,7 @@ import "../../dollar/interfaces/IMetaPool.sol";
 import "../../dollar/core/TWAPOracleDollar3pool.sol";
 import "../libraries/LibAccessControl.sol";
 import "../libraries/LibUbiquityDollar.sol";
+import "forge-std/console.sol";
 
 contract ManagerFacet is Modifiers {
     // TODO Add a generic setter for extra addresses that needs to be linked
@@ -94,10 +95,10 @@ contract ManagerFacet is Modifiers {
         s.treasuryAddress = _treasuryAddress;
     }
 
-    function setIncentiveToDollar(address _account, address _incentiveAddress)
-        external
-        onlyAdmin
-    {
+    function setIncentiveToDollar(
+        address _account,
+        address _incentiveAddress
+    ) external onlyAdmin {
         LibUbiquityDollar.setIncentiveContract(_account, _incentiveAddress);
     }
 
@@ -119,7 +120,7 @@ contract ManagerFacet is Modifiers {
             _fee
         );
         s.stableSwapMetaPoolAddress = metaPool;
-
+        console.log("deployStableSwapPool 2");
         // Approve the newly-deployed meta pool to transfer this contract's funds
         uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
             address(this)
@@ -127,40 +128,47 @@ contract ManagerFacet is Modifiers {
         uint256 dollarTokenAmount = IERC20(address(this)).balanceOf(
             address(this)
         );
-
+        console.log("deployStableSwapPool 3");
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
         IERC20(_crv3PoolTokenAddress).approve(metaPool, crv3PoolTokenAmount);
 
         IERC20(address(this)).approve(metaPool, 0);
         IERC20(address(this)).approve(metaPool, dollarTokenAmount);
-
+        console.log("deployStableSwapPool 4");
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
             IMetaPool(metaPool).coins(0) == address(this) &&
                 IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
+        console.log("deployStableSwapPool 5");
         // Add the initial liquidity to the StableSwap meta pool
         uint256[2] memory amounts = [
             IERC20(address(this)).balanceOf(address(this)),
             IERC20(_crv3PoolTokenAddress).balanceOf(address(this))
         ];
-
+        console.log("deployStableSwapPool 6");
         // set curve 3Pool address
         s.curve3PoolTokenAddress = _crv3PoolTokenAddress;
+        console.log(
+            "deployStableSwapPool 6.1 amounts[0] %s amounts[1] %s",
+            amounts[0],
+            amounts[1]
+        );
         IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
+        console.log("deployStableSwapPool 7");
     }
 
-    function getTwapOracleAddress() external view returns (address) {
+    function twapOracleAddress() external view returns (address) {
         return address(this);
     }
 
-    function getDollarTokenAddress() external view returns (address) {
+    function dollarTokenAddress() external view returns (address) {
         return address(this);
     }
 
-    function getCreditTokenAddress() external view returns (address) {
+    function creditTokenAddress() external view returns (address) {
         return s.creditTokenAddress;
     }
 
@@ -168,53 +176,53 @@ contract ManagerFacet is Modifiers {
         return s.creditNftAddress;
     }
 
-    function getGovernanceTokenAddress() external view returns (address) {
+    function governanceTokenAddress() external view returns (address) {
         return s.governanceTokenAddress;
     }
 
-    function getSushiSwapPoolAddress() external view returns (address) {
+    function sushiSwapPoolAddress() external view returns (address) {
         return s.sushiSwapPoolAddress;
     }
 
-    function getCreditCalculatorAddress() external view returns (address) {
+    function creditCalculatorAddress() external view returns (address) {
         return s.creditCalculatorAddress;
     }
 
-    function getCreditNftCalculatorAddress() external view returns (address) {
-        return s.creditNftCalculatorAddress;
+    function creditNFTCalculatorAddress() external view returns (address) {
+        return s.creditNFTCalculatorAddress;
     }
 
-    function getDollarMintCalculatorAddress() external view returns (address) {
+    function dollarMintCalculatorAddress() external view returns (address) {
         return s.dollarMintCalculatorAddress;
     }
 
-    function getExcessDollarsDistributor(
-        address _creditNftManagerAddress
+    function excessDollarsDistributor(
+        address _creditNFTManagerAddress
     ) external view returns (address) {
         return s._excessDollarDistributors[_creditNftManagerAddress];
     }
 
-    function getMasterChefAddress() external view returns (address) {
+    function masterChefAddress() external view returns (address) {
         return s.masterChefAddress;
     }
 
-    function getFormulasAddress() external view returns (address) {
+    function formulasAddress() external view returns (address) {
         return s.formulasAddress;
     }
 
-    function getStakingShareAddress() external view returns (address) {
+    function stakingShareAddress() external view returns (address) {
         return s.stakingShareAddress;
     }
 
-    function getStableSwapMetaPoolAddress() external view returns (address) {
+    function stableSwapMetaPoolAddress() external view returns (address) {
         return s.stableSwapMetaPoolAddress;
     }
 
-    function getStakingContractAddress() external view returns (address) {
+    function stakingContractAddress() external view returns (address) {
         return s.stakingContractAddress;
     }
 
-    function getTreasuryAddress() external view returns (address) {
+    function treasuryAddress() external view returns (address) {
         return s.treasuryAddress;
     }
 }
