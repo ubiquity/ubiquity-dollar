@@ -33,7 +33,7 @@ type Model = {
   shares: ShareData[];
   totalShares: BigNumber;
   walletLpBalance: BigNumber;
-  processing: boolean;
+  processing: ShareData["id"][];
 };
 
 type Actions = {
@@ -53,7 +53,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
   const { staking: bonding, masterChef, stakingToken: bondingToken, dollarMetapool: metaPool } = managedContracts;
 
   useAsyncInit(fetchSharesInformation);
-  async function fetchSharesInformation() {
+  async function fetchSharesInformation(processedShareId?: ShareData["id"]) {
     console.time("BondingShareExplorerContainer contract loading");
     const currentBlock = await web3Provider.getBlockNumber();
     const blockCountInAWeek = +(await bonding.blockCountInAWeek()).toString();
@@ -85,7 +85,12 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
     const sortedShares = shares.sort((a, b) => a.id - b.id);
 
     console.timeEnd("BondingShareExplorerContainer contract loading");
-    setModel({ processing: false, shares: sortedShares, totalShares, walletLpBalance });
+    setModel((model) => ({
+      processing: model ? model.processing.filter((id) => id !== processedShareId) : [],
+      shares: sortedShares,
+      totalShares,
+      walletLpBalance,
+    }));
   }
 
   function allLpAmount(id: number): BigNumber {
@@ -98,23 +103,29 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
   const actions: Actions = {
     onWithdrawLp: useCallback(
       async ({ id, amount }) => {
-        if (!model || model.processing) return;
+        if (!model || model.processing.includes(id)) return;
         console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
-        setModel({ ...model, processing: true });
+        setModel((prevModel) => (prevModel ? { ...prevModel, processing: [...prevModel.processing, id] } : null));
         doTransaction("Withdrawing LP...", async () => {
-          const isAllowed = await bondingToken.isApprovedForAll(walletAddress, bonding.address);
-          if (!isAllowed) {
-            // Allow bonding contract to control account share
-            if (!(await performTransaction(bondingToken.connect(signer).setApprovalForAll(bonding.address, true)))) {
-              return; // TODO: Show transaction errors to user
+          try {
+            const isAllowed = await bondingToken.isApprovedForAll(walletAddress, bonding.address);
+            if (!isAllowed) {
+              // Allow bonding contract to control account share
+              if (!(await performTransaction(bondingToken.connect(signer).setApprovalForAll(bonding.address, true)))) {
+                return; // TODO: Show transaction errors to user
+              }
             }
+
+            const bigNumberAmount = amount ? ethers.utils.parseEther(amount.toString()) : allLpAmount(id);
+            await performTransaction(bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
+          } catch (error) {
+            console.log(`Withdrawing LP from ${id} failed:`, error);
+            // throws exception to update the transaction log
+            throw error;
+          } finally {
+            fetchSharesInformation(id);
+            refreshBalances();
           }
-
-          const bigNumberAmount = amount ? ethers.utils.parseEther(amount.toString()) : allLpAmount(id);
-          await performTransaction(bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
-
-          fetchSharesInformation();
-          refreshBalances();
         });
       },
       [model]
@@ -122,14 +133,20 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
     onClaimUbq: useCallback(
       async (id) => {
-        if (!model || model.processing) return;
+        if (!model) return;
         console.log(`Claiming Ubiquity Governance token rewards from ${id}`);
-        setModel({ ...model, processing: true });
+        setModel((prevModel) => (prevModel ? { ...prevModel, processing: [...prevModel.processing, id] } : null));
         doTransaction("Claiming Ubiquity Governance tokens...", async () => {
-          await performTransaction(masterChef.connect(signer).getRewards(BigNumber.from(id)));
-
-          fetchSharesInformation();
-          refreshBalances();
+          try {
+            await performTransaction(masterChef.connect(signer).getRewards(BigNumber.from(id)));
+          } catch (error) {
+            console.log(`Claiming Ubiquity Governance token rewards from ${id} failed:`, error);
+            // throws exception to update the transaction log
+            throw error;
+          } finally {
+            fetchSharesInformation(id);
+            refreshBalances();
+          }
         });
       },
       [model]
@@ -137,9 +154,8 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
     onStake: useCallback(
       async ({ amount, weeks }) => {
-        if (!model || model.processing) return;
+        if (!model || model.processing.length) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
-        setModel({ ...model, processing: true });
         doTransaction("Staking...", async () => {});
         const allowance = await metaPool.allowance(walletAddress, bonding.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
@@ -182,7 +198,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
 
   return (
     <div>
-      <DepositShare onStake={onStake} disabled={processing} maxLp={walletLpBalance} />
+      <DepositShare onStake={onStake} disabled={processing.length > 0} maxLp={walletLpBalance} />
       <table id="Staking">
         <thead>
           <tr>
@@ -195,7 +211,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         {filteredShares.length > 0 ? (
           <tbody>
             {filteredShares.map((share) => (
-              <BondingShareRow key={share.id} {...share} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
+              <BondingShareRow key={share.id} {...share} disabled={processing.includes(share.id)} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
             ))}
           </tbody>
         ) : (
@@ -240,8 +256,8 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   );
 };
 
-type BondingShareRowProps = ShareData & { onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
-const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
+type BondingShareRowProps = ShareData & { disabled: boolean; onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
+const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, disabled, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
   const [withdrawAmount] = useState("");
 
   const numLpAmount = +formatEther(bond.lpAmount);
@@ -260,9 +276,13 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, onWithdrawL
     <tr key={id} title={`Bonding Share ID: ${id.toString()}`}>
       <td>
         {weeksLeft <= 0 && bond.lpAmount.gt(0) ? (
-          <button onClick={onClickWithdraw}>Claim &amp; Withdraw</button>
+          <button disabled={disabled} onClick={onClickWithdraw}>
+            Claim &amp; Withdraw
+          </button>
         ) : ugov.gt(0) ? (
-          <Button onClick={() => onClaimUbq(+id.toString())}>Claim reward</Button>
+          <Button disabled={disabled} onClick={() => onClaimUbq(+id.toString())}>
+            Claim reward
+          </Button>
         ) : null}
       </td>
       <td>

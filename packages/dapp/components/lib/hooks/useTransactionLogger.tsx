@@ -23,7 +23,7 @@ export const TransactionsContextProvider: React.FC<ChildrenShim> = ({ children }
   const doTransaction = async (title: string, wrappedFun: () => Promise<void>): Promise<boolean> => {
     const startTime = +new Date();
     let transaction: Transaction = { title, startTime, endTime: null, status: "pending", error: null, dismissed: false };
-    setTransactions({ ...transactions, [startTime]: transaction });
+    setTransactions((prevTransactions) => ({ ...prevTransactions, [startTime]: transaction }));
     try {
       await wrappedFun();
       transaction.status = "success";
@@ -42,7 +42,7 @@ export const TransactionsContextProvider: React.FC<ChildrenShim> = ({ children }
       transaction.status = "failure";
     }
     transaction = { ...transaction, endTime: +new Date() };
-    setTransactions({ ...transactions, [startTime]: transaction });
+    setTransactions((prevTransactions) => ({ ...prevTransactions, [startTime]: transaction }));
     return transaction.status === "success";
   };
 
@@ -51,7 +51,7 @@ export const TransactionsContextProvider: React.FC<ChildrenShim> = ({ children }
 
   const dismissTransaction = (startTime: string) => {
     console.log("Dismissing transaction", startTime);
-    setTransactions({ ...transactions, [startTime]: { ...transactions[startTime], dismissed: true } });
+    setTransactions((prevTransactions) => ({ ...prevTransactions, [startTime]: { ...transactions[startTime], dismissed: true } }));
   };
 
   return <TransactionsContext.Provider value={[transactions, doTransaction, doingTransactions, dismissTransaction]}>{children}</TransactionsContext.Provider>;

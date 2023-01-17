@@ -1,40 +1,35 @@
-import axios from "axios";
 import { spawn } from "child_process";
-import {
-    RPC_LIST,
-    RPC_DELAY,
-    REQ_BODY,
-    RESP_STATUS
-} from "./conf";
+import { RETRY_COUNT, RETRY_DELAY } from "./conf";
 
-const getRandom = async (array: string[]) => {
-    const length = array == null ? 0 : array.length;
-    return length ? array[Math.floor(Math.random() * length)] : undefined;
-};
-
-const getUrl = async () => {
-    let isRPC = false;
-
-    while (!isRPC) {
-        try {
-            const rpcUrl = await getRandom(RPC_LIST);
-            const resp = await axios.post(rpcUrl as string, REQ_BODY);
-
-            if (resp.status === RESP_STATUS) {
-                isRPC = true;
-                return rpcUrl;
-            }
-        } catch (error) {
-            await setTimeout(() => ({}), RPC_DELAY);
-        }
+let shouldSkip = false;
+let retryCount = 0;
+const procFork = async () => {
+  console.log(`using default anvil for unit-testing...`);
+  const command = spawn("forge", ["test"]);
+  shouldSkip = false;
+  command.stdout.on("data", (output: unknown) => {
+    console.log(output?.toString());
+  });
+  command.stderr.on("data", (output: unknown) => {
+    console.log(output?.toString());
+    if (shouldSkip === false && retryCount <= RETRY_COUNT) {
+      retryCount++;
+      setTimeout(() => {
+        procFork();
+      }, RETRY_DELAY);
+      shouldSkip = true;
     }
+  });
+
+  command.on("close", async (code: number) => {
+    console.log(`command closing on process`);
+    // if linux command exit code is not success (0) then throw an error
+    if (code !== 0) {
+      throw new Error(`Failing tests ${code}`);
+    } else {
+      process.exit(0);
+    }
+  });
 };
 
-(async () => {
-    const currentRPC = await getUrl();
-    console.log(`using ${currentRPC} for testing...`);
-    const command = spawn("forge", ["test", "--fork-url", currentRPC as string]);
-    command.stdout.on("data", (output: any) => {
-        console.log(output.toString());
-    });
-})();
+procFork();

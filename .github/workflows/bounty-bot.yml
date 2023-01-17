@@ -21,6 +21,6 @@ jobs:
           private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
       - name: Ubiquity Bounty Bot
-        uses: ubiquity/bounty-bot@v0.0.1-beta
+        uses: ubiquity/bounty-bot@v0.0.1
         with: 
           GITHUB_TOKEN: ${{ steps.get_installation_token.outputs.token }}

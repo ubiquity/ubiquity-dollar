@@ -36,7 +36,9 @@
     "ADMGR",
     "coef",
     "structs",
-    "tlsv"
+    "tlsv",
+    "connectkit",
+    "wagmi"
   ],
   "ignorePaths": [
     "**/*.json",
@@ -102,8 +104,10 @@
     "Funcs",
     "Reentrancy",
     "uncollateralized",
+    "collateralized",
     "alloc",
     "ubiquiti",
-    "buildhome"
+    "buildhome",
+    "ubiquibot"
   ]
 }
