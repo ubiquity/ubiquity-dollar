@@ -37,6 +37,8 @@
     "coef",
     "structs",
     "tlsv",
+    "connectkit",
+    "wagmi",
     "rpcutil",
     "Shouldset",
     "Vitalik",
