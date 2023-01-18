@@ -23,7 +23,7 @@ const verifyBlock = (data: DataType) => {
   }
 };
 
-const getRPC = async () => {
+export const getRPC = async () => {
   const promises = RPC_LIST.map(async (baseURL: string) => {
     try {
       const startTime = performance.now();

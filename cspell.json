@@ -36,7 +36,8 @@
     "ADMGR",
     "coef",
     "structs",
-    "tlsv"
+    "tlsv",
+    "rpcutil"
   ],
   "ignorePaths": [
     "**/*.json",

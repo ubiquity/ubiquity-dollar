@@ -22,3 +22,5 @@ export const RPC_HEADER = {
 
 export const RETRY_DELAY = 20000;
 export const RETRY_COUNT = 5;
+
+export const TEST_PATTERN = "Remote*";
