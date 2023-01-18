@@ -3,7 +3,7 @@ import { spawn } from "child_process";
 import { performance } from "node:perf_hooks";
 import { RETRY_COUNT, RETRY_DELAY, RPC_BODY, RPC_HEADER, RPC_LIST } from "./conf";
 
-type DataType = {
+export type DataType = {
   jsonrpc: string;
   id: number;
   result: {
@@ -13,7 +13,7 @@ type DataType = {
   };
 };
 
-const verifyBlock = (data: DataType) => {
+export const verifyBlock = (data: DataType) => {
   try {
     const { jsonrpc, id, result } = data;
     const { number, timestamp, hash } = result;
@@ -53,7 +53,7 @@ export const getRPC = async () => {
 
 let shouldSkip = false;
 let retryCount = 0;
-const procFork = async () => {
+export const procFork = async () => {
   const optimalRPC = await getRPC();
   console.log(`using ${optimalRPC} for unit-testing...`);
   const command = spawn("forge", ["test", "--fork-url", optimalRPC as string]);
@@ -76,5 +76,3 @@ const procFork = async () => {
     if (code !== 0) throw new Error("Failing tests");
   });
 };
-
-procFork();
