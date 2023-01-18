@@ -1,11 +1,13 @@
 import { FC } from "react";
 import BondingSharesExplorer from "@/components/staking/BondingSharesExplorer";
-import useWalletAddress from "@/components/lib/hooks/useWalletAddress";
-import WalletNotConnected from "@/components/ui/WalletNotConnected";
+import WalletConnectionWall from "@/components/ui/WalletConnectionWall";
 
 const Staking: FC = (): JSX.Element => {
-  const [walletAddress] = useWalletAddress();
-  return walletAddress ? <BondingSharesExplorer /> : WalletNotConnected;
+  return (
+    <WalletConnectionWall>
+      <BondingSharesExplorer />
+    </WalletConnectionWall>
+  );
 };
 
 export default Staking;
