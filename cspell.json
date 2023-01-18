@@ -37,7 +37,11 @@
     "coef",
     "structs",
     "tlsv",
-    "rpcutil"
+    "rpcutil",
+    "Shouldset",
+    "Vitalik",
+    "Beeple",
+    "Rarible"
   ],
   "ignorePaths": [
     "**/*.json",
