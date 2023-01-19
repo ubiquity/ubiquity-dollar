@@ -33,7 +33,7 @@
     "clean": "forge clean",
     "purge": "yarn clean",
     "anvil": "ts-node ./scripts/anvil/anvil.ts",
-    "run deploy:development": "bash ./scripts/bash/2_DevelopmentDeploy.sh"
+    "deploy_development": "ts-node ./scripts/deploy/dollar/DevelopmentDeploy.ts"
   },
   "keywords": [
     "stablecoin",

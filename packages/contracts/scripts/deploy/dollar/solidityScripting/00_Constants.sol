@@ -36,7 +36,7 @@ contract Constants is Script {
 
   string uri;
   address admin = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
-  address curveWhale = 0x72A916702BD97923E55D78ea5A3F413dEC7F7F85;
+  address curveWhale = 0x4486083589A063ddEF47EE2E4467B5236C508fDe;
   address USDCrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
   address basepool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
   address curveFactory = 0xB9fC157394Af804a3578134A6585C0dc9cc990d4;
