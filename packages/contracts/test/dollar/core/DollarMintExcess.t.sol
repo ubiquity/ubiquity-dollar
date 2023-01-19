@@ -1,14 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {IUniswapV2Router01} from
-    "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
 import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import {DollarMintExcess} from
-    "../../../src/dollar/core/DollarMintExcess.sol";
+import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 
 import "../../helpers/LocalTestHelper.sol";
@@ -27,8 +24,9 @@ contract DollarMintExcessTest is LocalTestHelper {
             .twapOracleAddress();
         dollarAddress = UbiquityDollarManager(dollarManagerAddress)
             .dollarTokenAddress();
-        excessDollarsDistributorAddress =
-            address(new DollarMintExcess(dollarManagerAddress));
+        excessDollarsDistributorAddress = address(
+            new DollarMintExcess(dollarManagerAddress)
+        );
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {
@@ -101,16 +99,20 @@ contract DollarMintExcessTest is LocalTestHelper {
         mockSushiSwapRouter(10e18);
         mockMetaPool(address(0x55555), 10e18, 10e18);
         mockManagerAddresses(address(0x123), address(0x456));
-        MockDollarToken(dollarAddress).mint(excessDollarsDistributorAddress, 200e18);
+        MockDollarToken(dollarAddress).mint(
+            excessDollarsDistributorAddress,
+            200e18
+        );
 
         // 10% should be transferred to the treasury address
-        uint256 _before_treasury_bal =
-            MockDollarToken(dollarAddress).balanceOf(treasuryAddress);
+        uint256 _before_treasury_bal = MockDollarToken(dollarAddress).balanceOf(
+            treasuryAddress
+        );
 
-        DollarMintExcess(excessDollarsDistributorAddress)
-            .distributeDollars();
-        uint256 _after_treasury_bal =
-            MockDollarToken(dollarAddress).balanceOf(treasuryAddress);
+        DollarMintExcess(excessDollarsDistributorAddress).distributeDollars();
+        uint256 _after_treasury_bal = MockDollarToken(dollarAddress).balanceOf(
+            treasuryAddress
+        );
         assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
     }
 }

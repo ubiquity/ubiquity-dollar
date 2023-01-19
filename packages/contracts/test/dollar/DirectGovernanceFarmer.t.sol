@@ -13,11 +13,10 @@ contract DirectGovernanceFarmerHarness is DirectGovernanceFarmer {
         address depositZap
     ) DirectGovernanceFarmer(_manager, base3Pool, depositZap) {}
 
-    function exposed_isIdIncluded(uint256[] memory idList, uint256 id)
-        external
-        pure
-        returns (bool)
-    {
+    function exposed_isIdIncluded(
+        uint256[] memory idList,
+        uint256 id
+    ) external pure returns (bool) {
         return isIdIncluded(idList, id);
     }
 }

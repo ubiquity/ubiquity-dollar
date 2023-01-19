@@ -22,7 +22,8 @@ interface ISablier {
     event PauserAdded(address indexed account);
     event PauserRemoved(address indexed account);
     event OwnershipTransferred(
-        address indexed previousOwner, address indexed newOwner
+        address indexed previousOwner,
+        address indexed newOwner
     );
     event CreateStream(
         uint256 indexed streamId,
@@ -34,7 +35,9 @@ interface ISablier {
         uint256 stopTime
     );
     event WithdrawFromStream(
-        uint256 indexed streamId, address indexed recipient, uint256 amount
+        uint256 indexed streamId,
+        address indexed recipient,
+        uint256 amount
     );
     event CancelStream(
         uint256 indexed streamId,
@@ -48,9 +51,10 @@ interface ISablier {
 
     function cancelStream(uint256 streamId) external returns (bool);
 
-    function withdrawFromStream(uint256 streamId, uint256 amount)
-        external
-        returns (bool);
+    function withdrawFromStream(
+        uint256 streamId,
+        uint256 amount
+    ) external returns (bool);
 
     function initialize() external;
 
@@ -68,7 +72,10 @@ interface ISablier {
 
     function pause() external;
 
-    function interestOf(uint256 streamId, uint256 amount)
+    function interestOf(
+        uint256 streamId,
+        uint256 amount
+    )
         external
         returns (
             uint256 senderInterest,
@@ -92,14 +99,13 @@ interface ISablier {
 
     function transferOwnership(address newOwner) external;
 
-    function getEarnings(address tokenAddress)
-        external
-        view
-        returns (uint256);
+    function getEarnings(address tokenAddress) external view returns (uint256);
 
     function nextStreamId() external view returns (uint256);
 
-    function getCompoundingStream(uint256 streamId)
+    function getCompoundingStream(
+        uint256 streamId
+    )
         external
         view
         returns (
@@ -116,16 +122,18 @@ interface ISablier {
             uint256 recipientSharePercentage
         );
 
-    function balanceOf(uint256 streamId, address who)
-        external
-        view
-        returns (uint256 balance);
+    function balanceOf(
+        uint256 streamId,
+        address who
+    ) external view returns (uint256 balance);
 
     function isPauser(address account) external view returns (bool);
 
     function paused() external view returns (bool);
 
-    function getStream(uint256 streamId)
+    function getStream(
+        uint256 streamId
+    )
         external
         view
         returns (
@@ -143,10 +151,7 @@ interface ISablier {
 
     function isOwner() external view returns (bool);
 
-    function isCompoundingStream(uint256 streamId)
-        external
-        view
-        returns (bool);
+    function isCompoundingStream(uint256 streamId) external view returns (bool);
 
     function deltaOf(uint256 streamId) external view returns (uint256 delta);
 

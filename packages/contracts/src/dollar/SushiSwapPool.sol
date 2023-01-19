@@ -15,7 +15,8 @@ contract SushiSwapPool {
     constructor(address _manager) {
         manager = UbiquityDollarManager(_manager);
         require(
-            manager.dollarTokenAddress() != address(0), "Dollar address not set"
+            manager.dollarTokenAddress() != address(0),
+            "Dollar address not set"
         );
         require(
             manager.governanceTokenAddress() != address(0),
@@ -23,11 +24,13 @@ contract SushiSwapPool {
         );
         // check if pair already exist
         address pool = factory.getPair(
-            manager.dollarTokenAddress(), manager.governanceTokenAddress()
+            manager.dollarTokenAddress(),
+            manager.governanceTokenAddress()
         );
         if (pool == address(0)) {
             pool = factory.createPair(
-                manager.dollarTokenAddress(), manager.governanceTokenAddress()
+                manager.dollarTokenAddress(),
+                manager.governanceTokenAddress()
             );
         }
         pair = IUniswapV2Pair(pool);

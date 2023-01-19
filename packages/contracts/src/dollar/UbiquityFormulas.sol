@@ -15,11 +15,11 @@ contract UbiquityFormulas {
     /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
     //          D32 = D^3/2
     //          S = m * D32 * A + A
-    function durationMultiply(uint256 _uLP, uint256 _weeks, uint256 _multiplier)
-        public
-        pure
-        returns (uint256 _shares)
-    {
+    function durationMultiply(
+        uint256 _uLP,
+        uint256 _weeks,
+        uint256 _multiplier
+    ) public pure returns (uint256 _shares) {
         bytes16 unit = uint256(1 ether).fromUInt();
         bytes16 d = _weeks.fromUInt();
         bytes16 d32 = (d.mul(d).mul(d)).sqrt();
@@ -98,11 +98,10 @@ contract UbiquityFormulas {
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function governanceMultiply(uint256 _multiplier, uint256 _price)
-        public
-        pure
-        returns (uint256 _newMultiplier)
-    {
+    function governanceMultiply(
+        uint256 _multiplier,
+        uint256 _price
+    ) public pure returns (uint256 _newMultiplier) {
         bytes16 m = _multiplier.fromUInt();
         bytes16 p = _price.fromUInt();
         bytes16 c = uint256(105 * 1e16).fromUInt(); // 1.05
