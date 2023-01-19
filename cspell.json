@@ -38,7 +38,12 @@
     "structs",
     "tlsv",
     "connectkit",
-    "wagmi"
+    "wagmi",
+    "rpcutil",
+    "Shouldset",
+    "Vitalik",
+    "Beeple",
+    "Rarible"
   ],
   "ignorePaths": [
     "**/*.json",
