@@ -20,8 +20,8 @@ contract TWAPOracleDollar3pool {
         pool = _pool;
         // coin at index 0 is Ubiquity Dollar and index 1 is 3CRV
         require(
-            IMetaPool(_pool).coins(0) == _dollarToken0
-                && IMetaPool(_pool).coins(1) == _curve3CRVToken1,
+            IMetaPool(_pool).coins(0) == _dollarToken0 &&
+                IMetaPool(_pool).coins(1) == _curve3CRVToken1,
             "TWAPOracle: COIN_ORDER_MISMATCH"
         );
 
@@ -44,8 +44,10 @@ contract TWAPOracleDollar3pool {
 
     // calculate average price
     function update() external {
-        (uint256[2] memory priceCumulative, uint256 blockTimestamp) =
-            _currentCumulativePrices();
+        (
+            uint256[2] memory priceCumulative,
+            uint256 blockTimestamp
+        ) = _currentCumulativePrices();
 
         if (blockTimestamp - pricesBlockTimestampLast > 0) {
             // get the balances between now and the last price cumulative snapshot

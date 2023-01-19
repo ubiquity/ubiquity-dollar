@@ -5,7 +5,7 @@ import "../../src/ubiquistick/UbiquiStick.sol";
 import "operator-filter-registry/OperatorFilterRegistryErrorsAndEvents.sol";
 import "forge-std/Test.sol";
 
-contract UbiquiStickTest is Test {
+contract RemoteUbiquiStickTest is Test {
     // contract instance
     UbiquiStick ust;
 
@@ -16,16 +16,28 @@ contract UbiquiStickTest is Test {
     address allowedOperator;
 
     // events
-    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
-    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+    event Approval(
+        address indexed owner,
+        address indexed approved,
+        uint256 indexed tokenId
+    );
+    event ApprovalForAll(
+        address indexed owner,
+        address indexed operator,
+        bool approved
+    );
+    event Transfer(
+        address indexed from,
+        address indexed to,
+        uint256 indexed tokenId
+    );
 
     function setUp() public {
         ust = new UbiquiStick();
 
-        mintTo = 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045;  // Vitalik's address
+        mintTo = 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045; // Vitalik's address
         transferTo = 0xc6b0562605D35eE710138402B878ffe6F2E23807; // Beeple's address
-        bannedOperator = 0x2B2e8cDA09bBA9660dCA5cB6233787738Ad68329; // SudoSwap LSSVMPairRouter
+        bannedOperator = 0x00000000000111AbE46ff893f3B2fdF1F759a8A8; // Blur NFT Marketplace (banned by the OperatorFilterRegistry contract at https://etherscan.io/address/0x000000000000AAeB6D7670E522A718067333cd4E)
         allowedOperator = 0x4feE7B061C97C9c496b01DbcE9CDb10c02f0a0Be; // Rarible NFT Transfer Proxy (for Approvals)
     }
 
@@ -43,7 +55,12 @@ contract UbiquiStickTest is Test {
         ust.safeMint(mintTo);
 
         // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(mintTo);
         ust.approve(bannedOperator, 1);
     }
@@ -53,7 +70,12 @@ contract UbiquiStickTest is Test {
         ust.safeMint(mintTo);
 
         // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(mintTo);
         ust.setApprovalForAll(bannedOperator, true);
     }
@@ -88,12 +110,22 @@ contract UbiquiStickTest is Test {
         ust.safeMint(mintTo);
 
         // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(mintTo);
         ust.approve(bannedOperator, 1);
 
         // transferFrom vitalik's address to Beeple's address should also fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(bannedOperator);
         ust.transferFrom(mintTo, transferTo, 1);
     }
@@ -103,12 +135,22 @@ contract UbiquiStickTest is Test {
         ust.safeMint(mintTo);
 
         // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(mintTo);
         ust.approve(bannedOperator, 1);
 
         // safeTransferFrom vitalik's address to Beeple's address should also fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(bannedOperator);
         ust.safeTransferFrom(mintTo, transferTo, 1);
     }
@@ -118,12 +160,22 @@ contract UbiquiStickTest is Test {
         ust.safeMint(mintTo);
 
         // Approval for banned operator should fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(mintTo);
         ust.approve(bannedOperator, 1);
 
         // safeTransferFrom vitalik's address to Beeple's address should also fail with the AddressFiltered(address filtered) error
-        vm.expectRevert(abi.encodeWithSelector(OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector, bannedOperator));
+        vm.expectRevert(
+            abi.encodeWithSelector(
+                OperatorFilterRegistryErrorsAndEvents.AddressFiltered.selector,
+                bannedOperator
+            )
+        );
         vm.prank(bannedOperator);
         ust.safeTransferFrom(mintTo, transferTo, 1, new bytes(0));
     }
@@ -149,7 +201,6 @@ contract UbiquiStickTest is Test {
 
         uint256 afterBalance = ust.balanceOf(transferTo);
         assertEq(afterBalance - beforeBalance, 1);
-      
     }
 
     function testSafeTransferFromForAllowedOperator() public {
@@ -197,5 +248,4 @@ contract UbiquiStickTest is Test {
         uint256 afterBalance = ust.balanceOf(transferTo);
         assertEq(afterBalance - beforeBalance, 1);
     }
-
 }

@@ -21,10 +21,18 @@ contract DepositState is LiveTestHelper {
             stakingMaxAccount,
             stakingMaxAccount
         ];
-        uint256[4] memory depositAmounts =
-            [minBal, fourthBal, maxBal / 2, maxBal / 2];
-        uint256[4] memory lockupWeeks =
-            [uint256(1), uint256(52), uint256(208), uint256(208)];
+        uint256[4] memory depositAmounts = [
+            minBal,
+            fourthBal,
+            maxBal / 2,
+            maxBal / 2
+        ];
+        uint256[4] memory lockupWeeks = [
+            uint256(1),
+            uint256(52),
+            uint256(208),
+            uint256(208)
+        ];
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
@@ -36,13 +44,11 @@ contract DepositState is LiveTestHelper {
     }
 }
 
-contract DepositStateTest is DepositState {
+contract RemoteDepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
-    function testUpdateStake(uint128 amount, uint128 debt, uint256 end)
-        public
-    {
+    function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -54,7 +60,10 @@ contract DepositStateTest is DepositState {
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
         vm.prank(admin);
         uint256 id = stakingShare.mint(
-            secondAccount, uint256(deposited), uint256(debt), end
+            secondAccount,
+            uint256(deposited),
+            uint256(debt),
+            end
         );
         StakingShare.Stake memory stake = stakingShare.getStake(id);
         assertEq(stake.minter, secondAccount);
@@ -70,7 +79,11 @@ contract DepositStateTest is DepositState {
         bytes memory data;
         vm.prank(admin);
         stakingShare.safeTransferFrom(
-            stakingMinAccount, secondAccount, 1, 1, data
+            stakingMinAccount,
+            secondAccount,
+            1,
+            1,
+            data
         );
         ids.push(1);
 
@@ -90,7 +103,11 @@ contract DepositStateTest is DepositState {
 
         vm.prank(admin);
         stakingShare.safeBatchTransferFrom(
-            stakingMaxAccount, secondAccount, ids, amounts, data
+            stakingMaxAccount,
+            secondAccount,
+            ids,
+            amounts,
+            data
         );
         assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
@@ -111,7 +128,9 @@ contract DepositStateTest is DepositState {
             fourthBal,
             creationBlock[1],
             ubiquityFormulas.durationMultiply(
-                fourthBal, 52, staking.stakingDiscountMultiplier()
+                fourthBal,
+                52,
+                staking.stakingDiscountMultiplier()
             ),
             staking.blockCountInAWeek() * 52,
             fourthBal
@@ -131,8 +150,8 @@ contract DepositStateTest is DepositState {
 
     function testSetUri() public {
         string memory stringTest = "{'name':'Bonding Share','description':,"
-            "'Ubiquity Bonding Share V2',"
-            "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
+        "'Ubiquity Bonding Share V2',"
+        "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
         stakingShare.setUri(stringTest);
         assertEq(

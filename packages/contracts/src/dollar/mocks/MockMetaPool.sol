@@ -36,11 +36,12 @@ contract MockMetaPool {
         return balances;
     }
 
-    function get_dy(int128 i, int128 j, uint256 dx, uint256[2] memory _balances)
-        external
-        view
-        returns (uint256)
-    {
+    function get_dy(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256[2] memory _balances
+    ) external view returns (uint256) {
         if (i == 0 && j == 1) {
             return dy_values[1];
         } else if (i == 1 && j == 0) {

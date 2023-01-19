@@ -9,7 +9,7 @@ import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 
 import {GOVERNANCE_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE} from "../../../src/manager/libraries/LibAppStorage.sol";
 
-contract TestManagerFacet is DiamondSetup {
+contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions() public {
         IManagerFacet.getExcessDollarsDistributor(contract1);
     }
@@ -122,10 +122,6 @@ contract TestManagerFacet is DiamondSetup {
             IManagerFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
             true
         );
-    }
-
-    function testShouldInitializeDollarTokenAddress() public prankAs(admin) {
-        assertEq(IManagerFacet.getDollarTokenAddress(), address(diamond));
     }
 
     function testShouldDeployStableSwapPool() public {

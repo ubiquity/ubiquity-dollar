@@ -7,7 +7,6 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "operator-filter-registry/DefaultOperatorFilterer.sol";
 
-
 // With this "The UbiquiStick" NFT contract you can :
 // - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
 //   - including check that someone as a NFT of the collection with « balanceOf »
@@ -54,22 +53,24 @@ contract UbiquiStick is
         setMinter(msg.sender);
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override (ERC721)
-        returns (string memory uri)
-    {
+    function tokenURI(
+        uint256 tokenId
+    ) public view override(ERC721) returns (string memory uri) {
         require(_exists(tokenId), "Nonexistent token");
-        return gold[tokenId]
-            ? _goldTokenURI
-            : (tokenId == INVISIBLE_TOKEN_ID ? _invisibleTokenURI : _tokenURI);
+        return
+            gold[tokenId]
+                ? _goldTokenURI
+                : (
+                    tokenId == INVISIBLE_TOKEN_ID
+                        ? _invisibleTokenURI
+                        : _tokenURI
+                );
     }
 
-    function setTokenURI(uint256 ntype, string memory tokenURI_)
-        public
-        onlyMinter
-    {
+    function setTokenURI(
+        uint256 ntype,
+        string memory tokenURI_
+    ) public onlyMinter {
         if (ntype == STANDARD_TYPE) {
             _tokenURI = tokenURI_;
         } else if (ntype == GOLD_TYPE) {
@@ -103,67 +104,69 @@ contract UbiquiStick is
     }
 
     function random() private view returns (uint256) {
-        return uint256(
-            keccak256(
-                abi.encodePacked(
-                    block.difficulty, block.timestamp, msg.sender, tokenIdNext
+        return
+            uint256(
+                keccak256(
+                    abi.encodePacked(
+                        block.difficulty,
+                        block.timestamp,
+                        msg.sender,
+                        tokenIdNext
+                    )
                 )
-            )
-        );
+            );
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override (ERC721, ERC721Enumerable)
-    {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    function _beforeConsecutiveTokenTransfer(address, address, uint256, uint96)
-        internal
-        override (ERC721, ERC721Enumerable)
-    {
+    function _beforeConsecutiveTokenTransfer(
+        address,
+        address,
+        uint256,
+        uint96
+    ) internal override(ERC721, ERC721Enumerable) {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override (ERC721, ERC721Enumerable)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC721, ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
-     function setApprovalForAll(address operator, bool approved)
-        public
-        override (ERC721, IERC721)
-        onlyAllowedOperatorApproval(operator)
-    {
+    function setApprovalForAll(
+        address operator,
+        bool approved
+    ) public override(ERC721, IERC721) onlyAllowedOperatorApproval(operator) {
         super.setApprovalForAll(operator, approved);
     }
 
-    function approve(address operator, uint256 tokenId)
-        public
-        override (ERC721, IERC721)
-        onlyAllowedOperatorApproval(operator)
-    {
+    function approve(
+        address operator,
+        uint256 tokenId
+    ) public override(ERC721, IERC721) onlyAllowedOperatorApproval(operator) {
         super.approve(operator, tokenId);
     }
 
-    function transferFrom(address from, address to, uint256 tokenId)
-        public
-        override (ERC721, IERC721)
-        onlyAllowedOperator(from)
-    {
+    function transferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override(ERC721, IERC721) onlyAllowedOperator(from) {
         super.transferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(address from, address to, uint256 tokenId)
-        public
-        override (ERC721, IERC721)
-        onlyAllowedOperator(from)
-    {
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) public override(ERC721, IERC721) onlyAllowedOperator(from) {
         super.safeTransferFrom(from, to, tokenId);
     }
 
@@ -172,9 +175,7 @@ contract UbiquiStick is
         address to,
         uint256 tokenId,
         bytes memory data
-    ) public override (ERC721, IERC721) onlyAllowedOperator(from) {
+    ) public override(ERC721, IERC721) onlyAllowedOperator(from) {
         super.safeTransferFrom(from, to, tokenId, data);
     }
-
-
 }

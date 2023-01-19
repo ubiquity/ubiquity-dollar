@@ -54,11 +54,12 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     }
 
     // @dev Creates `amount` new tokens for `to`, of token type `id`.
-    function mint(address to, uint256 id, uint256 amount, bytes memory data)
-        public
-        virtual
-        onlyMinter
-    {
+    function mint(
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) public virtual onlyMinter {
         _mint(to, id, amount, data);
         _totalSupply += amount;
         _holderBalances[to].add(id);
@@ -136,20 +137,17 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(
+        address holder
+    ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
     }
 
-    function _burn(address account, uint256 id, uint256 amount)
-        internal
-        virtual
-        override
-        whenNotPaused
-    {
+    function _burn(
+        address account,
+        uint256 id,
+        uint256 amount
+    ) internal virtual override whenNotPaused {
         super._burn(account, id, amount);
         _totalSupply -= amount;
     }
@@ -172,7 +170,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override (ERC1155, ERC1155Pausable) {
+    ) internal virtual override(ERC1155, ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

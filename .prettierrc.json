@@ -5,7 +5,7 @@
   "singleQuote": false,
   "printWidth": 160,
   "htmlWhitespaceSensitivity": "strict",
-  "plugins": [],
+  "plugins": ["prettier-plugin-solidity"],
   "overrides": [
     {
       "files": "*.sol",
@@ -14,8 +14,7 @@
         "tabWidth": 4,
         "useTabs": false,
         "singleQuote": false,
-        "bracketSpacing": false,
-        "explicitTypes": "always"
+        "bracketSpacing": false
       }
     }
   ]

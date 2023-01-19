@@ -14,64 +14,55 @@ import "../../dollar/core/TWAPOracleDollar3pool.sol";
 
 contract ManagerFacet is Modifiers {
     // TODO Add a generic setter for extra addresses that needs to be linked
-    function setTwapOracleAddress(address _twapOracleAddress)
-        external
-        onlyAdmin
-    {
+    function setTwapOracleAddress(
+        address _twapOracleAddress
+    ) external onlyAdmin {
         s.twapOracleAddress = _twapOracleAddress;
         // to be removed
 
-        TWAPOracleDollar3pool oracle =
-            TWAPOracleDollar3pool(s.twapOracleAddress);
+        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(
+            s.twapOracleAddress
+        );
         oracle.update();
     }
 
-    function setDollarTokenAddress(address _dollarTokenAddress)
-        external
-        onlyAdmin
-    {
+    function setDollarTokenAddress(
+        address _dollarTokenAddress
+    ) external onlyAdmin {
         s.dollarTokenAddress = _dollarTokenAddress;
     }
 
-    function setCreditTokenAddress(address _creditTokenAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditTokenAddress(
+        address _creditTokenAddress
+    ) external onlyAdmin {
         s.creditTokenAddress = _creditTokenAddress;
     }
 
-    function setCreditNFTAddress(address _creditNFTAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditNFTAddress(address _creditNFTAddress) external onlyAdmin {
         s.creditNFTAddress = _creditNFTAddress;
     }
 
-    function setGovernanceTokenAddress(address _governanceTokenAddress)
-        external
-        onlyAdmin
-    {
+    function setGovernanceTokenAddress(
+        address _governanceTokenAddress
+    ) external onlyAdmin {
         s.governanceTokenAddress = _governanceTokenAddress;
     }
 
-    function setSushiSwapPoolAddress(address _sushiSwapPoolAddress)
-        external
-        onlyAdmin
-    {
+    function setSushiSwapPoolAddress(
+        address _sushiSwapPoolAddress
+    ) external onlyAdmin {
         s.sushiSwapPoolAddress = _sushiSwapPoolAddress;
     }
 
-    function setCreditCalculatorAddress(address _creditCalculatorAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditCalculatorAddress(
+        address _creditCalculatorAddress
+    ) external onlyAdmin {
         s.creditCalculatorAddress = _creditCalculatorAddress;
     }
 
-    function setCreditNFTCalculatorAddress(address _creditNFTCalculatorAddress)
-        external
-        onlyAdmin
-    {
+    function setCreditNFTCalculatorAddress(
+        address _creditNFTCalculatorAddress
+    ) external onlyAdmin {
         s.creditNFTCalculatorAddress = _creditNFTCalculatorAddress;
     }
 
@@ -88,10 +79,9 @@ contract ManagerFacet is Modifiers {
         s._excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
     }
 
-    function setMasterChefAddress(address _masterChefAddress)
-        external
-        onlyAdmin
-    {
+    function setMasterChefAddress(
+        address _masterChefAddress
+    ) external onlyAdmin {
         s.masterChefAddress = _masterChefAddress;
     }
 
@@ -99,24 +89,21 @@ contract ManagerFacet is Modifiers {
         s.formulasAddress = _formulasAddress;
     }
 
-    function setStakingShareAddress(address _stakingShareAddress)
-        external
-        onlyAdmin
-    {
+    function setStakingShareAddress(
+        address _stakingShareAddress
+    ) external onlyAdmin {
         s.stakingShareAddress = _stakingShareAddress;
     }
 
-    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
-        external
-        onlyAdmin
-    {
+    function setStableSwapMetaPoolAddress(
+        address _stableSwapMetaPoolAddress
+    ) external onlyAdmin {
         s.stableSwapMetaPoolAddress = _stableSwapMetaPoolAddress;
     }
 
-    function setStakingContractAddress(address _stakingContractAddress)
-        external
-        onlyAdmin
-    {
+    function setStakingContractAddress(
+        address _stakingContractAddress
+    ) external onlyAdmin {
         s.stakingContractAddress = _stakingContractAddress;
     }
 
@@ -124,12 +111,13 @@ contract ManagerFacet is Modifiers {
         s.treasuryAddress = _treasuryAddress;
     }
 
-    function setIncentiveToDollar(address _account, address _incentiveAddress)
-        external
-        onlyAdmin
-    {
+    function setIncentiveToDollar(
+        address _account,
+        address _incentiveAddress
+    ) external onlyAdmin {
         IUbiquityDollarToken(s.dollarTokenAddress).setIncentiveContract(
-            _account, _incentiveAddress
+            _account,
+            _incentiveAddress
         );
     }
 
@@ -152,10 +140,12 @@ contract ManagerFacet is Modifiers {
         s.stableSwapMetaPoolAddress = metaPool;
 
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount =
-            IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
-        uint256 dollarTokenAmount =
-            IERC20(s.dollarTokenAddress).balanceOf(address(this));
+        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
+            address(this)
+        );
+        uint256 dollarTokenAmount = IERC20(s.dollarTokenAddress).balanceOf(
+            address(this)
+        );
 
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
@@ -166,8 +156,8 @@ contract ManagerFacet is Modifiers {
 
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == s.dollarTokenAddress
-                && IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            IMetaPool(metaPool).coins(0) == s.dollarTokenAddress &&
+                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
@@ -217,11 +207,9 @@ contract ManagerFacet is Modifiers {
         return s.dollarMintCalculatorAddress;
     }
 
-    function getExcessDollarsDistributor(address _creditNFTManagerAddress)
-        external
-        view
-        returns (address)
-    {
+    function getExcessDollarsDistributor(
+        address _creditNFTManagerAddress
+    ) external view returns (address) {
         return s._excessDollarDistributors[_creditNFTManagerAddress];
     }
 
