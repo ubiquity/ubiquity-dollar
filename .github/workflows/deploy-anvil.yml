@@ -14,9 +14,9 @@ jobs:
       - name: Install cloudflared
         uses: supplypike/setup-bin@v3
         with:
-          uri: 'https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64'
-          name: 'cloudflared'
-          version: 'latest'
+          uri: "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
+          name: "cloudflared"
+          version: "latest"
       - name: Tunnel
         id: tunnel
         run: cloudflared tunnel --url http://localhost:8545 &

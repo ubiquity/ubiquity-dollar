@@ -22,5 +22,5 @@ jobs:
 
       - name: Ubiquity Bounty Bot
         uses: ubiquity/bounty-bot@v0.0.1
-        with: 
+        with:
           GITHUB_TOKEN: ${{ steps.get_installation_token.outputs.token }}

@@ -11,8 +11,8 @@ contract ERC4626Test is Test {
     MockERC4626 vault;
 
     function setUp() public {
-        underlying = new MockERC20('Mock Token', 'TKN', 18);
-        vault = new MockERC4626(underlying, 'Mock Token Vault', 'vwTKN');
+        underlying = new MockERC20("Mock Token", "TKN", 18);
+        vault = new MockERC4626(underlying, "Mock Token Vault", "vwTKN");
     }
 
     function invariantMetadata() public {
@@ -21,9 +21,7 @@ contract ERC4626Test is Test {
         assertEq(vault.decimals(), 18);
     }
 
-    function testMetadata(string calldata name, string calldata symbol)
-        public
-    {
+    function testMetadata(string calldata name, string calldata symbol) public {
         MockERC4626 vlt = new MockERC4626(underlying, name, symbol);
         assertEq(vlt.name(), name);
         assertEq(vlt.symbol(), symbol);
@@ -42,7 +40,8 @@ contract ERC4626Test is Test {
         vm.prank(alice);
         underlying.approve(address(vault), aliceUnderlyingAmount);
         assertEq(
-            underlying.allowance(alice, address(vault)), aliceUnderlyingAmount
+            underlying.allowance(alice, address(vault)),
+            aliceUnderlyingAmount
         );
 
         uint256 alicePreDepositBal = underlying.balanceOf(alice);
@@ -54,13 +53,17 @@ contract ERC4626Test is Test {
 
         // Expect exchange rate to be 1:1 on initial deposit.
         assertEq(aliceUnderlyingAmount, aliceShareAmount);
-        assertEq(vault.previewWithdraw(aliceShareAmount), aliceUnderlyingAmount);
+        assertEq(
+            vault.previewWithdraw(aliceShareAmount),
+            aliceUnderlyingAmount
+        );
         assertEq(vault.previewDeposit(aliceUnderlyingAmount), aliceShareAmount);
         assertEq(vault.totalSupply(), aliceShareAmount);
         assertEq(vault.totalAssets(), aliceUnderlyingAmount);
         assertEq(vault.balanceOf(alice), aliceShareAmount);
         assertEq(
-            vault.convertToAssets(vault.balanceOf(alice)), aliceUnderlyingAmount
+            vault.convertToAssets(vault.balanceOf(alice)),
+            aliceUnderlyingAmount
         );
         assertEq(
             underlying.balanceOf(alice),
@@ -100,13 +103,17 @@ contract ERC4626Test is Test {
 
         // Expect exchange rate to be 1:1 on initial mint.
         assertEq(aliceShareAmount, aliceUnderlyingAmount);
-        assertEq(vault.previewWithdraw(aliceShareAmount), aliceUnderlyingAmount);
+        assertEq(
+            vault.previewWithdraw(aliceShareAmount),
+            aliceUnderlyingAmount
+        );
         assertEq(vault.previewDeposit(aliceUnderlyingAmount), aliceShareAmount);
         assertEq(vault.totalSupply(), aliceShareAmount);
         assertEq(vault.totalAssets(), aliceUnderlyingAmount);
         assertEq(vault.balanceOf(alice), aliceUnderlyingAmount);
         assertEq(
-            vault.convertToAssets(vault.balanceOf(alice)), aliceUnderlyingAmount
+            vault.convertToAssets(vault.balanceOf(alice)),
+            aliceUnderlyingAmount
         );
         assertEq(
             underlying.balanceOf(alice),
@@ -208,10 +215,12 @@ contract ERC4626Test is Test {
         assertEq(aliceShareAmount, 2000);
         assertEq(vault.balanceOf(alice), aliceShareAmount);
         assertEq(
-            vault.convertToAssets(vault.balanceOf(alice)), aliceUnderlyingAmount
+            vault.convertToAssets(vault.balanceOf(alice)),
+            aliceUnderlyingAmount
         );
         assertEq(
-            vault.convertToShares(aliceUnderlyingAmount), vault.balanceOf(alice)
+            vault.convertToShares(aliceUnderlyingAmount),
+            vault.balanceOf(alice)
         );
 
         // Expect a 1:1 ratio before mutation.
@@ -231,10 +240,12 @@ contract ERC4626Test is Test {
         assertEq(bobUnderlyingAmount, 4000);
         assertEq(vault.balanceOf(bob), bobShareAmount);
         assertEq(
-            vault.convertToAssets(vault.balanceOf(bob)), bobUnderlyingAmount
+            vault.convertToAssets(vault.balanceOf(bob)),
+            bobUnderlyingAmount
         );
         assertEq(
-            vault.convertToShares(bobUnderlyingAmount), vault.balanceOf(bob)
+            vault.convertToShares(bobUnderlyingAmount),
+            vault.balanceOf(bob)
         );
 
         // Expect a 1:1 ratio before mutation.
@@ -256,7 +267,10 @@ contract ERC4626Test is Test {
         // Bob's share count stays the same but the underlying amount changes from 4000 to 6000.
         underlying.mint(address(vault), mutationUnderlyingAmount);
         assertEq(vault.totalSupply(), preMutationShareBal);
-        assertEq(vault.totalAssets(), preMutationBal + mutationUnderlyingAmount);
+        assertEq(
+            vault.totalAssets(),
+            preMutationBal + mutationUnderlyingAmount
+        );
         assertEq(vault.balanceOf(alice), aliceShareAmount);
         assertEq(
             vault.convertToAssets(vault.balanceOf(alice)),

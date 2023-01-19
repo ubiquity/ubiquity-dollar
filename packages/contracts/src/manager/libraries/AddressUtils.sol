@@ -27,15 +27,16 @@ library AddressUtils {
     }
 
     function sendValue(address payable account, uint256 amount) internal {
-        (bool success,) = account.call{value: amount}("");
+        (bool success, ) = account.call{value: amount}("");
         if (!success) revert AddressUtils__SendValueFailed();
     }
 
-    function functionCall(address target, bytes memory data)
-        internal
-        returns (bytes memory)
-    {
-        return functionCall(target, data, "AddressUtils: failed low-level call");
+    function functionCall(
+        address target,
+        bytes memory data
+    ) internal returns (bytes memory) {
+        return
+            functionCall(target, data, "AddressUtils: failed low-level call");
     }
 
     function functionCall(
@@ -51,12 +52,13 @@ library AddressUtils {
         bytes memory data,
         uint256 value
     ) internal returns (bytes memory) {
-        return functionCallWithValue(
-            target,
-            data,
-            value,
-            "AddressUtils: failed low-level call with value"
-        );
+        return
+            functionCallWithValue(
+                target,
+                data,
+                value,
+                "AddressUtils: failed low-level call with value"
+            );
     }
 
     function functionCallWithValue(
@@ -79,8 +81,9 @@ library AddressUtils {
     ) private returns (bytes memory) {
         if (!isContract(target)) revert AddressUtils__NotContract();
 
-        (bool success, bytes memory returnData) =
-            target.call{value: value}(data);
+        (bool success, bytes memory returnData) = target.call{value: value}(
+            data
+        );
 
         if (success) {
             return returnData;

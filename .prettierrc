@@ -5,9 +5,7 @@
   "singleQuote": false,
   "printWidth": 160,
   "htmlWhitespaceSensitivity": "strict",
-  "plugins": [
-    "prettier-plugin-solidity"
-  ],
+  "plugins": ["prettier-plugin-solidity"],
   "overrides": [
     {
       "files": "*.sol",

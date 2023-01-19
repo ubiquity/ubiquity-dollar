@@ -22,15 +22,23 @@ contract DollarMintCalculator is IDollarMintCalculator {
 
     /// @notice returns (TWAP_PRICE  -1) * Ubiquity_Dollar_Total_Supply
     function getDollarsToMint() external view override returns (uint256) {
-        TWAPOracleDollar3pool oracle =
-            TWAPOracleDollar3pool(manager.twapOracleAddress());
+        TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(
+            manager.twapOracleAddress()
+        );
         uint256 twapPrice = oracle.consult(manager.dollarTokenAddress());
         require(twapPrice > 1 ether, "DollarMintCalculator: not > 1");
-        return twapPrice.fromUInt().sub(_one).mul(
-            (
-                IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt()
-                    .div(_one)
-            )
-        ).toUInt();
+        return
+            twapPrice
+                .fromUInt()
+                .sub(_one)
+                .mul(
+                    (
+                        IERC20(manager.dollarTokenAddress())
+                            .totalSupply()
+                            .fromUInt()
+                            .div(_one)
+                    )
+                )
+                .toUInt();
     }
 }

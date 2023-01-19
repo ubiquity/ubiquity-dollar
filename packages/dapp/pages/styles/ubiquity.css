@@ -587,7 +587,7 @@ td {
 }
 
 #WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__text,
-#WalletNotConnected.WalletNotConnected__transition-enter-active  .WalletNotConnected__text{
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__text {
   opacity: 0;
 }
 

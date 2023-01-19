@@ -31,7 +31,7 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 
 [Interactive Version](https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=ubiquity%2Fubiquity-dollar)
 
-### Smart Contracts 
+### Smart Contracts
 
 ![Visualization of the smart contracts codebase](./utils/diagram-contracts.svg)
 

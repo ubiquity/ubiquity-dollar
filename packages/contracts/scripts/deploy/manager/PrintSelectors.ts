@@ -11,11 +11,7 @@ if (args.length != 1) {
 }
 
 async function printSelectors(contractName: string, artifactFolderPath = "../../../out") {
-  const contractFilePath = path.join(
-    artifactFolderPath,
-    `${contractName}.sol`,
-    `${contractName}.json`
-  );
+  const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
   const contractArtifact = require(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;

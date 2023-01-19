@@ -2,10 +2,8 @@
 pragma solidity ^0.8.3;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
-import {CreditNFTRedemptionCalculator} from
-    "../../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {CreditNFTRedemptionCalculator} from "../../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
 import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
 import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
 
@@ -17,8 +15,9 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
 
     function setUp() public {
         dollarManagerAddress = helpers_deployUbiquityDollarManager();
-        creditNFTCalculatorAddress =
-            address(new CreditNFTRedemptionCalculator(dollarManagerAddress));
+        creditNFTCalculatorAddress = address(
+            new CreditNFTRedemptionCalculator(dollarManagerAddress)
+        );
     }
 
     function test_getCreditNFTAmount_revertsIfDebtTooHigh() public {
