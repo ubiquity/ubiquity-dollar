@@ -45,9 +45,11 @@ contract ZeroState is LiveTestHelper {
         uint256 _sharesAmount,
         uint256 _weeks
     );
-    event DustSent(address _to, address token, uint256 amount);
+    event DustSent(address _to, address _token, uint256 _amount);
     event ProtocolTokenAdded(address _token);
     event ProtocolTokenRemoved(address _token);
+    event Paused(address _caller);
+    event Unpaused(address _caller);
 
     address[] ogs;
     address[] ogsEmpty;
@@ -162,6 +164,50 @@ contract RemoteZeroStateTest is ZeroState {
         vm.prank(admin);
         staking.addProtocolToken(address(DAI));
     }
+
+    function testRemoveProtocolToken() public {
+        vm.startPrank(admin);
+        staking.addProtocolToken(address(DAI));
+        vm.stopPrank();
+
+        vm.expectEmit(true, false, false, true);
+        emit ProtocolTokenRemoved(address(DAI));
+
+        vm.startPrank(admin);
+        staking.removeProtocolToken(address(DAI));
+        vm.stopPrank();
+    }
+
+    function testSendDust(uint256 _amount) public {
+        vm.expectEmit(true, false, false, true);
+        emit DustSent(fourthAccount, address(dollarToken), _amount);
+
+        vm.startPrank(admin);
+        metapool.approve(address(staking), _amount);
+        staking.sendDust(fourthAccount, address(dollarToken), _amount);
+        vm.stopPrank();
+    }
+
+    function testPause() public {
+        vm.expectEmit(true, false, false, true);
+        emit Paused(admin);
+
+        vm.prank(admin);
+        staking.pause();
+    }
+
+    function testUnpause() public {
+        vm.prank(admin);
+        staking.pause();
+
+        vm.expectEmit(true, false, false, true);
+        emit Unpaused(admin);
+
+        vm.prank(admin);
+        staking.unpause();
+    }
+
+    // TODO funtion testMigrate() public {}
 
     function testSetStakingDiscountMultiplier(uint256 x) public {
         vm.expectEmit(true, false, false, true);

@@ -10,6 +10,9 @@ contract DepositState is LiveTestHelper {
     uint256 maxBal;
     uint256[] creationBlock;
 
+    event Paused(address _caller);
+    event Unpaused(address _caller);
+
     function setUp() public virtual override {
         super.setUp();
         fourthBal = metapool.balanceOf(fourthAccount);
@@ -72,6 +75,25 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake.endBlock, end);
     }
 
+    function testPause() public {
+        vm.expectEmit(true, false, false, true);
+        emit Paused(admin);
+
+        vm.prank(admin);
+        staking.pause();
+    }
+
+    function testUnpause() public {
+        vm.prank(admin);
+        staking.pause();
+
+        vm.expectEmit(true, false, false, true);
+        emit Unpaused(admin);
+
+        vm.prank(admin);
+        staking.unpause();
+    }
+
     function testTransferFrom() public {
         vm.prank(stakingMinAccount);
         stakingShare.setApprovalForAll(admin, true);
@@ -116,11 +138,21 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.totalSupply(), 4);
     }
 
-    // // TODO: needs to figured out why it sometimes fails
-    // function test_TotalLP() public {
-    //     uint256 totalLp = fourthBal + minBal + maxBal - 1;
-    //     assertEq(bondingShareV2.totalLP(), totalLp);
-    // }
+    // TODO: needs to figured out why it sometimes fails
+    function test_TotalLP(uint128 debt, uint256 end) public {
+        vm.startPrank(admin);
+        uint256 deposited = 1000;
+        stakingShare.mint(
+            secondAccount,
+            deposited,
+            uint256(debt),
+            end
+        );
+        uint256 _totalLp = stakingShare.totalLP();
+        assertEq(_totalLp, deposited);
+        vm.stopPrank();
+    }
+
 
     function testGetStake() public {
         StakingShare.Stake memory stake = StakingShare.Stake(
