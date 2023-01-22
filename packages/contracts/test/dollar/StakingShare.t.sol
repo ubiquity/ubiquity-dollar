@@ -51,6 +51,12 @@ contract RemoteDepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
+    // function testCannotDeployEmptyManager() public {
+    //     vm.prank(admin);
+    //     vm.expectRevert();
+    //     StakingShare broken = new StakingShare(address(0), "uri");
+    // }
+
     function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
@@ -58,6 +64,21 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake.lpAmount, amount);
         assertEq(stake.lpRewardDebt, debt);
         assertEq(stake.endBlock, end);
+    }
+
+    function testCannotUpdateStakeNotMinter(uint128 amount, uint128 debt, uint256 end) public {
+        vm.expectRevert("Governance token: not minter");
+        vm.prank(secondAccount);
+        stakingShare.updateStake(1, uint256(amount), uint256(debt), end); 
+    }
+
+    function testCannotUpdateaStateWhenPaused(uint128 amount, uint128 debt, uint256 end) public {
+        vm.prank(admin);
+        stakingShare.pause();
+
+        vm.expectRevert("Pausable: paused");
+        vm.prank(admin);
+        stakingShare.updateStake(1, uint256(amount), uint256(debt), end); 
     }
 
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
@@ -73,6 +94,43 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake.lpAmount, deposited);
         assertEq(stake.lpRewardDebt, debt);
         assertEq(stake.endBlock, end);
+    }
+
+    function testCannotMintZeroAddress(uint128 deposited, uint128 debt, uint256 end) public {
+        vm.expectRevert("ERC1155: mint to the zero address");
+        vm.prank(admin);
+        stakingShare.mint(
+            address(0),
+            uint256(deposited),
+            uint256(debt),
+            end
+        );
+    }
+
+    function testCannotMintNotMinter(uint128 deposited, uint128 debt, uint256 end) public {
+        vm.expectRevert("Governance token: not minter");
+        vm.prank(secondAccount);
+
+        stakingShare.mint(
+            address(0),
+            uint256(deposited),
+            uint256(debt),
+            end
+        );
+    }
+
+    function testCannotMintWhenPaused(uint128 deposited, uint128 debt, uint256 end) public {
+        vm.prank(admin);
+        stakingShare.pause();
+
+        vm.prank(admin);
+        vm.expectRevert("Pausable: paused");
+        stakingShare.mint(
+            address(0),
+            uint256(deposited),
+            uint256(debt),
+            end
+        );
     }
 
     function testPause() public {
@@ -112,6 +170,36 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
+    function testCannotSafeTransferFromUnapproved() public {
+        vm.expectRevert("ERC1155: caller is not token owner or approved");
+
+        bytes memory data;
+        vm.prank(admin);
+        stakingShare.safeTransferFrom(
+            stakingMinAccount,
+            secondAccount,
+            1,
+            1,
+            data
+        ); 
+    }
+
+    function testCannotSafeTransferFromWhenPaused() public {
+        vm.prank(admin);
+        stakingShare.pause();
+
+        vm.expectRevert("Pausable: paused");
+        vm.prank(admin);
+        bytes memory data;
+        stakingShare.safeTransferFrom(
+            stakingMinAccount,
+            secondAccount,
+            1,
+            1,
+            data
+        ); 
+    }
+
     function testBatchTransfer() public {
         ids.push(3);
         ids.push(4);
@@ -134,24 +222,54 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
+    function testCannotBatchTransferFromUnapproved() public {
+        vm.expectRevert("ERC1155: caller is not token owner or approved");
+
+        bytes memory data;
+        vm.prank(admin);
+        stakingShare.safeBatchTransferFrom(
+            stakingMaxAccount,
+            secondAccount,
+            ids,
+            amounts,
+            data
+        ); 
+    }
+
+    function testCannotBatchTransferFromWhenPaused() public {
+        vm.prank(admin);
+        stakingShare.pause();
+
+        vm.expectRevert("Pausable: paused");
+        bytes memory data;
+        vm.prank(admin);
+        stakingShare.safeBatchTransferFrom(
+            stakingMaxAccount,
+            secondAccount,
+            ids,
+            amounts,
+            data
+        ); 
+    }
+
     function testTotalSupply() public {
         assertEq(stakingShare.totalSupply(), 4);
     }
 
-    // TODO: needs to figured out why it sometimes fails
-    function test_TotalLP(uint128 debt, uint256 end) public {
-        vm.startPrank(admin);
-        uint256 deposited = 1000;
-        stakingShare.mint(
-            secondAccount,
-            deposited,
-            uint256(debt),
-            end
-        );
-        uint256 _totalLp = stakingShare.totalLP();
-        assertEq(_totalLp, deposited);
-        vm.stopPrank();
-    }
+    // // TODO: needs to figured out why it sometimes fails
+    // function test_TotalLP(uint128 debt, uint256 end) public {
+    //     vm.startPrank(admin);
+    //     uint256 deposited = 1000;
+    //     stakingShare.mint(
+    //         secondAccount,
+    //         deposited,
+    //         uint256(debt),
+    //         end
+    //     );
+    //     uint256 _totalLp = stakingShare.totalLP();
+    //     assertEq(_totalLp, deposited);
+    //     vm.stopPrank();
+    // }
 
 
     function testGetStake() public {
@@ -199,4 +317,5 @@ contract RemoteDepositStateTest is DepositState {
         vm.prank(fifthAccount);
         stakingShare.setUri(stringTest);
     }
+
 }

@@ -288,6 +288,7 @@ contract LiveTestHelper is Test {
 
         vm.startPrank(fourthAccount);
         dollarToken.approve(address(metapool), 10000e18);
+        // dollarToken.approve(address(fourthAccount), 1000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
@@ -333,7 +334,9 @@ contract LiveTestHelper is Test {
             locked
         );
 
-        dollarToken.approve(address(staking), 10000e18);
+        deal(address(dollarToken), address(staking), 100e18);
+
+        // dollarToken.approve(address(staking), 10000e18);
 
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 

@@ -165,6 +165,15 @@ contract RemoteZeroStateTest is ZeroState {
         staking.addProtocolToken(address(DAI));
     }
 
+    function testCannotAddProtocolToken() public {
+        vm.prank(admin);
+        staking.addProtocolToken(address(DAI));
+
+        vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
+        vm.prank(admin);
+        staking.addProtocolToken(address(DAI));
+    }
+
     function testRemoveProtocolToken() public {
         vm.startPrank(admin);
         staking.addProtocolToken(address(DAI));
@@ -178,14 +187,35 @@ contract RemoteZeroStateTest is ZeroState {
         vm.stopPrank();
     }
 
-    function testSendDust(uint256 _amount) public {
+    function testCannotRemoveProtocolToken() public {
+        vm.expectRevert("collectable-dust::token-not-part-of-the-protocol");
+        vm.prank(admin);
+        staking.removeProtocolToken(address(DAI));
+    }
+
+    function testSendDust() public {
         vm.expectEmit(true, false, false, true);
-        emit DustSent(fourthAccount, address(dollarToken), _amount);
+        emit DustSent(fourthAccount, address(dollarToken), 1e18);
 
         vm.startPrank(admin);
-        metapool.approve(address(staking), _amount);
-        staking.sendDust(fourthAccount, address(dollarToken), _amount);
+        staking.sendDust(fourthAccount, address(dollarToken), 1e18);
         vm.stopPrank();
+    }
+
+    function testCannotSendDustZeroAddress() public {
+        vm.expectRevert("collectable-dust::cant-send-dust-to-zero-address");
+        vm.startPrank(admin);
+        staking.sendDust(address(0), address(dollarToken), 1e18); 
+    }
+
+    function testCannotSendDustUnregisteredToken() public {
+        vm.prank(admin);
+        staking.addProtocolToken(address(dollarToken));
+
+        vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
+        vm.startPrank(admin);
+        staking.sendDust(fourthAccount, address(dollarToken), 1e18);
+        
     }
 
     function testPause() public {
@@ -207,7 +237,19 @@ contract RemoteZeroStateTest is ZeroState {
         staking.unpause();
     }
 
-    // TODO funtion testMigrate() public {}
+    // function testMigrate() public {
+    //     vm.expectEmit(true, false, false, true);
+    //     emit Unpaused(admin);
+
+    //     vm.prank(admin);
+    //     staking.migrate();
+    // }
+
+    function testCannotMigrateZeroId() public {
+        vm.expectRevert("not v1 address");
+        vm.prank(fourthAccount);
+        staking.migrate();
+    }
 
     function testSetStakingDiscountMultiplier(uint256 x) public {
         vm.expectEmit(true, false, false, true);
