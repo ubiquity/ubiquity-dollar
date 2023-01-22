@@ -336,8 +336,6 @@ contract LiveTestHelper is Test {
 
         deal(address(dollarToken), address(staking), 100e18);
 
-        // dollarToken.approve(address(staking), 10000e18);
-
         //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 
         staking.setMigrating(true);
