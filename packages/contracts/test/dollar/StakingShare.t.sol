@@ -256,22 +256,6 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.totalSupply(), 4);
     }
 
-    // // TODO: needs to figured out why it sometimes fails
-    // function test_TotalLP(uint128 debt, uint256 end) public {
-    //     vm.startPrank(admin);
-    //     uint256 deposited = 1000;
-    //     stakingShare.mint(
-    //         secondAccount,
-    //         deposited,
-    //         uint256(debt),
-    //         end
-    //     );
-    //     uint256 _totalLp = stakingShare.totalLP();
-    //     assertEq(_totalLp, deposited);
-    //     vm.stopPrank();
-    // }
-
-
     function testGetStake() public {
         StakingShare.Stake memory stake = StakingShare.Stake(
             fourthAccount,
