@@ -46,6 +46,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     UbiquityChefFacet IUbiquityChefFacet;
     StakingFacet IStakingFacet;
     StakingFormulasFacet IStakingFormulasFacet;
+    OwnershipFacet IOwnershipFacet;
 
     address incentive_addr;
 
@@ -493,6 +494,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IUbiquityChefFacet = UbiquityChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
+        IOwnershipFacet = OwnershipFacet(address(diamond));
 
         assertEq(IDollarFacet.decimals(), 18);
         // get all addresses
