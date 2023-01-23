@@ -237,14 +237,6 @@ contract RemoteZeroStateTest is ZeroState {
         staking.unpause();
     }
 
-    // function testMigrate() public {
-    //     vm.expectEmit(true, false, false, true);
-    //     emit Unpaused(admin);
-
-    //     vm.prank(admin);
-    //     staking.migrate();
-    // }
-
     function testCannotMigrateZeroId() public {
         vm.expectRevert("not v1 address");
         vm.prank(fourthAccount);
