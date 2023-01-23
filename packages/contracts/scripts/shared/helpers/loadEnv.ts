@@ -8,10 +8,12 @@ export const loadEnv = (path: string): Env => {
   const rpcUrl = process.env.RPC_URL || "http://localhost:8545";
   const privateKey = process.env.PRIVATE_KEY || Wallet.fromMnemonic(TEST_MNEMONIC).privateKey;
   const etherscanApiKey = process.env.ETHERSCAN_API_KEY;
+  const curveWhale = process.env.CURVE_WHALE;
 
   return {
     rpcUrl,
     privateKey,
     etherscanApiKey,
+    curveWhale,
   };
 };

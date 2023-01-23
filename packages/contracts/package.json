@@ -16,24 +16,24 @@
   "dependencies": {
     "@types/command-line-args": "5.2.0",
     "command-line-args": "5.2.1",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.3",
     "ethers": "^5.6.9",
-    "ts-node": "10.9.1"
+    "tsx": "^3.12.2"
   },
   "scripts": {
     "forge": "forge",
     "build": "forge build",
-    "test": "ts-node ./scripts/runner/runner.ts",
+    "test": "tsx ./scripts/runner/runner.ts",
     "slither:run": "slither . --compile-force-framework foundry --config-file slither.config.json",
     "echidna": "echidna-test . --config echidna.config.yml",
     "prettier": "forge fmt",
-    "deploy": "ts-node ./scripts/deploy/deploy.ts",
-    "deploy:diamond": "ts-node ./scripts/deploy/manager/DiamondInAll.ts",
-    "task": "ts-node ./scripts/task/task.ts",
+    "deploy": "tsx ./scripts/deploy/deploy.ts",
+    "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
+    "task": "tsx ./scripts/task/task.ts",
     "clean": "forge clean",
     "purge": "yarn clean",
-    "anvil": "ts-node ./scripts/anvil/anvil.ts",
-    "deploy_development": "ts-node ./scripts/deploy/dollar/DevelopmentDeploy.ts"
+    "anvil": "tsx ./scripts/anvil/anvil.ts",
+    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts"
   },
   "keywords": [
     "stablecoin",

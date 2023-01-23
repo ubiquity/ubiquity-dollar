@@ -17,7 +17,8 @@ library SafeAddArray {
     }
 
     function add(uint256[] storage array, uint256[] memory values) internal {
-        for (uint256 i = 0; i < values.length; i++) {
+        // slither-disable-next-line uninitialized-local-variables
+        for (uint256 i; i < values.length;) {
             bool exist = false;
             for (uint256 j = 0; j < array.length; j++) {
                 if (array[j] == values[i]) {
@@ -28,6 +29,7 @@ library SafeAddArray {
             if (!exist) {
                 array.push(values[i]);
             }
+            unchecked {++i;}
         }
     }
 }
