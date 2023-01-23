@@ -34,6 +34,10 @@ contract StakingFacet is Modifiers {
         return LibStaking.stakingDiscountMultiplier();
     }
 
+    function blockCountInAWeek() external view returns (uint256) {
+        return LibStaking.blockCountInAWeek();
+    }
+
     function setBlockCountInAWeek(uint256 _blockCountInAWeek)
         external
         onlyStakingManager

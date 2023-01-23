@@ -16,8 +16,6 @@ import {LibUbiquityDollar} from "../libraries/LibUbiquityDollar.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibUbiquityChef} from "../libraries/LibUbiquityChef.sol";
 
-import "forge-std/console.sol";
-
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
 // of your diamond. Add parameters to the init function if you need to.
@@ -61,7 +59,6 @@ contract DiamondInit is Modifiers {
             _args.dollarSymbol,
             _args.dollarDecimals
         );
-        console.log("init 1");
         // staking
         LibStaking.StakingData storage ls = LibStaking.stakingStorage();
         ls.stakingDiscountMultiplier = uint256(1000000 gwei); // 0.001
@@ -73,14 +70,11 @@ contract DiamondInit is Modifiers {
         appStore.stakingShareAddress = address(
             new StakingShare(address(this), uri)
         );
-        console.log("address this:%s msg.sender:%s", address(this), msg.sender);
-        console.log("init 1.1");
         // adding governance token
         appStore.governanceTokenAddress = address(
             new UbiquityGovernanceTokenForDiamond(address(this))
         );
 
-        console.log("init 2");
         // ubiquity chef before doing that we should have a metapool address
 
         LibUbiquityChef.initialize(
@@ -89,7 +83,6 @@ contract DiamondInit is Modifiers {
             _args.stakingShareIDs,
             _args.governancePerBlock
         );
-        console.log("init 3");
 
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional

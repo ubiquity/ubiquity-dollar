@@ -10,7 +10,6 @@ import "../../dollar/interfaces/IERC1155Ubiquity.sol";
 import "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibStakingFormulas} from "./LibStakingFormulas.sol";
-import "forge-std/console.sol";
 
 library LibUbiquityChef {
     using SafeERC20 for IERC20Ubiquity;
@@ -96,14 +95,7 @@ library LibUbiquityChef {
         cs.lastPrice = 1e18;
         cs.governanceMultiplier = 1e18;
         cs.governancePerBlock = _governancePerBlock;
-        console.log("initialize 1");
-        // _updateGovernanceMultiplier();
-        console.log(
-            "initialize governanceMultiplier:%s",
-            cs.governanceMultiplier
-        );
         uint256 lgt = _tos.length;
-        console.log("initialize 2 lgt:%s", lgt);
         require(lgt == _amounts.length, "_amounts array not same length");
         require(
             lgt == _stakingShareIDs.length,
@@ -165,33 +157,8 @@ library LibUbiquityChef {
         _updatePool();
         uint256 pending = ((ss.amount * cs.pool.accGovernancePerShare) / 1e12) -
             ss.rewardDebt;
-        console.log(
-            "--withdraw accGovernancePerShare:%s amount:%s _stakingShareID:%s",
-            cs.pool.accGovernancePerShare,
-            _amount,
-            _stakingShareID
-        );
-        console.log(
-            "--withdraw before balance of:%s is:%s",
-            to,
-            IERC20Ubiquity(LibAppStorage.appStorage().governanceTokenAddress)
-                .balanceOf(to)
-        );
-        console.log(
-            "--withdraw pending:%s ss.amount:%s cs.pool.accGovernancePerShare:%s",
-            pending,
-            ss.amount,
-            cs.pool.accGovernancePerShare
-        );
         // send Governance Tokens to Staking Share holder
-        console.log("-- send gov token :%s to:%s  ", pending, to);
         _safeGovernanceTransfer(to, pending);
-        console.log(
-            "--withdraw after balance of:%s is:%s",
-            to,
-            IERC20Ubiquity(LibAppStorage.appStorage().governanceTokenAddress)
-                .balanceOf(to)
-        );
         ss.amount -= _amount;
         ss.rewardDebt = (ss.amount * cs.pool.accGovernancePerShare) / 1e12;
         cs.totalShares -= _amount;
@@ -278,12 +245,6 @@ library LibUbiquityChef {
         ChefStorage storage cs = chefStorage();
         // (1.05/(1+abs(1-TWAP_PRICE)))
         uint256 currentPrice = _getTwapPrice();
-        console.log(
-            "--cur price:%s lastPrice:%s minPriceDiffToUpdateMultiplier:%s",
-            currentPrice,
-            cs.lastPrice,
-            cs.minPriceDiffToUpdateMultiplier
-        );
         bool isPriceDiffEnough = false;
         // a minimum price variation is needed to update the multiplier
         if (currentPrice > cs.lastPrice) {
@@ -293,12 +254,6 @@ library LibUbiquityChef {
             isPriceDiffEnough =
                 cs.lastPrice - currentPrice > cs.minPriceDiffToUpdateMultiplier;
         }
-        console.log(
-            "--cisPriceDiffEnough:%s governanceMultiplier:%s currentPrice:%s",
-            isPriceDiffEnough,
-            cs.governanceMultiplier,
-            currentPrice
-        );
         if (isPriceDiffEnough) {
             cs.governanceMultiplier = LibStakingFormulas.governanceMultiply(
                 cs.governanceMultiplier,
@@ -306,10 +261,6 @@ library LibUbiquityChef {
             );
             cs.lastPrice = currentPrice;
         }
-        console.log(
-            "--cisPriceDiffEnough governanceMultiplier:%s ",
-            cs.governanceMultiplier
-        );
     }
 
     // Update reward variables of the given pool to be up-to-date.
@@ -319,10 +270,6 @@ library LibUbiquityChef {
         if (block.number <= _pool.lastRewardBlock) {
             return;
         }
-        console.log(
-            "--_updatePool before updategovernanceMultiplier :%s ",
-            cs.governanceMultiplier
-        );
         _updateGovernanceMultiplier();
 
         if (cs.totalShares == 0) {
@@ -335,12 +282,6 @@ library LibUbiquityChef {
         address treasuryAddress = LibAppStorage.appStorage().treasuryAddress;
         uint256 multiplier = _getMultiplier();
         uint256 governanceReward = (multiplier * cs.governancePerBlock) / 1e18;
-        console.log(
-            "--governanceReward:%s multiplier:%s cs.governancePerBlock:%s",
-            governanceReward,
-            multiplier,
-            cs.governancePerBlock
-        );
         IERC20Ubiquity(governanceTokenAddress).mint(
             address(this),
             governanceReward
@@ -377,7 +318,6 @@ library LibUbiquityChef {
     }
 
     function _getTwapPrice() internal view returns (uint256) {
-        console.log(" //_getTwapPrice address(this):%s", address(this));
         return LibTWAPOracle.consult(address(this));
     }
 }

@@ -8,8 +8,6 @@ import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 import "../../dollar/interfaces/IERC20Ubiquity.sol";
 
-import "forge-std/console.sol";
-
 /// @title ERC20 Ubiquity preset
 /// @author Ubiquity DAO
 /// @notice ERC20 with :
@@ -71,10 +69,6 @@ contract ERC20UbiquityForDiamond is
         _tokenName = name_;
         _symbol = symbol_;
         accessCtrl = IAccessControl(_diamond);
-        console.log(
-            "ERC20UbiquityForDiamond constructor sender: %s ",
-            msg.sender
-        );
 
         uint256 chainId;
         // solhint-disable-next-line no-inline-assembly

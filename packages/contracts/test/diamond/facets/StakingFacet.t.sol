@@ -17,9 +17,8 @@ import {CreditNFTManager} from "../../../src/dollar/core/CreditNFTManager.sol";
 import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
 import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import "../../../src/diamond/libraries/Constants.sol";
-import "forge-std/console.sol";
 
-contract ZeroState is DiamondSetup {
+contract ZeroStateStaking is DiamondSetup {
     ICurveFactory curvePoolFactory =
         ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
     IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
@@ -42,9 +41,12 @@ contract ZeroState is DiamondSetup {
     BondingShareForDiamond stakingShareV1;
     IERC20Ubiquity governanceToken;
     event Deposit(
-        address indexed user,
-        uint256 amount,
-        uint256 indexed stakingShareId
+        address indexed _user,
+        uint256 indexed _id,
+        uint256 _lpAmount,
+        uint256 _stakingShareAmount,
+        uint256 _weeks,
+        uint256 _endBlock
     );
 
     event Withdraw(
@@ -59,6 +61,8 @@ contract ZeroState is DiamondSetup {
     event MinPriceDiffToUpdateMultiplierModified(
         uint256 indexed minPriceDiffToUpdateMultiplier
     );
+    event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
+    event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
 
     function setUp() public virtual override {
         super.setUp();
@@ -66,12 +70,6 @@ contract ZeroState is DiamondSetup {
             new MockMetaPool(address(IDollarFacet), curve3CrvToken)
         );
 
-        console.log(
-            "setUp0 admin:%s owner:%s  metaPoolAddress:%s",
-            admin,
-            owner,
-            metaPoolAddress
-        );
         vm.startPrank(owner);
 
         ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CrvToken);
@@ -129,16 +127,6 @@ contract ZeroState is DiamondSetup {
         vm.stopPrank();
         vm.prank(owner);
         ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
-        console.log(
-            "/// consult diams:%s crv:%s",
-            ITWAPOracleDollar3pool.consult(address(diamond)),
-            ITWAPOracleDollar3pool.consult(address(curve3CrvToken))
-        );
-        console.log(
-            "/// address diams:%s crv:%s",
-            address(diamond),
-            address(curve3CrvToken)
-        );
 
         CreditRedemptionCalculator creditRedemptionCalc = new CreditRedemptionCalculator(
                 address(diamond)
@@ -196,7 +184,6 @@ contract ZeroState is DiamondSetup {
         IDollarFacet.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
-        console.log("setUp3.24");
         vm.startPrank(fourthAccount);
         IDollarFacet.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
@@ -242,220 +229,146 @@ contract ZeroState is DiamondSetup {
     }
 }
 
-contract ZeroStateTest is ZeroState {
-    function testSetGovernancePerBlock(uint256 governancePerBlock) public {
-        vm.expectEmit(true, false, false, true, address(IUbiquityChefFacet));
-        emit GovernancePerBlockModified(governancePerBlock);
+contract ZeroStateStakingTest is ZeroStateStaking {
+    using stdStorage for StdStorage;
+
+    function testSetStakingDiscountMultiplier(uint256 x) public {
+        vm.expectEmit(true, false, false, true);
+        emit StakingDiscountMultiplierUpdated(x);
         vm.prank(admin);
-        IUbiquityChefFacet.setGovernancePerBlock(governancePerBlock);
-        assertEq(IUbiquityChefFacet.governancePerBlock(), governancePerBlock);
+        IStakingFacet.setStakingDiscountMultiplier(x);
+        assertEq(x, IStakingFacet.stakingDiscountMultiplier());
     }
 
-    function testSetGovernanceDiv(uint256 div) public {
+    function testSetBlockCountInAWeek(uint256 x) public {
+        vm.expectEmit(true, false, false, true);
+        emit BlockCountInAWeekUpdated(x);
         vm.prank(admin);
-        IUbiquityChefFacet.setGovernanceShareForTreasury(div);
-        assertEq(IUbiquityChefFacet.governanceDivider(), div);
+        IStakingFacet.setBlockCountInAWeek(x);
+        assertEq(x, IStakingFacet.blockCountInAWeek());
     }
 
-    function testSetMinPriceDiff(uint256 minPriceDiff) public {
-        vm.expectEmit(true, false, false, true, address(IUbiquityChefFacet));
-        emit MinPriceDiffToUpdateMultiplierModified(minPriceDiff);
-        vm.prank(admin);
-        IUbiquityChefFacet.setMinPriceDiffToUpdateMultiplier(minPriceDiff);
-        assertEq(
-            IUbiquityChefFacet.minPriceDiffToUpdateMultiplier(),
-            minPriceDiff
+    function testDeposit(uint256 lpAmount, uint256 lockup) public {
+        lpAmount = bound(lpAmount, 1, 100e18);
+        lockup = bound(lockup, 1, 208);
+        uint256 preBalance = metapool.balanceOf(stakingMinAccount);
+        vm.expectEmit(true, false, false, true);
+        emit Deposit(
+            stakingMinAccount,
+            stakingShare.totalSupply(),
+            lpAmount,
+            IStakingFormulasFacet.durationMultiply(
+                lpAmount,
+                lockup,
+                IStakingFacet.stakingDiscountMultiplier()
+            ),
+            lockup,
+            (block.number + lockup * IStakingFacet.blockCountInAWeek())
         );
+        vm.startPrank(stakingMinAccount);
+        metapool.approve(address(IStakingFacet), 2**256 - 1);
+        IStakingFacet.deposit(lpAmount, lockup);
+        assertEq(metapool.balanceOf(stakingMinAccount), preBalance - lpAmount);
     }
 
-    function testDepositFromZeroState(uint256 lpAmount) public {
-        uint256 LPBalance = metapool.balanceOf(fourthAccount);
-        lpAmount = bound(lpAmount, 1, LPBalance);
-        // lock for 10 weeks
-        uint256 shares = IStakingFormulasFacet.durationMultiply(
-            lpAmount,
-            10,
-            IStakingFacet.stakingDiscountMultiplier()
+    function testLockupMultiplier() public {
+        uint256 minLP = metapool.balanceOf(stakingMinAccount);
+        uint256 maxLP = metapool.balanceOf(stakingMaxAccount);
+
+        vm.startPrank(stakingMaxAccount);
+        metapool.approve(address(IStakingFacet), 2**256 - 1);
+        IStakingFacet.deposit(maxLP, 208);
+        vm.stopPrank();
+
+        vm.startPrank(stakingMinAccount);
+        metapool.approve(address(IStakingFacet), 2**256 - 1);
+        IStakingFacet.deposit(minLP, 1);
+        vm.stopPrank();
+
+        uint256[2] memory bsMaxAmount = IUbiquityChefFacet.getStakingShareInfo(
+            1
         );
-        console.log(
-            "--test durationMultiply lpAmount:%s stakingDiscountMultiplier:%s shares:%s",
-            lpAmount,
-            IStakingFacet.stakingDiscountMultiplier(),
-            shares
-        );
-        /*  vm.startPrank(admin);
-        uint256 id = stakingShare.mint(
-            fourthAccount,
-            lpAmount,
-            shares,
-            block.number + 100
+        uint256[2] memory bsMinAmount = IUbiquityChefFacet.getStakingShareInfo(
+            2
         );
 
-        vm.stopPrank(); */
-        uint256 id = stakingShare.totalSupply() + 1;
-        // vm.expectEmit(true, false, true, true, address(IUbiquityChefFacet));
-        // emit Deposit(fourthAccount, shares, id);
+        assertLt(bsMinAmount[0], bsMaxAmount[0]);
+    }
 
-        uint256 allowance = metapool.allowance(
-            fourthAccount,
-            address(IUbiquityChefFacet)
-        );
-        console.log(
-            "testDeposit bal:%s allowance:%s lpAmount:%s",
-            LPBalance,
-            allowance,
-            lpAmount
-        );
-
-        uint256 fourthBalance = metapool.balanceOf(fourthAccount);
-        console.log(" four balance", fourthBalance);
-
+    function testCannotStakeMoreThan4Years(uint256 _weeks) public {
+        _weeks = bound(_weeks, 209, 2**256 - 1);
+        vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
-        metapool.approve(address(diamond), fourthBalance);
-        allowance = metapool.allowance(
-            fourthAccount,
-            address(IUbiquityChefFacet)
-        );
-        console.log(
-            "testDeposit shares:%s id:%s allowance:%s ",
-            shares,
-            id,
-            allowance
-        );
+        IStakingFacet.deposit(1, _weeks);
+    }
 
-        vm.expectEmit(true, true, true, true, address(IUbiquityChefFacet));
-
-        emit Deposit(fourthAccount, shares, id);
-        console.log(
-            "testDeposit emit Deposit 2  fourthAccount:%s shares:%s id:%s",
-            fourthAccount,
-            shares,
-            id
-        );
+    function testCannotDepositZeroWeeks() public {
+        vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
-        IStakingFacet.deposit(lpAmount, 10);
-
-        (, uint256 accGovernance) = IUbiquityChefFacet.pool();
-        uint256[2] memory info1 = [shares, (shares * accGovernance) / 1e12];
-        uint256[2] memory info2 = IUbiquityChefFacet.getStakingShareInfo(id);
-        console.log("testDeposit info1-0: %s -1: %s ", info1[0], info1[1]);
-        console.log("testDeposit info2-0: %s -1: %s ", info2[0], info2[1]);
-        assertEq(info1[0], info2[0]);
-        assertEq(info1[1], info2[1]);
+        IStakingFacet.deposit(1, 0);
     }
 }
 
-contract DepositState is ZeroState {
+contract DepositStateStaking is ZeroStateStaking {
     uint256 fourthBal;
     uint256 fourthID;
     uint256 shares;
 
     function setUp() public virtual override {
         super.setUp();
-        console.log(
-            "****.0 IUbiquityChefFacet.totalShares():%s shares:%s",
-            IUbiquityChefFacet.totalShares(),
-            shares
-        );
+
         assertEq(IUbiquityChefFacet.totalShares(), 0);
-        console.log("DepositStatesetUp 1");
         fourthBal = metapool.balanceOf(fourthAccount);
-        console.log("DepositStatesetUp 2");
         shares = IStakingFormulasFacet.durationMultiply(
             fourthBal,
             1,
             IStakingFacet.stakingDiscountMultiplier()
         );
-        console.log("****.01 CALCULATED shares:%s", shares);
-        console.log("DepositStatesetUp 3");
         vm.startPrank(admin);
         fourthID = stakingShare.totalSupply() + 1;
         vm.stopPrank();
-        console.log("DepositStatesetUp 4 fourthID:%s", fourthID);
         vm.startPrank(fourthAccount);
         metapool.approve(address(diamond), fourthBal);
         IStakingFacet.deposit(fourthBal, 1);
 
         assertEq(stakingShare.totalSupply(), fourthID);
         assertEq(stakingShare.balanceOf(fourthAccount, fourthID), 1);
-        console.log(
-            "****.01 stakingShare totalSupply:%s balanceOf(fourthAccount,%s):%s",
-            stakingShare.totalSupply(),
-            fourthID,
-            stakingShare.balanceOf(fourthAccount, fourthID)
-        );
-        console.log(
-            "****.01 stakingShare address:%s from manager:%s",
-            address(stakingShare),
-            IManager.stakingShareAddress()
-        );
-        console.log(
-            "****.01 ACTUAL shares:%s",
-            IUbiquityChefFacet.totalShares()
-        );
+
         vm.stopPrank();
     }
 }
 
-contract DepositStateTest is DepositState {
+contract DepositStateTest is DepositStateStaking {
     function testTotalShares() public {
         assertEq(IUbiquityChefFacet.totalShares(), shares);
     }
 
     function testRemoveLiquidity(uint256 amount, uint256 blocks) public {
-        console.log("****1 shares:%s", shares);
         assertEq(IUbiquityChefFacet.totalShares(), shares);
 
         // advance the block number to  staking time so the withdraw is possible
         uint256 currentBlock = block.number;
         blocks = bound(blocks, 45361, 2**128 - 1);
-        //  vm.roll(currentBlock + blocks);
-        console.log("****2 shares:%s", shares);
         assertEq(IUbiquityChefFacet.totalShares(), shares);
 
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
-        // currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
         uint256 governancePerBlock = 10e18;
         uint256 reward = ((multiplier * governancePerBlock) / 1e18);
         uint256 governancePerShare = (reward * 1e12) / shares;
-        console.log(
-            "****3 shares:%s governancePerShare:%s multiplier:%s",
-            shares,
-            governancePerShare,
-            multiplier
-        );
         assertEq(IUbiquityChefFacet.totalShares(), shares);
         // we have to bound the amount of LP token to withdraw to max what account four has deposited
         amount = bound(amount, 1, fourthBal);
-        console.log("****4 shares:%s", shares);
         assertEq(IUbiquityChefFacet.totalShares(), shares);
 
         // calculate the reward in governance token for the user based on all his shares
         uint256 userReward = (shares * governancePerShare) / 1e12;
-        console.log(
-            "Governance Reward to User is:%s  for shares:%s",
-            userReward,
-            shares
-        );
-        // vm.expectEmit(true, true, true, true, address(IUbiquityChefFacet));
-        // emit Withdraw(fourthAccount, amount, fourthID);
+
         vm.prank(fourthAccount);
-        console.log(
-            "removeLiquidity fourthAccount:%s fourthID:%s amount:%s",
-            fourthAccount,
-            fourthID,
-            amount
-        );
         IStakingFacet.removeLiquidity(amount, fourthID);
-        console.log(
-            "Governance bal:%s , preBal:%s userReward:%s",
-            governanceToken.balanceOf(fourthAccount),
-            preBal,
-            userReward
-        );
+
         assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
     }
 
