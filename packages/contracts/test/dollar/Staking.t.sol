@@ -72,10 +72,8 @@ contract RemoteZeroStateTest is ZeroState {
     using stdStorage for StdStorage;
 
     function testAddUserToMigrate(uint256 x, uint256 y) public {
-        x = bound(x, 1, 2 ** 128 - 1);
+        x = bound(x, 1, 2**128 - 1);
         y = bound(y, 1, 208);
-        console.logUint(x);
-        console.logUint(y);
 
         vm.prank(admin);
         vm.record();
@@ -328,7 +326,7 @@ contract RemoteZeroStateTest is ZeroState {
             (block.number + lockup * staking.blockCountInAWeek())
         );
         vm.startPrank(stakingMinAccount);
-        metapool.approve(address(staking), 2 ** 256 - 1);
+        metapool.approve(address(staking), 2**256 - 1);
         staking.deposit(lpAmount, lockup);
         assertEq(metapool.balanceOf(stakingMinAccount), preBalance - lpAmount);
     }
@@ -340,13 +338,13 @@ contract RemoteZeroStateTest is ZeroState {
         maxAmount = bound(maxAmount, minAmount, maxLP);*/
 
         vm.startPrank(stakingMaxAccount);
-        metapool.approve(address(staking), 2 ** 256 - 1);
+        metapool.approve(address(staking), 2**256 - 1);
         staking.deposit(maxLP, 208);
         //uint256 bsMaxAmount = bondingShareV2.balanceOf(stakingMaxAccount, 1);
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
-        metapool.approve(address(staking), 2 ** 256 - 1);
+        metapool.approve(address(staking), 2**256 - 1);
         staking.deposit(minLP, 1);
         //uint256 bsMinAmount = bondingShareV2.balanceOf(stakingMinAccount, 2);
         vm.stopPrank();
@@ -358,7 +356,7 @@ contract RemoteZeroStateTest is ZeroState {
     }
 
     function testCannotStakeMoreThan4Years(uint256 _weeks) public {
-        _weeks = bound(_weeks, 209, 2 ** 256 - 1);
+        _weeks = bound(_weeks, 209, 2**256 - 1);
         vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
         staking.deposit(1, _weeks);
@@ -388,7 +386,7 @@ contract DepositState is ZeroState {
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
-            metapool.approve(address(staking), 2 ** 256 - 1);
+            metapool.approve(address(staking), 2**256 - 1);
             staking.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
         }
@@ -462,7 +460,7 @@ contract RemoteDepositStateTest is DepositState {
 
     function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {
         weeksLockup = bound(weeksLockup, 1, 208);
-        amount = bound(amount, 1e18, 2 ** 128 - 1);
+        amount = bound(amount, 1e18, 2**128 - 1);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
         uint256[2] memory preShares = ubiquityChef.getStakingShareInfo(1);
         deal(address(metapool), stakingMinAccount, uint256(amount));
@@ -518,7 +516,7 @@ contract RemoteDepositStateTest is DepositState {
     function testCannotRemoveMoreLiquidityThanBalance(uint256 amount) public {
         vm.roll(20000000);
         StakingShare.Stake memory stake = stakingShare.getStake(2);
-        amount = bound(amount, stake.lpAmount + 1, 2 ** 256 - 1);
+        amount = bound(amount, stake.lpAmount + 1, 2**256 - 1);
         vm.expectRevert("Staking: amount too big");
         vm.prank(fourthAccount);
         staking.removeLiquidity(amount, 2);

@@ -320,6 +320,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfStakingFacet.push(
             stakingFacet.setBlockCountInAWeek.selector
         );
+        selectorsOfStakingFacet.push(stakingFacet.blockCountInAWeek.selector);
         selectorsOfStakingFacet.push(stakingFacet.deposit.selector);
         selectorsOfStakingFacet.push(stakingFacet.addLiquidity.selector);
         selectorsOfStakingFacet.push(stakingFacet.removeLiquidity.selector);
@@ -478,7 +479,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         // deploy diamond
         vm.startPrank(owner);
-        console.log("!!!!!diamond owner:%s", _args.owner);
         diamond = new Diamond(_args, cuts);
         vm.stopPrank();
 

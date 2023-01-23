@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
-import "forge-std/console.sol";
 
 /// @title ERC20 Ubiquity preset
 /// @author Ubiquity DAO
@@ -75,7 +74,6 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
             manager.hasRole(manager.DEFAULT_ADMIN_ROLE(), msg.sender),
             "ERC20: deployer must be manager admin"
         );
-        console.log("ERC20Ubiquity 3");
         uint256 chainId;
         // solhint-disable-next-line no-inline-assembly
         assembly {

@@ -8,7 +8,6 @@ import "../../dollar/StakingShare.sol";
 import "./LibUbiquityChef.sol";
 import "./LibStakingFormulas.sol";
 import "./LibUbiquityDollar.sol";
-import "forge-std/console.sol";
 
 library LibStaking {
     using SafeERC20 for IERC20;
@@ -126,6 +125,10 @@ library LibStaking {
         return stakingStorage().stakingDiscountMultiplier;
     }
 
+    function blockCountInAWeek() internal view returns (uint256) {
+        return stakingStorage().blockCountInAWeek;
+    }
+
     function setBlockCountInAWeek(uint256 _blockCountInAWeek) internal {
         stakingStorage().blockCountInAWeek = _blockCountInAWeek;
         emit BlockCountInAWeekUpdated(_blockCountInAWeek);
@@ -160,21 +163,9 @@ library LibStaking {
             _weeks,
             ss.stakingDiscountMultiplier
         );
-        console.log(
-            "-- deposit durationMultiply lpAmount:%s _weeks:%s _sharesAmount:%s",
-            _lpsAmount,
-            _weeks,
-            _sharesAmount
-        );
         // calculate end locking period block number
         uint256 _endBlock = block.number + _weeks * ss.blockCountInAWeek;
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
-        console.log(
-            "_sharesAmount:%s ***stakingDiscountMultiplier:%s _id:%s ",
-            _sharesAmount,
-            ss.stakingDiscountMultiplier,
-            _id
-        );
         // set masterchef for Governance rewards
         LibUbiquityChef.deposit(msg.sender, _sharesAmount, _id);
 
@@ -464,12 +455,6 @@ library LibStaking {
         returns (uint256[2] memory bs, StakingShare.Stake memory stake)
     {
         address stakingAddress = LibAppStorage.appStorage().stakingShareAddress;
-        console.log(
-            "_checkForLiquidity: id:%s msg.sender:%s stakingaddr:%s",
-            _id,
-            msg.sender,
-            stakingAddress
-        );
         require(
             IERC1155Ubiquity(stakingAddress).balanceOf(msg.sender, _id) == 1,
             "Staking: caller is not owner"

@@ -14,7 +14,6 @@ import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDo
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "forge-std/Test.sol";
-import "forge-std/console.sol";
 
 contract MockCreditNftRedemptionCalculator {
     constructor() {}

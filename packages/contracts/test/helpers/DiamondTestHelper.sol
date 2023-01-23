@@ -3,7 +3,6 @@ pragma solidity ^0.8.3;
 
 import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
-import "forge-std/console.sol";
 import "../../src/diamond/interfaces/IDiamondCut.sol";
 import "../../src/diamond/interfaces/IDiamondLoupe.sol";
 

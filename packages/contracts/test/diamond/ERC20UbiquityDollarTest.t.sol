@@ -3,7 +3,6 @@ pragma solidity ^0.8.3;
 
 import "./DiamondTestSetup.sol";
 import "../../src/diamond/libraries/Constants.sol";
-import "forge-std/console.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
     address token_addr;
@@ -20,11 +19,6 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         super.setUp();
         token_addr = address(diamond);
         dollar_manager_addr = address(diamond);
-        console.log(
-            "dollar_manager_addr:%s diamond:%s",
-            dollar_manager_addr,
-            address(diamond)
-        );
     }
 
     function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
