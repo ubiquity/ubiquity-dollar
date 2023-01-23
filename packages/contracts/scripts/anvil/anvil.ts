@@ -1,28 +1,17 @@
 import axios from "axios";
 import { spawn } from "child_process";
-import { RPC_LIST, RPC_DELAY, REQ_BODY, RESP_STATUS } from "./conf";
-
-const getRandom = async (array: string[]) => {
-  const length = array == null ? 0 : array.length;
-  return length ? array[Math.floor(Math.random() * length)] : undefined;
-};
+import { loadEnv } from "../../shared";
+import fs from "fs";
+import path from "path";
 
 const getUrl = async () => {
-  let isRPC = false;
-
-  while (!isRPC) {
-    try {
-      const rpcUrl = await getRandom(RPC_LIST);
-      const resp = await axios.post(rpcUrl as string, REQ_BODY);
-
-      if (resp.status === RESP_STATUS) {
-        isRPC = true;
-        return rpcUrl;
-      }
-    } catch (error) {
-      await setTimeout(() => ({}), RPC_DELAY);
-    }
+  const envPath = path.join(__dirname, "../../../.env");
+  if (!fs.existsSync(envPath)) {
+    throw new Error("Env file not found");
   }
+  const env = loadEnv(envPath);
+
+  return env.rpcUrl;
 };
 
 (async () => {
