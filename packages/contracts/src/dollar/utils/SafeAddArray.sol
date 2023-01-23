@@ -8,7 +8,7 @@ pragma solidity 0.8.16;
  */
 library SafeAddArray {
     function add(uint256[] storage array, uint256 value) internal {
-        for (uint256 i = 0; i < array.length; i++) {
+        for (uint256 i; i < array.length; i++) {
             if (array[i] == value) {
                 return;
             }
