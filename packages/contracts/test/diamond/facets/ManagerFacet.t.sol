@@ -10,7 +10,7 @@ import "../../../src/diamond/libraries/LibAccessControl.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions() public {
-        IManager.getExcessDollarsDistributor(contract1);
+        IManager.excessDollarsDistributor(contract1);
     }
 
     function testShouldSetTwapOracleAddress() public prankAs(admin) {
