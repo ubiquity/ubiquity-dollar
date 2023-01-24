@@ -69,10 +69,10 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
     manager.curve3PoolTokenAddress(),
     manager.stakingShareAddress(),
     manager.creditNftAddress(),
-    manager.stakingAddress(),
+    manager.stakingShareAddress(),
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
-    manager.ubiquityFormulasAddress(),
+    manager.formulasAddress(),
     manager.creditNftCalculatorAddress(),
     manager.creditCalculatorAddress(),
   ]);

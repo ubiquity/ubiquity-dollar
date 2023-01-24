@@ -5524,7 +5524,7 @@
           },
           {
             "inputs": [],
-            "name": "autoRedeemTokenAddress",
+            "name": "UbiquityCreditTokenAddress",
             "outputs": [
               {
                 "internalType": "address",
@@ -5635,7 +5635,7 @@
           },
           {
             "inputs": [],
-            "name": "dollarMintingCalculatorAddress",
+            "name": "dollarMintCalculatorAddress",
             "outputs": [
               {
                 "internalType": "address",
@@ -5870,7 +5870,7 @@
             "inputs": [
               {
                 "internalType": "address",
-                "name": "_dollarMintingCalculatorAddress",
+                "name": "_dollarMintCalculatorAddress",
                 "type": "address"
               }
             ],
