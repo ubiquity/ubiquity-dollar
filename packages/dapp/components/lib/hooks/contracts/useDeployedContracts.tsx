@@ -1,4 +1,4 @@
-import { getDebtCouponManagerContract, getUbiquityAlgorithmicDollarManagerContract } from "@/components/utils/contracts";
+import { getCreditNftManagerContract, getUbiquityDollarManagerContract } from "@/components/utils/contracts";
 import { useMemo } from "react";
 import useDeployedAddress from "../useDeployedAddress";
 import useWeb3Provider from "../useWeb3Provider";
@@ -11,8 +11,8 @@ const useDeployedContracts = () => {
     () =>
       addr1 && addr2 && provider
         ? {
-            manager: getUbiquityAlgorithmicDollarManagerContract(addr1, provider),
-            debtCouponManager: getDebtCouponManagerContract(addr2, provider),
+            manager: getUbiquityDollarManagerContract(addr1, provider),
+            debtCouponManager: getCreditNftManagerContract(addr2, provider),
           }
         : null,
     [addr1, addr2, provider]

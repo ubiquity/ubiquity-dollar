@@ -13,7 +13,7 @@ import PositiveNumberInput from "../ui/PositiveNumberInput";
 import useRouter from "../lib/hooks/useRouter";
 import useTrade from "../lib/hooks/useTrade";
 import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
-import { getUniswapV3RouterContract } from "../utils/contracts";
+import { getUniswapV3RouterABIContract } from "../utils/contracts";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
 
 const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
@@ -43,7 +43,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
     refreshBalances();
     if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
-      const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
+      const routerContract = getUniswapV3RouterABIContract(V3_ROUTER_ADDRESS, provider);
       await (await routerContract.connect(signer).approveMax(quoteAmount, managedContracts.dollarToken)).wait();
       await useTrade(selectedRedeemToken, quoteAmount);
       refreshBalances();

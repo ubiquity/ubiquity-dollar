@@ -4,7 +4,7 @@ import { allPools } from "../pools";
 import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
 import {
-  getChainlinkPriceFeedContract,
+  getChainlinkPriceFeedABIContract,
   getERC20Contract,
   getSimpleBondContract,
   getUbiquiStickContract,
@@ -43,7 +43,7 @@ const useLaunchPartyContracts = (): [Contracts | null, Contract[], { isSaleContr
         ubiquiStickSale: getUbiquiStickSaleContract(UbiquiStickSaleAddress, provider),
         simpleBond,
         rewardToken: getERC20Contract(rewardToken, provider),
-        chainLink: getChainlinkPriceFeedContract(ChainLinkEthUsdAddress, provider),
+        chainLink: getChainlinkPriceFeedABIContract(ChainLinkEthUsdAddress, provider),
       };
 
       setContracts(contracts);

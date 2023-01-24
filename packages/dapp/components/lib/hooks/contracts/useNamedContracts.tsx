@@ -2,7 +2,7 @@ import useWeb3, { PossibleProviders } from "../useWeb3";
 
 import Deployed_Contracts from "@ubiquity/contracts/deployments.json";
 import NAMED_ACCOUNTS from "../../../config/named-accounts.json";
-import { getCurveFactoryContract, getDebtCouponManagerContract, getERC20Contract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts";
+import { getCurveFactoryContract, getCreditNftManagerContract, getERC20Contract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts";
 
 const getDebtCouponManagerAddress = () => {
   const contractDeployments: Record<string, any> = Deployed_Contracts;
@@ -20,7 +20,7 @@ export function connectedContracts(provider: NonNullable<PossibleProviders>) {
     usdc: getERC20Contract(NAMED_ACCOUNTS.USDC, provider),
     dai: getERC20Contract(NAMED_ACCOUNTS.DAI, provider),
     usdt: getERC20Contract(NAMED_ACCOUNTS.USDT, provider),
-    debtCouponManager: getDebtCouponManagerContract(DEBT_COUPON_MANAGER_ADDRESS, provider),
+    debtCouponManager: getCreditNftManagerContract(DEBT_COUPON_MANAGER_ADDRESS, provider),
     jarUsdc: getIJarContract(NAMED_ACCOUNTS.jarUSDCAddr, provider),
   };
 }
