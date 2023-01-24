@@ -8,32 +8,28 @@ contract StakingScript is FormulaScript {
 		super.run();
 		vm.startBroadcast(deployerPrivateKey);
 
-		for(uint i = 0; i < users_.length; ++i){
-            address original = users_[i];
-            uint256 lpAmount = amounts_[i];
-            uint256 term = lockups_[i];
-            originals.push(original);
-            lpAmounts.push(lpAmount);
-            terms.push(term);
+		for(uint256 i = 0; i < users.length; ++i){
+            uint256 lpAmount = lpAmounts[i];
+            uint256 term = terms[i];
             shareAmounts.push(
                 uFormulas.durationMultiply(lpAmount, term, 1e15)
 			);
             ids.push(i+1);
         }
-        address[] memory originals_ = originals;
+        address[] memory users_ = users;
         uint256[] memory lpAmounts_ = lpAmounts;
         uint256[] memory terms_ = terms;
         uint256[] memory shareAmounts_ = shareAmounts;
         uint256[] memory ids_ = ids;
 
-		Staking staking = new Staking(manager, sFormulas, originals_, lpAmounts_, terms_);
+		Staking staking = new Staking(manager, sFormulas, users_, lpAmounts_, terms_);
         manager.setStakingContractAddress(address(staking));
 
         StakingShare share = new StakingShare(manager, uri);
         manager.setStakingShareAddress(address(share));
 
         
-        UbiquityChef uChef = new UbiquityChef(manager, originals_, shareAmounts_, ids_);
+        UbiquityChef uChef = new UbiquityChef(manager, users_, shareAmounts_, ids_);
         manager.setMasterChefAddress(address(uChef));
 
 		manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(uChef));

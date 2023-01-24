@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawnSync } from "child_process";
 import { loadEnv } from "../../shared";
 import fs from "fs";
 import path from "path";
@@ -9,43 +9,65 @@ if (!fs.existsSync(envPath)) {
 }
 const env = loadEnv(envPath);
 
-const whaleAccount = env.curveWhale;
-const adminAddress = env.adminAddress;
+const curveWhale = env.curveWhale as string;
+const adminAddress = env.adminAddress as string;
+const _3CRV = env._3CRV as string;
 
 const impersonateAccount = async () => {
-  spawn("cast", ["rpc", "anvil_impersonateAccount", whaleAccount, "-r", "http://localhost:8545"], {
+  console.log("----------------------------------------------------------------");
+  console.log("Impersonating 'CURVE_WHALE' account");
+  console.log("----------------------------------------------------------------");
+  spawnSync("cast", ["rpc", "anvil_impersonateAccount", curveWhale, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
-  console.log("Impersonating 'CURVE_WHALE' account");
 };
 
 const sendTokens = async () => {
-  spawn(
+  console.log("----------------------------------------------------------------");
+  console.log("Sendingimport axios from "axios";
+  10,000 3CRV LP tokens to 'ADMIN_ADDRESS'");
+  console.log("----------------------------------------------------------------");
+  spawnSync(
     "cast",
     [
       "send",
+      _3CRV,
+      "transfer(address, uint256)",
       adminAddress,
-      "0xa9059cbb000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb9226600000000000000000000000000000000000000000000021e19e0c9bab2400000",
+      "10000000000000000000000", //10,000e18
       "--from",
-      whaleAccount,
+      curveWhale,
     ],
     {
       stdio: "inherit",
     }
   );
-  console.log("Sent 10000 3CRV LP tokens to 'ADMIN_ADDRESS'");
 };
 
 const stopImpersonatingAccount = async () => {
-  spawn("cast", ["rpc", "anvil_stopImpersonatingAccount", whaleAccount, "-r", "http://localhost:8545"], {
-    stdio: "inherit",
-  });
+  console.log("----------------------------------------------------------------");
   console.log("Ending account impersonation");
+  console.log("----------------------------------------------------------------");
+  spawnSync(
+    "cast", 
+    [
+      "rpc", 
+      "anvil_stopImpersonatingAccount", 
+      curveWhale, 
+      "-r", 
+      "http://localhost:8545"
+    ], 
+    {
+    stdio: "inherit",
+    }
+  );
 };
 
 const forgeScript = async () => {
+  console.log("----------------------------------------------------------------");
   console.log("Running Solidity script");
-  spawn(
+  console.log("----------------------------------------------------------------");
+  spawnSync(
     "forge",
     ["script", "scripts/deploy/dollar/solidityScripting/08_DevelopmentDeploy.s.sol:DevelopmentDeploy", "--fork-url", "http://localhost:8545", "--broadcast"],
     {

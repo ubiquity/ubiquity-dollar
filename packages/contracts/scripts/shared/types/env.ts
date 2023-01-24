@@ -4,4 +4,5 @@ export type Env = {
   adminAddress: string;
   etherscanApiKey?: string;
   curveWhale: string;
+  _3CRV: string;
 };

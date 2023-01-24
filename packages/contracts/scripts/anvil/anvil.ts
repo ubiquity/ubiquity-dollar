@@ -1,11 +1,10 @@
-import axios from "axios";
 import { spawn } from "child_process";
-import { loadEnv } from "../../shared";
+import { loadEnv } from "../shared";
 import fs from "fs";
 import path from "path";
 
 const getUrl = async () => {
-  const envPath = path.join(__dirname, "../../../.env");
+  const envPath = path.join(__dirname, "/../../.env");
   if (!fs.existsSync(envPath)) {
     throw new Error("Env file not found");
   }

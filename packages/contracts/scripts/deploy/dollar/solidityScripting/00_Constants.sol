@@ -28,22 +28,19 @@ import "forge-std/Script.sol";
 
 contract Constants is Script {
 
-  address[] originals;
-  uint256[] lpAmounts;
-  uint256[] terms;
+  
   uint256[] shareAmounts;
   uint256[] ids;
 
   string uri;
-  address admin = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
-  address curveWhale = 0x4486083589A063ddEF47EE2E4467B5236C508fDe;
+  address admin = vm.envAddress("ADMIN_ADDRESS");
   address USDCrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
   address basepool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
   address curveFactory = 0xB9fC157394Af804a3578134A6585C0dc9cc990d4;
 
   uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 
-  address[36] public users_ = [
+  address[] public users = [
     0x89eae71B865A2A39cBa62060aB1b40bbFFaE5b0D,
     0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd,
     0xa53A6fE2d8Ad977aD926C485343Ba39f32D3A3F6,
@@ -82,7 +79,7 @@ contract Constants is Script {
     0xbD37A957773D883186B989f6b21c209459022252
   ];
 
-  uint256[36] public amounts_ = [
+  uint256[] public lpAmounts = [
     1301000000000000000,
     3500000000000000000000,
     9351040526163838324896,
@@ -121,7 +118,7 @@ contract Constants is Script {
     26000000000000000000
   ];
 
-  uint256[36] public lockups_ = [
+  uint256[] public terms = [
     176,
     30,
     208,

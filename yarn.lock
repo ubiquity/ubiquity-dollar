@@ -2617,6 +2617,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@solidity-parser/parser@npm:^0.14.5":
+  version: 0.14.5
+  resolution: "@solidity-parser/parser@npm:0.14.5"
+  dependencies:
+    antlr4ts: ^0.5.0-alpha.4
+  checksum: 9e85a0d4f8a05a11db6022444b70b2f353e2358467b1cce44cdda703ae1e3c7337e1b8cbc2eec8e14a8f34f9c60b42f325e5fe9b3c934cc980e35091e292d7ee
+  languageName: node
+  linkType: hard
+
 "@styled-system/background@npm:^5.1.2":
   version: 5.1.2
   resolution: "@styled-system/background@npm:5.1.2"
@@ -3264,6 +3273,7 @@ __metadata:
     husky: ^8.0.2
     lint-staged: ^13.0.3
     nodemon: ^2.0.19
+    prettier-plugin-solidity: ^1.1.1
     rimraf: 3.0.2
   languageName: unknown
   linkType: soft
@@ -4256,6 +4266,15 @@ __metadata:
   version: 6.1.1
   resolution: "ansi-styles@npm:6.1.1"
   checksum: f2b1ed658ead23caf77effe7b875960cacd70d1ebe47c830e191358b242d688cf52a28d55ef9b19d102f792e8c1dec34bd865db264f1c7f4f63dd3a5fa84677e
+  languageName: node
+  linkType: hard
+
+"antlr4ts@npm:^0.5.0-alpha.4":
+  version: 0.5.0-dev
+  resolution: "antlr4ts@npm:0.5.0-dev"
+  dependencies:
+    source-map-support: ^0.5.16
+  checksum: 640dae2229124372b0329315e9614ae983bb80b1af237d8c0b3e90a2d85fb534e851c51d65d1897c92b36d27851d041ad8d95aab44af19cf7355b3ad11a3ddbf
   languageName: node
   linkType: hard
 
@@ -10410,6 +10429,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prettier-plugin-solidity@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "prettier-plugin-solidity@npm:1.1.1"
+  dependencies:
+    "@solidity-parser/parser": ^0.14.5
+    semver: ^7.3.8
+    solidity-comments-extractor: ^0.0.7
+  peerDependencies:
+    prettier: ">=2.3.0 || >=3.0.0-alpha.0"
+  checksum: a7c7305f128927ec62477a46a49caa0c5c73846bca91d2b2513caefc66f27946d886cd01c084b6933d3da89c517854786293d1cc0814c3622a38665fe12dbee5
+  languageName: node
+  linkType: hard
+
 "prettier@npm:2.7.1, prettier@npm:^2.3.1":
   version: 2.7.1
   resolution: "prettier@npm:2.7.1"
@@ -11487,6 +11519,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"solidity-comments-extractor@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "solidity-comments-extractor@npm:0.0.7"
+  checksum: a5cedf2310709969bc1783a6c336171478536f2f0ea96ad88437e0ef1e8844c0b37dd75591b0a824ec9c30640ea7e31b5f03128e871e6235bef3426617ce96c4
+  languageName: node
+  linkType: hard
+
 "source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
@@ -11494,7 +11533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-support@npm:^0.5.13, source-map-support@npm:^0.5.21":
+"source-map-support@npm:^0.5.13, source-map-support@npm:^0.5.16, source-map-support@npm:^0.5.21":
   version: 0.5.21
   resolution: "source-map-support@npm:0.5.21"
   dependencies:
