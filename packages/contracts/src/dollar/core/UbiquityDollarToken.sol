@@ -9,7 +9,8 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     mapping(address => address) public incentiveContract;
 
     event IncentiveContractUpdate(
-        address indexed _incentivized, address indexed _incentiveContract
+        address indexed _incentivized,
+        address indexed _incentiveContract
     );
 
     constructor(UbiquityDollarManager _manager)
@@ -19,9 +20,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     /// @param account the account to incentivize
     /// @param incentive the associated incentive contract
     /// @notice only Ubiquity Dollar manager can set Incentive contract
-    function setIncentiveContract(address account, address incentive)
-        external
-    {
+    function setIncentiveContract(address account, address incentive) external {
         require(
             ERC20Ubiquity.manager.hasRole(
                 ERC20Ubiquity.manager.GOVERNANCE_TOKEN_MANAGER_ROLE(),
@@ -43,7 +42,10 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         address senderIncentive = incentiveContract[sender];
         if (senderIncentive != address(0)) {
             IIncentive(senderIncentive).incentivize(
-                sender, recipient, msg.sender, amount
+                sender,
+                recipient,
+                msg.sender,
+                amount
             );
         }
 
@@ -51,18 +53,25 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         address recipientIncentive = incentiveContract[recipient];
         if (recipientIncentive != address(0)) {
             IIncentive(recipientIncentive).incentivize(
-                sender, recipient, msg.sender, amount
+                sender,
+                recipient,
+                msg.sender,
+                amount
             );
         }
 
         // incentive on operator
         address operatorIncentive = incentiveContract[msg.sender];
         if (
-            msg.sender != sender && msg.sender != recipient
-                && operatorIncentive != address(0)
+            msg.sender != sender &&
+            msg.sender != recipient &&
+            operatorIncentive != address(0)
         ) {
             IIncentive(operatorIncentive).incentivize(
-                sender, recipient, msg.sender, amount
+                sender,
+                recipient,
+                msg.sender,
+                amount
             );
         }
 
@@ -70,15 +79,19 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         address allIncentive = incentiveContract[address(0)];
         if (allIncentive != address(0)) {
             IIncentive(allIncentive).incentivize(
-                sender, recipient, msg.sender, amount
+                sender,
+                recipient,
+                msg.sender,
+                amount
             );
         }
     }
 
-    function _transfer(address sender, address recipient, uint256 amount)
-        internal
-        override
-    {
+    function _transfer(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) internal override {
         super._transfer(sender, recipient, amount);
         _checkAndApplyIncentives(sender, recipient, amount);
     }

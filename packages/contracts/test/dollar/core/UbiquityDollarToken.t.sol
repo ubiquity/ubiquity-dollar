@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarToken} from
-    "../../../src/dollar/core/UbiquityDollarToken.sol";
+import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
 import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
@@ -17,7 +16,8 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
     address mock_operator = address(0x333);
 
     event IncentiveContractUpdate(
-        address indexed _incentivized, address indexed _incentiveContract
+        address indexed _incentivized,
+        address indexed _incentiveContract
     );
 
     function setUp() public override {
@@ -35,14 +35,16 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.prank(mock_sender);
         vm.expectRevert("Dollar: must have admin role");
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_sender, incentive_addr
+            mock_sender,
+            incentive_addr
         );
 
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit IncentiveContractUpdate(mock_sender, incentive_addr);
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_sender, incentive_addr
+            mock_sender,
+            incentive_addr
         );
     }
 
@@ -55,19 +57,24 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         UbiquityDollarToken(dollar_addr).mint(mock_sender, 100);
 
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_sender, incentive_addr
+            mock_sender,
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_recipient, incentive_addr
+            mock_recipient,
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_operator, incentive_addr
+            mock_operator,
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            address(0), incentive_addr
+            address(0),
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            dollar_addr, incentive_addr
+            dollar_addr,
+            incentive_addr
         );
         vm.stopPrank();
 

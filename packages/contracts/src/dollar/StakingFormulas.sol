@@ -72,9 +72,12 @@ contract StakingFormulas {
         if (_stakingLpBalance < _totalLpDeposited && _stakingLpBalance > 0) {
             // if there is less LP token inside the staking contract that what have been deposited
             // we have to reduce proportionally the lp amount to withdraw
-            return _amount.fromUInt().mul(_stakingLpBalance.fromUInt()).div(
-                _totalLpDeposited.fromUInt()
-            ).toUInt();
+            return
+                _amount
+                    .fromUInt()
+                    .mul(_stakingLpBalance.fromUInt())
+                    .div(_totalLpDeposited.fromUInt())
+                    .toUInt();
         }
         return _amount;
     }

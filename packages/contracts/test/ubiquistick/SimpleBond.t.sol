@@ -105,11 +105,11 @@ contract StickerStateTest is StickerState {
             ((50 * amount) / 1e9),
             block.number,
             0
-            );
+        );
         bond.bond(address(bondToken), amount);
         vm.stopPrank();
         assertEq(bond.bondsCount(firstAccount), 1);
-        (, uint256 amount_,,,) = bond.bonds(firstAccount, 0);
+        (, uint256 amount_, , , ) = bond.bonds(firstAccount, 0);
         assertEq(amount, amount_);
     }
 
@@ -153,9 +153,9 @@ contract BondedStateTest is BondedState {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
         uint256 preBal = rewardToken.balanceOf(firstAccount);
         vm.warp(block.number + blocks);
-        (, uint256 amount0,,, uint256 block0) = bond.bonds(firstAccount, 0);
-        (, uint256 amount1,,, uint256 block1) = bond.bonds(firstAccount, 1);
-        (, uint256 amount2,,, uint256 block2) = bond.bonds(firstAccount, 2);
+        (, uint256 amount0, , , uint256 block0) = bond.bonds(firstAccount, 0);
+        (, uint256 amount1, , , uint256 block1) = bond.bonds(firstAccount, 1);
+        (, uint256 amount2, , , uint256 block2) = bond.bonds(firstAccount, 2);
 
         uint256 expected;
 
@@ -174,9 +174,9 @@ contract BondedStateTest is BondedState {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
         uint256 preBal = rewardToken.balanceOf(secondAccount);
         vm.warp(block.number + blocks);
-        (, uint256 amount0,,, uint256 block0) = bond.bonds(secondAccount, 0);
-        uint256 expected =
-            (((amount0 * 50) / 1e9) * (block.number - block0)) / 100;
+        (, uint256 amount0, , , uint256 block0) = bond.bonds(secondAccount, 0);
+        uint256 expected = (((amount0 * 50) / 1e9) * (block.number - block0)) /
+            100;
         vm.expectEmit(true, true, true, true, address(bond));
         emit LogClaim(secondAccount, 0, expected);
         vm.prank(secondAccount);
@@ -200,8 +200,10 @@ contract BondedStateTest is BondedState {
         vm.warp(block.number + blocks);
 
         for (uint256 i; i < amounts.length; ++i) {
-            (, uint256 amount, uint256 reward,, uint256 block_) =
-                bond.bonds(secondAccount, i);
+            (, uint256 amount, uint256 reward, , uint256 block_) = bond.bonds(
+                secondAccount,
+                i
+            );
             amounts[i] = amount;
             rewards[i] = reward;
             blocks_[i] = block_;
@@ -217,11 +219,15 @@ contract BondedStateTest is BondedState {
 
         for (uint256 i; i < amounts.length; ++i) {
             claimableExpected +=
-                (((amounts[i] * 50) / 1e9) * (block.number - blocks_[i])) / 100;
+                (((amounts[i] * 50) / 1e9) * (block.number - blocks_[i])) /
+                100;
         }
 
-        (uint256 rewards_, uint256 rewardsClaimed, uint256 rewardsClaimable) =
-            bond.rewardsOf(secondAccount);
+        (
+            uint256 rewards_,
+            uint256 rewardsClaimed,
+            uint256 rewardsClaimable
+        ) = bond.rewardsOf(secondAccount);
         assertEq(rewardsExpected, rewards_);
         assertEq(0, rewardsClaimed);
         assertEq(claimableExpected, rewardsClaimable);
@@ -232,13 +238,13 @@ contract BondedStateTest is BondedState {
         i = bound(i, 0, 4);
         vm.warp(block.number + blocks);
 
-        (, uint256 amount, uint256 rewardExpected,, uint256 block_) =
-            bond.bonds(secondAccount, i);
+        (, uint256 amount, uint256 rewardExpected, , uint256 block_) = bond
+            .bonds(secondAccount, i);
 
-        uint256 claimableExpected =
-            (((amount * 50) / 1e9) * (block.number - block_)) / 100;
-        (uint256 reward, uint256 rewardClaimed, uint256 rewardClaimable) =
-            bond.rewardsBondOf(secondAccount, i);
+        uint256 claimableExpected = (((amount * 50) / 1e9) *
+            (block.number - block_)) / 100;
+        (uint256 reward, uint256 rewardClaimed, uint256 rewardClaimable) = bond
+            .rewardsBondOf(secondAccount, i);
         assertEq(rewardExpected, reward);
         assertEq(rewardClaimed, 0);
         assertEq(rewardClaimable, claimableExpected);

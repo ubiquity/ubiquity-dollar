@@ -2,30 +2,29 @@
 pragma solidity 0.8.16;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import {ERC4626} from
-    "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
+import {ERC4626} from "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 
 contract MockERC4626 is ERC4626 {
     uint256 public beforeWithdrawHookCalledCounter = 0;
     uint256 public afterDepositHookCalledCounter = 0;
 
-    constructor(ERC20 _underlying, string memory _name, string memory _symbol)
-        ERC4626(_underlying)
-        ERC20(_name, _symbol)
-    {}
+    constructor(
+        ERC20 _underlying,
+        string memory _name,
+        string memory _symbol
+    ) ERC4626(_underlying) ERC20(_name, _symbol) {}
 
     /*//////////////////////////////////////////////////////////////
                         DEPOSIT/WITHDRAWAL LOGIC
     //////////////////////////////////////////////////////////////*/
 
-    function deposit(uint256 assets, address receiver)
-        public
-        virtual
-        override
-        returns (uint256 shares)
-    {
+    function deposit(
+        uint256 assets,
+        address receiver
+    ) public virtual override returns (uint256 shares) {
         require(
-            assets <= maxDeposit(receiver), "ERC4626: deposit more than max"
+            assets <= maxDeposit(receiver),
+            "ERC4626: deposit more than max"
         );
 
         // Check for rounding error since we round down in previewDeposit.
@@ -35,12 +34,10 @@ contract MockERC4626 is ERC4626 {
         return shares;
     }
 
-    function mint(uint256 shares, address receiver)
-        public
-        virtual
-        override
-        returns (uint256 assets)
-    {
+    function mint(
+        uint256 shares,
+        address receiver
+    ) public virtual override returns (uint256 assets) {
         require(shares <= maxMint(receiver), "ERC4626: mint more than max");
 
         assets = previewMint(shares);
@@ -49,13 +46,15 @@ contract MockERC4626 is ERC4626 {
         return assets;
     }
 
-    function withdraw(uint256 assets, address receiver, address owner)
-        public
-        virtual
-        override
-        returns (uint256 shares)
-    {
-        require(assets <= maxWithdraw(owner), "ERC4626: withdraw more than max");
+    function withdraw(
+        uint256 assets,
+        address receiver,
+        address owner
+    ) public virtual override returns (uint256 shares) {
+        require(
+            assets <= maxWithdraw(owner),
+            "ERC4626: withdraw more than max"
+        );
 
         shares = previewWithdraw(assets);
         beforeWithdraw(assets, shares);
@@ -64,12 +63,11 @@ contract MockERC4626 is ERC4626 {
         return shares;
     }
 
-    function redeem(uint256 shares, address receiver, address owner)
-        public
-        virtual
-        override
-        returns (uint256 assets)
-    {
+    function redeem(
+        uint256 shares,
+        address receiver,
+        address owner
+    ) public virtual override returns (uint256 assets) {
         // Check for rounding error since we round down in previewRedeem.
         require((assets = previewRedeem(shares)) != 0, "ZERO_ASSETS");
 

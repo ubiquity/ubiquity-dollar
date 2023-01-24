@@ -36,7 +36,14 @@
     "ADMGR",
     "coef",
     "structs",
-    "tlsv"
+    "tlsv",
+    "connectkit",
+    "wagmi",
+    "rpcutil",
+    "Shouldset",
+    "Vitalik",
+    "Beeple",
+    "Rarible"
   ],
   "ignorePaths": [
     "**/*.json",
@@ -105,6 +112,7 @@
     "collateralized",
     "alloc",
     "ubiquiti",
-    "buildhome"
+    "buildhome",
+    "ubiquibot"
   ]
 }

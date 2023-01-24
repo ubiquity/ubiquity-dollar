@@ -125,7 +125,7 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
           </Tippy>
         </div>
         <div>
-          <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
+          <a target="_blank" rel="noopener noreferrer" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
             <span>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</span>
             <span>{token}</span>
           </a>

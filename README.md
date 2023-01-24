@@ -1,8 +1,10 @@
 # Ubiquity Dollar
 
-Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). Ubiquity's Algorithmic Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies.
+Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies (as well as its collateral in 2023).
 
-The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
+- The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
+
+- The source code for those can be found [here](https://github.com/ubiquity/uad-contracts).
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
@@ -12,7 +14,7 @@ The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart
 
 - We offer incentives for contributors to solve issues.
 
-- Please learn how to contribute via our bounty program [here](https://github.com/ubiquity/ubiquity-dollar/wiki/Bounty-Rules/).
+- Please learn how to contribute via our bounty program [here](https://dao.ubq.fi/devpool).
 
 ## Yarn Workspaces
 
@@ -24,6 +26,18 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 │   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts">contracts</a>: Smart contracts for Ubiquity Dollar and UbiquiStick
 │   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/dapp">dapp</a>: User interface
 </pre>
+
+## Codebase Diagram
+
+[Interactive Version](https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=ubiquity%2Fubiquity-dollar)
+
+### Smart Contracts
+
+![Visualization of the smart contracts codebase](./utils/diagram-contracts.svg)
+
+### User Interface
+
+![Visualization of the user interface codebase](./utils/diagram-ui.svg)
 
 ## Installation
 
@@ -76,11 +90,11 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 ## Committing Code
 
-1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages. This can be frustrating for junior developers, but I promise that you'll quickly get used to it!
+1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages.
 
-The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of. 
+> The Conventional Commits specification is a lightweight convention on top of commit messages. It provides an easy set of rules for creating an explicit commit history; which makes it easier to write automated tools on top of.
 
-We use [prettier](https://github.com/prettier/prettier) and [eslint](https://github.com/eslint/eslint) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
+2. We use [prettier](https://github.com/prettier/prettier), [eslint](https://github.com/eslint/eslint) and [cspell](https://github.com/streetsidesoftware/cspell) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
 
 ## MetaMask Development Wallet Setup
 

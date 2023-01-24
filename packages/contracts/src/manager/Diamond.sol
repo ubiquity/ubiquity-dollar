@@ -22,7 +22,11 @@ contract Diamond {
         IDiamondCut.FacetCut[] memory _diamondCutFacets
     ) {
         LibDiamond.setContractOwner(_args.owner);
-        LibDiamond.diamondCut(_diamondCutFacets, _args.init, _args.initCalldata);
+        LibDiamond.diamondCut(
+            _diamondCutFacets,
+            _args.init,
+            _args.initCalldata
+        );
     }
 
     // Find facet for function that is called and execute the
@@ -40,8 +44,12 @@ contract Diamond {
             let result := delegatecall(gas(), facet, 0, calldatasize(), 0, 0)
             returndatacopy(0, 0, returndatasize())
             switch result
-            case 0 { revert(0, returndatasize()) }
-            default { return(0, returndatasize()) }
+            case 0 {
+                revert(0, returndatasize())
+            }
+            default {
+                return(0, returndatasize())
+            }
         }
     }
 

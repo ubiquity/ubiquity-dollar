@@ -7,14 +7,11 @@ import "./IERC20Ubiquity.sol";
 /// @author Ubiquity DAO
 interface IUbiquityDollarToken is IERC20Ubiquity {
     event IncentiveContractUpdate(
-        address indexed _incentivized, address indexed _incentiveContract
+        address indexed _incentivized,
+        address indexed _incentiveContract
     );
 
-    function setIncentiveContract(address account, address incentive)
-        external;
+    function setIncentiveContract(address account, address incentive) external;
 
-    function incentiveContract(address account)
-        external
-        view
-        returns (address);
+    function incentiveContract(address account) external view returns (address);
 }

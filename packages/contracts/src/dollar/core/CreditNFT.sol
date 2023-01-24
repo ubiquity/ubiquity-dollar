@@ -22,11 +22,15 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
     StructuredLinkedList.List private _sortedBlockNumbers;
 
     event MintedCreditNFT(
-        address recipient, uint256 expiryBlock, uint256 amount
+        address recipient,
+        uint256 expiryBlock,
+        uint256 amount
     );
 
-    event BurnedCreditNFTs(
-        address CreditNFTHolder, uint256 expiryBlock, uint256 amount
+    event BurnedCreditNFT(
+        address creditNFTHolder,
+        uint256 expiryBlock,
+        uint256 amount
     );
 
     modifier onlyCreditNFTManager() {
@@ -59,7 +63,8 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
-            _tokenSupplies[expiryBlockNumber] + (amount);
+            _tokenSupplies[expiryBlockNumber] +
+            (amount);
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
@@ -82,7 +87,8 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
-            _tokenSupplies[expiryBlockNumber] - (amount);
+            _tokenSupplies[expiryBlockNumber] -
+            (amount);
         _totalOutstandingDebt = _totalOutstandingDebt - (amount);
     }
 
@@ -101,10 +107,10 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
                 reachedEndOfExpiredKeys = true;
             } else {
                 //update tally and remove key from blocks and map
-                outstandingDebt =
-                    outstandingDebt - (_tokenSupplies[currentBlockNumber]);
-                _tokenSupplies[currentBlockNumber] = 0;
-                uint256 node = _sortedBlockNumbers.remove(currentBlockNumber);
+                _totalOutstandingDebt =
+                    _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                delete _tokenSupplies[currentBlockNumber];
+                _sortedBlockNumbers.remove(currentBlockNumber);
             }
             currentBlockNumber = _sortedBlockNumbers.popFront();
         }
@@ -122,10 +128,12 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
                 reachedEndOfExpiredKeys = true;
             } else {
                 outstandingDebt =
-                    outstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                    outstandingDebt -
+                    (_tokenSupplies[currentBlockNumber]);
             }
-            (, currentBlockNumber) =
-                _sortedBlockNumbers.getNextNode(currentBlockNumber);
+            (, currentBlockNumber) = _sortedBlockNumbers.getNextNode(
+                currentBlockNumber
+            );
         }
 
         return outstandingDebt;

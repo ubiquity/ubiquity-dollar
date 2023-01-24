@@ -44,7 +44,9 @@ contract StakingFormulasTest is LocalTestHelper {
     ) public {
         assertEq(
             stakingFormulas.lpRewardsRemoveLiquidityNormalization(
-                _stake, _shareInfo, _amount
+                _stake,
+                _shareInfo,
+                _amount
             ),
             _amount
         );
@@ -57,7 +59,9 @@ contract StakingFormulasTest is LocalTestHelper {
     ) public {
         assertEq(
             stakingFormulas.lpRewardsAddLiquidityNormalization(
-                _stake, _shareInfo, _amount
+                _stake,
+                _shareInfo,
+                _amount
             ),
             _amount
         );
@@ -69,7 +73,9 @@ contract StakingFormulasTest is LocalTestHelper {
         uint256 _amount = 100;
         assertEq(
             stakingFormulas.correctedAmountToWithdraw(
-                _totalLpDeposited, _stakingLpBalance, _amount
+                _totalLpDeposited,
+                _stakingLpBalance,
+                _amount
             ),
             100
         );
@@ -81,7 +87,9 @@ contract StakingFormulasTest is LocalTestHelper {
         uint256 _amount = 100;
         assertEq(
             stakingFormulas.correctedAmountToWithdraw(
-                _totalLpDeposited, _stakingLpBalance, _amount
+                _totalLpDeposited,
+                _stakingLpBalance,
+                _amount
             ),
             50
         );

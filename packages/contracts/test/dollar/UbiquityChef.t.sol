@@ -6,11 +6,15 @@ import "../helpers/LiveTestHelper.sol";
 
 contract ZeroState is LiveTestHelper {
     event Deposit(
-        address indexed user, uint256 amount, uint256 indexed stakingShareId
+        address indexed user,
+        uint256 amount,
+        uint256 indexed stakingShareId
     );
 
     event Withdraw(
-        address indexed user, uint256 amount, uint256 indexed stakingShareId
+        address indexed user,
+        uint256 amount,
+        uint256 indexed stakingShareId
     );
 
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
@@ -26,7 +30,7 @@ contract ZeroState is LiveTestHelper {
     }
 }
 
-contract ZeroStateTest is ZeroState {
+contract RemoteZeroStateTest is ZeroState {
     function testSetGovernancePerBlock(uint256 governancePerBlock) public {
         vm.expectEmit(true, false, false, true, address(ubiquityChef));
         emit GovernancePerBlockModified(governancePerBlock);
@@ -52,11 +56,16 @@ contract ZeroStateTest is ZeroState {
     function testDeposit(uint256 lpAmount) public {
         lpAmount = bound(lpAmount, 1, metapool.balanceOf(fourthAccount));
         uint256 shares = ubiquityFormulas.durationMultiply(
-            lpAmount, 10, staking.stakingDiscountMultiplier()
+            lpAmount,
+            10,
+            staking.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         uint256 id = stakingShare.mint(
-            fourthAccount, lpAmount, shares, block.number + 100
+            fourthAccount,
+            lpAmount,
+            shares,
+            block.number + 100
         );
         vm.expectEmit(true, false, true, true, address(ubiquityChef));
         emit Deposit(fourthAccount, shares, id);
@@ -79,18 +88,23 @@ contract DepositState is ZeroState {
         super.setUp();
         fourthBal = metapool.balanceOf(fourthAccount);
         shares = ubiquityFormulas.durationMultiply(
-            fourthBal, 10, staking.stakingDiscountMultiplier()
+            fourthBal,
+            10,
+            staking.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         fourthID = stakingShare.mint(
-            fourthAccount, fourthBal, shares, block.number + 100
+            fourthAccount,
+            fourthBal,
+            shares,
+            block.number + 100
         );
         ubiquityChef.deposit(fourthAccount, shares, fourthID);
         vm.stopPrank();
     }
 }
 
-contract DepositStateTest is DepositState {
+contract RemoteDepositStateTest is DepositState {
     function testTotalShares() public {
         assertEq(ubiquityChef.totalShares(), shares);
     }
@@ -127,11 +141,11 @@ contract DepositStateTest is DepositState {
     function testPendingGovernance(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
-        (uint256 lastRewardBlock,) = ubiquityChef.pool();
+        (uint256 lastRewardBlock, ) = ubiquityChef.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        uint256 reward = (multiplier * 10e18 / 1e18);
+        uint256 reward = ((multiplier * 10e18) / 1e18);
         uint256 governancePerShare = (reward * 1e12) / shares;
         uint256 userPending = (shares * governancePerShare) / 1e12;
 

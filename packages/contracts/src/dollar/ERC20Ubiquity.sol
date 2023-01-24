@@ -14,7 +14,7 @@ import "./interfaces/IERC20Ubiquity.sol";
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
 contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
-    UbiquityDollarManager public immutable manager;
+    UbiquityDollarManager public manager;
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public immutable DOMAIN_SEPARATOR;
@@ -59,11 +59,9 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
         _;
     }
 
-    constructor(
-        UbiquityDollarManager _manager,
-        string memory name_,
-        string memory symbol_
-    ) ERC20(name_, symbol_) {
+    constructor(address _manager, string memory name_, string memory symbol_)
+        ERC20(name_, symbol_)
+    {
         _tokenName = name_;
         _symbol = symbol_;
         manager = _manager;
@@ -151,7 +149,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     /// @param amount the amount to burn
     function burn(uint256 amount)
         public
-        override(ERC20Burnable, IERC20Ubiquity)
+        override (ERC20Burnable, IERC20Ubiquity)
         whenNotPaused
     {
         super.burn(amount);
@@ -161,7 +159,10 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     /// @notice burn Ubiquity Dollar tokens from specified account
     /// @param account the account to burn from
     /// @param amount the amount to burn
-    function burnFrom(address account, uint256 amount)
+    function burnFrom(
+        address account,
+        uint256 amount
+    )
         public
         override(ERC20Burnable, IERC20Ubiquity)
         onlyBurner
@@ -172,7 +173,12 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     }
 
     // @dev Creates `amount` new tokens for `to`.
-    function mint(address to, uint256 amount) public override onlyMinter {
+    function mint(address to, uint256 amount)
+        public
+        override
+        onlyMinter
+        whenNotPaused
+    {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }

@@ -231,11 +231,9 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param stakingShareId Staking Share Id to withdraw
      */
 
-    function withdraw(uint256 stakingShareId)
-        external
-        nonReentrant
-        returns (uint256[4] memory tokenAmounts)
-    {
+    function withdraw(
+        uint256 stakingShareId
+    ) external nonReentrant returns (uint256[4] memory tokenAmounts) {
         address staking = manager.stakingContractAddress();
         address stakingShare = manager.stakingShareAddress();
 
@@ -291,11 +289,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param stakingShareId Staking Share Id to withdraw
      * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or Ubiquity Dollar
      */
-    function withdraw(uint256 stakingShareId, address token)
-        external
-        nonReentrant
-        returns (uint256 tokenAmount)
-    {
+    function withdraw(
+        uint256 stakingShareId,
+        address token
+    ) external nonReentrant returns (uint256 tokenAmount) {
         // DAI / USDC / USDT / Ubiquity Dollar
         require(
             isMetaPoolCoin(token),
@@ -354,11 +351,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         emit Withdraw(msg.sender, stakingShareId, token, tokenAmount);
     }
 
-    function isIdIncluded(uint256[] memory idList, uint256 id)
-        internal
-        pure
-        returns (bool)
-    {
+    function isIdIncluded(
+        uint256[] memory idList,
+        uint256 id
+    ) internal pure returns (bool) {
         for (uint256 i = 0; i < idList.length; i++) {
             if (idList[i] == id) {
                 return true;

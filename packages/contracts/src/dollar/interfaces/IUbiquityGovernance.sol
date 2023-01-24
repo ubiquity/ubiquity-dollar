@@ -6,4 +6,6 @@ import "./IERC20Ubiquity.sol";
 /// @title Governance token interface
 /// @author Ubiquity DAO
 // solhint-disable-next-line no-empty-blocks
-interface IUbiquityGovernanceToken is IERC20Ubiquity {}
+interface IUbiquityGovernanceToken is IERC20Ubiquity {
+
+}

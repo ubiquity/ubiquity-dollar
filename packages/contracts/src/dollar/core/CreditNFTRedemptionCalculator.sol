@@ -24,20 +24,18 @@ contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
         manager = _manager;
     }
 
-    function getCreditNFTAmount(uint256 dollarsToBurn)
-        external
-        view
-        override
-        returns (uint256)
-    {
+    function getCreditNFTAmount(
+        uint256 dollarsToBurn
+    ) external view override returns (uint256) {
         require(
-            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt()
-                < IERC20(manager.dollarTokenAddress()).totalSupply(),
+            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt() <
+                IERC20(manager.dollarTokenAddress()).totalSupply(),
             "CreditNFT to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
         bytes16 totalDebt = CreditNFT(manager.creditNFTAddress())
-            .getTotalOutstandingDebt().fromUInt();
+            .getTotalOutstandingDebt()
+            .fromUInt();
         bytes16 r = totalDebt.div(
             IERC20(manager.dollarTokenAddress()).totalSupply().fromUInt()
         );

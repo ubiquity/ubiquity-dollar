@@ -33,11 +33,13 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     uint256 public expiredCreditNFTConversionRate = 2;
 
     event ExpiredCreditNFTConversionRateChanged(
-        uint256 newRate, uint256 previousRate
+        uint256 newRate,
+        uint256 previousRate
     );
 
     event CreditNFTLengthChanged(
-        uint256 newCreditNFTLengthBlocks, uint256 previousCreditNFTLengthBlocks
+        uint256 newCreditNFTLengthBlocks,
+        uint256 previousCreditNFTLengthBlocks
     );
 
     modifier onlyCreditNFTManager() {
@@ -56,36 +58,38 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 
-    function setExpiredCreditNFTConversionRate(uint256 rate)
-        external
-        onlyCreditNFTManager
-    {
+    function setExpiredCreditNFTConversionRate(
+        uint256 rate
+    ) external onlyCreditNFTManager {
         emit ExpiredCreditNFTConversionRateChanged(
-            rate, expiredCreditNFTConversionRate
-            );
+            rate,
+            expiredCreditNFTConversionRate
+        );
         expiredCreditNFTConversionRate = rate;
     }
 
-    function setCreditNFTLength(uint256 _creditNFTLengthBlocks)
-        external
-        onlyCreditNFTManager
-    {
+    function setCreditNFTLength(
+        uint256 _creditNFTLengthBlocks
+    ) external onlyCreditNFTManager {
         emit CreditNFTLengthChanged(
-            _creditNFTLengthBlocks, creditNFTLengthBlocks
-            );
+            _creditNFTLengthBlocks,
+            creditNFTLengthBlocks
+        );
         creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function exchangeDollarsForCreditNFT(uint256 amount)
-        external
-        returns (uint256)
-    {
+    function exchangeDollarsForCreditNFT(
+        uint256 amount
+    ) external returns (uint256) {
         uint256 twapPrice = _getTwapPrice();
 
-        require(twapPrice < 1 ether, "Price must be below 1 to mint Credit NFT");
+        require(
+            twapPrice < 1 ether,
+            "Price must be below 1 to mint Credit NFT"
+        );
 
         CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
         creditNFT.updateTotalDebt();
@@ -98,13 +102,17 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        ICreditNFTRedemptionCalculator creditNFTCalculator =
-            ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
-        uint256 creditNFTToMint = creditNFTCalculator.getCreditNFTAmount(amount);
+        ICreditNFTRedemptionCalculator creditNFTCalculator = ICreditNFTRedemptionCalculator(
+                manager.creditNFTCalculatorAddress()
+            );
+        uint256 creditNFTToMint = creditNFTCalculator.getCreditNFTAmount(
+            amount
+        );
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
-            msg.sender, amount
+            msg.sender,
+            amount
         );
 
         uint256 expiryBlockNumber = block.number + (creditNFTLengthBlocks);
@@ -118,10 +126,9 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit
     /// @return amount of Credit tokens minted
-    function exchangeDollarsForCredit(uint256 amount)
-        external
-        returns (uint256)
-    {
+    function exchangeDollarsForCredit(
+        uint256 amount
+    ) external returns (uint256) {
         uint256 twapPrice = _getTwapPrice();
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
@@ -137,18 +144,23 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        ICreditRedemptionCalculator creditCalculator =
-            ICreditRedemptionCalculator(manager.creditCalculatorAddress());
-        uint256 creditToMint =
-            creditCalculator.getCreditAmount(amount, blockHeightDebt);
+        ICreditRedemptionCalculator creditCalculator = ICreditRedemptionCalculator(
+                manager.creditCalculatorAddress()
+            );
+        uint256 creditToMint = creditCalculator.getCreditAmount(
+            amount,
+            blockHeightDebt
+        );
 
         // we burn user's dollars.
         UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
-            msg.sender, amount
+            msg.sender,
+            amount
         );
         // mint Credit
-        UbiquityCreditToken creditToken =
-            UbiquityCreditToken(manager.creditTokenAddress());
+        UbiquityCreditToken creditToken = UbiquityCreditToken(
+            manager.creditTokenAddress()
+        );
         creditToken.mint(msg.sender, creditToMint);
 
         //give minted Credit amount
@@ -157,25 +169,23 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
     /// @dev uses the current Credit NFT for dollars calculation to get Credit NFT for dollars
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function getCreditNFTReturnedForDollars(uint256 amount)
-        external
-        view
-        returns (uint256)
-    {
-        ICreditNFTRedemptionCalculator creditNFTCalculator =
-            ICreditNFTRedemptionCalculator(manager.creditNFTCalculatorAddress());
+    function getCreditNFTReturnedForDollars(
+        uint256 amount
+    ) external view returns (uint256) {
+        ICreditNFTRedemptionCalculator creditNFTCalculator = ICreditNFTRedemptionCalculator(
+                manager.creditNFTCalculatorAddress()
+            );
         return creditNFTCalculator.getCreditNFTAmount(amount);
     }
 
     /// @dev uses the current Credit for dollars calculation to get Credit for dollars
     /// @param amount the amount of dollars to exchange for Credit
-    function getCreditReturnedForDollars(uint256 amount)
-        external
-        view
-        returns (uint256)
-    {
-        ICreditRedemptionCalculator creditCalculator =
-            ICreditRedemptionCalculator(manager.creditCalculatorAddress());
+    function getCreditReturnedForDollars(
+        uint256 amount
+    ) external view returns (uint256) {
+        ICreditRedemptionCalculator creditCalculator = ICreditRedemptionCalculator(
+                manager.creditCalculatorAddress()
+            );
         return creditCalculator.getCreditAmount(amount, blockHeightDebt);
     }
 
@@ -189,11 +199,12 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     ) external view override returns (bytes4) {
         if (manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), operator)) {
             //allow the transfer since it originated from this contract
-            return bytes4(
-                keccak256(
-                    "onERC1155Received(address,address,uint256,uint256,bytes)"
-                )
-            );
+            return
+                bytes4(
+                    keccak256(
+                        "onERC1155Received(address,address,uint256,uint256,bytes)"
+                    )
+                );
         } else {
             //reject the transfer
             return "";
@@ -217,10 +228,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return governanceAmount amount of Governance Token minted to Credit NFT holder
-    function burnExpiredCreditNFTForGovernance(uint256 id, uint256 amount)
-        public
-        returns (uint256 governanceAmount)
-    {
+    function burnExpiredCreditNFTForGovernance(
+        uint256 id,
+        uint256 amount
+    ) public returns (uint256 governanceAmount) {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
         CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
 
@@ -233,8 +244,9 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         creditNFT.burnCreditNFT(msg.sender, amount, id);
 
         // Mint Governance Token to this contract. Transfer Governance Token to msg.sender i.e. Credit NFT holder
-        IERC20Ubiquity governanceToken =
-            IERC20Ubiquity(manager.governanceTokenAddress());
+        IERC20Ubiquity governanceToken = IERC20Ubiquity(
+            manager.governanceTokenAddress()
+        );
         governanceAmount = amount / expiredCreditNFTConversionRate;
         governanceToken.mint(msg.sender, governanceAmount);
     }
@@ -244,10 +256,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return amount of Credit pool tokens (i.e. LP tokens) minted to Credit NFT holder
-    function burnCreditNFTForCredit(uint256 id, uint256 amount)
-        public
-        returns (uint256)
-    {
+    function burnCreditNFTForCredit(
+        uint256 id,
+        uint256 amount
+    ) public returns (uint256) {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
         CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
 
@@ -260,8 +272,9 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         creditNFT.burnCreditNFT(msg.sender, amount, id);
 
         // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. Credit NFT holder
-        UbiquityCreditToken creditToken =
-            UbiquityCreditToken(manager.creditTokenAddress());
+        UbiquityCreditToken creditToken = UbiquityCreditToken(
+            manager.creditTokenAddress()
+        );
         creditToken.mint(address(this), amount);
         require(
             creditToken.transfer(msg.sender, amount),
@@ -274,24 +287,25 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @dev Exchange Credit pool token for Dollar tokens.
     /// @param amount Amount of Credit tokens to burn in exchange for Dollar tokens.
     /// @return amount of unredeemed Credit
-    function burnCreditTokensForDollars(uint256 amount)
-        public
-        returns (uint256)
-    {
+    function burnCreditTokensForDollars(
+        uint256 amount
+    ) public returns (uint256) {
         uint256 twapPrice = _getTwapPrice();
         require(twapPrice > 1 ether, "Price must be above 1");
         if (debtCycle) {
             debtCycle = false;
         }
-        UbiquityCreditToken creditToken =
-            UbiquityCreditToken(manager.creditTokenAddress());
+        UbiquityCreditToken creditToken = UbiquityCreditToken(
+            manager.creditTokenAddress()
+        );
         require(
             creditToken.balanceOf(msg.sender) >= amount,
             "User doesn't have enough Credit pool tokens."
         );
 
-        UbiquityDollarToken dollarToken =
-            UbiquityDollarToken(manager.dollarTokenAddress());
+        UbiquityDollarToken dollarToken = UbiquityDollarToken(
+            manager.dollarTokenAddress()
+        );
         uint256 maxRedeemableCredit = dollarToken.balanceOf(address(this));
 
         if (maxRedeemableCredit <= 0) {
@@ -315,14 +329,15 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param id the block number of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return amount of unredeemed Credit NFT
-    function redeemCreditNFT(uint256 id, uint256 amount)
-        public
-        returns (uint256)
-    {
+    function redeemCreditNFT(
+        uint256 id,
+        uint256 amount
+    ) public returns (uint256) {
         uint256 twapPrice = _getTwapPrice();
 
         require(
-            twapPrice > 1 ether, "Price must be above 1 to redeem Credit NFT"
+            twapPrice > 1 ether,
+            "Price must be above 1 to redeem Credit NFT"
         );
         if (debtCycle) {
             debtCycle = false;
@@ -336,17 +351,19 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         );
 
         mintClaimableDollars();
-        UbiquityDollarToken dollarToken =
-            UbiquityDollarToken(manager.dollarTokenAddress());
-        UbiquityCreditToken creditToken =
-            UbiquityCreditToken(manager.creditTokenAddress());
+        UbiquityDollarToken dollarToken = UbiquityDollarToken(
+            manager.dollarTokenAddress()
+        );
+        UbiquityCreditToken creditToken = UbiquityCreditToken(
+            manager.creditTokenAddress()
+        );
         // Credit have a priority on Credit NFT holder
         require(
             creditToken.totalSupply() <= dollarToken.balanceOf(address(this)),
             "There aren't enough Dollar to redeem currently"
         );
-        uint256 maxRedeemableCreditNFT =
-            dollarToken.balanceOf(address(this)) - creditToken.totalSupply();
+        uint256 maxRedeemableCreditNFT = dollarToken.balanceOf(address(this)) -
+            creditToken.totalSupply();
         uint256 creditNFTToRedeem = amount;
 
         if (amount > maxRedeemableCreditNFT) {
@@ -379,20 +396,22 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         //update the dollars for this cycle
         dollarsMintedThisCycle = totalMintableDollars;
 
-        UbiquityDollarToken dollarToken =
-            UbiquityDollarToken(manager.dollarTokenAddress());
+        UbiquityDollarToken dollarToken = UbiquityDollarToken(
+            manager.dollarTokenAddress()
+        );
         // Dollar should be minted to address(this)
         dollarToken.mint(address(this), dollarsToMint);
-        UbiquityCreditToken creditToken =
-            UbiquityCreditToken(manager.creditTokenAddress());
+        UbiquityCreditToken creditToken = UbiquityCreditToken(
+            manager.creditTokenAddress()
+        );
 
         uint256 currentRedeemableBalance = dollarToken.balanceOf(address(this));
-        uint256 totalOutstandingDebt =
-            creditNFT.getTotalOutstandingDebt() + creditToken.totalSupply();
+        uint256 totalOutstandingDebt = creditNFT.getTotalOutstandingDebt() +
+            creditToken.totalSupply();
 
         if (currentRedeemableBalance > totalOutstandingDebt) {
-            uint256 excessDollars =
-                currentRedeemableBalance - (totalOutstandingDebt);
+            uint256 excessDollars = currentRedeemableBalance -
+                (totalOutstandingDebt);
 
             IDollarMintExcess dollarsDistributor = IDollarMintExcess(
                 manager.getExcessDollarsDistributor(address(this))
@@ -411,8 +430,9 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
     function _getTwapPrice() internal returns (uint256) {
         TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
-        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
+        return
+            TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
+                manager.dollarTokenAddress()
+            );
     }
 }

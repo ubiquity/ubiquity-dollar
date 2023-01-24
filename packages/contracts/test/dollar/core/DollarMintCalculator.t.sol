@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "../../../src/dollar/core/UbiquityDollarManager.sol";
-import "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import "../../../src/dollar/core/DollarMintCalculator.sol";
+import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
