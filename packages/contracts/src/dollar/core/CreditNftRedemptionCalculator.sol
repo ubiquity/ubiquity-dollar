@@ -9,8 +9,7 @@ import "./CreditNft.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 
-contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
-
+contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

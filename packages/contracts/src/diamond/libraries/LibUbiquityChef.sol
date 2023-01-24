@@ -244,7 +244,7 @@ library LibUbiquityChef {
     function _updateGovernanceMultiplier() internal {
         ChefStorage storage cs = chefStorage();
         // (1.05/(1+abs(1-TWAP_PRICE)))
-        uint256 currentPrice = _getTwapPrice();
+        uint256 currentPrice = LibTWAPOracle.getTwapPrice();
         bool isPriceDiffEnough = false;
         // a minimum price variation is needed to update the multiplier
         if (currentPrice > cs.lastPrice) {
@@ -317,7 +317,5 @@ library LibUbiquityChef {
         return (block.number - lastRewardBlock) * governanceMultiplier;
     }
 
-    function _getTwapPrice() internal view returns (uint256) {
-        return LibTWAPOracle.consult(address(this));
-    }
+ 
 }

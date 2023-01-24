@@ -84,6 +84,10 @@ contract DiamondInit is Modifiers {
             _args.governancePerBlock
         );
 
+// creditNFTManager
+   /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
+    /// once set (unless migrated)
+creditNFTLengthBlocks 
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
         // arguments: address _init and bytes calldata _calldata

@@ -73,6 +73,13 @@ contract Modifiers {
         _;
     }
 
+    modifier onlyCreditNFTManager() {
+        require(
+            LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            "Caller is not a Credit NFT manager"
+        );
+        _;
+    }
     modifier onlyAdmin() {
         require(
             LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
@@ -139,6 +146,14 @@ contract Modifiers {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
             "MasterChef: not Governance Token manager"
+        );
+        _;
+    }
+
+        modifier onlyIncentiveAdmin() {
+        require(
+            LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
+            "CreditCalc: not admin"
         );
         _;
     }
