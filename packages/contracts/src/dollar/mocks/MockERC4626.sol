@@ -40,7 +40,7 @@ contract MockERC4626 is ERC4626 {
     ) public virtual override returns (uint256 assets) {
         require(shares <= maxMint(receiver), "ERC4626: mint more than max");
 
-        uint256 assets = previewMint(shares);
+        assets = previewMint(shares);
         _deposit(_msgSender(), receiver, assets, shares);
         afterDeposit(assets, shares);
         return assets;
@@ -56,7 +56,7 @@ contract MockERC4626 is ERC4626 {
             "ERC4626: withdraw more than max"
         );
 
-        uint256 shares = previewWithdraw(assets);
+        shares = previewWithdraw(assets);
         beforeWithdraw(assets, shares);
         _withdraw(_msgSender(), receiver, owner, assets, shares);
 
