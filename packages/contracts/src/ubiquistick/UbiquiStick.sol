@@ -9,8 +9,8 @@ import "operator-filter-registry/DefaultOperatorFilterer.sol";
 
 // With this "The UbiquiStick" NFT contract you can :
 // - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
-//   - including check that someone as a NFT of the collection with « balanceOf »
-//   - including check who is TokenID owner with « ownerOf »
+//   - including check that someone as a NFT of the collection with « balanceOf »
+//   - including check who is TokenID owner with « ownerOf »
 //   - including optional ERC721Metadata
 //     but without metadata JSON schema
 //     with 3 types of NFTs : standard, gold and invisible, each one having same metadata
@@ -121,7 +121,7 @@ contract UbiquiStick is
         address from,
         address to,
         uint256 tokenId
-    ) internal {
+    ) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
@@ -130,7 +130,7 @@ contract UbiquiStick is
         address,
         uint256,
         uint96
-    ) internal {
+    ) internal override(ERC721, ERC721Enumerable) {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 
