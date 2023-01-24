@@ -32,7 +32,6 @@ const Sidebar = () => {
             <Item text="Staking" href="/staking" icon="⛏"></Item>
             <Item text="Credits" href="/credits" icon="💸"></Item>
             <Item text="Markets" href="/markets" icon="🔁"></Item>
-            {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
             {PROD ? null : <Item text="Vaults" href="/vaults" icon="🚜"></Item>}
           </ul>
 
