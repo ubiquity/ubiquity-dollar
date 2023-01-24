@@ -10,19 +10,21 @@ if (!fs.existsSync(envPath)) {
 const env = loadEnv(envPath);
 
 const whaleAccount = env.curveWhale;
+const adminAddress = env.adminAddress;
 
-(async () => {
-  const command = spawn("cast", ["rpc", "anvil_impersonateAccount", whaleAccount, "-r", "http://localhost:8545"], {
+const impersonateAccount = async () => {
+  spawn("cast", ["rpc", "anvil_impersonateAccount", whaleAccount, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
-})();
+  console.log("Impersonating 'CURVE_WHALE' account");
+};
 
-(async () => {
-  const command = spawn(
+const sendTokens = async () => {
+  spawn(
     "cast",
     [
       "send",
-      "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490",
+      adminAddress,
       "0xa9059cbb000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb9226600000000000000000000000000000000000000000000021e19e0c9bab2400000",
       "--from",
       whaleAccount,
@@ -31,20 +33,32 @@ const whaleAccount = env.curveWhale;
       stdio: "inherit",
     }
   );
-})();
+  console.log("Sent 10000 3CRV LP tokens to 'ADMIN_ADDRESS'");
+};
 
-(async () => {
-  const command = spawn("cast", ["rpc", "anvil_stopImpersonatingAccount", whaleAccount, "-r", "http://localhost:8545"], {
+const stopImpersonatingAccount = async () => {
+  spawn("cast", ["rpc", "anvil_stopImpersonatingAccount", whaleAccount, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
-})();
+  console.log("Ending account impersonation");
+};
 
-(async () => {
-  const command = spawn(
+const forgeScript = async () => {
+  console.log("Running Solidity script");
+  spawn(
     "forge",
     ["script", "scripts/deploy/dollar/solidityScripting/08_DevelopmentDeploy.s.sol:DevelopmentDeploy", "--fork-url", "http://localhost:8545", "--broadcast"],
     {
       stdio: "inherit",
     }
   );
-})();
+};
+
+const main = async () => {
+  await impersonateAccount();
+  await sendTokens();
+  await stopImpersonatingAccount();
+  await forgeScript();
+};
+
+main();

@@ -114,7 +114,9 @@ Make sure you are using the following network configuration:
 
 This section is for the Ubiquity Dollar core protocol smart contracts (not the UbiquiStick NFT or UI related code.)
 
-You need to create `.env` file inside the contracts folder with 'RPC_URL', 'PRIVATE_KEY', 'PUBLIC_KEY', 'MNEMONIC', and 'CURVE_WHALE' all filled. 'PRIVATE_KEY' will be used to deploy locally and the matching 'PUBLIC_KEY' will be the admin on all the smart contracts. 'RPC_URL' and 'MNEMONIC' are used when launching Anvil and will ensure your `PUBLIC_KEY` account is funded. 
+You need to create `.env` file inside the contracts folder with 'RPC_URL', 'PRIVATE_KEY', 'ADMIN_ADDRESS', 'MNEMONIC', and 'CURVE_WHALE' all filled. 'PRIVATE_KEY' will be used to deploy locally and the matching 'ADMIN_ADDRESS' will be the admin on all the smart contracts. 'RPC_URL' and 'MNEMONIC' are used when launching Anvil and will ensure your `ADMIN_ADDRESS` account is funded. 
+
+The .env.example is prepopulated with the recommend test 'MNEMONIC', test 'PRIVATE_KEY', and test 'ADMIN_ADRESS'.
 
 To start your local chain run 
 

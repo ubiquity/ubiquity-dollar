@@ -26,7 +26,6 @@
     "test": "tsx ./scripts/runner/runner.ts",
     "slither:run": "slither . --compile-force-framework foundry --config-file slither.config.json",
     "echidna": "echidna-test . --config echidna.config.yml",
-    "prettier": "forge fmt",
     "deploy": "tsx ./scripts/deploy/deploy.ts",
     "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
     "task": "tsx ./scripts/task/task.ts",
