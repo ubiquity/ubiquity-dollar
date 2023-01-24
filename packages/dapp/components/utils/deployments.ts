@@ -1,11 +1,15 @@
-import ContractDeployments from "@ubiquity/contracts/deployments.json";
+import fullArtifact from "@ubiquity/contracts/deployments.json";
 
-const _contractDeployments = (): Record<string, any> => {
-  return ContractDeployments;
-};
+export type deployed = typeof fullArtifact;
+export type deployedChainId = keyof deployed;
+export type deployedContractName = keyof deployed[deployedChainId]["contracts"];
+export type deployedContractAbi = deployed[deployedChainId]["contracts"][deployedContractName]["abi"];
 
-export const getDeployments = (chainId: number, contractName: string): { address: string; abi: any } | undefined => {
-  const record = _contractDeployments()[chainId.toString()] ?? {};
-  const contractInstance = record?.contracts ? record?.contracts[contractName] : undefined;
-  return contractInstance ? { address: contractInstance.address, abi: contractInstance.abi } : undefined;
+// export type deployedContractAddresses = deployed[deployedChainId]["contracts"][deployedContractName]["address"];
+
+// const readDeployments = () => fullArtifact as deployments;
+
+export const getDeployments = (chainId: deployedChainId, contractName: deployedContractName): { address: string; abi: deployedContractAbi } => {
+  const selectedDeployment = fullArtifact[chainId];
+  return selectedDeployment.contracts[contractName];
 };
