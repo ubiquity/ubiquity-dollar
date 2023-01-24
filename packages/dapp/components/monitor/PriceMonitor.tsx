@@ -26,7 +26,7 @@ type ManagedContracts = NonNullable<Awaited<ReturnType<typeof useManagerManaged>
 type NamedContracts = NonNullable<Awaited<ReturnType<typeof useNamedContracts>>>;
 
 const fetchPrices = async (
-  { dollarToken: uad, dollarMetapool: metaPool, dollarTwapOracle: twapOracle, dollarMintingCalculator: dollarMintCalc }: ManagedContracts,
+  { dollarToken: uad, dollarMetapool: metaPool, dollarTwapOracle: twapOracle, dollarMintCalculator: dollarMintCalc }: ManagedContracts,
   { curvePool }: NamedContracts
 ): Promise<PriceMonitorProps> => {
   const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([

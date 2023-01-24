@@ -1,13 +1,13 @@
 import useWeb3, { PossibleProviders } from "../useWeb3";
 
-import DollarDeployments from "@ubiquity/dollar/deployments.json";
+import Deployed_Contracts from "@ubiquity/contracts/deployments.json";
 import NAMED_ACCOUNTS from "../../../config/named-accounts.json";
 import { getCurveFactoryContract, getDebtCouponManagerContract, getERC20Contract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts";
 
 const getDebtCouponManagerAddress = () => {
-  const contractDeployments: Record<string, any> = DollarDeployments;
+  const contractDeployments: Record<string, any> = Deployed_Contracts;
   const record = contractDeployments["1"] ?? {};
-  const contract = record[0]?.contracts ? record[0]?.contracts["DebtCouponManager"] : undefined;
+  const contract = record?.contracts ? record?.contracts["DebtCouponManager"] : undefined;
   return contract ? contract.address : undefined;
 };
 export const DEBT_COUPON_MANAGER_ADDRESS = getDebtCouponManagerAddress();

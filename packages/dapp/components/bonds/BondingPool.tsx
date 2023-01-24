@@ -69,7 +69,7 @@ const BondingPool = ({ enabled, poolData, onDeposit, ...info }: BondingPoolParam
             <div>
               Balance: {poolData ? format(round(poolData.poolTokenBalance)) : "????"} {LPTokenName}
             </div>
-            <a href={poolUrl} target="_blank">
+            <a href={poolUrl} target="_blank" rel="noopener noreferrer">
               Get more
             </a>
           </div>

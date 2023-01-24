@@ -1,0 +1,25 @@
+[profile.default]
+src = 'src'
+test = 'test'
+out = 'out'
+libs = ['lib']
+solc_version = '0.8.16'
+extra_output = [
+  "abi",
+  "evm.bytecode",
+  "evm.deployedBytecode",
+  "evm.methodIdentifiers",
+]
+optimizer = true
+optimizer_runs = 20_000
+force = false
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
+[fmt]
+tab_width = 2
+line_length = 80
+tab_width = 4
+bracket_spacing = false
+quote_style = 'double'
+
+[rpc_endpoints]
+mainnet = "${RPC_URL}"

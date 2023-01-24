@@ -52,7 +52,12 @@ fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
 
+
 .yarn
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
+cache
+build
+out
+packages/contracts/broadcast/*

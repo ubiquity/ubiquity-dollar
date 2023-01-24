@@ -1,0 +1,68 @@
+{
+  "name": "@ubiquity/contracts",
+  "version": "1.0.1-beta",
+  "private": true,
+  "description": "Ubiquity Algorithmic Dollar smart contracts",
+  "author": "Ubiquity DAO",
+  "license": "Apache-2.0",
+  "homepage": "https://dao.ubq.fi/dollar",
+  "bugs": {
+    "url": "https://github.com/ubiquity/ubiquity-dollar/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ubiquity/ubiquity-dollar.git"
+  },
+  "dependencies": {
+    "@types/command-line-args": "5.2.0",
+    "command-line-args": "5.2.1",
+    "dotenv": "^16.0.3",
+    "ethers": "^5.6.9",
+    "tsx": "^3.12.2"
+  },
+  "scripts": {
+    "forge": "forge",
+    "build": "forge build",
+    "test": "tsx ./scripts/runner/runner.ts",
+    "slither:run": "slither . --compile-force-framework foundry",
+    "echidna": "echidna-test . --config echidna.config.yml",
+    "prettier": "forge fmt",
+    "deploy": "tsx ./scripts/deploy/deploy.ts",
+    "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
+    "task": "tsx ./scripts/task/task.ts",
+    "clean": "forge clean",
+    "purge": "yarn clean",
+    "anvil": "tsx ./scripts/anvil/anvil.ts",
+    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts"
+  },
+  "keywords": [
+    "stablecoin",
+    "erc20",
+    "ethereum",
+    "defi",
+    "ubiquity",
+    "dao",
+    "dollar",
+    "decentralization",
+    "token",
+    "algorithmic"
+  ],
+  "lavamoat": {
+    "allowScripts": {
+      "core-js": false,
+      "keccak": false,
+      "secp256k1": false,
+      "web3": false,
+      "bufferutil": false,
+      "utf-8-validate": false,
+      "core-js-pure": false,
+      "postinstall-postinstall": false,
+      "husky": false
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "cspell": "latest",
+    "typescript": "^4.9.4"
+  }
+}
