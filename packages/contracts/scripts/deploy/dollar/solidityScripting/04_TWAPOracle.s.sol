@@ -6,10 +6,7 @@ import "./03_UbiquityGovernanceToken.s.sol";
 contract TWAPScript is GovernanceScript {
 	function run() public virtual override {
 		super.run();
-		uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 		vm.startBroadcast(deployerPrivateKey);
-
-		
 
 		TWAPOracleDollar3pool twapOracle = new TWAPOracleDollar3pool( 
 			metapool, 

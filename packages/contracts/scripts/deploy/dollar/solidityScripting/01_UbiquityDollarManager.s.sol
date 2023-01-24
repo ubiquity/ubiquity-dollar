@@ -6,8 +6,6 @@ import "./00_Constants.sol";
 contract ManagerScript is Constants {
     UbiquityDollarManager manager; 
     function run() public virtual {
-
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
         manager = new UbiquityDollarManager(admin);

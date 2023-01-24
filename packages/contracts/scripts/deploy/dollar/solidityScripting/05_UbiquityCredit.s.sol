@@ -6,7 +6,6 @@ import "./04_TWAPOracle.s.sol";
 contract CreditScript is TWAPScript {
 	function run() public virtual override {
 		super.run();
-		uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
         UbiquityCreditToken credit = new UbiquityCreditToken(manager);
@@ -33,6 +32,4 @@ contract CreditScript is TWAPScript {
 
         vm.stopBroadcast();
 	}
-
-
 }

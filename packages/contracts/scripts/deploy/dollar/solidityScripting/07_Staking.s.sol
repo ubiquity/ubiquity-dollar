@@ -6,7 +6,6 @@ import "./06_Formulas.s.sol";
 contract StakingScript is FormulaScript {
 	function run() public virtual override {
 		super.run();
-		uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 		vm.startBroadcast(deployerPrivateKey);
 
 		for(uint i = 0; i < users_.length; ++i){
@@ -42,6 +41,4 @@ contract StakingScript is FormulaScript {
 		
 		vm.stopBroadcast();
 	}
-
-
 }

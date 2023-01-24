@@ -9,7 +9,6 @@ contract DollarScript is ManagerScript{
 
     function run() public virtual override {
         super.run();
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
         
