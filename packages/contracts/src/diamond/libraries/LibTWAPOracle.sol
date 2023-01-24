@@ -114,4 +114,8 @@ library LibTWAPOracle {
             ds.slot := position
         }
     }
+
+       function getTwapPrice() internal view returns (uint256) {
+        return LibTWAPOracle.consult(address(this));
+    }
 }
