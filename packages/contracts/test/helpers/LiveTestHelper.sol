@@ -16,10 +16,10 @@ import "../../src/dollar/UbiquityChef.sol";
 import "../../src/dollar/core/CreditRedemptionCalculator.sol";
 import "../../src/dollar/interfaces/ICurveFactory.sol";
 import "../../src/dollar/interfaces/IMasterChef.sol";
-import "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import "../../src/dollar/core/CreditNftRedemptionCalculator.sol";
 import "../../src/dollar/core/DollarMintCalculator.sol";
-import "../../src/dollar/mocks/MockCreditNFT.sol";
-import "../../src/dollar/core/CreditNFTManager.sol";
+import "../../src/dollar/mocks/MockCreditNft.sol";
+import "../../src/dollar/core/CreditNftManager.sol";
 import "../../src/dollar/core/UbiquityCreditToken.sol";
 import "../../src/dollar/core/DollarMintExcess.sol";
 import "../../src/dollar/SushiSwapPool.sol";
@@ -44,10 +44,10 @@ contract LiveTestHelper is Test {
     TWAPOracleDollar3pool twapOracle;
     UbiquityChef ubiquityChef;
     CreditRedemptionCalculator creditRedemptionCalc;
-    CreditNFTRedemptionCalculator creditNFTRedemptionCalc;
+    CreditNftRedemptionCalculator creditNftRedemptionCalc;
     DollarMintCalculator dollarMintCalc;
-    MockCreditNFT creditNFT;
-    CreditNFTManager creditNFTManager;
+    MockCreditNft creditNft;
+    CreditNftManager creditNftManager;
     UbiquityCreditToken creditToken;
     DollarMintExcess dollarMintExcess;
     SushiSwapPool sushiGovernancePool;
@@ -91,7 +91,7 @@ contract LiveTestHelper is Test {
 
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-    uint256 creditNFTLengthBlocks = 100;
+    uint256 creditNftLengthBlocks = 100;
 
     address[] migrating;
     uint256[] migrateLP;
@@ -119,8 +119,8 @@ contract LiveTestHelper is Test {
         dollarToken = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(dollarToken));
 
-        creditNFT = new MockCreditNFT(100);
-        manager.setCreditNFTAddress(address(creditNFT));
+        creditNft = new MockCreditNft(100);
+        manager.setCreditNftAddress(address(creditNft));
 
         ubiquityFormulas = new UbiquityFormulas();
         manager.setFormulasAddress(address(ubiquityFormulas));
@@ -220,30 +220,30 @@ contract LiveTestHelper is Test {
         creditRedemptionCalc = new CreditRedemptionCalculator(address(manager));
         manager.setCreditCalculatorAddress(address(creditRedemptionCalc));
 
-        creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(
+        creditNftRedemptionCalc = new CreditNftRedemptionCalculator(
             address(manager)
         );
-        manager.setCreditNFTCalculatorAddress(address(creditNFTRedemptionCalc));
+        manager.setCreditNftCalculatorAddress(address(creditNftRedemptionCalc));
 
         dollarMintCalc = new DollarMintCalculator(address(manager));
         manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
-        creditNFTManager = new CreditNFTManager(
+        creditNftManager = new CreditNftManager(
             address(manager),
-            creditNFTLengthBlocks
+            creditNftLengthBlocks
         );
 
         manager.grantRole(
             manager.CREDIT_NFT_MANAGER_ROLE(),
-            address(creditNFTManager)
+            address(creditNftManager)
         );
         manager.grantRole(
             manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(creditNFTManager)
+            address(creditNftManager)
         );
         manager.grantRole(
             manager.GOVERNANCE_TOKEN_BURNER_ROLE(),
-            address(creditNFTManager)
+            address(creditNftManager)
         );
 
         creditToken = new UbiquityCreditToken(address(manager));
@@ -251,7 +251,7 @@ contract LiveTestHelper is Test {
 
         dollarMintExcess = new DollarMintExcess(address(manager));
         manager.setExcessDollarsDistributor(
-            address(creditNFTManager),
+            address(creditNftManager),
             address(dollarMintExcess)
         );
 

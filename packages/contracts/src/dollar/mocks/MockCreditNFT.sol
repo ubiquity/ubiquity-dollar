@@ -4,19 +4,19 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
-contract MockCreditNFT is ERC1155 {
+contract MockCreditNft is ERC1155 {
     uint256 private _totalOutstandingDebt;
     uint256 public checkPoint;
     mapping(address => mapping(uint256 => uint256)) _balances;
 
-    event MintedCreditNFT(
+    event MintedCreditNft(
         address recipient,
         uint256 expiryBlock,
         uint256 amount
     );
 
-    event BurnedCreditNFT(
-        address creditNFTHolder,
+    event BurnedCreditNft(
+        address creditNftHolder,
         uint256 expiryBlock,
         uint256 amount
     );
@@ -38,7 +38,7 @@ contract MockCreditNFT is ERC1155 {
         checkPoint = block.number;
     }
 
-    function mintCreditNFT(
+    function mintCreditNft(
         address receiver,
         uint256 amount,
         uint256 expiryBlockNumber
@@ -46,7 +46,7 @@ contract MockCreditNFT is ERC1155 {
         _balances[receiver][expiryBlockNumber] =
             _balances[receiver][expiryBlockNumber] +
             amount;
-        emit MintedCreditNFT(receiver, expiryBlockNumber, amount);
+        emit MintedCreditNft(receiver, expiryBlockNumber, amount);
     }
 
     function balanceOf(
@@ -56,14 +56,14 @@ contract MockCreditNFT is ERC1155 {
         return _balances[receiver][id];
     }
 
-    function burnCreditNFT(
-        address creditNFTOwner,
+    function burnCreditNft(
+        address creditNftOwner,
         uint256 amount,
         uint256 expiryBlockNumber
     ) public {
-        uint256 _balance = _balances[creditNFTOwner][expiryBlockNumber];
+        uint256 _balance = _balances[creditNftOwner][expiryBlockNumber];
         require(_balance >= amount, "Insufficient balance");
-        _balances[creditNFTOwner][expiryBlockNumber] = _balance - amount;
-        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, amount);
+        _balances[creditNftOwner][expiryBlockNumber] = _balance - amount;
+        emit BurnedCreditNft(creditNftOwner, expiryBlockNumber, amount);
     }
 }

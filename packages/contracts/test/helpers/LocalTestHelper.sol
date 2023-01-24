@@ -4,10 +4,10 @@ pragma solidity ^0.8.3;
 import {UbiquityDollarManager} from "../../src/dollar/core/UbiquityDollarManager.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {CreditRedemptionCalculator} from "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {CreditNFTRedemptionCalculator} from "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import {CreditNftRedemptionCalculator} from "../../src/dollar/core/CreditNftRedemptionCalculator.sol";
 import {DollarMintCalculator} from "../../src/dollar/core/DollarMintCalculator.sol";
 import {DollarMintExcess} from "../../src/dollar/core/DollarMintExcess.sol";
-import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
+import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
@@ -15,10 +15,10 @@ import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-contract MockCreditNFTRedemptionCalculator {
+contract MockCreditNftRedemptionCalculator {
     constructor() {}
 
-    function getCreditNFTAmount(
+    function getCreditNftAmount(
         uint256 dollarsToBurn
     ) external pure returns (uint256) {
         return dollarsToBurn;
@@ -36,8 +36,8 @@ abstract contract LocalTestHelper is Test {
 
         vm.startPrank(admin);
         // deploy credit NFT token
-        MockCreditNFT _creditNFT = new MockCreditNFT(100);
-        _manager.setCreditNFTAddress(address(_creditNFT));
+        MockCreditNft _creditNft = new MockCreditNft(100);
+        _manager.setCreditNftAddress(address(_creditNft));
 
         // deploy dollar token
         MockDollarToken _dollarToken = new MockDollarToken(10000e18);
@@ -59,10 +59,10 @@ abstract contract LocalTestHelper is Test {
         );
         _manager.setGovernanceTokenAddress(address(_governanceToken));
 
-        // deploy CreditNFTRedemptionCalculator
-        MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator = new MockCreditNFTRedemptionCalculator();
-        _manager.setCreditNFTCalculatorAddress(
-            address(_creditNFTRedemptionCalculator)
+        // deploy CreditNftRedemptionCalculator
+        MockCreditNftRedemptionCalculator _creditNftRedemptionCalculator = new MockCreditNftRedemptionCalculator();
+        _manager.setCreditNftCalculatorAddress(
+            address(_creditNftRedemptionCalculator)
         );
 
         // deploy credit token

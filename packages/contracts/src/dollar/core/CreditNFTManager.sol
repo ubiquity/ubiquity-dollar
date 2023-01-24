@@ -3,23 +3,23 @@ pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../interfaces/ICreditNFTManager.sol";
+import "../interfaces/ICreditNftManager.sol";
 import "../interfaces/ICreditRedemptionCalculator.sol";
-import "../interfaces/ICreditNFTRedemptionCalculator.sol";
+import "../interfaces/ICreditNftRedemptionCalculator.sol";
 import "../interfaces/IDollarMintCalculator.sol";
 import "../interfaces/IDollarMintExcess.sol";
 import "./TWAPOracleDollar3pool.sol";
 import "./UbiquityDollarToken.sol";
 import "./UbiquityCreditToken.sol";
 import "./UbiquityDollarManager.sol";
-import "./CreditNFT.sol";
+import "./CreditNft.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders
 /// @notice Allows users to burn their Ubiquity Dollar in exchange for Credit NFT
 /// redeemable in the future
 /// @notice Allows users to redeem individual Credit NFT or batch redeem
 /// Credit NFT on a first-come first-serve basis
-contract CreditNFTManager is ERC165, IERC1155Receiver {
+contract CreditNftManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
     UbiquityDollarManager public manager;
@@ -29,20 +29,20 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     uint256 public dollarsMintedThisCycle;
     bool public debtCycle;
     uint256 public blockHeightDebt;
-    uint256 public creditNFTLengthBlocks;
-    uint256 public expiredCreditNFTConversionRate = 2;
+    uint256 public creditNftLengthBlocks;
+    uint256 public expiredCreditNftConversionRate = 2;
 
-    event ExpiredCreditNFTConversionRateChanged(
+    event ExpiredCreditNftConversionRateChanged(
         uint256 newRate,
         uint256 previousRate
     );
 
-    event CreditNFTLengthChanged(
-        uint256 newCreditNFTLengthBlocks,
-        uint256 previousCreditNFTLengthBlocks
+    event CreditNftLengthChanged(
+        uint256 newCreditNftLengthBlocks,
+        uint256 previousCreditNftLengthBlocks
     );
 
-    modifier onlyCreditNFTManager() {
+    modifier onlyCreditNftManager() {
         require(
             manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
             "Caller is not a Credit NFT manager"
@@ -51,37 +51,37 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     }
 
     /// @param _manager the address of the manager contract so we can fetch variables
-    /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
+    /// @param _creditNftLengthBlocks how many blocks Credit NFT last. can't be changed
     /// once set (unless migrated)
-    constructor(address _manager, uint256 _creditNFTLengthBlocks) {
+    constructor(address _manager, uint256 _creditNftLengthBlocks) {
         manager = UbiquityDollarManager(_manager);
-        creditNFTLengthBlocks = _creditNFTLengthBlocks;
+        creditNftLengthBlocks = _creditNftLengthBlocks;
     }
 
-    function setExpiredCreditNFTConversionRate(
+    function setExpiredCreditNftConversionRate(
         uint256 rate
-    ) external onlyCreditNFTManager {
-        emit ExpiredCreditNFTConversionRateChanged(
+    ) external onlyCreditNftManager {
+        emit ExpiredCreditNftConversionRateChanged(
             rate,
-            expiredCreditNFTConversionRate
+            expiredCreditNftConversionRate
         );
-        expiredCreditNFTConversionRate = rate;
+        expiredCreditNftConversionRate = rate;
     }
 
-    function setCreditNFTLength(
-        uint256 _creditNFTLengthBlocks
-    ) external onlyCreditNFTManager {
-        emit CreditNFTLengthChanged(
-            _creditNFTLengthBlocks,
-            creditNFTLengthBlocks
+    function setCreditNftLength(
+        uint256 _creditNftLengthBlocks
+    ) external onlyCreditNftManager {
+        emit CreditNftLengthChanged(
+            _creditNftLengthBlocks,
+            creditNftLengthBlocks
         );
-        creditNFTLengthBlocks = _creditNFTLengthBlocks;
+        creditNftLengthBlocks = _creditNftLengthBlocks;
     }
 
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function exchangeDollarsForCreditNFT(
+    function exchangeDollarsForCreditNft(
         uint256 amount
     ) external returns (uint256) {
         uint256 twapPrice = _getTwapPrice();
@@ -91,8 +91,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             "Price must be below 1 to mint Credit NFT"
         );
 
-        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
-        creditNFT.updateTotalDebt();
+        CreditNft creditNft = CreditNft(manager.creditNftAddress());
+        creditNft.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
@@ -102,10 +102,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             dollarsMintedThisCycle = 0;
         }
 
-        ICreditNFTRedemptionCalculator creditNFTCalculator = ICreditNFTRedemptionCalculator(
-                manager.creditNFTCalculatorAddress()
+        ICreditNftRedemptionCalculator creditNftCalculator = ICreditNftRedemptionCalculator(
+                manager.creditNftCalculatorAddress()
             );
-        uint256 creditNFTToMint = creditNFTCalculator.getCreditNFTAmount(
+        uint256 creditNftToMint = creditNftCalculator.getCreditNftAmount(
             amount
         );
 
@@ -115,8 +115,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             amount
         );
 
-        uint256 expiryBlockNumber = block.number + (creditNFTLengthBlocks);
-        creditNFT.mintCreditNFT(msg.sender, creditNFTToMint, expiryBlockNumber);
+        uint256 expiryBlockNumber = block.number + (creditNftLengthBlocks);
+        creditNft.mintCreditNft(msg.sender, creditNftToMint, expiryBlockNumber);
 
         //give the caller the block number of the minted nft
         return expiryBlockNumber;
@@ -133,8 +133,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
 
-        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
-        creditNFT.updateTotalDebt();
+        CreditNft creditNft = CreditNft(manager.creditNftAddress());
+        creditNft.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
@@ -169,13 +169,13 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
     /// @dev uses the current Credit NFT for dollars calculation to get Credit NFT for dollars
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function getCreditNFTReturnedForDollars(
+    function getCreditNftReturnedForDollars(
         uint256 amount
     ) external view returns (uint256) {
-        ICreditNFTRedemptionCalculator creditNFTCalculator = ICreditNFTRedemptionCalculator(
-                manager.creditNFTCalculatorAddress()
+        ICreditNftRedemptionCalculator creditNftCalculator = ICreditNftRedemptionCalculator(
+                manager.creditNftCalculatorAddress()
             );
-        return creditNFTCalculator.getCreditNFTAmount(amount);
+        return creditNftCalculator.getCreditNftAmount(amount);
     }
 
     /// @dev uses the current Credit for dollars calculation to get Credit for dollars
@@ -228,26 +228,26 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return governanceAmount amount of Governance Token minted to Credit NFT holder
-    function burnExpiredCreditNFTForGovernance(
+    function burnExpiredCreditNftForGovernance(
         uint256 id,
         uint256 amount
     ) public returns (uint256 governanceAmount) {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
-        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
+        CreditNft creditNft = CreditNft(manager.creditNftAddress());
 
         require(id <= block.number, "Credit NFT has not expired");
         require(
-            creditNFT.balanceOf(msg.sender, id) >= amount,
+            creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit NFT"
         );
 
-        creditNFT.burnCreditNFT(msg.sender, amount, id);
+        creditNft.burnCreditNft(msg.sender, amount, id);
 
         // Mint Governance Token to this contract. Transfer Governance Token to msg.sender i.e. Credit NFT holder
         IERC20Ubiquity governanceToken = IERC20Ubiquity(
             manager.governanceTokenAddress()
         );
-        governanceAmount = amount / expiredCreditNFTConversionRate;
+        governanceAmount = amount / expiredCreditNftConversionRate;
         governanceToken.mint(msg.sender, governanceAmount);
     }
 
@@ -256,20 +256,20 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return amount of Credit pool tokens (i.e. LP tokens) minted to Credit NFT holder
-    function burnCreditNFTForCredit(
+    function burnCreditNftForCredit(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
-        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
+        CreditNft creditNft = CreditNft(manager.creditNftAddress());
 
         require(id > block.timestamp, "Credit NFT has expired");
         require(
-            creditNFT.balanceOf(msg.sender, id) >= amount,
+            creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit NFT"
         );
 
-        creditNFT.burnCreditNFT(msg.sender, amount, id);
+        creditNft.burnCreditNft(msg.sender, amount, id);
 
         // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. Credit NFT holder
         UbiquityCreditToken creditToken = UbiquityCreditToken(
@@ -323,7 +323,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param id the block number of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return amount of unredeemed Credit NFT
-    function redeemCreditNFT(
+    function redeemCreditNft(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
@@ -336,11 +336,11 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         if (debtCycle) {
             debtCycle = false;
         }
-        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
+        CreditNft creditNft = CreditNft(manager.creditNftAddress());
 
         require(id > block.number, "Credit NFT has expired");
         require(
-            creditNFT.balanceOf(msg.sender, id) >= amount,
+            creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit NFT"
         );
 
@@ -356,28 +356,28 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             creditToken.totalSupply() <= dollarToken.balanceOf(address(this)),
             "There aren't enough Dollar to redeem currently"
         );
-        uint256 maxRedeemableCreditNFT = dollarToken.balanceOf(address(this)) -
+        uint256 maxRedeemableCreditNft = dollarToken.balanceOf(address(this)) -
             creditToken.totalSupply();
-        uint256 creditNFTToRedeem = amount;
+        uint256 creditNftToRedeem = amount;
 
-        if (amount > maxRedeemableCreditNFT) {
-            creditNFTToRedeem = maxRedeemableCreditNFT;
+        if (amount > maxRedeemableCreditNft) {
+            creditNftToRedeem = maxRedeemableCreditNft;
         }
         require(
             dollarToken.balanceOf(address(this)) > 0,
             "There aren't any Dollar to redeem currently"
         );
 
-        // creditNFTManager must be an operator to transfer on behalf of msg.sender
-        creditNFT.burnCreditNFT(msg.sender, creditNFTToRedeem, id);
-        dollarToken.transfer(msg.sender, creditNFTToRedeem);
+        // creditNftManager must be an operator to transfer on behalf of msg.sender
+        creditNft.burnCreditNft(msg.sender, creditNftToRedeem, id);
+        dollarToken.transfer(msg.sender, creditNftToRedeem);
 
-        return amount - (creditNFTToRedeem);
+        return amount - (creditNftToRedeem);
     }
 
     function mintClaimableDollars() public {
-        CreditNFT creditNFT = CreditNFT(manager.creditNFTAddress());
-        creditNFT.updateTotalDebt();
+        CreditNft creditNft = CreditNft(manager.creditNftAddress());
+        creditNft.updateTotalDebt();
 
         // uint256 twapPrice = _getTwapPrice(); //unused variable. Why here?
         uint256 totalMintableDollars = IDollarMintCalculator(
@@ -397,7 +397,7 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
         );
 
         uint256 currentRedeemableBalance = dollarToken.balanceOf(address(this));
-        uint256 totalOutstandingDebt = creditNFT.getTotalOutstandingDebt() +
+        uint256 totalOutstandingDebt = creditNft.getTotalOutstandingDebt() +
             creditToken.totalSupply();
 
         if (currentRedeemableBalance > totalOutstandingDebt) {

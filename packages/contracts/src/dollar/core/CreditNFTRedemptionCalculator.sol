@@ -2,13 +2,13 @@
 pragma solidity ^0.8.3;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/ICreditNFTRedemptionCalculator.sol";
+import "../interfaces/ICreditNftRedemptionCalculator.sol";
 import "../libs/ABDKMathQuad.sol";
-import "./CreditNFT.sol";
+import "./CreditNft.sol";
 import "./UbiquityDollarManager.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
-contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
+contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
@@ -22,16 +22,16 @@ contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
         manager = UbiquityDollarManager(_manager);
     }
 
-    function getCreditNFTAmount(
+    function getCreditNftAmount(
         uint256 dollarsToBurn
     ) external view override returns (uint256) {
         require(
-            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt() <
+            CreditNft(manager.creditNftAddress()).getTotalOutstandingDebt() <
                 IERC20(manager.dollarTokenAddress()).totalSupply(),
             "CreditNFT to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
-        bytes16 totalDebt = CreditNFT(manager.creditNFTAddress())
+        bytes16 totalDebt = CreditNft(manager.creditNftAddress())
             .getTotalOutstandingDebt()
             .fromUInt();
         bytes16 r = totalDebt.div(

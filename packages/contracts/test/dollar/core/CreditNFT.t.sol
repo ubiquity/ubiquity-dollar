@@ -2,96 +2,96 @@
 pragma solidity ^0.8.3;
 
 import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
-import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
+import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
-contract CreditNFTTest is LocalTestHelper {
+contract CreditNftTest is LocalTestHelper {
     address dollarManagerAddress;
-    address creditNFTAddress;
+    address creditNftAddress;
 
-    event MintedCreditNFT(
+    event MintedCreditNft(
         address recipient,
         uint256 expiryBlock,
         uint256 amount
     );
 
-    event BurnedCreditNFT(
-        address creditNFTHolder,
+    event BurnedCreditNft(
+        address creditNftHolder,
         uint256 expiryBlock,
         uint256 amount
     );
 
     function setUp() public {
         dollarManagerAddress = helpers_deployUbiquityDollarManager();
-        creditNFTAddress = address(new CreditNFT(dollarManagerAddress));
+        creditNftAddress = address(new CreditNft(dollarManagerAddress));
     }
 
-    function test_mintCreditNFTRevertsIfNotCreditNFTManager() public {
+    function test_mintCreditNftRevertsIfNotCreditNftManager() public {
         vm.expectRevert("Caller is not a Credit NFT manager");
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x123), 1, 100);
+        CreditNft(creditNftAddress).mintCreditNft(address(0x123), 1, 100);
     }
 
-    function test_mintCreditNFTWorks() public {
+    function test_mintCreditNftWorks() public {
         address receiver = address(0x123);
         uint256 expiryBlockNumber = 100;
         uint256 mintAmount = 1;
 
-        uint256 init_balance = CreditNFT(creditNFTAddress).balanceOf(
+        uint256 init_balance = CreditNft(creditNftAddress).balanceOf(
             receiver,
             expiryBlockNumber
         );
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
-        emit MintedCreditNFT(receiver, expiryBlockNumber, 1);
-        CreditNFT(creditNFTAddress).mintCreditNFT(
+        emit MintedCreditNft(receiver, expiryBlockNumber, 1);
+        CreditNft(creditNftAddress).mintCreditNft(
             receiver,
             mintAmount,
             expiryBlockNumber
         );
-        uint256 last_balance = CreditNFT(creditNFTAddress).balanceOf(
+        uint256 last_balance = CreditNft(creditNftAddress).balanceOf(
             receiver,
             expiryBlockNumber
         );
         assertEq(last_balance - init_balance, mintAmount);
 
-        uint256[] memory holderTokens = CreditNFT(creditNFTAddress)
+        uint256[] memory holderTokens = CreditNft(creditNftAddress)
             .holderTokens(receiver);
         assertEq(holderTokens[0], expiryBlockNumber);
     }
 
-    function test_burnCreditNFTRevertsIfNotCreditNFTManager() public {
+    function test_burnCreditNftRevertsIfNotCreditNftManager() public {
         vm.expectRevert("Caller is not a Credit NFT manager");
-        CreditNFT(creditNFTAddress).burnCreditNFT(address(0x123), 1, 100);
+        CreditNft(creditNftAddress).burnCreditNft(address(0x123), 1, 100);
     }
 
-    function test_burnCreditNFTRevertsWorks() public {
-        address creditNFTOwner = address(0x123);
+    function test_burnCreditNftRevertsWorks() public {
+        address creditNftOwner = address(0x123);
         uint256 expiryBlockNumber = 100;
         uint256 burnAmount = 1;
 
         vm.prank(admin);
-        CreditNFT(creditNFTAddress).mintCreditNFT(
-            creditNFTOwner,
+        CreditNft(creditNftAddress).mintCreditNft(
+            creditNftOwner,
             10,
             expiryBlockNumber
         );
-        uint256 init_balance = CreditNFT(creditNFTAddress).balanceOf(
-            creditNFTOwner,
+        uint256 init_balance = CreditNft(creditNftAddress).balanceOf(
+            creditNftOwner,
             expiryBlockNumber
         );
-        vm.prank(creditNFTOwner);
-        CreditNFT(creditNFTAddress).setApprovalForAll(admin, true);
+        vm.prank(creditNftOwner);
+        CreditNft(creditNftAddress).setApprovalForAll(admin, true);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
-        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, 1);
-        CreditNFT(creditNFTAddress).burnCreditNFT(
-            creditNFTOwner,
+        emit BurnedCreditNft(creditNftOwner, expiryBlockNumber, 1);
+        CreditNft(creditNftAddress).burnCreditNft(
+            creditNftOwner,
             burnAmount,
             expiryBlockNumber
         );
-        uint256 last_balance = CreditNFT(creditNFTAddress).balanceOf(
-            creditNFTOwner,
+        uint256 last_balance = CreditNft(creditNftAddress).balanceOf(
+            creditNftOwner,
             expiryBlockNumber
         );
         assertEq(init_balance - last_balance, burnAmount);
@@ -99,30 +99,30 @@ contract CreditNFTTest is LocalTestHelper {
 
     function test_updateTotalDebt() public {
         vm.startPrank(admin);
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x222), 10, 20000);
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x333), 10, 30000);
+        CreditNft(creditNftAddress).mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        CreditNft(creditNftAddress).mintCreditNft(address(0x222), 10, 20000);
+        CreditNft(creditNftAddress).mintCreditNft(address(0x333), 10, 30000);
         vm.stopPrank();
 
         // sets block.number
         vm.roll(15000);
-        CreditNFT(creditNFTAddress).updateTotalDebt();
-        uint256 outStandingTotalDebt = CreditNFT(creditNFTAddress)
+        CreditNft(creditNftAddress).updateTotalDebt();
+        uint256 outStandingTotalDebt = CreditNft(creditNftAddress)
             .getTotalOutstandingDebt();
         assertEq(outStandingTotalDebt, 20);
     }
 
     function test_getTotalOutstandingDebt() public {
         vm.startPrank(admin);
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x222), 10, 20000);
-        CreditNFT(creditNFTAddress).mintCreditNFT(address(0x333), 10, 30000);
+        CreditNft(creditNftAddress).mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        CreditNft(creditNftAddress).mintCreditNft(address(0x222), 10, 20000);
+        CreditNft(creditNftAddress).mintCreditNft(address(0x333), 10, 30000);
         vm.stopPrank();
 
         // sets block.number
         vm.roll(25000);
-        CreditNFT(creditNFTAddress).updateTotalDebt();
-        uint256 outStandingTotalDebt = CreditNFT(creditNFTAddress)
+        CreditNft(creditNftAddress).updateTotalDebt();
+        uint256 outStandingTotalDebt = CreditNft(creditNftAddress)
             .getTotalOutstandingDebt();
         assertEq(outStandingTotalDebt, 10);
     }

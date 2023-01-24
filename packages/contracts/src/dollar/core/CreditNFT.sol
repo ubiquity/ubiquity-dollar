@@ -8,7 +8,7 @@ import "./UbiquityDollarManager.sol";
 /// @title A Credit NFT redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
-contract CreditNFT is ERC1155Ubiquity {
+contract CreditNft is ERC1155Ubiquity {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     //not public as if called externally can give inaccurate value. see method
@@ -20,19 +20,19 @@ contract CreditNFT is ERC1155Ubiquity {
     //ordered list of coupon expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
-    event MintedCreditNFT(
+    event MintedCreditNft(
         address recipient,
         uint256 expiryBlock,
         uint256 amount
     );
 
-    event BurnedCreditNFT(
-        address creditNFTHolder,
+    event BurnedCreditNft(
+        address creditNftHolder,
         uint256 expiryBlock,
         uint256 amount
     );
 
-    modifier onlyCreditNFTManager() {
+    modifier onlyCreditNftManager() {
         require(
             manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
             "Caller is not a Credit NFT manager"
@@ -49,13 +49,13 @@ contract CreditNFT is ERC1155Ubiquity {
     /// @notice Mint an amount of Credit NFT expiring at a certain block for a certain recipient
     /// @param amount amount of tokens to mint
     /// @param expiryBlockNumber the expiration block number of the Credit NFT to mint
-    function mintCreditNFT(
+    function mintCreditNft(
         address recipient,
         uint256 amount,
         uint256 expiryBlockNumber
-    ) public onlyCreditNFTManager {
+    ) public onlyCreditNftManager {
         mint(recipient, expiryBlockNumber, amount, "");
-        emit MintedCreditNFT(recipient, expiryBlockNumber, amount);
+        emit MintedCreditNft(recipient, expiryBlockNumber, amount);
 
         //insert new relevant block number if it doesn't exist in our list
         // (linked list implementation won't insert if dupe)
@@ -70,20 +70,20 @@ contract CreditNFT is ERC1155Ubiquity {
 
     /// @notice Burn an amount of Credit NFT expiring at a certain block from
     /// a certain holder's balance
-    /// @param creditNFTOwner the owner of those Credit NFT
+    /// @param creditNftOwner the owner of those Credit NFT
     /// @param amount amount of tokens to burn
     /// @param expiryBlockNumber the expiration block number of the Credit NFT to burn
-    function burnCreditNFT(
-        address creditNFTOwner,
+    function burnCreditNft(
+        address creditNftOwner,
         uint256 amount,
         uint256 expiryBlockNumber
-    ) public onlyCreditNFTManager {
+    ) public onlyCreditNftManager {
         require(
-            balanceOf(creditNFTOwner, expiryBlockNumber) >= amount,
+            balanceOf(creditNftOwner, expiryBlockNumber) >= amount,
             "Credit NFT owner not enough coupons"
         );
-        burn(creditNFTOwner, expiryBlockNumber, amount);
-        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, amount);
+        burn(creditNftOwner, expiryBlockNumber, amount);
+        emit BurnedCreditNft(creditNftOwner, expiryBlockNumber, amount);
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =

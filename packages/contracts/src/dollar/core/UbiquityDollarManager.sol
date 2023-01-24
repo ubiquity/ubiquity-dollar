@@ -36,9 +36,9 @@ contract UbiquityDollarManager is AccessControl {
     bytes32 public constant GOVERNANCE_TOKEN_MANAGER_ROLE =
         keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE");
     address public twapOracleAddress;
-    address public creditNFTAddress;
+    address public creditNftAddress;
     address public dollarTokenAddress;
-    address public creditNFTCalculatorAddress;
+    address public creditNftCalculatorAddress;
     address public dollarMintCalculatorAddress;
     address public stakingShareAddress;
     address public stakingContractAddress;
@@ -52,7 +52,7 @@ contract UbiquityDollarManager is AccessControl {
     address public creditTokenAddress;
     address public creditCalculatorAddress;
 
-    //key = address of CreditNFTManager, value = DollarMintExcess
+    //key = address of CreditNftManager, value = DollarMintExcess
     mapping(address => address) private _excessDollarDistributors;
 
     modifier onlyAdmin() {
@@ -90,8 +90,8 @@ contract UbiquityDollarManager is AccessControl {
         creditTokenAddress = _creditTokenAddress;
     }
 
-    function setCreditNFTAddress(address _creditNFTAddress) external onlyAdmin {
-        creditNFTAddress = _creditNFTAddress;
+    function setCreditNftAddress(address _creditNftAddress) external onlyAdmin {
+        creditNftAddress = _creditNftAddress;
     }
 
     function setIncentiveToDollar(
@@ -128,10 +128,10 @@ contract UbiquityDollarManager is AccessControl {
         creditCalculatorAddress = _creditCalculatorAddress;
     }
 
-    function setCreditNFTCalculatorAddress(
-        address _creditNFTCalculatorAddress
+    function setCreditNftCalculatorAddress(
+        address _creditNftCalculatorAddress
     ) external onlyAdmin {
-        creditNFTCalculatorAddress = _creditNFTCalculatorAddress;
+        creditNftCalculatorAddress = _creditNftCalculatorAddress;
     }
 
     function setDollarMintCalculatorAddress(
@@ -141,10 +141,10 @@ contract UbiquityDollarManager is AccessControl {
     }
 
     function setExcessDollarsDistributor(
-        address creditNFTManagerAddress,
+        address creditNftManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        _excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
+        _excessDollarDistributors[creditNftManagerAddress] = dollarMintExcess;
     }
 
     function setMasterChefAddress(
@@ -255,8 +255,8 @@ contract UbiquityDollarManager is AccessControl {
     }
 
     function getExcessDollarsDistributor(
-        address _creditNFTManagerAddress
+        address _creditNftManagerAddress
     ) external view returns (address) {
-        return _excessDollarDistributors[_creditNFTManagerAddress];
+        return _excessDollarDistributors[_creditNftManagerAddress];
     }
 }

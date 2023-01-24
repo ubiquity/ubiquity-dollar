@@ -4,10 +4,10 @@ pragma solidity ^0.8.3;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
 import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {CreditNFTRedemptionCalculator} from "../../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import {CreditNftRedemptionCalculator} from "../../../src/dollar/core/CreditNftRedemptionCalculator.sol";
 import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
-import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
+import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {CurveDollarIncentive} from "../../../src/dollar/transfer-hooks/CurveDollarIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
