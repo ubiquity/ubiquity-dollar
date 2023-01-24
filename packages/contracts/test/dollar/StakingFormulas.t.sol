@@ -43,11 +43,7 @@ contract StakingFormulasTest is LocalTestHelper {
         uint256 _amount
     ) public {
         assertEq(
-            stakingFormulas.lpRewardsRemoveLiquidityNormalization(
-                _stake,
-                _shareInfo,
-                _amount
-            ),
+            stakingFormulas.lpRewardsRemoveLiquidityNormalization(_amount),
             _amount
         );
     }
@@ -58,11 +54,7 @@ contract StakingFormulasTest is LocalTestHelper {
         uint256 _amount
     ) public {
         assertEq(
-            stakingFormulas.lpRewardsAddLiquidityNormalization(
-                _stake,
-                _shareInfo,
-                _amount
-            ),
+            stakingFormulas.lpRewardsAddLiquidityNormalization(_amount),
             _amount
         );
     }

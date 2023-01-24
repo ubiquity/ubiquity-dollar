@@ -332,7 +332,7 @@ contract Staking is CollectableDust, Pausable {
 
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsAddLiquidityNormalization(stake, bs, pendingLpReward);
+            .lpRewardsAddLiquidityNormalization(pendingLpReward);
         // add these LP Rewards to the deposited amount of LP token
         stake.lpAmount += pendingLpReward;
         lpRewards -= pendingLpReward;
@@ -428,7 +428,7 @@ contract Staking is CollectableDust, Pausable {
 
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsRemoveLiquidityNormalization(stake, bs, pendingLpReward);
+            .lpRewardsRemoveLiquidityNormalization(pendingLpReward);
 
         uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
             .correctedAmountToWithdraw(

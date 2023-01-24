@@ -121,13 +121,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
     function testOnERC1155Received_ShouldReturnSelector() public {
         assertEq(
-            directGovernanceFarmer.onERC1155Received(
-                address(0x1),
-                address(0x2),
-                3,
-                4,
-                ""
-            ),
+            directGovernanceFarmer.onERC1155Received(),
             DirectGovernanceFarmer.onERC1155Received.selector
         );
     }
