@@ -257,7 +257,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
 };
 
 type BondingShareRowProps = ShareData & { disabled: boolean; onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
-const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, disabled, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
+const BondingShareRow = ({ id, ugov, bond, weeksLeft, disabled, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
   const [withdrawAmount] = useState("");
 
   const numLpAmount = +formatEther(bond.lpAmount);

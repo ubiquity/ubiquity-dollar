@@ -6,7 +6,6 @@ import { FC } from "react";
 import { ChildrenShim } from "./children-shim";
 
 const IS_DEV = process.env.NODE_ENV == "development";
-const LOCAL_NODE_ADDRESS = "http://localhost:8545";
 
 export type PossibleProviders = Web3Provider | JsonRpcProvider | null;
 

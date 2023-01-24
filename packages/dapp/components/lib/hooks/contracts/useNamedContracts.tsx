@@ -1,27 +1,31 @@
 import useWeb3, { PossibleProviders } from "../useWeb3";
 
-import Deployed_Contracts from "@ubiquity/contracts/deployments.json";
-import NAMED_ACCOUNTS from "../../../config/named-accounts.json";
+import allDeployments from "@ubiquity/contracts/deployments.json";
+import addresses from "../../../config/named-accounts.json";
 import { getCurveFactoryContract, getCreditNftManagerContract, getERC20Contract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts";
+import { deployedChainId } from "@/components/utils/deployments";
 
-const getDebtCouponManagerAddress = () => {
-  const contractDeployments: Record<string, any> = Deployed_Contracts;
-  const record = contractDeployments["1"] ?? {};
-  const contract = record?.contracts ? record?.contracts["DebtCouponManager"] : undefined;
-  return contract ? contract.address : undefined;
+const getCreditNftManager = () => {
+  const chainId = "1" as deployedChainId;
+  const mainnetDeployment = allDeployments[chainId];
+  if (!mainnetDeployment) {
+    throw new Error(`Mainnet deployment contracts artifact not found`);
+  }
+  throw new Error(`No CreditNftManager in deployments artifact`);
+  // return mainnetDeployment.contracts["CreditNftManager"];
+  // @FIXME: update deployment script
 };
-export const DEBT_COUPON_MANAGER_ADDRESS = getDebtCouponManagerAddress();
 
 export type NamedContracts = ReturnType<typeof connectedContracts> | null;
 export function connectedContracts(provider: NonNullable<PossibleProviders>) {
   return {
-    curvePool: getCurveFactoryContract(NAMED_ACCOUNTS.curveFactory, provider),
-    yieldProxy: getYieldProxyContract(NAMED_ACCOUNTS.yieldProxy, provider),
-    usdc: getERC20Contract(NAMED_ACCOUNTS.USDC, provider),
-    dai: getERC20Contract(NAMED_ACCOUNTS.DAI, provider),
-    usdt: getERC20Contract(NAMED_ACCOUNTS.USDT, provider),
-    debtCouponManager: getCreditNftManagerContract(DEBT_COUPON_MANAGER_ADDRESS, provider),
-    jarUsdc: getIJarContract(NAMED_ACCOUNTS.jarUSDCAddr, provider),
+    curvePool: getCurveFactoryContract(addresses.curveFactory, provider),
+    yieldProxy: getYieldProxyContract(addresses.yieldProxy, provider),
+    usdc: getERC20Contract(addresses.USDC, provider),
+    dai: getERC20Contract(addresses.DAI, provider),
+    usdt: getERC20Contract(addresses.USDT, provider),
+    creditNftManager: getCreditNftManagerContract(getCreditNftManager(), provider),
+    jarUsdc: getIJarContract(addresses.jarUSDCAddr, provider),
   };
 }
 

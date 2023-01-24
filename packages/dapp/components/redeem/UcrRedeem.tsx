@@ -12,7 +12,7 @@ import Button from "../ui/Button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 import useRouter from "../lib/hooks/useRouter";
 import useTrade from "../lib/hooks/useTrade";
-import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
+import { SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
 import { getUniswapV3RouterABIContract } from "../utils/contracts";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
 
