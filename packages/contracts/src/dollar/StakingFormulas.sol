@@ -27,14 +27,14 @@ contract StakingFormulas {
     }
 
     /// @dev formula may add a decreasing rewards if locking end is near when removing liquidity
-    /// @param _stake , staking share
-    /// @param _amount , amount of LP tokens
+    // / @param _stake , staking share
+    // / @param _amount , amount of LP tokens
     /// @notice rewards = _amount;
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsRemoveLiquidityNormalization(
-        StakingShare.Stake memory _stake,
-        uint256[2] memory _shareInfo,
+        // StakingShare.Stake memory _stake,
+        // uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {
         return _amount;
@@ -42,14 +42,14 @@ contract StakingFormulas {
 
     /* solhint-enable no-unused-vars */
     /// @dev formula may add a decreasing rewards if locking end is near when adding liquidity
-    /// @param _stake , staking share
-    /// @param _amount , amount of LP tokens
+    // / @param _stake , staking share
+    // / @param _amount , amount of LP tokens
     /// @notice rewards = _amount;
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsAddLiquidityNormalization(
-        StakingShare.Stake memory _stake,
-        uint256[2] memory _shareInfo,
+        // StakingShare.Stake memory _stake,
+        // uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {
         return _amount;

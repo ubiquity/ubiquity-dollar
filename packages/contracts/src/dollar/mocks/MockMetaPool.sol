@@ -28,20 +28,31 @@ contract MockMetaPool {
         return last_block_timestamp;
     }
 
-    function get_twap_balances(
-        uint256[2] memory _first_balances,
-        uint256[2] memory _last_balances,
-        uint256 _time_elapsed
-    ) external view returns (uint256[2] memory) {
+    function get_twap_balances()
+        external
+        view
+        returns (
+            // uint256[2] memory _first_balances,
+            // uint256[2] memory _last_balances,
+            // uint256 _time_elapsed
+            uint256[2] memory
+        )
+    {
         return balances;
     }
 
     function get_dy(
         int128 i,
-        int128 j,
-        uint256 dx,
-        uint256[2] memory _balances
-    ) external view returns (uint256) {
+        int128 j
+    )
+        external
+        view
+        returns (
+            // uint256 dx,
+            // uint256[2] memory _balances
+            uint256
+        )
+    {
         if (i == 0 && j == 1) {
             return dy_values[1];
         } else if (i == 1 && j == 0) {

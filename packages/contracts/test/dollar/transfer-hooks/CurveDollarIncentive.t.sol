@@ -165,9 +165,9 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
-        IERC20 governanceToken = IERC20(
-            UbiquityDollarManager(dollarManagerAddress).governanceTokenAddress()
-        );
+        // IERC20 governanceToken = IERC20(
+        //     UbiquityDollarManager(dollarManagerAddress).governanceTokenAddress()
+        // );
         address dollarAddress = UbiquityDollarManager(dollarManagerAddress)
             .dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);

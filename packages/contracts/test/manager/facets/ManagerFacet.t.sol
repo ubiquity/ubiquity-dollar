@@ -10,7 +10,7 @@ import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {GOVERNANCE_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE} from "../../../src/manager/libraries/LibAppStorage.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
-    function testCanCallGeneralFunctions() public {
+    function testCanCallGeneralFunctions() public view {
         IManagerFacet.getExcessDollarsDistributor(contract1);
     }
 
