@@ -5,12 +5,13 @@
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "next build && next export --outdir dist",
+    "build": "run-s build:types build:next build:export",
+    "build:next": "next build",
+    "build:export": "next export --outdir dist",
+    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types",
     "start": "next dev",
     "clean": "rimraf ./dist",
-    "purge": "yarn clean && rimraf ./node_modules ./dist ./next",
-    "lint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "prettier": "prettier --write ."
+    "purge": "yarn clean && rimraf ./node_modules ./dist ./next"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",
@@ -19,15 +20,11 @@
     "@types/react": "^18.0.15",
     "@types/react-transition-group": "^4",
     "@uniswap/v3-periphery": "1.4.1",
-    "lint-staged": "^13.0.3",
-    "nodemon": "^2.0.19",
-    "postcss": "^8.4.21",
-    "prettier": "2.7.1",
     "typescript": "^4.9.4"
   },
   "dependencies": {
     "@tippyjs/react": "^4.2.5",
-    "@typechain/ethers-v5": "^10.1.0",
+    "@typechain/ethers-v5": "^10.2.0",
     "@types/btoa": "^1.2.3",
     "@types/react-dom": "^18.0.6",
     "@ubiquity/contracts": "workspace:*",

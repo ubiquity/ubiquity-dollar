@@ -48,7 +48,6 @@ typings
 contracts/*/deployments/*
 !contracts/*/deployments/mainnet
 contracts/dollar/tasks/library/distributor/fixtures/operators.json
-fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
 
@@ -60,3 +59,5 @@ fixtures/contracts-addresses/*
 cache
 build
 out
+
+packages/dapp/types
