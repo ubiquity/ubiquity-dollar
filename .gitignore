@@ -51,6 +51,7 @@ contracts/dollar/tasks/library/distributor/fixtures/operators.json
 fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
+packages/contracts/broadcast/*/*/*
 
 
 .yarn

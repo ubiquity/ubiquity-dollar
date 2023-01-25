@@ -3320,7 +3320,6 @@ __metadata:
     "@ubiquity/contracts": "workspace:*"
     "@uniswap/sdk-core": ^3.1.0
     "@uniswap/smart-order-router": ^2.10.1
-    "@uniswap/v3-periphery": 1.4.1
     "@uniswap/widgets": 2.18.0
     "@walletconnect/ethereum-provider": ^1.8.0
     autoprefixer: ^10.4.8
