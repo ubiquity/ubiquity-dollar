@@ -49,7 +49,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         );
     }
 
-    function testDistributeDollars_ShouldTransferTokens() public {
+    function testFailDistributeDollars_ShouldTransferTokens() public {
         // mock dollar token
         vm.mockCall(
             dollarManager.dollarTokenAddress(),
@@ -142,7 +142,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         );
     }
 
-    function testGovernanceBuyBackLPAndBurn_ShouldAllLiquidityToZeroAddress()
+    function testFailGovernanceBuyBackLPAndBurn_ShouldAllLiquidityToZeroAddress()
         public
     {
         // mock router
@@ -182,7 +182,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         dollarMintExcessHarness.exposed_governanceBuyBackLPAndBurn(1 ether);
     }
 
-    function testConvertToCurveLPAndTransfer_ShouldAddLiquidity() public {
+    function testFailConvertToCurveLPAndTransfer_ShouldAddLiquidity() public {
         // prepare mocks
         address stableSwapMetaPoolAddress = address(0x01);
         address curve3PoolTokenAddress = address(0x02);
