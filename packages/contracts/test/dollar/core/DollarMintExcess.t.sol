@@ -12,7 +12,7 @@ import "../../helpers/LocalTestHelper.sol";
 
 // exposes internal methods as external for testing
 contract DollarMintExcessHarness is DollarMintExcess {
-    constructor(address _manager) DollarMintExcess(_manager) {}
+    constructor(UbiquityDollarManager _manager) DollarMintExcess(_manager) {}
 
     function exposed_swapDollarsForGovernance(
         bytes16 amountIn
@@ -33,19 +33,20 @@ contract DollarMintExcessHarness is DollarMintExcess {
 
 contract DollarMintExcessTest is LocalTestHelper {
     UbiquityDollarManager dollarManager;
-    DollarMintExcessHarness dollarMintExcess;
+    DollarMintExcessHarness dollarMintExcessHarness;
 
     address sushiSwapRouterAddress = 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
 
     function setUp() public override {
         super.setUp();
-        dollarManagerAddress = address(manager);
-        twapOracleAddress =
-            UbiquityDollarManager(dollarManagerAddress).twapOracleAddress();
-        dollarAddress =
-            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress();
-        excessDollarsDistributorAddress =
-            address(new DollarMintExcess(manager));
+        dollarMintExcessHarness = new DollarMintExcessHarness(manager);
+        address dollarManagerAddress = address(manager);
+        address twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
+            .twapOracleAddress();
+        address dollarAddress = manager.dollarTokenAddress();
+        address excessDollarsDistributorAddress = address(
+            new DollarMintExcess(manager)
+        );
     }
 
     function testDistributeDollars_ShouldTransferTokens() public {
@@ -134,7 +135,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         );
         // make a swap
         assertEq(
-            dollarMintExcess.exposed_swapDollarsForGovernance(
+            dollarMintExcessHarness.exposed_swapDollarsForGovernance(
                 bytes16(0x00000000000000000000000000000001)
             ),
             1 ether
@@ -178,7 +179,7 @@ contract DollarMintExcessTest is LocalTestHelper {
                 )
             )
         );
-        dollarMintExcess.exposed_governanceBuyBackLPAndBurn(1 ether);
+        dollarMintExcessHarness.exposed_governanceBuyBackLPAndBurn(1 ether);
     }
 
     function testConvertToCurveLPAndTransfer_ShouldAddLiquidity() public {
@@ -186,7 +187,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         address stableSwapMetaPoolAddress = address(0x01);
         address curve3PoolTokenAddress = address(0x02);
         vm.prank(admin);
-        manager.setStableSwapMetaPoolAddress(_metaPoolAddress);
+        manager.setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
         vm.mockCall(
             stableSwapMetaPoolAddress,
             abi.encodeWithSelector(IMetaPool.exchange.selector),
@@ -213,7 +214,9 @@ contract DollarMintExcessTest is LocalTestHelper {
 
         // add liquidity
         assertEq(
-            dollarMintExcess.exposed_convertToCurveLPAndTransfer(1 ether),
+            dollarMintExcessHarness.exposed_convertToCurveLPAndTransfer(
+                1 ether
+            ),
             1 ether
         );
     }

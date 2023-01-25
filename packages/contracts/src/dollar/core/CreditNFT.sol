@@ -42,7 +42,9 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
     }
 
     //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
-    constructor(UbiquityDollarManager manager_) ERC1155Ubiquity(manager_, "URI") {
+    constructor(
+        UbiquityDollarManager manager_
+    ) ERC1155Ubiquity(manager_, "URI") {
         _totalOutstandingDebt = 0;
     }
 
@@ -83,7 +85,7 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
             "CreditNFT owner not enough CreditNFTs"
         );
         burn(creditNFTOwner, expiryBlockNumber, amount);
-        emit BurnedCreditNFTs(creditNFTOwner, expiryBlockNumber, amount);
+        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, amount);
 
         //update the total supply for that expiry and total outstanding debt
         _tokenSupplies[expiryBlockNumber] =
@@ -108,7 +110,8 @@ contract CreditNFT is ERC1155Ubiquity, ICreditNFT {
             } else {
                 //update tally and remove key from blocks and map
                 _totalOutstandingDebt =
-                    _totalOutstandingDebt - (_tokenSupplies[currentBlockNumber]);
+                    _totalOutstandingDebt -
+                    (_tokenSupplies[currentBlockNumber]);
                 delete _tokenSupplies[currentBlockNumber];
                 _sortedBlockNumbers.remove(currentBlockNumber);
             }

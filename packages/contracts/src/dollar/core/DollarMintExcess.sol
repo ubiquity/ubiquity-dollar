@@ -78,41 +78,31 @@ contract DollarMintExcess is IDollarMintExcess {
     }
 
     // buy-back and burn GovernanceToken
-    function _governanceBuyBackLPAndBurn(uint256 amount)
-        internal
-        returns (uint256 amountA, uint256 amountB, uint256 liquidity)
-    {
-        bytes16 amountUAD = (amount.fromUInt()).div(uint256(2).fromUInt());
+    function _governanceBuyBackLPAndBurn(
+        uint256 amount
+    ) internal returns (uint256 amountA, uint256 amountB, uint256 liquidity) {
+        bytes16 amountDollars = (amount.fromUInt()).div(uint256(2).fromUInt());
 
         // we need to approve sushi router
         IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
             address(_router),
             0
         );
-        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
-            address(_router),
-            amount
-        );
         uint256 amountGovernanceTokens = _swapDollarsForGovernance(
             amountDollars
         );
-        uint256 amountGovernanceTokens =
-            _swapDollarsForGovernance(amountDollars);
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router),
-            0
-        );
-        IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
-            address(_router), amountGovernanceTokens
+            amountGovernanceTokens
         );
 
         // deposit liquidity and transfer to zero address (burn)
         (amountA, amountB, liquidity) = _router.addLiquidity(
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
-            amountUAD.toUInt(),
-            amountGovernanceToken,
+            amountDollars.toUInt(),
+            amountGovernanceTokens,
             0,
             0,
             address(0),
@@ -124,16 +114,17 @@ contract DollarMintExcess is IDollarMintExcess {
     // @param amount to convert to curve LP by swapping to 3CRV
     //        and deposit the 3CRV as liquidity to get UbiquityDollar-3CRV LP tokens
     //        the LP token are sent to the staking contract
-    function _convertToCurveLPAndTransfer(uint256 amount)
-        internal
-        returns (uint256)
-    {
+    function _convertToCurveLPAndTransfer(
+        uint256 amount
+    ) internal returns (uint256) {
         // we need to approve metaPool
         IERC20Ubiquity(manager.dollarTokenAddress()).approve(
-            manager.stableSwapMetaPoolAddress(), 0
+            manager.stableSwapMetaPoolAddress(),
+            0
         );
         IERC20Ubiquity(manager.dollarTokenAddress()).approve(
-            manager.stableSwapMetaPoolAddress(), amount
+            manager.stableSwapMetaPoolAddress(),
+            amount
         );
 
         // swap  amount of Ubiquity Dollar => 3CRV
@@ -143,10 +134,12 @@ contract DollarMintExcess is IDollarMintExcess {
 
         // approve metapool to transfer our 3CRV
         IERC20(manager.curve3PoolTokenAddress()).approve(
-            manager.stableSwapMetaPoolAddress(), 0
+            manager.stableSwapMetaPoolAddress(),
+            0
         );
         IERC20(manager.curve3PoolTokenAddress()).approve(
-            manager.stableSwapMetaPoolAddress(), amount3CRVReceived
+            manager.stableSwapMetaPoolAddress(),
+            amount3CRVReceived
         );
 
         // deposit liquidity

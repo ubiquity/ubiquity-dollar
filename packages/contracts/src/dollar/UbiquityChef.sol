@@ -55,11 +55,15 @@ contract UbiquityChef is ReentrancyGuard {
     mapping(uint256 => StakingShareInfo) private _stakingShareInfo;
 
     event Deposit(
-        address indexed user, uint256 amount, uint256 indexed stakingShareId
+        address indexed user,
+        uint256 amount,
+        uint256 indexed stakingShareId
     );
 
     event Withdraw(
-        address indexed user, uint256 amount, uint256 indexed stakingShareId
+        address indexed user,
+        uint256 amount,
+        uint256 indexed stakingShareId
     );
 
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
@@ -71,7 +75,10 @@ contract UbiquityChef is ReentrancyGuard {
     // ----------- Modifiers -----------
     modifier onlyTokenManager() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MANAGER_ROLE(), msg.sender),
+            manager.hasRole(
+                manager.GOVERNANCE_TOKEN_MANAGER_ROLE(),
+                msg.sender
+            ),
             "MasterChef: not Governance Token manager"
         );
         _;
@@ -120,10 +127,9 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // the bigger governanceDivider is the less extra Governance Tokens will be minted for the treasury
-    function setGovernanceShareForTreasury(uint256 _governanceDivider)
-        external
-        onlyTokenManager
-    {
+    function setGovernanceShareForTreasury(
+        uint256 _governanceDivider
+    ) external onlyTokenManager {
         governanceDivider = _governanceDivider;
     }
 
@@ -137,31 +143,34 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // Deposit LP tokens to MasterChef for Governance Tokens allocation.
-    function deposit(address to, uint256 _amount, uint256 _stakingShareID)
-        external
-        nonReentrant
-        onlyStakingContract
-    {
+    function deposit(
+        address to,
+        uint256 _amount,
+        uint256 _stakingShareID
+    ) external nonReentrant onlyStakingContract {
         _deposit(to, _amount, _stakingShareID);
     }
 
     // Withdraw LP tokens from MasterChef.
-    function withdraw(address to, uint256 _amount, uint256 _stakingShareID)
-        external
-        nonReentrant
-        onlyStakingContract
-    {
-        StakingShareInfo storage ss = _ssInfo[_stakingShareID];
-        require(ss.amount >= _amount, "MC: amount too high");
+    function withdraw(
+        address to,
+        uint256 _amount,
+        uint256 _stakingShareID
+    ) external nonReentrant onlyStakingContract {
+        StakingShareInfo storage stakingShare = _stakingShareInfo[
+            _stakingShareID
+        ];
+        require(stakingShare.amount >= _amount, "MC: amount too high");
         _updatePool();
-        uint256 pending =
-            ((ss.amount * pool.accGovernancePerShare) / 1e12) - ss.rewardDebt;
+        uint256 pending = ((stakingShare.amount * pool.accGovernancePerShare) /
+            1e12) - stakingShare.rewardDebt;
         // send Governance Tokens to Staking Share holder
 
         _safeGovernanceTransfer(to, pending);
         stakingShare.amount -= _amount;
         stakingShare.rewardDebt =
-            (stakingShare.amount * pool.accGovernancePerShare) / 1e12;
+            (stakingShare.amount * pool.accGovernancePerShare) /
+            1e12;
         _totalShares -= _amount;
         emit Withdraw(to, _amount, _stakingShareID);
     }
@@ -169,16 +178,17 @@ contract UbiquityChef is ReentrancyGuard {
     /// @dev get pending governance rewards from UbiquityChef.
     /// @return amount of pending rewards transferred to msg.sender
     /// @notice only send pending rewards
-    function getRewards(uint256 StakingShareID) external returns (uint256) {
+    function getRewards(uint256 stakingShareID) external returns (uint256) {
         require(
             IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
-                msg.sender, stakingShareID
+                msg.sender,
+                stakingShareID
             ) == 1,
             "MS: caller is not owner"
         );
 
         // calculate user reward
-        StakingShareInfo storage user = _stakingShareInfo[StakingShareID];
+        StakingShareInfo storage user = _stakingShareInfo[stakingShareID];
         _updatePool();
         uint256 pending = ((user.amount * pool.accGovernancePerShare) / 1e12) -
             user.rewardDebt;
@@ -188,19 +198,18 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // View function to see pending Governance Tokens on frontend.
-    function pendingGovernance(uint256 stakingShareID)
-        external
-        view
-        returns (uint256)
-    {
-        StakingShareInfo storage user = _ssInfo[stakingShareID];
+    function pendingGovernance(
+        uint256 stakingShareID
+    ) external view returns (uint256) {
+        StakingShareInfo storage user = _stakingShareInfo[stakingShareID];
         uint256 accGovernancePerShare = pool.accGovernancePerShare;
 
         if (block.number > pool.lastRewardBlock && _totalShares != 0) {
             uint256 multiplier = _getMultiplier();
             uint256 governanceReward = (multiplier * governancePerBlock) / 1e18;
-            accGovernancePerShare = accGovernancePerShare
-                + ((governanceReward * 1e12) / _totalShares);
+            accGovernancePerShare =
+                accGovernancePerShare +
+                ((governanceReward * 1e12) / _totalShares);
         }
         return (user.amount * accGovernancePerShare) / 1e12 - user.rewardDebt;
     }
@@ -208,12 +217,13 @@ contract UbiquityChef is ReentrancyGuard {
     /**
      * @dev get the amount of shares and the reward debt of a Staking share .
      */
-    function getStakingShareInfo(uint256 _id)
-        external
-        view
-        returns (uint256[2] memory)
-    {
-        return [_ssInfo[_id].amount, _ssInfo[_id].rewardDebt];
+    function getStakingShareInfo(
+        uint256 _id
+    ) external view returns (uint256[2] memory) {
+        return [
+            _stakingShareInfo[_id].amount,
+            _stakingShareInfo[_id].rewardDebt
+        ];
     }
 
     /**
@@ -224,18 +234,24 @@ contract UbiquityChef is ReentrancyGuard {
     }
 
     // _Deposit LP tokens to MasterChef for Governance Token allocation.
-    function _deposit(address to, uint256 _amount, uint256 _stakingShareID)
-        internal
-    {
-        StakingShareInfo storage ss = _ssInfo[_stakingShareID];
+    function _deposit(
+        address to,
+        uint256 _amount,
+        uint256 _stakingShareID
+    ) internal {
+        StakingShareInfo storage stakingShare = _stakingShareInfo[
+            _stakingShareID
+        ];
         _updatePool();
-        if (ss.amount > 0) {
-            uint256 pending = ((ss.amount * pool.accGovernancePerShare) / 1e12)
-                - ss.rewardDebt;
+        if (stakingShare.amount > 0) {
+            uint256 pending = ((stakingShare.amount *
+                pool.accGovernancePerShare) / 1e12) - stakingShare.rewardDebt;
             _safeGovernanceTransfer(to, pending);
         }
-        ss.amount += _amount;
-        ss.rewardDebt = (ss.amount * pool.accGovernancePerShare) / 1e12;
+        stakingShare.amount += _amount;
+        stakingShare.rewardDebt =
+            (stakingShare.amount * pool.accGovernancePerShare) /
+            1e12;
         _totalShares += _amount;
         emit Deposit(to, _amount, _stakingShareID);
     }
@@ -250,8 +266,9 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 _amount,
         uint256 _stakingShareID
     ) internal {
-        StakingShareInfo storage stakingShare =
-            _stakingShareInfo[_stakingShareID];
+        StakingShareInfo storage stakingShare = _stakingShareInfo[
+            _stakingShareID
+        ];
 
         stakingShare.amount += _amount;
 
@@ -276,8 +293,10 @@ contract UbiquityChef is ReentrancyGuard {
         }
 
         if (isPriceDiffEnough) {
-            governanceMultiplier_ =
-                _governanceMultiply(governanceMultiplier_, currentPrice);
+            governanceMultiplier_ = _governanceMultiply(
+                governanceMultiplier_,
+                currentPrice
+            );
             lastPrice_ = currentPrice;
         }
         lastPrice = lastPrice_;
@@ -298,11 +317,13 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 multiplier = _getMultiplier();
         uint256 governanceReward = (multiplier * governancePerBlock) / 1e6;
         pool.accGovernancePerShare =
-            pool.accGovernancePerShare + (governanceReward / _totalShares);
+            pool.accGovernancePerShare +
+            (governanceReward / _totalShares);
         pool.lastRewardBlock = block.number;
 
-        pool.accGovernancePerShare = pool.accGovernancePerShare
-            + ((multiplier * governancePerBlock) / _totalShares / 1e6);
+        pool.accGovernancePerShare =
+            pool.accGovernancePerShare +
+            ((multiplier * governancePerBlock) / _totalShares / 1e6);
         pool.lastRewardBlock = block.number;
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             address(this),
@@ -313,21 +334,23 @@ contract UbiquityChef is ReentrancyGuard {
             manager.treasuryAddress(),
             governanceReward / governanceDivider
         );
-        pool.accGovernancePerShare = pool.accGovernancePerShare
-            + ((governanceReward * 1e12) / _totalShares);
+        pool.accGovernancePerShare =
+            pool.accGovernancePerShare +
+            ((governanceReward * 1e12) / _totalShares);
         pool.lastRewardBlock = block.number;
     }
 
     // Safe governance transfer function, just in case if rounding
     // error causes pool to not have enough governance tokens.
     function _safeGovernanceTransfer(address _to, uint256 _amount) internal {
-        IERC20Ubiquity governanceToken =
-            IERC20Ubiquity(manager.governanceTokenAddress());
+        IERC20Ubiquity governanceToken = IERC20Ubiquity(
+            manager.governanceTokenAddress()
+        );
         uint256 governanceBalance = governanceToken.balanceOf(address(this));
         if (_amount > governanceBalance) {
-            governance.safeTransfer(_to, governanceBalance);
+            governanceToken.safeTransfer(_to, governanceBalance);
         } else {
-            governance.safeTransfer(_to, _amount);
+            governanceToken.safeTransfer(_to, _amount);
         }
     }
 
@@ -346,9 +369,12 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 governanceMultiplier_,
         uint256 currentPrice
     ) internal view returns (uint256 multiplier) {
-        IUbiquityFormulas formulas =
-            IUbiquityFormulas(manager.formulasAddress());
-        multiplier =
-            formulas.governanceMultiply(governanceMultiplier_, currentPrice);
+        IUbiquityFormulas formulas = IUbiquityFormulas(
+            manager.formulasAddress()
+        );
+        multiplier = formulas.governanceMultiply(
+            governanceMultiplier_,
+            currentPrice
+        );
     }
 }

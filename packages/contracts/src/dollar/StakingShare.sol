@@ -71,7 +71,10 @@ contract StakingShare is
     /**
      * @dev constructor
      */
-    constructor(UbiquityDollarManager _manager, string memory uri) ERC1155SetURI(uri) {
+    constructor(
+        UbiquityDollarManager _manager,
+        string memory uri
+    ) ERC1155SetUri(uri) {
         manager = _manager;
     }
 

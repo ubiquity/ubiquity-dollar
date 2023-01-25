@@ -5,6 +5,7 @@ import {UbiquityDollarManager} from "../../src/dollar/core/UbiquityDollarManager
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {CreditRedemptionCalculator} from "../../src/dollar/core/CreditRedemptionCalculator.sol";
 import {CreditNFTRedemptionCalculator} from "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import {CreditNFTManager} from "../../src/dollar/core/CreditNFTManager.sol";
 import {DollarMintCalculator} from "../../src/dollar/core/DollarMintCalculator.sol";
 import {DollarMintExcess} from "../../src/dollar/core/DollarMintExcess.sol";
 import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
@@ -80,9 +81,7 @@ abstract contract LocalTestHelper is Test {
         manager.setCreditTokenAddress(address(creditToken));
 
         // deploy CreditRedemptionCalculator
-        creditRedemptionCalculator = new CreditRedemptionCalculator(
-            manager
-        );
+        creditRedemptionCalculator = new CreditRedemptionCalculator(manager);
         manager.setCreditCalculatorAddress(address(creditRedemptionCalculator));
 
         // deploy DollarMintCalculator

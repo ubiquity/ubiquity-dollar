@@ -43,7 +43,7 @@ contract CreditNFTTest is LocalTestHelper {
         );
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
-        emit MintedCreditNFTs(receiver, expiryBlockNumber, 1);
+        emit MintedCreditNFT(receiver, expiryBlockNumber, 1);
         CreditNFT(creditNFTAddress).mintCreditNFT(
             receiver,
             mintAmount,
@@ -84,7 +84,7 @@ contract CreditNFTTest is LocalTestHelper {
         CreditNFT(creditNFTAddress).setApprovalForAll(admin, true);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
-        emit BurnedCreditNFTs(creditNFTOwner, expiryBlockNumber, 1);
+        emit BurnedCreditNFT(creditNFTOwner, expiryBlockNumber, 1);
         CreditNFT(creditNFTAddress).burnCreditNFT(
             creditNFTOwner,
             burnAmount,

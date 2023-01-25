@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "../interfaces/IMetaPool.sol";
 import "../interfaces/ITWAPOracleDollar3pool.sol";
 
-contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool{
+contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
     address public immutable pool;
     address public immutable token0;
     address public immutable token1;
@@ -13,7 +13,11 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool{
     uint256 public pricesBlockTimestampLast;
     uint256[2] public priceCumulativeLast;
 
-    constructor(address _pool, address _uADtoken0, address _curve3CRVToken1) {
+    constructor(
+        address _pool,
+        address _dollarToken0,
+        address _curve3CRVToken1
+    ) {
         pool = _pool;
         // coin at index 0 is uAD and index 1 is 3CRV
         require(
@@ -22,7 +26,7 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool{
             "TWAPOracle: COIN_ORDER_MISMATCH"
         );
 
-        token0 = _uADtoken0;
+        token0 = _dollarToken0;
         token1 = _curve3CRVToken1;
 
         uint256 _reserve0 = uint112(IMetaPool(_pool).balances(0));
@@ -53,10 +57,19 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool{
             );
 
             // price to exchange amountIn uAD to 3CRV based on TWAP
-            UbiquityDollarPrice = IMetaPool(pool).get_dy(0, 1, 1 ether, twapBalances);
+            UbiquityDollarPrice = IMetaPool(pool).get_dy(
+                0,
+                1,
+                1 ether,
+                twapBalances
+            );
             // price to exchange amountIn 3CRV to uAD  based on TWAP
-            curve3CRVAverage =
-                IMetaPool(pool).get_dy(1, 0, 1 ether, twapBalances);
+            curve3CRVAverage = IMetaPool(pool).get_dy(
+                1,
+                0,
+                1 ether,
+                twapBalances
+            );
             // we update the priceCumulative
             priceCumulativeLast = priceCumulative;
             pricesBlockTimestampLast = blockTimestamp;

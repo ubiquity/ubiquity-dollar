@@ -9,10 +9,10 @@ contract UbiquityFormulas is IUbiquityFormulas {
     using ABDKMathQuad for bytes16;
 
     /// @dev formula duration multiply
-    /// @param uLP , amount of LP tokens
-    /// @param weeks_ , minimum duration of staking period
-    /// @param multiplier , staking discount multiplier = 0.0001
-    /// @return shares , amount of shares
+    /// @param _uLP , amount of LP tokens
+    /// @param _weeks , minimum duration of staking period
+    /// @param _multiplier , staking discount multiplier = 0.0001
+    /// @return _shares , amount of shares
     /// @notice shares = (1 + multiplier * weeks^3/2) * uLP
     //          D32 = D^3/2
     //          S = m * D32 * A + A
@@ -22,12 +22,18 @@ contract UbiquityFormulas is IUbiquityFormulas {
         uint256 _multiplier
     ) public pure returns (uint256 _shares) {
         bytes16 unit = uint256(1 ether).fromUInt();
-        bytes16 d = weeks_.fromUInt();
+        bytes16 d = _weeks.fromUInt();
         bytes16 d32 = (d.mul(d).mul(d)).sqrt();
         ///bytes16 m = multiplier.fromUInt().div(unit); // 0.0001
-        bytes16 a = uLP.fromUInt();
+        bytes16 a = _uLP.fromUInt();
 
-        shares = multiplier.fromUInt().mul(d32).mul(a).div(unit).add(a).toUInt();
+        _shares = _multiplier
+            .fromUInt()
+            .mul(d32)
+            .mul(a)
+            .div(unit)
+            .add(a)
+            .toUInt();
     }
 
     /// @dev formula bonding
@@ -95,29 +101,28 @@ contract UbiquityFormulas is IUbiquityFormulas {
     }
 
     /// @dev formula governance multiply
-    /// @param multiplier , initial governance min multiplier
-    /// @param price , current share price
-    /// @return newMultiplier , new governance min multiplier
+    /// @param _multiplier , initial governance min multiplier
+    /// @param _price , current share price
+    /// @return _newMultiplier , new governance min multiplier
     /// @notice newMultiplier = multiplier * ( 1.05 / (1 + abs( 1 - price ) ) )
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2
-    function governanceMultiply(uint256 _multiplier, uint256 _price)
-        public
-        pure
-        returns (uint256 _newMultiplier)
-    {
+    function governanceMultiply(
+        uint256 _multiplier,
+        uint256 _price
+    ) public pure returns (uint256 _newMultiplier) {
         bytes16 m = _multiplier.fromUInt();
         bytes16 p = _price.fromUInt();
         bytes16 c = uint256(105 * 1e16).fromUInt(); // 1.05
         bytes16 u = uint256(1e18).fromUInt(); // 1
         bytes16 a = u.add(u.sub(p).abs()); // 1 + abs( 1 - P )
 
-        newMultiplier = m.mul(c).div(a).toUInt(); // nM = M * C / A
+        _newMultiplier = m.mul(c).div(a).toUInt(); // nM = M * C / A
 
         // 5 >= multiplier >= 0.2
-        if (newMultiplier > 5e18 || newMultiplier < 2e17) {
-            newMultiplier = multiplier;
+        if (_newMultiplier > 5e18 || _newMultiplier < 2e17) {
+            _newMultiplier = _multiplier;
         }
     }
 }
