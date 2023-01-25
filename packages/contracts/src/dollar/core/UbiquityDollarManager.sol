@@ -40,8 +40,8 @@ contract UbiquityDollarManager is AccessControl {
     address public dollarTokenAddress;
     address public creditNftCalculatorAddress;
     address public dollarMintCalculatorAddress;
-    address public stakingShareAddress;
-    address public stakingContractAddress;
+    address public stakingTokenAddress;
+    address public stakingAddress;
     address public stableSwapMetaPoolAddress;
     address public curve3PoolTokenAddress; // 3CRV
     address public treasuryAddress;
@@ -158,9 +158,9 @@ contract UbiquityDollarManager is AccessControl {
     }
 
     function setStakingTokenAddress(
-        address _stakingShareAddress
+        address _stakingTokenAddress
     ) external onlyAdmin {
-        stakingShareAddress = _stakingShareAddress;
+        stakingTokenAddress = _stakingTokenAddress;
     }
 
     function setStableSwapMetaPoolAddress(
@@ -173,12 +173,12 @@ contract UbiquityDollarManager is AccessControl {
      * @notice set the staking smart contract address
      * @dev staking contract participants deposit  curve LP token
      * for a certain duration to earn Governance Tokens and more curve LP token
-     * @param _stakingContractAddress staking contract address
+     * @param _stakingAddress staking contract address
      */
     function setStakingContractAddress(
-        address _stakingContractAddress
+        address _stakingAddress
     ) external onlyAdmin {
-        stakingContractAddress = _stakingContractAddress;
+        stakingAddress = _stakingAddress;
     }
 
     /**

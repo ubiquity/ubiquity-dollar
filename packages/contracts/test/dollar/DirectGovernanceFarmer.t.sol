@@ -152,7 +152,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testDeposit_ShouldDepositTokens() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
-        address stakingShareAddress = address(0x102);
+        address stakingTokenAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
@@ -160,7 +160,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             stakingAddress
         );
         IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
-            stakingShareAddress
+            stakingTokenAddress
         );
         vm.stopPrank();
 
@@ -183,7 +183,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(1)
         );
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSignature(
                 "safeTransferFrom(address,address,uint256,uint256,bytes)",
                 address(directGovernanceFarmer),
@@ -235,7 +235,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testDeposit_Multiple_Tokens_ShouldDepositTokens() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
-        address stakingShareAddress = address(0x102);
+        address stakingTokenAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
@@ -243,7 +243,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             stakingAddress
         );
         IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
-            stakingShareAddress
+            stakingTokenAddress
         );
         vm.stopPrank();
 
@@ -292,7 +292,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(12)
         );
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSignature(
                 "safeTransferFrom(address,address,uint256,uint256,bytes)",
                 address(directGovernanceFarmer),
@@ -328,16 +328,16 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         public
     {
         address userAddress = address(0x100);
-        address stakingShareAddress = address(0x102);
+        address stakingTokenAddress = address(0x102);
 
         // admin sets staking share addresses
         vm.prank(admin);
         IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
-            stakingShareAddress
+            stakingTokenAddress
         );
 
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
             abi.encode([0])
         );
@@ -350,7 +350,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testWithdraw_Multiple_ShouldWithdraw() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
-        address stakingShareAddress = address(0x102);
+        address stakingTokenAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
@@ -358,7 +358,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             stakingAddress
         );
         IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
-            stakingShareAddress
+            stakingTokenAddress
         );
         vm.stopPrank();
 
@@ -397,7 +397,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(1)
         );
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSignature(
                 "safeTransferFrom(address,address,uint256,uint256,bytes)",
                 address(directGovernanceFarmer),
@@ -422,7 +422,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         uint256[] memory stakingShareIds = new uint256[](1);
         stakingShareIds[0] = 1;
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
             abi.encode(stakingShareIds)
         );
@@ -430,7 +430,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         IStakingToken.Stake memory stake;
         stake.lpAmount = 100e18;
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSelector(IStakingToken.getStake.selector),
             abi.encode(stake)
         );
@@ -470,16 +470,16 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
     function testWithdraw_ShouldRevert_IfSenderIsNotBondOwner() public {
         address userAddress = address(0x100);
-        address stakingShareAddress = address(0x102);
+        address stakingTokenAddress = address(0x102);
 
         // admin sets staking share addresses
         vm.prank(admin);
         IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
-            stakingShareAddress
+            stakingTokenAddress
         );
 
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
             abi.encode([0])
         );
@@ -492,7 +492,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testWithdraw_ShouldWithdraw() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
-        address stakingShareAddress = address(0x102);
+        address stakingTokenAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
@@ -500,7 +500,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             stakingAddress
         );
         IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
-            stakingShareAddress
+            stakingTokenAddress
         );
         vm.stopPrank();
 
@@ -523,7 +523,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(1)
         );
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSignature(
                 "safeTransferFrom(address,address,uint256,uint256,bytes)",
                 address(directGovernanceFarmer),
@@ -545,7 +545,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         uint256[] memory stakingShareIds = new uint256[](1);
         stakingShareIds[0] = 1;
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
             abi.encode(stakingShareIds)
         );
@@ -553,7 +553,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         IStakingToken.Stake memory stake;
         stake.lpAmount = 100e18;
         vm.mockCall(
-            stakingShareAddress,
+            stakingTokenAddress,
             abi.encodeWithSelector(IStakingToken.getStake.selector),
             abi.encode(stake)
         );

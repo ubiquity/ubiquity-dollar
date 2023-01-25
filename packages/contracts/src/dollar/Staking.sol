@@ -377,7 +377,7 @@ contract Staking is CollectableDust, Pausable {
             )[0] * accLpRewardPerShare) /
             1e12;
 
-        StakingToken(manager.stakingShareAddress()).updateStake(
+        StakingToken(manager.stakingTokenAddress()).updateStake(
             _id,
             stake.lpAmount,
             stake.lpRewardDebt,
@@ -432,7 +432,7 @@ contract Staking is CollectableDust, Pausable {
 
         uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
             .correctedAmountToWithdraw(
-                StakingToken(manager.stakingShareAddress()).totalLP(),
+                StakingToken(manager.stakingTokenAddress()).totalLP(),
                 metapool.balanceOf(address(this)) - lpRewards,
                 _amount
             );
@@ -449,7 +449,7 @@ contract Staking is CollectableDust, Pausable {
             )[0] * accLpRewardPerShare) /
             1e12;
 
-        StakingToken(manager.stakingShareAddress()).updateStake(
+        StakingToken(manager.stakingTokenAddress()).updateStake(
             _id,
             stake.lpAmount,
             stake.lpRewardDebt,
@@ -470,7 +470,7 @@ contract Staking is CollectableDust, Pausable {
 
     // View function to see pending lpRewards on frontend.
     function pendingLpRewards(uint256 _id) external view returns (uint256) {
-        StakingToken staking = StakingToken(manager.stakingShareAddress());
+        StakingToken staking = StakingToken(manager.stakingTokenAddress());
         StakingToken.Stake memory stake = staking.getStake(_id);
         uint256[2] memory bs = IUbiquityChef(manager.masterChefAddress())
             .getStakingTokenInfo(_id);
@@ -542,7 +542,7 @@ contract Staking is CollectableDust, Pausable {
             .totalShares();
         // priceShare = totalLP / totalShares
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
-            StakingToken(manager.stakingShareAddress()).totalLP(),
+            StakingToken(manager.stakingTokenAddress()).totalLP(),
             totalShares,
             ONE
         );
@@ -589,7 +589,7 @@ contract Staking is CollectableDust, Pausable {
 
     /// @dev update the accumulated excess LP per share
     function _updateLpPerShare() internal {
-        StakingToken stake = StakingToken(manager.stakingShareAddress());
+        StakingToken stake = StakingToken(manager.stakingTokenAddress());
         uint256 lpBalance = IERC20(manager.stableSwapMetaPoolAddress())
             .balanceOf(address(this));
         // the excess LP is the current balance
@@ -629,7 +629,7 @@ contract Staking is CollectableDust, Pausable {
         // set the lp rewards debts so that this staking share only get lp rewards from this day
         uint256 lpRewardDebt = (shares * accLpRewardPerShare) / 1e12;
         return
-            StakingToken(manager.stakingShareAddress()).mint(
+            StakingToken(manager.stakingTokenAddress()).mint(
                 to,
                 lpAmount,
                 lpRewardDebt,
@@ -641,13 +641,13 @@ contract Staking is CollectableDust, Pausable {
         uint256 _id
     ) internal returns (uint256[2] memory bs, StakingToken.Stake memory stake) {
         require(
-            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingTokenAddress()).balanceOf(
                 msg.sender,
                 _id
             ) == 1,
             "Staking: caller is not owner"
         );
-        StakingToken staking = StakingToken(manager.stakingShareAddress());
+        StakingToken staking = StakingToken(manager.stakingTokenAddress());
         stake = staking.getStake(_id);
         require(
             block.number > stake.endBlock,

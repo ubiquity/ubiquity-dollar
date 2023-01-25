@@ -1,19 +1,19 @@
 import {
-  getStakingTokenContract,
-  getStakingContract,
   getCreditNftContract,
-  getDollarMintCalculatorContract,
-  getERC20Contract,
-  getSushiSwapPoolContract,
-  getTWAPOracleDollar3poolContract,
-  getUbiquityDollarTokenContract,
-  getUbiquityCreditTokenContract,
-  getUbiquityFormulasContract,
-  getUbiquityGovernanceTokenContract,
   getCreditNftRedemptionCalculatorContract,
   getCreditRedemptionCalculatorContract,
+  getDollarMintCalculatorContract,
+  getERC20Contract,
+  getStakingContract,
+  getStakingTokenContract,
+  getSushiSwapPoolContract,
+  getTWAPOracleDollar3poolContract,
+  getUbiquityCreditTokenContract,
+  getUbiquityDollarTokenContract,
+  getUbiquityFormulasContract,
+  getUbiquityGovernanceTokenContract,
 } from "@/components/utils/contracts";
-import { getUniswapV2PairABIContract, getDollar3poolMarketContract } from "@/components/utils/contracts-external";
+import { getDollar3poolMarketContract, getUniswapV2PairABIContract } from "@/components/utils/contracts-external";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -42,7 +42,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: UbiquityDollarManager["functions"], provider: NonNullable<PossibleProviders>) {
+async function connectManagerContracts(manager: UbiquityDollarManager, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
@@ -79,7 +79,10 @@ async function connectManagerContracts(manager: UbiquityDollarManager["functions
   ]);
 
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
-  const ugovUadPairContract = getUniswapV2PairABIContract(await sushiSwapPoolContract.pair(), provider);
+
+  const pair = await sushiSwapPoolContract.pair();
+
+  const governanceMarketPairContract = getUniswapV2PairABIContract(pair, provider);
 
   return {
     dollarToken: getUbiquityDollarTokenContract(dollarToken, provider),
@@ -94,7 +97,7 @@ async function connectManagerContracts(manager: UbiquityDollarManager["functions
     staking: getStakingContract(staking, provider),
     masterChef: getStakingContract(ubiquityChef, provider),
     sushiSwapPool: sushiSwapPoolContract,
-    governanceMarket: ugovUadPairContract,
+    governanceMarket: governanceMarketPairContract,
     ubiquityFormulas: getUbiquityFormulasContract(ubiquityFormulas, provider),
     creditNftCalculator: getCreditNftRedemptionCalculatorContract(creditNftCalculator, provider),
     creditCalculator: getCreditRedemptionCalculatorContract(creditCalculator, provider),

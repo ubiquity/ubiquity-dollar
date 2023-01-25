@@ -90,9 +90,9 @@ contract ManagerFacet is Modifiers {
     }
 
     function setStakingTokenAddress(
-        address _stakingShareAddress
+        address _stakingTokenAddress
     ) external onlyAdmin {
-        s.stakingShareAddress = _stakingShareAddress;
+        s.stakingTokenAddress = _stakingTokenAddress;
     }
 
     function setStableSwapMetaPoolAddress(
@@ -102,9 +102,9 @@ contract ManagerFacet is Modifiers {
     }
 
     function setStakingContractAddress(
-        address _stakingContractAddress
+        address _stakingAddress
     ) external onlyAdmin {
-        s.stakingContractAddress = _stakingContractAddress;
+        s.stakingAddress = _stakingAddress;
     }
 
     function setTreasuryAddress(address _treasuryAddress) external onlyAdmin {
@@ -222,7 +222,7 @@ contract ManagerFacet is Modifiers {
     }
 
     function getStakingTokenAddress() external view returns (address) {
-        return s.stakingShareAddress;
+        return s.stakingTokenAddress;
     }
 
     function getStableSwapMetaPoolAddress() external view returns (address) {
@@ -230,7 +230,7 @@ contract ManagerFacet is Modifiers {
     }
 
     function getStakingContractAddress() external view returns (address) {
-        return s.stakingContractAddress;
+        return s.stakingAddress;
     }
 
     function getTreasuryAddress() external view returns (address) {

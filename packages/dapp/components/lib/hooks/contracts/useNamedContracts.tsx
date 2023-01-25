@@ -3,7 +3,7 @@ import useWeb3, { PossibleProviders } from "../useWeb3";
 import allDeployments from "@ubiquity/contracts/deployments.json";
 import addresses from "../../../config/named-accounts.json";
 import { getCreditNftManagerContract, getERC20Contract } from "@/components/utils/contracts";
-import { getCurveFactoryContract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts-external";
+import { getCurveFactoryContract, getIJarContract } from "@/components/utils/contracts-external";
 import { deployedChainId } from "@/components/utils/deployments";
 
 const getCreditNftManager = () => {
@@ -21,7 +21,6 @@ export type NamedContracts = ReturnType<typeof connectedContracts> | null;
 export function connectedContracts(provider: NonNullable<PossibleProviders>) {
   return {
     curvePool: getCurveFactoryContract(addresses.curveFactory, provider),
-    yieldProxy: getYieldProxyContract(addresses.yieldProxy, provider),
     usdc: getERC20Contract(addresses.USDC, provider),
     dai: getERC20Contract(addresses.DAI, provider),
     usdt: getERC20Contract(addresses.USDT, provider),

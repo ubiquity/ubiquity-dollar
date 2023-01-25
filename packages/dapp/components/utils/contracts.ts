@@ -67,7 +67,7 @@ import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.jso
 import UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import UbiquityChef from "@ubiquity/contracts/out/UbiquityChef.sol/UbiquityChef.json";
 import UbiquityCreditToken from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
-import UbiquityDollarManager from "@ubiquity/contracts/out/UbiquityDollarManager.sol/UbiquityDollarManager.json";
+
 import UbiquityDollarToken from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
 import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UbiquityGovernanceToken from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
@@ -155,147 +155,135 @@ import type { UbiquityGovernanceToken as IUbiquityGovernanceToken } from "types/
 import type { UintUtils as IUintUtils } from "types/UintUtils";
 import type { ZozoVault as IZozoVault } from "types/ZozoVault";
 
+import UbiquityDollarManager from "@ubiquity/contracts/out/UbiquityDollarManager.sol/UbiquityDollarManager.json";
 import type { UbiquityDollarManager as IUbiquityDollarManager } from "types/UbiquityDollarManager";
 
+// import { UbiquityDollarManager } from "types/UbiquityDollarManager";
 export const getUbiquityDollarManagerContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityDollarManager.abi, address, provider) as IUbiquityDollarManager["functions"]; // UbiquityDollarManager
+  getContract(UbiquityDollarManager.abi, address, provider) as IUbiquityDollarManager; // UbiquityDollarManager
 
 export const getAccessControlContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(AccessControl.abi, address, provider) as IAccessControl["functions"]; // AccessControl
+  getContract(AccessControl.abi, address, provider) as IAccessControl; // AccessControl
 export const getAccessControlInternalContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(AccessControlInternal.abi, address, provider) as IAccessControlInternal["functions"]; // AccessControlInternal
+  getContract(AccessControlInternal.abi, address, provider) as IAccessControlInternal; // AccessControlInternal
 export const getAddressUtilsContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(AddressUtils.abi, address, provider) as IAddressUtils["functions"]; // AddressUtils
+  getContract(AddressUtils.abi, address, provider) as IAddressUtils; // AddressUtils
 export const getCollectableDustContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CollectableDust.abi, address, provider) as ICollectableDust["functions"]; // CollectableDust
-export const getCreditClockContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CreditClock.abi, address, provider) as ICreditClock["functions"]; // CreditClock
-export const getCreditNftContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CreditNft.abi, address, provider) as ICreditNft["functions"]; // CreditNft
+  getContract(CollectableDust.abi, address, provider) as ICollectableDust; // CollectableDust
+export const getCreditClockContract = (address: string, provider: ethers.providers.Provider) => getContract(CreditClock.abi, address, provider) as ICreditClock; // CreditClock
+export const getCreditNftContract = (address: string, provider: ethers.providers.Provider) => getContract(CreditNft.abi, address, provider) as ICreditNft; // CreditNft
 export const getCreditNftManagerContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CreditNftManager.abi, address, provider) as ICreditNftManager["functions"]; // CreditNftManager
+  getContract(CreditNftManager.abi, address, provider) as ICreditNftManager; // CreditNftManager
 export const getCreditNftRedemptionCalculatorContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CreditNftRedemptionCalculator.abi, address, provider) as ICreditNftRedemptionCalculator["functions"]; // CreditNftRedemptionCalculator
+  getContract(CreditNftRedemptionCalculator.abi, address, provider) as ICreditNftRedemptionCalculator; // CreditNftRedemptionCalculator
 export const getCreditRedemptionCalculatorContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CreditRedemptionCalculator.abi, address, provider) as ICreditRedemptionCalculator["functions"]; // CreditRedemptionCalculator
+  getContract(CreditRedemptionCalculator.abi, address, provider) as ICreditRedemptionCalculator; // CreditRedemptionCalculator
 export const getCurveDollarIncentiveContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(CurveDollarIncentive.abi, address, provider) as ICurveDollarIncentive["functions"]; // CurveDollarIncentive
+  getContract(CurveDollarIncentive.abi, address, provider) as ICurveDollarIncentive; // CurveDollarIncentive
 export const getDefaultOperatorFiltererContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DefaultOperatorFilterer.abi, address, provider) as IDefaultOperatorFilterer["functions"]; // DefaultOperatorFilterer
-export const getDiamondContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(Diamond.abi, address, provider) as IDiamond["functions"]; // Diamond
+  getContract(DefaultOperatorFilterer.abi, address, provider) as IDefaultOperatorFilterer; // DefaultOperatorFilterer
+export const getDiamondContract = (address: string, provider: ethers.providers.Provider) => getContract(Diamond.abi, address, provider) as IDiamond; // Diamond
 export const getDiamondCutFacetContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DiamondCutFacet.abi, address, provider) as IDiamondCutFacet["functions"]; // DiamondCutFacet
-export const getDiamondInitContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DiamondInit.abi, address, provider) as IDiamondInit["functions"]; // DiamondInit
+  getContract(DiamondCutFacet.abi, address, provider) as IDiamondCutFacet; // DiamondCutFacet
+export const getDiamondInitContract = (address: string, provider: ethers.providers.Provider) => getContract(DiamondInit.abi, address, provider) as IDiamondInit; // DiamondInit
 export const getDiamondLoupeFacetContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DiamondLoupeFacet.abi, address, provider) as IDiamondLoupeFacet["functions"]; // DiamondLoupeFacet
+  getContract(DiamondLoupeFacet.abi, address, provider) as IDiamondLoupeFacet; // DiamondLoupeFacet
 export const getDiamondTestHelperContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DiamondTestHelper.abi, address, provider) as IDiamondTestHelper["functions"]; // DiamondTestHelper
+  getContract(DiamondTestHelper.abi, address, provider) as IDiamondTestHelper; // DiamondTestHelper
 export const getDirectGovernanceFarmerContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DirectGovernanceFarmer.abi, address, provider) as IDirectGovernanceFarmer["functions"]; // DirectGovernanceFarmer
+  getContract(DirectGovernanceFarmer.abi, address, provider) as IDirectGovernanceFarmer; // DirectGovernanceFarmer
 export const getDollarMintCalculatorContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DollarMintCalculator.abi, address, provider) as IDollarMintCalculator["functions"]; // DollarMintCalculator
+  getContract(DollarMintCalculator.abi, address, provider) as IDollarMintCalculator; // DollarMintCalculator
 export const getDollarMintExcessContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(DollarMintExcess.abi, address, provider) as IDollarMintExcess["functions"]; // DollarMintExcess
+  getContract(DollarMintExcess.abi, address, provider) as IDollarMintExcess; // DollarMintExcess
 export const getEnumerableSetContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(EnumerableSet.abi, address, provider) as IEnumerableSet["functions"]; // EnumerableSet
-export const getERC20Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC20.abi, address, provider) as IERC20["functions"]; // ERC20
+  getContract(EnumerableSet.abi, address, provider) as IEnumerableSet; // EnumerableSet
+export const getERC20Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC20.abi, address, provider) as IERC20; // ERC20
 export const getERC20BurnableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC20Burnable.abi, address, provider) as IERC20Burnable["functions"]; // ERC20Burnable
+  getContract(ERC20Burnable.abi, address, provider) as IERC20Burnable; // ERC20Burnable
 export const getERC20PausableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC20Pausable.abi, address, provider) as IERC20Pausable["functions"]; // ERC20Pausable
+  getContract(ERC20Pausable.abi, address, provider) as IERC20Pausable; // ERC20Pausable
 export const getERC20UbiquityContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC20Ubiquity.abi, address, provider) as IERC20Ubiquity["functions"]; // ERC20Ubiquity
-export const getERC165Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC165.abi, address, provider) as IERC165["functions"]; // ERC165
-export const getERC721Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC721.abi, address, provider) as IERC721["functions"]; // ERC721
+  getContract(ERC20Ubiquity.abi, address, provider) as IERC20Ubiquity; // ERC20Ubiquity
+export const getERC165Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC165.abi, address, provider) as IERC165; // ERC165
+export const getERC721Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC721.abi, address, provider) as IERC721; // ERC721
 export const getERC721BurnableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC721Burnable.abi, address, provider) as IERC721Burnable["functions"]; // ERC721Burnable
+  getContract(ERC721Burnable.abi, address, provider) as IERC721Burnable; // ERC721Burnable
 export const getERC721EnumerableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC721Enumerable.abi, address, provider) as IERC721Enumerable["functions"]; // ERC721Enumerable
-export const getERC1155Contract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155.abi, address, provider) as IERC1155["functions"]; // ERC1155
+  getContract(ERC721Enumerable.abi, address, provider) as IERC721Enumerable; // ERC721Enumerable
+export const getERC1155Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC1155.abi, address, provider) as IERC1155; // ERC1155
 export const getERC1155BurnableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155Burnable.abi, address, provider) as IERC1155Burnable["functions"]; // ERC1155Burnable
+  getContract(ERC1155Burnable.abi, address, provider) as IERC1155Burnable; // ERC1155Burnable
 export const getERC1155BurnableSetUriContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155BurnableSetUri.abi, address, provider) as IERC1155BurnableSetUri["functions"]; // ERC1155BurnableSetUri
+  getContract(ERC1155BurnableSetUri.abi, address, provider) as IERC1155BurnableSetUri; // ERC1155BurnableSetUri
 export const getERC1155PausableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155Pausable.abi, address, provider) as IERC1155Pausable["functions"]; // ERC1155Pausable
+  getContract(ERC1155Pausable.abi, address, provider) as IERC1155Pausable; // ERC1155Pausable
 export const getERC1155PausableSetUriContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155PausableSetUri.abi, address, provider) as IERC1155PausableSetUri["functions"]; // ERC1155PausableSetUri
+  getContract(ERC1155PausableSetUri.abi, address, provider) as IERC1155PausableSetUri; // ERC1155PausableSetUri
 export const getERC1155ReceiverContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155Receiver.abi, address, provider) as IERC1155Receiver["functions"]; // ERC1155Receiver
+  getContract(ERC1155Receiver.abi, address, provider) as IERC1155Receiver; // ERC1155Receiver
 export const getERC1155SetUriContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155SetUri.abi, address, provider) as IERC1155SetUri["functions"]; // ERC1155SetUri
+  getContract(ERC1155SetUri.abi, address, provider) as IERC1155SetUri; // ERC1155SetUri
 export const getERC1155UbiquityContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC1155Ubiquity.abi, address, provider) as IERC1155Ubiquity["functions"]; // ERC1155Ubiquity
-export const getERC4626Contract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ERC4626.abi, address, provider) as IERC4626["functions"]; // ERC4626
-export const getLibDiamondContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(LibDiamond.abi, address, provider) as ILibDiamond["functions"]; // LibDiamond
+  getContract(ERC1155Ubiquity.abi, address, provider) as IERC1155Ubiquity; // ERC1155Ubiquity
+export const getERC4626Contract = (address: string, provider: ethers.providers.Provider) => getContract(ERC4626.abi, address, provider) as IERC4626; // ERC4626
+export const getLibDiamondContract = (address: string, provider: ethers.providers.Provider) => getContract(LibDiamond.abi, address, provider) as ILibDiamond; // LibDiamond
 export const getLiveTestHelperContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(LiveTestHelper.abi, address, provider) as ILiveTestHelper["functions"]; // LiveTestHelper
-export const getLPContract = (address: string, provider: ethers.providers.Provider) => getContract(LP.abi, address, provider) as ILP["functions"]; // LP
+  getContract(LiveTestHelper.abi, address, provider) as ILiveTestHelper; // LiveTestHelper
+export const getLPContract = (address: string, provider: ethers.providers.Provider) => getContract(LP.abi, address, provider) as ILP; // LP
 export const getManagerFacetContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ManagerFacet.abi, address, provider) as IManagerFacet["functions"]; // ManagerFacet
+  getContract(ManagerFacet.abi, address, provider) as IManagerFacet; // ManagerFacet
 export const getMockCreditNftContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockCreditNft.abi, address, provider) as IMockCreditNft["functions"]; // MockCreditNft
+  getContract(MockCreditNft.abi, address, provider) as IMockCreditNft; // MockCreditNft
 export const getMockCreditTokenContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockCreditToken.abi, address, provider) as IMockCreditToken["functions"]; // MockCreditToken
+  getContract(MockCreditToken.abi, address, provider) as IMockCreditToken; // MockCreditToken
 export const getMockDollarTokenContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockDollarToken.abi, address, provider) as IMockDollarToken["functions"]; // MockDollarToken
-export const getMockERC20Contract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockERC20.abi, address, provider) as IMockERC20["functions"]; // MockERC20
-export const getMockERC4626Contract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockERC4626.abi, address, provider) as IMockERC4626["functions"]; // MockERC4626
+  getContract(MockDollarToken.abi, address, provider) as IMockDollarToken; // MockDollarToken
+export const getMockERC20Contract = (address: string, provider: ethers.providers.Provider) => getContract(MockERC20.abi, address, provider) as IMockERC20; // MockERC20
+export const getMockERC4626Contract = (address: string, provider: ethers.providers.Provider) => getContract(MockERC4626.abi, address, provider) as IMockERC4626; // MockERC4626
 export const getMockIncentiveContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockIncentive.abi, address, provider) as IMockIncentive["functions"]; // MockIncentive
+  getContract(MockIncentive.abi, address, provider) as IMockIncentive; // MockIncentive
 export const getMockMetaPoolContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockMetaPool.abi, address, provider) as IMockMetaPool["functions"]; // MockMetaPool
+  getContract(MockMetaPool.abi, address, provider) as IMockMetaPool; // MockMetaPool
 export const getMockTWAPOracleDollar3poolContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockTWAPOracleDollar3pool.abi, address, provider) as IMockTWAPOracleDollar3pool["functions"]; // MockTWAPOracleDollar3pool
+  getContract(MockTWAPOracleDollar3pool.abi, address, provider) as IMockTWAPOracleDollar3pool; // MockTWAPOracleDollar3pool
 export const getMockUBQmanagerContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(MockUBQmanager.abi, address, provider) as IMockUBQmanager["functions"]; // MockUBQmanager
+  getContract(MockUBQmanager.abi, address, provider) as IMockUBQmanager; // MockUBQmanager
 export const getOperatorFiltererContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(OperatorFilterer.abi, address, provider) as IOperatorFilterer["functions"]; // OperatorFilterer
+  getContract(OperatorFilterer.abi, address, provider) as IOperatorFilterer; // OperatorFilterer
 export const getOperatorFilterRegistryErrorsAndEventsContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(OperatorFilterRegistryErrorsAndEvents.abi, address, provider) as IOperatorFilterRegistryErrorsAndEvents["functions"]; // OperatorFilterRegistryErrorsAndEvents
-export const getOwnableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(Ownable.abi, address, provider) as IOwnable["functions"]; // Ownable
+  getContract(OperatorFilterRegistryErrorsAndEvents.abi, address, provider) as IOperatorFilterRegistryErrorsAndEvents; // OperatorFilterRegistryErrorsAndEvents
+export const getOwnableContract = (address: string, provider: ethers.providers.Provider) => getContract(Ownable.abi, address, provider) as IOwnable; // Ownable
 export const getOwnershipFacetContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(OwnershipFacet.abi, address, provider) as IOwnershipFacet["functions"]; // OwnershipFacet
-export const getPausableContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(Pausable.abi, address, provider) as IPausable["functions"]; // Pausable
-export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(SimpleBond.abi, address, provider) as ISimpleBond["functions"]; // SimpleBond
-export const getStakingContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(Staking.abi, address, provider) as IStaking["functions"]; // Staking
+  getContract(OwnershipFacet.abi, address, provider) as IOwnershipFacet; // OwnershipFacet
+export const getPausableContract = (address: string, provider: ethers.providers.Provider) => getContract(Pausable.abi, address, provider) as IPausable; // Pausable
+export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => getContract(SimpleBond.abi, address, provider) as ISimpleBond; // SimpleBond
+export const getStakingContract = (address: string, provider: ethers.providers.Provider) => getContract(Staking.abi, address, provider) as IStaking; // Staking
 export const getStakingTokenContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(StakingToken.abi, address, provider) as IStakingToken["functions"]; // StakingToken
+  getContract(StakingToken.abi, address, provider) as IStakingToken; // StakingToken
 export const getStakingFormulasContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(StakingFormulas.abi, address, provider) as IStakingFormulas["functions"]; // StakingFormulas
+  getContract(StakingFormulas.abi, address, provider) as IStakingFormulas; // StakingFormulas
 export const getStdAssertionsContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(StdAssertions.abi, address, provider) as IStdAssertions["functions"]; // StdAssertions
+  getContract(StdAssertions.abi, address, provider) as IStdAssertions; // StdAssertions
+
 export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(SushiSwapPool.abi, address, provider) as ISushiSwapPool["functions"]; // SushiSwapPool
+  getContract(SushiSwapPool.abi, address, provider) as ISushiSwapPool; // SushiSwapPool
+
 export const getTWAPOracleDollar3poolContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(TWAPOracleDollar3pool.abi, address, provider) as ITWAPOracleDollar3pool["functions"]; // TWAPOracleDollar3pool
-export const getUARContract = (address: string, provider: ethers.providers.Provider) => getContract(UAR.abi, address, provider) as IUAR["functions"]; // UAR
-export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquiStick.abi, address, provider) as IUbiquiStick["functions"]; // UbiquiStick
+  getContract(TWAPOracleDollar3pool.abi, address, provider) as ITWAPOracleDollar3pool; // TWAPOracleDollar3pool
+export const getUARContract = (address: string, provider: ethers.providers.Provider) => getContract(UAR.abi, address, provider) as IUAR; // UAR
+export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquiStick.abi, address, provider) as IUbiquiStick; // UbiquiStick
 export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquiStickSale.abi, address, provider) as IUbiquiStickSale["functions"]; // UbiquiStickSale
+  getContract(UbiquiStickSale.abi, address, provider) as IUbiquiStickSale; // UbiquiStickSale
 export const getUbiquityChefContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityChef.abi, address, provider) as IUbiquityChef["functions"]; // UbiquityChef
+  getContract(UbiquityChef.abi, address, provider) as IUbiquityChef; // UbiquityChef
 export const getUbiquityCreditTokenContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityCreditToken.abi, address, provider) as IUbiquityCreditToken["functions"]; // UbiquityCreditToken
+  getContract(UbiquityCreditToken.abi, address, provider) as IUbiquityCreditToken; // UbiquityCreditToken
 export const getUbiquityDollarTokenContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityDollarToken.abi, address, provider) as IUbiquityDollarToken["functions"]; // UbiquityDollarToken
+  getContract(UbiquityDollarToken.abi, address, provider) as IUbiquityDollarToken; // UbiquityDollarToken
 export const getUbiquityFormulasContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityFormulas.abi, address, provider) as IUbiquityFormulas["functions"]; // UbiquityFormulas
+  getContract(UbiquityFormulas.abi, address, provider) as IUbiquityFormulas; // UbiquityFormulas
 export const getUbiquityGovernanceTokenContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UbiquityGovernanceToken.abi, address, provider) as IUbiquityGovernanceToken["functions"]; // UbiquityGovernanceToken
-export const getUintUtilsContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(UintUtils.abi, address, provider) as IUintUtils["functions"]; // UintUtils
-export const getZozoVaultContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(ZozoVault.abi, address, provider) as IZozoVault["functions"]; // ZozoVault
+  getContract(UbiquityGovernanceToken.abi, address, provider) as IUbiquityGovernanceToken; // UbiquityGovernanceToken
+export const getUintUtilsContract = (address: string, provider: ethers.providers.Provider) => getContract(UintUtils.abi, address, provider) as IUintUtils; // UintUtils
+export const getZozoVaultContract = (address: string, provider: ethers.providers.Provider) => getContract(ZozoVault.abi, address, provider) as IZozoVault; // ZozoVault

@@ -1,4 +1,4 @@
-import { BigNumber, Contract, ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { useState } from "react";
 import { SwapWidget } from "@uniswap/widgets";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";

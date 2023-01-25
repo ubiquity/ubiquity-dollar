@@ -210,7 +210,7 @@ contract Bonding is CollectableDust {
         );
 
         require(
-            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingTokenAddress()).balanceOf(
                 msg.sender,
                 _id
             ) >= _sharesAmount,
@@ -228,7 +228,7 @@ contract Bonding is CollectableDust {
 
         uint256 _currentShareValue = currentShareValue();
 
-        IERC1155Ubiquity(manager.stakingShareAddress()).burn(
+        IERC1155Ubiquity(manager.stakingTokenAddress()).burn(
             msg.sender,
             _id,
             _sharesAmount
@@ -250,7 +250,7 @@ contract Bonding is CollectableDust {
             address(this)
         );
 
-        uint256 totalShares = IERC1155Ubiquity(manager.stakingShareAddress())
+        uint256 totalShares = IERC1155Ubiquity(manager.stakingTokenAddress())
             .totalSupply();
 
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
@@ -274,7 +274,7 @@ contract Bonding is CollectableDust {
             "Bonding: share value should not be null"
         );
 
-        IERC1155Ubiquity(manager.stakingShareAddress()).mint(
+        IERC1155Ubiquity(manager.stakingTokenAddress()).mint(
             msg.sender,
             _id,
             _sharesAmount,
