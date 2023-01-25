@@ -5,12 +5,13 @@
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "scripts": {
+    "prebuild": "clean",
     "build": "run-s build:types build:next build:export",
     "build:next": "next build",
     "build:export": "next export --outdir dist",
     "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types",
     "start": "next dev",
-    "clean": "rimraf ./dist",
+    "clean": "rimraf types dist",
     "purge": "yarn clean && rimraf ./node_modules ./dist ./next"
   },
   "devDependencies": {
