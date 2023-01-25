@@ -12,6 +12,7 @@ contract DepositState is LiveTestHelper {
 
     event Paused(address _caller);
     event Unpaused(address _caller);
+    event TransferSingle(address operator, address from, address to, uint256 id, uint256 amount);
 
     function setUp() public virtual override {
         super.setUp();
@@ -51,12 +52,6 @@ contract RemoteDepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
-    // function testCannotDeployEmptyManager() public {
-    //     vm.prank(admin);
-    //     vm.expectRevert();
-    //     StakingShare broken = new StakingShare(address(0), "uri");
-    // }
-
     function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
@@ -94,6 +89,7 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake.lpAmount, deposited);
         assertEq(stake.lpRewardDebt, debt);
         assertEq(stake.endBlock, end);
+        assertEq(stake.creationBlock, block.number);
     }
 
     function testCannotMintZeroAddress(uint128 deposited, uint128 debt, uint256 end) public {
@@ -141,6 +137,12 @@ contract RemoteDepositStateTest is DepositState {
         staking.pause();
     }
 
+    function testCannotPauseNotPauser() public {
+        vm.expectRevert("not pauser");
+        vm.prank(secondAccount);
+        staking.pause();
+    }
+
     function testUnpause() public {
         vm.prank(admin);
         staking.pause();
@@ -150,6 +152,15 @@ contract RemoteDepositStateTest is DepositState {
 
         vm.prank(admin);
         staking.unpause();
+    }
+
+    function testCannotUnpauseNotPauser() public {
+        vm.prank(admin);
+        staking.pause();
+
+        vm.expectRevert("not pauser");
+        vm.prank(secondAccount);
+        staking.unpause(); 
     }
 
     function testTransferFrom() public {
@@ -177,6 +188,38 @@ contract RemoteDepositStateTest is DepositState {
         vm.prank(admin);
         stakingShare.safeTransferFrom(
             stakingMinAccount,
+            secondAccount,
+            1,
+            1,
+            data
+        ); 
+    }
+
+    function testCannotSafeTransferFromToAddressZero() public {
+        vm.prank(stakingMinAccount);
+        stakingShare.setApprovalForAll(admin, true);
+
+        vm.expectRevert("ERC1155: transfer to the zero address");
+        bytes memory data;
+        vm.prank(admin);
+        stakingShare.safeTransferFrom(
+            stakingMinAccount,
+            address(0),
+            1,
+            1,
+            data
+        ); 
+    }
+
+    function testCannotSafeTransferFromInsufficientBalance() public {
+        vm.prank(fifthAccount);
+        stakingShare.setApprovalForAll(admin, true);
+
+        vm.expectRevert("ERC1155: insufficient balance for transfer");
+        bytes memory data;
+        vm.prank(admin);
+        stakingShare.safeTransferFrom(
+            fifthAccount,
             secondAccount,
             1,
             1,
@@ -297,7 +340,7 @@ contract RemoteDepositStateTest is DepositState {
 
     function testCannotSetUriFromNonAllowedAddress() public {
         string memory stringTest = "{'a parsed json':'value'}";
-        vm.expectRevert();
+        vm.expectRevert("Governance token: not staking manager");
         vm.prank(fifthAccount);
         stakingShare.setUri(stringTest);
     }
