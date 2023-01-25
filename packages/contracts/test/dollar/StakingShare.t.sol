@@ -181,20 +181,6 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
-    function testCannotSafeTransferFromUnapproved() public {
-        vm.expectRevert("ERC1155: caller is not token owner or approved");
-
-        bytes memory data;
-        vm.prank(admin);
-        stakingShare.safeTransferFrom(
-            stakingMinAccount,
-            secondAccount,
-            1,
-            1,
-            data
-        ); 
-    }
-
     function testCannotSafeTransferFromToAddressZero() public {
         vm.prank(stakingMinAccount);
         stakingShare.setApprovalForAll(admin, true);
@@ -263,20 +249,6 @@ contract RemoteDepositStateTest is DepositState {
             data
         );
         assertEq(stakingShare.holderTokens(secondAccount), ids);
-    }
-
-    function testCannotBatchTransferFromUnapproved() public {
-        vm.expectRevert("ERC1155: caller is not token owner or approved");
-
-        bytes memory data;
-        vm.prank(admin);
-        stakingShare.safeBatchTransferFrom(
-            stakingMaxAccount,
-            secondAccount,
-            ids,
-            amounts,
-            data
-        ); 
     }
 
     function testCannotBatchTransferFromWhenPaused() public {

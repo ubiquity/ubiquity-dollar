@@ -96,23 +96,6 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(y, checkWeeks);
     }
 
-    // function testDeploy() public {
-    //     address[] ogs;
-    //     address[] ogsEmpty;
-    //     uint256[] balances;
-    //     uint256[] lockup; 
-        
-    //     Staking broken = new Staking(
-    //         address(manager),
-    //         address(stakingFormulas),
-    //         ogsEmpty,
-    //         balances,
-    //         lockup
-    //     );
-
-    //     assertEq(fourthAccount, checkAddress);
-    // }
-
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
         Staking broken = new Staking(
@@ -383,19 +366,6 @@ contract RemoteZeroStateTest is ZeroState {
         vm.prank(fourthAccount);
         staking.deposit(1, 0);
     }
-
-    // function testCannotDepositWhenPaused() public {
-    //     uint256 minLP = metapool.balanceOf(stakingMinAccount);
-
-    //     vm.prank(admin);
-    //     staking.pause();
-
-    //     vm.expectRevert("Pausable: paused");
-    //     vm.startPrank(stakingMinAccount);
-    //     metapool.approve(address(staking), 2 ** 256 - 1);
-    //     staking.deposit(minLP, 1);
-    //     vm.stopPrank;
-    // }
 }
 
 contract DepositState is ZeroState {

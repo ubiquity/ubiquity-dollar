@@ -288,7 +288,6 @@ contract LiveTestHelper is Test {
 
         vm.startPrank(fourthAccount);
         dollarToken.approve(address(metapool), 10000e18);
-        // dollarToken.approve(address(fourthAccount), 1000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
