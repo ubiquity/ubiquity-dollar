@@ -55,6 +55,9 @@ import OwnershipFacet from "@ubiquity/contracts/out/OwnershipFacet.sol/Ownership
 import Pausable from "@ubiquity/contracts/out/Pausable.sol/Pausable.json";
 import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
 import Staking from "@ubiquity/contracts/out/Staking.sol/Staking.json";
+
+import StakingToken from "@ubiquity/contracts/out/StakingToken.sol/StakingToken.json";
+
 import StakingFormulas from "@ubiquity/contracts/out/StakingFormulas.sol/StakingFormulas.json";
 import StdAssertions from "@ubiquity/contracts/out/StdAssertions.sol/StdAssertions.json";
 import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
@@ -133,6 +136,9 @@ import type { Pausable as IPausable } from "types/Pausable";
 
 import type { SimpleBond as ISimpleBond } from "types/SimpleBond";
 import type { Staking as IStaking } from "types/Staking";
+
+import type { StakingToken as IStakingToken } from "types/StakingToken";
+
 import type { StakingFormulas as IStakingFormulas } from "types/StakingFormulas";
 import type { StdAssertions as IStdAssertions } from "types/StdAssertions";
 
@@ -264,6 +270,8 @@ export const getSimpleBondContract = (address: string, provider: ethers.provider
   getContract(SimpleBond.abi, address, provider) as ISimpleBond["functions"]; // SimpleBond
 export const getStakingContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(Staking.abi, address, provider) as IStaking["functions"]; // Staking
+export const getStakingTokenContract = (address: string, provider: ethers.providers.Provider) =>
+  getContract(StakingToken.abi, address, provider) as IStakingToken["functions"]; // StakingToken
 export const getStakingFormulasContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(StakingFormulas.abi, address, provider) as IStakingFormulas["functions"]; // StakingFormulas
 export const getStdAssertionsContract = (address: string, provider: ethers.providers.Provider) =>
