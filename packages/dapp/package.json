@@ -5,14 +5,14 @@
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "scripts": {
-    "prebuild": "clean",
+    "prebuild": "run-p clean",
     "build": "run-s build:types build:next build:export",
-    "build:next": "next build",
     "build:export": "next export --outdir dist",
-    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types",
     "start": "next dev",
-    "clean": "rimraf types dist",
-    "purge": "yarn clean && rimraf ./node_modules ./dist ./next"
+    "clean": "rimraf next types node_modules",
+    "build:next": "next build",
+    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types",
+    "build:node_modules": "yarn install --frozen-lockfile"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",
@@ -33,7 +33,6 @@
     "@uniswap/smart-order-router": "^2.10.1",
     "@uniswap/widgets": "2.18.0",
     "@walletconnect/ethereum-provider": "^1.8.0",
-    "autoprefixer": "^10.4.8",
     "btoa": "^1.2.1",
     "classnames": "^2.3.1",
     "connectkit": "1.1.0",

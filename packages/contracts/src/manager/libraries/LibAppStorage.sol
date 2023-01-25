@@ -25,8 +25,8 @@ struct AppStorage {
     address dollarTokenAddress;
     address creditNftCalculatorAddress;
     address dollarMintCalculatorAddress;
-    address stakingShareAddress;
-    address stakingContractAddress;
+    address stakingTokenAddress;
+    address stakingAddress;
     address stableSwapMetaPoolAddress;
     address curve3PoolTokenAddress; // 3CRV
     address treasuryAddress;

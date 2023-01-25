@@ -119,8 +119,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //require(IERC20(token).transferFrom(msg.sender, address(this), amount), "sender cannot transfer specified fund");
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
 
-        address staking = manager.stakingContractAddress();
-        address stakingShare = manager.stakingShareAddress();
+        address staking = manager.stakingAddress();
+        address stakingShare = manager.stakingTokenAddress();
 
         uint256 lpAmount; //UAD3CRVf
         //[Ubiquity Dollar, DAI, USDC, USDT]
@@ -230,8 +230,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
                 tokenAmounts[3]
             );
         }
-        address staking = manager.stakingContractAddress();
-        address stakingShare = manager.stakingShareAddress();
+        address staking = manager.stakingAddress();
+        address stakingShare = manager.stakingTokenAddress();
 
         uint256 lpAmount; //UAD3CRVf
 
@@ -274,8 +274,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     function withdraw(
         uint256 stakingShareId
     ) external nonReentrant returns (uint256[4] memory tokenAmounts) {
-        address staking = manager.stakingContractAddress();
-        address stakingShare = manager.stakingShareAddress();
+        address staking = manager.stakingAddress();
+        address stakingShare = manager.stakingTokenAddress();
 
         uint256[] memory stakingShareIds = IStakingToken(stakingShare)
             .holderTokens(msg.sender);
@@ -298,7 +298,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         );
 
         // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
-        //address staking = ubiquityManager.stakingContractAddress();
+        //address staking = ubiquityManager.stakingAddress();
         IStakingToken(stakingShare).setApprovalForAll(staking, true);
         IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
         IStakingToken(stakingShare).setApprovalForAll(staking, false);
@@ -349,8 +349,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             isMetaPoolCoin(token),
             "Invalid token: must be DAI, USD Coin, Tether, or Ubiquity Dollar"
         );
-        address staking = manager.stakingContractAddress();
-        address stakingShare = manager.stakingShareAddress();
+        address staking = manager.stakingAddress();
+        address stakingShare = manager.stakingTokenAddress();
 
         uint256[] memory stakingShareIds = IStakingToken(stakingShare)
             .holderTokens(msg.sender);
@@ -376,7 +376,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         );
 
         // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
-        //address staking = ubiquityManager.stakingContractAddress();
+        //address staking = ubiquityManager.stakingAddress();
         IStakingToken(stakingShare).setApprovalForAll(staking, true);
         IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
         IStakingToken(stakingShare).setApprovalForAll(staking, false);

@@ -56,7 +56,7 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setFormulasAddress(address _formulasAddress) external;
 
-    function setStakingTokenAddress(address _stakingShareAddress) external;
+    function setStakingTokenAddress(address _stakingTokenAddress) external;
 
     function setStableSwapMetaPoolAddress(
         address _stableSwapMetaPoolAddress
@@ -66,11 +66,9 @@ interface IUbiquityDollarManager is IAccessControl {
      * @notice set the staking smart contract address
      * @dev staking contract participants deposit  curve LP token
      * for a certain duration to earn Governance Token and more curve LP token
-     * @param _stakingContractAddress staking contract address
+     * @param _stakingAddress staking contract address
      */
-    function setStakingContractAddress(
-        address _stakingContractAddress
-    ) external;
+    function setStakingContractAddress(address _stakingAddress) external;
 
     /**
      * @notice set the treasury address
@@ -102,9 +100,9 @@ interface IUbiquityDollarManager is IAccessControl {
         address _creditNftManagerAddress
     ) external view returns (address);
 
-    function stakingContractAddress() external view returns (address);
+    function stakingAddress() external view returns (address);
 
-    function stakingShareAddress() external view returns (address);
+    function stakingTokenAddress() external view returns (address);
 
     function stableSwapMetaPoolAddress() external view returns (address);
 

@@ -154,7 +154,7 @@ contract DollarMintExcess is IDollarMintExcess {
             .add_liquidity(
                 [0, amount3CRVReceived],
                 0,
-                manager.stakingContractAddress()
+                manager.stakingAddress()
             );
         // update TWAP price
         return res;

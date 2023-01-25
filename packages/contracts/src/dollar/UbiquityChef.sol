@@ -86,7 +86,7 @@ contract UbiquityChef is ReentrancyGuard {
 
     modifier onlyStakingContract() {
         require(
-            msg.sender == manager.stakingContractAddress(),
+            msg.sender == manager.stakingAddress(),
             "MasterChef: not Staking Contract"
         );
         _;
@@ -173,7 +173,7 @@ contract UbiquityChef is ReentrancyGuard {
     /// @notice only send pending rewards
     function getRewards(uint256 stakingShareID) external returns (uint256) {
         require(
-            IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
+            IERC1155Ubiquity(manager.stakingTokenAddress()).balanceOf(
                 msg.sender,
                 stakingShareID
             ) == 1,
