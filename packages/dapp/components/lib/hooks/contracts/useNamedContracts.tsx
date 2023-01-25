@@ -2,7 +2,8 @@ import useWeb3, { PossibleProviders } from "../useWeb3";
 
 import allDeployments from "@ubiquity/contracts/deployments.json";
 import addresses from "../../../config/named-accounts.json";
-import { getCurveFactoryContract, getCreditNftManagerContract, getERC20Contract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts";
+import { getCreditNftManagerContract, getERC20Contract } from "@/components/utils/contracts";
+import { getCurveFactoryContract, getIJarContract, getYieldProxyContract } from "@/components/utils/contracts-external";
 import { deployedChainId } from "@/components/utils/deployments";
 
 const getCreditNftManager = () => {

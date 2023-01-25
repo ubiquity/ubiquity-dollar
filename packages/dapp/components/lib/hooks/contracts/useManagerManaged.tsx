@@ -10,13 +10,15 @@ import {
   getUbiquityCreditTokenContract,
   getUbiquityFormulasContract,
   getUbiquityGovernanceTokenContract,
-  getUniswapV2PairABIContract,
   getCreditNftRedemptionCalculatorContract,
   getCreditRedemptionCalculatorContract,
-  getDollar3poolMarketContract,
 } from "@/components/utils/contracts";
-import { Contract } from "ethers";
+import { getUniswapV2PairABIContract, getDollar3poolMarketContract } from "@/components/utils/contracts-external";
+
 import { createContext, useContext, useEffect, useState } from "react";
+
+import { UbiquityDollarManager } from "types/UbiquityDollarManager";
+
 import { ChildrenShim } from "../children-shim";
 import useWeb3, { PossibleProviders } from "../useWeb3";
 import useDeployedContracts from "./useDeployedContracts";
@@ -32,7 +34,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   useEffect(() => {
     if (deployedContracts && provider) {
       (async () => {
-        setManagedContracts(await connectManagerContracts(deployedContracts.manager, provider));
+        setManagedContracts(await connectManagerContracts(deployedContracts.globalManager, provider));
       })();
     }
   }, [deployedContracts, provider]);
@@ -40,20 +42,20 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: Contract, provider: NonNullable<PossibleProviders>) {
+async function connectManagerContracts(manager: UbiquityDollarManager["functions"], provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
     dollar3poolMarket,
     twapOracle,
-    dollarMintCalc,
+    dollarMintCalculator,
     creditToken,
     governanceToken,
     _3crvToken,
     stakingToken,
     creditNft,
     staking,
-    masterChef,
+    ubiquityChef,
     sushiSwapPool,
     ubiquityFormulas,
     creditNftCalculator,
@@ -83,14 +85,14 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
     dollarToken: getUbiquityDollarTokenContract(dollarToken, provider),
     dollarMetapool: getDollar3poolMarketContract(dollar3poolMarket, provider),
     dollarTwapOracle: getTWAPOracleDollar3poolContract(twapOracle, provider),
-    dollarMintCalculator: getDollarMintCalculatorContract(dollarMintCalc, provider),
+    dollarMintCalculator: getDollarMintCalculatorContract(dollarMintCalculator, provider),
     creditToken: getUbiquityCreditTokenContract(creditToken, provider),
     governanceToken: getUbiquityGovernanceTokenContract(governanceToken, provider),
     _3crvToken: getERC20Contract(_3crvToken, provider),
     stakingToken: getStakingTokenContract(stakingToken, provider),
     creditNft: getCreditNftContract(creditNft, provider),
     staking: getStakingContract(staking, provider),
-    masterChef: getStakingContract(masterChef, provider),
+    masterChef: getStakingContract(ubiquityChef, provider),
     sushiSwapPool: sushiSwapPoolContract,
     governanceMarket: ugovUadPairContract,
     ubiquityFormulas: getUbiquityFormulasContract(ubiquityFormulas, provider),

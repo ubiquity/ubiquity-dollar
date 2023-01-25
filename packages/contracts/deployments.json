@@ -3361,7 +3361,7 @@
           }
         ]
       },
-      "DebtCouponManager": {
+      "CreditNftManager": {
         "address": "0x432120Ad63779897A424f7905BA000dF38A74554",
         "abi": [
           {

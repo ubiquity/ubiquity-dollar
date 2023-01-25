@@ -15,28 +15,25 @@ type TokenMonitorProps = {
 };
 
 const TokenMonitorContainer = () => {
-  const { debtCouponManager } = useDeployedContracts() || {};
+  const { creditNftManager } = useDeployedContracts() || {};
   const { creditNft: debtCouponToken, dollarToken: uad } = useManagerManaged() || {};
 
   const [tokenMonitorPRops, setTokenMonitorProps] = useState<State>(null);
 
   useEffect(() => {
-    if (debtCouponManager && debtCouponToken && uad) {
+    if (creditNftManager && debtCouponToken && uad) {
       (async function () {
-        const [totalOutstandingDebt, totalRedeemable] = await Promise.all([
-          debtCouponToken.getTotalOutstandingDebt(),
-          uad.balanceOf(debtCouponManager.address),
-        ]);
+        const [totalOutstandingDebt, totalRedeemable] = await Promise.all([debtCouponToken.getTotalOutstandingDebt(), uad.balanceOf(creditNftManager.address)]);
 
         setTokenMonitorProps({
           debtCouponAddress: debtCouponToken.address,
-          debtCouponManagerAddress: debtCouponManager.address,
+          debtCouponManagerAddress: creditNftManager.address,
           totalOutstandingDebt: +formatEther(totalOutstandingDebt),
           totalRedeemable: +formatEther(totalRedeemable),
         });
       })();
     }
-  }, [debtCouponManager, debtCouponToken, uad]);
+  }, [creditNftManager, debtCouponToken, uad]);
 
   return tokenMonitorPRops && <TokenMonitor {...tokenMonitorPRops} />;
 };

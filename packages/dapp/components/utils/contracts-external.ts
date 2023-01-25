@@ -1,10 +1,10 @@
 import ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
 import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
-import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
+// import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import { ethers } from "ethers";
 import { ICurveFactoryInterface } from "types/ICurveFactory";
 import { IJarInterface } from "types/IJar";
-import { IMetaPoolInterface } from "types/IMetaPool";
+// import { IMetaPoolInterface } from "types/IMetaPool";
 // import { UniswapV2PairABIInterface } from "types/UniswapV2PairABI";
 // import { UniswapV3PoolABIInterface } from "types/UniswapV3PoolABI";
 // import { UniswapV3RouterABIInterface } from "types/UniswapV3RouterABI";
@@ -39,8 +39,8 @@ import { getContract } from "./contracts";
 //   getContract(YieldProxyABI, address, provider) as YieldProxyABIInterface; // YieldProxyABI
 
 // // // //
-export const getDollar3poolMarketContract = (address: string, provider: ethers.providers.Provider) =>
-  getContract(IMetaPool.abi, address, provider) as IMetaPoolInterface; // IMetaPool
+// export const getDollar3poolMarketContract = (address: string, provider: ethers.providers.Provider) =>
+//   getContract(IMetaPool.abi, address, provider) as IMetaPoolInterface; // IMetaPool
 
 // export const getUniswapV2PairABIContract = (address: string, provider: ethers.providers.Provider) =>
 //   getContract(UniswapV2PairABI, address, provider) as UniswapV2PairABIInterface; // UniswapV2PairABI

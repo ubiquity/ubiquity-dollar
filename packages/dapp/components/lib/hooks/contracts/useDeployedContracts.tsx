@@ -6,16 +6,16 @@ import useWeb3Provider from "../useWeb3Provider";
 export type DeployedContracts = ReturnType<typeof useDeployedContracts> | null;
 const useDeployedContracts = () => {
   const provider = useWeb3Provider();
-  const [addr1, addr2] = useDeployedAddress("UbiquityAlgorithmicDollarManager", "DebtCouponManager");
+  const [globalManagerAddress, creditNftManagerAddress] = useDeployedAddress("UbiquityAlgorithmicDollarManager", "CreditNftManager");
   return useMemo(
     () =>
-      addr1 && addr2 && provider
+      globalManagerAddress && creditNftManagerAddress && provider
         ? {
-            manager: getUbiquityDollarManagerContract(addr1, provider),
-            debtCouponManager: getCreditNftManagerContract(addr2, provider),
+            globalManager: getUbiquityDollarManagerContract(globalManagerAddress, provider),
+            creditNftManager: getCreditNftManagerContract(creditNftManagerAddress, provider),
           }
         : null,
-    [addr1, addr2, provider]
+    [globalManagerAddress, creditNftManagerAddress, provider]
   );
 };
 

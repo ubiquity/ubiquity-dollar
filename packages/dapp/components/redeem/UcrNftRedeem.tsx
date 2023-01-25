@@ -67,13 +67,13 @@ const UcrNftRedeem = () => {
   };
 
   const redeemUcrNftForUad = async (amount: BigNumber) => {
-    const { debtCouponManager } = deployedContracts;
+    const { creditNftManager } = deployedContracts;
     const debtId = debtIds[selectedDebtId];
     if (
       debtId &&
-      (await ensureERC1155Allowance("uCR-NFT -> DebtCouponManager", managedContracts.creditNft as unknown as Contract, signer, debtCouponManager.address))
+      (await ensureERC1155Allowance("uCR-NFT -> CreditNftManager", managedContracts.creditNft as unknown as Contract, signer, creditNftManager.address))
     ) {
-      await (await debtCouponManager.connect(signer).redeemCoupons(debtId, amount)).wait();
+      await (await creditNftManager.connect(signer).redeemCoupons(debtId, amount)).wait();
       refreshBalances();
       fetchDebts(walletAddress, managedContracts.creditNft);
     }
