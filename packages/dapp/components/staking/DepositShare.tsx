@@ -18,14 +18,14 @@ async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Prom
   const reserves = await contracts.governanceMarket.getReserves();
 
   const ubqPrice = +reserves[0].toString() / +reserves[1].toString();
-  const ubqPerBlock = await contracts.masterChef.uGOVPerBlock();
-  const ubqMultiplier = await contracts.masterChef.uGOVmultiplier();
+  const ubqPerBlock = await contracts.ubiquityChef.governancePerBlock();
+  const ubqMultiplier = await contracts.ubiquityChef.governanceMultiplier();
   const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));
   const blockCountInAWeek = toNum(await contracts.staking.blockCountInAWeek());
   const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
-  const totalShares = toEtherNum(await contracts.masterChef.totalShares());
+  const totalShares = toEtherNum(await contracts.ubiquityChef.totalShares());
   const usdPerWeek = ubqPerWeek * ubqPrice;
-  const bondingDiscountMultiplier = await contracts.staking.bondingDiscountMultiplier();
+  const bondingDiscountMultiplier = await contracts.staking.stakingDiscountMultiplier();
   return { totalShares, usdPerWeek, bondingDiscountMultiplier };
 }
 

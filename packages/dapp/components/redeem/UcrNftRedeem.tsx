@@ -73,7 +73,7 @@ const UcrNftRedeem = () => {
       debtId &&
       (await ensureERC1155Allowance("uCR-NFT -> CreditNftManager", managedContracts.creditNft as unknown as Contract, signer, creditNftManager.address))
     ) {
-      await (await creditNftManager.connect(signer).redeemCoupons(debtId, amount)).wait();
+      await (await creditNftManager.connect(signer).redeemCreditNft(debtId, amount)).wait();
       refreshBalances();
       fetchDebts(walletAddress, managedContracts.creditNft);
     }

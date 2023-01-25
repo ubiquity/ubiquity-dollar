@@ -13,8 +13,8 @@ import PositiveNumberInput from "../ui/PositiveNumberInput";
 import useRouter from "../lib/hooks/useRouter";
 import useTrade from "../lib/hooks/useTrade";
 import { SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
-import { getUniswapV3RouterABIContract } from "../utils/contracts";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
+import { getUniswapV3RouterContract } from "../utils/contracts-external";
 
 const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const [{ provider, walletAddress }] = useWeb3();
@@ -40,10 +40,10 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const redeemUcr = async (amount: BigNumber) => {
     const { creditNftManager } = deployedContracts;
     await ensureERC20Allowance("uCR -> CreditNftManager", managedContracts.creditToken, amount, signer, creditNftManager.address);
-    await (await creditNftManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
+    await (await creditNftManager.connect(signer).burnCreditTokensForDollars(amount)).wait();
     refreshBalances();
     if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
-      const routerContract = getUniswapV3RouterABIContract(V3_ROUTER_ADDRESS, provider);
+      const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
       await (await routerContract.connect(signer).approveMax(quoteAmount, managedContracts.dollarToken)).wait();
       await useTrade(selectedRedeemToken, quoteAmount);
       refreshBalances();

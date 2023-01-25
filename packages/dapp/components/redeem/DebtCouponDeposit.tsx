@@ -35,7 +35,7 @@ const UcrNftGenerator = () => {
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { creditNftManager } = deployedContracts;
     await ensureERC20Allowance("uAD -> CreditNftManager", managedContracts.dollarToken as unknown as Contract, amount, signer, creditNftManager.address);
-    await (await creditNftManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
+    await (await creditNftManager.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
     refreshBalances();
   };
 
@@ -54,7 +54,7 @@ const UcrNftGenerator = () => {
     const amount = extractValidAmount(val);
     if (amount) {
       setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCouponAmount(amount));
+      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCreditNftAmount(amount));
     }
   };
 
