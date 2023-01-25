@@ -89,7 +89,7 @@ contract ManagerFacet is Modifiers {
         s.formulasAddress = _formulasAddress;
     }
 
-    function setStakingShareAddress(
+    function setStakingTokenAddress(
         address _stakingShareAddress
     ) external onlyAdmin {
         s.stakingShareAddress = _stakingShareAddress;
@@ -221,7 +221,7 @@ contract ManagerFacet is Modifiers {
         return s.formulasAddress;
     }
 
-    function getStakingShareAddress() external view returns (address) {
+    function getStakingTokenAddress() external view returns (address) {
         return s.stakingShareAddress;
     }
 

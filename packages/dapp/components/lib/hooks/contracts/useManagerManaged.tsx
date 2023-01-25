@@ -68,7 +68,7 @@ async function connectManagerContracts(manager: UbiquityDollarManager["functions
     manager.creditTokenAddress(),
     manager.governanceTokenAddress(),
     manager.curve3PoolTokenAddress(),
-    manager.stakingTokenAddress(),
+    manager.stakingAddress(),
     manager.creditNftAddress(),
     manager.stakingTokenAddress(),
     manager.masterChefAddress(),

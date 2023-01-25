@@ -15,7 +15,7 @@ import "./interfaces/ITWAPOracleDollar3pool.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./utils/CollectableDust.sol";
 import "./StakingFormulas.sol";
-import "./StakingShare.sol";
+import "./StakingToken.sol";
 
 contract Staking is CollectableDust, Pausable {
     using SafeERC20 for IERC20;
@@ -319,7 +319,7 @@ contract Staking is CollectableDust, Pausable {
     ) external whenNotPaused {
         (
             uint256[2] memory bs,
-            StakingShare.Stake memory stake
+            StakingToken.Stake memory stake
         ) = _checkForLiquidity(_id);
 
         // calculate pending LP rewards
@@ -372,12 +372,12 @@ contract Staking is CollectableDust, Pausable {
         // should be done after masterchef withdraw
         _updateLpPerShare();
         stake.lpRewardDebt =
-            (IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(
+            (IUbiquityChef(manager.masterChefAddress()).getStakingTokenInfo(
                 _id
             )[0] * accLpRewardPerShare) /
             1e12;
 
-        StakingShare(manager.stakingShareAddress()).updateStake(
+        StakingToken(manager.stakingShareAddress()).updateStake(
             _id,
             stake.lpAmount,
             stake.lpRewardDebt,
@@ -401,7 +401,7 @@ contract Staking is CollectableDust, Pausable {
     ) external whenNotPaused {
         (
             uint256[2] memory bs,
-            StakingShare.Stake memory stake
+            StakingToken.Stake memory stake
         ) = _checkForLiquidity(_id);
         require(stake.lpAmount >= _amount, "Staking: amount too big");
         // we should decrease the Governance token rewards proportionally to the LP removed
@@ -423,7 +423,7 @@ contract Staking is CollectableDust, Pausable {
         );
 
         // redeem of the extra LP
-        // staking lp balance - StakingShare.totalLP
+        // staking lp balance - StakingToken.totalLP
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
 
         // add an extra step to be able to decrease rewards if locking end is near
@@ -432,7 +432,7 @@ contract Staking is CollectableDust, Pausable {
 
         uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
             .correctedAmountToWithdraw(
-                StakingShare(manager.stakingShareAddress()).totalLP(),
+                StakingToken(manager.stakingShareAddress()).totalLP(),
                 metapool.balanceOf(address(this)) - lpRewards,
                 _amount
             );
@@ -444,12 +444,12 @@ contract Staking is CollectableDust, Pausable {
         // user.amount.mul(pool.accSushiPerShare).div(1e12);
         // should be done after masterchef withdraw
         stake.lpRewardDebt =
-            (IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(
+            (IUbiquityChef(manager.masterChefAddress()).getStakingTokenInfo(
                 _id
             )[0] * accLpRewardPerShare) /
             1e12;
 
-        StakingShare(manager.stakingShareAddress()).updateStake(
+        StakingToken(manager.stakingShareAddress()).updateStake(
             _id,
             stake.lpAmount,
             stake.lpRewardDebt,
@@ -470,10 +470,10 @@ contract Staking is CollectableDust, Pausable {
 
     // View function to see pending lpRewards on frontend.
     function pendingLpRewards(uint256 _id) external view returns (uint256) {
-        StakingShare staking = StakingShare(manager.stakingShareAddress());
-        StakingShare.Stake memory stake = staking.getStake(_id);
+        StakingToken staking = StakingToken(manager.stakingShareAddress());
+        StakingToken.Stake memory stake = staking.getStake(_id);
         uint256[2] memory bs = IUbiquityChef(manager.masterChefAddress())
-            .getStakingShareInfo(_id);
+            .getStakingTokenInfo(_id);
 
         uint256 lpBalance = IERC20(manager.stableSwapMetaPoolAddress())
             .balanceOf(address(this));
@@ -542,7 +542,7 @@ contract Staking is CollectableDust, Pausable {
             .totalShares();
         // priceShare = totalLP / totalShares
         priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
-            StakingShare(manager.stakingShareAddress()).totalLP(),
+            StakingToken(manager.stakingShareAddress()).totalLP(),
             totalShares,
             ONE
         );
@@ -589,7 +589,7 @@ contract Staking is CollectableDust, Pausable {
 
     /// @dev update the accumulated excess LP per share
     function _updateLpPerShare() internal {
-        StakingShare stake = StakingShare(manager.stakingShareAddress());
+        StakingToken stake = StakingToken(manager.stakingShareAddress());
         uint256 lpBalance = IERC20(manager.stableSwapMetaPoolAddress())
             .balanceOf(address(this));
         // the excess LP is the current balance
@@ -629,7 +629,7 @@ contract Staking is CollectableDust, Pausable {
         // set the lp rewards debts so that this staking share only get lp rewards from this day
         uint256 lpRewardDebt = (shares * accLpRewardPerShare) / 1e12;
         return
-            StakingShare(manager.stakingShareAddress()).mint(
+            StakingToken(manager.stakingShareAddress()).mint(
                 to,
                 lpAmount,
                 lpRewardDebt,
@@ -639,7 +639,7 @@ contract Staking is CollectableDust, Pausable {
 
     function _checkForLiquidity(
         uint256 _id
-    ) internal returns (uint256[2] memory bs, StakingShare.Stake memory stake) {
+    ) internal returns (uint256[2] memory bs, StakingToken.Stake memory stake) {
         require(
             IERC1155Ubiquity(manager.stakingShareAddress()).balanceOf(
                 msg.sender,
@@ -647,7 +647,7 @@ contract Staking is CollectableDust, Pausable {
             ) == 1,
             "Staking: caller is not owner"
         );
-        StakingShare staking = StakingShare(manager.stakingShareAddress());
+        StakingToken staking = StakingToken(manager.stakingShareAddress());
         stake = staking.getStake(_id);
         require(
             block.number > stake.endBlock,
@@ -655,7 +655,7 @@ contract Staking is CollectableDust, Pausable {
         );
 
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
-        bs = IUbiquityChef(manager.masterChefAddress()).getStakingShareInfo(
+        bs = IUbiquityChef(manager.masterChefAddress()).getStakingTokenInfo(
             _id
         );
     }

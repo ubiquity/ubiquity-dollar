@@ -223,8 +223,8 @@ contract RemoteZeroStateTest is ZeroState {
         //uint256 bsMinAmount = bondingShareV2.balanceOf(stakingMinAccount, 2);
         vm.stopPrank();
 
-        uint256[2] memory bsMaxAmount = ubiquityChef.getStakingShareInfo(1);
-        uint256[2] memory bsMinAmount = ubiquityChef.getStakingShareInfo(2);
+        uint256[2] memory bsMaxAmount = ubiquityChef.getStakingTokenInfo(1);
+        uint256[2] memory bsMinAmount = ubiquityChef.getStakingTokenInfo(2);
 
         assertLt(bsMinAmount[0], bsMaxAmount[0]);
     }
@@ -311,8 +311,8 @@ contract RemoteDepositStateTest is DepositState {
     function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {
         weeksLockup = bound(weeksLockup, 1, 208);
         amount = bound(amount, 1e18, 2 ** 128 - 1);
-        StakingShare.Stake memory stake = stakingShare.getStake(1);
-        uint256[2] memory preShares = ubiquityChef.getStakingShareInfo(1);
+        StakingToken.Stake memory stake = stakingShare.getStake(1);
+        uint256[2] memory preShares = ubiquityChef.getStakingTokenInfo(1);
         deal(address(metapool), stakingMinAccount, uint256(amount));
         vm.roll(20000000);
         vm.expectEmit(true, true, false, false, address(staking));
@@ -328,13 +328,13 @@ contract RemoteDepositStateTest is DepositState {
         );
         vm.prank(stakingMinAccount);
         staking.addLiquidity(uint256(amount), 1, weeksLockup);
-        uint256[2] memory postShares = ubiquityChef.getStakingShareInfo(1);
+        uint256[2] memory postShares = ubiquityChef.getStakingTokenInfo(1);
         assertGt(postShares[0], preShares[0]);
     }
 
     function testRemoveLiquidity(uint256 amount) public {
         vm.roll(20000000);
-        StakingShare.Stake memory stake = stakingShare.getStake(1);
+        StakingToken.Stake memory stake = stakingShare.getStake(1);
         amount = bound(amount, 1, stake.lpAmount);
 
         uint256 preBal = metapool.balanceOf(stakingMinAccount);
@@ -365,7 +365,7 @@ contract RemoteDepositStateTest is DepositState {
 
     function testCannotRemoveMoreLiquidityThanBalance(uint256 amount) public {
         vm.roll(20000000);
-        StakingShare.Stake memory stake = stakingShare.getStake(2);
+        StakingToken.Stake memory stake = stakingShare.getStake(2);
         amount = bound(amount, stake.lpAmount + 1, 2 ** 256 - 1);
         vm.expectRevert("Staking: amount too big");
         vm.prank(fourthAccount);

@@ -135,9 +135,9 @@ export const Deploy_Manager: DeployCallbackFn = {
   StakingFormulas: (args: CommandLineOption) => {
     createHandler([], args, `${dollarPath}/StakingFormulas.sol:StakingFormulas`);
   },
-  StakingShare: (args: CommandLineOption) => {
+  StakingToken: (args: CommandLineOption) => {
     const { manager, uri } = args;
-    createHandler([manager, uri], args, `${dollarPath}/StakingShare.sol:StakingShare`);
+    createHandler([manager, uri], args, `${dollarPath}/StakingToken.sol:StakingToken`);
   },
   SushiSwapPool: (args: CommandLineOption) => {
     const { manager } = args;

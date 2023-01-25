@@ -51,7 +51,7 @@ contract RemoteDepositStateTest is DepositState {
     function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
-        StakingShare.Stake memory stake = stakingShare.getStake(1);
+        StakingToken.Stake memory stake = stakingShare.getStake(1);
         assertEq(stake.lpAmount, amount);
         assertEq(stake.lpRewardDebt, debt);
         assertEq(stake.endBlock, end);
@@ -65,7 +65,7 @@ contract RemoteDepositStateTest is DepositState {
             uint256(debt),
             end
         );
-        StakingShare.Stake memory stake = stakingShare.getStake(id);
+        StakingToken.Stake memory stake = stakingShare.getStake(id);
         assertEq(stake.minter, secondAccount);
         assertEq(stake.lpAmount, deposited);
         assertEq(stake.lpRewardDebt, debt);
@@ -123,7 +123,7 @@ contract RemoteDepositStateTest is DepositState {
     // }
 
     function testGetStake() public {
-        StakingShare.Stake memory stake = StakingShare.Stake(
+        StakingToken.Stake memory stake = StakingToken.Stake(
             fourthAccount,
             fourthBal,
             creationBlock[1],
@@ -136,7 +136,7 @@ contract RemoteDepositStateTest is DepositState {
             fourthBal
         );
 
-        StakingShare.Stake memory stake_ = stakingShare.getStake(2);
+        StakingToken.Stake memory stake_ = stakingShare.getStake(2);
         bytes32 stake1 = bytes32(abi.encode(stake));
         bytes32 stake2 = bytes32(abi.encode(stake_));
         assertEq(stake1, stake2);

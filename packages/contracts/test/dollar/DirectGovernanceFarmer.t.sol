@@ -159,7 +159,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
             stakingShareAddress
         );
         vm.stopPrank();
@@ -242,7 +242,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
             stakingShareAddress
         );
         vm.stopPrank();
@@ -332,7 +332,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
             stakingShareAddress
         );
 
@@ -357,7 +357,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
             stakingShareAddress
         );
         vm.stopPrank();
@@ -427,11 +427,11 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(stakingShareIds)
         );
 
-        IStakingShare.Stake memory stake;
+        IStakingToken.Stake memory stake;
         stake.lpAmount = 100e18;
         vm.mockCall(
             stakingShareAddress,
-            abi.encodeWithSelector(IStakingShare.getStake.selector),
+            abi.encodeWithSelector(IStakingToken.getStake.selector),
             abi.encode(stake)
         );
 
@@ -474,7 +474,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
             stakingShareAddress
         );
 
@@ -499,7 +499,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        IUbiquityDollarManager(dollarManagerAddress).setStakingTokenAddress(
             stakingShareAddress
         );
         vm.stopPrank();
@@ -550,11 +550,11 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             abi.encode(stakingShareIds)
         );
 
-        IStakingShare.Stake memory stake;
+        IStakingToken.Stake memory stake;
         stake.lpAmount = 100e18;
         vm.mockCall(
             stakingShareAddress,
-            abi.encodeWithSelector(IStakingShare.getStake.selector),
+            abi.encodeWithSelector(IStakingToken.getStake.selector),
             abi.encode(stake)
         );
 

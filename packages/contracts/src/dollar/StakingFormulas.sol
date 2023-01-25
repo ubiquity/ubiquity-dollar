@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "./StakingShare.sol";
+import "./StakingToken.sol";
 import "./libs/ABDKMathQuad.sol";
 
 contract StakingFormulas {
@@ -15,7 +15,7 @@ contract StakingFormulas {
     /// @param _amount , amount of LP tokens
     /// @notice shares = (stake.shares * _amount )  / stake.lpAmount ;
     function sharesForLP(
-        StakingShare.Stake memory _stake,
+        StakingToken.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256 _uLP) {
@@ -33,7 +33,7 @@ contract StakingFormulas {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsRemoveLiquidityNormalization(
-        // StakingShare.Stake memory _stake,
+        // StakingToken.Stake memory _stake,
         // uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {
@@ -48,7 +48,7 @@ contract StakingFormulas {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsAddLiquidityNormalization(
-        // StakingShare.Stake memory _stake,
+        // StakingToken.Stake memory _stake,
         // uint256[2] memory _shareInfo,
         uint256 _amount
     ) public pure returns (uint256) {

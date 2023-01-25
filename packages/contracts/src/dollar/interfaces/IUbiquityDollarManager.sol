@@ -56,7 +56,7 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setFormulasAddress(address _formulasAddress) external;
 
-    function setStakingShareAddress(address _stakingShareAddress) external;
+    function setStakingTokenAddress(address _stakingShareAddress) external;
 
     function setStableSwapMetaPoolAddress(
         address _stableSwapMetaPoolAddress

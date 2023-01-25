@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../UbiquityChef.sol";
 
 interface IUbiquityChef {
-    struct StakingShareInfo {
+    struct StakingTokenInfo {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
     }
@@ -38,7 +38,7 @@ interface IUbiquityChef {
     ) external;
 
     // Info about a staking share
-    function getStakingShareInfo(
+    function getStakingTokenInfo(
         uint256 _id
     ) external view returns (uint256[2] memory);
 

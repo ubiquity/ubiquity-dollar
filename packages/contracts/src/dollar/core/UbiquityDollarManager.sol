@@ -157,7 +157,7 @@ contract UbiquityDollarManager is AccessControl {
         formulasAddress = _formulasAddress;
     }
 
-    function setStakingShareAddress(
+    function setStakingTokenAddress(
         address _stakingShareAddress
     ) external onlyAdmin {
         stakingShareAddress = _stakingShareAddress;

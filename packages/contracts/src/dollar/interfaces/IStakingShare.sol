@@ -6,7 +6,7 @@ import "./IERC1155Ubiquity.sol";
 
 /// @title ERC1155 Ubiquity preset interface
 /// @author Ubiquity DAO
-interface IStakingShare is IERC1155Ubiquity {
+interface IStakingToken is IERC1155Ubiquity {
     struct Stake {
         // address of the minter
         address minter;

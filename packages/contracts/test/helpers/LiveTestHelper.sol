@@ -5,7 +5,7 @@ import "../../src/dollar/Staking.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";
 import "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/StakingFormulas.sol";
-import "../../src/dollar/StakingShare.sol";
+import "../../src/dollar/StakingToken.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
 import "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import "../../src/dollar/core/UbiquityDollarManager.sol";
@@ -36,7 +36,7 @@ contract LiveTestHelper is Test {
     Bonding stakingV1;
     Staking staking;
     StakingFormulas stakingFormulas;
-    StakingShare stakingShare;
+    StakingToken stakingShare;
 
     UbiquityDollarManager manager;
 
@@ -105,7 +105,7 @@ contract LiveTestHelper is Test {
 
         stakingV1 = new Bonding(address(manager), sablier);
         stakingShareV1 = new BondingShare(address(manager));
-        manager.setStakingShareAddress(address(stakingShareV1));
+        manager.setStakingTokenAddress(address(stakingShareV1));
         manager.setStakingContractAddress(address(stakingV1));
         manager.grantRole(
             manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
@@ -316,8 +316,8 @@ contract LiveTestHelper is Test {
         ///uint256 bondingMaxBal = metapool.balanceOf(stakingMaxAccount);
 
         vm.startPrank(admin);
-        stakingShare = new StakingShare(address(manager), uri);
-        manager.setStakingShareAddress(address(stakingShare));
+        stakingShare = new StakingToken(address(manager), uri);
+        manager.setStakingTokenAddress(address(stakingShare));
 
         stakingFormulas = new StakingFormulas();
 

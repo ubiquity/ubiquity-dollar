@@ -73,7 +73,7 @@ contract RemoteZeroStateTest is ZeroState {
         vm.stopPrank();
         (, uint256 accGovernance) = ubiquityChef.pool();
         uint256[2] memory info1 = [shares, (shares * accGovernance) / 1e12];
-        uint256[2] memory info2 = ubiquityChef.getStakingShareInfo(id);
+        uint256[2] memory info2 = ubiquityChef.getStakingTokenInfo(id);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }
@@ -164,9 +164,9 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(userPending, pendingGovernance);
     }
 
-    function testGetStakingShareInfo() public {
+    function testGetStakingTokenInfo() public {
         uint256[2] memory info1 = [shares, 0];
-        uint256[2] memory info2 = ubiquityChef.getStakingShareInfo(1);
+        uint256[2] memory info2 = ubiquityChef.getStakingTokenInfo(1);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }

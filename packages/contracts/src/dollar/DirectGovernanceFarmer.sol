@@ -12,7 +12,7 @@ import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./interfaces/IDepositZap.sol";
 import "./interfaces/IStaking.sol";
-import "./interfaces/IStakingShare.sol";
+import "./interfaces/IStakingToken.sol";
 import "./interfaces/IStableSwap3Pool.sol";
 import "./interfaces/IUbiquityDollarManager.sol";
 
@@ -92,9 +92,9 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Deposit into Ubiquity protocol
-     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingShare
+     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingToken
      * @notice STEP 1 : Change (DAI / USDC / USDT / Ubiquity dollar) to 3CRV at uAD3CRV MetaPool
-     * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingShare
+     * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingToken
      * @param token Token deposited : DAI, USDC, USDT or Ubiquity Dollar
      * @param amount Amount of tokens to deposit (For max: `uint256(-1)`)
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
@@ -144,7 +144,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
         stakingShareId = IStaking(staking).deposit(lpAmount, durationWeeks);
 
-        IStakingShare(stakingShare).safeTransferFrom(
+        IStakingToken(stakingShare).safeTransferFrom(
             address(this),
             msg.sender,
             stakingShareId,
@@ -162,9 +162,9 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Deposit into Ubiquity protocol
-     * @notice Stable coins (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingShare
+     * @notice Stable coins (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingToken
      * @notice STEP 1 : Change (DAI / USDC / USDT / Ubiquity dollar) to 3CRV at uAD3CRV MetaPool
-     * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingShare
+     * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingToken
      * @param tokenAmounts Amount of tokens to deposit (For max: `uint256(-1)`) it MUST follow this order [Ubiquity Dollar, DAI, USDC, USDT]
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
      */
@@ -248,7 +248,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IERC20(ubiquity3PoolLP).safeIncreaseAllowance(staking, lpAmount);
         stakingShareId = IStaking(staking).deposit(lpAmount, durationWeeks);
 
-        IStakingShare(stakingShare).safeTransferFrom(
+        IStakingToken(stakingShare).safeTransferFrom(
             address(this),
             msg.sender,
             stakingShareId,
@@ -265,8 +265,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Withdraw from Ubiquity protocol
-     * @notice Ubiquity StakingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
-     * @notice STEP 1 : Ubiquity StakingShare  => uAD3CRV-f
+     * @notice Ubiquity StakingToken => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
+     * @notice STEP 1 : Ubiquity StakingToken  => uAD3CRV-f
      * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @param stakingShareId Staking Share Id to withdraw
      */
@@ -277,14 +277,14 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address staking = manager.stakingContractAddress();
         address stakingShare = manager.stakingShareAddress();
 
-        uint256[] memory stakingShareIds = IStakingShare(stakingShare)
+        uint256[] memory stakingShareIds = IStakingToken(stakingShare)
             .holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
         //stake.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "!bond owner");
 
         //transfer bondingShare NFT token from msg.sender to this address
-        IStakingShare(stakingShare).safeTransferFrom(
+        IStakingToken(stakingShare).safeTransferFrom(
             msg.sender,
             address(this),
             stakingShareId,
@@ -293,15 +293,15 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         );
 
         // Get Stake
-        IStakingShare.Stake memory stake = IStakingShare(stakingShare).getStake(
+        IStakingToken.Stake memory stake = IStakingToken(stakingShare).getStake(
             stakingShareId
         );
 
         // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
         //address staking = ubiquityManager.stakingContractAddress();
-        IStakingShare(stakingShare).setApprovalForAll(staking, true);
+        IStakingToken(stakingShare).setApprovalForAll(staking, true);
         IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
-        IStakingShare(stakingShare).setApprovalForAll(staking, false);
+        IStakingToken(stakingShare).setApprovalForAll(staking, false);
 
         uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(
             address(this)
@@ -334,8 +334,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
     /**
      * @dev Withdraw from Ubiquity protocol
-     * @notice Ubiquity StakingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
-     * @notice STEP 1 : Ubiquity StakingShare  => uAD3CRV-f
+     * @notice Ubiquity StakingToken => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
+     * @notice STEP 1 : Ubiquity StakingToken  => uAD3CRV-f
      * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @param stakingShareId Staking Share Id to withdraw
      * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or Ubiquity Dollar
@@ -352,7 +352,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address staking = manager.stakingContractAddress();
         address stakingShare = manager.stakingShareAddress();
 
-        uint256[] memory stakingShareIds = IStakingShare(stakingShare)
+        uint256[] memory stakingShareIds = IStakingToken(stakingShare)
             .holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
         //stake.minter is this contract address so that cannot use it for verification.
@@ -362,7 +362,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         );
 
         //transfer bondingShare NFT token from msg.sender to this address
-        IStakingShare(stakingShare).safeTransferFrom(
+        IStakingToken(stakingShare).safeTransferFrom(
             msg.sender,
             address(this),
             stakingShareId,
@@ -371,15 +371,15 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         );
 
         // Get Stake
-        IStakingShare.Stake memory stake = IStakingShare(stakingShare).getStake(
+        IStakingToken.Stake memory stake = IStakingToken(stakingShare).getStake(
             stakingShareId
         );
 
         // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
         //address staking = ubiquityManager.stakingContractAddress();
-        IStakingShare(stakingShare).setApprovalForAll(staking, true);
+        IStakingToken(stakingShare).setApprovalForAll(staking, true);
         IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
-        IStakingShare(stakingShare).setApprovalForAll(staking, false);
+        IStakingToken(stakingShare).setApprovalForAll(staking, false);
 
         uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(
             address(this)

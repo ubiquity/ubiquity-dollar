@@ -8,7 +8,7 @@ import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
-contract StakingShare is
+contract StakingToken is
     ERC1155SetUri,
     ERC1155BurnableSetUri,
     ERC1155PausableSetUri

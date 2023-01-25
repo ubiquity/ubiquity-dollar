@@ -87,9 +87,9 @@ contract RemoteTestManagerFacet is DiamondSetup {
         assertEq(IManagerFacet.getFormulasAddress(), contract1);
     }
 
-    function testShouldSetStakingShareAddress() public prankAs(admin) {
-        IManagerFacet.setStakingShareAddress(contract1);
-        assertEq(IManagerFacet.getStakingShareAddress(), contract1);
+    function testShouldSetStakingTokenAddress() public prankAs(admin) {
+        IManagerFacet.setStakingTokenAddress(contract1);
+        assertEq(IManagerFacet.getStakingTokenAddress(), contract1);
     }
 
     function testShouldSetStableSwapMetaPoolAddress() public prankAs(admin) {

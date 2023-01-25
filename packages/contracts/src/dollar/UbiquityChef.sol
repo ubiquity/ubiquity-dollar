@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 import "./interfaces/ITWAPOracleDollar3pool.sol";
-import "./StakingShare.sol";
+import "./StakingToken.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 
@@ -15,7 +15,7 @@ contract UbiquityChef is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     // Info of each user.
-    struct StakingShareInfo {
+    struct StakingTokenInfo {
         uint256 amount; // staking rights.
         uint256 rewardDebt; // Reward debt. See explanation below.
         //
@@ -52,7 +52,7 @@ contract UbiquityChef is ReentrancyGuard {
     // Info of each pool.
     PoolInfo public pool;
     // Info of each user that stakes LP tokens.
-    mapping(uint256 => StakingShareInfo) private _ssInfo;
+    mapping(uint256 => StakingTokenInfo) private _ssInfo;
 
     event Deposit(
         address indexed user,
@@ -154,7 +154,7 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 _amount,
         uint256 _stakingShareID
     ) external nonReentrant onlyStakingContract {
-        StakingShareInfo storage ss = _ssInfo[_stakingShareID];
+        StakingTokenInfo storage ss = _ssInfo[_stakingShareID];
         require(ss.amount >= _amount, "MC: amount too high");
         _updatePool();
         uint256 pending = ((ss.amount * pool.accGovernancePerShare) / 1e12) -
@@ -181,7 +181,7 @@ contract UbiquityChef is ReentrancyGuard {
         );
 
         // calculate user reward
-        StakingShareInfo storage user = _ssInfo[stakingShareID];
+        StakingTokenInfo storage user = _ssInfo[stakingShareID];
         _updatePool();
         uint256 pending = ((user.amount * pool.accGovernancePerShare) / 1e12) -
             user.rewardDebt;
@@ -194,7 +194,7 @@ contract UbiquityChef is ReentrancyGuard {
     function pendingGovernance(
         uint256 stakingShareID
     ) external view returns (uint256) {
-        StakingShareInfo storage user = _ssInfo[stakingShareID];
+        StakingTokenInfo storage user = _ssInfo[stakingShareID];
         uint256 accGovernancePerShare = pool.accGovernancePerShare;
 
         if (block.number > pool.lastRewardBlock && _totalShares != 0) {
@@ -210,7 +210,7 @@ contract UbiquityChef is ReentrancyGuard {
     /**
      * @dev get the amount of shares and the reward debt of a staking share .
      */
-    function getStakingShareInfo(
+    function getStakingTokenInfo(
         uint256 _id
     ) external view returns (uint256[2] memory) {
         return [_ssInfo[_id].amount, _ssInfo[_id].rewardDebt];
@@ -229,7 +229,7 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 _amount,
         uint256 _stakingShareID
     ) internal {
-        StakingShareInfo storage ss = _ssInfo[_stakingShareID];
+        StakingTokenInfo storage ss = _ssInfo[_stakingShareID];
         _updatePool();
         if (ss.amount > 0) {
             uint256 pending = ((ss.amount * pool.accGovernancePerShare) /

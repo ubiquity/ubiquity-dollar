@@ -95,7 +95,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         selectorsOfManagerFacet.push(managerFacet.setFormulasAddress.selector);
         selectorsOfManagerFacet.push(
-            managerFacet.setStakingShareAddress.selector
+            managerFacet.setStakingTokenAddress.selector
         );
         selectorsOfManagerFacet.push(
             managerFacet.setStableSwapMetaPoolAddress.selector
@@ -143,7 +143,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         selectorsOfManagerFacet.push(managerFacet.getFormulasAddress.selector);
         selectorsOfManagerFacet.push(
-            managerFacet.getStakingShareAddress.selector
+            managerFacet.getStakingTokenAddress.selector
         );
         selectorsOfManagerFacet.push(
             managerFacet.getStableSwapMetaPoolAddress.selector
