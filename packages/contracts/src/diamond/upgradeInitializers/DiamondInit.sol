@@ -15,6 +15,8 @@ import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {LibUbiquityDollar} from "../libraries/LibUbiquityDollar.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibUbiquityChef} from "../libraries/LibUbiquityChef.sol";
+import {LibCreditNFTManager} from "../libraries/LibCreditNFTManager.sol";
+import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
@@ -30,6 +32,7 @@ contract DiamondInit is Modifiers {
         uint256[] amounts;
         uint256[] stakingShareIDs;
         uint256 governancePerBlock;
+        uint256 creditNFTLengthBlocks;
     }
 
     // You can add parameters to this function in order to pass in
@@ -84,10 +87,18 @@ contract DiamondInit is Modifiers {
             _args.governancePerBlock
         );
 
-// creditNFTManager
-   /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
-    /// once set (unless migrated)
-creditNFTLengthBlocks 
+        // creditNFTManager
+        /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
+        /// once set (unless migrated)
+        LibCreditNFTManager.creditNFTStorage().creditNFTLengthBlocks = _args
+            .creditNFTLengthBlocks;
+        LibCreditNFTManager
+            .creditNFTStorage()
+            .expiredCreditNFTConversionRate = 2;
+
+        LibCreditRedemptionCalculator
+            .creditRedemptionCalculatorStorage()
+            .coef = 1 ether;
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
         // arguments: address _init and bytes calldata _calldata

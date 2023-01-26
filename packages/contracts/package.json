@@ -62,6 +62,7 @@
     }
   },
   "devDependencies": {
+    "prettier-plugin-solidity": "^1.1.1",
     "@types/node": "^18.11.18",
     "@types/react-transition-group": "^4",
     "cspell": "latest",
