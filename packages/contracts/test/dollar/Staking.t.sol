@@ -15,7 +15,7 @@ contract ZeroState is LiveTestHelper {
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
-        uint256 _stakingShareAmount,
+        uint256 _stakingTokenAmount,
         uint256 _weeks,
         uint256 _endBlock
     );
@@ -25,14 +25,14 @@ contract ZeroState is LiveTestHelper {
         uint256 _lpAmount,
         uint256 _lpAmountTransferred,
         uint256 _lpRewards,
-        uint256 _stakingShareAmount
+        uint256 _stakingTokenAmount
     );
 
     event AddLiquidityFromStake(
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
-        uint256 _stakingShareAmount
+        uint256 _stakingTokenAmount
     );
 
     event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
@@ -189,7 +189,7 @@ contract RemoteZeroStateTest is ZeroState {
         vm.expectEmit(true, false, false, true);
         emit Deposit(
             stakingMinAccount,
-            stakingShare.totalSupply(),
+            stakingToken.totalSupply(),
             lpAmount,
             IUbiquityFormulas(manager.formulasAddress()).durationMultiply(
                 lpAmount,
@@ -311,7 +311,7 @@ contract RemoteDepositStateTest is DepositState {
     function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {
         weeksLockup = bound(weeksLockup, 1, 208);
         amount = bound(amount, 1e18, 2 ** 128 - 1);
-        StakingToken.Stake memory stake = stakingShare.getStake(1);
+        StakingToken.Stake memory stake = stakingToken.getStake(1);
         uint256[2] memory preShares = ubiquityChef.getStakingTokenInfo(1);
         deal(address(metapool), stakingMinAccount, uint256(amount));
         vm.roll(20000000);
@@ -334,7 +334,7 @@ contract RemoteDepositStateTest is DepositState {
 
     function testRemoveLiquidity(uint256 amount) public {
         vm.roll(20000000);
-        StakingToken.Stake memory stake = stakingShare.getStake(1);
+        StakingToken.Stake memory stake = stakingToken.getStake(1);
         amount = bound(amount, 1, stake.lpAmount);
 
         uint256 preBal = metapool.balanceOf(stakingMinAccount);
@@ -365,7 +365,7 @@ contract RemoteDepositStateTest is DepositState {
 
     function testCannotRemoveMoreLiquidityThanBalance(uint256 amount) public {
         vm.roll(20000000);
-        StakingToken.Stake memory stake = stakingShare.getStake(2);
+        StakingToken.Stake memory stake = stakingToken.getStake(2);
         amount = bound(amount, stake.lpAmount + 1, 2 ** 256 - 1);
         vm.expectRevert("Staking: amount too big");
         vm.prank(fourthAccount);

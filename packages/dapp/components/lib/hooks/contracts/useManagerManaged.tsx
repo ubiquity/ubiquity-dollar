@@ -35,7 +35,8 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   useEffect(() => {
     if (deployedContracts && provider) {
       (async () => {
-        setManagedContracts(await connectManagerContracts(deployedContracts.globalManager, provider));
+        const connectedManagerContracts = await connectManagerContracts(deployedContracts.globalManager, provider);
+        setManagedContracts(connectedManagerContracts);
       })();
     }
   }, [deployedContracts, provider]);

@@ -50,8 +50,8 @@ contract RemoteDepositStateTest is DepositState {
 
     function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
         vm.prank(admin);
-        stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
-        StakingToken.Stake memory stake = stakingShare.getStake(1);
+        stakingToken.updateStake(1, uint256(amount), uint256(debt), end);
+        StakingToken.Stake memory stake = stakingToken.getStake(1);
         assertEq(stake.lpAmount, amount);
         assertEq(stake.lpRewardDebt, debt);
         assertEq(stake.endBlock, end);
@@ -59,13 +59,13 @@ contract RemoteDepositStateTest is DepositState {
 
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
         vm.prank(admin);
-        uint256 id = stakingShare.mint(
+        uint256 id = stakingToken.mint(
             secondAccount,
             uint256(deposited),
             uint256(debt),
             end
         );
-        StakingToken.Stake memory stake = stakingShare.getStake(id);
+        StakingToken.Stake memory stake = stakingToken.getStake(id);
         assertEq(stake.minter, secondAccount);
         assertEq(stake.lpAmount, deposited);
         assertEq(stake.lpRewardDebt, debt);
@@ -74,11 +74,11 @@ contract RemoteDepositStateTest is DepositState {
 
     function testTransferFrom() public {
         vm.prank(stakingMinAccount);
-        stakingShare.setApprovalForAll(admin, true);
+        stakingToken.setApprovalForAll(admin, true);
 
         bytes memory data;
         vm.prank(admin);
-        stakingShare.safeTransferFrom(
+        stakingToken.safeTransferFrom(
             stakingMinAccount,
             secondAccount,
             1,
@@ -87,7 +87,7 @@ contract RemoteDepositStateTest is DepositState {
         );
         ids.push(1);
 
-        assertEq(stakingShare.holderTokens(secondAccount), ids);
+        assertEq(stakingToken.holderTokens(secondAccount), ids);
     }
 
     function testBatchTransfer() public {
@@ -97,23 +97,23 @@ contract RemoteDepositStateTest is DepositState {
         amounts.push(1);
 
         vm.prank(stakingMaxAccount);
-        stakingShare.setApprovalForAll(admin, true);
+        stakingToken.setApprovalForAll(admin, true);
 
         bytes memory data;
 
         vm.prank(admin);
-        stakingShare.safeBatchTransferFrom(
+        stakingToken.safeBatchTransferFrom(
             stakingMaxAccount,
             secondAccount,
             ids,
             amounts,
             data
         );
-        assertEq(stakingShare.holderTokens(secondAccount), ids);
+        assertEq(stakingToken.holderTokens(secondAccount), ids);
     }
 
     function testTotalSupply() public {
-        assertEq(stakingShare.totalSupply(), 4);
+        assertEq(stakingToken.totalSupply(), 4);
     }
 
     // // TODO: needs to figured out why it sometimes fails
@@ -136,7 +136,7 @@ contract RemoteDepositStateTest is DepositState {
             fourthBal
         );
 
-        StakingToken.Stake memory stake_ = stakingShare.getStake(2);
+        StakingToken.Stake memory stake_ = stakingToken.getStake(2);
         bytes32 stake1 = bytes32(abi.encode(stake));
         bytes32 stake2 = bytes32(abi.encode(stake_));
         assertEq(stake1, stake2);
@@ -144,7 +144,7 @@ contract RemoteDepositStateTest is DepositState {
 
     function testHolderTokens() public {
         ids.push(1);
-        uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
+        uint256[] memory ids_ = stakingToken.holderTokens(stakingMinAccount);
         assertEq(ids, ids_);
     }
 
@@ -153,9 +153,9 @@ contract RemoteDepositStateTest is DepositState {
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
-        stakingShare.setUri(stringTest);
+        stakingToken.setUri(stringTest);
         assertEq(
-            stakingShare.uri(1),
+            stakingToken.uri(1),
             stringTest,
             "the uri is not set correctly by the method"
         );
@@ -165,6 +165,6 @@ contract RemoteDepositStateTest is DepositState {
         string memory stringTest = "{'a parsed json':'value'}";
         vm.expectRevert();
         vm.prank(fifthAccount);
-        stakingShare.setUri(stringTest);
+        stakingToken.setUri(stringTest);
     }
 }

@@ -50,7 +50,7 @@ contract Staking is CollectableDust, Pausable {
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
-        uint256 _stakingShareAmount,
+        uint256 _stakingTokenAmount,
         uint256 _weeks,
         uint256 _endBlock
     );
@@ -60,14 +60,14 @@ contract Staking is CollectableDust, Pausable {
         uint256 _lpAmount,
         uint256 _lpAmountTransferred,
         uint256 _lpRewards,
-        uint256 _stakingShareAmount
+        uint256 _stakingTokenAmount
     );
 
     event AddLiquidityFromStake(
         address indexed _user,
         uint256 indexed _id,
         uint256 _lpAmount,
-        uint256 _stakingShareAmount
+        uint256 _stakingTokenAmount
     );
 
     event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);

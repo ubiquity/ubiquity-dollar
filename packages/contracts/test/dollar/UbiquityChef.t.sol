@@ -8,13 +8,13 @@ contract ZeroState is LiveTestHelper {
     event Deposit(
         address indexed user,
         uint256 amount,
-        uint256 indexed stakingShareId
+        uint256 indexed stakingTokenId
     );
 
     event Withdraw(
         address indexed user,
         uint256 amount,
-        uint256 indexed stakingShareId
+        uint256 indexed stakingTokenId
     );
 
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
@@ -61,7 +61,7 @@ contract RemoteZeroStateTest is ZeroState {
             staking.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
-        uint256 id = stakingShare.mint(
+        uint256 id = stakingToken.mint(
             fourthAccount,
             lpAmount,
             shares,
@@ -93,7 +93,7 @@ contract DepositState is ZeroState {
             staking.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
-        fourthID = stakingShare.mint(
+        fourthID = stakingToken.mint(
             fourthAccount,
             fourthBal,
             shares,

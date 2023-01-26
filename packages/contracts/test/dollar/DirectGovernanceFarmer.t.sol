@@ -41,17 +41,17 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         address token,
         uint256 amount,
         uint256 durationWeeks,
-        uint256 stakingShareId
+        uint256 stakingTokenId
     );
     event DepositMulti(
         address indexed sender,
         uint256[4] amount,
         uint256 durationWeeks,
-        uint256 stakingShareId
+        uint256 stakingTokenId
     );
     event WithdrawAll(
         address indexed sender,
-        uint256 stakingShareId,
+        uint256 stakingTokenId,
         uint256[4] amounts
     );
 
@@ -198,12 +198,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.expectEmit(true, true, true, true, address(directGovernanceFarmer));
         emit DepositSingle(userAddress, address(token0), uint256(100e18), 1, 1);
         // user deposits 100 DAI for 1 week
-        uint256 stakingShareId = directGovernanceFarmer.depositSingle(
+        uint256 stakingTokenId = directGovernanceFarmer.depositSingle(
             address(token0),
             100e18,
             1
         );
-        assertEq(stakingShareId, 1);
+        assertEq(stakingTokenId, 1);
     }
 
     // Multiple
@@ -313,11 +313,11 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
 
         // user deposits 100 uAD 99 DAI 98 USDC 97 USDT
-        uint256 stakingShareId = directGovernanceFarmer.depositMulti(
+        uint256 stakingTokenId = directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8
         );
-        assertEq(stakingShareId, 12);
+        assertEq(stakingTokenId, 12);
         assertEq(dollar.balanceOf(userAddress), 0);
         assertEq(token0.balanceOf(userAddress), 0);
         assertEq(token1.balanceOf(userAddress), 0);
@@ -419,12 +419,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.warp(block.timestamp + 8 days);
 
         // prepare mocks for withdraw
-        uint256[] memory stakingShareIds = new uint256[](1);
-        stakingShareIds[0] = 1;
+        uint256[] memory stakingTokenIds = new uint256[](1);
+        stakingTokenIds[0] = 1;
         vm.mockCall(
             stakingTokenAddress,
             abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
-            abi.encode(stakingShareIds)
+            abi.encode(stakingTokenIds)
         );
 
         IStakingToken.Stake memory stake;
@@ -542,12 +542,12 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         vm.warp(block.timestamp + 8 days);
 
         // prepare mocks for withdraw
-        uint256[] memory stakingShareIds = new uint256[](1);
-        stakingShareIds[0] = 1;
+        uint256[] memory stakingTokenIds = new uint256[](1);
+        stakingTokenIds[0] = 1;
         vm.mockCall(
             stakingTokenAddress,
             abi.encodeWithSelector(IERC1155Ubiquity.holderTokens.selector),
-            abi.encode(stakingShareIds)
+            abi.encode(stakingTokenIds)
         );
 
         IStakingToken.Stake memory stake;

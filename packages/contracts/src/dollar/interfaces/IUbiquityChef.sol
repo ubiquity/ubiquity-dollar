@@ -17,24 +17,24 @@ interface IUbiquityChef {
         uint256 accGovernancePerShare; // Accumulated Governance Token per share, times 1e12. See below.
     }
 
-    event Deposit(address indexed user, uint256 amount, uint256 stakingShareID);
+    event Deposit(address indexed user, uint256 amount, uint256 stakingTokenID);
     event Withdraw(
         address indexed user,
         uint256 amount,
-        uint256 stakingShareID
+        uint256 stakingTokenID
     );
 
     function deposit(
         address sender,
         uint256 amount,
-        uint256 stakingShareID
+        uint256 stakingTokenID
     ) external;
 
     // Withdraw LP tokens from MasterChef.
     function withdraw(
         address sender,
         uint256 amount,
-        uint256 stakingShareID
+        uint256 stakingTokenID
     ) external;
 
     // Info about a staking share

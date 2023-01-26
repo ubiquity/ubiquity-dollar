@@ -144,8 +144,8 @@ export const Deploy_Manager: DeployCallbackFn = {
     createHandler([manager], args, `${dollarPath}/SushiSwapPool.sol:SushiSwapPool`);
   },
   UbiquityChef: (args: CommandLineOption) => {
-    const { manager, tos, amounts, stakingShareIDs } = args;
-    createHandler([manager, tos, amounts, stakingShareIDs], args, `${dollarPath}/UbiquityChef.sol:UbiquityChef`);
+    const { manager, tos, amounts, stakingTokenIDs } = args;
+    createHandler([manager, tos, amounts, stakingTokenIDs], args, `${dollarPath}/UbiquityChef.sol:UbiquityChef`);
   },
   UbiquityFormulas: (args: CommandLineOption) => {
     createHandler([], args, `${dollarPath}/UbiquityFormulas.sol:UbiquityFormulas`);

@@ -3,10 +3,12 @@ import { useMemo } from "react";
 import useDeployedAddress from "../useDeployedAddress";
 import useWeb3Provider from "../useWeb3Provider";
 
+import { getKeyFromValue } from "@/components/utils/protocol-version-safety";
+
 export type DeployedContracts = ReturnType<typeof useDeployedContracts> | null;
 const useDeployedContracts = () => {
   const provider = useWeb3Provider();
-  const [globalManagerAddress, creditNftManagerAddress] = useDeployedAddress("UbiquityAlgorithmicDollarManager", "CreditNftManager");
+  const [globalManagerAddress, creditNftManagerAddress] = useDeployedAddress(getKeyFromValue("UbiquityDollarManager"), getKeyFromValue("CreditNftManager"));
   return useMemo(
     () =>
       globalManagerAddress && creditNftManagerAddress && provider

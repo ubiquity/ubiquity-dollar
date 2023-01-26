@@ -12,8 +12,10 @@ const getCreditNftManager = () => {
   if (!mainnetDeployment) {
     throw new Error(`Mainnet deployment contracts artifact not found`);
   }
-  throw new Error(`No CreditNftManager in deployments artifact`);
-  // return mainnetDeployment.contracts["CreditNftManager"];
+  // throw new Error(`No CreditNftManager in deployments artifact`);
+  const contracts = mainnetDeployment.contracts;
+
+  return contracts["DebtCouponManager"];
   // @FIXME: update deployment script
 };
 
