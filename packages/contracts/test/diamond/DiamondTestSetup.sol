@@ -381,7 +381,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
             tos: new address[](0),
             amounts: new uint256[](0),
             stakingShareIDs: new uint256[](0),
-            governancePerBlock: 10e18
+            governancePerBlock: 10e18,
+            creditNFTLengthBlocks: 100
         });
         // diamod arguments
         DiamondArgs memory _args = DiamondArgs({
