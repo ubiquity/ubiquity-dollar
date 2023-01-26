@@ -2,6 +2,7 @@
 pragma solidity ^0.8.3;
 
 import "./BancorFormula.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "./interfaces/IERC20Ubiquity.sol";
 import "./interfaces/IERC1155Ubiquity.sol";
 import "./core/UbiquityDollarManager.sol";
@@ -12,7 +13,7 @@ import "./core/UbiquityDollarManager.sol";
  * Inspired from Bancor protocol and simondlr
  * https://github.com/bancorprotocol/contracts
  */
-contract BondingCurve is BancorFormula {
+contract BondingCurve is BancorFormula, Pausable {
     uint256 constant ACCURACY = 10 ** 18;
 
     /// @dev Token issued by the bonding curve
@@ -22,10 +23,10 @@ contract BondingCurve is BancorFormula {
     IERC20Ubiquity immutable collateral;
 
     /// @dev The ratio of how much collateral "backs" the total marketcap of the Token
-    uint32 immutable weight;
+    uint32 immutable connectorWeight;
 
     /// @dev The intersecting price to mint or burn a Token when supply == PRECISION
-    uint256 immutable intersect;
+    uint256 immutable baseY;
 
     /**
      * @dev Available balance of reserve token in contract
@@ -48,60 +49,63 @@ contract BondingCurve is BancorFormula {
         _;
     }
 
+    modifier onlyPauser() {
+        require(
+            manager.hasRole(manager.PAUSER_ROLE(), msg.sender), "not pauser"
+        );
+        _;
+    }
+
     constructor(
         address _manager,
         IERC1155Ubiquity _token,
         IERC20Ubiquity _collateral,
-        uint32 _weight,
-        uint256 _intersect
+        uint32 _connectorWeight,
+        uint256 _baseY
     ) {
-        require(_weight <= 1000000 && _weight > 0);
+        require(_connectorWeight > 0 && _connectorWeight <= 1000000);
         token = _token;
         collateral = _collateral;
-        weight = _weight;
-        intersect = _intersect;
+        connectorWeight = _connectorWeight;
+        baseY = _baseY;
 
         manager = UbiquityDollarManager(_manager);
     }
 
     function deposit(uint256 _collateralDeposited, address _recipient)
         external
-        returns (uint256 _price)
+        returns (uint256 tokensReturned)
     {
-        _price = _getPrice(tokenIds);
-
-        require(_collateralDeposited >= _price, "Not enough collateral");
-
-        bytes memory tokenValue = _toBytes(_price);
+        uint256 supply = token.totalSupply();
+        if (supply > 0) {
+            tokensReturned = _purchaseTargetAmount(
+                _collateralDeposited,
+                connectorWeight,
+                supply,
+                poolBalance
+            );
+        } else {
+            tokensReturned = _purchaseTargetAmountFromZero(
+                _collateralDeposited,
+                connectorWeight,
+                ACCURACY,
+                baseY
+            );
+        }
 
         poolBalance += _collateralDeposited;
         collateral.transferFrom(msg.sender, address(this), _collateralDeposited);
 
-        tokenIds += 1;
-        token.mint(_recipient, tokenIds, 1, tokenValue);
+        token.mint(_recipient, tokenIds, 1, "Ubiquistick");
 
         emit Deposit(_recipient, _collateralDeposited);
     }
 
-    function _toBytes(uint256 x) internal pure returns (bytes memory b) {
-        b = new bytes(32);
-        assembly {
-            mstore(add(b, 32), x)
-        }
+    function pause() public virtual onlyPauser {
+        _pause();
     }
 
-    function withdraw(uint256 _amount) external onlyUBQMinter {
-        require(_amount > 0, "Amount must be greater than zero");
-        require(_amount < poolBalance, "Insufficient funds");
-
-        poolBalance -= _amount;
-
-        collateral.transfer(msg.sender, _amount);
-
-        emit Withdraw(msg.sender, _amount);
-    }
-
-    function _getPrice(uint256 _tokenID) internal view returns (uint256 _price) {
-        _price = _calculatePurchasePrice(_tokenID);
+    function unpause() public virtual onlyPauser {
+        _unpause();
     }
 }
