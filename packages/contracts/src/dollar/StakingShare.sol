@@ -203,29 +203,6 @@ contract StakingShare is
         return _holderBalances[holder];
     }
 
-    // function _burn(
-    //     address account,
-    //     uint256 id,
-    //     uint256 amount
-    // ) internal virtual override whenNotPaused {
-    //     require(amount == 1, "amount <> 1");
-    //     super._burn(account, id, 1);
-    //     Stake storage _stake = _stakes[id];
-    //     require(_stake.lpAmount == 0, "LP <> 0");
-    //     _totalSupply -= 1;
-    // }
-
-    // function _burnBatch(
-    //     address account,
-    //     uint256[] memory ids,
-    //     uint256[] memory amounts
-    // ) internal virtual override whenNotPaused {
-    //     super._burnBatch(account, ids, amounts);
-    //     for (uint256 i = 0; i < ids.length; ++i) {
-    //         _totalSupply -= amounts[i];
-    //     }
-    // }
-
     function _beforeTokenTransfer(
         address operator,
         address from,
