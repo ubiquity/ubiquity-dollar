@@ -200,18 +200,21 @@ contract UbiquityChef is ReentrancyGuard {
     // View function to see pending Governance Tokens on frontend.
     function pendingGovernance(
         uint256 stakingShareID
-    ) external view returns (uint256) {
+    ) external view returns (uint256 userReward) {
         StakingShareInfo storage user = _stakingShareInfo[stakingShareID];
         uint256 accGovernancePerShare = pool.accGovernancePerShare;
 
         if (block.number > pool.lastRewardBlock && _totalShares != 0) {
             uint256 multiplier = _getMultiplier();
-            uint256 governanceReward = (multiplier * governancePerBlock) / 1e18;
+            uint256 governanceReward = (multiplier * governancePerBlock);
             accGovernancePerShare =
                 accGovernancePerShare +
-                ((governanceReward * 1e12) / _totalShares);
+                ((governanceReward / _totalShares) / 1e6);
         }
-        return (user.amount * accGovernancePerShare) / 1e12 - user.rewardDebt;
+        userReward =
+            (user.amount * accGovernancePerShare) /
+            1e12 -
+            user.rewardDebt;
     }
 
     /**
@@ -315,16 +318,15 @@ contract UbiquityChef is ReentrancyGuard {
             return;
         }
         uint256 multiplier = _getMultiplier();
-        uint256 governanceReward = (multiplier * governancePerBlock) / 1e6;
-        pool.accGovernancePerShare =
-            pool.accGovernancePerShare +
-            (governanceReward / _totalShares);
+        uint256 governanceReward = (multiplier * governancePerBlock);
+        uint256 accGovernancePerShare = pool.accGovernancePerShare;
+
+        accGovernancePerShare =
+            accGovernancePerShare +
+            ((multiplier * governancePerBlock) / _totalShares / 1e6);
+        pool.accGovernancePerShare = accGovernancePerShare;
         pool.lastRewardBlock = block.number;
 
-        pool.accGovernancePerShare =
-            pool.accGovernancePerShare +
-            ((multiplier * governancePerBlock) / _totalShares / 1e6);
-        pool.lastRewardBlock = block.number;
         IERC20Ubiquity(manager.governanceTokenAddress()).mint(
             address(this),
             governanceReward
