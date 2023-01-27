@@ -181,9 +181,11 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 toTransfer = IERC20(manager.dollarTokenAddress()).balanceOf(
             address(this)
         );
-        IERC20(manager.dollarTokenAddress()).transfer(
-            manager.treasuryAddress(),
-            toTransfer
+        require(
+            IERC20(manager.dollarTokenAddress()).transfer(
+                manager.treasuryAddress(),
+                toTransfer
+            )
         );
         emit PriceReset(
             manager.dollarTokenAddress(),
@@ -210,9 +212,11 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 toTransfer = IERC20(manager.curve3PoolTokenAddress()).balanceOf(
             address(this)
         );
-        IERC20(manager.curve3PoolTokenAddress()).transfer(
-            manager.treasuryAddress(),
-            toTransfer
+        require(
+            IERC20(manager.curve3PoolTokenAddress()).transfer(
+                manager.treasuryAddress(),
+                toTransfer
+            )
         );
         emit PriceReset(
             manager.curve3PoolTokenAddress(),
