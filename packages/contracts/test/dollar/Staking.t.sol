@@ -79,9 +79,7 @@ contract RemoteZeroStateTest is ZeroState {
         vm.record();
         staking.addUserToMigrate(fourthAccount, x, y);
 
-        (bytes32[] memory reads, bytes32[] memory writes) = vm.accesses(
-            address(staking)
-        );
+        (, bytes32[] memory writes) = vm.accesses(address(staking));
 
         address checkAddress = address(
             bytes20(vm.load(address(staking), writes[1]) << 96)
