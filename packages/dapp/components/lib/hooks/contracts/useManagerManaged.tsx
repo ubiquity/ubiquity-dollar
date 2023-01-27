@@ -34,10 +34,9 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);
 
   useEffect(() => {
-    console.trace({ deployedContracts, provider });
-
     if (deployedContracts && provider) {
       (async () => {
+        console.trace({ globalManager: deployedContracts.globalManager });
         const connectedManagerContracts = await connectManagerContracts(deployedContracts.globalManager, provider);
         setManagedContracts(connectedManagerContracts);
       })();
@@ -99,9 +98,7 @@ async function connectManagerContracts(manager: UbiquityDollarManager & Contract
   ]);
 
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
-
   const pair = await sushiSwapPoolContract.pair();
-
   const governanceMarketPairContract = getUniswapV2PairABIContract(pair, provider);
 
   return {

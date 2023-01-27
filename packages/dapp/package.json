@@ -1,19 +1,17 @@
 {
   "name": "@ubiquity/dapp",
   "version": "1.0.1-beta",
-  "private": true,
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "run-p clean",
-    "build:watch": "run-s build:types build:next",
     "build": "run-s build:types build:next build:export",
+    "build:watch": "run-s build:types build:next",
     "build:export": "next export --outdir dist",
     "start": "next dev",
     "clean": "rimraf next types node_modules",
     "build:next": "next build",
-    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types",
-    "build:node_modules": "yarn install --frozen-lockfile"
+    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",

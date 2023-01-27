@@ -37,7 +37,6 @@ import ERC721Burnable from "@ubiquity/contracts/out/ERC721Burnable.sol/ERC721Bur
 import ERC721Enumerable from "@ubiquity/contracts/out/ERC721Enumerable.sol/ERC721Enumerable.json";
 import LibDiamond from "@ubiquity/contracts/out/LibDiamond.sol/LibDiamond.json";
 import LiveTestHelper from "@ubiquity/contracts/out/LiveTestHelper.sol/LiveTestHelper.json";
-// import LP from "@ubiquity/contracts/out/LP.sol/LP.json";
 import ManagerFacet from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
 import MockCreditNft from "@ubiquity/contracts/out/MockCreditNft.sol/MockCreditNft.json";
 import MockCreditToken from "@ubiquity/contracts/out/MockCreditToken.sol/MockCreditToken.json";
@@ -55,29 +54,23 @@ import OwnershipFacet from "@ubiquity/contracts/out/OwnershipFacet.sol/Ownership
 import Pausable from "@ubiquity/contracts/out/Pausable.sol/Pausable.json";
 import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
 import Staking from "@ubiquity/contracts/out/Staking.sol/Staking.json";
-
 import StakingToken from "@ubiquity/contracts/out/StakingToken.sol/StakingToken.json";
-
 import StakingFormulas from "@ubiquity/contracts/out/StakingFormulas.sol/StakingFormulas.json";
 import StdAssertions from "@ubiquity/contracts/out/StdAssertions.sol/StdAssertions.json";
 import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import TWAPOracleDollar3pool from "@ubiquity/contracts/out/TWAPOracleDollar3pool.sol/TWAPOracleDollar3pool.json";
-// import UAR from "@ubiquity/contracts/out/UAR.sol/UAR.json";
 import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import UbiquityChef from "@ubiquity/contracts/out/UbiquityChef.sol/UbiquityChef.json";
 import UbiquityCreditToken from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
-
 import UbiquityDollarToken from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
 import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
 import UbiquityGovernanceToken from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 import UintUtils from "@ubiquity/contracts/out/UintUtils.sol/UintUtils.json";
 import ZozoVault from "@ubiquity/contracts/out/ZozoVault.sol/ZozoVault.json";
 import { ContractInterface, ethers } from "ethers";
-
 export const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) =>
   new ethers.Contract(address, abi, provider) as unknown;
-
 import type { AccessControl as IAccessControl } from "types/AccessControl";
 import type { AccessControlInternal as IAccessControlInternal } from "types/AccessControlInternal";
 import type { AddressUtils as IAddressUtils } from "types/AddressUtils";
@@ -132,15 +125,11 @@ import type { OperatorFilterRegistryErrorsAndEvents as IOperatorFilterRegistryEr
 import type { Ownable as IOwnable } from "types/Ownable";
 import type { OwnershipFacet as IOwnershipFacet } from "types/OwnershipFacet";
 import type { Pausable as IPausable } from "types/Pausable";
-
 import type { SimpleBond as ISimpleBond } from "types/SimpleBond";
 import type { Staking as IStaking } from "types/Staking";
-
 import type { StakingToken as IStakingToken } from "types/StakingToken";
-
 import type { StakingFormulas as IStakingFormulas } from "types/StakingFormulas";
 import type { StdAssertions as IStdAssertions } from "types/StdAssertions";
-
 import type { SushiSwapPool as ISushiSwapPool } from "types/SushiSwapPool";
 import type { TWAPOracleDollar3pool as ITWAPOracleDollar3pool } from "types/TWAPOracleDollar3pool";
 import type { UbiquiStick as IUbiquiStick } from "types/UbiquiStick";
@@ -152,11 +141,9 @@ import type { UbiquityFormulas as IUbiquityFormulas } from "types/UbiquityFormul
 import type { UbiquityGovernanceToken as IUbiquityGovernanceToken } from "types/UbiquityGovernanceToken";
 import type { UintUtils as IUintUtils } from "types/UintUtils";
 import type { ZozoVault as IZozoVault } from "types/ZozoVault";
-
 import UbiquityDollarManager from "@ubiquity/contracts/out/UbiquityDollarManager.sol/UbiquityDollarManager.json";
 import type { UbiquityDollarManager as IUbiquityDollarManager } from "types/UbiquityDollarManager";
 
-// import { UbiquityDollarManager } from "types/UbiquityDollarManager";
 export const getUbiquityDollarManagerContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(UbiquityDollarManager.abi, address, provider) as IUbiquityDollarManager; // UbiquityDollarManager
 
@@ -269,7 +256,6 @@ export const getSushiSwapPoolContract = (address: string, provider: ethers.provi
 
 export const getTWAPOracleDollar3poolContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(TWAPOracleDollar3pool.abi, address, provider) as ITWAPOracleDollar3pool; // TWAPOracleDollar3pool
-// export const getUARContract = (address: string, provider: ethers.providers.Provider) => getContract(UAR.abi, address, provider) as IUAR; // UAR
 export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquiStick.abi, address, provider) as IUbiquiStick; // UbiquiStick
 export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(UbiquiStickSale.abi, address, provider) as IUbiquiStickSale; // UbiquiStickSale
