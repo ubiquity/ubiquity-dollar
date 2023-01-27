@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import "@uniswap/widgets/fonts.css";
 
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
@@ -18,11 +18,21 @@ const index: FC = (): JSX.Element => {
     }
   }, [managedContracts]);
 
+  const [didMount, setDidMount] = useState(false);
+
+  useEffect(() => {
+    setDidMount(true);
+  }, []);
+
   return (
-    <WalletConnectionWall>
-      <DollarPrice />
-      <MigrateButton />
-    </WalletConnectionWall>
+    <div>
+      {didMount && (
+        <WalletConnectionWall>
+          <DollarPrice />
+          <MigrateButton />
+        </WalletConnectionWall>
+      )}
+    </div>
   );
 };
 
