@@ -2,7 +2,7 @@ import { deployedChainId, deployedContractName } from "@/components/utils/deploy
 import contractDeployments from "@ubiquity/contracts/deployments.json";
 import { useNetwork } from "wagmi";
 
-const LOCAL_CHAIN = "31337" as deployedChainId;
+// const LOCAL_CHAIN = "31337" as deployedChainId;
 
 const useDeployedAddress = (...contractNames: deployedContractName[]) => {
   const network = useNetwork();
@@ -15,16 +15,17 @@ const useDeployedAddress = (...contractNames: deployedContractName[]) => {
 
   const chain = network.chain;
 
-  const chainId = (chain?.id ?? LOCAL_CHAIN) as deployedChainId;
+  const chainId = chain?.id as unknown as deployedChainId;
   if (!chainId) {
     return [];
   }
   const deployment = contractDeployments[chainId];
-  const deployedContracts = deployment.contracts;
+  console.trace({ deployment });
+  const deployedContracts = deployment?.contracts;
 
   console.trace({ contractNames });
-
-  const addresses = contractNames.map((name: deployedContractName) => deployedContracts[name].address);
+  const addresses = contractNames.map((name: deployedContractName) => deployedContracts[name]?.address);
+  console.trace({ addresses });
   return addresses;
 };
 

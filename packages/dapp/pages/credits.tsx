@@ -4,7 +4,10 @@ import DollarPrice from "@/components/redeem/DollarPrice";
 import UcrRedeem from "@/components/redeem/UcrRedeem";
 import UcrNftGenerator from "@/components/redeem/DebtCouponDeposit";
 import UcrNftRedeem from "@/components/redeem/UcrNftRedeem";
+
+//                              // packages/dapp/components/lib/hooks/contracts/useManagerManaged.tsx
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
+
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
 // import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
 import WalletConnectionWall from "@/components/ui/WalletConnectionWall";

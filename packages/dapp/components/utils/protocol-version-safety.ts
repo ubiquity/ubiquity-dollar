@@ -25,20 +25,20 @@ const nameUpgrades = {
   TheUbiquityStickSale: "UbiquiStickSale",
 };
 
-const unallocatedNames = [
-  "DirectGovernanceFarmer",
-  "SushiSwapPool",
-  "CreditClock",
-  "CreditRedemptionCalculator",
-  "Diamond",
-  "DiamondCutFacet",
-  "DiamondLoupeFacet",
-  "ManagerFacet",
-  "OwnershipFacet",
-  "Modifiers",
-  "DiamondInit",
-  "SimpleBond",
-];
+// const unallocatedNames = [
+//   "DirectGovernanceFarmer",
+//   "SushiSwapPool",
+//   "CreditClock",
+//   "CreditRedemptionCalculator",
+//   "Diamond",
+//   "DiamondCutFacet",
+//   "DiamondLoupeFacet",
+//   "ManagerFacet",
+//   "OwnershipFacet",
+//   "Modifiers",
+//   "DiamondInit",
+//   "SimpleBond",
+// ];
 
 export function getKeyFromValue(contractName: string) {
   const keys = Object.keys(nameUpgrades);

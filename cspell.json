@@ -114,6 +114,7 @@
     "ubiquiti",
     "buildhome",
     "ubiquibot",
-    "multicall"
+    "multicall",
+    "turbotrace"
   ]
 }

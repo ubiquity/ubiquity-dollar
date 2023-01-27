@@ -17,10 +17,9 @@
     "inlineSources": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@/components/*": ["components/*"],
-      "@/ui": ["components/ui"],
       "@/ui/*": ["components/ui/*"],
       "@/lib/*": ["components/lib/*"]
     }

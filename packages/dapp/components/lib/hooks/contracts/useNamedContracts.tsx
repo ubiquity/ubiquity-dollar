@@ -5,6 +5,7 @@ import addresses from "../../../config/named-accounts.json";
 import { getCreditNftManagerContract, getERC20Contract } from "@/components/utils/contracts";
 import { getCurveFactoryContract, getIJarContract } from "@/components/utils/contracts-external";
 import { deployedChainId } from "@/components/utils/deployments";
+import { getKeyFromValue } from "@/components/utils/protocol-version-safety";
 
 const getCreditNftManager = () => {
   const chainId = "1" as deployedChainId;
@@ -15,7 +16,9 @@ const getCreditNftManager = () => {
   // throw new Error(`No CreditNftManager in deployments artifact`);
   const contracts = mainnetDeployment.contracts;
 
-  return contracts["DebtCouponManager"];
+  const newKey = getKeyFromValue("CreditNftManager");
+
+  return contracts[newKey].address;
   // @FIXME: update deployment script
 };
 
