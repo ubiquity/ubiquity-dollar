@@ -23,6 +23,7 @@
   },
   "scripts": {
     "forge": "forge",
+    "prebuild": "run-p clean",
     "build": "forge build",
     "test": "tsx ./scripts/runner/runner.ts",
     "test:slither": "slither . --compile-force-framework foundry",
