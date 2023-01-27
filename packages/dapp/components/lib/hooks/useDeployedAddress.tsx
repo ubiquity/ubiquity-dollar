@@ -20,12 +20,8 @@ const useDeployedAddress = (...contractNames: deployedContractName[]) => {
     return [];
   }
   const deployment = contractDeployments[chainId];
-  console.trace({ deployment });
-  const deployedContracts = deployment?.contracts;
-
-  console.trace({ contractNames });
-  const addresses = contractNames.map((name: deployedContractName) => deployedContracts[name]?.address);
-  console.trace({ addresses });
+  const deployedContracts = deployment.contracts;
+  const addresses = contractNames.map((name: deployedContractName) => deployedContracts[name].address);
   return addresses;
 };
 

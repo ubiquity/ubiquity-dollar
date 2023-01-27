@@ -15,6 +15,7 @@ import {
   getUbiquityGovernanceTokenContract,
 } from "@/components/utils/contracts";
 import { getDollar3poolMarketContract, getUniswapV2PairABIContract } from "@/components/utils/contracts-external";
+import { Contract } from "ethers";
 
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -33,6 +34,8 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);
 
   useEffect(() => {
+    console.trace({ deployedContracts, provider });
+
     if (deployedContracts && provider) {
       (async () => {
         const connectedManagerContracts = await connectManagerContracts(deployedContracts.globalManager, provider);
@@ -44,7 +47,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: UbiquityDollarManager, provider: NonNullable<PossibleProviders>) {
+async function connectManagerContracts(manager: UbiquityDollarManager & Contract, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
@@ -63,21 +66,36 @@ async function connectManagerContracts(manager: UbiquityDollarManager, provider:
     creditNftCalculator,
     creditCalculator,
   ] = await Promise.all([
+    // manager.dollarTokenAddress(),
+    // manager.stableSwapMetaPoolAddress(),
+    // manager.twapOracleAddress(),
+    // manager.dollarMintCalculatorAddress(),
+    // manager.creditTokenAddress(),
+    // manager.governanceTokenAddress(),
+    // manager.curve3PoolTokenAddress(),
+    // manager.stakingAddress(),
+    // manager.creditNftAddress(),
+    // manager.stakingTokenAddress(),
+    // manager.masterChefAddress(),
+    // manager.sushiSwapPoolAddress(),
+    // manager.formulasAddress(),
+    // manager.creditNftCalculatorAddress(),
+    // manager.creditCalculatorAddress(),
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
     manager.twapOracleAddress(),
-    manager.dollarMintCalculatorAddress(),
-    manager.creditTokenAddress(),
+    manager.dollarMintingCalculatorAddress(),
+    manager.autoRedeemTokenAddress(),
     manager.governanceTokenAddress(),
     manager.curve3PoolTokenAddress(),
-    manager.stakingAddress(),
-    manager.creditNftAddress(),
-    manager.stakingTokenAddress(),
+    manager.bondingShareAddress(),
+    manager.debtCouponAddress(),
+    manager.bondingContractAddress(),
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
-    manager.creditNftCalculatorAddress(),
-    manager.creditCalculatorAddress(),
+    manager.couponCalculatorAddress(),
+    manager.uarCalculatorAddress(),
   ]);
 
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
