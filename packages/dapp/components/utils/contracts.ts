@@ -37,7 +37,7 @@ import ERC721Burnable from "@ubiquity/contracts/out/ERC721Burnable.sol/ERC721Bur
 import ERC721Enumerable from "@ubiquity/contracts/out/ERC721Enumerable.sol/ERC721Enumerable.json";
 import LibDiamond from "@ubiquity/contracts/out/LibDiamond.sol/LibDiamond.json";
 import LiveTestHelper from "@ubiquity/contracts/out/LiveTestHelper.sol/LiveTestHelper.json";
-import LP from "@ubiquity/contracts/out/LP.sol/LP.json";
+// import LP from "@ubiquity/contracts/out/LP.sol/LP.json";
 import ManagerFacet from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
 import MockCreditNft from "@ubiquity/contracts/out/MockCreditNft.sol/MockCreditNft.json";
 import MockCreditToken from "@ubiquity/contracts/out/MockCreditToken.sol/MockCreditToken.json";
@@ -62,7 +62,7 @@ import StakingFormulas from "@ubiquity/contracts/out/StakingFormulas.sol/Staking
 import StdAssertions from "@ubiquity/contracts/out/StdAssertions.sol/StdAssertions.json";
 import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import TWAPOracleDollar3pool from "@ubiquity/contracts/out/TWAPOracleDollar3pool.sol/TWAPOracleDollar3pool.json";
-import UAR from "@ubiquity/contracts/out/UAR.sol/UAR.json";
+// import UAR from "@ubiquity/contracts/out/UAR.sol/UAR.json";
 import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import UbiquityChef from "@ubiquity/contracts/out/UbiquityChef.sol/UbiquityChef.json";
@@ -117,7 +117,6 @@ import type { ERC721Burnable as IERC721Burnable } from "types/ERC721Burnable";
 import type { ERC721Enumerable as IERC721Enumerable } from "types/ERC721Enumerable";
 import type { LibDiamond as ILibDiamond } from "types/LibDiamond";
 import type { LiveTestHelper as ILiveTestHelper } from "types/LiveTestHelper";
-import type { LP as ILP } from "types/LP";
 import type { ManagerFacet as IManagerFacet } from "types/ManagerFacet";
 import type { MockCreditNft as IMockCreditNft } from "types/MockCreditNft";
 import type { MockCreditToken as IMockCreditToken } from "types/MockCreditToken";
@@ -144,7 +143,6 @@ import type { StdAssertions as IStdAssertions } from "types/StdAssertions";
 
 import type { SushiSwapPool as ISushiSwapPool } from "types/SushiSwapPool";
 import type { TWAPOracleDollar3pool as ITWAPOracleDollar3pool } from "types/TWAPOracleDollar3pool";
-import type { UAR as IUAR } from "types/UAR";
 import type { UbiquiStick as IUbiquiStick } from "types/UbiquiStick";
 import type { UbiquiStickSale as IUbiquiStickSale } from "types/UbiquiStickSale";
 import type { UbiquityChef as IUbiquityChef } from "types/UbiquityChef";
@@ -230,7 +228,7 @@ export const getERC4626Contract = (address: string, provider: ethers.providers.P
 export const getLibDiamondContract = (address: string, provider: ethers.providers.Provider) => getContract(LibDiamond.abi, address, provider) as ILibDiamond; // LibDiamond
 export const getLiveTestHelperContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(LiveTestHelper.abi, address, provider) as ILiveTestHelper; // LiveTestHelper
-export const getLPContract = (address: string, provider: ethers.providers.Provider) => getContract(LP.abi, address, provider) as ILP; // LP
+// export const getLPContract = (address: string, provider: ethers.providers.Provider) => getContract(LP.abi, address, provider) as ILP; // LP
 export const getManagerFacetContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(ManagerFacet.abi, address, provider) as IManagerFacet; // ManagerFacet
 export const getMockCreditNftContract = (address: string, provider: ethers.providers.Provider) =>
@@ -271,7 +269,7 @@ export const getSushiSwapPoolContract = (address: string, provider: ethers.provi
 
 export const getTWAPOracleDollar3poolContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(TWAPOracleDollar3pool.abi, address, provider) as ITWAPOracleDollar3pool; // TWAPOracleDollar3pool
-export const getUARContract = (address: string, provider: ethers.providers.Provider) => getContract(UAR.abi, address, provider) as IUAR; // UAR
+// export const getUARContract = (address: string, provider: ethers.providers.Provider) => getContract(UAR.abi, address, provider) as IUAR; // UAR
 export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => getContract(UbiquiStick.abi, address, provider) as IUbiquiStick; // UbiquiStick
 export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) =>
   getContract(UbiquiStickSale.abi, address, provider) as IUbiquiStickSale; // UbiquiStickSale
