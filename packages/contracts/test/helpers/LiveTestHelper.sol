@@ -36,7 +36,7 @@ contract LiveTestHelper is Test {
     // Bonding stakingV1;
     Staking staking;
     StakingFormulas stakingFormulas;
-    // StakingToken stakingToken;
+    StakingToken stakingToken;
 
     UbiquityDollarManager manager;
 
