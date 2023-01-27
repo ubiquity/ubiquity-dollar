@@ -2,8 +2,8 @@
 pragma solidity ^0.8.3;
 
 import "../../src/dollar/Staking.sol";
-import "../../src/dollar/mocks/MockStaking.sol";
-import "../../src/dollar/mocks/MockStakingToken.sol";
+// import "../../src/dollar/mocks/MockBondingV1.sol";
+// import "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/StakingFormulas.sol";
 import "../../src/dollar/StakingToken.sol";
 import "../../src/dollar/interfaces/IMetaPool.sol";
@@ -33,24 +33,30 @@ import "forge-std/Test.sol";
 contract LiveTestHelper is Test {
     using stdStorage for StdStorage;
 
-    CreditNftManager creditNftManager;
-    CreditNftRedemptionCalculator creditNftRedemptionCalc;
-    CreditRedemptionCalculator creditRedemptionCalc;
-    DollarMintCalculator dollarMintCalc;
-    DollarMintExcess dollarMintExcess;
-    IMetaPool metapool;
-    MockCreditNft creditNft;
-    MockDollarToken dollarToken;
+    // Bonding stakingV1;
     Staking staking;
     StakingFormulas stakingFormulas;
-    StakingToken stakingToken;
-    SushiSwapPool sushiGovernancePool;
+    // StakingToken stakingToken;
+
+    UbiquityDollarManager manager;
+
+    UbiquityFormulas ubiquityFormulas;
     TWAPOracleDollar3pool twapOracle;
     UbiquityChef ubiquityChef;
+    CreditRedemptionCalculator creditRedemptionCalc;
+    CreditNftRedemptionCalculator creditNftRedemptionCalc;
+    DollarMintCalculator dollarMintCalc;
+    MockCreditNft creditNft;
+    CreditNftManager creditNftManager;
     UbiquityCreditToken creditToken;
-    UbiquityDollarManager manager;
-    UbiquityFormulas ubiquityFormulas;
+    DollarMintExcess dollarMintExcess;
+    SushiSwapPool sushiGovernancePool;
+    IMetaPool metapool;
+
+    MockDollarToken dollarToken;
     UbiquityGovernanceToken governanceToken;
+
+    // BondingShare stakingTokenV1;
 
     IUniswapV2Factory factory =
         IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
@@ -97,18 +103,12 @@ contract LiveTestHelper is Test {
         manager = new UbiquityDollarManager(admin);
         address managerAddress = address(manager);
 
-        staking = new MockStaking(address(manager), sablier);
-        stakingToken = new MockStakingToken(address(manager));
-        manager.setStakingTokenAddress(address(stakingToken));
-        manager.setStakingContractAddress(address(staking));
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(staking)
-        );
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(stakingToken)
-        );
+        // stakingV1 = new Bonding(address(manager), sablier);
+        // stakingTokenV1 = new BondingShare(address(manager));
+        // manager.setStakingTokenAddress(address(stakingTokenV1));
+        // manager.setStakingContractAddress(address(stakingV1));
+        // manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        // manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingTokenV1));
 
         dollarToken = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(dollarToken));
@@ -123,10 +123,10 @@ contract LiveTestHelper is Test {
         manager.setGovernanceTokenAddress(address(governanceToken));
         //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
 
-        staking.setBlockCountInAWeek(420);
-        manager.setStakingContractAddress(address(staking));
+        // stakingV1.setBlockCountInAWeek(420);
+        // manager.setStakingContractAddress(address(stakingV1));
 
-        stakingToken.setApprovalForAll(address(staking), true);
+        // // stakingTokenV1.setApprovalForAll(address(stakingV1), true);
 
         manager.setTreasuryAddress(treasury);
 
@@ -168,14 +168,8 @@ contract LiveTestHelper is Test {
             deal(address(dollarToken), mintings[i], 10000e18);
         }
 
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(staking)
-        );
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_BURNER_ROLE(),
-            address(staking)
-        );
+        // manager.grantRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        // manager.grantRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(stakingV1));
 
         deal(address(dollarToken), curveWhaleAddress, 10e18);
 
@@ -306,12 +300,12 @@ contract LiveTestHelper is Test {
         vm.prank(fourthAccount);
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
-        ///uint256 stakingMinBal = metapool.balanceOf(stakingMinAccount);
-        ///uint256 stakingMaxBal = metapool.balanceOf(stakingMaxAccount);
+        ///uint256 bondingMinBal = metapool.balanceOf(stakingMinAccount);
+        ///uint256 bondingMaxBal = metapool.balanceOf(stakingMaxAccount);
 
         vm.startPrank(admin);
-        stakingToken = new StakingToken(address(manager), uri);
-        manager.setStakingTokenAddress(address(stakingToken));
+        // stakingToken = new StakingToken(address(manager), uri);
+        // manager.setStakingTokenAddress(address(stakingToken));
 
         stakingFormulas = new StakingFormulas();
 
@@ -327,7 +321,7 @@ contract LiveTestHelper is Test {
             locked
         );
 
-        //staking.sendDust(address(stakingV2), address(metapool), stakingMinBal + stakingMaxBal);
+        // bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 
         staking.setMigrating(true);
 
@@ -339,20 +333,14 @@ contract LiveTestHelper is Test {
 
         manager.setStakingContractAddress(address(staking));
 
-        manager.revokeRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(staking)
-        );
-        manager.revokeRole(
-            manager.GOVERNANCE_TOKEN_BURNER_ROLE(),
-            address(staking)
-        );
+        // manager.revokeRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), address(stakingV1));
+        // manager.revokeRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), address(stakingV1));
         vm.stopPrank();
 
         vm.prank(secondAccount);
-        stakingToken.setApprovalForAll(address(staking), true);
+        // // stakingTokenV1.setApprovalForAll(address(stakingV1), true);
 
         vm.prank(thirdAccount);
-        stakingToken.setApprovalForAll(address(staking), true);
+        // // stakingTokenV1.setApprovalForAll(address(stakingV1), true);
     }
 }
