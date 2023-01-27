@@ -336,10 +336,6 @@ contract UbiquityChef is ReentrancyGuard {
             manager.treasuryAddress(),
             governanceReward / governanceDivider
         );
-        pool.accGovernancePerShare =
-            pool.accGovernancePerShare +
-            ((governanceReward * 1e12) / _totalShares);
-        pool.lastRewardBlock = block.number;
     }
 
     // Safe governance transfer function, just in case if rounding
