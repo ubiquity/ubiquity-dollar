@@ -1,0 +1,21 @@
+name: Generate Test Coverage Report
+
+on:
+  pull_request:
+  push:
+  create:
+    tag:
+      - "v*"
+
+jobs:
+  install-and-run-coverage:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.1.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
