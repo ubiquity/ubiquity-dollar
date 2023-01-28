@@ -13,16 +13,31 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v3
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: "18"
 
-      - uses: devmasx/coverage-check-action@v1.2.0
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Setup Foundry
+        uses: onbjerg/foundry-toolchain@v1
         with:
-          type: simplecov
-          result_path: packages/contracts/lcov.info
-          min_coverage: 90
-          token: ${{ github.token }}
+          version: nightly
+
+      - name: Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+
+        # script to run coverage
+
+      - name: Monitor coverage
+        uses: slavcodev/coverage-monitor-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          coverage_path: "packages/contracts/lcov.info"
+          threshold_alert: 10
+          threshold_warning: 50
+          threshold_metric: "lines"
