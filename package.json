@@ -38,7 +38,8 @@
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:cloudflare": "bash ./utils/build_cloudflare.sh",
     "build:ci:netlify": "yarn build:all",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
