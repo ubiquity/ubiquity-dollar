@@ -1,3 +1,5 @@
+![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
+
 # Ubiquity Dollar
 
 Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies (as well as its collateral in 2023).
