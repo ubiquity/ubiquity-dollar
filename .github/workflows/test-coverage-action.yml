@@ -31,10 +31,9 @@ jobs:
       - name: Install
         run: yarn install --mode=skip-build && yarn allow-scripts
 
-        # script to run coverage
-
       - name: Setup LCOV
         uses: hrishikesh-kadam/setup-lcov@v1
+        
       - name: Report code coverage
         uses: zgosalvez/github-actions-report-lcov@v3
         with:
