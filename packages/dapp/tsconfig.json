@@ -17,12 +17,11 @@
     "inlineSources": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/ui": ["components/ui"],
-      "@/ui/*": ["components/ui/*"],
-      "@/lib/*": ["components/lib/*"]
+      "@/components/*": ["pages/components/*"],
+      "@/ui/*": ["pages/components/ui/*"],
+      "@/lib/*": ["pages/components/lib/*"]
     }
   },
   "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],

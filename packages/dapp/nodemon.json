@@ -1,0 +1,9 @@
+{
+  "events": {
+    "restart": "clear && printf '\\033[3J'"
+  },
+  "verbose": false,
+  "ignore": ["**/*.json", "fixtures/**", "contracts/*/types/**", "**/*/cache/", "**/*/artifacts/"],
+  "ext": "tsx",
+  "exec": "yarn build:watch"
+}
