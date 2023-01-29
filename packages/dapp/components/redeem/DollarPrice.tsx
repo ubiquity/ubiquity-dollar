@@ -5,7 +5,7 @@ import usePrices from "./lib/usePrices";
 
 const roundPrice = (twapPrice: BigNumber): string => parseFloat(ethers.utils.formatEther(twapPrice)).toFixed(8);
 
-const DollarPrice = () => {
+export default function DollarPrice() {
   const [twapPrice, spotPrice] = usePrices();
 
   return (
@@ -31,6 +31,4 @@ const DollarPrice = () => {
       </div>
     </div>
   );
-};
-
-export default DollarPrice;
+}

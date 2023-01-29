@@ -1,6 +1,5 @@
 import { ButtonLink } from "@/components/ui/Button";
 import Icon, { IconsNames } from "@/components/ui/Icon";
-import { FC } from "react";
 
 const Currency = ({ name, icon }: { name: string; icon: IconsNames }) => (
   <>
@@ -11,7 +10,7 @@ const Currency = ({ name, icon }: { name: string; icon: IconsNames }) => (
   </>
 );
 
-const Markets: FC = (): JSX.Element => {
+export default function Markets() {
   return (
     <div id="Markets" className="panel">
       <h2>Primary Markets</h2>
@@ -41,6 +40,4 @@ const Markets: FC = (): JSX.Element => {
       </div>
     </div>
   );
-};
-
-export default Markets;
+}
