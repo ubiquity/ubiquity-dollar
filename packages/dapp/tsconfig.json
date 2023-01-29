@@ -19,9 +19,9 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./",
     "paths": {
-      "@/components/*": ["components/*"],
-      "@/ui/*": ["components/ui/*"],
-      "@/lib/*": ["components/lib/*"]
+      "@/components/*": ["old-components/*"],
+      "@/ui/*": ["old-components/ui/*"],
+      "@/lib/*": ["old-components/lib/*"]
     }
   },
   "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
