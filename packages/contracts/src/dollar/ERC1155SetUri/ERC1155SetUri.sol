@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts (last updated v4.7.0) (token/ERC1155/ERC1155.sol)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
@@ -27,8 +27,9 @@ contract ERC1155SetUri is Context, ERC165, IERC1155, IERC1155MetadataURI {
     mapping(address => mapping(address => bool)) private _operatorApprovals;
 
     // Used as the URI for all token types by relying on ID substitution, e.g. https://token-cdn-domain/{id}.json
-    /**@dev
-     *we set the _uri variable as internal
+    /**
+     * @dev
+     * we set the _uri variable as internal
      */
     string internal _uri;
 
@@ -336,39 +337,39 @@ contract ERC1155SetUri is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155BatchReceived} and return the
      * acceptance magic value.
      */
-    function _mintBatch(
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) internal virtual {
-        require(to != address(0), "ERC1155: mint to the zero address");
-        require(
-            ids.length == amounts.length,
-            "ERC1155: ids and amounts length mismatch"
-        );
+    // function _mintBatch(
+    //     address to,
+    //     uint256[] memory ids,
+    //     uint256[] memory amounts,
+    //     bytes memory data
+    // ) internal virtual {
+    //     require(to != address(0), "ERC1155: mint to the zero address");
+    //     require(
+    //         ids.length == amounts.length,
+    //         "ERC1155: ids and amounts length mismatch"
+    //     );
 
-        address operator = _msgSender();
+    //     address operator = _msgSender();
 
-        _beforeTokenTransfer(operator, address(0), to, ids, amounts, data);
+    //     _beforeTokenTransfer(operator, address(0), to, ids, amounts, data);
 
-        for (uint256 i = 0; i < ids.length; i++) {
-            _balances[ids[i]][to] += amounts[i];
-        }
+    //     for (uint256 i = 0; i < ids.length; i++) {
+    //         _balances[ids[i]][to] += amounts[i];
+    //     }
 
-        emit TransferBatch(operator, address(0), to, ids, amounts);
+    //     emit TransferBatch(operator, address(0), to, ids, amounts);
 
-        _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
+    //     _afterTokenTransfer(operator, address(0), to, ids, amounts, data);
 
-        _doSafeBatchTransferAcceptanceCheck(
-            operator,
-            address(0),
-            to,
-            ids,
-            amounts,
-            data
-        );
-    }
+    //     _doSafeBatchTransferAcceptanceCheck(
+    //         operator,
+    //         address(0),
+    //         to,
+    //         ids,
+    //         amounts,
+    //         data
+    //     );
+    // }
 
     /**
      * @dev Destroys `amount` tokens of token type `id` from `from`

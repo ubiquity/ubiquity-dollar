@@ -96,7 +96,8 @@ contract RemoteZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
-        Staking broken = new Staking(manager,
+        Staking broken = new Staking(
+            manager,
             stakingFormulas,
             ogsEmpty,
             balances,
@@ -144,16 +145,14 @@ contract RemoteZeroStateTest is ZeroState {
     function testSetStakingFormula() public {
         assertEq(
             bytes20(address(stakingFormulas)),
-            bytes20(address(staking.stakingFormulas()))
+            bytes20(address(staking.formulas()))
         );
         vm.startPrank(admin);
-        StakingFormulas steak = new StakingFormulas();
-        staking.setStakingFormulas(steak);
+        StakingFormulas stake = new StakingFormulas();
+        staking.setFormulas(stake);
         vm.stopPrank();
 
-        assertEq(
-            bytes20(address(steak)), bytes20(address(staking.stakingFormulas()))
-        );
+        assertEq(bytes20(address(stake)), bytes20(address(staking.formulas())));
     }
 
     function testAddProtocolToken() public {
