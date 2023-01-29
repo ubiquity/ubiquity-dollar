@@ -210,6 +210,7 @@ library EnumerableSet {
             set._indexes[value] = set._values.length;
             return true;
         }
+        return false;
     }
 
     function _remove(Set storage set, bytes32 value) private returns (bool) {
@@ -231,5 +232,6 @@ library EnumerableSet {
 
             return true;
         }
+        return false;
     }
 }
