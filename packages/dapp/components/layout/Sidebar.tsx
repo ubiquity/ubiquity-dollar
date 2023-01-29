@@ -80,8 +80,10 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
     <li>
       <div>
         <Link href={href} target={href.match(/https?:\/\//) ? "_blank" : ""}>
-          <span>{text}</span>
-          <span>{isExternal ? <Icon icon="external" /> : null}</span>
+          <div>
+            <span>{text}</span>
+            <span>{isExternal ? <Icon icon="external" /> : null}</span>
+          </div>
         </Link>
       </div>
     </li>
