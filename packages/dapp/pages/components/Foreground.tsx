@@ -6,10 +6,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import Sidebar from "./Sidebar";
 // import TransactionsDisplay from "./TransactionsDisplay";
 
-type LayoutProps = {
-  children: React.ReactNode;
-};
-
 function ErrorHandler({ error }: { error: Error }) {
   return (
     <div id="Error" className="panel">
@@ -22,7 +18,7 @@ function ErrorHandler({ error }: { error: Error }) {
   );
 }
 
-export default function Layout({ children }: LayoutProps) {
+export default function Foreground({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const { ethereum } = window;
     if (ethereum) {

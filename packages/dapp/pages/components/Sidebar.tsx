@@ -16,7 +16,7 @@ const Sidebar = () => {
               <div>
                 <Link id="Logo" href="/">
                   <div>
-                    <div>{/* <Icon icon="uad" /> */}</div>
+                    <div>{/* {<Icon icon="uad" />} */}</div>
                     <div>
                       <span>Ubiquity Dollar (Beta)</span>
                     </div>
@@ -28,7 +28,6 @@ const Sidebar = () => {
             <Item text="Staking" href="/staking" icon="⛏"></Item>
             <Item text="Credits" href="/credits" icon="💸"></Item>
             <Item text="Markets" href="/markets" icon="🔁"></Item>
-            {PROD ? null : <Item text="Vaults" href="/vaults" icon="🚜"></Item>}
           </ul>
 
           <ul>
