@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Icon, { IconsNames } from "../ui/Icon";
+// import Icon, { IconsNames } from "@/ui/Icon";
 import BuildInfo from "./BuildInfo";
 import WalletConnect from "./WalletConnect";
 
@@ -16,9 +16,7 @@ const Sidebar = () => {
               <div>
                 <Link id="Logo" href="/">
                   <div>
-                    <div>
-                      <Icon icon="uad" />
-                    </div>
+                    <div>{/* <Icon icon="uad" /> */}</div>
                     <div>
                       <span>Ubiquity Dollar (Beta)</span>
                     </div>
@@ -53,9 +51,7 @@ const Sidebar = () => {
             </li>
           </ul>
           <ul>
-            <li>
-              <WalletConnect />
-            </li>
+            <li>{/* <WalletConnect /> */}</li>
             <li>
               <BuildInfo />
             </li>
@@ -66,11 +62,9 @@ const Sidebar = () => {
   );
 };
 
-const SocialLinkItem = ({ href, icon, alt }: { href: string; icon: IconsNames; alt: string }) => (
+const SocialLinkItem = ({ href, icon, alt }: { href: string; alt: string }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" title={alt}>
-    <div>
-      <Icon icon={icon} />
-    </div>
+    <div>{/* <Icon icon={icon} /> */}</div>
   </a>
 );
 
@@ -82,7 +76,7 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
         <Link href={href} target={href.match(/https?:\/\//) ? "_blank" : ""}>
           <div>
             <span>{text}</span>
-            <span>{isExternal ? <Icon icon="external" /> : null}</span>
+            {/* <span>{isExternal ? <Icon icon="external" /> : null}</span> */}
           </div>
         </Link>
       </div>

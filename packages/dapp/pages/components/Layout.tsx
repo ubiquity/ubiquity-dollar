@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import Icon from "../ui/Icon";
-import Inventory from "./Inventory";
+// import Icon from "@/ui/Icon";
+// import Inventory from "./Inventory";
 import Sidebar from "./Sidebar";
-import TransactionsDisplay from "./TransactionsDisplay";
+// import TransactionsDisplay from "./TransactionsDisplay";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ function ErrorHandler({ error }: { error: Error }) {
   return (
     <div id="Error" className="panel">
       <div>
-        <Icon icon="warning" />
+        {/* <Icon icon="warning" /> */}
         <h2>Error</h2>
       </div>
       <div>{error.message}</div>
@@ -36,7 +36,7 @@ export default function Layout({ children }: LayoutProps) {
       <Sidebar />
       <div id="MainContent" onClick={hideSidebarOnMobile}>
         <div>
-          <TransactionsDisplay />
+          {/* <TransactionsDisplay /> */}
           <div id="Content">
             <div>
               <div>
@@ -48,9 +48,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
 
-        <div>
-          <Inventory />
-        </div>
+        <div>{/* <Inventory /> */}</div>
       </div>
     </div>
   );

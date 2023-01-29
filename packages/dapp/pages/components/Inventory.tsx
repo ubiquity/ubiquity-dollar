@@ -2,13 +2,13 @@ import Tippy from "@tippyjs/react";
 import { BaseContract, BigNumber, ethers } from "ethers";
 import { useEffect } from "react";
 
-import useWeb3 from "old-components/lib/hooks/useWeb3";
-import icons from "old-components/ui/icons";
+import useWeb3 from "@/components/lib/hooks/useWeb3";
+import icons from "@/components/ui/icons";
 
-import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
-import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
-import useBalances, { Balances } from "../lib/hooks/useBalances";
-import { ManagedContracts } from "../lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "@/lib/hooks/contracts/useManagerManaged";
+import useNamedContracts from "@/lib/hooks/contracts/useNamedContracts";
+import useBalances, { Balances } from "@/lib/hooks/useBalances";
+import { ManagedContracts } from "@/lib/hooks/contracts/useManagerManaged";
 
 const Inventory = () => {
   const [{ walletAddress }] = useWeb3();
