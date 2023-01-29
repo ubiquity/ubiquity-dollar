@@ -32,7 +32,8 @@
     "clean": "run-p clean:*",
     "clean:forge": "forge clean",
     "clean:yarn": "yarn clean",
-    "task": "tsx ./scripts/task/task.ts"
+    "task": "tsx ./scripts/task/task.ts",
+    "_fix:submodules": "git submodule update --init --recursive"
   },
   "lavamoat": {
     "allowScripts": {

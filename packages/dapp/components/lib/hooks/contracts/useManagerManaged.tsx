@@ -17,7 +17,7 @@ import {
 import { getDollar3poolMarketContract, getUniswapV2PairABIContract } from "@/components/utils/contracts-external";
 import { Contract } from "ethers";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useAtom, useEffect, useState } from "react";
 
 import { UbiquityDollarManager } from "types/UbiquityDollarManager";
 
@@ -121,4 +121,4 @@ async function connectManagerContracts(manager: UbiquityDollarManager & Contract
   };
 }
 
-export default () => useContext(ManagedContractsContext);
+export default () => useAtom(ManagedContractsContext);

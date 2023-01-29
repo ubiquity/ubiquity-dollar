@@ -1,4 +1,4 @@
-const Custom404 = () => {
+export default function Custom404() {
   return (
     <div id="Page404">
       <div>
@@ -43,6 +43,4 @@ const Custom404 = () => {
       <div>404</div>
     </div>
   );
-};
-
-export default Custom404;
+}

@@ -1,9 +1,8 @@
-import { FC } from "react";
 import PriceMonitor from "@/components/monitor/PriceMonitor";
 import MetapoolMonitor from "@/components/monitor/MetapoolMonitor";
 import TokenMonitor from "@/components/monitor/TokenMonitor";
 
-const Monitor: FC = (): JSX.Element => {
+export default function Monitor() {
   return (
     <>
       <PriceMonitor />
@@ -11,6 +10,4 @@ const Monitor: FC = (): JSX.Element => {
       <TokenMonitor />
     </>
   );
-};
-
-export default Monitor;
+}

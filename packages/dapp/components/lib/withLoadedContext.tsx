@@ -7,7 +7,7 @@ import useWeb3, { PossibleProviders } from "./hooks/useWeb3";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 export type LoadedContext = {
   managedContracts: NonNullable<ManagedContracts>;
-  deployedContracts: NonNullable<DeployedContracts>;
+  deployedContracts: NonNullable<ReturnType<typeof useDeployedContracts>>;
   namedContracts: NonNullable<NamedContracts>;
   web3Provider: NonNullable<PossibleProviders>;
   walletAddress: string;

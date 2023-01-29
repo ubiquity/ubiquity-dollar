@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useAtom, useState } from "react";
 import { ChildrenShim } from "./children-shim";
 
 export type Transaction = {
@@ -57,7 +57,7 @@ export const TransactionsContextProvider: React.FC<ChildrenShim> = ({ children }
   return <TransactionsContext.Provider value={[transactions, doTransaction, doingTransactions, dismissTransaction]}>{children}</TransactionsContext.Provider>;
 };
 
-const useTransactionLogger = () => useContext(TransactionsContext);
+const useTransactionLogger = () => useAtom(TransactionsContext);
 
 export default useTransactionLogger;
 

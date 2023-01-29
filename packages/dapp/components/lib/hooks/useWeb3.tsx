@@ -1,7 +1,7 @@
 import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
-import { useAccount, useProvider, useSigner } from "wagmi";
-import { WagmiConfig, createClient, chain } from "wagmi";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import { chain, createClient, useAccount, useProvider, useSigner, WagmiConfig } from "wagmi";
+
 import { FC } from "react";
 import { ChildrenShim } from "./children-shim";
 

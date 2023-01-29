@@ -1,10 +1,11 @@
 import { erc1155BalanceOf } from "@/lib/utils";
 import { BigNumber, Contract } from "ethers";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import useManagerManaged from "./contracts/useManagerManaged";
 import useNamedContracts from "./contracts/useNamedContracts";
 import useWalletAddress from "./useWalletAddress";
 import { ChildrenShim } from "./children-shim";
+import { useAtom } from "jotai";
 
 export interface Balances {
   uad: BigNumber;
@@ -66,6 +67,6 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
   return <BalancesContext.Provider value={[balances, refreshBalances]}>{children}</BalancesContext.Provider>;
 };
 
-const useBalances = () => useContext(BalancesContext);
+const useBalances = () => useAtom(BalancesContext);
 
 export default useBalances;
