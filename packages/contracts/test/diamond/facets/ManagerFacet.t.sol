@@ -41,16 +41,6 @@ contract RemoteTestManagerFacet is DiamondSetup {
         assertEq(IManager.sushiSwapPoolAddress(), contract1);
     }
 
-    function testShouldSetCreditCalculatorAddress() public prankAs(admin) {
-        IManager.setCreditCalculatorAddress(contract1);
-        assertEq(IManager.creditCalculatorAddress(), contract1);
-    }
-
-    function testShouldSetCreditNFTCalculatorAddress() public prankAs(admin) {
-        IManager.setCreditNFTCalculatorAddress(contract1);
-        assertEq(IManager.creditNFTCalculatorAddress(), contract1);
-    }
-
     function testShouldSetDollarMintCalculatorAddress() public prankAs(admin) {
         IManager.setDollarMintCalculatorAddress(contract1);
         assertEq(IManager.dollarMintCalculatorAddress(), contract1);

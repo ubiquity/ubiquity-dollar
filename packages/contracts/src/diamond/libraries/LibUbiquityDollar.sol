@@ -94,6 +94,10 @@ library LibUbiquityDollar {
         );
     }
 
+    function balanceOf(address account) internal view returns (uint256) {
+        return ubiquityDollarStorage().balances[account];
+    }
+
     function setSymbol(string memory newSymbol) internal {
         ubiquityDollarStorage().symbol = newSymbol;
     }
@@ -214,11 +218,10 @@ library LibUbiquityDollar {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender)
-        internal
-        view
-        returns (uint256)
-    {
+    function allowance(
+        address owner,
+        address spender
+    ) internal view returns (uint256) {
         return ubiquityDollarStorage().allowances[owner][spender];
     }
 
@@ -299,11 +302,7 @@ library LibUbiquityDollar {
         return true;
     }
 
-    function approve(
-        address owner,
-        address spender,
-        uint256 amount
-    ) internal {
+    function approve(address owner, address spender, uint256 amount) internal {
         require(owner != address(0), "ERC20: approve from the zero address");
         require(spender != address(0), "ERC20: approve to the zero address");
 

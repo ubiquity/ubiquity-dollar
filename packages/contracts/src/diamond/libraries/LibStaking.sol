@@ -77,9 +77,8 @@ library LibStaking {
             0
         );
         LibTWAPOracle.update();
-        uint256 toTransfer = LibUbiquityDollar.ubiquityDollarStorage().balances[
-            address(this)
-        ];
+        uint256 toTransfer = LibUbiquityDollar.balanceOf(address(this));
+
         LibUbiquityDollar.transfer(
             msg.sender,
             LibAppStorage.appStorage().treasuryAddress,
@@ -114,9 +113,9 @@ library LibStaking {
         emit PriceReset(ts.token1, coinWithdrawn, toTransfer);
     }
 
-    function setStakingDiscountMultiplier(uint256 _stakingDiscountMultiplier)
-        internal
-    {
+    function setStakingDiscountMultiplier(
+        uint256 _stakingDiscountMultiplier
+    ) internal {
         stakingStorage().stakingDiscountMultiplier = _stakingDiscountMultiplier;
         emit StakingDiscountMultiplierUpdated(_stakingDiscountMultiplier);
     }
@@ -138,10 +137,10 @@ library LibStaking {
     /// @param _lpsAmount of LP token to send
     /// @param _weeks during lp token will be held
     /// @notice weeks act as a multiplier for the amount of staking shares to be received
-    function deposit(uint256 _lpsAmount, uint256 _weeks)
-        internal
-        returns (uint256 _id)
-    {
+    function deposit(
+        uint256 _lpsAmount,
+        uint256 _weeks
+    ) internal returns (uint256 _id) {
         require(
             1 <= _weeks && _weeks <= 208,
             "Staking: duration must be between 1 and 208 weeks"
@@ -204,10 +203,10 @@ library LibStaking {
 
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = LibStakingFormulas.lpRewardsAddLiquidityNormalization(
-                stake,
-                bs,
-                pendingLpReward
-            );
+            stake,
+            bs,
+            pendingLpReward
+        );
         // add these LP Rewards to the deposited amount of LP token
         stake.lpAmount += pendingLpReward;
         StakingData storage ss = stakingStorage();
@@ -368,11 +367,10 @@ library LibStaking {
     /// @dev return the amount of Lp token rewards an amount of shares entitled
     /// @param amount of staking shares
     /// @param lpRewardDebt lp rewards that has already been distributed
-    function lpRewardForShares(uint256 amount, uint256 lpRewardDebt)
-        internal
-        view
-        returns (uint256 pendingLpReward)
-    {
+    function lpRewardForShares(
+        uint256 amount,
+        uint256 lpRewardDebt
+    ) internal view returns (uint256 pendingLpReward) {
         StakingData storage ss = stakingStorage();
         if (ss.accLpRewardPerShare > 0) {
             pendingLpReward =
@@ -450,10 +448,9 @@ library LibStaking {
             );
     }
 
-    function _checkForLiquidity(uint256 _id)
-        internal
-        returns (uint256[2] memory bs, StakingShare.Stake memory stake)
-    {
+    function _checkForLiquidity(
+        uint256 _id
+    ) internal returns (uint256[2] memory bs, StakingShare.Stake memory stake) {
         address stakingAddress = LibAppStorage.appStorage().stakingShareAddress;
         require(
             IERC1155Ubiquity(stakingAddress).balanceOf(msg.sender, _id) == 1,

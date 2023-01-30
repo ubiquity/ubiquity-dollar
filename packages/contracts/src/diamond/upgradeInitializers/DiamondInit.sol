@@ -70,6 +70,7 @@ contract DiamondInit is Modifiers {
 
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
+
         appStore.stakingShareAddress = address(
             new StakingShare(address(this), uri)
         );

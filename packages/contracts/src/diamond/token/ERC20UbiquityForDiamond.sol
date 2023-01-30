@@ -145,11 +145,9 @@ contract ERC20UbiquityForDiamond is
 
     /// @notice burn Ubiquity Dollar tokens from caller
     /// @param amount the amount to burn
-    function burn(uint256 amount)
-        public
-        override(ERC20Burnable, IERC20Ubiquity)
-        whenNotPaused
-    {
+    function burn(
+        uint256 amount
+    ) public override(ERC20Burnable, IERC20Ubiquity) whenNotPaused {
         super.burn(amount);
         emit Burning(msg.sender, amount);
     }
@@ -157,7 +155,10 @@ contract ERC20UbiquityForDiamond is
     /// @notice burn Ubiquity Dollar tokens from specified account
     /// @param account the account to burn from
     /// @param amount the amount to burn
-    function burnFrom(address account, uint256 amount)
+    function burnFrom(
+        address account,
+        uint256 amount
+    )
         public
         override(ERC20Burnable, IERC20Ubiquity)
         onlyBurner
@@ -168,12 +169,10 @@ contract ERC20UbiquityForDiamond is
     }
 
     // @dev Creates `amount` new tokens for `to`.
-    function mint(address to, uint256 amount)
-        public
-        override
-        onlyMinter
-        whenNotPaused
-    {
+    function mint(
+        address to,
+        uint256 amount
+    ) public override onlyMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }

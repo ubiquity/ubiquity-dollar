@@ -7,10 +7,8 @@ import "../DiamondTestSetup.sol";
 import {StakingShareForDiamond} from "../../../src/diamond/token/StakingShareForDiamond.sol";
 import {BondingShareForDiamond} from "../../../src/diamond/mocks/MockShareV1.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {CreditRedemptionCalculator} from "../../../src/dollar/core/CreditRedemptionCalculator.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
-import {CreditNFTRedemptionCalculator} from "../../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
 import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
 import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
 import {CreditNFTManager} from "../../../src/dollar/core/CreditNFTManager.sol";
@@ -87,7 +85,6 @@ contract ZeroStateStaking is DiamondSetup {
         for (uint256 i = 0; i < mintings.length; ++i) {
             deal(address(diamond), mintings[i], 10000e18);
         }
-
         address[5] memory crvDeal = [
             address(diamond),
             owner,
@@ -128,17 +125,7 @@ contract ZeroStateStaking is DiamondSetup {
         vm.prank(owner);
         ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
 
-        CreditRedemptionCalculator creditRedemptionCalc = new CreditRedemptionCalculator(
-                address(diamond)
-            );
         vm.startPrank(admin);
-        IManager.setCreditCalculatorAddress(address(creditRedemptionCalc));
-        CreditNFTRedemptionCalculator creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(
-                address(IManager)
-            );
-        IManager.setCreditNFTCalculatorAddress(
-            address(creditNFTRedemptionCalc)
-        );
 
         DollarMintCalculator dollarMintCalc = new DollarMintCalculator(
             address(IManager)
@@ -266,7 +253,7 @@ contract ZeroStateStakingTest is ZeroStateStaking {
             (block.number + lockup * IStakingFacet.blockCountInAWeek())
         );
         vm.startPrank(stakingMinAccount);
-        metapool.approve(address(IStakingFacet), 2**256 - 1);
+        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
         IStakingFacet.deposit(lpAmount, lockup);
         assertEq(metapool.balanceOf(stakingMinAccount), preBalance - lpAmount);
     }
@@ -276,12 +263,12 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         uint256 maxLP = metapool.balanceOf(stakingMaxAccount);
 
         vm.startPrank(stakingMaxAccount);
-        metapool.approve(address(IStakingFacet), 2**256 - 1);
+        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
         IStakingFacet.deposit(maxLP, 208);
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
-        metapool.approve(address(IStakingFacet), 2**256 - 1);
+        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
         IStakingFacet.deposit(minLP, 1);
         vm.stopPrank();
 
@@ -296,7 +283,7 @@ contract ZeroStateStakingTest is ZeroStateStaking {
     }
 
     function testCannotStakeMoreThan4Years(uint256 _weeks) public {
-        _weeks = bound(_weeks, 209, 2**256 - 1);
+        _weeks = bound(_weeks, 209, 2 ** 256 - 1);
         vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
         IStakingFacet.deposit(1, _weeks);
@@ -348,7 +335,7 @@ contract DepositStateTest is DepositStateStaking {
 
         // advance the block number to  staking time so the withdraw is possible
         uint256 currentBlock = block.number;
-        blocks = bound(blocks, 45361, 2**128 - 1);
+        blocks = bound(blocks, 45361, 2 ** 128 - 1);
         assertEq(IUbiquityChefFacet.totalShares(), shares);
 
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
@@ -373,7 +360,7 @@ contract DepositStateTest is DepositStateStaking {
     }
 
     function testGetRewards(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**128 - 1);
+        blocks = bound(blocks, 1, 2 ** 128 - 1);
 
         (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
         uint256 currentBlock = block.number;
@@ -394,7 +381,7 @@ contract DepositStateTest is DepositStateStaking {
     }
 
     function testPendingGovernance(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**128 - 1);
+        blocks = bound(blocks, 1, 2 ** 128 - 1);
 
         (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
         uint256 currentBlock = block.number;

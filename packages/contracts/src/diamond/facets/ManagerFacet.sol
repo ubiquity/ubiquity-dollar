@@ -37,18 +37,6 @@ contract ManagerFacet is Modifiers {
         s.sushiSwapPoolAddress = _sushiSwapPoolAddress;
     }
 
-    function setCreditCalculatorAddress(
-        address _creditCalculatorAddress
-    ) external onlyAdmin {
-        s.creditCalculatorAddress = _creditCalculatorAddress;
-    }
-
-    function setCreditNftCalculatorAddress(
-        address _creditNftCalculatorAddress
-    ) external onlyAdmin {
-        s.creditNftCalculatorAddress = _creditNftCalculatorAddress;
-    }
-
     function setDollarMintCalculatorAddress(
         address _dollarMintCalculatorAddress
     ) external onlyAdmin {
@@ -173,11 +161,11 @@ contract ManagerFacet is Modifiers {
     }
 
     function creditCalculatorAddress() external view returns (address) {
-        return s.creditCalculatorAddress;
+        return address(this);
     }
 
     function creditNFTCalculatorAddress() external view returns (address) {
-        return s.creditNFTCalculatorAddress;
+        return address(this);
     }
 
     function dollarMintCalculatorAddress() external view returns (address) {

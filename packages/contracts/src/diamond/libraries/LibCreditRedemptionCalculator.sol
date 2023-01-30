@@ -6,6 +6,8 @@ import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import {CreditNFT} from "../../dollar/core/CreditNFT.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 
+import "forge-std/console.sol";
+
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 library LibCreditRedemptionCalculator {
     using ABDKMathQuad for uint256;
