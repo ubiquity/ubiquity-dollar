@@ -39,7 +39,7 @@ jobs:
         run: yarn workspace @ubiquity/contracts forge install
 
       - name: Run Forge tests
-        run: yarn workspace @ubiquity/contracts forge test --fork-url https://cloudflare-eth.com
+        run: yarn workspace @ubiquity/contracts forge test --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7
 
       - name: Coverage
-        run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://cloudflare-eth.com
+        run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7
