@@ -19,23 +19,11 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
-
-      - name: Run Forge build
-        run: |
-          forge --version
-          forge build --sizes
-        id: build
+      - name: Forge Install
+        run: yarn workspace @ubiquity/contracts forge install
 
       - name: Run Forge tests
-        run: |
-          forge test -vvv
-        id: test
+        run: yarn workspace @ubiquity/contracts forge install
 
       - name: Coverage
-        run: |
-          forge coverage --report lcov
-        id: coverage
+        run: yarn workspace @ubiquity/contracts forge install
