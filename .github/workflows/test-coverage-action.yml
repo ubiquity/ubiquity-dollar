@@ -19,8 +19,27 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Setup Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+
+      - name: Forge Install
+        run: yarn workspace @ubiquity/contracts forge install
+
       - name: Run Forge tests
         run: yarn workspace @ubiquity/contracts forge test
 
       - name: Coverage
-        run: yarn workspace @ubiquity/contracts forge install
+        run: yarn workspace @ubiquity/contracts forge coverage
