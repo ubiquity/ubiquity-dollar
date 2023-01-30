@@ -41,15 +41,10 @@ jobs:
       - name: Coverage
         run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7
 
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ../../packages/contracts/
-          env_vars: OS,PYTHON
-          fail_ci_if_error: true
-          files: ./lcov.info
-          flags: unittests
-          name: codecov-umbrella
-          path_to_write_report: ./coverage/codecov_report.txt
-          verbose: true
+      - name: Upload coverage reports to Codecov
+        run: |
+          # Replace `linux` below with the appropriate OS
+          # Options are `alpine`, `linux`, `macos`, `windows`
+          curl -Os https://uploader.codecov.io/latest/linux/codecov
+          chmod +x codecov
+          ./packages/contracts/lcov.info -t ${CODECOV_TOKEN}
