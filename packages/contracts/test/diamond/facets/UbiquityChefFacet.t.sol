@@ -7,13 +7,10 @@ import "../DiamondTestSetup.sol";
 import {StakingShareForDiamond} from "../../../src/diamond/token/StakingShareForDiamond.sol";
 import {BondingShareForDiamond} from "../../../src/diamond/mocks/MockShareV1.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {CreditRedemptionCalculator} from "../../../src/dollar/core/CreditRedemptionCalculator.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
-import {CreditNFTRedemptionCalculator} from "../../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
 import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
 import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
-import {CreditNFTManager} from "../../../src/dollar/core/CreditNFTManager.sol";
 import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
 import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import "../../../src/diamond/libraries/Constants.sol";
@@ -123,40 +120,17 @@ contract ZeroState is DiamondSetup {
         vm.prank(owner);
         ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
 
-        CreditRedemptionCalculator creditRedemptionCalc = new CreditRedemptionCalculator(
-                address(diamond)
-            );
         vm.startPrank(admin);
-        IManager.setCreditCalculatorAddress(address(creditRedemptionCalc));
-        CreditNFTRedemptionCalculator creditNFTRedemptionCalc = new CreditNFTRedemptionCalculator(
-                address(IManager)
-            );
-        IManager.setCreditNFTCalculatorAddress(
-            address(creditNFTRedemptionCalc)
-        );
-
         DollarMintCalculator dollarMintCalc = new DollarMintCalculator(
             address(IManager)
         );
         IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
-        CreditNFTManager creditNFTManager = new CreditNFTManager(
-            address(IManager),
-            creditNFTLengthBlocks
-        );
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
-        IAccessCtrl.grantRole(
-            CREDIT_NFT_MANAGER_ROLE,
-            address(creditNFTManager)
-        );
-        IAccessCtrl.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(creditNFTManager)
-        );
 
-        IAccessCtrl.grantRole(
-            GOVERNANCE_TOKEN_BURNER_ROLE,
-            address(creditNFTManager)
-        );
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
+        IAccessCtrl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
         UbiquityCreditTokenForDiamond creditToken = new UbiquityCreditTokenForDiamond(
                 address(IManager)
             );
@@ -165,7 +139,7 @@ contract ZeroState is DiamondSetup {
             address(IManager)
         );
         IManager.setExcessDollarsDistributor(
-            address(creditNFTManager),
+            address(diamond),
             address(dollarMintExcess)
         );
         vm.stopPrank();
@@ -326,7 +300,7 @@ contract DepositStateTest is DepositState {
 
         // advance the block number to  staking time so the withdraw is possible
         uint256 currentBlock = block.number;
-        blocks = bound(blocks, 45361, 2**128 - 1);
+        blocks = bound(blocks, 45361, 2 ** 128 - 1);
         assertEq(IUbiquityChefFacet.totalShares(), shares);
 
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
@@ -350,7 +324,7 @@ contract DepositStateTest is DepositState {
     }
 
     function testGetRewards(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**128 - 1);
+        blocks = bound(blocks, 1, 2 ** 128 - 1);
 
         (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
         uint256 currentBlock = block.number;
@@ -371,7 +345,7 @@ contract DepositStateTest is DepositState {
     }
 
     function testPendingGovernance(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**128 - 1);
+        blocks = bound(blocks, 1, 2 ** 128 - 1);
 
         (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
         uint256 currentBlock = block.number;

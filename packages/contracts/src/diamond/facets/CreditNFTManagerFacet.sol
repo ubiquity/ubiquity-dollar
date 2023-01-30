@@ -19,10 +19,18 @@ contract CreditNFTManagerFacet is Modifiers {
         LibCreditNFTManager.setExpiredCreditNFTConversionRate(rate);
     }
 
+    function expiredCreditNFTConversionRate() external view returns (uint256) {
+        return LibCreditNFTManager.expiredCreditNFTConversionRate();
+    }
+
     function setCreditNFTLength(
         uint256 creditNFTLengthBlocks
     ) external onlyCreditNFTManager {
         LibCreditNFTManager.setCreditNFTLength(creditNFTLengthBlocks);
+    }
+
+    function creditNFTLengthBlocks() external view returns (uint256) {
+        return LibCreditNFTManager.creditNFTLengthBlocks();
     }
 
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.

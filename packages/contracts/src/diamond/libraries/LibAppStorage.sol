@@ -150,7 +150,7 @@ contract Modifiers {
         _;
     }
 
-        modifier onlyIncentiveAdmin() {
+    modifier onlyIncentiveAdmin() {
         require(
             LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditCalc: not admin"
