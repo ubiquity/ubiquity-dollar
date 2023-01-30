@@ -19,11 +19,8 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Forge Install
-        run: yarn workspace @ubiquity/contracts forge install
-
       - name: Run Forge tests
-        run: yarn workspace @ubiquity/contracts forge install
+        run: yarn workspace @ubiquity/contracts forge test
 
       - name: Coverage
         run: yarn workspace @ubiquity/contracts forge install
