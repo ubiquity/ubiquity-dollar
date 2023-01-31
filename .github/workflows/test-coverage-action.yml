@@ -52,6 +52,7 @@ jobs:
           
   jobB:
     runs-on: ubuntu-latest
+    needs: jobA
     name: Update Coverage
     steps:
       - name: Download Coverage Results
