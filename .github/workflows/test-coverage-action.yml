@@ -43,7 +43,9 @@ jobs:
 
       - name: Coverage
         id: coverage
-        run: echo ${{ LINES = yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth.ubq.fi/v1/mainnet }}
+        run: |
+          $LINES = yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth.ubq.fi/v1/mainnet
+          echo $LINES
 
       # - name: Upload artifacts
       #   uses: actions/upload-artifact@v3
