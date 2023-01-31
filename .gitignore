@@ -29,7 +29,6 @@ _.seed
 \*.tsbuildinfo
 bower_components
 build/Release
-coverage
 dist
 jspm_packages
 lerna-debug.log\*
