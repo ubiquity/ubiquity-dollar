@@ -11,10 +11,7 @@ jobs:
   jobA:
     strategy:
       fail-fast: true
-
-    outputs:
-      lines: ${{ steps.coverage.outputs.test }}
-
+      
     name: Calculate Coverage
     runs-on: ubuntu-latest
     steps:
@@ -51,11 +48,14 @@ jobs:
           path: ./coverage.txt
           
   jobB:
+    outputs:
+      output1: ${{ steps.cov-result.outputs.result }}
     runs-on: ubuntu-latest
     needs: jobA
     name: Update Coverage
     steps:
       - name: Download Coverage Results
+        id: cov-result
         uses: actions/download-artifact@v3
         with:
           name: cov-result
@@ -63,5 +63,23 @@ jobs:
         run: |
           VAL="$(tail -1 coverage.txt)"
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
-          echo $FOO | cut -f2,3 -d'|'
-
+          RES="$(echo $FOO | cut -f2,3 -d'|')"
+          echo "::set-output name=result::${RES}"
+  
+  jobC:
+    runs-on: ubuntu-latest
+    needs: jobB
+    name: Update Badge
+    steps:
+      - id: date
+        run: |
+          echo ${{needs.jobB.outputs.output1}}
+          echo "##[set-output name=data;]$(date)"
+      - name: Time badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: time
+          LABEL: 'Coverage'
+          STATUS: ${{ steps.cov-result.outputs.result }}
+          COLOR: 00EEFF
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
