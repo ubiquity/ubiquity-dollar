@@ -71,11 +71,7 @@ jobs:
     needs: jobB
     name: Update Badge
     steps:
-      - id: date
-        run: |
-          echo ${{needs.jobB.outputs.output1}}
-          echo "##[set-output name=data;]$(date)"
-      - name: Time badge
+      - name: coverage
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: time
