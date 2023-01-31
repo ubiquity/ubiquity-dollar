@@ -65,7 +65,6 @@ jobs:
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f2,3 -d'|')"
           echo "::set-output name=result::$RES"
-          echo $RES
           env:
             Result: $RES
       - name: coverage update
