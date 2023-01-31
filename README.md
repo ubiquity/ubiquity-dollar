@@ -3,7 +3,7 @@
 ![Install and Build Workflow](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/install-and-build-pr.yml/badge.svg?branch=development)
 ![Yarn Audit](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/yarn-audit-actions.yml/badge.svg?branch=development)
 
-![](https://byob.yarr.is/FibrinLab/ubiquity-dollar/coverage)
+![Coverage](https://byob.yarr.is/FibrinLab/ubiquity-dollar/coverage)
 
 # Ubiquity Dollar
 
