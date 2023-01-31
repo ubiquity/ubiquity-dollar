@@ -3,6 +3,8 @@
 ![Install and Build Workflow](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/install-and-build-pr.yml/badge.svg?branch=development)
 ![Yarn Audit](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/yarn-audit-actions.yml/badge.svg?branch=development)
 
+![](https://byob.yarr.is/FibrinLab/ubiquity-dollar/time)
+
 # Ubiquity Dollar
 
 Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies (as well as its collateral in 2023).
