@@ -61,5 +61,5 @@ jobs:
           name: cov-result
       - shell: bash
         run: |
-          echo "coverage results downloaded"
+          cat coverage.txt
 
