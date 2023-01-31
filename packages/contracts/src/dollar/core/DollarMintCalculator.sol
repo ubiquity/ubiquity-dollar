@@ -19,7 +19,7 @@ contract DollarMintCalculator is IDollarMintCalculator {
     /// @param _manager the address of the manager contract so we can fetch variables
     constructor(UbiquityDollarManager _manager) {
         manager = _manager;
-        dollarToken = IERC20(manager.dollarTokenAddress);
+        dollarToken = IERC20(manager.dollarTokenAddress());
     }
 
     /// @notice returns (TWAP_PRICE  -1) * Dollar_Total_Supply
@@ -37,7 +37,7 @@ contract DollarMintCalculator is IDollarMintCalculator {
 
         bytes16 bytesTwap = twapPrice.fromUInt();
         bytes16 dollarSupply = dollarToken.totalSupply().fromUInt();
-        dollarsToMint = (((bytesTwap.sub(one)).mul(dollarSupply)).div(_one))
+        dollarsToMint = (((bytesTwap.sub(_one)).mul(dollarSupply)).div(_one))
             .toUInt();
     }
 }

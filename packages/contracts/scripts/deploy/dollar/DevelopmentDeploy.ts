@@ -2,6 +2,7 @@ import { spawnSync } from "child_process";
 import { loadEnv } from "../../shared";
 import fs from "fs";
 import path from "path";
+import axios from "axios";
 
 const envPath = path.join(__dirname, "../../../.env");
 if (!fs.existsSync(envPath)) {
@@ -24,8 +25,7 @@ const impersonateAccount = async () => {
 
 const sendTokens = async () => {
   console.log("----------------------------------------------------------------");
-  console.log("Sendingimport axios from "axios";
-  10,000 3CRV LP tokens to 'ADMIN_ADDRESS'");
+  console.log("Sending 10,000 3CRV LP tokens to 'ADMIN_ADDRESS'");
   console.log("----------------------------------------------------------------");
   spawnSync(
     "cast",
@@ -48,19 +48,9 @@ const stopImpersonatingAccount = async () => {
   console.log("----------------------------------------------------------------");
   console.log("Ending account impersonation");
   console.log("----------------------------------------------------------------");
-  spawnSync(
-    "cast", 
-    [
-      "rpc", 
-      "anvil_stopImpersonatingAccount", 
-      curveWhale, 
-      "-r", 
-      "http://localhost:8545"
-    ], 
-    {
+  spawnSync("cast", ["rpc", "anvil_stopImpersonatingAccount", curveWhale, "-r", "http://localhost:8545"], {
     stdio: "inherit",
-    }
-  );
+  });
 };
 
 const forgeScript = async () => {
