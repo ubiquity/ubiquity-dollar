@@ -71,11 +71,11 @@ jobs:
     needs: jobB
     name: Update Badge
     steps:
-      - name: coverage
+      - name: coverage update
         uses: RubbaBoy/BYOB@v1.3.0
         with:
-          NAME: time
+          NAME: coverage
           LABEL: 'Coverage'
-          STATUS: ${{ steps.cov-result.outputs.result }}
+          STATUS: ${{ needs.jobB.outputs.output1 }}
           COLOR: 00EEFF
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
