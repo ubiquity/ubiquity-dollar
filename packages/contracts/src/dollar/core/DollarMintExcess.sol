@@ -1,16 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../interfaces/IERC20Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
-import "../interfaces/IERC20Ubiquity.sol";
 import "../interfaces/IDollarMintExcess.sol";
 import "../interfaces/IMetaPool.sol";
-import "../SushiSwapPool.sol";
-import "../libs/ABDKMathQuad.sol";
 import "./UbiquityDollarManager.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards
@@ -20,14 +19,14 @@ contract DollarMintExcess is IDollarMintExcess {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     uint256 private immutable _minAmountToDistribute = 100 ether;
     IUniswapV2Router01 private immutable _router =
         IUniswapV2Router01(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F); // SushiV2Router02
 
     /// @param _manager the address of the manager contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function distributeDollars() external override {
@@ -50,10 +49,10 @@ contract DollarMintExcess is IDollarMintExcess {
                 treasuryAddress,
                 fiftyPercent
             );
-            // convert Ubiquity Dollar to GovernanceToken-DollarToken LP on sushi and burn them
+            // convert DollarToken to GovernanceToken-DollarToken LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
             // convert remaining Ubiquity Dollar to curve LP tokens
-            // and transfer the curve LP tokens to the staking contract
+            // and transfer the curve LP tokens to the bonding contract
             _convertToCurveLPAndTransfer(
                 excessDollars - fiftyPercent - tenPercent
             );
@@ -78,8 +77,10 @@ contract DollarMintExcess is IDollarMintExcess {
         return amounts[1];
     }
 
-    // buy-back and burn Governance Token
-    function _governanceBuyBackLPAndBurn(uint256 amount) internal {
+    // buy-back and burn GovernanceToken
+    function _governanceBuyBackLPAndBurn(
+        uint256 amount
+    ) internal returns (uint256 amountA, uint256 amountB, uint256 liquidity) {
         bytes16 amountDollars = (amount.fromUInt()).div(uint256(2).fromUInt());
 
         // we need to approve sushi router
@@ -87,25 +88,17 @@ contract DollarMintExcess is IDollarMintExcess {
             address(_router),
             0
         );
-        IERC20Ubiquity(manager.dollarTokenAddress()).safeApprove(
-            address(_router),
-            amount
-        );
         uint256 amountGovernanceTokens = _swapDollarsForGovernance(
             amountDollars
         );
 
         IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
             address(_router),
-            0
-        );
-        IERC20Ubiquity(manager.governanceTokenAddress()).safeApprove(
-            address(_router),
             amountGovernanceTokens
         );
 
         // deposit liquidity and transfer to zero address (burn)
-        _router.addLiquidity(
+        (amountA, amountB, liquidity) = _router.addLiquidity(
             manager.dollarTokenAddress(),
             manager.governanceTokenAddress(),
             amountDollars.toUInt(),
@@ -134,7 +127,7 @@ contract DollarMintExcess is IDollarMintExcess {
             amount
         );
 
-        // swap amount of Ubiquity Dollar => 3CRV
+        // swap  amount of Ubiquity Dollar => 3CRV
         uint256 amount3CRVReceived = IMetaPool(
             manager.stableSwapMetaPoolAddress()
         ).exchange(0, 1, amount, 0);

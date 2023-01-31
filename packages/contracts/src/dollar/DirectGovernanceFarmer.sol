@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.16;
+pragma solidity 0.8.16;
 
 /**
  * @title Ubiquity.
@@ -14,19 +14,19 @@ import "./interfaces/IDepositZap.sol";
 import "./interfaces/IStaking.sol";
 import "./interfaces/IStakingShare.sol";
 import "./interfaces/IStableSwap3Pool.sol";
-import "./interfaces/IUbiquityDollarManager.sol";
+import "./core/UbiquityDollarManager.sol";
 
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    address public token2; //USDT decimal 6
-    address public token1; //USDC decimal 6
-    address public token0; //DAI
-    address public ubiquity3PoolLP;
-    address public ubiquityDollar;
-    address public depositZapUbiquityDollar;
+    address public immutable token2; //USDT decimal 6
+    address public immutable token1; //USDC decimal 6
+    address public immutable token0; //DAI
+    address public immutable ubiquity3PoolLP;
+    address public immutable ubiquityDollar;
+    address public immutable depositZapUbiquityDollar;
 
-    IUbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     event DepositSingle(
         address indexed sender,
@@ -49,13 +49,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint256 amount
     );
     event WithdrawAll(
-        address indexed sender,
-        uint256 stakingShareId,
-        uint256[4] amounts
+        address indexed sender, uint256 stakingShareId, uint256[4] amounts
     );
 
-    constructor(address _manager, address base3Pool, address depositZap) {
-        manager = IUbiquityDollarManager(_manager); // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
+    constructor(UbiquityDollarManager _manager, address base3Pool, address depositZap) {
+        manager = _manager; // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
         ubiquity3PoolLP = manager.stableSwapMetaPoolAddress(); // 0x20955CB69Ae1515962177D164dfC9522feef567E
         ubiquityDollar = manager.dollarTokenAddress(); // 0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6
         depositZapUbiquityDollar = depositZap; // 0xA79828DF1850E8a3A3064576f380D90aECDD3359;
@@ -67,7 +65,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     //TODO create updateConfig method
-
+    /// Needs to check that Operator is Authorized, From is Valid, ID exists
     function onERC1155Received(
         address operator,
         address from,
@@ -94,11 +92,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param amount Amount of tokens to deposit (For max: `uint256(-1)`)
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
      */
-    function depositSingle(
-        address token,
-        uint256 amount,
-        uint256 durationWeeks
-    ) external nonReentrant returns (uint256 stakingShareId) {
+    function depositSingle(address token, uint256 amount, uint256 durationWeeks)
+        external
+        nonReentrant
+        returns (uint256 stakingShareId)
+    {
         // DAI / USDC / USDT / Ubiquity Dollar
         require(
             isMetaPoolCoin(token),
@@ -129,9 +127,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //STEP1: add DAI, USDC, USDT or Ubiquity Dollar into metapool liquidity and get UAD3CRVf
         IERC20(token).safeIncreaseAllowance(depositZapUbiquityDollar, amount);
         lpAmount = IDepositZap(depositZapUbiquityDollar).add_liquidity(
-            ubiquity3PoolLP,
-            tokenAmounts,
-            0
+            ubiquity3PoolLP, tokenAmounts, 0
         );
 
         //STEP2: stake UAD3CRVf to Staking
@@ -140,19 +136,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         stakingShareId = IStaking(staking).deposit(lpAmount, durationWeeks);
 
         IStakingShare(stakingShare).safeTransferFrom(
-            address(this),
-            msg.sender,
-            stakingShareId,
-            1,
-            bytes("")
+            address(this), msg.sender, stakingShareId, 1, bytes("")
         );
         emit DepositSingle(
-            msg.sender,
-            token,
-            amount,
-            durationWeeks,
-            stakingShareId
-        );
+            msg.sender, token, amount, durationWeeks, stakingShareId
+            );
     }
 
     /**
@@ -169,10 +157,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     ) external nonReentrant returns (uint256 stakingShareId) {
         // at least one should be non zero Ubiquity Dollar / DAI / USDC / USDT
         require(
-            tokenAmounts[0] > 0 ||
-                tokenAmounts[1] > 0 ||
-                tokenAmounts[2] > 0 ||
-                tokenAmounts[3] > 0,
+            tokenAmounts[0] > 0 || tokenAmounts[1] > 0 || tokenAmounts[2] > 0
+                || tokenAmounts[3] > 0,
             "amounts==0"
         );
         require(
@@ -181,48 +167,36 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         );
         if (tokenAmounts[0] > 0) {
             IERC20(ubiquityDollar).safeTransferFrom(
-                msg.sender,
-                address(this),
-                tokenAmounts[0]
+                msg.sender, address(this), tokenAmounts[0]
             );
             IERC20(ubiquityDollar).safeIncreaseAllowance(
-                depositZapUbiquityDollar,
-                tokenAmounts[0]
+                depositZapUbiquityDollar, tokenAmounts[0]
             );
         }
         if (tokenAmounts[1] > 0) {
             IERC20(token0).safeTransferFrom(
-                msg.sender,
-                address(this),
-                tokenAmounts[1]
+                msg.sender, address(this), tokenAmounts[1]
             );
             IERC20(token0).safeIncreaseAllowance(
-                depositZapUbiquityDollar,
-                tokenAmounts[1]
+                depositZapUbiquityDollar, tokenAmounts[1]
             );
         }
         //Note, due to USDT implementation, normal transferFrom does not work and have an error of "function returned an unexpected amount of data"
         //require(IERC20(token).transferFrom(msg.sender, address(this), amount), "sender cannot transfer specified fund");
         if (tokenAmounts[2] > 0) {
             IERC20(token1).safeTransferFrom(
-                msg.sender,
-                address(this),
-                tokenAmounts[2]
+                msg.sender, address(this), tokenAmounts[2]
             );
             IERC20(token1).safeIncreaseAllowance(
-                depositZapUbiquityDollar,
-                tokenAmounts[2]
+                depositZapUbiquityDollar, tokenAmounts[2]
             );
         }
         if (tokenAmounts[3] > 0) {
             IERC20(token2).safeTransferFrom(
-                msg.sender,
-                address(this),
-                tokenAmounts[3]
+                msg.sender, address(this), tokenAmounts[3]
             );
             IERC20(token2).safeIncreaseAllowance(
-                depositZapUbiquityDollar,
-                tokenAmounts[3]
+                depositZapUbiquityDollar, tokenAmounts[3]
             );
         }
         address staking = manager.stakingContractAddress();
@@ -233,9 +207,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //STEP1: add DAI, USDC, USDT or Ubiquity Dollar into metapool liquidity and get UAD3CRVf
 
         lpAmount = IDepositZap(depositZapUbiquityDollar).add_liquidity(
-            ubiquity3PoolLP,
-            tokenAmounts,
-            0
+            ubiquity3PoolLP, tokenAmounts, 0
         );
 
         //STEP2: stake UAD3CRVf to Staking
@@ -244,18 +216,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         stakingShareId = IStaking(staking).deposit(lpAmount, durationWeeks);
 
         IStakingShare(stakingShare).safeTransferFrom(
-            address(this),
-            msg.sender,
-            stakingShareId,
-            1,
-            bytes("")
+            address(this), msg.sender, stakingShareId, 1, bytes("")
         );
         emit DepositMulti(
-            msg.sender,
-            tokenAmounts,
-            durationWeeks,
-            stakingShareId
-        );
+            msg.sender, tokenAmounts, durationWeeks, stakingShareId
+            );
     }
 
     /**
@@ -272,25 +237,20 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address staking = manager.stakingContractAddress();
         address stakingShare = manager.stakingShareAddress();
 
-        uint256[] memory stakingShareIds = IStakingShare(stakingShare)
-            .holderTokens(msg.sender);
+        uint256[] memory stakingShareIds =
+            IStakingShare(stakingShare).holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
         //stake.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "!bond owner");
 
         //transfer bondingShare NFT token from msg.sender to this address
         IStakingShare(stakingShare).safeTransferFrom(
-            msg.sender,
-            address(this),
-            stakingShareId,
-            1,
-            "0x"
+            msg.sender, address(this), stakingShareId, 1, "0x"
         );
 
         // Get Stake
-        IStakingShare.Stake memory stake = IStakingShare(stakingShare).getStake(
-            stakingShareId
-        );
+        IStakingShare.Stake memory stake =
+            IStakingShare(stakingShare).getStake(stakingShareId);
 
         // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
         //address staking = ubiquityManager.stakingContractAddress();
@@ -298,18 +258,13 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
         IStakingShare(stakingShare).setApprovalForAll(staking, false);
 
-        uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(
-            address(this)
-        );
-        uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress())
-            .balanceOf(address(this));
+        uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));
+        uint256 governanceTokenAmount =
+            IERC20(manager.governanceTokenAddress()).balanceOf(address(this));
 
         // STEP2 : Withdraw  3Crv LPs from meta pool to get back Ubiquity Dollar, DAI, USDC or USDT
 
-        IERC20(ubiquity3PoolLP).approve(
-            depositZapUbiquityDollar,
-            lpTokenAmount
-        );
+        IERC20(ubiquity3PoolLP).approve(depositZapUbiquityDollar, lpTokenAmount);
         tokenAmounts = IDepositZap(depositZapUbiquityDollar).remove_liquidity(
             ubiquity3PoolLP,
             lpTokenAmount,
@@ -320,8 +275,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IERC20(token1).safeTransfer(msg.sender, tokenAmounts[2]);
         IERC20(token2).safeTransfer(msg.sender, tokenAmounts[3]);
         IERC20(manager.governanceTokenAddress()).safeTransfer(
-            msg.sender,
-            governanceTokenAmount
+            msg.sender, governanceTokenAmount
         );
 
         emit WithdrawAll(msg.sender, stakingShareId, tokenAmounts);
@@ -347,8 +301,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         address staking = manager.stakingContractAddress();
         address stakingShare = manager.stakingShareAddress();
 
-        uint256[] memory stakingShareIds = IStakingShare(stakingShare)
-            .holderTokens(msg.sender);
+        uint256[] memory stakingShareIds =
+            IStakingShare(stakingShare).holderTokens(msg.sender);
         //Need to verify msg.sender by holderToken history.
         //stake.minter is this contract address so that cannot use it for verification.
         require(
@@ -358,17 +312,12 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
 
         //transfer bondingShare NFT token from msg.sender to this address
         IStakingShare(stakingShare).safeTransferFrom(
-            msg.sender,
-            address(this),
-            stakingShareId,
-            1,
-            "0x"
+            msg.sender, address(this), stakingShareId, 1, "0x"
         );
 
         // Get Stake
-        IStakingShare.Stake memory stake = IStakingShare(stakingShare).getStake(
-            stakingShareId
-        );
+        IStakingShare.Stake memory stake =
+            IStakingShare(stakingShare).getStake(stakingShareId);
 
         // STEP 1 : Withdraw Ubiquity Staking Shares to get back uAD3CRV-f LPs
         //address staking = ubiquityManager.stakingContractAddress();
@@ -376,32 +325,27 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         IStaking(staking).removeLiquidity(stake.lpAmount, stakingShareId);
         IStakingShare(stakingShare).setApprovalForAll(staking, false);
 
-        uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(
-            address(this)
-        );
-        uint256 governanceTokenAmount = IERC20(manager.governanceTokenAddress())
-            .balanceOf(address(this));
+        uint256 lpTokenAmount = IERC20(ubiquity3PoolLP).balanceOf(address(this));
+        uint256 governanceTokenAmount =
+            IERC20(manager.governanceTokenAddress()).balanceOf(address(this));
 
         // STEP2 : Withdraw  3Crv LPs from meta pool to get back Ubiquity Dollar, DAI, USDC or USDT
         uint128 tokenIndex = token == ubiquityDollar
             ? 0
             : (token == token0 ? 1 : (token == token1 ? 2 : 3));
-        IERC20(ubiquity3PoolLP).approve(
-            depositZapUbiquityDollar,
-            lpTokenAmount
+        require(
+            IERC20(ubiquity3PoolLP).approve(
+                depositZapUbiquityDollar, lpTokenAmount
+            )
         );
         tokenAmount = IDepositZap(depositZapUbiquityDollar)
             .remove_liquidity_one_coin(
-                ubiquity3PoolLP,
-                lpTokenAmount,
-                int128(tokenIndex),
-                0
-            ); //[Ubiquity Dollar, DAI, USDC, USDT]
+            ubiquity3PoolLP, lpTokenAmount, int128(tokenIndex), 0
+        ); //[UAD, DAI, USDC, USDT]
 
         IERC20(token).safeTransfer(msg.sender, tokenAmount);
         IERC20(manager.governanceTokenAddress()).safeTransfer(
-            msg.sender,
-            governanceTokenAmount
+            msg.sender, governanceTokenAmount
         );
 
         emit Withdraw(msg.sender, stakingShareId, token, tokenAmount);
@@ -420,9 +364,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     function isMetaPoolCoin(address token) public view returns (bool) {
-        return (token == token2 ||
-            token == token1 ||
-            token == token0 ||
-            token == ubiquityDollar);
+        return (
+            token == token2 || 
+            token == token1 || 
+            token == token0 || 
+            token == ubiquityDollar
+        );
     }
 }

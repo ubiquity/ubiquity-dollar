@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity >=0.8.10;
+pragma solidity 0.8.16;
 
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC4626} from "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
@@ -40,7 +40,7 @@ contract MockERC4626 is ERC4626 {
     ) public virtual override returns (uint256 assets) {
         require(shares <= maxMint(receiver), "ERC4626: mint more than max");
 
-        uint256 assets = previewMint(shares);
+        assets = previewMint(shares);
         _deposit(_msgSender(), receiver, assets, shares);
         afterDeposit(assets, shares);
         return assets;
@@ -56,7 +56,7 @@ contract MockERC4626 is ERC4626 {
             "ERC4626: withdraw more than max"
         );
 
-        uint256 shares = previewWithdraw(assets);
+        shares = previewWithdraw(assets);
         beforeWithdraw(assets, shares);
         _withdraw(_msgSender(), receiver, owner, assets, shares);
 

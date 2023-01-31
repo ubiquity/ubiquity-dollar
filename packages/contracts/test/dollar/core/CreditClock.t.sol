@@ -9,7 +9,6 @@ contract CreditClockTest is LocalTestHelper {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager manager;
     CreditClock creditClock;
 
     bytes16 private immutable one = uint256(1).fromUInt();
@@ -20,7 +19,7 @@ contract CreditClockTest is LocalTestHelper {
         bytes16 ratePerBlock
     );
 
-    function setUp() public {
+    function setUp() public override {
         manager = new UbiquityDollarManager(address(this));
         creditClock = new CreditClock(
             manager,

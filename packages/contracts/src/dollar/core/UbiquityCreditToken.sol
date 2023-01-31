@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "../ERC20Ubiquity.sol";
+import "src/dollar/core/UbiquityDollarManager.sol";
 
 contract UbiquityCreditToken is ERC20Ubiquity {
-    constructor(
-        address _manager
-    ) ERC20Ubiquity(_manager, "Ubiquity Auto Redeem", "uAR") {} // solhint-disable-line no-empty-blocks
+    constructor(UbiquityDollarManager _manager)
+        ERC20Ubiquity(_manager, "Ubiquity Auto Redeem", "uAR")
+    {} // solhint-disable-line no-empty-blocks
 
     /// @notice raise capital in form of Ubiquity Credit Token (only redeemable when Ubiquity Dollar > 1$)
     /// @param amount the amount to be minted

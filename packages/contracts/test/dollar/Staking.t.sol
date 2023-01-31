@@ -98,9 +98,8 @@ contract RemoteZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
-        Staking broken = new Staking(
-            address(manager),
-            address(stakingFormulas),
+        Staking broken = new Staking(manager,
+            stakingFormulas,
             ogsEmpty,
             balances,
             lockup
@@ -111,8 +110,8 @@ contract RemoteZeroStateTest is ZeroState {
         balances.push(1);
         vm.expectRevert("balances array not same length");
         Staking broken = new Staking(
-            address(manager),
-            address(stakingFormulas),
+            manager,
+            stakingFormulas,
             ogs,
             balances,
             lockup
@@ -123,8 +122,8 @@ contract RemoteZeroStateTest is ZeroState {
         lockup.push(1);
         vm.expectRevert("weeks array not same length");
         Staking broken = new Staking(
-            address(manager),
-            address(stakingFormulas),
+            manager,
+            stakingFormulas,
             ogs,
             balances,
             lockup
@@ -159,14 +158,15 @@ contract RemoteZeroStateTest is ZeroState {
     function testSetStakingFormula() public {
         assertEq(
             bytes20(address(stakingFormulas)),
-            bytes20(staking.stakingFormulasAddress())
+            bytes20(address(staking.stakingFormulas()))
         );
-        vm.prank(admin);
-        staking.setStakingFormulasAddress(secondAccount);
+        vm.startPrank(admin);
+        StakingFormulas steak = new StakingFormulas();
+        staking.setStakingFormulas(steak);
+        vm.stopPrank();
 
         assertEq(
-            bytes20(secondAccount),
-            bytes20(staking.stakingFormulasAddress())
+            bytes20(address(steak)), bytes20(address(staking.stakingFormulas()))
         );
     }
 

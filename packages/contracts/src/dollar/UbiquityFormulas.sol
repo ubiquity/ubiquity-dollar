@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import {IUbiquityFormulas} from "./interfaces/IUbiquityFormulas.sol";
 
-contract UbiquityFormulas {
+contract UbiquityFormulas is IUbiquityFormulas {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
@@ -12,7 +13,7 @@ contract UbiquityFormulas {
     /// @param _weeks , minimum duration of staking period
     /// @param _multiplier , staking discount multiplier = 0.0001
     /// @return _shares , amount of shares
-    /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
+    /// @notice shares = (1 + multiplier * weeks^3/2) * uLP
     //          D32 = D^3/2
     //          S = m * D32 * A + A
     function durationMultiply(
@@ -23,78 +24,87 @@ contract UbiquityFormulas {
         bytes16 unit = uint256(1 ether).fromUInt();
         bytes16 d = _weeks.fromUInt();
         bytes16 d32 = (d.mul(d).mul(d)).sqrt();
-        bytes16 m = _multiplier.fromUInt().div(unit); // 0.0001
+        ///bytes16 m = multiplier.fromUInt().div(unit); // 0.0001
         bytes16 a = _uLP.fromUInt();
 
-        _shares = m.mul(d32).mul(a).add(a).toUInt();
+        _shares = _multiplier
+            .fromUInt()
+            .mul(d32)
+            .mul(a)
+            .div(unit)
+            .add(a)
+            .toUInt();
     }
 
     /// @dev formula bonding
-    /// @param _shares , amount of shares
-    /// @param _currentShareValue , current share value
-    /// @param _targetPrice , target Ubiquity Dollar price
-    /// @return _uBOND , amount of bonding shares
-    /// @notice UBOND = _shares / _currentShareValue * _targetPrice
-    // newShares = A / V * T
-    function bonding(
-        uint256 _shares,
-        uint256 _currentShareValue,
-        uint256 _targetPrice
-    ) public pure returns (uint256 _uBOND) {
-        bytes16 a = _shares.fromUInt();
-        bytes16 v = _currentShareValue.fromUInt();
-        bytes16 t = _targetPrice.fromUInt();
+    /// @param shares , amount of shares
+    /// @param currentShareValue , current share value
+    /// @param targetPrice , target Ubiquity Dollar price
+    /// @return uBOND , amount of bonding shares
+    /// @notice UBOND = shares * targetPrice / currentShareValue
+    // newShares = A * T / V
+    function staking(
+        uint256 shares,
+        uint256 currentShareValue,
+        uint256 targetPrice
+    ) public pure returns (uint256 uBOND) {
+        bytes16 a = shares.fromUInt();
+        bytes16 v = currentShareValue.fromUInt();
+        bytes16 t = targetPrice.fromUInt();
 
-        _uBOND = a.div(v).mul(t).toUInt();
+        uBOND = a.mul(t).div(v).toUInt();
     }
 
     /// @dev formula redeem bonds
-    /// @param _uBOND , amount of bonding shares
-    /// @param _currentShareValue , current share value
-    /// @param _targetPrice , target uAD price
-    /// @return _uLP , amount of LP tokens
-    /// @notice _uLP = _uBOND * _currentShareValue / _targetPrice
-    // _uLP = A * V / T
-    function redeemBonds(
-        uint256 _uBOND,
-        uint256 _currentShareValue,
-        uint256 _targetPrice
-    ) public pure returns (uint256 _uLP) {
-        bytes16 a = _uBOND.fromUInt();
-        bytes16 v = _currentShareValue.fromUInt();
-        bytes16 t = _targetPrice.fromUInt();
+    /// @param uBOND , amount of bonding shares
+    /// @param currentShareValue , current share value
+    /// @param targetPrice , target uAD price
+    /// @return uLP , amount of LP tokens
+    /// @notice uLP = uBOND * currentShareValue / targetPrice
+    // uLP = A * V / T
+    function redeemShares(
+        uint256 uBOND,
+        uint256 currentShareValue,
+        uint256 targetPrice
+    ) public pure returns (uint256 uLP) {
+        bytes16 a = uBOND.fromUInt();
+        bytes16 v = currentShareValue.fromUInt();
+        bytes16 t = targetPrice.fromUInt();
 
-        _uLP = a.mul(v).div(t).toUInt();
+        uLP = a.mul(v).div(t).toUInt();
     }
 
     /// @dev formula bond price
-    /// @param _totalULP , total LP tokens
-    /// @param _totalUBOND , total bond shares
-    /// @param _targetPrice ,  target Ubiquity Dollar price
-    /// @return _priceUBOND , bond share price
+    /// @param totalULP , total LP tokens
+    /// @param totalUBOND , total bond shares
+    /// @param targetPrice ,  target Ubiquity Dollar price
+    /// @return priceUBOND , bond share price
     /// @notice
-    // IF _totalUBOND = 0  priceBOND = TARGET_PRICE
+    // IF totalUBOND = 0  priceBOND = TARGET_PRICE
     // ELSE                priceBOND = totalLP / totalShares * TARGET_PRICE
     // R = T == 0 ? 1 : LP / S
     // P = R * T
-    function bondPrice(
-        uint256 _totalULP,
-        uint256 _totalUBOND,
-        uint256 _targetPrice
-    ) public pure returns (uint256 _priceUBOND) {
-        bytes16 lp = _totalULP.fromUInt();
-        bytes16 s = _totalUBOND.fromUInt();
-        bytes16 r = _totalUBOND == 0 ? uint256(1).fromUInt() : lp.div(s);
-        bytes16 t = _targetPrice.fromUInt();
+    function sharePrice(
+        uint256 totalULP,
+        uint256 totalUBOND,
+        uint256 targetPrice
+    ) public pure returns (uint256 priceUBOND) {
+        bytes16 lp = totalULP.fromUInt();
+        bytes16 s = totalUBOND.fromUInt();
+        bytes16 t = targetPrice.fromUInt();
 
-        _priceUBOND = r.mul(t).toUInt();
+        if (totalUBOND == 0) {
+            priceUBOND = uint256(1).fromUInt().mul(t).toUInt();
+        } else {
+            priceUBOND = lp.mul(t).div(s).toUInt();
+        }
     }
 
-    /// @dev formula Governance Token multiply
-    /// @param _multiplier , initial Governance Token min multiplier
+    /// @dev formula governance multiply
+    /// @param _multiplier , initial governance min multiplier
     /// @param _price , current share price
-    /// @return _newMultiplier , new Governance Token min multiplier
-    /// @notice new_multiplier = multiplier * ( 1.05 / (1 + abs( 1 - price ) ) )
+    /// @return _newMultiplier , new governance min multiplier
+    /// @notice newMultiplier = multiplier * ( 1.05 / (1 + abs( 1 - price ) ) )
     // nM = M * C / A
     // A = ( 1 + abs( 1 - P)))
     // 5 >= multiplier >= 0.2

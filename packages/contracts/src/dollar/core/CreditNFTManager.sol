@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -22,7 +22,7 @@ import "./CreditNFT.sol";
 contract CreditNFTManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     //the amount of dollars we minted this cycle, so we can calculate delta.
     // should be reset to 0 when cycle ends
@@ -53,8 +53,8 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param _manager the address of the manager contract so we can fetch variables
     /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
     /// once set (unless migrated)
-    constructor(address _manager, uint256 _creditNFTLengthBlocks) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager, uint256 _creditNFTLengthBlocks) {
+        manager = _manager;
         creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }
 
@@ -276,7 +276,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             manager.creditTokenAddress()
         );
         creditToken.mint(address(this), amount);
-        creditToken.transfer(msg.sender, amount);
+        require(
+            creditToken.transfer(msg.sender, amount),
+            "CreditNFTManager: Credit Token Transfer Failed"
+        );
 
         return creditToken.balanceOf(msg.sender);
     }
@@ -315,7 +318,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
             creditToRedeem = maxRedeemableCredit;
         }
         creditToken.burnFrom(msg.sender, creditToRedeem);
-        dollarToken.transfer(msg.sender, creditToRedeem);
+        require(
+            dollarToken.transfer(msg.sender, amount),
+            "CreditNFTManager: Credit Token Transfer Failed"
+        );
 
         return amount - creditToRedeem;
     }
@@ -370,7 +376,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
 
         // creditNFTManager must be an operator to transfer on behalf of msg.sender
         creditNFT.burnCreditNFT(msg.sender, creditNFTToRedeem, id);
-        dollarToken.transfer(msg.sender, creditNFTToRedeem);
+        require(
+            creditToken.transfer(msg.sender, amount),
+            "CreditNFTManager: Credit Token Transfer Failed"
+        );
 
         return amount - (creditNFTToRedeem);
     }
@@ -408,9 +417,12 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            dollarToken.transfer(
-                manager.getExcessDollarsDistributor(address(this)),
-                excessDollars
+            require(
+                dollarToken.transfer(
+                    manager.getExcessDollarsDistributor(address(this)),
+                    excessDollars
+                ),
+                "Dollar: Transfer failed"
             );
             dollarsDistributor.distributeDollars();
         }

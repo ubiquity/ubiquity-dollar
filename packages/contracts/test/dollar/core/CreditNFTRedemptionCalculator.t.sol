@@ -13,11 +13,11 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
     address dollarManagerAddress;
     address creditNFTCalculatorAddress;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
-        creditNFTCalculatorAddress = address(
-            new CreditNFTRedemptionCalculator(dollarManagerAddress)
-        );
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
+        creditNFTCalculatorAddress =
+            address(new CreditNFTRedemptionCalculator(manager));
     }
 
     function test_getCreditNFTAmount_revertsIfDebtTooHigh() public {
