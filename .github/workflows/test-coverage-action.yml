@@ -65,17 +65,12 @@ jobs:
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f2,3 -d'|')"
           echo "::set-output name=result::$RES"
-  
-  jobC:
-    runs-on: ubuntu-latest
-    needs: jobB
-    name: Update Badge
-    steps:
+          echo $RES
       - name: coverage update
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: coverage
           LABEL: 'Coverage'
-          STATUS: ${{ needs.jobB.outputs.output1 }}
+          STATUS: ${{ steps.cov-result.outputs.result }}
           COLOR: 00EEFF
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
