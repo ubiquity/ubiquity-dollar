@@ -58,6 +58,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: cov-result
-          run: |
-            echo "coverage results downloaded"
+      - shell: bash
+        run: |
+          echo "coverage results downloaded"
 
