@@ -25,13 +25,11 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         super.setUp();
         vm.startPrank(admin);
         dollar_addr = address(new UbiquityDollarToken(manager));
-        manager.grantRole(
-            keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin
-        );
+        manager.grantRole(keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin);
         vm.stopPrank();
     }
 
-    function test_setIncentiveContract() public {
+    function testSetIncentiveContract_ShouldRevert_IfNotAdmin() public {
         vm.prank(mock_sender);
         vm.expectRevert("Dollar: must have admin role");
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
@@ -48,7 +46,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         );
     }
 
-    function test_transferIncentive() public {
+    function testTransfer_ShouldCallIncentivize_IfValidTransfer() public {
         address userA = address(0x100001);
         address userB = address(0x100001);
         vm.startPrank(admin);

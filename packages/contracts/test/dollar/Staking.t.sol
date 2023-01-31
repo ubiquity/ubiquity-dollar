@@ -71,7 +71,7 @@ contract ZeroState is LiveTestHelper {
 contract RemoteZeroStateTest is ZeroState {
     using stdStorage for StdStorage;
 
-    function testAddUserToMigrate(uint256 x, uint256 y) public {
+    function testAddUserToMigrate_ShouldWork(uint256 x, uint256 y) public {
         x = bound(x, 1, 2 ** 128 - 1);
         y = bound(y, 1, 208);
         console.logUint(x);
@@ -96,7 +96,7 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(y, checkWeeks);
     }
 
-    function testCannotDeployEmptyAddress() public {
+    function test_ShouldRevert_IfDeployingAnEmptyAddress() public {
         vm.expectRevert("address array empty");
         Staking broken = new Staking(
             manager,
@@ -107,7 +107,7 @@ contract RemoteZeroStateTest is ZeroState {
         );
     }
 
-    function testCannotDeployDifferentLength1() public {
+    function test_ShouldRevert_IfBalancesArrayNotSameLength() public {
         balances.push(1);
         vm.expectRevert("balances array not same length");
         Staking broken = new Staking(
@@ -119,7 +119,7 @@ contract RemoteZeroStateTest is ZeroState {
         );
     }
 
-    function testCannotDeployDifferentLength2() public {
+    function test_ShouldRevert_IfWeeksArrayNotSameLength() public {
         lockup.push(1);
         vm.expectRevert("weeks array not same length");
         Staking broken = new Staking(
@@ -131,32 +131,34 @@ contract RemoteZeroStateTest is ZeroState {
         );
     }
 
-    function testSetMigrator() public {
+    function testSetMigrator_ShouldSetMigrator() public {
         vm.prank(admin);
         staking.setMigrator(secondAccount);
         assertEq(secondAccount, staking.migrator());
     }
 
-    function testCannotSetMigratorNotMigrator() public {
+    function testSetMigrator_ShouldRevert_IfNotMigrator() public {
         vm.expectRevert("not migrator");
         vm.prank(secondAccount);
         staking.setMigrator(fourthAccount);
     }
 
-    function testSetMigrating() public {
+    function testSetMigrating_ShouldSetMigratingValue() public {
         assertEq(true, staking.migrating());
         vm.prank(admin);
         staking.setMigrating(false);
         assertEq(false, staking.migrating());
     }
 
-    function testCannotSetMigratingNotMigrator() public {
+    function testSetMigrating_ShouldRevert_IfNotMigrator() public {
         vm.expectRevert("not migrator");
         vm.prank(secondAccount);
         staking.setMigrating(false);
     }
 
-    function testSetStakingFormula() public {
+    function testSetStakingFormulaAddress_ShouldSetStakingFormulaAddressValue()
+        public
+    {
         assertEq(
             bytes20(address(stakingFormulas)),
             bytes20(address(staking.stakingFormulas()))
@@ -172,7 +174,7 @@ contract RemoteZeroStateTest is ZeroState {
         );
     }
 
-    function testCannotSetStakingFormula() public {
+    function testCannotSetStakingFormula_ShouldRevertWhenNotManager() public {
         vm.startPrank(secondAccount);
         StakingFormulas steak = new StakingFormulas();
         vm.expectRevert("not manager");
@@ -180,14 +182,17 @@ contract RemoteZeroStateTest is ZeroState {
         vm.stopPrank();
     }
 
-    function testAddProtocolToken() public {
-        vm.expectEmit(true, false, false, true);
+    function testAddProtocolToken_ShouldEmitProtocolTokenAddedAndAddProtocolToken()
+        public
+    {
         emit ProtocolTokenAdded(address(DAI));
         vm.prank(admin);
         staking.addProtocolToken(address(DAI));
     }
 
-    function testCannotAddProtocolToken() public {
+    function testAddProtocolToken_ShouldRevert_IfTokenIsPartOfTheProtocol()
+        public
+    {
         vm.prank(admin);
         staking.addProtocolToken(address(DAI));
 
@@ -196,13 +201,15 @@ contract RemoteZeroStateTest is ZeroState {
         staking.addProtocolToken(address(DAI));
     }
 
-    function testCannotAddProtocolTokenNotManager() public {
+    function testAddProtocolTokenNotManager_ShouldRevert_IfNotManager() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
         staking.addProtocolToken(secondAccount);
     }
 
-    function testRemoveProtocolToken() public {
+    function testRemoveProtocolToken_ShouldEmitProtocolTokenRemovedAndRemoveProtocolToken()
+        public
+    {
         vm.startPrank(admin);
         staking.addProtocolToken(address(DAI));
         vm.stopPrank();
@@ -215,19 +222,21 @@ contract RemoteZeroStateTest is ZeroState {
         vm.stopPrank();
     }
 
-    function testCannotRemoveProtocolToken() public {
+    function testRemoveProtocolToken_ShouldRevert_IfTokenIsNotPartOfTheProtocol()
+        public
+    {
         vm.expectRevert("collectable-dust::token-not-part-of-the-protocol");
         vm.prank(admin);
         staking.removeProtocolToken(address(DAI));
     }
 
-    function testCannotRemoveProtocolTokenNotManager() public {
+    function testRemoveProtocolToken_ShouldRevert_IfNotManager() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
         staking.removeProtocolToken(secondAccount);
     }
 
-    function testSendDust() public {
+    function testSendDust_ShouldEmitDustSentAndSendDust() public {
         vm.expectEmit(true, false, false, true);
         emit DustSent(fourthAccount, address(dollarToken), 1e18);
 
@@ -236,13 +245,13 @@ contract RemoteZeroStateTest is ZeroState {
         vm.stopPrank();
     }
 
-    function testCannotSendDustZeroAddress() public {
+    function testSendDust_ShouldRevert_IfZeroAddress() public {
         vm.expectRevert("collectable-dust::cant-send-dust-to-zero-address");
         vm.startPrank(admin);
         staking.sendDust(address(0), address(dollarToken), 1e18);
     }
 
-    function testCannotSendDustUnregisteredToken() public {
+    function testSendDust_ShouldRevert_IfTokenIsNotPartOfTheProtocol() public {
         vm.prank(admin);
         staking.addProtocolToken(address(dollarToken));
 
@@ -251,13 +260,13 @@ contract RemoteZeroStateTest is ZeroState {
         staking.sendDust(fourthAccount, address(dollarToken), 1e18);
     }
 
-    function testCannotSendDustNotManager() public {
+    function testSendDust_ShouldRevert_IfNotManager() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
         staking.sendDust(fourthAccount, address(dollarToken), 1e18);
     }
 
-    function testPause() public {
+    function testPause_ShouldEmitPausedAndPause() public {
         vm.expectEmit(true, false, false, true);
         emit Paused(admin);
 
@@ -265,7 +274,7 @@ contract RemoteZeroStateTest is ZeroState {
         staking.pause();
     }
 
-    function testUnpause() public {
+    function testUnpause_ShouldEmitsUnpausedAndUnpause() public {
         vm.prank(admin);
         staking.pause();
 
@@ -276,13 +285,15 @@ contract RemoteZeroStateTest is ZeroState {
         staking.unpause();
     }
 
-    function testCannotMigrateZeroId() public {
+    function testMigrate_ShouldRevert_IfZeroId() public {
         vm.expectRevert("not v1 address");
         vm.prank(fourthAccount);
         staking.migrate();
     }
 
-    function testSetStakingDiscountMultiplier(uint256 x) public {
+    function testSetStakingDiscountMultiplier_ShouldEmitStakingDiscountMultiplierUpdatedAndSetStakingDiscountMultiplier(
+        uint256 x
+    ) public {
         vm.expectEmit(true, false, false, true);
         emit StakingDiscountMultiplierUpdated(x);
         vm.prank(admin);
@@ -290,13 +301,17 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(x, staking.stakingDiscountMultiplier());
     }
 
-    function testCannotSetStakingDiscountMultiplier(uint256 x) public {
+    function testSetStakingDiscountMultiplier_ShouldRevert_IfNotManager(
+        uint256 x
+    ) public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
         staking.setStakingDiscountMultiplier(x);
     }
 
-    function testSetBlockCountInAWeek(uint256 x) public {
+    function testSetBlockCountInAWeek_ShouldEmitBlockCountInAWeekUpdatedAndSetBlockCountInAWeek(
+        uint256 x
+    ) public {
         vm.expectEmit(true, false, false, true);
         emit BlockCountInAWeekUpdated(x);
         vm.prank(admin);
@@ -304,13 +319,18 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(x, staking.blockCountInAWeek());
     }
 
-    function testCannotSetBlockCountInAWeekNotManager(uint256 x) public {
+    function testSetBlockCountInAWeek_ShouldRevert_IfNotManager(
+        uint256 x
+    ) public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
         staking.setBlockCountInAWeek(x);
     }
 
-    function testDeposit(uint256 lpAmount, uint256 lockup) public {
+    function testDeposit_ShouldDeposit(
+        uint256 lpAmount,
+        uint256 lockup
+    ) public {
         lpAmount = bound(lpAmount, 1, 100e18);
         lockup = bound(lockup, 1, 208);
         uint256 preBalance = metapool.balanceOf(stakingMinAccount);
@@ -357,14 +377,14 @@ contract RemoteZeroStateTest is ZeroState {
         assertLt(bsMinAmount[0], bsMaxAmount[0]);
     }
 
-    function testCannotStakeMoreThan4Years(uint256 _weeks) public {
+    function testDeposit_ShouldRevert_IfMoreThan4Years(uint256 _weeks) public {
         _weeks = bound(_weeks, 209, 2 ** 256 - 1);
         vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
         staking.deposit(1, _weeks);
     }
 
-    function testCannotDepositZeroWeeks() public {
+    function testDeposit_ShouldRevert_IfZeroWeeks() public {
         vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
         staking.deposit(1, 0);
@@ -400,7 +420,9 @@ contract RemoteDepositStateTest is DepositState {
     address[] path1;
     address[] path2;
 
-    function testCannotDollarPriceResetNotManager(uint256 amount) public {
+    function testDollarPriceReset_ShouldRevert_IfNotManager(
+        uint256 amount
+    ) public {
         amount = bound(
             amount,
             1000e18,
@@ -412,7 +434,9 @@ contract RemoteDepositStateTest is DepositState {
         staking.dollarPriceReset(amount);
     }
 
-    function testDollarPriceReset(uint256 amount) public {
+    function testDollarPriceReset_ShouldResetDollarPrice(
+        uint256 amount
+    ) public {
         amount = bound(
             amount,
             1000e18,
@@ -431,7 +455,7 @@ contract RemoteDepositStateTest is DepositState {
         assertLt(dollarPostBalance, dollarPreBalance);
     }
 
-    function testCRVPriceReset(uint256 amount) public {
+    function testCRVPriceReset_ShouldResetCRVPrice(uint256 amount) public {
         amount = bound(
             amount,
             1000e18,
@@ -448,7 +472,9 @@ contract RemoteDepositStateTest is DepositState {
         assertLt(crvPostBalance, crvPreBalance);
     }
 
-    function testCannotCRVPriceResetNotManager(uint256 amount) public {
+    function testCRVPriceReset_ShouldRevert_IfNotManager(
+        uint256 amount
+    ) public {
         amount = bound(
             amount,
             1000e18,
@@ -460,7 +486,10 @@ contract RemoteDepositStateTest is DepositState {
         staking.crvPriceReset(amount);
     }
 
-    function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {
+    function testAddLiquidity_ShouldAddLiquidity(
+        uint256 amount,
+        uint256 weeksLockup
+    ) public {
         weeksLockup = bound(weeksLockup, 1, 208);
         amount = bound(amount, 1e18, 2 ** 128 - 1);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -484,7 +513,7 @@ contract RemoteDepositStateTest is DepositState {
         assertGt(postShares[0], preShares[0]);
     }
 
-    function testRemoveLiquidity(uint256 amount) public {
+    function testRemoveLiquidity_ShouldRemoveLiquidity(uint256 amount) public {
         vm.roll(20000000);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
         amount = bound(amount, 1, stake.lpAmount);
@@ -506,7 +535,7 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(preBal + amount, postBal);
     }
 
-    function testPendingLPRewards() public {
+    function testPendingLPRewards_ShouldReturn_PendingLPRewards() public {
         uint256 prePending = staking.pendingLpRewards(3);
 
         deal(address(metapool), address(staking), 1000000e18);
@@ -515,7 +544,9 @@ contract RemoteDepositStateTest is DepositState {
         assertGt(postPending, prePending);
     }
 
-    function testCannotRemoveMoreLiquidityThanBalance(uint256 amount) public {
+    function testRemoveLiquidity_ShouldRevert_IfAmountIsMoreThanBalance(
+        uint256 amount
+    ) public {
         vm.roll(20000000);
         StakingShare.Stake memory stake = stakingShare.getStake(2);
         amount = bound(amount, stake.lpAmount + 1, 2 ** 256 - 1);
@@ -524,14 +555,14 @@ contract RemoteDepositStateTest is DepositState {
         staking.removeLiquidity(amount, 2);
     }
 
-    function testCannotCallOthersStake() public {
+    function testRemoveLiquidity_ShouldRevert_IfNotOwner() public {
         vm.roll(20000000);
         vm.expectRevert("Staking: caller is not owner");
         vm.prank(stakingMinAccount);
         staking.removeLiquidity(1, 2);
     }
 
-    function testCannotWithdrawBeforeStakeExpires() public {
+    function testRemoveLiquidity_ShouldRevert_IfStakeNotExpired() public {
         vm.expectRevert("Staking: Redeem not allowed before staking time");
         vm.prank(stakingMaxAccount);
         staking.removeLiquidity(1, 3);

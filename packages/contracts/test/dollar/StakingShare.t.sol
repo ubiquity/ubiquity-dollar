@@ -58,7 +58,11 @@ contract RemoteDepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
-    function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
+    function testUpdateStake_ShouldUpdateStake(
+        uint128 amount,
+        uint128 debt,
+        uint256 end
+    ) public {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -67,7 +71,7 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake.endBlock, end);
     }
 
-    function testCannotUpdateStakeNotMinter(
+    function testUpdateStake_ShouldRevert_IfNotMinter(
         uint128 amount,
         uint128 debt,
         uint256 end
@@ -77,7 +81,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
     }
 
-    function testCannotUpdateStateWhenPaused(
+    function testUpdateStake_ShouldRevert_IfPaused(
         uint128 amount,
         uint128 debt,
         uint256 end
@@ -90,7 +94,11 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
     }
 
-    function testMint(uint128 deposited, uint128 debt, uint256 end) public {
+    function testMint_ShouldMint(
+        uint128 deposited,
+        uint128 debt,
+        uint256 end
+    ) public {
         vm.prank(admin);
         uint256 id = stakingShare.mint(
             secondAccount,
@@ -106,7 +114,7 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake.creationBlock, block.number);
     }
 
-    function testCannotMintZeroAddress(
+    function testMint_ShouldRevert_IfMintingToZeroAddress(
         uint128 deposited,
         uint128 debt,
         uint256 end
@@ -116,7 +124,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
-    function testCannotMintNotMinter(
+    function testMint_ShouldRevert_IfNotMinter(
         uint128 deposited,
         uint128 debt,
         uint256 end
@@ -127,7 +135,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
-    function testCannotMintWhenPaused(
+    function testMint_ShouldRevert_IfPaused(
         uint128 deposited,
         uint128 debt,
         uint256 end
@@ -140,7 +148,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
-    function testPause() public {
+    function testPause_ShouldPause() public {
         vm.expectEmit(true, false, false, true);
         emit Paused(admin);
 
@@ -148,13 +156,13 @@ contract RemoteDepositStateTest is DepositState {
         staking.pause();
     }
 
-    function testCannotPauseNotPauser() public {
+    function testPause_ShouldRevert_IfNotPauser() public {
         vm.expectRevert("not pauser");
         vm.prank(secondAccount);
         staking.pause();
     }
 
-    function testUnpause() public {
+    function testUnpause_ShouldUnpause() public {
         vm.prank(admin);
         staking.pause();
 
@@ -165,7 +173,7 @@ contract RemoteDepositStateTest is DepositState {
         staking.unpause();
     }
 
-    function testCannotUnpauseNotPauser() public {
+    function testUnpause_ShouldRevert_IfNotPauser() public {
         vm.prank(admin);
         staking.pause();
 
@@ -174,7 +182,7 @@ contract RemoteDepositStateTest is DepositState {
         staking.unpause();
     }
 
-    function testTransferFrom() public {
+    function testSafeTransferFrom_ShouldTransferTokenId() public {
         vm.prank(stakingMinAccount);
         stakingShare.setApprovalForAll(admin, true);
 
@@ -192,7 +200,7 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
-    function testCannotSafeTransferFromToAddressZero() public {
+    function testSafeTransferFrom_ShouldRevert_IfToAddressZero() public {
         vm.prank(stakingMinAccount);
         stakingShare.setApprovalForAll(admin, true);
 
@@ -208,7 +216,7 @@ contract RemoteDepositStateTest is DepositState {
         );
     }
 
-    function testCannotSafeTransferFromInsufficientBalance() public {
+    function testSafeTransferFrom_ShouldRevert_IfInsufficientBalance() public {
         vm.prank(fifthAccount);
         stakingShare.setApprovalForAll(admin, true);
 
@@ -218,7 +226,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.safeTransferFrom(fifthAccount, secondAccount, 1, 1, data);
     }
 
-    function testCannotSafeTransferFromWhenPaused() public {
+    function testSafeTransferFrom_ShouldRevert_IfPaused() public {
         vm.prank(admin);
         stakingShare.pause();
 
@@ -234,7 +242,7 @@ contract RemoteDepositStateTest is DepositState {
         );
     }
 
-    function testBatchTransfer() public {
+    function testSafeBatchTransferFrom_ShouldTransferTokenIds() public {
         ids.push(3);
         ids.push(4);
         amounts.push(1);
@@ -256,7 +264,7 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stakingShare.holderTokens(secondAccount), ids);
     }
 
-    function testCannotBatchTransferFromWhenPaused() public {
+    function testSafeBatchTransferFrom_ShouldRevert_IfPaused() public {
         vm.prank(admin);
         stakingShare.pause();
 
@@ -272,11 +280,11 @@ contract RemoteDepositStateTest is DepositState {
         );
     }
 
-    function testTotalSupply() public {
+    function testTotalSupply_ShouldReturn_TotalSupply() public {
         assertEq(stakingShare.totalSupply(), 4);
     }
 
-    function testGetStake() public {
+    function testGetStake_ShouldReturnStake() public {
         StakingShare.Stake memory stake = StakingShare.Stake(
             fourthAccount,
             fourthBal,
@@ -296,13 +304,13 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake1, stake2);
     }
 
-    function testHolderTokens() public {
+    function testHolderTokens_ShouldReturnHolderTokens() public {
         ids.push(1);
         uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
         assertEq(ids, ids_);
     }
 
-    function testSetUri() public {
+    function testSetUri_ShouldSetUri() public {
         string memory stringTest = "{'name':'Bonding Share','description':,"
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
@@ -315,7 +323,9 @@ contract RemoteDepositStateTest is DepositState {
         );
     }
 
-    function testCannotSetUriFromNonAllowedAddress() public {
+    function testSetUri_ShouldRevert_IfGovernanceTokenNotStakingManager()
+        public
+    {
         string memory stringTest = "{'a parsed json':'value'}";
         vm.expectRevert("Governance token: not staking manager");
         vm.prank(fifthAccount);

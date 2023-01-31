@@ -13,8 +13,9 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
     address metaPoolAddress;
 
     function setUp() public override {
-        metaPoolAddress =
-            address(new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress));
+        metaPoolAddress = address(
+            new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress)
+        );
         twapOracleAddress = address(
             new TWAPOracleDollar3pool(
                 metaPoolAddress,
@@ -24,7 +25,7 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
         );
     }
 
-    function test_overall() public {
+    function testConsultTWAPOracle_ShouldReturnCorrectPrices() public {
         // set the mock data for meta pool
         uint256[2] memory _price_cumulative_last = [
             uint256(100e18),

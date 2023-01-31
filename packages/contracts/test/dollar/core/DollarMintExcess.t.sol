@@ -110,7 +110,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         dollarMintExcessHarness.distributeDollars();
     }
 
-    function testSwapDollarsForGovernance_ShouldReturnSwapOutputAmount()
+    function testSwapDollarsForGovernance_ShouldReturn_SwapOutputAmount()
         public
     {
         // mock router

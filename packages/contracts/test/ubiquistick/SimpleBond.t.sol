@@ -52,26 +52,28 @@ contract ZeroState is Test {
 }
 
 contract ZeroStateTest is ZeroState {
-    function testSetSticker() public {
+    function testSetSticker_ShouldSetSticker() public {
         vm.prank(admin);
         bond.setSticker(address(stick));
         assertEq(bond.sticker(), address(stick));
     }
 
-    function testSetRewards(uint256 ratio) public {
+    function testSetRewards_ShouldSetRewards(uint256 ratio) public {
         vm.prank(admin);
         bond.setRewards(address(bondToken), ratio);
         assertEq(bond.rewardsRatio(address(bondToken)), ratio);
     }
 
-    function testSetVestingBlocks(uint256 blocks) public {
+    function testSetVestingBlocks_ShouldSetVestingBlocks(
+        uint256 blocks
+    ) public {
         blocks = bound(blocks, 1, 2 ** 256 - 1);
         vm.prank(admin);
         bond.setVestingBlocks(blocks);
         assertEq(bond.vestingBlocks(), blocks);
     }
 
-    function testSetTreasury() public {
+    function testSetTreasury_ShouldSetTreasury() public {
         vm.prank(admin);
         bond.setTreasury(admin);
         assertEq(bond.treasury(), admin);
@@ -113,7 +115,7 @@ contract StickerStateTest is StickerState {
         assertEq(amount, amount_);
     }
 
-    function testCanOnlyBondAllowedToken() public {
+    function testBond_ShouldRevert_IfTokenNotAllowed() public {
         vm.expectRevert("Token not allowed");
         vm.prank(secondAccount);
         bond.bond(address(fakeToken), 1);
@@ -149,7 +151,7 @@ contract BondedStateTest is BondedState {
     uint256[5] rewards;
     uint256[5] blocks_;
 
-    function testClaim(uint256 blocks) public {
+    function testClaim_ShouldClaimRewards(uint256 blocks) public {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
         uint256 preBal = rewardToken.balanceOf(firstAccount);
         vm.warp(block.number + blocks);
@@ -170,7 +172,9 @@ contract BondedStateTest is BondedState {
         assertEq(preBal + expected, rewardToken.balanceOf(firstAccount));
     }
 
-    function testClaimBond(uint256 blocks) public {
+    function testClaimBond_ShouldEmitLogClaimAndClaimBondRewards(
+        uint256 blocks
+    ) public {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
         uint256 preBal = rewardToken.balanceOf(secondAccount);
         vm.warp(block.number + blocks);
@@ -184,7 +188,7 @@ contract BondedStateTest is BondedState {
         assertEq(expected, claimed);
     }
 
-    function testWithdraw(uint256 amount) public {
+    function testWithdraw_ShouldWithdrawBondTokens(uint256 amount) public {
         amount = bound(amount, 1, bondToken.balanceOf(address(bond)));
         uint256 preBalTreasury = bondToken.balanceOf(treasury);
         uint256 preBalBond = bondToken.balanceOf(address(bond));
@@ -194,7 +198,7 @@ contract BondedStateTest is BondedState {
         assertEq(preBalBond - amount, bondToken.balanceOf(address(bond)));
     }
 
-    function testRewardsOf(uint256 blocks) public {
+    function testRewardsOf_ShouldReturnRewardsOfBond(uint256 blocks) public {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
 
         vm.warp(block.number + blocks);
@@ -233,7 +237,10 @@ contract BondedStateTest is BondedState {
         assertEq(claimableExpected, rewardsClaimable);
     }
 
-    function testRewardsBondOf(uint256 blocks, uint256 i) public {
+    function testRewardsBondOf_ShouldReturnCorrectValues(
+        uint256 blocks,
+        uint256 i
+    ) public {
         blocks = bound(blocks, 0, 2 ** 128 - 1);
         i = bound(i, 0, 4);
         vm.warp(block.number + blocks);
@@ -250,7 +257,7 @@ contract BondedStateTest is BondedState {
         assertEq(rewardClaimable, claimableExpected);
     }
 
-    function testBondsCount() public {
+    function testBondsCount_ShouldReturnCorrectCount() public {
         uint256 firstCount = bond.bondsCount(firstAccount);
         uint256 secondCount = bond.bondsCount(secondAccount);
 
