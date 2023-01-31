@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 interface ICollectableDust {
     event DustSent(address _to, address token, uint256 amount);

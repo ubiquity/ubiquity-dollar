@@ -1,4 +1,5 @@
 export const RPC_LIST: string[] = [
+  "https://eth.ubq.fi/v1/mainnet",
   "https://rpc.flashbots.net",
   "https://nodes.mewapi.io/rpc/eth",
   "https://cloudflare-eth.com",

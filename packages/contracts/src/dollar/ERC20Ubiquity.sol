@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -17,7 +17,7 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     UbiquityDollarManager public manager;
 
     // solhint-disable-next-line var-name-mixedcase
-    bytes32 public DOMAIN_SEPARATOR;
+    bytes32 public immutable DOMAIN_SEPARATOR;
     // keccak256("Permit(address owner,address spender,
     //                   uint256 value,uint256 nonce,uint256 deadline)");
     bytes32 public constant PERMIT_TYPEHASH =
@@ -60,13 +60,13 @@ contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
     }
 
     constructor(
-        address _manager,
+        UbiquityDollarManager _manager,
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {
         _tokenName = name_;
         _symbol = symbol_;
-        manager = UbiquityDollarManager(_manager);
+        manager = _manager;
         // sender must be UbiquityDollarManager roleAdmin
         // because he will get the admin, minter and pauser role on Ubiquity Dollar and we want to
         // manage all permissions through the manager

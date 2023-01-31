@@ -42,33 +42,21 @@ contract TestDiamond is DiamondSetup {
 
     function testSelectorsAssociatedWithCorrectFacet() public {
         for (uint i = 0; i < facetAddressList.length; i++) {
-            if (compareStrings(facetNames[i], "DiamondCutFacet")) {
+            if(compareStrings(facetNames[i], 'DiamondCutFacet')) {
                 for (uint j = 0; j < selectorsOfDiamondCutFacet.length; j++) {
-                    assertEq(
-                        facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfDiamondCutFacet[j])
-                    );
+                    assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfDiamondCutFacet[j]));
                 }
-            } else if (compareStrings(facetNames[i], "DiamondLoupeFacet")) {
+            } else if (compareStrings(facetNames[i], 'DiamondLoupeFacet')) {
                 for (uint j = 0; j < selectorsOfDiamondLoupeFacet.length; j++) {
-                    assertEq(
-                        facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfDiamondLoupeFacet[j])
-                    );
+                    assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfDiamondLoupeFacet[j]));
                 }
-            } else if (compareStrings(facetNames[i], "OwnershipFacet")) {
+            } else if (compareStrings(facetNames[i], 'OwnershipFacet')) {
                 for (uint j = 0; j < selectorsOfOwnershipFacet.length; j++) {
-                    assertEq(
-                        facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfOwnershipFacet[j])
-                    );
+                    assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfOwnershipFacet[j]));
                 }
-            } else if (compareStrings(facetNames[i], "ManagerFacet")) {
+            } else if (compareStrings(facetNames[i], 'ManagerFacet')) {
                 for (uint j = 0; j < selectorsOfManagerFacet.length; j++) {
-                    assertEq(
-                        facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfManagerFacet[j])
-                    );
+                    assertEq(facetAddressList[i], ILoupe.facetAddress(selectorsOfManagerFacet[j]));
                 }
             }
         }

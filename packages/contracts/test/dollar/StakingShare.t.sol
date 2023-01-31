@@ -52,7 +52,9 @@ contract RemoteDepositStateTest is DepositState {
     uint256[] ids;
     uint256[] amounts;
 
-    function testUpdateStake(uint128 amount, uint128 debt, uint256 end) public {
+    function testUpdateStake(uint128 amount, uint128 debt, uint256 end)
+        public
+    {
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
