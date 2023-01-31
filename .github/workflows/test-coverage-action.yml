@@ -8,41 +8,46 @@ on:
       - "v*"
 
 jobs:
-  check:
-    strategy:
-      fail-fast: true
+  setup:
+    check:
+      strategy:
+        fail-fast: true
 
-    name: Foundry project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
+      outputs:
+        lines: ${{ steps.coverage.outputs.test }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
+      name: Foundry project
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+          with:
+            submodules: recursive
 
-      - name: Install dependencies
-        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+        - name: Setup Node
+          uses: actions/setup-node@v3
+          with:
+            node-version: "18"
 
-      - name: Setup Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
+        - name: Install dependencies
+          run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
 
-      - name: Install
-        run: yarn install --mode=skip-build && yarn allow-scripts
+        - name: Setup Foundry
+          uses: onbjerg/foundry-toolchain@v1
+          with:
+            version: nightly
 
-      - name: Forge Install
-        run: yarn workspace @ubiquity/contracts forge install
+        - name: Install
+          run: yarn install --mode=skip-build && yarn allow-scripts
 
-      # - name: Coverage
-      #   run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7
+        - name: Forge Install
+          run: yarn workspace @ubiquity/contracts forge install
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: my-artifact
-          path: coverage/reports/lcov.info # or path/to/artifact
+        - name: Coverage
+          id: coverage
+          run: echo ${{ LINES = `yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth.ubq.fi/v1/mainnet` }}
+
+        - name: Upload artifacts
+          uses: actions/upload-artifact@v3
+          with:
+            name: my-artifact
+            path: packages/contracts/lcov.info # or path/to/artifact
