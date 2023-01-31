@@ -17,6 +17,7 @@ import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNFTManager} from "../libraries/LibCreditNFTManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
+import {UbiquityDollarManager} from "../../dollar/core/UbiquityDollarManager.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
@@ -72,7 +73,7 @@ contract DiamondInit is Modifiers {
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
 
         appStore.stakingShareAddress = address(
-            new StakingShare(address(this), uri)
+            new StakingShare(UbiquityDollarManager(address(this)), uri)
         );
         // adding governance token
         appStore.governanceTokenAddress = address(

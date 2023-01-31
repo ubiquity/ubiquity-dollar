@@ -52,7 +52,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         IManager.setCreditTokenAddress(creditTokenAddress);
         // deploy dollarMintCalculator
         dollarMintCalculatorAddress = address(
-            new DollarMintCalculator(address(diamond))
+            new DollarMintCalculator(UbiquityDollarManager(address(this)))
         );
         vm.prank(admin);
         IManager.setDollarMintCalculatorAddress(dollarMintCalculatorAddress);
@@ -311,7 +311,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
 
         // set excess dollar distributor for creditNFTAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            UbiquityDollarManager(dollarManagerAddress)
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
@@ -340,7 +340,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
 
         // set excess dollar distributor for creditNFTAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            UbiquityDollarManager(dollarManagerAddress)
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
@@ -372,7 +372,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
 
         // set excess dollar distributor for debtCouponAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            UbiquityDollarManager(dollarManagerAddress)
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
@@ -393,7 +393,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         mockDollarMintCalcFuncs(50);
         // set excess dollar distributor for creditNFTAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            UbiquityDollarManager(dollarManagerAddress)
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(

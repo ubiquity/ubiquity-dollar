@@ -130,11 +130,11 @@ contract ZeroStateStaking is DiamondSetup {
         vm.startPrank(admin);
 
         DollarMintCalculator dollarMintCalc = new DollarMintCalculator(
-            address(IManager)
+            UbiquityDollarManager(address(IManager))
         );
         IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
         CreditNFTManager creditNFTManager = new CreditNFTManager(
-            address(IManager),
+            UbiquityDollarManager(address(IManager)),
             creditNFTLengthBlocks
         );
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
@@ -156,7 +156,7 @@ contract ZeroStateStaking is DiamondSetup {
             );
         IManager.setCreditTokenAddress(address(creditToken));
         DollarMintExcess dollarMintExcess = new DollarMintExcess(
-            address(IManager)
+            UbiquityDollarManager(address(IManager))
         );
         IManager.setExcessDollarsDistributor(
             address(creditNFTManager),
