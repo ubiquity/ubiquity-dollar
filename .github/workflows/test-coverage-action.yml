@@ -71,6 +71,6 @@ jobs:
         with:
           NAME: coverage
           LABEL: 'Coverage'
-          STATUS: ${RES}
+          STATUS: ${{RES}}
           COLOR: 00EEFF
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
