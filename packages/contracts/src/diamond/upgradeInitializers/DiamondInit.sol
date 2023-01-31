@@ -12,9 +12,9 @@ import {StakingShare} from "../../dollar/StakingShare.sol";
 import {UbiquityGovernanceTokenForDiamond} from "../token/UbiquityGovernanceTokenForDiamond.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
-import {LibUbiquityDollar} from "../libraries/LibUbiquityDollar.sol";
+import {LibDollar} from "../libraries/LibDollar.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
-import {LibUbiquityChef} from "../libraries/LibUbiquityChef.sol";
+import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNFTManager} from "../libraries/LibCreditNFTManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 
@@ -57,7 +57,7 @@ contract DiamondInit is Modifiers {
         appStore.paused = false;
         appStore.treasuryAddress = _args.admin;
         // Dollar
-        LibUbiquityDollar.initialize(
+        LibDollar.initialize(
             _args.dollarName,
             _args.dollarSymbol,
             _args.dollarDecimals
@@ -81,7 +81,7 @@ contract DiamondInit is Modifiers {
 
         // ubiquity chef before doing that we should have a metapool address
 
-        LibUbiquityChef.initialize(
+        LibChef.initialize(
             _args.tos,
             _args.amounts,
             _args.stakingShareIDs,

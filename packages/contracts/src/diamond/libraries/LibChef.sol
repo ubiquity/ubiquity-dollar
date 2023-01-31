@@ -11,7 +11,7 @@ import "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibStakingFormulas} from "./LibStakingFormulas.sol";
 
-library LibUbiquityChef {
+library LibChef {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
 
@@ -129,9 +129,9 @@ library LibUbiquityChef {
     }
 
     // the bigger governanceDivider is the less extra Governance Tokens will be minted for the treasury
-    function setGovernanceShareForTreasury(uint256 _governanceDivider)
-        internal
-    {
+    function setGovernanceShareForTreasury(
+        uint256 _governanceDivider
+    ) internal {
         chefStorage().governanceDivider = _governanceDivider;
     }
 
@@ -186,11 +186,9 @@ library LibUbiquityChef {
         return pending;
     }
 
-    function getStakingShareInfo(uint256 _id)
-        internal
-        view
-        returns (uint256[2] memory)
-    {
+    function getStakingShareInfo(
+        uint256 _id
+    ) internal view returns (uint256[2] memory) {
         StakingShareInfo memory ss = chefStorage().ssInfo[_id];
         return [ss.amount, ss.rewardDebt];
     }
@@ -200,11 +198,9 @@ library LibUbiquityChef {
     }
 
     // View function to see pending Governance Tokens on frontend.
-    function pendingGovernance(uint256 stakingShareID)
-        internal
-        view
-        returns (uint256)
-    {
+    function pendingGovernance(
+        uint256 stakingShareID
+    ) internal view returns (uint256) {
         ChefStorage storage cs = chefStorage();
         StakingShareInfo storage user = cs.ssInfo[stakingShareID];
         uint256 accGovernancePerShare = cs.pool.accGovernancePerShare;
@@ -316,6 +312,4 @@ library LibUbiquityChef {
         uint256 governanceMultiplier = chefStorage().governanceMultiplier;
         return (block.number - lastRewardBlock) * governanceMultiplier;
     }
-
- 
 }

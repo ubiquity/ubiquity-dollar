@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import {UbiquityDollarTokenFacet} from "../../../src/diamond/facets/UbiquityDollarTokenFacet.sol";
+import {DollarTokenFacet} from "../../../src/diamond/facets/DollarTokenFacet.sol";
 
 import "../DiamondTestSetup.sol";
 
-contract UbiquityDollarTokenFacetTest is DiamondSetup {
+contract DollarTokenFacetTest is DiamondSetup {
     address mock_sender = address(0x111);
     address mock_recipient = address(0x222);
     address mock_operator = address(0x333);

@@ -24,9 +24,9 @@ contract CreditNFTManagerFacet is Modifiers {
     }
 
     function setCreditNFTLength(
-        uint256 creditNFTLengthBlocks
+        uint256 _creditNFTLengthBlocks
     ) external onlyCreditNFTManager {
-        LibCreditNFTManager.setCreditNFTLength(creditNFTLengthBlocks);
+        LibCreditNFTManager.setCreditNFTLength(_creditNFTLengthBlocks);
     }
 
     function creditNFTLengthBlocks() external view returns (uint256) {

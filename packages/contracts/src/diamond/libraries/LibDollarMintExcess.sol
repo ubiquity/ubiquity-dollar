@@ -10,7 +10,7 @@ import "../../dollar/interfaces/IMetaPool.sol";
 import "../../dollar/SushiSwapPool.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
-import {LibUbiquityDollar} from "./LibUbiquityDollar.sol";
+import {LibDollar} from "./LibDollar.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards
@@ -26,7 +26,7 @@ library LibDollarMintExcess {
 
     function distributeDollars() internal {
         //the excess dollars which were sent to this contract by the coupon manager
-        uint256 excessDollars = LibUbiquityDollar.balanceOf(address(this));
+        uint256 excessDollars = LibDollar.balanceOf(address(this));
         if (excessDollars > _minAmountToDistribute) {
             address treasuryAddress = LibAppStorage
                 .appStorage()

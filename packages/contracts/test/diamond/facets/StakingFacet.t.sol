@@ -272,12 +272,8 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         IStakingFacet.deposit(minLP, 1);
         vm.stopPrank();
 
-        uint256[2] memory bsMaxAmount = IUbiquityChefFacet.getStakingShareInfo(
-            1
-        );
-        uint256[2] memory bsMinAmount = IUbiquityChefFacet.getStakingShareInfo(
-            2
-        );
+        uint256[2] memory bsMaxAmount = IChefFacet.getStakingShareInfo(1);
+        uint256[2] memory bsMinAmount = IChefFacet.getStakingShareInfo(2);
 
         assertLt(bsMinAmount[0], bsMaxAmount[0]);
     }
@@ -304,7 +300,7 @@ contract DepositStateStaking is ZeroStateStaking {
     function setUp() public virtual override {
         super.setUp();
 
-        assertEq(IUbiquityChefFacet.totalShares(), 0);
+        assertEq(IChefFacet.totalShares(), 0);
         fourthBal = metapool.balanceOf(fourthAccount);
         shares = IStakingFormulasFacet.durationMultiply(
             fourthBal,
@@ -327,28 +323,28 @@ contract DepositStateStaking is ZeroStateStaking {
 
 contract DepositStateTest is DepositStateStaking {
     function testTotalShares() public {
-        assertEq(IUbiquityChefFacet.totalShares(), shares);
+        assertEq(IChefFacet.totalShares(), shares);
     }
 
     function testRemoveLiquidity(uint256 amount, uint256 blocks) public {
-        assertEq(IUbiquityChefFacet.totalShares(), shares);
+        assertEq(IChefFacet.totalShares(), shares);
 
         // advance the block number to  staking time so the withdraw is possible
         uint256 currentBlock = block.number;
         blocks = bound(blocks, 45361, 2 ** 128 - 1);
-        assertEq(IUbiquityChefFacet.totalShares(), shares);
+        assertEq(IChefFacet.totalShares(), shares);
 
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
-        (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
+        (uint256 lastRewardBlock, ) = IChefFacet.pool();
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
         uint256 governancePerBlock = 10e18;
         uint256 reward = ((multiplier * governancePerBlock) / 1e18);
         uint256 governancePerShare = (reward * 1e12) / shares;
-        assertEq(IUbiquityChefFacet.totalShares(), shares);
+        assertEq(IChefFacet.totalShares(), shares);
         // we have to bound the amount of LP token to withdraw to max what account four has deposited
         amount = bound(amount, 1, fourthBal);
-        assertEq(IUbiquityChefFacet.totalShares(), shares);
+        assertEq(IChefFacet.totalShares(), shares);
 
         // calculate the reward in governance token for the user based on all his shares
         uint256 userReward = (shares * governancePerShare) / 1e12;
@@ -362,7 +358,7 @@ contract DepositStateTest is DepositStateStaking {
     function testGetRewards(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
-        (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
+        (uint256 lastRewardBlock, ) = IChefFacet.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
@@ -370,20 +366,20 @@ contract DepositStateTest is DepositStateStaking {
         uint256 governancePerShare = (reward * 1e12) / shares;
         uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
-        uint256 rewardSent = IUbiquityChefFacet.getRewards(1);
+        uint256 rewardSent = IChefFacet.getRewards(1);
         assertEq(userReward, rewardSent);
     }
 
     function testCannotGetRewardsOtherAccount() public {
         vm.expectRevert("MS: caller is not owner");
         vm.prank(stakingMinAccount);
-        IUbiquityChefFacet.getRewards(1);
+        IChefFacet.getRewards(1);
     }
 
     function testPendingGovernance(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
-        (uint256 lastRewardBlock, ) = IUbiquityChefFacet.pool();
+        (uint256 lastRewardBlock, ) = IChefFacet.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
@@ -391,13 +387,13 @@ contract DepositStateTest is DepositStateStaking {
         uint256 governancePerShare = (reward * 1e12) / shares;
         uint256 userPending = (shares * governancePerShare) / 1e12;
 
-        uint256 pendingGovernance = IUbiquityChefFacet.pendingGovernance(1);
+        uint256 pendingGovernance = IChefFacet.pendingGovernance(1);
         assertEq(userPending, pendingGovernance);
     }
 
     function testGetStakingShareInfo() public {
         uint256[2] memory info1 = [shares, 0];
-        uint256[2] memory info2 = IUbiquityChefFacet.getStakingShareInfo(1);
+        uint256[2] memory info2 = IChefFacet.getStakingShareInfo(1);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }

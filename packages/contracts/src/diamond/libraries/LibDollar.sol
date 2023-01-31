@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import {PERMIT_TYPEHASH} from "./LibAppStorage.sol";
 import "../../dollar/interfaces/IIncentive.sol";
 
-library LibUbiquityDollar {
+library LibDollar {
     struct UbiquityDollarStorage {
         /// @notice get associated incentive contract, 0 address if N/A
         mapping(address => address) incentiveContract;

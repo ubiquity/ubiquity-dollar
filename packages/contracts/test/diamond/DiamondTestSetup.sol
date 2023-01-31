@@ -8,9 +8,9 @@ import "../../src/diamond/facets/OwnershipFacet.sol";
 import "../../src/diamond/facets/ManagerFacet.sol";
 import "../../src/diamond/facets/AccessControlFacet.sol";
 import "../../src/diamond/facets/TWAPOracleDollar3poolFacet.sol";
-import "../../src/diamond/facets/UbiquityDollarTokenFacet.sol";
+import "../../src/diamond/facets/DollarTokenFacet.sol";
 import "../../src/diamond/facets/CollectableDustFacet.sol";
-import "../../src/diamond/facets/UbiquityChefFacet.sol";
+import "../../src/diamond/facets/ChefFacet.sol";
 import "../../src/diamond/facets/StakingFacet.sol";
 import "../../src/diamond/facets/StakingFormulasFacet.sol";
 import "../../src/diamond/facets/CreditNFTManagerFacet.sol";
@@ -34,9 +34,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     // actual implementation of facets
     AccessControlFacet accessControlFacet;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
-    UbiquityDollarTokenFacet dollarTokenFacet;
+    DollarTokenFacet dollarTokenFacet;
     CollectableDustFacet collectableDustFacet;
-    UbiquityChefFacet ubiquityChefFacet;
+    ChefFacet chefFacet;
     StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
 
@@ -52,10 +52,10 @@ abstract contract DiamondSetup is DiamondTestHelper {
     ManagerFacet IManager;
     TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
     AccessControlFacet IAccessCtrl;
-    UbiquityDollarTokenFacet IDollarFacet;
+    DollarTokenFacet IDollarFacet;
 
     CollectableDustFacet ICollectableDustFacet;
-    UbiquityChefFacet IUbiquityChefFacet;
+    ChefFacet IChefFacet;
     StakingFacet IStakingFacet;
     StakingFormulasFacet IStakingFormulasFacet;
     OwnershipFacet IOwnershipFacet;
@@ -85,9 +85,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfAccessControlFacet;
     bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
-    bytes4[] selectorsOfUbiquityDollarTokenFacet;
+    bytes4[] selectorsOfDollarTokenFacet;
     bytes4[] selectorsOfCollectableDustFacet;
-    bytes4[] selectorsOfUbiquityChefFacet;
+    bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
 
@@ -229,60 +229,30 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         // Ubiquity Dollar Token
         // -- ERC20
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.name.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.symbol.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.decimals.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.totalSupply.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.balanceOf.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.transfer.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.allowance.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.approve.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.name.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.symbol.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.decimals.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.totalSupply.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.balanceOf.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.transfer.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.allowance.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.approve.selector);
+        selectorsOfDollarTokenFacet.push(
             dollarTokenFacet.transferFrom.selector
         );
         // -- ERC20 Ubiquity
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.burn.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.permit.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.burnFrom.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.mint.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.setSymbol.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.setName.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
-            dollarTokenFacet.nonces.selector
-        );
-        selectorsOfUbiquityDollarTokenFacet.push(
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.burn.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.permit.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.burnFrom.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.mint.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.setSymbol.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.setName.selector);
+        selectorsOfDollarTokenFacet.push(dollarTokenFacet.nonces.selector);
+        selectorsOfDollarTokenFacet.push(
             dollarTokenFacet.DOMAIN_SEPARATOR.selector
         );
         // -- Specific to dollar
-        selectorsOfUbiquityDollarTokenFacet.push(
+        selectorsOfDollarTokenFacet.push(
             dollarTokenFacet.setIncentiveContract.selector
         );
         // Collectable Dust
@@ -296,37 +266,23 @@ abstract contract DiamondSetup is DiamondTestHelper {
             collectableDustFacet.sendDust.selector
         );
         // Chef
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.setGovernancePerBlock.selector
+        selectorsOfChefFacet.push(chefFacet.setGovernancePerBlock.selector);
+        selectorsOfChefFacet.push(chefFacet.governancePerBlock.selector);
+        selectorsOfChefFacet.push(chefFacet.governanceDivider.selector);
+        selectorsOfChefFacet.push(
+            chefFacet.minPriceDiffToUpdateMultiplier.selector
         );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.governancePerBlock.selector
+        selectorsOfChefFacet.push(
+            chefFacet.setGovernanceShareForTreasury.selector
         );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.governanceDivider.selector
+        selectorsOfChefFacet.push(
+            chefFacet.setMinPriceDiffToUpdateMultiplier.selector
         );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.minPriceDiffToUpdateMultiplier.selector
-        );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.setGovernanceShareForTreasury.selector
-        );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.setMinPriceDiffToUpdateMultiplier.selector
-        );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.getRewards.selector
-        );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.pendingGovernance.selector
-        );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.getStakingShareInfo.selector
-        );
-        selectorsOfUbiquityChefFacet.push(
-            ubiquityChefFacet.totalShares.selector
-        );
-        selectorsOfUbiquityChefFacet.push(ubiquityChefFacet.pool.selector);
+        selectorsOfChefFacet.push(chefFacet.getRewards.selector);
+        selectorsOfChefFacet.push(chefFacet.pendingGovernance.selector);
+        selectorsOfChefFacet.push(chefFacet.getStakingShareInfo.selector);
+        selectorsOfChefFacet.push(chefFacet.totalShares.selector);
+        selectorsOfChefFacet.push(chefFacet.pool.selector);
 
         // Staking
         selectorsOfStakingFacet.push(stakingFacet.dollarPriceReset.selector);
@@ -444,9 +400,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         managerFacet = new ManagerFacet();
         accessControlFacet = new AccessControlFacet();
         twapOracleDollar3PoolFacet = new TWAPOracleDollar3poolFacet();
-        dollarTokenFacet = new UbiquityDollarTokenFacet();
+        dollarTokenFacet = new DollarTokenFacet();
         collectableDustFacet = new CollectableDustFacet();
-        ubiquityChefFacet = new UbiquityChefFacet();
+        chefFacet = new ChefFacet();
         stakingFacet = new StakingFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
 
@@ -466,9 +422,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "ManagerFacet",
             "AccessControlFacet",
             "TWAPOracleDollar3poolFacet",
-            "UbiquityDollarTokenFacet",
+            "DollarTokenFacet",
             "CollectableDustFacet",
-            "UbiquityChefFacet",
+            "ChefFacet",
             "StakingFacet",
             "StakingFormulasFacet",
             "CreditNFTManagerFacet",
@@ -551,7 +507,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             FacetCut({
                 facetAddress: address(dollarTokenFacet),
                 action: FacetCutAction.Add,
-                functionSelectors: selectorsOfUbiquityDollarTokenFacet
+                functionSelectors: selectorsOfDollarTokenFacet
             })
         );
         cuts[7] = (
@@ -563,9 +519,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         cuts[8] = (
             FacetCut({
-                facetAddress: address(ubiquityChefFacet),
+                facetAddress: address(chefFacet),
                 action: FacetCutAction.Add,
-                functionSelectors: selectorsOfUbiquityChefFacet
+                functionSelectors: selectorsOfChefFacet
             })
         );
         cuts[9] = (
@@ -629,9 +585,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IManager = ManagerFacet(address(diamond));
         IAccessCtrl = AccessControlFacet(address(diamond));
         ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
-        IDollarFacet = UbiquityDollarTokenFacet(address(diamond));
+        IDollarFacet = DollarTokenFacet(address(diamond));
         ICollectableDustFacet = CollectableDustFacet(address(diamond));
-        IUbiquityChefFacet = UbiquityChefFacet(address(diamond));
+        IChefFacet = ChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
         IOwnershipFacet = OwnershipFacet(address(diamond));

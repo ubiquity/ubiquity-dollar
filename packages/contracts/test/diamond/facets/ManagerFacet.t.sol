@@ -9,7 +9,7 @@ import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import "../../../src/diamond/libraries/LibAccessControl.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
-    function testCanCallGeneralFunctions_ShouldSucceed() public {
+    function testCanCallGeneralFunctions_ShouldSucceed() public view {
         IManager.excessDollarsDistributor(contract1);
     }
 
