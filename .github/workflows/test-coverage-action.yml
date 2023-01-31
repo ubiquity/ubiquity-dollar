@@ -61,5 +61,6 @@ jobs:
           name: cov-result
       - shell: bash
         run: |
-          cat coverage.txt
+          value = `tail -1 coverage.txt`
+          echo value
 
