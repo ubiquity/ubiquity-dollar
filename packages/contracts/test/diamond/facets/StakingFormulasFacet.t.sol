@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
- 
-import "../DiamondTestSetup.sol"; 
-import "../../../src/dollar/libs/ABDKMathQuad.sol";
+
+import "../DiamondTestSetup.sol";
+import "abdk/ABDKMathQuad.sol";
 
 contract StakingFormulasFacetTest is DiamondSetup {
     using ABDKMathQuad for uint256;
@@ -11,7 +11,6 @@ contract StakingFormulasFacetTest is DiamondSetup {
     function setUp() public virtual override {
         super.setUp();
     }
-
 
     function test_sharesForLP() public {
         StakingShare.Stake memory _stake = StakingShare.Stake({
@@ -30,7 +29,10 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256[2] memory _shareInfo = [uint256(100), uint256(100)];
         uint256 _amount = 10;
 
-        assertEq(IStakingFormulasFacet.sharesForLP(_stake, _shareInfo, _amount), 10);
+        assertEq(
+            IStakingFormulasFacet.sharesForLP(_stake, _shareInfo, _amount),
+            10
+        );
     }
 
     function test_lpRewardsRemoveLiquidityNormalization(
@@ -40,7 +42,9 @@ contract StakingFormulasFacetTest is DiamondSetup {
     ) public {
         assertEq(
             IStakingFormulasFacet.lpRewardsRemoveLiquidityNormalization(
-                _stake, _shareInfo, _amount
+                _stake,
+                _shareInfo,
+                _amount
             ),
             _amount
         );
@@ -53,7 +57,9 @@ contract StakingFormulasFacetTest is DiamondSetup {
     ) public {
         assertEq(
             IStakingFormulasFacet.lpRewardsAddLiquidityNormalization(
-                _stake, _shareInfo, _amount
+                _stake,
+                _shareInfo,
+                _amount
             ),
             _amount
         );
@@ -65,7 +71,9 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _amount = 100;
         assertEq(
             IStakingFormulasFacet.correctedAmountToWithdraw(
-                _totalLpDeposited, _stakingLpBalance, _amount
+                _totalLpDeposited,
+                _stakingLpBalance,
+                _amount
             ),
             100
         );
@@ -77,7 +85,9 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _amount = 100;
         assertEq(
             IStakingFormulasFacet.correctedAmountToWithdraw(
-                _totalLpDeposited, _stakingLpBalance, _amount
+                _totalLpDeposited,
+                _stakingLpBalance,
+                _amount
             ),
             50
         );
