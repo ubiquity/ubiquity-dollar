@@ -124,7 +124,7 @@ contract ZeroStateChef is DiamondSetup {
 
         vm.startPrank(admin);
         DollarMintCalculator dollarMintCalc = new DollarMintCalculator(
-            UbiquityDollarManager(address(this))
+            UbiquityDollarManager(address(diamond))
         );
         IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
