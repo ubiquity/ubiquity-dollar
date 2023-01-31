@@ -52,7 +52,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         IManager.setCreditTokenAddress(creditTokenAddress);
         // deploy dollarMintCalculator
         dollarMintCalculatorAddress = address(
-            new DollarMintCalculator(UbiquityDollarManager(address(this)))
+            new DollarMintCalculator(UbiquityDollarManager(address(diamond)))
         );
         vm.prank(admin);
         IManager.setDollarMintCalculatorAddress(dollarMintCalculatorAddress);
