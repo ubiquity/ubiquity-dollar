@@ -43,10 +43,11 @@ jobs:
 
       - name: Coverage
         id: coverage
-        run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7 >> coverage.txt
+        run: |
+          echo "Testing this out: 122" > coverage.txt
 
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: my-artifact
-      #     path: packages/contracts/lcov.info # or path/to/artifact
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-artifact
+          path: ./coverage.txt
