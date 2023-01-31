@@ -16,6 +16,8 @@ import "../../src/diamond/facets/StakingFormulasFacet.sol";
 import "../../src/diamond/facets/CreditNFTManagerFacet.sol";
 import "../../src/diamond/facets/CreditNFTRedemptionCalculatorFacet.sol";
 import "../../src/diamond/facets/CreditRedemptionCalculatorFacet.sol";
+import "../../src/diamond/facets/DollarMintCalculatorFacet.sol";
+import "../../src/diamond/facets/DollarMintExcessFacet.sol";
 import "../../src/diamond/Diamond.sol";
 import "../../src/diamond/upgradeInitializers/DiamondInit.sol";
 import "../helpers/DiamondTestHelper.sol";
@@ -41,6 +43,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     CreditNFTManagerFacet creditNFTManagerFacet;
     CreditNFTRedemptionCalculatorFacet creditNFTRedemptionCalculatorFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacet;
+
+    DollarMintCalculatorFacet dollarMintCalculatorFacet;
+    DollarMintExcessFacet dollarMintExcessFacet;
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
@@ -58,6 +63,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     CreditNFTManagerFacet ICreditNFTMgrFacet;
     CreditNFTRedemptionCalculatorFacet ICreditNFTRedCalcFacet;
     CreditRedemptionCalculatorFacet ICreditRedCalcFacet;
+
+    DollarMintCalculatorFacet IDollarMintCalcFacet;
+    DollarMintExcessFacet IDollarMintExcessFacet;
 
     address incentive_addr;
 
@@ -86,6 +94,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfCreditNFTManagerFacet;
     bytes4[] selectorsOfCreditNFTRedemptionCalculatorFacet;
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
+
+    bytes4[] selectorsOfDollarMintCalculatorFacet;
+    bytes4[] selectorsOfDollarMintExcessFacet;
 
     // deploys diamond and connects facets
     function setUp() public virtual {
@@ -417,6 +428,15 @@ abstract contract DiamondSetup is DiamondTestHelper {
             (creditRedemptionCalculatorFacet.getCreditAmount.selector)
         );
 
+        // Dollar Mint Calculator
+        selectorsOfDollarMintCalculatorFacet.push(
+            (dollarMintCalculatorFacet.getDollarsToMint.selector)
+        );
+        // Dollar Mint Excess
+        selectorsOfDollarMintExcessFacet.push(
+            (dollarMintExcessFacet.distributeDollars.selector)
+        );
+
         //deploy facets
         dCutFacet = new DiamondCutFacet();
         dLoupeFacet = new DiamondLoupeFacet();
@@ -434,6 +454,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         creditNFTRedemptionCalculatorFacet = new CreditNFTRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacet = new CreditRedemptionCalculatorFacet();
 
+        dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
+        dollarMintExcessFacet = new DollarMintExcessFacet();
+
         dInit = new DiamondInit();
 
         facetNames = [
@@ -450,7 +473,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "StakingFormulasFacet",
             "CreditNFTManagerFacet",
             "CreditNFTRedemptionCalculatorFacet",
-            "CreditRedemptionCalculatorFacet"
+            "CreditRedemptionCalculatorFacet",
+            "DollarMintCalculatorFacet",
+            "DollarMintExcessFacet"
         ];
 
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -474,7 +499,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](14);
+        FacetCut[] memory cuts = new FacetCut[](16);
 
         cuts[0] = (
             FacetCut({
@@ -578,6 +603,20 @@ abstract contract DiamondSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfCreditRedemptionCalculatorFacet
             })
         );
+        cuts[14] = (
+            FacetCut({
+                facetAddress: address(dollarMintCalculatorFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfDollarMintCalculatorFacet
+            })
+        );
+        cuts[15] = (
+            FacetCut({
+                facetAddress: address(dollarMintExcessFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfDollarMintExcessFacet
+            })
+        );
 
         // deploy diamond
         vm.startPrank(owner);
@@ -602,6 +641,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
             address(diamond)
         );
         ICreditRedCalcFacet = CreditRedemptionCalculatorFacet(address(diamond));
+
+        IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
+        IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
 
         assertEq(IDollarFacet.decimals(), 18);
         // get all addresses
