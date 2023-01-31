@@ -62,5 +62,5 @@ jobs:
       - shell: bash
         run: |
           value = `tail -1 coverage.txt`
-          echo value
+          echo $value
 
