@@ -43,7 +43,7 @@ jobs:
 
       - name: Coverage
         id: coverage
-        run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth.ubq.fi/v1/mainnet >> coverage.txt
+        run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7 >> coverage.txt
 
       # - name: Upload artifacts
       #   uses: actions/upload-artifact@v3
