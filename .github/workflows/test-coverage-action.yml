@@ -61,5 +61,7 @@ jobs:
           name: cov-result
       - shell: bash
         run: |
-          tail -1 coverage.txt
+          VAL = echo ${tail -1 coverage.txt}
+          FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
+          echo $FOO | cut -f2,3 -d'|'
 
