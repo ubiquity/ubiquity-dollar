@@ -8,46 +8,45 @@ on:
       - "v*"
 
 jobs:
-  setup:
-    check:
-      strategy:
-        fail-fast: true
+  check:
+    strategy:
+      fail-fast: true
 
-      outputs:
-        lines: ${{ steps.coverage.outputs.test }}
+    outputs:
+      lines: ${{ steps.coverage.outputs.test }}
 
-      name: Foundry project
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-          with:
-            submodules: recursive
+    name: Foundry project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
-        - name: Setup Node
-          uses: actions/setup-node@v3
-          with:
-            node-version: "18"
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
 
-        - name: Install dependencies
-          run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
 
-        - name: Setup Foundry
-          uses: onbjerg/foundry-toolchain@v1
-          with:
-            version: nightly
+      - name: Setup Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
 
-        - name: Install
-          run: yarn install --mode=skip-build && yarn allow-scripts
+      - name: Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
 
-        - name: Forge Install
-          run: yarn workspace @ubiquity/contracts forge install
+      - name: Forge Install
+        run: yarn workspace @ubiquity/contracts forge install
 
-        - name: Coverage
-          id: coverage
-          run: echo ${{ LINES = `yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth.ubq.fi/v1/mainnet` }}
+      - name: Coverage
+        id: coverage
+        run: echo ${{ LINES = `yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth.ubq.fi/v1/mainnet` }}
 
-        - name: Upload artifacts
-          uses: actions/upload-artifact@v3
-          with:
-            name: my-artifact
-            path: packages/contracts/lcov.info # or path/to/artifact
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: my-artifact
+      #     path: packages/contracts/lcov.info # or path/to/artifact
