@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
-import "../libraries/LibUbiquityDollar.sol";
+import "../libraries/LibDollar.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -35,7 +35,7 @@ contract ERC20ForFacet is Context, IERC20 {
      * @dev Returns the name of the token.
      */
     function name() public view virtual returns (string memory) {
-        return LibUbiquityDollar.ubiquityDollarStorage().name;
+        return LibDollar.ubiquityDollarStorage().name;
     }
 
     /**
@@ -43,7 +43,7 @@ contract ERC20ForFacet is Context, IERC20 {
      * name.
      */
     function symbol() public view virtual returns (string memory) {
-        return LibUbiquityDollar.ubiquityDollarStorage().symbol;
+        return LibDollar.ubiquityDollarStorage().symbol;
     }
 
     /**
@@ -60,14 +60,14 @@ contract ERC20ForFacet is Context, IERC20 {
      * {IERC20-balanceOf} and {IERC20-transfer}.
      */
     function decimals() public view virtual returns (uint8) {
-        return LibUbiquityDollar.ubiquityDollarStorage().decimals;
+        return LibDollar.ubiquityDollarStorage().decimals;
     }
 
     /**
      * @dev See {IERC20-totalSupply}.
      */
     function totalSupply() public view virtual override returns (uint256) {
-        return LibUbiquityDollar.ubiquityDollarStorage().totalSupply;
+        return LibDollar.ubiquityDollarStorage().totalSupply;
     }
 
     /**
@@ -76,7 +76,7 @@ contract ERC20ForFacet is Context, IERC20 {
     function balanceOf(
         address account
     ) public view virtual override returns (uint256) {
-        return LibUbiquityDollar.balanceOf(account);
+        return LibDollar.balanceOf(account);
     }
 
     /**
@@ -91,7 +91,7 @@ contract ERC20ForFacet is Context, IERC20 {
         address recipient,
         uint256 amount
     ) public virtual override returns (bool) {
-        LibUbiquityDollar.transfer(_msgSender(), recipient, amount);
+        LibDollar.transfer(_msgSender(), recipient, amount);
         return true;
     }
 
@@ -102,7 +102,7 @@ contract ERC20ForFacet is Context, IERC20 {
         address owner,
         address spender
     ) public view virtual override returns (uint256) {
-        return LibUbiquityDollar.allowance(owner, spender);
+        return LibDollar.allowance(owner, spender);
     }
 
     /**
@@ -116,7 +116,7 @@ contract ERC20ForFacet is Context, IERC20 {
         address spender,
         uint256 amount
     ) public virtual override returns (bool) {
-        LibUbiquityDollar.approve(_msgSender(), spender, amount);
+        LibDollar.approve(_msgSender(), spender, amount);
         return true;
     }
 
@@ -139,8 +139,8 @@ contract ERC20ForFacet is Context, IERC20 {
         uint256 amount
     ) public virtual override returns (bool) {
         address spender = _msgSender();
-        LibUbiquityDollar.spendAllowance(from, spender, amount);
-        LibUbiquityDollar.transfer(from, to, amount);
+        LibDollar.spendAllowance(from, spender, amount);
+        LibDollar.transfer(from, to, amount);
         return true;
     }
 
@@ -161,7 +161,7 @@ contract ERC20ForFacet is Context, IERC20 {
         uint256 addedValue
     ) public virtual returns (bool) {
         address owner = _msgSender();
-        return LibUbiquityDollar.increaseAllowance(owner, spender, addedValue);
+        return LibDollar.increaseAllowance(owner, spender, addedValue);
     }
 
     /**
@@ -183,11 +183,6 @@ contract ERC20ForFacet is Context, IERC20 {
         uint256 subtractedValue
     ) public virtual returns (bool) {
         address owner = _msgSender();
-        return
-            LibUbiquityDollar.decreaseAllowance(
-                owner,
-                spender,
-                subtractedValue
-            );
+        return LibDollar.decreaseAllowance(owner, spender, subtractedValue);
     }
 }

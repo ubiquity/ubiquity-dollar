@@ -3,7 +3,7 @@ pragma solidity ^0.8.3;
 
 import "../../dollar/interfaces/IIncentive.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import "../libraries/LibUbiquityDollar.sol";
+import "../libraries/LibDollar.sol";
 import "../libraries/LibAccessControl.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {ERC20ForFacet} from "../token/ERC20ForFacet.sol";
@@ -16,7 +16,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
-contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
+contract DollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
     event IncentiveContractUpdate(
         address indexed _incentivized,
         address indexed _incentiveContract
@@ -25,16 +25,16 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
     /// @param account the account to incentivize
     /// @param incentive the associated incentive contract
     /// @notice only Ubiquity Dollar manager can set Incentive contract
-    function setIncentiveContract(address account, address incentive)
-        external
-        onlyAdmin
-    {
+    function setIncentiveContract(
+        address account,
+        address incentive
+    ) external onlyAdmin {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
             "Dollar: must have admin role"
         );
 
-        LibUbiquityDollar.setIncentiveContract(account, incentive);
+        LibDollar.setIncentiveContract(account, incentive);
     }
 
     function initialize(
@@ -46,19 +46,19 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
         // because he will get the admin, minter and pauser role on Ubiquity Dollar and we want to
         // manage all permissions through the manager
 
-        LibUbiquityDollar.initialize(name_, symbol_, decimals_);
+        LibDollar.initialize(name_, symbol_, decimals_);
     }
 
     /// @notice setSymbol update token symbol
     /// @param newSymbol new token symbol
     function setSymbol(string memory newSymbol) external onlyAdmin {
-        LibUbiquityDollar.setSymbol(newSymbol);
+        LibDollar.setSymbol(newSymbol);
     }
 
     /// @notice setName update token name
     /// @param newName new token name
     function setName(string memory newName) external onlyAdmin {
-        LibUbiquityDollar.setName(newName);
+        LibDollar.setName(newName);
     }
 
     /// @notice permit spending of Ubiquity Dollar. owner has signed a message allowing
@@ -76,7 +76,7 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
         bytes32 r,
         bytes32 _s
     ) external {
-        LibUbiquityDollar.permit(owner, spender, value, deadline, v, r, _s);
+        LibDollar.permit(owner, spender, value, deadline, v, r, _s);
     }
 
     /**
@@ -87,12 +87,10 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
      * - `recipient` cannot be the zero address.
      * - the caller must have a balance of at least `amount`.
      */
-    function transfer(address recipient, uint256 amount)
-        public
-        override(ERC20ForFacet, IERC20)
-        whenNotPaused
-        returns (bool)
-    {
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) public override(ERC20ForFacet, IERC20) whenNotPaused returns (bool) {
         return super.transfer(recipient, amount);
     }
 
@@ -123,7 +121,7 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
      * See {ERC20-_burn}.
      */
     function burn(uint256 amount) external whenNotPaused {
-        LibUbiquityDollar.burn(_msgSender(), amount);
+        LibDollar.burn(_msgSender(), amount);
     }
 
     /**
@@ -137,29 +135,26 @@ contract UbiquityDollarTokenFacet is Modifiers, ERC20ForFacet, IERC20Ubiquity {
      * - the caller must have allowance for ``accounts``'s tokens of at least
      * `amount`.
      */
-    function burnFrom(address account, uint256 amount)
-        external
-        onlyBurner
-        whenNotPaused
-    {
-        LibUbiquityDollar.burn(account, amount);
+    function burnFrom(
+        address account,
+        uint256 amount
+    ) external onlyBurner whenNotPaused {
+        LibDollar.burn(account, amount);
     }
 
     // @dev Creates `amount` new tokens for `to`.
-    function mint(address to, uint256 amount)
-        external
-        override
-        onlyMinter
-        whenNotPaused
-    {
-        LibUbiquityDollar.mint(to, amount);
+    function mint(
+        address to,
+        uint256 amount
+    ) external override onlyMinter whenNotPaused {
+        LibDollar.mint(to, amount);
     }
 
     function nonces(address sender) external view returns (uint256) {
-        return LibUbiquityDollar.ubiquityDollarStorage().nonces[sender];
+        return LibDollar.ubiquityDollarStorage().nonces[sender];
     }
 
     function DOMAIN_SEPARATOR() external view returns (bytes32) {
-        return LibUbiquityDollar.ubiquityDollarStorage().DOMAIN_SEPARATOR;
+        return LibDollar.ubiquityDollarStorage().DOMAIN_SEPARATOR;
     }
 }

@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./LibTWAPOracle.sol";
 import "../../dollar/StakingShare.sol";
-import "./LibUbiquityChef.sol";
+import "./LibChef.sol";
 import "./LibStakingFormulas.sol";
-import "./LibUbiquityDollar.sol";
+import "./LibDollar.sol";
 
 library LibStaking {
     using SafeERC20 for IERC20;
@@ -77,9 +77,9 @@ library LibStaking {
             0
         );
         LibTWAPOracle.update();
-        uint256 toTransfer = LibUbiquityDollar.balanceOf(address(this));
+        uint256 toTransfer = LibDollar.balanceOf(address(this));
 
-        LibUbiquityDollar.transfer(
+        LibDollar.transfer(
             msg.sender,
             LibAppStorage.appStorage().treasuryAddress,
             toTransfer
@@ -166,7 +166,7 @@ library LibStaking {
         uint256 _endBlock = block.number + _weeks * ss.blockCountInAWeek;
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
         // set masterchef for Governance rewards
-        LibUbiquityChef.deposit(msg.sender, _sharesAmount, _id);
+        LibChef.deposit(msg.sender, _sharesAmount, _id);
 
         emit Deposit(
             msg.sender,
@@ -219,7 +219,7 @@ library LibStaking {
         stake.lpAmount += _amount;
 
         // redeem all shares
-        LibUbiquityChef.withdraw(msg.sender, sharesToRemove, _id);
+        LibChef.withdraw(msg.sender, sharesToRemove, _id);
 
         // calculate the amount of share based on the new amount of lp deposited and the duration
         uint256 _sharesAmount = LibStakingFormulas.durationMultiply(
@@ -229,7 +229,7 @@ library LibStaking {
         );
 
         // deposit new shares
-        LibUbiquityChef.deposit(msg.sender, _sharesAmount, _id);
+        LibChef.deposit(msg.sender, _sharesAmount, _id);
         // calculate end locking period block number
         // 1 week = 45361 blocks = 2371753*7/366
         // n = (block + duration * 45361)
@@ -238,8 +238,7 @@ library LibStaking {
         // should be done after masterchef withdraw
         _updateLpPerShare();
         stake.lpRewardDebt =
-            (LibUbiquityChef.getStakingShareInfo(_id)[0] *
-                ss.accLpRewardPerShare) /
+            (LibChef.getStakingShareInfo(_id)[0] * ss.accLpRewardPerShare) /
             1e12;
         StakingShare(LibAppStorage.appStorage().stakingShareAddress)
             .updateStake(
@@ -281,7 +280,7 @@ library LibStaking {
         // stake.shares = stake.shares - sharesToRemove;
         // get masterchef for Governance token rewards To ensure correct computation
         // it needs to be done BEFORE updating the bonding share
-        LibUbiquityChef.withdraw(msg.sender, sharesToRemove, _id);
+        LibChef.withdraw(msg.sender, sharesToRemove, _id);
 
         // redeem of the extra LP
         // staking lp balance - StakingShare.totalLP
@@ -307,8 +306,7 @@ library LibStaking {
         // user.amount.mul(pool.accSushiPerShare).div(1e12);
         // should be done after masterchef withdraw
         stake.lpRewardDebt =
-            (LibUbiquityChef.getStakingShareInfo(_id)[0] *
-                ss.accLpRewardPerShare) /
+            (LibChef.getStakingShareInfo(_id)[0] * ss.accLpRewardPerShare) /
             1e12;
 
         StakingShare(stakingShareAddress).updateStake(
@@ -338,7 +336,7 @@ library LibStaking {
             .stakingShareAddress;
         StakingShare staking = StakingShare(stakingShareAddress);
         StakingShare.Stake memory stake = staking.getStake(_id);
-        uint256[2] memory bs = LibUbiquityChef.getStakingShareInfo(_id);
+        uint256[2] memory bs = LibChef.getStakingShareInfo(_id);
 
         uint256 lpBalance = IERC20(LibTWAPOracle.twapOracleStorage().pool)
             .balanceOf(address(this));
@@ -352,7 +350,7 @@ library LibStaking {
                 uint256 newLpRewards = currentLpRewards - ss.lpRewards;
                 curAccLpRewardPerShare =
                     ss.accLpRewardPerShare +
-                    ((newLpRewards * 1e12) / LibUbiquityChef.totalShares());
+                    ((newLpRewards * 1e12) / LibChef.totalShares());
             }
             // we multiply the shares amount by the accumulated lpRewards per share
             // and remove the lp Reward Debt
@@ -381,7 +379,7 @@ library LibStaking {
     }
 
     function currentShareValue() internal view returns (uint256 priceShare) {
-        uint256 totalShares = LibUbiquityChef.totalShares();
+        uint256 totalShares = LibChef.totalShares();
         address stakingShareAddress = LibAppStorage
             .appStorage()
             .stakingShareAddress;
@@ -404,7 +402,7 @@ library LibStaking {
             .balanceOf(address(this));
         // the excess LP is the current balance
         // minus the total deposited LP + LP that needs to be migrated
-        uint256 totalShares = LibUbiquityChef.totalShares();
+        uint256 totalShares = LibChef.totalShares();
         if (
             lpBalance >= (stake.totalLP() + ss.totalLpToMigrate) &&
             totalShares > 0
@@ -464,6 +462,6 @@ library LibStaking {
         );
 
         LibTWAPOracle.update();
-        bs = LibUbiquityChef.getStakingShareInfo(_id);
+        bs = LibChef.getStakingShareInfo(_id);
     }
 }

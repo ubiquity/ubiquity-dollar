@@ -67,7 +67,7 @@ contract MockMetaPool {
         uint256[2] memory _amounts,
         uint256 _min_mint_amount,
         address _receiver
-    ) external returns (uint256) {
+    ) external pure returns (uint256) {
         return 100e18;
     }
 }

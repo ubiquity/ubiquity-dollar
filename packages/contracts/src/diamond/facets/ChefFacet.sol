@@ -1,29 +1,27 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import {LibUbiquityChef} from "../libraries/LibUbiquityChef.sol";
+import {LibChef} from "../libraries/LibChef.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
-contract UbiquityChefFacet is Modifiers {
-    function setGovernancePerBlock(uint256 _governancePerBlock)
-        external
-        onlyTokenManager
-    {
-        LibUbiquityChef.setGovernancePerBlock(_governancePerBlock);
+contract ChefFacet is Modifiers {
+    function setGovernancePerBlock(
+        uint256 _governancePerBlock
+    ) external onlyTokenManager {
+        LibChef.setGovernancePerBlock(_governancePerBlock);
     }
 
     // the bigger governanceDivider is the less extra Governance Tokens will be minted for the treasury
-    function setGovernanceShareForTreasury(uint256 _governanceDivider)
-        external
-        onlyTokenManager
-    {
-        LibUbiquityChef.setGovernanceShareForTreasury(_governanceDivider);
+    function setGovernanceShareForTreasury(
+        uint256 _governanceDivider
+    ) external onlyTokenManager {
+        LibChef.setGovernanceShareForTreasury(_governanceDivider);
     }
 
     function setMinPriceDiffToUpdateMultiplier(
         uint256 _minPriceDiffToUpdateMultiplier
     ) external onlyTokenManager {
-        LibUbiquityChef.setMinPriceDiffToUpdateMultiplier(
+        LibChef.setMinPriceDiffToUpdateMultiplier(
             _minPriceDiffToUpdateMultiplier
         );
     }
@@ -32,28 +30,28 @@ contract UbiquityChefFacet is Modifiers {
     /// @return amount of pending rewards transferred to msg.sender
     /// @notice only send pending rewards
     function getRewards(uint256 stakingShareID) external returns (uint256) {
-        return LibUbiquityChef.getRewards(stakingShareID);
+        return LibChef.getRewards(stakingShareID);
     }
 
     /**
      * @dev get the governance Per Block.
      */
     function governancePerBlock() external view returns (uint256) {
-        return LibUbiquityChef.governancePerBlock();
+        return LibChef.governancePerBlock();
     }
 
     /**
      * @dev get the governance divider.
      */
     function governanceDivider() external view returns (uint256) {
-        return LibUbiquityChef.governanceDivider();
+        return LibChef.governanceDivider();
     }
 
     /**
      * @dev get the pool information.
      */
     function pool() external view returns (uint256, uint256) {
-        LibUbiquityChef.PoolInfo memory _pool = LibUbiquityChef.pool();
+        LibChef.PoolInfo memory _pool = LibChef.pool();
 
         return (_pool.lastRewardBlock, _pool.accGovernancePerShare);
     }
@@ -62,33 +60,29 @@ contract UbiquityChefFacet is Modifiers {
      * @dev get the minimum price differrence to update the multiplier.
      */
     function minPriceDiffToUpdateMultiplier() external view returns (uint256) {
-        return LibUbiquityChef.minPriceDiffToUpdateMultiplier();
+        return LibChef.minPriceDiffToUpdateMultiplier();
     }
 
     // View function to see pending Governance Tokens on frontend.
-    function pendingGovernance(uint256 stakingShareID)
-        external
-        view
-        returns (uint256)
-    {
-        return LibUbiquityChef.pendingGovernance(stakingShareID);
+    function pendingGovernance(
+        uint256 stakingShareID
+    ) external view returns (uint256) {
+        return LibChef.pendingGovernance(stakingShareID);
     }
 
     /**
      * @dev get the amount of shares and the reward debt of a staking share .
      */
-    function getStakingShareInfo(uint256 _id)
-        external
-        view
-        returns (uint256[2] memory)
-    {
-        return LibUbiquityChef.getStakingShareInfo(_id);
+    function getStakingShareInfo(
+        uint256 _id
+    ) external view returns (uint256[2] memory) {
+        return LibChef.getStakingShareInfo(_id);
     }
 
     /**
      * @dev Total amount of shares .
      */
     function totalShares() external view returns (uint256) {
-        return LibUbiquityChef.totalShares();
+        return LibChef.totalShares();
     }
 }

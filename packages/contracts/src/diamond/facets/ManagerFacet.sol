@@ -10,7 +10,7 @@ import "../../dollar/interfaces/ICurveFactory.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
 import "../../dollar/core/TWAPOracleDollar3pool.sol";
 import "../libraries/LibAccessControl.sol";
-import "../libraries/LibUbiquityDollar.sol";
+import "../libraries/LibDollar.sol";
 
 contract ManagerFacet is Modifiers {
     // TODO Add a generic setter for extra addresses that needs to be linked
@@ -86,7 +86,7 @@ contract ManagerFacet is Modifiers {
         address _account,
         address _incentiveAddress
     ) external onlyAdmin {
-        LibUbiquityDollar.setIncentiveContract(_account, _incentiveAddress);
+        LibDollar.setIncentiveContract(_account, _incentiveAddress);
     }
 
     function deployStableSwapPool(
