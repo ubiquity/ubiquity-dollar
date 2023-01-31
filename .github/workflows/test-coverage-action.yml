@@ -8,14 +8,14 @@ on:
       - "v*"
 
 jobs:
-  check:
+  jobA:
     strategy:
       fail-fast: true
 
     outputs:
       lines: ${{ steps.coverage.outputs.test }}
 
-    name: Foundry project
+    name: Calculate Coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -42,11 +42,23 @@ jobs:
         run: yarn workspace @ubiquity/contracts forge install
 
       - name: Coverage
-        id: coverage
         run: yarn workspace @ubiquity/contracts forge coverage --fork-url https://eth-mainnet.g.alchemy.com/v2/WRRZczVcOh7GrDm7TeE7PwfVayvnXWe7 > coverage.txt
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: my-artifact
+          name: cov-result
           path: ./coverage.txt
+          
+  jobB:
+    runs-on: ubuntu-latest
+    name: Update Coverage
+    steps:
+      - name: Download Coverage Results
+        uses: actions/download-artifact@v3
+        with:
+          name: cov-result
+          shell: bash
+          run: |
+            echo "coverage results downloaded"
+
