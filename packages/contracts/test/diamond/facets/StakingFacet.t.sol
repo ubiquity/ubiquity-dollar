@@ -16,10 +16,11 @@ import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/Ubiquity
 import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import "../../../src/diamond/libraries/Constants.sol";
 
+import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol";
+import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
+
 contract ZeroStateStaking is DiamondSetup {
-    ICurveFactory curvePoolFactory =
-        ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
-    IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
+    MockERC20 crvToken;
     uint256 creditNFTLengthBlocks = 100;
     address treasury = address(0x3);
     address secondAccount = address(0x4);
@@ -30,9 +31,6 @@ contract ZeroStateStaking is DiamondSetup {
     address stakingMinAccount = address(0x9);
     address stakingMaxAccount = address(0x10);
 
-    address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
-    address curveWhaleAddress = 0x4486083589A063ddEF47EE2E4467B5236C508fDe;
-    address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
     StakingShareForDiamond stakingShare;
@@ -64,13 +62,14 @@ contract ZeroStateStaking is DiamondSetup {
 
     function setUp() public virtual override {
         super.setUp();
+        crvToken = new MockERC20("3 CRV", "3CRV", 18);
         metaPoolAddress = address(
-            new MockMetaPool(address(IDollarFacet), curve3CrvToken)
+            new MockMetaPool(address(IDollarFacet), address(crvToken))
         );
 
         vm.startPrank(owner);
 
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CrvToken);
+        ITWAPOracleDollar3pool.setPool(metaPoolAddress, address(crvToken));
 
         address[7] memory mintings = [
             admin,
@@ -94,8 +93,7 @@ contract ZeroStateStaking is DiamondSetup {
         ];
         vm.stopPrank();
         for (uint256 i; i < crvDeal.length; ++i) {
-            vm.prank(curveWhaleAddress);
-            crvToken.transfer(crvDeal[i], 10000e18);
+            crvToken.mint(crvDeal[i], 10000e18);
         }
 
         vm.startPrank(admin);
@@ -107,13 +105,17 @@ contract ZeroStateStaking is DiamondSetup {
             address(stakingShareV1)
         );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
-        //  vm.stopPrank();
+
+        ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
+        address curve3CrvBasePool = address(
+            new MockMetaPool(address(diamond), address(crvToken))
+        );
 
         //vm.prank(admin);
         IManager.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
-            curve3CrvToken,
+            address(crvToken),
             10,
             50000000
         );
@@ -123,7 +125,7 @@ contract ZeroStateStaking is DiamondSetup {
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
         vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
+        ITWAPOracleDollar3pool.setPool(address(metapool), address(crvToken));
 
         vm.startPrank(admin);
 

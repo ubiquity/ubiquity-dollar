@@ -14,11 +14,12 @@ import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
 import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
 import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import "../../../src/diamond/libraries/Constants.sol";
+import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
+import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol";
 
-contract ZeroState is DiamondSetup {
-    ICurveFactory curvePoolFactory =
-        ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
-    IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
+contract ZeroStateChef is DiamondSetup {
+    MockERC20 crvToken;
+    address curve3CrvToken;
     uint256 creditNFTLengthBlocks = 100;
     address treasury = address(0x3);
     address secondAccount = address(0x4);
@@ -29,9 +30,6 @@ contract ZeroState is DiamondSetup {
     address stakingMinAccount = address(0x9);
     address stakingMaxAccount = address(0x10);
 
-    address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
-    address curveWhaleAddress = 0x4486083589A063ddEF47EE2E4467B5236C508fDe;
-    address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
     StakingShareForDiamond stakingShare;
@@ -58,6 +56,8 @@ contract ZeroState is DiamondSetup {
 
     function setUp() public virtual override {
         super.setUp();
+        crvToken = new MockERC20("3 CRV", "3CRV", 18);
+        curve3CrvToken = address(crvToken);
         metaPoolAddress = address(
             new MockMetaPool(address(IDollarFacet), curve3CrvToken)
         );
@@ -89,8 +89,7 @@ contract ZeroState is DiamondSetup {
         ];
         vm.stopPrank();
         for (uint256 i; i < crvDeal.length; ++i) {
-            vm.prank(curveWhaleAddress);
-            crvToken.transfer(crvDeal[i], 10000e18);
+            crvToken.mint(crvDeal[i], 10000e18);
         }
 
         vm.startPrank(admin);
@@ -103,7 +102,10 @@ contract ZeroState is DiamondSetup {
         );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
         //  vm.stopPrank();
-
+        ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
+        address curve3CrvBasePool = address(
+            new MockMetaPool(address(diamond), address(crvToken))
+        );
         //vm.prank(admin);
         IManager.deployStableSwapPool(
             address(curvePoolFactory),
@@ -198,7 +200,7 @@ contract ZeroState is DiamondSetup {
     }
 }
 
-contract ZeroStateTest is ZeroState {
+contract ZeroStateChefTest is ZeroStateChef {
     function testSetGovernancePerBlock(uint256 governancePerBlock) public {
         vm.expectEmit(true, false, false, true, address(IChefFacet));
         emit GovernancePerBlockModified(governancePerBlock);
@@ -256,7 +258,7 @@ contract ZeroStateTest is ZeroState {
     }
 }
 
-contract DepositState is ZeroState {
+contract DepositStateChef is ZeroStateChef {
     uint256 fourthBal;
     uint256 fourthID;
     uint256 shares;
@@ -284,7 +286,7 @@ contract DepositState is ZeroState {
     }
 }
 
-contract DepositStateTest is DepositState {
+contract DepositStateChefTest is DepositStateChef {
     function testTotalShares() public {
         assertEq(IChefFacet.totalShares(), shares);
     }
