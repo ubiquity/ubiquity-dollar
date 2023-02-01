@@ -220,9 +220,9 @@ contract Staking is IStaking, CollectableDust, Pausable {
     }
 
     function setStakingFormulas(
-        StakingFormulas _stakingFormulas
+        StakingFormulas formulaContract
     ) external onlyStakingManager {
-        stakingFormulas = _stakingFormulas;
+        stakingFormulas = formulaContract;
     }
 
     /// Collectable Dust
