@@ -18,21 +18,29 @@ contract UbiquityFormulasTest is Test {
             1,
             1000000 gwei
         );
-        assertEq(amount, 100099999999999999999);
+        assertEq(amount, 100100000000000000000);
     }
 
-    function testBonding_ShouldReturnAmount() public {
-        uint amount = ubiquityFormulas.bonding(100 ether, 2 ether, 3 ether);
+    function testStaking_ShouldReturnAmount() public {
+        uint amount = ubiquityFormulas.staking(100 ether, 2 ether, 3 ether);
         assertEq(amount, 150000000000000000000);
     }
 
-    function testRedeemBonds_ShouldReturnAmount() public {
-        uint amount = ubiquityFormulas.redeemBonds(100 ether, 2 ether, 3 ether);
+    function testRedeemShares_ShouldReturnAmount() public {
+        uint amount = ubiquityFormulas.redeemShares(
+            100 ether,
+            2 ether,
+            3 ether
+        );
         assertEq(amount, 66666666666666666666);
     }
 
-    function testBondPrice_ShouldReturnAmount() public {
-        uint amount = ubiquityFormulas.bondPrice(100 ether, 100 ether, 1 ether);
+    function testSharePrice_ShouldReturnAmount() public {
+        uint amount = ubiquityFormulas.sharePrice(
+            100 ether,
+            100 ether,
+            1 ether
+        );
         assertEq(amount, 1000000000000000000);
     }
 
