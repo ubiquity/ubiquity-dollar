@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 // OpenZeppelin Contracts v4.4.1 (token/ERC1155/extensions/ERC1155Pausable.sol)
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.16;
 
 import "./ERC1155SetUri.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
