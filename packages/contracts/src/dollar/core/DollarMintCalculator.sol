@@ -14,7 +14,7 @@ contract DollarMintCalculator is IDollarMintCalculator {
 
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
     UbiquityDollarManager public immutable manager;
-    IERC20 dollarToken;
+    IERC20 immutable dollarToken;
 
     /// @param _manager the address of the manager contract so we can fetch variables
     constructor(UbiquityDollarManager _manager) {
