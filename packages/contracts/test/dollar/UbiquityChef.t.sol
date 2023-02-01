@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/LiveTestHelper.sol";
@@ -110,7 +110,7 @@ contract RemoteDepositStateTest is DepositState {
     }
 
     function testWithdraw(uint256 amount, uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**64-1);
+        blocks = bound(blocks, 1, 2 ** 64 - 1);
         amount = bound(amount, 1, shares);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         uint256 preBal_ = metapool.balanceOf(fourthAccount);
@@ -123,7 +123,7 @@ contract RemoteDepositStateTest is DepositState {
     }
 
     function testGetRewards(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2**64-1);
+        blocks = bound(blocks, 1, 2 ** 64 - 1);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         vm.roll(block.number + blocks);
 
