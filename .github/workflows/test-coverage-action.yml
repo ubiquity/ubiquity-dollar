@@ -39,7 +39,7 @@ jobs:
         run: yarn workspace @ubiquity/contracts forge install
 
       - name: Coverage
-        run: yarn workspace @ubiquity/contracts forge coverage --no-match-path src/dollar/libs/ --fork-url https://eth.ubq.fi/v1/mainnetXWe7 > coverage.txt
+        run: yarn workspace @ubiquity/contracts forge coverage --no-match-path src/dollar/libs/ --fork-url https://eth.ubq.fi/v1/mainnet > coverage.txt
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
