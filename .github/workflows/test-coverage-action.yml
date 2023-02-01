@@ -64,14 +64,12 @@ jobs:
           VAL="$(tail -1 coverage.txt)"
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f2,3 -d'|')"
-          echo "::set-output name=result::$RES"
-          env:
-            Result: $RES
+          echo "action_state=RES" >> $GITHUB_ENV
       - name: coverage update
         uses: RubbaBoy/BYOB@v1.3.0
         with:
           NAME: coverage
           LABEL: 'Coverage'
-          STATUS: ${{ env.Result }}
+          STATUS: ${{ env.action_state }}
           COLOR: 00EEFF
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
