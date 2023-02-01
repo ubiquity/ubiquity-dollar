@@ -98,7 +98,8 @@ contract RemoteZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyAddress() public {
         vm.expectRevert("address array empty");
-        Staking broken = new Staking(manager,
+        Staking broken = new Staking(
+            manager,
             stakingFormulas,
             ogsEmpty,
             balances,
@@ -139,7 +140,7 @@ contract RemoteZeroStateTest is ZeroState {
     function testCannotSetMigratorNotMigrator() public {
         vm.expectRevert("not migrator");
         vm.prank(secondAccount);
-        staking.setMigrator(fourthAccount); 
+        staking.setMigrator(fourthAccount);
     }
 
     function testSetMigrating() public {
@@ -152,7 +153,7 @@ contract RemoteZeroStateTest is ZeroState {
     function testCannotSetMigratingNotMigrator() public {
         vm.expectRevert("not migrator");
         vm.prank(secondAccount);
-        staking.setMigrating(false);  
+        staking.setMigrating(false);
     }
 
     function testSetStakingFormula() public {
@@ -166,14 +167,16 @@ contract RemoteZeroStateTest is ZeroState {
         vm.stopPrank();
 
         assertEq(
-            bytes20(address(steak)), bytes20(address(staking.stakingFormulas()))
+            bytes20(address(steak)),
+            bytes20(address(staking.stakingFormulas()))
         );
     }
 
     function testCannotSetStakingFormula() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
-        staking.setStakingFormulasAddress(secondAccount); 
+        StakingFormulas steak = new StakingFormulas();
+        staking.setStakingFormulas(steak);
     }
 
     function testAddProtocolToken() public {
@@ -195,7 +198,7 @@ contract RemoteZeroStateTest is ZeroState {
     function testCannotAddProtocolTokenNotManager() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
-        staking.addProtocolToken(secondAccount);  
+        staking.addProtocolToken(secondAccount);
     }
 
     function testRemoveProtocolToken() public {
@@ -220,7 +223,7 @@ contract RemoteZeroStateTest is ZeroState {
     function testCannotRemoveProtocolTokenNotManager() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
-        staking.removeProtocolToken(secondAccount);   
+        staking.removeProtocolToken(secondAccount);
     }
 
     function testSendDust() public {
@@ -235,7 +238,7 @@ contract RemoteZeroStateTest is ZeroState {
     function testCannotSendDustZeroAddress() public {
         vm.expectRevert("collectable-dust::cant-send-dust-to-zero-address");
         vm.startPrank(admin);
-        staking.sendDust(address(0), address(dollarToken), 1e18); 
+        staking.sendDust(address(0), address(dollarToken), 1e18);
     }
 
     function testCannotSendDustUnregisteredToken() public {
@@ -245,13 +248,12 @@ contract RemoteZeroStateTest is ZeroState {
         vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
         vm.startPrank(admin);
         staking.sendDust(fourthAccount, address(dollarToken), 1e18);
-        
     }
 
     function testCannotSendDustNotManager() public {
         vm.expectRevert("not manager");
         vm.prank(secondAccount);
-        staking.sendDust(fourthAccount, address(dollarToken), 1e18); 
+        staking.sendDust(fourthAccount, address(dollarToken), 1e18);
     }
 
     function testPause() public {
