@@ -179,7 +179,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 toTransfer = IERC20(manager.dollarTokenAddress()).balanceOf(
             address(this)
         );
-        IERC20(manager.dollarTokenAddress()).transfer(
+        IERC20(manager.dollarTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             toTransfer
         );
@@ -208,7 +208,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 toTransfer = IERC20(manager.curve3PoolTokenAddress()).balanceOf(
             address(this)
         );
-        IERC20(manager.curve3PoolTokenAddress()).transfer(
+        IERC20(manager.curve3PoolTokenAddress()).safeTransfer(
             manager.treasuryAddress(),
             toTransfer
         );
