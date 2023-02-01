@@ -5,20 +5,19 @@ import "../../../src/dollar/core/UbiquityCreditToken.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract UbiquityCreditTokenTest is LocalTestHelper {
-    UbiquityCreditToken creditToken;
+    UbiquityCreditToken ubiquityCreditToken;
 
-    address dollarManagerAddress;
+    function setUp() public override {
+        super.setUp();
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
         vm.prank(admin);
-        creditToken = new UbiquityCreditToken(dollarManagerAddress);
+        ubiquityCreditToken = new UbiquityCreditToken(manager);
     }
 
     function testRaiseCapital_ShouldMintTokens() public {
-        assertEq(creditToken.balanceOf(treasuryAddress), 0);
+        assertEq(ubiquityCreditToken.balanceOf(treasuryAddress), 0);
         vm.prank(admin);
-        creditToken.raiseCapital(1e18);
-        assertEq(creditToken.balanceOf(treasuryAddress), 1e18);
+        ubiquityCreditToken.raiseCapital(1e18);
+        assertEq(ubiquityCreditToken.balanceOf(treasuryAddress), 1e18);
     }
 }
