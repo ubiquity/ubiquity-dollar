@@ -5,4 +5,5 @@ export type Env = {
   etherscanApiKey?: string;
   curveWhale: string;
   _3CRV: string;
+  mnemonic: string;
 };
