@@ -44,10 +44,10 @@ jobs:
       - name: Setup Forge
         run: yarn workspace @ubiquity/contracts forge install
 
-      - name: Build
+      - name: Build All
         run: yarn build:all
 
-      - name: Test
+      - name: Test All
         run: yarn test:all
 
       - name: Prepare Deployment
