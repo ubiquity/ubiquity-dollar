@@ -1,4 +1,4 @@
-name: Install and run Yarn Audit
+name: Yarn Audit
 
 on:
   pull_request:
@@ -20,5 +20,5 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Audit and Attempt Fix
+      - name: Audit
         run: yes | npx yarn-audit-fix

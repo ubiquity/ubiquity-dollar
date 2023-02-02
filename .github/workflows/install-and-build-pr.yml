@@ -1,4 +1,4 @@
-name: Install and Build Workflow
+name: Build
 
 on:
   pull_request:
