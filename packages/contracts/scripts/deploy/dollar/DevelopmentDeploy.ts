@@ -2,10 +2,11 @@ import { spawnSync } from "child_process";
 import { ethers } from "ethers";
 import fs from "fs";
 import path from "path";
-import { loadEnv } from "../../shared";
+import { loadEnv, warn } from "../../shared";
 import { TEST_MNEMONIC } from "../../shared/constants/mnemonic";
 
 const envPath = path.join(__dirname, "../../../.env");
+
 if (!fs.existsSync(envPath)) {
   throw new Error("Env file not found");
 }
@@ -18,6 +19,8 @@ if (!fs.existsSync(envPath)) {
   const wallet = ethers.Wallet.fromMnemonic(TEST_MNEMONIC);
   const adminAddress = wallet.address;
 
+  console.log({ _3CRV, curveWhale, adminAddress });
+
   await impersonateAccount(curveWhale);
   await sendTokens(_3CRV, adminAddress, curveWhale);
   await stopImpersonatingAccount(curveWhale);
@@ -26,37 +29,33 @@ if (!fs.existsSync(envPath)) {
 
 //
 
-async function impersonateAccount(curveWhale) {
-  console.log("----------------------------------------------------------------");
-  console.log("Impersonating 'CURVE_WHALE' account");
-  console.log("----------------------------------------------------------------");
+async function impersonateAccount(curveWhale: string) {
+  warn("Impersonating 'CURVE_WHALE' account");
+
   spawnSync("cast", ["rpc", "anvil_impersonateAccount", curveWhale, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
 }
 
-async function sendTokens(_3CRV, adminAddress, curveWhale) {
-  console.log("----------------------------------------------------------------");
-  console.log("Sending 10,000 3CRV LP tokens to 'PUBLIC_KEY'");
-  console.log("----------------------------------------------------------------");
+async function sendTokens(_3CRV: string, adminAddress: string, curveWhale: string) {
+  warn("Sending 10,000 3CRV LP tokens to 'PUBLIC_KEY'");
+
   spawnSync("cast", ["send", _3CRV, "transfer(address, uint256)", adminAddress, "10000000000000000000000", "--from", curveWhale], {
     stdio: "inherit",
   });
 }
 
-async function stopImpersonatingAccount(curveWhale) {
-  console.log("----------------------------------------------------------------");
-  console.log("Ending account impersonation");
-  console.log("----------------------------------------------------------------");
+async function stopImpersonatingAccount(curveWhale: string) {
+  warn("Ending account impersonation");
+
   spawnSync("cast", ["rpc", "anvil_stopImpersonatingAccount", curveWhale, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
 }
 
 async function forgeScript() {
-  console.log("----------------------------------------------------------------");
-  console.log("Running Solidity script");
-  console.log("----------------------------------------------------------------");
+  warn("Running Solidity script");
+
   spawnSync(
     "forge",
     ["script", "scripts/deploy/dollar/solidityScripting/08_DevelopmentDeploy.s.sol:DevelopmentDeploy", "--fork-url", "http://localhost:8545", "--broadcast"],
