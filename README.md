@@ -1,14 +1,10 @@
-# Ubiquity Dollar
-
-Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is an algorithmic stablecoin that maintains its peg by virtue of its monetary and fiscal policies (as well as its collateral in 2023).
-
-- The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
-
-- The source code for those can be found [here](https://github.com/ubiquity/uad-contracts).
-
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 
-## Contributing
+- Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/).
+- The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
+- The source code for those can be found [here](https://github.com/ubiquity/uad-contracts).
+
+# Contributing
 
 - We welcome everybody to participate in improving the codebase.
 
@@ -16,7 +12,7 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 
 - Please learn how to contribute via our bounty program [here](https://dao.ubq.fi/devpool).
 
-## Yarn Workspaces
+# Yarn Workspaces
 
 The repo has been built as a [yarn workspace](https://yarnpkg.com/features/workspaces) monorepo.
 
@@ -27,7 +23,7 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 │   ├── <a href="https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/dapp">dapp</a>: User interface
 </pre>
 
-## Codebase Diagram
+# Codebase Diagram
 
 [Interactive Version](https://mango-dune-07a8b7110.1.azurestaticapps.net/?repo=ubiquity%2Fubiquity-dollar)
 
@@ -39,7 +35,7 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 
 ![Visualization of the user interface codebase](./utils/diagram-ui.svg)
 
-## Installation
+# Installation
 
 - We use [Foundry](https://github.com/foundry-rs/foundry).
 - Here are their [docs](https://book.getfoundry.sh/).
@@ -50,7 +46,7 @@ git clone https://github.com/ubiquity/ubiquity-dollar.git
 yarn
 ```
 
-## Build
+# Build
 
 ```bash
 yarn build:all # builds the smart contracts and user interface
@@ -65,7 +61,7 @@ yarn workspace @ubiquity/dapp build # Build the user interface
 
 **_NOTE_**: Dapp package depends on the contracts package.
 
-## Test
+# Test
 
 As of the last time this was updated this supports smart contract unit tests. In the future we will include UI tests.
 
@@ -73,7 +69,7 @@ As of the last time this was updated this supports smart contract unit tests. In
 yarn test:all
 ```
 
-## Running workspace specific commands
+# Running workspace specific commands
 
 ```bash
 # SCRIPT_NAME=XXX
@@ -88,7 +84,7 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 ```
 
-## Committing Code
+# Committing Code
 
 1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages.
 
@@ -96,43 +92,23 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 2. We use [prettier](https://github.com/prettier/prettier), [eslint](https://github.com/eslint/eslint) and [cspell](https://github.com/streetsidesoftware/cspell) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
 
-## MetaMask Development Wallet Setup
+# Wallet Setup for Development
 
 ### Network Settings
 
 Make sure you are using the following network configuration:
 
-- `31337` chain ID of the Hardhat network.
-- `http://127.0.0.1:8545` RPC endpoint of the Hardhat network.
+- `31337` chain ID of the Anvil network.
+- `http://127.0.0.1:8545` RPC endpoint of the Anvil network.
+### Contracts Setup
 
-### Shared Private Keys
+This section is for the core protocol smart contracts (not the UbiquiStick NFT or UI related code.)
 
-- These keys are derived from the `upset concert service toy elephant spoil gun yellow girl provide click beauty`.
-- Do not send assets of value to these wallets.
-
-| PATH              | ADDRESS                                    | PRIVATE KEY                                                        |
-| :---------------- | :----------------------------------------- | :----------------------------------------------------------------- |
-| m/44'/60'/0'/0/0  | 0xa18E35a6E821AaDC80AFD132FFa72879f999F2fc | 0x4454691749f69f1224e443731757b75005d0335d38cd3900d7f74e64625c6091 |
-| m/44'/60'/0'/0/1  | 0x959d25B75324fBE0ADc75a454Df286eaBc7B45a7 | 0x61aefdfdd9dc3f84b6e9e061dd51781b126a78f54836ae77d9b9b81017d801b6 |
-| m/44'/60'/0'/0/2  | 0x1cDd6EfC312982F337E45cBA1050422908564358 | 0x934eaa469cf07f77eef7eba88279d7be916887e7be42bbf8abeac1e300c02d5e |
-| m/44'/60'/0'/0/3  | 0x1853E2B5F1135e888a85b1C0Cf54D5Fa4E82d5A1 | 0xa6eebebb2e7a4adc76a4710e980af27f550a55b2753bf3e9badaf635c34f9f91 |
-| m/44'/60'/0'/0/4  | 0x7f1F7e985F85891Be5E38fCC6242fFCF81a08576 | 0xf50d765fff48f95cca730165913c8e645f13f8bc5a14e8cb2edf125748ef1afe |
-| m/44'/60'/0'/0/5  | 0xd7a01fd8a68723baB8dBbE162504D8b4Fb49e2c9 | 0x727d650cc0c833f8ae2bff91d14e2fc4b23cee28e6d961c5307666e58a12b163 |
-| m/44'/60'/0'/0/6  | 0xC16AD476ab93b80C16fD6F00cDD79E4F9A7b7a76 | 0xa65196f91a8b6007808c508beda7f755ca808f899c4254865766e5aecb837528 |
-| m/44'/60'/0'/0/7  | 0x4A3DdEfFB0d2C1f69C083f578301896757B2b232 | 0x13d5a3866730f686dc8bf248710106a8e660bc861739cadf71c5dd261f90b533 |
-| m/44'/60'/0'/0/8  | 0x9Bf996d84AAecBb2E06dc5F277B7A26EBCA52A67 | 0x61eafce90092133ec543caa90c085af57c850df1b400f0af5cd0bf34fcddb052 |
-| m/44'/60'/0'/0/9  | 0x71454ff148c22f6D2Fc50C13aF0B702Aaa134189 | 0x3c82c68b4df60547a5fb926bf8d9513f4a6cf07604cb6429778ef6dce4eb48fb |
-| m/44'/60'/0'/0/10 | 0x53e93feD0C06D78ec86cEfC58b619BD6B5F93Ade | 0x79c924066175ae04a3ef3cd88d293e1c2f7fd7a860c5ddb8f09077bd4225c757 |
-
-### Ubiquity Dollar Contracts Setup
-
-This section is for the Ubiquity Dollar core protocol smart contracts (not the UbiquiStick NFT or UI related code.)
-
-You need to create `.env` file inside the contracts folder with 'RPC_URL', 'PRIVATE_KEY', 'ADMIN_ADDRESS', 'MNEMONIC', and 'CURVE_WHALE' all filled. 'PRIVATE_KEY' will be used to deploy locally and the matching 'ADMIN_ADDRESS' will be the admin on all the smart contracts. 'RPC_URL' and 'MNEMONIC' are used when launching Anvil and will ensure your `ADMIN_ADDRESS` account is funded. 
+You need to create `.env` file inside the contracts folder with 'RPC_URL', 'PRIVATE_KEY', 'PUBLIC_KEY', 'MNEMONIC', and 'CURVE_WHALE' all filled. 'PRIVATE_KEY' will be used to deploy locally and the matching 'PUBLIC_KEY' will be the admin on all the smart contracts. 'RPC_URL' and 'MNEMONIC' are used when launching Anvil and will ensure your `PUBLIC_KEY` account is funded.
 
 The .env.example is prepopulated with the recommend test 'MNEMONIC', test 'PRIVATE_KEY', and test 'ADMIN_ADRESS'.
 
-To start your local chain run 
+To start your local chain run
 
 ``` yarn workspace @ubiquity/contracts anvil ```
 
@@ -142,7 +118,27 @@ To deploy the contracts run
 
 ``` yarn workspace @ubiquity/contracts deploy:development ```
 
-This will first impersonate the `CURVE_WHALE` and transfer some tokens so we can create a UbiquityDollar/3CRV pool, and then it will deploy the Ubiquity Dollar core protocol via a series of Solidity scripts via Forge. 
+This will first impersonate the `CURVE_WHALE` and transfer some tokens so we can create a UbiquityDollar/3CRV pool, and then it will deploy the Ubiquity Dollar core protocol via a series of Solidity scripts via Forge.
+
+### Shared Private Keys for Development
+
+- These keys are derived from `test test test test test test test test test test test junk`.
+- Do not send assets of value to these wallets.
+
+```
+Private Key; Address; Path
+```
+```
+ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80; 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266; m/44'/60'/0'/0/0
+59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d; 0x70997970c51812dc3a010c7d01b50e0d17dc79c8; m/44'/60'/0'/0/1
+5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a; 0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc; m/44'/60'/0'/0/2
+7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6; 0x90f79bf6eb2c4f870365e785982e1f101e93b906; m/44'/60'/0'/0/3
+47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a; 0x15d34aaf54267db7d7c367839aaf71a00a2c6a65; m/44'/60'/0'/0/4
+8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba; 0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc; m/44'/60'/0'/0/5
+92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e; 0x976ea74026e726554db657fa54763abd0c3a0aa9; m/44'/60'/0'/0/6
+4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356; 0x14dc79964da2c08b23698b3d3cc7ca32193d9955; m/44'/60'/0'/0/7
+dbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97; 0x23618e81e3f5cdf7f54c3d65f7fbc0abf5b21e8f; m/44'/60'/0'/0/8
+2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6; 0xa0ee7a142d267c1f36714e4a8f75612f20a79720; m/44'/60'/0'/0/9
+```
 
 Sine stabilitate nihil habemus.
-
