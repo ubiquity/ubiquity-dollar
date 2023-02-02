@@ -7,13 +7,18 @@ import path from "path";
 
 let optimalRPC;
 
+const envPath = path.join(__dirname, "/../../.env");
+if (!fs.existsSync(envPath)) {
+  throw new Error("Env file not found");
+}
+
+const env = loadEnv(envPath);
+
 const getUrl = async () => {
-  const envPath = path.join(__dirname, "/../../.env");
-
-  const env = loadEnv(envPath);
-
   return env.rpcUrl;
 };
+
+const mnemonic = env.mnemonic;
 
 (async () => {
   optimalRPC = await getUrl();
@@ -21,7 +26,7 @@ const getUrl = async () => {
     optimalRPC = (await getRPC()).toString();
   }
   console.log(`using ${optimalRPC} for anvil...`);
-  const command = spawn("anvil", ["-f", optimalRPC as string, "-m", "test test test test test test test test test test test junk", "--chain-id", "31337"]);
+  const command = spawn("anvil", ["-f", optimalRPC as string, "-m", mnemonic as string, "--chain-id", "31337"]);
   command.stdout.on("data", (output: any) => {
     console.log(output.toString());
   });
