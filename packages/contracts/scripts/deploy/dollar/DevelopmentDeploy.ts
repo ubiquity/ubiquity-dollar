@@ -1,59 +1,59 @@
 import { spawnSync } from "child_process";
-import { loadEnv } from "../../shared";
+import { ethers } from "ethers";
 import fs from "fs";
 import path from "path";
-import axios from "axios";
+import { loadEnv } from "../../shared";
+import { TEST_MNEMONIC } from "../../shared/constants/mnemonic";
 
 const envPath = path.join(__dirname, "../../../.env");
 if (!fs.existsSync(envPath)) {
   throw new Error("Env file not found");
 }
-const env = loadEnv(envPath);
 
-const curveWhale = env.curveWhale as string;
-const adminAddress = env.adminAddress as string;
-const _3CRV = env._3CRV as string;
+(async function main() {
+  const env = loadEnv(envPath);
+  const { _3CRV, curveWhale } = env;
 
-const impersonateAccount = async () => {
+  // get the wallets from the TEST_MNEMONIC
+  const wallet = ethers.Wallet.fromMnemonic(TEST_MNEMONIC);
+  const adminAddress = wallet.address;
+
+  await impersonateAccount(curveWhale);
+  await sendTokens(_3CRV, adminAddress, curveWhale);
+  await stopImpersonatingAccount(curveWhale);
+  await forgeScript();
+})();
+
+//
+
+async function impersonateAccount(curveWhale) {
   console.log("----------------------------------------------------------------");
   console.log("Impersonating 'CURVE_WHALE' account");
   console.log("----------------------------------------------------------------");
   spawnSync("cast", ["rpc", "anvil_impersonateAccount", curveWhale, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
-};
+}
 
-const sendTokens = async () => {
+async function sendTokens(_3CRV, adminAddress, curveWhale) {
   console.log("----------------------------------------------------------------");
-  console.log("Sending 10,000 3CRV LP tokens to 'ADMIN_ADDRESS'");
+  console.log("Sending 10,000 3CRV LP tokens to 'PUBLIC_KEY'");
   console.log("----------------------------------------------------------------");
-  spawnSync(
-    "cast",
-    [
-      "send",
-      _3CRV,
-      "transfer(address, uint256)",
-      adminAddress,
-      "10000000000000000000000", //10,000e18
-      "--from",
-      curveWhale,
-    ],
-    {
-      stdio: "inherit",
-    }
-  );
-};
+  spawnSync("cast", ["send", _3CRV, "transfer(address, uint256)", adminAddress, "10000000000000000000000", "--from", curveWhale], {
+    stdio: "inherit",
+  });
+}
 
-const stopImpersonatingAccount = async () => {
+async function stopImpersonatingAccount(curveWhale) {
   console.log("----------------------------------------------------------------");
   console.log("Ending account impersonation");
   console.log("----------------------------------------------------------------");
   spawnSync("cast", ["rpc", "anvil_stopImpersonatingAccount", curveWhale, "-r", "http://localhost:8545"], {
     stdio: "inherit",
   });
-};
+}
 
-const forgeScript = async () => {
+async function forgeScript() {
   console.log("----------------------------------------------------------------");
   console.log("Running Solidity script");
   console.log("----------------------------------------------------------------");
@@ -64,13 +64,4 @@ const forgeScript = async () => {
       stdio: "inherit",
     }
   );
-};
-
-const main = async () => {
-  await impersonateAccount();
-  await sendTokens();
-  await stopImpersonatingAccount();
-  await forgeScript();
-};
-
-main();
+}

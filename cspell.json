@@ -113,6 +113,7 @@
     "alloc",
     "ubiquiti",
     "buildhome",
-    "ubiquibot"
+    "ubiquibot",
+    "basepool"
   ]
 }
