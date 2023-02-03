@@ -1,2 +1,6 @@
-console.log("Hello from puppeteer.ts");
-export default process.exit(0);
+export default function puppeteerTest() {
+  console.log("Hello from puppeteer.ts");
+  process.exit(0);
+}
+
+puppeteerTest();
