@@ -55,7 +55,6 @@
   "packageManager": "yarn@3.2.3",
   "lavamoat": {
     "allowScripts": {
-      "esbuild": true,
       "$root$": true,
       "bufferutil": true,
       "utf-8-validate": true,
@@ -67,7 +66,8 @@
       "classic-level": true,
       "@ubiquity/monorepo": true,
       "napi-macros/example": true,
-      "husky": true
+      "husky": true,
+      "tsx>@esbuild-kit/core-utils>esbuild": true
     }
   },
   "dependencies": {
