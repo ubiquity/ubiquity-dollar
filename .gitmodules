@@ -1,9 +1,6 @@
 [submodule "packages/contracts/lib/Uniswap/v2-periphery"]
 	path = packages/contracts/lib/Uniswap/v2-periphery
 	url = https://github.com/Uniswap/v2-periphery.git
-[submodule "packages/contracts/lib/Uniswap/v3-periphery"]
-	path = packages/contracts/lib/Uniswap/v3-periphery
-	url = https://github.com/Uniswap/v3-periphery.git
 [submodule "packages/contracts/lib/Uniswap/v2-core"]
 	path = packages/contracts/lib/Uniswap/v2-core
 	url = https://github.com/Uniswap/v2-core.git
