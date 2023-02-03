@@ -55,6 +55,7 @@
   "packageManager": "yarn@3.2.3",
   "lavamoat": {
     "allowScripts": {
+      "esbuild": true,
       "$root$": true,
       "bufferutil": true,
       "utf-8-validate": true,
