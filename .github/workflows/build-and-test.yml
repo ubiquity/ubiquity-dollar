@@ -64,3 +64,11 @@ jobs:
         with:
           name: pr
           path: pr/
+
+      - name: Run Server
+        run: yarn dev:dapp &
+        env:
+          CI: true
+
+      - name: UI Tests
+        run: npx tsx packages/dapp/test/puppeteer.ts
