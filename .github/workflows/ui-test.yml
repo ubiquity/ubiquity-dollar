@@ -2,8 +2,8 @@ name: UI Test
 
 on: [push]
 
-env:
-  YARN_CACHE_FOLDER: ${{ env.HOME }}/.cache/yarn
+# env:
+  # YARN_CACHE_FOLDER: ${{ env.HOME }}/.cache/yarn
 
 jobs:
   test:
