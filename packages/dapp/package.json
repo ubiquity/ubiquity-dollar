@@ -8,6 +8,7 @@
     "build": "run-s build:types build:next build:export",
     "build:watch": "run-s build:types build:next",
     "build:export": "next export --outdir dist",
+    "test": "tsx test/puppeteer.ts",
     "start": "next dev",
     "clean": "rimraf next types node_modules",
     "build:next": "next build",
