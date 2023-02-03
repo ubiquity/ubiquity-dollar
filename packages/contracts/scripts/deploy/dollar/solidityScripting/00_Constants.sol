@@ -33,7 +33,7 @@ contract Constants is Script {
   uint256[] ids;
 
   string uri;
-  address admin = vm.envAddress("ADMIN_ADDRESS");
+  address admin = vm.envAddress("PUBLIC_KEY");
   address USDCrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
   address basepool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
   address curveFactory = 0xB9fC157394Af804a3578134A6585C0dc9cc990d4;
