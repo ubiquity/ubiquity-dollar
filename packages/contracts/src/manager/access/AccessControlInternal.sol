@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.16;
 
 import {EnumerableSet} from "../libraries/EnumerableSet.sol";
 import {AddressUtils} from "../libraries/AddressUtils.sol";
@@ -74,17 +74,6 @@ abstract contract AccessControlInternal is IAccessControlInternal {
         bytes32 role
     ) internal view virtual returns (bytes32) {
         return AccessControlStorage.layout().roles[role].adminRole;
-    }
-
-    /**
-     * @notice set role as admin role
-     * @param role role to set
-     * @param adminRole admin role to set
-     */
-    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
-        bytes32 previousAdminRole = _getRoleAdmin(role);
-        AccessControlStorage.layout().roles[role].adminRole = adminRole;
-        emit RoleAdminChanged(role, previousAdminRole, adminRole);
     }
 
     /*

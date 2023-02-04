@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {AccessControlStorage} from "../libraries/AccessControlStorage.sol";
@@ -129,6 +129,7 @@ contract ManagerFacet is Modifiers {
         uint256 _fee
     ) external onlyAdmin {
         // Create new StableSwap meta pool (uAD <-> 3Crv)
+        // slither-disable-next-line reentrancy-no-eth
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
             ERC20(s.dollarTokenAddress).name(),

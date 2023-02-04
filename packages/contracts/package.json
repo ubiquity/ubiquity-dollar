@@ -18,9 +18,10 @@
     "@tanstack/query-persist-client-core": "^4.24.4",
     "@types/command-line-args": "5.2.0",
     "command-line-args": "5.2.1",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.3",
     "ethers": "^5.6.9",
     "npm-run-all": "^4.1.5",
+    "react-transition-group": "^4.4.5",
     "tsx": "^3.12.2"
   },
   "scripts": {
@@ -35,7 +36,9 @@
     "clean:forge": "forge clean",
     "clean:yarn": "yarn clean",
     "task": "tsx ./scripts/task/task.ts",
-    "_fix:submodules": "git submodule update --init --recursive"
+    "_fix:submodules": "git submodule update --init --recursive",
+    "run:anvil": "tsx ./scripts/anvil/anvil.ts",
+    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts"
   },
   "lavamoat": {
     "allowScripts": {
@@ -52,6 +55,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "@types/react-transition-group": "^4",
+    "cspell": "latest",
     "typescript": "^4.9.5"
   }
 }

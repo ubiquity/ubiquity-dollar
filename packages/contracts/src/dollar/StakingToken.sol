@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -28,7 +28,7 @@ contract StakingToken is
         uint256 lpAmount;
     }
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     mapping(uint256 => Stake) private _stakes;
@@ -71,8 +71,11 @@ contract StakingToken is
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155SetUri(uri) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(
+        UbiquityDollarManager _manager,
+        string memory uri
+    ) ERC1155SetUri(uri) {
+        manager = _manager;
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.
@@ -201,29 +204,6 @@ contract StakingToken is
         address holder
     ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
-    }
-
-    function _burn(
-        address account,
-        uint256 id,
-        uint256 amount
-    ) internal virtual override whenNotPaused {
-        require(amount == 1, "amount <> 1");
-        super._burn(account, id, 1);
-        Stake storage _stake = _stakes[id];
-        require(_stake.lpAmount == 0, "LP <> 0");
-        _totalSupply -= 1;
-    }
-
-    function _burnBatch(
-        address account,
-        uint256[] memory ids,
-        uint256[] memory amounts
-    ) internal virtual override whenNotPaused {
-        super._burnBatch(account, ids, amounts);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply -= amounts[i];
-        }
     }
 
     function _beforeTokenTransfer(

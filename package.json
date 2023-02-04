@@ -34,7 +34,7 @@
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
     "test:all": "yarn workspaces foreach run test",
     "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
-    "prettier:all": "yarn workspaces foreach run prettier",
+    "format": "prettier packages/**/*.{ts,tsx,sol} --write",
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:cloudflare": "bash ./utils/build_cloudflare.sh",
     "build:ci:netlify": "yarn build:all",

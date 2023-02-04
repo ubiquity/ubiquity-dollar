@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
-import "../libs/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 import "./UbiquityDollarManager.sol";
 
 contract CreditClock {

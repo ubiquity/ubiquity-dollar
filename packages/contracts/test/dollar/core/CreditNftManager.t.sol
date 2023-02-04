@@ -28,16 +28,17 @@ contract CreditNftManagerTest is LocalTestHelper {
     address creditTokenAddress;
     address dollarMintCalculatorAddress;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
 
         creditNftManagerAddress = address(
             new CreditNftManager(dollarManagerAddress, creditNftLengthBlocks)
         );
-        twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
-            .twapOracleAddress();
-        dollarTokenAddress = UbiquityDollarManager(dollarManagerAddress)
-            .dollarTokenAddress();
+        twapOracleAddress =
+            manager.twapOracleAddress();
+        dollarTokenAddress =
+            manager.dollarTokenAddress();
         creditCalculatorAddress = UbiquityDollarManager(dollarManagerAddress)
             .creditCalculatorAddress();
         creditNftAddress = UbiquityDollarManager(dollarManagerAddress)
@@ -347,7 +348,7 @@ contract CreditNftManagerTest is LocalTestHelper {
 
         // set excess dollar distributor for creditNftAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            manager
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
@@ -379,7 +380,7 @@ contract CreditNftManagerTest is LocalTestHelper {
 
         // set excess dollar distributor for creditNftAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            manager
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
@@ -414,7 +415,7 @@ contract CreditNftManagerTest is LocalTestHelper {
 
         // set excess dollar distributor for debtCouponAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            manager
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
@@ -433,7 +434,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         mockDollarMintCalcFuncs(50);
         // set excess dollar distributor for creditNftAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            dollarManagerAddress
+            manager
         );
         helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(

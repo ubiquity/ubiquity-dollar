@@ -9,7 +9,7 @@ let retryRemoteCount = 0;
 const procRemoteFork = async () => {
   const optimalRPC = await getRPC();
   console.log(`using ${optimalRPC} for unit-testing...`);
-  const command = spawn("forge", ["test", "--fork-url", optimalRPC as string, "--match-contract", TEST_PATTERN]);
+  const command = spawn("forge", ["test", "--fork-url", optimalRPC as string, "--match-contract", TEST_PATTERN, "-vvv"]);
   shouldRemoteSkip = false;
   command.stdout.on("data", (output: unknown) => {
     console.log(output?.toString());

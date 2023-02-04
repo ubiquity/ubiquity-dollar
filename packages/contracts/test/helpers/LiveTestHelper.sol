@@ -119,7 +119,7 @@ contract LiveTestHelper is Test {
         ubiquityFormulas = new UbiquityFormulas();
         manager.setFormulasAddress(address(ubiquityFormulas));
 
-        governanceToken = new UbiquityGovernanceToken(address(manager));
+        governanceToken = new UbiquityGovernanceToken(manager);
         manager.setGovernanceTokenAddress(address(governanceToken));
         //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
 
@@ -133,7 +133,7 @@ contract LiveTestHelper is Test {
         deal(address(governanceToken), thirdAccount, 100000e18);
         deal(address(dollarToken), thirdAccount, 1000000e18);
 
-        sushiGovernancePool = new SushiSwapPool(address(manager));
+        sushiGovernancePool = new SushiSwapPool(manager);
         manager.setSushiSwapPoolAddress(address(sushiGovernancePool));
 
         vm.stopPrank();
@@ -205,7 +205,7 @@ contract LiveTestHelper is Test {
             address(curve3CrvToken)
         );
         manager.setTwapOracleAddress(address(twapOracle));
-        creditRedemptionCalc = new CreditRedemptionCalculator(address(manager));
+        creditRedemptionCalc = new CreditRedemptionCalculator(manager);
         manager.setCreditCalculatorAddress(address(creditRedemptionCalc));
 
         creditNftRedemptionCalc = new CreditNftRedemptionCalculator(
@@ -213,7 +213,7 @@ contract LiveTestHelper is Test {
         );
         manager.setCreditNftCalculatorAddress(address(creditNftRedemptionCalc));
 
-        dollarMintCalc = new DollarMintCalculator(address(manager));
+        dollarMintCalc = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
         creditNftManager = new CreditNftManager(
@@ -234,10 +234,11 @@ contract LiveTestHelper is Test {
             address(creditNftManager)
         );
 
-        creditToken = new UbiquityCreditToken(address(manager));
+        creditToken = new UbiquityCreditToken(manager);
         manager.setCreditTokenAddress(address(creditToken));
 
-        dollarMintExcess = new DollarMintExcess(address(manager));
+        dollarMintExcess =
+            new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(
             address(creditNftManager),
             address(dollarMintExcess)
@@ -247,7 +248,7 @@ contract LiveTestHelper is Test {
         uint256[] memory amounts;
         uint256[] memory ids;
 
-        ubiquityChef = new UbiquityChef(managerAddress, tos, amounts, ids);
+        ubiquityChef = new UbiquityChef(manager, tos, amounts, ids);
 
         manager.setMasterChefAddress(address(ubiquityChef));
         manager.grantRole(
@@ -313,13 +314,10 @@ contract LiveTestHelper is Test {
         migrateLP = [0, 0, 0];
         locked = [uint256(1), uint256(1), uint256(208)];
 
-        staking = new Staking(
-            address(manager),
-            address(stakingFormulas),
-            migrating,
-            migrateLP,
-            locked
-        );
+        staking =
+        new Staking(manager, stakingFormulas, migrating, migrateLP, locked);
+
+        deal(address(dollarToken), address(staking), 100e18);
 
         // bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 

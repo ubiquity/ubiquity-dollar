@@ -1,25 +1,27 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditNftRedemptionCalculator.sol";
 import "../libs/ABDKMathQuad.sol";
 import "./CreditNft.sol";
 import "./UbiquityDollarManager.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "./CreditNFT.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     /*   using ABDKMath64x64 for uint256;
     using ABDKMath64x64 for int128;*/
 
     /// @param _manager the address of the manager/config contract so we can fetch variables
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function getCreditNftAmount(
@@ -39,7 +41,7 @@ contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
         );
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));
-        bytes16 res = one.div(oneMinusRAllSquared);
-        return res.mul(dollarsToBurn.fromUInt()).toUInt();
+        bytes16 res = one.mul(dollarsToBurn.fromUInt());
+        return res.div(oneMinusRAllSquared).toUInt();
     }
 }

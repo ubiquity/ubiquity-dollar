@@ -13,7 +13,7 @@ contract StakingFormulasTest is LocalTestHelper {
 
     StakingFormulas stakingFormulas;
 
-    function setUp() public {
+    function setUp() public override {
         stakingFormulas = new StakingFormulas();
     }
 

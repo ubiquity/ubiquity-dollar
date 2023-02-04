@@ -9,8 +9,8 @@ import "operator-filter-registry/DefaultOperatorFilterer.sol";
 
 // With this "The UbiquiStick" NFT contract you can :
 // - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
-//   - including check that someone as a NFT of the collection with « balanceOf »
-//   - including check who is TokenID owner with « ownerOf »
+//   - including check that someone as a NFT of the collection with « balanceOf »
+//   - including check who is TokenID owner with « ownerOf »
 //   - including optional ERC721Metadata
 //     but without metadata JSON schema
 //     with 3 types of NFTs : standard, gold and invisible, each one having same metadata

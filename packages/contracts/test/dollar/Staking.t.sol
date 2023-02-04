@@ -45,9 +45,11 @@ contract ZeroState is LiveTestHelper {
         uint256 _sharesAmount,
         uint256 _weeks
     );
-    event DustSent(address _to, address token, uint256 amount);
+    event DustSent(address _to, address _token, uint256 _amount);
     event ProtocolTokenAdded(address _token);
     event ProtocolTokenRemoved(address _token);
+    event Paused(address _caller);
+    event Unpaused(address _caller);
 
     address[] ogs;
     address[] ogsEmpty;
@@ -136,6 +138,12 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(secondAccount, staking.migrator());
     }
 
+    function testCannotSetMigratorNotMigrator() public {
+        vm.expectRevert("not migrator");
+        vm.prank(secondAccount);
+        staking.setMigrator(fourthAccount);
+    }
+
     function testSetMigrating() public {
         assertEq(true, staking.migrating());
         vm.prank(admin);
@@ -143,18 +151,34 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(false, staking.migrating());
     }
 
+    function testCannotSetMigratingNotMigrator() public {
+        vm.expectRevert("not migrator");
+        vm.prank(secondAccount);
+        staking.setMigrating(false);
+    }
+
     function testSetStakingFormula() public {
         assertEq(
             bytes20(address(stakingFormulas)),
-            bytes20(staking.stakingFormulasAddress())
+            bytes20(address(staking.stakingFormulas()))
         );
-        vm.prank(admin);
-        staking.setStakingFormulasAddress(secondAccount);
+        vm.startPrank(admin);
+        StakingFormulas steak = new StakingFormulas();
+        staking.setStakingFormulas(steak);
+        vm.stopPrank();
 
         assertEq(
-            bytes20(secondAccount),
-            bytes20(staking.stakingFormulasAddress())
+            bytes20(address(steak)),
+            bytes20(address(staking.stakingFormulas()))
         );
+    }
+
+    function testCannotSetStakingFormula() public {
+        vm.startPrank(secondAccount);
+        StakingFormulas steak = new StakingFormulas();
+        vm.expectRevert("not manager");
+        staking.setStakingFormulas(steak);
+        vm.stopPrank();
     }
 
     function testAddProtocolToken() public {
@@ -162,6 +186,101 @@ contract RemoteZeroStateTest is ZeroState {
         emit ProtocolTokenAdded(address(DAI));
         vm.prank(admin);
         staking.addProtocolToken(address(DAI));
+    }
+
+    function testCannotAddProtocolToken() public {
+        vm.prank(admin);
+        staking.addProtocolToken(address(DAI));
+
+        vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
+        vm.prank(admin);
+        staking.addProtocolToken(address(DAI));
+    }
+
+    function testCannotAddProtocolTokenNotManager() public {
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.addProtocolToken(secondAccount);
+    }
+
+    function testRemoveProtocolToken() public {
+        vm.startPrank(admin);
+        staking.addProtocolToken(address(DAI));
+        vm.stopPrank();
+
+        vm.expectEmit(true, false, false, true);
+        emit ProtocolTokenRemoved(address(DAI));
+
+        vm.startPrank(admin);
+        staking.removeProtocolToken(address(DAI));
+        vm.stopPrank();
+    }
+
+    function testCannotRemoveProtocolToken() public {
+        vm.expectRevert("collectable-dust::token-not-part-of-the-protocol");
+        vm.prank(admin);
+        staking.removeProtocolToken(address(DAI));
+    }
+
+    function testCannotRemoveProtocolTokenNotManager() public {
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.removeProtocolToken(secondAccount);
+    }
+
+    function testSendDust() public {
+        vm.expectEmit(true, false, false, true);
+        emit DustSent(fourthAccount, address(dollarToken), 1e18);
+
+        vm.startPrank(admin);
+        staking.sendDust(fourthAccount, address(dollarToken), 1e18);
+        vm.stopPrank();
+    }
+
+    function testCannotSendDustZeroAddress() public {
+        vm.expectRevert("collectable-dust::cant-send-dust-to-zero-address");
+        vm.startPrank(admin);
+        staking.sendDust(address(0), address(dollarToken), 1e18);
+    }
+
+    function testCannotSendDustUnregisteredToken() public {
+        vm.prank(admin);
+        staking.addProtocolToken(address(dollarToken));
+
+        vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
+        vm.startPrank(admin);
+        staking.sendDust(fourthAccount, address(dollarToken), 1e18);
+    }
+
+    function testCannotSendDustNotManager() public {
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.sendDust(fourthAccount, address(dollarToken), 1e18);
+    }
+
+    function testPause() public {
+        vm.expectEmit(true, false, false, true);
+        emit Paused(admin);
+
+        vm.prank(admin);
+        staking.pause();
+    }
+
+    function testUnpause() public {
+        vm.prank(admin);
+        staking.pause();
+
+        vm.expectEmit(true, false, false, true);
+        emit Unpaused(admin);
+
+        vm.prank(admin);
+        staking.unpause();
+    }
+
+    function testCannotMigrateZeroId() public {
+        vm.expectRevert("not v1 address");
+        vm.prank(fourthAccount);
+        staking.migrate();
     }
 
     function testSetStakingDiscountMultiplier(uint256 x) public {
@@ -172,12 +291,24 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(x, staking.stakingDiscountMultiplier());
     }
 
+    function testCannotSetStakingDiscountMultiplier(uint256 x) public {
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.setStakingDiscountMultiplier(x);
+    }
+
     function testSetBlockCountInAWeek(uint256 x) public {
         vm.expectEmit(true, false, false, true);
         emit BlockCountInAWeekUpdated(x);
         vm.prank(admin);
         staking.setBlockCountInAWeek(x);
         assertEq(x, staking.blockCountInAWeek());
+    }
+
+    function testCannotSetBlockCountInAWeekNotManager(uint256 x) public {
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.setBlockCountInAWeek(x);
     }
 
     function testDeposit(uint256 lpAmount, uint256 lockup) public {
@@ -270,6 +401,18 @@ contract RemoteDepositStateTest is DepositState {
     address[] path1;
     address[] path2;
 
+    function testCannotDollarPriceResetNotManager(uint256 amount) public {
+        amount = bound(
+            amount,
+            1000e18,
+            dollarToken.balanceOf(address(metapool)) / 10
+        );
+
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.dollarPriceReset(amount);
+    }
+
     function testDollarPriceReset(uint256 amount) public {
         amount = bound(
             amount,
@@ -304,6 +447,18 @@ contract RemoteDepositStateTest is DepositState {
 
         uint256 crvPostBalance = crvToken.balanceOf(address(metapool));
         assertLt(crvPostBalance, crvPreBalance);
+    }
+
+    function testCannotCRVPriceResetNotManager(uint256 amount) public {
+        amount = bound(
+            amount,
+            1000e18,
+            crvToken.balanceOf(address(metapool)) / 10
+        );
+
+        vm.expectRevert("not manager");
+        vm.prank(secondAccount);
+        staking.crvPriceReset(amount);
     }
 
     function testAddLiquidity(uint256 amount, uint256 weeksLockup) public {

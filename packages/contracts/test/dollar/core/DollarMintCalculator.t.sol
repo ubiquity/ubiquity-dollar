@@ -13,8 +13,9 @@ contract DollarMintCalculatorTest is LocalTestHelper {
     address twapOracleAddress;
     address dollarMintCalculatorAddress;
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
             .twapOracleAddress();
         dollarMintCalculatorAddress = UbiquityDollarManager(

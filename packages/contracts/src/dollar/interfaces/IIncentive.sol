@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 /// @title incentive contract interface
 /// @notice Called by Ubiquity Dollar token contract when transferring with an incentivized address

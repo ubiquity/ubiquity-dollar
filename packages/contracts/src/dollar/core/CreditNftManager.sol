@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -22,7 +22,7 @@ import "./CreditNft.sol";
 contract CreditNftManager is ERC165, IERC1155Receiver {
     using SafeERC20 for IERC20Ubiquity;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     //the amount of dollars we minted this cycle, so we can calculate delta.
     // should be reset to 0 when cycle ends
@@ -276,7 +276,10 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
             manager.creditTokenAddress()
         );
         creditToken.mint(address(this), amount);
-        creditToken.transfer(msg.sender, amount);
+        require(
+            creditToken.transfer(msg.sender, amount),
+            "CreditNFTManager: Credit Token Transfer Failed"
+        );
 
         return creditToken.balanceOf(msg.sender);
     }
@@ -315,7 +318,10 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
             creditToRedeem = maxRedeemableCredit;
         }
         creditToken.burnFrom(msg.sender, creditToRedeem);
-        dollarToken.transfer(msg.sender, creditToRedeem);
+        require(
+            dollarToken.transfer(msg.sender, amount),
+            "CreditNFTManager: Credit Token Transfer Failed"
+        );
 
         return amount - creditToRedeem;
     }
@@ -408,9 +414,12 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
                 manager.getExcessDollarsDistributor(address(this))
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            dollarToken.transfer(
-                manager.getExcessDollarsDistributor(address(this)),
-                excessDollars
+            require(
+                dollarToken.transfer(
+                    manager.getExcessDollarsDistributor(address(this)),
+                    excessDollars
+                ),
+                "Dollar: Transfer failed"
             );
             dollarsDistributor.distributeDollars();
         }

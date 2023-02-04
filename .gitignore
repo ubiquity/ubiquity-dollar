@@ -50,6 +50,7 @@ contracts/*/deployments/*
 contracts/dollar/tasks/library/distributor/fixtures/operators.json
 dist/
 fixtures/contracts-addresses/*
+packages/contracts/broadcast/*/*/*
 
 
 .yarn
@@ -62,3 +63,4 @@ out
 
 packages/dapp/types
 .vscode
+packages/contracts/broadcast/*

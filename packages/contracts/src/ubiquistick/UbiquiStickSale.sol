@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.16;
 
 // FORK from Land DAO -> https://github.com/Land-DAO/nft-contracts/blob/main/contracts/LandSale.sol
 
@@ -51,11 +51,10 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
     }
 
     // Set the allowance for the specified address
-    function setAllowance(
-        address _address,
-        uint256 _count,
-        uint256 _price
-    ) public onlyOwner {
+    function setAllowance(address _address, uint256 _count, uint256 _price)
+        public
+        onlyOwner
+    {
         require(_address != address(0), "Invalid Address");
         _allowances[_address] = Purchase(_count, _price);
     }
@@ -74,9 +73,11 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
     }
 
     // Get the allowance for the specified address
-    function allowance(
-        address _address
-    ) public view returns (uint256 count, uint256 price) {
+    function allowance(address _address)
+        public
+        view
+        returns (uint256 count, uint256 price)
+    {
         Purchase memory _allowance = _allowances[_address];
         count = _allowance.count;
         price = _allowance.price;
@@ -86,8 +87,8 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
     receive() external payable nonReentrant {
         // Check if tokens are still available for sale
         require(tokenContract.totalSupply() < MAXIMUM_SUPPLY, "Sold Out");
-        uint256 remainingTokenCount = MAXIMUM_SUPPLY -
-            tokenContract.totalSupply();
+        uint256 remainingTokenCount =
+            MAXIMUM_SUPPLY - tokenContract.totalSupply();
 
         // Check if sufficient funds are sent, and that the address is whitelisted
         // and had enough allowance with enough funds
@@ -95,8 +96,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         uint256 price;
         (count, price) = allowance(msg.sender);
         require(
-            count > 0,
-            "Not Whitelisted For The Sale Or Insufficient Allowance"
+            count > 0, "Not Whitelisted For The Sale Or Insufficient Allowance"
         );
 
         if (remainingTokenCount < count) {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "../interfaces/IIncentive.sol";
 import "../ERC20Ubiquity.sol";
@@ -14,7 +14,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     );
 
     constructor(
-        address _manager
+        UbiquityDollarManager _manager
     ) ERC20Ubiquity(_manager, "Ubiquity Algorithmic Dollar", "uAD") {} // solhint-disable-line no-empty-blocks
 
     /// @param account the account to incentivize
