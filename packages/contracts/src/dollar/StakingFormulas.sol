@@ -2,8 +2,7 @@
 pragma solidity 0.8.16;
 
 import "./StakingToken.sol";
-import "./libs/ABDKMathQuad.sol";
-
+import "../../lib/abdk-libraries-solidity/ABDKMathQuad.sol";
 contract StakingFormulas {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;

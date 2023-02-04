@@ -21,12 +21,12 @@ contract CreditScript is TWAPScript {
             );
         manager.setCreditCalculatorAddress(address(creditCalculator));
 
-        CreditNFTRedemptionCalculator nftCalculator = new CreditNFTRedemptionCalculator(
+        CreditNftRedemptionCalculator nftCalculator = new CreditNftRedemptionCalculator(
                 manager
             );
-        manager.setCreditNFTCalculatorAddress(address(nftCalculator));
+        manager.setCreditNftCalculatorAddress(address(nftCalculator));
 
-        CreditNFTManager nftManager = new CreditNFTManager(manager, 10);
+        CreditNftManager nftManager = new CreditNftManager(manager, 10);
         manager.grantRole(
             manager.CREDIT_NFT_MANAGER_ROLE(),
             address(nftManager)
@@ -40,8 +40,8 @@ contract CreditScript is TWAPScript {
             address(nftManager)
         );
 
-        CreditNFT creditNFT = new CreditNFT(manager);
-        manager.setCreditNFTAddress(address(creditNFT));
+        CreditNft creditNft = new CreditNft(manager);
+        manager.setCreditNftAddress(address(creditNft));
 
         vm.stopBroadcast();
     }

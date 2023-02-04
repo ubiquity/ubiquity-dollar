@@ -3,11 +3,10 @@ pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditNftRedemptionCalculator.sol";
-import "../libs/ABDKMathQuad.sol";
+import "../../../lib/abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNft.sol";
 import "./UbiquityDollarManager.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
-import "./CreditNFT.sol";
+import "./CreditNft.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
@@ -30,7 +29,7 @@ contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
         require(
             CreditNft(manager.creditNftAddress()).getTotalOutstandingDebt() <
                 IERC20(manager.dollarTokenAddress()).totalSupply(),
-            "CreditNFT to Dollar: DEBT_TOO_HIGH"
+            "CreditNft to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
         bytes16 totalDebt = CreditNft(manager.creditNftAddress())

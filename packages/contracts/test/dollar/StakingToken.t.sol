@@ -74,7 +74,7 @@ contract RemoteDepositStateTest is DepositState {
     ) public {
         vm.expectRevert("Governance token: not minter");
         vm.prank(secondAccount);
-        stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
+        stakingToken.updateStake(1, uint256(amount), uint256(debt), end);
     }
 
     function testCannotUpdateStateWhenPaused(
@@ -83,11 +83,11 @@ contract RemoteDepositStateTest is DepositState {
         uint256 end
     ) public {
         vm.prank(admin);
-        stakingShare.pause();
+        stakingToken.pause();
 
         vm.expectRevert("Pausable: paused");
         vm.prank(admin);
-        stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
+        stakingToken.updateStake(1, uint256(amount), uint256(debt), end);
     }
 
     function testMint(uint128 deposited, uint128 debt, uint256 end) public {
@@ -113,7 +113,7 @@ contract RemoteDepositStateTest is DepositState {
     ) public {
         vm.expectRevert("ERC1155: mint to the zero address");
         vm.prank(admin);
-        stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
+        stakingToken.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
     function testCannotMintNotMinter(
@@ -124,7 +124,7 @@ contract RemoteDepositStateTest is DepositState {
         vm.expectRevert("Governance token: not minter");
         vm.prank(secondAccount);
 
-        stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
+        stakingToken.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
     function testCannotMintWhenPaused(
@@ -133,11 +133,11 @@ contract RemoteDepositStateTest is DepositState {
         uint256 end
     ) public {
         vm.prank(admin);
-        stakingShare.pause();
+        stakingToken.pause();
 
         vm.prank(admin);
         vm.expectRevert("Pausable: paused");
-        stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
+        stakingToken.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
     function testPause() public {
@@ -194,12 +194,12 @@ contract RemoteDepositStateTest is DepositState {
 
     function testCannotSafeTransferFromToAddressZero() public {
         vm.prank(stakingMinAccount);
-        stakingShare.setApprovalForAll(admin, true);
+        stakingToken.setApprovalForAll(admin, true);
 
         vm.expectRevert("ERC1155: transfer to the zero address");
         bytes memory data;
         vm.prank(admin);
-        stakingShare.safeTransferFrom(
+        stakingToken.safeTransferFrom(
             stakingMinAccount,
             address(0),
             1,
@@ -210,22 +210,22 @@ contract RemoteDepositStateTest is DepositState {
 
     function testCannotSafeTransferFromInsufficientBalance() public {
         vm.prank(fifthAccount);
-        stakingShare.setApprovalForAll(admin, true);
+        stakingToken.setApprovalForAll(admin, true);
 
         vm.expectRevert("ERC1155: insufficient balance for transfer");
         bytes memory data;
         vm.prank(admin);
-        stakingShare.safeTransferFrom(fifthAccount, secondAccount, 1, 1, data);
+        stakingToken.safeTransferFrom(fifthAccount, secondAccount, 1, 1, data);
     }
 
     function testCannotSafeTransferFromWhenPaused() public {
         vm.prank(admin);
-        stakingShare.pause();
+        stakingToken.pause();
 
         vm.expectRevert("Pausable: paused");
         vm.prank(admin);
         bytes memory data;
-        stakingShare.safeTransferFrom(
+        stakingToken.safeTransferFrom(
             stakingMinAccount,
             secondAccount,
             1,
@@ -258,12 +258,12 @@ contract RemoteDepositStateTest is DepositState {
 
     function testCannotBatchTransferFromWhenPaused() public {
         vm.prank(admin);
-        stakingShare.pause();
+        stakingToken.pause();
 
         vm.expectRevert("Pausable: paused");
         bytes memory data;
         vm.prank(admin);
-        stakingShare.safeBatchTransferFrom(
+        stakingToken.safeBatchTransferFrom(
             stakingMaxAccount,
             secondAccount,
             ids,

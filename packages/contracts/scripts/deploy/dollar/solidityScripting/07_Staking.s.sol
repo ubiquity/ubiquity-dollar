@@ -29,8 +29,8 @@ contract StakingScript is FormulaScript {
         );
         manager.setStakingContractAddress(address(staking));
 
-        StakingShare share = new StakingShare(manager, uri);
-        manager.setStakingShareAddress(address(share));
+        StakingToken share = new StakingToken(manager, uri);
+        manager.setStakingTokenAddress(address(share));
 
         UbiquityChef uChef = new UbiquityChef(
             manager,

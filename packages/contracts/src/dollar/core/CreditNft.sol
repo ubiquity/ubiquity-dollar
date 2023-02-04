@@ -4,9 +4,9 @@ pragma solidity 0.8.16;
 import "../ERC1155Ubiquity.sol";
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "./UbiquityDollarManager.sol";
-import "../interfaces/ICreditNFT.sol";
+import "../interfaces/ICreditNft.sol";
 
-/// @title A CreditNFT redeemable for dollars with an expiry block number
+/// @title A CreditNft redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
 contract CreditNft is ERC1155Ubiquity {
@@ -18,7 +18,7 @@ contract CreditNft is ERC1155Ubiquity {
     //represents tokenSupply of each expiry (since 1155 doesn't have this)
     mapping(uint256 => uint256) private _tokenSupplies;
 
-    //ordered list of CreditNFT expiries
+    //ordered list of CreditNft expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
     event MintedCreditNft(
@@ -36,7 +36,7 @@ contract CreditNft is ERC1155Ubiquity {
     modifier onlyCreditNftManager() {
         require(
             manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
-            "Caller is not a CreditNFT manager"
+            "Caller is not a CreditNft manager"
         );
         _;
     }
@@ -48,7 +48,7 @@ contract CreditNft is ERC1155Ubiquity {
         _totalOutstandingDebt = 0;
     }
 
-    /// @notice Mint an amount of CreditNFTs expiring at a certain block for a certain recipient
+    /// @notice Mint an amount of CreditNfts expiring at a certain block for a certain recipient
     /// @param amount amount of tokens to mint
     /// @param expiryBlockNumber the expiration block number of the Credit NFT to mint
     function mintCreditNft(
@@ -70,7 +70,7 @@ contract CreditNft is ERC1155Ubiquity {
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
-    /// @notice Burn an amount of CreditNFTs expiring at a certain block from
+    /// @notice Burn an amount of CreditNfts expiring at a certain block from
     /// a certain holder's balance
     /// @param creditNftOwner the owner of those Credit NFT
     /// @param amount amount of tokens to burn

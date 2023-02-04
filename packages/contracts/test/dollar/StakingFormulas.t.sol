@@ -3,8 +3,7 @@ pragma solidity ^0.8.3;
 
 import "../../src/dollar/StakingFormulas.sol";
 import "../../src/dollar/StakingToken.sol";
-import "../../src/dollar/libs/ABDKMathQuad.sol";
-
+import "../../lib/abdk-libraries-solidity/ABDKMathQuad.sol";
 import "../helpers/LocalTestHelper.sol";
 
 contract StakingFormulasTest is LocalTestHelper {

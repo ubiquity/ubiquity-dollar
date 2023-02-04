@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 /// @title A Credit NFT which corresponds to a ICreditNftRedemptionCalculator contract
-interface ICreditNFT is IERC1155 {
+interface ICreditNft is IERC1155 {
     function updateTotalDebt() external;
 
     function burnCreditNft(

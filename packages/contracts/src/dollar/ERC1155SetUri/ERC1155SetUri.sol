@@ -280,8 +280,8 @@ contract ERC1155SetUri is Context, ERC165, IERC1155, IERC1155MetadataURI {
      * Because these URIs cannot be meaningfully represented by the {URI} event,
      * this function emits no events.
      */
-    function _setURI(string memory uri) internal virtual {
-        _uri = uri;
+    function _setURI(string memory __uri) internal virtual {
+        _uri = __uri;
     }
 
     /**

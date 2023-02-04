@@ -278,7 +278,7 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
         creditToken.mint(address(this), amount);
         require(
             creditToken.transfer(msg.sender, amount),
-            "CreditNFTManager: Credit Token Transfer Failed"
+            "CreditNftManager: Credit Token Transfer Failed"
         );
 
         return creditToken.balanceOf(msg.sender);
@@ -320,7 +320,7 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
         creditToken.burnFrom(msg.sender, creditToRedeem);
         require(
             dollarToken.transfer(msg.sender, amount),
-            "CreditNFTManager: Credit Token Transfer Failed"
+            "CreditNftManager: Credit Token Transfer Failed"
         );
 
         return amount - creditToRedeem;

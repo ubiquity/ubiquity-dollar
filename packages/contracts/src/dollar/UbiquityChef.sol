@@ -52,7 +52,7 @@ contract UbiquityChef is ReentrancyGuard {
     // Info of each pool.
     PoolInfo public pool;
     // Info of each user that stakes LP tokens.
-    mapping(uint256 => StakingTokenInfo) private _ssInfo;
+    mapping(uint256 => StakingTokenInfo) private stakingToken;
 
     event Deposit(
         address indexed user,
@@ -156,17 +156,17 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 _amount,
         uint256 _stakingTokenID
     ) external nonReentrant onlyStakingContract {
-        StakingTokenInfo storage ss = _ssInfo[_stakingTokenID];
-        require(ss.amount >= _amount, "MC: amount too high");
+        StakingTokenInfo storage _stakingToken = stakingToken[_stakingTokenID];
+        require(_stakingToken.amount >= _amount, "MC: amount too high");
         _updatePool();
-        uint256 pending = ((stakingShare.amount * pool.accGovernancePerShare) /
-            1e12) - stakingShare.rewardDebt;
+        uint256 pending = ((_stakingToken.amount * pool.accGovernancePerShare) /
+            1e12) - _stakingToken.rewardDebt;
         // send Governance Tokens to Staking Share holder
 
         _safeGovernanceTransfer(to, pending);
-        stakingShare.amount -= _amount;
-        stakingShare.rewardDebt =
-            (stakingShare.amount * pool.accGovernancePerShare) /
+        _stakingToken.amount -= _amount;
+        _stakingToken.rewardDebt =
+            (_stakingToken.amount * pool.accGovernancePerShare) /
             1e12;
         _totalShares -= _amount;
         emit Withdraw(to, _amount, _stakingTokenID);
@@ -185,7 +185,7 @@ contract UbiquityChef is ReentrancyGuard {
         );
 
         // calculate user reward
-        StakingTokenInfo storage user = _ssInfo[stakingTokenID];
+        StakingTokenInfo storage user = stakingToken[stakingTokenID];
         _updatePool();
         uint256 pending = ((user.amount * pool.accGovernancePerShare) / 1e12) -
             user.rewardDebt;
@@ -198,7 +198,7 @@ contract UbiquityChef is ReentrancyGuard {
     function pendingGovernance(
         uint256 stakingTokenID
     ) external view returns (uint256) {
-        StakingTokenInfo storage user = _ssInfo[stakingTokenID];
+        StakingTokenInfo storage user = stakingToken[stakingTokenID];
         uint256 accGovernancePerShare = pool.accGovernancePerShare;
 
         if (block.number > pool.lastRewardBlock && _totalShares != 0) {
@@ -208,10 +208,8 @@ contract UbiquityChef is ReentrancyGuard {
                 accGovernancePerShare +
                 ((governanceReward / _totalShares) / 1e6);
         }
-        userReward =
-            (user.amount * accGovernancePerShare) /
-            1e12 -
-            user.rewardDebt;
+
+        return (user.amount * accGovernancePerShare) / 1e12 - user.rewardDebt;
     }
 
     /**
@@ -221,8 +219,8 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 _id
     ) external view returns (uint256[2] memory) {
         return [
-            _stakingShareInfo[_id].amount,
-            _stakingShareInfo[_id].rewardDebt
+            stakingToken[_id].amount,
+            stakingToken[_id].rewardDebt
         ];
     }
 
@@ -239,38 +237,19 @@ contract UbiquityChef is ReentrancyGuard {
         uint256 _amount,
         uint256 _stakingTokenID
     ) internal {
-        StakingTokenInfo storage ss = _ssInfo[_stakingTokenID];
+        StakingTokenInfo storage _stakingToken = stakingToken[_stakingTokenID];
         _updatePool();
-        if (stakingShare.amount > 0) {
-            uint256 pending = ((stakingShare.amount *
-                pool.accGovernancePerShare) / 1e12) - stakingShare.rewardDebt;
+        if (_stakingToken.amount > 0) {
+            uint256 pending = ((_stakingToken.amount *
+                pool.accGovernancePerShare) / 1e12) - _stakingToken.rewardDebt;
             _safeGovernanceTransfer(to, pending);
         }
-        stakingShare.amount += _amount;
-        stakingShare.rewardDebt =
-            (stakingShare.amount * pool.accGovernancePerShare) /
+        _stakingToken.amount += _amount;
+        _stakingToken.rewardDebt =
+            (_stakingToken.amount * pool.accGovernancePerShare) /
             1e12;
         _totalShares += _amount;
         emit Deposit(to, _amount, _stakingTokenID);
-    }
-
-    ///@notice used in constructor for migrating over deposits from old version
-    ///@dev reduces costs of deployment vs using regular _deposit
-    ///@param _to address of bond holder
-    ///@param _amount number of bond shares for bond
-    ///@param _stakingShareID id of bond
-    function _migrateDeposit(
-        address _to,
-        uint256 _amount,
-        uint256 _stakingShareID
-    ) internal {
-        StakingShareInfo storage stakingShare = _stakingShareInfo[
-            _stakingShareID
-        ];
-
-        stakingShare.amount += _amount;
-
-        emit Deposit(_to, _amount, _stakingShareID);
     }
 
     // UPDATE governance multiplier

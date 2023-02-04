@@ -9,7 +9,7 @@ import "./interfaces/IMetaPool.sol";
 import "./interfaces/IUbiquityFormulas.sol";
 import "./core/UbiquityDollarToken.sol";
 import "./StakingFormulas.sol";
-import "./StakingShare.sol";
+import "./StakingToken.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./interfaces/ISablier.sol";
 import "./interfaces/IUbiquityChef.sol";
@@ -316,7 +316,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 _lockup
     ) external whenNotPaused {
         (
-            uint256[2] memory bs,
+            uint256[2] memory stakeInfo,
             StakingToken.Stake memory stake
         ) = _checkForLiquidity(_id);
         // calculate pending LP rewards
@@ -393,7 +393,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 _id
     ) external whenNotPaused {
         (
-            uint256[2] memory bs,
+            uint256[2] memory stakeInfo,
             StakingToken.Stake memory stake
         ) = _checkForLiquidity(_id);
         require(stake.lpAmount >= _amount, "Staking: amount too big");
@@ -468,7 +468,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
     function pendingLpRewards(uint256 _id) external view returns (uint256) {
         StakingToken staking = StakingToken(manager.stakingTokenAddress());
         StakingToken.Stake memory stake = staking.getStake(_id);
-        uint256[2] memory bs = IUbiquityChef(manager.masterChefAddress())
+        uint256[2] memory stakeInfo = IUbiquityChef(manager.masterChefAddress())
             .getStakingTokenInfo(_id);
 
         uint256 lpBalance = IERC20(manager.stableSwapMetaPoolAddress())
@@ -590,11 +590,11 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 totalShares = IUbiquityChef(manager.masterChefAddress())
             .totalShares();
         if (
-            lpBalance >= (stakingShare.totalLP() + totalLpToMigrate) &&
+            lpBalance >= (stake.totalLP() + totalLpToMigrate) &&
             totalShares > 0
         ) {
             uint256 currentLpRewards = lpBalance -
-                (stakingShare.totalLP() + totalLpToMigrate);
+                (stake.totalLP() + totalLpToMigrate);
 
             // is there new LP rewards to be distributed ?
             if (currentLpRewards > lpRewards) {
@@ -633,7 +633,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     function _checkForLiquidity(
         uint256 _id
-    ) internal returns (uint256[2] memory bs, StakingToken.Stake memory stake) {
+    ) internal returns (uint256[2] memory stakeInfo, StakingToken.Stake memory stake) {
         require(
             IERC1155Ubiquity(manager.stakingTokenAddress()).balanceOf(
                 msg.sender,
@@ -648,7 +648,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
             "Staking: Redeem not allowed before staking time"
         );
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
-        bs = IUbiquityChef(manager.masterChefAddress()).getStakingTokenInfo(
+        stakeInfo = IUbiquityChef(manager.masterChefAddress()).getStakingTokenInfo(
             _id
         );
     }

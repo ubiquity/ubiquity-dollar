@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "src/dollar/core/CreditNFT.sol";
-import "src/dollar/core/CreditNFTManager.sol";
-import "src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import "src/dollar/core/CreditNft.sol";
+import "src/dollar/core/CreditNftManager.sol";
+import "src/dollar/core/CreditNftRedemptionCalculator.sol";
 import "src/dollar/core/CreditRedemptionCalculator.sol";
 import "src/dollar/core/DollarMintCalculator.sol";
 import "src/dollar/core/DollarMintExcess.sol";
@@ -17,7 +17,7 @@ import "src/dollar/interfaces/IMetaPool.sol";
 import "src/dollar/DirectGovernanceFarmer.sol";
 import "src/dollar/Staking.sol";
 import "src/dollar/StakingFormulas.sol";
-import "src/dollar/StakingShare.sol";
+import "src/dollar/StakingToken.sol";
 import "src/dollar/UbiquityChef.sol";
 import "src/dollar/UbiquityFormulas.sol";
 

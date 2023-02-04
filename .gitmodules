@@ -19,3 +19,6 @@
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
+[submodule "packages/dapp/test/scraper-kernel"]
+	path = packages/dapp/test/scraper-kernel
+	url = https://github.com/ubiquity/scraper-kernel.git
