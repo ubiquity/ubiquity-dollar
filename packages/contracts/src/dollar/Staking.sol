@@ -327,8 +327,9 @@ contract Staking is IStaking, CollectableDust, Pausable {
             stake.lpRewardDebt
         );
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsAddLiquidityNormalization(pendingLpReward);
+        pendingLpReward = stakingFormulas.lpRewardsAddLiquidityNormalization(
+            pendingLpReward
+        );
         // add these LP Rewards to the deposited amount of LP token
         stake.lpAmount += pendingLpReward;
         lpRewards -= pendingLpReward;
@@ -424,15 +425,15 @@ contract Staking is IStaking, CollectableDust, Pausable {
         // staking lp balance - StakingToken.totalLP
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
         // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = StakingFormulas(this.stakingFormulasAddress())
-            .lpRewardsRemoveLiquidityNormalization(pendingLpReward);
+        pendingLpReward = stakingFormulas.lpRewardsRemoveLiquidityNormalization(
+            pendingLpReward
+        );
 
-        uint256 correctedAmount = StakingFormulas(this.stakingFormulasAddress())
-            .correctedAmountToWithdraw(
-                StakingToken(manager.stakingTokenAddress()).totalLP(),
-                metapool.balanceOf(address(this)) - lpRewards,
-                _amount
-            );
+        uint256 correctedAmount = stakingFormulas.correctedAmountToWithdraw(
+            StakingToken(manager.stakingTokenAddress()).totalLP(),
+            metapool.balanceOf(address(this)) - lpRewards,
+            _amount
+        );
 
         lpRewards -= pendingLpReward;
         stake.lpAmount -= _amount;
@@ -536,7 +537,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 totalShares = IUbiquityChef(manager.masterChefAddress())
             .totalShares();
         // priceShare = totalLP / totalShares
-        priceShare = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
+        priceShare = IUbiquityFormulas(manager.formulasAddress()).sharePrice(
             StakingToken(manager.stakingTokenAddress()).totalLP(),
             totalShares,
             ONE
@@ -590,8 +591,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 totalShares = IUbiquityChef(manager.masterChefAddress())
             .totalShares();
         if (
-            lpBalance >= (stake.totalLP() + totalLpToMigrate) &&
-            totalShares > 0
+            lpBalance >= (stake.totalLP() + totalLpToMigrate) && totalShares > 0
         ) {
             uint256 currentLpRewards = lpBalance -
                 (stake.totalLP() + totalLpToMigrate);
@@ -633,7 +633,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     function _checkForLiquidity(
         uint256 _id
-    ) internal returns (uint256[2] memory stakeInfo, StakingToken.Stake memory stake) {
+    )
+        internal
+        returns (uint256[2] memory stakeInfo, StakingToken.Stake memory stake)
+    {
         require(
             IERC1155Ubiquity(manager.stakingTokenAddress()).balanceOf(
                 msg.sender,
@@ -648,8 +651,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
             "Staking: Redeem not allowed before staking time"
         );
         ITWAPOracleDollar3pool(manager.twapOracleAddress()).update();
-        stakeInfo = IUbiquityChef(manager.masterChefAddress()).getStakingTokenInfo(
-            _id
-        );
+        stakeInfo = IUbiquityChef(manager.masterChefAddress())
+            .getStakingTokenInfo(_id);
     }
 }

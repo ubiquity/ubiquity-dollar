@@ -208,9 +208,7 @@ contract LiveTestHelper is Test {
         creditRedemptionCalc = new CreditRedemptionCalculator(manager);
         manager.setCreditCalculatorAddress(address(creditRedemptionCalc));
 
-        creditNftRedemptionCalc = new CreditNftRedemptionCalculator(
-            address(manager)
-        );
+        creditNftRedemptionCalc = new CreditNftRedemptionCalculator(manager);
         manager.setCreditNftCalculatorAddress(address(creditNftRedemptionCalc));
 
         dollarMintCalc = new DollarMintCalculator(manager);
@@ -237,8 +235,7 @@ contract LiveTestHelper is Test {
         creditToken = new UbiquityCreditToken(manager);
         manager.setCreditTokenAddress(address(creditToken));
 
-        dollarMintExcess =
-            new DollarMintExcess(manager);
+        dollarMintExcess = new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(
             address(creditNftManager),
             address(dollarMintExcess)
@@ -314,8 +311,13 @@ contract LiveTestHelper is Test {
         migrateLP = [0, 0, 0];
         locked = [uint256(1), uint256(1), uint256(208)];
 
-        staking =
-        new Staking(manager, stakingFormulas, migrating, migrateLP, locked);
+        staking = new Staking(
+            manager,
+            stakingFormulas,
+            migrating,
+            migrateLP,
+            locked
+        );
 
         deal(address(dollarToken), address(staking), 100e18);
 

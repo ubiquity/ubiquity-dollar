@@ -89,7 +89,7 @@ abstract contract LocalTestHelper is Test {
         manager.setDollarMintCalculatorAddress(address(dollarMintCalculator));
 
         // deploy CreditNftManager
-        creditNftManager = new CreditNftManager(manager, 100);
+        creditNftManager = new CreditNftManager(address(manager), 100);
 
         dollarMintExcess = new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(

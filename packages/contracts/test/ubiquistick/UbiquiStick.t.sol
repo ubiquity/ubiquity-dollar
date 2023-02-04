@@ -20,15 +20,6 @@ contract UbiquiStickHarness is UbiquiStick {
                 )
             );
     }
-
-    function exposed_beforeConsecutiveTokenTransfer(
-        address address1,
-        address address2,
-        uint256 value1,
-        uint96 value2
-    ) public {
-        _beforeConsecutiveTokenTransfer(address1, address2, value1, value2);
-    }
 }
 
 contract UbiquiStickTest is Test {
@@ -176,18 +167,6 @@ contract UbiquiStickTest is Test {
         assertEq(
             ubiquiStick.exposed_random(),
             12751150048135892262188697730632532742577045435178855596188279334644121003250
-        );
-    }
-
-    function testBeforeConsecutiveTokenTransfer_ShouldRevert() public {
-        vm.expectRevert(
-            "ERC721Enumerable: consecutive transfers not supported"
-        );
-        ubiquiStick.exposed_beforeConsecutiveTokenTransfer(
-            address(0),
-            address(0),
-            0,
-            0
         );
     }
 

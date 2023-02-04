@@ -237,7 +237,7 @@ contract MockStaking is CollectableDust {
         // if (redeemStreamTime == 0) {
         IERC20(manager.stableSwapMetaPoolAddress()).safeTransfer(
             msg.sender,
-            IUbiquityFormulas(manager.formulasAddress()).redeemBonds(
+            IUbiquityFormulas(manager.formulasAddress()).redeemShares(
                 _tokensAmount,
                 _currentTokenValue,
                 ONE
@@ -253,7 +253,7 @@ contract MockStaking is CollectableDust {
         uint256 totalTokens = IERC1155Ubiquity(manager.stakingTokenAddress())
             .totalSupply();
 
-        priceToken = IUbiquityFormulas(manager.formulasAddress()).bondPrice(
+        priceToken = IUbiquityFormulas(manager.formulasAddress()).sharePrice(
             totalLP,
             totalTokens,
             ONE
