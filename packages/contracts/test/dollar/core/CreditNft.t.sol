@@ -22,13 +22,13 @@ contract CreditNftTest is LocalTestHelper {
         uint256 amount
     );
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
-        creditNftAddress = address(new CreditNft(dollarManagerAddress));
+    function setUp() public override {
+        super.setUp();
+        creditNftAddress = address(new CreditNft(manager));
     }
 
     function test_mintCreditNftRevertsIfNotCreditNftManager() public {
-        vm.expectRevert("Caller is not a Credit NFT manager");
+        vm.expectRevert("Caller is not a CreditNft manager");
         CreditNft(creditNftAddress).mintCreditNft(address(0x123), 1, 100);
     }
 
@@ -61,7 +61,7 @@ contract CreditNftTest is LocalTestHelper {
     }
 
     function test_burnCreditNftRevertsIfNotCreditNftManager() public {
-        vm.expectRevert("Caller is not a Credit NFT manager");
+        vm.expectRevert("Caller is not a CreditNft manager");
         CreditNft(creditNftAddress).burnCreditNft(address(0x123), 1, 100);
     }
 
@@ -105,7 +105,7 @@ contract CreditNftTest is LocalTestHelper {
         vm.stopPrank();
 
         // sets block.number
-        vm.roll(15000);
+        vm.roll(block.number + 15000);
         CreditNft(creditNftAddress).updateTotalDebt();
         uint256 outStandingTotalDebt = CreditNft(creditNftAddress)
             .getTotalOutstandingDebt();
@@ -120,7 +120,7 @@ contract CreditNftTest is LocalTestHelper {
         vm.stopPrank();
 
         // sets block.number
-        vm.roll(25000);
+        vm.roll(block.number + 25000);
         CreditNft(creditNftAddress).updateTotalDebt();
         uint256 outStandingTotalDebt = CreditNft(creditNftAddress)
             .getTotalOutstandingDebt();
