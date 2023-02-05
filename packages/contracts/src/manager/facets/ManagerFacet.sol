@@ -38,8 +38,8 @@ contract ManagerFacet is Modifiers {
         s.creditTokenAddress = _creditTokenAddress;
     }
 
-    function setCreditNFTAddress(address _creditNFTAddress) external onlyAdmin {
-        s.creditNFTAddress = _creditNFTAddress;
+    function setCreditNftAddress(address _creditNftAddress) external onlyAdmin {
+        s.creditNftAddress = _creditNftAddress;
     }
 
     function setGovernanceTokenAddress(
@@ -60,10 +60,10 @@ contract ManagerFacet is Modifiers {
         s.creditCalculatorAddress = _creditCalculatorAddress;
     }
 
-    function setCreditNFTCalculatorAddress(
-        address _creditNFTCalculatorAddress
+    function setCreditNftCalculatorAddress(
+        address _creditNftCalculatorAddress
     ) external onlyAdmin {
-        s.creditNFTCalculatorAddress = _creditNFTCalculatorAddress;
+        s.creditNftCalculatorAddress = _creditNftCalculatorAddress;
     }
 
     function setDollarMintCalculatorAddress(
@@ -73,10 +73,10 @@ contract ManagerFacet is Modifiers {
     }
 
     function setExcessDollarsDistributor(
-        address creditNFTManagerAddress,
+        address creditNftManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        s._excessDollarDistributors[creditNFTManagerAddress] = dollarMintExcess;
+        s._excessDollarDistributors[creditNftManagerAddress] = dollarMintExcess;
     }
 
     function setMasterChefAddress(
@@ -184,8 +184,8 @@ contract ManagerFacet is Modifiers {
         return s.creditTokenAddress;
     }
 
-    function getCreditNFTAddress() external view returns (address) {
-        return s.creditNFTAddress;
+    function getCreditNftAddress() external view returns (address) {
+        return s.creditNftAddress;
     }
 
     function getGovernanceTokenAddress() external view returns (address) {
@@ -200,8 +200,8 @@ contract ManagerFacet is Modifiers {
         return s.creditCalculatorAddress;
     }
 
-    function getCreditNFTCalculatorAddress() external view returns (address) {
-        return s.creditNFTCalculatorAddress;
+    function getCreditNftCalculatorAddress() external view returns (address) {
+        return s.creditNftCalculatorAddress;
     }
 
     function getDollarMintCalculatorAddress() external view returns (address) {
@@ -209,9 +209,9 @@ contract ManagerFacet is Modifiers {
     }
 
     function getExcessDollarsDistributor(
-        address _creditNFTManagerAddress
+        address _creditNftManagerAddress
     ) external view returns (address) {
-        return s._excessDollarDistributors[_creditNFTManagerAddress];
+        return s._excessDollarDistributors[_creditNftManagerAddress];
     }
 
     function getMasterChefAddress() external view returns (address) {

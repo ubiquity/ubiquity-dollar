@@ -71,7 +71,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(
             managerFacet.setCreditTokenAddress.selector
         );
-        selectorsOfManagerFacet.push(managerFacet.setCreditNFTAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.setCreditNftAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.setGovernanceTokenAddress.selector
         );
@@ -82,7 +82,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             managerFacet.setCreditCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.setCreditNFTCalculatorAddress.selector
+            managerFacet.setCreditNftCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
             managerFacet.setDollarMintCalculatorAddress.selector
@@ -119,7 +119,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(
             managerFacet.getCreditTokenAddress.selector
         );
-        selectorsOfManagerFacet.push(managerFacet.getCreditNFTAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.getCreditNftAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.getGovernanceTokenAddress.selector
         );
@@ -130,7 +130,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             managerFacet.getCreditCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.getCreditNFTCalculatorAddress.selector
+            managerFacet.getCreditNftCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
             managerFacet.getDollarMintCalculatorAddress.selector

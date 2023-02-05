@@ -42,9 +42,9 @@ contract RemoteTestManagerFacet is DiamondSetup {
         assertEq(IManagerFacet.getCreditTokenAddress(), contract1);
     }
 
-    function testShouldSetCreditNFTAddress() public prankAs(admin) {
-        IManagerFacet.setCreditNFTAddress(contract1);
-        assertEq(IManagerFacet.getCreditNFTAddress(), contract1);
+    function testShouldSetCreditNftAddress() public prankAs(admin) {
+        IManagerFacet.setCreditNftAddress(contract1);
+        assertEq(IManagerFacet.getCreditNftAddress(), contract1);
     }
 
     function testShouldSetGovernanceTokenAddress() public prankAs(admin) {
@@ -62,9 +62,9 @@ contract RemoteTestManagerFacet is DiamondSetup {
         assertEq(IManagerFacet.getCreditCalculatorAddress(), contract1);
     }
 
-    function testShouldSetCreditNFTCalculatorAddress() public prankAs(admin) {
-        IManagerFacet.setCreditNFTCalculatorAddress(contract1);
-        assertEq(IManagerFacet.getCreditNFTCalculatorAddress(), contract1);
+    function testShouldSetCreditNftCalculatorAddress() public prankAs(admin) {
+        IManagerFacet.setCreditNftCalculatorAddress(contract1);
+        assertEq(IManagerFacet.getCreditNftCalculatorAddress(), contract1);
     }
 
     function testShouldSetDollarMintCalculatorAddress() public prankAs(admin) {
