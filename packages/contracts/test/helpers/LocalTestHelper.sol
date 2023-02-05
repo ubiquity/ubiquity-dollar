@@ -4,11 +4,11 @@ pragma solidity ^0.8.3;
 import {UbiquityDollarManager} from "../../src/dollar/core/UbiquityDollarManager.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {CreditRedemptionCalculator} from "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {CreditNFTRedemptionCalculator} from "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
-import {CreditNFTManager} from "../../src/dollar/core/CreditNFTManager.sol";
+import {CreditNftRedemptionCalculator} from "../../src/dollar/core/CreditNftRedemptionCalculator.sol";
+import {CreditNftManager} from "../../src/dollar/core/CreditNftManager.sol";
 import {DollarMintCalculator} from "../../src/dollar/core/DollarMintCalculator.sol";
 import {DollarMintExcess} from "../../src/dollar/core/DollarMintExcess.sol";
-import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
+import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
@@ -16,10 +16,10 @@ import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
-contract MockCreditNFTRedemptionCalculator {
+contract MockCreditNftRedemptionCalculator {
     constructor() {}
 
-    function getCreditNFTAmount(
+    function getCreditNftAmount(
         uint256 dollarsToBurn
     ) external pure returns (uint256) {
         return dollarsToBurn;
@@ -33,24 +33,24 @@ abstract contract LocalTestHelper is Test {
     address public treasuryAddress = address(0x111222333);
 
     UbiquityDollarManager manager;
-    MockCreditNFT creditNFT;
+    MockCreditNft creditNft;
     MockDollarToken dollarToken;
     MockTWAPOracleDollar3pool twapOracle;
     UbiquityGovernanceToken governanceToken;
-    MockCreditNFTRedemptionCalculator creditNFTRedemptionCalculator;
+    MockCreditNftRedemptionCalculator creditNftRedemptionCalculator;
     MockCreditToken creditToken;
     CreditRedemptionCalculator creditRedemptionCalculator;
     DollarMintCalculator dollarMintCalculator;
-    CreditNFTManager creditNFTManager;
+    CreditNftManager creditNftManager;
     DollarMintExcess dollarMintExcess;
 
     function setUp() public virtual {
         manager = new UbiquityDollarManager(admin);
 
         vm.startPrank(admin);
-        // deploy credit NFT token
-        creditNFT = new MockCreditNFT(100);
-        manager.setCreditNFTAddress(address(creditNFT));
+        // deploy credit Nft token
+        creditNft = new MockCreditNft(100);
+        manager.setCreditNftAddress(address(creditNft));
 
         // deploy dollar token
         dollarToken = new MockDollarToken(10000e18);
@@ -70,10 +70,10 @@ abstract contract LocalTestHelper is Test {
         governanceToken = new UbiquityGovernanceToken(manager);
         manager.setGovernanceTokenAddress(address(governanceToken));
 
-        // deploy CreditNFTRedemptionCalculator
-        creditNFTRedemptionCalculator = new MockCreditNFTRedemptionCalculator();
-        manager.setCreditNFTCalculatorAddress(
-            address(creditNFTRedemptionCalculator)
+        // deploy CreditNftRedemptionCalculator
+        creditNftRedemptionCalculator = new MockCreditNftRedemptionCalculator();
+        manager.setCreditNftCalculatorAddress(
+            address(creditNftRedemptionCalculator)
         );
 
         // deploy credit token
@@ -88,12 +88,12 @@ abstract contract LocalTestHelper is Test {
         dollarMintCalculator = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(dollarMintCalculator));
 
-        // deploy CreditNFTManager
-        creditNFTManager = new CreditNFTManager(manager, 100);
+        // deploy CreditNftManager
+        creditNftManager = new CreditNftManager(manager, 100);
 
         dollarMintExcess = new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(
-            address(creditNFTManager),
+            address(creditNftManager),
             address(dollarMintExcess)
         );
 

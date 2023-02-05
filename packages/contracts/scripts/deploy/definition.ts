@@ -4,7 +4,7 @@ export const optionDefinitions: OptionDefinition[] = [
   { name: "task", defaultOption: true },
   { name: "manager", alias: "m", type: String },
   { name: "network", alias: "n", type: String, defaultValue: "goerli" },
-  { name: "creditNFTLengthBlocks", alias: "c", type: Number },
+  { name: "creditNftLengthBlocks", alias: "c", type: Number },
   { name: "pool", alias: "p", type: String },
   { name: "dollarToken0", alias: "d", type: String },
   { name: "curve3CRVToken1", alias: "k", type: String },

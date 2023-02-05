@@ -20,7 +20,7 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setCreditTokenAddress(address _creditTokenAddress) external;
 
-    function setCreditNFTAddress(address _creditNFTAddress) external;
+    function setCreditNftAddress(address _creditNftAddress) external;
 
     function setIncentiveToDollar(
         address _account,
@@ -39,8 +39,8 @@ interface IUbiquityDollarManager is IAccessControl {
         address _creditCalculatorAddress
     ) external;
 
-    function setCreditNFTCalculatorAddress(
-        address _creditNFTCalculatorAddress
+    function setCreditNftCalculatorAddress(
+        address _creditNftCalculatorAddress
     ) external;
 
     function setDollarMintCalculatorAddress(
@@ -48,7 +48,7 @@ interface IUbiquityDollarManager is IAccessControl {
     ) external;
 
     function setExcessDollarsDistributor(
-        address creditNFTManagerAddress,
+        address creditNftManagerAddress,
         address dollarMintExcess
     ) external;
 
@@ -99,7 +99,7 @@ interface IUbiquityDollarManager is IAccessControl {
     ) external;
 
     function getExcessDollarsDistributor(
-        address _creditNFTManagerAddress
+        address _creditNftManagerAddress
     ) external view returns (address);
 
     function stakingContractAddress() external view returns (address);
