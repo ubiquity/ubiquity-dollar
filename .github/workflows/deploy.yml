@@ -1,13 +1,14 @@
-name: Receive Workflow and Deploy
+name: Deploy
 
 on:
   workflow_run:
-    workflows: ["Install and Build Workflow"]
+    workflows: ["Build"]
     types:
       - completed
 
 jobs:
-  receive-pr-and-deploy:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-22.04
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -33,7 +34,7 @@ jobs:
       - name: Extract files
         run: unzip pr.zip && unzip pull-request.zip && ls
 
-      - name: Deploy Development
+      - name: Deploy
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --dir=./dist --prod > ./deployments.log
@@ -49,7 +50,7 @@ jobs:
         run: |
           echo "The generated token is masked: ${TOKEN}"
 
-      - name: Print Logs
+      - name: Deploy Comment
         uses: actions/github-script@v6
         with:
           github-token: ${{ steps.get_installation_token.outputs.token }}
