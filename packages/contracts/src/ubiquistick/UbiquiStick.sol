@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "operator-filter-registry/src/DefaultOperatorFilterer.sol";
+import "node_modules/operator-filter-registry/src/DefaultOperatorFilterer.sol";
 
 // With this "The UbiquiStick" NFT contract you can :
 // - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
