@@ -16,13 +16,13 @@ import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.jso
 import UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
-import DebtCouponManager from "@ubiquity/contracts/out/CreditNFTManager.sol/CreditNFTManager.json";
+import DebtCouponManager from "@ubiquity/contracts/out/CreditNftManager.sol/CreditNftManager.json";
 import ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
 import BondingShareV2 from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import BondingV2 from "@ubiquity/contracts/out/Staking.sol/Staking.json";
-import DebtCoupon from "@ubiquity/contracts/out/CreditNFT.sol/CreditNFT.json";
+import DebtCoupon from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
 import DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculator.sol/DollarMintCalculator.json";
-import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNFTRedemptionCalculator.sol/ICreditNFTRedemptionCalculator.json";
+import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
 import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import IUARForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
 import MasterChefV2 from "@ubiquity/contracts/out/UbiquityChef.sol/UbiquityChef.json";

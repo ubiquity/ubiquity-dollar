@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "abdk/ABDKMathQuad.sol";
-import "./CreditNFT.sol";
+import "./CreditNft.sol";
 
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
@@ -47,7 +47,7 @@ contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
         uint256 blockHeightDebt
     ) external view override returns (uint256) {
         require(
-            CreditNFT(manager.creditNFTAddress()).getTotalOutstandingDebt() <
+            CreditNft(manager.creditNftAddress()).getTotalOutstandingDebt() <
                 IERC20(manager.dollarTokenAddress()).totalSupply(),
             "Credit to Dollar: DEBT_TOO_HIGH"
         );

@@ -21,9 +21,9 @@ bytes32 constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256(
 
 struct AppStorage {
     address twapOracleAddress;
-    address creditNFTAddress;
+    address creditNftAddress;
     address dollarTokenAddress;
-    address creditNFTCalculatorAddress;
+    address creditNftCalculatorAddress;
     address dollarMintCalculatorAddress;
     address stakingShareAddress;
     address stakingContractAddress;
