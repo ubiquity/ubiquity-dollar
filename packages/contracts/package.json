@@ -22,19 +22,19 @@
     "tsx": "^3.12.2"
   },
   "scripts": {
-    "forge": "forge",
-    "build": "forge build",
     "test": "tsx ./scripts/runner/runner.ts",
-    "slither:run": "slither . --compile-force-framework foundry",
-    "echidna": "echidna-test . --config echidna.config.yml",
-    "prettier": "forge fmt",
+    "test:slither": "slither . --compile-force-framework foundry",
+    "test:echidna": "echidna-test . --config echidna.config.yml",
+    "start:anvil": "tsx ./scripts/anvil/anvil.ts",
+    "prebuild": "run-p clean",
     "deploy": "tsx ./scripts/deploy/deploy.ts",
-    "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
-    "task": "tsx ./scripts/task/task.ts",
-    "clean": "forge clean",
-    "purge": "yarn clean",
-    "anvil": "tsx ./scripts/anvil/anvil.ts",
-    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts"
+    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts",
+    "clean": "run-p clean:*",
+    "clean:yarn": "yarn clean",
+    "clean:forge": "forge clean",
+    "build": "forge build",
+    "forge:install": "forge install",
+    "_hardhat-task": "tsx ./scripts/task/task.ts"
   },
   "keywords": [
     "stablecoin",
