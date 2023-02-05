@@ -18,6 +18,7 @@
     "command-line-args": "5.2.1",
     "dotenv": "^16.0.3",
     "ethers": "^5.6.9",
+    "operator-filter-registry": "^1.4.0",
     "react-transition-group": "^4.4.5",
     "tsx": "^3.12.2"
   },
