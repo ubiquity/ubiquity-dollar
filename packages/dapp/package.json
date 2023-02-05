@@ -5,12 +5,15 @@
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "next build && next export --outdir dist",
+    "prebuild": "run-p clean",
+    "build": "run-s build:types build:next build:export",
+    "build:watch": "run-s build:types build:next",
+    "build:export": "next export --outdir dist",
+    "test": "tsx test/puppeteer.ts",
     "start": "next dev",
-    "clean": "rimraf ./dist",
-    "purge": "yarn clean && rimraf ./node_modules ./dist ./next",
-    "lint": "eslint . --ext .ts,.tsx --cache --fix --plugin tsc --rule 'tsc/config: [2, {configFile: \"./tsconfig.json\"}]'",
-    "prettier": "prettier --write ."
+    "clean": "rimraf next types node_modules",
+    "build:next": "next build",
+    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/*.json --out-dir=types"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",
