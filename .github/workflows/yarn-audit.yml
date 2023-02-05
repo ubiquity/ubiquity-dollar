@@ -1,14 +1,11 @@
-name: Install and run Yarn Audit
+name: Yarn Audit
 
 on:
-  pull_request:
   push:
-  create:
-    tag:
-      - "v*"
 
 jobs:
-  build-and-audit:
+  audit-and-fix:
+    name: Audit & Fix
     runs-on: ubuntu-22.04
 
     steps:
@@ -20,5 +17,5 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Audit and Attempt Fix
+      - name: Audit
         run: yes | npx yarn-audit-fix

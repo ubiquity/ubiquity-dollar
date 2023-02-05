@@ -1,8 +1,9 @@
-name: Static Anaysis with Slither
+name: Slither Analysis
 
-on: [push, pull_request]
+on: push
 jobs:
-  build:
+  slither-analysis:
+    name: Slither Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -32,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           yarn install
-          yarn workspace @ubiquity/contracts forge install
+          yarn workspace @ubiquity/contracts forge:install
 
       - name: Test with Slither
-        run: yarn workspace @ubiquity/contracts run slither:run
+        run: yarn workspace @ubiquity/contracts run test:slither

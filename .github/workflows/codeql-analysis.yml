@@ -1,12 +1,11 @@
-name: "CodeQL"
+name: CodeQL Analysis
 
 on:
-  pull_request:
   push:
 
 jobs:
-  analyze:
-    name: Analyze
+  code-ql-analysis:
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
     permissions:
       actions: read
