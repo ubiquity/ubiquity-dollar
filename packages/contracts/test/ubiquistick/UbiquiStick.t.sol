@@ -2,8 +2,9 @@
 pragma solidity 0.8.16;
 
 import "forge-std/Test.sol";
-import "../../node_modules/operator-filter-registry/src/DefaultOperatorFilterer.sol";
-
+import {DefaultOperatorFilterer} from "operator-filter-registry/DefaultOperatorFilterer.sol";
+import {IOperatorFilterRegistry} from "operator-filter-registry/IOperatorFilterRegistry.sol";
+import {OperatorFilterer} from "operator-filter-registry/OperatorFilterer.sol";
 import "../../src/ubiquistick/UbiquiStick.sol";
 
 contract UbiquiStickHarness is UbiquiStick {
