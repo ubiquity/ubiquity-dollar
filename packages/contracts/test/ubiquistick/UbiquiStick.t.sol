@@ -212,9 +212,7 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(OperatorFilterer.isOperatorAllowed.selector),
             abi.encode(false)
         );
         // mint 1 token to minter
@@ -248,9 +246,7 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(OperatorFilterer.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
@@ -284,9 +280,7 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(OperatorFilterer.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
@@ -323,9 +317,7 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(OperatorFilterer.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
@@ -364,9 +356,7 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(OperatorFilterer.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
