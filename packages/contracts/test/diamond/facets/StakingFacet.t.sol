@@ -237,8 +237,8 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         assertEq(x, IStakingFacet.blockCountInAWeek());
     }
 
-    function testDeposit(uint256 lpAmount, uint256 lockup) public {
-        lpAmount = bound(lpAmount, 1, 100e18);
+    function testDeposit_Staking(uint256 lpAmount, uint256 lockup) public {
+        lpAmount = bound(lpAmount, 1, metapool.balanceOf(stakingMinAccount));
         lockup = bound(lockup, 1, 208);
         require(lpAmount >= 1 && lpAmount <= 100e18);
         require(lockup >= 1 && lockup <= 208);
