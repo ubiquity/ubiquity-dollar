@@ -32,7 +32,6 @@ contract DollarMintExcessHarness is DollarMintExcess {
 }
 
 contract DollarMintExcessTest is LocalTestHelper {
-    UbiquityDollarManager dollarManager;
     DollarMintExcessHarness dollarMintExcessHarness;
 
     address sushiSwapRouterAddress = 0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F;
@@ -40,24 +39,17 @@ contract DollarMintExcessTest is LocalTestHelper {
     function setUp() public override {
         super.setUp();
         dollarMintExcessHarness = new DollarMintExcessHarness(manager);
-        address dollarManagerAddress = address(manager);
-        address twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
-            .twapOracleAddress();
-        address dollarAddress = manager.dollarTokenAddress();
-        address excessDollarsDistributorAddress = address(
-            new DollarMintExcess(manager)
-        );
     }
 
-    function testFailDistributeDollars_ShouldTransferTokens() public {
+    function testDistributeDollars_ShouldTransferTokens() public {
         // mock dollar token
         vm.mockCall(
-            dollarManager.dollarTokenAddress(),
+            manager.dollarTokenAddress(),
             abi.encodeWithSelector(IERC20.balanceOf.selector),
             abi.encode(200 ether)
         );
         vm.mockCall(
-            dollarManager.dollarTokenAddress(),
+            manager.dollarTokenAddress(),
             abi.encodeWithSelector(IERC20.transfer.selector),
             abi.encode()
         );
@@ -84,14 +76,14 @@ contract DollarMintExcessTest is LocalTestHelper {
         address stableSwapMetaPoolAddress = address(0x01);
         address curve3PoolTokenAddress = address(0x02);
         vm.prank(admin);
-        dollarManager.setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
+        manager.setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
         vm.mockCall(
             stableSwapMetaPoolAddress,
             abi.encodeWithSelector(IMetaPool.exchange.selector),
             abi.encode(1 ether)
         );
         vm.store(
-            address(dollarManager),
+            address(manager),
             bytes32(uint256(9)),
             bytes32(abi.encode(curve3PoolTokenAddress))
         );
@@ -109,13 +101,13 @@ contract DollarMintExcessTest is LocalTestHelper {
 
         // distribute
         vm.expectCall(
-            dollarManager.dollarTokenAddress(),
+            manager.dollarTokenAddress(),
             abi.encodeCall(
                 IERC20.transfer,
-                (dollarManager.treasuryAddress(), 100 ether)
+                (manager.treasuryAddress(), 100 ether)
             )
         );
-        dollarMintExcess.distributeDollars();
+        dollarMintExcessHarness.distributeDollars();
     }
 
     function testSwapDollarsForGovernance_ShouldReturnSwapOutputAmount()
@@ -142,7 +134,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         );
     }
 
-    function testFailGovernanceBuyBackLPAndBurn_ShouldAllLiquidityToZeroAddress()
+    function testGovernanceBuyBackLPAndBurn_ShouldAllLiquidityToZeroAddress()
         public
     {
         // mock router
@@ -168,8 +160,8 @@ contract DollarMintExcessTest is LocalTestHelper {
             abi.encodeCall(
                 IUniswapV2Router01.addLiquidity,
                 (
-                    dollarManager.dollarTokenAddress(),
-                    dollarManager.governanceTokenAddress(),
+                    manager.dollarTokenAddress(),
+                    manager.governanceTokenAddress(),
                     0.5 ether,
                     2 ether,
                     0,
@@ -182,7 +174,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         dollarMintExcessHarness.exposed_governanceBuyBackLPAndBurn(1 ether);
     }
 
-    function testFailConvertToCurveLPAndTransfer_ShouldAddLiquidity() public {
+    function testConvertToCurveLPAndTransfer_ShouldAddLiquidity() public {
         // prepare mocks
         address stableSwapMetaPoolAddress = address(0x01);
         address curve3PoolTokenAddress = address(0x02);
@@ -195,7 +187,7 @@ contract DollarMintExcessTest is LocalTestHelper {
         );
 
         vm.store(
-            address(dollarManager),
+            address(manager),
             bytes32(uint256(9)),
             bytes32(abi.encode(curve3PoolTokenAddress))
         );
