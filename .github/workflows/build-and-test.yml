@@ -22,7 +22,16 @@ jobs:
           node-version: "18"
 
       - name: Install dependencies
-        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+        run: |
+          sudo apt -y update || {
+            echo "Failed to update package information."
+            exit 1
+          }
+
+          sudo apt -y install libusb-1.0-0-dev libudev-dev || {
+            echo "Failed to install the libraries."
+            exit 1
+          }
 
       - name: Setup Foundry
         uses: onbjerg/foundry-toolchain@v1
