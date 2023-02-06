@@ -2392,13 +2392,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@openzeppelin/contracts-upgradeable@npm:^4.8.0":
-  version: 4.8.1
-  resolution: "@openzeppelin/contracts-upgradeable@npm:4.8.1"
-  checksum: 6af2fbddf263214c02d80430b218cb3ca8482e77b1cc070d07ca4f79d42460941e7ea1bb89a096bd292841040652e10d779b491cd19c201008d92e9e689d9000
-  languageName: node
-  linkType: hard
-
 "@openzeppelin/contracts@npm:3.4.1-solc-0.7-2":
   version: 3.4.1-solc-0.7-2
   resolution: "@openzeppelin/contracts@npm:3.4.1-solc-0.7-2"
@@ -2410,13 +2403,6 @@ __metadata:
   version: 3.4.2-solc-0.7
   resolution: "@openzeppelin/contracts@npm:3.4.2-solc-0.7"
   checksum: 1a6048f31ed560c34429a05e534102c51124ecaf113aca7ebeb7897cfaaf61007cdd7952374c282adaeb79b04ee86ee80b16eed28b62fc6d60e3ffcd7a696895
-  languageName: node
-  linkType: hard
-
-"@openzeppelin/contracts@npm:^4.7.3":
-  version: 4.8.1
-  resolution: "@openzeppelin/contracts@npm:4.8.1"
-  checksum: 99acefde1ae42c2d935ec9b4ebd327e786c499a4ec76b9582eb9adb0ff94a77c48047332fba44fb97b82b5a46d80e74d3e5d8cf73d5defa7f746f2a67f070281
   languageName: node
   linkType: hard
 
@@ -3246,7 +3232,6 @@ __metadata:
     cspell: latest
     dotenv: ^16.0.3
     ethers: ^5.6.9
-    operator-filter-registry: ^1.4.0
     react-transition-group: ^4.4.5
     tsx: ^3.12.2
     typescript: ^4.9.4
@@ -10525,16 +10510,6 @@ __metadata:
   dependencies:
     mimic-fn: ^4.0.0
   checksum: 0846ce78e440841335d4e9182ef69d5762e9f38aa7499b19f42ea1c4cd40f0b4446094c455c713f9adac3f4ae86f613bb5e30c99e52652764d06a89f709b3788
-  languageName: node
-  linkType: hard
-
-"operator-filter-registry@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "operator-filter-registry@npm:1.4.0"
-  dependencies:
-    "@openzeppelin/contracts": ^4.7.3
-    "@openzeppelin/contracts-upgradeable": ^4.8.0
-  checksum: 2b10a8a610508eeaf386165342ecf932a8fc7098a1a6ce193ca511fc9193fd84cac74e31d7d2e7d683e765b9eb739c2ad2aea1987c00203b375686991be342d0
   languageName: node
   linkType: hard
 
