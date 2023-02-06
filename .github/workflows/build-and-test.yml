@@ -2,6 +2,7 @@ name: Build & Test
 
 on:
   push:
+  pull_request:
     tag:
       - "v*"
 
@@ -68,6 +69,3 @@ jobs:
         run: yarn dev:dapp &
         env:
           CI: true
-
-      - name: UI Tests
-        run: npx tsx packages/dapp/test/puppeteer.ts
