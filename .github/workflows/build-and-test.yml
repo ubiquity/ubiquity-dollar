@@ -3,8 +3,6 @@ name: Build & Test
 on:
   push:
   pull_request:
-    tag:
-      - "v*"
 
 jobs:
   build-and-test:
