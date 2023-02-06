@@ -5,3 +5,4 @@ solidity-linked-list/=lib/solidity-linked-list
 @uniswap/v2-core/contracts/=lib/Uniswap/v2-core/contracts
 @uniswap/v2-periphery/contracts/=lib/Uniswap/v2-periphery/contracts
 abdk/=lib/abdk-libraries-solidity/
+operator-filter-registry/=lib/operator-filter-registry/src
