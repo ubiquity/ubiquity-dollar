@@ -1,0 +1,69 @@
+name: Build & Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Setup Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Yarn Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+
+      - name: Set Environment Variables
+        env:
+          INFURA_ID: ${{ secrets.INFURA_ID }}
+          API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
+        run: |
+          echo "INFURA_ID=$INFURA_ID" > ./packages/dapp/.env
+          echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
+
+      - name: Setup Forge
+        run: yarn workspace @ubiquity/contracts forge:install
+
+      - name: Build All
+        run: yarn build
+
+      - name: Test All
+        run: yarn test
+
+      - name: Prepare Deployment
+        env:
+          EVENT_NAME: ${{github.event_name}}
+          PR_NUMBER: ${{ github.event.number }}
+          SHA: ${{github.sha}}
+        run: |
+          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
+          mkdir -p ./pr
+          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
+          cd ./packages/dapp && zip -r pull-request.zip ./dist && cp pull-request.zip ../../pr
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pr
+          path: pr/
+
+      - name: Run Server
+        run: yarn dev:dapp &
+        env:
+          CI: true

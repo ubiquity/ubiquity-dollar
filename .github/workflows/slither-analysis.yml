@@ -1,0 +1,39 @@
+name: Slither Analysis
+
+on: workflow_dispatch
+jobs:
+  slither-analysis:
+    name: Slither Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install solc-select
+        run: pip3 install solc-select
+
+      - name: Install solc 0.8.16
+        run: |
+          solc-select install 0.8.16
+          solc-select use 0.8.16
+
+      - name: Install Slither
+        run: pip3 install slither-analyzer
+
+      - name: Install dependencies
+        run: |
+          yarn install
+          yarn workspace @ubiquity/contracts forge:install
+
+      - name: Test with Slither
+        run: yarn workspace @ubiquity/contracts run test:slither
