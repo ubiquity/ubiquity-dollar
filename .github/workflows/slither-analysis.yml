@@ -1,6 +1,6 @@
 name: Slither Analysis
 
-on: push
+on: workflow_dispatch
 jobs:
   slither-analysis:
     name: Slither Analysis
