@@ -1,6 +1,7 @@
 name: CodeQL Analysis
 
 on:
+  pull_request:
   push:
 
 jobs:

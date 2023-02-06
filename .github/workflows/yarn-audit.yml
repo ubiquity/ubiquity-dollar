@@ -1,6 +1,7 @@
 name: Yarn Audit
 
 on:
+  pull_request:
   push:
 
 jobs:
