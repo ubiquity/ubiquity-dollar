@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditNFTRedemptionCalculator.sol";
@@ -10,7 +10,6 @@ import "./CreditNFT.sol";
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 
 contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
-
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

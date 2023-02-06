@@ -113,6 +113,13 @@
     "alloc",
     "ubiquiti",
     "buildhome",
-    "ubiquibot"
+    "ubiquibot",
+    "basepool",
+    "inheritdoc",
+    "calldatacopy",
+    "calldatasize",
+    "delegatecall",
+    "returndatacopy",
+    "returndatasize"
   ]
 }

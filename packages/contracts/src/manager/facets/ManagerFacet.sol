@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.17;
 
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {AccessControlStorage} from "../libraries/AccessControlStorage.sol";

@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "abdk/ABDKMathQuad.sol";
 import "./CreditNFT.sol";
-
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditRedemptionCalculator is ICreditRedemptionCalculator {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -53,7 +53,10 @@ contract CreditNFTManager is ERC165, IERC1155Receiver {
     /// @param _manager the address of the manager contract so we can fetch variables
     /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
     /// once set (unless migrated)
-    constructor(UbiquityDollarManager _manager, uint256 _creditNFTLengthBlocks) {
+    constructor(
+        UbiquityDollarManager _manager,
+        uint256 _creditNFTLengthBlocks
+    ) {
         manager = _manager;
         creditNFTLengthBlocks = _creditNFTLengthBlocks;
     }

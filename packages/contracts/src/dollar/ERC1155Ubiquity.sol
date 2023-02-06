@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.17;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
@@ -49,7 +49,10 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(UbiquityDollarManager manager_, string memory uri) ERC1155(uri) {
+    constructor(
+        UbiquityDollarManager manager_,
+        string memory uri
+    ) ERC1155(uri) {
         manager = manager_;
     }
 

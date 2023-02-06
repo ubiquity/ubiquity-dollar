@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.17;
 
 import {LibDiamond} from "../libraries/LibDiamond.sol";
 import {IDiamondLoupe} from "../interfaces/IDiamondLoupe.sol";
@@ -11,7 +11,7 @@ import {AccessControlStorage} from "../libraries/AccessControlStorage.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
-// of your diamond. Add parameters to the init funciton if you need to.
+// of your diamond. Add parameters to the init function if you need to.
 
 contract DiamondInit is Modifiers {
     // You can add parameters to this function in order to pass in
