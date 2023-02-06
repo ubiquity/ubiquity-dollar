@@ -1,7 +1,7 @@
 ![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
-![Conventional Commits](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/enforce-conventional-commits.yml/badge.svg?branch=development)
-![Install and Build Workflow](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/install-and-build-pr.yml/badge.svg?branch=development)
-![Yarn Audit](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/yarn-audit-actions.yml/badge.svg?branch=development)
+![Conventional Commits](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/conventional-commits.yml/badge.svg?branch=development)
+![Build and Test](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/build-and-test.yml/badge.svg?branch=development)
+![Yarn Audit](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/yarn-audit.yml/badge.svg?branch=development)
 
 ![](https://byob.yarr.is/FibrinLab/ubiquity-dollar/coverage)
 
