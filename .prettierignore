@@ -1,0 +1,7 @@
+dist/
+.next/
+fixtures/
+types/
+lib/
+contracts/out/
+*.json

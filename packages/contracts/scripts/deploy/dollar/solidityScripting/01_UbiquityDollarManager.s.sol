@@ -4,7 +4,8 @@ pragma solidity 0.8.16;
 import "./00_Constants.sol";
 
 contract ManagerScript is Constants {
-    UbiquityDollarManager manager; 
+    UbiquityDollarManager manager;
+
     function run() public virtual {
         vm.startBroadcast(deployerPrivateKey);
 

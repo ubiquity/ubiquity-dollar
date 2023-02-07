@@ -35,10 +35,8 @@ contract CreditNFTManagerTest is LocalTestHelper {
         creditNFTManagerAddress = address(
             new CreditNFTManager(manager, creditNFTLengthBlocks)
         );
-        twapOracleAddress =
-            manager.twapOracleAddress();
-        dollarTokenAddress =
-            manager.dollarTokenAddress();
+        twapOracleAddress = manager.twapOracleAddress();
+        dollarTokenAddress = manager.dollarTokenAddress();
         creditCalculatorAddress = UbiquityDollarManager(dollarManagerAddress)
             .creditCalculatorAddress();
         creditNFTAddress = UbiquityDollarManager(dollarManagerAddress)
@@ -298,7 +296,8 @@ contract CreditNFTManagerTest is LocalTestHelper {
         deal(dollarTokenAddress, address(creditNFTManager), 10000000e18);
         vm.startPrank(account1);
         MockCreditToken(creditTokenAddress).approve(
-            creditNFTManagerAddress, 2 ^ (256 - 1)
+            creditNFTManagerAddress,
+            2 ^ (256 - 1)
         );
         uint256 unredeemed = creditNFTManager.burnCreditTokensForDollars(10e18);
         vm.stopPrank();

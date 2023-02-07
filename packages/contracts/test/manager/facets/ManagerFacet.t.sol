@@ -7,10 +7,7 @@ import "../../../src/dollar/interfaces/IMetaPool.sol";
 import "../../../src/dollar/mocks/MockDollarToken.sol";
 import "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 
-import {
-    GOVERNANCE_TOKEN_MINTER_ROLE,
-    GOVERNANCE_TOKEN_BURNER_ROLE
-} from "../../../src/manager/libraries/LibAppStorage.sol";
+import {GOVERNANCE_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE} from "../../../src/manager/libraries/LibAppStorage.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions() public {
@@ -75,7 +72,8 @@ contract RemoteTestManagerFacet is DiamondSetup {
     function testShouldSetExcessDollarsDistributor() public prankAs(admin) {
         IManagerFacet.setExcessDollarsDistributor(contract1, contract2);
         assertEq(
-            IManagerFacet.getExcessDollarsDistributor(contract1), contract2
+            IManagerFacet.getExcessDollarsDistributor(contract1),
+            contract2
         );
     }
 
@@ -110,15 +108,19 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testShouldsetIncentiveToDollar() public prankAs(admin) {
-        address dollarTokenAddress =
-            generateAddress("dollarTokenAddress", true, 10 ether);
+        address dollarTokenAddress = generateAddress(
+            "dollarTokenAddress",
+            true,
+            10 ether
+        );
         IManagerFacet.setDollarTokenAddress(dollarTokenAddress);
         IManagerFacet.setIncentiveToDollar(user1, contract1);
     }
 
     function testShouldSetMinterRoleWhenInitializing() public prankAs(admin) {
         assertEq(
-            IManagerFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin), true
+            IManagerFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
+            true
         );
     }
 
@@ -173,8 +175,9 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
         vm.startPrank(admin);
 
-        ICurveFactory curvePoolFactory =
-            ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
+        ICurveFactory curvePoolFactory = ICurveFactory(
+            0x0959158b6040D32d04c301A72CBFD6b39E21c9AE
+        );
         address curve3CrvBasePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
         address curve3CrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
 
@@ -186,8 +189,9 @@ contract RemoteTestManagerFacet is DiamondSetup {
             50000000
         );
 
-        IMetaPool metapool =
-            IMetaPool(IManagerFacet.getStableSwapMetaPoolAddress());
+        IMetaPool metapool = IMetaPool(
+            IManagerFacet.getStableSwapMetaPoolAddress()
+        );
         address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
         metapool.transfer(address(stakingV2Address), 100e18);
         vm.stopPrank();

@@ -49,7 +49,10 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(UbiquityDollarManager manager_, string memory uri) ERC1155(uri) {
+    constructor(
+        UbiquityDollarManager manager_,
+        string memory uri
+    ) ERC1155(uri) {
         manager = manager_;
     }
 
