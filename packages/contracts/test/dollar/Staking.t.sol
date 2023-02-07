@@ -173,11 +173,9 @@ contract RemoteZeroStateTest is ZeroState {
     }
 
     function testCannotSetStakingFormula() public {
-        vm.startPrank(secondAccount);
-        StakingFormulas steak = new StakingFormulas();
         vm.expectRevert("not manager");
-        staking.setStakingFormulas(steak);
-        vm.stopPrank();
+        vm.prank(secondAccount);
+        staking.setStakingFormulas(new StakingFormulas());
     }
 
     function testAddProtocolToken() public {
