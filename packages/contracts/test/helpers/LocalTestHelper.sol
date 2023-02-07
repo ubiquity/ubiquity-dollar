@@ -48,7 +48,7 @@ abstract contract LocalTestHelper is Test {
         manager = new UbiquityDollarManager(admin);
 
         vm.startPrank(admin);
-        // deploy credit Nft token
+        // deploy Credit NFT token
         creditNft = new MockCreditNft(100);
         manager.setCreditNftAddress(address(creditNft));
 
