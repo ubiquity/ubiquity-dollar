@@ -175,7 +175,7 @@ contract RemoteZeroStateTest is ZeroState {
     function testCannotSetStakingFormula() public {
         vm.startPrank(secondAccount);
         vm.expectRevert("not manager");
-        staking.setStakingFormulas(new StakingFormulas());
+        staking.setStakingFormulas(stake);
         vm.stopPrank();
     }
 
