@@ -50,7 +50,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
     /// @notice Mint an amount of CreditNfts expiring at a certain block for a certain recipient
     /// @param amount amount of tokens to mint
-    /// @param expiryBlockNumber the expiration block number of the CreditNfts to mint
+    /// @param expiryBlockNumber the expiration block number of the CreditNFTs to mint
     function mintCreditNft(
         address recipient,
         uint256 amount,
