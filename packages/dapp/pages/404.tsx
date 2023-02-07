@@ -29,7 +29,7 @@ const Custom404 = () => {
             </a>
           </li>
           <li>
-            <a href="//t.me/ubiquitydao" target="_blank">
+            <a href="//t.me/UbiquityDAO" target="_blank">
               Telegram
             </a>
           </li>
