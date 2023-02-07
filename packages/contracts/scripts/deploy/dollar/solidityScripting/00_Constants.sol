@@ -29,6 +29,7 @@ contract Constants is Script {
     uint256[] shareAmounts;
     uint256[] ids;
     string uri;
+
     uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
     address admin = vm.envAddress("PUBLIC_KEY");
     address USDCrvToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
