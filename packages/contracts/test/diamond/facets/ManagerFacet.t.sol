@@ -30,8 +30,8 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testSetCreditNFTAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setCreditNFTAddress(contract1);
-        assertEq(IManager.creditNFTAddress(), contract1);
+        IManager.setCreditNftAddress(contract1);
+        assertEq(IManager.creditNftAddress(), contract1);
     }
 
     function testSetGovernanceTokenAddress_ShouldSucceed()

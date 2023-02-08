@@ -3,7 +3,7 @@ pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {CreditNFT} from "../../dollar/core/CreditNFT.sol";
+import {CreditNft} from "../../dollar/core/CreditNft.sol";
 import {CREDIT_NFT_MANAGER_ROLE} from "./Constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IDollarMintExcess} from "../../dollar/interfaces/IDollarMintExcess.sol";
@@ -11,7 +11,7 @@ import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 import {LibDollar} from "./LibDollar.sol";
 import {LibCreditRedemptionCalculator} from "./LibCreditRedemptionCalculator.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
-import {LibCreditNFTRedemptionCalculator} from "./LibCreditNFTRedemptionCalculator.sol";
+import {LibCreditNftRedemptionCalculator} from "./LibCreditNFTRedemptionCalculator.sol";
 import {UbiquityCreditToken} from "../../dollar/core/UbiquityCreditToken.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
 import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
@@ -22,7 +22,7 @@ import {DollarTokenFacet} from "../facets/DollarTokenFacet.sol";
 /// redeemable in the future
 /// @notice Allows users to redeem individual Credit NFT or batch redeem
 /// Credit NFT on a first-come first-serve basis
-library LibCreditNFTManager {
+library LibCreditNftManager {
     using SafeERC20 for IERC20Ubiquity;
 
     bytes32 constant CREDIT_NFT_MANAGER_STORAGE_SLOT =
@@ -96,8 +96,8 @@ library LibCreditNFTManager {
             "Price must be below 1 to mint Credit NFT"
         );
 
-        CreditNFT creditNFT = CreditNFT(
-            LibAppStorage.appStorage().creditNFTAddress
+        CreditNft creditNFT = CreditNft(
+            LibAppStorage.appStorage().creditNftAddress
         );
         creditNFT.updateTotalDebt();
         CreditNFTMgrData storage cs = creditNFTStorage();
@@ -109,14 +109,14 @@ library LibCreditNFTManager {
             cs.dollarsMintedThisCycle = 0;
         }
 
-        uint256 creditNFTToMint = LibCreditNFTRedemptionCalculator
+        uint256 creditNFTToMint = LibCreditNftRedemptionCalculator
             .getCreditNFTAmount(amount);
 
         // we burn user's dollars.
         LibDollar.burn(msg.sender, amount);
 
         uint256 expiryBlockNumber = block.number + (cs.creditNFTLengthBlocks);
-        creditNFT.mintCreditNFT(msg.sender, creditNFTToMint, expiryBlockNumber);
+        creditNFT.mintCreditNft(msg.sender, creditNFTToMint, expiryBlockNumber);
 
         //give the caller the block number of the minted nft
         return expiryBlockNumber;
@@ -133,8 +133,8 @@ library LibCreditNFTManager {
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
 
-        CreditNFT creditNFT = CreditNFT(
-            LibAppStorage.appStorage().creditNFTAddress
+        CreditNft creditNFT = CreditNft(
+            LibAppStorage.appStorage().creditNftAddress
         );
         creditNFT.updateTotalDebt();
 
@@ -169,7 +169,7 @@ library LibCreditNFTManager {
     function getCreditNFTReturnedForDollars(
         uint256 amount
     ) internal view returns (uint256) {
-        return LibCreditNFTRedemptionCalculator.getCreditNFTAmount(amount);
+        return LibCreditNftRedemptionCalculator.getCreditNFTAmount(amount);
     }
 
     /// @dev uses the current Credit for dollars calculation to get Credit for dollars
@@ -215,8 +215,8 @@ library LibCreditNFTManager {
         uint256 amount
     ) public returns (uint256 governanceAmount) {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
-        CreditNFT creditNFT = CreditNFT(
-            LibAppStorage.appStorage().creditNFTAddress
+        CreditNft creditNFT = CreditNft(
+            LibAppStorage.appStorage().creditNftAddress
         );
 
         require(id <= block.number, "Credit NFT has not expired");
@@ -225,7 +225,7 @@ library LibCreditNFTManager {
             "User not enough Credit NFT"
         );
 
-        creditNFT.burnCreditNFT(msg.sender, amount, id);
+        creditNFT.burnCreditNft(msg.sender, amount, id);
 
         // Mint Governance Token to this contract. Transfer Governance Token to msg.sender i.e. Credit NFT holder
         IERC20Ubiquity governanceToken = IERC20Ubiquity(
@@ -247,8 +247,8 @@ library LibCreditNFTManager {
         uint256 amount
     ) public returns (uint256) {
         // Check whether Credit NFT hasn't expired --> Burn Credit NFT.
-        CreditNFT creditNFT = CreditNFT(
-            LibAppStorage.appStorage().creditNFTAddress
+        CreditNft creditNFT = CreditNft(
+            LibAppStorage.appStorage().creditNftAddress
         );
 
         require(id > block.timestamp, "Credit NFT has expired");
@@ -257,7 +257,7 @@ library LibCreditNFTManager {
             "User not enough Credit NFT"
         );
 
-        creditNFT.burnCreditNFT(msg.sender, amount, id);
+        creditNFT.burnCreditNft(msg.sender, amount, id);
 
         // Mint LP tokens to this contract. Transfer LP tokens to msg.sender i.e. Credit NFT holder
         UbiquityCreditToken creditToken = UbiquityCreditToken(
@@ -322,7 +322,7 @@ library LibCreditNFTManager {
             creditNFTStorage().debtCycle = false;
         }
         AppStorage storage s = LibAppStorage.appStorage();
-        CreditNFT creditNFT = CreditNFT(s.creditNFTAddress);
+        CreditNft creditNFT = CreditNft(s.creditNftAddress);
 
         require(id > block.number, "Credit NFT has expired");
         require(
@@ -354,7 +354,7 @@ library LibCreditNFTManager {
         );
 
         // creditNFTManager must be an operator to transfer on behalf of msg.sender
-        creditNFT.burnCreditNFT(msg.sender, creditNFTToRedeem, id);
+        creditNFT.burnCreditNft(msg.sender, creditNFTToRedeem, id);
         DollarTokenFacet(address(this)).transfer(msg.sender, creditNFTToRedeem);
 
         return amount - (creditNFTToRedeem);
@@ -363,7 +363,7 @@ library LibCreditNFTManager {
     function mintClaimableDollars() public {
         AppStorage storage s = LibAppStorage.appStorage();
 
-        CreditNFT creditNFT = CreditNFT(s.creditNFTAddress);
+        CreditNft creditNFT = CreditNft(s.creditNftAddress);
         creditNFT.updateTotalDebt();
 
         uint256 totalMintableDollars = IDollarMintCalculator(

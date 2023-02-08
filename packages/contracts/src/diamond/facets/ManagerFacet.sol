@@ -148,7 +148,7 @@ contract ManagerFacet is Modifiers {
         return s.creditTokenAddress;
     }
 
-    function getCreditNftAddress() external view returns (address) {
+    function creditNftAddress() external view returns (address) {
         return s.creditNftAddress;
     }
 
@@ -173,7 +173,7 @@ contract ManagerFacet is Modifiers {
     }
 
     function excessDollarsDistributor(
-        address _creditNFTManagerAddress
+        address _creditNftManagerAddress
     ) external view returns (address) {
         return s._excessDollarDistributors[_creditNftManagerAddress];
     }

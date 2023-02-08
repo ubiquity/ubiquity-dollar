@@ -50,11 +50,11 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
         uint256 j = 0;
         for (uint256 i = 0; i < array.length; i++) {
             if (i != index) {
-                newArray[j] = array[i];
+                newarray[j] = array[i];
                 j += 1;
             }
         }
-        return newArray;
+        return newarray;
     }
 
     // remove value from bytes4[] array
