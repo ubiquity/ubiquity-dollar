@@ -2,14 +2,14 @@
 pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../interfaces/ICreditNftRedemptionCalculator.sol";
+import {ICreditNftRedemptionCalculator} from "../interfaces/ICreditNftRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "./CreditNft.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 
-contract CreditNFTRedemptionCalculator is ICreditNFTRedemptionCalculator {
+contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

@@ -10,8 +10,8 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol"
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
 import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
-import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
-import {CreditNFTManager} from "../../../src/dollar/core/CreditNFTManager.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
+import {CreditNftManager} from "../../../src/dollar/core/CreditNftManager.sol";
 import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
 import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import "../../../src/diamond/libraries/Constants.sol";
@@ -133,7 +133,7 @@ contract ZeroStateStaking is DiamondSetup {
             UbiquityDollarManager(address(IManager))
         );
         IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
-        CreditNFTManager creditNFTManager = new CreditNFTManager(
+        CreditNftManager creditNFTManager = new CreditNftManager(
             UbiquityDollarManager(address(IManager)),
             creditNFTLengthBlocks
         );

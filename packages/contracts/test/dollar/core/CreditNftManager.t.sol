@@ -296,7 +296,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         deal(dollarTokenAddress, address(creditNftManager), 10000000e18);
         vm.startPrank(account1);
         MockCreditToken(creditTokenAddress).approve(
-            creditNFTManagerAddress,
+            creditNftManagerAddress,
             2 ^ (256 - 1)
         );
         uint256 unredeemed = creditNftManager.burnCreditTokensForDollars(10e18);

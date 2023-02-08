@@ -226,7 +226,7 @@ contract LiveTestHelper is Test {
         dollarMintCalc = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
-        creditNFTManager = new CreditNFTManager(manager, creditNFTLengthBlocks);
+        creditNftManager = new CreditNftManager(manager, creditNftLengthBlocks);
 
         manager.grantRole(
             manager.CREDIT_NFT_MANAGER_ROLE(),

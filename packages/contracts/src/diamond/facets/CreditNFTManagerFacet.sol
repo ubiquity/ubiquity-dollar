@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {LibCreditNFTManager} from "../libraries/LibCreditNFTManager.sol";
+import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders
@@ -12,25 +12,25 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
 /// redeemable in the future
 /// @notice Allows users to redeem individual Credit NFT or batch redeem
 /// Credit NFT on a first-come first-serve basis
-contract CreditNFTManagerFacet is Modifiers {
+contract CreditNftManagerFacet is Modifiers {
     function setExpiredCreditNFTConversionRate(
         uint256 rate
     ) external onlyCreditNFTManager {
-        LibCreditNFTManager.setExpiredCreditNFTConversionRate(rate);
+        LibCreditNftManager.setExpiredCreditNFTConversionRate(rate);
     }
 
     function expiredCreditNFTConversionRate() external view returns (uint256) {
-        return LibCreditNFTManager.expiredCreditNFTConversionRate();
+        return LibCreditNftManager.expiredCreditNFTConversionRate();
     }
 
     function setCreditNFTLength(
         uint256 _creditNFTLengthBlocks
     ) external onlyCreditNFTManager {
-        LibCreditNFTManager.setCreditNFTLength(_creditNFTLengthBlocks);
+        LibCreditNftManager.setCreditNFTLength(_creditNFTLengthBlocks);
     }
 
     function creditNFTLengthBlocks() external view returns (uint256) {
-        return LibCreditNFTManager.creditNFTLengthBlocks();
+        return LibCreditNftManager.creditNFTLengthBlocks();
     }
 
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
@@ -39,7 +39,7 @@ contract CreditNFTManagerFacet is Modifiers {
     function exchangeDollarsForCreditNFT(
         uint256 amount
     ) external returns (uint256) {
-        return LibCreditNFTManager.exchangeDollarsForCreditNFT(amount);
+        return LibCreditNftManager.exchangeDollarsForCreditNFT(amount);
     }
 
     /// @dev called when a user wants to burn Dollar for Credit.
@@ -49,7 +49,7 @@ contract CreditNFTManagerFacet is Modifiers {
     function exchangeDollarsForCredit(
         uint256 amount
     ) external returns (uint256) {
-        return LibCreditNFTManager.exchangeDollarsForCredit(amount);
+        return LibCreditNftManager.exchangeDollarsForCredit(amount);
     }
 
     /// @dev uses the current Credit NFT for dollars calculation to get Credit NFT for dollars
@@ -57,7 +57,7 @@ contract CreditNFTManagerFacet is Modifiers {
     function getCreditNFTReturnedForDollars(
         uint256 amount
     ) external view returns (uint256) {
-        return LibCreditNFTManager.getCreditNFTReturnedForDollars(amount);
+        return LibCreditNftManager.getCreditNFTReturnedForDollars(amount);
     }
 
     /// @dev uses the current Credit for dollars calculation to get Credit for dollars
@@ -65,7 +65,7 @@ contract CreditNFTManagerFacet is Modifiers {
     function getCreditReturnedForDollars(
         uint256 amount
     ) external view returns (uint256) {
-        return LibCreditNFTManager.getCreditReturnedForDollars(amount);
+        return LibCreditNftManager.getCreditReturnedForDollars(amount);
     }
 
     /// @dev should be called by this contract only when getting Credit NFT to be burnt
@@ -77,7 +77,7 @@ contract CreditNFTManagerFacet is Modifiers {
         bytes calldata data
     ) external view returns (bytes4) {
         return
-            LibCreditNFTManager.onERC1155Received(
+            LibCreditNftManager.onERC1155Received(
                 operator,
                 from,
                 id,
@@ -108,7 +108,7 @@ contract CreditNFTManagerFacet is Modifiers {
         uint256 amount
     ) public returns (uint256 governanceAmount) {
         return
-            LibCreditNFTManager.burnExpiredCreditNFTForGovernance(id, amount);
+            LibCreditNftManager.burnExpiredCreditNFTForGovernance(id, amount);
     }
 
     // TODO should we leave it ?
@@ -120,7 +120,7 @@ contract CreditNFTManagerFacet is Modifiers {
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
-        return LibCreditNFTManager.burnCreditNFTForCredit(id, amount);
+        return LibCreditNftManager.burnCreditNFTForCredit(id, amount);
     }
 
     /// @dev Exchange Credit pool token for Dollar tokens.
@@ -129,7 +129,7 @@ contract CreditNFTManagerFacet is Modifiers {
     function burnCreditTokensForDollars(
         uint256 amount
     ) public returns (uint256) {
-        return LibCreditNFTManager.burnCreditTokensForDollars(amount);
+        return LibCreditNftManager.burnCreditTokensForDollars(amount);
     }
 
     /// @param id the block number of the Credit NFT
@@ -139,10 +139,10 @@ contract CreditNFTManagerFacet is Modifiers {
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
-        return LibCreditNFTManager.redeemCreditNFT(id, amount);
+        return LibCreditNftManager.redeemCreditNFT(id, amount);
     }
 
     function mintClaimableDollars() public {
-        LibCreditNFTManager.mintClaimableDollars();
+        LibCreditNftManager.mintClaimableDollars();
     }
 }

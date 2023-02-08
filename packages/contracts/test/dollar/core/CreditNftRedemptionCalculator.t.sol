@@ -16,8 +16,9 @@ contract CreditNftRedemptionCalculatorTest is LocalTestHelper {
     function setUp() public override {
         super.setUp();
         dollarManagerAddress = address(manager);
-        creditNftCalculatorAddress =
-            address(new CreditNftRedemptionCalculator(manager));
+        creditNftCalculatorAddress = address(
+            new CreditNftRedemptionCalculator(manager)
+        );
     }
 
     function test_getCreditNftAmount_revertsIfDebtTooHigh() public {

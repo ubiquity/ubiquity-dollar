@@ -2,15 +2,15 @@
 pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../../dollar/interfaces/ICreditNFTRedemptionCalculator.sol";
-import {LibCreditNFTRedemptionCalculator} from "../libraries/LibCreditNFTRedemptionCalculator.sol";
+import {ICreditNftRedemptionCalculator} from "../../dollar/interfaces/ICreditNftRedemptionCalculator.sol";
+import {LibCreditNftRedemptionCalculator} from "../libraries/LibCreditNFTRedemptionCalculator.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
-contract CreditNFTRedemptionCalculatorFacet is ICreditNFTRedemptionCalculator {
-    function getCreditNFTAmount(
+contract CreditNftRedemptionCalculatorFacet is ICreditNftRedemptionCalculator {
+    function getCreditNftAmount(
         uint256 dollarsToBurn
     ) external view override returns (uint256) {
         return
-            LibCreditNFTRedemptionCalculator.getCreditNFTAmount(dollarsToBurn);
+            LibCreditNftRedemptionCalculator.getCreditNFTAmount(dollarsToBurn);
     }
 }

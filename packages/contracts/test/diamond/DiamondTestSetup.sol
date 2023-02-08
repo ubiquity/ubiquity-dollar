@@ -40,8 +40,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
     StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
 
-    CreditNFTManagerFacet creditNFTManagerFacet;
-    CreditNFTRedemptionCalculatorFacet creditNFTRedemptionCalculatorFacet;
+    CreditNftManagerFacet creditNFTManagerFacet;
+    CreditNftRedemptionCalculatorFacet creditNFTRedemptionCalculatorFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacet;
 
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
@@ -60,8 +60,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
     StakingFormulasFacet IStakingFormulasFacet;
     OwnershipFacet IOwnershipFacet;
 
-    CreditNFTManagerFacet ICreditNFTMgrFacet;
-    CreditNFTRedemptionCalculatorFacet ICreditNFTRedCalcFacet;
+    CreditNftManagerFacet ICreditNFTMgrFacet;
+    CreditNftRedemptionCalculatorFacet ICreditNFTRedCalcFacet;
     CreditRedemptionCalculatorFacet ICreditRedCalcFacet;
 
     DollarMintCalculatorFacet IDollarMintCalcFacet;
@@ -168,7 +168,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(managerFacet.twapOracleAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.dollarTokenAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.creditTokenAddress.selector);
-        selectorsOfManagerFacet.push(managerFacet.creditNFTAddress.selector);
+        selectorsOfManagerFacet.push(managerFacet.creditNftAddress.selector);
         selectorsOfManagerFacet.push(
             managerFacet.governanceTokenAddress.selector
         );
@@ -370,7 +370,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         // Credit NFT Redemption Calculator
         selectorsOfCreditNFTRedemptionCalculatorFacet.push(
-            creditNFTRedemptionCalculatorFacet.getCreditNFTAmount.selector
+            creditNFTRedemptionCalculatorFacet.getCreditNftAmount.selector
         );
 
         // Credit Redemption Calculator
@@ -406,8 +406,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
         stakingFacet = new StakingFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
 
-        creditNFTManagerFacet = new CreditNFTManagerFacet();
-        creditNFTRedemptionCalculatorFacet = new CreditNFTRedemptionCalculatorFacet();
+        creditNFTManagerFacet = new CreditNftManagerFacet();
+        creditNFTRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacet = new CreditRedemptionCalculatorFacet();
 
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
@@ -592,8 +592,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
         IOwnershipFacet = OwnershipFacet(address(diamond));
 
-        ICreditNFTMgrFacet = CreditNFTManagerFacet(address(diamond));
-        ICreditNFTRedCalcFacet = CreditNFTRedemptionCalculatorFacet(
+        ICreditNFTMgrFacet = CreditNftManagerFacet(address(diamond));
+        ICreditNFTRedCalcFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
         );
         ICreditRedCalcFacet = CreditRedemptionCalculatorFacet(address(diamond));

@@ -2,21 +2,21 @@
 pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
-import {CreditNFTManagerFacet} from "../../../src/diamond/facets/CreditNFTManagerFacet.sol";
+import {CreditNftManagerFacet} from "../../../src/diamond/facets/CreditNFTManagerFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../../src/diamond/facets/CreditRedemptionCalculatorFacet.sol";
 import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
-import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
+import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 import {TWAPOracleDollar3poolFacet} from "../../../src/diamond/facets/TWAPOracleDollar3poolFacet.sol";
 import "../../../src/diamond/libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
 
 contract CreditNFTManagerFacetTest is DiamondSetup {
-    MockCreditNFT _creditNFT;
+    MockCreditNft _creditNFT;
     address dollarManagerAddress;
     address dollarTokenAddress;
     address creditCalculatorAddress;
@@ -35,9 +35,9 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         uint256 admSupply = IDollarFacet.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
-        _creditNFT = new MockCreditNFT(100);
+        _creditNFT = new MockCreditNft(100);
         vm.prank(admin);
-        IManager.setCreditNFTAddress(address(_creditNFT));
+        IManager.setCreditNftAddress(address(_creditNFT));
 
         twapOracleAddress = address(diamond);
         dollarTokenAddress = address(diamond);
@@ -171,7 +171,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
     {
         address mockMessageSender = address(0x123);
         vm.prank(admin);
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             mockMessageSender,
             100,
             500
@@ -186,7 +186,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             mockMessageSender,
             2e18,
             expiryBlockNumber
@@ -223,7 +223,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             mockMessageSender,
             2e18,
             expiryBlockNumber
@@ -284,7 +284,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             account1,
             100,
             expiryBlockNumber
@@ -299,7 +299,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             account1,
             100,
             expiryBlockNumber
@@ -331,7 +331,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         mockDollarMintCalcFuncs(0);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             account1,
             100,
             expiryBlockNumber
@@ -360,7 +360,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         mockDollarMintCalcFuncs(20000e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        MockCreditNFT(creditNFTAddress).mintCreditNFT(
+        MockCreditNft(creditNFTAddress).mintCreditNft(
             account1,
             100,
             expiryBlockNumber
