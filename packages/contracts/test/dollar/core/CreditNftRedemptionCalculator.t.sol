@@ -29,7 +29,7 @@ contract CreditNFTRedemptionCalculatorTest is LocalTestHelper {
             UbiquityDollarManager(dollarManagerAddress).creditNftAddress()
         ).setTotalOutstandingDebt(totalSupply + 1);
 
-        vm.expectRevert("CreditNFT to Dollar: DEBT_TOO_HIGH");
+        vm.expectRevert("CreditNft to Dollar: DEBT_TOO_HIGH");
         CreditNftRedemptionCalculator(creditNFTCalculatorAddress)
             .getCreditNftAmount(0);
     }
