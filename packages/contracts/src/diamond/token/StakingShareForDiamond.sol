@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -25,7 +25,7 @@ contract StakingShareForDiamond is ERC1155, ERC1155Burnable, ERC1155Pausable {
         // lp remaining for a user
         uint256 lpAmount;
     }
-    IAccessControl public accessCtrl;
+    IAccessControl public immutable accessCtrl;
 
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
@@ -187,11 +187,9 @@ contract StakingShareForDiamond is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(
+        address holder
+    ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
     }
 

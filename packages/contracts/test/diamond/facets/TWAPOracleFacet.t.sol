@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";

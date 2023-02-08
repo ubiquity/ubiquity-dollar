@@ -73,7 +73,7 @@ contract CreditClock {
             if (blockNumber < block.number)
                 revert("CreditClock: block number must not be in the past.");
         }
-
+        // slither-disable-next-line divide-before-multiply
         rate = rateStartValue.mul(
             one.div(
                 // b ^ n == 2^(n*log²(b))

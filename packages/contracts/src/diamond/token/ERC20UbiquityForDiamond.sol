@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
@@ -20,10 +20,10 @@ contract ERC20UbiquityForDiamond is
     ERC20Burnable,
     ERC20Pausable
 {
-    IAccessControl public accessCtrl;
+    IAccessControl public immutable accessCtrl;
 
     // solhint-disable-next-line var-name-mixedcase
-    bytes32 public DOMAIN_SEPARATOR;
+    bytes32 public immutable DOMAIN_SEPARATOR;
     mapping(address => uint256) public nonces;
     string private _tokenName;
     string private _symbol;

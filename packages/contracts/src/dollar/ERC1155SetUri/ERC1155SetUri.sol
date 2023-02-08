@@ -487,10 +487,14 @@ contract ERC1155SetUri is Context, ERC165, IERC1155, IERC1155MetadataURI {
                     amount,
                     data
                 )
-            returns (bytes4 response) {
+            returns (
+                // slither-disable-next-line uninitialized-local
+                bytes4 response
+            ) {
                 if (response != IERC1155Receiver.onERC1155Received.selector) {
                     revert("ERC1155: ERC1155Receiver rejected tokens");
                 }
+                // slither-disable-next-line uninitialized-local
             } catch Error(string memory reason) {
                 revert(reason);
             } catch {
@@ -516,12 +520,16 @@ contract ERC1155SetUri is Context, ERC165, IERC1155, IERC1155MetadataURI {
                     amounts,
                     data
                 )
-            returns (bytes4 response) {
+            returns (
+                // slither-disable-next-line uninitialized-local
+                bytes4 response
+            ) {
                 if (
                     response != IERC1155Receiver.onERC1155BatchReceived.selector
                 ) {
                     revert("ERC1155: ERC1155Receiver rejected tokens");
                 }
+                // slither-disable-next-line uninitialized-local
             } catch Error(string memory reason) {
                 revert(reason);
             } catch {

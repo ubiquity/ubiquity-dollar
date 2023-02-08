@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
@@ -65,6 +65,10 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
 
     function testIncentivizeBuy() public {
         vm.startPrank(admin);
+        manager.grantRole(
+            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
+            curveIncentiveAddress
+        );
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
