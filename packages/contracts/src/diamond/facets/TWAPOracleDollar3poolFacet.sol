@@ -4,11 +4,13 @@ pragma solidity ^0.8.16;
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
-contract TWAPOracleDollar3poolFacet is Modifiers {
-    function setPool(address _pool, address _curve3CRVToken1)
-        external
-        onlyOwner
-    {
+import {ITWAPOracleDollar3pool} from "../../dollar/interfaces/ITWAPOracleDollar3pool.sol";
+
+contract TWAPOracleDollar3poolFacet is Modifiers, ITWAPOracleDollar3pool {
+    function setPool(
+        address _pool,
+        address _curve3CRVToken1
+    ) external onlyOwner {
         return LibTWAPOracle.setPool(_pool, _curve3CRVToken1);
     }
 

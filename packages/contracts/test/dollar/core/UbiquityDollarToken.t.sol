@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
 import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
@@ -25,9 +25,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         super.setUp();
         vm.startPrank(admin);
         dollar_addr = address(new UbiquityDollarToken(manager));
-        manager.grantRole(
-            keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin
-        );
+        manager.grantRole(keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin);
         vm.stopPrank();
     }
 

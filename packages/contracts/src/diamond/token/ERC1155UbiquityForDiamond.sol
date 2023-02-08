@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
@@ -22,7 +22,7 @@ contract ERC1155UbiquityForDiamond is
 {
     using SafeAddArray for uint256[];
 
-    IAccessControl public accessCtrl;
+    IAccessControl public immutable accessCtrl;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     uint256 private _totalSupply;
@@ -79,9 +79,11 @@ contract ERC1155UbiquityForDiamond is
         bytes memory data
     ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
+        uint256 localTotalSupply = _totalSupply;
         for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply += amounts[i];
+            localTotalSupply += amounts[i];
         }
+        _totalSupply = localTotalSupply;
         _holderBalances[to].add(ids);
     }
 
@@ -143,11 +145,9 @@ contract ERC1155UbiquityForDiamond is
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(
+        address holder
+    ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
     }
 

@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "../libraries/LibCollectableDust.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {ICollectableDust} from "../../dollar/interfaces/utils/ICollectableDust.sol";
 
-contract CollectableDustFacet is Modifiers {
+contract CollectableDustFacet is ICollectableDust, Modifiers {
     /// Collectable Dust
     function addProtocolToken(address _token) external onlyStakingManager {
         LibCollectableDust.addProtocolToken(_token);

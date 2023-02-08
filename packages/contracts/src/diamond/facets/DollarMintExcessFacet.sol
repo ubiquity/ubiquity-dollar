@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {IDollarMintExcess} from "../../dollar/interfaces/IDollarMintExcess.sol";
 import {LibDollarMintExcess} from "../libraries/LibDollarMintExcess.sol";

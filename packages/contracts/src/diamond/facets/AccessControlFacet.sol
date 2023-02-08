@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.16;
 
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import {AccessControlInternal} from "../access/AccessControlInternal.sol";
@@ -19,21 +19,20 @@ contract AccessControlFacet is
     /**
      * @inheritdoc IAccessControl
      */
-    function grantRole(bytes32 role, address account)
-        external
-        onlyRole(_getRoleAdmin(role))
-    {
+    function grantRole(
+        bytes32 role,
+        address account
+    ) external onlyRole(_getRoleAdmin(role)) {
         return _grantRole(role, account);
     }
 
     /**
      * @inheritdoc IAccessControl
      */
-    function hasRole(bytes32 role, address account)
-        external
-        view
-        returns (bool)
-    {
+    function hasRole(
+        bytes32 role,
+        address account
+    ) external view returns (bool) {
         return _hasRole(role, account);
     }
 
@@ -47,10 +46,10 @@ contract AccessControlFacet is
     /**
      * @inheritdoc IAccessControl
      */
-    function revokeRole(bytes32 role, address account)
-        external
-        onlyRole(_getRoleAdmin(role))
-    {
+    function revokeRole(
+        bytes32 role,
+        address account
+    ) external onlyRole(_getRoleAdmin(role)) {
         return _revokeRole(role, account);
     }
 

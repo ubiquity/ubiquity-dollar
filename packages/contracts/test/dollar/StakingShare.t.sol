@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/LiveTestHelper.sol";
@@ -77,7 +77,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
     }
 
-    function testCannotUpdateStateWhenPaused(
+    function testCannotUpdateaStateWhenPaused(
         uint128 amount,
         uint128 debt,
         uint256 end

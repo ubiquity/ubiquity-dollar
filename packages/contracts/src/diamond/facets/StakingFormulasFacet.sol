@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {LibStakingFormulas} from "../libraries/LibStakingFormulas.sol";
 import {StakingShare} from "../../dollar/StakingShare.sol";

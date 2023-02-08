@@ -79,24 +79,6 @@ abstract contract AccessControlInternal {
         return LibAccessControl.accessControlStorage().roles[role].adminRole;
     }
 
-    /**
-     * @notice set role as admin role
-     * @param role role to set
-     * @param adminRole admin role to set
-     */
-    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
-        bytes32 previousAdminRole = _getRoleAdmin(role);
-        LibAccessControl
-            .accessControlStorage()
-            .roles[role]
-            .adminRole = adminRole;
-        emit LibAccessControl.RoleAdminChanged(
-            role,
-            previousAdminRole,
-            adminRole
-        );
-    }
-
     /*
      * @notice assign role to given account
      * @param role role to assign

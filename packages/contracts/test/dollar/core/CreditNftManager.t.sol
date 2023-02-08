@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
 import {CreditNftManager} from "../../../src/dollar/core/CreditNftManager.sol";
@@ -35,10 +35,8 @@ contract CreditNftManagerTest is LocalTestHelper {
         creditNftManagerAddress = address(
             new CreditNftManager(manager, creditNftLengthBlocks)
         );
-        twapOracleAddress =
-            manager.twapOracleAddress();
-        dollarTokenAddress =
-            manager.dollarTokenAddress();
+        twapOracleAddress = manager.twapOracleAddress();
+        dollarTokenAddress = manager.dollarTokenAddress();
         creditCalculatorAddress = UbiquityDollarManager(dollarManagerAddress)
             .creditCalculatorAddress();
         creditNftAddress = UbiquityDollarManager(dollarManagerAddress)
@@ -298,7 +296,8 @@ contract CreditNftManagerTest is LocalTestHelper {
         deal(dollarTokenAddress, address(creditNftManager), 10000000e18);
         vm.startPrank(account1);
         MockCreditToken(creditTokenAddress).approve(
-            creditNftManagerAddress, 2 ^ (256 - 1)
+            creditNFTManagerAddress,
+            2 ^ (256 - 1)
         );
         uint256 unredeemed = creditNftManager.burnCreditTokensForDollars(10e18);
         vm.stopPrank();

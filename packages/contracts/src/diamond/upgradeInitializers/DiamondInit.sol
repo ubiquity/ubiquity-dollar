@@ -65,7 +65,7 @@ contract DiamondInit is Modifiers {
         );
         // staking
         LibStaking.StakingData storage ls = LibStaking.stakingStorage();
-        ls.stakingDiscountMultiplier = uint256(1000000 gwei); // 0.001
+        ls.stakingDiscountMultiplier = uint256(0.001 ether); // 0.001
         ls.blockCountInAWeek = 45361;
         // add staking shares
 

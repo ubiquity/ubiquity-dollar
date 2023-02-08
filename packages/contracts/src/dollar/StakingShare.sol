@@ -115,6 +115,7 @@ contract StakingShare is
         uint256 endBlock
     ) public virtual onlyMinter whenNotPaused returns (uint256 id) {
         id = _totalSupply + 1;
+        // slither-disable-next-line reentrancy-no-eth
         _mint(to, id, 1, bytes(""));
         _totalSupply += 1;
         _holderBalances[to].add(id);
