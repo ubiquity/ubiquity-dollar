@@ -21,7 +21,7 @@ import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 
 contract ZeroStateStaking is DiamondSetup {
     MockERC20 crvToken;
-    uint256 creditNFTLengthBlocks = 100;
+    uint256 creditNftLengthBlocks = 100;
     address treasury = address(0x3);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);
@@ -133,23 +133,23 @@ contract ZeroStateStaking is DiamondSetup {
             UbiquityDollarManager(address(IManager))
         );
         IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
-        CreditNftManager creditNFTManager = new CreditNftManager(
+        CreditNftManager creditNftManager = new CreditNftManager(
             UbiquityDollarManager(address(IManager)),
-            creditNFTLengthBlocks
+            creditNftLengthBlocks
         );
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
         IAccessCtrl.grantRole(
             CREDIT_NFT_MANAGER_ROLE,
-            address(creditNFTManager)
+            address(creditNftManager)
         );
         IAccessCtrl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(creditNFTManager)
+            address(creditNftManager)
         );
 
         IAccessCtrl.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
-            address(creditNFTManager)
+            address(creditNftManager)
         );
         UbiquityCreditTokenForDiamond creditToken = new UbiquityCreditTokenForDiamond(
                 address(IManager)
@@ -159,7 +159,7 @@ contract ZeroStateStaking is DiamondSetup {
             UbiquityDollarManager(address(IManager))
         );
         IManager.setExcessDollarsDistributor(
-            address(creditNFTManager),
+            address(creditNftManager),
             address(dollarMintExcess)
         );
         vm.stopPrank();

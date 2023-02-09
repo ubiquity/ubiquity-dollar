@@ -20,7 +20,7 @@ import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol"
 contract ZeroStateChef is DiamondSetup {
     MockERC20 crvToken;
     address curve3CrvToken;
-    uint256 creditNFTLengthBlocks = 100;
+    uint256 creditNftLengthBlocks = 100;
     address treasury = address(0x3);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);
