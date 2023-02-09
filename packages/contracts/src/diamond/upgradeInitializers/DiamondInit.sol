@@ -15,7 +15,7 @@ import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {LibDollar} from "../libraries/LibDollar.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
-import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
+import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 import {UbiquityDollarManager} from "../../dollar/core/UbiquityDollarManager.sol";
 
@@ -92,11 +92,11 @@ contract DiamondInit is Modifiers {
         // creditNFTManager
         /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)
-        LibCreditNftManager.creditNFTStorage().creditNFTLengthBlocks = _args
-            .creditNFTLengthBlocks;
+        LibCreditNftManager.creditNFTStorage().creditNftLengthBlocks = _args
+            .creditNftLengthBlocks;
         LibCreditNftManager
-            .creditNFTStorage()
-            .expiredCreditNFTConversionRate = 2;
+            .creditNftStorage()
+            .expiredCreditNftConversionRate = 2;
 
         LibCreditRedemptionCalculator
             .creditRedemptionCalculatorStorage()

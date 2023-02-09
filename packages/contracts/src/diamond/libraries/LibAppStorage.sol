@@ -73,7 +73,7 @@ contract Modifiers {
         _;
     }
 
-    modifier onlyCreditNFTManager() {
+    modifier onlyCreditNftManager() {
         require(
             LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a Credit NFT manager"

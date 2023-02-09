@@ -164,7 +164,7 @@ contract ManagerFacet is Modifiers {
         return address(this);
     }
 
-    function creditNFTCalculatorAddress() external view returns (address) {
+    function creditNftCalculatorAddress() external view returns (address) {
         return address(this);
     }
 

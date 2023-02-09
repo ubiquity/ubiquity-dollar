@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
+import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders
@@ -13,33 +13,33 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
 /// @notice Allows users to redeem individual Credit NFT or batch redeem
 /// Credit NFT on a first-come first-serve basis
 contract CreditNftManagerFacet is Modifiers {
-    function setExpiredCreditNFTConversionRate(
+    function setExpiredCreditNftConversionRate(
         uint256 rate
     ) external onlyCreditNFTManager {
-        LibCreditNftManager.setExpiredCreditNFTConversionRate(rate);
+        LibCreditNftManager.setExpiredCreditNftConversionRate(rate);
     }
 
-    function expiredCreditNFTConversionRate() external view returns (uint256) {
-        return LibCreditNftManager.expiredCreditNFTConversionRate();
+    function expiredCreditNftConversionRate() external view returns (uint256) {
+        return LibCreditNftManager.expiredCreditNftConversionRate();
     }
 
-    function setCreditNFTLength(
+    function setCreditNftLength(
         uint256 _creditNFTLengthBlocks
     ) external onlyCreditNFTManager {
-        LibCreditNftManager.setCreditNFTLength(_creditNFTLengthBlocks);
+        LibCreditNftManager.setCreditNFTLength(_creditNftLengthBlocks);
     }
 
-    function creditNFTLengthBlocks() external view returns (uint256) {
-        return LibCreditNftManager.creditNFTLengthBlocks();
+    function creditNftLengthBlocks() external view returns (uint256) {
+        return LibCreditNftManager.creditNftLengthBlocks();
     }
 
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function exchangeDollarsForCreditNFT(
+    function exchangeDollarsForCreditNft(
         uint256 amount
     ) external returns (uint256) {
-        return LibCreditNftManager.exchangeDollarsForCreditNFT(amount);
+        return LibCreditNftManager.exchangeDollarsForCreditNft(amount);
     }
 
     /// @dev called when a user wants to burn Dollar for Credit.
@@ -54,10 +54,10 @@ contract CreditNftManagerFacet is Modifiers {
 
     /// @dev uses the current Credit NFT for dollars calculation to get Credit NFT for dollars
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function getCreditNFTReturnedForDollars(
+    function getCreditNftReturnedForDollars(
         uint256 amount
     ) external view returns (uint256) {
-        return LibCreditNftManager.getCreditNFTReturnedForDollars(amount);
+        return LibCreditNftManager.getCreditNftReturnedForDollars(amount);
     }
 
     /// @dev uses the current Credit for dollars calculation to get Credit for dollars
@@ -103,24 +103,24 @@ contract CreditNftManagerFacet is Modifiers {
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return governanceAmount amount of Governance Token minted to Credit NFT holder
-    function burnExpiredCreditNFTForGovernance(
+    function burnExpiredCreditNftForGovernance(
         uint256 id,
         uint256 amount
     ) public returns (uint256 governanceAmount) {
         return
-            LibCreditNftManager.burnExpiredCreditNFTForGovernance(id, amount);
+            LibCreditNftManager.burnExpiredCreditNftForGovernance(id, amount);
     }
 
     // TODO should we leave it ?
     /// @dev Lets Credit NFT holder burn Credit NFT for Credit. Doesn't make TWAP > 1 check.
     /// @param id the timestamp of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
-    /// @return amount of Credit pool tokens (i.e. LP tokens) minted to Credit NFT holder
-    function burnCreditNFTForCredit(
+    /// @return amount of Credit pool tokens (i.e. LP tokens) minted to Credit Nft holder
+    function burnCreditNftForCredit(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
-        return LibCreditNftManager.burnCreditNFTForCredit(id, amount);
+        return LibCreditNftManager.burnCreditNftForCredit(id, amount);
     }
 
     /// @dev Exchange Credit pool token for Dollar tokens.
@@ -135,11 +135,11 @@ contract CreditNftManagerFacet is Modifiers {
     /// @param id the block number of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return amount of unredeemed Credit NFT
-    function redeemCreditNFT(
+    function redeemCreditNft(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
-        return LibCreditNftManager.redeemCreditNFT(id, amount);
+        return LibCreditNftManager.redeemCreditNft(id, amount);
     }
 
     function mintClaimableDollars() public {

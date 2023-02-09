@@ -12,7 +12,7 @@ library LibCreditNftRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    function getCreditNFTAmount(
+    function getCreditNftAmount(
         uint256 dollarsToBurn
     ) internal view returns (uint256) {
         address creditNFTAddress = LibAppStorage.appStorage().creditNftAddress;
