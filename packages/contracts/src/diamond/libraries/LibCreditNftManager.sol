@@ -219,7 +219,7 @@ library LibCreditNftManager {
             LibAppStorage.appStorage().creditNftAddress
         );
 
-        require(id <= block.number, "Credit Nft has not expired");
+        require(id <= block.number, "Credit NFT has not expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit NFT"
@@ -251,7 +251,7 @@ library LibCreditNftManager {
             LibAppStorage.appStorage().creditNftAddress
         );
 
-        require(id > block.timestamp, "Credit Nft has expired");
+        require(id > block.timestamp, "Credit NFT has expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit NFT"
@@ -324,7 +324,7 @@ library LibCreditNftManager {
         AppStorage storage s = LibAppStorage.appStorage();
         CreditNft creditNft = CreditNft(s.creditNftAddress);
 
-        require(id > block.number, "Credit Nft has expired");
+        require(id > block.number, "Credit NFT has expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit NFT"

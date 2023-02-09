@@ -53,7 +53,10 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
     /// @param _manager the address of the manager contract so we can fetch variables
     /// @param _creditNftLengthBlocks how many blocks Credit Nft last. can't be changed
     /// once set (unless migrated)
-    constructor(UbiquityDollarManager _manager, uint256 _creditNftLengthBlocks) {
+    constructor(
+        UbiquityDollarManager _manager,
+        uint256 _creditNftLengthBlocks
+    ) {
         manager = _manager;
         creditNftLengthBlocks = _creditNftLengthBlocks;
     }
@@ -235,7 +238,7 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
         // Check whether Credit Nft hasn't expired --> Burn Credit Nft.
         CreditNft creditNft = CreditNft(manager.creditNftAddress());
 
-        require(id <= block.number, "Credit Nft has not expired");
+        require(id <= block.number, "Credit NFT has not expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit Nft"
@@ -263,7 +266,7 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
         // Check whether Credit Nft hasn't expired --> Burn Credit Nft.
         CreditNft creditNft = CreditNft(manager.creditNftAddress());
 
-        require(id > block.timestamp, "Credit Nft has expired");
+        require(id > block.timestamp, "Credit NFT has expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit Nft"
@@ -344,7 +347,7 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
         }
         CreditNft creditNft = CreditNft(manager.creditNftAddress());
 
-        require(id > block.number, "Credit Nft has expired");
+        require(id > block.number, "Credit NFT has expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,
             "User not enough Credit Nft"

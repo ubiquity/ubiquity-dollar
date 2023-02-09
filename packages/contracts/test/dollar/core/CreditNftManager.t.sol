@@ -178,7 +178,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         public
     {
         vm.roll(1000);
-        vm.expectRevert("Credit Nft has not expired");
+        vm.expectRevert("Credit NFT has not expired");
         CreditNftManager(creditNftManagerAddress)
             .burnExpiredCreditNftForGovernance(2000, 1e18);
     }
@@ -226,7 +226,7 @@ contract CreditNftManagerTest is LocalTestHelper {
 
     function test_burnCreditNftForCreditRevertsIfExpired() public {
         vm.warp(1000);
-        vm.expectRevert("Credit Nft has expired");
+        vm.expectRevert("Credit NFT has expired");
         CreditNftManager(creditNftManagerAddress).burnCreditNftForCredit(
             500,
             1e18
@@ -317,7 +317,7 @@ contract CreditNftManagerTest is LocalTestHelper {
     function test_redeemCreditNftRevertsIfCreditNftExpired() public {
         mockTwapFuncs(2e18);
         vm.roll(10000);
-        vm.expectRevert("Credit Nft has expired");
+        vm.expectRevert("Credit NFT has expired");
         CreditNftManager(creditNftManagerAddress).redeemCreditNft(5555, 100);
     }
 

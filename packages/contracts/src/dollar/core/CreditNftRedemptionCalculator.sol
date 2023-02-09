@@ -29,7 +29,7 @@ contract CreditNftRedemptionCalculator is ICreditNftRedemptionCalculator {
         require(
             CreditNft(manager.creditNftAddress()).getTotalOutstandingDebt() <
                 IERC20(manager.dollarTokenAddress()).totalSupply(),
-            "CreditNft to Dollar: DEBT_TOO_HIGH"
+            "CreditNFT to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
         bytes16 totalDebt = CreditNft(manager.creditNftAddress())
