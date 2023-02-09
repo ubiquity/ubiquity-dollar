@@ -22,4 +22,4 @@ bracket_spacing = false
 quote_style = 'double'
 
 [rpc_endpoints]
-mainnet = "${RPC_URL}"
+mainnet = "https://eth.ubq.fi/v1/mainnet"
