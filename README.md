@@ -124,17 +124,15 @@ Make sure you are using the following network configuration:
 | m/44'/60'/0'/0/9  | 0x71454ff148c22f6D2Fc50C13aF0B702Aaa134189 | 0x3c82c68b4df60547a5fb926bf8d9513f4a6cf07604cb6429778ef6dce4eb48fb |
 | m/44'/60'/0'/0/10 | 0x53e93feD0C06D78ec86cEfC58b619BD6B5F93Ade | 0x79c924066175ae04a3ef3cd88d293e1c2f7fd7a860c5ddb8f09077bd4225c757 |
 
-### Ubiquity Dollar Contracts Setup
+### Ubiquity Dollar Contracts Deployment
 
-This section is for the Ubiquity Dollar core protocol smart contracts (not the UbiquiStick NFT or UI related code.)
+You need to create `.env` file inside the contracts folder with 'PRIVATE_KEY', 'PUBLIC_KEY', 'MNEMONIC', and 'CURVE_WHALE' all filled. 'PRIVATE_KEY' will be used to deploy locally and the matching 'PUBLIC_KEY' will be the admin on all the smart contracts. 'MNEMONIC' is used when launching Anvil and will ensure your `PUBLIC_KEY` account is funded.
 
-You need to create `.env` file inside the contracts folder with 'RPC_URL', 'PRIVATE_KEY', 'ADMIN_ADDRESS', 'MNEMONIC', and 'CURVE_WHALE' all filled. 'PRIVATE_KEY' will be used to deploy locally and the matching 'ADMIN_ADDRESS' will be the admin on all the smart contracts. 'RPC_URL' and 'MNEMONIC' are used when launching Anvil and will ensure your `ADMIN_ADDRESS` account is funded. 
+The .env.example is prepopulated with the recommend test 'MNEMONIC', test 'PRIVATE_KEY', and test 'PUBLIC_KEY'.
 
-The .env.example is prepopulated with the recommend test 'MNEMONIC', test 'PRIVATE_KEY', and test 'ADMIN_ADRESS'.
+To start your local chain run
 
-To start your local chain run 
-
-``` yarn workspace @ubiquity/contracts anvil ```
+``` yarn workspace @ubiquity/contracts start:anvil ```
 
 If successful it will show a readout of accounts generated from `MNEMONIC` and the port it's listening on.
 
@@ -142,7 +140,6 @@ To deploy the contracts run
 
 ``` yarn workspace @ubiquity/contracts deploy:development ```
 
-This will first impersonate the `CURVE_WHALE` and transfer some tokens so we can create a UbiquityDollar/3CRV pool, and then it will deploy the Ubiquity Dollar core protocol via a series of Solidity scripts via Forge. 
+This will first impersonate the `CURVE_WHALE` and transfer some tokens so we can create a UbiquityDollar/3CRV pool, and then it will deploy the Ubiquity Dollar core protocol via a series of Solidity scripts via Forge.
 
 Sine stabilitate nihil habemus.
-
