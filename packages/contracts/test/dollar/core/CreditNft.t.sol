@@ -27,12 +27,12 @@ contract CreditNftTest is LocalTestHelper {
         creditNftAddress = address(new CreditNft(manager));
     }
 
-    function test_mintCreditNftRevertsIfNotCreditNftManager() public {
+    function testMintCreditNft_ShouldRevert_WhenNotCreditNftManager() public {
         vm.expectRevert("Caller is not a CreditNft manager");
         CreditNft(creditNftAddress).mintCreditNft(address(0x123), 1, 100);
     }
 
-    function test_mintCreditNftWorks() public {
+    function testMintCreditNft_ShouldMintCreditNft() public {
         address receiver = address(0x123);
         uint256 expiryBlockNumber = 100;
         uint256 mintAmount = 1;
@@ -60,12 +60,12 @@ contract CreditNftTest is LocalTestHelper {
         assertEq(holderTokens[0], expiryBlockNumber);
     }
 
-    function test_burnCreditNftRevertsIfNotCreditNftManager() public {
+    function testBurnCreditNft_ShouldRevert_WhenNotCreditNftManager() public {
         vm.expectRevert("Caller is not a CreditNft manager");
         CreditNft(creditNftAddress).burnCreditNft(address(0x123), 1, 100);
     }
 
-    function test_burnCreditNftRevertsWorks() public {
+    function testBurnCreditNft_ShouldBurnCreditNft() public {
         address creditNftOwner = address(0x123);
         uint256 expiryBlockNumber = 100;
         uint256 burnAmount = 1;

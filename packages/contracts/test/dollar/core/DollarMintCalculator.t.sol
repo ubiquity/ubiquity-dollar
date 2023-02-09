@@ -38,13 +38,13 @@ contract DollarMintCalculatorTest is LocalTestHelper {
         );
     }
 
-    function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {
+    function testGetDollarsToMint_ShouldRevert_IfPriceLowerThan1USD() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("DollarMintCalculator: not > 1");
         DollarMintCalculator(dollarMintCalculatorAddress).getDollarsToMint();
     }
 
-    function test_getDollarsToMintWorks() public {
+    function testGetDollarsToMint_ShouldCalculate_TheCorrectAmount() public {
         mockTwapFuncs(2e18);
         uint256 totalSupply = MockDollarToken(dollarAddress).totalSupply();
         uint256 amountToMint = DollarMintCalculator(dollarMintCalculatorAddress)

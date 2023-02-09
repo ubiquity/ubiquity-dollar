@@ -31,7 +31,9 @@ contract ZeroState is LiveTestHelper {
 }
 
 contract RemoteZeroStateTest is ZeroState {
-    function testSetGovernancePerBlock(uint256 governancePerBlock) public {
+    function testSetGovernancePerBlock_ShouldSetGovernancePerBlock(
+        uint256 governancePerBlock
+    ) public {
         vm.expectEmit(true, false, false, true, address(ubiquityChef));
         emit GovernancePerBlockModified(governancePerBlock);
         vm.prank(admin);
@@ -39,13 +41,15 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(ubiquityChef.governancePerBlock(), governancePerBlock);
     }
 
-    function testSetGovernanceDiv(uint256 div) public {
+    function testSetGovernanceDiv_ShouldSetGovernanceDiv(uint256 div) public {
         vm.prank(admin);
         ubiquityChef.setGovernanceShareForTreasury(div);
         assertEq(ubiquityChef.governanceDivider(), div);
     }
 
-    function testSetMinPriceDiff(uint256 minPriceDiff) public {
+    function testSetMinPriceDiff_ShouldSetMinPriceDiff(
+        uint256 minPriceDiff
+    ) public {
         vm.expectEmit(true, false, false, true, address(ubiquityChef));
         emit MinPriceDiffToUpdateMultiplierModified(minPriceDiff);
         vm.prank(admin);
@@ -53,7 +57,7 @@ contract RemoteZeroStateTest is ZeroState {
         assertEq(ubiquityChef.minPriceDiffToUpdateMultiplier(), minPriceDiff);
     }
 
-    function testDeposit(uint256 lpAmount) public {
+    function testDeposit_ShouldDeposit(uint256 lpAmount) public {
         lpAmount = bound(lpAmount, 1, metapool.balanceOf(fourthAccount));
         uint256 shares = ubiquityFormulas.durationMultiply(
             lpAmount,
@@ -105,11 +109,14 @@ contract DepositState is ZeroState {
 }
 
 contract RemoteDepositStateTest is DepositState {
-    function testTotalShares() public {
+    function testTotalSharesShouldReturnTotalShares() public {
         assertEq(ubiquityChef.totalShares(), shares);
     }
 
-    function testWithdraw(uint256 amount, uint256 blocks) public {
+    function testWithdraw_ShouldWithdraw(
+        uint256 amount,
+        uint256 blocks
+    ) public {
         blocks = bound(blocks, 1, 2 ** 64 - 1);
         amount = bound(amount, 1, shares);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
@@ -122,7 +129,7 @@ contract RemoteDepositStateTest is DepositState {
         assertLt(preBal, governanceToken.balanceOf(fourthAccount));
     }
 
-    function testGetRewards(uint256 blocks) public {
+    function testGetRewards_ShouldGetRewards(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 64 - 1);
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
         vm.roll(block.number + blocks);
@@ -132,13 +139,15 @@ contract RemoteDepositStateTest is DepositState {
         assertLt(preBal, preBal + rewardSent);
     }
 
-    function testCannotGetRewardsOtherAccount() public {
+    function testGetRewards_ShouldRevertIfCallerIsNotOwner() public {
         vm.expectRevert("MS: caller is not owner");
         vm.prank(stakingMinAccount);
         ubiquityChef.getRewards(1);
     }
 
-    function testPendingGovernance(uint256 blocks) public {
+    function testPendingGovernance_ShouldGetPendingGovernanceTokens(
+        uint256 blocks
+    ) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
         (uint256 lastRewardBlock, ) = ubiquityChef.pool();

@@ -35,10 +35,8 @@ contract CreditNftManagerTest is LocalTestHelper {
         creditNftManagerAddress = address(
             new CreditNftManager(manager, creditNftLengthBlocks)
         );
-        twapOracleAddress =
-            manager.twapOracleAddress();
-        dollarTokenAddress =
-            manager.dollarTokenAddress();
+        twapOracleAddress = manager.twapOracleAddress();
+        dollarTokenAddress = manager.dollarTokenAddress();
         creditCalculatorAddress = UbiquityDollarManager(dollarManagerAddress)
             .creditCalculatorAddress();
         creditNftAddress = UbiquityDollarManager(dollarManagerAddress)
@@ -95,7 +93,9 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_setExpiredCreditNftConversionRate() public {
+    function testSetExpiredCreditNftConversionRateShouldRevertIfCallerIsNotCreditNftManager()
+        public
+    {
         vm.expectRevert("Caller is not a Credit Nft manager");
         CreditNftManager(creditNftManagerAddress)
             .setExpiredCreditNftConversionRate(100);
@@ -110,7 +110,9 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_setCreditNftLength() public {
+    function testSetCreditNftLength_ShouldRevert_IfCallerIsNotCreditNftManager()
+        public
+    {
         vm.expectRevert("Caller is not a Credit Nft manager");
         CreditNftManager(creditNftManagerAddress).setCreditNftLength(100);
 
@@ -122,7 +124,9 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_exchangeDollarsForCreditNft() public {
+    function testExchangeDollarsForCreditNft_ShouldBeSuccessful_WhenTestedWithCorrectPrice()
+        public
+    {
         mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint Credit Nft");
         CreditNftManager(creditNftManagerAddress).exchangeDollarsForCreditNft(
@@ -149,7 +153,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         // like check the difference in creditNft/dollarToken balance
     }
 
-    function test_exchangeDollarsForCreditRevertsIfPriceHigherThan1Ether()
+    function testExchangeDollarsForCredit_ShouldRevert_IfPriceHigherThan1Ether()
         public
     {
         mockTwapFuncs(2e18);
@@ -157,7 +161,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         CreditNftManager(creditNftManagerAddress).exchangeDollarsForCredit(100);
     }
 
-    function test_exchangeDollarsForCreditWorks() public {
+    function testExchangeDollarsForCredit_ShouldBeSuccessful() public {
         mockTwapFuncs(5e17);
         address mockSender = address(0x123);
         vm.roll(10000);
@@ -176,7 +180,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         assertEq(creditAmount, 10e18);
     }
 
-    function test_burnExpiredCreditNftForGovernanceRevertsIfNotExpired()
+    function testBurnExpiredCreditNftForGovernance_ShouldRevert_IfNotExpired()
         public
     {
         vm.roll(1000);
@@ -185,7 +189,7 @@ contract CreditNftManagerTest is LocalTestHelper {
             .burnExpiredCreditNftForGovernance(2000, 1e18);
     }
 
-    function test_burnExpiredCreditNftForGovernanceRevertsIfNotEnoughBalance()
+    function testBurnExpiredCreditNftForGovernance_ShouldRevert_IfNotEnoughCreditNft()
         public
     {
         address mockMessageSender = address(0x123);
@@ -202,7 +206,7 @@ contract CreditNftManagerTest is LocalTestHelper {
             .burnExpiredCreditNftForGovernance(500, 1e18);
     }
 
-    function test_burnExpiredCreditNftForGovernanceWorks() public {
+    function testBurnExpiredCreditNftForGovernance_ShouldWork() public {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
@@ -226,7 +230,9 @@ contract CreditNftManagerTest is LocalTestHelper {
         assertEq(governanceBalance, 5e17);
     }
 
-    function test_burnCreditNftForCreditRevertsIfExpired() public {
+    function testBurnCreditNftForCredit_ShouldRevert_WhenCreditNftExpired()
+        public
+    {
         vm.warp(1000);
         vm.expectRevert("Credit Nft has expired");
         CreditNftManager(creditNftManagerAddress).burnCreditNftForCredit(
@@ -235,7 +241,9 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_burnCreditNftForCreditRevertsIfNotEnoughBalance() public {
+    function testBurnCreditNftForCredit_ShouldRevert_WhenNotEnoughCreditNft()
+        public
+    {
         vm.warp(1000);
         vm.expectRevert("User not enough Credit Nft");
         CreditNftManager(creditNftManagerAddress).burnCreditNftForCredit(
@@ -244,7 +252,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_burnCreditNftForCreditWorks() public {
+    function testBurnCreditNftForCredit_ShouldWork() public {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
@@ -269,7 +277,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         assertEq(redeemBalance, 1e18);
     }
 
-    function test_burnCreditTokensForDollarsRevertsIfPriceLowerThan1Ether()
+    function testBurnCreditTokensForDollars_ShouldRevert_IfPriceLowerThan1Ether()
         public
     {
         mockTwapFuncs(5e17);
@@ -279,7 +287,9 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_burnCreditTokensForDollarsIfNotEnoughBalance() public {
+    function testBurnCreditTokensForDollars_ShouldRevertIfUserDoesNotHaveEnoughCreditPoolTokens()
+        public
+    {
         mockTwapFuncs(2e18);
         vm.expectRevert("User doesn't have enough Credit pool tokens.");
         CreditNftManager(creditNftManagerAddress).burnCreditTokensForDollars(
@@ -287,7 +297,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_burnCreditTokensForDollarsWorks() public {
+    function testBurnCreditTokensForDollars_ShouldWork() public {
         mockTwapFuncs(2e18);
         mockDollarMintCalcFuncs(1e18);
         address account1 = address(0x123);
@@ -298,7 +308,8 @@ contract CreditNftManagerTest is LocalTestHelper {
         deal(dollarTokenAddress, address(creditNftManager), 10000000e18);
         vm.startPrank(account1);
         MockCreditToken(creditTokenAddress).approve(
-            creditNftManagerAddress, 2 ^ (256 - 1)
+            creditNftManagerAddress,
+            2 ^ (256 - 1)
         );
         uint256 unredeemed = creditNftManager.burnCreditTokensForDollars(10e18);
         vm.stopPrank();
@@ -306,7 +317,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         assertEq(preBal + 10e18, dollarToken.balanceOf(account1));
     }
 
-    function test_redeemCreditNftRevertsIfPriceLowerThan1Ether() public {
+    function testRedeemCreditNft_ShouldRevert_IfPriceLowerThan1Ether() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("Price must be above 1 to redeem Credit Nft");
         CreditNftManager(creditNftManagerAddress).redeemCreditNft(
@@ -315,14 +326,14 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_redeemCreditNftRevertsIfCreditNftExpired() public {
+    function testRedeemCreditNft_ShouldRevert_IfCreditNftExpired() public {
         mockTwapFuncs(2e18);
         vm.roll(10000);
         vm.expectRevert("Credit Nft has expired");
         CreditNftManager(creditNftManagerAddress).redeemCreditNft(5555, 100);
     }
 
-    function test_redeemCreditNftRevertsIfNotEnoughBalance() public {
+    function testRedeemCreditNft_ShouldRevert_IfNotEnoughBalance() public {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
@@ -340,7 +351,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_redeemCreditNftRevertsIfNotEnoughDollars() public {
+    function testRedeemCreditNft_ShouldRevert_WhenNotEnoughDollars() public {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
@@ -374,7 +385,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_redeemCreditNftRevertsIfZeroAmountOfDollars() public {
+    function testRedeemCreditNft_ShouldRevert_WhenZeroAmountOfDollars() public {
         mockTwapFuncs(2e18);
         mockDollarMintCalcFuncs(0);
         address account1 = address(0x123);
@@ -406,7 +417,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         );
     }
 
-    function test_redeemCreditNftWorks() public {
+    function testRedeemCreditNft_ShouldWork() public {
         mockTwapFuncs(2e18);
         mockDollarMintCalcFuncs(20000e18);
         address account1 = address(0x123);
@@ -438,7 +449,7 @@ contract CreditNftManagerTest is LocalTestHelper {
         assertEq(unredeemedCreditNft, 0);
     }
 
-    function test_mintClaimableDollars() public {
+    function testMintClaimableDollars_ShouldWork() public {
         mockDollarMintCalcFuncs(50);
         // set excess dollar distributor for creditNftAddress
         DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(

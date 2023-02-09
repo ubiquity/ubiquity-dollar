@@ -16,11 +16,12 @@ contract CreditNftRedemptionCalculatorTest is LocalTestHelper {
     function setUp() public override {
         super.setUp();
         dollarManagerAddress = address(manager);
-        creditNftCalculatorAddress =
-            address(new CreditNftRedemptionCalculator(manager));
+        creditNftCalculatorAddress = address(
+            new CreditNftRedemptionCalculator(manager)
+        );
     }
 
-    function test_getCreditNftAmount_revertsIfDebtTooHigh() public {
+    function testGetCreditNftAmount_ShouldRevert_IfDebtTooHigh() public {
         uint256 totalSupply = IERC20(
             UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         ).totalSupply();
@@ -33,7 +34,7 @@ contract CreditNftRedemptionCalculatorTest is LocalTestHelper {
             .getCreditNftAmount(0);
     }
 
-    function test_getCreditNftAmount() public {
+    function testGetCreditNftAmount_ShouldReturn_CorrectAmount() public {
         uint256 totalSupply = IERC20(
             UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         ).totalSupply();

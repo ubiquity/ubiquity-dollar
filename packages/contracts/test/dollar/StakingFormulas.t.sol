@@ -17,7 +17,7 @@ contract StakingFormulasTest is LocalTestHelper {
         stakingFormulas = new StakingFormulas();
     }
 
-    function test_sharesForLP() public {
+    function testSharesForLP_ShouldReturn_CorrectValue() public {
         StakingShare.Stake memory _stake = StakingShare.Stake({
             // address of the minter
             minter: address(0x11111),
@@ -37,7 +37,7 @@ contract StakingFormulasTest is LocalTestHelper {
         assertEq(stakingFormulas.sharesForLP(_stake, _shareInfo, _amount), 10);
     }
 
-    function test_lpRewardsRemoveLiquidityNormalization(
+    function testLpRewardsRemoveLiquidityNormalization_ShouldReturnCorrectValue(
         StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
@@ -52,7 +52,7 @@ contract StakingFormulasTest is LocalTestHelper {
         );
     }
 
-    function test_lpRewardsAddLiquidityNormalization(
+    function testLpRewardsAddLiquidityNormalization_ShouldReturnCorrectValue(
         StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
@@ -67,7 +67,7 @@ contract StakingFormulasTest is LocalTestHelper {
         );
     }
 
-    function test_correctedAmountToWithdraw_returnAmount() public {
+    function testCorrectedAmountToWithdraw_ShouldReturnAmount() public {
         uint256 _totalLpDeposited = 10000;
         uint256 _stakingLpBalance = 20000;
         uint256 _amount = 100;
@@ -81,7 +81,9 @@ contract StakingFormulasTest is LocalTestHelper {
         );
     }
 
-    function test_correctedAmountToWithdraw_calcSharedAmount() public {
+    function testCorrectedAmountToWithdraw_ShouldCalculateSharedAmount()
+        public
+    {
         uint256 _totalLpDeposited = 10000;
         uint256 _stakingLpBalance = 5000;
         uint256 _amount = 100;

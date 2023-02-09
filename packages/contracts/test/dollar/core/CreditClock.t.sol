@@ -28,13 +28,13 @@ contract CreditClockTest is LocalTestHelper {
         );
     }
 
-    function testSetRatePerBlockNotAdmin() public {
+    function testSetRatePerBlock_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("CreditClock: not admin");
         creditClock.setRatePerBlock(uint256(1).fromUInt());
     }
 
-    function testGetRateOldBlock() public {
+    function testGetRate_ShouldRevert_WhenBlockIsInThePast() public {
         vm.roll(block.number + 10);
         vm.expectRevert("CreditClock: block number must not be in the past.");
         creditClock.getRate(block.number - 1);
