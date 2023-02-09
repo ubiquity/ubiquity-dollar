@@ -48,10 +48,10 @@ library LibCreditRedemptionCalculator {
         uint256 dollarsToBurn,
         uint256 blockHeightDebt
     ) internal view returns (uint256) {
-        address creditNFTAddress = LibAppStorage.appStorage().creditNftAddress;
-        CreditNft cNFT = CreditNft(creditNFTAddress);
+        address creditNftAddress = LibAppStorage.appStorage().creditNftAddress;
+        CreditNft credits = CreditNft(creditNftAddress);
         require(
-            cNFT.getTotalOutstandingDebt() <
+            credits.getTotalOutstandingDebt() <
                 IERC20(address(this)).totalSupply(),
             "Credit to Dollar: DEBT_TOO_HIGH"
         );

@@ -15,7 +15,7 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
 contract CreditNftManagerFacet is Modifiers {
     function setExpiredCreditNftConversionRate(
         uint256 rate
-    ) external onlyCreditNFTManager {
+    ) external onlyCreditNftManager {
         LibCreditNftManager.setExpiredCreditNftConversionRate(rate);
     }
 
@@ -24,9 +24,9 @@ contract CreditNftManagerFacet is Modifiers {
     }
 
     function setCreditNftLength(
-        uint256 _creditNFTLengthBlocks
-    ) external onlyCreditNFTManager {
-        LibCreditNftManager.setCreditNFTLength(_creditNftLengthBlocks);
+        uint256 _creditNftLengthBlocks
+    ) external onlyCreditNftManager {
+        LibCreditNftManager.setCreditNftLength(_creditNftLengthBlocks);
     }
 
     function creditNftLengthBlocks() external view returns (uint256) {

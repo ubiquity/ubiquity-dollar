@@ -12,7 +12,7 @@ struct AppStorage {
     uint256 reentrancyStatus;
     // others
     address creditNftAddress;
-    address creditNFTCalculatorAddress;
+    address creditNftCalculatorAddress;
     address dollarMintCalculatorAddress;
     address stakingShareAddress;
     address stakingContractAddress;

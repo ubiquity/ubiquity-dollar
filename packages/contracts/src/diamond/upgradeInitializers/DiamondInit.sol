@@ -33,7 +33,7 @@ contract DiamondInit is Modifiers {
         uint256[] amounts;
         uint256[] stakingShareIDs;
         uint256 governancePerBlock;
-        uint256 creditNFTLengthBlocks;
+        uint256 creditNftLengthBlocks;
     }
 
     // You can add parameters to this function in order to pass in
@@ -89,10 +89,10 @@ contract DiamondInit is Modifiers {
             _args.governancePerBlock
         );
 
-        // creditNFTManager
-        /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
+        // creditNftManager
+        /// @param _creditNftLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)
-        LibCreditNftManager.creditNFTStorage().creditNftLengthBlocks = _args
+        LibCreditNftManager.creditNftStorage().creditNftLengthBlocks = _args
             .creditNftLengthBlocks;
         LibCreditNftManager
             .creditNftStorage()
