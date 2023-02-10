@@ -46,15 +46,15 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
         uint256 index,
         bytes4[] memory array
     ) public pure returns (bytes4[] memory) {
-        bytes4[] memory newarray = new bytes4[](array.length - 1);
+        bytes4[] memory newArray = new bytes4[](array.length - 1);
         uint256 j = 0;
         for (uint256 i = 0; i < array.length; i++) {
             if (i != index) {
-                newarray[j] = array[i];
+                newArray[j] = array[i];
                 j += 1;
             }
         }
-        return newarray;
+        return newArray;
     }
 
     // remove value from bytes4[] array

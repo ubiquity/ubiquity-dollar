@@ -110,7 +110,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         contract2 = generateAddress("Contract2", true, 10 ether);
 
         // set all function selectors
-        // Diamond Cutselectors
+        // Diamond Cut selectors
         selectorsOfDiamondCutFacet.push(IDiamondCut.diamondCut.selector);
 
         // Diamond Loupe
@@ -128,7 +128,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfOwnershipFacet.push(IERC173.transferOwnership.selector);
         selectorsOfOwnershipFacet.push(IERC173.owner.selector);
 
-        // Manager selectrs
+        // Manager selectors
         selectorsOfManagerFacet.push(
             managerFacet.setCreditTokenAddress.selector
         );
@@ -445,7 +445,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             governancePerBlock: 10e18,
             creditNFTLengthBlocks: 100
         });
-        // diamod arguments
+        // diamond arguments
         DiamondArgs memory _args = DiamondArgs({
             owner: owner,
             init: address(dInit),

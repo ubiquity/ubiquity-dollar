@@ -103,14 +103,14 @@ library LibStakingFormulas {
         _shares = m.mul(d32).mul(a).add(a).toUInt();
     }
 
-    /// @dev formula bonding
+    /// @dev formula staking
     /// @param _shares , amount of shares
     /// @param _currentShareValue , current share value
     /// @param _targetPrice , target Ubiquity Dollar price
     /// @return _uBOND , amount of bonding shares
     /// @notice UBOND = _shares / _currentShareValue * _targetPrice
     // newShares = A / V * T
-    function bonding(
+    function staking(
         uint256 _shares,
         uint256 _currentShareValue,
         uint256 _targetPrice
@@ -122,14 +122,14 @@ library LibStakingFormulas {
         _uBOND = a.div(v).mul(t).toUInt();
     }
 
-    /// @dev formula redeem bonds
+    /// @dev formula redeem stake
     /// @param _uBOND , amount of bonding shares
     /// @param _currentShareValue , current share value
     /// @param _targetPrice , target uAD price
     /// @return _uLP , amount of LP tokens
     /// @notice _uLP = _uBOND * _currentShareValue / _targetPrice
     // _uLP = A * V / T
-    function redeemBonds(
+    function redeemStake(
         uint256 _uBOND,
         uint256 _currentShareValue,
         uint256 _targetPrice

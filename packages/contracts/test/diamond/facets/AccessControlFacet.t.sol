@@ -28,7 +28,7 @@ contract AccessControlFacetTest is DiamondSetup {
     );
 
     // test grantRole function should work only for admin
-    function testgrantRole_ShouldWork() public {
+    function testGrantRole_ShouldWork() public {
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit RoleGranted(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient, admin);
@@ -36,7 +36,7 @@ contract AccessControlFacetTest is DiamondSetup {
     }
 
     // test grantRole function should revert if sender is not admin
-    function testgrantRole_ShouldRevertWhenNotAdmin() public {
+    function testGrantRole_ShouldRevertWhenNotAdmin() public {
         vm.prank(mock_sender);
 
         vm.expectRevert(

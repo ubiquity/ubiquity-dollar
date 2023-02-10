@@ -57,7 +57,7 @@ contract ChefFacet is Modifiers {
     }
 
     /**
-     * @dev get the minimum price differrence to update the multiplier.
+     * @dev get the minimum price difference to update the multiplier.
      */
     function minPriceDiffToUpdateMultiplier() external view returns (uint256) {
         return LibChef.minPriceDiffToUpdateMultiplier();

@@ -6,7 +6,7 @@ import "../../../src/diamond/libraries/Constants.sol";
 import "../DiamondTestSetup.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 
-contract ColectableDustFacetTest is DiamondSetup {
+contract CollectableDustFacetTest is DiamondSetup {
     address mock_sender = address(0x111);
     address mock_recipient = address(0x222);
     address mock_operator = address(0x333);
