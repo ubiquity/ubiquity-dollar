@@ -51,11 +51,10 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 
 ### Network Settings
-
-Make sure you are using the following network configuration:
-
-- `31337` chain ID of the Hardhat network.
-- `http://127.0.0.1:8545` RPC endpoint of the Hardhat network.
+| Network | Chain ID | RPC Endpoint                  | Comment |
+|---------|----------|-------------------------------|---------|
+| `mainnet` | `1`        | `https://eth.ubq.fi/v1/mainnet` | Our dedicated mainnet gateway     |
+| `anvil`   | `31337`    | `http://127.0.0.1:8545`         | Used for local development     |
 
 ## Deploying Contracts (Ubiquity Dollar Core)
 
