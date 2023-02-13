@@ -14,7 +14,7 @@ import "./core/UbiquityDollarManager.sol";
  * https://github.com/bancorprotocol/contracts
  */
 contract BondingCurve is BancorFormula, Pausable {
-    uint256 constant ACCURACY = 10 ** 18;
+    uint256 constant ACCURACY = 10e18;
 
     /// @dev Token issued by the bonding curve
     IERC1155Ubiquity immutable token;

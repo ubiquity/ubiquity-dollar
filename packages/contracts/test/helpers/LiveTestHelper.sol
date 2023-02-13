@@ -2,6 +2,7 @@
 pragma solidity ^0.8.3;
 
 import "../../src/dollar/Staking.sol";
+import "../../src/dollar/BondingCurve.sol";
 import "../../src/dollar/mocks/MockBondingV1.sol";
 import "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/StakingFormulas.sol";
@@ -37,6 +38,7 @@ contract LiveTestHelper is Test {
     Staking staking;
     StakingFormulas stakingFormulas;
     StakingShare stakingShare;
+    BondingCurve bondingCurve;
 
     UbiquityDollarManager manager;
 
@@ -112,6 +114,8 @@ contract LiveTestHelper is Test {
 
         dollarToken = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(dollarToken));
+
+        bondingCurve = new BondingCurve(address(manager), creditNFT, governanceToken, );
 
         creditNFT = new MockCreditNFT(100);
         manager.setCreditNFTAddress(address(creditNFT));
