@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
 import {CreditNftManager} from "../../../src/dollar/core/CreditNftManager.sol";

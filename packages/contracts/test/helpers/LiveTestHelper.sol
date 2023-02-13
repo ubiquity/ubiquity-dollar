@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "src/dollar/Staking.sol";
 import "src/dollar/mocks/MockBondingV1.sol";
@@ -226,8 +226,7 @@ contract LiveTestHelper is Test {
         dollarMintCalc = new DollarMintCalculator(manager);
         manager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
-        creditNftManager =
-            new CreditNftManager(manager, creditNftLengthBlocks);
+        creditNftManager = new CreditNftManager(manager, creditNftLengthBlocks);
 
         manager.grantRole(
             manager.CREDIT_NFT_MANAGER_ROLE(),
@@ -245,8 +244,7 @@ contract LiveTestHelper is Test {
         creditToken = new UbiquityCreditToken(manager);
         manager.setCreditTokenAddress(address(creditToken));
 
-        dollarMintExcess =
-            new DollarMintExcess(manager);
+        dollarMintExcess = new DollarMintExcess(manager);
         manager.setExcessDollarsDistributor(
             address(creditNftManager),
             address(dollarMintExcess)
@@ -322,8 +320,13 @@ contract LiveTestHelper is Test {
         migrateLP = [0, 0, 0];
         locked = [uint256(1), uint256(1), uint256(208)];
 
-        staking =
-        new Staking(manager, stakingFormulas, migrating, migrateLP, locked);
+        staking = new Staking(
+            manager,
+            stakingFormulas,
+            migrating,
+            migrateLP,
+            locked
+        );
 
         deal(address(dollarToken), address(staking), 100e18);
 

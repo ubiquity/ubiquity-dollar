@@ -100,7 +100,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         bool reachedEndOfExpiredKeys = false;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
         uint256 outstandingDebt = _totalOutstandingDebt;
-
+        uint256 localTotalOutstandingDebt = outstandingDebt;
         //if list is empty, currentBlockNumber will be 0
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {
             if (currentBlockNumber > block.number) {
@@ -108,10 +108,13 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
                 require(_sortedBlockNumbers.pushFront(currentBlockNumber));
                 reachedEndOfExpiredKeys = true;
             } else {
-                //update tally and remove key from blocks and map
+                // update tally and remove key from blocks and map
+                // https://github.com/ubiquity/ubiquity-dollar/issues/557
+                // slither-disable-next-line costly-loop
                 _totalOutstandingDebt =
                     _totalOutstandingDebt -
                     (_tokenSupplies[currentBlockNumber]);
+                // slither-disable-next-line costly-loop
                 delete _tokenSupplies[currentBlockNumber];
                 _sortedBlockNumbers.remove(currentBlockNumber);
             }

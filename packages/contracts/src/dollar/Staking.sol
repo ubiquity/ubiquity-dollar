@@ -313,6 +313,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 _id,
         uint256 _lockup
     ) external whenNotPaused {
+        // slither-disable-next-line reentrancy-no-eth
         (
             uint256[2] memory stakeInfo,
             StakingShare.Stake memory stake

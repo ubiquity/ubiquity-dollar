@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/LiveTestHelper.sol";
@@ -74,8 +74,6 @@ contract RemoteZeroStateTest is ZeroState {
     function testAddUserToMigrate_ShouldWork(uint256 x, uint256 y) public {
         x = bound(x, 1, 2 ** 128 - 1);
         y = bound(y, 1, 208);
-        console.logUint(x);
-        console.logUint(y);
 
         vm.prank(admin);
         vm.record();

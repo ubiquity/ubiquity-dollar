@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
-import "forge-std/console.sol";
-import "../../src/manager/interfaces/IDiamondCut.sol";
-import "../../src/manager/interfaces/IDiamondLoupe.sol";
+import "../../src/diamond/interfaces/IDiamondCut.sol";
+import "../../src/diamond/interfaces/IDiamondLoupe.sol";
 
 contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
     uint256 private seed;
@@ -138,7 +137,7 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
     function compareStrings(
         string memory a,
         string memory b
-    ) public view returns (bool) {
+    ) public pure returns (bool) {
         return (keccak256(abi.encodePacked((a))) ==
             keccak256(abi.encodePacked((b))));
     }

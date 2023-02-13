@@ -14,7 +14,7 @@ import "./interfaces/IERC20Ubiquity.sol";
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
 contract ERC20Ubiquity is IERC20Ubiquity, ERC20, ERC20Burnable, ERC20Pausable {
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public immutable DOMAIN_SEPARATOR;
