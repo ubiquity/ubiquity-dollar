@@ -97,7 +97,7 @@ contract CreditNftTest is LocalTestHelper {
         assertEq(init_balance - last_balance, burnAmount);
     }
 
-    function testFail_updateTotalDebt() public {
+    function testUpdateTotalDebt_ShouldUpdateTotalDebt() public {
         vm.startPrank(admin);
         CreditNft(creditNftAddress).mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
         CreditNft(creditNftAddress).mintCreditNft(address(0x222), 10, 20000);
@@ -112,7 +112,7 @@ contract CreditNftTest is LocalTestHelper {
         assertEq(outStandingTotalDebt, 20);
     }
 
-    function testFail_getTotalOutstandingDebt() public {
+    function testGetTotalOutstandingDebt_ReturnTotalDebt() public {
         vm.startPrank(admin);
         CreditNft(creditNftAddress).mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
         CreditNft(creditNftAddress).mintCreditNft(address(0x222), 10, 20000);
