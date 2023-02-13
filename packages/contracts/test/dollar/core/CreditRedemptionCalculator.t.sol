@@ -43,4 +43,9 @@ contract CreditRedemptionCalculatorTest is LocalTestHelper {
         vm.expectRevert("Credit to Dollar: DEBT_TOO_HIGH");
         creditCalc.getCreditAmount(1 ether, 10);
     }
+
+    function testGetCreditAmount_ShouldReturnAmount() public {
+        uint amount = creditCalc.getCreditAmount(1 ether, 10);
+        assertEq(amount, 9999999999999999999);
+    }
 }
