@@ -48,7 +48,15 @@ jobs:
       - name: Test All
         run: yarn test
 
-      - name: Prepare Deployment
+      - name: Cloudflare Deployment
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ubiquity-dollar
+          directory: packages/dapp/dist
+
+      - name: Prepare Netlify Deployment
         env:
           EVENT_NAME: ${{github.event_name}}
           PR_NUMBER: ${{ github.event.number }}

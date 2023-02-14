@@ -31,6 +31,7 @@ jobs:
             const workflow_run_id = '${{ github.event.workflow_run.id }}';
             const workspace = '${{ github.workspace }}';
             download_artifact({github, context, fs, workflow_run_id, workspace})
+
       - name: Extract files
         run: unzip pr.zip && unzip pull-request.zip && ls
 
@@ -38,12 +39,14 @@ jobs:
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --dir=./dist --prod > ./deployments.log
+
       - name: GitHub App token
         uses: tibdex/github-app-token@v1.7.0
         id: get_installation_token
         with:
           app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
           private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+
       - name: Use token
         env:
           TOKEN: ${{ steps.generate_token.outputs.token }}

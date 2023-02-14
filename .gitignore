@@ -63,3 +63,4 @@ build
 out
 packages/contracts/broadcast/*
 packages/dapp/types/
+.vscode/
