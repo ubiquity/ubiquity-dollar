@@ -36,7 +36,6 @@
     "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "prettier:all": "yarn workspaces foreach run prettier",
     "lint:all": "yarn workspaces foreach run lint",
-    "build:ci:cloudflare": "bash ./utils/build_cloudflare.sh",
     "build:ci:netlify": "yarn build:all",
     "postinstall": "husky install",
     "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
