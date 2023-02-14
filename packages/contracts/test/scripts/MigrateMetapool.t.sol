@@ -30,7 +30,7 @@ contract MetapoolMigrate is Test {
     uint256 metaBalance;
 
     function setUp() public {
-        string memory forkURL = vm.envString("RPC_URL");
+        /*string memory forkURL = vm.envString("RPC_URL");
 
         if (
             keccak256(abi.encodePacked(forkURL)) !=
@@ -39,7 +39,8 @@ contract MetapoolMigrate is Test {
             mainnet = vm.createSelectFork(forkURL);
         } else {
             mainnet = vm.createSelectFork("https://eth.ubq.fi/v1/mainnet");
-        }
+        }*/
+        mainnet = vm.createSelectFork("https://eth.ubq.fi/v1/mainnet");
         snapshot = vm.snapshot();
     }
 
