@@ -24,7 +24,7 @@ jobs:
         run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
 
       - name: Setup Foundry
-        uses: onbjerg/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
 
