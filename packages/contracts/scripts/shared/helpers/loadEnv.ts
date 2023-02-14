@@ -5,7 +5,7 @@ import { Wallet } from "ethers";
 
 export const loadEnv = (path: string): Env => {
   dotenv.config({ path });
-  const rpcUrl = process.env.RPC_URL || "http://localhost:8545";
+  const rpcUrl = process.env.RPC_URL || "https://eth.ubq.fi/v1/mainnet";
   const privateKey = process.env.PRIVATE_KEY || Wallet.fromMnemonic(TEST_MNEMONIC).privateKey;
   const adminAddress = process.env.PUBLIC_KEY || Wallet.fromMnemonic(TEST_MNEMONIC).address;
   const etherscanApiKey = process.env.ETHERSCAN_API_KEY;
