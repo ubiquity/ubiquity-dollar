@@ -26,8 +26,6 @@ contract MetapoolMigrate is Test {
 
     uint256 mainnet;
     uint256 snapshot;
-    uint256 metaBalanceV3;
-    uint256 metaBalance;
 
     function setUp() public {
         /*string memory forkURL = vm.envString("RPC_URL");
@@ -51,21 +49,33 @@ contract MetapoolMigrate is Test {
         uint256 v2LP = v2Metapool.balanceOf(address(staking)) +
             v2Metapool.balanceOf(admin);
 
-        migrate();
+        (uint256 metaBalance, uint256 metaBalanceV3) = migrate();
 
         uint256 v3LP = v3Metapool.balanceOf(address(staking)) +
             v3Metapool.balanceOf(admin);
         uint256 v3dollarBal = dollarToken.balanceOf(address(v3Metapool));
         uint256 v3curve3Bal = curve3Token.balanceOf(address(v3Metapool));
 
-        console.log("V2 LP Tokens: ", metaBalance);
-        console.log("V3 LP Tokens: ", metaBalanceV3);
-        console.log("V2 total LP: ", v2LP);
-        console.log("V3 total LP: ", v3LP);
-        console.log("V2 dollarToken Bal: ", v2dollarBal);
-        console.log("V2 curve3 Bal: ", v2curve3Bal);
-        console.log("V3 dollarToken Bal: ", v3dollarBal);
-        console.log("V3 curve3 Bal: ", v3curve3Bal);
+        console.log("LP Tokens in Staking before migration: ", metaBalance);
+        console.log("LP Tokens in Staking after migration: ", metaBalanceV3);
+        console.log("Total LP Tokens Curve Metapool V2: ", v2LP);
+        console.log("Total LP Tokens Curve Metapool V3: ", v3LP);
+        console.log(
+            "Amount of UbiquityDollar Tokens in Curve Metapool V2: ",
+            v2dollarBal
+        );
+        console.log(
+            "Amount of Curve3 Tokens in Curve Metapool V2: ",
+            v2curve3Bal
+        );
+        console.log(
+            "Amount of UbiquityDollar Tokens in Curve Metapool V3: ",
+            v3dollarBal
+        );
+        console.log(
+            "Amount of Curve3 Tokens in Curve Metapool V3: ",
+            v3curve3Bal
+        );
     }
 
     function testV2WithdrawVsV3() public {
@@ -85,7 +95,7 @@ contract MetapoolMigrate is Test {
         vm.stopPrank();
 
         uint256 userDollarV2 = dollarToken.balanceOf(user) - dollarTokenPreBal;
-        uint256 userLPv2 = curve3Token.balanceOf(user);
+        uint256 userLPV2 = curve3Token.balanceOf(user);
 
         vm.revertTo(snapshot);
 
@@ -102,22 +112,37 @@ contract MetapoolMigrate is Test {
         vm.stopPrank();
 
         uint256 userDollarV3 = dollarToken.balanceOf(user) - dollarTokenPreBal;
-        uint256 userLPv3 = curve3Token.balanceOf(user);
+        uint256 userLPV3 = curve3Token.balanceOf(user);
 
         uint256 v3dollarBal = dollarToken.balanceOf(address(v3Metapool));
         uint256 v3curve3Bal = curve3Token.balanceOf(address(v3Metapool));
 
-        console.log("V2 Withdraw: ", v2Bal);
-        console.log("V3 Withdraw: ", v3Bal);
-        console.log("V2 0 Withdraw: ", userDollarV2);
-        console.log("V2 1 Withdraw: ", userLPv2);
-        console.log("V3 0 Withdraw: ", userDollarV3);
-        console.log("V3 1 Withdraw: ", userLPv3);
-        console.log("V3 Pool 0 bal: ", v3dollarBal);
-        console.log("V3 Pool 1 bal: ", v3curve3Bal);
+        console.log("Metapool LP Tokens withdrawn pre migration: ", v2Bal);
+        console.log("Metapool LP Tokens withdrawn post migration: ", v3Bal);
+        console.log(
+            "UbiquityDollar Tokens withdrawn pre migration: ",
+            userDollarV2
+        );
+        console.log("Curve3 Tokens withdrawn pre migration: ", userLPV2);
+        console.log(
+            "UbiquityDollar Tokens withdrawn post migration: ",
+            userDollarV3
+        );
+        console.log("Curve3 Tokens withdrawn post migration: ", userLPV3);
+        console.log(
+            "Curve Metapool V3 UbiquityDollar balance after withdrawal: ",
+            v3dollarBal
+        );
+        console.log(
+            "Curve Metapool V3 Curve3 balance after withdrawal: ",
+            v3curve3Bal
+        );
     }
 
-    function migrate() internal {
+    function migrate()
+        internal
+        returns (uint256 metaBalance, uint256 metaBalanceV3)
+    {
         vm.startPrank(admin);
         metaBalance = v2Metapool.balanceOf(address(staking));
         staking.sendDust(admin, address(v2Metapool), metaBalance);
