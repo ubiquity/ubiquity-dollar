@@ -1,10 +1,9 @@
 name: Coverage
 
 on:
-  workflow_run:
-    workflows: ["Build & Test"]
-    types:
-      - completed
+  push:
+  pull_request:
+  
 jobs:
   coverage:
     name: Coverage
