@@ -1,0 +1,63 @@
+name: Coverage
+
+on:
+  workflow_run:
+    workflows: ["Build & Test"]
+    types:
+      - completed
+jobs:
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Yarn Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+
+      - name: Coverage
+        run: yarn workspace @ubiquity/contracts coverage > coverage.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: cov-result
+          path: ./coverage.txt
+
+      - name: Download Coverage Results
+        id: cov-result
+        uses: actions/download-artifact@v3
+        with:
+          name: cov-result
+      - shell: bash
+        run: |
+          VAL="$(tail -1 coverage.txt)"
+          FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
+          RES="$(echo $FOO | cut -f3,3 -d'|')"
+          echo "action_state=${RES}" >> $GITHUB_ENV
+
+      - name: Coverage Update
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage
+          LABEL: 'Coverage'
+          STATUS: ${{ env.action_state }}
+          COLOR: 00EEFF
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

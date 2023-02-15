@@ -1,3 +1,11 @@
+![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
+![Conventional Commits](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/conventional-commits.yml/badge.svg?branch=development)
+![Build and Test](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/build-and-test.yml/badge.svg?branch=development)
+![Yarn Audit](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/yarn-audit.yml/badge.svg?branch=development)
+![Slither Analysis](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/slither-analysis.yml/badge.svg?branch=development)
+
+![](https://byob.yarr.is/ubiquity/ubiquity-dollar/coverage)
+
 # Ubiquity Dollar
 Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is a collateralized stablecoin.
 - The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
