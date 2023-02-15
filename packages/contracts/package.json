@@ -33,6 +33,7 @@
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",
     "build": "forge build",
+    "coverage": "forge coverage --fork-url https://eth.ubq.fi/v1/mainnet",
     "forge:install": "forge install",
     "_hardhat-task": "tsx ./scripts/task/task.ts"
   },
