@@ -1,6 +1,6 @@
 ![](https://byob.yarr.is/FibrinLab/ubiquity-dollar/coverage)
 
-[![Coverage](https://img.shields.io/badge/Coverage-my_coverage-green.svg)]()
+![Coverage](https://img.shields.io/badge/Coverage-my_coverage-green.svg)
 
 
 ![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
