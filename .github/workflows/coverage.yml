@@ -41,7 +41,7 @@ jobs:
           path: ./coverage.txt
 
       - name: Download Coverage Results
-        id: cov-result
+        id: coverage
         uses: actions/download-artifact@v3
         with:
           name: cov-result
