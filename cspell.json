@@ -1,6 +1,12 @@
 {
   "version": "0.2",
   "language": "en",
+  "languageSettings": [
+    {
+      "languageId": ["*"],
+      "locale": "en-US"
+    }
+  ],
   "ignorePaths": [
     "**/*.json",
     "**/*.log",
@@ -127,6 +133,8 @@
     "wagmi",
     "webp",
     "zapaz",
-    "zozo"
+    "zozo",
+    "Localchain",
+    "ubiquibot"
   ]
 }
