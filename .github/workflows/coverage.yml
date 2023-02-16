@@ -51,6 +51,7 @@ jobs:
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
           echo "RESULT=${RES}" >> $GITHUB_ENV
+          echo "::set-output name=version::${RES}"
 
       - name: Coverage
         uses: RubbaBoy/BYOB@v1.3.0
