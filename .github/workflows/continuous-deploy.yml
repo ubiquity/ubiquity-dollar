@@ -22,15 +22,7 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Cloudflare Deployment
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ubiquity-dollar
-          directory: packages/dapp/dist
-
-      - name: "Download Netlify Artifact"
+      - name: "Download Artifact"
         uses: actions/github-script@v6.3.3
         with:
           script: |
@@ -40,8 +32,16 @@ jobs:
             const workspace = '${{ github.workspace }}';
             download_artifact({github, context, fs, workflow_run_id, workspace})
 
-      - name: Extract Netlify Files
+      - name: Extract Artifact
         run: unzip pr.zip && unzip pull-request.zip && ls
+
+      - name: Deploy Cloudflare
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: ubiquity-dollar
+          directory: ./dist
 
       - name: Deploy Netlify
         run: |
