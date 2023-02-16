@@ -48,7 +48,7 @@ jobs:
       - name: Test All
         run: yarn test
 
-      - name: Prepare Netlify Deployment
+      - name: Prepare Deployment Artifact
         env:
           EVENT_NAME: ${{github.event_name}}
           PR_NUMBER: ${{ github.event.number }}
