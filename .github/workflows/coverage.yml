@@ -51,12 +51,9 @@ jobs:
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
           echo "action_state=${RES}" >> $GITHUB_ENV
-
-      - name: Coverage Update
-        uses: RubbaBoy/BYOB@v1.3.0
-        with:
-          NAME: coverage
-          LABEL: 'Coverage'
-          STATUS: ${{ env.action_state }}
-          COLOR: 00EEFF
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          sed -i "1s/.*/$action_state/" README.md
+          # Commit and push the changes to the repository
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git commit -am "build: Update README with variable status"
+          git push
