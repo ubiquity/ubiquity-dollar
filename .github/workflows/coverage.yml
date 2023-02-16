@@ -50,14 +50,17 @@ jobs:
           VAL="$(tail -1 coverage.txt)"
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
-          echo "action_state=${RES}" >> $GITHUB_ENV
-          
-      - name: Update readme file
-        uses: jamesgeorge007/github-readme-badge@master
+          echo "RESULT=${RES}" >> $GITHUB_ENV
+
+      - name: Generate badge
+        id: badge
+        uses: shieldsio/shields@v5.4.0
         with:
-          readme_path: README.md
-          data: |
-            {
-              "label": "Coverage",
-              "message": "${{ env.action_state }}"
-            }
+          label: Coverage
+          message: ${{ env.RESULT }}
+          color: blue
+
+      - name: Update README
+        run: |
+          sed -i "1i[![Version](https://img.shields.io/badge/Coverage-${{ steps.badge.outputs.message }}-blue)](https://github.com/FibrinLab/ubiquity-dollar?branch=working-ci)" README.md
+          
