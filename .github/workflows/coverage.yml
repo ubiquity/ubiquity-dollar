@@ -52,15 +52,10 @@ jobs:
           RES="$(echo $FOO | cut -f3,3 -d'|')"
           echo "RESULT=${RES}" >> $GITHUB_ENV
 
-      - name: Generate badge
-        id: badge
-        uses: shieldsio/shields@v5.4.0
+      - name: Generate Badge
+        uses: peterrhodesdev/build-a-badge@v1.3.1
         with:
-          label: Coverage
+          token: ${{ secrets.GITHUB_TOKEN }}
+          filename: my-coverage
+          label: coverage
           message: ${{ env.RESULT }}
-          color: blue
-
-      - name: Update README
-        run: |
-          sed -i "1i[![Version](https://img.shields.io/badge/Coverage-${{ steps.badge.outputs.message }}-blue)](https://github.com/FibrinLab/ubiquity-dollar?branch=working-ci)" README.md
-          
