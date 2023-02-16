@@ -50,7 +50,7 @@ jobs:
           VAL="$(tail -1 coverage.txt)"
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
-          echo "::set-output name=coverage::${$RES}"
+          echo "::set-output name=coverage::${RES}"
 
       - name: Coverage
         uses: RubbaBoy/BYOB@v1.3.0
