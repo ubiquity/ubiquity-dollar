@@ -3,7 +3,7 @@ pragma solidity 0.8.16;
 
 import "./01_UbiquityDollarManager.s.sol";
 
-contract DollarScript is ManagerScript{
+contract DollarScript is ManagerScript {
     UbiquityDollarToken dollar;
     address metapool;
 
@@ -11,22 +11,21 @@ contract DollarScript is ManagerScript{
         super.run();
         vm.startBroadcast(deployerPrivateKey);
 
-        
         dollar = new UbiquityDollarToken(manager);
         manager.setDollarTokenAddress(address(dollar));
-        
+
         dollar.mint(address(manager), 10000e18);
 
         manager.deployStableSwapPool(
             curveFactory,
-            basepool,
-            USDCrvToken,
+            basePool,
+            curve3PoolToken,
             10,
             5000000
         );
-        
+
         metapool = manager.stableSwapMetaPoolAddress();
-        
+
         vm.stopBroadcast();
     }
 }
