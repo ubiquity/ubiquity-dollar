@@ -4,7 +4,7 @@
 ![Yarn Audit](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/yarn-audit.yml/badge.svg?branch=development)
 ![Slither Analysis](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/slither-analysis.yml/badge.svg?branch=development)
 
-![Coverage](https://byob.yarr.is/ubiquity/ubiquity-dollar/coverage)
+![](https://byob.yarr.is/FibrinLab/ubiquity-dollar/coverage)
 
 # Ubiquity Dollar
 Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is a collateralized stablecoin.
