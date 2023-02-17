@@ -50,6 +50,15 @@ jobs:
           VAL="$(tail -1 coverage.txt)"
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
-          echo "::set-output name=myVariable::${RES}"
+          echo "::set-output name=cov::${RES}"
           echo "COVERAGE=${RES}" >> $GITHUB_ENV
+
+      - name: Coverage badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: coverage
+          LABEL: 'Coverage'
+          STATUS: ${{ steps.coverage.outputs.cov }}
+          COLOR: 00EEFF
+          GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
