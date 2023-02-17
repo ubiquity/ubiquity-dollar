@@ -1,4 +1,4 @@
-![Coverage](https://img.shields.io/badge/coverage-$coverage-green.svg)
+The value of my variable is: {{myVariable}}
 
 
 ![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
