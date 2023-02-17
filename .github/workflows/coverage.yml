@@ -10,16 +10,16 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
-      deployments: read|write|none
-      id-token: read|write|none
-      issues: read|write|none
-      discussions: read|write|none
-      packages: read|write|none
-      pages: read|write|none
-      pull-requests: read|write|none
-      repository-projects: read|write|none
-      security-events: read|write|none
-      statuses: read|write|none
+      deployments: write
+      id-token: write
+      issues: write
+      discussions: write
+      packages: write
+      pages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
 
     steps:
       - name: Checkout repository
