@@ -8,7 +8,8 @@ jobs:
   coverage:
     name: Coverage
     runs-on: ubuntu-22.04
-    permissions: write
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -58,5 +59,5 @@ jobs:
           LABEL: 'Coverage'
           STATUS: ${{ env.COVERAGE }}
           COLOR: 00EEFF
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
 
