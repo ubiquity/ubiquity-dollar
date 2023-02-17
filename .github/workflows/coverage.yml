@@ -33,7 +33,7 @@ jobs:
         run: yarn install --mode=skip-build && yarn allow-scripts
 
       - name: Coverage
-        run: yarn workspace @ubiquity/contracts coverage > coverage.txt
+        run: yarn workspace @ubiquity/contracts test:coverage > coverage.txt
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
