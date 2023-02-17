@@ -1,5 +1,3 @@
-![Build Status](https://img.shields.io/badge/Build-${{env.COVERAGE}}-brightgreen.svg)
-![](https://byob.yarr.is/FibrinLab/ubiquity-dollar/coverage)
 ![](https://byob.yarr.is/ubiquity/ubiquity-dollar/coverage)
 
 ![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
