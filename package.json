@@ -40,6 +40,9 @@
     "postinstall": "husky install",
     "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
       "prettier --write",
