@@ -51,12 +51,5 @@ jobs:
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
           echo "::set-output name=myVariable::${RES}"
-          echo "MY_VARIABLE=${RES}" >> $GITHUB_ENV
-
-      - name: Update README
-        run: |
-          sed -i 's/{{myVariable}}/${{ steps.set_variable.outputs.myVariable }}/g' README.md
-          git add README.md
-          git commit -m "build: update readme with variable value"
-          git push
+          echo "COVERAGE=${RES}" >> $GITHUB_ENV
 
