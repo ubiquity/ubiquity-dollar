@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
+      repositories: 
+        - name: ubiquity-dollar
+          permission: write
 
     steps:
       - name: Checkout repository
