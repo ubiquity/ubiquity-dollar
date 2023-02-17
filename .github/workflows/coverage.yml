@@ -51,6 +51,7 @@ jobs:
           FOO="$(echo -e "${VAL}" | tr -d '[:space:]')"  
           RES="$(echo $FOO | cut -f3,3 -d'|')"
           echo "::set-output name=myVariable::${RES}"
+          echo "MY_VARIABLE=${RES}" >> $GITHUB_ENV
 
       - name: Update README
         run: |

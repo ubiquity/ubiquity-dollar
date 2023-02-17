@@ -1,4 +1,5 @@
 The value of my variable is: {{myVariable}}
+The value of my variable is: "${{ env.MY_VARIABLE }}"
 
 
 ![CodeQL](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/codeql-analysis.yml/badge.svg?branch=development)
