@@ -58,7 +58,7 @@ jobs:
         with:
           NAME: coverage
           LABEL: 'Coverage'
-          STATUS: ${{ steps.coverage.outputs.cov }}
+          STATUS: ${{ env.COVERAGE }}
           COLOR: 00EEFF
           GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
 
