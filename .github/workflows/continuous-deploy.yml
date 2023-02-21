@@ -49,7 +49,7 @@ jobs:
           projectName: ubiquity-dollar
           directory: ./dist
 
-      - name: Nix CI Deploy
+      - name: Deploy Railway
         run: |
           cd dist
           npm i -g @railway/cli
