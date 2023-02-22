@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "forge-std/Test.sol";
 
-contract MetapoolMigrate is Test {
+contract MigrateMetapool is Test {
     address admin = 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd;
     UbiquityDollarManager manager =
         UbiquityDollarManager(0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98);
