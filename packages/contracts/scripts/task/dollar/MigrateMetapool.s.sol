@@ -31,7 +31,8 @@ contract migrateFunds is Script {
         TWAPOracleDollar3pool twapOracle;
 
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        address admin = 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd;
+        address admin = vm.addr(deployerPrivateKey);
+        require(admin == 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd, "only admin can run the metapool migration");
         vm.startBroadcast(deployerPrivateKey);
 
         uint256 metaBalance = v2Metapool.balanceOf(address(staking));
