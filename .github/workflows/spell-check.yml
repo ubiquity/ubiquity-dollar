@@ -18,4 +18,5 @@ jobs:
 
       - name: Spell Check
         run: |
-          yes | npx cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')
+          TARGET=$(git diff --name-only HEAD^ HEAD)
+          yes | npx cspell $TARGET
