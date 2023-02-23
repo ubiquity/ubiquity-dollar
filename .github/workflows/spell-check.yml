@@ -1,5 +1,8 @@
 name: Spell Check
-on: [push]
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   publish:
@@ -18,5 +21,6 @@ jobs:
 
       - name: Spell Check
         run: |
-          TARGET=$(git diff --name-only base..HEAD)
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/${{ github.head_ref }}:refs/remotes/origin/${{ github.head_ref }}
+          TARGET=$(git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }})
           yes | npx cspell $TARGET
