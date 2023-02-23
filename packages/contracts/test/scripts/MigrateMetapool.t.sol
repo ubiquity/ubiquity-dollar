@@ -44,19 +44,19 @@ contract MigrateMetapool is Test {
     }
 
     function testMigrateCompare() public {
-        uint256 adminDollarPreBal = dollarToken.balanceOf(admin);
+        uint256 adminDollarPreBalance = dollarToken.balanceOf(admin);
         /// Ubiquity Dollar balance of V2 Metapool before migration
-        uint256 v2DollarPreBal = dollarToken.balanceOf(address(v2Metapool));
+        uint256 v2DollarPreBalance = dollarToken.balanceOf(address(v2Metapool));
         /// Curve3 LP Balance of V2 Metapool before migration
-        uint256 v2Curve3PreBal = curve3Token.balanceOf(address(v2Metapool));
+        uint256 v2Curve3PreBalance = curve3Token.balanceOf(address(v2Metapool));
         /// Total amount of V2 Metapool LP tokens before migration
         uint256 v2LP = v2Metapool.totalSupply();
 
         (
             uint256 metaBalance,
             uint256 metaBalanceV3,
-            uint256 adminCurve3Bal,
-            uint256 adminDollarBal,
+            uint256 adminCurve3Balance,
+            uint256 adminDollarBalance,
             uint256 lpMinted
         ) = _migrate();
 
@@ -65,11 +65,15 @@ contract MigrateMetapool is Test {
         /// Total amount of V3 Metapool LP tokens after migration
         uint256 v3LP = v3Metapool.totalSupply();
         /// Ubiquity Dollar balance of V3 Metapool after migration
-        uint256 v3DollarBal = dollarToken.balanceOf(address(v3Metapool));
+        uint256 v3DollarBalance = dollarToken.balanceOf(address(v3Metapool));
         /// Curve3 LP balance of V3 Metapool after migration
-        uint256 v3Curve3Bal = curve3Token.balanceOf(address(v3Metapool));
-        uint256 v2Curve3PostBal = curve3Token.balanceOf(address(v2Metapool));
-        uint256 v2DollarPostBal = dollarToken.balanceOf(address(v2Metapool));
+        uint256 v3Curve3Balance = curve3Token.balanceOf(address(v3Metapool));
+        uint256 v2Curve3PostBalance = curve3Token.balanceOf(
+            address(v2Metapool)
+        );
+        uint256 v2DollarPostBalance = dollarToken.balanceOf(
+            address(v2Metapool)
+        );
 
         console.log("LP Tokens in Staking before migration: ", metaBalance);
         console.log("LP Tokens in Staking after migration: ", metaBalanceV3);
@@ -77,28 +81,28 @@ contract MigrateMetapool is Test {
         console.log("Total LP Tokens Curve Metapool V3: ", v3LP);
         console.log(
             "Amount of UbiquityDollar Tokens in Curve Metapool V2: ",
-            v2DollarPreBal
+            v2DollarPreBalance
         );
         console.log(
             "Amount of Curve3 Tokens in Curve Metapool V2: ",
-            v2Curve3PreBal
+            v2Curve3PreBalance
         );
         console.log(
             "Amount of UbiquityDollar Tokens in Curve Metapool V3: ",
-            v3DollarBal
+            v3DollarBalance
         );
         console.log(
             "Amount of Curve3 Tokens in Curve Metapool V3: ",
-            v3Curve3Bal
+            v3Curve3Balance
         );
 
         /// V2 Metapool is unbalanced during migration so we use the lesser balance of the two tokens when adding liquidity to V3
-        if (adminCurve3Bal <= adminDollarBal) {
-            assertEq(v3DollarBal, adminCurve3Bal);
-            assertEq(v3Curve3Bal, adminCurve3Bal);
+        if (adminCurve3Balance <= adminDollarBalance) {
+            assertEq(v3DollarBalance, adminCurve3Balance);
+            assertEq(v3Curve3Balance, adminCurve3Balance);
         } else {
-            assertEq(v3DollarBal, adminDollarBal);
-            assertEq(v3Curve3Bal, adminDollarBal);
+            assertEq(v3DollarBalance, adminDollarBalance);
+            assertEq(v3Curve3Balance, adminDollarBalance);
         }
         /// ensures enough v3 LP tokens were minted
         assertGe(metaBalanceV3, metaBalance);
@@ -112,15 +116,15 @@ contract MigrateMetapool is Test {
             so we are unable to migrate all funds.
         */
 
-        assertEq(v2Curve3PreBal, (v2Curve3PostBal + v3Curve3Bal));
+        assertEq(v2Curve3PreBalance, (v2Curve3PostBalance + v3Curve3Balance));
 
         /// Same as above but for Ubiquity Dollar Token
         assertEq(
-            v2DollarPreBal,
-            v2DollarPostBal +
-                v3DollarBal +
+            v2DollarPreBalance,
+            v2DollarPostBalance +
+                v3DollarBalance +
                 dollarToken.balanceOf(admin) -
-                adminDollarPreBal
+                adminDollarPreBalance
         );
     }
 
@@ -128,7 +132,7 @@ contract MigrateMetapool is Test {
         address user = 0x4007CE2083c7F3E18097aeB3A39bb8eC149a341d;
         uint256[] memory tokens = bonds.holderTokens(user);
 
-        uint256 dollarTokenPreBal = dollarToken.balanceOf(user);
+        uint256 dollarTokenPreBalance = dollarToken.balanceOf(user);
         BondingShareV2.Bond memory bond = bonds.getBond(tokens[0]);
         uint256 withdraw = bond.lpAmount;
 
@@ -136,11 +140,12 @@ contract MigrateMetapool is Test {
 
         vm.startPrank(user);
         staking.removeLiquidity(withdraw, tokens[0]);
-        uint256 v2Bal = v2Metapool.balanceOf(user);
-        v2Metapool.remove_liquidity(v2Bal, [uint256(0), uint256(0)]);
+        uint256 v2Balance = v2Metapool.balanceOf(user);
+        v2Metapool.remove_liquidity(v2Balance, [uint256(0), uint256(0)]);
         vm.stopPrank();
 
-        uint256 userDollarV2 = dollarToken.balanceOf(user) - dollarTokenPreBal;
+        uint256 userDollarV2 = dollarToken.balanceOf(user) -
+            dollarTokenPreBalance;
         uint256 userLPV2 = curve3Token.balanceOf(user);
 
         vm.revertTo(snapshot);
@@ -152,19 +157,20 @@ contract MigrateMetapool is Test {
         uint256 withdrawV3 = bondV3.lpAmount;
         vm.startPrank(user);
         staking.removeLiquidity(withdrawV3, tokens[0]);
-        uint256 v3Bal = v3Metapool.balanceOf(user);
+        uint256 v3Balance = v3Metapool.balanceOf(user);
 
-        v3Metapool.remove_liquidity(v3Bal, [uint256(0), uint256(0)]);
+        v3Metapool.remove_liquidity(v3Balance, [uint256(0), uint256(0)]);
         vm.stopPrank();
 
-        uint256 userDollarV3 = dollarToken.balanceOf(user) - dollarTokenPreBal;
+        uint256 userDollarV3 = dollarToken.balanceOf(user) -
+            dollarTokenPreBalance;
         uint256 userLPV3 = curve3Token.balanceOf(user);
 
-        uint256 v3DollarBal = dollarToken.balanceOf(address(v3Metapool));
-        uint256 v3Curve3Bal = curve3Token.balanceOf(address(v3Metapool));
+        uint256 v3DollarBalance = dollarToken.balanceOf(address(v3Metapool));
+        uint256 v3Curve3Balance = curve3Token.balanceOf(address(v3Metapool));
 
-        console.log("Metapool LP Tokens withdrawn pre migration: ", v2Bal);
-        console.log("Metapool LP Tokens withdrawn post migration: ", v3Bal);
+        console.log("Metapool LP Tokens withdrawn pre migration: ", v2Balance);
+        console.log("Metapool LP Tokens withdrawn post migration: ", v3Balance);
         console.log(
             "UbiquityDollar Tokens withdrawn pre migration: ",
             userDollarV2
@@ -177,30 +183,30 @@ contract MigrateMetapool is Test {
         console.log("Curve3 Tokens withdrawn post migration: ", userLPV3);
         console.log(
             "Curve Metapool V3 UbiquityDollar balance after withdrawal: ",
-            v3DollarBal
+            v3DollarBalance
         );
         console.log(
             "Curve Metapool V3 Curve3 balance after withdrawal: ",
-            v3Curve3Bal
+            v3Curve3Balance
         );
 
-        assertGe(v3Bal, v2Bal);
+        assertGe(v3Balance, v2Balance);
         assertLt(userDollarV3, userDollarV2);
     }
 
     /// @dev internal function for migrating Curve Metapool LP Tokens contained in Staking from V2 to V3
     /// @return metaBalance Staking Contract V2 LP Balance before migration
     /// @return metaBalanceV3 Staking Contract V3 LP Balance after migration
-    /// @return adminCurve3Bal Admin address Curve3 LP token balance after withdrawal from V2 Curve Metapool
-    /// @return adminDollarBal Admin address Ubiquity Dollar token balance after withdrawal from V2 Curve Metapool
+    /// @return adminCurve3Balance Admin address Curve3 LP token balance after withdrawal from V2 Curve Metapool
+    /// @return adminDollarBalance Admin address Ubiquity Dollar token balance after withdrawal from V2 Curve Metapool
     /// @return lpMinted amount of Metapool V3 LP tokens minted during migration
     function _migrate()
         internal
         returns (
             uint256 metaBalance,
             uint256 metaBalanceV3,
-            uint256 adminCurve3Bal,
-            uint256 adminDollarBal,
+            uint256 adminCurve3Balance,
+            uint256 adminDollarBalance,
             uint256 lpMinted
         )
     {
@@ -210,15 +216,15 @@ contract MigrateMetapool is Test {
 
         v2Metapool.remove_liquidity(metaBalance, [uint256(0), uint256(0)]);
 
-        adminCurve3Bal = curve3Token.balanceOf(admin);
-        adminDollarBal = dollarToken.balanceOf(admin);
+        adminCurve3Balance = curve3Token.balanceOf(admin);
+        adminDollarBalance = dollarToken.balanceOf(admin);
 
         uint256 deposit;
 
-        if (adminCurve3Bal <= adminDollarBal) {
-            deposit = adminCurve3Bal;
+        if (adminCurve3Balance <= adminDollarBalance) {
+            deposit = adminCurve3Balance;
         } else {
-            deposit = adminDollarBal;
+            deposit = adminDollarBalance;
         }
 
         curve3Token.approve(address(v3Metapool), 0);
