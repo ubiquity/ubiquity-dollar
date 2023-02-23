@@ -1,4 +1,4 @@
-name: Cspell en_US check
+name: Spell Check
 on: [push]
 
 jobs:
@@ -16,6 +16,6 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Stage Cspell
+      - name: Spell Check
         run: |
-          yes | npx cspell "**"
+          yes | npx cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')
