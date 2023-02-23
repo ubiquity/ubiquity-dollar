@@ -20,14 +20,6 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Compare Changes
-        run: |
-          git fetch --no-tags --prune --depth=1 origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
-          CHANGES=$(git diff --name-only ${GITHUB_BASE_REF}..${GITHUB_HEAD_REF})
-          echo "Changed files: $CHANGES"
-
-      - name: Spell Check
         run: |
           git fetch --no-tags --prune --depth=1 origin "+refs/heads/${{ github.base_ref }}:refs/remotes/origin/${{ github.base_ref }}"
           CHANGES=$(git diff --name-only ${GITHUB_BASE_REF}..${GITHUB_HEAD_REF})
