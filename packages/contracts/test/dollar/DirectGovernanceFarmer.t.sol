@@ -257,9 +257,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         vm.startPrank(userAddress);
 
-        // mint 100 uAD to user
+        // mint 100 Dollars to user
         dollar.mint(userAddress, 100e18);
-        // user allows DirectGovernanceFarmerHarness to spend user's uAD
+        // user allows DirectGovernanceFarmerHarness to spend user's Dollars
         dollar.approve(address(directGovernanceFarmer), 100e18);
         assertEq(dollar.balanceOf(userAddress), 100e18);
         // mint 100 DAI to user
@@ -320,7 +320,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             12
         );
 
-        // user deposits 100 uAD 99 DAI 98 USDC 97 USDT
+        // user deposits 100 Dollars 99 DAI 98 USDC 97 USDT
         uint256 stakingShareId = directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8
@@ -370,9 +370,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         vm.startPrank(userAddress);
 
-        // mint 100 uAD to user
+        // mint 100 Dollars to user
         dollar.mint(userAddress, 100e18);
-        // user allows DirectGovernanceFarmerHarness to spend user's uAD
+        // user allows DirectGovernanceFarmerHarness to spend user's Dollars
         dollar.approve(address(directGovernanceFarmer), 100e18);
         assertEq(dollar.balanceOf(userAddress), 100e18);
         // mint 100 DAI to user
@@ -415,7 +415,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             ""
         );
 
-        // user deposits 100 uAD, 99 DAI 98 USDC 97 USDT for 1 week
+        // user deposits 100 Dollars, 99 DAI 98 USDC 97 USDT for 1 week
         directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             1

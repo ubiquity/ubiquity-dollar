@@ -41,6 +41,7 @@ const MetapoolMonitor = (props: MetapoolMonitorProps) => {
   return (
     <div className="panel">
       <h2>Metapool Balances</h2>
+      {/* cspell: disable-next-line */}
       <Balance title="uAD" balance={props.uadBalance} />
       <Balance title="CRV" balance={props.crvBalance} />
     </div>

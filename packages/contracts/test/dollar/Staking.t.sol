@@ -360,13 +360,11 @@ contract RemoteZeroStateTest is ZeroState {
         vm.startPrank(stakingMaxAccount);
         metapool.approve(address(staking), 2 ** 256 - 1);
         staking.deposit(maxLP, 208);
-        //uint256 bsMaxAmount = bondingShareV2.balanceOf(stakingMaxAccount, 1);
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
         metapool.approve(address(staking), 2 ** 256 - 1);
         staking.deposit(minLP, 1);
-        //uint256 bsMinAmount = bondingShareV2.balanceOf(stakingMinAccount, 2);
         vm.stopPrank();
 
         uint256[2] memory bsMaxAmount = ubiquityChef.getStakingShareInfo(1);

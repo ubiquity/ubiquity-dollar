@@ -6,7 +6,10 @@ import {ERC20UbiquityForDiamond} from "./ERC20UbiquityForDiamond.sol";
 contract UbiquityCreditTokenForDiamond is ERC20UbiquityForDiamond {
     constructor(
         address _diamond
-    ) ERC20UbiquityForDiamond(_diamond, "Ubiquity Auto Redeem", "uAR") {} // solhint-disable-line no-empty-blocks
+    )
+        // cspell: disable-next-line
+        ERC20UbiquityForDiamond(_diamond, "Ubiquity Auto Redeem", "uAR")
+    {} // solhint-disable-line no-empty-blocks
 
     /// @notice raise capital in form of Ubiquity Credit Token (only redeemable when Ubiquity Dollar > 1$)
     /// @param amount the amount to be minted
