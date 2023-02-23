@@ -32,7 +32,10 @@ contract migrateFunds is Script {
 
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address admin = vm.addr(deployerPrivateKey);
-        require(admin == 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd, "only admin can run the metapool migration");
+        require(
+            admin == 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd,
+            "only admin can run the metapool migration"
+        );
         vm.startBroadcast(deployerPrivateKey);
 
         uint256 metaBalance = v2Metapool.balanceOf(address(staking));
@@ -40,15 +43,15 @@ contract migrateFunds is Script {
 
         v2Metapool.remove_liquidity(metaBalance, [uint256(0), uint256(0)]);
 
-        uint256 curve3Bal = curve3PoolToken.balanceOf(admin);
-        uint256 dollarBal = dollarToken.balanceOf(admin);
+        uint256 curve3Balance = curve3PoolToken.balanceOf(admin);
+        uint256 dollarBalance = dollarToken.balanceOf(admin);
 
         uint256 deposit;
 
-        if (curve3Bal <= dollarBal) {
-            deposit = curve3Bal;
+        if (curve3Balance <= dollarBalance) {
+            deposit = curve3Balance;
         } else {
-            deposit = dollarBal;
+            deposit = dollarBalance;
         }
 
         curve3PoolToken.approve(address(v3Metapool), 0);
