@@ -27,5 +27,4 @@ jobs:
 
       - name: Spell Check
         run: |
-          TARGET=${{ steps.changed-files.outputs.all_changed_files }}
-          yes | npx cspell $TARGET
+          yes | npx cspell --file-list ${{ steps.changed-files.outputs.all_changed_files }}
