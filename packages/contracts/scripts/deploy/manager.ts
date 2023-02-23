@@ -8,8 +8,9 @@ const ubiquiStickPath = "src/ubiquistick";
 const LPTokenName = "LP token";
 const LPTokenSymbol = "LP";
 
-const UARName = "Ubiquity Auto Redeem";
-const UARSymbol = "uAR";
+const autoRedeemName = "Ubiquity Auto Redeem";
+// cspell:disable-next-line
+const autoRedeemSymbol = "uAR";
 
 const simpleBondHandler = async (args: CommandLineOption) => {
   const { network, treasury } = args;
@@ -199,7 +200,7 @@ export const Deploy_Manager: DeployCallbackFn = {
   },
   UAR: (args: CommandLineOption) => {
     const { treasury } = args;
-    createHandler([UARName, UARSymbol, treasury], args, `${ubiquiStickPath}/UAR.sol:UAR`);
+    createHandler([autoRedeemName, autoRedeemSymbol, treasury], args, `${ubiquiStickPath}/UAR.sol:UAR`);
   },
   SimpleBond: (args: CommandLineOption) => {
     standardHandler["SimpleBond"](args);

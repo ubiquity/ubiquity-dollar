@@ -1,12 +1,5 @@
 {
   "version": "0.2",
-  "language": "en",
-  "languageSettings": [
-    {
-      "languageId": ["*"],
-      "locale": "en-US"
-    }
-  ],
   "ignorePaths": [
     "**/*.json",
     "**/*.log",
@@ -21,9 +14,24 @@
     "**/cspell.json",
     "**/node_modules/**"
   ],
+  "readonly": true,
+  "useGitignore": true,
   "words": [
-    "",
+    "!UbiquityDollar",
+    "!UbiquityCredit",
+    "!UbiquityGovernance",
     "!UbiquityStick",
+    "!UbiquityAlgorithmicDollar",
+    "!Algorithmic",
+    "!BondingShareV2",
+    "!BondingV2",
+    "!uAD",
+    "!UBQ",
+    "!uCR",
+    "!uAR",
+    "!uDEBT",
+    "!uBOND",
+    "!uGOV",
     "ABDK",
     "accu",
     "ADMGR",
@@ -125,16 +133,13 @@
     "TYPEHASH",
     "Ubiqui",
     "UbiquiStick",
-    "UBOND",
-    "uGOV",
     "uncollateralized",
     "usedapp",
     "Vitalik",
     "wagmi",
     "webp",
     "zapaz",
-    "zozo",
-    "Localchain",
-    "ubiquibot"
-  ]
+    "zozo"
+  ],
+  "language": "en-US"
 }

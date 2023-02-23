@@ -277,10 +277,12 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testName_ShouldReturnTokenName() public {
+        // cspell: disable-next-line
         assertEq(IDollarFacet.name(), "Ubiquity Algorithmic Dollar");
     }
 
     function testSymbol_ShouldReturnSymbolName() public {
+        // cspell: disable-next-line
         assertEq(IDollarFacet.symbol(), "uAD");
     }
 

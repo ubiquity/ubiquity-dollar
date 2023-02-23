@@ -307,9 +307,6 @@ contract LiveTestHelper is Test {
         vm.prank(fourthAccount);
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
-        ///uint256 bondingMinBal = metapool.balanceOf(stakingMinAccount);
-        ///uint256 bondingMaxBal = metapool.balanceOf(stakingMaxAccount);
-
         vm.startPrank(admin);
         stakingShare = new StakingShare(manager, uri);
         manager.setStakingShareAddress(address(stakingShare));
@@ -329,8 +326,6 @@ contract LiveTestHelper is Test {
         );
 
         deal(address(dollarToken), address(staking), 100e18);
-
-        //bondingV1.sendDust(address(bondingV2), address(metapool), bondingMinBal + bondingMaxBal);
 
         staking.setMigrating(true);
 

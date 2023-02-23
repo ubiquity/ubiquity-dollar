@@ -96,7 +96,7 @@ contract ManagerFacet is Modifiers {
         uint256 _amplificationCoefficient,
         uint256 _fee
     ) external onlyAdmin {
-        // Create new StableSwap meta pool (uAD <-> 3Crv)
+        // Create new StableSwap meta pool (Dollar <-> 3Crv)
         // slither-disable-next-line reentrancy-no-eth
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
@@ -120,7 +120,7 @@ contract ManagerFacet is Modifiers {
 
         IERC20(address(this)).approve(metaPool, 0);
         IERC20(address(this)).approve(metaPool, dollarTokenAmount);
-        // coin at index 0 is uAD and index 1 is 3CRV
+        // coin at index 0 is Dollar and index 1 is 3CRV
         require(
             IMetaPool(metaPool).coins(0) == address(this) &&
                 IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,

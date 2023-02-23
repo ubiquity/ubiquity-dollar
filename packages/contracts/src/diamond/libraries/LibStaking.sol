@@ -279,7 +279,7 @@ library LibStaking {
         // update staking shares
         // stake.shares = stake.shares - sharesToRemove;
         // get masterchef for Governance token rewards To ensure correct computation
-        // it needs to be done BEFORE updating the bonding share
+        // it needs to be done BEFORE updating the staking share
         LibChef.withdraw(msg.sender, sharesToRemove, _id);
 
         // redeem of the extra LP
@@ -417,7 +417,7 @@ library LibStaking {
                     ss.accLpRewardPerShare +
                     (((currentLpRewards - ss.lpRewards) * 1e12) / totalShares);
 
-                // update the bonding contract lpRewards
+                // update the staking contract lpRewards
                 ss.lpRewards = currentLpRewards;
             }
         }

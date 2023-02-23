@@ -17,10 +17,10 @@ contract CreditClock {
     // The block height from where we start applying the rate.
     uint256 public rateStartBlock;
 
-    // This is the exchange rate of uAR for the start block.
+    // This is the exchange rate of Credits for the start block.
     bytes16 public rateStartValue;
 
-    // Deprecation rate. How much uAD is deprecated on each block.
+    // Deprecation rate. How many Dollars are deprecated on each block.
     bytes16 public ratePerBlock;
 
     event SetRatePerBlock(

@@ -13,7 +13,10 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         address indexed _incentiveContract
     );
 
-    constructor(UbiquityDollarManager _manager)
+    constructor(
+        UbiquityDollarManager _manager
+    )
+        // cspell: disable-next-line
         ERC20Ubiquity(_manager, "Ubiquity Algorithmic Dollar", "uAD")
     {} // solhint-disable-line no-empty-blocks
 

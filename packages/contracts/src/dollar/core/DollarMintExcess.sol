@@ -52,7 +52,7 @@ contract DollarMintExcess is IDollarMintExcess {
             // convert DollarToken to GovernanceToken-DollarToken LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
             // convert remaining Ubiquity Dollar to curve LP tokens
-            // and transfer the curve LP tokens to the bonding contract
+            // and transfer the curve LP tokens to the staking contract
             _convertToCurveLPAndTransfer(
                 excessDollars - fiftyPercent - tenPercent
             );
