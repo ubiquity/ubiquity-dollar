@@ -21,6 +21,5 @@ jobs:
 
       - name: Spell Check
         run: |
-          git fetch --no-tags --prune --depth=1 origin +refs/heads/${{ github.head_ref }}:refs/remotes/origin/${{ github.head_ref }}
-          TARGET=$(git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }})
+          TARGET=$(git diff --name-only origin/${{ GITHUB_BASE_REF }}..origin/${{ GITHUB_HEAD_REF }})
           yes | npx cspell $TARGET
