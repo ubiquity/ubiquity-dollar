@@ -21,5 +21,5 @@ jobs:
 
       - name: Spell Check
         run: |
-          TARGET=$(git diff --name-only $(GITHUB_BASE_REF)..$(GITHUB_HEAD_REF))
+          TARGET=$(git diff --name-only ${GITHUB_BASE_REF##*/}..${GITHUB_HEAD_REF##*/}
           yes | npx cspell $TARGET
