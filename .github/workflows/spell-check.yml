@@ -18,5 +18,5 @@ jobs:
 
       - name: Spell Check
         run: |
-          TARGET=$(git diff --name-only HEAD^ HEAD)
+          TARGET=$(git diff --name-only base..HEAD)
           yes | npx cspell $TARGET
