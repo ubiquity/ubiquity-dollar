@@ -53,8 +53,8 @@ jobs:
         run: |
           cd dist
           npm i -g @railway/cli
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT_ID }}
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway up
+          RAILWAY_API_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_API_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway up
 
       - name: Get UbiquiBot Token
         uses: tibdex/github-app-token@v1.7.0
