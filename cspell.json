@@ -1,19 +1,6 @@
 {
   "version": "0.2",
-  "ignorePaths": [
-    "**/*.json",
-    "**/*.log",
-    "**/*.svg",
-    "**/*.lock",
-    "**/packages/contracts/lib/**",
-    "**/packages/contracts/dollar/lib/**",
-    "**/packages/contracts/scripts/shared/libs/**",
-    "**/packages/contracts/src/dollar/libs/**",
-    "**/packages/contracts/src/dollar/interfaces/**",
-    "**/packages/dapp/dist/**",
-    "**/cspell.json",
-    "**/node_modules/**"
-  ],
+  "ignorePaths": ["**/*.json", "**/*.log", "**/*.svg", "**/*.lock", "**/lib/*", "**/interfaces/*", "**/dist/*", "**/cspell.json", "**/node_modules/**"],
   "readonly": true,
   "useGitignore": true,
   "words": [
