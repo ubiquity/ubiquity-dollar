@@ -5,11 +5,12 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  publish:
+  spell-check:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       deployments: write
+
     steps:
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -27,4 +28,5 @@ jobs:
 
       - name: Spell Check
         run: |
-          yes | npx cspell --file-list ${{ steps.changed-files.outputs.all_changed_files }}
+          yes | npx cspell
+          npx cspell --file-list ${{ steps.changed-files.outputs.all_changed_files }}
