@@ -6,6 +6,7 @@ on:
 
 jobs:
   spell-check:
+    name: Spell Check
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -28,5 +29,4 @@ jobs:
 
       - name: Spell Check
         run: |
-          yes | npx cspell
-          npx cspell --file-list ${{ steps.changed-files.outputs.all_changed_files }}
+          yes | npx cspell --file-list "${{ steps.changed-files.outputs.all_changed_files }}"
