@@ -23,5 +23,5 @@ jobs:
 
       - name: Spell Check
         run: |
-          LIST="$(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
+          LIST="$(find . -type f \( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
           yes | npx cspell $LIST
