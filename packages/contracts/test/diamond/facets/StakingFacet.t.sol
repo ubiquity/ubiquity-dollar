@@ -64,7 +64,7 @@ contract ZeroStateStaking is DiamondSetup {
         super.setUp();
         crvToken = new MockERC20("3 CRV", "3CRV", 18);
         metaPoolAddress = address(
-            new MockMetaPool(address(IDollarFacet), address(crvToken))
+            new MockMetaPool(address(IDollar), address(crvToken))
         );
 
         vm.startPrank(owner);
@@ -82,7 +82,7 @@ contract ZeroStateStaking is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(diamond), mintings[i], 10000e18);
+            deal(address(IDollar), mintings[i], 10000e18);
         }
         address[5] memory crvDeal = [
             address(diamond),
@@ -165,16 +165,16 @@ contract ZeroStateStaking is DiamondSetup {
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
-        IDollarFacet.approve(address(metapool), 10000e18);
+        IDollar.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
         vm.startPrank(stakingMaxAccount);
-        IDollarFacet.approve(address(metapool), 10000e18);
+        IDollar.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
         vm.startPrank(fourthAccount);
-        IDollarFacet.approve(address(metapool), 10000e18);
+        IDollar.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 

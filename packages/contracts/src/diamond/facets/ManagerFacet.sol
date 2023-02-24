@@ -10,7 +10,6 @@ import "../../dollar/interfaces/ICurveFactory.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
 import "../../dollar/core/TWAPOracleDollar3pool.sol";
 import "../libraries/LibAccessControl.sol";
-import "../libraries/LibDollar.sol";
 
 contract ManagerFacet is Modifiers {
     // TODO Add a generic setter for extra addresses that needs to be linked
@@ -19,6 +18,13 @@ contract ManagerFacet is Modifiers {
         address _creditTokenAddress
     ) external onlyAdmin {
         s.creditTokenAddress = _creditTokenAddress;
+    }
+
+    // set dollar token address
+    function setDollarTokenAddress(
+        address _dollarTokenAddress
+    ) external onlyAdmin {
+        s.dollarTokenAddress = _dollarTokenAddress;
     }
 
     function setCreditNftAddress(address _creditNftAddress) external onlyAdmin {
@@ -86,7 +92,10 @@ contract ManagerFacet is Modifiers {
         address _account,
         address _incentiveAddress
     ) external onlyAdmin {
-        LibDollar.setIncentiveContract(_account, _incentiveAddress);
+        IUbiquityDollarToken dollar = IUbiquityDollarToken(
+            s.dollarTokenAddress
+        );
+        dollar.setIncentiveContract(_account, _incentiveAddress);
     }
 
     function deployStableSwapPool(
@@ -100,9 +109,9 @@ contract ManagerFacet is Modifiers {
         // slither-disable-next-line reentrancy-no-eth
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
-            ERC20(address(this)).name(),
-            ERC20(address(this)).symbol(),
-            address(this),
+            ERC20(s.dollarTokenAddress).name(),
+            ERC20(s.dollarTokenAddress).symbol(),
+            s.dollarTokenAddress,
             _amplificationCoefficient,
             _fee
         );
@@ -111,24 +120,24 @@ contract ManagerFacet is Modifiers {
         uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
             address(this)
         );
-        uint256 dollarTokenAmount = IERC20(address(this)).balanceOf(
+        uint256 dollarTokenAmount = IERC20(s.dollarTokenAddress).balanceOf(
             address(this)
         );
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
         IERC20(_crv3PoolTokenAddress).approve(metaPool, crv3PoolTokenAmount);
 
-        IERC20(address(this)).approve(metaPool, 0);
-        IERC20(address(this)).approve(metaPool, dollarTokenAmount);
+        IERC20(s.dollarTokenAddress).approve(metaPool, 0);
+        IERC20(s.dollarTokenAddress).approve(metaPool, dollarTokenAmount);
         // coin at index 0 is Dollar and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == address(this) &&
+            IMetaPool(metaPool).coins(0) == s.dollarTokenAddress &&
                 IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
         uint256[2] memory amounts = [
-            IERC20(address(this)).balanceOf(address(this)),
+            IERC20(s.dollarTokenAddress).balanceOf(address(this)),
             IERC20(_crv3PoolTokenAddress).balanceOf(address(this))
         ];
         // set curve 3Pool address
@@ -141,7 +150,7 @@ contract ManagerFacet is Modifiers {
     }
 
     function dollarTokenAddress() external view returns (address) {
-        return address(this);
+        return s.dollarTokenAddress;
     }
 
     function creditTokenAddress() external view returns (address) {

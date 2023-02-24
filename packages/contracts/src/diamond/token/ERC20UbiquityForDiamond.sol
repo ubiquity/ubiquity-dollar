@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
-import "../interfaces/IAccessControl.sol";
+import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
-import "../../dollar/interfaces/IERC20Ubiquity.sol";
+import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 
 /// @title ERC20 Ubiquity preset
 /// @author Ubiquity DAO
@@ -14,11 +14,10 @@ import "../../dollar/interfaces/IERC20Ubiquity.sol";
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
-contract ERC20UbiquityForDiamond is
-    IERC20Ubiquity,
+abstract contract ERC20UbiquityForDiamond is
     ERC20,
-    ERC20Burnable,
-    ERC20Pausable
+    ERC20Pausable,
+    IERC20Ubiquity
 {
     IAccessControl public immutable accessCtrl;
 
@@ -28,27 +27,11 @@ contract ERC20UbiquityForDiamond is
     string private _tokenName;
     string private _symbol;
 
-    // ----------- Modifiers -----------
-    modifier onlyMinter() {
-        require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
-            "Governance token: not minter"
-        );
-        _;
-    }
-
-    modifier onlyBurner() {
-        require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
-            "Governance token: not burner"
-        );
-        _;
-    }
-
+    // modifiers
     modifier onlyPauser() {
         require(
             accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
-            "Governance token: not pauser"
+            "ERC20: not pauser"
         );
         _;
     }
@@ -56,7 +39,7 @@ contract ERC20UbiquityForDiamond is
     modifier onlyAdmin() {
         require(
             accessCtrl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "ERC20: deployer must be manager admin"
+            "ERC20: not admin"
         );
         _;
     }
@@ -143,40 +126,6 @@ contract ERC20UbiquityForDiamond is
         _approve(owner, spender, value);
     }
 
-    /// @notice burn Ubiquity Dollar tokens from caller
-    /// @param amount the amount to burn
-    function burn(
-        uint256 amount
-    ) public override(ERC20Burnable, IERC20Ubiquity) whenNotPaused {
-        super.burn(amount);
-        emit Burning(msg.sender, amount);
-    }
-
-    /// @notice burn Ubiquity Dollar tokens from specified account
-    /// @param account the account to burn from
-    /// @param amount the amount to burn
-    function burnFrom(
-        address account,
-        uint256 amount
-    )
-        public
-        override(ERC20Burnable, IERC20Ubiquity)
-        onlyBurner
-        whenNotPaused // to suppress ? if BURNER_ROLE should do it even paused ?
-    {
-        _burn(account, amount);
-        emit Burning(account, amount);
-    }
-
-    // @dev Creates `amount` new tokens for `to`.
-    function mint(
-        address to,
-        uint256 amount
-    ) public override onlyMinter whenNotPaused {
-        _mint(to, amount);
-        emit Minting(to, msg.sender, amount);
-    }
-
     // @dev Pauses all token transfers.
     function pause() public onlyPauser {
         _pause();
@@ -185,6 +134,36 @@ contract ERC20UbiquityForDiamond is
     // @dev Unpauses all token transfers.
     function unpause() public onlyPauser {
         _unpause();
+    }
+
+    /**
+     * @dev Destroys `amount` tokens from the caller.
+     *
+     * See {ERC20-_burn}.
+     */
+    function burn(uint256 amount) public virtual whenNotPaused {
+        _burn(_msgSender(), amount);
+        emit Burning(msg.sender, amount);
+    }
+
+    /**
+     * @dev Destroys `amount` tokens from `account`, deducting from the caller's
+     * allowance.
+     *
+     * See {ERC20-_burn} and {ERC20-allowance}.
+     *
+     * Requirements:
+     *
+     * - the caller must have allowance for ``accounts``'s tokens of at least
+     * `amount`.
+     */
+    function burnFrom(
+        address account,
+        uint256 amount
+    ) public virtual whenNotPaused onlyAdmin {
+        _spendAllowance(account, _msgSender(), amount);
+        _burn(account, amount);
+        emit Burning(msg.sender, amount);
     }
 
     /**

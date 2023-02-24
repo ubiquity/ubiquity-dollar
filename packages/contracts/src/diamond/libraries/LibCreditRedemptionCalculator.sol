@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
 import "forge-std/console.sol";
 
@@ -48,11 +48,12 @@ library LibCreditRedemptionCalculator {
         uint256 dollarsToBurn,
         uint256 blockHeightDebt
     ) internal view returns (uint256) {
-        address creditNFTAddress = LibAppStorage.appStorage().creditNftAddress;
+        AppStorage storage s = LibAppStorage.appStorage();
+        address creditNFTAddress = s.creditNftAddress;
         CreditNft cNFT = CreditNft(creditNFTAddress);
         require(
             cNFT.getTotalOutstandingDebt() <
-                IERC20(address(this)).totalSupply(),
+                IERC20(s.dollarTokenAddress).totalSupply(),
             "Credit to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 coef = creditRedemptionCalculatorStorage().coef.fromUInt().div(
