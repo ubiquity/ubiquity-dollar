@@ -563,10 +563,12 @@ abstract contract DiamondSetup is DiamondTestHelper {
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
 
-        // grant diamond dollar minting and burning rights
         vm.startPrank(admin);
+        // grant diamond dollar minting and burning rights
         IAccessCtrl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
         IAccessCtrl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
+        // grant diamond token admin rights
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(diamond));
         vm.stopPrank();
     }
 }

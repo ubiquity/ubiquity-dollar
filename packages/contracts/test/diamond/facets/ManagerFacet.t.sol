@@ -21,7 +21,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testSetDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
-        assertEq(IManager.dollarTokenAddress(), address(diamond));
+        assertEq(IManager.dollarTokenAddress(), address(IDollar));
     }
 
     function testSetCreditTokenAddress_ShouldSucceed() public prankAs(admin) {
@@ -104,6 +104,13 @@ contract RemoteTestManagerFacet is DiamondSetup {
             IAccessCtrl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
             true
         );
+        assertEq(
+            IAccessCtrl.hasRole(
+                GOVERNANCE_TOKEN_MANAGER_ROLE,
+                address(diamond)
+            ),
+            true
+        );
         IManager.setIncentiveToDollar(user1, contract1);
     }
 
@@ -121,7 +128,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
         public
         prankAs(admin)
     {
-        assertEq(IManager.dollarTokenAddress(), address(diamond));
+        assertEq(IManager.dollarTokenAddress(), address(IDollar));
     }
 
     function testDeployStableSwapPool_ShouldSucceed() public {
