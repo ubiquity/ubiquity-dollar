@@ -2,8 +2,6 @@
 pragma solidity ^0.8.16;
 
 import "src/dollar/Staking.sol";
-import "src/dollar/mocks/MockBondingV1.sol";
-import "src/dollar/mocks/MockShareV1.sol";
 import "src/dollar/StakingFormulas.sol";
 import "src/dollar/StakingShare.sol";
 import "src/dollar/interfaces/IMetaPool.sol";
@@ -33,7 +31,6 @@ import "forge-std/Test.sol";
 contract LiveTestHelper is Test {
     using stdStorage for StdStorage;
 
-    Bonding stakingV1;
     Staking staking;
     StakingFormulas stakingFormulas;
     StakingShare stakingShare;
@@ -55,8 +52,6 @@ contract LiveTestHelper is Test {
 
     MockDollarToken dollarToken;
     UbiquityGovernanceToken governanceToken;
-
-    BondingShare stakingShareV1;
 
     IUniswapV2Factory factory =
         IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
@@ -103,19 +98,6 @@ contract LiveTestHelper is Test {
         manager = new UbiquityDollarManager(admin);
         address managerAddress = address(manager);
 
-        stakingV1 = new Bonding(managerAddress, sablier);
-        stakingShareV1 = new BondingShare(manager);
-        manager.setStakingShareAddress(address(stakingShareV1));
-        manager.setStakingContractAddress(address(stakingV1));
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(stakingV1)
-        );
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(stakingShareV1)
-        );
-
         dollarToken = new MockDollarToken(10000);
         manager.setDollarTokenAddress(address(dollarToken));
 
@@ -128,11 +110,6 @@ contract LiveTestHelper is Test {
         governanceToken = new UbiquityGovernanceToken(manager);
         manager.setGovernanceTokenAddress(address(governanceToken));
         //manager.grantRole(manager.STAKING_MANAGER_ROLE(), admin);
-
-        stakingV1.setBlockCountInAWeek(420);
-        manager.setStakingContractAddress(address(stakingV1));
-
-        stakingShareV1.setApprovalForAll(address(stakingV1), true);
 
         manager.setTreasuryAddress(treasury);
 
@@ -173,15 +150,6 @@ contract LiveTestHelper is Test {
         for (uint256 i = 0; i < mintings.length; ++i) {
             deal(address(dollarToken), mintings[i], 10000e18);
         }
-
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(stakingV1)
-        );
-        manager.grantRole(
-            manager.GOVERNANCE_TOKEN_BURNER_ROLE(),
-            address(stakingV1)
-        );
 
         deal(address(dollarToken), curveWhaleAddress, 10e18);
 
@@ -337,20 +305,10 @@ contract LiveTestHelper is Test {
 
         manager.setStakingContractAddress(address(staking));
 
-        manager.revokeRole(
-            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
-            address(stakingV1)
-        );
-        manager.revokeRole(
-            manager.GOVERNANCE_TOKEN_BURNER_ROLE(),
-            address(stakingV1)
-        );
         vm.stopPrank();
 
         vm.prank(secondAccount);
-        stakingShareV1.setApprovalForAll(address(stakingV1), true);
 
         vm.prank(thirdAccount);
-        stakingShareV1.setApprovalForAll(address(stakingV1), true);
     }
 }

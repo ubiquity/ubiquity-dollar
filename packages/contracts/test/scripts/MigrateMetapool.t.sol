@@ -3,7 +3,7 @@ pragma solidity 0.8.16;
 
 import "src/dollar/core/UbiquityDollarManager.sol";
 import "src/dollar/Staking.sol";
-import "src/dollar/mocks/MockBondingShareV2.sol";
+import "src/dollar/mocks/MockStakingShare.sol";
 import "src/dollar/interfaces/IMetaPool.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -16,8 +16,8 @@ contract MigrateMetapool is Test {
         UbiquityDollarManager(0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98);
     Staking staking =
         Staking(payable(0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38));
-    StakingShare bonds =
-        StakingShare(0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5);
+    MockStakingShare bonds =
+        MockStakingShare(0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5);
     /// Ubiquity Dollar Token (Dollar)
     IERC20 dollarToken = IERC20(0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6);
     /// Curve3 LP Token (3CRV)
@@ -133,7 +133,7 @@ contract MigrateMetapool is Test {
         uint256[] memory tokens = bonds.holderTokens(user);
 
         uint256 dollarTokenPreBalance = dollarToken.balanceOf(user);
-        StakingShare.Bond memory bond = bonds.getBond(tokens[0]);
+        MockStakingShare.Bond memory bond = bonds.getBond(tokens[0]);
         uint256 withdraw = bond.lpAmount;
 
         vm.roll(block.number + 10483200);
@@ -153,7 +153,7 @@ contract MigrateMetapool is Test {
         _migrate();
 
         vm.roll(block.number + 10483200);
-        StakingShare.Bond memory bondV3 = bonds.getBond(tokens[0]);
+        MockStakingShare.Bond memory bondV3 = bonds.getBond(tokens[0]);
         uint256 withdrawV3 = bondV3.lpAmount;
         vm.startPrank(user);
         staking.removeLiquidity(withdrawV3, tokens[0]);

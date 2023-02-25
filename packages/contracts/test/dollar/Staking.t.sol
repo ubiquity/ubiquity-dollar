@@ -38,13 +38,6 @@ contract ZeroState is LiveTestHelper {
     event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
     event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
 
-    event Migrated(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpsAmount,
-        uint256 _sharesAmount,
-        uint256 _weeks
-    );
     event DustSent(address _to, address _token, uint256 _amount);
     event ProtocolTokenAdded(address _token);
     event ProtocolTokenRemoved(address _token);
@@ -70,29 +63,6 @@ contract ZeroState is LiveTestHelper {
 
 contract RemoteZeroStateTest is ZeroState {
     using stdStorage for StdStorage;
-
-    function testAddUserToMigrate_ShouldWork(uint256 x, uint256 y) public {
-        x = bound(x, 1, 2 ** 128 - 1);
-        y = bound(y, 1, 208);
-
-        vm.prank(admin);
-        vm.record();
-        staking.addUserToMigrate(fourthAccount, x, y);
-
-        (bytes32[] memory reads, bytes32[] memory writes) = vm.accesses(
-            address(staking)
-        );
-
-        address checkAddress = address(
-            bytes20(vm.load(address(staking), writes[1]) << 96)
-        );
-        uint256 checkLP = uint256(vm.load(address(staking), writes[3]));
-        uint256 checkWeeks = uint256(vm.load(address(staking), writes[6]));
-
-        assertEq(fourthAccount, checkAddress);
-        assertEq(x, checkLP);
-        assertEq(y, checkWeeks);
-    }
 
     function test_ShouldRevert_IfDeployingAnEmptyAddress() public {
         vm.expectRevert("address array empty");
@@ -281,12 +251,6 @@ contract RemoteZeroStateTest is ZeroState {
 
         vm.prank(admin);
         staking.unpause();
-    }
-
-    function testMigrate_ShouldRevert_IfZeroId() public {
-        vm.expectRevert("not v1 address");
-        vm.prank(fourthAccount);
-        staking.migrate();
     }
 
     function testSetStakingDiscountMultiplier_ShouldEmitStakingDiscountMultiplierUpdatedAndSetStakingDiscountMultiplier(

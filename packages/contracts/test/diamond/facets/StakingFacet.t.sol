@@ -5,7 +5,6 @@ import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import "../DiamondTestSetup.sol";
 import {StakingShareForDiamond} from "../../../src/diamond/token/StakingShareForDiamond.sol";
-import {BondingShareForDiamond} from "../../../src/diamond/mocks/MockShareV1.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
@@ -34,7 +33,6 @@ contract ZeroStateStaking is DiamondSetup {
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
     StakingShareForDiamond stakingShare;
-    BondingShareForDiamond stakingShareV1;
     IERC20Ubiquity governanceToken;
     event Deposit(
         address indexed _user,
@@ -97,13 +95,6 @@ contract ZeroStateStaking is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        stakingShareV1 = new BondingShareForDiamond(address(diamond));
-        IManager.setStakingShareAddress(address(stakingShareV1));
-        stakingShareV1.setApprovalForAll(address(diamond), true);
-        IAccessCtrl.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(stakingShareV1)
-        );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
@@ -206,12 +197,6 @@ contract ZeroStateStaking is DiamondSetup {
         IStakingFacet.setBlockCountInAWeek(420);
 
         vm.stopPrank();
-
-        vm.prank(secondAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
-
-        vm.prank(thirdAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
     }
 }
 

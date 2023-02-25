@@ -150,10 +150,6 @@ contract RemoteTestManagerFacet is DiamondSetup {
             deal(address(IDollarFacet), mintings[i], 10000e18);
         }
 
-        address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
-
         vm.stopPrank();
 
         address[4] memory crvDeal = [

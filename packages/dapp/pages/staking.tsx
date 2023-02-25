@@ -1,11 +1,11 @@
 import { FC } from "react";
-import BondingSharesExplorer from "@/components/staking/BondingSharesExplorer";
+import StakingSharesExplorer from "@/components/staking/StakingSharesExplorer";
 import WalletConnectionWall from "@/components/ui/WalletConnectionWall";
 
 const Staking: FC = (): JSX.Element => {
   return (
     <WalletConnectionWall>
-      <BondingSharesExplorer />
+      <StakingSharesExplorer />
     </WalletConnectionWall>
   );
 };

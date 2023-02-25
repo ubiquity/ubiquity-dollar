@@ -135,25 +135,6 @@ contract Staking is IStaking, CollectableDust, Pausable {
     // solhint-disable-next-line no-empty-blocks
     receive() external payable {}
 
-    /// @dev addUserToMigrate add a user to migrate from V1.
-    ///      IMPORTANT execute that function BEFORE sending the corresponding LP token
-    ///      otherwise they will have extra LP rewards
-    /// @param _original address of v1 user
-    /// @param _lpBalance LP Balance of v1 user
-    /// @param lockup weeks lockup of v1 user
-    /// @notice user will then be able to migrate.
-    function addUserToMigrate(
-        address _original,
-        uint256 _lpBalance,
-        uint256 lockup
-    ) external onlyMigrator {
-        _toMigrateOriginals.push(_original);
-        _toMigrateLpBalances.push(_lpBalance);
-        totalLpToMigrate += _lpBalance;
-        _toMigrateLockups.push(lockup);
-        toMigrateId[_original] = _toMigrateOriginals.length;
-    }
-
     function setMigrator(address _migrator) external onlyMigrator {
         migrator = _migrator;
     }
@@ -502,18 +483,6 @@ contract Staking is IStaking, CollectableDust, Pausable {
         _unpause();
     }
 
-    /// @dev migrate let a user migrate from V1
-    /// @notice user will then be able to migrate
-    function migrate() public whenMigrating returns (uint256 _id) {
-        _id = toMigrateId[msg.sender];
-        require(_id > 0, "not v1 address");
-        _migrate(
-            _toMigrateOriginals[_id - 1],
-            _toMigrateLpBalances[_id - 1],
-            _toMigrateLockups[_id - 1]
-        );
-    }
-
     /// @dev return the amount of Lp token rewards an amount of shares entitled
     /// @param amount of staking shares
     /// @param lpRewardDebt lp rewards that has already been distributed
@@ -538,43 +507,6 @@ contract Staking is IStaking, CollectableDust, Pausable {
             totalShares,
             ONE
         );
-    }
-
-    /// @dev migrate let a user migrate from V1
-    /// @notice user will then be able to migrate
-    function _migrate(
-        address user,
-        uint256 _lpsAmount,
-        uint256 _lockup
-    ) internal returns (uint256 _id) {
-        require(toMigrateId[user] > 0, "not v1 address");
-        require(_lpsAmount > 0, "LP amount is zero");
-        require(
-            1 <= _lockup && _lockup <= 208,
-            "Duration must be between 1 and 208 weeks"
-        );
-        // unregister address
-        toMigrateId[user] = 0;
-        // calculate the amount of share based on the amount of lp deposited and the duration
-        uint256 _sharesAmount = IUbiquityFormulas(manager.formulasAddress())
-            .durationMultiply(_lpsAmount, _lockup, stakingDiscountMultiplier);
-
-        // update the accumulated lp rewards per shares
-        _updateLpPerShare();
-        // reduce the total LP to migrate after the minting
-        // to keep the _updateLpPerShare calculation consistent
-        totalLpToMigrate -= _lpsAmount;
-        // calculate end locking period block number
-        uint256 endBlock = block.number + _lockup * blockCountInAWeek;
-        _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
-
-        // set UbiquityChef for Governance rewards
-        IUbiquityChef(manager.masterChefAddress()).deposit(
-            user,
-            _sharesAmount,
-            _id
-        );
-        emit Migrated(user, _id, _lpsAmount, _sharesAmount, _lockup);
     }
 
     /// @dev update the accumulated excess LP per share

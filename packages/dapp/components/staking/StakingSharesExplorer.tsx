@@ -44,7 +44,7 @@ type Actions = {
 const USD_TO_LP = 0.7460387929;
 const LP_TO_USD = 1 / USD_TO_LP;
 
-export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+export const StakingSharesExplorerContainer = ({ managedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
   const [model, setModel] = useState<Model | null>(null);
   const [, doTransaction] = useTransactionLogger();
   const [, refreshBalances] = useBalances();
@@ -53,7 +53,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation(processedShareId?: ShareData["id"]) {
-    console.time("BondingShareExplorerContainer contract loading");
+    console.time("StakingShareExplorerContainer contract loading");
     const currentBlock = await web3Provider.getBlockNumber();
     // cspell: disable-next-line
     const blockCountInAWeek = +(await bonding.blockCountInAWeek()).toString();
@@ -72,7 +72,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
           masterChef.pendingUGOV(id),
           // cspell: disable-next-line
           bondingToken.getBond(id),
-          masterChef.getBondingShareInfo(id),
+          masterChef.getStakingShareInfo(id),
           // cspell: disable-next-line
           bondingToken.balanceOf(walletAddress, id),
         ]);
@@ -91,7 +91,7 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
 
     const sortedShares = shares.sort((a, b) => a.id - b.id);
 
-    console.timeEnd("BondingShareExplorerContainer contract loading");
+    console.timeEnd("StakingShareExplorerContainer contract loading");
     setModel((model) => ({
       processing: model ? model.processing.filter((id) => id !== processedShareId) : [],
       shares: sortedShares,
@@ -189,14 +189,14 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
     ),
   };
 
-  return <BondingSharesExplorer model={model} actions={actions} />;
+  return <StakingSharesExplorer model={model} actions={actions} />;
 };
 
-export const BondingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
-  return <>{model ? <BondingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}</>;
+export const StakingSharesExplorer = memo(({ model, actions }: { model: Model | null; actions: Actions }) => {
+  return <>{model ? <StakingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}</>;
 });
 
-export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake, processing, walletLpBalance }: Model & Actions) => {
+export const StakingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake, processing, walletLpBalance }: Model & Actions) => {
   const totalUserShares = shares.reduce((sum, val) => {
     return sum.add(val.sharesBalance);
   }, BigNumber.from(0));
@@ -226,7 +226,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         {filteredShares.length > 0 ? (
           <tbody>
             {filteredShares.map((share) => (
-              <BondingShareRow key={share.id} {...share} disabled={processing.includes(share.id)} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
+              <StakingShareRow key={share.id} {...share} disabled={processing.includes(share.id)} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
             ))}
           </tbody>
         ) : (
@@ -272,9 +272,9 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   );
 };
 
-type BondingShareRowProps = ShareData & { disabled: boolean; onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
+type StakingShareRowProps = ShareData & { disabled: boolean; onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
 // cspell: disable-next-line
-const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, disabled, onWithdrawLp, onClaimUbq }: BondingShareRowProps) => {
+const StakingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, disabled, onWithdrawLp, onClaimUbq }: StakingShareRowProps) => {
   const [withdrawAmount] = useState("");
 
   const numLpAmount = +formatEther(bond.lpAmount);
@@ -316,4 +316,4 @@ const BondingShareRow = ({ id, ugov, sharesBalance, bond, weeksLeft, disabled, o
   );
 };
 
-export default withLoadedContext(BondingSharesExplorerContainer);
+export default withLoadedContext(StakingSharesExplorerContainer);

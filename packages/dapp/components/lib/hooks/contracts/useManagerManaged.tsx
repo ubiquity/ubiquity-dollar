@@ -1,5 +1,5 @@
 import {
-  getBondingShareV2Contract,
+  getStakingShareContract,
   getBondingV2Contract,
   getDebtCouponContract,
   getDollarMintCalculatorContract,
@@ -89,7 +89,7 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
     creditToken: getCreditContract(creditToken, provider),
     governanceToken: getGovernanceContract(governanceToken, provider),
     _3crvToken: getERC20Contract(_3crvToken, provider),
-    stakingToken: getBondingShareV2Contract(stakingToken, provider),
+    stakingToken: getStakingShareContract(stakingToken, provider),
     creditNft: getDebtCouponContract(creditNft, provider),
     staking: getBondingV2Contract(staking, provider),
     masterChef: getMasterChefV2Contract(masterChef, provider),
