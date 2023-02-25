@@ -38,6 +38,7 @@
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:netlify": "yarn build:all",
     "postinstall": "husky install",
+    "lint:cspell:all:watch": "nodemon -e sol,ts,tsx --exec 'yarn lint:cspell:all --fail-fast'",
     "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
   },
   "engines": {
