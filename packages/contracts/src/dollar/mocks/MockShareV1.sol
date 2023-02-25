@@ -6,5 +6,7 @@ import "src/dollar/core/UbiquityDollarManager.sol";
 
 contract BondingShare is ERC1155Ubiquity {
     // solhint-disable-next-line no-empty-blocks
-    constructor(UbiquityDollarManager manager_) ERC1155Ubiquity(manager_, "URI") {}
+    constructor(
+        UbiquityDollarManager manager_
+    ) ERC1155Ubiquity(manager_, "URI") {}
 }

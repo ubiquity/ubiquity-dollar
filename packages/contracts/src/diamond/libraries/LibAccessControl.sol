@@ -76,11 +76,10 @@ library LibAccessControl {
      * @param account account to query
      * @return whether role is assigned to account
      */
-    function hasRole(bytes32 role, address account)
-        internal
-        view
-        returns (bool)
-    {
+    function hasRole(
+        bytes32 role,
+        address account
+    ) internal view returns (bool) {
         return accessControlStorage().roles[role].members.contains(account);
     }
 
