@@ -95,6 +95,13 @@ contract ZeroStateStaking is DiamondSetup {
         }
 
         vm.startPrank(admin);
+        stakingShare = new StakingShareForDiamond(address(diamond));
+        IManager.setStakingShareAddress(address(stakingShare));
+        stakingShare.setApprovalForAll(address(diamond), true);
+        IAccessCtrl.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(stakingShare)
+        );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
@@ -197,6 +204,12 @@ contract ZeroStateStaking is DiamondSetup {
         IStakingFacet.setBlockCountInAWeek(420);
 
         vm.stopPrank();
+
+        vm.prank(secondAccount);
+        stakingShare.setApprovalForAll(address(diamond), true);
+
+        vm.prank(thirdAccount);
+        stakingShare.setApprovalForAll(address(diamond), true);
     }
 }
 
