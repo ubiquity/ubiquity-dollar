@@ -31,7 +31,7 @@ abstract contract ERC20UbiquityForDiamond is
     modifier onlyPauser() {
         require(
             accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
-            "ERC20: not pauser"
+            "ERC20Ubiquity: not pauser"
         );
         _;
     }
@@ -39,7 +39,7 @@ abstract contract ERC20UbiquityForDiamond is
     modifier onlyAdmin() {
         require(
             accessCtrl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "ERC20: not admin"
+            "ERC20Ubiquity: not admin"
         );
         _;
     }

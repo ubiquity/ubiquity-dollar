@@ -25,11 +25,11 @@ library LibDollarMintExcess {
 
     function distributeDollars() internal {
         //the excess dollars which were sent to this contract by the coupon manager
-        AppStorage storage s = LibAppStorage.appStorage();
-        IERC20Ubiquity dollar = IERC20Ubiquity(s.dollarTokenAddress);
+        AppStorage storage store = LibAppStorage.appStorage();
+        IERC20Ubiquity dollar = IERC20Ubiquity(store.dollarTokenAddress);
         uint256 excessDollars = dollar.balanceOf(address(this));
         if (excessDollars > _minAmountToDistribute) {
-            address treasuryAddress = s.treasuryAddress;
+            address treasuryAddress = store.treasuryAddress;
 
             // curve UbiquityDollar-3CRV liquidity pool
             uint256 tenPercent = excessDollars
@@ -56,9 +56,9 @@ library LibDollarMintExcess {
         bytes16 amountIn
     ) internal returns (uint256) {
         address[] memory path = new address[](2);
-        AppStorage storage s = LibAppStorage.appStorage();
-        path[0] = s.dollarTokenAddress;
-        path[1] = s.governanceTokenAddress;
+        AppStorage storage store = LibAppStorage.appStorage();
+        path[0] = store.dollarTokenAddress;
+        path[1] = store.governanceTokenAddress;
         uint256[] memory amounts = _router.swapExactTokensForTokens(
             amountIn.toUInt(),
             0,
@@ -110,9 +110,9 @@ library LibDollarMintExcess {
     function _convertToCurveLPAndTransfer(
         uint256 amount
     ) internal returns (uint256) {
-        AppStorage storage s = LibAppStorage.appStorage();
-        address stableSwapMetaPoolAddress = s.stableSwapMetaPoolAddress;
-        address curve3PoolTokenAddress = s.curve3PoolTokenAddress;
+        AppStorage storage store = LibAppStorage.appStorage();
+        address stableSwapMetaPoolAddress = store.stableSwapMetaPoolAddress;
+        address curve3PoolTokenAddress = store.curve3PoolTokenAddress;
         // we need to approve metaPool
         IERC20Ubiquity dollar = IERC20Ubiquity(
             LibAppStorage.appStorage().dollarTokenAddress

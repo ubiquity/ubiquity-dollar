@@ -14,8 +14,8 @@ library LibDollarMintCalculator {
 
     /// @notice returns (TWAP_PRICE  -1) * Ubiquity_Dollar_Total_Supply
     function getDollarsToMint() internal view returns (uint256) {
-        AppStorage storage s = LibAppStorage.appStorage();
-        uint256 twapPrice = LibTWAPOracle.consult(s.dollarTokenAddress);
+        AppStorage storage store = LibAppStorage.appStorage();
+        uint256 twapPrice = LibTWAPOracle.consult(store.dollarTokenAddress);
         require(twapPrice > 1 ether, "DollarMintCalculator: not > 1");
         bytes16 _one = (uint256(1 ether)).fromUInt();
         return
@@ -24,7 +24,7 @@ library LibDollarMintCalculator {
                 .sub(_one)
                 .mul(
                     (
-                        IERC20(s.dollarTokenAddress)
+                        IERC20(store.dollarTokenAddress)
                             .totalSupply()
                             .fromUInt()
                             .div(_one)

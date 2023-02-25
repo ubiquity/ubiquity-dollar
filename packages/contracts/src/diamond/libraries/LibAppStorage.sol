@@ -40,7 +40,7 @@ library LibAppStorage {
 }
 
 contract Modifiers {
-    AppStorage internal s;
+    AppStorage internal store;
 
     /**
      * @dev Prevents a contract from calling itself, directly or indirectly.
@@ -56,17 +56,17 @@ contract Modifiers {
     modifier nonReentrant() {
         // On the first call to nonReentrant, _notEntered will be true
         require(
-            s.reentrancyStatus != s.ENTERED,
+            store.reentrancyStatus != store.ENTERED,
             "ReentrancyGuard: reentrant call"
         );
 
         // Any calls to nonReentrant after this point will fail
-        s.reentrancyStatus = s.ENTERED;
+        store.reentrancyStatus = store.ENTERED;
         _;
 
         // By storing the original value once again, a refund is triggered (see
         // https://eips.ethereum.org/EIPS/eip-2200)
-        s.reentrancyStatus = s.NOT_ENTERED;
+        store.reentrancyStatus = store.NOT_ENTERED;
     }
 
     modifier onlyOwner() {

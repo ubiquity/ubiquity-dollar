@@ -17,75 +17,77 @@ contract ManagerFacet is Modifiers {
     function setCreditTokenAddress(
         address _creditTokenAddress
     ) external onlyAdmin {
-        s.creditTokenAddress = _creditTokenAddress;
+        store.creditTokenAddress = _creditTokenAddress;
     }
 
     // set dollar token address
     function setDollarTokenAddress(
         address _dollarTokenAddress
     ) external onlyAdmin {
-        s.dollarTokenAddress = _dollarTokenAddress;
+        store.dollarTokenAddress = _dollarTokenAddress;
     }
 
     function setCreditNftAddress(address _creditNftAddress) external onlyAdmin {
-        s.creditNftAddress = _creditNftAddress;
+        store.creditNftAddress = _creditNftAddress;
     }
 
     function setGovernanceTokenAddress(
         address _governanceTokenAddress
     ) external onlyAdmin {
-        s.governanceTokenAddress = _governanceTokenAddress;
+        store.governanceTokenAddress = _governanceTokenAddress;
     }
 
     function setSushiSwapPoolAddress(
         address _sushiSwapPoolAddress
     ) external onlyAdmin {
-        s.sushiSwapPoolAddress = _sushiSwapPoolAddress;
+        store.sushiSwapPoolAddress = _sushiSwapPoolAddress;
     }
 
     function setDollarMintCalculatorAddress(
         address _dollarMintCalculatorAddress
     ) external onlyAdmin {
-        s.dollarMintCalculatorAddress = _dollarMintCalculatorAddress;
+        store.dollarMintCalculatorAddress = _dollarMintCalculatorAddress;
     }
 
     function setExcessDollarsDistributor(
         address creditNftManagerAddress,
         address dollarMintExcess
     ) external onlyAdmin {
-        s._excessDollarDistributors[creditNftManagerAddress] = dollarMintExcess;
+        store._excessDollarDistributors[
+            creditNftManagerAddress
+        ] = dollarMintExcess;
     }
 
     function setMasterChefAddress(
         address _masterChefAddress
     ) external onlyAdmin {
-        s.masterChefAddress = _masterChefAddress;
+        store.masterChefAddress = _masterChefAddress;
     }
 
     function setFormulasAddress(address _formulasAddress) external onlyAdmin {
-        s.formulasAddress = _formulasAddress;
+        store.formulasAddress = _formulasAddress;
     }
 
     function setStakingShareAddress(
         address _stakingShareAddress
     ) external onlyAdmin {
-        s.stakingShareAddress = _stakingShareAddress;
+        store.stakingShareAddress = _stakingShareAddress;
     }
 
     function setStableSwapMetaPoolAddress(
         address _stableSwapMetaPoolAddress
     ) external onlyAdmin {
-        s.stableSwapMetaPoolAddress = _stableSwapMetaPoolAddress;
+        store.stableSwapMetaPoolAddress = _stableSwapMetaPoolAddress;
     }
 
     function setStakingContractAddress(
         address _stakingContractAddress
     ) external onlyAdmin {
-        s.stakingContractAddress = _stakingContractAddress;
+        store.stakingContractAddress = _stakingContractAddress;
     }
 
     function setTreasuryAddress(address _treasuryAddress) external onlyAdmin {
-        s.treasuryAddress = _treasuryAddress;
+        store.treasuryAddress = _treasuryAddress;
     }
 
     function setIncentiveToDollar(
@@ -93,7 +95,7 @@ contract ManagerFacet is Modifiers {
         address _incentiveAddress
     ) external onlyAdmin {
         IUbiquityDollarToken dollar = IUbiquityDollarToken(
-            s.dollarTokenAddress
+            store.dollarTokenAddress
         );
         dollar.setIncentiveContract(_account, _incentiveAddress);
     }
@@ -109,39 +111,39 @@ contract ManagerFacet is Modifiers {
         // slither-disable-next-line reentrancy-no-eth
         address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
             _crvBasePool,
-            ERC20(s.dollarTokenAddress).name(),
-            ERC20(s.dollarTokenAddress).symbol(),
-            s.dollarTokenAddress,
+            ERC20(store.dollarTokenAddress).name(),
+            ERC20(store.dollarTokenAddress).symbol(),
+            store.dollarTokenAddress,
             _amplificationCoefficient,
             _fee
         );
-        s.stableSwapMetaPoolAddress = metaPool;
+        store.stableSwapMetaPoolAddress = metaPool;
         // Approve the newly-deployed meta pool to transfer this contract's funds
         uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
             address(this)
         );
-        uint256 dollarTokenAmount = IERC20(s.dollarTokenAddress).balanceOf(
+        uint256 dollarTokenAmount = IERC20(store.dollarTokenAddress).balanceOf(
             address(this)
         );
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
         IERC20(_crv3PoolTokenAddress).approve(metaPool, crv3PoolTokenAmount);
 
-        IERC20(s.dollarTokenAddress).approve(metaPool, 0);
-        IERC20(s.dollarTokenAddress).approve(metaPool, dollarTokenAmount);
+        IERC20(store.dollarTokenAddress).approve(metaPool, 0);
+        IERC20(store.dollarTokenAddress).approve(metaPool, dollarTokenAmount);
         // coin at index 0 is Dollar and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == s.dollarTokenAddress &&
+            IMetaPool(metaPool).coins(0) == store.dollarTokenAddress &&
                 IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
         uint256[2] memory amounts = [
-            IERC20(s.dollarTokenAddress).balanceOf(address(this)),
+            IERC20(store.dollarTokenAddress).balanceOf(address(this)),
             IERC20(_crv3PoolTokenAddress).balanceOf(address(this))
         ];
         // set curve 3Pool address
-        s.curve3PoolTokenAddress = _crv3PoolTokenAddress;
+        store.curve3PoolTokenAddress = _crv3PoolTokenAddress;
         IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
     }
 
@@ -150,23 +152,23 @@ contract ManagerFacet is Modifiers {
     }
 
     function dollarTokenAddress() external view returns (address) {
-        return s.dollarTokenAddress;
+        return store.dollarTokenAddress;
     }
 
     function creditTokenAddress() external view returns (address) {
-        return s.creditTokenAddress;
+        return store.creditTokenAddress;
     }
 
     function creditNftAddress() external view returns (address) {
-        return s.creditNftAddress;
+        return store.creditNftAddress;
     }
 
     function governanceTokenAddress() external view returns (address) {
-        return s.governanceTokenAddress;
+        return store.governanceTokenAddress;
     }
 
     function sushiSwapPoolAddress() external view returns (address) {
-        return s.sushiSwapPoolAddress;
+        return store.sushiSwapPoolAddress;
     }
 
     function creditCalculatorAddress() external view returns (address) {
@@ -178,36 +180,36 @@ contract ManagerFacet is Modifiers {
     }
 
     function dollarMintCalculatorAddress() external view returns (address) {
-        return s.dollarMintCalculatorAddress;
+        return store.dollarMintCalculatorAddress;
     }
 
     function excessDollarsDistributor(
         address _creditNftManagerAddress
     ) external view returns (address) {
-        return s._excessDollarDistributors[_creditNftManagerAddress];
+        return store._excessDollarDistributors[_creditNftManagerAddress];
     }
 
     function masterChefAddress() external view returns (address) {
-        return s.masterChefAddress;
+        return store.masterChefAddress;
     }
 
     function formulasAddress() external view returns (address) {
-        return s.formulasAddress;
+        return store.formulasAddress;
     }
 
     function stakingShareAddress() external view returns (address) {
-        return s.stakingShareAddress;
+        return store.stakingShareAddress;
     }
 
     function stableSwapMetaPoolAddress() external view returns (address) {
-        return s.stableSwapMetaPoolAddress;
+        return store.stableSwapMetaPoolAddress;
     }
 
     function stakingContractAddress() external view returns (address) {
-        return s.stakingContractAddress;
+        return store.stakingContractAddress;
     }
 
     function treasuryAddress() external view returns (address) {
-        return s.treasuryAddress;
+        return store.treasuryAddress;
     }
 }

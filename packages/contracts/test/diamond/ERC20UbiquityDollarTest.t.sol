@@ -22,7 +22,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
-        vm.expectRevert("ERC20: not admin");
+        vm.expectRevert("ERC20Ubiquity: not admin");
         IDollar.setSymbol("ANY_SYMBOL");
     }
 
@@ -33,7 +33,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testSetName_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
-        vm.expectRevert("ERC20: not admin");
+        vm.expectRevert("ERC20Ubiquity: not admin");
         IDollar.setName("ANY_NAME");
     }
 
@@ -226,7 +226,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testPause_ShouldRevert_IfCalledNotByThePauserRole() public {
-        vm.expectRevert("ERC20: not pauser");
+        vm.expectRevert("ERC20Ubiquity: not pauser");
         IDollar.pause();
     }
 
@@ -241,7 +241,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // admin pauses contract
         vm.prank(admin);
         IDollar.pause();
-        vm.expectRevert("ERC20: not pauser");
+        vm.expectRevert("ERC20Ubiquity: not pauser");
         IDollar.unpause();
     }
 
