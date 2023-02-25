@@ -49,11 +49,13 @@ const YourBonds = ({
                       <div>
                         {formatFixed(round(bond.claimable + bond.claimed))}
                         {" / "}
+                        {/* cspell: disable-next-line */}
                         {formatFixed(round(bond.rewards))} uCR{" "}
                       </div>
                       <div title={`Ends at block: ${bond.endsAtBlock}`}>{toTimeInWords(+bond.endsAtDate - +new Date())} left</div>
                     </div>
                   </td>
+                  {/* cspell: disable-next-line */}
                   <td>{formatFixed(round(bond.claimable))} uCR</td>
                 </tr>
               ))}
@@ -69,6 +71,7 @@ const YourBonds = ({
       </div>
       <div>Accumulated claimable</div>
       <div>
+        {/* cspell: disable-next-line */}
         {format(round(accumulated))} uCR {accumulatedInUsd !== null ? <span>(${format(round(accumulatedInUsd))})</span> : null}
       </div>
       <div>

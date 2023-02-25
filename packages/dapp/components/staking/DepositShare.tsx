@@ -13,6 +13,7 @@ const toNum = (n: BigNumber) => +n.toString();
 const MIN_WEEKS = 1;
 const MAX_WEEKS = 208;
 
+// cspell: disable-next-line
 type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
 async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Promise<PrefetchedConstants> {
   const reserves = await contracts.governanceMarket.getReserves();
@@ -25,30 +26,25 @@ async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Prom
   const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
   const totalShares = toEtherNum(await contracts.masterChef.totalShares());
   const usdPerWeek = ubqPerWeek * ubqPrice;
+  // cspell: disable-next-line
   const bondingDiscountMultiplier = await contracts.staking.bondingDiscountMultiplier();
+  // cspell: disable-next-line
   return { totalShares, usdPerWeek, bondingDiscountMultiplier };
 }
 
 async function calculateApyForWeeks(contracts: NonNullable<ManagedContracts>, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
+  // cspell: disable-next-line
   const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
   const usdAsLp = 0.7460387929; // TODO: Get this number from the Curve contract
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
   const weeks = BigNumber.from(weeksNum.toString());
+  // cspell: disable-next-line
   const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
   const rewardsPerWeek = (shares / totalShares) * usdPerWeek;
   const yearlyYield = (rewardsPerWeek / 7) * DAYS_IN_A_YEAR * 100;
   return Math.round(yearlyYield * 100) / 100;
 }
-
-// async function calculateExpectedShares(contracts: Contracts, prefetch: PrefetchedConstants, amount: string, weeks: string): Promise<number> {
-//   const { bondingDiscountMultiplier } = prefetch;
-//   const weeksBig = BigNumber.from(weeks);
-//   const amountBig = ethers.utils.parseEther(amount);
-//   const expectedShares = await contracts.ubiquityFormulas.durationMultiply(amountBig, weeksBig, bondingDiscountMultiplier);
-//   const expectedSharesNum = +ethers.utils.formatEther(expectedShares);
-//   return Math.round(expectedSharesNum * 10000) / 10000;
-// }
 
 type DepositShareProps = {
   onStake: ({ amount, weeks }: { amount: BigNumber; weeks: BigNumber }) => void;
@@ -118,6 +114,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
 
   return (
     <div className="panel">
+      {/* cspell: disable-next-line */}
       <h2>Stake liquidity to receive UBQ</h2>
       <div>APR {currentApy ? `${currentApy}%` : aprBounds ? `${aprBounds[1]}%` : "..."}</div>
       <div>

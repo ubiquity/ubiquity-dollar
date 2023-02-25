@@ -199,9 +199,6 @@ contract ZeroStateStaking is DiamondSetup {
         vm.prank(fourthAccount);
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
-        ///uint256 bondingMinBal = metapool.balanceOf(stakingMinAccount);
-        ///uint256 bondingMaxBal = metapool.balanceOf(stakingMaxAccount);
-
         vm.startPrank(admin);
         stakingShare = new StakingShareForDiamond(address(diamond), uri);
         IManager.setStakingShareAddress(address(stakingShare));

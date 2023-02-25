@@ -19,7 +19,7 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
         address _curve3CRVToken1
     ) {
         pool = _pool;
-        // coin at index 0 is uAD and index 1 is 3CRV
+        // coin at index 0 is Ubiquity Dollar and index 1 is 3CRV
         require(
             IMetaPool(_pool).coins(0) == _dollarToken0 &&
                 IMetaPool(_pool).coins(1) == _curve3CRVToken1,
@@ -56,14 +56,14 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
                 blockTimestamp - pricesBlockTimestampLast
             );
 
-            // price to exchange amountIn uAD to 3CRV based on TWAP
+            // price to exchange amountIn Ubiquity Dollar to 3CRV based on TWAP
             UbiquityDollarPrice = IMetaPool(pool).get_dy(
                 0,
                 1,
                 1 ether,
                 twapBalances
             );
-            // price to exchange amountIn 3CRV to uAD  based on TWAP
+            // price to exchange amountIn 3CRV to Ubiquity Dollar based on TWAP
             curve3CRVAverage = IMetaPool(pool).get_dy(
                 1,
                 0,
@@ -80,11 +80,11 @@ contract TWAPOracleDollar3pool is ITWAPOracleDollar3pool {
     // for the first time.
     function consult(address token) external view returns (uint256 amountOut) {
         if (token == token0) {
-            // price to exchange 1 uAD to 3CRV based on TWAP
+            // price to exchange 1 Ubiquity Dollar to 3CRV based on TWAP
             amountOut = UbiquityDollarPrice;
         } else {
             require(token == token1, "TWAPOracle: INVALID_TOKEN");
-            // price to exchange 1 3CRV to uAD  based on TWAP
+            // price to exchange 1 3CRV to Ubiquity Dollar based on TWAP
             amountOut = curve3CRVAverage;
         }
     }

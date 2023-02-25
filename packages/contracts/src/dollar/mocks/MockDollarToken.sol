@@ -5,6 +5,7 @@ pragma solidity 0.8.16;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract MockDollarToken is ERC20 {
+    // cspell: disable-next-line
     constructor(uint256 initialSupply) ERC20("ubiquityDollar", "uAD") {
         _mint(msg.sender, initialSupply);
     }

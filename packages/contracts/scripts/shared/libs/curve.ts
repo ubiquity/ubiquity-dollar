@@ -1,3 +1,4 @@
+// cspell: disable
 // Utility functions for curve lp pool
 
 import { BigNumber, constants, utils } from "ethers";

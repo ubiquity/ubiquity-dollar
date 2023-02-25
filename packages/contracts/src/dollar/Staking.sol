@@ -162,10 +162,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
         migrating = _migrating;
     }
 
-    /// @dev uADPriceReset remove uAD unilaterally from the curve LP share sitting inside
-    ///      the staking contract and send the uAD received to the treasury.
-    ///      This will have the immediate effect of pushing the uAD price HIGHER
-    /// @param amount of LP token to be removed for uAD
+    /// @dev uADPriceReset remove Dollars unilaterally from the curve LP share sitting inside
+    ///      the staking contract and send the Dollars received to the treasury.
+    ///      This will have the immediate effect of pushing the Dollars price HIGHER
+    /// @param amount of LP token to be removed for Dollars
     /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
     function dollarPriceReset(uint256 amount) external onlyStakingManager {
         IMetaPool metaPool = IMetaPool(manager.stableSwapMetaPoolAddress());
@@ -192,7 +192,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
 
     /// @dev crvPriceReset remove 3CRV unilaterally from the curve LP share sitting inside
     ///      the staking contract and send the 3CRV received to the treasury
-    ///      This will have the immediate effect of pushing the uAD price LOWER
+    ///      This will have the immediate effect of pushing the Dollars price LOWER
     /// @param amount of LP token to be removed for 3CRV tokens
     /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
     function crvPriceReset(uint256 amount) external onlyStakingManager {
@@ -260,7 +260,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         emit BlockCountInAWeekUpdated(_blockCountInAWeek);
     }
 
-    /// @dev deposit uAD-3CRV LP tokens for a duration to receive staking shares
+    /// @dev deposit Dollars-3CRV LP tokens for a duration to receive staking shares
     /// @param _lpsAmount of LP token to send
     /// @param _lockup number of weeks during lp token will be held
     /// @notice _lockup act as a multiplier for the amount of staking shares to be received
@@ -287,7 +287,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         // calculate end locking period block number
         uint256 _endBlock = block.number + _lockup * blockCountInAWeek;
         _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
-        // set UbiquityChef for uGOV rewards
+        // set UbiquityChef for Governance rewards
         IUbiquityChef(manager.masterChefAddress()).deposit(
             msg.sender,
             _sharesAmount,
@@ -383,7 +383,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         );
     }
 
-    /// @dev Remove an amount of uAD-3CRV LP tokens
+    /// @dev Remove an amount of Dollars-3CRV LP tokens
     /// @param _amount of LP token deposited when _id was created to be withdrawn
     /// @param _id staking shares id
     /// @notice staking shares are ERC1155 (aka NFT) because they have an expiration date
@@ -398,7 +398,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
             StakingShare.Stake memory stake
         ) = _checkForLiquidity(_id);
         require(stake.lpAmount >= _amount, "Staking: amount too big");
-        // we should decrease the UBQ rewards proportionally to the LP removed
+        // we should decrease the Governance rewards proportionally to the LP removed
         // sharesToRemove = (staking shares * _amount )  / stake.lpAmount ;
         uint256 sharesToRemove = stakingFormulas.sharesForLP(
             stake,
@@ -414,7 +414,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         lpRewards -= pendingLpReward;
         // update staking shares
         //stake.shares = stake.shares - sharesToRemove;
-        // get UbiquityChef for uGOV rewards To ensure correct computation
+        // get UbiquityChef for Governance rewards To ensure correct computation
         // it needs to be done BEFORE updating the staking share
         IUbiquityChef(manager.masterChefAddress()).withdraw(
             msg.sender,
@@ -568,7 +568,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         uint256 endBlock = block.number + _lockup * blockCountInAWeek;
         _id = _mint(user, _lpsAmount, _sharesAmount, endBlock);
 
-        // set UbiquityChef for uGOV rewards
+        // set UbiquityChef for Governance rewards
         IUbiquityChef(manager.masterChefAddress()).deposit(
             user,
             _sharesAmount,

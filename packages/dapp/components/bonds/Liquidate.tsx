@@ -6,9 +6,11 @@ const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: num
   return (
     <div>
       <h2>Liquidate</h2>
+      {/* cspell: disable-next-line */}
       <h3>Exit the game; sell uCR for ETH</h3>
       <div>You have</div>
       <div>
+        {/* cspell: disable-next-line */}
         {accumulated !== null ? format(round(accumulated)) : "????"} uCR
         {accumulatedInUsd !== null ? <span>(${format(round(accumulatedInUsd))})</span> : null}
       </div>
