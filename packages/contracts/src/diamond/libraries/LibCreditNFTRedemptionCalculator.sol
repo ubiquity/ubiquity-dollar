@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 library LibCreditNftRedemptionCalculator {
@@ -15,17 +15,18 @@ library LibCreditNftRedemptionCalculator {
     function getCreditNFTAmount(
         uint256 dollarsToBurn
     ) internal view returns (uint256) {
-        address creditNFTAddress = LibAppStorage.appStorage().creditNftAddress;
+        AppStorage storage store = LibAppStorage.appStorage();
+        address creditNFTAddress = store.creditNftAddress;
         CreditNft cNFT = CreditNft(creditNFTAddress);
         require(
             cNFT.getTotalOutstandingDebt() <
-                IERC20(address(this)).totalSupply(),
+                IERC20(store.dollarTokenAddress).totalSupply(),
             "CreditNFT to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
         bytes16 totalDebt = cNFT.getTotalOutstandingDebt().fromUInt();
         bytes16 r = totalDebt.div(
-            IERC20(address(this)).totalSupply().fromUInt()
+            IERC20(store.dollarTokenAddress).totalSupply().fromUInt()
         );
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));

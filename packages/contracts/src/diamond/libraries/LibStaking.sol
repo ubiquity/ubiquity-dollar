@@ -7,7 +7,6 @@ import "./LibTWAPOracle.sol";
 import "../../dollar/StakingShare.sol";
 import "./LibChef.sol";
 import "./LibStakingFormulas.sol";
-import "./LibDollar.sol";
 
 library LibStaking {
     using SafeERC20 for IERC20;
@@ -77,14 +76,11 @@ library LibStaking {
             0
         );
         LibTWAPOracle.update();
-        uint256 toTransfer = LibDollar.balanceOf(address(this));
-
-        LibDollar.transfer(
-            msg.sender,
-            LibAppStorage.appStorage().treasuryAddress,
-            toTransfer
-        );
-        emit PriceReset(address(this), coinWithdrawn, toTransfer);
+        AppStorage storage store = LibAppStorage.appStorage();
+        IERC20 dollar = IERC20(store.dollarTokenAddress);
+        uint256 toTransfer = dollar.balanceOf(address(this));
+        dollar.safeTransfer(store.treasuryAddress, toTransfer);
+        emit PriceReset(store.dollarTokenAddress, coinWithdrawn, toTransfer);
     }
 
     /// @dev crvPriceReset remove 3CRV unilaterally from the curve LP share sitting inside

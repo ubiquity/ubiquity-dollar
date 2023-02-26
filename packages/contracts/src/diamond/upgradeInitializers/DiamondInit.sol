@@ -8,11 +8,10 @@ import {IERC173} from "../interfaces/IERC173.sol";
 import "../libraries/LibAppStorage.sol";
 import "../libraries/LibAccessControl.sol";
 import {StakingShare} from "../../dollar/StakingShare.sol";
-//import {UbiquityGovernanceToken} from "../../dollar/core/UbiquityGovernanceToken.sol";
+import {UbiquityDollarTokenForDiamond} from "../token/UbiquityDollarTokenForDiamond.sol";
 import {UbiquityGovernanceTokenForDiamond} from "../token/UbiquityGovernanceTokenForDiamond.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
-import {LibDollar} from "../libraries/LibDollar.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
@@ -26,9 +25,6 @@ import {UbiquityDollarManager} from "../../dollar/core/UbiquityDollarManager.sol
 contract DiamondInit is Modifiers {
     struct Args {
         address admin;
-        string dollarName;
-        string dollarSymbol;
-        uint8 dollarDecimals;
         address[] tos;
         uint256[] amounts;
         uint256[] stakingShareIDs;
@@ -48,21 +44,22 @@ contract DiamondInit is Modifiers {
 
         LibAccessControl.grantRole(DEFAULT_ADMIN_ROLE, _args.admin);
         LibAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, _args.admin);
+        LibAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, _args.admin);
+        LibAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, _args.admin);
+        LibAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, _args.admin);
+        LibAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, _args.admin);
+        LibAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, _args.admin);
         LibAccessControl.grantRole(PAUSER_ROLE, _args.admin);
         LibAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, _args.admin);
         LibAccessControl.grantRole(STAKING_MANAGER_ROLE, _args.admin);
         LibAccessControl.grantRole(INCENTIVE_MANAGER_ROLE, _args.admin);
         LibAccessControl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, _args.admin);
+
         AppStorage storage appStore = LibAppStorage.appStorage();
 
         appStore.paused = false;
         appStore.treasuryAddress = _args.admin;
-        // Dollar
-        LibDollar.initialize(
-            _args.dollarName,
-            _args.dollarSymbol,
-            _args.dollarDecimals
-        );
+
         // staking
         LibStaking.StakingData storage ls = LibStaking.stakingStorage();
         ls.stakingDiscountMultiplier = uint256(0.001 ether); // 0.001
@@ -78,6 +75,11 @@ contract DiamondInit is Modifiers {
         // adding governance token
         appStore.governanceTokenAddress = address(
             new UbiquityGovernanceTokenForDiamond(address(this))
+        );
+
+        // adding dollar token
+        appStore.dollarTokenAddress = address(
+            new UbiquityDollarTokenForDiamond(address(this))
         );
 
         // ubiquity chef before doing that we should have a metapool address

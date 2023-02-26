@@ -8,14 +8,12 @@ import {CREDIT_NFT_MANAGER_ROLE} from "./Constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IDollarMintExcess} from "../../dollar/interfaces/IDollarMintExcess.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
-import {LibDollar} from "./LibDollar.sol";
 import {LibCreditRedemptionCalculator} from "./LibCreditRedemptionCalculator.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibCreditNftRedemptionCalculator} from "./LibCreditNFTRedemptionCalculator.sol";
 import {UbiquityCreditToken} from "../../dollar/core/UbiquityCreditToken.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
 import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
-import {DollarTokenFacet} from "../facets/DollarTokenFacet.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders
 /// @notice Allows users to burn their Ubiquity Dollar in exchange for Credit NFT
@@ -113,7 +111,10 @@ library LibCreditNftManager {
             .getCreditNFTAmount(amount);
 
         // we burn user's dollars.
-        LibDollar.burn(msg.sender, amount);
+        IERC20Ubiquity(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(
+            msg.sender,
+            amount
+        );
 
         uint256 expiryBlockNumber = block.number + (cs.creditNFTLengthBlocks);
         creditNFT.mintCreditNft(msg.sender, creditNFTToMint, expiryBlockNumber);
@@ -132,10 +133,8 @@ library LibCreditNftManager {
         uint256 twapPrice = LibTWAPOracle.getTwapPrice();
 
         require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
-
-        CreditNft creditNFT = CreditNft(
-            LibAppStorage.appStorage().creditNftAddress
-        );
+        AppStorage storage store = LibAppStorage.appStorage();
+        CreditNft creditNFT = CreditNft(store.creditNftAddress);
         creditNFT.updateTotalDebt();
 
         //we are in a down cycle so reset the cycle counter
@@ -153,10 +152,10 @@ library LibCreditNftManager {
         );
 
         // we burn user's dollars.
-        LibDollar.burn(msg.sender, amount);
+        IERC20Ubiquity(store.dollarTokenAddress).burnFrom(msg.sender, amount);
         // mint Credit
         UbiquityCreditToken creditToken = UbiquityCreditToken(
-            LibAppStorage.appStorage().creditTokenAddress
+            store.creditTokenAddress
         );
         creditToken.mint(msg.sender, creditToMint);
 
@@ -287,12 +286,14 @@ library LibCreditNftManager {
             creditToken.balanceOf(msg.sender) >= amount,
             "User doesn't have enough Credit pool tokens."
         );
-
-        uint256 maxRedeemableCredit = LibDollar.balanceOf(address(this));
+        IERC20Ubiquity dollar = IERC20Ubiquity(
+            LibAppStorage.appStorage().dollarTokenAddress
+        );
+        uint256 maxRedeemableCredit = dollar.balanceOf(address(this));
 
         if (maxRedeemableCredit <= 0) {
             mintClaimableDollars();
-            maxRedeemableCredit = LibDollar.balanceOf(address(this));
+            maxRedeemableCredit = dollar.balanceOf(address(this));
         }
 
         uint256 creditToRedeem = amount;
@@ -300,7 +301,7 @@ library LibCreditNftManager {
             creditToRedeem = maxRedeemableCredit;
         }
         creditToken.burnFrom(msg.sender, creditToRedeem);
-        DollarTokenFacet(address(this)).transfer(msg.sender, creditToRedeem);
+        dollar.transfer(msg.sender, creditToRedeem);
 
         return amount - creditToRedeem;
     }
@@ -321,8 +322,8 @@ library LibCreditNftManager {
         if (creditNFTStorage().debtCycle) {
             creditNFTStorage().debtCycle = false;
         }
-        AppStorage storage s = LibAppStorage.appStorage();
-        CreditNft creditNFT = CreditNft(s.creditNftAddress);
+        AppStorage storage store = LibAppStorage.appStorage();
+        CreditNft creditNFT = CreditNft(store.creditNftAddress);
 
         require(id > block.number, "Credit NFT has expired");
         require(
@@ -333,15 +334,15 @@ library LibCreditNftManager {
         mintClaimableDollars();
 
         UbiquityCreditToken creditToken = UbiquityCreditToken(
-            s.creditTokenAddress
+            store.creditTokenAddress
         );
-
+        IERC20Ubiquity dollar = IERC20Ubiquity(store.dollarTokenAddress);
         // Credit have a priority on Credit NFT holder
         require(
-            creditToken.totalSupply() <= LibDollar.balanceOf(address(this)),
+            creditToken.totalSupply() <= dollar.balanceOf(address(this)),
             "There aren't enough Dollar to redeem currently"
         );
-        uint256 maxRedeemableCreditNFT = LibDollar.balanceOf(address(this)) -
+        uint256 maxRedeemableCreditNFT = dollar.balanceOf(address(this)) -
             creditToken.totalSupply();
         uint256 creditNFTToRedeem = amount;
 
@@ -349,25 +350,26 @@ library LibCreditNftManager {
             creditNFTToRedeem = maxRedeemableCreditNFT;
         }
         require(
-            LibDollar.balanceOf(address(this)) > 0,
+            dollar.balanceOf(address(this)) > 0,
             "There aren't any Dollar to redeem currently"
         );
 
         // creditNFTManager must be an operator to transfer on behalf of msg.sender
         creditNFT.burnCreditNft(msg.sender, creditNFTToRedeem, id);
-        DollarTokenFacet(address(this)).transfer(msg.sender, creditNFTToRedeem);
+
+        dollar.transfer(msg.sender, creditNFTToRedeem);
 
         return amount - (creditNFTToRedeem);
     }
 
     function mintClaimableDollars() public {
-        AppStorage storage s = LibAppStorage.appStorage();
+        AppStorage storage store = LibAppStorage.appStorage();
 
-        CreditNft creditNFT = CreditNft(s.creditNftAddress);
+        CreditNft creditNFT = CreditNft(store.creditNftAddress);
         creditNFT.updateTotalDebt();
 
         uint256 totalMintableDollars = IDollarMintCalculator(
-            s.dollarMintCalculatorAddress
+            store.dollarMintCalculatorAddress
         ).getDollarsToMint();
         uint256 dollarsToMint = totalMintableDollars -
             (creditNFTStorage().dollarsMintedThisCycle);
@@ -375,12 +377,13 @@ library LibCreditNftManager {
         creditNFTStorage().dollarsMintedThisCycle = totalMintableDollars;
 
         // Dollar should be minted to address(this)
-        LibDollar.mint(address(this), dollarsToMint);
+        IERC20Ubiquity dollar = IERC20Ubiquity(store.dollarTokenAddress);
+        dollar.mint(address(this), dollarsToMint);
         UbiquityCreditToken creditToken = UbiquityCreditToken(
-            s.creditTokenAddress
+            store.creditTokenAddress
         );
 
-        uint256 currentRedeemableBalance = LibDollar.balanceOf(address(this));
+        uint256 currentRedeemableBalance = dollar.balanceOf(address(this));
         uint256 totalOutstandingDebt = creditNFT.getTotalOutstandingDebt() +
             creditToken.totalSupply();
 
@@ -389,11 +392,11 @@ library LibCreditNftManager {
                 (totalOutstandingDebt);
 
             IDollarMintExcess dollarsDistributor = IDollarMintExcess(
-                s._excessDollarDistributors[address(this)]
+                store._excessDollarDistributors[address(this)]
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            DollarTokenFacet(address(this)).transfer(
-                s._excessDollarDistributors[address(this)],
+            dollar.transfer(
+                store._excessDollarDistributors[address(this)],
                 excessDollars
             );
             dollarsDistributor.distributeDollars();

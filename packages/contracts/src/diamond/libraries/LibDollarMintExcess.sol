@@ -9,8 +9,7 @@ import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
 import "../../dollar/SushiSwapPool.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
-import {LibDollar} from "./LibDollar.sol";
+import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards
@@ -26,11 +25,11 @@ library LibDollarMintExcess {
 
     function distributeDollars() internal {
         //the excess dollars which were sent to this contract by the coupon manager
-        uint256 excessDollars = LibDollar.balanceOf(address(this));
+        AppStorage storage store = LibAppStorage.appStorage();
+        IERC20Ubiquity dollar = IERC20Ubiquity(store.dollarTokenAddress);
+        uint256 excessDollars = dollar.balanceOf(address(this));
         if (excessDollars > _minAmountToDistribute) {
-            address treasuryAddress = LibAppStorage
-                .appStorage()
-                .treasuryAddress;
+            address treasuryAddress = store.treasuryAddress;
 
             // curve UbiquityDollar-3CRV liquidity pool
             uint256 tenPercent = excessDollars
@@ -41,10 +40,7 @@ library LibDollarMintExcess {
                 .fromUInt()
                 .div(uint256(2).fromUInt())
                 .toUInt();
-            IERC20Ubiquity(address(this)).safeTransfer(
-                treasuryAddress,
-                fiftyPercent
-            );
+            dollar.safeTransfer(treasuryAddress, fiftyPercent);
             // convert Ubiquity Dollar to GovernanceToken-DollarToken LP on sushi and burn them
             _governanceBuyBackLPAndBurn(tenPercent);
             // convert remaining Ubiquity Dollar to curve LP tokens
@@ -60,8 +56,9 @@ library LibDollarMintExcess {
         bytes16 amountIn
     ) internal returns (uint256) {
         address[] memory path = new address[](2);
-        path[0] = address(this);
-        path[1] = LibAppStorage.appStorage().governanceTokenAddress;
+        AppStorage storage store = LibAppStorage.appStorage();
+        path[0] = store.dollarTokenAddress;
+        path[1] = store.governanceTokenAddress;
         uint256[] memory amounts = _router.swapExactTokensForTokens(
             amountIn.toUInt(),
             0,
@@ -78,24 +75,25 @@ library LibDollarMintExcess {
         bytes16 amountDollars = (amount.fromUInt()).div(uint256(2).fromUInt());
 
         // we need to approve sushi router
-        IERC20Ubiquity(address(this)).safeApprove(address(_router), 0);
-        IERC20Ubiquity(address(this)).safeApprove(address(_router), amount);
+
+        IERC20Ubiquity dollar = IERC20Ubiquity(
+            LibAppStorage.appStorage().dollarTokenAddress
+        );
+        IERC20Ubiquity gov = IERC20Ubiquity(
+            LibAppStorage.appStorage().governanceTokenAddress
+        );
+        dollar.safeApprove(address(_router), 0);
         uint256 amountGovernanceTokens = _swapDollarsForGovernance(
             amountDollars
         );
-        address governanceTokenAddress = LibAppStorage
-            .appStorage()
-            .governanceTokenAddress;
-        IERC20Ubiquity(governanceTokenAddress).safeApprove(address(_router), 0);
-        IERC20Ubiquity(governanceTokenAddress).safeApprove(
-            address(_router),
-            amountGovernanceTokens
-        );
+
+        gov.safeApprove(address(_router), 0);
+        gov.safeApprove(address(_router), amountGovernanceTokens);
 
         // deposit liquidity and transfer to zero address (burn)
         _router.addLiquidity(
-            address(this),
-            governanceTokenAddress,
+            address(dollar),
+            address(gov),
             amountDollars.toUInt(),
             amountGovernanceTokens,
             0,
@@ -112,18 +110,15 @@ library LibDollarMintExcess {
     function _convertToCurveLPAndTransfer(
         uint256 amount
     ) internal returns (uint256) {
-        address stableSwapMetaPoolAddress = LibAppStorage
-            .appStorage()
-            .stableSwapMetaPoolAddress;
-        address curve3PoolTokenAddress = LibAppStorage
-            .appStorage()
-            .curve3PoolTokenAddress;
+        AppStorage storage store = LibAppStorage.appStorage();
+        address stableSwapMetaPoolAddress = store.stableSwapMetaPoolAddress;
+        address curve3PoolTokenAddress = store.curve3PoolTokenAddress;
         // we need to approve metaPool
-        IERC20Ubiquity(address(this)).approve(stableSwapMetaPoolAddress, 0);
-        IERC20Ubiquity(address(this)).approve(
-            stableSwapMetaPoolAddress,
-            amount
+        IERC20Ubiquity dollar = IERC20Ubiquity(
+            LibAppStorage.appStorage().dollarTokenAddress
         );
+        dollar.approve(stableSwapMetaPoolAddress, 0);
+        dollar.approve(stableSwapMetaPoolAddress, amount);
 
         // swap amount of Ubiquity Dollar => 3CRV
         uint256 amount3CRVReceived = IMetaPool(stableSwapMetaPoolAddress)

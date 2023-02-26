@@ -31,7 +31,7 @@ contract ERC1155UbiquityForDiamond is
     modifier onlyMinter() {
         require(
             accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
-            "Governance token: not minter"
+            "ERC1155Ubiquity: not minter"
         );
         _;
     }
@@ -39,7 +39,7 @@ contract ERC1155UbiquityForDiamond is
     modifier onlyBurner() {
         require(
             accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
-            "Governance token: not burner"
+            "ERC1155Ubiquity: not burner"
         );
         _;
     }
@@ -47,7 +47,7 @@ contract ERC1155UbiquityForDiamond is
     modifier onlyPauser() {
         require(
             accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
-            "Governance token: not pauser"
+            "ERC1155Ubiquity: not pauser"
         );
         _;
     }
