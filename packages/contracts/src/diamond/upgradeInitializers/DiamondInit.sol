@@ -59,38 +59,18 @@ contract DiamondInit is Modifiers {
 
         appStore.paused = false;
         appStore.treasuryAddress = _args.admin;
-
         // staking
         LibStaking.StakingData storage ls = LibStaking.stakingStorage();
         ls.stakingDiscountMultiplier = uint256(0.001 ether); // 0.001
         ls.blockCountInAWeek = 45361;
-        // add staking shares
-
-        string
-            memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-
-        appStore.stakingShareAddress = address(
-            new StakingShare(UbiquityDollarManager(address(this)), uri)
-        );
-        // adding governance token
-        appStore.governanceTokenAddress = address(
-            new UbiquityGovernanceTokenForDiamond(address(this))
-        );
-
-        // adding dollar token
-        appStore.dollarTokenAddress = address(
-            new UbiquityDollarTokenForDiamond(address(this))
-        );
 
         // ubiquity chef before doing that we should have a metapool address
-
         LibChef.initialize(
             _args.tos,
             _args.amounts,
             _args.stakingShareIDs,
             _args.governancePerBlock
         );
-
         // creditNFTManager
         /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)

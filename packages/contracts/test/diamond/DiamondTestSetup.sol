@@ -135,6 +135,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
             managerFacet.setGovernanceTokenAddress.selector
         );
         selectorsOfManagerFacet.push(
+            managerFacet.setDollarTokenAddress.selector
+        );
+        selectorsOfManagerFacet.push(
             managerFacet.setSushiSwapPoolAddress.selector
         );
         selectorsOfManagerFacet.push(
@@ -383,7 +386,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
         dollarMintExcessFacet = new DollarMintExcessFacet();
 
         dInit = new DiamondInit();
-
         facetNames = [
             "DiamondCutFacet",
             "DiamondLoupeFacet",
@@ -532,18 +534,16 @@ abstract contract DiamondSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfDollarMintExcessFacet
             })
         );
-
         // deploy diamond
         vm.prank(owner);
         diamond = new Diamond(_args, cuts);
-
         // initialize interfaces
         ILoupe = IDiamondLoupe(address(diamond));
         ICut = IDiamondCut(address(diamond));
         IManager = ManagerFacet(address(diamond));
         IAccessCtrl = AccessControlFacet(address(diamond));
         ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
-        IDollar = UbiquityDollarTokenForDiamond(IManager.dollarTokenAddress());
+
         ICollectableDustFacet = CollectableDustFacet(address(diamond));
         IChefFacet = ChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
@@ -559,16 +559,37 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
 
-        assertEq(IDollar.decimals(), 18);
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
-
         vm.startPrank(admin);
         // grant diamond dollar minting and burning rights
         IAccessCtrl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
         IAccessCtrl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
         // grant diamond token admin rights
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(diamond));
+        // add staking shares
+        string
+            memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
+
+        address stakingShareAddress = address(
+            new StakingShare(UbiquityDollarManager(address(diamond)), uri)
+        );
+        // adding governance token
+        address governanceTokenAddress = address(
+            new UbiquityGovernanceTokenForDiamond(address(diamond))
+        );
+        // adding dollar token
+        address dollarTokenAddress = address(
+            new UbiquityDollarTokenForDiamond(address(diamond))
+        );
+        // add staking shares
+        IManager.setStakingShareAddress(stakingShareAddress);
+        // adding governance token
+        IManager.setGovernanceTokenAddress(governanceTokenAddress);
+        // adding dollar token
+        IManager.setDollarTokenAddress(dollarTokenAddress);
+        IDollar = UbiquityDollarTokenForDiamond(IManager.dollarTokenAddress());
+        assertEq(IDollar.decimals(), 18);
         vm.stopPrank();
     }
 }
