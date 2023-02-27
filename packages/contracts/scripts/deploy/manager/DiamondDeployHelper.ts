@@ -5,15 +5,15 @@ export const FacetCutAction = { Add: 0, Replace: 1, Remove: 2 };
 
 export async function getSelectorsFromFacet(contractName: string, artifactFolderPath = "../../../out") {
   const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const contractArtifact = require(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;
   const target = new ethers.ContractFactory(abi, bytecode);
   const signatures = Object.keys(target.interface.functions);
 
-  const selectors = signatures.reduce((acc, val) => {
+  const selectors = signatures.reduce((acc: string[], val) => {
     if (val !== "init(bytes)") {
-      // @ts-ignore
       acc.push(target.interface.getSighash(val));
     }
     return acc;
@@ -24,8 +24,9 @@ export async function getSelectorsFromFacet(contractName: string, artifactFolder
   return selectors;
 }
 
-export function getContractInstance(contractName: string, account?: any, artifactFolderPath = "../../../out") {
+export function getContractInstance(contractName: string, account?: ethers.Signer | undefined, artifactFolderPath = "../../../out") {
   const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const contractArtifact = require(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;
