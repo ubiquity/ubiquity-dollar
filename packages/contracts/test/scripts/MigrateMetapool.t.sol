@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
+//cspell:ignore BondingShareV2
 
 import {UbiquityDollarManager} from "src/dollar/core/UbiquityDollarManager.sol";
 import {Staking} from "src/dollar/Staking.sol";
@@ -8,7 +9,6 @@ import {BondingShareV2} from "src/dollar/mocks/MockBondingShareV2.sol";
 import {IMetaPool} from "src/dollar/interfaces/IMetaPool.sol";
 import {TWAPOracleDollar3pool} from "src/dollar/core/TWAPOracleDollar3pool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
 
 import "forge-std/Test.sol";
 
@@ -87,18 +87,15 @@ contract MigrateMetapool is Test {
         console.log("Total LP Tokens Curve Metapool V2: ", v2LP);
         console.log("Total LP Tokens Curve Metapool V3: ", v3LP);
         console.log(
-
             "Amount of Ubiquity Dollar Tokens in Curve Metapool V2: ",
-
             v2DollarPreBalance
         );
         console.log(
-            "Amount of UbiquityDollar Tokens in Curve Metapool V2 after migration: ",
+            "Amount of Ubiquity Dollar Tokens in Curve Metapool V2 after migration: ",
             v2DollarPostBalance
         );
         console.log(
             "Amount of Ubiquity Dollar Tokens in Curve Metapool V3: ",
-
             v3DollarBalance
         );
         console.log(
@@ -198,7 +195,6 @@ contract MigrateMetapool is Test {
             "Curve Metapool V3 Curve3 balance after withdrawal: ",
             v3Curve3Balance
         );
-
 
         assertGe(v3Balance, v2Balance);
         assertLe(userDollarV3, userDollarV2);
