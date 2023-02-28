@@ -5,7 +5,7 @@ pragma solidity 0.8.16;
 
 import {UbiquityDollarManager} from "src/dollar/core/UbiquityDollarManager.sol";
 import {Staking} from "src/dollar/Staking.sol";
-import {BondingShareV2} from "src/dollar/mocks/MockBondingShareV2.sol";
+import {BondingShareV2} from "src/dollar/mocks/MockStakingShare.sol";
 import {IMetaPool} from "src/dollar/interfaces/IMetaPool.sol";
 import {TWAPOracleDollar3pool} from "src/dollar/core/TWAPOracleDollar3pool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
