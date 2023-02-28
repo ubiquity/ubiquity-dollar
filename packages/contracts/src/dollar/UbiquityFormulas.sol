@@ -36,67 +36,67 @@ contract UbiquityFormulas is IUbiquityFormulas {
             .toUInt();
     }
 
-    /// @dev formula bonding
+    /// @dev formula staking
     /// @param shares , amount of shares
     /// @param currentShareValue , current share value
     /// @param targetPrice , target Ubiquity Dollar price
-    /// @return uBOND , amount of bonding shares
-    /// @notice UBOND = shares * targetPrice / currentShareValue
+    /// @return stakingShares , amount of staking shares
+    /// @notice stakingShares = shares * targetPrice / currentShareValue
     // newShares = A * T / V
     function staking(
         uint256 shares,
         uint256 currentShareValue,
         uint256 targetPrice
-    ) public pure returns (uint256 uBOND) {
+    ) public pure returns (uint256 stakingShares) {
         bytes16 a = shares.fromUInt();
         bytes16 v = currentShareValue.fromUInt();
         bytes16 t = targetPrice.fromUInt();
 
-        uBOND = a.mul(t).div(v).toUInt();
+        stakingShares = a.mul(t).div(v).toUInt();
     }
 
     /// @dev formula redeem bonds
-    /// @param uBOND , amount of bonding shares
+    /// @param stakingShares , amount of staking shares
     /// @param currentShareValue , current share value
-    /// @param targetPrice , target uAD price
+    /// @param targetPrice , target Dollar price
     /// @return uLP , amount of LP tokens
-    /// @notice uLP = uBOND * currentShareValue / targetPrice
+    /// @notice uLP = stakingShares * currentShareValue / targetPrice
     // uLP = A * V / T
     function redeemShares(
-        uint256 uBOND,
+        uint256 stakingShares,
         uint256 currentShareValue,
         uint256 targetPrice
     ) public pure returns (uint256 uLP) {
-        bytes16 a = uBOND.fromUInt();
+        bytes16 a = stakingShares.fromUInt();
         bytes16 v = currentShareValue.fromUInt();
         bytes16 t = targetPrice.fromUInt();
 
         uLP = a.mul(v).div(t).toUInt();
     }
 
-    /// @dev formula bond price
+    /// @dev formula staking price
     /// @param totalULP , total LP tokens
-    /// @param totalUBOND , total bond shares
+    /// @param totalStakingShares , total staking shares
     /// @param targetPrice ,  target Ubiquity Dollar price
-    /// @return priceUBOND , bond share price
+    /// @return stakingSharePrice , staking share price
     /// @notice
-    // IF totalUBOND = 0  priceBOND = TARGET_PRICE
+    // IF totalStakingShares = 0  priceBOND = TARGET_PRICE
     // ELSE                priceBOND = totalLP / totalShares * TARGET_PRICE
     // R = T == 0 ? 1 : LP / S
     // P = R * T
     function sharePrice(
         uint256 totalULP,
-        uint256 totalUBOND,
+        uint256 totalStakingShares,
         uint256 targetPrice
-    ) public pure returns (uint256 priceUBOND) {
+    ) public pure returns (uint256 stakingSharePrice) {
         bytes16 lp = totalULP.fromUInt();
-        bytes16 s = totalUBOND.fromUInt();
+        bytes16 s = totalStakingShares.fromUInt();
         bytes16 t = targetPrice.fromUInt();
 
-        if (totalUBOND == 0) {
-            priceUBOND = uint256(1).fromUInt().mul(t).toUInt();
+        if (totalStakingShares == 0) {
+            stakingSharePrice = uint256(1).fromUInt().mul(t).toUInt();
         } else {
-            priceUBOND = lp.mul(t).div(s).toUInt();
+            stakingSharePrice = lp.mul(t).div(s).toUInt();
         }
     }
 

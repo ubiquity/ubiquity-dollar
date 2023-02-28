@@ -6,5 +6,8 @@ import "./ERC20UbiquityForDiamond.sol";
 contract UbiquityGovernanceTokenForDiamond is ERC20UbiquityForDiamond {
     constructor(
         address _manager
-    ) ERC20UbiquityForDiamond(_manager, "Ubiquity", "UBQ") {} // solhint-disable-line no-empty-blocks, max-line-length
+    )
+        // cspell: disable-next-line
+        ERC20UbiquityForDiamond(_manager, "Ubiquity", "UBQ")
+    {} // solhint-disable-line no-empty-blocks, max-line-length
 }

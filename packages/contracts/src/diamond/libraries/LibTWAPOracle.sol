@@ -115,7 +115,7 @@ library LibTWAPOracle {
         }
     }
 
-       function getTwapPrice() internal view returns (uint256) {
+    function getTwapPrice() internal view returns (uint256) {
         return LibTWAPOracle.consult(address(this));
     }
 }

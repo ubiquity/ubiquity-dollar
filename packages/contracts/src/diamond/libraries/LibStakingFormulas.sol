@@ -36,7 +36,7 @@ library LibStakingFormulas {
         return _amount;
     }
 
-    /// @dev formula Governance Rights corresponding to a staking shares LP amount
+    /// @dev formula Governance Rights corresponding to a staking tokens LP amount
     /// @param _stake , staking share
     /// @param _amount , amount of LP tokens
     /// @notice shares = (stake.shares * _amount )  / stake.lpAmount ;
@@ -107,61 +107,63 @@ library LibStakingFormulas {
     /// @param _shares , amount of shares
     /// @param _currentShareValue , current share value
     /// @param _targetPrice , target Ubiquity Dollar price
-    /// @return _uBOND , amount of bonding shares
-    /// @notice UBOND = _shares / _currentShareValue * _targetPrice
+    /// @return _stakingTokens , amount of staking tokens
+    /// @notice stakingTokens = _shares / _currentShareValue * _targetPrice
     // newShares = A / V * T
     function staking(
         uint256 _shares,
         uint256 _currentShareValue,
         uint256 _targetPrice
-    ) internal pure returns (uint256 _uBOND) {
+    ) internal pure returns (uint256 _stakingTokens) {
         bytes16 a = _shares.fromUInt();
         bytes16 v = _currentShareValue.fromUInt();
         bytes16 t = _targetPrice.fromUInt();
 
-        _uBOND = a.div(v).mul(t).toUInt();
+        _stakingTokens = a.div(v).mul(t).toUInt();
     }
 
     /// @dev formula redeem stake
-    /// @param _uBOND , amount of bonding shares
+    /// @param _stakingTokens , amount of staking tokens
     /// @param _currentShareValue , current share value
-    /// @param _targetPrice , target uAD price
+    /// @param _targetPrice , target Dollar price
     /// @return _uLP , amount of LP tokens
-    /// @notice _uLP = _uBOND * _currentShareValue / _targetPrice
+    /// @notice _uLP = _stakingTokens * _currentShareValue / _targetPrice
     // _uLP = A * V / T
     function redeemStake(
-        uint256 _uBOND,
+        uint256 _stakingTokens,
         uint256 _currentShareValue,
         uint256 _targetPrice
     ) internal pure returns (uint256 _uLP) {
-        bytes16 a = _uBOND.fromUInt();
+        bytes16 a = _stakingTokens.fromUInt();
         bytes16 v = _currentShareValue.fromUInt();
         bytes16 t = _targetPrice.fromUInt();
 
         _uLP = a.mul(v).div(t).toUInt();
     }
 
-    /// @dev formula bond price
+    /// @dev formula staking price
     /// @param _totalULP , total LP tokens
-    /// @param _totalUBOND , total bond shares
+    /// @param _totalStakingShares , total staking shares
     /// @param _targetPrice ,  target Ubiquity Dollar price
-    /// @return _priceUBOND , bond share price
+    /// @return _stakingPrice , staking share price
     /// @notice
-    // IF _totalUBOND = 0  priceBOND = TARGET_PRICE
+    // IF _totalStakingShares = 0  priceBOND = TARGET_PRICE
     // ELSE                priceBOND = totalLP / totalShares * TARGET_PRICE
     // R = T == 0 ? 1 : LP / S
     // P = R * T
     function bondPrice(
         uint256 _totalULP,
-        uint256 _totalUBOND,
+        uint256 _totalStakingShares,
         uint256 _targetPrice
-    ) internal pure returns (uint256 _priceUBOND) {
+    ) internal pure returns (uint256 _stakingPrice) {
         bytes16 lp = _totalULP.fromUInt();
-        bytes16 s = _totalUBOND.fromUInt();
-        bytes16 r = _totalUBOND == 0 ? uint256(1).fromUInt() : lp.div(s);
+        bytes16 s = _totalStakingShares.fromUInt();
+        bytes16 r = _totalStakingShares == 0
+            ? uint256(1).fromUInt()
+            : lp.div(s);
         bytes16 t = _targetPrice.fromUInt();
 
-        _priceUBOND = r.mul(t).toUInt();
+        _stakingPrice = r.mul(t).toUInt();
     }
 
     /// @dev formula Governance Token multiply

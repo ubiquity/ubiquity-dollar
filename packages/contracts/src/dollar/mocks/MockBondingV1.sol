@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MIT
+// cspell: disable // disabled because all of bonding v1 is deprecated
 pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";

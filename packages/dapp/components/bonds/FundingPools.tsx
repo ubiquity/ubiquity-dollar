@@ -11,6 +11,7 @@ const FundingPools = ({ enabled, poolsData, onDeposit }: FundingPoolParams) => {
   return (
     <div>
       <h2>Funding Pools</h2>
+      {/* cspell: disable-next-line */}
       <h3>Sell LP, get uCR over the course of 5 days</h3>
       <div>
         {pools.map((pool) => (

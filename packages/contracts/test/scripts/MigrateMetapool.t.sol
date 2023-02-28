@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
+
 import {UbiquityDollarManager} from "src/dollar/core/UbiquityDollarManager.sol";
 import {Staking} from "src/dollar/Staking.sol";
 import {BondingShareV2} from "src/dollar/mocks/MockBondingShareV2.sol";
 import {IMetaPool} from "src/dollar/interfaces/IMetaPool.sol";
 import {TWAPOracleDollar3pool} from "src/dollar/core/TWAPOracleDollar3pool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 
 import "forge-std/Test.sol";
 
@@ -17,16 +19,17 @@ contract MigrateMetapool is Test {
         UbiquityDollarManager(0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98);
     Staking staking =
         Staking(payable(0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38));
-    BondingShareV2 bonds =
-        BondingShareV2(0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5);
-    /// Ubiquity Dollar Token (uAD)
+    MockStakingShare bonds =
+        MockStakingShare(0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5);
+    /// Ubiquity Dollar Token (Dollar)
     IERC20 dollarToken = IERC20(0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6);
     /// Curve3 LP Token (3CRV)
-    IERC20 curve3PoolToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
-    /// Curve Metapool V2 uAD:3CRV
+    IERC20 curve3Token = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
+    /// Curve Metapool V2 Dollar:3CRV
+
     IMetaPool v2Metapool =
         IMetaPool(0x20955CB69Ae1515962177D164dfC9522feef567E);
-    /// Curve Metapool V3 uAD:3CRV
+    /// Curve Metapool V3 Dollar:3CRV
     IMetaPool v3Metapool =
         IMetaPool(0x9558b18f021FC3cBa1c9B777603829A42244818b);
 
@@ -84,7 +87,9 @@ contract MigrateMetapool is Test {
         console.log("Total LP Tokens Curve Metapool V2: ", v2LP);
         console.log("Total LP Tokens Curve Metapool V3: ", v3LP);
         console.log(
-            "Amount of UbiquityDollar Tokens in Curve Metapool V2 before migration: ",
+
+            "Amount of Ubiquity Dollar Tokens in Curve Metapool V2: ",
+
             v2DollarPreBalance
         );
         console.log(
@@ -92,7 +97,8 @@ contract MigrateMetapool is Test {
             v2DollarPostBalance
         );
         console.log(
-            "Amount of UbiquityDollar Tokens in Curve Metapool V3 after migration: ",
+            "Amount of Ubiquity Dollar Tokens in Curve Metapool V3: ",
+
             v3DollarBalance
         );
         console.log(
@@ -110,9 +116,9 @@ contract MigrateMetapool is Test {
 
         /// ensures all v3 LP tokens minted are deposited in Staking
         assertEq(lpMinted, metaBalanceV3);
-        /* 
+        /*
             Compares the amount of Curve3 LP tokens in V2 Metapool before migration
-            to the amount of Curve3 LP tokens in both Metapools after migration to 
+            to the amount of Curve3 LP tokens in both Metapools after migration to
             ensure no Curve3 LP tokens are lost during migration.
             The Staking Contract holds the large majority of V2 LP tokens but there are some smaller holders
             so we are unable to migrate all funds.
@@ -134,7 +140,7 @@ contract MigrateMetapool is Test {
         uint256[] memory tokens = bonds.holderTokens(user);
 
         uint256 dollarTokenPreBalance = dollarToken.balanceOf(user);
-        BondingShareV2.Bond memory bond = bonds.getBond(tokens[0]);
+        MockStakingShare.Bond memory bond = bonds.getBond(tokens[0]);
         uint256 withdraw = bond.lpAmount;
 
         vm.roll(block.number + 10483200);
@@ -154,7 +160,7 @@ contract MigrateMetapool is Test {
         _migrate();
 
         vm.roll(block.number + 10483200);
-        BondingShareV2.Bond memory bondV3 = bonds.getBond(tokens[0]);
+        MockStakingShare.Bond memory bondV3 = bonds.getBond(tokens[0]);
         uint256 withdrawV3 = bondV3.lpAmount;
         vm.startPrank(user);
         staking.removeLiquidity(withdrawV3, tokens[0]);
@@ -175,15 +181,24 @@ contract MigrateMetapool is Test {
         console.log("Metapool LP Tokens withdrawn pre migration: ", v2Balance);
         console.log("Metapool LP Tokens withdrawn post migration: ", v3Balance);
         console.log(
-            "UbiquityDollar Tokens withdrawn pre migration: ",
+            "Ubiquity Dollar Tokens withdrawn pre migration: ",
             userDollarV2
         );
         console.log("Curve3 Tokens withdrawn pre migration: ", userCurve3V2);
         console.log(
-            "UbiquityDollar Tokens withdrawn post migration: ",
+            "Ubiquity Dollar Tokens withdrawn post migration: ",
             userDollarV3
         );
-        console.log("Curve3 Tokens withdrawn post migration: ", userCurve3V3);
+        console.log("Curve3 Tokens withdrawn post migration: ", userLPV3);
+        console.log(
+            "Curve Metapool V3 Ubiquity Dollar balance after withdrawal: ",
+            v3DollarBalance
+        );
+        console.log(
+            "Curve Metapool V3 Curve3 balance after withdrawal: ",
+            v3Curve3Balance
+        );
+
 
         assertGe(v3Balance, v2Balance);
         assertLe(userDollarV3, userDollarV2);

@@ -51,6 +51,7 @@ const BondingMigrate = () => {
 
   return (
     <>
+      {/* cspell: disable-next-line */}
       <div id="bonding-migrate">
         <div>
           <button onClick={handleMigration}>Migrate</button>

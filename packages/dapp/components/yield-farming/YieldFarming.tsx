@@ -1,3 +1,4 @@
+// cspell: disable
 import { BigNumber, Contract, ethers } from "ethers";
 import { memo, useEffect, useState } from "react";
 

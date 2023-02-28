@@ -1,5 +1,5 @@
 import {
-  getBondingShareV2Contract,
+  getStakingShareContract,
   getBondingV2Contract,
   getDebtCouponContract,
   getDollarMintCalculatorContract,
@@ -10,10 +10,10 @@ import {
   getMasterChefV2Contract,
   getSushiSwapPoolContract,
   getTWAPOracleContract,
-  getUbiquityAlgorithmicDollarContract,
-  getUbiquityCreditContract,
+  getDollarContract,
+  getCreditContract,
   getUbiquityFormulasContract,
-  getUbqContract,
+  getGovernanceContract,
   getUniswapV2FactoryContract,
 } from "@/components/utils/contracts";
 import { Contract } from "ethers";
@@ -78,22 +78,23 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
   ]);
 
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
-  const ugovUadPairContract = getUniswapV2FactoryContract(await sushiSwapPoolContract.pair(), provider);
+
+  const governanceMarket = getUniswapV2FactoryContract(await sushiSwapPoolContract.pair(), provider);
 
   return {
-    dollarToken: getUbiquityAlgorithmicDollarContract(dollarToken, provider),
+    dollarToken: getDollarContract(dollarToken, provider),
     dollarMetapool: getIMetaPoolContract(dollar3poolMarket, provider),
     dollarTwapOracle: getTWAPOracleContract(twapOracle, provider),
     dollarMintCalculator: getDollarMintCalculatorContract(dollarMintCalc, provider),
-    creditToken: getUbiquityCreditContract(creditToken, provider),
-    governanceToken: getUbqContract(governanceToken, provider),
+    creditToken: getCreditContract(creditToken, provider),
+    governanceToken: getGovernanceContract(governanceToken, provider),
     _3crvToken: getERC20Contract(_3crvToken, provider),
-    stakingToken: getBondingShareV2Contract(stakingToken, provider),
+    stakingToken: getStakingShareContract(stakingToken, provider),
     creditNft: getDebtCouponContract(creditNft, provider),
     staking: getBondingV2Contract(staking, provider),
     masterChef: getMasterChefV2Contract(masterChef, provider),
     sushiSwapPool: sushiSwapPoolContract,
-    governanceMarket: ugovUadPairContract,
+    governanceMarket: governanceMarket,
     ubiquityFormulas: getUbiquityFormulasContract(ubiquityFormulas, provider),
     creditNftCalculator: getICouponsForDollarsCalculatorContract(creditNftCalculator, provider),
     creditCalculator: getIUARForDollarsCalculatorContract(creditCalculator, provider),
