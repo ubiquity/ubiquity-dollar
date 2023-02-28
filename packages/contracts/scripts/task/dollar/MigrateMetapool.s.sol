@@ -30,6 +30,8 @@ contract migrateFunds is Script {
 
         TWAPOracleDollar3pool twapOracle;
 
+        uint256 dollarPreBalance = dollarToken.balanceOf(admin);
+
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address admin = vm.addr(deployerPrivateKey);
         require(
@@ -55,10 +57,10 @@ contract migrateFunds is Script {
         }
 
         curve3PoolToken.approve(address(v3Metapool), 0);
-        curve3PoolToken.approve(address(v3Metapool), deposit);
+        curve3PoolToken.approve(address(v3Metapool), curve3Balance);
 
         dollarToken.approve(address(v3Metapool), 0);
-        dollarToken.approve(address(v3Metapool), deposit);
+        dollarToken.approve(address(v3Metapool), dollarBalance);
 
         v3Metapool.add_liquidity([deposit, deposit], 0, address(staking));
 
@@ -70,6 +72,34 @@ contract migrateFunds is Script {
             address(curve3PoolToken)
         );
         manager.setTwapOracleAddress(address(twapOracle));
+
+        uint256 secondDeposit = dollarToken.balanceOf(admin);
+
+        v3Metapool.add_liquidity(
+            [uint256(0), secondDeposit],
+            0,
+            address(staking)
+        );
+
+        uint256 secondDeposit = dollarBalance - deposit - dollarPreBalance;
+
+        v3Metapool.add_liquidity(
+            [secondDeposit, uint256[0]],
+            0,
+            address(staking)
+        );
+
+        manager.setStableSwapMetaPoolAddress(address(v3Metapool));
+
+        require(
+            manager.twapOracleAddress() == address(twapOracle),
+            "TWAPOracle address not set"
+        );
+
+        require(
+            manager.stableSwapMetaPoolAddress == address(v3Metapool),
+            "Metapool address not set"
+        );
 
         vm.stopBroadcast();
     }

@@ -78,8 +78,6 @@ contract UbiquityDollarManager is AccessControl {
         address _twapOracleAddress
     ) external onlyAdmin {
         twapOracleAddress = _twapOracleAddress;
-        // to be removed
-
         TWAPOracleDollar3pool oracle = TWAPOracleDollar3pool(twapOracleAddress);
     }
 
