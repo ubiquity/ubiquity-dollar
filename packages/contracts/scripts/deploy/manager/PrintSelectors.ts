@@ -12,8 +12,7 @@ if (args.length != 1) {
 
 async function printSelectors(contractName: string, artifactFolderPath = "../../../out") {
   const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const contractArtifact = require(contractFilePath);
+  const contractArtifact = await import(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;
   const target = new ethers.ContractFactory(abi, bytecode);

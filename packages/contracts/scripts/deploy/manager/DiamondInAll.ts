@@ -44,24 +44,24 @@ const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult 
     const diamondArgs = args.constructorArguments[0];
     const diamondCut = args.constructorArguments[1];
 
-    flattenConstructorArgs += `${diamondArgs.owner},${diamondArgs.init},${diamondArgs.initCalldata})" "[`;
+    flattenConstructorArgs = `${flattenConstructorArgs}${diamondArgs.owner},${diamondArgs.init},${diamondArgs.initCalldata})" "[`;
 
     for (let i = 0; i < diamondCut.length; i++) {
-      flattenConstructorArgs += `(${diamondCut[i].facetAddress},${diamondCut[i].action},[`;
+      flattenConstructorArgs = `${flattenConstructorArgs}(${diamondCut[i].facetAddress},${diamondCut[i].action},[`;
 
       const functionSelectors = diamondCut[i].functionSelectors;
       for (let j = 0; j < functionSelectors.length; j++) {
-        flattenConstructorArgs += `${functionSelectors[j]}`;
+        flattenConstructorArgs = `${flattenConstructorArgs}${functionSelectors[j]}`;
         if (j !== functionSelectors.length - 1) {
-          flattenConstructorArgs += `,`;
+          flattenConstructorArgs = `${flattenConstructorArgs},`;
         }
       }
-      flattenConstructorArgs += `])`;
+      flattenConstructorArgs = `${flattenConstructorArgs}])`;
       if (i !== diamondCut.length - 1) {
-        flattenConstructorArgs += `,`;
+        flattenConstructorArgs = `${flattenConstructorArgs},`;
       }
     }
-    flattenConstructorArgs += `]"`;
+    flattenConstructorArgs = `${flattenConstructorArgs}]"`;
     prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --private-key ${args.privateKey} ${args.contractInstance} --constructor-args ${flattenConstructorArgs}`;
   } else {
     prepareCmd = `forge create --json --rpc-url ${args.rpcUrl} --private-key ${args.privateKey} ${args.contractInstance}`;
@@ -223,7 +223,7 @@ async function deployDiamond() {
   console.log("Diamond Cut:", cut);
 
   // call to init function
-  const diamondInitInstance = getContractInstance("DiamondInit");
+  const diamondInitInstance = await getContractInstance("DiamondInit");
 
   const initArgs: any = [
     {

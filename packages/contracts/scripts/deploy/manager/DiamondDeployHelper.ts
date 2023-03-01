@@ -5,8 +5,7 @@ export const FacetCutAction = { Add: 0, Replace: 1, Remove: 2 };
 
 export async function getSelectorsFromFacet(contractName: string, artifactFolderPath = "../../../out") {
   const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const contractArtifact = require(contractFilePath);
+  const contractArtifact = await import(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;
   const target = new ethers.ContractFactory(abi, bytecode);
@@ -24,10 +23,9 @@ export async function getSelectorsFromFacet(contractName: string, artifactFolder
   return selectors;
 }
 
-export function getContractInstance(contractName: string, account?: ethers.Signer, artifactFolderPath = "../../../out") {
+export async function getContractInstance(contractName: string, account?: ethers.Signer, artifactFolderPath = "../../../out") {
   const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const contractArtifact = require(contractFilePath);
+  const contractArtifact = await import(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;
   let target;
