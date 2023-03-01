@@ -24,7 +24,7 @@ export async function getSelectorsFromFacet(contractName: string, artifactFolder
   return selectors;
 }
 
-export function getContractInstance(contractName: string, account?: ethers.Signer | undefined, artifactFolderPath = "../../../out") {
+export function getContractInstance(contractName: string, account?: ethers.Signer, artifactFolderPath = "../../../out") {
   const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const contractArtifact = require(contractFilePath);
