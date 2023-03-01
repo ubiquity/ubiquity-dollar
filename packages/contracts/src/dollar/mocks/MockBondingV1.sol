@@ -15,7 +15,7 @@ import "../interfaces/ITWAPOracleDollar3pool.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../utils/CollectableDust.sol";
 
-contract Bonding is CollectableDust {
+contract MockBondingV1 is CollectableDust {
     using SafeERC20 for IERC20;
 
     bytes public data = "";
