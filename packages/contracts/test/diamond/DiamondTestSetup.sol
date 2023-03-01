@@ -404,11 +404,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: admin,
+            /*
             // cspell: disable-next-line
             dollarName: "Ubiquity Algorithmic Dollar",
             // cspell: disable-next-line
             dollarSymbol: "uAD",
             dollarDecimals: 18,
+            */
             tos: new address[](0),
             amounts: new uint256[](0),
             stakingShareIDs: new uint256[](0),
