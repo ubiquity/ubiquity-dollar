@@ -8,7 +8,8 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "../core/UbiquityDollarManager.sol";
 import "../utils/SafeAddArray.sol";
 
-contract MockStakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
+//cspell:ignore BondingShareV2
+contract BondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
     struct Bond {
         // address of the minter
