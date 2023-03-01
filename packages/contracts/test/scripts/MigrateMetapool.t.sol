@@ -19,8 +19,8 @@ contract MigrateMetapool is Test {
         UbiquityDollarManager(0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98);
     Staking staking =
         Staking(payable(0xC251eCD9f1bD5230823F9A0F99a44A87Ddd4CA38));
-    MockStakingShare bonds =
-        MockStakingShare(0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5);
+    BondingShareV2 bonds =
+        BondingShareV2(0x2dA07859613C14F6f05c97eFE37B9B4F212b5eF5);
     /// Ubiquity Dollar Token (Dollar)
     IERC20 dollarToken = IERC20(0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6);
     /// Curve3 LP Token (3CRV)
@@ -53,9 +53,7 @@ contract MigrateMetapool is Test {
         /// Ubiquity Dollar balance of V2 Metapool before migration
         uint256 v2DollarPreBalance = dollarToken.balanceOf(address(v2Metapool));
         /// Curve3 LP Balance of V2 Metapool before migration
-        uint256 v2Curve3PreBalance = curve3PoolToken.balanceOf(
-            address(v2Metapool)
-        );
+        uint256 v2Curve3PreBalance = curve3Token.balanceOf(address(v2Metapool));
         /// Total amount of V2 Metapool LP tokens before migration
         uint256 v2LP = v2Metapool.totalSupply();
 
@@ -70,11 +68,9 @@ contract MigrateMetapool is Test {
         /// Ubiquity Dollar balance of V3 Metapool after migration
         uint256 v3DollarBalance = dollarToken.balanceOf(address(v3Metapool));
         /// Curve3 LP balance of V3 Metapool after migration
-        uint256 v3Curve3Balance = curve3PoolToken.balanceOf(
-            address(v3Metapool)
-        );
+        uint256 v3Curve3Balance = curve3Token.balanceOf(address(v3Metapool));
         /// Curve3 LP Balance of V2 Metapool after Migration
-        uint256 v2Curve3PostBalance = curve3PoolToken.balanceOf(
+        uint256 v2Curve3PostBalance = curve3Token.balanceOf(
             address(v2Metapool)
         );
         /// Ubiquity Dollar balance of V2 Metapool after Migration
@@ -137,7 +133,7 @@ contract MigrateMetapool is Test {
         uint256[] memory tokens = bonds.holderTokens(user);
 
         uint256 dollarTokenPreBalance = dollarToken.balanceOf(user);
-        MockStakingShare.Bond memory bond = bonds.getBond(tokens[0]);
+        BondingShareV2.Bond memory bond = bonds.getBond(tokens[0]);
         uint256 withdraw = bond.lpAmount;
 
         vm.roll(block.number + 10483200);
@@ -150,14 +146,14 @@ contract MigrateMetapool is Test {
 
         uint256 userDollarV2 = dollarToken.balanceOf(user) -
             dollarTokenPreBalance;
-        uint256 userCurve3V2 = curve3PoolToken.balanceOf(user);
+        uint256 userCurve3V2 = curve3Token.balanceOf(user);
 
         vm.revertTo(snapshot);
 
         _migrate();
 
         vm.roll(block.number + 10483200);
-        MockStakingShare.Bond memory bondV3 = bonds.getBond(tokens[0]);
+        BondingShareV2.Bond memory bondV3 = bonds.getBond(tokens[0]);
         uint256 withdrawV3 = bondV3.lpAmount;
         vm.startPrank(user);
         staking.removeLiquidity(withdrawV3, tokens[0]);
@@ -168,12 +164,10 @@ contract MigrateMetapool is Test {
 
         uint256 userDollarV3 = dollarToken.balanceOf(user) -
             dollarTokenPreBalance;
-        uint256 userCurve3V3 = curve3PoolToken.balanceOf(user);
+        uint256 userCurve3V3 = curve3Token.balanceOf(user);
 
         uint256 v3DollarBalance = dollarToken.balanceOf(address(v3Metapool));
-        uint256 v3Curve3Balance = curve3PoolToken.balanceOf(
-            address(v3Metapool)
-        );
+        uint256 v3Curve3Balance = curve3Token.balanceOf(address(v3Metapool));
 
         console.log("Metapool LP Tokens withdrawn pre migration: ", v2Balance);
         console.log("Metapool LP Tokens withdrawn post migration: ", v3Balance);
@@ -186,7 +180,7 @@ contract MigrateMetapool is Test {
             "Ubiquity Dollar Tokens withdrawn post migration: ",
             userDollarV3
         );
-        console.log("Curve3 Tokens withdrawn post migration: ", userLPV3);
+        console.log("Curve3 Tokens withdrawn post migration: ", userCurve3V3);
         console.log(
             "Curve Metapool V3 Ubiquity Dollar balance after withdrawal: ",
             v3DollarBalance
@@ -218,7 +212,7 @@ contract MigrateMetapool is Test {
 
         v2Metapool.remove_liquidity(metaBalance, [uint256(0), uint256(0)]);
 
-        uint256 curve3Balance = curve3PoolToken.balanceOf(admin);
+        uint256 curve3Balance = curve3Token.balanceOf(admin);
         uint256 dollarBalance = dollarToken.balanceOf(admin);
 
         uint256 deposit;
@@ -229,8 +223,8 @@ contract MigrateMetapool is Test {
             deposit = dollarBalance;
         }
 
-        curve3PoolToken.approve(address(v3Metapool), 0);
-        curve3PoolToken.approve(address(v3Metapool), curve3Balance);
+        curve3Token.approve(address(v3Metapool), 0);
+        curve3Token.approve(address(v3Metapool), curve3Balance);
 
         dollarToken.approve(address(v3Metapool), 0);
         dollarToken.approve(address(v3Metapool), dollarBalance);
@@ -246,7 +240,7 @@ contract MigrateMetapool is Test {
         twapOracle = new TWAPOracleDollar3pool(
             address(v3Metapool),
             address(dollarToken),
-            address(curve3PoolToken)
+            address(curve3Token)
         );
         ///manager.setTwapOracleAddress(address(twapOracle));
 
