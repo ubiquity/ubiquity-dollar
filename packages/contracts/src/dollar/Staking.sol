@@ -162,7 +162,7 @@ contract Staking is IStaking, CollectableDust, Pausable {
         migrating = _migrating;
     }
 
-    /// @dev uADPriceReset remove Dollars unilaterally from the curve LP share sitting inside
+    /// @dev dollarPriceReset remove Dollars unilaterally from the curve LP share sitting inside
     ///      the staking contract and send the Dollars received to the treasury.
     ///      This will have the immediate effect of pushing the Dollars price HIGHER
     /// @param amount of LP token to be removed for Dollars

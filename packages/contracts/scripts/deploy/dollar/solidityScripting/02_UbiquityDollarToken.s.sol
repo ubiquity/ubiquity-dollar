@@ -19,7 +19,7 @@ contract DollarScript is ManagerScript {
         manager.deployStableSwapPool(
             curveFactory,
             basePool,
-            USDCrvToken,
+            curve3PoolToken,
             10,
             5000000
         );

@@ -13,7 +13,6 @@ function warnIfNotSet(key: string) {
 
 export const loadEnv = (path: string) => {
   dotenv.config({ path });
-
   const rpcUrl = warnIfNotSet("RPC_URL") || "https://eth.ubq.fi/v1/mainnet";
   const privateKey = warnIfNotSet("PRIVATE_KEY") || Wallet.fromMnemonic(TEST_MNEMONIC).privateKey;
   const adminAddress = warnIfNotSet("PUBLIC_KEY") || Wallet.fromMnemonic(TEST_MNEMONIC).address;

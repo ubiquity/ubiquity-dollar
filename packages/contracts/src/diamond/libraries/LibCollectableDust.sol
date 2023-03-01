@@ -50,11 +50,7 @@ library LibCollectableDust {
         emit ProtocolTokenRemoved(_token);
     }
 
-    function sendDust(
-        address _to,
-        address _token,
-        uint256 _amount
-    ) internal {
+    function sendDust(address _to, address _token, uint256 _amount) internal {
         require(
             _to != address(0),
             "collectable-dust::cant-send-dust-to-zero-address"

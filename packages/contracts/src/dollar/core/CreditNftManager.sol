@@ -53,7 +53,10 @@ contract CreditNftManager is ERC165, IERC1155Receiver {
     /// @param _manager the address of the manager contract so we can fetch variables
     /// @param _creditNftLengthBlocks how many blocks Credit Nft last. can't be changed
     /// once set (unless migrated)
-    constructor(UbiquityDollarManager _manager, uint256 _creditNftLengthBlocks) {
+    constructor(
+        UbiquityDollarManager _manager,
+        uint256 _creditNftLengthBlocks
+    ) {
         manager = _manager;
         creditNftLengthBlocks = _creditNftLengthBlocks;
     }

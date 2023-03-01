@@ -7,6 +7,7 @@ import "../libraries/Constants.sol";
 
 contract UbiquityGovernanceTokenForDiamond is ERC20UbiquityForDiamond {
     constructor(
+
         address _diamond
     )
         // cspell: disable-next-line
@@ -49,4 +50,5 @@ contract UbiquityGovernanceTokenForDiamond is ERC20UbiquityForDiamond {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }
+
 }

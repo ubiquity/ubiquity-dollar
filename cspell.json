@@ -3,6 +3,8 @@
   "ignorePaths": ["**/*.json", "**/*.log", "**/*.svg", "**/*.lock", "**/lib/*", "**/interfaces/*", "**/dist/*", "**/cspell.json", "**/node_modules/**"],
   "readonly": true,
   "useGitignore": true,
+  "enableFiletypes": ["solidity"],
+
   "words": [
     "!UbiquityDollar",
     "!UbiquityCredit",

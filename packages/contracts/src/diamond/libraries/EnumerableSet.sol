@@ -212,10 +212,10 @@ library EnumerableSet {
         }
     }
 
-    function _remove(Set storage set, bytes32 value)
-        private
-        returns (bool ret)
-    {
+    function _remove(
+        Set storage set,
+        bytes32 value
+    ) private returns (bool ret) {
         uint256 valueIndex = set._indexes[value];
 
         if (valueIndex != 0) {
