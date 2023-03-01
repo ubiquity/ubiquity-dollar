@@ -21,7 +21,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
     }
 
     function testSetDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
-        assertEq(IManager.dollarTokenAddress(), address(diamond));
+        assertEq(IManager.dollarTokenAddress(), address(IDollar));
     }
 
     function testSetCreditTokenAddress_ShouldSucceed() public prankAs(admin) {
@@ -104,6 +104,13 @@ contract RemoteTestManagerFacet is DiamondSetup {
             IAccessCtrl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
             true
         );
+        assertEq(
+            IAccessCtrl.hasRole(
+                GOVERNANCE_TOKEN_MANAGER_ROLE,
+                address(diamond)
+            ),
+            true
+        );
         IManager.setIncentiveToDollar(user1, contract1);
     }
 
@@ -121,14 +128,14 @@ contract RemoteTestManagerFacet is DiamondSetup {
         public
         prankAs(admin)
     {
-        assertEq(IManager.dollarTokenAddress(), address(diamond));
+        assertEq(IManager.dollarTokenAddress(), address(IDollar));
     }
 
     function testDeployStableSwapPool_ShouldSucceed() public {
-        assertEq(IDollarFacet.decimals(), 18);
+        assertEq(IDollar.decimals(), 18);
         vm.startPrank(admin);
 
-        IDollarFacet.mint(admin, 10000);
+        IDollar.mint(admin, 10000);
 
         IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
         MockERC20 curve3CrvToken = new MockERC20("3 CRV", "3CRV", 18);
@@ -147,7 +154,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(IDollarFacet), mintings[i], 10000e18);
+            deal(address(IDollar), mintings[i], 10000e18);
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);

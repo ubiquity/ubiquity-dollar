@@ -40,7 +40,7 @@ contract CollectableDustFacetTest is DiamondSetup {
         ICollectableDustFacet.addProtocolToken(address(diamond));
         // mint dollar
 
-        IDollarFacet.mint(address(diamond), 100);
+        IDollar.mint(address(diamond), 100);
         vm.stopPrank();
         vm.prank(stakingManager);
         vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
@@ -67,13 +67,13 @@ contract CollectableDustFacetTest is DiamondSetup {
         ICollectableDustFacet.removeProtocolToken(address(diamond));
         // mint dollar
 
-        IDollarFacet.mint(address(diamond), 100);
+        IDollar.mint(address(diamond), 100);
         vm.stopPrank();
-        assertEq(IDollarFacet.balanceOf(address(diamond)), 100);
+        assertEq(IDollar.balanceOf(address(diamond)), 100);
         vm.prank(stakingManager);
 
-        ICollectableDustFacet.sendDust(mock_recipient, address(diamond), 100);
-        assertEq(IDollarFacet.balanceOf(address(diamond)), 0);
-        assertEq(IDollarFacet.balanceOf(address(mock_recipient)), 100);
+        ICollectableDustFacet.sendDust(mock_recipient, address(IDollar), 100);
+        assertEq(IDollar.balanceOf(address(diamond)), 0);
+        assertEq(IDollar.balanceOf(address(mock_recipient)), 100);
     }
 }

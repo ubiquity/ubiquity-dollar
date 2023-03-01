@@ -31,8 +31,8 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);
-        IDollarFacet.mint(admin, 10000e18);
-        uint256 admSupply = IDollarFacet.balanceOf(admin);
+        IDollar.mint(admin, 10000e18);
+        uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
         _creditNFT = new MockCreditNft(100);
@@ -40,7 +40,7 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         IManager.setCreditNftAddress(address(_creditNFT));
 
         twapOracleAddress = address(diamond);
-        dollarTokenAddress = address(diamond);
+        dollarTokenAddress = address(IDollar);
         creditNFTManagerAddress = address(diamond);
         creditCalculatorAddress = IManager.creditCalculatorAddress();
         creditNFTAddress = address(_creditNFT);
@@ -58,8 +58,9 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         IManager.setDollarMintCalculatorAddress(dollarMintCalculatorAddress);
 
         // set this contract as minter
-        vm.prank(admin);
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        vm.startPrank(admin);
+        IAccessCtrl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(this));
+        vm.stopPrank();
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {

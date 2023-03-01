@@ -10,8 +10,8 @@ contract CreditNFTRedemptionCalculatorFacetTest is DiamondSetup {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);
-        IDollarFacet.mint(admin, 10000e18);
-        uint256 admSupply = IDollarFacet.balanceOf(admin);
+        IDollar.mint(admin, 10000e18);
+        uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
         _creditNFT = new MockCreditNft(100);
         vm.prank(admin);
@@ -19,7 +19,7 @@ contract CreditNFTRedemptionCalculatorFacetTest is DiamondSetup {
     }
 
     function test_getCreditNFTAmount_revertsIfDebtTooHigh() public {
-        uint256 totalSupply = IDollarFacet.totalSupply();
+        uint256 totalSupply = IDollar.totalSupply();
         MockCreditNft(IManager.creditNftAddress()).setTotalOutstandingDebt(
             totalSupply + 1
         );
@@ -29,7 +29,7 @@ contract CreditNFTRedemptionCalculatorFacetTest is DiamondSetup {
     }
 
     function test_getCreditNFTAmount() public {
-        uint256 totalSupply = IDollarFacet.totalSupply();
+        uint256 totalSupply = IDollar.totalSupply();
         MockCreditNft(IManager.creditNftAddress()).setTotalOutstandingDebt(
             totalSupply / 2
         );

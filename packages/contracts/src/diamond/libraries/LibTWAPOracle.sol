@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.16;
 
-import "../../dollar/interfaces/IMetaPool.sol";
+import {IMetaPool} from "../../dollar/interfaces/IMetaPool.sol";
+import {LibAppStorage} from "./LibAppStorage.sol";
 
 library LibTWAPOracle {
     struct TWAPOracleStorage {
@@ -19,7 +20,8 @@ library LibTWAPOracle {
 
     function setPool(address _pool, address _curve3CRVToken1) internal {
         require(
-            IMetaPool(_pool).coins(0) == address(this),
+            IMetaPool(_pool).coins(0) ==
+                LibAppStorage.appStorage().dollarTokenAddress,
             "TWAPOracle: FIRST_COIN_NOT_DOLLAR"
         );
         TWAPOracleStorage storage ts = twapOracleStorage();
@@ -84,7 +86,8 @@ library LibTWAPOracle {
 
     function consult(address token) internal view returns (uint256 amountOut) {
         TWAPOracleStorage memory ts = twapOracleStorage();
-        if (token == address(this)) {
+
+        if (token == LibAppStorage.appStorage().dollarTokenAddress) {
             // price to exchange 1 Ubiquity Dollar to 3CRV based on TWAP
             amountOut = ts.price0Average;
         } else {
@@ -116,6 +119,9 @@ library LibTWAPOracle {
     }
 
     function getTwapPrice() internal view returns (uint256) {
-        return LibTWAPOracle.consult(address(this));
+        return
+            LibTWAPOracle.consult(
+                LibAppStorage.appStorage().dollarTokenAddress
+            );
     }
 }
