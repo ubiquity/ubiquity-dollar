@@ -91,7 +91,6 @@ export const getYieldProxyContract = (address: string, provider: ethers.provider
 };
 
 export const getStakingShareContract = (address: string, provider: ethers.providers.Provider) => {
-
   return getContract(StakingToken.abi, address, provider);
 };
 

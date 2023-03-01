@@ -129,7 +129,6 @@ contract ManagerFacet is Modifiers {
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
         IERC20(_crv3PoolTokenAddress).approve(metaPool, crv3PoolTokenAmount);
 
-
         IERC20(store.dollarTokenAddress).approve(metaPool, 0);
         IERC20(store.dollarTokenAddress).approve(metaPool, dollarTokenAmount);
 
