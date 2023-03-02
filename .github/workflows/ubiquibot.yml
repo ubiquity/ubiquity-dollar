@@ -4,6 +4,11 @@ on:
     types:
       - labeled
       - unlabeled
+      - assigned
+  issue_comment:
+    types:
+      - created
+      - edited      
 
 jobs:
   calculate-bounty:
