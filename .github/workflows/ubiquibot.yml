@@ -5,6 +5,7 @@ on:
       - labeled
       - unlabeled
       - assigned
+      - closed
   issue_comment:
     types:
       - created
