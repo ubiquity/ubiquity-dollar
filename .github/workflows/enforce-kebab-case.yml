@@ -34,8 +34,8 @@ jobs:
           done
           git config --local user.email "UbiquiBot@github.com"
           git config --local user.name "UbiquiBot"
-          # git add -A
-          git add -u
+          git add -A
+          # git add -u
           git diff-index --quiet HEAD || git commit -am "refactor: rename files to kebab case" --no-verify
           # git push git@github.com:${{github.repository}}.git ${{github.ref}}
         fi
@@ -43,7 +43,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: 'refactor: rename files to kebab case'
