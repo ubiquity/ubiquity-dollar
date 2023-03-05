@@ -33,7 +33,6 @@ const Sidebar = () => {
             <Item text="Credits" href="/credits" icon="💸"></Item>
             <Item text="Markets" href="/markets" icon="🔁"></Item>
             {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
-            {PROD ? null : <Item text="Vaults" href="/vaults" icon="🚜"></Item>}
           </ul>
 
           <ul>
@@ -46,7 +45,7 @@ const Sidebar = () => {
               <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
             </li>
             <li>
-              <SocialLinkItem href="https://t.me/ubiquitydao" alt="Telegram" icon="telegram" />
+              <SocialLinkItem href="https://t.me/UbiquityDAO" alt="Telegram" icon="telegram" />
             </li>
             <li>
               <SocialLinkItem href="https://github.com/ubiquity" alt="Github" icon="github" />
