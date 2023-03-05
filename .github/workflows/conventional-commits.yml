@@ -1,11 +1,7 @@
 name: Conventional Commits
 
 on:
-  pull_request_target:
-    types:
-      - opened
-      - edited
-      - synchronize
+  pull_request:
   push:
     branches:
       - development
