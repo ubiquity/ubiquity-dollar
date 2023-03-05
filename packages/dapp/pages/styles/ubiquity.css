@@ -121,6 +121,7 @@ video {
   font-size: 12px;
   /* max-width: 200px; */
   padding-left: 16px;
+  text-align: center;
 }
 #Foreground input[type="checkbox"] {
   display: none;
@@ -139,7 +140,10 @@ video {
 #MainContent > div {
   display: inline-block;
 }
-
+#Sidebar ul:nth-of-type(1),
+#Sidebar ul:nth-of-type(2) {
+  text-align: left;
+}
 #Sidebar ul {
   margin: auto;
 }
@@ -159,9 +163,13 @@ video {
   opacity: 1;
 }
 
+#Sidebar button {
+  width: 100%;
+}
+
 #WalletConnect {
   position: relative;
-  padding: var(--button-pad);
+  /* padding: var(--button-pad); */
 }
 
 .wallet-connect__connect {

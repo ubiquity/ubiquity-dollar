@@ -1,0 +1,97 @@
+:root {
+  --black: hsl(0deg 0% 0%);
+  --light-5: hsl(0deg 0% 88%);
+  --light-4: hsl(0deg 0% 91%);
+  --light-3: hsl(0deg 0% 94%);
+  --light-2: hsl(0deg 0% 97%);
+  --light-1: hsl(0deg 0% 100%);
+}
+
+body #LightDarkModeToggle::before {
+  content: "🌙";
+  color: #fff;
+}
+body.light-mode #LightDarkModeToggle::before {
+  content: "☀️";
+}
+
+body.light-mode {
+  background-color: var(--light-4);
+}
+body.light-mode #Background {
+  background-color: var(--light-4);
+  -webkit-mask-image: none;
+}
+
+body.light-mode #Background #color {
+  background: var(--light-4);
+}
+
+body.light-mode .panel {
+  background: var(--light-3);
+}
+
+body.light-mode,
+body.light-mode a,
+body.light-mode button {
+  color: var(--black);
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode h5,
+body.light-mode h6,
+body.light-mode th {
+  color: var(--black);
+}
+
+body.light-mode button,
+body.light-mode input {
+  background-color: var(--light-2);
+}
+body.light-mode button:hover,
+body.light-mode input:hover {
+  background-color: var(--light-1);
+}
+
+body.light-mode #DollarPrice span:last-child {
+  color: var(--black);
+}
+
+body.light-mode aside {
+  color: #404040;
+}
+
+body.light-mode .WalletNotConnected__svg {
+  fill: var(--black);
+}
+body.light-mode .WalletNotConnected__text {
+  color: var(--black);
+}
+
+body.light-mode .iPGSoB:before {
+  background-color: var(--light-5);
+  /* background: transparent; */
+  /* width: 100%; */
+  /* border: none; */
+  /* backdrop-filter: blur(4px); */
+}
+body.light-mode .dbvzkF,
+body.light-mode .dzmsHP:hover {
+  color: #000;
+}
+
+body.light-mode div.sc-idXgbr.jlGrGt {
+  /* border:none */
+}
+
+body.light-mode a.sc-cjibBx.hBfxKN {
+  background-color: #fff;
+}
+
+body.light-mode #__CONNECTKIT__ button:hover {
+  background: #fff;
+  color: #000;
+}
