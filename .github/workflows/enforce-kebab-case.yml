@@ -13,10 +13,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Authenticate SSH
-      # if: github.ref == 'refs/heads/development' && secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY != ''
       uses: webfactory/ssh-agent@v0.4.0
       with:
-        ssh-private-key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.UBIQUIBOT_PRIVATE_KEY }}
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
@@ -33,12 +32,12 @@ jobs:
             name=$(basename "$file")
             mv "$file" "$path/$(echo $name | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
           done
-          git config --local user.email "UbiquiBot[dev]@github.com"
-          git config --local user.name "UbiquiBot[dev]"
+          git config --local user.email "UbiquiBot@github.com"
+          git config --local user.name "UbiquiBot"
           # git add -A
           git add -u
           git diff-index --quiet HEAD || git commit -am "refactor: rename files to kebab case" --no-verify
           git push git@github.com:${{github.repository}}.git ${{github.ref}}
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+        GITHUB_TOKEN: ${{ secrets.UBIQUIBOT_PRIVATE_KEY }}
