@@ -8,13 +8,35 @@ jobs:
   kebab-case-check:
     runs-on: ubuntu-latest
     steps:
+
     - name: Checkout repository
       uses: actions/checkout@v2
+
+    - name: Authenticate SSH
+      # if: github.ref == 'refs/heads/development' && secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY != ''
+      uses: webfactory/ssh-agent@v0.4.0
+      with:
+        ssh-private-key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
     - name: Verify file names
       run: |
         failed_files=$(find . -not -path './.git/*' -type f -name '*[A-Z]*' -printf '%f\n')
         if [[ $failed_files ]]; then
           echo "The following files have uppercase letters in their names:"
           echo "$failed_files"
-          exit 1
+          echo ""
+          echo "Renaming files..."
+          for file in $failed_files; do
+            mv "$file" "$(echo $file | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
+          done
+          git config --local user.email "UbiquiBot[dev]@github.com"
+          git config --local user.name "UbiquiBot[dev]"
+          # git add -A
+          git add -u
+          git diff-index --quiet HEAD || git commit -am "refactor: rename files to kebab case" --no-verify
+          git push git@github.com:${{github.repository}}.git ${{github.ref}}
         fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
