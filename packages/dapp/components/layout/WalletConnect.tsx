@@ -14,7 +14,7 @@ const WalletConnect = () => {
               <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer" id="Address">
                 {ensName || truncatedAddress}
               </a>
-              <Button onClick={() => disconnect()}>Disconnect</Button>
+              <Button onClick={() => disconnect()}>Disconnect Wallet</Button>
             </div>
           ) : (
             <Button className="wallet-connect__connect" disabled={isConnecting} onClick={show}>
