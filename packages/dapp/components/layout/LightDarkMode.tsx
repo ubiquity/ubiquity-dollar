@@ -11,15 +11,18 @@ export default function LightDarkMode() {
 }
 
 function toggleDarkMode() {
-  const body = document.getElementById(`__next`);
+  const __next = document.getElementById(`__next`);
+  if (!__next) {
+    throw new Error("Could not find '__next' element");
+  }
   const lightDarkModeToggle = document.getElementById("LightDarkModeToggle");
-  const isLightMode = body.classList.contains("light-mode");
+  const isLightMode = __next.classList.contains("light-mode");
 
   if (isLightMode) {
-    body.classList.remove("light-mode");
+    __next.classList.remove("light-mode");
     lightDarkModeToggle?.classList.remove("active");
   } else {
-    body.classList.add("light-mode");
+    __next.classList.add("light-mode");
     lightDarkModeToggle?.classList.add("active");
   }
 }
