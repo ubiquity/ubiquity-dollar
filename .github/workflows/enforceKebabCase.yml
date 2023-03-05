@@ -1,8 +1,7 @@
 name: "Kebab Case CI"
 on:
+  pull_request:
   push:
-    branches:
-      - main
 jobs:
   kebab-case-check:
     runs-on: ubuntu-latest
