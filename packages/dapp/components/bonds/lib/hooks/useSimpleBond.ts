@@ -9,7 +9,7 @@ import { aprFromRatio, multiplierFromRatio } from "../utils";
 import { Contracts } from "./useLaunchPartyContracts";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
-import { ERC20 } from "@/types/contracts";
+import { ERC20 } from "types";
 
 export type BondData = {
   tokenName: string;

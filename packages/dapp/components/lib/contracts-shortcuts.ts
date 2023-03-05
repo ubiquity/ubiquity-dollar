@@ -1,5 +1,5 @@
-import { ERC1155, ERC20 } from "@/types/contracts";
-import { BigNumber, ethers, Contract } from "ethers";
+import { BigNumber, ethers } from "ethers";
+import { ERC1155, ERC20 } from "types";
 
 import { performTransaction } from "./utils";
 

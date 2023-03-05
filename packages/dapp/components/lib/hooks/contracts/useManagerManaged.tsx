@@ -16,7 +16,7 @@ import {
   getGovernanceContract,
   getUniswapV2PairContract,
 } from "@/components/utils/contracts";
-import { UbiquityDollarManager } from "@/types/contracts";
+import { UbiquityDollarManager } from "types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "../children-shim";
 import useWeb3, { PossibleProviders } from "../useWeb3";
@@ -68,12 +68,12 @@ async function connectManagerContracts(manager: UbiquityDollarManager, provider:
     manager.governanceTokenAddress(),
     manager.curve3PoolTokenAddress(),
     manager.stakingShareAddress(),
-    manager.creditNFTAddress(),
+    manager.creditNftAddress(),
     manager.stakingContractAddress(),
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
-    manager.creditNFTCalculatorAddress(),
+    manager.creditNftCalculatorAddress(),
     manager.creditCalculatorAddress(),
   ]);
 

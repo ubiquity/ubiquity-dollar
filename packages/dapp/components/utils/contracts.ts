@@ -1,5 +1,5 @@
+/* eslint-disable no-unused-vars */
 import { ContractInterface, ethers } from "ethers";
-
 import UniswapV2PairABI from "../config/abis/UniswapV2Pair.json";
 import UniswapV3PoolABI from "../config/abis/UniswapV3Pool.json";
 import UniswapV3RouterABI from "../config/abis/UniswapV3Router.json";
@@ -8,9 +8,7 @@ import ERC20ABI from "../config/abis/ERC20.json";
 import USDCTokenABI from "../config/abis/USDCToken.json";
 import DAITokenABI from "../config/abis/DAIToken.json";
 import USDTTokenABI from "../config/abis/USDTToken.json";
-
 import YieldProxyABI from "../config/abis/YieldProxy.json";
-
 import _SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
 import _UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import _UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
@@ -295,131 +293,132 @@ import {
   UbiquityFormulasTest,
   IERC20Permit,
 } from "types";
+import { IRouter } from "@uniswap/smart-order-router";
+import { Provider } from "@ethersproject/providers";
 
-const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
+const getContract = (abi: ContractInterface, address: string, provider: Provider) => {
   return new ethers.Contract(address, abi, provider);
 };
 
-export const getUniswapV2PairContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUniswapV2PairContract = (address: string, provider: Provider) => {
   return getContract(UniswapV2PairABI, address, provider) as IUniswapV2Pair;
 };
 
-export const getUniswapV3PoolContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUniswapV3PoolContract = (address: string, provider: Provider) => {
   return getContract(UniswapV3PoolABI, address, provider); // as UniswapV3Pool;
 };
-
-export const getUniswapV3RouterContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UniswapV3RouterABI, address, provider) as IUniswapV2Router01;
+export const getUniswapV3RouterContract = (address: string, provider: Provider) => {
+  return getContract(UniswapV3RouterABI, address, provider); // as ISwapRouter;
 };
 
-export const getChainlinkPriceFeedContract = (address: string, provider: ethers.providers.Provider): ethers.Contract => {
+export const getChainlinkPriceFeedContract = (address: string, provider: Provider): ethers.Contract => {
   return getContract(ChainlinkPriceFeedABI, address, provider); // as ChainlinkPriceFeed;
 };
 
-export const getERC20Contract = (address: string, provider: ethers.providers.Provider) => {
+export const getERC20Contract = (address: string, provider: Provider) => {
   return getContract(ERC20ABI, address, provider) as ERC20;
 };
 
-export const getERC1155UbiquityContract = (address: string, provider: ethers.providers.Provider) => {
+export const getERC1155UbiquityContract = (address: string, provider: Provider) => {
   return getContract(_ERC1155Ubiquity.abi, address, provider) as ERC1155Ubiquity;
 };
 
-export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => {
+export const getSimpleBondContract = (address: string, provider: Provider) => {
   return getContract(_SimpleBond.abi, address, provider) as SimpleBond;
 };
 
-export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquiStickContract = (address: string, provider: Provider) => {
   return getContract(_UbiquiStick.abi, address, provider) as UbiquiStick;
 };
 
-export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquiStickSaleContract = (address: string, provider: Provider) => {
   return getContract(_UbiquiStickSale.abi, address, provider) as UbiquiStickSale;
 };
 
-export const getIJarContract = (address: string, provider: ethers.providers.Provider) => {
+export const getIJarContract = (address: string, provider: Provider) => {
   return getContract(_IJar.abi, address, provider) as IJar;
 };
 
-export const getDebtCouponManagerContract = (address: string, provider: ethers.providers.Provider) => {
+export const getDebtCouponManagerContract = (address: string, provider: Provider) => {
   return getContract(_DebtCouponManager.abi, address, provider) as CreditNftManager;
 };
 
-export const getCurveFactoryContract = (address: string, provider: ethers.providers.Provider) => {
+export const getCurveFactoryContract = (address: string, provider: Provider) => {
   return getContract(_ICurveFactory.abi, address, provider) as ICurveFactory;
 };
 
-export const getYieldProxyContract = (address: string, provider: ethers.providers.Provider) => {
+export const getYieldProxyContract = (address: string, provider: Provider) => {
   return getContract(YieldProxyABI, address, provider); // as YieldProxy;
 };
 
-export const getStakingShareContract = (address: string, provider: ethers.providers.Provider) => {
+export const getStakingShareContract = (address: string, provider: Provider) => {
   return getContract(_StakingToken.abi, address, provider) as StakingShare;
 };
 
-export const getBondingV2Contract = (address: string, provider: ethers.providers.Provider) => {
+export const getBondingV2Contract = (address: string, provider: Provider) => {
   return getContract(_Staking.abi, address, provider) as Staking;
 };
 
-export const getDebtCouponContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(_DebtCoupon.abi, address, provider); // as DebtCoupon;
+export const getDebtCouponContract = (address: string, provider: Provider) => {
+  return getContract(_DebtCoupon.abi, address, provider) as CreditNft;
 };
 
-export const getTWAPOracleContract = (address: string, provider: ethers.providers.Provider) => {
+export const getTWAPOracleContract = (address: string, provider: Provider) => {
   return getContract(_TWAPOracle.abi, address, provider) as ITWAPOracleDollar3pool;
 };
 
-export const getDollarMintCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+export const getDollarMintCalculatorContract = (address: string, provider: Provider) => {
   return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculator;
 };
 
-export const getICouponsForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+export const getICouponsForDollarsCalculatorContract = (address: string, provider: Provider) => {
   return getContract(_ICouponsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculator;
 };
 
-export const getIUARForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+export const getIUARForDollarsCalculatorContract = (address: string, provider: Provider) => {
   return getContract(_IUARForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculator;
 };
 
-export const getIMetaPoolContract = (address: string, provider: ethers.providers.Provider) => {
+export const getIMetaPoolContract = (address: string, provider: Provider) => {
   return getContract(_IMetaPool.abi, address, provider) as IMetaPool;
 };
 
-export const getMasterChefV2Contract = (address: string, provider: ethers.providers.Provider) => {
+export const getMasterChefV2Contract = (address: string, provider: Provider) => {
   return getContract(_MasterChefV2.abi, address, provider) as UbiquityChef;
 };
 
-export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) => {
+export const getSushiSwapPoolContract = (address: string, provider: Provider) => {
   return getContract(_SushiSwapPool.abi, address, provider) as SushiSwapPool;
 };
 
-export const getUbiquityManagerContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquityManagerContract = (address: string, provider: Provider) => {
   return getContract(_UbiquityManager.abi, address, provider) as UbiquityDollarManager;
 };
 
-export const getDollarContract = (address: string, provider: ethers.providers.Provider) => {
+export const getDollarContract = (address: string, provider: Provider) => {
   return getContract(_Dollar.abi, address, provider) as UbiquityDollarToken;
 };
 
-export const getCreditContract = (address: string, provider: ethers.providers.Provider) => {
+export const getCreditContract = (address: string, provider: Provider) => {
   return getContract(_Credit.abi, address, provider) as UbiquityCreditToken;
 };
 
-export const getUbiquityFormulasContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUbiquityFormulasContract = (address: string, provider: Provider) => {
   return getContract(_UbiquityFormulas.abi, address, provider) as UbiquityFormulas;
 };
 
-export const getGovernanceContract = (address: string, provider: ethers.providers.Provider) => {
+export const getGovernanceContract = (address: string, provider: Provider) => {
   return getContract(_Governance.abi, address, provider) as UbiquityGovernanceToken;
 };
 
-export const getUSDCTokenContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUSDCTokenContract = (address: string, provider: Provider) => {
   return getContract(USDCTokenABI, address, provider) as ERC20;
 };
 
-export const getDAITokenContract = (address: string, provider: ethers.providers.Provider) => {
+export const getDAITokenContract = (address: string, provider: Provider) => {
   return getContract(DAITokenABI, address, provider) as ERC20;
 };
 
-export const getUSDTTokenContract = (address: string, provider: ethers.providers.Provider) => {
+export const getUSDTTokenContract = (address: string, provider: Provider) => {
   return getContract(USDTTokenABI, address, provider) as ERC20;
 };

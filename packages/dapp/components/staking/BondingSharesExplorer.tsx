@@ -65,14 +65,14 @@ export const BondingSharesExplorerContainer = ({ managedContracts, web3Provider,
     const shares: ShareData[] = [];
     await Promise.all(
       // cspell: disable-next-line
-      bondingShareIds.map(async (id: string) => {
+      bondingShareIds.map(async (id: BigNumber) => {
         // cspell: disable-next-line
         const [ugov, bond, bondingShareInfo, tokenBalance] = await Promise.all([
           // cspell: disable-next-line
-          masterChef.pendingUGOV(id),
+          masterChef.pendingGovernance(id),
           // cspell: disable-next-line
-          bondingToken.getBond(id),
-          masterChef.getBondingShareInfo(id),
+          bondingToken.getStake(id),
+          masterChef.getStakingShareInfo(id),
           // cspell: disable-next-line
           bondingToken.balanceOf(walletAddress, id),
         ]);

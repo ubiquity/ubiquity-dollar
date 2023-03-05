@@ -27,7 +27,7 @@ async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Prom
   const totalShares = toEtherNum(await contracts.masterChef.totalShares());
   const usdPerWeek = ubqPerWeek * ubqPrice;
   // cspell: disable-next-line
-  const bondingDiscountMultiplier = await contracts.staking.bondingDiscountMultiplier();
+  const bondingDiscountMultiplier = await contracts.staking.stakingDiscountMultiplier();
   // cspell: disable-next-line
   return { totalShares, usdPerWeek, bondingDiscountMultiplier };
 }
