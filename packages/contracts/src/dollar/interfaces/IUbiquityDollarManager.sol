@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/access/IAccessControl.sol";
 
@@ -20,29 +20,35 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setCreditTokenAddress(address _creditTokenAddress) external;
 
-    function setCreditNFTAddress(address _creditNFTAddress) external;
+    function setCreditNftAddress(address _creditNftAddress) external;
 
-    function setIncentiveToDollar(address _account, address _incentiveAddress)
-        external;
+    function setIncentiveToDollar(
+        address _account,
+        address _incentiveAddress
+    ) external;
 
     function setDollarTokenAddress(address _dollarTokenAddress) external;
 
-    function setGovernanceTokenAddress(address _governanceTokenAddress)
-        external;
+    function setGovernanceTokenAddress(
+        address _governanceTokenAddress
+    ) external;
 
     function setSushiSwapPoolAddress(address _sushiSwapPoolAddress) external;
 
-    function setCreditCalculatorAddress(address _creditCalculatorAddress) external;
+    function setCreditCalculatorAddress(
+        address _creditCalculatorAddress
+    ) external;
 
-    function setCreditNFTCalculatorAddress(address _creditNFTCalculatorAddress)
-        external;
+    function setCreditNftCalculatorAddress(
+        address _creditNftCalculatorAddress
+    ) external;
 
     function setDollarMintCalculatorAddress(
         address _dollarMintCalculatorAddress
     ) external;
 
     function setExcessDollarsDistributor(
-        address creditNFTManagerAddress,
+        address creditNftManagerAddress,
         address dollarMintExcess
     ) external;
 
@@ -52,8 +58,9 @@ interface IUbiquityDollarManager is IAccessControl {
 
     function setStakingShareAddress(address _stakingShareAddress) external;
 
-    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress)
-        external;
+    function setStableSwapMetaPoolAddress(
+        address _stableSwapMetaPoolAddress
+    ) external;
 
     /**
      * @notice set the staking smart contract address
@@ -61,8 +68,9 @@ interface IUbiquityDollarManager is IAccessControl {
      * for a certain duration to earn Governance Token and more curve LP token
      * @param _stakingContractAddress staking contract address
      */
-    function setStakingContractAddress(address _stakingContractAddress)
-        external;
+    function setStakingContractAddress(
+        address _stakingContractAddress
+    ) external;
 
     /**
      * @notice set the treasury address
@@ -90,10 +98,9 @@ interface IUbiquityDollarManager is IAccessControl {
         uint256 _fee
     ) external;
 
-    function getExcessDollarsDistributor(address _creditNFTManagerAddress)
-        external
-        view
-        returns (address);
+    function getExcessDollarsDistributor(
+        address _creditNftManagerAddress
+    ) external view returns (address);
 
     function stakingContractAddress() external view returns (address);
 
@@ -104,5 +111,4 @@ interface IUbiquityDollarManager is IAccessControl {
     function dollarTokenAddress() external view returns (address);
 
     function governanceTokenAddress() external view returns (address);
-
 }

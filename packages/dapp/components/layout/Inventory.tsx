@@ -34,9 +34,12 @@ const Inventory = () => {
       </div>
       <div>
         <div>
+          {/* cspell: disable-next-line */}
           {showIfBalanceExists("uad", "uAD", "dollarToken")}
+          {/* cspell: disable-next-line */}
           {showIfBalanceExists("ucr", "uCR", "creditToken")}
           {showIfBalanceExists("ucrNft", "uCR-NFT", "creditNft")}
+          {/* cspell: disable-next-line */}
           {showIfBalanceExists("ubq", "UBQ", "governanceToken")}
           {showIfBalanceExists("_3crv", "3crv", "_3crvToken")}
           {showIfBalanceExists("uad3crv", "uAD3CRV-f", "dollarMetapool")}
@@ -125,7 +128,7 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
           </Tippy>
         </div>
         <div>
-          <a target="_blank" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
+          <a target="_blank" rel="noopener noreferrer" href={tokenAddr && accountAddr ? `https://etherscan.io/token/${tokenAddr}?a=${accountAddr}` : ""}>
             <span>{`${parseInt(ethers.utils.formatUnits(balance, decimals))}`}</span>
             <span>{token}</span>
           </a>
@@ -136,9 +139,12 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
 };
 
 const tokenSvg = {
+  // cspell: disable-next-line
   uAD: () => icons.SVGs.uad,
+  // cspell: disable-next-line
   uCR: () => icons.SVGs.ucr,
   "uCR-NFT": () => icons.SVGs.ucrNft,
+  // cspell: disable-next-line
   UBQ: () => icons.SVGs.ubq,
   USDC: () => icons.SVGs.usdc,
   DAI: () => icons.SVGs.dai,

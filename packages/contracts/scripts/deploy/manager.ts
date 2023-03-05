@@ -1,121 +1,215 @@
-import { OptionDefinition } from "command-line-args";
+import { CommandLineOption, DeployCallbackFn, deployments, Networks } from "../shared";
+import { createHandler, getContract } from "./create";
 
-import { DeployFuncCallback } from "../shared";
-import bondingFunc, { optionDefinitions as bondingOptions } from "./dollar/Bonding";
-import uAdManagerFunc, { optionDefinitions as uadManagerOptions } from "./dollar/UbiquityAlgorithmicDollarManager";
-import bondingShareFunc, { optionDefinitions as bondingShareOptions } from "./dollar/BondingShare";
-import bondingShareV2Func, { optionDefinitions as bondingShareV2Options } from "./dollar/BondingShareV2";
-import couponsForDollarsCalculatorFunc, { optionDefinitions as couponsForDollarsCalculatorOptions } from "./dollar/CouponsForDollarsCalculator";
-import curveUADIncentiveFunc, { optionDefinitions as curveUADIncentiveOptions } from "./dollar/CurveUADIncentive";
-import debtCouponFunc, { optionDefinitions as debtCouponOptions } from "./dollar/DebtCoupon";
-import debtCouponManagerFunc, { optionDefinitions as debtCouponManagerOptions } from "./dollar/DebtCouponManager";
-import dollarMintingCalculatorFunc, { optionDefinitions as dollarMintingCalculatorOptions } from "./dollar/DollarMintingCalculator";
-import excessDollarsDistributorFunc, { optionDefinitions as excessDollarsDistributorOptions } from "./dollar/ExcessDollarDistributor";
-import masterChefFunc, { optionDefinitions as masterChefOptions } from "./dollar/MasterChef";
-import ubiquityGovernanceFunc, { optionDefinitions as ubiquityGovernanceOptions } from "./dollar/UbiquityGovernance";
-import sushiSwapPoolFunc, { optionDefinitions as sushiSwapPoolOptions } from "./dollar/UbiquityGovernance";
-import uARForDollarsCalculatorFunc, { optionDefinitions as uARForDollarsCalculatorOptions } from "./dollar/UARForDollarsCalculator";
-import ubiquityAlgorithmicDollarFunc, { optionDefinitions as ubiquityAlgorithmDollarOptions } from "./dollar/UbiquityAlgorithmicDollar";
-import ubiquityAutoRedeemFunc, { optionDefinitions as ubiquityAutoRedeemOptions } from "./dollar/UbiquityAutoRedeem";
-import ubiquityFormulaFunc, { optionDefinitions as ubiquityFormulaOptions } from "./dollar/UbiquityFormulas";
-import yieldProxyFunc, { optionDefinitions as yieldProxyOptions } from "./dollar/YieldProxy";
-import ubiquiStickFunc, { optionDefinitions as ubiquiStickOptions } from "./ubiquistick/UbiquiStick";
-import ubiquiStickSaleFunc, { optionDefinitions as ubiquiStickSaleOptions } from "./ubiquistick/UbiquiStickSale";
-import uARFunc, { optionDefinitions as uAROptions } from "./ubiquistick/UAR";
-import lpFunc, { optionDefinitions as lpOptions } from "./ubiquistick/LP";
-import simpleBondFunc, { optionDefinitions as simpleBondOptions } from "./ubiquistick/SimpleBond";
+const dollarPath = "src/dollar";
+const corePath = "src/dollar/core";
+const ubiquiStickPath = "src/ubiquistick";
 
-export const DEPLOY_FUNCS: Record<string, { handler: DeployFuncCallback; options: OptionDefinition[] }> = {
-  Bonding: {
-    handler: bondingFunc,
-    options: bondingOptions,
+const LPTokenName = "LP token";
+const LPTokenSymbol = "LP";
+
+const autoRedeemName = "Ubiquity Auto Redeem";
+// cspell:disable-next-line
+const autoRedeemSymbol = "uAR";
+
+const simpleBondHandler = async (args: CommandLineOption) => {
+  const { network, treasury } = args;
+  let { vestingBlocks, testenv } = args;
+  vestingBlocks = vestingBlocks ?? 32300; // about 5 days
+
+  const chainId = Networks[network] ?? undefined;
+  if (!chainId) {
+    throw new Error(`Unsupported network: ${network} Please configure it out first`);
+  }
+  // If testenv is true, it means that the ownership is transferred in the deployment step
+  // Must be careful when you deploy contracts to the mainnet.
+  testenv = testenv ?? true;
+  const { address: uARAddr, abi: uARAbi } = await deployments(chainId.toString(), "UAR");
+
+  const { result, stderr } = await createHandler([uARAddr, vestingBlocks, treasury], args, `${ubiquiStickPath}/SimpleBond.sol:SimpleBond`);
+  if (stderr || result === undefined) {
+    return;
+  }
+
+  const simpleBondAddress = result.deployedTo;
+  const { abi: sbAbi } = await deployments(chainId.toString(), "SimpleBond");
+  const { abi: ubsAbi } = await deployments(chainId.toString(), "UbiquiStick");
+  const simpleBondContract = await getContract(simpleBondAddress, sbAbi);
+  console.log("Setting up the sticker...");
+  let tx = await simpleBondContract.setSticker(ubsAbi);
+  let receipt = await tx.wait();
+  console.log("Setting up the sticker done!!!, hash: ", receipt.transactionHash);
+
+  if (testenv) {
+    console.log("Transferring the ownership of UAR to SimpleBond contract deployed recently...");
+    const uARContract = await getContract(uARAddr, uARAbi);
+    tx = await uARContract.transferOwnership(simpleBondAddress);
+    console.log("Transferring ownership tx mined. tx: ", tx);
+    receipt = await tx.wait();
+    console.log("Transferring ownership done, hash: ", receipt.transactionHash);
+
+    // TODO: Set allowance for SimpleBond to spend treasury money
+  }
+};
+
+const ubiquiStickHandler = async (args: CommandLineOption) => {
+  const { stderr, result } = await createHandler([], args, `${ubiquiStickPath}/UbiquiStick.sol:UbiquiStick`);
+  if (stderr || result === undefined) {
+    return;
+  }
+  // TODO: Do we need to set tokenURI during the deployment? For example, if we should have 10k tokens,
+  // this part will definitely be an issue to consume lots of gas. General idea is to set baseURI and others are getting generated
+  // from baseURI automatically. So it might be a way to have them as a forge script.
+  //
+  // prev source code:
+  //
+  // await ubiquiStick.connect(deployer).setTokenURI(0, tokenURIs.standardJson);
+  // await ubiquiStick.connect(deployer).setTokenURI(1, tokenURIs.goldJson);
+  // await ubiquiStick.connect(deployer).setTokenURI(2, tokenURIs.invisibleJson);
+};
+
+const ubiquiStickSaleHandler = async (args: CommandLineOption) => {
+  const { network, treasury } = args;
+  const chainId = Networks[network] ?? undefined;
+  if (!chainId) {
+    throw new Error(`Unsupported network: ${network} Please configure it out first`);
+  }
+
+  const { stderr, result } = await createHandler([], args, `${ubiquiStickPath}/UbiquiStickSale.sol:UbiquiStickSale`);
+  if (stderr || result === undefined) {
+    return;
+  }
+
+  const ubiquiStickSaleAddress = result.deployedTo;
+  const ubiquiStickDeployments = await deployments(chainId.toString(), "UbiquiStick");
+
+  const { address: ubdAddr, abi: ubdAbi } = ubiquiStickDeployments;
+  const ubiquiStickContract = await getContract(ubdAddr, ubdAbi);
+  console.log("Granting minter role to UbiquiStickSale contract...");
+  let tx = await ubiquiStickContract.setMinter(ubiquiStickSaleAddress);
+  let receipt = await tx.wait();
+  console.log("Granting minter role to UbiquiStickSale contract done!!!, hash: ", receipt.transactionHash);
+
+  console.log("Setting up funds address and token contract...");
+  const { abi: ubsAbi } = await deployments(chainId.toString(), "UbiquiStickSale");
+  const ubiquiStickSaleContract = await getContract(ubiquiStickSaleAddress, ubsAbi);
+  tx = await ubiquiStickSaleContract.setFundsAddress(treasury);
+  console.log("Setting funds address tx mined, tx: ", tx);
+  receipt = await tx.wait();
+  console.log("Setting funds address done, hash: ", receipt.transactionHash);
+
+  tx = await ubiquiStickSaleContract.setTokenContract(ubdAddr);
+  console.log("Setting token address tx mined, tx: ", tx);
+  receipt = await tx.wait();
+  console.log("Setting token address done, hash: ", receipt.transactionHash);
+};
+
+export const standardHandler = {
+  SimpleBond: (args: CommandLineOption) => {
+    simpleBondHandler(args);
   },
-  UbiquityAlgorithmicDollarManager: {
-    handler: uAdManagerFunc,
-    options: uadManagerOptions,
+  UbiquiStick: (args: CommandLineOption) => {
+    ubiquiStickHandler(args);
   },
-  BondingShare: {
-    handler: bondingShareFunc,
-    options: bondingShareOptions,
+  UbiquiStickSale: (args: CommandLineOption) => {
+    ubiquiStickSaleHandler(args);
   },
-  BondingShareV2: {
-    handler: bondingShareV2Func,
-    options: bondingShareV2Options,
+};
+
+export const Deploy_Manager: DeployCallbackFn = {
+  DirectGovernanceFarmer: (args: CommandLineOption) => {
+    const { manager, base3Pool, depositZap } = args;
+    createHandler([manager, base3Pool, depositZap], args, `${dollarPath}/DirectGovernanceFarmer.sol:DirectGovernanceFarmer`);
   },
-  CouponsForDollarsCalculator: {
-    handler: couponsForDollarsCalculatorFunc,
-    options: couponsForDollarsCalculatorOptions,
+  Erc20Ubiquity: (args: CommandLineOption) => {
+    const { manager, name, symbol } = args;
+    createHandler([manager, name, symbol], args, `${dollarPath}/ERC20Ubiquity.sol:ERC20Ubiquity`);
   },
-  CurveUADIncentive: {
-    handler: curveUADIncentiveFunc,
-    options: curveUADIncentiveOptions,
+  ERC1155Ubiquity: (args: CommandLineOption) => {
+    const { manager, uri } = args;
+    createHandler([manager, uri], args, `${dollarPath}/ERC1155Ubiquity.sol:ERC1155Ubiquity`);
   },
-  DebtCoupon: {
-    handler: debtCouponFunc,
-    options: debtCouponOptions,
+  Staking: (args: CommandLineOption) => {
+    const { manager, stakingFormulasAddress, originals, lpBalances, weeks } = args;
+    createHandler([manager, stakingFormulasAddress, originals, lpBalances, weeks], args, `${dollarPath}/Staking.sol:Staking`);
   },
-  DebtCouponManager: {
-    handler: debtCouponManagerFunc,
-    options: debtCouponManagerOptions,
+  StakingFormulas: (args: CommandLineOption) => {
+    createHandler([], args, `${dollarPath}/StakingFormulas.sol:StakingFormulas`);
   },
-  DollarMintingCalculator: {
-    handler: dollarMintingCalculatorFunc,
-    options: dollarMintingCalculatorOptions,
+  StakingShare: (args: CommandLineOption) => {
+    const { manager, uri } = args;
+    createHandler([manager, uri], args, `${dollarPath}/StakingShare.sol:StakingShare`);
   },
-  ExcessDollarDistributor: {
-    handler: excessDollarsDistributorFunc,
-    options: excessDollarsDistributorOptions,
+  SushiSwapPool: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${dollarPath}/SushiSwapPool.sol:SushiSwapPool`);
   },
-  MasterChef: {
-    handler: masterChefFunc,
-    options: masterChefOptions,
+  UbiquityChef: (args: CommandLineOption) => {
+    const { manager, tos, amounts, stakingShareIDs } = args;
+    createHandler([manager, tos, amounts, stakingShareIDs], args, `${dollarPath}/UbiquityChef.sol:UbiquityChef`);
   },
-  UbiquityGovernance: {
-    handler: ubiquityGovernanceFunc,
-    options: ubiquityGovernanceOptions,
+  UbiquityFormulas: (args: CommandLineOption) => {
+    createHandler([], args, `${dollarPath}/UbiquityFormulas.sol:UbiquityFormulas`);
   },
-  SushiSwapPool: {
-    handler: sushiSwapPoolFunc,
-    options: sushiSwapPoolOptions,
+  CreditNft: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/CreditNft.sol:CreditNft`);
   },
-  UARForDollarsCalculator: {
-    handler: uARForDollarsCalculatorFunc,
-    options: uARForDollarsCalculatorOptions,
+  CreditNftManager: (args: CommandLineOption) => {
+    const { manager, creditNftLengthBlocks } = args;
+    createHandler([manager, creditNftLengthBlocks], args, `${corePath}/CreditNftManager.sol:CreditNftManager`);
   },
-  UbiquityAlgorithmicDollar: {
-    handler: ubiquityAlgorithmicDollarFunc,
-    options: ubiquityAlgorithmDollarOptions,
+  CreditNftRedemptionCalculator: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/CreditNftRedemptionCalculator.sol:CreditNftRedemptionCalculator`);
   },
-  UbiquityAutoRedeem: {
-    handler: ubiquityAutoRedeemFunc,
-    options: ubiquityAutoRedeemOptions,
+  CreditRedemptionCalculator: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/CreditRedemptionCalculator.sol:CreditRedemptionCalculator`);
   },
-  UbiquityFormulas: {
-    handler: ubiquityFormulaFunc,
-    options: ubiquityFormulaOptions,
+  DollarMintCalculator: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/DollarMintCalculator.sol:DollarMintCalculator`);
   },
-  YieldProxy: {
-    handler: yieldProxyFunc,
-    options: yieldProxyOptions,
+  DollarMintExcess: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/DollarMintExcess.sol:DollarMintExcess`);
   },
-  UbiquiStick: {
-    handler: ubiquiStickFunc,
-    options: ubiquiStickOptions,
+  TWAPOracleDollar3pool: (args: CommandLineOption) => {
+    const { pool, dollarToken0, curve3CRVToken1 } = args;
+    createHandler([pool, dollarToken0, curve3CRVToken1], args, `${corePath}/TWAPOracleDollar3pool.sol:TWAPOracleDollar3pool`);
   },
-  UbiquiStickSale: {
-    handler: ubiquiStickSaleFunc,
-    options: ubiquiStickSaleOptions,
+  UbiquityCreditToken: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/UbiquityCreditToken.sol:UbiquityCreditToken`);
   },
-  UAR: {
-    handler: uARFunc,
-    options: uAROptions,
+  UbiquityDollarManager: (args: CommandLineOption) => {
+    const { admin } = args;
+    createHandler([admin], args, `${corePath}/UbiquityDollarManager.sol:UbiquityDollarManager`);
   },
-  LP: {
-    handler: lpFunc,
-    options: lpOptions,
+  UbiquityDollarToken: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/UbiquityDollarToken.sol:UbiquityDollarToken`);
   },
-  SimpleBond: {
-    handler: simpleBondFunc,
-    options: simpleBondOptions,
+  UbiquityGovernanceToken: (args: CommandLineOption) => {
+    const { manager } = args;
+    createHandler([manager], args, `${corePath}/UbiquityGovernanceToken.sol:UbiquityGovernanceToken`);
+  },
+  LP: (args: CommandLineOption) => {
+    createHandler([LPTokenName, LPTokenSymbol], args, `${ubiquiStickPath}/LP.sol:LP`);
+  },
+  UAR: (args: CommandLineOption) => {
+    const { treasury } = args;
+    createHandler([autoRedeemName, autoRedeemSymbol, treasury], args, `${ubiquiStickPath}/UAR.sol:UAR`);
+  },
+  SimpleBond: (args: CommandLineOption) => {
+    standardHandler["SimpleBond"](args);
+  },
+  UbiquiStick: (args: CommandLineOption) => {
+    //unfinished code
+    standardHandler["UbiquiStick"](args);
+  },
+  UbiquiStickSale: (args: CommandLineOption) => {
+    standardHandler["UbiquiStickSale"](args);
   },
 };

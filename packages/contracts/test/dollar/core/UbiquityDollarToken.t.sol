@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
-import {UbiquityDollarToken} from
-    "../../../src/dollar/core/UbiquityDollarToken.sol";
+import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
 import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
@@ -17,36 +16,37 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
     address mock_operator = address(0x333);
 
     event IncentiveContractUpdate(
-        address indexed _incentivized, address indexed _incentiveContract
+        address indexed _incentivized,
+        address indexed _incentiveContract
     );
 
-    function setUp() public {
+    function setUp() public override {
         incentive_addr = address(new MockIncentive());
-        dollar_manager_address = helpers_deployUbiquityDollarManager();
+        super.setUp();
         vm.startPrank(admin);
-        dollar_addr = address(new UbiquityDollarToken(dollar_manager_address));
-        UbiquityDollarManager(dollar_manager_address).grantRole(
-            keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin
-        );
+        dollar_addr = address(new UbiquityDollarToken(manager));
+        manager.grantRole(keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin);
         vm.stopPrank();
     }
 
-    function test_setIncentiveContract() public {
+    function testSetIncentiveContract_ShouldRevert_IfNotAdmin() public {
         vm.prank(mock_sender);
         vm.expectRevert("Dollar: must have admin role");
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_sender, incentive_addr
+            mock_sender,
+            incentive_addr
         );
 
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit IncentiveContractUpdate(mock_sender, incentive_addr);
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_sender, incentive_addr
+            mock_sender,
+            incentive_addr
         );
     }
 
-    function test_transferIncentive() public {
+    function testTransfer_ShouldCallIncentivize_IfValidTransfer() public {
         address userA = address(0x100001);
         address userB = address(0x100001);
         vm.startPrank(admin);
@@ -55,19 +55,24 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         UbiquityDollarToken(dollar_addr).mint(mock_sender, 100);
 
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_sender, incentive_addr
+            mock_sender,
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_recipient, incentive_addr
+            mock_recipient,
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            mock_operator, incentive_addr
+            mock_operator,
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            address(0), incentive_addr
+            address(0),
+            incentive_addr
         );
         UbiquityDollarToken(dollar_addr).setIncentiveContract(
-            dollar_addr, incentive_addr
+            dollar_addr,
+            incentive_addr
         );
         vm.stopPrank();
 

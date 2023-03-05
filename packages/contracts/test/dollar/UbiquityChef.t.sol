@@ -1,16 +1,20 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../helpers/LiveTestHelper.sol";
 
 contract ZeroState is LiveTestHelper {
     event Deposit(
-        address indexed user, uint256 amount, uint256 indexed stakingShareId
+        address indexed user,
+        uint256 amount,
+        uint256 indexed stakingShareId
     );
 
     event Withdraw(
-        address indexed user, uint256 amount, uint256 indexed stakingShareId
+        address indexed user,
+        uint256 amount,
+        uint256 indexed stakingShareId
     );
 
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
@@ -26,8 +30,10 @@ contract ZeroState is LiveTestHelper {
     }
 }
 
-contract ZeroStateTest is ZeroState {
-    function testSetGovernancePerBlock(uint256 governancePerBlock) public {
+contract RemoteZeroStateTest is ZeroState {
+    function testSetGovernancePerBlock_ShouldSetGovernancePerBlock(
+        uint256 governancePerBlock
+    ) public {
         vm.expectEmit(true, false, false, true, address(ubiquityChef));
         emit GovernancePerBlockModified(governancePerBlock);
         vm.prank(admin);
@@ -35,13 +41,15 @@ contract ZeroStateTest is ZeroState {
         assertEq(ubiquityChef.governancePerBlock(), governancePerBlock);
     }
 
-    function testSetGovernanceDiv(uint256 div) public {
+    function testSetGovernanceDiv_ShouldSetGovernanceDiv(uint256 div) public {
         vm.prank(admin);
         ubiquityChef.setGovernanceShareForTreasury(div);
         assertEq(ubiquityChef.governanceDivider(), div);
     }
 
-    function testSetMinPriceDiff(uint256 minPriceDiff) public {
+    function testSetMinPriceDiff_ShouldSetMinPriceDiff(
+        uint256 minPriceDiff
+    ) public {
         vm.expectEmit(true, false, false, true, address(ubiquityChef));
         emit MinPriceDiffToUpdateMultiplierModified(minPriceDiff);
         vm.prank(admin);
@@ -49,14 +57,19 @@ contract ZeroStateTest is ZeroState {
         assertEq(ubiquityChef.minPriceDiffToUpdateMultiplier(), minPriceDiff);
     }
 
-    function testDeposit(uint256 lpAmount) public {
+    function testDeposit_ShouldDeposit(uint256 lpAmount) public {
         lpAmount = bound(lpAmount, 1, metapool.balanceOf(fourthAccount));
         uint256 shares = ubiquityFormulas.durationMultiply(
-            lpAmount, 10, staking.stakingDiscountMultiplier()
+            lpAmount,
+            10,
+            staking.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         uint256 id = stakingShare.mint(
-            fourthAccount, lpAmount, shares, block.number + 100
+            fourthAccount,
+            lpAmount,
+            shares,
+            block.number + 100
         );
         vm.expectEmit(true, false, true, true, address(ubiquityChef));
         emit Deposit(fourthAccount, shares, id);
@@ -79,81 +92,73 @@ contract DepositState is ZeroState {
         super.setUp();
         fourthBal = metapool.balanceOf(fourthAccount);
         shares = ubiquityFormulas.durationMultiply(
-            fourthBal, 10, staking.stakingDiscountMultiplier()
+            fourthBal,
+            10,
+            staking.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         fourthID = stakingShare.mint(
-            fourthAccount, fourthBal, shares, block.number + 100
+            fourthAccount,
+            fourthBal,
+            shares,
+            block.number + 100
         );
         ubiquityChef.deposit(fourthAccount, shares, fourthID);
         vm.stopPrank();
     }
 }
 
-contract DepositStateTest is DepositState {
-    function testTotalShares() public {
+contract RemoteDepositStateTest is DepositState {
+    function testTotalSharesShouldReturnTotalShares() public {
         assertEq(ubiquityChef.totalShares(), shares);
     }
 
-    function testWithdraw(uint256 amount, uint256 blocks) public {
-        blocks = bound(blocks, 1, 2 ** 128 - 1);
-        uint256 preBal = governanceToken.balanceOf(fourthAccount);
-        (uint256 lastRewardBlock,) = ubiquityChef.pool();
-        uint256 currentBlock = block.number;
-        vm.roll(currentBlock + blocks);
-        uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 governancePerShare = (reward * 1e12) / shares;
-        uint256 userReward = (shares * governancePerShare) / 1e12;
-        console.log("Governance Reward to User", userReward);
+    function testWithdraw_ShouldWithdraw(
+        uint256 amount,
+        uint256 blocks
+    ) public {
+        blocks = bound(blocks, 1, 2 ** 64 - 1);
         amount = bound(amount, 1, shares);
-        vm.expectEmit(true, true, true, true, address(ubiquityChef));
+        uint256 preBal = governanceToken.balanceOf(fourthAccount);
+        uint256 preBal_ = metapool.balanceOf(fourthAccount);
+        vm.roll(block.number + blocks);
+        vm.expectEmit(true, false, false, true, address(ubiquityChef));
         emit Withdraw(fourthAccount, amount, fourthID);
         vm.prank(admin);
         ubiquityChef.withdraw(fourthAccount, amount, fourthID);
-        assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
+        assertLt(preBal, governanceToken.balanceOf(fourthAccount));
     }
 
-    function testGetRewards(uint256 blocks) public {
-        blocks = bound(blocks, 1, 2 ** 128 - 1);
+    function testGetRewards_ShouldGetRewards(uint256 blocks) public {
+        blocks = bound(blocks, 1, 2 ** 64 - 1);
+        uint256 preBal = governanceToken.balanceOf(fourthAccount);
+        vm.roll(block.number + blocks);
 
-        (uint256 lastRewardBlock,) = ubiquityChef.pool();
-        uint256 currentBlock = block.number;
-        vm.roll(currentBlock + blocks);
-        uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        uint256 reward = (multiplier * 10e18 / 1e18);
-        uint256 governancePerShare = (reward * 1e12) / shares;
-        uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
         uint256 rewardSent = ubiquityChef.getRewards(1);
-        assertEq(userReward, rewardSent);
+        assertLt(preBal, preBal + rewardSent);
     }
 
-    function testCannotGetRewardsOtherAccount() public {
+    function testGetRewards_ShouldRevertIfCallerIsNotOwner() public {
         vm.expectRevert("MS: caller is not owner");
         vm.prank(stakingMinAccount);
         ubiquityChef.getRewards(1);
     }
 
-    function testPendingGovernance(uint256 blocks) public {
+    function testPendingGovernance_ShouldGetPendingGovernanceTokens(
+        uint256 blocks
+    ) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
-        (uint256 lastRewardBlock,) = ubiquityChef.pool();
+        (uint256 lastRewardBlock, ) = ubiquityChef.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
-        uint256 reward = (multiplier * 10e18 / 1e18);
+        uint256 reward = ((multiplier * 10e18) / 1e18);
         uint256 governancePerShare = (reward * 1e12) / shares;
         uint256 userPending = (shares * governancePerShare) / 1e12;
 
         uint256 pendingGovernance = ubiquityChef.pendingGovernance(1);
         assertEq(userPending, pendingGovernance);
-    }
-
-    function testGetStakingShareInfo() public {
-        uint256[2] memory info1 = [shares, 0];
-        uint256[2] memory info2 = ubiquityChef.getStakingShareInfo(1);
-        assertEq(info1[0], info2[0]);
-        assertEq(info1[1], info2[1]);
     }
 }

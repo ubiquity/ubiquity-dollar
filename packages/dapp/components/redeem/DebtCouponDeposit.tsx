@@ -34,6 +34,7 @@ const UcrNftGenerator = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
+    // cspell: disable-next-line
     await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken, amount, signer, debtCouponManager.address);
     await (await debtCouponManager.connect(signer).exchangeDollarsForCreditNFT(amount)).wait();
     refreshBalances();
@@ -42,6 +43,7 @@ const UcrNftGenerator = () => {
   const handleBurn = async () => {
     const amount = extractValidAmount();
     if (amount) {
+      // cspell: disable-next-line
       doTransaction("Burning uAD...", async () => {
         setInputVal("");
         await depositDollarForDebtCoupons(amount);
@@ -67,8 +69,10 @@ const UcrNftGenerator = () => {
 
   return (
     <div>
+      {/* cspell: disable-next-line */}
       <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
       <Button onClick={handleBurn} disabled={!submitEnabled}>
+        {/* cspell: disable-next-line */}
         Redeem uAD for uCR-NFT
       </Button>
       {expectedDebtCoupon && inputVal && <p>expected uCR-NFT {formatEther(expectedDebtCoupon)}</p>}

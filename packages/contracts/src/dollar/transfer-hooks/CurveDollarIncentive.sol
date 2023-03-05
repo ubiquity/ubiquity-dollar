@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "../core/TWAPOracleDollar3pool.sol";
 import "../core/UbiquityDollarManager.sol";
 import "../core/UbiquityDollarToken.sol";
 import "../interfaces/IUbiquityGovernance.sol";
 import "../interfaces/IIncentive.sol";
-import "../libs/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 /// @title Curve trading incentive contract
 /// @author Ubiquity DAO
@@ -15,7 +15,7 @@ contract CurveDollarIncentive is IIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     bool public isSellPenaltyOn = true;
     bool public isBuyIncentiveOn = true;
     bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
@@ -41,8 +41,8 @@ contract CurveDollarIncentive is IIncentive {
 
     /// @notice CurveIncentive constructor
     /// @param _manager Ubiquity Dollar Manager
-    constructor(address _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(UbiquityDollarManager _manager) {
+        manager = _manager;
     }
 
     function incentivize(
@@ -65,10 +65,10 @@ contract CurveDollarIncentive is IIncentive {
     /// @notice set an address to be exempted from Curve trading incentives
     /// @param account the address to update
     /// @param isExempt a flag for whether to flag as exempt or not
-    function setExemptAddress(address account, bool isExempt)
-        external
-        onlyAdmin
-    {
+    function setExemptAddress(
+        address account,
+        bool isExempt
+    ) external onlyAdmin {
         _exempt[account] = isExempt;
         emit ExemptAddressUpdate(account, isExempt);
     }
@@ -111,12 +111,14 @@ contract CurveDollarIncentive is IIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityDollarToken(manager.dollarTokenAddress())
-                    .balanceOf(target) >= penalty + amount,
+                UbiquityDollarToken(manager.dollarTokenAddress()).balanceOf(
+                    target
+                ) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
             UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
-                target, penalty
+                target,
+                penalty
             ); // burn from the recipient
         }
     }
@@ -136,28 +138,26 @@ contract CurveDollarIncentive is IIncentive {
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of Governance Token
             IUbiquityGovernanceToken(manager.governanceTokenAddress()).mint(
-                target, incentive
+                target,
+                incentive
             );
         }
     }
 
     /// @notice returns the percentage of deviation from the peg multiplied by amount
     //          when Ubiquity Dollar is <1$
-    function _getPercentDeviationFromUnderPeg(uint256 amount)
-        internal
-        returns (uint256)
-    {
+    function _getPercentDeviationFromUnderPeg(
+        uint256 amount
+    ) internal returns (uint256) {
         _updateOracle();
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
         }
 
-        uint256 res = _one.sub(curPrice.fromUInt()).mul(
-            (amount.fromUInt().div(_one))
-        ).toUInt();
+        bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
-        return res;
+        return res.div(_one).toUInt();
     }
 
     function _updateOracle() internal {
@@ -165,8 +165,9 @@ contract CurveDollarIncentive is IIncentive {
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
-        return TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
-            manager.dollarTokenAddress()
-        );
+        return
+            TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
+                manager.dollarTokenAddress()
+            );
     }
 }

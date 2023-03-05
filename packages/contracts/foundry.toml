@@ -20,3 +20,6 @@ line_length = 80
 tab_width = 4
 bracket_spacing = false
 quote_style = 'double'
+
+[rpc_endpoints]
+mainnet = "https://eth.ubq.fi/v1/mainnet"

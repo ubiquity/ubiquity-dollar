@@ -94,6 +94,7 @@ const UcrNftRedeem = () => {
         </div>
       </div>
       <Button disabled={!submitEnabled} onClick={handleRedeem}>
+        {/* cspell: disable-next-line */}
         Redeem uCR-NFT for uAD
       </Button>
     </div>

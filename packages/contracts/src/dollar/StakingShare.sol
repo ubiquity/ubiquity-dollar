@@ -1,14 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
+import "./ERC1155SetUri/ERC1155BurnableSetUri.sol";
+import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
-contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract StakingShare is
+    ERC1155SetUri,
+    ERC1155BurnableSetUri,
+    ERC1155PausableSetUri
+{
     using SafeAddArray for uint256[];
 
     struct Stake {
@@ -24,7 +28,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 lpAmount;
     }
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     mapping(uint256 => Stake) private _stakes;
@@ -36,6 +40,14 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         require(
             manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
             "Governance token: not minter"
+        );
+        _;
+    }
+
+    modifier onlyStakingManager() {
+        require(
+            manager.hasRole(manager.STAKING_MANAGER_ROLE(), msg.sender),
+            "Governance token: not staking manager"
         );
         _;
     }
@@ -59,8 +71,11 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(
+        UbiquityDollarManager _manager,
+        string memory uri
+    ) ERC1155SetUri(uri) {
+        manager = _manager;
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.
@@ -100,6 +115,7 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 endBlock
     ) public virtual onlyMinter whenNotPaused returns (uint256 id) {
         id = _totalSupply + 1;
+        // slither-disable-next-line reentrancy-no-eth
         _mint(to, id, 1, bytes(""));
         _totalSupply += 1;
         _holderBalances[to].add(id);
@@ -185,36 +201,10 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(
+        address holder
+    ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
-    }
-
-    function _burn(address account, uint256 id, uint256 amount)
-        internal
-        virtual
-        override
-        whenNotPaused
-    {
-        require(amount == 1, "amount <> 1");
-        super._burn(account, id, 1);
-        Stake storage _stake = _stakes[id];
-        require(_stake.lpAmount == 0, "LP <> 0");
-        _totalSupply -= 1;
-    }
-
-    function _burnBatch(
-        address account,
-        uint256[] memory ids,
-        uint256[] memory amounts
-    ) internal virtual override whenNotPaused {
-        super._burnBatch(account, ids, amounts);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply -= amounts[i];
-        }
     }
 
     function _beforeTokenTransfer(
@@ -224,7 +214,15 @@ contract StakingShare is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override (ERC1155, ERC1155Pausable) {
+    ) internal virtual override(ERC1155SetUri, ERC1155PausableSetUri) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     */
+
+    function setUri(string memory newUri) external onlyStakingManager {
+        _uri = newUri;
     }
 }

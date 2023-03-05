@@ -48,7 +48,6 @@ const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContract
 
       setContracts(contracts);
       setTokensContracts(allPools.map((pool) => getERC20Contract(pool.tokenAddress, provider)));
-
       setIsSaleContractOwner((await contracts.ubiquiStickSale.owner()).toLowerCase() === walletAddress.toLowerCase());
       setIsSimpleBondOwner((await contracts.simpleBond.owner()).toLowerCase() === walletAddress.toLowerCase());
     })();

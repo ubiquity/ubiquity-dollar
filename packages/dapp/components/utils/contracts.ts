@@ -1,159 +1,163 @@
-import { ethers } from "ethers";
+import { ContractInterface, ethers } from "ethers";
 
-import {
-  ChainlinkPriceFeed__factory,
-  CreditNFTManager__factory,
-  CreditNFT__factory,
-  DAIToken__factory,
-  DollarMintCalculator__factory,
-  ERC1155Ubiquity__factory,
-  ERC20__factory,
-  ICreditNFTRedemptionCalculator__factory,
-  ICreditRedemptionCalculator__factory,
-  ICurveFactory__factory,
-  IJar__factory,
-  IMetaPool__factory,
-  SimpleBond__factory,
-  StakingShare__factory,
-  Staking__factory,
-  SushiSwapPool__factory,
-  TWAPOracleDollar3pool__factory,
-  UbiquiStickSale__factory,
-  UbiquiStick__factory,
-  UbiquityChef__factory,
-  UbiquityCreditToken__factory,
-  UbiquityDollarManager__factory,
-  UbiquityDollarToken__factory,
-  UbiquityFormulas__factory,
-  UbiquityGovernanceToken__factory,
-  UniswapV2Pair__factory,
-  UniswapV3Pool__factory,
-  UniswapV3Router__factory,
-  USDCToken__factory,
-  USDTToken__factory,
-  YieldProxy__factory,
-} from "@/types/contracts";
+import UniswapV2PairABI from "../config/abis/UniswapV2Pair.json";
+import UniswapV3PoolABI from "../config/abis/UniswapV3Pool.json";
+import UniswapV3RouterABI from "../config/abis/UniswapV3Router.json";
+import ChainlinkPriceFeedABI from "../config/abis/ChainlinkPriceFeed.json";
+import ERC20ABI from "../config/abis/ERC20.json";
+import USDCTokenABI from "../config/abis/USDCToken.json";
+import DAITokenABI from "../config/abis/DAIToken.json";
+import USDTTokenABI from "../config/abis/USDTToken.json";
+
+import YieldProxyABI from "../config/abis/YieldProxy.json";
+
+import SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
+import UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
+import UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
+import ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
+import IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
+import DebtCouponManager from "@ubiquity/contracts/out/CreditNftManager.sol/CreditNftManager.json";
+import ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
+import StakingToken from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
+import Staking from "@ubiquity/contracts/out/Staking.sol/Staking.json";
+import DebtCoupon from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
+import DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculator.sol/DollarMintCalculator.json";
+import ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
+import IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
+import IUARForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
+import MasterChefV2 from "@ubiquity/contracts/out/UbiquityChef.sol/UbiquityChef.json";
+import SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
+import TWAPOracle from "@ubiquity/contracts/out/TWAPOracleDollar3pool.sol/TWAPOracleDollar3pool.json";
+import UbiquityManager from "@ubiquity/contracts/out/UbiquityDollarManager.sol/UbiquityDollarManager.json";
+import Dollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
+import Credit from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
+import UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
+import Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
+
+const getContract = (abi: ContractInterface, address: string, provider: ethers.providers.Provider) => {
+  return new ethers.Contract(address, abi, provider);
+};
 
 export const getUniswapV2FactoryContract = (address: string, provider: ethers.providers.Provider) => {
-  return UniswapV2Pair__factory.connect(address, provider);
+  return getContract(UniswapV2PairABI, address, provider);
 };
 
 export const getUniswapV3PoolContract = (address: string, provider: ethers.providers.Provider) => {
-  return UniswapV3Pool__factory.connect(address, provider);
+  return getContract(UniswapV3PoolABI, address, provider);
 };
 
 export const getUniswapV3RouterContract = (address: string, provider: ethers.providers.Provider) => {
-  return UniswapV3Router__factory.connect(address, provider);
+  return getContract(UniswapV3RouterABI, address, provider);
 };
 
-export const getChainlinkPriceFeedContract = (address: string, provider: ethers.providers.Provider) => {
-  return ChainlinkPriceFeed__factory.connect(address, provider);
+export const getChainlinkPriceFeedContract = (address: string, provider: ethers.providers.Provider): ethers.Contract => {
+  return getContract(ChainlinkPriceFeedABI, address, provider);
 };
 
 export const getERC20Contract = (address: string, provider: ethers.providers.Provider) => {
-  return ERC20__factory.connect(address, provider);
+  return getContract(ERC20ABI, address, provider);
 };
 
 export const getERC1155UbiquityContract = (address: string, provider: ethers.providers.Provider) => {
-  return ERC1155Ubiquity__factory.connect(address, provider);
+  return getContract(ERC1155Ubiquity.abi, address, provider);
 };
 
 export const getSimpleBondContract = (address: string, provider: ethers.providers.Provider) => {
-  return SimpleBond__factory.connect(address, provider);
+  return getContract(SimpleBond.abi, address, provider);
 };
 
 export const getUbiquiStickContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquiStick__factory.connect(address, provider);
+  return getContract(UbiquiStick.abi, address, provider);
 };
 
 export const getUbiquiStickSaleContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquiStickSale__factory.connect(address, provider);
+  return getContract(UbiquiStickSale.abi, address, provider);
 };
 
 export const getIJarContract = (address: string, provider: ethers.providers.Provider) => {
-  return IJar__factory.connect(address, provider);
+  return getContract(IJar.abi, address, provider);
 };
 
 export const getDebtCouponManagerContract = (address: string, provider: ethers.providers.Provider) => {
-  return CreditNFTManager__factory.connect(address, provider);
+  return getContract(DebtCouponManager.abi, address, provider);
 };
 
 export const getCurveFactoryContract = (address: string, provider: ethers.providers.Provider) => {
-  return ICurveFactory__factory.connect(address, provider);
+  return getContract(ICurveFactory.abi, address, provider);
 };
 
 export const getYieldProxyContract = (address: string, provider: ethers.providers.Provider) => {
-  return YieldProxy__factory.connect(address, provider);
+  return getContract(YieldProxyABI, address, provider);
 };
 
-export const getBondingShareV2Contract = (address: string, provider: ethers.providers.Provider) => {
-  return StakingShare__factory.connect(address, provider);
+export const getStakingShareContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(StakingToken.abi, address, provider);
 };
 
 export const getBondingV2Contract = (address: string, provider: ethers.providers.Provider) => {
-  return Staking__factory.connect(address, provider);
+  return getContract(Staking.abi, address, provider);
 };
 
 export const getDebtCouponContract = (address: string, provider: ethers.providers.Provider) => {
-  return CreditNFT__factory.connect(address, provider);
+  return getContract(DebtCoupon.abi, address, provider);
 };
 
 export const getTWAPOracleContract = (address: string, provider: ethers.providers.Provider) => {
-  return TWAPOracleDollar3pool__factory.connect(address, provider);
+  return getContract(TWAPOracle.abi, address, provider);
 };
 
-export const getDollarMintingCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
-  return DollarMintCalculator__factory.connect(address, provider);
+export const getDollarMintCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(DollarMintCalculator.abi, address, provider);
 };
 
 export const getICouponsForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
-  return ICreditNFTRedemptionCalculator__factory.connect(address, provider);
+  return getContract(ICouponsForDollarsCalculator.abi, address, provider);
 };
 
 export const getIUARForDollarsCalculatorContract = (address: string, provider: ethers.providers.Provider) => {
-  return ICreditRedemptionCalculator__factory.connect(address, provider);
+  return getContract(IUARForDollarsCalculator.abi, address, provider);
 };
 
 export const getIMetaPoolContract = (address: string, provider: ethers.providers.Provider) => {
-  return IMetaPool__factory.connect(address, provider);
+  return getContract(IMetaPool.abi, address, provider);
 };
 
 export const getMasterChefV2Contract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquityChef__factory.connect(address, provider);
+  return getContract(MasterChefV2.abi, address, provider);
 };
 
 export const getSushiSwapPoolContract = (address: string, provider: ethers.providers.Provider) => {
-  return SushiSwapPool__factory.connect(address, provider);
+  return getContract(SushiSwapPool.abi, address, provider);
 };
 
-export const getUbiquityDollarManagerContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquityDollarManager__factory.connect(address, provider);
+export const getUbiquityManagerContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UbiquityManager.abi, address, provider);
 };
 
-export const getUbiquityDollarContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquityDollarToken__factory.connect(address, provider);
+export const getDollarContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(Dollar.abi, address, provider);
 };
 
-export const getUbiquityCreditContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquityCreditToken__factory.connect(address, provider);
+export const getCreditContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(Credit.abi, address, provider);
 };
 
 export const getUbiquityFormulasContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquityFormulas__factory.connect(address, provider);
+  return getContract(UbiquityFormulas.abi, address, provider);
 };
 
-export const getUbqContract = (address: string, provider: ethers.providers.Provider) => {
-  return UbiquityGovernanceToken__factory.connect(address, provider);
+export const getGovernanceContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(Governance.abi, address, provider);
 };
 
 export const getUSDCTokenContract = (address: string, provider: ethers.providers.Provider) => {
-  return USDCToken__factory.connect(address, provider);
+  return getContract(USDCTokenABI, address, provider);
 };
 
 export const getDAITokenContract = (address: string, provider: ethers.providers.Provider) => {
-  return DAIToken__factory.connect(address, provider);
+  return getContract(DAITokenABI, address, provider);
 };
 
 export const getUSDTTokenContract = (address: string, provider: ethers.providers.Provider) => {
-  return USDTToken__factory.connect(address, provider);
+  return getContract(USDTTokenABI, address, provider);
 };

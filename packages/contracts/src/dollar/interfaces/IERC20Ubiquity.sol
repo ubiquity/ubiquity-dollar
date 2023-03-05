@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -8,7 +8,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 interface IERC20Ubiquity is IERC20 {
     // ----------- Events -----------
     event Minting(
-        address indexed _to, address indexed _minter, uint256 _amount
+        address indexed _to,
+        address indexed _minter,
+        uint256 _amount
     );
 
     event Burning(address indexed _burned, uint256 _amount);

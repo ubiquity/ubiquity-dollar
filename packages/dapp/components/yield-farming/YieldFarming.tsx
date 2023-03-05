@@ -1,4 +1,5 @@
-import { BigNumber, ethers } from "ethers";
+// cspell: disable
+import { BigNumber, Contract, ethers } from "ethers";
 import { memo, useEffect, useState } from "react";
 
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
@@ -13,7 +14,7 @@ import Icon from "../ui/Icon";
 import MaxButtonWrapper from "../ui/MaxButtonWrapper";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 import Tooltip from "../ui/Tooltip";
-import WalletNotConnected from "../ui/WalletNotConnected";
+import WalletConnectionWall from "../ui/WalletConnectionWall";
 import { ButtonLink } from "@/components/ui/Button";
 
 type Balance = { usdc: number; ubq: number; uad: number };
@@ -475,4 +476,10 @@ export const YieldFarmingDeposit = memo(
   }
 );
 
-export default memo(withLoadedContext(YieldFarmingContainer, () => WalletNotConnected));
+const WithWalletConnectionWall = (p: LoadedContext) => (
+  <WalletConnectionWall>
+    <YieldFarmingContainer {...p} />
+  </WalletConnectionWall>
+);
+
+export default memo(withLoadedContext(WithWalletConnectionWall));

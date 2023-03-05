@@ -51,6 +51,8 @@ contracts/dollar/tasks/library/distributor/fixtures/operators.json
 fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
+packages/contracts/broadcast/*/*/*
+
 
 .yarn
 .yarn/*
@@ -59,5 +61,6 @@ fixtures/contracts-addresses/*
 cache
 build
 out
-
-packages/dapp/types/contracts
+packages/contracts/broadcast/*
+packages/dapp/types/
+.vscode/

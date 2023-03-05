@@ -16,21 +16,26 @@
   "dependencies": {
     "@types/command-line-args": "5.2.0",
     "command-line-args": "5.2.1",
-    "dotenv": "^16.0.0",
+    "dotenv": "^16.0.3",
     "ethers": "^5.6.9",
-    "ts-node": "10.9.1"
+    "react-transition-group": "^4.4.5",
+    "tsx": "^3.12.2"
   },
   "scripts": {
-    "forge": "forge",
+    "test": "tsx ./scripts/runner/runner.ts",
+    "test:slither": "slither . --compile-force-framework foundry",
+    "test:echidna": "echidna-test . --config echidna.config.yml",
+    "start:anvil": "tsx ./scripts/anvil/anvil.ts",
+    "prebuild": "run-p clean",
+    "deploy": "tsx ./scripts/deploy/deploy.ts",
+    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts",
+    "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
+    "clean": "run-p clean:*",
+    "clean:yarn": "yarn clean",
+    "clean:forge": "forge clean",
     "build": "forge build",
-    "test": "forge test --fork-url https://cloudflare-eth.com",
-    "slither:run": "slither . --compile-force-framework foundry",
-    "echidna": "echidna-test . --config echidna.config.yml",
-    "prettier": "forge fmt",
-    "deploy": "ts-node ./scripts/deploy/deploy.ts",
-    "task": "ts-node ./scripts/task/task.ts",
-    "clean": "forge clean",
-    "purge": "yarn clean"
+    "forge:install": "forge install",
+    "_hardhat-task": "tsx ./scripts/task/task.ts"
   },
   "keywords": [
     "stablecoin",
@@ -56,5 +61,12 @@
       "postinstall-postinstall": false,
       "husky": false
     }
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@types/react-transition-group": "^4",
+    "cspell": "latest",
+    "prettier-plugin-solidity": "^1.1.2",
+    "typescript": "^4.9.4"
   }
 }

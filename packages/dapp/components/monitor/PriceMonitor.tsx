@@ -26,7 +26,7 @@ type ManagedContracts = NonNullable<Awaited<ReturnType<typeof useManagerManaged>
 type NamedContracts = NonNullable<Awaited<ReturnType<typeof useNamedContracts>>>;
 
 const fetchPrices = async (
-  { dollarToken: uad, dollarMetapool: metaPool, dollarTwapOracle: twapOracle, dollarMintingCalculator: dollarMintCalc }: ManagedContracts,
+  { dollarToken: uad, dollarMetapool: metaPool, dollarTwapOracle: twapOracle, dollarMintCalculator: dollarMintCalc }: ManagedContracts,
   { curvePool }: NamedContracts
 ): Promise<PriceMonitorProps> => {
   const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
@@ -81,14 +81,18 @@ const PriceMonitor = (props: PriceMonitorProps) => {
   return (
     <div className="panel">
       <h2>Spot</h2>
+      {/* cspell: disable-next-line */}
       <PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
       <h3>Time Weighted Average</h3>
+      {/* cspell: disable-next-line */}
       <PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
+      {/* cspell: disable-next-line */}
       <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
       <h3>Dollar Minting</h3>
       <div>
         {props.dollarToBeMinted ? (
           <div>
+            {/* cspell: disable-next-line */}
             {props.dollarToBeMinted} <span> uAD</span> to be minted
           </div>
         ) : (

@@ -1,1 +1,1 @@
-export * from "./curve"
+export * from "./curve";
