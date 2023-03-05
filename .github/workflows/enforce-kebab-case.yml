@@ -43,9 +43,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
     - name: Create pull request
+      id: cpr
       uses: peter-evans/create-pull-request@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: 'refactor: rename files to kebab case'
         title: 'refactor: rename files to kebab case'
         branch: 'fix/forceful-kebab'
+        base: ${{ github.head_ref }}
+
+    # - name: Check outputs
+    #   if: ${{ steps.cpr.outputs.pull-request-number }}
+    #   run: |
+    #     echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
+    #     echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
