@@ -50,7 +50,7 @@ jobs:
         commit-message: 'refactor: rename files to kebab case'
         title: 'refactor: rename files to kebab case'
         branch: 'fix/forceful-kebab'
-        base: ${{ github.head_ref }}
+        base: ${{ github.sha }}
 
     # - name: Check outputs
     #   if: ${{ steps.cpr.outputs.pull-request-number }}
