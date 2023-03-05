@@ -1,15 +1,17 @@
-name: "Enforce Kebab Case File Names"
-on: push
-
+name: "Kebab Case CI"
+on:
+  push:
+    branches:
+      - main
 jobs:
-  kebab_case_check:
+  kebab-case-check:
     runs-on: ubuntu-latest
     steps:
-    - name: Check file names
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Verify file names
       run: |
-        find . -type f -name '*[A-Z]*' -not -path "./.git/*" | while read filename; do
-          echo "File name '$filename' contains uppercase letters."
-          echo "Renaming '$filename' to '$(echo $filename | tr '[:upper:]' '[:lower:]' | tr '_' '-')'"
-          mv "$filename" "$(echo $filename | tr '[:upper:]' '[:lower:]' | tr '_' '-')"
-        done
-      shell: bash
+        if [[ $(find . -not -path './.git/*' -type f -name '*[A-Z]*' -printf 1) ]]; then
+          echo "Files with uppercase letters detected. Please rename the files to kebab-case format."
+          exit 1
+        fi
