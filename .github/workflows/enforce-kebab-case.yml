@@ -22,14 +22,16 @@ jobs:
 
     - name: Verify file names
       run: |
-        failed_files=$(find . -not -path './.git/*' -type f -name '*[A-Z]*' -printf '%f\n')
+        failed_files=$(find . -not -path './.git/*' -type f -name '*[A-Z]*' -printf '%p\n')
         if [[ $failed_files ]]; then
           echo "The following files have uppercase letters in their names:"
           echo "$failed_files"
           echo ""
           echo "Renaming files..."
           for file in $failed_files; do
-            mv "$file" "$(echo $file | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
+            path=$(dirname "$file")
+            name=$(basename "$file")
+            mv "$file" "$path/$(echo $name | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')"
           done
           git config --local user.email "UbiquiBot[dev]@github.com"
           git config --local user.name "UbiquiBot[dev]"
