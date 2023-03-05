@@ -10,7 +10,8 @@ import {
   getUbiquiStickContract,
   getUbiquiStickSaleContract,
 } from "@/components/utils/contracts";
-import { UbiquiStick, UbiquiStickSale, SimpleBond, ERC20, ChainlinkPriceFeed } from "@/types/contracts";
+import { UbiquiStick, UbiquiStickSale,SimpleBond, ERC20 } from "types";
+import { Contract } from "ethers";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
 
@@ -19,7 +20,7 @@ export type Contracts = {
   ubiquiStickSale: UbiquiStickSale;
   simpleBond: SimpleBond;
   rewardToken: ERC20;
-  chainLink: ChainlinkPriceFeed;
+  chainLink: Contract; // ChainlinkPriceFeed
 };
 
 const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
