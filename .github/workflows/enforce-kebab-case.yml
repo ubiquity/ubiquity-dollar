@@ -1,7 +1,9 @@
 name: "Kebab Case CI"
 on:
-  pull_request:
   push:
+    branches:
+      - '*'
+  pull_request:
 jobs:
   kebab-case-check:
     runs-on: ubuntu-latest
@@ -10,7 +12,9 @@ jobs:
       uses: actions/checkout@v2
     - name: Verify file names
       run: |
-        if [[ $(find . -not -path './.git/*' -type f -name '*[A-Z]*' -printf 1) ]]; then
-          echo "Files with uppercase letters detected. Please rename the files to kebab-case format."
+        failed_files=$(find . -not -path './.git/*' -type f -name '*[A-Z]*' -printf '%f\n')
+        if [[ $failed_files ]]; then
+          echo "The following files have uppercase letters in their names:"
+          echo "$failed_files"
           exit 1
         fi
