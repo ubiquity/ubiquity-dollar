@@ -15,7 +15,7 @@ jobs:
     - name: Authenticate SSH
       uses: webfactory/ssh-agent@v0.4.0
       with:
-        ssh-private-key: ${{ secrets.UBIQUIBOT_PRIVATE_KEY }}
+        ssh-private-key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
@@ -40,4 +40,4 @@ jobs:
           git push git@github.com:${{github.repository}}.git ${{github.ref}}
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.UBIQUIBOT_PRIVATE_KEY }}
+        GITHUB_TOKEN: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
