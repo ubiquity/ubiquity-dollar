@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Icon, { IconsNames } from "../ui/Icon";
+import LightDarkMode from "./LightDarkMode";
 import BuildInfo from "./BuildInfo";
 import WalletConnect from "./WalletConnect";
 
@@ -57,10 +58,13 @@ const Sidebar = () => {
           </ul>
           <ul>
             <li>
-              <WalletConnect />
+              <LightDarkMode />
             </li>
             <li>
               <BuildInfo />
+            </li>
+            <li>
+              <WalletConnect />
             </li>
           </ul>
         </div>
