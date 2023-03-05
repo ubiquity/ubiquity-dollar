@@ -303,6 +303,7 @@ th {
   margin-left: 3px;
 }
 .panel {
+  text-rendering: geometricPrecision;
   background: radial-gradient(#00000080, #101010ff);
   margin: 24px auto;
   margin-right: 3px;
