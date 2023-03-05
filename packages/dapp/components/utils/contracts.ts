@@ -300,8 +300,8 @@ const getContract = (abi: ContractInterface, address: string, provider: ethers.p
   return new ethers.Contract(address, abi, provider);
 };
 
-export const getUniswapV2FactoryContract = (address: string, provider: ethers.providers.Provider) => {
-  return getContract(UniswapV2PairABI, address, provider) as IUniswapV2Factory;
+export const getUniswapV2PairContract = (address: string, provider: ethers.providers.Provider) => {
+  return getContract(UniswapV2PairABI, address, provider) as IUniswapV2Pair;
 };
 
 export const getUniswapV3PoolContract = (address: string, provider: ethers.providers.Provider) => {

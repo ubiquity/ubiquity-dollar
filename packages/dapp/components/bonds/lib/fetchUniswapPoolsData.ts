@@ -1,6 +1,6 @@
 import { PossibleProviders } from "@/lib/hooks/useWeb3";
 import { ethers } from "ethers";
-import { getERC20Contract, getUniswapV2FactoryContract, getUniswapV3PoolContract } from "@/components/utils/contracts";
+import { getERC20Contract, getUniswapV2PairContract, getUniswapV3PoolContract } from "@/components/utils/contracts";
 import { ERC20 } from '../../../types/ERC20';
 export type UniswapData = {
   poolAddress: string;
@@ -25,7 +25,7 @@ type UniswapDataRequest = {
 
 async function fetchUniswapPoolsData(pools: UniswapDataRequest[], provider: NonNullable<PossibleProviders>): Promise<{ [poolAddress: string]: UniswapData }> {
   const getUniPoolFullData = async (poolAddress: string, isV2: boolean): Promise<UniswapData> => {
-    const pool = isV2 ? getUniswapV2FactoryContract(poolAddress, provider) : getUniswapV3PoolContract(poolAddress, provider);
+    const pool = isV2 ? getUniswapV2PairContract(poolAddress, provider) : getUniswapV3PoolContract(poolAddress, provider);
     const t1 = getERC20Contract(await pool.token0(), provider) as ERC20;
     const t2 = getERC20Contract(await pool.token1(), provider) as ERC20;
     const d1 = await t1.decimals();

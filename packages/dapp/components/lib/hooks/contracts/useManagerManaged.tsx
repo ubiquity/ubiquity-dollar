@@ -14,7 +14,7 @@ import {
   getCreditContract,
   getUbiquityFormulasContract,
   getGovernanceContract,
-  getUniswapV2FactoryContract,
+  getUniswapV2PairContract,
 } from "@/components/utils/contracts";
 import { UbiquityDollarManager } from "@/types/contracts";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -79,7 +79,7 @@ async function connectManagerContracts(manager: UbiquityDollarManager, provider:
 
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
 
-  const governanceMarket = getUniswapV2FactoryContract(await sushiSwapPoolContract.pair(), provider);
+  const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
 
   return {
     dollarToken: getDollarContract(dollarToken, provider),
