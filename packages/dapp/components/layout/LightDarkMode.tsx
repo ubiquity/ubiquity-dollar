@@ -11,7 +11,7 @@ export default function LightDarkMode() {
 }
 
 function toggleDarkMode() {
-  const body = document.body;
+  const body = document.getElementById(`__next`);
   const lightDarkModeToggle = document.getElementById("LightDarkModeToggle");
   const isLightMode = body.classList.contains("light-mode");
 

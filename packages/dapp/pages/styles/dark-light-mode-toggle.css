@@ -8,90 +8,105 @@
 }
 
 body #LightDarkModeToggle::before {
-  content: "🌙";
+  content: "☀️";
   color: #fff;
 }
-body.light-mode #LightDarkModeToggle::before {
-  content: "☀️";
+#__next.light-mode #LightDarkModeToggle::before {
+  content: "🌙";
 }
 
-body.light-mode {
+#__next.light-mode {
   background-color: var(--light-4);
 }
-body.light-mode #Background {
+#__next.light-mode #Background {
   background-color: var(--light-4);
   -webkit-mask-image: none;
 }
 
-body.light-mode #Background #color {
+#__next.light-mode #Background #color {
   background: var(--light-4);
 }
 
-body.light-mode .panel {
+#__next.light-mode .panel {
   background: var(--light-3);
 }
 
-body.light-mode,
-body.light-mode a,
-body.light-mode button {
+#__next.light-mode,
+#__next.light-mode a,
+#__next.light-mode button {
   color: var(--black);
 }
 
-body.light-mode h1,
-body.light-mode h2,
-body.light-mode h3,
-body.light-mode h4,
-body.light-mode h5,
-body.light-mode h6,
-body.light-mode th {
+#__next.light-mode h1,
+#__next.light-mode h2,
+#__next.light-mode h3,
+#__next.light-mode h4,
+#__next.light-mode h5,
+#__next.light-mode h6,
+#__next.light-mode th {
   color: var(--black);
 }
 
-body.light-mode button,
-body.light-mode input {
+#__next.light-mode button,
+#__next.light-mode input {
   background-color: var(--light-2);
 }
-body.light-mode button:hover,
-body.light-mode input:hover {
+#__next.light-mode button#WalletNotConnected {
+  background-color: initial;
+}
+#__next.light-mode button:hover,
+#__next.light-mode input:hover {
   background-color: var(--light-1);
 }
 
-body.light-mode #DollarPrice span:last-child {
+#__next.light-mode #DollarPrice span:last-child {
   color: var(--black);
 }
 
-body.light-mode aside {
+#__next.light-mode aside {
   color: #404040;
 }
 
-body.light-mode .WalletNotConnected__svg {
+#__next.light-mode .WalletNotConnected__svg {
   fill: var(--black);
 }
-body.light-mode .WalletNotConnected__text {
+#__next.light-mode .WalletNotConnected__text {
   color: var(--black);
 }
 
-body.light-mode .iPGSoB:before {
+#__next.light-mode .iPGSoB:before {
   background-color: var(--light-5);
-  /* background: transparent; */
-  /* width: 100%; */
-  /* border: none; */
-  /* backdrop-filter: blur(4px); */
 }
-body.light-mode .dbvzkF,
-body.light-mode .dzmsHP:hover {
+#__next.light-mode .dbvzkF,
+#__next.light-mode .dzmsHP:hover {
   color: #000;
 }
 
-body.light-mode div.sc-idXgbr.jlGrGt {
-  /* border:none */
-}
-
-body.light-mode a.sc-cjibBx.hBfxKN {
+#__next.light-mode a.sc-cjibBx.hBfxKN {
   background-color: #fff;
 }
 
-body.light-mode #__CONNECTKIT__ button:hover {
+#__next.light-mode #__CONNECTKIT__ button:hover {
   background: #fff;
   color: #000;
+}
+@media (max-width: 460px) {
+  #__next.light-mode #Foreground input[type="checkbox"] + #Sidebar {
+    background: white;
+  }
+}
+
+#__next.light-mode #Foreground input[type="checkbox"] {
+  background: var(--light-5);
+  box-shadow: 0 0 48px 36px var(--light-5);
+}
+
+#__next.light-mode #Foreground input[type="checkbox"]:hover,
+#__next.light-mode #Foreground input[type="checkbox"]:hover::before,
+#__next.light-mode #Foreground input[type="checkbox"]:hover::after {
+  border-top: 2px solid #000;
+}
+
+#__next.light-mode #Foreground input[type="checkbox"]:checked {
+  border-top: 2px solid #ffffff00;
 }
