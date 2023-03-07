@@ -4,7 +4,7 @@ pragma solidity 0.8.16;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "./core/UbiquityDollarManager.sol";
+import "./old/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 /// @title ERC1155 Ubiquity preset

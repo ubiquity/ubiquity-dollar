@@ -2,11 +2,11 @@
 pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
-import {CreditNftManagerFacet} from "../../../src/diamond/facets/CreditNFTManagerFacet.sol";
+import {CreditNftManagerFacet} from "../../../src/diamond/facets/CreditNftManagerFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../../src/diamond/facets/CreditRedemptionCalculatorFacet.sol";
-import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
+import {DollarMintCalculatorFacet} from "../../../src/diamond/facets/DollarMintCalculatorFacet.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
-import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
+import {DollarMintExcessFacet} from "../../../src/diamond/facets/DollarMintExcessFacet.sol";
 import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 import {TWAPOracleDollar3poolFacet} from "../../../src/diamond/facets/TWAPOracleDollar3poolFacet.sol";
 import "../../../src/diamond/libraries/Constants.sol";
@@ -15,7 +15,7 @@ import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
 
-contract CreditNFTManagerFacetTest is DiamondSetup {
+contract CreditNftManagerFacetTest is DiamondSetup {
     MockCreditNft _creditNFT;
     address dollarManagerAddress;
     address dollarTokenAddress;
@@ -50,12 +50,6 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         creditTokenAddress = address(_creditToken);
         vm.prank(admin);
         IManager.setCreditTokenAddress(creditTokenAddress);
-        // deploy dollarMintCalculator
-        dollarMintCalculatorAddress = address(
-            new DollarMintCalculator(UbiquityDollarManager(address(diamond)))
-        );
-        vm.prank(admin);
-        IManager.setDollarMintCalculatorAddress(dollarMintCalculatorAddress);
 
         // set this contract as minter
         vm.startPrank(admin);
@@ -77,21 +71,11 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
 
     function mockDollarMintCalcFuncs(uint256 _dollarsToMint) public {
         vm.mockCall(
-            IManager.dollarMintCalculatorAddress(),
+            address(diamond),
             abi.encodeWithSelector(
-                DollarMintCalculator.getDollarsToMint.selector
+                DollarMintCalculatorFacet.getDollarsToMint.selector
             ),
             abi.encode(_dollarsToMint)
-        );
-    }
-
-    function helperDeployExcessDollarCalculator(
-        address _excessDollarsDistributor
-    ) public {
-        vm.prank(admin);
-        IManager.setExcessDollarsDistributor(
-            creditNFTManagerAddress,
-            _excessDollarsDistributor
         );
     }
 
@@ -311,13 +295,11 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         );
 
         // set excess dollar distributor for creditNFTAddress
-        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            UbiquityDollarManager(dollarManagerAddress)
-        );
-        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
-            address(_excessDollarsDistributor),
-            abi.encodeWithSelector(DollarMintExcess.distributeDollars.selector),
+            address(diamond),
+            abi.encodeWithSelector(
+                DollarMintExcessFacet.distributeDollars.selector
+            ),
             abi.encode()
         );
 
@@ -340,13 +322,12 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         // MockAutoRedeem(creditTokenAddress).mint(creditNFTManagerAddress, 20000e18);
 
         // set excess dollar distributor for creditNFTAddress
-        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            UbiquityDollarManager(dollarManagerAddress)
-        );
-        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
+
         vm.mockCall(
-            address(_excessDollarsDistributor),
-            abi.encodeWithSelector(DollarMintExcess.distributeDollars.selector),
+            address(diamond),
+            abi.encodeWithSelector(
+                DollarMintExcessFacet.distributeDollars.selector
+            ),
             abi.encode()
         );
 
@@ -372,13 +353,11 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
         );
 
         // set excess dollar distributor for debtCouponAddress
-        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            UbiquityDollarManager(dollarManagerAddress)
-        );
-        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
         vm.mockCall(
-            address(_excessDollarsDistributor),
-            abi.encodeWithSelector(DollarMintExcess.distributeDollars.selector),
+            address(diamond),
+            abi.encodeWithSelector(
+                DollarMintExcessFacet.distributeDollars.selector
+            ),
             abi.encode()
         );
         vm.prank(account1);
@@ -393,13 +372,12 @@ contract CreditNFTManagerFacetTest is DiamondSetup {
     function test_mintClaimableDollars() public {
         mockDollarMintCalcFuncs(50);
         // set excess dollar distributor for creditNFTAddress
-        DollarMintExcess _excessDollarsDistributor = new DollarMintExcess(
-            UbiquityDollarManager(dollarManagerAddress)
-        );
-        helperDeployExcessDollarCalculator(address(_excessDollarsDistributor));
+
         vm.mockCall(
-            address(_excessDollarsDistributor),
-            abi.encodeWithSelector(DollarMintExcess.distributeDollars.selector),
+            address(diamond),
+            abi.encodeWithSelector(
+                DollarMintExcessFacet.distributeDollars.selector
+            ),
             abi.encode()
         );
 

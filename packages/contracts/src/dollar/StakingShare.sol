@@ -5,7 +5,7 @@ import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./ERC1155SetUri/ERC1155BurnableSetUri.sol";
 import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
-import "./core/UbiquityDollarManager.sol";
+import "./old/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 contract StakingShare is

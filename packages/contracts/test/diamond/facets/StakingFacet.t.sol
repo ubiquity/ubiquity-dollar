@@ -9,13 +9,13 @@ import {BondingShareForDiamond} from "../../../src/diamond/mocks/MockShareV1.sol
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
-import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
+import {DollarMintCalculatorFacet} from "../../../src/diamond/facets/DollarMintCalculatorFacet.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import {CreditNftManager} from "../../../src/dollar/core/CreditNftManager.sol";
+import {CreditNftManagerFacet} from "../../../src/diamond/facets/CreditNftManagerFacet.sol";
 import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
-import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
+import {DollarMintExcessFacet} from "../../../src/diamond/facets/DollarMintExcessFacet.sol";
 import "../../../src/diamond/libraries/Constants.sol";
-
+import "forge-std/Test.sol";
 import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 
@@ -129,39 +129,16 @@ contract ZeroStateStaking is DiamondSetup {
 
         vm.startPrank(admin);
 
-        DollarMintCalculator dollarMintCalc = new DollarMintCalculator(
-            UbiquityDollarManager(address(IManager))
-        );
-        IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
-        CreditNftManager creditNFTManager = new CreditNftManager(
-            UbiquityDollarManager(address(IManager)),
-            creditNFTLengthBlocks
-        );
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
-        IAccessCtrl.grantRole(
-            CREDIT_NFT_MANAGER_ROLE,
-            address(creditNFTManager)
-        );
-        IAccessCtrl.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(creditNFTManager)
-        );
+        IAccessCtrl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
 
-        IAccessCtrl.grantRole(
-            GOVERNANCE_TOKEN_BURNER_ROLE,
-            address(creditNFTManager)
-        );
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
         UbiquityCreditTokenForDiamond creditToken = new UbiquityCreditTokenForDiamond(
                 address(IManager)
             );
         IManager.setCreditTokenAddress(address(creditToken));
-        DollarMintExcess dollarMintExcess = new DollarMintExcess(
-            UbiquityDollarManager(address(IManager))
-        );
-        IManager.setExcessDollarsDistributor(
-            address(creditNFTManager),
-            address(dollarMintExcess)
-        );
+
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);

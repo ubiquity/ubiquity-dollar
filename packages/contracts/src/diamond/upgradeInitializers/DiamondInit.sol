@@ -16,7 +16,6 @@ import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
-import {UbiquityDollarManager} from "../../dollar/core/UbiquityDollarManager.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables

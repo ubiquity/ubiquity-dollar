@@ -3,6 +3,7 @@ pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
 import "abdk/ABDKMathQuad.sol";
+import {StakingShareForDiamond} from "../../../src/diamond/token/StakingShareForDiamond.sol";
 
 contract StakingFormulasFacetTest is DiamondSetup {
     using ABDKMathQuad for uint256;
@@ -13,18 +14,19 @@ contract StakingFormulasFacetTest is DiamondSetup {
     }
 
     function test_sharesForLP() public {
-        StakingShare.Stake memory _stake = StakingShare.Stake({
-            // address of the minter
-            minter: address(0x11111),
-            // lp amount deposited by the user
-            lpFirstDeposited: 0,
-            creationBlock: 100,
-            // lp that were already there when created
-            lpRewardDebt: 0,
-            endBlock: 1000,
-            // lp remaining for a user
-            lpAmount: 100
-        });
+        StakingShareForDiamond.Stake memory _stake = StakingShareForDiamond
+            .Stake({
+                // address of the minter
+                minter: address(0x11111),
+                // lp amount deposited by the user
+                lpFirstDeposited: 0,
+                creationBlock: 100,
+                // lp that were already there when created
+                lpRewardDebt: 0,
+                endBlock: 1000,
+                // lp remaining for a user
+                lpAmount: 100
+            });
 
         uint256[2] memory _shareInfo = [uint256(100), uint256(100)];
         uint256 _amount = 10;
@@ -36,7 +38,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
     }
 
     function test_lpRewardsRemoveLiquidityNormalization(
-        StakingShare.Stake memory _stake,
+        StakingShareForDiamond.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public {
@@ -51,7 +53,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
     }
 
     function test_lpRewardsAddLiquidityNormalization(
-        StakingShare.Stake memory _stake,
+        StakingShareForDiamond.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) public {

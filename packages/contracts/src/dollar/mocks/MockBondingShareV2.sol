@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "../core/UbiquityDollarManager.sol";
+import "../old/UbiquityDollarManager.sol";
 import "../utils/SafeAddArray.sol";
 
 //cspell:ignore BondingShareV2

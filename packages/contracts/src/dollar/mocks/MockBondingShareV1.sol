@@ -2,7 +2,7 @@
 pragma solidity 0.8.16;
 
 import "../ERC1155Ubiquity.sol";
-import "src/dollar/core/UbiquityDollarManager.sol";
+import "src/dollar/old/UbiquityDollarManager.sol";
 
 //cspell:disable
 contract MockBondingShareV1 is ERC1155Ubiquity {

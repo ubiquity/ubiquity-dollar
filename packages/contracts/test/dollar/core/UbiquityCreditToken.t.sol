@@ -1,17 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "../../../src/dollar/core/UbiquityCreditToken.sol";
+import "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract UbiquityCreditTokenTest is LocalTestHelper {
-    UbiquityCreditToken ubiquityCreditToken;
+    UbiquityCreditTokenForDiamond ubiquityCreditToken;
 
     function setUp() public override {
         super.setUp();
 
         vm.prank(admin);
-        ubiquityCreditToken = new UbiquityCreditToken(manager);
+        ubiquityCreditToken = new UbiquityCreditTokenForDiamond(
+            address(diamond)
+        );
     }
 
     function testRaiseCapital_ShouldMintTokens() public {

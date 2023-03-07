@@ -2,7 +2,7 @@
 pragma solidity 0.8.16;
 
 import "../ERC20Ubiquity.sol";
-import "src/dollar/core/UbiquityDollarManager.sol";
+import "src/dollar/old/UbiquityDollarManager.sol";
 
 contract UbiquityCreditToken is ERC20Ubiquity {
     constructor(

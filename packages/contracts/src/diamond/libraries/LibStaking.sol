@@ -186,7 +186,7 @@ library LibStaking {
     ) internal {
         (
             uint256[2] memory bs,
-            StakingShare.Stake memory stake
+            StakingShareForDiamond.Stake memory stake
         ) = _checkForLiquidity(_id);
 
         // calculate pending LP rewards
@@ -258,7 +258,7 @@ library LibStaking {
     function removeLiquidity(uint256 _amount, uint256 _id) internal {
         (
             uint256[2] memory bs,
-            StakingShare.Stake memory stake
+            StakingShareForDiamond.Stake memory stake
         ) = _checkForLiquidity(_id);
         require(stake.lpAmount >= _amount, "Staking: amount too big");
         // we should decrease the Governance token rewards proportionally to the LP removed
@@ -444,13 +444,19 @@ library LibStaking {
 
     function _checkForLiquidity(
         uint256 _id
-    ) internal returns (uint256[2] memory bs, StakingShare.Stake memory stake) {
+    )
+        internal
+        returns (
+            uint256[2] memory bs,
+            StakingShareForDiamond.Stake memory stake
+        )
+    {
         address stakingAddress = LibAppStorage.appStorage().stakingShareAddress;
         require(
             IERC1155Ubiquity(stakingAddress).balanceOf(msg.sender, _id) == 1,
             "Staking: caller is not owner"
         );
-        StakingShare staking = StakingShare(stakingAddress);
+        StakingShareForDiamond staking = StakingShareForDiamond(stakingAddress);
         stake = staking.getStake(_id);
         require(
             block.number > stake.endBlock,

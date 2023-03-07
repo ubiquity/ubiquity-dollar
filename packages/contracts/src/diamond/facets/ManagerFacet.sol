@@ -8,7 +8,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../../dollar/interfaces/IUbiquityDollarToken.sol";
 import "../../dollar/interfaces/ICurveFactory.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
-import "../../dollar/core/TWAPOracleDollar3pool.sol";
 import "../libraries/LibAccessControl.sol";
 
 contract ManagerFacet is Modifiers {

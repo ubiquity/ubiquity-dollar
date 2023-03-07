@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import {LibStakingFormulas} from "../libraries/LibStakingFormulas.sol";
-import {StakingShare} from "../../dollar/StakingShare.sol";
+import {StakingShareForDiamond} from "../token/StakingShareForDiamond.sol";
 
 contract StakingFormulasFacet {
     /// @dev formula Governance Rights corresponding to a staking shares LP amount
@@ -10,7 +10,7 @@ contract StakingFormulasFacet {
     /// @param _amount , amount of LP tokens
     /// @notice shares = (stake.shares * _amount )  / stake.lpAmount ;
     function sharesForLP(
-        StakingShare.Stake memory _stake,
+        StakingShareForDiamond.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) external pure returns (uint256 _uLP) {
@@ -24,7 +24,7 @@ contract StakingFormulasFacet {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsRemoveLiquidityNormalization(
-        StakingShare.Stake memory _stake,
+        StakingShareForDiamond.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) external pure returns (uint256) {
@@ -44,7 +44,7 @@ contract StakingFormulasFacet {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsAddLiquidityNormalization(
-        StakingShare.Stake memory _stake,
+        StakingShareForDiamond.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) external pure returns (uint256) {

@@ -1,27 +1,27 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import "src/dollar/Staking.sol";
+import "src/dollar/old/Staking.sol";
 import "src/dollar/mocks/MockBondingV1.sol";
 import "src/dollar/mocks/MockBondingShareV1.sol";
-import "src/dollar/StakingFormulas.sol";
+import "src/dollar/old/StakingFormulas.sol";
 import "src/dollar/StakingShare.sol";
 import "src/dollar/interfaces/IMetaPool.sol";
 import "src/dollar/core/UbiquityGovernanceToken.sol";
-import "src/dollar/core/UbiquityDollarManager.sol";
+import "src/dollar/old/UbiquityDollarManager.sol";
 import "src/dollar/mocks/MockDollarToken.sol";
-import "src/dollar/UbiquityFormulas.sol";
-import "src/dollar/core/TWAPOracleDollar3pool.sol";
-import "src/dollar/UbiquityChef.sol";
-import "src/dollar/core/CreditRedemptionCalculator.sol";
+import "src/dollar/old/UbiquityFormulas.sol";
+import "src/dollar/old/TWAPOracleDollar3pool.sol";
+import "src/dollar/old/UbiquityChef.sol";
+import "src/dollar/old/CreditRedemptionCalculator.sol";
 import "src/dollar/interfaces/ICurveFactory.sol";
 import "src/dollar/interfaces/IMasterChef.sol";
-import "src/dollar/core/CreditNftRedemptionCalculator.sol";
-import "src/dollar/core/DollarMintCalculator.sol";
+import "src/dollar/old/CreditNftRedemptionCalculator.sol";
+import "src/dollar/old/DollarMintCalculator.sol";
 import "src/dollar/mocks/MockCreditNft.sol";
-import "src/dollar/core/CreditNftManager.sol";
+import "src/dollar/old/CreditNftManager.sol";
 import "src/dollar/core/UbiquityCreditToken.sol";
-import "src/dollar/core/DollarMintExcess.sol";
+import "src/dollar/old/DollarMintExcess.sol";
 import "src/dollar/SushiSwapPool.sol";
 import "src/dollar/interfaces/IERC1155Ubiquity.sol";
 

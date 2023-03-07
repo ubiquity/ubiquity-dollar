@@ -4,8 +4,6 @@ pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "../UbiquityChef.sol";
-
 interface IUbiquityChef {
     struct StakingShareInfo {
         uint256 amount; // How many LP tokens the user has provided.

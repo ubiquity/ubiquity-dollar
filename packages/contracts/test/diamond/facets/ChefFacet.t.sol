@@ -9,10 +9,9 @@ import {BondingShareForDiamond} from "../../../src/diamond/mocks/MockShareV1.sol
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
-import {DollarMintCalculator} from "../../../src/dollar/core/DollarMintCalculator.sol";
+import {DollarMintCalculatorFacet} from "../../../src/diamond/facets/DollarMintCalculatorFacet.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
-import {DollarMintExcess} from "../../../src/dollar/core/DollarMintExcess.sol";
 import "../../../src/diamond/libraries/Constants.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol";
@@ -123,10 +122,6 @@ contract ZeroStateChef is DiamondSetup {
         ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
 
         vm.startPrank(admin);
-        DollarMintCalculator dollarMintCalc = new DollarMintCalculator(
-            UbiquityDollarManager(address(diamond))
-        );
-        IManager.setDollarMintCalculatorAddress(address(dollarMintCalc));
 
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
         IAccessCtrl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
@@ -137,13 +132,7 @@ contract ZeroStateChef is DiamondSetup {
                 address(IManager)
             );
         IManager.setCreditTokenAddress(address(creditToken));
-        DollarMintExcess dollarMintExcess = new DollarMintExcess(
-            UbiquityDollarManager(address(this))
-        );
-        IManager.setExcessDollarsDistributor(
-            address(diamond),
-            address(dollarMintExcess)
-        );
+
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);

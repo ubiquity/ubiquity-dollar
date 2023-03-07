@@ -2,14 +2,15 @@
 pragma solidity 0.8.16;
 
 import "abdk/ABDKMathQuad.sol";
-import "../old/UbiquityDollarManager.sol";
+import {IAccessControl} from "../interfaces/IAccessControl.sol";
+import "../libraries/Constants.sol";
 
-contract CreditClock {
+contract CreditClockForDiamond {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
     // Manager contract.
-    UbiquityDollarManager private immutable manager;
+    IAccessControl public immutable accessCtrl;
 
     // ABDKMathQuad with value of 1.
     bytes16 private immutable one = uint256(1).fromUInt();
@@ -31,21 +32,21 @@ contract CreditClock {
 
     modifier onlyAdmin() {
         require(
-            manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
+            accessCtrl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditClock: not admin"
         );
         _;
     }
 
-    /// @param _manager The address of the manager/config contract so we can fetch variables.
+    /// @param _diamond The address of the _diamond contract for access control.
     /// @param _rateStartValue ABDKMathQuad Initial rate.
     /// @param _ratePerBlock ABDKMathQuad Initial rate change per block.
     constructor(
-        UbiquityDollarManager _manager,
+        address _diamond,
         bytes16 _rateStartValue,
         bytes16 _ratePerBlock
     ) {
-        manager = _manager;
+        accessCtrl = IAccessControl(_diamond);
         rateStartBlock = block.number;
         rateStartValue = _rateStartValue;
         ratePerBlock = _ratePerBlock;

@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../DiamondTestSetup.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";

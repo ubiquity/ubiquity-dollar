@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "../../../src/dollar/core/CreditClock.sol";
-
+import {UbiquityDollarManager} from "../../../src/dollar/old/UbiquityDollarManager.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract CreditClockTest is LocalTestHelper {

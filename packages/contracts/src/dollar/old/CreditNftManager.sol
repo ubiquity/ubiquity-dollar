@@ -9,10 +9,10 @@ import "../interfaces/ICreditNftRedemptionCalculator.sol";
 import "../interfaces/IDollarMintCalculator.sol";
 import "../interfaces/IDollarMintExcess.sol";
 import "./TWAPOracleDollar3pool.sol";
-import "./UbiquityDollarToken.sol";
-import "./UbiquityCreditToken.sol";
+import "../core/UbiquityDollarToken.sol";
+import "../core/UbiquityCreditToken.sol";
 import "./UbiquityDollarManager.sol";
-import "./CreditNft.sol";
+import "../core/CreditNft.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit Nft holders
 /// @notice Allows users to burn their Ubiquity Dollar in exchange for Credit Nft

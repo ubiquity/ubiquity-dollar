@@ -368,9 +368,8 @@ library LibCreditNftManager {
         CreditNft creditNFT = CreditNft(store.creditNftAddress);
         creditNFT.updateTotalDebt();
 
-        uint256 totalMintableDollars = IDollarMintCalculator(
-            store.dollarMintCalculatorAddress
-        ).getDollarsToMint();
+        uint256 totalMintableDollars = IDollarMintCalculator(address(this))
+            .getDollarsToMint();
         uint256 dollarsToMint = totalMintableDollars -
             (creditNFTStorage().dollarsMintedThisCycle);
         //update the dollars for this cycle
@@ -392,13 +391,10 @@ library LibCreditNftManager {
                 (totalOutstandingDebt);
 
             IDollarMintExcess dollarsDistributor = IDollarMintExcess(
-                store._excessDollarDistributors[address(this)]
+                address(this)
             );
             // transfer excess dollars to the distributor and tell it to distribute
-            dollar.transfer(
-                store._excessDollarDistributors[address(this)],
-                excessDollars
-            );
+            dollar.transfer(address(this), excessDollars);
             dollarsDistributor.distributeDollars();
         }
     }

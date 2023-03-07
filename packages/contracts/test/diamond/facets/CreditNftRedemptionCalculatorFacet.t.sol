@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 import "../DiamondTestSetup.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 
-contract CreditNFTRedemptionCalculatorFacetTest is DiamondSetup {
+contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
     MockCreditNft _creditNFT;
 
     function setUp() public virtual override {

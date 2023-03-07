@@ -61,6 +61,7 @@ contract StakingShareForDiamond is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
+    // TODO should this inherit from ERC1155UbiquityForDiamond?
     constructor(address _diamond, string memory uri) ERC1155(uri) {
         accessCtrl = IAccessControl(_diamond);
     }

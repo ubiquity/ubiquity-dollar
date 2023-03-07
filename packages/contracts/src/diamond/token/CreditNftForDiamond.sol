@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "../ERC1155Ubiquity.sol";
+import {ERC1155UbiquityForDiamond} from "./ERC1155UbiquityForDiamond.sol";
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";
-import "../old/UbiquityDollarManager.sol";
-import "../interfaces/ICreditNft.sol";
+import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
+import "../libraries/Constants.sol";
 
 /// @title A CreditNft redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number
 /// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
-contract CreditNft is ERC1155Ubiquity, ICreditNft {
+contract CreditNftForDiamond is ERC1155UbiquityForDiamond, ICreditNft {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     //not public as if called externally can give inaccurate value. see method
@@ -35,16 +35,14 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
     modifier onlyCreditNftManager() {
         require(
-            manager.hasRole(manager.CREDIT_NFT_MANAGER_ROLE(), msg.sender),
+            accessCtrl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a CreditNft manager"
         );
         _;
     }
 
     //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
-    constructor(
-        UbiquityDollarManager manager_
-    ) ERC1155Ubiquity(manager_, "URI") {
+    constructor(address _diamond) ERC1155UbiquityForDiamond(_diamond, "URI") {
         _totalOutstandingDebt = 0;
     }
 

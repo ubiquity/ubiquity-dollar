@@ -255,10 +255,11 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         vm.stopPrank();
 
-        vm.startPrank(userAddress);
-
         // mint 100 Dollars to user
+        vm.prank(admin);
         dollar.mint(userAddress, 100e18);
+
+        vm.startPrank(userAddress);
         // user allows DirectGovernanceFarmerHarness to spend user's Dollars
         dollar.approve(address(directGovernanceFarmer), 100e18);
         assertEq(dollar.balanceOf(userAddress), 100e18);
@@ -368,10 +369,11 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         vm.stopPrank();
 
-        vm.startPrank(userAddress);
-
         // mint 100 Dollars to user
+        vm.prank(admin);
         dollar.mint(userAddress, 100e18);
+
+        vm.startPrank(userAddress);
         // user allows DirectGovernanceFarmerHarness to spend user's Dollars
         dollar.approve(address(directGovernanceFarmer), 100e18);
         assertEq(dollar.balanceOf(userAddress), 100e18);

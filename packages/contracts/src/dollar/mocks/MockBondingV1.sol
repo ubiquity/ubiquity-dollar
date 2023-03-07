@@ -5,7 +5,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../core/UbiquityDollarToken.sol";
-import "../core/UbiquityDollarManager.sol";
+import "../old/UbiquityDollarManager.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "../interfaces/IMetaPool.sol";
 import "../interfaces/IUbiquityFormulas.sol";

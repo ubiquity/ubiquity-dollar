@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../interfaces/ICreditRedemptionCalculator.sol";
 import "./UbiquityDollarManager.sol";
 import "abdk/ABDKMathQuad.sol";
-import "./CreditNft.sol";
+import "../core/CreditNft.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditRedemptionCalculator is ICreditRedemptionCalculator {
