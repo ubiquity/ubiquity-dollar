@@ -1,5 +1,5 @@
 import {
-  getBondingShareV2Contract,
+  getStakingShareContract,
   getBondingV2Contract,
   getDebtCouponContract,
   getDollarMintCalculatorContract,
@@ -10,13 +10,13 @@ import {
   getMasterChefV2Contract,
   getSushiSwapPoolContract,
   getTWAPOracleContract,
-  getUbiquityAlgorithmicDollarContract,
-  getUbiquityCreditContract,
+  getDollarContract,
+  getCreditContract,
   getUbiquityFormulasContract,
-  getUbqContract,
-  getUniswapV2FactoryContract,
+  getGovernanceContract,
+  getUniswapV2PairContract,
 } from "@/components/utils/contracts";
-import { Contract } from "ethers";
+import { UbiquityDollarManager } from "types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "../children-shim";
 import useWeb3, { PossibleProviders } from "../useWeb3";
@@ -41,7 +41,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: Contract, provider: NonNullable<PossibleProviders>) {
+async function connectManagerContracts(manager: UbiquityDollarManager, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
@@ -63,37 +63,38 @@ async function connectManagerContracts(manager: Contract, provider: NonNullable<
     manager.dollarTokenAddress(),
     manager.stableSwapMetaPoolAddress(),
     manager.twapOracleAddress(),
-    manager.dollarMintingCalculatorAddress(),
-    manager.autoRedeemTokenAddress(),
+    manager.dollarMintCalculatorAddress(),
+    manager.creditTokenAddress(),
     manager.governanceTokenAddress(),
     manager.curve3PoolTokenAddress(),
-    manager.bondingShareAddress(),
-    manager.debtCouponAddress(),
-    manager.bondingContractAddress(),
+    manager.stakingShareAddress(),
+    manager.creditNftAddress(),
+    manager.stakingContractAddress(),
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
     manager.formulasAddress(),
-    manager.couponCalculatorAddress(),
-    manager.uarCalculatorAddress(),
+    manager.creditNftCalculatorAddress(),
+    manager.creditCalculatorAddress(),
   ]);
 
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
-  const ugovUadPairContract = getUniswapV2FactoryContract(await sushiSwapPoolContract.pair(), provider);
+
+  const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
 
   return {
-    dollarToken: getUbiquityAlgorithmicDollarContract(dollarToken, provider),
+    dollarToken: getDollarContract(dollarToken, provider),
     dollarMetapool: getIMetaPoolContract(dollar3poolMarket, provider),
     dollarTwapOracle: getTWAPOracleContract(twapOracle, provider),
     dollarMintCalculator: getDollarMintCalculatorContract(dollarMintCalc, provider),
-    creditToken: getUbiquityCreditContract(creditToken, provider),
-    governanceToken: getUbqContract(governanceToken, provider),
+    creditToken: getCreditContract(creditToken, provider),
+    governanceToken: getGovernanceContract(governanceToken, provider),
     _3crvToken: getERC20Contract(_3crvToken, provider),
-    stakingToken: getBondingShareV2Contract(stakingToken, provider),
+    stakingToken: getStakingShareContract(stakingToken, provider),
     creditNft: getDebtCouponContract(creditNft, provider),
     staking: getBondingV2Contract(staking, provider),
     masterChef: getMasterChefV2Contract(masterChef, provider),
     sushiSwapPool: sushiSwapPoolContract,
-    governanceMarket: ugovUadPairContract,
+    governanceMarket: governanceMarket,
     ubiquityFormulas: getUbiquityFormulasContract(ubiquityFormulas, provider),
     creditNftCalculator: getICouponsForDollarsCalculatorContract(creditNftCalculator, provider),
     creditCalculator: getIUARForDollarsCalculatorContract(creditCalculator, provider),

@@ -25,6 +25,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const managedContracts = useManagerManaged();
 
   const [inputVal, setInputVal] = useState("0");
+  // cspell: disable-next-line
   const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
   const [quoteAmount, lastQuoteAmount] = useRouter(selectedRedeemToken, inputVal);
   const currentlyAbovePeg = twapInteger > 1;
@@ -39,12 +40,14 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
 
   const redeemUcr = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken as unknown as Contract, amount, signer, debtCouponManager.address);
-    await (await debtCouponManager.connect(signer).burnAutoRedeemTokensForDollars(amount)).wait();
+    // cspell: disable-next-line
+    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken, amount, signer, debtCouponManager.address);
+    await (await debtCouponManager.connect(signer).burnCreditTokensForDollars(amount)).wait();
     refreshBalances();
+    // cspell: disable-next-line
     if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
       const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
-      await (await routerContract.connect(signer).approveMax(quoteAmount, managedContracts.dollarToken)).wait();
+      await (await routerContract.connect(signer).approveMax(managedContracts.dollarToken.address)).wait();
       await useTrade(selectedRedeemToken, quoteAmount);
       refreshBalances();
     }
@@ -53,6 +56,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const handleRedeem = () => {
     const amount = extractValidAmount();
     if (amount) {
+      // cspell: disable-next-line
       doTransaction("Redeeming uCR...", async () => {
         setInputVal("");
         await redeemUcr(amount);
@@ -83,7 +87,9 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
           <h4>TWAP is above peg</h4>
           <div onChange={onChangeValue}>
             <p>Please select a token to redeem for:</p>
+            {/* cspell: disable-next-line */}
             <input type="radio" id="tokenChoice1" name="redeemToken" value="uAD" checked={selectedRedeemToken === "uAD"} readOnly />
+            {/* cspell: disable-next-line */}
             <label htmlFor="tokenChoice1">uAD</label>
 
             <input type="radio" id="tokenChoice2" name="redeemToken" value="USDC" checked={selectedRedeemToken === "USDC"} readOnly />
@@ -96,20 +102,26 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
             <label htmlFor="tokenChoice4">USDT</label>
           </div>
           <div>
+            {/* cspell: disable-next-line */}
             <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
             <span onClick={handleMax}>MAX</span>
           </div>
+          {/* cspell: disable-next-line */}
           {inputVal && selectedRedeemToken === "uAD" && quoteAmount && (
             <div>
+              {/* cspell: disable-next-line */}
               {inputVal} uCR -&gt; {quoteAmount} uAD.
             </div>
           )}
+          {/* cspell: disable-next-line */}
           {inputVal && selectedRedeemToken !== "uAD" && quoteAmount && lastQuoteAmount && (
             <div>
+              {/* cspell: disable-next-line */}
               {inputVal} uCR -&gt; {quoteAmount} uAD -&gt; {lastQuoteAmount} {selectedRedeemToken}.
             </div>
           )}
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
+            {/* cspell: disable-next-line */}
             Redeem uCR for {selectedRedeemToken}
           </Button>
         </div>

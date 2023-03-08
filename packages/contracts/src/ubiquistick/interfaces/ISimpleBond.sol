@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.16;
 
 interface ISimpleBond {
     event LogSetRewards(address token, uint256 rewardsRatio);
@@ -27,9 +27,10 @@ interface ISimpleBond {
 
     function unpause() external;
 
-    function bond(address token, uint256 amount)
-        external
-        returns (uint256 bondId);
+    function bond(
+        address token,
+        uint256 amount
+    ) external returns (uint256 bondId);
 
     function bondsCount(address token) external returns (uint256 bondNb);
 
@@ -39,7 +40,9 @@ interface ISimpleBond {
 
     function withdraw(address token, uint256 amount) external;
 
-    function rewardsOf(address addr)
+    function rewardsOf(
+        address addr
+    )
         external
         view
         returns (
@@ -48,7 +51,10 @@ interface ISimpleBond {
             uint256 rewardsClaimable
         );
 
-    function rewardsBondOf(address addr, uint256 index)
+    function rewardsBondOf(
+        address addr,
+        uint256 index
+    )
         external
         view
         returns (

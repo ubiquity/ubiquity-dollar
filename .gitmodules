@@ -13,6 +13,18 @@
 [submodule "packages/contracts/lib/forge-std"]
 	path = packages/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "packages/contracts/lib/abdk-libraries-solidity"]
+	path = packages/contracts/lib/abdk-libraries-solidity
+	url = https://github.com/abdk-consulting/abdk-libraries-solidity
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
+[submodule "packages/contracts/lib/Uniswap/v3-periphery"]
+	path = packages/contracts/lib/Uniswap/v3-periphery
+	url = https://github.com/Uniswap/v3-periphery.git
+[submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-periphery"]
+	path = packages/contracts/packages/contracts/lib/Uniswap/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery.git
+[submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-core"]
+	path = packages/contracts/packages/contracts/lib/Uniswap/v2-core
+	url = https://github.com/Uniswap/v2-core

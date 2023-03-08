@@ -19,34 +19,18 @@ type Coupon = {
 };
 
 type Coupons = {
+  // cspell: disable-next-line
   uDEBT: Coupon[];
+  // cspell: disable-next-line
   uBOND: number;
+  // cspell: disable-next-line
   uAR: number;
 };
 
+// cspell: disable-next-line
 const uDEBT = "uDEBT";
+// cspell: disable-next-line
 const uAR = "uAR";
-
-// async function _expectedCoupon(
-//   uadAmount: string,
-//   contracts: Contracts | null,
-//   selectedCurrency: string,
-//   setExpectedCoupon: Dispatch<SetStateAction<BigNumber | undefined>>
-// ) {
-//   const amount = ethers.utils.parseEther(uadAmount);
-//   if (contracts && amount.gt(BigNumber.from(0))) {
-//     if (selectedCurrency === uDEBT) {
-//       const expectedCoupon = await contracts.coupon.getCouponAmount(amount);
-//       console.log("expectedCoupon", expectedCoupon.toString());
-//       setExpectedCoupon(expectedCoupon);
-//     } else if (selectedCurrency === uAR) {
-//       const blockHeight = await contracts.debtCouponManager.blockHeightDebt();
-//       const expectedCoupon = await contracts.uarCalc.getUARAmount(amount, blockHeight);
-//       console.log("expectedCoupon", expectedCoupon.toString());
-//       setExpectedCoupon(expectedCoupon);
-//     }
-//   }
-// }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
@@ -65,6 +49,7 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
     },
     onBurn: async (uadAmount, setErrMsg) => {
       setErrMsg("");
+      // cspell: disable-next-line
       await doTransaction("Burning uAD...", async () => {});
     },
   };
@@ -86,12 +71,18 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
   const uarTotalSupply = 30000;
   const uDebtTotalSupply = 12000;
   const coupons: Coupons = {
+    // cspell: disable-next-line
     uDEBT: [
+      // cspell: disable-next-line
       { amount: 1000, expiration: 1640390400000, swap: { amount: 800, unit: "uAR" } },
+      // cspell: disable-next-line
       { amount: 500, expiration: 1639526400000, swap: { amount: 125, unit: "uAR" } },
+      // cspell: disable-next-line
       { amount: 666, expiration: 1636934400000, swap: { amount: 166.5, unit: "UBQ" } },
     ],
+    // cspell: disable-next-line
     uBOND: 1000,
+    // cspell: disable-next-line
     uAR: 3430,
   };
 
@@ -160,6 +151,7 @@ const DebtCoupon = memo(
     priceIncreaseFormula,
   }: DebtCouponProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
+    // cspell: disable-next-line
     const [selectedCurrency, selectCurrency] = useState(uDEBT);
     const [increasedValue, setIncreasedValue] = useState(0);
     const [errMsg, setErrMsg] = useState<string>();
@@ -196,7 +188,7 @@ const DebtCoupon = memo(
       setErrMsg("");
       const missing = `Missing input value for`;
       const bignumberErr = `can't parse BigNumber from`;
-
+      // cspell: disable-next-line
       const subject = `uAD amount`;
       const amountEl = e.target as HTMLInputElement;
       const amountValue = amountEl?.value;
@@ -310,29 +302,37 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
   const shouldDisableInput = (type: keyof Coupons) => {
     if (!coupons) {
       return true;
+      // cspell: disable-next-line
     } else if (type === "uAR") {
+      // cspell: disable-next-line
       return !coupons.uAR || coupons.uAR <= 0;
+      // cspell: disable-next-line
     } else if (type === "uBOND") {
+      // cspell: disable-next-line
       return !coupons.uBOND || coupons.uBOND <= 0;
     }
     return false;
   };
 
   const handleInputUAR = async (e: ChangeEvent) => {
+    // cspell: disable-next-line
     if (!coupons || !coupons.uAR) {
       return;
     }
     const amountEl = e.target as HTMLInputElement;
     const amountValue = amountEl?.value;
+    // cspell: disable-next-line
     setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
   };
 
   const handleInputUBond = async (e: ChangeEvent) => {
+    // cspell: disable-next-line
     if (!coupons || !coupons.uBOND) {
       return;
     }
     const amountEl = e.target as HTMLInputElement;
     const amountValue = amountEl?.value;
+    // cspell: disable-next-line
     setUBondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
   };
 
@@ -347,9 +347,11 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
         <div>
           <div>
             <div>
+              {/* cspell: disable-next-line */}
               <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
             </div>
             <div>
+              {/* cspell: disable-next-line */}
               <input type="number" value={uBondAmount} disabled={shouldDisableInput("uBOND")} onChange={handleInputUBond} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
@@ -358,9 +360,11 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
         <div>
           <div>
             <div>
+              {/* cspell: disable-next-line */}
               <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
             </div>
             <div>
+              {/* cspell: disable-next-line */}
               <input type="number" value={uarAmount} disabled={shouldDisableInput("uAR")} onChange={handleInputUAR} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
@@ -372,7 +376,9 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
               <span>Deprecation rate 10% / week</span>
             </div>
             <div>
+              {/* cspell: disable-next-line */}
               <span>{uarToUDebtFormula(uarAmount).toLocaleString()} uDEBT</span>
+              {/* cspell: disable-next-line */}
               <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
             </div>
           </div>
@@ -398,6 +404,7 @@ export const RewardCycleInfo = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupp
       <div>
         <div>
           <div>
+            {/* cspell: disable-next-line */}
             <span>uAD</span>
           </div>
           <div>
@@ -421,14 +428,17 @@ export const RewardCycleInfo = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupp
           </div>
           <div>
             <div>
+              {/* cspell: disable-next-line */}
               <div>uBOND</div>
               <div>{uBondTotalSupply.toLocaleString()}</div>
             </div>
             <div>
+              {/* cspell: disable-next-line */}
               <div>uAR</div>
               <div>{uarTotalSupply.toLocaleString()}</div>
             </div>
             <div>
+              {/* cspell: disable-next-line */}
               <div>uDEBT</div>
               <div>{uDebtTotalSupply.toLocaleString()}</div>
             </div>
@@ -465,10 +475,13 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
   return (
     <>
       <div>
+        {/* cspell: disable-next-line */}
         <span>uAD</span>
         <input type="number" onChange={handleInputUAD} />
         <nav>
+          {/* cspell: disable-next-line */}
           <button onClick={() => handleTabSelect(uAR)}>uAR</button>
+          {/* cspell: disable-next-line */}
           <button onClick={() => handleTabSelect(uDEBT)}>uDEBT</button>
         </nav>
         <button onClick={handleBurn}>Burn</button>
@@ -510,6 +523,7 @@ export const PumpCycle = ({
       </div>
       <div>
         <div>
+          {/* cspell: disable-next-line */}
           <span>Fungible (uAR)</span>
           <table>
             <tbody>
@@ -533,6 +547,7 @@ export const PumpCycle = ({
           <a href="">Learn more</a>
         </div>
         <div>
+          {/* cspell: disable-next-line */}
           <span>Non-fungible (uDEBT)</span>
           <table>
             <tbody>
@@ -554,6 +569,7 @@ export const PumpCycle = ({
             <span>Convertible to fungible</span>
           </div>
           <div>
+            {/* cspell: disable-next-line */}
             <span>Can be redeemed for UBQ at {uDebtUbqRedemptionRate * 100}% rate</span>
           </div>
           <a href="">Learn more</a>
@@ -615,6 +631,7 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
       </div>
       <div>
         <span>
+          {/* cspell: disable-next-line */}
           {parseFloat(price) <= 1 ? "Burn uAD for debt coupons and help pump the price back up" : "Time to redeem debts coupons and help move the price down"}
         </span>
       </div>
@@ -634,15 +651,19 @@ export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => 
       <table>
         <thead>
           <tr>
+            {/* cspell: disable-next-line */}
             <th>uDEBT</th>
             <th>Expiration</th>
             <th>Swap</th>
             <th></th>
           </tr>
         </thead>
+
         <tbody>
+          {/* cspell: disable-next-line */}
           {coupons && coupons.uDEBT && coupons.uDEBT.length
-            ? coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
+            ? // cspell: disable-next-line
+              coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
             : null}
         </tbody>
       </table>

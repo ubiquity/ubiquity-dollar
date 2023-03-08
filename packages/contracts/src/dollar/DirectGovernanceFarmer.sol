@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.16;
+pragma solidity 0.8.16;
 
 /**
  * @title Ubiquity.
@@ -14,19 +14,19 @@ import "./interfaces/IDepositZap.sol";
 import "./interfaces/IStaking.sol";
 import "./interfaces/IStakingShare.sol";
 import "./interfaces/IStableSwap3Pool.sol";
-import "./interfaces/IUbiquityDollarManager.sol";
+import "./core/UbiquityDollarManager.sol";
 
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    address public token2; //USDT decimal 6
-    address public token1; //USDC decimal 6
-    address public token0; //DAI
-    address public ubiquity3PoolLP;
-    address public ubiquityDollar;
-    address public depositZapUbiquityDollar;
+    address public immutable token2; //USDT decimal 6
+    address public immutable token1; //USDC decimal 6
+    address public immutable token0; //DAI
+    address public immutable ubiquity3PoolLP;
+    address public immutable ubiquityDollar;
+    address public immutable depositZapUbiquityDollar;
 
-    IUbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
 
     event DepositSingle(
         address indexed sender,
@@ -55,11 +55,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     );
 
     constructor(
-        address _manager,
+        UbiquityDollarManager _manager,
         address base3Pool,
         address depositZap
     ) {
-        manager = IUbiquityDollarManager(_manager); // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
+        manager = _manager; // 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
         ubiquity3PoolLP = manager.stableSwapMetaPoolAddress(); // 0x20955CB69Ae1515962177D164dfC9522feef567E
         ubiquityDollar = manager.dollarTokenAddress(); // 0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6
         depositZapUbiquityDollar = depositZap; // 0xA79828DF1850E8a3A3064576f380D90aECDD3359;
@@ -71,7 +71,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     //TODO create updateConfig method
-
+    /// Needs to check that Operator is Authorized, From is Valid, ID exists
     function onERC1155Received(
         address operator,
         address from,
@@ -270,11 +270,9 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param stakingShareId Staking Share Id to withdraw
      */
 
-    function withdraw(uint256 stakingShareId)
-        external
-        nonReentrant
-        returns (uint256[4] memory tokenAmounts)
-    {
+    function withdraw(
+        uint256 stakingShareId
+    ) external nonReentrant returns (uint256[4] memory tokenAmounts) {
         address staking = manager.stakingContractAddress();
         address stakingShare = manager.stakingShareAddress();
 
@@ -284,7 +282,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         //stake.minter is this contract address so that cannot use it for verification.
         require(isIdIncluded(stakingShareIds, stakingShareId), "!bond owner");
 
-        //transfer bondingShare NFT token from msg.sender to this address
+        //transfer stakingShare NFT token from msg.sender to this address
         IStakingShare(stakingShare).safeTransferFrom(
             msg.sender,
             address(this),
@@ -341,11 +339,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
      * @param stakingShareId Staking Share Id to withdraw
      * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or Ubiquity Dollar
      */
-    function withdraw(uint256 stakingShareId, address token)
-        external
-        nonReentrant
-        returns (uint256 tokenAmount)
-    {
+    function withdraw(
+        uint256 stakingShareId,
+        address token
+    ) external nonReentrant returns (uint256 tokenAmount) {
         // DAI / USDC / USDT / Ubiquity Dollar
         require(
             isMetaPoolCoin(token),
@@ -363,7 +360,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
             "sender is not true bond owner"
         );
 
-        //transfer bondingShare NFT token from msg.sender to this address
+        //transfer stakingShare NFT token from msg.sender to this address
         IStakingShare(stakingShare).safeTransferFrom(
             msg.sender,
             address(this),
@@ -393,9 +390,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint128 tokenIndex = token == ubiquityDollar
             ? 0
             : (token == token0 ? 1 : (token == token1 ? 2 : 3));
-        IERC20(ubiquity3PoolLP).approve(
-            depositZapUbiquityDollar,
-            lpTokenAmount
+        require(
+            IERC20(ubiquity3PoolLP).approve(
+                depositZapUbiquityDollar,
+                lpTokenAmount
+            )
         );
         tokenAmount = IDepositZap(depositZapUbiquityDollar)
             .remove_liquidity_one_coin(
@@ -403,7 +402,7 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
                 lpTokenAmount,
                 int128(tokenIndex),
                 0
-            ); //[Ubiquity Dollar, DAI, USDC, USDT]
+            ); //[UAD, DAI, USDC, USDT]
 
         IERC20(token).safeTransfer(msg.sender, tokenAmount);
         IERC20(manager.governanceTokenAddress()).safeTransfer(
@@ -414,11 +413,10 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         emit Withdraw(msg.sender, stakingShareId, token, tokenAmount);
     }
 
-    function isIdIncluded(uint256[] memory idList, uint256 id)
-        internal
-        pure
-        returns (bool)
-    {
+    function isIdIncluded(
+        uint256[] memory idList,
+        uint256 id
+    ) internal pure returns (bool) {
         for (uint256 i = 0; i < idList.length; i++) {
             if (idList[i] == id) {
                 return true;

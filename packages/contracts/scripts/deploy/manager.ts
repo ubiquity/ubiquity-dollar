@@ -8,8 +8,9 @@ const ubiquiStickPath = "src/ubiquistick";
 const LPTokenName = "LP token";
 const LPTokenSymbol = "LP";
 
-const UARName = "Ubiquity Auto Redeem";
-const UARSymbol = "uAR";
+const autoRedeemName = "Ubiquity Auto Redeem";
+// cspell:disable-next-line
+const autoRedeemSymbol = "uAR";
 
 const simpleBondHandler = async (args: CommandLineOption) => {
   const { network, treasury } = args;
@@ -150,17 +151,17 @@ export const Deploy_Manager: DeployCallbackFn = {
   UbiquityFormulas: (args: CommandLineOption) => {
     createHandler([], args, `${dollarPath}/UbiquityFormulas.sol:UbiquityFormulas`);
   },
-  CreditNFT: (args: CommandLineOption) => {
+  CreditNft: (args: CommandLineOption) => {
     const { manager } = args;
-    createHandler([manager], args, `${corePath}/CreditNFT.sol:CreditNFT`);
+    createHandler([manager], args, `${corePath}/CreditNft.sol:CreditNft`);
   },
-  CreditNFTManager: (args: CommandLineOption) => {
-    const { manager, creditNFTLengthBlocks } = args;
-    createHandler([manager, creditNFTLengthBlocks], args, `${corePath}/CreditNFTManager.sol:CreditNFTManager`);
+  CreditNftManager: (args: CommandLineOption) => {
+    const { manager, creditNftLengthBlocks } = args;
+    createHandler([manager, creditNftLengthBlocks], args, `${corePath}/CreditNftManager.sol:CreditNftManager`);
   },
-  CreditNFTRedemptionCalculator: (args: CommandLineOption) => {
+  CreditNftRedemptionCalculator: (args: CommandLineOption) => {
     const { manager } = args;
-    createHandler([manager], args, `${corePath}/CreditNFTRedemptionCalculator.sol:CreditNFTRedemptionCalculator`);
+    createHandler([manager], args, `${corePath}/CreditNftRedemptionCalculator.sol:CreditNftRedemptionCalculator`);
   },
   CreditRedemptionCalculator: (args: CommandLineOption) => {
     const { manager } = args;
@@ -199,7 +200,7 @@ export const Deploy_Manager: DeployCallbackFn = {
   },
   UAR: (args: CommandLineOption) => {
     const { treasury } = args;
-    createHandler([UARName, UARSymbol, treasury], args, `${ubiquiStickPath}/UAR.sol:UAR`);
+    createHandler([autoRedeemName, autoRedeemSymbol, treasury], args, `${ubiquiStickPath}/UAR.sol:UAR`);
   },
   SimpleBond: (args: CommandLineOption) => {
     standardHandler["SimpleBond"](args);

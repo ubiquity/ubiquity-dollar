@@ -1,4 +1,4 @@
-import { Contract, ethers } from "ethers";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
 import { ZERO_ADDRESS } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { aprFromRatio, multiplierFromRatio } from "../utils";
 import { Contracts } from "./useLaunchPartyContracts";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
+import { ERC20 } from "types";
 
 export type BondData = {
   tokenName: string;
@@ -21,7 +22,7 @@ export type BondData = {
   rewardPrice: number;
 };
 
-const useSimpleBond = (contracts: Contracts | null, tokensContracts: Contract[]) => {
+const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) => {
   const [{ provider, walletAddress }] = useWeb3();
   const ubqContracts = useManagerManaged();
 

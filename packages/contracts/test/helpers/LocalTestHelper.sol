@@ -1,33 +1,26 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
-import {UbiquityDollarManager} from
-    "../../src/dollar/core/UbiquityDollarManager.sol";
+import {UbiquityDollarManager} from "../../src/dollar/core/UbiquityDollarManager.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
-import {CreditRedemptionCalculator} from
-    "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {CreditNFTRedemptionCalculator} from
-    "../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
-import {DollarMintCalculator} from
-    "../../src/dollar/core/DollarMintCalculator.sol";
-import {DollarMintExcess} from
-    "../../src/dollar/core/DollarMintExcess.sol";
-import {MockCreditNFT} from "../../src/dollar/mocks/MockCreditNFT.sol";
+import {CreditRedemptionCalculator} from "../../src/dollar/core/CreditRedemptionCalculator.sol";
+import {CreditNftRedemptionCalculator} from "../../src/dollar/core/CreditNftRedemptionCalculator.sol";
+import {CreditNftManager} from "../../src/dollar/core/CreditNftManager.sol";
+import {DollarMintCalculator} from "../../src/dollar/core/DollarMintCalculator.sol";
+import {DollarMintExcess} from "../../src/dollar/core/DollarMintExcess.sol";
+import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 
 import "forge-std/Test.sol";
-import "forge-std/console.sol";
 
-contract MockCreditNFTRedemptionCalculator {
+contract MockCreditNftRedemptionCalculator {
     constructor() {}
 
-    function getCreditNFTAmount(uint256 dollarsToBurn)
-        external
-        pure
-        returns (uint256)
-    {
+    function getCreditNftAmount(
+        uint256 dollarsToBurn
+    ) external pure returns (uint256) {
         return dollarsToBurn;
     }
 }
@@ -38,57 +31,74 @@ abstract contract LocalTestHelper is Test {
     address public admin = address(0x123abc);
     address public treasuryAddress = address(0x111222333);
 
-    function helpers_deployUbiquityDollarManager()
-        public
-        returns (address)
-    {
-        UbiquityDollarManager _manager =
-            new UbiquityDollarManager(admin);
+    UbiquityDollarManager manager;
+    MockCreditNft creditNft;
+    MockDollarToken dollarToken;
+    MockTWAPOracleDollar3pool twapOracle;
+    UbiquityGovernanceToken governanceToken;
+    MockCreditNftRedemptionCalculator creditNftRedemptionCalculator;
+    MockCreditToken creditToken;
+    CreditRedemptionCalculator creditRedemptionCalculator;
+    DollarMintCalculator dollarMintCalculator;
+    CreditNftManager creditNftManager;
+    DollarMintExcess dollarMintExcess;
+
+    function setUp() public virtual {
+        manager = new UbiquityDollarManager(admin);
 
         vm.startPrank(admin);
-        // deploy credit NFT token
-        MockCreditNFT _creditNFT = new MockCreditNFT(100);
-        _manager.setCreditNFTAddress(address(_creditNFT));
+        // deploy Credit NFT token
+        creditNft = new MockCreditNft(100);
+        manager.setCreditNftAddress(address(creditNft));
 
         // deploy dollar token
-        MockDollarToken _dollarToken = new MockDollarToken(10000e18);
-        _manager.setDollarTokenAddress(address(_dollarToken));
+        dollarToken = new MockDollarToken(10000e18);
+        manager.setDollarTokenAddress(address(dollarToken));
 
         // deploy twapPrice oracle
-        MockTWAPOracleDollar3pool _twapOracle =
-        new MockTWAPOracleDollar3pool(address(0x100), address(_dollarToken), address(0x101), 100, 100);
-        _manager.setTwapOracleAddress(address(_twapOracle));
+        twapOracle = new MockTWAPOracleDollar3pool(
+            address(0x100),
+            address(dollarToken),
+            address(0x101),
+            100,
+            100
+        );
+        manager.setTwapOracleAddress(address(twapOracle));
 
         // deploy governance token
-        UbiquityGovernanceToken _governanceToken = new UbiquityGovernanceToken(address(_manager));
-        _manager.setGovernanceTokenAddress(address(_governanceToken));
+        governanceToken = new UbiquityGovernanceToken(manager);
+        manager.setGovernanceTokenAddress(address(governanceToken));
 
-        // deploy CreditNFTRedemptionCalculator
-        MockCreditNFTRedemptionCalculator _creditNFTRedemptionCalculator =
-            new MockCreditNFTRedemptionCalculator();
-        _manager.setCreditNFTCalculatorAddress(
-            address(_creditNFTRedemptionCalculator)
+        // deploy CreditNftRedemptionCalculator
+        creditNftRedemptionCalculator = new MockCreditNftRedemptionCalculator();
+        manager.setCreditNftCalculatorAddress(
+            address(creditNftRedemptionCalculator)
         );
 
         // deploy credit token
-        MockCreditToken _creditToken = new MockCreditToken(0);
-        _manager.setCreditTokenAddress(address(_creditToken));
+        creditToken = new MockCreditToken(0);
+        manager.setCreditTokenAddress(address(creditToken));
 
         // deploy CreditRedemptionCalculator
-        CreditRedemptionCalculator _creditRedemptionCalculator =
-            new CreditRedemptionCalculator(address(_manager));
-        _manager.setCreditCalculatorAddress(address(_creditRedemptionCalculator));
+        creditRedemptionCalculator = new CreditRedemptionCalculator(manager);
+        manager.setCreditCalculatorAddress(address(creditRedemptionCalculator));
 
         // deploy DollarMintCalculator
-        DollarMintCalculator _dollarMintCalculator =
-            new DollarMintCalculator(address(_manager));
-        _manager.setDollarMintCalculatorAddress(address(_dollarMintCalculator));
+        dollarMintCalculator = new DollarMintCalculator(manager);
+        manager.setDollarMintCalculatorAddress(address(dollarMintCalculator));
+
+        // deploy CreditNftManager
+        creditNftManager = new CreditNftManager(manager, 100);
+
+        dollarMintExcess = new DollarMintExcess(manager);
+        manager.setExcessDollarsDistributor(
+            address(creditNftManager),
+            address(dollarMintExcess)
+        );
 
         // set treasury address
-        _manager.setTreasuryAddress(treasuryAddress);
+        manager.setTreasuryAddress(treasuryAddress);
 
         vm.stopPrank();
-
-        return address(_manager);
     }
 }

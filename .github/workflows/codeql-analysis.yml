@@ -1,12 +1,12 @@
-name: "CodeQL"
+name: CodeQL Analysis
 
 on:
   pull_request:
   push:
 
 jobs:
-  analyze:
-    name: Analyze
+  code-ql-analysis:
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -16,18 +16,18 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'javascript', 'typescript' ]
+        language: ["javascript", "typescript"]
         # CodeQL currently supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Modified to support codebase. Currently no support for Solidity Language
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Init CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
+      - name: Init CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2

@@ -1,6 +1,7 @@
 import "./styles/ubiquity.css";
 import "./styles/queries.css";
 import "./styles/proxima.css";
+import "./styles/dark-light-mode-toggle.css";
 
 import { AppProps } from "next/app";
 import Head from "next/head";

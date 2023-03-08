@@ -1,11 +1,12 @@
-name: Create diagram
+name: Create Diagram
 on:
   workflow_dispatch: {}
   push:
     branches:
       - main
 jobs:
-  get_data:
+  create-diagram:
+    name: Create Diagram
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

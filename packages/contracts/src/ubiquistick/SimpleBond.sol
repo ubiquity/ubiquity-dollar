@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.9;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
@@ -85,11 +85,10 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @notice Set Rewards for specific Token
     /// @param token token address
     /// @param tokenRewardsRatio rewardsRatio for this token
-    function setRewards(address token, uint256 tokenRewardsRatio)
-        public
-        override
-        onlyOwner
-    {
+    function setRewards(
+        address token,
+        uint256 tokenRewardsRatio
+    ) public override onlyOwner {
         require(token != address(0), "Invalid Reward token");
         rewardsRatio[token] = tokenRewardsRatio;
 
@@ -98,11 +97,9 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
     /// @notice Set vesting duration
     /// @param vestingBlocks_ vesting duration in blocks
-    function setVestingBlocks(uint256 vestingBlocks_)
-        public
-        override
-        onlyOwner
-    {
+    function setVestingBlocks(
+        uint256 vestingBlocks_
+    ) public override onlyOwner {
         require(vestingBlocks_ > 0, "Invalid Vesting blocks number");
         vestingBlocks = vestingBlocks_;
     }
@@ -128,13 +125,10 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @param token bonded token address
     /// @param amount amount of token to bond
     /// @return bondId Bond id
-    function bond(address token, uint256 amount)
-        public
-        override
-        whenNotPaused
-        onlySticker
-        returns (uint256 bondId)
-    {
+    function bond(
+        address token,
+        uint256 amount
+    ) public override whenNotPaused onlySticker returns (uint256 bondId) {
         require(rewardsRatio[token] > 0, "Token not allowed");
 
         // @dev throws if not enough allowance or tokens for address
@@ -154,27 +148,32 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         bonds[msg.sender].push(bnd);
 
         emit LogBond(
-            msg.sender, bnd.token, bnd.amount, bnd.rewards, bnd.block, bondId
-            );
+            msg.sender,
+            bnd.token,
+            bnd.amount,
+            bnd.rewards,
+            bnd.block,
+            bondId
+        );
     }
 
     /// @notice Claim all rewards
     /// @return claimed Rewards claimed successfully
     function claim() public override whenNotPaused returns (uint256 claimed) {
-        for (uint256 index = 0; (index < bonds[msg.sender].length); index += 1)
-        {
+        for (
+            uint256 index = 0;
+            (index < bonds[msg.sender].length);
+            index += 1
+        ) {
             claimed += claimBond(index);
         }
     }
 
     /// @notice Claim bond rewards
     /// @return claimed Rewards claimed successfully
-    function claimBond(uint256 index)
-        public
-        override
-        whenNotPaused
-        returns (uint256 claimed)
-    {
+    function claimBond(
+        uint256 index
+    ) public override whenNotPaused returns (uint256 claimed) {
         Bond storage bnd = bonds[msg.sender][index];
         uint256 claimAmount = _bondClaimableRewards(bnd);
 
@@ -185,7 +184,9 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
             assert(bnd.claimed <= bnd.rewards);
             IUAR(tokenRewards).raiseCapital(claimAmount);
             IERC20(tokenRewards).safeTransferFrom(
-                treasury, msg.sender, claimAmount
+                treasury,
+                msg.sender,
+                claimAmount
             );
         }
 
@@ -195,11 +196,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @notice Withdraw token from the smart contract, only for owner
     /// @param  token token withdraw
     /// @param amount amount withdraw
-    function withdraw(address token, uint256 amount)
-        public
-        override
-        onlyOwner
-    {
+    function withdraw(address token, uint256 amount) public override onlyOwner {
         IERC20(token).safeTransfer(treasury, amount);
     }
 
@@ -207,7 +204,9 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @return rewards Amount of rewards
     /// @return rewardsClaimed Amount of rewards already claimed
     /// @return rewardsClaimable Amount of still claimable rewards
-    function rewardsOf(address addr)
+    function rewardsOf(
+        address addr
+    )
         public
         view
         override
@@ -233,7 +232,10 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @return rewards Amount of rewards
     /// @return rewardsClaimed Amount of rewards already claimed
     /// @return rewardsClaimable Amount of still claimable rewards
-    function rewardsBondOf(address addr, uint256 index)
+    function rewardsBondOf(
+        address addr,
+        uint256 index
+    )
         public
         view
         override
@@ -256,11 +258,9 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     }
 
     /// @dev calculate claimable rewards during vesting period, or all claimable rewards after, minus already claimed
-    function _bondClaimableRewards(Bond memory bnd)
-        internal
-        view
-        returns (uint256 claimable)
-    {
+    function _bondClaimableRewards(
+        Bond memory bnd
+    ) internal view returns (uint256 claimable) {
         assert(block.number >= bnd.block);
 
         uint256 blocks = block.number - bnd.block;

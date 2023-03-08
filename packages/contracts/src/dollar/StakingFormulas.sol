@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "./StakingShare.sol";
-import "./libs/ABDKMathQuad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 contract StakingFormulas {
     using ABDKMathQuad for uint256;
@@ -72,9 +72,12 @@ contract StakingFormulas {
         if (_stakingLpBalance < _totalLpDeposited && _stakingLpBalance > 0) {
             // if there is less LP token inside the staking contract that what have been deposited
             // we have to reduce proportionally the lp amount to withdraw
-            return _amount.fromUInt().mul(_stakingLpBalance.fromUInt()).div(
-                _totalLpDeposited.fromUInt()
-            ).toUInt();
+            return
+                _amount
+                    .fromUInt()
+                    .mul(_stakingLpBalance.fromUInt())
+                    .div(_totalLpDeposited.fromUInt())
+                    .toUInt();
         }
         return _amount;
     }

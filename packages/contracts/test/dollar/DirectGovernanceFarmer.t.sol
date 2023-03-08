@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import "../../src/dollar/DirectGovernanceFarmer.sol";
 import "../../src/dollar/mocks/MockERC20.sol";
@@ -8,16 +8,15 @@ import {ERC20Ubiquity} from "../../src/dollar/ERC20Ubiquity.sol";
 
 contract DirectGovernanceFarmerHarness is DirectGovernanceFarmer {
     constructor(
-        address _manager,
+        UbiquityDollarManager manager,
         address base3Pool,
         address depositZap
-    ) DirectGovernanceFarmer(_manager, base3Pool, depositZap) {}
+    ) DirectGovernanceFarmer(manager, base3Pool, depositZap) {}
 
-    function exposed_isIdIncluded(uint256[] memory idList, uint256 id)
-        external
-        pure
-        returns (bool)
-    {
+    function exposed_isIdIncluded(
+        uint256[] memory idList,
+        uint256 id
+    ) external pure returns (bool) {
         return isIdIncluded(idList, id);
     }
 }
@@ -37,6 +36,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     address dollarManagerAddress;
     address depositZapAddress = address(0x4);
     address base3PoolAddress = address(0x5);
+
     event DepositSingle(
         address indexed sender,
         address token,
@@ -56,8 +56,9 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         uint256[4] amounts
     );
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
         dollar = ERC20Ubiquity(
             UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         );
@@ -72,7 +73,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             18
         );
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress)
+        UbiquityDollarManager(dollarManagerAddress)
             .setStableSwapMetaPoolAddress(address(stableSwapMetaPool));
         // mock base3Pool to return mocked token addresses
         vm.mockCall(
@@ -92,7 +93,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         // create direct governance farmer contract instance
         directGovernanceFarmer = new DirectGovernanceFarmer(
-            dollarManagerAddress,
+            manager,
             base3PoolAddress,
             depositZapAddress
         );
@@ -109,7 +110,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         assertEq(
             directGovernanceFarmer.ubiquityDollar(),
-            IUbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
+            UbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         );
         assertEq(
             directGovernanceFarmer.depositZapUbiquityDollar(),
@@ -163,10 +164,10 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
             stakingShareAddress
         );
         vm.stopPrank();
@@ -214,7 +215,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     }
 
     // Multiple
-    function testDeposit_Multiple_Tokens_ShouldRevert_IfAmountsIsNotPositive()
+    function testDepositMultipleTokens_ShouldRevert_IfAmountsIsNotPositive()
         public
     {
         address userAddress = address(0x100);
@@ -227,7 +228,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
     }
 
-    function testDeposit_Multiple_Tokens_ShouldRevert_IfDurationIsNotValid()
+    function testDepositMultipleTokens_ShouldRevert_IfDurationIsNotValid()
         public
     {
         address userAddress = address(0x100);
@@ -239,26 +240,26 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
     }
 
-    function testDeposit_Multiple_Tokens_ShouldDepositTokens() public {
+    function testDepositMultipleTokens_ShouldDepositTokens() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
             stakingShareAddress
         );
         vm.stopPrank();
 
         vm.startPrank(userAddress);
 
-        // mint 100 uAD to user
+        // mint 100 Dollars to user
         dollar.mint(userAddress, 100e18);
-        // user allows DirectGovernanceFarmerHarness to spend user's uAD
+        // user allows DirectGovernanceFarmerHarness to spend user's Dollars
         dollar.approve(address(directGovernanceFarmer), 100e18);
         assertEq(dollar.balanceOf(userAddress), 100e18);
         // mint 100 DAI to user
@@ -319,7 +320,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             12
         );
 
-        // user deposits 100 uAD 99 DAI 98 USDC 97 USDT
+        // user deposits 100 Dollars 99 DAI 98 USDC 97 USDT
         uint256 stakingShareId = directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             8
@@ -331,15 +332,13 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         assertEq(token2.balanceOf(userAddress), 0);
     }
 
-    function testWithdraw__Multiple_ShouldRevert_IfSenderIsNotBondOwner()
-        public
-    {
+    function testWithdrawMultiple_ShouldRevert_IfSenderIsNotBondOwner() public {
         address userAddress = address(0x100);
         address stakingShareAddress = address(0x102);
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
             stakingShareAddress
         );
 
@@ -354,26 +353,26 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         directGovernanceFarmer.withdraw(1);
     }
 
-    function testWithdraw_Multiple_ShouldWithdraw() public {
+    function testWithdrawMultiple_ShouldWithdraw() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
             stakingShareAddress
         );
         vm.stopPrank();
 
         vm.startPrank(userAddress);
 
-        // mint 100 uAD to user
+        // mint 100 Dollars to user
         dollar.mint(userAddress, 100e18);
-        // user allows DirectGovernanceFarmerHarness to spend user's uAD
+        // user allows DirectGovernanceFarmerHarness to spend user's Dollars
         dollar.approve(address(directGovernanceFarmer), 100e18);
         assertEq(dollar.balanceOf(userAddress), 100e18);
         // mint 100 DAI to user
@@ -416,7 +415,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
             ""
         );
 
-        // user deposits 100 uAD, 99 DAI 98 USDC 97 USDT for 1 week
+        // user deposits 100 Dollars, 99 DAI 98 USDC 97 USDT for 1 week
         directGovernanceFarmer.depositMulti(
             [uint256(100e18), uint256(99e18), uint256(98e18), uint256(97e18)],
             1
@@ -466,7 +465,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
     // END Multiple
 
-    function testWithdraw_ShouldRevert_IfTokenIsNotInMetaPool() public {
+    function testWithdrawShouldRevertIfTokenIsNotInMetaPool() public {
         address userAddress = address(0x100);
         vm.prank(userAddress);
         vm.expectRevert(
@@ -475,13 +474,13 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         directGovernanceFarmer.withdraw(1, address(0));
     }
 
-    function testWithdraw_ShouldRevert_IfSenderIsNotBondOwner() public {
+    function testWithdrawShouldRevertIfSenderIsNotBondOwner() public {
         address userAddress = address(0x100);
         address stakingShareAddress = address(0x102);
 
         // admin sets staking share addresses
         vm.prank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
             stakingShareAddress
         );
 
@@ -496,17 +495,17 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         directGovernanceFarmer.withdraw(1, address(token0));
     }
 
-    function testWithdraw_ShouldWithdraw() public {
+    function testWithdrawShouldWithdraw() public {
         address userAddress = address(0x100);
         address stakingAddress = address(0x101);
         address stakingShareAddress = address(0x102);
 
         // admin sets staking and staking share addresses
         vm.startPrank(admin);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
             stakingAddress
         );
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+        UbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
             stakingShareAddress
         );
         vm.stopPrank();
@@ -580,10 +579,10 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         assertEq(tokenAmount, 100e18);
     }
 
-    function testIsIdIncluded_ReturnTrue_IfIdIsInTheList() public {
+    function testIsIdIncludedReturnTrueIfIdIsInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                dollarManagerAddress,
+                manager,
                 base3PoolAddress,
                 depositZapAddress
             );
@@ -593,10 +592,10 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         assertTrue(directGovernanceFarmerHarness.exposed_isIdIncluded(list, 1));
     }
 
-    function testIsIdIncluded_ReturnFalse_IfIdIsNotInTheList() public {
+    function testIsIdIncludedReturnFalseIfIdIsNotInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                dollarManagerAddress,
+                manager,
                 base3PoolAddress,
                 depositZapAddress
             );
@@ -607,19 +606,19 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
     }
 
-    function testIsMetaPoolCoin_ReturnTrue_IfToken0IsPassed() public {
+    function testIsMetaPoolCoinReturnTrueIfToken0IsPassed() public {
         assertTrue(directGovernanceFarmer.isMetaPoolCoin(address(token0)));
     }
 
-    function testIsMetaPoolCoin_ReturnTrue_IfToken1IsPassed() public {
+    function testIsMetaPoolCoinReturnTrueIfToken1IsPassed() public {
         assertTrue(directGovernanceFarmer.isMetaPoolCoin(address(token1)));
     }
 
-    function testIsMetaPoolCoin_ReturnTrue_IfToken2IsPassed() public {
+    function testIsMetaPoolCoinReturnTrueIfToken2IsPassed() public {
         assertTrue(directGovernanceFarmer.isMetaPoolCoin(address(token2)));
     }
 
-    function testIsMetaPoolCoin_ReturnTrue_IfUbiquityDollarTokenIsPassed()
+    function testIsMetaPoolCoinReturnTrueIfUbiquityDollarTokenIsPassed()
         public
     {
         assertTrue(
@@ -629,7 +628,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
     }
 
-    function testIsMetaPoolCoin_ReturnFalse_IfTokenAddressIsNotInMetaPool()
+    function testIsMetaPoolCoinReturnFalseIfTokenAddressIsNotInMetaPool()
         public
     {
         assertFalse(directGovernanceFarmer.isMetaPoolCoin(address(0)));

@@ -1,4 +1,4 @@
-import { BigNumber, Contract } from "ethers";
+import { BigNumber } from "ethers";
 import { useState } from "react";
 
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
@@ -34,14 +34,16 @@ const UcrNftGenerator = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const { debtCouponManager } = deployedContracts;
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken as unknown as Contract, amount, signer, debtCouponManager.address);
-    await (await debtCouponManager.connect(signer).exchangeDollarsForDebtCoupons(amount)).wait();
+    // cspell: disable-next-line
+    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken, amount, signer, debtCouponManager.address);
+    await (await debtCouponManager.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
     refreshBalances();
   };
 
   const handleBurn = async () => {
     const amount = extractValidAmount();
     if (amount) {
+      // cspell: disable-next-line
       doTransaction("Burning uAD...", async () => {
         setInputVal("");
         await depositDollarForDebtCoupons(amount);
@@ -54,7 +56,7 @@ const UcrNftGenerator = () => {
     const amount = extractValidAmount(val);
     if (amount) {
       setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCouponAmount(amount));
+      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCreditNftAmount(amount));
     }
   };
 
@@ -67,8 +69,10 @@ const UcrNftGenerator = () => {
 
   return (
     <div>
+      {/* cspell: disable-next-line */}
       <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
       <Button onClick={handleBurn} disabled={!submitEnabled}>
+        {/* cspell: disable-next-line */}
         Redeem uAD for uCR-NFT
       </Button>
       {expectedDebtCoupon && inputVal && <p>expected uCR-NFT {formatEther(expectedDebtCoupon)}</p>}

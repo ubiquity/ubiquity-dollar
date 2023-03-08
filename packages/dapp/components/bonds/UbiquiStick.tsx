@@ -39,7 +39,7 @@ const UbiquiStick = ({ isConnected, sticks, allowance, onBuy, media }: UbiquiSti
   return (
     <div>
       <h2>The Ubiquistick NFT</h2>
-      <h3>Access the game bonding pools</h3>
+      <h3>Access the bonds</h3>
       <div>
         {sticksCount && sticksCount > 0 ? (
           <>

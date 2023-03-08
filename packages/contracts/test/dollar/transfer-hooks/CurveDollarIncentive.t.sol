@@ -1,16 +1,13 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {UbiquityDollarManager} from
-    "../../../src/dollar/core/UbiquityDollarManager.sol";
-import {UbiquityDollarToken} from
-    "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {CreditNFTRedemptionCalculator} from
-    "../../../src/dollar/core/CreditNFTRedemptionCalculator.sol";
+import {UbiquityDollarManager} from "../../../src/dollar/core/UbiquityDollarManager.sol";
+import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
+import {CreditNftRedemptionCalculator} from "../../../src/dollar/core/CreditNftRedemptionCalculator.sol";
 import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
-import {CreditNFT} from "../../../src/dollar/core/CreditNFT.sol";
-import {MockCreditNFT} from "../../../src/dollar/mocks/MockCreditNFT.sol";
+import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {CurveDollarIncentive} from "../../../src/dollar/transfer-hooks/CurveDollarIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
@@ -23,15 +20,13 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
 
     event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
-    function setUp() public {
-        dollarManagerAddress = helpers_deployUbiquityDollarManager();
-        curveIncentiveAddress =
-            address(new CurveDollarIncentive(dollarManagerAddress));
-        twapOracleAddress = UbiquityDollarManager(dollarManagerAddress)
-            .twapOracleAddress();
+    function setUp() public override {
+        super.setUp();
+        dollarManagerAddress = address(manager);
+        curveIncentiveAddress = address(new CurveDollarIncentive(manager));
+        twapOracleAddress = manager.twapOracleAddress();
         vm.prank(admin);
-        UbiquityDollarManager(dollarManagerAddress)
-            .setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
+        manager.setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
     }
 
     function mockInternalFuncs(uint256 _twapPrice) public {
@@ -47,46 +42,54 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         );
     }
 
-    function test_incentivize_revertsIfCallerNotUAD() public {
+    function testIncentivizeShouldRevertWhenCallerNotUAD() public {
         vm.expectRevert("CurveIncentive: Caller is not Ubiquity Dollar");
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            address(0x111), address(0x112), admin, 100
+            address(0x111),
+            address(0x112),
+            admin,
+            100
         );
     }
 
-    function test_incentivize_revertsIfSenderEqualToReceiver() public {
-        vm.prank(
-            UbiquityDollarManager(dollarManagerAddress)
-                .dollarTokenAddress()
-        );
+    function testIncentivizeShouldRevertIfSenderEqualToReceiver() public {
+        vm.prank(manager.dollarTokenAddress());
         vm.expectRevert("CurveIncentive: cannot send self");
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            address(0x111), address(0x111), admin, 100
+            address(0x111),
+            address(0x111),
+            admin,
+            100
         );
     }
 
-    function test_incentivize_buy() public {
+    function testIncentivizeBuy() public {
+        vm.startPrank(admin);
+        manager.grantRole(
+            manager.GOVERNANCE_TOKEN_MINTER_ROLE(),
+            curveIncentiveAddress
+        );
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
-        IERC20 governanceToken = IERC20(
-            UbiquityDollarManager(dollarManagerAddress)
-                .governanceTokenAddress()
-        );
-        address dollarAddress = UbiquityDollarManager(dollarManagerAddress)
-            .dollarTokenAddress();
+        IERC20 governanceToken = IERC20(manager.governanceTokenAddress());
+        address dollarAddress = manager.dollarTokenAddress();
         address mockReceiver = address(0x111);
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = governanceToken.balanceOf(mockReceiver);
-        vm.prank(admin);
-        CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            mockReceiver, true
-        );
 
+        CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
+            mockReceiver,
+            true
+        );
+        vm.stopPrank();
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         uint256 last_balance = governanceToken.balanceOf(mockReceiver);
@@ -96,14 +99,18 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         init_balance = governanceToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            mockReceiver, false
+            mockReceiver,
+            false
         );
         CurveDollarIncentive(curveIncentiveAddress).switchBuyIncentive();
         vm.stopPrank();
 
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         last_balance = governanceToken.balanceOf(mockReceiver);
@@ -114,14 +121,18 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         init_balance = governanceToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            mockReceiver, false
+            mockReceiver,
+            false
         );
         CurveDollarIncentive(curveIncentiveAddress).switchBuyIncentive();
         vm.stopPrank();
 
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         last_balance = governanceToken.balanceOf(mockReceiver);
@@ -131,28 +142,28 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         init_balance = governanceToken.balanceOf(mockReceiver);
         mockInternalFuncs(5e17);
         vm.prank(admin);
-        UbiquityDollarManager(dollarManagerAddress).grantRole(
-            keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"), curveIncentiveAddress
+        manager.grantRole(
+            keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"),
+            curveIncentiveAddress
         );
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            stableSwapPoolAddress, mockReceiver, address(0), 100e18
+            stableSwapPoolAddress,
+            mockReceiver,
+            address(0),
+            100e18
         );
 
         last_balance = governanceToken.balanceOf(mockReceiver);
         assertEq(last_balance - init_balance, 50e18);
     }
 
-    function test_incentivize_sell() public {
+    function testIncentivizeSell() public {
         address stableSwapPoolAddress = UbiquityDollarManager(
             dollarManagerAddress
         ).stableSwapMetaPoolAddress();
-        IERC20 governanceToken = IERC20(
-            UbiquityDollarManager(dollarManagerAddress)
-                .governanceTokenAddress()
-        );
-        address dollarAddress = UbiquityDollarManager(dollarManagerAddress)
-            .dollarTokenAddress();
+        IERC20 governanceToken = IERC20(manager.governanceTokenAddress());
+        address dollarAddress = manager.dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);
         address mockSender = address(0x222);
 
@@ -160,12 +171,16 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         uint256 init_balance = dollarToken.balanceOf(mockSender);
         vm.prank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            mockSender, true
+            mockSender,
+            true
         );
 
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         uint256 last_balance = dollarToken.balanceOf(mockSender);
@@ -175,14 +190,18 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         init_balance = dollarToken.balanceOf(mockSender);
         vm.startPrank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            mockSender, false
+            mockSender,
+            false
         );
         CurveDollarIncentive(curveIncentiveAddress).switchSellPenalty();
         vm.stopPrank();
 
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         last_balance = dollarToken.balanceOf(mockSender);
@@ -193,14 +212,18 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         init_balance = dollarToken.balanceOf(mockSender);
         vm.startPrank(admin);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            mockSender, false
+            mockSender,
+            false
         );
         CurveDollarIncentive(curveIncentiveAddress).switchSellPenalty();
         vm.stopPrank();
 
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         last_balance = dollarToken.balanceOf(mockSender);
@@ -214,18 +237,22 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         mockInternalFuncs(5e17);
         vm.prank(dollarAddress);
         CurveDollarIncentive(curveIncentiveAddress).incentivize(
-            mockSender, stableSwapPoolAddress, address(0), 100e18
+            mockSender,
+            stableSwapPoolAddress,
+            address(0),
+            100e18
         );
 
         last_balance = dollarToken.balanceOf(mockSender);
         assertEq(init_balance - last_balance, 50e18);
     }
 
-    function test_setExemptAddress() public {
+    function testSetExemptAddress_ShouldRevertOrSet_IfAdmin() public {
         address exemptAddress = address(0x123);
         vm.expectRevert("CurveIncentive: not admin");
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            exemptAddress, true
+            exemptAddress,
+            true
         );
 
         assertEq(
@@ -238,7 +265,8 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         vm.expectEmit(true, true, false, true);
         emit ExemptAddressUpdate(exemptAddress, true);
         CurveDollarIncentive(curveIncentiveAddress).setExemptAddress(
-            exemptAddress, true
+            exemptAddress,
+            true
         );
         assertEq(
             CurveDollarIncentive(curveIncentiveAddress).isExemptAddress(
@@ -248,31 +276,35 @@ contract CurveDollarIncentiveTest is LocalTestHelper {
         );
     }
 
-    function test_switchSellPenalty() public {
+    function testSwitchSellPenalty_ShouldRevertOrSwitch_IfAdmin() public {
         vm.expectRevert("CurveIncentive: not admin");
         CurveDollarIncentive(curveIncentiveAddress).switchSellPenalty();
 
         assertEq(
-            CurveDollarIncentive(curveIncentiveAddress).isSellPenaltyOn(), true
+            CurveDollarIncentive(curveIncentiveAddress).isSellPenaltyOn(),
+            true
         );
         vm.prank(admin);
         CurveDollarIncentive(curveIncentiveAddress).switchSellPenalty();
         assertEq(
-            CurveDollarIncentive(curveIncentiveAddress).isSellPenaltyOn(), false
+            CurveDollarIncentive(curveIncentiveAddress).isSellPenaltyOn(),
+            false
         );
     }
 
-    function test_switchBuyIncentive() public {
+    function testSwitchBuyIncentive_ShouldRevertOrSwitch_IfAdmin() public {
         vm.expectRevert("CurveIncentive: not admin");
         CurveDollarIncentive(curveIncentiveAddress).switchBuyIncentive();
 
         assertEq(
-            CurveDollarIncentive(curveIncentiveAddress).isBuyIncentiveOn(), true
+            CurveDollarIncentive(curveIncentiveAddress).isBuyIncentiveOn(),
+            true
         );
         vm.prank(admin);
         CurveDollarIncentive(curveIncentiveAddress).switchBuyIncentive();
         assertEq(
-            CurveDollarIncentive(curveIncentiveAddress).isBuyIncentiveOn(), false
+            CurveDollarIncentive(curveIncentiveAddress).isBuyIncentiveOn(),
+            false
         );
     }
 }

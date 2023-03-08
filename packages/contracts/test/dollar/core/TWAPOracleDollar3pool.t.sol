@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {TWAPOracleDollar3pool} from
-    "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
+import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract TWAPOracleDollar3poolTest is LocalTestHelper {
@@ -13,18 +12,25 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
     address twapOracleAddress;
     address metaPoolAddress;
 
-    function setUp() public {
-        metaPoolAddress =
-            address(new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress));
+    function setUp() public override {
+        metaPoolAddress = address(
+            new MockMetaPool(dollarTokenAddress, curve3CRVTokenAddress)
+        );
         twapOracleAddress = address(
-            new TWAPOracleDollar3pool(metaPoolAddress, dollarTokenAddress, curve3CRVTokenAddress)
+            new TWAPOracleDollar3pool(
+                metaPoolAddress,
+                dollarTokenAddress,
+                curve3CRVTokenAddress
+            )
         );
     }
 
-    function test_overall() public {
+    function testConsultTWAPOracle_ShouldReturnCorrectPrices() public {
         // set the mock data for meta pool
-        uint256[2] memory _price_cumulative_last =
-            [uint256(100e18), uint256(100e18)];
+        uint256[2] memory _price_cumulative_last = [
+            uint256(100e18),
+            uint256(100e18)
+        ];
         uint256 _last_block_timestamp = 20000;
         uint256[2] memory _twap_balances = [uint256(100e18), uint256(100e18)];
         uint256[2] memory _dy_values = [uint256(100e18), uint256(100e18)];
@@ -37,8 +43,9 @@ contract TWAPOracleDollar3poolTest is LocalTestHelper {
 
         TWAPOracleDollar3pool(twapOracleAddress).update();
 
-        uint256 amount0Out =
-            TWAPOracleDollar3pool(twapOracleAddress).consult(dollarTokenAddress);
+        uint256 amount0Out = TWAPOracleDollar3pool(twapOracleAddress).consult(
+            dollarTokenAddress
+        );
         uint256 amount1Out = TWAPOracleDollar3pool(twapOracleAddress).consult(
             curve3CRVTokenAddress
         );

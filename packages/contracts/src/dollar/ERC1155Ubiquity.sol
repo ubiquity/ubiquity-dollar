@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
@@ -16,7 +16,7 @@ import "./utils/SafeAddArray.sol";
 contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
 
-    UbiquityDollarManager public manager;
+    UbiquityDollarManager public immutable manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     uint256 private _totalSupply;
@@ -49,16 +49,20 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(
+        UbiquityDollarManager manager_,
+        string memory uri
+    ) ERC1155(uri) {
+        manager = manager_;
     }
 
     // @dev Creates `amount` new tokens for `to`, of token type `id`.
-    function mint(address to, uint256 id, uint256 amount, bytes memory data)
-        public
-        virtual
-        onlyMinter
-    {
+    function mint(
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) public virtual onlyMinter {
         _mint(to, id, amount, data);
         _totalSupply += amount;
         _holderBalances[to].add(id);
@@ -72,9 +76,11 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
+        uint256 amountMinted;
         for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply += amounts[i];
+            amountMinted += amounts[i];
         }
+        _totalSupply += amountMinted;
         _holderBalances[to].add(ids);
     }
 
@@ -136,20 +142,17 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev array of token Id held by the msg.sender.
      */
-    function holderTokens(address holder)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function holderTokens(
+        address holder
+    ) public view returns (uint256[] memory) {
         return _holderBalances[holder];
     }
 
-    function _burn(address account, uint256 id, uint256 amount)
-        internal
-        virtual
-        override
-        whenNotPaused
-    {
+    function _burn(
+        address account,
+        uint256 id,
+        uint256 amount
+    ) internal virtual override whenNotPaused {
         super._burn(account, id, amount);
         _totalSupply -= amount;
     }
@@ -172,7 +175,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override (ERC1155, ERC1155Pausable) {
+    ) internal virtual override(ERC1155, ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 }

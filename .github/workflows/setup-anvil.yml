@@ -1,0 +1,26 @@
+on: workflow_dispatch
+
+name: Setup Anvil
+
+jobs:
+  setup-anvil:
+    name: Setup Anvil
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+      - name: Install Cloudflared
+        uses: supplypike/setup-bin@v3
+        with:
+          uri: "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
+          name: "cloudflared"
+          version: "latest"
+      - name: Tunnel Anvil
+        id: tunnel
+        run: cloudflared tunnel --url http://localhost:8545 &
+        shell: bash
+      - name: Run Anvil
+        run: anvil
+        shell: bash

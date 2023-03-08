@@ -11,20 +11,15 @@ if (args.length != 1) {
 }
 
 async function printSelectors(contractName: string, artifactFolderPath = "../../../out") {
-  const contractFilePath = path.join(
-    artifactFolderPath,
-    `${contractName}.sol`,
-    `${contractName}.json`
-  );
-  const contractArtifact = require(contractFilePath);
+  const contractFilePath = path.join(artifactFolderPath, `${contractName}.sol`, `${contractName}.json`);
+  const contractArtifact = await import(contractFilePath);
   const abi = contractArtifact.abi;
   const bytecode = contractArtifact.bytecode;
   const target = new ethers.ContractFactory(abi, bytecode);
   const signatures = Object.keys(target.interface.functions);
 
-  const selectors = signatures.reduce((acc, val) => {
+  const selectors = signatures.reduce((acc: string[], val) => {
     if (val !== "init(bytes)") {
-      // @ts-ignore
       acc.push(target.interface.getSighash(val));
     }
     return acc;

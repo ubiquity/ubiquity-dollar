@@ -81,14 +81,18 @@ const PriceMonitor = (props: PriceMonitorProps) => {
   return (
     <div className="panel">
       <h2>Spot</h2>
+      {/* cspell: disable-next-line */}
       <PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
       <h3>Time Weighted Average</h3>
+      {/* cspell: disable-next-line */}
       <PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
+      {/* cspell: disable-next-line */}
       <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
       <h3>Dollar Minting</h3>
       <div>
         {props.dollarToBeMinted ? (
           <div>
+            {/* cspell: disable-next-line */}
             {props.dollarToBeMinted} <span> uAD</span> to be minted
           </div>
         ) : (

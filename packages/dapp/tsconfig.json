@@ -22,7 +22,8 @@
       "@/components/*": ["components/*"],
       "@/ui": ["components/ui"],
       "@/ui/*": ["components/ui/*"],
-      "@/lib/*": ["components/lib/*"]
+      "@/lib/*": ["components/lib/*"],
+      "@/types/contracts": ["types/contracts"]
     }
   },
   "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],

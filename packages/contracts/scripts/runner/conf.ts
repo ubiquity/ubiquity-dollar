@@ -1,4 +1,5 @@
 export const RPC_LIST: string[] = [
+  "https://eth.ubq.fi/v1/mainnet",
   "https://rpc.flashbots.net",
   "https://nodes.mewapi.io/rpc/eth",
   "https://cloudflare-eth.com",
@@ -22,3 +23,5 @@ export const RPC_HEADER = {
 
 export const RETRY_DELAY = 20000;
 export const RETRY_COUNT = 5;
+
+export const TEST_PATTERN = "Remote*";
