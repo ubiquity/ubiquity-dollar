@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
+import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders
@@ -36,10 +36,10 @@ contract CreditNftManagerFacet is Modifiers {
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function exchangeDollarsForCreditNFT(
+    function exchangeDollarsForCreditNft(
         uint256 amount
     ) external returns (uint256) {
-        return LibCreditNftManager.exchangeDollarsForCreditNFT(amount);
+        return LibCreditNftManager.exchangeDollarsForCreditNft(amount);
     }
 
     /// @dev called when a user wants to burn Dollar for Credit.
@@ -135,7 +135,7 @@ contract CreditNftManagerFacet is Modifiers {
     /// @param id the block number of the Credit NFT
     /// @param amount the amount of Credit NFT to redeem
     /// @return amount of unredeemed Credit NFT
-    function redeemCreditNFT(
+    function redeemCreditNft(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {

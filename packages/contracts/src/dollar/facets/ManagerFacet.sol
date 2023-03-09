@@ -212,4 +212,8 @@ contract ManagerFacet is Modifiers {
     function treasuryAddress() external view returns (address) {
         return store.treasuryAddress;
     }
+
+    function curve3PoolTokenAddress() external view returns (address) {
+        return store.curve3PoolTokenAddress;
+    }
 }

@@ -33,6 +33,11 @@ contract ChefFacet is Modifiers {
         return LibChef.getRewards(stakingShareID);
     }
 
+    /// @dev get governance multiplier
+    function governanceMultiplier() external view returns (uint256) {
+        return LibChef._getGovernanceMultiplier();
+    }
+
     /**
      * @dev get the governance Per Block.
      */

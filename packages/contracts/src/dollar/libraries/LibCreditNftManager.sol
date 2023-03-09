@@ -10,7 +10,7 @@ import {IDollarMintExcess} from "../../dollar/interfaces/IDollarMintExcess.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 import {LibCreditRedemptionCalculator} from "./LibCreditRedemptionCalculator.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
-import {LibCreditNftRedemptionCalculator} from "./LibCreditNFTRedemptionCalculator.sol";
+import {LibCreditNftRedemptionCalculator} from "./LibCreditNftRedemptionCalculator.sol";
 import {UbiquityCreditToken} from "../../dollar/core/UbiquityCreditToken.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
 import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
@@ -84,7 +84,7 @@ library LibCreditNftManager {
     /// @dev called when a user wants to burn Ubiquity Dollar for Credit NFT.
     ///      should only be called when oracle is below a dollar
     /// @param amount the amount of dollars to exchange for Credit NFT
-    function exchangeDollarsForCreditNFT(
+    function exchangeDollarsForCreditNft(
         uint256 amount
     ) internal returns (uint256) {
         uint256 twapPrice = LibTWAPOracle.getTwapPrice();

@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
-import {LibCreditNftManager} from "../libraries/LibCreditNFTManager.sol";
+import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond

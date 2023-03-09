@@ -3,7 +3,7 @@ pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICreditNftRedemptionCalculator} from "../../dollar/interfaces/ICreditNftRedemptionCalculator.sol";
-import {LibCreditNftRedemptionCalculator} from "../libraries/LibCreditNFTRedemptionCalculator.sol";
+import {LibCreditNftRedemptionCalculator} from "../libraries/LibCreditNftRedemptionCalculator.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditNftRedemptionCalculatorFacet is ICreditNftRedemptionCalculator {

@@ -311,4 +311,8 @@ library LibChef {
         uint256 governanceMultiplier = chefStorage().governanceMultiplier;
         return (block.number - lastRewardBlock) * governanceMultiplier;
     }
+
+    function _getGovernanceMultiplier() internal view returns (uint256) {
+        return chefStorage().governanceMultiplier;
+    }
 }
