@@ -3,17 +3,17 @@ pragma solidity 0.8.16;
 
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
-import "./old/UbiquityDollarManager.sol";
+import {IUbiquityDollarManager} from "../dollar/interfaces/IUbiquityDollarManager.sol";
 
 contract SushiSwapPool {
     IUniswapV2Factory constant factory =
         IUniswapV2Factory(0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac);
 
-    UbiquityDollarManager public immutable manager;
+    IUbiquityDollarManager public immutable manager;
     IUniswapV2Pair public immutable pair;
 
-    constructor(UbiquityDollarManager _manager) {
-        manager = UbiquityDollarManager(_manager);
+    constructor(IUbiquityDollarManager _manager) {
+        manager = IUbiquityDollarManager(_manager);
         require(
             manager.dollarTokenAddress() != address(0),
             "Dollar address not set"

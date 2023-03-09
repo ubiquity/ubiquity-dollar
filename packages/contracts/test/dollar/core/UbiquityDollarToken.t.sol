@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {UbiquityDollarTokenForDiamond} from "../../../src/diamond/token/UbiquityDollarTokenForDiamond.sol";
+import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
 import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
@@ -31,6 +31,19 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
             admin
         );
         vm.stopPrank();
+    }
+
+    function testSetDiamond_ShouldRevert_WhenNotAdmin() public {
+        vm.prank(address(0x123abc));
+        vm.expectRevert("ERC20Ubiquity: not admin");
+        IDollar.setDiamond(address(0x123abc));
+    }
+
+    function testSetDiamond_ShouldSetDiamond() public {
+        address newDiamond = address(0x123abc);
+        vm.prank(admin);
+        IDollar.setDiamond(newDiamond);
+        require(IDollar.getDiamond() == newDiamond);
     }
 
     function testSetIncentiveContract_ShouldRevert_IfNotAdmin() public {

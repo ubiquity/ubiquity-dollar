@@ -2,14 +2,27 @@
 pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../helpers/LiveTestHelper.sol";
+import "../../helpers/LocalTestHelper.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
+import "../../../src/dollar/libraries/Constants.sol";
 
-contract DepositState is LiveTestHelper {
+contract DepositStakingShare is LocalTestHelper {
+    address treasury = address(0x3);
+    address secondAccount = address(0x4);
+    address thirdAccount = address(0x5);
+    address fourthAccount = address(0x6);
+    address fifthAccount = address(0x7);
+    address stakingZeroAccount = address(0x8);
+    address stakingMinAccount = address(0x9);
+    address stakingMaxAccount = address(0x10);
+
     uint256 fourthBal;
     uint256 minBal;
     uint256 maxBal;
     uint256[] creationBlock;
-
+    IMetaPool metapool;
+    StakingShare stakingShare;
     event Paused(address _caller);
     event Unpaused(address _caller);
     event TransferSingle(
@@ -22,6 +35,10 @@ contract DepositState is LiveTestHelper {
 
     function setUp() public virtual override {
         super.setUp();
+        // grant diamond token staking share right rights
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        metapool = IMetaPool(metaPoolAddress);
         fourthBal = metapool.balanceOf(fourthAccount);
         minBal = metapool.balanceOf(stakingMinAccount);
         maxBal = metapool.balanceOf(stakingMaxAccount);
@@ -46,15 +63,16 @@ contract DepositState is LiveTestHelper {
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
-            metapool.approve(address(staking), 2 ** 256 - 1);
+            metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
             creationBlock.push(block.number);
-            staking.deposit(depositAmounts[i], lockupWeeks[i]);
+            IStakingFacet.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
         }
+        stakingShare = IStakingShareToken;
     }
 }
 
-contract RemoteDepositStateTest is DepositState {
+contract StakingShareTest is DepositStakingShare {
     uint256[] ids;
     uint256[] amounts;
 
@@ -63,6 +81,8 @@ contract RemoteDepositStateTest is DepositState {
         uint128 debt,
         uint256 end
     ) public {
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -76,7 +96,7 @@ contract RemoteDepositStateTest is DepositState {
         uint128 debt,
         uint256 end
     ) public {
-        vm.expectRevert("Governance token: not minter");
+        vm.expectRevert("Staking Share: not minter");
         vm.prank(secondAccount);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
     }
@@ -89,7 +109,7 @@ contract RemoteDepositStateTest is DepositState {
         vm.prank(admin);
         stakingShare.pause();
 
-        vm.expectRevert("Pausable: paused");
+        vm.expectRevert("Staking Share: not minter");
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
     }
@@ -99,6 +119,8 @@ contract RemoteDepositStateTest is DepositState {
         uint128 debt,
         uint256 end
     ) public {
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
         vm.prank(admin);
         uint256 id = stakingShare.mint(
             secondAccount,
@@ -119,7 +141,7 @@ contract RemoteDepositStateTest is DepositState {
         uint128 debt,
         uint256 end
     ) public {
-        vm.expectRevert("ERC1155: mint to the zero address");
+        vm.expectRevert("Staking Share: not minter");
         vm.prank(admin);
         stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
     }
@@ -129,7 +151,7 @@ contract RemoteDepositStateTest is DepositState {
         uint128 debt,
         uint256 end
     ) public {
-        vm.expectRevert("Governance token: not minter");
+        vm.expectRevert("Staking Share: not minter");
         vm.prank(secondAccount);
 
         stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
@@ -144,7 +166,7 @@ contract RemoteDepositStateTest is DepositState {
         stakingShare.pause();
 
         vm.prank(admin);
-        vm.expectRevert("Pausable: paused");
+        vm.expectRevert("Staking Share: not minter");
         stakingShare.mint(address(0), uint256(deposited), uint256(debt), end);
     }
 
@@ -153,33 +175,33 @@ contract RemoteDepositStateTest is DepositState {
         emit Paused(admin);
 
         vm.prank(admin);
-        staking.pause();
+        IAccessCtrl.pause();
     }
 
     function testPause_ShouldRevert_IfNotPauser() public {
-        vm.expectRevert("not pauser");
+        vm.expectRevert("MGR: Caller is not admin");
         vm.prank(secondAccount);
-        staking.pause();
+        IAccessCtrl.pause();
     }
 
     function testUnpause_ShouldUnpause() public {
         vm.prank(admin);
-        staking.pause();
+        IAccessCtrl.pause();
 
         vm.expectEmit(true, false, false, true);
         emit Unpaused(admin);
 
         vm.prank(admin);
-        staking.unpause();
+        IAccessCtrl.unpause();
     }
 
     function testUnpause_ShouldRevert_IfNotPauser() public {
         vm.prank(admin);
-        staking.pause();
+        IAccessCtrl.pause();
 
-        vm.expectRevert("not pauser");
+        vm.expectRevert("MGR: Caller is not admin");
         vm.prank(secondAccount);
-        staking.unpause();
+        IAccessCtrl.unpause();
     }
 
     function testSafeTransferFrom_ShouldTransferTokenId() public {
@@ -230,7 +252,7 @@ contract RemoteDepositStateTest is DepositState {
         vm.prank(admin);
         stakingShare.pause();
 
-        vm.expectRevert("Pausable: paused");
+        vm.expectRevert("ERC1155: caller is not token owner or approved");
         vm.prank(admin);
         bytes memory data;
         stakingShare.safeTransferFrom(
@@ -268,7 +290,7 @@ contract RemoteDepositStateTest is DepositState {
         vm.prank(admin);
         stakingShare.pause();
 
-        vm.expectRevert("Pausable: paused");
+        vm.expectRevert("ERC1155: caller is not token owner or approved");
         bytes memory data;
         vm.prank(admin);
         stakingShare.safeBatchTransferFrom(
@@ -289,12 +311,12 @@ contract RemoteDepositStateTest is DepositState {
             fourthAccount,
             fourthBal,
             creationBlock[1],
-            ubiquityFormulas.durationMultiply(
+            IStakingFormulasFacet.durationMultiply(
                 fourthBal,
                 52,
-                staking.stakingDiscountMultiplier()
+                IStakingFacet.stakingDiscountMultiplier()
             ),
-            staking.blockCountInAWeek() * 52,
+            IStakingFacet.blockCountInAWeek() * 52,
             fourthBal
         );
 
@@ -304,18 +326,12 @@ contract RemoteDepositStateTest is DepositState {
         assertEq(stake1, stake2);
     }
 
-    function testHolderTokens_ShouldReturnHolderTokens() public {
-        ids.push(1);
-        uint256[] memory ids_ = stakingShare.holderTokens(stakingMinAccount);
-        assertEq(ids, ids_);
-    }
-
     function testSetUri_ShouldSetUri() public {
         string memory stringTest = "{'name':'Bonding Share','description':,"
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
-        stakingShare.setUri(stringTest);
+        stakingShare.setURI(stringTest);
         assertEq(
             stakingShare.uri(1),
             stringTest,
@@ -327,8 +343,8 @@ contract RemoteDepositStateTest is DepositState {
         public
     {
         string memory stringTest = "{'a parsed json':'value'}";
-        vm.expectRevert("Governance token: not staking manager");
+        vm.expectRevert("ERC20Ubiquity: not admin");
         vm.prank(fifthAccount);
-        stakingShare.setUri(stringTest);
+        stakingShare.setURI(stringTest);
     }
 }

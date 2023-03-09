@@ -3,8 +3,8 @@ pragma solidity ^0.8.16;
 
 import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
-import "../../src/diamond/interfaces/IDiamondCut.sol";
-import "../../src/diamond/interfaces/IDiamondLoupe.sol";
+import "../../src/dollar/interfaces/IDiamondCut.sol";
+import "../../src/dollar/interfaces/IDiamondLoupe.sol";
 
 contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
     uint256 private seed;

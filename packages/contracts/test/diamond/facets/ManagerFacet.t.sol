@@ -7,10 +7,10 @@ import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {LibAccessControl} from "../../../src/diamond/libraries/LibAccessControl.sol";
+import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol";
+import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions_ShouldSucceed() public view {

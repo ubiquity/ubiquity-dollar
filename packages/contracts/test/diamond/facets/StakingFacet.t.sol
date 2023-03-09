@@ -4,20 +4,20 @@ pragma solidity ^0.8.16;
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import "../DiamondTestSetup.sol";
-import {StakingShareForDiamond} from "../../../src/diamond/token/StakingShareForDiamond.sol";
-import {BondingShareForDiamond} from "../../../src/diamond/mocks/MockShareV1.sol";
+import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
+import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
-import {DollarMintCalculatorFacet} from "../../../src/diamond/facets/DollarMintCalculatorFacet.sol";
+import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import {CreditNftManagerFacet} from "../../../src/diamond/facets/CreditNftManagerFacet.sol";
-import {UbiquityCreditTokenForDiamond} from "../../../src/diamond/token/UbiquityCreditTokenForDiamond.sol";
-import {DollarMintExcessFacet} from "../../../src/diamond/facets/DollarMintExcessFacet.sol";
-import "../../../src/diamond/libraries/Constants.sol";
-import "forge-std/Test.sol";
-import {MockCurveFactory} from "../../../src/diamond/mocks/MockCurveFactory.sol";
+import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManagerFacet.sol";
+import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
+import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
+import "../../../src/dollar/libraries/Constants.sol";
+import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
+import "forge-std/Test.sol";
 
 contract ZeroStateStaking is DiamondSetup {
     MockERC20 crvToken;
@@ -33,8 +33,8 @@ contract ZeroStateStaking is DiamondSetup {
 
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-    StakingShareForDiamond stakingShare;
-    BondingShareForDiamond stakingShareV1;
+    StakingShare stakingShare;
+    BondingShare stakingShareV1;
     IERC20Ubiquity governanceToken;
     event Deposit(
         address indexed _user,
@@ -97,7 +97,7 @@ contract ZeroStateStaking is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        stakingShareV1 = new BondingShareForDiamond(address(diamond));
+        stakingShareV1 = new BondingShare(address(diamond));
         IManager.setStakingShareAddress(address(stakingShareV1));
         stakingShareV1.setApprovalForAll(address(diamond), true);
         IAccessCtrl.grantRole(
@@ -134,9 +134,9 @@ contract ZeroStateStaking is DiamondSetup {
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
 
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
-        UbiquityCreditTokenForDiamond creditToken = new UbiquityCreditTokenForDiamond(
-                address(IManager)
-            );
+        UbiquityCreditToken creditToken = new UbiquityCreditToken(
+            address(IManager)
+        );
         IManager.setCreditTokenAddress(address(creditToken));
 
         vm.stopPrank();
@@ -177,7 +177,7 @@ contract ZeroStateStaking is DiamondSetup {
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
         vm.startPrank(admin);
-        stakingShare = new StakingShareForDiamond(address(diamond), uri);
+        stakingShare = new StakingShare(address(diamond), uri);
         IManager.setStakingShareAddress(address(stakingShare));
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
         IStakingFacet.setBlockCountInAWeek(420);

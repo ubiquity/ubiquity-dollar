@@ -4,8 +4,8 @@ pragma solidity ^0.8.16;
 import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {ManagerFacet} from "../../../src/diamond/facets/ManagerFacet.sol";
-import {DollarMintExcessFacet} from "../../../src/diamond/facets/DollarMintExcessFacet.sol";
+import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
+import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
 import "../DiamondTestSetup.sol";
 
 contract DollarMintExcessFacetTest is DiamondSetup {

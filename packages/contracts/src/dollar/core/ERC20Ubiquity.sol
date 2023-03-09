@@ -14,12 +14,8 @@ import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
-abstract contract ERC20UbiquityForDiamond is
-    ERC20,
-    ERC20Pausable,
-    IERC20Ubiquity
-{
-    IAccessControl public immutable accessCtrl;
+abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
+    IAccessControl public accessCtrl;
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public immutable DOMAIN_SEPARATOR;
@@ -71,6 +67,18 @@ abstract contract ERC20UbiquityForDiamond is
                 address(this)
             )
         );
+    }
+
+    /// @notice getDiamond returns the diamond address
+    /// @return diamond address
+    function getDiamond() external view returns (address) {
+        return address(accessCtrl);
+    }
+
+    /// @notice setDiamond update the diamond address
+    /// @param _diamond new diamond address
+    function setDiamond(address _diamond) external onlyAdmin {
+        accessCtrl = IAccessControl(_diamond);
     }
 
     /// @notice setSymbol update token symbol

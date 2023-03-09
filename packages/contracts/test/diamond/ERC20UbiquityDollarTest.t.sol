@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "./DiamondTestSetup.sol";
-import "../../src/diamond/libraries/Constants.sol";
+import "../../src/dollar/libraries/Constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
     address token_addr;

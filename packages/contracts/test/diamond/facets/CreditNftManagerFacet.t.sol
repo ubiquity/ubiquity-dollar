@@ -2,18 +2,17 @@
 pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
-import {CreditNftManagerFacet} from "../../../src/diamond/facets/CreditNftManagerFacet.sol";
-import {CreditRedemptionCalculatorFacet} from "../../../src/diamond/facets/CreditRedemptionCalculatorFacet.sol";
-import {DollarMintCalculatorFacet} from "../../../src/diamond/facets/DollarMintCalculatorFacet.sol";
-import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
-import {DollarMintExcessFacet} from "../../../src/diamond/facets/DollarMintExcessFacet.sol";
-import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
-import {TWAPOracleDollar3poolFacet} from "../../../src/diamond/facets/TWAPOracleDollar3poolFacet.sol";
-import "../../../src/diamond/libraries/Constants.sol";
+import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManagerFacet.sol";
+import {CreditRedemptionCalculatorFacet} from "../../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
+import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
+import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
+import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
+import "../../../src/dollar/libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
+import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
 contract CreditNftManagerFacetTest is DiamondSetup {
     MockCreditNft _creditNFT;

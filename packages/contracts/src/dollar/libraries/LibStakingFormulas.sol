@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {StakingShareForDiamond} from "../../../src/diamond/token/StakingShareForDiamond.sol";
+import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import "abdk/ABDKMathQuad.sol";
 import "./Constants.sol";
 
@@ -41,7 +41,7 @@ library LibStakingFormulas {
     /// @param _amount , amount of LP tokens
     /// @notice shares = (stake.shares * _amount )  / stake.lpAmount ;
     function sharesForLP(
-        StakingShareForDiamond.Stake memory _stake,
+        StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) internal pure returns (uint256 _uLP) {
@@ -59,7 +59,7 @@ library LibStakingFormulas {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsRemoveLiquidityNormalization(
-        StakingShareForDiamond.Stake memory _stake,
+        StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) internal pure returns (uint256) {
@@ -74,7 +74,7 @@ library LibStakingFormulas {
     // solhint-disable-block  no-unused-vars
     /* solhint-disable no-unused-vars */
     function lpRewardsAddLiquidityNormalization(
-        StakingShareForDiamond.Stake memory _stake,
+        StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
         uint256 _amount
     ) internal pure returns (uint256) {
