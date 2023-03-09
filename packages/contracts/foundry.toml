@@ -23,3 +23,96 @@ quote_style = 'double'
 
 [rpc_endpoints]
 mainnet = "https://eth.ubq.fi/v1/mainnet"
+
+[profile.default.model_checker]
+engine = 'chc'
+timeout = 10_000
+targets = [
+    'assert',
+    'constantCondition',
+    'divByZero',
+    'outOfBounds',
+    'overflow',
+    'underflow',
+]
+
+[profile.default.model_checker.contracts]
+'src/diamond/Diamond.sol' = [ 'Diamond' ]
+'src/diamond/access/AccessControlInternal.sol' = [ 'AccessControlInternal' ]
+'src/diamond/facets/AccessControlFacet.sol' = [ 'AccessControlFacet' ]
+'src/diamond/facets/ChefFacet.sol' = [ 'ChefFacet' ]
+'src/diamond/facets/CollectableDustFacet.sol' = [ 'CollectableDustFacet' ]
+'src/diamond/facets/CreditNFTManagerFacet.sol' = [ 'CreditNftManagerFacet' ]
+'src/diamond/facets/CreditNFTRedemptionCalculatorFacet.sol' = [ 'CreditNftRedemptionCalculatorFacet' ]
+'src/diamond/facets/CreditRedemptionCalculatorFacet.sol' = [ 'CreditRedemptionCalculatorFacet' ]
+'src/diamond/facets/DiamondCutFacet.sol' = [ 'DiamondCutFacet' ]
+'src/diamond/facets/DiamondLoupeFacet.sol' = [ 'DiamondLoupeFacet' ]
+'src/diamond/facets/DollarMintCalculatorFacet.sol' = [ 'DollarMintCalculatorFacet' ]
+'src/diamond/facets/DollarMintExcessFacet.sol' = [ 'DollarMintExcessFacet' ]
+'src/diamond/facets/ManagerFacet.sol' = [ 'ManagerFacet' ]
+'src/diamond/facets/OwnershipFacet.sol' = [ 'OwnershipFacet' ]
+'src/diamond/facets/StakingFacet.sol' = [ 'StakingFacet' ]
+'src/diamond/facets/StakingFormulasFacet.sol' = [ 'StakingFormulasFacet' ]
+'src/diamond/facets/TWAPOracleDollar3poolFacet.sol' = [ 'TWAPOracleDollar3poolFacet' ]
+'src/diamond/libraries/LibAppStorage.sol' = [ 'Modifiers' ]
+'src/diamond/mocks/MockCurveFactory.sol' = [ 'MockCurveFactory' ]
+'src/diamond/mocks/MockShareV1.sol' = [ 'BondingShareForDiamond' ]
+'src/diamond/token/ERC1155UbiquityForDiamond.sol' = [ 'ERC1155UbiquityForDiamond' ]
+'src/diamond/token/ERC20UbiquityForDiamond.sol' = [ 'ERC20UbiquityForDiamond' ]
+'src/diamond/token/StakingShareForDiamond.sol' = [ 'StakingShareForDiamond' ]
+'src/diamond/token/UbiquityCreditTokenForDiamond.sol' = [ 'UbiquityCreditTokenForDiamond' ]
+'src/diamond/token/UbiquityDollarTokenForDiamond.sol' = [ 'UbiquityDollarTokenForDiamond' ]
+'src/diamond/token/UbiquityGovernanceTokenForDiamond.sol' = [ 'UbiquityGovernanceTokenForDiamond' ]
+'src/diamond/upgradeInitializers/DiamondInit.sol' = [ 'DiamondInit' ]
+'src/dollar/DirectGovernanceFarmer.sol' = [ 'DirectGovernanceFarmer' ]
+'src/dollar/ERC1155SetUri/ERC1155BurnableSetUri.sol' = [ 'ERC1155BurnableSetUri' ]
+'src/dollar/ERC1155SetUri/ERC1155PausableSetUri.sol' = [ 'ERC1155PausableSetUri' ]
+'src/dollar/ERC1155SetUri/ERC1155SetUri.sol' = [ 'ERC1155SetUri' ]
+'src/dollar/ERC1155Ubiquity.sol' = [ 'ERC1155Ubiquity' ]
+'src/dollar/ERC20Ubiquity.sol' = [ 'ERC20Ubiquity' ]
+'src/dollar/Staking.sol' = [ 'Staking' ]
+'src/dollar/StakingFormulas.sol' = [ 'StakingFormulas' ]
+'src/dollar/StakingShare.sol' = [ 'StakingShare' ]
+'src/dollar/SushiSwapPool.sol' = [ 'SushiSwapPool' ]
+'src/dollar/UbiquityChef.sol' = [ 'UbiquityChef' ]
+'src/dollar/UbiquityFormulas.sol' = [ 'UbiquityFormulas' ]
+'src/dollar/core/CreditClock.sol' = [ 'CreditClock' ]
+'src/dollar/core/CreditNft.sol' = [ 'CreditNft' ]
+'src/dollar/core/CreditNftManager.sol' = [ 'CreditNftManager' ]
+'src/dollar/core/CreditNftRedemptionCalculator.sol' = [ 'CreditNftRedemptionCalculator' ]
+'src/dollar/core/CreditRedemptionCalculator.sol' = [ 'CreditRedemptionCalculator' ]
+'src/dollar/core/DollarMintCalculator.sol' = [ 'DollarMintCalculator' ]
+'src/dollar/core/DollarMintExcess.sol' = [ 'DollarMintExcess' ]
+'src/dollar/core/TWAPOracleDollar3pool.sol' = [ 'TWAPOracleDollar3pool' ]
+'src/dollar/core/UbiquityCreditToken.sol' = [ 'UbiquityCreditToken' ]
+'src/dollar/core/UbiquityDollarManager.sol' = [ 'UbiquityDollarManager' ]
+'src/dollar/core/UbiquityDollarToken.sol' = [ 'UbiquityDollarToken' ]
+'src/dollar/core/UbiquityGovernanceToken.sol' = [ 'UbiquityGovernanceToken' ]
+'src/dollar/mocks/MockBondingShareV1.sol' = [ 'MockBondingShareV1' ]
+'src/dollar/mocks/MockBondingShareV2.sol' = [ 'MockBondingShareV2' ]
+'src/dollar/mocks/MockBondingV1.sol' = [ 'MockBondingV1' ]
+'src/dollar/mocks/MockCreditNft.sol' = [ 'MockCreditNft' ]
+'src/dollar/mocks/MockCreditToken.sol' = [ 'MockCreditToken' ]
+'src/dollar/mocks/MockDollarToken.sol' = [ 'MockDollarToken' ]
+'src/dollar/mocks/MockERC20.sol' = [ 'MockERC20' ]
+'src/dollar/mocks/MockERC4626.sol' = [ 'MockERC4626' ]
+'src/dollar/mocks/MockIncentive.sol' = [ 'MockIncentive' ]
+'src/dollar/mocks/MockMetaPool.sol' = [ 'MockMetaPool' ]
+'src/dollar/mocks/MockTWAPOracleDollar3pool.sol' = [ 'MockTWAPOracleDollar3pool' ]
+'src/dollar/mocks/ZozoVault.sol' = [ 'ZozoVault' ]
+'src/dollar/transfer-hooks/CurveDollarIncentive.sol' = [ 'CurveDollarIncentive' ]
+'src/dollar/utils/CollectableDust.sol' = [ 'CollectableDust' ]
+'src/ubiquistick/LP.sol' = [ 'LP' ]
+'src/ubiquistick/MockUBQmanager.sol' = [ 'MockUBQmanager' ]
+'src/ubiquistick/SimpleBond.sol' = [ 'SimpleBond' ]
+'src/ubiquistick/UbiquiStick.sol' = [ 'UbiquiStick' ]
+'src/ubiquistick/UbiquiStickSale.sol' = [ 'UbiquiStickSale' ]
+
+
+
+
+
+
+
+
+
