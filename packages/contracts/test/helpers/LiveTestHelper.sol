@@ -24,6 +24,8 @@ import "src/dollar/core/UbiquityCreditToken.sol";
 import "src/dollar/core/DollarMintExcess.sol";
 import "src/dollar/SushiSwapPool.sol";
 import "src/dollar/interfaces/IERC1155Ubiquity.sol";
+import "src/dollar/BondingCurve.sol";
+import "src/ubiquistick/UbiquiStick.sol";
 
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
@@ -131,9 +133,14 @@ contract LiveTestHelper is Test {
         bondingCurve = new BondingCurve(
             address(manager),
             address(ubiquiStick),
-            address(governanceToken),
-            1,
-            1000
+            address(governanceToken)
+        );
+
+        manager.setBondingCurveAddress(address(bondingCurve));
+
+        manager.grantRole(
+            manager.BONDING_MINTER_ROLE(),
+            admin
         );
 
         ubiquityFormulas = new UbiquityFormulas();

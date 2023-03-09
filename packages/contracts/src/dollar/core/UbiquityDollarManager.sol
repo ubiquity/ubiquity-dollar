@@ -198,7 +198,7 @@ contract UbiquityDollarManager is AccessControl {
      * @dev the bonding curve exchanges Dollar Tokens for NFTs and is used to maintain the protocol
      * @param _bondingCurveAddress treasury fund address
      */
-    function _setBondingCurveAddress(
+    function setBondingCurveAddress(
         address _bondingCurveAddress
     ) external onlyAdmin {
         bondingCurveAddress = _bondingCurveAddress;

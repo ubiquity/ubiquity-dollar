@@ -23,6 +23,7 @@ contract ZeroState is LiveTestHelper {
 
     uint32 connectorWeight;
     uint256 baseY;
+    uint256 constant ACCURACY = 10e18;
 
     function setUp() public virtual override {
         super.setUp();
@@ -36,9 +37,7 @@ contract ZeroStateTest is ZeroState {
         BondingCurve broken = new BondingCurve(
             address(manager),
             address(0),
-            address(governanceToken),
-            1,
-            1000
+            address(governanceToken)
         );
     }
 
@@ -47,34 +46,46 @@ contract ZeroStateTest is ZeroState {
         BondingCurve broken = new BondingCurve(
             address(manager),
             address(0),
-            address(governanceToken),
-            0,
-            1000
+            address(governanceToken)
         );
     }
-    // function testCannotDeployEmptyUbiquistickAddr() public {
-    //     vm.expectRevert("NFT address empty");
-    //     BondingCurve broken = new BondingCurve(
-    //         address(manager),
-    //         address(0),
-    //         address(governanceToken),
-    //         1,
-    //         1000
-    //     );
-    // }
+
+
+    uint256 connWeight = bound(uint256(connectorWeight), 1, 1000000);
+    uint32 _connectorWeight = uint32(connWeight);
+    uint256 _baseY = bound(baseY, 1, 1000000);
+
+    function testSetParams() public {
+
+        vm.prank(admin);
+        bondingCurve.setParams(
+            _connectorWeight,
+            _baseY
+        );
+
+        assertEq(bondingCurve.connectorWeight(), _connectorWeight);
+        assertEq(bondingCurve.baseY(), _baseY);
+    }
 
     uint256 collateralDeposited;
 
     function testDeposit() public {
         // vm.expectEmit(true, false, false, true);
         // emit Deposit(secondAccount, collateralDeposited);
+        vm.startPrank(admin);
+        bondingCurve.setParams(
+            _connectorWeight,
+            _baseY
+        ); 
 
-        vm.prank(admin);
+        uint256 poolBalance = bondingCurve.poolBalance();
+
         bondingCurve.deposit(
             collateralDeposited, 
             secondAccount
         );
 
         assertEq(bondingCurve.poolBalance(), collateralDeposited);
+        vm.stopPrank();
     }
 }
