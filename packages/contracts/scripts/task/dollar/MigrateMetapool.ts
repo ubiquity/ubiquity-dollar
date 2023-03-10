@@ -13,7 +13,7 @@ const rpcUrl = env.rpcUrl as string;
 
 const migrateMetapool = async () => {
   console.log("Running Solidity Script to Migrate Metapool Funds");
-  spawnSync("forge", ["script", "scripts/dollar/MigrateMetapool.s.sol", "--fork-url", rpcUrl, "--broadcast"]);
+  spawnSync("forge", ["script", "scripts/task/dollar/MigrateMetapool.s.sol", "--fork-url", rpcUrl, "--broadcast"]);
 };
 
 migrateMetapool();
