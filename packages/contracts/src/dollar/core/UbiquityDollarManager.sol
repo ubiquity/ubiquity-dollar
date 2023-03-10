@@ -38,6 +38,8 @@ contract UbiquityDollarManager is AccessControl {
 
     bytes32 public constant BONDING_MINTER_ROLE =
         keccak256("BONDING_MINTER_ROLE");
+    bytes32 public constant UBQ_MINTER_ROLE =
+        keccak256("UBQ_MINTER_ROLE");
 
     address public twapOracleAddress;
     address public creditNftAddress;
@@ -56,6 +58,7 @@ contract UbiquityDollarManager is AccessControl {
     address public creditTokenAddress;
     address public creditCalculatorAddress;
     address public bondingCurveAddress;
+    address public ubiquiStickAddress;
 
     //key = address of CreditNftManager, value = DollarMintExcess
     mapping(address => address) private _excessDollarDistributors;
@@ -77,6 +80,7 @@ contract UbiquityDollarManager is AccessControl {
         _setupRole(INCENTIVE_MANAGER_ROLE, _admin);
         _setupRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(this));
         _setupRole(BONDING_MINTER_ROLE, _admin);
+        _setupRole(UBQ_MINTER_ROLE, _admin);
     }
 
     // TODO Add a generic setter for extra addresses that needs to be linked
@@ -95,6 +99,10 @@ contract UbiquityDollarManager is AccessControl {
 
     function setCreditNftAddress(address _creditNftAddress) external onlyAdmin {
         creditNftAddress = _creditNftAddress;
+    }
+
+    function setUbiquiStickAddress(address _ubiquiStick) external onlyAdmin {
+        ubiquiStickAddress = _ubiquiStick;
     }
 
     function setIncentiveToDollar(

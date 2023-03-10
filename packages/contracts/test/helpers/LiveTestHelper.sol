@@ -25,7 +25,7 @@ import "src/dollar/core/DollarMintExcess.sol";
 import "src/dollar/SushiSwapPool.sol";
 import "src/dollar/interfaces/IERC1155Ubiquity.sol";
 import "src/dollar/BondingCurve.sol";
-import "src/ubiquistick/UbiquiStick.sol";
+import "src/dollar/mocks/MockUbiquistick.sol";
 
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol";
@@ -59,7 +59,7 @@ contract LiveTestHelper is Test {
 
     MockDollarToken dollarToken;
     UbiquityGovernanceToken governanceToken;
-    UbiquiStick ubiquiStick;
+    MockUbiquistick ubiquiStick;
 
     MockBondingShareV1 bondingShareV1;
 
@@ -127,13 +127,19 @@ contract LiveTestHelper is Test {
         creditNft = new MockCreditNft(100);
         manager.setCreditNftAddress(address(creditNft));
 
-        ubiquiStick = new UbiquiStick();
+        ubiquiStick = new MockUbiquistick();
+        manager.setUbiquiStickAddress(address(ubiquiStick));
+
+        // manager.grantRole(
+        //     manager.UBQ_MINTER_ROLE(),
+        //     admin
+        // );
+
         uint32 connectorWeight;
         uint256 baseY;
         bondingCurve = new BondingCurve(
             address(manager),
-            address(ubiquiStick),
-            address(governanceToken)
+            address(ubiquiStick)
         );
 
         manager.setBondingCurveAddress(address(bondingCurve));

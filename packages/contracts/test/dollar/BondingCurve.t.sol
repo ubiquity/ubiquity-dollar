@@ -16,11 +16,6 @@ contract ZeroState is LiveTestHelper {
         uint256 amount
     );
 
-    address[] ogs;
-    address[] ogsEmpty;
-    uint256[] balances;
-    uint256[] lockup;
-
     uint32 connectorWeight;
     uint256 baseY;
     uint256 constant ACCURACY = 10e18;
@@ -36,8 +31,7 @@ contract ZeroStateTest is ZeroState {
         vm.expectRevert("NFT address empty");
         BondingCurve broken = new BondingCurve(
             address(manager),
-            address(0),
-            address(governanceToken)
+            address(0)
         );
     }
 
@@ -45,8 +39,7 @@ contract ZeroStateTest is ZeroState {
         vm.expectRevert();
         BondingCurve broken = new BondingCurve(
             address(manager),
-            address(0),
-            address(governanceToken)
+            address(0)
         );
     }
 
@@ -70,14 +63,47 @@ contract ZeroStateTest is ZeroState {
     uint256 collateralDeposited;
 
     function testDeposit() public {
-        // vm.expectEmit(true, false, false, true);
-        // emit Deposit(secondAccount, collateralDeposited);
+        vm.expectEmit(true, false, false, true);
+        emit Deposit(secondAccount, collateralDeposited);
+
         vm.startPrank(admin);
         bondingCurve.setParams(
             _connectorWeight,
             _baseY
         ); 
 
+        bondingCurve.setCollateralToken(
+            address(dollarToken)
+        );
+
+        uint256 tokenIds = 0;
+        uint256 poolBalance = bondingCurve.poolBalance();
+
+        bondingCurve.deposit(
+            collateralDeposited, 
+            secondAccount
+        );
+        vm.stopPrank();
+
+        assertEq(bondingCurve.poolBalance(), collateralDeposited);
+        assertEq(dollarToken.balanceOf(secondAccount), collateralDeposited);
+    }
+
+    function testWithdraw() public {
+        vm.expectEmit(true, false, false, true);
+        emit Withdraw(thirdAccount, collateralDeposited);
+
+        vm.startPrank(admin);
+        bondingCurve.setParams(
+            _connectorWeight,
+            _baseY
+        ); 
+
+        bondingCurve.setCollateralToken(
+            address(dollarToken)
+        );
+
+        uint256 tokenIds = 0;
         uint256 poolBalance = bondingCurve.poolBalance();
 
         bondingCurve.deposit(
@@ -85,7 +111,13 @@ contract ZeroStateTest is ZeroState {
             secondAccount
         );
 
-        assertEq(bondingCurve.poolBalance(), collateralDeposited);
+        bondingCurve.withdraw(
+            thirdAccount,
+            collateralDeposited
+        );
         vm.stopPrank();
+
+        assertEq(bondingCurve.poolBalance(), 0);
+        assertEq(dollarToken.balanceOf(thirdAccount), collateralDeposited);
     }
 }
