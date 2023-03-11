@@ -199,10 +199,10 @@ library LibStaking {
 
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = LibStakingFormulas.lpRewardsAddLiquidityNormalization(
-                stake,
-                bs,
-                pendingLpReward
-            );
+            stake,
+            bs,
+            pendingLpReward
+        );
         // add these LP Rewards to the deposited amount of LP token
         stake.lpAmount += pendingLpReward;
         StakingData storage ss = stakingStorage();

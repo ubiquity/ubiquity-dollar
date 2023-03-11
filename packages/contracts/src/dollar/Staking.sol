@@ -427,10 +427,10 @@ contract Staking is IStaking, CollectableDust, Pausable {
         IERC20 metapool = IERC20(manager.stableSwapMetaPoolAddress());
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = stakingFormulas.lpRewardsRemoveLiquidityNormalization(
-                stake,
-                stakeInfo,
-                pendingLpReward
-            );
+            stake,
+            stakeInfo,
+            pendingLpReward
+        );
         uint256 correctedAmount = stakingFormulas.correctedAmountToWithdraw(
             StakingShare(manager.stakingShareAddress()).totalLP(),
             metapool.balanceOf(address(this)) - lpRewards,

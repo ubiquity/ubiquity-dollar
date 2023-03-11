@@ -279,8 +279,8 @@ library LibDiamond {
                 .facetFunctionSelectors[_facetAddress]
                 .functionSelectors[lastSelectorPosition];
             ds.facetFunctionSelectors[_facetAddress].functionSelectors[
-                    selectorPosition
-                ] = lastSelector;
+                selectorPosition
+            ] = lastSelector;
             ds
                 .selectorToFacetAndPosition[lastSelector]
                 .functionSelectorPosition = uint96(selectorPosition);
