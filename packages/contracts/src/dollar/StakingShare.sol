@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
-import "./ERC1155SetUri/ERC1155SetUri.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./ERC1155SetUri/ERC1155BurnableSetUri.sol";
-import "./ERC1155SetUri/ERC1155PausableSetUri.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 contract StakingShare is
-    ERC1155SetUri,
-    ERC1155BurnableSetUri,
-    ERC1155PausableSetUri
+    ERC1155URIStorage,
+    ERC1155Pausable
 {
     using SafeAddArray for uint256[];
+
+    string private _uri = "";
 
     struct Stake {
         // address of the minter
@@ -72,9 +72,8 @@ contract StakingShare is
      * @dev constructor
      */
     constructor(
-        UbiquityDollarManager _manager,
-        string memory uri
-    ) ERC1155SetUri(uri) {
+        UbiquityDollarManager _manager
+    ) ERC1155URIStorage() {
         manager = _manager;
     }
 
@@ -214,15 +213,29 @@ contract StakingShare is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155SetUri, ERC1155PausableSetUri) {
+    ) internal virtual override(ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    function uri(
+        uint256 tokenId
+    ) public view virtual override(ERC1155URIStorage, ERC1155) returns (string memory) {
+        super.uri(tokenId);
     }
 
     /**
      *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
      */
 
-    function setUri(string memory newUri) external onlyStakingManager {
-        _uri = newUri;
+    function setUri(uint256 tokenId, string memory newUri) external onlyStakingManager {
+        _setURI(tokenId, newUri);
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
+     */
+
+    function setBaseUri(string memory newUri) external onlyStakingManager {
+        _setBaseURI(newUri);
     }
 }
