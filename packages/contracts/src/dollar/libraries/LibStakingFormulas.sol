@@ -97,10 +97,15 @@ library LibStakingFormulas {
         bytes16 unit = uint256(1 ether).fromUInt();
         bytes16 d = _weeks.fromUInt();
         bytes16 d32 = (d.mul(d).mul(d)).sqrt();
-        bytes16 m = _multiplier.fromUInt().div(unit); // 0.0001
         bytes16 a = _uLP.fromUInt();
 
-        _shares = m.mul(d32).mul(a).add(a).toUInt();
+        _shares = _multiplier
+            .fromUInt()
+            .mul(d32)
+            .mul(a)
+            .div(unit)
+            .add(a)
+            .toUInt();
     }
 
     /// @dev formula staking

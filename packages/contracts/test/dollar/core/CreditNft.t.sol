@@ -32,17 +32,17 @@ contract CreditNftTest is LocalTestHelper {
         IManager.setCreditNftAddress(address(creditNftAddress));
     }
 
-    function testSetDiamond_ShouldRevert_WhenNotAdmin() public {
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("ERC20Ubiquity: not admin");
-        creditNft.setDiamond(address(0x123abc));
+        creditNft.setManager(address(0x123abc));
     }
 
-    function testSetDiamond_ShouldSetDiamond() public {
+    function testSetManager_ShouldSetDiamond() public {
         address newDiamond = address(0x123abc);
         vm.prank(admin);
-        creditNft.setDiamond(newDiamond);
-        require(creditNft.getDiamond() == newDiamond);
+        creditNft.setManager(newDiamond);
+        require(creditNft.getManager() == newDiamond);
     }
 
     function testMintCreditNft_ShouldRevert_WhenNotCreditNftManager() public {

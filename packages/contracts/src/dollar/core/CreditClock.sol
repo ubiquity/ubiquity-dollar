@@ -38,15 +38,15 @@ contract CreditClock {
         _;
     }
 
-    /// @param _diamond The address of the _diamond contract for access control.
+    /// @param _manager The address of the _manager contract for access control.
     /// @param _rateStartValue ABDKMathQuad Initial rate.
     /// @param _ratePerBlock ABDKMathQuad Initial rate change per block.
     constructor(
-        address _diamond,
+        address _manager,
         bytes16 _rateStartValue,
         bytes16 _ratePerBlock
     ) {
-        accessCtrl = IAccessControl(_diamond);
+        accessCtrl = IAccessControl(_manager);
         rateStartBlock = block.number;
         rateStartValue = _rateStartValue;
         ratePerBlock = _ratePerBlock;
@@ -54,15 +54,15 @@ contract CreditClock {
         emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
     }
 
-    /// @notice setDiamond update the diamond address
-    /// @param _diamond new diamond address
-    function setDiamond(address _diamond) external onlyAdmin {
-        accessCtrl = IAccessControl(_diamond);
+    /// @notice setManager update the manager address
+    /// @param _manager new manager address
+    function setManager(address _manager) external onlyAdmin {
+        accessCtrl = IAccessControl(_manager);
     }
 
-    /// @notice getDiamond returns the diamond address
-    /// @return diamond address
-    function getDiamond() external view returns (address) {
+    /// @notice getManager returns the manager address
+    /// @return manager address
+    function getManager() external view returns (address) {
         return address(accessCtrl);
     }
 

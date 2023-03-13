@@ -28,17 +28,17 @@ contract CreditClockTest is LocalTestHelper {
         );
     }
 
-    function testSetDiamond_ShouldRevert_WhenNotAdmin() public {
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("CreditClock: not admin");
-        creditClock.setDiamond(address(0x123abc));
+        creditClock.setManager(address(0x123abc));
     }
 
-    function testSetDiamond_ShouldSetDiamond() public {
+    function testSetManager_ShouldSetDiamond() public {
         address newDiamond = address(0x123abc);
         vm.prank(admin);
-        creditClock.setDiamond(newDiamond);
-        require(creditClock.getDiamond() == newDiamond);
+        creditClock.setManager(newDiamond);
+        require(creditClock.getManager() == newDiamond);
     }
 
     function testSetRatePerBlock_ShouldRevert_WhenNotAdmin() public {

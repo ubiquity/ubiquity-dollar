@@ -16,10 +16,10 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     );
 
     constructor(
-        address _diamond
+        address _manager
     )
         // cspell: disable-next-line
-        ERC20Ubiquity(_diamond, "Ubiquity Dollar", "uAD")
+        ERC20Ubiquity(_manager, "Ubiquity Dollar", "uAD")
     {} // solhint-disable-line no-empty-blocks, max-line-length
 
     // ----------- Modifiers -----------

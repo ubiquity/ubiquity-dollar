@@ -93,4 +93,13 @@ contract StakingFormulasFacetTest is DiamondSetup {
             50
         );
     }
+
+    function testDurationMultiply_ShouldReturnAmount() public {
+        uint amount = IStakingFormulasFacet.durationMultiply(
+            100 ether,
+            1,
+            1000000 gwei
+        );
+        assertEq(amount, 100100000000000000000);
+    }
 }

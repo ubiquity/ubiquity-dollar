@@ -20,16 +20,16 @@ contract UbiquityGovernanceTokenTest is LocalTestHelper {
         vm.stopPrank();
     }
 
-    function testSetDiamond_ShouldRevert_WhenNotAdmin() public {
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("ERC20Ubiquity: not admin");
-        IGovToken.setDiamond(address(0x123abc));
+        IGovToken.setManager(address(0x123abc));
     }
 
-    function testSetDiamond_ShouldSetDiamond() public {
+    function testSetManager_ShouldSetManager() public {
         address newDiamond = address(0x123abc);
         vm.prank(admin);
-        IGovToken.setDiamond(newDiamond);
-        require(IGovToken.getDiamond() == newDiamond);
+        IGovToken.setManager(newDiamond);
+        require(IGovToken.getManager() == newDiamond);
     }
 }

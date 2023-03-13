@@ -7,10 +7,10 @@ import "../libraries/Constants.sol";
 
 contract UbiquityGovernanceToken is ERC20Ubiquity {
     constructor(
-        address _diamond
+        address _manager
     )
         // cspell: disable-next-line
-        ERC20Ubiquity(_diamond, "Ubiquity", "UBQ")
+        ERC20Ubiquity(_manager, "Ubiquity", "UBQ")
     {} // solhint-disable-line no-empty-blocks, max-line-length
 
     // ----------- Modifiers -----------

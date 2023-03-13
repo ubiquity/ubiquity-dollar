@@ -33,17 +33,17 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.stopPrank();
     }
 
-    function testSetDiamond_ShouldRevert_WhenNotAdmin() public {
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("ERC20Ubiquity: not admin");
-        IDollar.setDiamond(address(0x123abc));
+        IDollar.setManager(address(0x123abc));
     }
 
-    function testSetDiamond_ShouldSetDiamond() public {
+    function testSetManager_ShouldSetManager() public {
         address newDiamond = address(0x123abc);
         vm.prank(admin);
-        IDollar.setDiamond(newDiamond);
-        require(IDollar.getDiamond() == newDiamond);
+        IDollar.setManager(newDiamond);
+        require(IDollar.getManager() == newDiamond);
     }
 
     function testSetIncentiveContract_ShouldRevert_IfNotAdmin() public {

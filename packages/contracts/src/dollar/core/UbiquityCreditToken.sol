@@ -8,10 +8,10 @@ import "../libraries/Constants.sol";
 
 contract UbiquityCreditToken is ERC20Ubiquity {
     constructor(
-        address _diamond
+        address _manager
     )
         // cspell: disable-next-line
-        ERC20Ubiquity(_diamond, "Ubiquity Credit", "uCR")
+        ERC20Ubiquity(_manager, "Ubiquity Credit", "uCR")
     {} // solhint-disable-line no-empty-blocks
 
     // ----------- Modifiers -----------

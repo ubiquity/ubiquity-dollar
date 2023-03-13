@@ -21,16 +21,16 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
         assertEq(ubiquityCreditToken.balanceOf(treasuryAddress), 1e18);
     }
 
-    function testSetDiamond_ShouldRevert_WhenNotAdmin() public {
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("ERC20Ubiquity: not admin");
-        ubiquityCreditToken.setDiamond(address(0x123abc));
+        ubiquityCreditToken.setManager(address(0x123abc));
     }
 
-    function testSetDiamond_ShouldSetDiamond() public {
+    function testSetDiamond_ShouldSetManager() public {
         address newDiamond = address(0x123abc);
         vm.prank(admin);
-        ubiquityCreditToken.setDiamond(newDiamond);
-        require(ubiquityCreditToken.getDiamond() == newDiamond);
+        ubiquityCreditToken.setManager(newDiamond);
+        require(ubiquityCreditToken.getManager() == newDiamond);
     }
 }

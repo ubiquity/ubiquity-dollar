@@ -59,20 +59,20 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _diamond, string memory uri) ERC1155(uri) {
-        accessCtrl = IAccessControl(_diamond);
+    constructor(address _manager, string memory uri) ERC1155(uri) {
+        accessCtrl = IAccessControl(_manager);
     }
 
-    /// @notice getDiamond returns the diamond address
-    /// @return diamond address
-    function getDiamond() external view returns (address) {
+    /// @notice getManager returns the manager address
+    /// @return manager address
+    function getManager() external view returns (address) {
         return address(accessCtrl);
     }
 
-    /// @notice setDiamond update the diamond address
-    /// @param _diamond new diamond address
-    function setDiamond(address _diamond) external onlyAdmin {
-        accessCtrl = IAccessControl(_diamond);
+    /// @notice setManager update the manager address
+    /// @param _manager new manager address
+    function setManager(address _manager) external onlyAdmin {
+        accessCtrl = IAccessControl(_manager);
     }
 
     /// @notice setURI update the URI

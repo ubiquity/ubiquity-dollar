@@ -256,7 +256,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testName_ShouldReturnTokenName() public {
         // cspell: disable-next-line
-        assertEq(IDollar.name(), "Ubiquity Algorithmic Dollar");
+        assertEq(IDollar.name(), "Ubiquity Dollar");
     }
 
     function testSymbol_ShouldReturnSymbolName() public {

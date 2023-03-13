@@ -59,9 +59,9 @@ contract StakingShare is ERC1155Ubiquity {
      */
     // TODO should this inherit from ERC1155Ubiquity?
     constructor(
-        address _diamond,
+        address _manager,
         string memory uri
-    ) ERC1155Ubiquity(_diamond, uri) {}
+    ) ERC1155Ubiquity(_manager, uri) {}
 
     /// @dev update stake LP amount , LP rewards debt and end block.
     /// @param _stakeId staking share id

@@ -41,13 +41,13 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
     }
 
     constructor(
-        address _diamond,
+        address _manager,
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {
         _tokenName = name_;
         _symbol = symbol_;
-        accessCtrl = IAccessControl(_diamond);
+        accessCtrl = IAccessControl(_manager);
 
         uint256 chainId;
         // solhint-disable-next-line no-inline-assembly
@@ -69,16 +69,16 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
         );
     }
 
-    /// @notice getDiamond returns the diamond address
-    /// @return diamond address
-    function getDiamond() external view returns (address) {
+    /// @notice getManager returns the manager address
+    /// @return manager address
+    function getManager() external view returns (address) {
         return address(accessCtrl);
     }
 
-    /// @notice setDiamond update the diamond address
-    /// @param _diamond new diamond address
-    function setDiamond(address _diamond) external onlyAdmin {
-        accessCtrl = IAccessControl(_diamond);
+    /// @notice setManager update the manager address
+    /// @param _manager new manager address
+    function setManager(address _manager) external onlyAdmin {
+        accessCtrl = IAccessControl(_manager);
     }
 
     /// @notice setSymbol update token symbol
