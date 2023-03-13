@@ -88,9 +88,9 @@ contract CreditNftManagerTest is LocalTestHelper {
     ) public {
         vm.prank(admin);
         UbiquityDollarManager(dollarManagerAddress).setExcessDollarsDistributor(
-                creditNftManagerAddress,
-                _excessDollarsDistributor
-            );
+            creditNftManagerAddress,
+            _excessDollarsDistributor
+        );
     }
 
     function testSetExpiredCreditNftConversionRateShouldRevertIfCallerIsNotCreditNftManager()

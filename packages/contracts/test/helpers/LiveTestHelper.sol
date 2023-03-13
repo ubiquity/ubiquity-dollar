@@ -130,11 +130,6 @@ contract LiveTestHelper is Test {
         ubiquiStick = new MockUbiquistick();
         manager.setUbiquiStickAddress(address(ubiquiStick));
 
-        // manager.grantRole(
-        //     manager.UBQ_MINTER_ROLE(),
-        //     admin
-        // );
-
         uint32 connectorWeight;
         uint256 baseY;
         bondingCurve = new BondingCurve(
