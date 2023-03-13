@@ -11,7 +11,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
         address _diamond
     )
         // cspell: disable-next-line
-        ERC20Ubiquity(_diamond, "Ubiquity Auto Redeem", "uAR")
+        ERC20Ubiquity(_diamond, "Ubiquity Credit", "uCR")
     {} // solhint-disable-line no-empty-blocks
 
     // ----------- Modifiers -----------
