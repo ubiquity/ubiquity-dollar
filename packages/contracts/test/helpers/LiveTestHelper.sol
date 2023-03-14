@@ -127,18 +127,6 @@ contract LiveTestHelper is Test {
         creditNft = new MockCreditNft(100);
         manager.setCreditNftAddress(address(creditNft));
 
-        ubiquiStick = new MockUbiquistick();
-        manager.setUbiquiStickAddress(address(ubiquiStick));
-
-        uint32 connectorWeight;
-        uint256 baseY;
-        bondingCurve = new BondingCurve(
-            address(manager),
-            address(ubiquiStick)
-        );
-
-        manager.setBondingCurveAddress(address(bondingCurve));
-
         manager.grantRole(
             manager.BONDING_MINTER_ROLE(),
             admin
@@ -164,6 +152,18 @@ contract LiveTestHelper is Test {
         sushiGovernancePool = new SushiSwapPool(manager);
         manager.setSushiSwapPoolAddress(address(sushiGovernancePool));
 
+        vm.stopPrank();
+
+        vm.startPrank(admin);
+        ubiquiStick = new MockUbiquistick();
+        manager.setUbiquiStickAddress(address(ubiquiStick));
+
+        bondingCurve = new BondingCurve(
+            address(manager),
+            address(ubiquiStick)
+        );
+
+        manager.setBondingCurveAddress(address(bondingCurve));
         vm.stopPrank();
 
         vm.startPrank(thirdAccount);

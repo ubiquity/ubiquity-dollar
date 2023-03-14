@@ -25,7 +25,7 @@ contract ZeroState is LiveTestHelper {
     }
 }
 
-contract ZeroStateTest is ZeroState {
+contract RemoteZeroStateTest is ZeroState {
 
     function testCannotDeployEmptyUbiquistickAddr() public {
         vm.expectRevert("NFT address empty");

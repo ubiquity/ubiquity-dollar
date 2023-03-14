@@ -12,6 +12,7 @@ import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
+import {MockUbiquistick} from "../../src/dollar/mocks/MockUbiquistick.sol";
 
 import "forge-std/Test.sol";
 
@@ -42,6 +43,8 @@ abstract contract LocalTestHelper is Test {
     DollarMintCalculator dollarMintCalculator;
     CreditNftManager creditNftManager;
     DollarMintExcess dollarMintExcess;
+
+    MockUbiquistick ubiquiStick;
 
     function setUp() public virtual {
         manager = new UbiquityDollarManager(admin);
@@ -74,6 +77,10 @@ abstract contract LocalTestHelper is Test {
         manager.setCreditNftCalculatorAddress(
             address(creditNftRedemptionCalculator)
         );
+
+        // deploy ubiquistick
+        ubiquiStick = new MockUbiquistick();
+        manager.setUbiquiStickAddress(address(ubiquiStick));
 
         // deploy credit token
         creditToken = new MockCreditToken(0);
