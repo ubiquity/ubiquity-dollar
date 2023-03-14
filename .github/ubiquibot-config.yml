@@ -37,4 +37,3 @@ priorityLabels:
 - name: 'Priority: 4 (Emergency)'
   weight: 5
   target: 'Price: 500+ USD'
-autoPayMode: true
