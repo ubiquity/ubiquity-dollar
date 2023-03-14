@@ -101,7 +101,7 @@ contract BondingCurve is BancorFormula, Pausable {
         baseY = _baseY;
     }
 
-    function setTresuryAddr(
+    function setTreasuryAddress(
         address _treasury
     ) external onlyBondingMinter {
         require(_treasury != address(0), "zero address");

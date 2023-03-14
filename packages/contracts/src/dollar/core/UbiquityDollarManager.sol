@@ -38,8 +38,8 @@ contract UbiquityDollarManager is AccessControl {
 
     bytes32 public constant BONDING_MINTER_ROLE =
         keccak256("BONDING_MINTER_ROLE");
-    bytes32 public constant UBQ_MINTER_ROLE =
-        keccak256("UBQ_MINTER_ROLE");
+    bytes32 public constant BOND_TOKEN_MINTER_ROLE =
+        keccak256("BOND_TOKEN_MINTER_ROLE");
 
     address public twapOracleAddress;
     address public creditNftAddress;
@@ -80,7 +80,7 @@ contract UbiquityDollarManager is AccessControl {
         _setupRole(INCENTIVE_MANAGER_ROLE, _admin);
         _setupRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(this));
         _setupRole(BONDING_MINTER_ROLE, _admin);
-        _setupRole(UBQ_MINTER_ROLE, _admin);
+        _setupRole(BOND_TOKEN_MINTER_ROLE, _admin);
     }
 
     // TODO Add a generic setter for extra addresses that needs to be linked

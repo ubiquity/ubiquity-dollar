@@ -107,7 +107,7 @@ contract RemoteZeroStateTest is ZeroState {
             address(dollarToken)
         );
 
-        bondingCurve.setTresuryAddr(
+        bondingCurve.setTreasuryAddress(
             address(thirdAccount)
         );
 
