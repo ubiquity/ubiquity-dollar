@@ -11,7 +11,7 @@ import "../ubiquistick/interfaces/IUbiquiStick.sol";
 
 /**
  * @title Bonding Curve
- * @dev Bonding curve contract based on Bacor formula
+ * @dev Bonding curve contract based on Bancor formula
  * Inspired from Bancor protocol
  * https://github.com/bancorprotocol/contracts
  */
@@ -29,13 +29,16 @@ contract BondingCurve is BancorFormula, Pausable {
     address public collateral;
 
     /// @dev Treasury address
-    address public treasury;
+    address public treasuryAddress;
 
     /// @dev The ratio of how much collateral "backs" the total Token
     uint32 public connectorWeight;
 
     /// @dev The intersecting price to mint or burn a Token when supply == PRECISION
     uint256 public baseY;
+
+    /// @dev token id
+    uint256 public constant BONDING_TOKEN_ID = 1;
 
     /**
      * @dev Available balance of reserve token in contract
@@ -101,11 +104,8 @@ contract BondingCurve is BancorFormula, Pausable {
         baseY = _baseY;
     }
 
-    function setTreasuryAddress(
-        address _treasury
-    ) external onlyBondingMinter {
-        require(_treasury != address(0), "zero address");
-        treasury = _treasury;
+    function setTreasuryAddress() external onlyBondingMinter {
+        treasuryAddress = manager.treasuryAddress();
     }
 
     /// @notice 
@@ -142,12 +142,18 @@ contract BondingCurve is BancorFormula, Pausable {
             _collateralDeposited
         );
 
+
         poolBalance += _collateralDeposited;
-        tokenIds += 1;
         bytes memory tokReturned = toBytes(tokensReturned);
         share[_recipient] = tokensReturned;
 
-        token.mint(_recipient, tokenIds, tokensReturned, tokReturned);
+        IUbiquiStick(manager.ubiquiStickAddress()).mint(
+           _recipient, 
+           BONDING_TOKEN_ID, 
+           tokensReturned, 
+           tokReturned 
+        );
+
         emit Deposit(_recipient, _collateralDeposited);
 
         return tokensReturned;
@@ -169,7 +175,7 @@ contract BondingCurve is BancorFormula, Pausable {
     function withdraw(uint256 _amount) external onlyBondingMinter {
         require(_amount <= poolBalance, "invalid amount");
 
-        IERC20Ubiquity(collateral).transferFrom(address(this), treasury, _amount);
+        IERC20Ubiquity(collateral).transferFrom(address(this), treasuryAddress, _amount);
         poolBalance -= _amount;
 
         emit Withdraw(_amount);

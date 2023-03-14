@@ -18,7 +18,8 @@ contract ZeroState is LiveTestHelper {
     uint32 connectorWeight;
     uint256 baseY;
     uint256 constant ACCURACY = 10e18;
-
+    uint256 public constant BONDING_TOKEN_ID = 1;
+    address public treasuryAddress;
 
     mapping (address => uint256) public share;
 
@@ -51,7 +52,6 @@ contract RemoteZeroStateTest is ZeroState {
     uint256 _baseY = bound(baseY, 1, 1000000);
 
     function testSetParams() public {
-
         vm.prank(admin);
         bondingCurve.setParams(
             _connectorWeight,
@@ -60,6 +60,13 @@ contract RemoteZeroStateTest is ZeroState {
 
         assertEq(bondingCurve.connectorWeight(), _connectorWeight);
         assertEq(bondingCurve.baseY(), _baseY);
+    }
+
+    function testSetTreasuryAddress() public {
+        vm.prank(admin);
+        bondingCurve.setTreasuryAddress();
+
+        assertEq(manager.treasuryAddress(), bondingCurve.treasuryAddress());
     }
 
     uint256 collateralDeposited;
@@ -80,17 +87,13 @@ contract RemoteZeroStateTest is ZeroState {
 
         vm.stopPrank();
 
-        uint256 tokenIds = 0;
-        uint256 poolBalance = bondingCurve.poolBalance();
-
         bondingCurve.deposit(
             collateralDeposited, 
             secondAccount
         );
 
-        // assertEq(bondingCurve.share[secondAccount], )
+        assertEq(bondingCurve.share(secondAccount), ubiquiStick.balanceOf(secondAccount, BONDING_TOKEN_ID));
         assertEq(bondingCurve.poolBalance(), collateralDeposited);
-        assertEq(dollarToken.balanceOf(secondAccount), collateralDeposited);
     }
 
     function testWithdraw() public {
@@ -107,26 +110,26 @@ contract RemoteZeroStateTest is ZeroState {
             address(dollarToken)
         );
 
-        bondingCurve.setTreasuryAddress(
-            address(thirdAccount)
-        );
+        manager.setTreasuryAddress(address(thirdAccount));
+        bondingCurve.setTreasuryAddress();
 
         vm.stopPrank();
-
-        uint256 tokenIds = 0;
-        uint256 poolBalance = bondingCurve.poolBalance();
 
         bondingCurve.deposit(
             collateralDeposited, 
             secondAccount
         );
+        uint256 poolBalance = bondingCurve.poolBalance();
+
+        uint256 _amount = bound(baseY, 0, collateralDeposited);
 
         vm.prank(admin);
         bondingCurve.withdraw(
-            collateralDeposited
+            _amount
         );
+        uint256 balance = poolBalance - _amount;
 
-        assertEq(bondingCurve.poolBalance(), 0);
-        assertEq(dollarToken.balanceOf(thirdAccount), collateralDeposited);
+        assertEq(bondingCurve.poolBalance(), balance);
+        assertEq(dollarToken.balanceOf(treasuryAddress), _amount);
     }
 }
