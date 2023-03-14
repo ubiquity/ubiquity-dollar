@@ -12,7 +12,7 @@ import "../ubiquistick/interfaces/IUbiquiStick.sol";
 /**
  * @title Bonding Curve
  * @dev Bonding curve contract based on Bacor formula
- * Inspired from Bancor protocol and simondlr
+ * Inspired from Bancor protocol
  * https://github.com/bancorprotocol/contracts
  */
 contract BondingCurve is BancorFormula, Pausable {
@@ -28,7 +28,10 @@ contract BondingCurve is BancorFormula, Pausable {
     // IERC20Ubiquity immutable collateral;
     address public collateral;
 
-    /// @dev The ratio of how much collateral "backs" the total marketcap of the Token
+    /// @dev Treasury address
+    address public treasury;
+
+    /// @dev The ratio of how much collateral "backs" the total Token
     uint32 public connectorWeight;
 
     /// @dev The intersecting price to mint or burn a Token when supply == PRECISION
@@ -42,11 +45,14 @@ contract BondingCurve is BancorFormula, Pausable {
     /// @dev Current number of tokens minted
     uint256 public tokenIds = 0;
 
+    /// @dev Mapping of tokens minted to address
+    mapping (address => uint256) public share;
+
     UbiquityDollarManager public manager;
 
     event Deposit(address indexed user, uint256 amount);
 
-    event Withdraw(address indexed recipient, uint256 amount);
+    event Withdraw(uint256 amount);
 
     modifier onlyBondingMinter() {
         require(
@@ -64,7 +70,7 @@ contract BondingCurve is BancorFormula, Pausable {
 
     modifier onlyParamsSet() {
         require(
-            connectorWeight != 0 && baseY != 0, "not initialised"
+            connectorWeight != 0 && baseY != 0, "not set"
         );
         _;
     }
@@ -95,10 +101,17 @@ contract BondingCurve is BancorFormula, Pausable {
         baseY = _baseY;
     }
 
+    function setTresuryAddr(
+        address _treasury
+    ) external onlyBondingMinter {
+        require(_treasury != address(0), "zero address");
+        treasury = _treasury;
+    }
+
     /// @notice 
     /// @dev 
     /// @param _collateralDeposited Amount of collateral
-    /// @param _recipient An address to recieve the NFT
+    /// @param _recipient An address to receive the NFT
     /// @return Tokens minted
     function deposit(uint256 _collateralDeposited, address _recipient)
         external
@@ -131,10 +144,10 @@ contract BondingCurve is BancorFormula, Pausable {
 
         poolBalance += _collateralDeposited;
         tokenIds += 1;
-        uint256 nftNum = 1;
         bytes memory tokReturned = toBytes(tokensReturned);
+        share[_recipient] = tokensReturned;
 
-        token.mint(_recipient, tokenIds, nftNum, tokReturned);
+        token.mint(_recipient, tokenIds, tokensReturned, tokReturned);
         emit Deposit(_recipient, _collateralDeposited);
 
         return tokensReturned;
@@ -153,12 +166,12 @@ contract BondingCurve is BancorFormula, Pausable {
         _unpause();
     }
 
-    function withdraw(address _to, uint256 _amount) external onlyBondingMinter {
+    function withdraw(uint256 _amount) external onlyBondingMinter {
         require(_amount <= poolBalance, "invalid amount");
 
-        IERC20Ubiquity(collateral).transferFrom(address(this), _to, _amount);
+        IERC20Ubiquity(collateral).transferFrom(address(this), treasury, _amount);
         poolBalance -= _amount;
 
-        emit Withdraw(_to, _amount);
+        emit Withdraw(_amount);
     }
 }

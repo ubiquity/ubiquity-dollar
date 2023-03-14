@@ -12,13 +12,15 @@ contract ZeroState is LiveTestHelper {
     );
 
     event Withdraw(
-        address indexed recipient, 
         uint256 amount
     );
 
     uint32 connectorWeight;
     uint256 baseY;
     uint256 constant ACCURACY = 10e18;
+
+
+    mapping (address => uint256) public share;
 
     function setUp() public virtual override {
         super.setUp();
@@ -76,6 +78,8 @@ contract RemoteZeroStateTest is ZeroState {
             address(dollarToken)
         );
 
+        vm.stopPrank();
+
         uint256 tokenIds = 0;
         uint256 poolBalance = bondingCurve.poolBalance();
 
@@ -83,15 +87,15 @@ contract RemoteZeroStateTest is ZeroState {
             collateralDeposited, 
             secondAccount
         );
-        vm.stopPrank();
 
+        // assertEq(bondingCurve.share[secondAccount], )
         assertEq(bondingCurve.poolBalance(), collateralDeposited);
         assertEq(dollarToken.balanceOf(secondAccount), collateralDeposited);
     }
 
     function testWithdraw() public {
         vm.expectEmit(true, false, false, true);
-        emit Withdraw(thirdAccount, collateralDeposited);
+        emit Withdraw(collateralDeposited);
 
         vm.startPrank(admin);
         bondingCurve.setParams(
@@ -103,6 +107,12 @@ contract RemoteZeroStateTest is ZeroState {
             address(dollarToken)
         );
 
+        bondingCurve.setTresuryAddr(
+            address(thirdAccount)
+        );
+
+        vm.stopPrank();
+
         uint256 tokenIds = 0;
         uint256 poolBalance = bondingCurve.poolBalance();
 
@@ -111,11 +121,10 @@ contract RemoteZeroStateTest is ZeroState {
             secondAccount
         );
 
+        vm.prank(admin);
         bondingCurve.withdraw(
-            thirdAccount,
             collateralDeposited
         );
-        vm.stopPrank();
 
         assertEq(bondingCurve.poolBalance(), 0);
         assertEq(dollarToken.balanceOf(thirdAccount), collateralDeposited);

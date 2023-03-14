@@ -7,8 +7,8 @@ import "abdk/ABDKMathQuad.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 /**
- * @title Bancor formula by Bancor
- * @dev Modified from the original by Slava Balasanov
+ * @title Bancor formula
+ * @dev Modified from the original
  * @notice forked from Bancor:
  * https://github.com/bancorprotocol/contracts
  *
