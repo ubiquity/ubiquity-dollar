@@ -15,8 +15,6 @@ contract StakingShare is
 {
     using SafeAddArray for uint256[];
 
-    string public _uri = "";
-
     struct Stake {
         // address of the minter
         address minter;
@@ -78,7 +76,6 @@ contract StakingShare is
         string memory uri
     ) ERC1155(uri) {
         manager = _manager;
-        _uri = uri;
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.
@@ -224,22 +221,25 @@ contract StakingShare is
     function uri(
         uint256 tokenId
     ) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory) {
-        return _uri;
+        return super.uri(tokenId);
     }
 
     /**
      *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
      */
 
-    function setUri(uint256 tokenId, string memory newUri) external onlyStakingManager {
-        _setURI(tokenId, newUri);
+    function setUri(uint256 tokenId, string memory tokenUri) external onlyStakingManager {
+        _setURI(tokenId, tokenUri);
+    }
+
+    function setUri(string memory tokenUri) external onlyStakingManager {
+        _setURI(tokenUri);
     }
 
     /**
      *@dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
      */
-
     function setBaseUri(string memory newUri) external onlyStakingManager {
-        _uri = newUri;
+        _setBaseURI(newUri);
     }
 }

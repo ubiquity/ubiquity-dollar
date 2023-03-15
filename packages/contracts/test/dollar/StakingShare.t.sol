@@ -315,7 +315,7 @@ contract RemoteDepositStateTest is DepositState {
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
-        stakingShare.setBaseUri(stringTest);
+        stakingShare.setUri(1, stringTest);
         assertEq(
             stakingShare.uri(1),
             stringTest,
