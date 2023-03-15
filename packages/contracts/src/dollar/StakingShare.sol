@@ -3,17 +3,19 @@ pragma solidity 0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "./core/UbiquityDollarManager.sol";
 import "./utils/SafeAddArray.sol";
 
 contract StakingShare is
     ERC1155URIStorage,
-    ERC1155Pausable
+    ERC1155Pausable,
+    ERC1155Burnable
 {
     using SafeAddArray for uint256[];
 
-    string private _uri = "";
+    string public _uri = "";
 
     struct Stake {
         // address of the minter
@@ -72,9 +74,11 @@ contract StakingShare is
      * @dev constructor
      */
     constructor(
-        UbiquityDollarManager _manager
-    ) ERC1155URIStorage() {
+        UbiquityDollarManager _manager,
+        string memory uri
+    ) ERC1155(uri) {
         manager = _manager;
+        _uri = uri;
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.
@@ -213,14 +217,14 @@ contract StakingShare is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155Pausable) {
+    ) internal virtual override(ERC1155, ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
     function uri(
         uint256 tokenId
-    ) public view virtual override(ERC1155URIStorage, ERC1155) returns (string memory) {
-        super.uri(tokenId);
+    ) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory) {
+        return _uri;
     }
 
     /**
@@ -236,6 +240,6 @@ contract StakingShare is
      */
 
     function setBaseUri(string memory newUri) external onlyStakingManager {
-        _setBaseURI(newUri);
+        _uri = newUri;
     }
 }

@@ -315,7 +315,7 @@ contract RemoteDepositStateTest is DepositState {
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
-        stakingShare.setUri(stringTest);
+        stakingShare.setBaseUri(stringTest);
         assertEq(
             stakingShare.uri(1),
             stringTest,
@@ -329,6 +329,6 @@ contract RemoteDepositStateTest is DepositState {
         string memory stringTest = "{'a parsed json':'value'}";
         vm.expectRevert("Governance token: not staking manager");
         vm.prank(fifthAccount);
-        stakingShare.setUri(stringTest);
+        stakingShare.setUri(1, stringTest);
     }
 }
