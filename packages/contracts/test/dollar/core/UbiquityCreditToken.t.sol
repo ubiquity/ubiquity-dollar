@@ -27,10 +27,10 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
         ubiquityCreditToken.setManager(address(0x123abc));
     }
 
-    function testSetDiamond_ShouldSetManager() public {
-        address newDiamond = address(0x123abc);
+    function testSetManager_ShouldSetManager() public {
+        address newManager = address(0x123abc);
         vm.prank(admin);
-        ubiquityCreditToken.setManager(newDiamond);
-        require(ubiquityCreditToken.getManager() == newDiamond);
+        ubiquityCreditToken.setManager(newManager);
+        require(ubiquityCreditToken.getManager() == newManager);
     }
 }

@@ -75,9 +75,9 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         accessCtrl = IAccessControl(_manager);
     }
 
-    /// @notice setURI update the URI
+    /// @notice setUri update the URI
     /// @param newURI new URI
-    function setURI(string memory newURI) external onlyAdmin {
+    function setUri(string memory newURI) external onlyAdmin {
         _setURI(newURI);
     }
 

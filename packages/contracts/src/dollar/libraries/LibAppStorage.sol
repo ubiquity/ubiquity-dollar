@@ -84,7 +84,7 @@ contract Modifiers {
     modifier onlyAdmin() {
         require(
             LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "MGR: Caller is not admin"
+            "Manager: Caller is not admin"
         );
         _;
     }

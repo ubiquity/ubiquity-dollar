@@ -179,7 +179,7 @@ contract StakingShareTest is DepositStakingShare {
     }
 
     function testPause_ShouldRevert_IfNotPauser() public {
-        vm.expectRevert("MGR: Caller is not admin");
+        vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
         IAccessCtrl.pause();
     }
@@ -199,7 +199,7 @@ contract StakingShareTest is DepositStakingShare {
         vm.prank(admin);
         IAccessCtrl.pause();
 
-        vm.expectRevert("MGR: Caller is not admin");
+        vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
         IAccessCtrl.unpause();
     }
@@ -331,7 +331,7 @@ contract StakingShareTest is DepositStakingShare {
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
-        stakingShare.setURI(stringTest);
+        stakingShare.setUri(stringTest);
         assertEq(
             stakingShare.uri(1),
             stringTest,
@@ -345,6 +345,6 @@ contract StakingShareTest is DepositStakingShare {
         string memory stringTest = "{'a parsed json':'value'}";
         vm.expectRevert("ERC20Ubiquity: not admin");
         vm.prank(fifthAccount);
-        stakingShare.setURI(stringTest);
+        stakingShare.setUri(stringTest);
     }
 }

@@ -27,9 +27,9 @@ contract UbiquityGovernanceTokenTest is LocalTestHelper {
     }
 
     function testSetManager_ShouldSetManager() public {
-        address newDiamond = address(0x123abc);
+        address newManager = address(0x123abc);
         vm.prank(admin);
-        IGovToken.setManager(newDiamond);
-        require(IGovToken.getManager() == newDiamond);
+        IGovToken.setManager(newManager);
+        require(IGovToken.getManager() == newManager);
     }
 }
