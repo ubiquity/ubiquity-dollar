@@ -324,7 +324,7 @@ contract RemoteDepositStateTest is DepositState {
     }
 
     function testSetUriSingle_ShouldSetUri() public {
-        string memory stringTest = "{'name':'Bonding Share','description':,"
+        string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin); 
