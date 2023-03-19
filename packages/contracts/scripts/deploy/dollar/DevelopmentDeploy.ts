@@ -57,13 +57,9 @@ const forgeScript = async () => {
   console.log("----------------------------------------------------------------");
   console.log("Running Solidity script");
   console.log("----------------------------------------------------------------");
-  spawnSync(
-    "forge",
-    ["script", "scripts/deploy/dollar/solidityScripting/08_DevelopmentDeploy.s.sol:DevelopmentDeploy", "--fork-url", "http://localhost:8545", "--broadcast"],
-    {
-      stdio: "inherit",
-    }
-  );
+  spawnSync("forge", ["script", "StakingShareScript", "--fork-url", "http://localhost:8545", "--broadcast"], {
+    stdio: "inherit",
+  });
 };
 
 const main = async () => {
