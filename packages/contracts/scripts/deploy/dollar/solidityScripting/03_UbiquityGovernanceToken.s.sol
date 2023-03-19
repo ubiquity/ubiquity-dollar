@@ -10,8 +10,12 @@ contract GovernanceScript is DollarScript {
         super.run();
         vm.startBroadcast(deployerPrivateKey);
 
-        governance = new UbiquityGovernanceToken(manager);
-        manager.setGovernanceTokenAddress(address(governance));
+        governance = new UbiquityGovernanceToken(address(diamond));
+
+        IManager.setGovernanceTokenAddress(address(governance));
+        // grant diamond token admin rights
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
 
         vm.stopBroadcast();
     }

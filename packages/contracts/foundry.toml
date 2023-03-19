@@ -3,6 +3,7 @@ src = 'src'
 test = 'test'
 out = 'out'
 libs = ['lib']
+script = 'scripts'
 solc_version = '0.8.16'
 extra_output = [
   "abi",
