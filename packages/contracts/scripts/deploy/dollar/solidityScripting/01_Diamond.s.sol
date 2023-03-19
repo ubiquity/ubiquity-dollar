@@ -28,7 +28,7 @@ import {UbiquityGovernanceToken} from "../../../../src/dollar/core/UbiquityGover
 import {IDiamondCut} from "../../../../src/dollar/interfaces/IDiamondCut.sol";
 //import "../../src/dollar/interfaces/IDiamondLoupe.sol";
 
-import "./00_Constants.sol";
+import "./00_Constants.s.sol";
 
 contract DiamondScript is Constants {
     bytes4[] selectorsOfDiamondCutFacet;
@@ -144,6 +144,8 @@ contract DiamondScript is Constants {
         diamond = new Diamond(_args, cuts);
         IManager = ManagerFacet(address(diamond));
         IAccessCtrl = AccessControlFacet(address(diamond));
+        StakingFacet IStakingFacet = StakingFacet(address(diamond));
+        IStakingFacet.setBlockCountInAWeek(420);
         vm.stopBroadcast();
     }
 
