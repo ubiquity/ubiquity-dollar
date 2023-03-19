@@ -2,17 +2,15 @@
 pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 contract StakingShare is
-    ERC1155URIStorage,
-    ERC1155Pausable,
-    ERC1155Burnable
+    ERC1155Ubiquity,
+    ERC1155URIStorage
 {
     using SafeAddArray for uint256[];
 
@@ -35,10 +33,8 @@ contract StakingShare is
     uint256 private _totalLP;
     uint256 private _totalSupply;
 
-    IAccessControl public accessCtrl;
-
     // ----------- Modifiers -----------
-    modifier onlyMinter() {
+    modifier onlyMinter() override {
         require(
             accessCtrl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
             "Staking Share: not minter"
@@ -46,7 +42,7 @@ contract StakingShare is
         _;
     }
 
-    modifier onlyBurner() {
+    modifier onlyBurner() override {
         require(
             accessCtrl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
             "Staking Share: not burner"
@@ -54,7 +50,7 @@ contract StakingShare is
         _;
     }
 
-    modifier onlyPauser() {
+    modifier onlyPauser() override {
         require(
             accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
             "Staking Share: not pauser"
@@ -68,8 +64,7 @@ contract StakingShare is
     constructor(
         address _manager,
         string memory uri
-    ) ERC1155(uri) {
-        accessCtrl = IAccessControl(_manager);
+    ) ERC1155Ubiquity(_manager, uri) {
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.
@@ -123,26 +118,6 @@ contract StakingShare is
     }
 
     /**
-     * @dev Pauses all token transfers.
-     *
-     * See {ERC1155Pausable} and {Pausable-_pause}.
-     *
-     */
-    function pause() public virtual onlyPauser {
-        _pause();
-    }
-
-    /**
-     * @dev Unpauses all token transfers.
-     *
-     * See {ERC1155Pausable} and {Pausable-_unpause}.
-     *
-     */
-    function unpause() public virtual onlyPauser {
-        _unpause();
-    }
-
-    /**
      * @dev See {IERC1155-safeTransferFrom}.
      */
     function safeTransferFrom(
@@ -151,29 +126,15 @@ contract StakingShare is
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) public override whenNotPaused {
+    ) public override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         super.safeTransferFrom(from, to, id, amount, data);
         _holderBalances[to].add(id);
     }
 
     /**
-     * @dev See {IERC1155-safeBatchTransferFrom}.
-     */
-    function safeBatchTransferFrom(
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) public virtual override whenNotPaused {
-        super.safeBatchTransferFrom(from, to, ids, amounts, data);
-        _holderBalances[to].add(ids);
-    }
-
-    /**
      * @dev Total amount of tokens  .
      */
-    function totalSupply() public view virtual returns (uint256) {
+    function totalSupply() public view virtual override returns (uint256) {
         return _totalSupply;
     }
 
@@ -192,12 +153,28 @@ contract StakingShare is
     }
 
     /**
-     * @dev array of token Id held by the msg.sender.
+     * @dev See {IERC1155-safeBatchTransferFrom}.
      */
-    function holderTokens(
-        address holder
-    ) public view returns (uint256[] memory) {
-        return _holderBalances[holder];
+    function safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) public virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+        super.safeBatchTransferFrom(from, to, ids, amounts, data);
+        _holderBalances[to].add(ids);
+    }
+
+    function _burnBatch(
+        address account,
+        uint256[] memory ids,
+        uint256[] memory amounts
+    ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+        super._burnBatch(account, ids, amounts);
+        for (uint256 i = 0; i < ids.length; ++i) {
+            _totalSupply -= amounts[i];
+        }
     }
 
     function _beforeTokenTransfer(
@@ -207,7 +184,7 @@ contract StakingShare is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155, ERC1155Pausable) {
+    ) internal virtual override(ERC1155, ERC1155Ubiquity) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
@@ -221,7 +198,7 @@ contract StakingShare is
         address account,
         uint256 id,
         uint256 amount
-    ) internal virtual override whenNotPaused {
+    ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         require(amount == 1, "amount <> 1");
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
@@ -235,10 +212,6 @@ contract StakingShare is
 
     function setUri(uint256 tokenId, string memory tokenUri) external onlyMinter {
         _setURI(tokenId, tokenUri);
-    }
-
-    function setUri(string memory tokenUri) external onlyMinter {
-        _setURI(tokenUri);
     }
 
     /**
