@@ -16,7 +16,7 @@ import {
   getGovernanceContract,
   getUniswapV2PairContract,
 } from "@/components/utils/contracts";
-import { UbiquityDollarManager } from "types";
+import { ManagerFacet } from "types";
 import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "../children-shim";
 import useWeb3, { PossibleProviders } from "../useWeb3";
@@ -41,7 +41,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: UbiquityDollarManager, provider: NonNullable<PossibleProviders>) {
+async function connectManagerContracts(manager: ManagerFacet, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
@@ -56,8 +56,7 @@ async function connectManagerContracts(manager: UbiquityDollarManager, provider:
     staking,
     masterChef,
     sushiSwapPool,
-    ubiquityFormulas,
-    creditNftCalculator,
+    ubiquityFormulas, 
     creditCalculator,
   ] = await Promise.all([
     manager.dollarTokenAddress(),
@@ -72,11 +71,10 @@ async function connectManagerContracts(manager: UbiquityDollarManager, provider:
     manager.stakingContractAddress(),
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
-    manager.formulasAddress(),
-    manager.creditNftCalculatorAddress(),
+    manager.formulasAddress(), 
     manager.creditCalculatorAddress(),
   ]);
-
+  const creditNftCalculator = manager.address;
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
 
   const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);

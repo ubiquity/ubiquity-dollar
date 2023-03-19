@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "../core/UbiquityDollarManager.sol";
 import "../utils/SafeAddArray.sol";
+import "../../dollar/libraries/Constants.sol";
+import {IUbiquityDollarManager} from "../interfaces/IUbiquityDollarManager.sol";
 
 //cspell:ignore BondingShareV2
 contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
@@ -24,7 +25,7 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 lpAmount;
     }
 
-    UbiquityDollarManager public manager;
+    IUbiquityDollarManager public manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
     mapping(uint256 => Bond) private _bonds;
@@ -34,7 +35,7 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_MINTER_ROLE(), msg.sender),
+            manager.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -42,7 +43,7 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(manager.GOVERNANCE_TOKEN_BURNER_ROLE(), msg.sender),
+            manager.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
             "Governance token: not burner"
         );
         _;
@@ -50,7 +51,7 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     modifier onlyPauser() {
         require(
-            manager.hasRole(manager.PAUSER_ROLE(), msg.sender),
+            manager.hasRole(PAUSER_ROLE, msg.sender),
             "Governance token: not pauser"
         );
         _;
@@ -60,7 +61,7 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
      * @dev constructor
      */
     constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = UbiquityDollarManager(_manager);
+        manager = IUbiquityDollarManager(_manager);
     }
 
     /// @dev update bond LP amount , LP rewards debt and end block.

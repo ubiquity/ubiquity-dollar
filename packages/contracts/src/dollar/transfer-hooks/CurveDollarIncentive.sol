@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
-
+// TODO ADAPT FOR DIAMOND
+/*
 import "../core/TWAPOracleDollar3pool.sol";
 import "../core/UbiquityDollarManager.sol";
 import "../core/UbiquityDollarToken.sol";
@@ -8,7 +9,7 @@ import "../interfaces/IUbiquityGovernance.sol";
 import "../interfaces/IIncentive.sol";
 import "abdk/ABDKMathQuad.sol";
 
-/// @title Curve trading incentive contract
+ /// @title Curve trading incentive contract
 /// @author Ubiquity DAO
 /// @dev incentives
 contract CurveDollarIncentive is IIncentive {
@@ -94,17 +95,17 @@ contract CurveDollarIncentive is IIncentive {
             return;
         }
 
-        /*
-        WARNING
-        From curve doc :Tokens that take a fee upon a successful transfer may cause the curve pool
-        to break or act in unexpected ways.
-        fei does it differently because they can make sure only one contract has the ability to sell
-        Ubiquity Dollar and they control the whole liquidity pool on curve.
-        here to avoid problem with the curve pool we execute the transfer as specified and then we
-        take the penalty so if penalty + amount > balance then we revert
-        swapping Ubiquity Dollar for 3CRV (or underlying) (aka selling Ubiquity Dollar) will burn x% of Ubiquity Dollar
-        Where x = (1- TWAP_Price) *100.
-        */
+        
+        // WARNING
+        // From curve doc :Tokens that take a fee upon a successful transfer may cause the curve pool
+        // to break or act in unexpected ways.
+        // fei does it differently because they can make sure only one contract has the ability to sell
+        // Ubiquity Dollar and they control the whole liquidity pool on curve.
+        // here to avoid problem with the curve pool we execute the transfer as specified and then we
+        // take the penalty so if penalty + amount > balance then we revert
+        // swapping Ubiquity Dollar for 3CRV (or underlying) (aka selling Ubiquity Dollar) will burn x% of Ubiquity Dollar
+        // Where x = (1- TWAP_Price) *100.
+         
 
         uint256 penalty = _getPercentDeviationFromUnderPeg(amount);
         if (penalty != 0) {
@@ -131,9 +132,9 @@ contract CurveDollarIncentive is IIncentive {
         }
 
         uint256 incentive = _getPercentDeviationFromUnderPeg(amountIn);
-        /* swapping 3CRV (or underlying) for Ubiquity Dollar (aka buying Ubiquity Dollar) will mint x% of Governance Token.
-             Where x = (1- TWAP_Price) * amountIn.
-            E.g. Ubiquity Dollar = 0.8, you buy 1000 Ubiquity Dollar, you get (1-0.8)*1000 = 200 Governance Token */
+            // swapping 3CRV (or underlying) for Ubiquity Dollar (aka buying Ubiquity Dollar) will mint x% of Governance Token.
+            //  Where x = (1- TWAP_Price) * amountIn.
+            // E.g. Ubiquity Dollar = 0.8, you buy 1000 Ubiquity Dollar, you get (1-0.8)*1000 = 200 Governance Token  
 
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of Governance Token
@@ -171,3 +172,4 @@ contract CurveDollarIncentive is IIncentive {
             );
     }
 }
+ */

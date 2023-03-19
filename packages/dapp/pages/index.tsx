@@ -5,7 +5,6 @@ import "@uniswap/widgets/fonts.css";
 import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
 import DollarPrice from "@/components/redeem/DollarPrice";
-import MigrateButton from "@/components/redeem/MigrateButton";
 import WalletConnectionWall from "@/components/ui/WalletConnectionWall";
 
 const index: FC = (): JSX.Element => {
@@ -21,7 +20,6 @@ const index: FC = (): JSX.Element => {
   return (
     <WalletConnectionWall>
       <DollarPrice />
-      <MigrateButton />
     </WalletConnectionWall>
   );
 };

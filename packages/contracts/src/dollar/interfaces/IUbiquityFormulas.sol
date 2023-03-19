@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.16;
 
+import {StakingShare} from "../core/StakingShare.sol";
+
 interface IUbiquityFormulas {
     function durationMultiply(
         uint256 _uLP,
@@ -8,26 +10,27 @@ interface IUbiquityFormulas {
         uint256 _multiplier
     ) external pure returns (uint256 _shares);
 
-    function staking(
-        uint256 _shares,
-        uint256 _currentShareValue,
-        uint256 _targetPrice
-    ) external pure returns (uint256 _uBOND);
+    function correctedAmountToWithdraw(
+        uint256 _totalLpDeposited,
+        uint256 _stakingLpBalance,
+        uint256 _amount
+    ) external pure returns (uint256);
 
-    function redeemShares(
-        uint256 _uBOND,
-        uint256 _currentShareValue,
-        uint256 _targetPrice
+    function lpRewardsAddLiquidityNormalization(
+        StakingShare.Stake memory _stake,
+        uint256[2] memory _shareInfo,
+        uint256 _amount
+    ) external pure returns (uint256);
+
+    function lpRewardsRemoveLiquidityNormalization(
+        StakingShare.Stake memory _stake,
+        uint256[2] memory _shareInfo,
+        uint256 _amount
+    ) external pure returns (uint256);
+
+    function sharesForLP(
+        StakingShare.Stake memory _stake,
+        uint256[2] memory _shareInfo,
+        uint256 _amount
     ) external pure returns (uint256 _uLP);
-
-    function sharePrice(
-        uint256 _totalULP,
-        uint256 _totalUBOND,
-        uint256 _targetPrice
-    ) external pure returns (uint256 _priceUBOND);
-
-    function governanceMultiply(
-        uint256 _multiplier,
-        uint256 _price
-    ) external pure returns (uint256 _newMultiplier);
 }

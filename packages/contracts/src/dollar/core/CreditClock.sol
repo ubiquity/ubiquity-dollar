@@ -2,14 +2,15 @@
 pragma solidity 0.8.16;
 
 import "abdk/ABDKMathQuad.sol";
-import "./UbiquityDollarManager.sol";
+import {IAccessControl} from "../interfaces/IAccessControl.sol";
+import "../libraries/Constants.sol";
 
 contract CreditClock {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
     // Manager contract.
-    UbiquityDollarManager private immutable manager;
+    IAccessControl public accessCtrl;
 
     // ABDKMathQuad with value of 1.
     bytes16 private immutable one = uint256(1).fromUInt();
@@ -31,26 +32,38 @@ contract CreditClock {
 
     modifier onlyAdmin() {
         require(
-            manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
+            accessCtrl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditClock: not admin"
         );
         _;
     }
 
-    /// @param _manager The address of the manager/config contract so we can fetch variables.
+    /// @param _manager The address of the _manager contract for access control.
     /// @param _rateStartValue ABDKMathQuad Initial rate.
     /// @param _ratePerBlock ABDKMathQuad Initial rate change per block.
     constructor(
-        UbiquityDollarManager _manager,
+        address _manager,
         bytes16 _rateStartValue,
         bytes16 _ratePerBlock
     ) {
-        manager = _manager;
+        accessCtrl = IAccessControl(_manager);
         rateStartBlock = block.number;
         rateStartValue = _rateStartValue;
         ratePerBlock = _ratePerBlock;
 
         emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
+    }
+
+    /// @notice setManager update the manager address
+    /// @param _manager new manager address
+    function setManager(address _manager) external onlyAdmin {
+        accessCtrl = IAccessControl(_manager);
+    }
+
+    /// @notice getManager returns the manager address
+    /// @return manager address
+    function getManager() external view returns (address) {
+        return address(accessCtrl);
     }
 
     /// @dev Sets rate to apply from this block onward.
