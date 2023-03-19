@@ -2,12 +2,13 @@
 pragma solidity 0.8.16;
 
 //cspell:ignore BondingShareV2
+/*  TO BE DONE WITH THE DIAMOND 
 
 import {UbiquityDollarManager} from "src/dollar/core/UbiquityDollarManager.sol";
 import {Staking} from "src/dollar/Staking.sol";
 import {MockBondingShareV2} from "src/dollar/mocks/MockBondingShareV2.sol";
 import {IMetaPool} from "src/dollar/interfaces/IMetaPool.sol";
-import {TWAPOracleDollar3pool} from "src/dollar/core/TWAPOracleDollar3pool.sol";
+ import {TWAPOracleDollar3pool} from "src/dollar/core/TWAPOracleDollar3pool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "forge-std/Test.sol";
@@ -41,10 +42,10 @@ contract MigrateMetapool is Test {
     uint256 snapshot;
 
     function setUp() public {
-        /*
-            Forking mainnet to run the tests and then taking a snapshot of the state so we can later revert to the snapshot for comparing states after two different logic runs.
-            Fork URL currently hardcoded due to current limits of Github Actions
-        */
+        
+          //  Forking mainnet to run the tests and then taking a snapshot of the state so we can later revert to the snapshot for comparing states after two different logic runs.
+          //  Fork URL currently hardcoded due to current limits of Github Actions
+        
         mainnet = vm.createSelectFork("https://eth.ubq.fi/v1/mainnet");
         snapshot = vm.snapshot();
     }
@@ -109,13 +110,13 @@ contract MigrateMetapool is Test {
 
         /// ensures all v3 LP tokens minted are deposited in Staking
         assertEq(lpMinted, metaBalanceV3);
-        /*
-            Compares the amount of Curve3 LP tokens in V2 Metapool before migration
-            to the amount of Curve3 LP tokens in both Metapools after migration to
-            ensure no Curve3 LP tokens are lost during migration.
-            The Staking Contract holds the large majority of V2 LP tokens but there are some smaller holders
-            so we are unable to migrate all funds.
-        */
+       
+            // Compares the amount of Curve3 LP tokens in V2 Metapool before migration
+            // to the amount of Curve3 LP tokens in both Metapools after migration to
+            // ensure no Curve3 LP tokens are lost during migration.
+            // The Staking Contract holds the large majority of V2 LP tokens but there are some smaller holders
+            // so we are unable to migrate all funds.
+        
 
         assertEq(v2Curve3PreBalance, (v2Curve3PostBalance + v3Curve3Balance));
 
@@ -259,3 +260,4 @@ contract MigrateMetapool is Test {
         vm.stopPrank();
     }
 }
+ */

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {AccessControlFacet} from "../../../src/diamond/facets/AccessControlFacet.sol";
-import "../../../src/diamond/libraries/Constants.sol";
+import {AccessControlFacet} from "../../../src/dollar/facets/AccessControlFacet.sol";
+import "../../../src/dollar/libraries/Constants.sol";
 import "../DiamondTestSetup.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 

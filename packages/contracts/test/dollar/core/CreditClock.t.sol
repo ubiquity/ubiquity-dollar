@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import "../../../src/dollar/core/CreditClock.sol";
-
+import {CreditClock} from "../../../src/dollar/core/CreditClock.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "../../helpers/LocalTestHelper.sol";
 
 contract CreditClockTest is LocalTestHelper {
@@ -20,12 +20,25 @@ contract CreditClockTest is LocalTestHelper {
     );
 
     function setUp() public override {
-        manager = new UbiquityDollarManager(address(this));
+        super.setUp();
         creditClock = new CreditClock(
-            manager,
+            address(diamond),
             uint256(1000000).fromUInt(),
             uint256(1).fromUInt().div(uint256(100).fromUInt())
         );
+    }
+
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
+        vm.prank(address(0x123abc));
+        vm.expectRevert("CreditClock: not admin");
+        creditClock.setManager(address(0x123abc));
+    }
+
+    function testSetManager_ShouldSetDiamond() public {
+        address newDiamond = address(0x123abc);
+        vm.prank(admin);
+        creditClock.setManager(newDiamond);
+        require(creditClock.getManager() == newDiamond);
     }
 
     function testSetRatePerBlock_ShouldRevert_WhenNotAdmin() public {
@@ -91,6 +104,7 @@ contract CreditClockTest is LocalTestHelper {
         vm.expectEmit(false, false, false, true);
         emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
         vm.roll(rateStartBlock);
+        vm.prank(admin);
         creditClock.setRatePerBlock(ratePerBlock);
 
         require(creditClock.rateStartBlock() == rateStartBlock);
@@ -113,6 +127,7 @@ contract CreditClockTest is LocalTestHelper {
         vm.expectEmit(false, false, false, true);
         emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
         vm.roll(rateStartBlock);
+        vm.prank(admin);
         creditClock.setRatePerBlock(ratePerBlock);
 
         require(creditClock.rateStartBlock() == rateStartBlock);
@@ -135,6 +150,7 @@ contract CreditClockTest is LocalTestHelper {
         vm.expectEmit(false, false, false, true);
         emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
         vm.roll(rateStartBlock);
+        vm.prank(admin);
         creditClock.setRatePerBlock(ratePerBlock);
 
         require(creditClock.rateStartBlock() == rateStartBlock);

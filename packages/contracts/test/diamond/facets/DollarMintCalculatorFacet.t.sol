@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
-import "../../helpers/LocalTestHelper.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract DollarMintCalculatorFacetTest is DiamondSetup {
     address dollarManagerAddress;
@@ -38,7 +38,7 @@ contract DollarMintCalculatorFacetTest is DiamondSetup {
 
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
-        uint256 totalSupply = MockDollarToken(dollarAddress).totalSupply();
+        uint256 totalSupply = IERC20(dollarAddress).totalSupply();
         uint256 amountToMint = IDollarMintCalcFacet.getDollarsToMint();
         assertEq(amountToMint, totalSupply);
     }

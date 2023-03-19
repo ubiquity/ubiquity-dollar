@@ -3,6 +3,7 @@ pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
 import "abdk/ABDKMathQuad.sol";
+import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 
 contract StakingFormulasFacetTest is DiamondSetup {
     using ABDKMathQuad for uint256;
@@ -91,5 +92,14 @@ contract StakingFormulasFacetTest is DiamondSetup {
             ),
             50
         );
+    }
+
+    function testDurationMultiply_ShouldReturnAmount() public {
+        uint amount = IStakingFormulasFacet.durationMultiply(
+            100 ether,
+            1,
+            1000000 gwei
+        );
+        assertEq(amount, 100100000000000000000);
     }
 }
