@@ -217,6 +217,18 @@ contract StakingShare is
         return super.uri(tokenId);
     }
 
+    function _burn(
+        address account,
+        uint256 id,
+        uint256 amount
+    ) internal virtual override whenNotPaused {
+        require(amount == 1, "amount <> 1");
+        super._burn(account, id, 1);
+        Stake storage _stake = _stakes[id];
+        require(_stake.lpAmount == 0, "LP <> 0");
+        _totalSupply -= 1;
+    }
+
     /**
      *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
      */
