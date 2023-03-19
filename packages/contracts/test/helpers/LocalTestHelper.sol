@@ -1,19 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {UbiquityDollarManager} from "../../src/dollar/core/UbiquityDollarManager.sol";
-import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
-import {CreditRedemptionCalculator} from "../../src/dollar/core/CreditRedemptionCalculator.sol";
-import {CreditNftRedemptionCalculator} from "../../src/dollar/core/CreditNftRedemptionCalculator.sol";
-import {CreditNftManager} from "../../src/dollar/core/CreditNftManager.sol";
-import {DollarMintCalculator} from "../../src/dollar/core/DollarMintCalculator.sol";
-import {DollarMintExcess} from "../../src/dollar/core/DollarMintExcess.sol";
 import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
-import {MockDollarToken} from "../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
-
-import "forge-std/Test.sol";
+import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
+import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
+import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
+import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
+import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
+import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
+import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
+import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
+import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
+import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 
 contract MockCreditNftRedemptionCalculator {
     constructor() {}
@@ -25,80 +25,69 @@ contract MockCreditNftRedemptionCalculator {
     }
 }
 
-abstract contract LocalTestHelper is Test {
+abstract contract LocalTestHelper is DiamondSetup {
     address public constant NATIVE_ASSET = address(0);
-
-    address public admin = address(0x123abc);
+    address curve3CRVTokenAddress = address(0x101);
     address public treasuryAddress = address(0x111222333);
 
-    UbiquityDollarManager manager;
-    MockCreditNft creditNft;
-    MockDollarToken dollarToken;
-    MockTWAPOracleDollar3pool twapOracle;
-    UbiquityGovernanceToken governanceToken;
-    MockCreditNftRedemptionCalculator creditNftRedemptionCalculator;
-    MockCreditToken creditToken;
-    CreditRedemptionCalculator creditRedemptionCalculator;
-    DollarMintCalculator dollarMintCalculator;
-    CreditNftManager creditNftManager;
-    DollarMintExcess dollarMintExcess;
+    TWAPOracleDollar3poolFacet twapOracle;
 
-    function setUp() public virtual {
-        manager = new UbiquityDollarManager(admin);
+    CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculator;
+    MockCreditToken creditToken;
+    CreditRedemptionCalculatorFacet creditRedemptionCalculator;
+    DollarMintCalculatorFacet dollarMintCalculator;
+    CreditNftManagerFacet creditNftManager;
+    DollarMintExcessFacet dollarMintExcess;
+    address metaPoolAddress;
+
+    function setUp() public virtual override {
+        super.setUp();
+
+        twapOracle = ITWAPOracleDollar3pool;
+        creditNftRedemptionCalculator = ICreditNFTRedCalcFacet;
+        creditRedemptionCalculator = ICreditRedCalcFacet;
+        dollarMintCalculator = IDollarMintCalcFacet;
+        creditNftManager = ICreditNFTMgrFacet;
+        dollarMintExcess = IDollarMintExcessFacet;
 
         vm.startPrank(admin);
-        // deploy Credit NFT token
-        creditNft = new MockCreditNft(100);
-        manager.setCreditNftAddress(address(creditNft));
 
-        // deploy dollar token
-        dollarToken = new MockDollarToken(10000e18);
-        manager.setDollarTokenAddress(address(dollarToken));
-
-        // deploy twapPrice oracle
-        twapOracle = new MockTWAPOracleDollar3pool(
-            address(0x100),
-            address(dollarToken),
-            address(0x101),
-            100,
-            100
+        //mint some dollar token
+        IDollar.mint(address(0x1045256), 10000e18);
+        require(
+            IDollar.balanceOf(address(0x1045256)) == 10000e18,
+            "dollar balance is not 10000e18"
         );
-        manager.setTwapOracleAddress(address(twapOracle));
 
-        // deploy governance token
-        governanceToken = new UbiquityGovernanceToken(manager);
-        manager.setGovernanceTokenAddress(address(governanceToken));
-
-        // deploy CreditNftRedemptionCalculator
-        creditNftRedemptionCalculator = new MockCreditNftRedemptionCalculator();
-        manager.setCreditNftCalculatorAddress(
-            address(creditNftRedemptionCalculator)
+        // twapPrice oracle
+        metaPoolAddress = address(
+            new MockMetaPool(address(IDollar), curve3CRVTokenAddress)
+        );
+        // set the mock data for meta pool
+        uint256[2] memory _price_cumulative_last = [
+            uint256(100e18),
+            uint256(100e18)
+        ];
+        uint256 _last_block_timestamp = 20000;
+        uint256[2] memory _twap_balances = [uint256(100e18), uint256(100e18)];
+        uint256[2] memory _dy_values = [uint256(100e18), uint256(100e18)];
+        MockMetaPool(metaPoolAddress).updateMockParams(
+            _price_cumulative_last,
+            _last_block_timestamp,
+            _twap_balances,
+            _dy_values
         );
 
         // deploy credit token
         creditToken = new MockCreditToken(0);
-        manager.setCreditTokenAddress(address(creditToken));
-
-        // deploy CreditRedemptionCalculator
-        creditRedemptionCalculator = new CreditRedemptionCalculator(manager);
-        manager.setCreditCalculatorAddress(address(creditRedemptionCalculator));
-
-        // deploy DollarMintCalculator
-        dollarMintCalculator = new DollarMintCalculator(manager);
-        manager.setDollarMintCalculatorAddress(address(dollarMintCalculator));
-
-        // deploy CreditNftManager
-        creditNftManager = new CreditNftManager(manager, 100);
-
-        dollarMintExcess = new DollarMintExcess(manager);
-        manager.setExcessDollarsDistributor(
-            address(creditNftManager),
-            address(dollarMintExcess)
-        );
+        IManager.setCreditTokenAddress(address(creditToken));
 
         // set treasury address
-        manager.setTreasuryAddress(treasuryAddress);
+        IManager.setTreasuryAddress(treasuryAddress);
 
         vm.stopPrank();
+        vm.prank(owner);
+        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CRVTokenAddress);
+        ITWAPOracleDollar3pool.update();
     }
 }

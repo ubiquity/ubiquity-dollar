@@ -1,26 +1,33 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.16;
 
-import "../../src/diamond/interfaces/IDiamondCut.sol";
-import "../../src/diamond/facets/DiamondCutFacet.sol";
-import "../../src/diamond/facets/DiamondLoupeFacet.sol";
-import "../../src/diamond/facets/OwnershipFacet.sol";
-import "../../src/diamond/facets/ManagerFacet.sol";
-import "../../src/diamond/facets/AccessControlFacet.sol";
-import "../../src/diamond/facets/TWAPOracleDollar3poolFacet.sol";
-import "../../src/diamond/facets/CollectableDustFacet.sol";
-import "../../src/diamond/facets/ChefFacet.sol";
-import "../../src/diamond/facets/StakingFacet.sol";
-import "../../src/diamond/facets/StakingFormulasFacet.sol";
-import "../../src/diamond/facets/CreditNFTManagerFacet.sol";
-import "../../src/diamond/facets/CreditNFTRedemptionCalculatorFacet.sol";
-import "../../src/diamond/facets/CreditRedemptionCalculatorFacet.sol";
-import "../../src/diamond/facets/DollarMintCalculatorFacet.sol";
-import "../../src/diamond/facets/DollarMintExcessFacet.sol";
-import "../../src/diamond/Diamond.sol";
-import "../../src/diamond/upgradeInitializers/DiamondInit.sol";
-import "../helpers/DiamondTestHelper.sol";
+import "@openzeppelin/contracts/interfaces/IERC165.sol";
+import {IDiamondCut} from "../../src/dollar/interfaces/IDiamondCut.sol";
+import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
+import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
+import {IERC173} from "../../src/dollar/interfaces/IERC173.sol";
+import {IDiamondLoupe} from "../../src/dollar/interfaces/IDiamondLoupe.sol";
+import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
+import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
+import {AccessControlFacet} from "../../src/dollar/facets/AccessControlFacet.sol";
+import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
+import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet.sol";
+import {ChefFacet} from "../../src/dollar/facets/ChefFacet.sol";
+import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
+import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
+import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
+import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
+import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
+import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
+import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
+import {Diamond, DiamondArgs} from "../../src/dollar/Diamond.sol";
+import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
+import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
+import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
+import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
+import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
+import "../../src/dollar/libraries/Constants.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
     // contract types of facets to be deployed
@@ -45,7 +52,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
 
-    UbiquityDollarTokenForDiamond IDollar;
+    UbiquityDollarToken IDollar;
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
@@ -65,6 +72,10 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     DollarMintCalculatorFacet IDollarMintCalcFacet;
     DollarMintExcessFacet IDollarMintExcessFacet;
+
+    StakingShare IStakingShareToken;
+    // adding governance token
+    UbiquityGovernanceToken IGovToken;
 
     address incentive_addr;
 
@@ -170,6 +181,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(managerFacet.dollarTokenAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.creditTokenAddress.selector);
         selectorsOfManagerFacet.push(managerFacet.creditNftAddress.selector);
+        selectorsOfManagerFacet.push(
+            managerFacet.curve3PoolTokenAddress.selector
+        );
         selectorsOfManagerFacet.push(
             managerFacet.governanceTokenAddress.selector
         );
@@ -308,7 +322,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             creditNFTManagerFacet.setCreditNFTLength.selector
         );
         selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.exchangeDollarsForCreditNFT.selector
+            creditNFTManagerFacet.exchangeDollarsForCreditNft.selector
         );
         selectorsOfCreditNFTManagerFacet.push(
             creditNFTManagerFacet.exchangeDollarsForCredit.selector
@@ -335,7 +349,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             creditNFTManagerFacet.burnCreditTokensForDollars.selector
         );
         selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.redeemCreditNFT.selector
+            creditNFTManagerFacet.redeemCreditNft.selector
         );
         selectorsOfCreditNFTManagerFacet.push(
             creditNFTManagerFacet.mintClaimableDollars.selector
@@ -567,20 +581,22 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IAccessCtrl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
         // grant diamond token admin rights
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(diamond));
+        // grant diamond token minter rights
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
         // add staking shares
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
 
         address stakingShareAddress = address(
-            new StakingShare(UbiquityDollarManager(address(diamond)), uri)
+            new StakingShare(address(diamond), uri)
         );
         // adding governance token
         address governanceTokenAddress = address(
-            new UbiquityGovernanceTokenForDiamond(address(diamond))
+            new UbiquityGovernanceToken(address(diamond))
         );
         // adding dollar token
         address dollarTokenAddress = address(
-            new UbiquityDollarTokenForDiamond(address(diamond))
+            new UbiquityDollarToken(address(diamond))
         );
         // add staking shares
         IManager.setStakingShareAddress(stakingShareAddress);
@@ -588,7 +604,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IManager.setGovernanceTokenAddress(governanceTokenAddress);
         // adding dollar token
         IManager.setDollarTokenAddress(dollarTokenAddress);
-        IDollar = UbiquityDollarTokenForDiamond(IManager.dollarTokenAddress());
+        IDollar = UbiquityDollarToken(IManager.dollarTokenAddress());
+        IGovToken = UbiquityGovernanceToken(IManager.governanceTokenAddress());
+        IStakingShareToken = StakingShare(IManager.stakingShareAddress());
         assertEq(IDollar.decimals(), 18);
         vm.stopPrank();
     }

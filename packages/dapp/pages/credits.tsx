@@ -1,5 +1,4 @@
 import { FC, useState } from "react";
-import MigrateButton from "@/components/redeem/MigrateButton";
 import DollarPrice from "@/components/redeem/DollarPrice";
 import UcrRedeem from "@/components/redeem/UcrRedeem";
 import UcrNftGenerator from "@/components/redeem/DebtCouponDeposit";
@@ -27,7 +26,6 @@ const PriceStabilization: FC = (): JSX.Element => {
     <WalletConnectionWall>
       <div id="CreditOperations" data-twap={twapInteger}>
         <DollarPrice />
-        <MigrateButton />
         <div id="MintUcr" className="panel">
           <h2>Generate Ubiquity Credit NFTs</h2>
           <aside>When TWAP is below peg</aside>

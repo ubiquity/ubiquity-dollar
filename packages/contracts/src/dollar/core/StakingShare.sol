@@ -1,18 +1,22 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "../utils/SafeAddArray.sol";
-import "../../dollar/libraries/Constants.sol";
-import {IUbiquityDollarManager} from "../interfaces/IUbiquityDollarManager.sol";
+import "../../dollar/utils/SafeAddArray.sol";
+import "../interfaces/IAccessControl.sol";
+import "../libraries/Constants.sol";
 
-//cspell:ignore BondingShareV2
-contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract StakingShare is
+    ERC1155URIStorage,
+    ERC1155Pausable,
+    ERC1155Burnable
+{
     using SafeAddArray for uint256[];
-    struct Bond {
+
+    struct Stake {
         // address of the minter
         address minter;
         // lp amount deposited by the user
@@ -25,34 +29,35 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 lpAmount;
     }
 
-    IUbiquityDollarManager public manager;
     // Mapping from account to operator approvals
     mapping(address => uint256[]) private _holderBalances;
-    mapping(uint256 => Bond) private _bonds;
+    mapping(uint256 => Stake) private _stakes;
     uint256 private _totalLP;
     uint256 private _totalSupply;
+
+    IAccessControl public accessCtrl;
 
     // ----------- Modifiers -----------
     modifier onlyMinter() {
         require(
-            manager.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
-            "Governance token: not minter"
+            accessCtrl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
+            "Staking Share: not minter"
         );
         _;
     }
 
     modifier onlyBurner() {
         require(
-            manager.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
-            "Governance token: not burner"
+            accessCtrl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
+            "Staking Share: not burner"
         );
         _;
     }
 
     modifier onlyPauser() {
         require(
-            manager.hasRole(PAUSER_ROLE, msg.sender),
-            "Governance token: not pauser"
+            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
+            "Staking Share: not pauser"
         );
         _;
     }
@@ -60,23 +65,26 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /**
      * @dev constructor
      */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
-        manager = IUbiquityDollarManager(_manager);
+    constructor(
+        address _manager,
+        string memory uri
+    ) ERC1155(uri) {
+        accessCtrl = IAccessControl(_manager);
     }
 
-    /// @dev update bond LP amount , LP rewards debt and end block.
-    /// @param _bondId bonding share id
+    /// @dev update stake LP amount , LP rewards debt and end block.
+    /// @param _stakeId staking share id
     /// @param _lpAmount amount of LP token deposited
-    /// @param _lpRewardDebt amount of excess LP token inside the bonding contract
+    /// @param _lpRewardDebt amount of excess LP token inside the staking contract
     /// @param _endBlock end locking period block number
-    function updateBond(
-        uint256 _bondId,
+    function updateStake(
+        uint256 _stakeId,
         uint256 _lpAmount,
         uint256 _lpRewardDebt,
         uint256 _endBlock
     ) external onlyMinter whenNotPaused {
-        Bond storage bond = _bonds[_bondId];
-        uint256 curLpAmount = bond.lpAmount;
+        Stake storage stake = _stakes[_stakeId];
+        uint256 curLpAmount = stake.lpAmount;
         if (curLpAmount > _lpAmount) {
             // we are removing LP
             _totalLP -= curLpAmount - _lpAmount;
@@ -84,15 +92,15 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
             // we are adding LP
             _totalLP += _lpAmount - curLpAmount;
         }
-        bond.lpAmount = _lpAmount;
-        bond.lpRewardDebt = _lpRewardDebt;
-        bond.endBlock = _endBlock;
+        stake.lpAmount = _lpAmount;
+        stake.lpRewardDebt = _lpRewardDebt;
+        stake.endBlock = _endBlock;
     }
 
     // @dev Creates `amount` new tokens for `to`, of token type `id`.
     /// @param to owner address
     /// @param lpDeposited amount of LP token deposited
-    /// @param lpRewardDebt amount of excess LP token inside the bonding contract
+    /// @param lpRewardDebt amount of excess LP token inside the staking contract
     /// @param endBlock block number when the locking period ends
     function mint(
         address to,
@@ -104,13 +112,13 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         _mint(to, id, 1, bytes(""));
         _totalSupply += 1;
         _holderBalances[to].add(id);
-        Bond storage _bond = _bonds[id];
-        _bond.minter = to;
-        _bond.lpFirstDeposited = lpDeposited;
-        _bond.lpAmount = lpDeposited;
-        _bond.lpRewardDebt = lpRewardDebt;
-        _bond.creationBlock = block.number;
-        _bond.endBlock = endBlock;
+        Stake storage _stake = _stakes[id];
+        _stake.minter = to;
+        _stake.lpFirstDeposited = lpDeposited;
+        _stake.lpAmount = lpDeposited;
+        _stake.lpRewardDebt = lpRewardDebt;
+        _stake.creationBlock = block.number;
+        _stake.endBlock = endBlock;
         _totalLP += lpDeposited;
     }
 
@@ -177,10 +185,10 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     }
 
     /**
-     * @dev return bond details.
+     * @dev return stake details.
      */
-    function getBond(uint256 id) public view returns (Bond memory) {
-        return _bonds[id];
+    function getStake(uint256 id) public view returns (Stake memory) {
+        return _stakes[id];
     }
 
     /**
@@ -192,29 +200,6 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         return _holderBalances[holder];
     }
 
-    function _burn(
-        address account,
-        uint256 id,
-        uint256 amount
-    ) internal virtual override whenNotPaused {
-        require(amount == 1, "amount <> 1");
-        super._burn(account, id, 1);
-        Bond storage _bond = _bonds[id];
-        require(_bond.lpAmount == 0, "LP <> 0");
-        _totalSupply -= 1;
-    }
-
-    function _burnBatch(
-        address account,
-        uint256[] memory ids,
-        uint256[] memory amounts
-    ) internal virtual override whenNotPaused {
-        super._burnBatch(account, ids, amounts);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply -= amounts[i];
-        }
-    }
-
     function _beforeTokenTransfer(
         address operator,
         address from,
@@ -224,5 +209,30 @@ contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) internal virtual override(ERC1155, ERC1155Pausable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    function uri(
+        uint256 tokenId
+    ) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory) {
+        return super.uri(tokenId);
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     */
+
+    function setUri(uint256 tokenId, string memory tokenUri) external onlyMinter {
+        _setURI(tokenId, tokenUri);
+    }
+
+    function setUri(string memory tokenUri) external onlyMinter {
+        _setURI(tokenUri);
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
+     */
+    function setBaseUri(string memory newUri) external onlyMinter {
+        _setBaseURI(newUri);
     }
 }

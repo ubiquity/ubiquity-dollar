@@ -4,8 +4,8 @@ import { ContractInterface, ethers } from "ethers";
 
 // ARTIFACTS
 import _DebtCoupon from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
-import _DebtCouponManager from "@ubiquity/contracts/out/CreditNftManager.sol/CreditNftManager.json";
-import _DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculator.sol/DollarMintCalculator.json";
+import _DebtCouponManager from "@ubiquity/contracts/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json";
+import _DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json";
 import _ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import _ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
 import _IUARForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
@@ -13,17 +13,17 @@ import _ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFact
 import _IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import _IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import _SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
-import _Staking from "@ubiquity/contracts/out/Staking.sol/Staking.json";
+import _Staking from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
 import _StakingToken from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import _SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
-import _TWAPOracle from "@ubiquity/contracts/out/TWAPOracleDollar3pool.sol/TWAPOracleDollar3pool.json";
+import _TWAPOracle from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import _UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import _UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
-import _MasterChefV2 from "@ubiquity/contracts/out/UbiquityChef.sol/UbiquityChef.json";
+import _MasterChefV2 from "@ubiquity/contracts/out/ChefFacet.sol/ChefFacet.json";
 import _Credit from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
-import _UbiquityManager from "@ubiquity/contracts/out/UbiquityDollarManager.sol/UbiquityDollarManager.json";
+import _UbiquityManager from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
 import _Dollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
-import _UbiquityFormulas from "@ubiquity/contracts/out/UbiquityFormulas.sol/UbiquityFormulas.json";
+import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import _Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 
 // ABIs
@@ -39,10 +39,10 @@ import YieldProxyABI from "../config/abis/YieldProxy.json";
 
 import {
   CreditNft,
-  CreditNftManager,
-  CreditNftRedemptionCalculator,
-  CreditRedemptionCalculator,
-  DollarMintCalculator,
+  CreditNftManagerFacet,
+  CreditNftRedemptionCalculatorFacet,
+  CreditRedemptionCalculatorFacet,
+  DollarMintCalculatorFacet,
   ERC1155Ubiquity,
   ERC20,
   ICurveFactory,
@@ -51,16 +51,16 @@ import {
   ITWAPOracleDollar3pool,
   IUniswapV2Pair,
   SimpleBond,
-  Staking,
+  StakingFacet,
   StakingShare,
   SushiSwapPool,
   UbiquiStick,
   UbiquiStickSale,
-  UbiquityChef,
+  ChefFacet,
   UbiquityCreditToken,
-  UbiquityDollarManager,
+  ManagerFacet,
   UbiquityDollarToken,
-  UbiquityFormulas,
+  StakingFormulasFacet,
   UbiquityGovernanceToken,
 } from "types";
 
@@ -108,7 +108,7 @@ export const getIJarContract = (address: string, provider: Provider) => {
 };
 
 export const getDebtCouponManagerContract = (address: string, provider: Provider) => {
-  return getContract(_DebtCouponManager.abi, address, provider) as CreditNftManager;
+  return getContract(_DebtCouponManager.abi, address, provider) as CreditNftManagerFacet;
 };
 
 export const getCurveFactoryContract = (address: string, provider: Provider) => {
@@ -124,7 +124,7 @@ export const getStakingShareContract = (address: string, provider: Provider) => 
 };
 
 export const getBondingV2Contract = (address: string, provider: Provider) => {
-  return getContract(_Staking.abi, address, provider) as Staking;
+  return getContract(_Staking.abi, address, provider) as StakingFacet;
 };
 
 export const getDebtCouponContract = (address: string, provider: Provider) => {
@@ -136,15 +136,15 @@ export const getTWAPOracleContract = (address: string, provider: Provider) => {
 };
 
 export const getDollarMintCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculator;
+  return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculatorFacet;
 };
 
 export const getICouponsForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_ICouponsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculator;
+  return getContract(_ICouponsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
 };
 
 export const getIUARForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_IUARForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculator;
+  return getContract(_IUARForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
 };
 
 export const getIMetaPoolContract = (address: string, provider: Provider) => {
@@ -152,7 +152,7 @@ export const getIMetaPoolContract = (address: string, provider: Provider) => {
 };
 
 export const getMasterChefV2Contract = (address: string, provider: Provider) => {
-  return getContract(_MasterChefV2.abi, address, provider) as UbiquityChef;
+  return getContract(_MasterChefV2.abi, address, provider) as ChefFacet;
 };
 
 export const getSushiSwapPoolContract = (address: string, provider: Provider) => {
@@ -160,7 +160,7 @@ export const getSushiSwapPoolContract = (address: string, provider: Provider) =>
 };
 
 export const getUbiquityManagerContract = (address: string, provider: Provider) => {
-  return getContract(_UbiquityManager.abi, address, provider) as UbiquityDollarManager;
+  return getContract(_UbiquityManager.abi, address, provider) as ManagerFacet;
 };
 
 export const getDollarContract = (address: string, provider: Provider) => {
@@ -172,7 +172,7 @@ export const getCreditContract = (address: string, provider: Provider) => {
 };
 
 export const getUbiquityFormulasContract = (address: string, provider: Provider) => {
-  return getContract(_UbiquityFormulas.abi, address, provider) as UbiquityFormulas;
+  return getContract(_UbiquityFormulas.abi, address, provider) as StakingFormulasFacet;
 };
 
 export const getGovernanceContract = (address: string, provider: Provider) => {

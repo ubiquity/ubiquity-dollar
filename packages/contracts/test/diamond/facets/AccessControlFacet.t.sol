@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {AccessControlFacet} from "../../../src/diamond/facets/AccessControlFacet.sol";
-import "../../../src/diamond/libraries/Constants.sol";
+import {AccessControlFacet} from "../../../src/dollar/facets/AccessControlFacet.sol";
+import "../../../src/dollar/libraries/Constants.sol";
 import "../DiamondTestSetup.sol";
-import {AddressUtils} from "../../../src/diamond/libraries/AddressUtils.sol";
+import {AddressUtils} from "../../../src/dollar/libraries/AddressUtils.sol";
 
-import {UintUtils} from "../../../src/diamond/libraries/UintUtils.sol";
+import {UintUtils} from "../../../src/dollar/libraries/UintUtils.sol";
 
 contract AccessControlFacetTest is DiamondSetup {
     using AddressUtils for address;

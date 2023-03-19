@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import "./DiamondTestSetup.sol";
-import "../../src/diamond/libraries/Constants.sol";
+import "../../src/dollar/libraries/Constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
     address token_addr;
@@ -256,7 +256,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testName_ShouldReturnTokenName() public {
         // cspell: disable-next-line
-        assertEq(IDollar.name(), "Ubiquity Algorithmic Dollar");
+        assertEq(IDollar.name(), "Ubiquity Dollar");
     }
 
     function testSymbol_ShouldReturnSymbolName() public {

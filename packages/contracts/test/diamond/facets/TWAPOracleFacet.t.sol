@@ -3,7 +3,6 @@ pragma solidity ^0.8.16;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {TWAPOracleDollar3pool} from "../../../src/dollar/core/TWAPOracleDollar3pool.sol";
 import "../DiamondTestSetup.sol";
 
 contract TWAPOracleDollar3poolFacetTest is DiamondSetup {
