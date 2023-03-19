@@ -4,11 +4,6 @@ pragma solidity ^0.8.16;
 import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
-<<<<<<< HEAD
-import {MockUbiquistick} from "../../src/dollar/mocks/MockUbiquistick.sol";
-
-import "forge-std/Test.sol";
-=======
 import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
@@ -19,7 +14,6 @@ import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFac
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
->>>>>>> origin/ERC1155
 
 contract MockCreditNftRedemptionCalculator {
     constructor() {}
@@ -38,12 +32,6 @@ abstract contract LocalTestHelper is DiamondSetup {
 
     TWAPOracleDollar3poolFacet twapOracle;
 
-<<<<<<< HEAD
-    MockUbiquistick ubiquiStick;
-
-    function setUp() public virtual {
-        manager = new UbiquityDollarManager(admin);
-=======
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculator;
     MockCreditToken creditToken;
     CreditRedemptionCalculatorFacet creditRedemptionCalculator;
@@ -61,7 +49,6 @@ abstract contract LocalTestHelper is DiamondSetup {
         dollarMintCalculator = IDollarMintCalcFacet;
         creditNftManager = ICreditNFTMgrFacet;
         dollarMintExcess = IDollarMintExcessFacet;
->>>>>>> origin/ERC1155
 
         vm.startPrank(admin);
 
