@@ -128,7 +128,6 @@ contract StakingShare is
         bytes memory data
     ) public override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         super.safeTransferFrom(from, to, id, amount, data);
-        _holderBalances[to].add(id);
     }
 
     /**
@@ -163,7 +162,6 @@ contract StakingShare is
         bytes memory data
     ) public virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
-        _holderBalances[to].add(ids);
     }
 
     function _burnBatch(
@@ -172,9 +170,6 @@ contract StakingShare is
         uint256[] memory amounts
     ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         super._burnBatch(account, ids, amounts);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply -= amounts[i];
-        }
     }
 
     function _beforeTokenTransfer(
