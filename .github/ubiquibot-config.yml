@@ -1,4 +1,5 @@
 ---
+autoPayMode: true
 baseMultiplier: 1000
 timeLabels:
 - name: 'Time: <1 Hour'
