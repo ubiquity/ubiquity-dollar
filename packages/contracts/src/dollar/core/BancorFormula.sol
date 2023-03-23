@@ -2,7 +2,7 @@
 pragma solidity ^0.8.3;
 
 // import "./interfaces/IBancorFormula.sol";
-import "./libs/BancorPower.sol";
+import "./BancorPower.sol";
 import "abdk/ABDKMathQuad.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
