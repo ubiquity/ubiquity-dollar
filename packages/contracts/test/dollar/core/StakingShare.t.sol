@@ -342,6 +342,22 @@ contract StakingShareTest is DepositStakingShare {
         );
     }
 
+    function testSetBaseUri_ShouldSetUri() public {
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+
+        string memory stringTest = "{'name':'Bonding Share','description':,"
+        "'Ubiquity Bonding Share V2',"
+        "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
+        vm.prank(admin);
+        stakingShare.setBaseUri(stringTest);
+        assertEq(
+            stakingShare.baseURI(),
+            stringTest,
+            "the uri is not set correctly by the method"
+        );
+    }
+
     function testSetUriSingle_ShouldSetUri() public {
         vm.prank(admin);
         IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
