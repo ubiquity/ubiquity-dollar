@@ -49,17 +49,30 @@ library BondingCurve {
     UbiquityDollarManager public manager;
 
     event Deposit(address indexed user, uint256 amount);
-
     event Withdraw(uint256 amount);
 
-    function setCollateralToken(address _collateral) external onlyBondingMinter {
-        collateral = _collateral;
+    struct BondingCurveData {
+        uint32 connectorWeight;
+        uint256 baseY;
+    
     }
+
+    function bondingCurveStorage() internal pure returns (BondingCurveData storage l) {
+        bytes32 slot = BONDING_CONTROL_STORAGE_SLOT;
+        assembly {
+            l.slot := slot
+        }
+    }
+
+    // Look into this function
+    // function setCollateralToken(address _collateral) internal {
+    //     collateral = _collateral;
+    // }
 
     function setParams(
         uint32 _connectorWeight, 
         uint256 _baseY
-    ) external onlyBondingMinter {
+    ) internal {
         require(_connectorWeight > 0 && _connectorWeight <= 1000000, "invalid values"); 
         require(_baseY > 0, "must valid baseY");
 
