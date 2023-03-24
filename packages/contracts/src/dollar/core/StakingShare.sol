@@ -33,6 +33,8 @@ contract StakingShare is
     uint256 private _totalLP;
     uint256 private _totalSupply;
 
+    string private _baseURI = "";
+
     // ----------- Modifiers -----------
     modifier onlyMinter() override {
         require(
@@ -214,5 +216,10 @@ contract StakingShare is
      */
     function setBaseUri(string memory newUri) external onlyMinter {
         _setBaseURI(newUri);
+        _baseURI = newUri;
+    }
+
+    function getBaseUri() external view returns (string memory) {
+        return _baseURI;
     }
 }

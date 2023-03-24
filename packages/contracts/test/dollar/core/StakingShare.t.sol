@@ -352,7 +352,7 @@ contract StakingShareTest is DepositStakingShare {
         vm.prank(admin);
         stakingShare.setBaseUri(stringTest);
         assertEq(
-            stakingShare.baseURI(),
+            stakingShare.getBaseUri(),
             stringTest,
             "the uri is not set correctly by the method"
         );
