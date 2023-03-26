@@ -346,7 +346,7 @@ contract StakingShareTest is DepositStakingShare {
         vm.prank(admin);
         IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
-        string memory stringTest = "{'name':'Bonding Share','description':,"
+        string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Bonding Share V2',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
