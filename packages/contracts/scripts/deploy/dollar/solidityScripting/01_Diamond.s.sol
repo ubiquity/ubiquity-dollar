@@ -398,6 +398,7 @@ contract DiamondScript is Constants {
             collectableDustFacet.sendDust.selector
         );
         // Chef
+        selectorsOfChefFacet.push(chefFacet.governanceMultiplier.selector);
         selectorsOfChefFacet.push(chefFacet.setGovernancePerBlock.selector);
         selectorsOfChefFacet.push(chefFacet.governancePerBlock.selector);
         selectorsOfChefFacet.push(chefFacet.governanceDivider.selector);
