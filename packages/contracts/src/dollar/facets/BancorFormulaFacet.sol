@@ -11,7 +11,7 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
  * https://github.com/bancorprotocol/contracts
  *
  */
-contract BancorFormula is Modifiers {
+contract BancorFormulaFacet is Modifiers {
     /**
      * @dev Given a token supply, reserve balance, weight and a deposit amount (in the reserve token),
      * calculates the target amount for a given conversion (in the main token)

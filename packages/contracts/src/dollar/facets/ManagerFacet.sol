@@ -85,6 +85,18 @@ contract ManagerFacet is Modifiers {
         store.stakingContractAddress = _stakingContractAddress;
     }
 
+    function setBondingCurveAddress(
+        address _bondingCurveAddress
+    ) external onlyAdmin {
+        store.bondingCurveAddress = _bondingCurveAddress;
+    }
+
+    function setBancorFormularAddress(
+        address _bancorFormulaAddress
+    ) external onlyAdmin {
+        store.bancorFormulaAddress = _bancorFormulaAddress;
+    }
+
     function setTreasuryAddress(address _treasuryAddress) external onlyAdmin {
         store.treasuryAddress = _treasuryAddress;
     }

@@ -10,7 +10,7 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
  * Inspired from Bancor protocol
  * https://github.com/bancorprotocol/contracts
  */
-contract BondingCurve is Modifiers {
+contract BondingCurveFacet is Modifiers {
 
     function setParams(
         uint32 _connectorWeight, 

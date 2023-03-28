@@ -27,6 +27,8 @@ struct AppStorage {
     address creditTokenAddress;
     address creditCalculatorAddress;
     address ubiquiStickAddress;
+    address bondingCurveAddress;
+    address bancorFormulaAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;

@@ -27,6 +27,8 @@ import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
+import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
+import {BancorFormulaFacet} from "../../src/dollar/facets/BancorFormulaFacet.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
@@ -44,6 +46,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     ChefFacet chefFacet;
     StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
+
+    BondingCurveFacet bondingCurveFacet;
+    BancorFormulaFacet bancorFormulaFacet;
 
     CreditNftManagerFacet creditNFTManagerFacet;
     CreditNftRedemptionCalculatorFacet creditNFTRedemptionCalculatorFacet;
@@ -65,6 +70,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     StakingFacet IStakingFacet;
     StakingFormulasFacet IStakingFormulasFacet;
     OwnershipFacet IOwnershipFacet;
+
+    BondingCurveFacet IBondingCurveFacet;
+    BancorFormulaFacet IBancorFormulaFacet;
 
     CreditNftManagerFacet ICreditNFTMgrFacet;
     CreditNftRedemptionCalculatorFacet ICreditNFTRedCalcFacet;
@@ -99,6 +107,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
+
+    bytes4[] selectorsOfBondingCurveFacet;
+    bytes4[] selectorsOfBancorFormulaFacet;
 
     bytes4[] selectorsOfCreditNFTManagerFacet;
     bytes4[] selectorsOfCreditNFTRedemptionCalculatorFacet;
@@ -169,6 +180,12 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         selectorsOfManagerFacet.push(
             managerFacet.setStakingContractAddress.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            managerFacet.setBondingCurveAddress.selector
+        );
+        selectorsOfBancorFormulaFacet.push(
+            managerFacet.setBancorFormularAddress.selector
         );
         selectorsOfManagerFacet.push(managerFacet.setTreasuryAddress.selector);
         selectorsOfManagerFacet.push(
@@ -308,6 +325,25 @@ abstract contract DiamondSetup is DiamondTestHelper {
             stakingFormulasFacet.durationMultiply.selector
         );
 
+        // Bonding Curve
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.setParams.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.deposit.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.withdraw.selector
+        );
+
+        // Bancor Formula
+        selectorsOfBancorFormulaFacet.push(
+            bancorFormulaFacet._purchaseTargetAmount.selector
+        );
+        selectorsOfBancorFormulaFacet.push(
+            bancorFormulaFacet._purchaseTargetAmountFromZero.selector
+        );
+
         // Credit facets
         selectorsOfCreditNFTManagerFacet.push(
             creditNFTManagerFacet.creditNFTLengthBlocks.selector
@@ -392,6 +428,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         stakingFacet = new StakingFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
 
+        bondingCurveFacet = new BondingCurveFacet();
+        bancorFormulaFacet = new BancorFormulaFacet();
+
         creditNFTManagerFacet = new CreditNftManagerFacet();
         creditNFTRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacet = new CreditRedemptionCalculatorFacet();
@@ -415,7 +454,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "CreditNFTRedemptionCalculatorFacet",
             "CreditRedemptionCalculatorFacet",
             "DollarMintCalculatorFacet",
-            "DollarMintExcessFacet"
+            "DollarMintExcessFacet",
+            "BondingCurveFacet",
+            "BancorFormulaFacet"
         ];
 
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -436,7 +477,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](15);
+        FacetCut[] memory cuts = new FacetCut[](17);
 
         cuts[0] = (
             FacetCut({
@@ -548,6 +589,20 @@ abstract contract DiamondSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfDollarMintExcessFacet
             })
         );
+        cuts[15] = (
+            FacetCut({
+                facetAddress: address(bondingCurveFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfBondingCurveFacet
+            })
+        );
+        cuts[16] = (
+            FacetCut({
+                facetAddress: address(bancorFormulaFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfBancorFormulaFacet
+            })
+        );
         // deploy diamond
         vm.prank(owner);
         diamond = new Diamond(_args, cuts);
@@ -563,6 +618,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
         IOwnershipFacet = OwnershipFacet(address(diamond));
+
+        IBondingCurveFacet = BondingCurveFacet(address(diamond));
+        IBancorFormulaFacet = BancorFormulaFacet(address(diamond));
 
         ICreditNFTMgrFacet = CreditNftManagerFacet(address(diamond));
         ICreditNFTRedCalcFacet = CreditNftRedemptionCalculatorFacet(
