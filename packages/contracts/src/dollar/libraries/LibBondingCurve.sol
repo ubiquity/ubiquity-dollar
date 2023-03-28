@@ -1,52 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.3;
 
-import "@openzeppelin/contracts/security/Pausable.sol";
-import "./interfaces/IERC20Ubiquity.sol";
-// import "./interfaces/IERC1155Ubiquity.sol";
-import "./core/UbiquityDollarManager.sol";
-import "./core/UbiquityDollarToken.sol";
-import "../ubiquistick/interfaces/IUbiquiStick.sol";
-import {BancorFormula} from "../core/BancorFormula.sol";
+// import "@openzeppelin/contracts/security/Pausable.sol";
+// import "./LibBancorFormula.sol";
+
+import "../interfaces/IERC1155Ubiquity.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {LibAppStorage} from "./LibAppStorage.sol";
+import "./LibBancorFormula.sol";
+import "./Constants.sol";
 
 
-library BondingCurve {
-    uint256 constant ACCURACY = 10e18;
+library LibBondingCurve {
+    using SafeERC20 for IERC20;
 
-    /// @dev Token issued by the bonding curve
-    // IUbiquiStick immutable token;
-    address public tokenAddr;
-    // IERC1155Ubiquity public token;
-    IUbiquiStick immutable token;
-
-    /// @dev Token used as collateral for minting the Token issued by the bonding curve
-    // IERC20Ubiquity immutable collateral;
-    address public collateral;
-
-    /// @dev Treasury address
-    address public treasuryAddress;
-
-    /// @dev The ratio of how much collateral "backs" the total Token
-    uint32 public connectorWeight;
-
-    /// @dev The intersecting price to mint or burn a Token when supply == PRECISION
-    uint256 public baseY;
-
-    /// @dev token id
-    uint256 public constant BONDING_TOKEN_ID = 1;
-
-    /**
-     * @dev Available balance of reserve token in contract
-     */
-    uint256 public poolBalance = 0;
-
-    /// @dev Current number of tokens minted
-    uint256 public tokenIds = 0;
-
-    /// @dev Mapping of tokens minted to address
-    mapping (address => uint256) public share;
-
-    UbiquityDollarManager public manager;
+    bytes32 constant BONDING_CONTROL_STORAGE_SLOT =
+        keccak256("ubiquity.contracts.bonding.storage");
 
     event Deposit(address indexed user, uint256 amount);
     event Withdraw(uint256 amount);
@@ -54,7 +24,9 @@ library BondingCurve {
     struct BondingCurveData {
         uint32 connectorWeight;
         uint256 baseY;
-    
+        uint256 poolBalance;
+        uint256 tokenIds;
+        mapping (address => uint256) share;
     }
 
     function bondingCurveStorage() internal pure returns (BondingCurveData storage l) {
@@ -64,11 +36,6 @@ library BondingCurve {
         }
     }
 
-    // Look into this function
-    // function setCollateralToken(address _collateral) internal {
-    //     collateral = _collateral;
-    // }
-
     function setParams(
         uint32 _connectorWeight, 
         uint256 _baseY
@@ -76,63 +43,61 @@ library BondingCurve {
         require(_connectorWeight > 0 && _connectorWeight <= 1000000, "invalid values"); 
         require(_baseY > 0, "must valid baseY");
 
-        connectorWeight = _connectorWeight;
-        baseY = _baseY;
+        BondingCurveData storage ss = bondingCurveStorage();
+
+        ss.connectorWeight = _connectorWeight;
+        ss.baseY = _baseY;
     }
 
-    function setTreasuryAddress() external onlyBondingMinter {
-        treasuryAddress = manager.treasuryAddress();
-    }
-
-    /// @notice 
-    /// @dev 
-    /// @param _collateralDeposited Amount of collateral
-    /// @param _recipient An address to receive the NFT
-    /// @return Tokens minted
     function deposit(uint256 _collateralDeposited, address _recipient)
-        external
-        onlyParamsSet
-        returns (uint256)
+        internal
+        returns (uint256 tokensReturned)
     {
+        BondingCurveData storage ss = bondingCurveStorage();
+        require(
+            ss.connectorWeight != 0 && ss.baseY != 0, "not set"
+        );
+
         uint256 tokensReturned;
 
-        if (tokenIds > 0) {
-            tokensReturned = _purchaseTargetAmount(
+        if (ss.tokenIds > 0) {
+            tokensReturned = LibBancorFormula._purchaseTargetAmount(
                 _collateralDeposited,
-                connectorWeight,
-                tokenIds,
-                poolBalance
+                ss.connectorWeight,
+                ss.tokenIds,
+                ss.poolBalance
             );
         } else {
-            tokensReturned = _purchaseTargetAmountFromZero(
+            tokensReturned = LibBancorFormula._purchaseTargetAmountFromZero(
                 _collateralDeposited,
-                connectorWeight,
+                ss.connectorWeight,
                 ACCURACY,
-                baseY
+                ss.baseY
             );
         }
 
-        IERC20(manager.dollarTokenAddress()).transferFrom(
-            msg.sender,
-            address(this),
+        IERC20 dollar = IERC20(
+            LibAppStorage.appStorage().dollarTokenAddress
+        );
+        uint256 toTransfer = _collateralDeposited;
+        dollar.safeTransfer(
+            LibAppStorage.appStorage().treasuryAddress, 
             _collateralDeposited
         );
 
-
-        poolBalance += _collateralDeposited;
+        ss.poolBalance += _collateralDeposited;
         bytes memory tokReturned = toBytes(tokensReturned);
-        share[_recipient] = tokensReturned;
+        ss.share[_recipient] = tokensReturned;
 
-        IUbiquiStick(manager.ubiquiStickAddress()).mint(
+        IERC1155Ubiquity(LibAppStorage.appStorage().ubiquiStickAddress).mint(
            _recipient, 
-           BONDING_TOKEN_ID, 
+           ss.tokenIds, 
            tokensReturned, 
            tokReturned 
         );
 
         emit Deposit(_recipient, _collateralDeposited);
 
-        return tokensReturned;
     }
 
     function toBytes(uint256 x) internal pure returns (bytes memory b) {
@@ -140,19 +105,18 @@ library BondingCurve {
         assembly { mstore(add(b, 32), x) }
     }
 
-    function pause() public virtual onlyPauser {
-        _pause();
-    }
+    function withdraw(uint256 _amount) internal {
+        BondingCurveData storage ss = bondingCurveStorage();
+        require(_amount <= ss.poolBalance, "invalid amount");
 
-    function unpause() public virtual onlyPauser {
-        _unpause();
-    }
+        IERC20 dollar = IERC20(LibAppStorage.appStorage().dollarTokenAddress);
+        uint256 toTransfer = _amount;
+        dollar.safeTransfer(
+            LibAppStorage.appStorage().treasuryAddress,
+            _amount
+        );
 
-    function withdraw(uint256 _amount) external onlyBondingMinter {
-        require(_amount <= poolBalance, "invalid amount");
-
-        IERC20Ubiquity(collateral).transferFrom(address(this), treasuryAddress, _amount);
-        poolBalance -= _amount;
+        ss.poolBalance -= _amount;
 
         emit Withdraw(_amount);
     }

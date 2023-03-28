@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
+import "abdk/ABDKMathQuad.sol";
+
 bytes32 constant DEFAULT_ADMIN_ROLE = 0x00;
 bytes32 constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256(
     "GOVERNANCE_TOKEN_MINTER_ROLE"
@@ -38,6 +40,11 @@ bytes32 constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256(
 
 address constant ETH_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 uint256 constant ONE = uint256(1 ether); // 3Crv has 18 decimals
+
+uint256 constant ACCURACY = 10e18;
+uint256 constant BONDING_TOKEN_ID = 1;
+uint32  constant MAX_WEIGHT = 1e6;
+// bytes16 constant ONE = (uint256(1)).fromUInt();
 
 // keccak256("Permit(address owner,address spender,
 //                   uint256 value,uint256 nonce,uint256 deadline)");

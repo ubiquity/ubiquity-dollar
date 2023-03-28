@@ -26,6 +26,7 @@ struct AppStorage {
     address formulasAddress;
     address creditTokenAddress;
     address creditCalculatorAddress;
+    address ubiquiStickAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;
@@ -81,6 +82,7 @@ contract Modifiers {
         );
         _;
     }
+
     modifier onlyAdmin() {
         require(
             LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
@@ -88,6 +90,7 @@ contract Modifiers {
         );
         _;
     }
+
     modifier onlyMinter() {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
