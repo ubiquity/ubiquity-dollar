@@ -1,5 +1,7 @@
 import { FC } from "react";
-import BondsContainer from "../components/bonds/App";
+
+import dynamic from "next/dynamic";
+const BondsContainer = dynamic(() => import("../components/bonds/App"), { ssr: false }); //@note Fix: (Hydration Error)
 
 const Bonds: FC = (): JSX.Element => {
   return <BondsContainer />;
