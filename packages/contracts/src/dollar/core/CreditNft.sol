@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.19;
 
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";

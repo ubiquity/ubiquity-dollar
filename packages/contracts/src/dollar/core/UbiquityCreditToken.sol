@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.19;
 
 import {ManagerFacet} from "../facets/ManagerFacet.sol";
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";

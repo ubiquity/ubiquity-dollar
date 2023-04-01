@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.19;
 
 import {ICurveFactory} from "../../dollar/interfaces/ICurveFactory.sol";
 import {MockMetaPool} from "../../dollar/mocks/MockMetaPool.sol";

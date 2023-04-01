@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.19;
 
 import {AccessControlFacet} from "../../../src/dollar/facets/AccessControlFacet.sol";
 import "../../../src/dollar/libraries/Constants.sol";

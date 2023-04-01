@@ -1,6 +1,6 @@
 // contracts/GLDToken.sol
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.19;
 
 contract MockTWAPOracleDollar3pool {
     address public immutable pool;

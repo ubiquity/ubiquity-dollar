@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.19;
 
 import {CreditClock} from "../../../src/dollar/core/CreditClock.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";

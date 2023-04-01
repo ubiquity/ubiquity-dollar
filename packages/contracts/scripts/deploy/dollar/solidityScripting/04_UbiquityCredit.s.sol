@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.16;
+pragma solidity 0.8.19;
 
 import "./03_UbiquityGovernanceToken.s.sol";
 import {UbiquityCreditToken} from "../../../../src/dollar/core/UbiquityCreditToken.sol";

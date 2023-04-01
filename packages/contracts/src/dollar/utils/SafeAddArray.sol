@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.16;
+pragma solidity 0.8.19;
 
 /**
  * @dev Wrappers over Solidity's array push operations with added check
