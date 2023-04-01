@@ -1,13 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../../../src/dollar/utils/SafeAddArray.sol";
+import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
-contract StakingShare is ERC1155Ubiquity {
+contract StakingShare is
+    ERC1155Ubiquity,
+    ERC1155URIStorage
+{
     using SafeAddArray for uint256[];
 
     struct Stake {
@@ -28,6 +32,8 @@ contract StakingShare is ERC1155Ubiquity {
     mapping(uint256 => Stake) private _stakes;
     uint256 private _totalLP;
     uint256 private _totalSupply;
+
+    string private _baseURI = "";
 
     // ----------- Modifiers -----------
     modifier onlyMinter() override {
@@ -57,11 +63,11 @@ contract StakingShare is ERC1155Ubiquity {
     /**
      * @dev constructor
      */
-    // TODO should this inherit from ERC1155Ubiquity?
     constructor(
         address _manager,
         string memory uri
-    ) ERC1155Ubiquity(_manager, uri) {}
+    ) ERC1155Ubiquity(_manager, uri) {
+    }
 
     /// @dev update stake LP amount , LP rewards debt and end block.
     /// @param _stakeId staking share id
@@ -114,6 +120,19 @@ contract StakingShare is ERC1155Ubiquity {
     }
 
     /**
+     * @dev See {IERC1155-safeTransferFrom}.
+     */
+    function safeTransferFrom(
+        address from,
+        address to,
+        uint256 id,
+        uint256 amount,
+        bytes memory data
+    ) public override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+        super.safeTransferFrom(from, to, id, amount, data);
+    }
+
+    /**
      * @dev Total amount of tokens  .
      */
     function totalSupply() public view virtual override returns (uint256) {
@@ -134,15 +153,73 @@ contract StakingShare is ERC1155Ubiquity {
         return _stakes[id];
     }
 
+    /**
+     * @dev See {IERC1155-safeBatchTransferFrom}.
+     */
+    function safeBatchTransferFrom(
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) public virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+        super.safeBatchTransferFrom(from, to, ids, amounts, data);
+    }
+
+    function _burnBatch(
+        address account,
+        uint256[] memory ids,
+        uint256[] memory amounts
+    ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+        super._burnBatch(account, ids, amounts);
+    }
+
+    function _beforeTokenTransfer(
+        address operator,
+        address from,
+        address to,
+        uint256[] memory ids,
+        uint256[] memory amounts,
+        bytes memory data
+    ) internal virtual override(ERC1155, ERC1155Ubiquity) {
+        super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    function uri(
+        uint256 tokenId
+    ) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory) {
+        return super.uri(tokenId);
+    }
+
     function _burn(
         address account,
         uint256 id,
         uint256 amount
-    ) internal virtual override whenNotPaused {
+    ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         require(amount == 1, "amount <> 1");
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
         require(_stake.lpAmount == 0, "LP <> 0");
         _totalSupply -= 1;
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     */
+
+    function setUri(uint256 tokenId, string memory tokenUri) external onlyMinter {
+        _setURI(tokenId, tokenUri);
+    }
+
+    /**
+     *@dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
+     */
+    function setBaseUri(string memory newUri) external onlyMinter {
+        _setBaseURI(newUri);
+        _baseURI = newUri;
+    }
+
+    function getBaseUri() external view returns (string memory) {
+        return _baseURI;
     }
 }

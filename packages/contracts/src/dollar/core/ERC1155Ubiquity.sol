@@ -138,7 +138,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) public override {
+    ) public virtual override {
         super.safeTransferFrom(from, to, id, amount, data);
         _holderBalances[to].add(id);
     }

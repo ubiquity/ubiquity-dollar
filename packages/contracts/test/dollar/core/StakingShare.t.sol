@@ -252,7 +252,7 @@ contract StakingShareTest is DepositStakingShare {
         vm.prank(admin);
         stakingShare.pause();
 
-        vm.expectRevert("ERC1155: caller is not token owner or approved");
+        vm.expectRevert("Pausable: paused");
         vm.prank(admin);
         bytes memory data;
         stakingShare.safeTransferFrom(
@@ -290,7 +290,7 @@ contract StakingShareTest is DepositStakingShare {
         vm.prank(admin);
         stakingShare.pause();
 
-        vm.expectRevert("ERC1155: caller is not token owner or approved");
+        vm.expectRevert("Pausable: paused");
         bytes memory data;
         vm.prank(admin);
         stakingShare.safeBatchTransferFrom(
@@ -327,11 +327,14 @@ contract StakingShareTest is DepositStakingShare {
     }
 
     function testSetUri_ShouldSetUri() public {
-        string memory stringTest = "{'name':'Bonding Share','description':,"
-        "'Ubiquity Bonding Share V2',"
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+
+        string memory stringTest = "{'name':'Staking Share','description':,"
+        "'Ubiquity Staking Share',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
         vm.prank(admin);
-        stakingShare.setUri(stringTest);
+        stakingShare.setUri(1, stringTest);
         assertEq(
             stakingShare.uri(1),
             stringTest,
@@ -339,12 +342,44 @@ contract StakingShareTest is DepositStakingShare {
         );
     }
 
+    function testSetBaseUri_ShouldSetUri() public {
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+
+        string memory stringTest = "{'name':'Staking Share','description':,"
+        "'Ubiquity Staking Share',"
+        "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
+        vm.prank(admin);
+        stakingShare.setBaseUri(stringTest);
+        assertEq(
+            stakingShare.getBaseUri(),
+            stringTest,
+            "the uri is not set correctly by the method"
+        );
+    }
+
+    function testSetUriSingle_ShouldSetUri() public {
+        vm.prank(admin);
+        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+
+        string memory stringTest = "{'name':'Staking Share','description':,"
+        "'Ubiquity Staking Share',"
+        "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
+        vm.prank(admin); 
+        stakingShare.setUri(stringTest);
+        assertEq(
+            stakingShare.uri(1),
+            stringTest,
+            "the uri is not set correctly by the method"
+        ); 
+    }
+
     function testSetUri_ShouldRevert_IfGovernanceTokenNotStakingManager()
         public
     {
         string memory stringTest = "{'a parsed json':'value'}";
-        vm.expectRevert("ERC20Ubiquity: not admin");
+        vm.expectRevert("Staking Share: not minter");
         vm.prank(fifthAccount);
-        stakingShare.setUri(stringTest);
+        stakingShare.setUri(1, stringTest);
     }
 }
