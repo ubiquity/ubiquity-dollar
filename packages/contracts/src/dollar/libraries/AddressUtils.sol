@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.8;
+pragma solidity ^0.8.19;
 
 /**
  * @dev https://github.com/solidstate-network/solidstate-solidity/blob/master/contracts/utils/AddressUtils.sol

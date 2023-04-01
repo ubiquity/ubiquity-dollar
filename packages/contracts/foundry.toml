@@ -4,7 +4,7 @@ test = 'test'
 out = 'out'
 libs = ['lib']
 script = 'scripts'
-solc_version = '0.8.16'
+solc_version = '0.8.19'
 extra_output = [
   "abi",
   "evm.bytecode",
@@ -16,7 +16,6 @@ optimizer_runs = 20_000
 force = false
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
 [fmt]
-tab_width = 2
 line_length = 80
 tab_width = 4
 bracket_spacing = false

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.16;
+pragma solidity ^0.8.19;
 
 import {LibChef} from "../libraries/LibChef.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
