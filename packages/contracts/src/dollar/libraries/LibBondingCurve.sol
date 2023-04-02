@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.3;
+pragma solidity ^0.8.16;
 
-// import "@openzeppelin/contracts/security/Pausable.sol";
-// import "./LibBancorFormula.sol";
-
-import "../interfaces/IERC1155Ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
+import "../interfaces/IERC1155Ubiquity.sol";
 import "./LibBancorFormula.sol";
 import "./Constants.sol";
 
@@ -20,6 +18,7 @@ library LibBondingCurve {
 
     event Deposit(address indexed user, uint256 amount);
     event Withdraw(uint256 amount);
+    event ParamsSet(uint32 connectorWeight, uint256 baseY);
 
     struct BondingCurveData {
         uint32 connectorWeight;
@@ -43,15 +42,25 @@ library LibBondingCurve {
         require(_connectorWeight > 0 && _connectorWeight <= 1000000, "invalid values"); 
         require(_baseY > 0, "must valid baseY");
 
-        BondingCurveData storage ss = bondingCurveStorage();
+        bondingCurveStorage().connectorWeight = _connectorWeight;
+        bondingCurveStorage().baseY = _baseY;
+        emit ParamsSet(_connectorWeight, _baseY);
+    }
 
-        ss.connectorWeight = _connectorWeight;
-        ss.baseY = _baseY;
+    function connectorWeight() internal returns (uint32) {
+        return bondingCurveStorage().connectorWeight;
+    }
+
+    function baseY() internal returns (uint256) {
+        return bondingCurveStorage().baseY;
+    }
+    
+    function poolBalance() internal returns (uint256) {
+        return bondingCurveStorage().poolBalance;
     }
 
     function deposit(uint256 _collateralDeposited, address _recipient)
         internal
-        returns (uint256 tokensReturned)
     {
         BondingCurveData storage ss = bondingCurveStorage();
         require(
@@ -88,15 +97,26 @@ library LibBondingCurve {
         ss.poolBalance += _collateralDeposited;
         bytes memory tokReturned = toBytes(tokensReturned);
         ss.share[_recipient] = tokensReturned;
+        ss.tokenIds += 1;
 
-        IERC1155Ubiquity(LibAppStorage.appStorage().ubiquiStickAddress).mint(
-           _recipient, 
-           ss.tokenIds, 
-           tokensReturned, 
-           tokReturned 
+        IERC1155Ubiquity nft = IERC1155Ubiquity(
+            LibAppStorage.appStorage().ubiquiStickAddress
         );
+        // nft.mint(
+        //    _recipient, 
+        //    ss.tokenIds, 
+        //    tokensReturned, 
+        //    tokReturned 
+        // );
 
-        emit Deposit(_recipient, _collateralDeposited);
+        // IERC1155Ubiquity(LibAppStorage.appStorage().ubiquiStickAddress).mint(
+        //    _recipient, 
+        //    ss.tokenIds, 
+        //    tokensReturned, 
+        //    tokReturned 
+        // );
+
+        // emit Deposit(_recipient, _collateralDeposited);
 
     }
 

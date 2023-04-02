@@ -181,11 +181,11 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfManagerFacet.push(
             managerFacet.setStakingContractAddress.selector
         );
-        selectorsOfBondingCurveFacet.push(
+        selectorsOfManagerFacet.push(
             managerFacet.setBondingCurveAddress.selector
         );
-        selectorsOfBancorFormulaFacet.push(
-            managerFacet.setBancorFormularAddress.selector
+        selectorsOfManagerFacet.push(
+            managerFacet.setBancorFormulaAddress.selector
         );
         selectorsOfManagerFacet.push(managerFacet.setTreasuryAddress.selector);
         selectorsOfManagerFacet.push(
@@ -328,6 +328,15 @@ abstract contract DiamondSetup is DiamondTestHelper {
         // Bonding Curve
         selectorsOfBondingCurveFacet.push(
             bondingCurveFacet.setParams.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.connectorWeight.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.baseY.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.poolBalance.selector
         );
         selectorsOfBondingCurveFacet.push(
             bondingCurveFacet.deposit.selector
@@ -617,10 +626,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IChefFacet = ChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
-        IOwnershipFacet = OwnershipFacet(address(diamond));
-
         IBondingCurveFacet = BondingCurveFacet(address(diamond));
         IBancorFormulaFacet = BancorFormulaFacet(address(diamond));
+        IOwnershipFacet = OwnershipFacet(address(diamond));
 
         ICreditNFTMgrFacet = CreditNftManagerFacet(address(diamond));
         ICreditNFTRedCalcFacet = CreditNftRedemptionCalculatorFacet(

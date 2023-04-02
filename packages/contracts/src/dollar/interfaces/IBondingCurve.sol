@@ -7,9 +7,14 @@ interface IBondingCurve {
         uint256 _baseY
     ) external; 
 
+    function connectorWeight() external returns (uint32);
+
+    function baseY() external returns (uint256);
+    
+    function poolBalance() external returns (uint256);
+
     function deposit(uint256 _collateralDeposited, address _recipient)
-        external
-        returns (uint256);
+        external;
 
     function withdraw(uint256 _amount) external;
 }

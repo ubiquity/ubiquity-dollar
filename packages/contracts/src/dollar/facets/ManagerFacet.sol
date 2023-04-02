@@ -91,7 +91,7 @@ contract ManagerFacet is Modifiers {
         store.bondingCurveAddress = _bondingCurveAddress;
     }
 
-    function setBancorFormularAddress(
+    function setBancorFormulaAddress(
         address _bancorFormulaAddress
     ) external onlyAdmin {
         store.bancorFormulaAddress = _bancorFormulaAddress;
@@ -219,6 +219,14 @@ contract ManagerFacet is Modifiers {
 
     function stakingContractAddress() external view returns (address) {
         return store.stakingContractAddress;
+    }
+
+    function bondingCurveAddress() external view returns (address) {
+        return store.bondingCurveAddress;
+    }
+
+    function setBancorFormularAddress() external view returns (address) {
+        return store.bancorFormulaAddress;
     }
 
     function treasuryAddress() external view returns (address) {
