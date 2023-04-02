@@ -16,7 +16,7 @@ export type LoadedContext = {
 
 export default function withLoadedContext<T>(El: (params: LoadedContext & T) => JSX.Element, ElNull?: () => JSX.Element) {
   return (otherParams: T) => {
-    const [{ walletAddress, signer, provider }] = useWeb3();
+    const { walletAddress, signer, provider } = useWeb3();
     const managedContracts = useManagerManaged();
     const deployedContracts = useDeployedContracts();
     const namedContracts = useNamedContracts();

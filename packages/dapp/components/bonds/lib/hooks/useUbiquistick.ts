@@ -28,7 +28,7 @@ export type SticksAllowance = {
 };
 
 const useUbiquistick = (contracts: Contracts | null) => {
-  const [{ provider, walletAddress }] = useWeb3();
+  const { provider, walletAddress } = useWeb3();
   const ubqContracts = useManagerManaged();
 
   const [sticks, setSticks] = useState<OwnedSticks | null>(null);

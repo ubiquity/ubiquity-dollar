@@ -5,7 +5,7 @@ import useWeb3 from "@/components/lib/hooks/useWeb3";
 import { uAD_TOKEN, USDC_TOKEN, USDT_TOKEN, DAI_TOKEN, parseAmount, V3_ROUTER_ADDRESS } from "../utils";
 
 const useTrade = async (selectedToken: string, amountIn = "0") => {
-  const [{ provider, walletAddress }] = useWeb3();
+  const { provider, walletAddress } = useWeb3();
 
   let selectedTokenObject;
   const parsedAmountIn = parseAmount(amountIn, uAD_TOKEN);

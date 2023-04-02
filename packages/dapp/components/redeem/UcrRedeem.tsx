@@ -17,7 +17,7 @@ import { getUniswapV3RouterContract } from "../utils/contracts";
 import useWeb3 from "@/components/lib/hooks/useWeb3";
 
 const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
-  const [{ provider, walletAddress }] = useWeb3();
+  const { provider, walletAddress } = useWeb3();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction, doingTransaction] = useTransactionLogger();

@@ -1,7 +1,7 @@
 import useWeb3 from "./useWeb3";
 
 const useWeb3Provider = () => {
-  const [{ provider }] = useWeb3();
+  const { provider } = useWeb3();
 
   return provider;
 };

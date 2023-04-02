@@ -10,7 +10,7 @@ import {
   getUbiquiStickContract,
   getUbiquiStickSaleContract,
 } from "@/components/utils/contracts";
-import { UbiquiStick, UbiquiStickSale,SimpleBond, ERC20 } from "types";
+import { UbiquiStick, UbiquiStickSale, SimpleBond, ERC20 } from "types";
 import { Contract } from "ethers";
 
 const ChainLinkEthUsdAddress = "0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419";
@@ -25,7 +25,7 @@ export type Contracts = {
 
 const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
   const [UbiquiStickAddress, UbiquiStickSaleAddress, SimpleBondAddress] = useDeployedAddress("UbiquiStick", "UbiquiStickSale", "SimpleBond");
-  const [{ provider, walletAddress }] = useWeb3();
+  const { provider, walletAddress } = useWeb3();
   const [contracts, setContracts] = useState<Contracts | null>(null);
   const [tokensContracts, setTokensContracts] = useState<ERC20[]>([]);
   const [isSaleContractOwner, setIsSaleContractOwner] = useState<boolean>(false);

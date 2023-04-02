@@ -5,7 +5,7 @@ import useWeb3 from "@/components/lib/hooks/useWeb3";
 import { uAD_TOKEN, uCR_TOKEN, USDC_TOKEN, USDT_TOKEN, DAI_TOKEN, parseAmount } from "../utils";
 
 const useRouter = (selectedToken: string, amountIn = "0"): [string | undefined, string | undefined] => {
-  const [{ provider, walletAddress }] = useWeb3();
+  const { provider, walletAddress } = useWeb3();
   const [quoteAmount, setQuoteAmount] = useState<string | undefined>();
   const [lastQuoteAmount, setLastQuoteAmount] = useState<string | undefined>();
 
