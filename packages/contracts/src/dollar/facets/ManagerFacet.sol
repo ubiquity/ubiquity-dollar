@@ -26,6 +26,12 @@ contract ManagerFacet is Modifiers {
         store.dollarTokenAddress = _dollarTokenAddress;
     }
 
+    function setUbiquistickAddress(
+        address _ubiquistickAddress
+    ) external onlyAdmin {
+        store.ubiquiStickAddress = _ubiquistickAddress;
+    }
+
     function setCreditNftAddress(address _creditNftAddress) external onlyAdmin {
         store.creditNftAddress = _creditNftAddress;
     }
@@ -167,6 +173,10 @@ contract ManagerFacet is Modifiers {
         return store.dollarTokenAddress;
     }
 
+    function ubiquiStickAddress() external view returns (address) {
+        return store.ubiquiStickAddress;
+    }
+
     function creditTokenAddress() external view returns (address) {
         return store.creditTokenAddress;
     }
@@ -225,7 +235,7 @@ contract ManagerFacet is Modifiers {
         return store.bondingCurveAddress;
     }
 
-    function setBancorFormularAddress() external view returns (address) {
+    function bancorFormulaAddress() external view returns (address) {
         return store.bancorFormulaAddress;
     }
 

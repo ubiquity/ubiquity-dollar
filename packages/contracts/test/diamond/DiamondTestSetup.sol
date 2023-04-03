@@ -25,6 +25,7 @@ import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol"
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
+import {UbiquiStick} from "../../src/ubiquistick/UbiquiStick.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
@@ -58,6 +59,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     DollarMintExcessFacet dollarMintExcessFacet;
 
     UbiquityDollarToken IDollar;
+    UbiquiStick IUbiquiStick;
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
@@ -158,6 +160,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         selectorsOfManagerFacet.push(
             managerFacet.setDollarTokenAddress.selector
+        );
+        selectorsOfManagerFacet.push(
+            managerFacet.setUbiquistickAddress.selector
         );
         selectorsOfManagerFacet.push(
             managerFacet.setSushiSwapPoolAddress.selector
@@ -664,12 +669,17 @@ abstract contract DiamondSetup is DiamondTestHelper {
         address dollarTokenAddress = address(
             new UbiquityDollarToken(address(diamond))
         );
+        // adding ubiquistick
+        address ubiquiStickAddress = address(
+            new UbiquiStick()
+        );
         // add staking shares
         IManager.setStakingShareAddress(stakingShareAddress);
         // adding governance token
         IManager.setGovernanceTokenAddress(governanceTokenAddress);
         // adding dollar token
         IManager.setDollarTokenAddress(dollarTokenAddress);
+        IManager.setUbiquistickAddress(ubiquiStickAddress);
         IDollar = UbiquityDollarToken(IManager.dollarTokenAddress());
         IGovToken = UbiquityGovernanceToken(IManager.governanceTokenAddress());
         IStakingShareToken = StakingShare(IManager.stakingShareAddress());

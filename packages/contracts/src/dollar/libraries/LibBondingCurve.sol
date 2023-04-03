@@ -2,10 +2,9 @@
 pragma solidity ^0.8.16;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-// import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
-import "../interfaces/IERC1155Ubiquity.sol";
+import "../../ubiquistick/interfaces/IUbiquiStick.sol";
 import "./LibBancorFormula.sol";
 import "./Constants.sol";
 
@@ -88,9 +87,9 @@ library LibBondingCurve {
         IERC20 dollar = IERC20(
             LibAppStorage.appStorage().dollarTokenAddress
         );
-        uint256 toTransfer = _collateralDeposited;
-        dollar.safeTransfer(
-            LibAppStorage.appStorage().treasuryAddress, 
+        dollar.transferFrom(
+            _recipient,
+            address(this),
             _collateralDeposited
         );
 
@@ -99,24 +98,17 @@ library LibBondingCurve {
         ss.share[_recipient] = tokensReturned;
         ss.tokenIds += 1;
 
-        IERC1155Ubiquity nft = IERC1155Ubiquity(
+        IUbiquiStick bNFT = IUbiquiStick(
             LibAppStorage.appStorage().ubiquiStickAddress
         );
-        // nft.mint(
-        //    _recipient, 
-        //    ss.tokenIds, 
-        //    tokensReturned, 
-        //    tokReturned 
-        // );
+        bNFT.mint(
+            _recipient, 
+            ss.tokenIds, 
+            tokensReturned, 
+            tokReturned 
+        );
 
-        // IERC1155Ubiquity(LibAppStorage.appStorage().ubiquiStickAddress).mint(
-        //    _recipient, 
-        //    ss.tokenIds, 
-        //    tokensReturned, 
-        //    tokReturned 
-        // );
-
-        // emit Deposit(_recipient, _collateralDeposited);
+        emit Deposit(_recipient, _collateralDeposited);
 
     }
 

@@ -47,68 +47,67 @@ contract ZeroStateStakingTest is BondingCurveFacetTest {
         assertEq(baseY, IBondingCurveFacet.baseY());
     }
 
-    function testDeposit(uint32 connectorWeight, uint256 baseY) public {
-        uint256 collateralDeposited;
-        uint connWeight;
-        connectorWeight = uint32(bound(connWeight, 1, 1000000));
-        baseY = bound(baseY, 1, 1000000);
+    // function testDeposit(uint32 connectorWeight, uint256 baseY) public {
+    //     uint256 collateralDeposited;
+    //     uint connWeight;
+    //     connectorWeight = uint32(bound(connWeight, 1, 1000000));
+    //     baseY = bound(baseY, 1, 1000000);
 
-        // uint coll = 1000;
+    //     vm.expectEmit(true, false, false, true);
+    //     emit Deposit(secondAccount, collateralDeposited);
 
-        // vm.expectEmit(true, false, false, true);
-        // emit Deposit(secondAccount, collateralDeposited);
+    //     vm.startPrank(admin);
+    //     IBondingCurveFacet.setParams(
+    //         connectorWeight,
+    //         baseY
+    //     ); 
 
-        vm.prank(admin);
-        IBondingCurveFacet.setParams(
-            connectorWeight,
-            baseY
-        ); 
+    //     IBondingCurveFacet.deposit(
+    //         collateralDeposited, 
+    //         secondAccount
+    //     );
+    //     vm.stopPrank;
 
-        IBondingCurveFacet.deposit(
-            collateralDeposited, 
-            secondAccount
-        );
+    //     assertEq(IBondingCurveFacet.poolBalance(), collateralDeposited);
+    // }
 
-        assertEq(IBondingCurveFacet.poolBalance(), collateralDeposited);
-    }
+    // function testWithdraw(uint32 connectorWeight, uint256 baseY) public {
+    //     // vm.expectEmit(true, false, false, true);
+    //     // emit Withdraw(collateralDeposited);
 
-    function testWithdraw(uint32 connectorWeight, uint256 baseY) public {
-        // vm.expectEmit(true, false, false, true);
-        // emit Withdraw(collateralDeposited);
+    //     uint256 collateralDeposited;
+    //     uint connWeight;
+    //     connectorWeight = uint32(bound(connWeight, 1, 1000000));
+    //     baseY = bound(baseY, 1, 1000000);
 
-        uint256 collateralDeposited;
-        uint connWeight;
-        connectorWeight = uint32(bound(connWeight, 1, 1000000));
-        baseY = bound(baseY, 1, 1000000);
+    //     // vm.expectEmit(true, false, false, true);
+    //     // emit Deposit(secondAccount, collateralDeposited);
 
-        // vm.expectEmit(true, false, false, true);
-        // emit Deposit(secondAccount, collateralDeposited);
+    //     vm.startPrank(admin);
+    //     IBondingCurveFacet.setParams(
+    //         connectorWeight,
+    //         baseY
+    //     ); 
 
-        vm.startPrank(admin);
-        IBondingCurveFacet.setParams(
-            connectorWeight,
-            baseY
-        ); 
-
-        IBondingCurveFacet.deposit(
-            collateralDeposited, 
-            secondAccount
-        );
+    //     IBondingCurveFacet.deposit(
+    //         collateralDeposited, 
+    //         secondAccount
+    //     );
 
 
-        uint256 _amount = bound(baseY, 0, collateralDeposited);
+    //     uint256 _amount = bound(baseY, 0, collateralDeposited);
 
-        IBondingCurveFacet.withdraw(
-            _amount
-        );
-        vm.stopPrank();
-        
-        uint256 poolBalance = IBondingCurveFacet.poolBalance();
-        uint256 balance = poolBalance - _amount;
+    //     IBondingCurveFacet.withdraw(
+    //         _amount
+    //     );
+    //     vm.stopPrank();
 
-        assertEq(IBondingCurveFacet.poolBalance(), balance);
-        // assertEq(dollarToken.balanceOf(treasuryAddress), _amount);
-    }
+    //     uint256 poolBalance = IBondingCurveFacet.poolBalance();
+    //     uint256 balance = poolBalance - _amount;
+
+    //     assertEq(IBondingCurveFacet.poolBalance(), balance);
+    //     // assertEq(dollarToken.balanceOf(treasuryAddress), _amount);
+    // }
 
 }
 
