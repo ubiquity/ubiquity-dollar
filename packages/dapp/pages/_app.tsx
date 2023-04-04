@@ -5,6 +5,7 @@ import "./styles/dark-light-mode-toggle.css";
 
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script"; //@note Fix: (next/script warning)
 
 import AppContextProvider from "@/lib/AppContextProvider";
 import Background from "../components/layout/Background";
@@ -61,8 +62,8 @@ function GenerateHead() {
       <link rel="icon" type="image/png" sizes="310x310" href="https://dao.ubq.fi/favicon-310x310.png" />
       <link rel="icon" type="image/png" sizes="512x512" href="https://dao.ubq.fi/favicon-512x512.png" />
       <meta name="theme-color" content="#06061a" />
-      {process.env.NODE_ENV !== "production" && <script dangerouslySetInnerHTML={{ __html: noOverlayWorkaroundScript }} />}
-      <script dangerouslySetInnerHTML={{ __html: dnsHijackingUIProtectionScript }} />
+      {process.env.NODE_ENV !== "production" && <Script dangerouslySetInnerHTML={{ __html: noOverlayWorkaroundScript }} />}
+      <Script dangerouslySetInnerHTML={{ __html: dnsHijackingUIProtectionScript }} />
     </Head>
   );
 }

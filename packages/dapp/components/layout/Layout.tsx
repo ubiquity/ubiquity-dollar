@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
 import Icon from "../ui/Icon";
@@ -23,13 +23,25 @@ function ErrorHandler({ error }: { error: Error }) {
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const firstUpdate = useRef(false);
+  const updateFinish = useRef(false);
+
   useEffect(() => {
-    const { ethereum } = window;
-    if (ethereum) {
-      ethereum.on("accountsChanged", window.location.reload);
-      ethereum.on("chainChanged", window.location.reload);
+    //@note Fix: (Illegal Invocation)
+    if (firstUpdate.current) {
+      const { ethereum } = window;
+      if (ethereum) {
+        ethereum.on("accountsChanged", window.location.reload);
+        ethereum.on("chainChanged", window.location.reload);
+      }
+      firstUpdate.current = false;
+      updateFinish.current = true;
+    } else {
+      if (!updateFinish.current) {
+        firstUpdate.current = true;
+      }
     }
-  }, []);
+  }, [firstUpdate]);
 
   return (
     <div id="Foreground">
