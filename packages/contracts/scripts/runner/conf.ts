@@ -20,8 +20,3 @@ export const RPC_BODY = JSON.stringify({
 export const RPC_HEADER = {
   "Content-Type": "application/json",
 };
-
-export const RETRY_DELAY = 20000;
-export const RETRY_COUNT = 5;
-
-export const TEST_PATTERN = "Remote*";

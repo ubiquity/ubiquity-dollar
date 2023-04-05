@@ -22,7 +22,7 @@
     "tsx": "^3.12.2"
   },
   "scripts": {
-    "test": "tsx ./scripts/runner/runner.ts",
+    "test": "forge test",
     "test:slither": "slither . --compile-force-framework foundry",
     "test:echidna": "echidna-test . --config echidna.config.yml",
     "start:anvil": "tsx ./scripts/anvil/anvil.ts",
