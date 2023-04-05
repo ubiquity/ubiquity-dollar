@@ -46,7 +46,7 @@ jobs:
         run: yarn build
 
       - name: Test All
-        run: yarn test
+        run: yarn test:all
 
       - name: Prepare Deployment Artifact
         env:
