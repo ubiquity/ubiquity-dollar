@@ -15,17 +15,15 @@ const Sidebar = () => {
           <ul>
             <li>
               <div>
-                <Link href="/">
-                  <a id="Logo">
+                <Link href="/" id="Logo">
+                  <div>
                     <div>
-                      <div>
-                        <Icon icon="uad" />
-                      </div>
-                      <div>
-                        <span>Ubiquity Dollar (Beta)</span>
-                      </div>
+                      <Icon icon="uad" />
                     </div>
-                  </a>
+                    <div>
+                      <span>Ubiquity Dollar (Beta)</span>
+                    </div>
+                  </div>
                 </Link>
               </div>
             </li>
@@ -86,11 +84,9 @@ const Item = ({ text, href }: { text: string; href: string; icon: string }) => {
   return (
     <li>
       <div>
-        <Link href={href}>
-          <a target={href.match(/https?:\/\//) ? "_blank" : ""}>
-            <span>{text}</span>
-            <span>{isExternal ? <Icon icon="external" /> : null}</span>
-          </a>
+        <Link href={href} target={href.match(/https?:\/\//) ? "_blank" : ""}>
+          <span>{text}</span>
+          <span>{isExternal ? <Icon icon="external" /> : null}</span>
         </Link>
       </div>
     </li>

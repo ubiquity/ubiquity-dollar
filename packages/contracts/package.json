@@ -35,7 +35,8 @@
     "clean:forge": "forge clean",
     "build": "forge build",
     "forge:install": "forge install",
-    "_hardhat-task": "tsx ./scripts/task/task.ts"
+    "_hardhat-task": "tsx ./scripts/task/task.ts",
+    "migrate:metapool": "tsx ./scripts/task/dollar/MigrateMetapool.ts"
   },
   "keywords": [
     "stablecoin",
