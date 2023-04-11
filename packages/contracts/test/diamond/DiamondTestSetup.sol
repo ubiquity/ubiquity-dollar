@@ -25,7 +25,7 @@ import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol"
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
-import {UbiquiStick} from "../../src/ubiquistick/UbiquiStick.sol";
+import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
@@ -59,7 +59,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     DollarMintExcessFacet dollarMintExcessFacet;
 
     UbiquityDollarToken IDollar;
-    UbiquiStick IUbiquiStick;
+    ERC1155Ubiquity IERC1155Ubiquity;
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
@@ -671,7 +671,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         // adding ubiquistick
         address ubiquiStickAddress = address(
-            new UbiquiStick()
+            new ERC1155Ubiquity(address(diamond), uri)
         );
         // add staking shares
         IManager.setStakingShareAddress(stakingShareAddress);
@@ -681,6 +681,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IManager.setDollarTokenAddress(dollarTokenAddress);
         IManager.setUbiquistickAddress(ubiquiStickAddress);
         IDollar = UbiquityDollarToken(IManager.dollarTokenAddress());
+        // IERC1155Ubiquity = ERC1155Ubiquity(IManager.ubiquiStickAddress());
         IGovToken = UbiquityGovernanceToken(IManager.governanceTokenAddress());
         IStakingShareToken = StakingShare(IManager.stakingShareAddress());
         assertEq(IDollar.decimals(), 18);
