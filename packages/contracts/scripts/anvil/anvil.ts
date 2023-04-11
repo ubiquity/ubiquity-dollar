@@ -1,6 +1,5 @@
 import { spawn } from "child_process";
 import { loadEnv } from "../shared";
-import { RETRY_COUNT, RETRY_DELAY, TEST_PATTERN } from "../runner/conf";
 import { getRPC } from "../runner/rpcutil";
 import fs from "fs";
 import path from "path";

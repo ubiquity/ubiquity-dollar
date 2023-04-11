@@ -1,7 +1,6 @@
 import axios from "axios";
-import { spawn } from "child_process";
 import { performance } from "node:perf_hooks";
-import { RETRY_COUNT, RETRY_DELAY, RPC_BODY, RPC_HEADER, RPC_LIST } from "./conf";
+import { RPC_BODY, RPC_HEADER, RPC_LIST } from "./conf";
 
 export type DataType = {
   jsonrpc: string;
@@ -49,30 +48,4 @@ export const getRPC = async () => {
   });
   const { baseURL: optimalRPC } = await Promise.any(promises);
   return optimalRPC;
-};
-
-let shouldSkip = false;
-let retryCount = 0;
-export const procFork = async () => {
-  const optimalRPC = await getRPC();
-  console.log(`using ${optimalRPC} for unit-testing...`);
-  const command = spawn("forge", ["test", "--fork-url", optimalRPC as string]);
-  shouldSkip = false;
-  command.stdout.on("data", (output: unknown) => {
-    console.log(output?.toString());
-  });
-  command.stderr.on("data", (output: unknown) => {
-    console.log(output?.toString());
-    if (shouldSkip === false && retryCount <= RETRY_COUNT) {
-      retryCount++;
-      setTimeout(() => {
-        procFork();
-      }, RETRY_DELAY);
-      shouldSkip = true;
-    }
-  });
-  command.on("close", (code: number) => {
-    // if linux command exit code is not success (0) then throw an error
-    if (code !== 0) throw new Error("Failing tests");
-  });
 };
