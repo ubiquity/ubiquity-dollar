@@ -2,7 +2,6 @@ import { spawnSync } from "child_process";
 import { loadEnv } from "../../shared";
 import fs from "fs";
 import path from "path";
-import axios from "axios";
 
 const envPath = path.join(__dirname, "../../../.env");
 if (!fs.existsSync(envPath)) {

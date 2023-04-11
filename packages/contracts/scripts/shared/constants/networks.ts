@@ -3,3 +3,5 @@ export const Networks: Record<string, number> = {
   optimism: 10,
   goerli: 5,
 };
+
+export const FALLBACK_RPC = "https://eth.ubq.fi/v1/mainnet";
