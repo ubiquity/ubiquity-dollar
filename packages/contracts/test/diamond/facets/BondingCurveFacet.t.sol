@@ -14,6 +14,8 @@ contract BondingCurveFacetTest is DiamondSetup {
     address fourthAccount = address(0x6);
     address fifthAccount = address(0x7);
 
+    uint256 constant ACCURACY = 10e18;
+
     mapping (address => uint256) public share;
 
     event Deposit(address indexed user, uint256 amount);
@@ -30,7 +32,7 @@ contract BondingCurveFacetTest is DiamondSetup {
     }
 }
 
-contract ZeroStateStakingTest is BondingCurveFacetTest {
+contract ZeroStateBonding is BondingCurveFacetTest {
     using stdStorage for StdStorage;
 
     function testSetParams(uint32 connectorWeight, uint256 baseY) public {
@@ -72,7 +74,15 @@ contract ZeroStateStakingTest is BondingCurveFacetTest {
         );
         vm.stopPrank();
 
+        uint256 tokReturned = IBondingCurveFacet.purchaseTargetAmountFromZero(
+            collateralDeposited,
+            connectorWeight,
+            ACCURACY,
+            baseY
+        );
+
         assertEq(IBondingCurveFacet.poolBalance(), collateralDeposited);
+        assertEq(tokReturned, IBondingCurveFacet.getShare(secondAccount));
     }
 
     function testWithdraw(uint32 connectorWeight, uint256 baseY) public {
@@ -109,6 +119,28 @@ contract ZeroStateStakingTest is BondingCurveFacetTest {
 
         assertEq(IBondingCurveFacet.poolBalance(), balance);
     }
-
 }
 
+// contract DepositStateBonding is ZeroStateBonding {
+
+//     function setUp() public virtual override {
+//         super.setUp();
+
+//         uint256 collateralDeposited;
+//         uint32 connectorWeight = uint32(100);
+//         uint256 baseY = 100;
+
+//         assertEq(IBondingCurveFacet.poolBalance(), 0);
+//         vm.prank(admin);
+//         IBondingCurveFacet.setParams(
+//             connectorWeight,
+//             baseY
+//         ); 
+//         IBondingCurveFacet.deposit(
+//             collateralDeposited, 
+//             thirdAccount
+//         );
+//         // assertEq(IBondingCurveFacet.poolBalance(), collateralDeposited);
+
+//     }
+// }
