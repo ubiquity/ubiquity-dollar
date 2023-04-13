@@ -26,9 +26,7 @@ struct AppStorage {
     address formulasAddress;
     address creditTokenAddress;
     address creditCalculatorAddress;
-    address ubiquiStickAddress;
-    address bondingCurveAddress;
-    address bancorFormulaAddress;
+    address twapOracleAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;
