@@ -41,6 +41,7 @@ library LibCurveDollarIncentive {
     function incentivize(
         address sender,
         address receiver,
+        address,
         uint256 amountIn
     ) internal {
         require(sender != receiver, "CurveIncentive: cannot send self");

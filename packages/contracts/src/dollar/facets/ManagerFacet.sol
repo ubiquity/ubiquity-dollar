@@ -79,6 +79,12 @@ contract ManagerFacet is Modifiers {
         store.stakingShareAddress = _stakingShareAddress;
     }
 
+    function setCurveDollarIncentiveAddress(
+        address _curveDollarIncentiveAddress
+    ) external onlyAdmin {
+        store.curveDollarIncentiveAddress = _curveDollarIncentiveAddress;
+    }
+
     function setStableSwapMetaPoolAddress(
         address _stableSwapMetaPoolAddress
     ) external onlyAdmin {

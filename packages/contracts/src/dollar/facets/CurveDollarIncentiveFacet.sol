@@ -9,11 +9,13 @@ contract CurveDollarIncentiveFacet is Modifiers {
     function incentivize(
         address sender,
         address receiver,
+        address admin,
         uint256 amountIn
     ) external {
         LibCurveDollarIncentive.incentivize(
             sender,
             receiver,
+            admin,
             amountIn
         );
     }

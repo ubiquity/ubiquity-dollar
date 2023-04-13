@@ -27,6 +27,7 @@ struct AppStorage {
     address creditTokenAddress;
     address creditCalculatorAddress;
     address twapOracleAddress;
+    address curveDollarIncentiveAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;
