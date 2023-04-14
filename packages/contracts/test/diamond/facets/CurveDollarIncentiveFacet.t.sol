@@ -23,43 +23,32 @@ import "forge-std/Test.sol";
 
 
 contract CurveDollarIncentiveTest is DiamondSetup {
-    // address dollarManagerAddress;
-    // address curveIncentiveAddress;
     address stableSwapMetaPoolAddress = address(0x123);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);
     address mockReceiver = address(0x111);
     address mockSender = address(0x222);
-    // address dollarAddress = IManager.dollarTokenAddress();
 
     event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
     function setUp() public override {
         super.setUp();
-
-        // vm.startPrank(admin);
-        // address dollarAddress = IManager.dollarTokenAddress();
-        // IAccessCtrl.grantRole(DOLLAR_MANAGER_ROLE, dollarAddress);
-        // vm.stopPrank();
-
-        // dollarManagerAddress = address(ManagerFacet);
-        // curveIncentiveAddress = address(CurveDollarIncentiveFacet);
-        // twapOracleAddress = ManagerFacet.twapOracleAddress();
-        // ManagerFacet.setStableSwapMetaPoolAddress(stableSwapMetaPoolAddress);
     }
 
-    // function mockInternalFuncs(uint256 _twapPrice) public {
-    //     vm.mockCall(
-    //         twapOracleAddress,
-    //         abi.encodeWithSelector(TWAPOracleDollar3pool.update.selector),
-    //         abi.encode()
-    //     );
-    //     vm.mockCall(
-    //         twapOracleAddress,
-    //         abi.encodeWithSelector(TWAPOracleDollar3pool.consult.selector),
-    //         abi.encode(_twapPrice)
-    //     );
-    // }
+    function mockInternalFuncs(uint256 _twapPrice) public {
+        address twapOracleAddress = IManager.twapOracleAddress();
+
+        vm.mockCall(
+            twapOracleAddress,
+            abi.encodeWithSelector(TWAPOracleDollar3poolFacet.update.selector),
+            abi.encode()
+        );
+        vm.mockCall(
+            twapOracleAddress,
+            abi.encodeWithSelector(TWAPOracleDollar3poolFacet.consult.selector),
+            abi.encode(_twapPrice)
+        );
+    }
 
     function testIncentivizeShouldRevertWhenCallerNotUAD() public {
         vm.expectRevert("CurveIncentive: Caller is not Ubiquity Dollar");
