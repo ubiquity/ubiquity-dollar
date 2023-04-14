@@ -57,7 +57,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     DollarMintExcessFacet dollarMintExcessFacet;
 
     UbiquityDollarToken IDollar;
-    ERC1155Ubiquity IERC1155Ubiquity;
+    ERC1155Ubiquity IUbiquityNFT;
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
@@ -657,6 +657,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
         address ubiquiStickAddress = address(
             new ERC1155Ubiquity(address(diamond), uri)
         );
+        IUbiquityNFT = new ERC1155Ubiquity(address(diamond), uri);
+
         // add staking shares
         IManager.setStakingShareAddress(stakingShareAddress);
         // adding governance token
@@ -665,7 +667,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IManager.setDollarTokenAddress(dollarTokenAddress);
         IManager.setUbiquistickAddress(ubiquiStickAddress);
         IDollar = UbiquityDollarToken(IManager.dollarTokenAddress());
-        // IERC1155Ubiquity = ERC1155Ubiquity(IManager.ubiquiStickAddress());
         IGovToken = UbiquityGovernanceToken(IManager.governanceTokenAddress());
         IStakingShareToken = StakingShare(IManager.stakingShareAddress());
         assertEq(IDollar.decimals(), 18);

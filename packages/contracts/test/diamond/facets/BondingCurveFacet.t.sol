@@ -68,11 +68,14 @@ contract ZeroStateBonding is BondingCurveFacetTest {
             baseY
         ); 
 
+        uint256 initBal = IDollar.balanceOf(secondAccount);
+
         IBondingCurveFacet.deposit(
             collateralDeposited, 
             secondAccount
         );
         vm.stopPrank();
+        uint256 finBal = IDollar.balanceOf(secondAccount);
 
         uint256 tokReturned = IBondingCurveFacet.purchaseTargetAmountFromZero(
             collateralDeposited,
@@ -81,8 +84,10 @@ contract ZeroStateBonding is BondingCurveFacetTest {
             baseY
         );
 
-        assertEq(IBondingCurveFacet.poolBalance(), collateralDeposited);
+        assertEq(collateralDeposited, IBondingCurveFacet.poolBalance());
         assertEq(tokReturned, IBondingCurveFacet.getShare(secondAccount));
+        assertEq(collateralDeposited, finBal - initBal);
+        assertEq(tokReturned, IUbiquityNFT.balanceOf(secondAccount, 1));
     }
 
     function testWithdraw(uint32 connectorWeight, uint256 baseY) public {
@@ -118,6 +123,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 balance = poolBalance - _amount;
 
         assertEq(IBondingCurveFacet.poolBalance(), balance);
+        assertEq(IDollar.balanceOf(IManager.treasuryAddress()), _amount);
     }
 }
 

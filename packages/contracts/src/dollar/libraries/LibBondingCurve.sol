@@ -97,10 +97,9 @@ library LibBondingCurve {
             _collateralDeposited
         );
 
-        ss.poolBalance += _collateralDeposited;
+        ss.poolBalance = ss.poolBalance + _collateralDeposited;
         bytes memory tokReturned = toBytes(tokensReturned);
         ss.share[_recipient] = tokensReturned;
-        ss.tokenIds += 1;
 
         IERC1155Ubiquity bNFT = IERC1155Ubiquity(
             LibAppStorage.appStorage().ubiquiStickAddress
@@ -111,6 +110,7 @@ library LibBondingCurve {
             tokensReturned, 
             tokReturned 
         );
+        ss.tokenIds += 1;
 
         emit Deposit(_recipient, _collateralDeposited);
     }
