@@ -38,6 +38,16 @@ library LibCurveDollarIncentive {
         }
     }
 
+    function isSellPenaltyOn() internal view returns (bool) {
+        CurveDollarData storage ss = curveDollarStorage(); 
+        return ss.isSellPenaltyOn;
+    }
+
+    function isBuyIncentiveOn() internal view returns (bool) {
+        CurveDollarData storage ss = curveDollarStorage(); 
+        return ss.isBuyIncentiveOn;
+    }
+
     function incentivize(
         address sender,
         address receiver,

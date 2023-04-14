@@ -162,4 +162,12 @@ contract Modifiers {
         );
         _;
     }
+
+    modifier onlyDollar() {
+        require(
+            LibAccessControl.hasRole(DOLLAR_MANAGER_ROLE, msg.sender),
+            "CurveIncentive: Caller is not Ubiquity Dollar"
+        );
+        _;
+    }
 }

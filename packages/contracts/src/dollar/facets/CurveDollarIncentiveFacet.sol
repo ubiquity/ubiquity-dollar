@@ -11,7 +11,7 @@ contract CurveDollarIncentiveFacet is Modifiers {
         address receiver,
         address admin,
         uint256 amountIn
-    ) external {
+    ) external onlyDollar {
         LibCurveDollarIncentive.incentivize(
             sender,
             receiver,
@@ -26,18 +26,26 @@ contract CurveDollarIncentiveFacet is Modifiers {
     function setExemptAddress(
         address account,
         bool isExempt
-    ) external {
+    ) external onlyAdmin {
         LibCurveDollarIncentive.setExemptAddress(account, isExempt);
     }
 
     /// @notice switch the sell penalty
-    function switchSellPenalty() external {
+    function switchSellPenalty() external onlyAdmin {
         LibCurveDollarIncentive.switchSellPenalty();
     }
 
     /// @notice switch the buy incentive
-    function switchBuyIncentive() external {
+    function switchBuyIncentive() external onlyAdmin {
         LibCurveDollarIncentive.switchBuyIncentive();
+    }
+
+    function isSellPenaltyOn() external view returns (bool) {
+        return LibCurveDollarIncentive.isSellPenaltyOn();
+    }
+
+    function isBuyIncentiveOn() external view returns (bool) {
+        return LibCurveDollarIncentive.isBuyIncentiveOn();
     }
 
     /// @notice returns true if account is marked as exempt

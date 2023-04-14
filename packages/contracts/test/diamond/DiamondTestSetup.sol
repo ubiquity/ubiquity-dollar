@@ -107,6 +107,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
+    bytes4[] selectorsOfCurveDollarIncentiveFacet;
 
     bytes4[] selectorsOfCreditNFTManagerFacet;
     bytes4[] selectorsOfCreditNFTRedemptionCalculatorFacet;
@@ -325,6 +326,30 @@ abstract contract DiamondSetup is DiamondTestHelper {
             stakingFormulasFacet.durationMultiply.selector
         );
 
+        // Curve Dollar Incentive Facet
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.incentivize.selector
+        );
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.setExemptAddress.selector
+        );
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.switchSellPenalty.selector
+        );
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.switchBuyIncentive.selector
+        );
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.isExemptAddress.selector
+        );
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.isSellPenaltyOn.selector
+        );
+        selectorsOfCurveDollarIncentiveFacet.push(
+            curveDollarIncentiveFacet.isBuyIncentiveOn.selector
+        );
+
+>>>>>>> 429f57f5 (feat: adapting tests to diamond)
         // Credit facets
         selectorsOfCreditNFTManagerFacet.push(
             creditNFTManagerFacet.creditNFTLengthBlocks.selector
@@ -408,6 +433,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         chefFacet = new ChefFacet();
         stakingFacet = new StakingFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
+        curveDollarIncentiveFacet = new CurveDollarIncentiveFacet();
 
         creditNFTManagerFacet = new CreditNftManagerFacet();
         creditNFTRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
@@ -567,6 +593,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfDollarMintExcessFacet
             })
         );
+        cuts[15] = (
+            FacetCut({
+                facetAddress: address(curveDollarIncentiveFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfCurveDollarIncentiveFacet
+            })
+        );
         // deploy diamond
         vm.prank(owner);
         diamond = new Diamond(_args, cuts);
@@ -581,6 +614,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IChefFacet = ChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
+        ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(address(diamond));
         IOwnershipFacet = OwnershipFacet(address(diamond));
 
         ICreditNFTMgrFacet = CreditNftManagerFacet(address(diamond));
