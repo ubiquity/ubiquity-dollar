@@ -16,7 +16,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
     function setParams(
         uint32 _connectorWeight, 
         uint256 _baseY
-    ) external {
+    ) external onlyAdmin {
         LibBondingCurve.setParams(_connectorWeight, _baseY);
     }
 
@@ -46,7 +46,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         return LibBondingCurve.getShare(_recipient);
     }
 
-    function withdraw(uint256 _amount) external whenNotPaused {
+    function withdraw(uint256 _amount) external onlyAdmin whenNotPaused {
         LibBondingCurve.withdraw(_amount);
     }
 
