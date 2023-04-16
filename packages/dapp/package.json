@@ -35,11 +35,11 @@
     "@uniswap/sdk-core": "^3.1.0",
     "@uniswap/smart-order-router": "^2.10.1",
     "@uniswap/widgets": "2.18.0",
-    "@walletconnect/ethereum-provider": "^1.8.0",
+    "@walletconnect/ethereum-provider": "^2.5.2",
     "autoprefixer": "^10.4.8",
     "btoa": "^1.2.1",
     "classnames": "^2.3.1",
-    "connectkit": "1.1.0",
+    "connectkit": "^1.2.2",
     "ethers": "^5.7.2",
     "hardhat": "^2.10.1",
     "immer": "^9.0.17",
@@ -55,6 +55,6 @@
     "react-transition-group": "^4.4.5",
     "rimraf": "3.0.2",
     "typechain": "^8.1.0",
-    "wagmi": "^0.8.9"
+    "wagmi": "^0.12.9"
   }
 }

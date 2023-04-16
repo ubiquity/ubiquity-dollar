@@ -11,7 +11,7 @@ import useBalances, { Balances } from "../lib/hooks/useBalances";
 import { ManagedContracts } from "../lib/hooks/contracts/useManagerManaged";
 
 const Inventory = () => {
-  const [{ walletAddress }] = useWeb3();
+  const { walletAddress } = useWeb3();
   const [balances, refreshBalances] = useBalances();
   const managedContracts = useManagerManaged();
   const namedContracts = useNamedContracts();

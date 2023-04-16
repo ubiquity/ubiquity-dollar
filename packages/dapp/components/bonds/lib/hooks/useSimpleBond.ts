@@ -23,7 +23,7 @@ export type BondData = {
 };
 
 const useSimpleBond = (contracts: Contracts | null, tokensContracts: ERC20[]) => {
-  const [{ provider, walletAddress }] = useWeb3();
+  const { provider, walletAddress } = useWeb3();
   const ubqContracts = useManagerManaged();
 
   const [rewardTokenBalance, setRewardTokenBalance] = useState<number | null>(null);

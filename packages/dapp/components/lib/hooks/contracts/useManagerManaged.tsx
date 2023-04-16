@@ -26,7 +26,7 @@ export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts
 export const ManagedContractsContext = createContext<ManagedContracts>(null);
 
 export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ children }) => {
-  const [{ provider }] = useWeb3();
+  const { provider } = useWeb3();
   const deployedContracts = useDeployedContracts();
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);
 
@@ -56,7 +56,7 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
     staking,
     masterChef,
     sushiSwapPool,
-    ubiquityFormulas, 
+    ubiquityFormulas,
     creditCalculator,
   ] = await Promise.all([
     manager.dollarTokenAddress(),
@@ -71,7 +71,7 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
     manager.stakingContractAddress(),
     manager.masterChefAddress(),
     manager.sushiSwapPoolAddress(),
-    manager.formulasAddress(), 
+    manager.formulasAddress(),
     manager.creditCalculatorAddress(),
   ]);
   const creditNftCalculator = manager.address;
