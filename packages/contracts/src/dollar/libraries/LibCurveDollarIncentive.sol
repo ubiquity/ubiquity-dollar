@@ -98,7 +98,7 @@ library LibCurveDollarIncentive {
 
         CurveDollarData storage ss = curveDollarStorage();
 
-        if (isExemptAddress(target) || ss.isSellPenaltyOn) {
+        if (isExemptAddress(target) || !ss.isSellPenaltyOn) {
             return;
         }
 
@@ -135,7 +135,7 @@ library LibCurveDollarIncentive {
     function _incentivizeBuy(address target, uint256 amountIn) internal {
         CurveDollarData storage ss = curveDollarStorage();
 
-        if (isExemptAddress(target) || ss.isBuyIncentiveOn) {
+        if (isExemptAddress(target) || !ss.isBuyIncentiveOn) {
             return;
         }
 
