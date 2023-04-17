@@ -51,7 +51,6 @@ library LibCurveDollarIncentive {
     function incentivize(
         address sender,
         address receiver,
-        address,
         uint256 amountIn
     ) internal {
         require(sender != receiver, "CurveIncentive: cannot send self");
@@ -96,10 +95,10 @@ library LibCurveDollarIncentive {
     }
 
     function _incentivizeSell(address target, uint256 amount) internal {
-        _updateOracle();
+
         CurveDollarData storage ss = curveDollarStorage();
 
-        if (isExemptAddress(target) || !ss.isSellPenaltyOn) {
+        if (isExemptAddress(target) || ss.isSellPenaltyOn) {
             return;
         }
 
@@ -130,13 +129,13 @@ library LibCurveDollarIncentive {
                 penalty
             ); // burn from the recipient
         }
+        LibTWAPOracle.update();
     }
 
     function _incentivizeBuy(address target, uint256 amountIn) internal {
-        _updateOracle();
         CurveDollarData storage ss = curveDollarStorage();
 
-        if (isExemptAddress(target) || !ss.isBuyIncentiveOn) {
+        if (isExemptAddress(target) || ss.isBuyIncentiveOn) {
             return;
         }
 
@@ -152,6 +151,7 @@ library LibCurveDollarIncentive {
                 incentive
             );
         }
+        LibTWAPOracle.update();
     }
 
     /// @notice returns the percentage of deviation from the peg multiplied by amount
@@ -159,7 +159,6 @@ library LibCurveDollarIncentive {
     function _getPercentDeviationFromUnderPeg(
         uint256 amount
     ) internal returns (uint256) {
-        _updateOracle();
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
@@ -168,9 +167,6 @@ library LibCurveDollarIncentive {
         bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
         return res.div(_one).toUInt();
-    }
-
-    function _updateOracle() internal {
         LibTWAPOracle.update();
     }
 
