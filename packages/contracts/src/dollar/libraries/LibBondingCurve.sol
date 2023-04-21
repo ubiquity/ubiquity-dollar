@@ -97,7 +97,7 @@ library LibBondingCurve {
             _collateralDeposited
         );
 
-        ss.poolBalance += _collateralDeposited;
+        ss.poolBalance = ss.poolBalance + _collateralDeposited;
         bytes memory tokReturned = toBytes(tokensReturned);
         ss.share[_recipient] += tokensReturned;
         ss.tokenIds += 1;
