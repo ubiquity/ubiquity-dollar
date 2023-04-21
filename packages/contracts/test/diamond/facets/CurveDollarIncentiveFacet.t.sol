@@ -89,7 +89,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         ICurveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
-            100e18
+            amountIn
         );
 
         uint256 last_balance = governanceToken.balanceOf(mockReceiver);
