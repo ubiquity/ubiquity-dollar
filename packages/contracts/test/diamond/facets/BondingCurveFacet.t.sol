@@ -3,11 +3,13 @@ pragma solidity ^0.8.16;
 
 import "../DiamondTestSetup.sol";
 import "../../../src/dollar/libraries/Constants.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import "forge-std/Test.sol";
 
 contract BondingCurveFacetTest is DiamondSetup {
+    
 
     address treasury = address(0x3);
     address secondAccount = address(0x4);
@@ -36,6 +38,7 @@ contract BondingCurveFacetTest is DiamondSetup {
 }
 
 contract ZeroStateBonding is BondingCurveFacetTest {
+    using SafeMath for uint256;
     using stdStorage for StdStorage;
 
     function testSetParams(uint32 connectorWeight, uint256 baseY) public {
@@ -102,8 +105,14 @@ contract ZeroStateBonding is BondingCurveFacetTest {
             baseY
         );
 
+        // Logic Test
+        uint256 baseN = collateralDeposited.add(baseY);
+        uint256 power = (baseN.mul(10 ** 18)).div(baseY);
+        uint256 result = ACCURACY.mul(SafeMath.sub((power**(connectorWeight)), 10 ** 18)).div(10 ** 18);
+
         assertEq(collateralDeposited, IBondingCurveFacet.poolBalance());
         assertEq(collateralDeposited, finBal - initBal);
+        assertEq(tokReturned, result);
         assertEq(tokReturned, IBondingCurveFacet.getShare(secondAccount));
         assertEq(tokReturned, IUbiquityNFT.balanceOf(secondAccount, 1));
 
@@ -177,13 +186,11 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         );
     }
 
-    function testPurchaseTargetAmount() public {
+    function testPurchaseTargetAmount(uint32 connWeight, uint256 bal) public {
         // Calculate expected result
         uint256 tokensDeposited;
-        uint connWeight;
         uint256 tokenIds;
         uint32 connectorWeight = uint32(bound(connWeight, 1, MAX_WEIGHT));
-        uint256 bal;
         uint256 poolBalance = bound(bal, 1, 1000000);
 
         uint256 expected = (tokenIds * tokensDeposited) / poolBalance;
