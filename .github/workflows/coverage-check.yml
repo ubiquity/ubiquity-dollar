@@ -1,4 +1,5 @@
-name: Check Test Coverage
+name: Compare Test Coverage
+# This compares test coverage and throws an error if test coverage is lower than the previous run.
 
 on:
   pull_request:
@@ -6,7 +7,7 @@ on:
 
 jobs:
   test-coverage:
-    name: Check Test Coverage
+    name: Compare Test Coverage
     runs-on: ubuntu-22.04
     permissions:
       contents: read
