@@ -46,7 +46,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ubiquity-dollar
+          projectName: uad-ubq-fi
           directory: ./dist
 
       # - name: Deploy Railway
