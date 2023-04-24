@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity ^0.8.19;
 
-library FraxPoolLibrary {
+import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
+library UbiquityPoolLibraryFacet {
+    using SafeMath for uint256;
 
     // Constants for various precisions
     uint256 private constant PRICE_PRECISION = 1e6;
