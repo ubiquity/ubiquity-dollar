@@ -11,7 +11,7 @@ import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 //import "../../Governance/AccessControl.sol";
 import {IStableSwap3Pool} from "../interfaces/IStableSwap3Pool.sol";
 import {IMetaPool} from "../interfaces/IMetaPool.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
 library LibUbiquityPool {
     using SafeMath for uint256;
@@ -31,24 +31,20 @@ library LibUbiquityPool {
 
         
         address[] collateralAddresses;
-        mapping(address => IMetaPool) collatMetaPools;
-        mapping(address => uint256) missingDecimals;
+        mapping(address => IMetaPool) collateralMetaPools;
+        mapping(address => uint8) missingDecimals;
         mapping(address => uint256) tokenBalances;
         
-        address timelockAddress;
+        //address timelockAddress;
         
-        address ubiquityDollarTokenAddress;
         UbiquityDollarToken ubiquityDollarToken;
         IMetaPool dollarMetaPool;
-        address dollarTWAPOracleAddress;
 
         IStableSwap3Pool curve3Pool;
         address curve3PoolAddress;
 
         uint256 mintingFee;
         uint256 redemptionFee;
-        uint256 buybackFee;
-        uint256 recollatFee;
 
         mapping (address => mapping(address => uint256)) redeemCollateralBalances;
         mapping (address => uint256) unclaimedPoolCollateral;
@@ -68,11 +64,13 @@ library LibUbiquityPool {
         uint256 dollarFloor;
     }
 
+    /// User Functions ///
+
     function mintDollar(
         address collateralAddress, 
         uint256 collateralAmount, 
         uint256 dollarOutMin
-        ) external 
+        ) internal 
     {   
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         uint256 dollarPriceUSD = getDollarPriceUSD();
@@ -89,8 +87,8 @@ library LibUbiquityPool {
 
         uint256 dollarAmountD18 = calcMintDollarAmount(
             collateralAmountD18, 
-            getCollateralPriceUSD(collateralAddress), 
-            dollarPriceUSD);
+            getCollateralPriceCurve3(collateralAddress), 
+            getCurve3PriceUSD());
 
         dollarAmountD18 = dollarAmountD18.sub(poolStorage.mintingFee);
         require(dollarOutMin <= dollarAmountD18, "Slippage limit reached");
@@ -107,7 +105,7 @@ library LibUbiquityPool {
         address collateralAddress,
         uint256 dollarAmount,
         uint256 collateralOutMin
-    ) external 
+    ) internal 
     {   
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
@@ -128,8 +126,8 @@ library LibUbiquityPool {
             );
         uint256 collateralOut = calcRedeemCollateralAmount(
             dollarAmountPrecision, 
-            getCollateralPriceUSD(collateralAddress), 
-            dollarPriceUSD);
+            getCollateralPriceCurve3(collateralAddress), 
+            getCurve3PriceUSD());
         
         collateralOut = collateralOut.sub(poolStorage.redemptionFee);
 
@@ -158,12 +156,56 @@ library LibUbiquityPool {
         poolStorage.lastRedeemed[msg.sender] = block.number;
     }
 
-    function collectRedemption() external {
+    function collectRedemption(address collateralAddress) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
             poolStorage.lastRedeemed[msg.sender] + poolStorage.redemptionDelay >= block.number,
             "Must wait for redemptionDelay blocks before collecting");
+        
+        bool sendCollateral = false;
+        uint256 collateralAmount = 0;
+
+        if(poolStorage.redeemCollateralBalances[msg.sender][collateralAddress] > 0){
+            collateralAmount = poolStorage.redeemCollateralBalances[msg.sender][collateralAddress];
+            poolStorage.redeemCollateralBalances[msg.sender][collateralAddress] = 0;
+            poolStorage.unclaimedPoolCollateral[collateralAddress] = poolStorage.unclaimedPoolCollateral[collateralAddress].sub(collateralAmount);
+
+            sendCollateral = true;
+
+            if(sendCollateral){
+                TransferHelper.safeTransfer(collateralAddress, msg.sender, collateralAmount);
+            }
+        }
     }
+
+    /// ADMIN FUNCTIONS ///
+
+    function addToken(address collateralAddress, IMetaPool collateralMetaPool) internal {
+        require(collateralAddress != 0x0 && address(collateralMetaPool) != 0x0, "0 address detected");
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+
+        poolStorage.collateralAddresses.push(collateralAddress);
+        poolStorage.collateralMetaPools[collateralAddress] = collateralMetaPool;
+        poolStorage.missingDecimals[collateralAddress] = 18.sub(IERC20(collateralAddress).decimals);
+    }
+
+    function initialize(IMetaPool dollarMetaPool_,
+        address curve3PoolAddress_,
+        uint256 mintingFee_,
+        uint256 redemptionFee_)
+        internal 
+    {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+        AppStorage storage store = LibAppStorage.appStorage();
+        poolStorage.dollarMetaPool = dollarMetaPool_;
+        poolStorage.ubiquityDollarToken = IERC20(store.dollarTokenAddress);
+        poolStorage.curve3Pool = StableSwapPool(curve3PoolAddress_);
+        poolStorage.mintingFee = mintingFee_;
+        poolStorage.redemptionFee = redemptionFee_;
+        poolStorage.
+    }
+
+    /// CHECK FUNCTIONS ///
 
     function checkCollateralToken(
         address collateralAddress
@@ -178,26 +220,29 @@ library LibUbiquityPool {
         }
     }
 
+    /// CALC FUNCTIONS ///
+
     function calcMintDollarAmount(
         uint256 collateralAmountD18, 
-        uint256 collateralPriceUSD, 
-        uint256 dollarPriceUSD
+        uint256 collateralPriceCurve3, 
+        uint256 curve3PriceUSD
         ) internal 
         pure 
         returns(uint256 dollarOut) 
     {
-        dollarOut = collateralAmountD18.mul(collateralPriceUSD).div(dollarPriceUSD);
+        dollarOut = collateralAmountD18.mul(collateralPriceUSD).div(curve3PriceUSD);
     }
 
     function calcRedeemCollateralAmount(
         uint256 dollarAmountD18, 
-        uint256 collateralPriceUSD, 
-        uint256 dollarPriceUSD
+        uint256 collateralPriceCurve3, 
+        uint256 curve3PriceUSD
         ) internal 
         pure 
         returns(uint256 collateralOut) 
     {
-        collateralOut = dollarAmountD18.mul(dollarPriceUSD).div(collateralPriceUSD);
+        uint256 collteralPriceUSD = (collateralPriceCurve3.mul(10e18)).div(curve3PriceUSD);
+        collateralOut = (dollarAmountD18.mul(10e18)).div(collateralPriceUSD);
     }
 
     function getDollarPriceUSD() 
@@ -209,16 +254,14 @@ library LibUbiquityPool {
         dollarPriceUSD = (dollarPrice.mul(10e18)).div(curve3PriceUSD);
     }
 
-    function getCollateralPriceUSD(
+    function getCollateralPriceCurve3(
         address collateralAddress
         ) 
         internal 
-        returns(uint256 collateralPriceUSD) 
+        returns(uint256 collateralPriceCurve3) 
     {
-        IMetaPool collatMetaPool = ubiquityPoolStorage().collatMetaPools[collateralAddress];
-        uint256 collateralPrice = collatMetaPool.get_dy(0, 1, 10e18);
-        uint256 curve3PriceUSD = getCurve3PriceUSD();
-        collateralPriceUSD = (collateralPrice.mul(10e18)).div(curve3PriceUSD);
+        IMetaPool collateralMetaPool = ubiquityPoolStorage().collateralMetaPools[collateralAddress];
+        collateralPriceCurve3 = collateralMetaPool.get_dy(0, 1, 10e18);
     }
 
     function getCurve3PriceUSD() internal returns(uint256 curve3PriceUSD) {
