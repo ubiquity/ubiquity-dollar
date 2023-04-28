@@ -47,7 +47,7 @@ contract UbiquityPoolFacet is Modifiers {
 
     /// @dev admin function for whitelisting a token as collateral
     /// @param collateralAddress the address of the token being whitelisted
-    /// @param collateralMetapool 3CRV Metapool for the token being whitelisted
+    /// @param collateralMetaPool 3CRV Metapool for the token being whitelisted
     function addToken(address collateralAddress, IMetaPool collateralMetaPool) external onlyAdmin {
         LibUbiquityPool.addToken(collateralAddress, collateralMetaPool);
     }
