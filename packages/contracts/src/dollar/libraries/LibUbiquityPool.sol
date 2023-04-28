@@ -44,7 +44,7 @@ library LibUbiquityPool {
         mapping(address => bool) collateralNotRedeemPaused;
         mapping(address => bool) collateralNotMintPaused;
         
-        //address timelockAddress;
+       
         
         UbiquityDollarToken ubiquityDollarToken;
         IMetaPool dollarMetaPool;
@@ -69,7 +69,7 @@ library LibUbiquityPool {
         // Number of blocks to wait before being able to collectRedemption()
         uint256 redemptionDelay;
 
-        // Min USD value of UbiquityDollar for minting to happen
+        // Min USD value of UbiquityDollarToken for minting to happen
         uint256 dollarFloor;
     }
 
@@ -103,7 +103,7 @@ library LibUbiquityPool {
         );
         require(
             dollarPriceUSD >= poolStorage.dollarFloor, 
-            "UbiquytyDollar value must be 1 USD or greater to mint"
+            "UbiquityDollarToken value must be 1 USD or greater to mint"
         );
 
         uint256 collateralAmountD18 = collateralAmount * poolStorage.missingDecimals[collateralAddress];
@@ -142,7 +142,7 @@ library LibUbiquityPool {
         );
         require(
             dollarPriceUSD < poolStorage.dollarFloor,
-            "UbiquityDollar value must be less than 1 USD to redeem"
+            "UbiquityDollarToken value must be less than 1 USD to redeem"
         );
         
         uint256 dollarAmountPrecision = 

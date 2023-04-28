@@ -65,7 +65,7 @@ contract UbiquityPoolFacet is Modifiers {
         LibUbiquityPool.setNotRedeemPaused(collateralAddress, notRedeemPaused);
     }
 
-    /// @dev admin punction to pause and unpause minting for a specific collateral token
+    /// @dev admin function to pause and unpause minting for a specific collateral token
     /// @param collateralAddress address of the token being affected
     /// @param notMintPaused true to turn on minting for token, false to pause minting for token
     function setNotMintPaused(
