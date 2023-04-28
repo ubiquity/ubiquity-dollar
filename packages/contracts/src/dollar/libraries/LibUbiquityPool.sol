@@ -13,13 +13,18 @@ import {IStableSwap3Pool} from "../interfaces/IStableSwap3Pool.sol";
 import {IMetaPool} from "../interfaces/IMetaPool.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
+
 library LibUbiquityPool {
     using SafeMath for uint256;
 
     bytes32 constant UBIQUITY_POOL_STORAGE_POSITION = 
         keccak256("ubiquity.contracts.ubiquity.pool.storage");
 
-    function ubiquityPoolStorage() internal pure returns(UbiquityPoolStorage storage uPoolStorage) {
+    function ubiquityPoolStorage() 
+        internal 
+        pure 
+        returns(UbiquityPoolStorage storage uPoolStorage) 
+    {
         bytes32 position = UBIQUITY_POOL_STORAGE_POSITION;
         assembly {
             uPoolStorage.slot := position
@@ -34,6 +39,8 @@ library LibUbiquityPool {
         mapping(address => IMetaPool) collateralMetaPools;
         mapping(address => uint8) missingDecimals;
         mapping(address => uint256) tokenBalances;
+        mapping(address => bool) collateralNotRedeemPaused;
+        mapping(address => bool) collateralNotMintPaused;
         
         //address timelockAddress;
         
@@ -64,13 +71,27 @@ library LibUbiquityPool {
         uint256 dollarFloor;
     }
 
+    /// Custom Modifiers ///
+
+    modifier notRedeemPaused(address collateralAddress) {
+        require(ubiquityPoolStorage().collateralNotRedeemPaused[collateralAddress]);
+        _;
+    }
+
+    modifier notMintPaused(address collateralAddress) {
+        require(ubiquityPoolStorage().collateralNotMintPaused[collateralAddress]);
+        _;
+    }
+
     /// User Functions ///
 
     function mintDollar(
         address collateralAddress, 
         uint256 collateralAmount, 
         uint256 dollarOutMin
-        ) internal 
+    ) 
+        internal
+        notMintPaused(collateralAddress)
     {   
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         uint256 dollarPriceUSD = getDollarPriceUSD();
@@ -105,7 +126,9 @@ library LibUbiquityPool {
         address collateralAddress,
         uint256 dollarAmount,
         uint256 collateralOutMin
-    ) internal 
+    ) 
+        internal 
+        notRedeemPaused(collateralAddress)
     {   
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
@@ -189,10 +212,32 @@ library LibUbiquityPool {
         poolStorage.missingDecimals[collateralAddress] = 18.sub(IERC20(collateralAddress).decimals);
     }
 
-    function initialize(IMetaPool dollarMetaPool_,
+    function setNotRedeemPaused(
+        address collateralToken,
+        bool notRedeemPaused_
+    )
+        internal
+    {
+        ubiquityPoolStorage().collateralNotRedeemPaused[collateralAddress] = 
+            notRedeemPaused_;
+    }
+
+    function setNotMintPaused(
+        address collateralToken,
+        bool notMintPaused_
+    )
+        internal
+    {
+        ubiquityPoolStorage().collateralNotMintPaused[collateralAddress] = 
+            notMintPaused_;
+    }
+
+    function initialize(
+        IMetaPool dollarMetaPool_,
         address curve3PoolAddress_,
         uint256 mintingFee_,
-        uint256 redemptionFee_)
+        uint256 redemptionFee_
+    )
         internal 
     {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
@@ -202,14 +247,15 @@ library LibUbiquityPool {
         poolStorage.curve3Pool = StableSwapPool(curve3PoolAddress_);
         poolStorage.mintingFee = mintingFee_;
         poolStorage.redemptionFee = redemptionFee_;
-        poolStorage.
+        
     }
 
     /// CHECK FUNCTIONS ///
 
     function checkCollateralToken(
         address collateralAddress
-        ) internal 
+    ) 
+        internal 
         returns(bool isCollateral) 
     {
         address[] memory collateralAddresses_ = ubiquityPoolStorage().collateralAddresses;
@@ -226,7 +272,8 @@ library LibUbiquityPool {
         uint256 collateralAmountD18, 
         uint256 collateralPriceCurve3, 
         uint256 curve3PriceUSD
-        ) internal 
+    ) 
+        internal 
         pure 
         returns(uint256 dollarOut) 
     {
@@ -237,7 +284,8 @@ library LibUbiquityPool {
         uint256 dollarAmountD18, 
         uint256 collateralPriceCurve3, 
         uint256 curve3PriceUSD
-        ) internal 
+    ) 
+        internal 
         pure 
         returns(uint256 collateralOut) 
     {
@@ -256,7 +304,7 @@ library LibUbiquityPool {
 
     function getCollateralPriceCurve3(
         address collateralAddress
-        ) 
+    ) 
         internal 
         returns(uint256 collateralPriceCurve3) 
     {
