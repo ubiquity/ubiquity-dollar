@@ -1,6 +1,9 @@
 name: Deploy to Cloudflare Pages
 
 on:
+  push:
+    branches:
+      - development
   pull_request:
 
 jobs:
