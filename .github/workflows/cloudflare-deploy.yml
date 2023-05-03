@@ -35,7 +35,8 @@ jobs:
           PRODUCTION_BRANCH: "development"      
           OUTPUT_DIRECTORY: "static"
         run: |
-          projectName=$(echo $REPOSITORY | sed 's/\//-/g')
+          IFS='/' read -ra fields <<< "$REPOSITORY"
+          projectName="${fields[1]}"
           echo $projectName
           wrangler pages project list > project_list.txt
           if grep -q $projectName project_list.txt; then
