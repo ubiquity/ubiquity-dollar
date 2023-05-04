@@ -49,4 +49,6 @@ jobs:
 
       - name: Compare coverages
         if: ${{ steps.coverage-development.outputs.COVERAGE > steps.coverage-pr.outputs.COVERAGE }}
-        run: exit 1
+        run: |
+          echo "Error: test coverage decreased"
+          exit 1
