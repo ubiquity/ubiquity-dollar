@@ -27,6 +27,8 @@ import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
+import {ICurveFactory} from "../../src/dollar/interfaces/ICurveFactory.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
@@ -77,6 +79,12 @@ abstract contract DiamondSetup is DiamondTestHelper {
     // adding governance token
     UbiquityGovernanceToken IGovToken;
 
+    //0x0959158b6040D32d04c301A72CBFD6b39E21c9AE
+    ICurveFactory curveFactory;
+    //0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490
+    IERC20 crv3Token;
+
+
     address incentive_addr;
 
     string[] facetNames;
@@ -107,8 +115,14 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
 
+    //id selector for mainnet fork;
+    uint256 mainnet;
+    // id selector for snapshot;
+    uint256 snapshot;
+
     // deploys diamond and connects facets
     function setUp() public virtual {
+        mainnet = vm.createSelectFork("https://eth.ubq.fi/v1/mainnet");
         incentive_addr = address(new MockIncentive());
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
@@ -608,6 +622,12 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IGovToken = UbiquityGovernanceToken(IManager.governanceTokenAddress());
         IStakingShareToken = StakingShare(IManager.stakingShareAddress());
         assertEq(IDollar.decimals(), 18);
+
+        curveFactory = ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
+        crv3Token = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
+        
         vm.stopPrank();
+
+
     }
 }
