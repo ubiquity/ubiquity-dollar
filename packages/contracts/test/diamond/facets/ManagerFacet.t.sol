@@ -6,11 +6,8 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions_ShouldSucceed() public view {
@@ -138,8 +135,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
         IDollar.mint(admin, 10000);
 
-        IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
-        MockERC20 curve3CrvToken = new MockERC20("3 CRV", "3CRV", 18);
+        
         address secondAccount = address(0x3);
         address stakingZeroAccount = address(0x4);
         address stakingMinAccount = address(0x5);
@@ -176,19 +172,17 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
         for (uint256 i; i < crvDeal.length; ++i) {
             // distribute crv to the accounts
-            curve3CrvToken.mint(crvDeal[i], 10000e18);
+            deal(address(crv3Token), crvDeal[i], 1000e18);
         }
 
         vm.startPrank(admin);
 
-        ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
-        address curve3CrvBasePool = address(
-            new MockMetaPool(address(diamond), address(curve3CrvToken))
-        );
+        
+        address curve3CrvBasePool = address(0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7);
         IManager.deployStableSwapPool(
-            address(curvePoolFactory),
+            address(curveFactory),
             curve3CrvBasePool,
-            address(curve3CrvToken),
+            address(crv3Token),
             10,
             50000000
         );
