@@ -2,7 +2,6 @@
 pragma solidity ^0.8.19;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import "../DiamondTestSetup.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
@@ -10,26 +9,18 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol"
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 
 import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
 import "../../../src/dollar/libraries/Constants.sol";
-import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
-import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import "forge-std/Test.sol";
+
+
+
 
 contract ZeroStateStaking is DiamondSetup {
-    MockERC20 crvToken;
+    
     uint256 creditNFTLengthBlocks = 100;
-    address treasury = address(0x3);
-    address secondAccount = address(0x4);
-    address thirdAccount = address(0x5);
-    address fourthAccount = address(0x6);
-    address fifthAccount = address(0x7);
-    address stakingZeroAccount = address(0x8);
-    address stakingMinAccount = address(0x9);
-    address stakingMaxAccount = address(0x10);
+    
 
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
@@ -50,7 +41,7 @@ contract ZeroStateStaking is DiamondSetup {
         uint256 amount,
         uint256 indexed stakingShareId
     );
-    IMetaPool metapool;
+    
     address metaPoolAddress;
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
 
@@ -62,39 +53,6 @@ contract ZeroStateStaking is DiamondSetup {
 
     function setUp() public virtual override {
         super.setUp();
-        crvToken = new MockERC20("3 CRV", "3CRV", 18);
-        metaPoolAddress = address(
-            new MockMetaPool(address(IDollar), address(crvToken))
-        );
-
-        vm.startPrank(owner);
-
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, address(crvToken));
-
-        address[7] memory mintings = [
-            admin,
-            address(diamond),
-            owner,
-            fourthAccount,
-            stakingZeroAccount,
-            stakingMinAccount,
-            stakingMaxAccount
-        ];
-
-        for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(IDollar), mintings[i], 10000e18);
-        }
-        address[5] memory crvDeal = [
-            address(diamond),
-            owner,
-            stakingMaxAccount,
-            stakingMinAccount,
-            fourthAccount
-        ];
-        vm.stopPrank();
-        for (uint256 i; i < crvDeal.length; ++i) {
-            crvToken.mint(crvDeal[i], 10000e18);
-        }
 
         vm.startPrank(admin);
         stakingShareV1 = new BondingShare(address(diamond));
@@ -106,26 +64,14 @@ contract ZeroStateStaking is DiamondSetup {
         );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
 
-        ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
-        address curve3CrvBasePool = address(
-            new MockMetaPool(address(diamond), address(crvToken))
-        );
+        
+        
 
-        //vm.prank(admin);
-        IManager.deployStableSwapPool(
-            address(curvePoolFactory),
-            curve3CrvBasePool,
-            address(crvToken),
-            10,
-            50000000
-        );
-        //
-        metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
+        
+        
         metapool.transfer(address(IStakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
-        vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(address(metapool), address(crvToken));
 
         vm.startPrank(admin);
 
@@ -143,16 +89,16 @@ contract ZeroStateStaking is DiamondSetup {
 
         vm.startPrank(stakingMinAccount);
         IDollar.approve(address(metapool), 10000e18);
-        crvToken.approve(address(metapool), 10000e18);
+        crv3Token.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
         vm.startPrank(stakingMaxAccount);
         IDollar.approve(address(metapool), 10000e18);
-        crvToken.approve(address(metapool), 10000e18);
+        crv3Token.approve(address(metapool), 10000e18);
         vm.stopPrank();
         vm.startPrank(fourthAccount);
         IDollar.approve(address(metapool), 10000e18);
-        crvToken.approve(address(metapool), 10000e18);
+        crv3Token.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
         uint256[2] memory amounts_ = [uint256(100e18), uint256(100e18)];

@@ -8,20 +8,12 @@ import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 
 contract DepositStakingShare is LocalTestHelper {
-    address treasury = address(0x3);
-    address secondAccount = address(0x4);
-    address thirdAccount = address(0x5);
-    address fourthAccount = address(0x6);
-    address fifthAccount = address(0x7);
-    address stakingZeroAccount = address(0x8);
-    address stakingMinAccount = address(0x9);
-    address stakingMaxAccount = address(0x10);
+    
 
     uint256 fourthBal;
     uint256 minBal;
     uint256 maxBal;
     uint256[] creationBlock;
-    IMetaPool metapool;
     StakingShare stakingShare;
     event Paused(address _caller);
     event Unpaused(address _caller);

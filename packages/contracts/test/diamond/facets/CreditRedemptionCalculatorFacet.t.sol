@@ -2,21 +2,21 @@
 pragma solidity ^0.8.19;
 
 import "../DiamondTestSetup.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
-    MockCreditNft _creditNFT;
+    CreditNft _creditNFT;
 
     function setUp() public virtual override {
         super.setUp();
-        vm.prank(admin);
+        vm.startPrank(admin);
         IDollar.mint(admin, 10000e18);
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
-        _creditNFT = new MockCreditNft(100);
-        vm.prank(admin);
+        _creditNFT = new CreditNft(address(diamond));
+        
         IManager.setCreditNftAddress(address(_creditNFT));
+        vm.stopPrank();
     }
 
     function testSetConstant_ShouldRevert_IfCalledNotByAdmin() public {

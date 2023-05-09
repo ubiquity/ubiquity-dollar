@@ -3,11 +3,9 @@ pragma solidity ^0.8.19;
 
 import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
-import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 
 contract RemoteTestManagerFacet is DiamondSetup {
     function testCanCallGeneralFunctions_ShouldSucceed() public view {
@@ -131,6 +129,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
 
     function testDeployStableSwapPool_ShouldSucceed() public {
         assertEq(IDollar.decimals(), 18);
+        vm.revertTo(snapshot);
         vm.startPrank(admin);
 
         IDollar.mint(admin, 10000);
@@ -168,7 +167,7 @@ contract RemoteTestManagerFacet is DiamondSetup {
         ];
 
         // curve3CrvBasePool Curve.fi: DAI/USDC/USDT Pool
-        // curve3CrvToken  TokenTracker that represents  Curve.fi DAI/USDC/USDT part in the pool  (3Crv)
+        // crv3Token  TokenTracker that represents  Curve.fi DAI/USDC/USDT part in the pool  (3Crv)
 
         for (uint256 i; i < crvDeal.length; ++i) {
             // distribute crv to the accounts

@@ -28,8 +28,11 @@ import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {ICurveFactory} from "../../src/dollar/interfaces/ICurveFactory.sol";
+import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {CreditNft} from "../../src/dollar/core/CreditNft.sol";
 import "../../src/dollar/libraries/Constants.sol";
+import "forge-std/Test.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
     // contract types of facets to be deployed
@@ -83,6 +86,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     ICurveFactory curveFactory;
     //0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490
     IERC20 crv3Token;
+    IMetaPool metapool;
 
 
     address incentive_addr;
@@ -96,6 +100,15 @@ abstract contract DiamondSetup is DiamondTestHelper {
     address user1;
     address contract1;
     address contract2;
+
+    address treasury = address(0x3);
+    address secondAccount = address(0x4);
+    address thirdAccount = address(0x5);
+    address fourthAccount = address(0x6);
+    address fifthAccount = address(0x7);
+    address stakingZeroAccount = address(0x8);
+    address stakingMinAccount = address(0x9);
+    address stakingMaxAccount = address(0x10);
 
     bytes4[] selectorsOfDiamondCutFacet;
     bytes4[] selectorsOfDiamondLoupeFacet;
@@ -625,8 +638,55 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         curveFactory = ICurveFactory(0x0959158b6040D32d04c301A72CBFD6b39E21c9AE);
         crv3Token = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
-        
+
+        snapshot = vm.snapshot();
+
+        IDollar.mint(address(IManager), 10000e18);
+        deal(address(crv3Token), address(IManager), 10000e18);
+
+        address crv3BasePool = address(0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7);
+
+        IManager.deployStableSwapPool(
+            address(curveFactory),
+            crv3BasePool,
+            address(crv3Token),
+            10,
+            40000000
+        );
+
+        metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
         vm.stopPrank();
+
+        vm.prank(owner);
+        ITWAPOracleDollar3pool.setPool(address(metapool), address(crv3Token));
+        
+        
+
+        address[7] memory mintings = [
+            admin,
+            address(diamond),
+            owner,
+            fourthAccount,
+            stakingZeroAccount,
+            stakingMinAccount,
+            stakingMaxAccount
+        ];
+
+        for (uint256 i = 0; i < mintings.length; ++i) {
+            deal(address(IDollar), mintings[i], 10000e18);
+        }
+
+        address[5] memory crvDeal = [
+            address(diamond),
+            owner,
+            stakingMaxAccount,
+            stakingMinAccount,
+            fourthAccount
+        ];
+        vm.stopPrank();
+        for (uint256 i; i < crvDeal.length; ++i) {
+            deal(address(crv3Token), crvDeal[i], 10000e18);
+        }
 
 
     }
