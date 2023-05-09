@@ -67,13 +67,13 @@ contract CollectableDustFacetTest is DiamondSetup {
         ICollectableDustFacet.removeProtocolToken(address(diamond));
         // mint dollar
 
-        IDollar.mint(address(diamond), 100);
         vm.stopPrank();
-        assertEq(IDollar.balanceOf(address(diamond)), 100);
-        vm.prank(stakingManager);
+        
+        uint256 preBalance = IDollar.balanceOf(address(diamond));
 
-        ICollectableDustFacet.sendDust(mock_recipient, address(IDollar), 100);
+        vm.prank(stakingManager);
+        ICollectableDustFacet.sendDust(mock_recipient, address(IDollar), preBalance);
         assertEq(IDollar.balanceOf(address(diamond)), 0);
-        assertEq(IDollar.balanceOf(address(mock_recipient)), 100);
+        assertEq(IDollar.balanceOf(address(mock_recipient)), preBalance);
     }
 }

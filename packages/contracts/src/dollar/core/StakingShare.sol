@@ -65,8 +65,8 @@ contract StakingShare is
      */
     constructor(
         address _manager,
-        string memory uri
-    ) ERC1155Ubiquity(_manager, uri) {
+        string memory uri_
+    ) ERC1155Ubiquity(_manager, uri_) {
     }
 
     /// @dev update stake LP amount , LP rewards debt and end block.

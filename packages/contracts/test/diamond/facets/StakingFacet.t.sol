@@ -160,8 +160,6 @@ contract ZeroStateStakingTest is ZeroStateStaking {
     function testDeposit_Staking(uint256 lpAmount, uint256 lockup) public {
         lpAmount = bound(lpAmount, 1, metapool.balanceOf(stakingMinAccount));
         lockup = bound(lockup, 1, 208);
-        require(lpAmount >= 1 && lpAmount <= 100e18);
-        require(lockup >= 1 && lockup <= 208);
         uint256 preBalance = metapool.balanceOf(stakingMinAccount);
         vm.expectEmit(true, false, false, true);
         emit Deposit(
