@@ -1,6 +1,6 @@
 ---
 autoPayMode: true
-baseMultiplier: 1000
+baseMultiplier: 2000
 timeLabels:
 - name: 'Time: <1 Hour'
   weight: 0.125
