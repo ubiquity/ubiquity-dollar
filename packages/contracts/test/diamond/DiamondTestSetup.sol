@@ -47,6 +47,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     ChefFacet chefFacet;
     StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
+    BondingCurveFacet bondingCurveFacet;
     CurveDollarIncentiveFacet curveDollarIncentiveFacet;
 
     CreditNftManagerFacet creditNFTManagerFacet;
@@ -107,6 +108,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
+    bytes4[] selectorsOfBondingCurveFacet;
     bytes4[] selectorsOfCurveDollarIncentiveFacet;
 
     bytes4[] selectorsOfCreditNFTManagerFacet;
@@ -326,6 +328,35 @@ abstract contract DiamondSetup is DiamondTestHelper {
             stakingFormulasFacet.durationMultiply.selector
         );
 
+         // Bonding Curve
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.setParams.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.connectorWeight.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.baseY.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.poolBalance.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.deposit.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.getShare.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.withdraw.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.purchaseTargetAmount.selector
+        );
+        selectorsOfBondingCurveFacet.push(
+            bondingCurveFacet.purchaseTargetAmountFromZero.selector
+        );
+
         // Curve Dollar Incentive Facet
         selectorsOfCurveDollarIncentiveFacet.push(
             curveDollarIncentiveFacet.incentivize.selector
@@ -349,7 +380,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
             curveDollarIncentiveFacet.isBuyIncentiveOn.selector
         );
 
->>>>>>> 429f57f5 (feat: adapting tests to diamond)
         // Credit facets
         selectorsOfCreditNFTManagerFacet.push(
             creditNFTManagerFacet.creditNFTLengthBlocks.selector
@@ -433,6 +463,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         chefFacet = new ChefFacet();
         stakingFacet = new StakingFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
+        bondingCurveFacet = new BondingCurveFacet();
         curveDollarIncentiveFacet = new CurveDollarIncentiveFacet();
 
         creditNFTManagerFacet = new CreditNftManagerFacet();
@@ -481,7 +512,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](16);
+        FacetCut[] memory cuts = new FacetCut[](17);
 
         cuts[0] = (
             FacetCut({
@@ -595,6 +626,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         cuts[15] = (
             FacetCut({
+                facetAddress: address(bondingCurveFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfBondingCurveFacet
+            })
+        );
+        cuts[16] = (
+            FacetCut({
                 facetAddress: address(curveDollarIncentiveFacet),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCurveDollarIncentiveFacet
@@ -614,6 +652,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IChefFacet = ChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
+        IBondingCurveFacet = BondingCurveFacet(address(diamond));
         ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(address(diamond));
         IOwnershipFacet = OwnershipFacet(address(diamond));
 
@@ -636,7 +675,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(diamond));
         // grant diamond token minter rights
         IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(DOLLAR_MANAGER_ROLE, address(diamond));
+        IAccessCtrl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
         // add staking shares
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";

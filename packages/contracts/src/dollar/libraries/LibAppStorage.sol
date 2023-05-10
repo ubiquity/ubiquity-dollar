@@ -26,7 +26,9 @@ struct AppStorage {
     address formulasAddress;
     address creditTokenAddress;
     address creditCalculatorAddress;
-    address twapOracleAddress;
+    address ubiquiStickAddress;
+    address bondingCurveAddress;
+    address bancorFormulaAddress;
     address curveDollarIncentiveAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
@@ -165,7 +167,7 @@ contract Modifiers {
 
     modifier onlyDollarManager() {
         require(
-            LibAccessControl.hasRole(DOLLAR_MANAGER_ROLE, msg.sender),
+            LibAccessControl.hasRole(CURVE_DOLLAR_MANAGER_ROLE, msg.sender),
             "CurveIncentive: Caller is not Ubiquity Dollar"
         );
         _;

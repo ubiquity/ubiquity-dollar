@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
-
-
  
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
@@ -15,6 +13,9 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol"
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import "forge-std/Test.sol";
 
+import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
+import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
+
 
 contract CurveDollarIncentiveTest is DiamondSetup {
     address stableSwapMetaPoolAddress = address(0x123);
@@ -22,37 +23,33 @@ contract CurveDollarIncentiveTest is DiamondSetup {
     address thirdAccount = address(0x5);
     address mockReceiver = address(0x111);
     address mockSender = address(0x222);
+    address managerAddr = address(0x333);
 
-    address curve3CRVTokenAddress = address(0x333);
     address twapOracleAddress;
-    address metaPoolAddress;
 
     event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
     function setUp() public override {
         super.setUp();
 
-        metaPoolAddress = address(
-            new MockMetaPool(address(IDollar), curve3CRVTokenAddress)
-        );
+        twapOracleAddress = address(diamond);
 
-        vm.prank(admin);
-        IAccessCtrl.grantRole(DOLLAR_MANAGER_ROLE, mockDollarManager);
+        vm.startPrank(admin);
+        IAccessCtrl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
+        MockDollarToken(IManager.dollarTokenAddress()).mint(mockSender, 10000e18);
+        vm.stopPrank();
 
     }
 
-    function mockInternalFuncs(uint256 _twapPrice) public {
-        twapOracleAddress = IManager.twapOracleAddress();
-
-        vm.mockCall(
-            twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracleDollar3poolFacet.update.selector),
-            abi.encode()
+    function mockTwapFuncs(uint256 _twapPrice) public {
+        uint256 TWAP_ORACLE_STORAGE_POSITION = uint256(
+            keccak256("diamond.standard.twap.oracle.storage")
         );
-        vm.mockCall(
-            twapOracleAddress,
-            abi.encodeWithSelector(TWAPOracleDollar3poolFacet.consult.selector),
-            abi.encode(_twapPrice)
+        uint256 dollarPricePosition = TWAP_ORACLE_STORAGE_POSITION + 2;
+        vm.store(
+            address(diamond),
+            bytes32(dollarPricePosition),
+            bytes32(_twapPrice)
         );
     }
 
@@ -66,7 +63,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
     }
 
     function testIncentivizeShouldRevertIfSenderEqualToReceiver() public {
-        vm.startPrank(mockDollarManager);
+        vm.startPrank(managerAddr);
         vm.expectRevert("CurveIncentive: cannot send self");
         ICurveDollarIncentiveFacet.incentivize(
             address(0x111),
@@ -80,7 +77,6 @@ contract CurveDollarIncentiveTest is DiamondSetup {
 
         address stableSwapPoolAddress =  IManager.stableSwapMetaPoolAddress();
         IERC20 governanceToken = IERC20(IManager.governanceTokenAddress());
-        address dollarAddress = IManager.dollarTokenAddress();
         uint256 amountIn;
         
         // 1. do nothing if the target address is included to exempt list
@@ -92,7 +88,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         );
         vm.stopPrank();
 
-        vm.prank(mockDollarManager);
+        vm.prank(managerAddr);
         ICurveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
@@ -111,7 +107,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         );
         vm.stopPrank();
 
-        vm.prank(mockDollarManager);
+        vm.prank(managerAddr);
         ICurveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
@@ -122,30 +118,29 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         assertEq(last_balance, init_balance);
 
         // 3. do nothing if no incentive
-        // mockInternalFuncs(1e18);
-        // init_balance = governanceToken.balanceOf(mockReceiver);
-        // vm.startPrank(admin);
-        // ICurveDollarIncentiveFacet.setExemptAddress(
-        //     mockReceiver,
-        //     false
-        // );
-        // ICurveDollarIncentiveFacet.switchBuyIncentive();
-        // vm.stopPrank();
+        mockTwapFuncs(1e18);
+        init_balance = governanceToken.balanceOf(mockReceiver);
+        vm.startPrank(admin);
+        ICurveDollarIncentiveFacet.setExemptAddress(
+            mockReceiver,
+            false
+        );
+        vm.stopPrank();
 
-        // vm.prank(mockDollarManager);
-        // ICurveDollarIncentiveFacet.incentivize(
-        //     stableSwapPoolAddress,
-        //     mockReceiver,
-        //     100e18
-        // );
+        vm.prank(managerAddr);
+        ICurveDollarIncentiveFacet.incentivize(
+            stableSwapPoolAddress,
+            mockReceiver,
+            100e18
+        );
 
-        // last_balance = governanceToken.balanceOf(mockReceiver);
-        // assertEq(last_balance, init_balance);
+        last_balance = governanceToken.balanceOf(mockReceiver);
+        assertEq(last_balance, init_balance);
 
         // 4. mint the incentive amount of tokens to the target address
         init_balance = governanceToken.balanceOf(mockReceiver);
-        mockInternalFuncs(5e17);
-        vm.prank(mockDollarManager);
+        mockTwapFuncs(5e17);
+        vm.prank(managerAddr);
         ICurveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
@@ -158,10 +153,9 @@ contract CurveDollarIncentiveTest is DiamondSetup {
 
     function testIncentivizeSell() public {
         address stableSwapPoolAddress =  IManager.stableSwapMetaPoolAddress();
-        IERC20 governanceToken = IERC20(IManager.governanceTokenAddress());
+        // IERC20 governanceToken = IERC20(IManager.governanceTokenAddress());
         address dollarAddress = IManager.dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);
-        uint256 amountIn;
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = dollarToken.balanceOf(mockSender);
@@ -171,16 +165,11 @@ contract CurveDollarIncentiveTest is DiamondSetup {
             true
         );
 
-        vm.prank(admin);
-        address dollarTokenAddress = address(
-            new UbiquityDollarToken(address(diamond))
-        );
-
-        vm.prank(mockDollarManager);
+        vm.prank(managerAddr);
         ICurveDollarIncentiveFacet.incentivize(
             mockSender,
             stableSwapPoolAddress,
-            amountIn
+            100e18
         );
 
         uint256 last_balance = dollarToken.balanceOf(mockSender);
@@ -195,51 +184,49 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         );
         vm.stopPrank();
 
-        // vm.prank(mockDollarManager);
-        // ICurveDollarIncentiveFacet.incentivize(
-        //     mockSender,
-        //     stableSwapPoolAddress,
-        //     amountIn
-        // );
+        vm.prank(managerAddr);
+        ICurveDollarIncentiveFacet.incentivize(
+            mockSender,
+            stableSwapPoolAddress,
+            100e18
+        );
 
         last_balance = dollarToken.balanceOf(mockSender);
         assertEq(last_balance, init_balance);
 
         // // 3. do nothing if no penalty
-        // mockInternalFuncs(1e18);
-        // init_balance = dollarToken.balanceOf(mockSender);
-        // vm.startPrank(admin);
-        // ICurveDollarIncentiveFacet.setExemptAddress(
-        //     mockSender,
-        //     false
-        // );
-        // ICurveDollarIncentiveFacet.switchSellPenalty();
-        // vm.stopPrank();
+        mockTwapFuncs(1e18);
+        init_balance = dollarToken.balanceOf(mockSender);
+        vm.startPrank(admin);
+        ICurveDollarIncentiveFacet.setExemptAddress(
+            mockSender,
+            false
+        );
+        vm.stopPrank();
 
-        // vm.prank(mockDollarManager);
-        // ICurveDollarIncentiveFacet.incentivize(
-        //     mockSender,
-        //     stableSwapPoolAddress,
-        //     address(0),
-        //     100e18
-        // );
+        vm.prank(managerAddr);
+        ICurveDollarIncentiveFacet.incentivize(
+            mockSender,
+            stableSwapPoolAddress,
+            100e18
+        );
 
-        // last_balance = dollarToken.balanceOf(mockSender);
-        // assertEq(last_balance, init_balance);
+        last_balance = dollarToken.balanceOf(mockSender);
+        assertEq(last_balance, init_balance);
 
         // 4. burn the penalty amount of tokens from the target address
         vm.prank(admin);
         UbiquityDollarToken(dollarAddress).mint(mockSender, 10000e18);
         init_balance = dollarToken.balanceOf(mockSender);
-        assertEq(init_balance, 10000e18);
-        mockInternalFuncs(5e17);
+        // assertEq(init_balance, 10000e18);
+        mockTwapFuncs(5e17);
 
-        // vm.prank(mockDollarManager);
-        // ICurveDollarIncentiveFacet.incentivize(
-        //     mockSender,
-        //     stableSwapPoolAddress,
-        //     100e18
-        // );
+        vm.prank(managerAddr);
+        ICurveDollarIncentiveFacet.incentivize(
+            mockSender,
+            stableSwapPoolAddress,
+            100e18
+        );
 
         last_balance = dollarToken.balanceOf(mockSender);
         assertEq(init_balance - last_balance, 0);

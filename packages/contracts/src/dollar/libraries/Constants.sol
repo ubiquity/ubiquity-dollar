@@ -30,8 +30,8 @@ bytes32 constant DOLLAR_TOKEN_MINTER_ROLE = keccak256(
 bytes32 constant DOLLAR_TOKEN_BURNER_ROLE = keccak256(
     "DOLLAR_TOKEN_BURNER_ROLE"
 );
-bytes32 constant DOLLAR_MANAGER_ROLE = keccak256(
-    "DOLLAR_MANAGER_ROLE"
+bytes32 constant CURVE_DOLLAR_MANAGER_ROLE = keccak256(
+    "CURVE_DOLLAR_MANAGER_ROLE"
 );
 bytes32 constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 bytes32 constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
