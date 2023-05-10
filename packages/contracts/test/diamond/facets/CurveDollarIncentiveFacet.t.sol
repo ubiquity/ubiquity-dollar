@@ -218,7 +218,6 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         vm.prank(admin);
         UbiquityDollarToken(dollarAddress).mint(mockSender, 10000e18);
         init_balance = dollarToken.balanceOf(mockSender);
-        // assertEq(init_balance, 10000e18);
         mockTwapFuncs(5e17);
 
         vm.prank(managerAddr);
