@@ -6,16 +6,11 @@ import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
 import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
 import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CurveDollarIncentiveFacet} from "../../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import "../DiamondTestSetup.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
-import "forge-std/Test.sol";
-
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-
+import "../DiamondTestSetup.sol";
+import "forge-std/Test.sol";
 
 contract CurveDollarIncentiveTest is DiamondSetup {
     address stableSwapMetaPoolAddress = address(0x123);
@@ -153,7 +148,6 @@ contract CurveDollarIncentiveTest is DiamondSetup {
 
     function testIncentivizeSell() public {
         address stableSwapPoolAddress =  IManager.stableSwapMetaPoolAddress();
-        // IERC20 governanceToken = IERC20(IManager.governanceTokenAddress());
         address dollarAddress = IManager.dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);
 
@@ -194,7 +188,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         last_balance = dollarToken.balanceOf(mockSender);
         assertEq(last_balance, init_balance);
 
-        // // 3. do nothing if no penalty
+        // 3. do nothing if no penalty
         mockTwapFuncs(1e18);
         init_balance = dollarToken.balanceOf(mockSender);
         vm.startPrank(admin);
