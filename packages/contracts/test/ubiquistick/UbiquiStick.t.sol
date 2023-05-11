@@ -65,22 +65,19 @@ contract UbiquiStickTest is Test {
 
     function testTokenURI_ShouldReturnTokenURIForTokenTypeGold() public {
         // set gold token URI
-        vm.prank(minter);
+        vm.startPrank(minter);
         ubiquiStick.setTokenURI(GOLD_TYPE, "TOKEN_URI_GOLD");
         // mint gold token
-        // mint 80 tokens to user (needed for random() to return a gold type)
-        for (uint i = 1; i <= 80; i++) {
-            vm.prank(minter);
+        // mint 57 tokens to user (needed for random() to return a gold type)
+        for (uint i = 1; i <= 57; i++) {
             ubiquiStick.safeMint(user);
         }
-        // mock EVM values so that random() could return a gold token
-        vm.warp(1);
-        vm.difficulty(81);
-        // mint 81st gold token
-        vm.prank(minter);
+        // with the default "block.prevrandao = 0" the 58th token is gold
         ubiquiStick.safeMint(user);
 
-        assertEq(ubiquiStick.tokenURI(81), "TOKEN_URI_GOLD");
+        assertEq(ubiquiStick.tokenURI(58), "TOKEN_URI_GOLD");
+
+        vm.stopPrank();
     }
 
     function testTokenURI_ShouldReturnTokenURIForTokenTypeInvisible() public {
@@ -140,21 +137,17 @@ contract UbiquiStickTest is Test {
     }
 
     function testSafeMint_ShouldMintGoldToken() public {
-        // mint 80 tokens to user (needed for random() to return a gold type)
-        for (uint i = 1; i <= 80; i++) {
-            vm.prank(minter);
+        vm.startPrank(minter);
+        // mint 57 tokens to user (needed for random() to return a gold type)
+        for (uint i = 1; i <= 57; i++) {
             ubiquiStick.safeMint(user);
         }
-
-        // mock EVM values so that random() could return a gold token
-        vm.warp(1);
-        vm.difficulty(81);
-
-        // mint 81st token
-        vm.prank(minter);
+        // with the default "block.prevrandao = 0" the 58th token is gold
         ubiquiStick.safeMint(user);
-        assertEq(ubiquiStick.ownerOf(81), user);
-        assertEq(ubiquiStick.gold(81), true);
+        assertEq(ubiquiStick.ownerOf(58), user);
+        assertEq(ubiquiStick.gold(58), true);
+
+        vm.stopPrank();
     }
 
     function testBatchSafeMint_ShouldRevert_IfCalledNotByMinter() public {
@@ -171,11 +164,10 @@ contract UbiquiStickTest is Test {
     }
 
     function testRandom_ShouldReturnRandomValue() public {
-        vm.warp(1);
-        vm.difficulty(1);
+        // by default "block.prevrandao = 0"
         assertEq(
             ubiquiStick.exposed_random(),
-            12751150048135892262188697730632532742577045435178855596188279334644121003250
+            59314673252666873280629439252894990696031209845167399747113266702537979136323
         );
     }
 
