@@ -34,6 +34,7 @@
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",
     "build": "forge build",
+    "build:smt": "forge build:smt",
     "forge:install": "forge install",
     "_hardhat-task": "tsx ./scripts/task/task.ts",
     "migrate:metapool": "tsx ./scripts/task/dollar/MigrateMetapool.ts"
