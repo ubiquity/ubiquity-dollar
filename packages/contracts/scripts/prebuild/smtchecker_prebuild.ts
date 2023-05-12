@@ -22,7 +22,7 @@ function getAllFiles(dirPath: string, arrayOfFiles: string[]): string[] {
 }
 
 function updateFoundryFile() {
-  const fileContent = fs.readFileSync(foundry_file, "utf8");
+  const fileContent = fs.readFileSync(foundryFile, "utf8");
   const contracts = getAllFiles("../../src", []).map((contract) =>
     contract.replace("../../", "")
   );
