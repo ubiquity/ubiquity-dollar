@@ -23,3 +23,15 @@ quote_style = 'double'
 
 [rpc_endpoints]
 mainnet = "https://eth.ubq.fi/v1/mainnet"
+
+[profile.default.model_checker]
+engine = 'chc'
+timeout = 10_000
+targets = [
+    'assert',
+    'constantCondition',
+    'divByZero',
+    'outOfBounds',
+    'overflow',
+    'underflow',
+]
