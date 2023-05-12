@@ -9,7 +9,6 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {IMetaPool} from "../interfaces/IMetaPool.sol";
 
 contract UbiquityPoolFacet is Modifiers {
-    
     /// @dev Mints 1 UbiquityDollarToken for every 1USD of CollateralToken deposited
     /// @param collateralAddress address of collateral token being deposited
     /// @param collateralAmount amount of collateral tokens being deposited
@@ -18,10 +17,12 @@ contract UbiquityPoolFacet is Modifiers {
         address collateralAddress,
         uint256 collateralAmount,
         uint256 dollarOutMin
-    ) 
-        external 
-    {
-        LibUbiquityPool.mintDollar(collateralAddress, collateralAmount, dollarOutMin);
+    ) external {
+        LibUbiquityPool.mintDollar(
+            collateralAddress,
+            collateralAmount,
+            dollarOutMin
+        );
     }
 
     /// @dev Burn UbiquityDollarTokens and receive 1USD of collateral token for every 1 UbiquityDollarToken burned
@@ -32,10 +33,12 @@ contract UbiquityPoolFacet is Modifiers {
         address collateralAddress,
         uint256 dollarAmount,
         uint256 collateralOutMin
-    ) 
-        external 
-    {
-        LibUbiquityPool.redeemDollar(collateralAddress, dollarAmount, collateralOutMin);
+    ) external {
+        LibUbiquityPool.redeemDollar(
+            collateralAddress,
+            dollarAmount,
+            collateralOutMin
+        );
     }
 
     /// @dev used to collect collateral tokens after redeeming/burning UbiquityDollarToken
@@ -48,21 +51,27 @@ contract UbiquityPoolFacet is Modifiers {
     /// @dev admin function for whitelisting a token as collateral
     /// @param collateralAddress the address of the token being whitelisted
     /// @param collateralMetaPool 3CRV Metapool for the token being whitelisted
-    function addToken(address collateralAddress, IMetaPool collateralMetaPool) external onlyAdmin {
+    function addToken(
+        address collateralAddress,
+        IMetaPool collateralMetaPool
+    ) external onlyAdmin {
         LibUbiquityPool.addToken(collateralAddress, collateralMetaPool);
     }
-    
+
     /// @dev admin function to pause and unpause redemption for a specific collateral token
     /// @param collateralAddress address of the token being affected
     /// @param notRedeemPaused true to turn on redemption for token, false to pause redemption of token
     function setNotRedeemPaused(
         address collateralAddress,
         bool notRedeemPaused
-    ) 
-        external
-        onlyAdmin
-    {
+    ) external onlyAdmin {
         LibUbiquityPool.setNotRedeemPaused(collateralAddress, notRedeemPaused);
+    }
+
+    function getNotRedeemPaused(
+        address _collateralAddress
+    ) external view returns (bool) {
+        return LibUbiquityPool.getNotRedeemPaused(_collateralAddress);
     }
 
     /// @dev admin function to pause and unpause minting for a specific collateral token
@@ -71,10 +80,24 @@ contract UbiquityPoolFacet is Modifiers {
     function setNotMintPaused(
         address collateralAddress,
         bool notMintPaused
-    ) 
-        external
-        onlyAdmin
-    {
+    ) external onlyAdmin {
         LibUbiquityPool.setNotMintPaused(collateralAddress, notMintPaused);
+    }
+
+    function getRedeemCollateralBalances(
+        address account,
+        address collateralAddress
+    ) external view returns (uint256) {
+        return
+            LibUbiquityPool.getRedeemCollateralBalances(
+                account,
+                collateralAddress
+            );
+    }
+
+    function getNotMintPaused(
+        address _collateralAddress
+    ) external view returns (bool) {
+        return LibUbiquityPool.getNotMintPaused(_collateralAddress);
     }
 }
