@@ -4,21 +4,21 @@ import path from "path";
 const foundry_file = path.join(__dirname, "../../foundry.toml");
 
 function getAllFiles(dirPath: string, arrayOfFiles: string[]): string[] {
-  const fullPath = path.resolve(dirPath);
-  const files = fs.readdirSync(fullPath);
+    const fullPath = path.join(__dirname, dirPath);
+    const files = fs.readdirSync(fullPath);
 
-  for (const file of files) {
-    const filePath = path.join(fullPath, file);
-    const fileStat = fs.statSync(filePath);
+    for (const file of files) {
+        const filePath = path.join(fullPath, file);
+        const fileStat = fs.statSync(filePath);
 
-    if (fileStat.isDirectory()) {
-      getAllFiles(filePath, arrayOfFiles);
-    } else {
-      arrayOfFiles.push(filePath);
+        if (fileStat.isDirectory()) {
+            getAllFiles(filePath, arrayOfFiles);
+        } else {
+            arrayOfFiles.push(filePath);
+        }
     }
-  }
 
-  return arrayOfFiles;
+    return arrayOfFiles;
 }
 
 function updateFoundryFile() {

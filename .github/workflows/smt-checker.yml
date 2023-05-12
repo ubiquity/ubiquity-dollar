@@ -10,14 +10,6 @@ jobs:
     runs-on: ubuntu-22.04
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.14.1"
-
       - name: Install dependencies
         run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
 
