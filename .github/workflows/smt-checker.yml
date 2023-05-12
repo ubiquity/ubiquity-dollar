@@ -1,6 +1,7 @@
 name: SMT Checker
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
