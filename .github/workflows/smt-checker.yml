@@ -15,8 +15,5 @@ jobs:
         with:
           version: nightly-87bc53fc6c874bd4c92d97ed180b949e3a36d78c
 
-      - name: Setup Forge
-        run: yarn workspace @ubiquity/contracts forge:install
-
       - name: Build and Run SMT Check
         run: yarn build:smt
