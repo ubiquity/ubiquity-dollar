@@ -1,6 +1,7 @@
 name: SMT Checker
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   build-and-smt-check:
