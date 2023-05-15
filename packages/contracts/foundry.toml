@@ -26,7 +26,7 @@ mainnet = "https://eth.ubq.fi/v1/mainnet"
 
 [profile.default.model_checker]
 engine = 'chc'
-timeout = 10_000
+timeout = 10000
 targets = [
     'assert',
     'constantCondition',
