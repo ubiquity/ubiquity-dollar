@@ -29,6 +29,7 @@ struct AppStorage {
     address ubiquiStickAddress;
     address bondingCurveAddress;
     address bancorFormulaAddress;
+    address curveDollarIncentiveAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;
@@ -160,6 +161,14 @@ contract Modifiers {
         require(
             LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditCalc: not admin"
+        );
+        _;
+    }
+
+    modifier onlyDollarManager() {
+        require(
+            LibAccessControl.hasRole(CURVE_DOLLAR_MANAGER_ROLE, msg.sender),
+            "CurveIncentive: Caller is not Ubiquity Dollar"
         );
         _;
     }
