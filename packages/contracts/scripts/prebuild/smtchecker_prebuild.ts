@@ -46,9 +46,9 @@ const updateFoundryFile = () => {
     /\[profile\.default\.model_checker\.contracts\](.*?)(?:(?:\r*\n){2})/s,
     `[profile.default.model_checker.contracts]\n${contractsString}\n`
   );
-  console.log(contractsString);
+  //   console.log(contractsString);
   fs.writeFileSync(foundry_file, newContent);
-  console.log(foundry_file);
+  //   console.log(foundry_file);
 };
 
 updateFoundryFile();
