@@ -35,3 +35,5 @@ targets = [
     'overflow',
     'underflow',
 ]
+
+[profile.default.model_checker.contracts]
