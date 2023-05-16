@@ -7,6 +7,7 @@ pragma solidity ^0.8.19;
 import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {IMetaPool} from "../interfaces/IMetaPool.sol";
+import "forge-std/console.sol";
 
 contract UbiquityPoolFacet is Modifiers {
     /// @dev Mints 1 UbiquityDollarToken for every 1USD of CollateralToken deposited
@@ -18,6 +19,7 @@ contract UbiquityPoolFacet is Modifiers {
         uint256 collateralAmount,
         uint256 dollarOutMin
     ) external {
+        console.log("mintDollar");
         LibUbiquityPool.mintDollar(
             collateralAddress,
             collateralAmount,
@@ -61,27 +63,33 @@ contract UbiquityPoolFacet is Modifiers {
     /// @dev admin function to pause and unpause redemption for a specific collateral token
     /// @param collateralAddress address of the token being affected
     /// @param notRedeemPaused true to turn on redemption for token, false to pause redemption of token
-    function setNotRedeemPaused(
+    function setRedeemActive(
         address collateralAddress,
         bool notRedeemPaused
     ) external onlyAdmin {
-        LibUbiquityPool.setNotRedeemPaused(collateralAddress, notRedeemPaused);
+        LibUbiquityPool.setRedeemActive(collateralAddress, notRedeemPaused);
     }
 
-    function getNotRedeemPaused(
+    function getRedeemActive(
         address _collateralAddress
     ) external view returns (bool) {
-        return LibUbiquityPool.getNotRedeemPaused(_collateralAddress);
+        return LibUbiquityPool.getRedeemActive(_collateralAddress);
     }
 
     /// @dev admin function to pause and unpause minting for a specific collateral token
     /// @param collateralAddress address of the token being affected
     /// @param notMintPaused true to turn on minting for token, false to pause minting for token
-    function setNotMintPaused(
+    function setMintActive(
         address collateralAddress,
         bool notMintPaused
     ) external onlyAdmin {
-        LibUbiquityPool.setNotMintPaused(collateralAddress, notMintPaused);
+        LibUbiquityPool.setMintActive(collateralAddress, notMintPaused);
+    }
+
+    function getMintActive(
+        address _collateralAddress
+    ) external view returns (bool) {
+        return LibUbiquityPool.getMintActive(_collateralAddress);
     }
 
     function getRedeemCollateralBalances(
@@ -93,11 +101,5 @@ contract UbiquityPoolFacet is Modifiers {
                 account,
                 collateralAddress
             );
-    }
-
-    function getNotMintPaused(
-        address _collateralAddress
-    ) external view returns (bool) {
-        return LibUbiquityPool.getNotMintPaused(_collateralAddress);
     }
 }

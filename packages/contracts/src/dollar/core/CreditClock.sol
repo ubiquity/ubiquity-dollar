@@ -83,8 +83,9 @@ contract CreditClock {
         if (blockNumber == 0) {
             blockNumber = block.number;
         } else {
-            if (blockNumber < block.number)
+            if (blockNumber < block.number) {
                 revert("CreditClock: block number must not be in the past.");
+            }
         }
         // slither-disable-next-line divide-before-multiply
         rate = rateStartValue.mul(

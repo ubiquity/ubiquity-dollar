@@ -52,7 +52,7 @@ contract Modifiers {
      * function is not supported. It is possible to prevent this from happening
      * by making the `nonReentrant` function external, and making it call a
      * `private` function that does the actual work.
-
+     *
      * @dev Works identically to OZ's nonReentrant.
      * @dev Used to avoid state storage collision within diamond.
      */
@@ -149,6 +149,7 @@ contract Modifiers {
         );
         _;
     }
+
     modifier onlyTokenManager() {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),

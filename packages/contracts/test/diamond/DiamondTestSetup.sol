@@ -317,6 +317,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         // UbiquityPool
         selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.mintDollar.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
             ubiquityPoolFacet.redeemDollar.selector
         );
         selectorsOfUbiquityPoolFacet.push(
@@ -324,19 +327,19 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         selectorsOfUbiquityPoolFacet.push(ubiquityPoolFacet.addToken.selector);
         selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacet.setNotRedeemPaused.selector
+            ubiquityPoolFacet.setRedeemActive.selector
         );
         selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacet.getNotRedeemPaused.selector
+            ubiquityPoolFacet.getRedeemActive.selector
         );
         selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacet.setNotMintPaused.selector
+            ubiquityPoolFacet.setMintActive.selector
         );
         selectorsOfUbiquityPoolFacet.push(
             ubiquityPoolFacet.getRedeemCollateralBalances.selector
         );
         selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacet.getNotMintPaused.selector
+            ubiquityPoolFacet.getMintActive.selector
         );
 
         // Staking Formulas
