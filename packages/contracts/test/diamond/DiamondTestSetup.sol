@@ -535,7 +535,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](17);
+        FacetCut[] memory cuts = new FacetCut[](18);
 
         cuts[0] = (
             FacetCut({
