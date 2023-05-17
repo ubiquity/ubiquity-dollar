@@ -26,7 +26,7 @@ jobs:
         run: yarn install
 
       - name: Wrangler Install
-        run: yarn add -g wrangler
+        run: yarn global add wrangler
 
       - name: Publish to Cloudflare
         env:
