@@ -64,3 +64,6 @@ out
 packages/contracts/broadcast/*
 packages/dapp/types/
 .vscode/
+/packages/contracts/filtered-lcov.info
+/packages/contracts/lcov.info
+/packages/contracts/merged-lcov.info
