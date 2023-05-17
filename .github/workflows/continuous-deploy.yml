@@ -39,15 +39,15 @@ jobs:
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --dir=./dist --prod > ./deployments.log
-          ls -la
+          # ls -la
 
-      - name: Deploy Cloudflare
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: uad-ubq-fi
-          directory: ./dist
+      # - name: Deploy Cloudflare
+      #   uses: cloudflare/pages-action@v1
+      #   with:
+      #     apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      #     accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      #     projectName: uad-ubq-fi
+      #     directory: ./dist
 
       # - name: Deploy Railway
       #   run: |

@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     permissions:
       contents: read
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -24,15 +24,15 @@ jobs:
 
       - name: Yarn Install
         run: yarn install
-      
-#       - name: Wrangler Install
-#         run: npm install -g wrangler
+
+      - name: Wrangler Install
+        run: yarn add -g wrangler
 
       - name: Publish to Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           REPOSITORY: ${{ github.repository }}
-          PRODUCTION_BRANCH: "development"      
+          PRODUCTION_BRANCH: "development"
           OUTPUT_DIRECTORY: "static"
         run: |
           IFS='/' read -ra fields <<< "$REPOSITORY"
@@ -45,4 +45,26 @@ jobs:
             echo "Project not found"
             wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
           fi
-          yes | npx wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"
+          wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"
+
+      - name: Get UbiquiBot Token
+        uses: tibdex/github-app-token@v1.7.0
+        id: get_installation_token
+        with:
+          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
+          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+
+      - name: Save UbiquiBot Token
+        env:
+          TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          echo "The generated token is masked: ${TOKEN}"
+
+      - name: Deploy Comment as UbiquiBot
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.get_installation_token.outputs.token }}
+          script: |
+            const fs = require("fs");
+            const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
+            await print_deployments_log({github, context, fs});
