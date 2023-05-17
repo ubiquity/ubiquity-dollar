@@ -33,7 +33,7 @@
     "build:dapp": "yarn workspace @ubiquity/dapp run build",
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
     "test:all": "yarn workspace @ubiquity/contracts run test:unit",
-    "coverage": "cd packages/contracts/ && ./coverage.sh",
+    "coverage": "yarn workspace @ubiquity/contracts run test:coverage",
     "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "prettier:all": "prettier packages/ --write",
     "lint:all": "yarn workspaces foreach run lint",
