@@ -10,14 +10,13 @@ import "../interfaces/IERC1155Ubiquity.sol";
 import "./Constants.sol";
 import "abdk/ABDKMathQuad.sol";
 
-
 library LibBondingCurve {
     using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
     bytes32 constant BONDING_CONTROL_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.bonding.storage");
+        bytes32(uint256(keccak256("ubiquity.contracts.bonding.storage")) - 1);
 
     event Deposit(address indexed user, uint256 amount);
     event Withdraw(uint256 amount);
@@ -28,21 +27,25 @@ library LibBondingCurve {
         uint256 baseY;
         uint256 poolBalance;
         uint256 tokenIds;
-        mapping (address => uint256) share;
+        mapping(address => uint256) share;
     }
 
-    function bondingCurveStorage() internal pure returns (BondingCurveData storage l) {
+    function bondingCurveStorage()
+        internal
+        pure
+        returns (BondingCurveData storage l)
+    {
         bytes32 slot = BONDING_CONTROL_STORAGE_SLOT;
         assembly {
             l.slot := slot
         }
     }
 
-    function setParams(
-        uint32 _connectorWeight, 
-        uint256 _baseY
-    ) internal {
-        require(_connectorWeight > 0 && _connectorWeight <= 1000000, "invalid values"); 
+    function setParams(uint32 _connectorWeight, uint256 _baseY) internal {
+        require(
+            _connectorWeight > 0 && _connectorWeight <= 1000000,
+            "invalid values"
+        );
         require(_baseY > 0, "must valid baseY");
 
         bondingCurveStorage().connectorWeight = _connectorWeight;
@@ -57,18 +60,17 @@ library LibBondingCurve {
     function baseY() internal returns (uint256) {
         return bondingCurveStorage().baseY;
     }
-    
+
     function poolBalance() internal returns (uint256) {
         return bondingCurveStorage().poolBalance;
     }
 
-    function deposit(uint256 _collateralDeposited, address _recipient)
-        internal
-    {
+    function deposit(
+        uint256 _collateralDeposited,
+        address _recipient
+    ) internal {
         BondingCurveData storage ss = bondingCurveStorage();
-        require(
-            ss.connectorWeight != 0 && ss.baseY != 0, "not set"
-        );
+        require(ss.connectorWeight != 0 && ss.baseY != 0, "not set");
 
         uint256 tokensReturned;
 
@@ -88,14 +90,8 @@ library LibBondingCurve {
             );
         }
 
-        IERC20 dollar = IERC20(
-            LibAppStorage.appStorage().dollarTokenAddress
-        );
-        dollar.transferFrom(
-            _recipient,
-            address(this),
-            _collateralDeposited
-        );
+        IERC20 dollar = IERC20(LibAppStorage.appStorage().dollarTokenAddress);
+        dollar.transferFrom(_recipient, address(this), _collateralDeposited);
 
         ss.poolBalance = ss.poolBalance + _collateralDeposited;
         bytes memory tokReturned = toBytes(tokensReturned);
@@ -105,12 +101,7 @@ library LibBondingCurve {
         IERC1155Ubiquity bNFT = IERC1155Ubiquity(
             LibAppStorage.appStorage().ubiquiStickAddress
         );
-        bNFT.mint(
-            _recipient, 
-            ss.tokenIds, 
-            tokensReturned, 
-            tokReturned 
-        );
+        bNFT.mint(_recipient, ss.tokenIds, tokensReturned, tokReturned);
 
         emit Deposit(_recipient, _collateralDeposited);
     }
@@ -122,7 +113,9 @@ library LibBondingCurve {
 
     function toBytes(uint256 x) internal pure returns (bytes memory b) {
         b = new bytes(32);
-        assembly { mstore(add(b, 32), x) }
+        assembly {
+            mstore(add(b, 32), x)
+        }
     }
 
     function withdraw(uint256 _amount) internal {
@@ -151,7 +144,7 @@ library LibBondingCurve {
      * @param _connectorWeight   connector weight, represented in ppm, 1 - 1,000,000
      * @param _supply          current Token supply
      * @param _connectorBalance   total connector balance
-     * 
+     *
      * @return amount of Tokens minted
      */
     function purchaseTargetAmount(
@@ -159,12 +152,14 @@ library LibBondingCurve {
         uint32 _connectorWeight,
         uint256 _supply,
         uint256 _connectorBalance
-    ) internal view returns(uint256) {
-
+    ) internal view returns (uint256) {
         // validate input
         require(_connectorBalance > 0, "ERR_INVALID_SUPPLY");
-        require(_connectorWeight > 0 && _connectorWeight <= MAX_WEIGHT, "ERR_INVALID_WEIGHT");
-        
+        require(
+            _connectorWeight > 0 && _connectorWeight <= MAX_WEIGHT,
+            "ERR_INVALID_WEIGHT"
+        );
+
         // special case for 0 deposit amount
         if (_tokensDeposited == 0) {
             return 0;
@@ -181,9 +176,7 @@ library LibBondingCurve {
         );
 
         bytes16 connBal = _connectorBalance.fromUInt();
-        bytes16 temp = _one.add(
-            _tokensDeposited.fromUInt().div(connBal)
-        );
+        bytes16 temp = _one.add(_tokensDeposited.fromUInt().div(connBal));
         //Instead of calculating "base ^ exp", we calculate "e ^ (log(base) * exp)".
         bytes16 result = _supply.fromUInt().mul(
             (temp.ln().mul(exponent)).exp().sub(_one)
@@ -201,7 +194,7 @@ library LibBondingCurve {
      * @param _connectorWeight      connector weight, represented in ppm, 1 - 1,000,000
      * @param _baseX                constant x
      * @param _baseY                expected price
-     * 
+     *
      * @return amount of Tokens minted
      */
     function purchaseTargetAmountFromZero(
@@ -213,9 +206,10 @@ library LibBondingCurve {
         // (MAX_WEIGHT/reserveWeight -1)
         bytes16 _one = uintToBytes16(ONE);
 
-        bytes16 exponent = uint256(MAX_WEIGHT).fromUInt().div(
-            _connectorWeight.fromUInt()
-        ).sub(_one);
+        bytes16 exponent = uint256(MAX_WEIGHT)
+            .fromUInt()
+            .div(_connectorWeight.fromUInt())
+            .sub(_one);
 
         // Instead of calculating "x ^ exp", we calculate "e ^ (log(x) * exp)".
         // _baseY ^ (MAX_WEIGHT/reserveWeight -1)
@@ -229,7 +223,10 @@ library LibBondingCurve {
     }
 
     function uintToBytes16(uint256 x) internal pure returns (bytes16 b) {
-        require(x <= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF, "Value too large for bytes16");
+        require(
+            x <= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,
+            "Value too large for bytes16"
+        );
         b = bytes16(abi.encodePacked(x));
     }
 }

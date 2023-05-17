@@ -15,8 +15,8 @@ library LibTWAPOracle {
         uint256[2] priceCumulativeLast;
     }
 
-    bytes32 public constant TWAP_ORACLE_STORAGE_POSITION =
-        keccak256("diamond.standard.twap.oracle.storage");
+    bytes32 constant TWAP_ORACLE_STORAGE_POSITION =
+        bytes32(uint256(keccak256("diamond.standard.twap.oracle.storage")) - 1);
 
     function setPool(address _pool, address _curve3CRVToken1) internal {
         require(

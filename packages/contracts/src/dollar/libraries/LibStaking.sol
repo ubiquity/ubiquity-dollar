@@ -12,7 +12,7 @@ library LibStaking {
     using SafeERC20 for IERC20;
 
     bytes32 constant STAKING_CONTROL_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.staking.storage");
+        bytes32(uint256(keccak256("ubiquity.contracts.staking.storage")) - 1);
 
     event PriceReset(
         address _tokenWithdrawn,
