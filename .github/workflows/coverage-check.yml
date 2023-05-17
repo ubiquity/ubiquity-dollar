@@ -65,7 +65,6 @@ jobs:
 
       - name: Get PR branch coverage
         id: coverage-pr
-        shell: bash
         run: |
           cd packages/contracts
           
