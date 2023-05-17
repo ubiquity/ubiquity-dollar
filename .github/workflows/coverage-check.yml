@@ -28,6 +28,7 @@ jobs:
 
       - name: Get development branch coverage
         id: coverage-development
+        shell: bash
         run: |
           cd packages/contracts
           
@@ -64,6 +65,7 @@ jobs:
 
       - name: Get PR branch coverage
         id: coverage-pr
+        shell: bash
         run: |
           cd packages/contracts
           
