@@ -12,6 +12,7 @@ import {IUbiquityDollarManager} from "../interfaces/IUbiquityDollarManager.sol";
 //cspell:ignore BondingShareV2
 contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
+
     struct Bond {
         // address of the minter
         address minter;

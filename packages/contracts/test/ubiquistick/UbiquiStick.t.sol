@@ -69,7 +69,7 @@ contract UbiquiStickTest is Test {
         ubiquiStick.setTokenURI(GOLD_TYPE, "TOKEN_URI_GOLD");
         // mint gold token
         // mint 80 tokens to user (needed for random() to return a gold type)
-        for (uint i = 1; i <= 80; i++) {
+        for (uint256 i = 1; i <= 80; i++) {
             vm.prank(minter);
             ubiquiStick.safeMint(user);
         }
@@ -88,7 +88,7 @@ contract UbiquiStickTest is Test {
         vm.prank(minter);
         ubiquiStick.setTokenURI(INVISIBLE_TYPE, "TOKEN_URI_INVISIBLE");
         // mint 42 tokens, token with id 42 is invisible
-        for (uint i = 1; i <= 42; i++) {
+        for (uint256 i = 1; i <= 42; i++) {
             vm.prank(minter);
             ubiquiStick.safeMint(user);
         }
@@ -141,7 +141,7 @@ contract UbiquiStickTest is Test {
 
     function testSafeMint_ShouldMintGoldToken() public {
         // mint 80 tokens to user (needed for random() to return a gold type)
-        for (uint i = 1; i <= 80; i++) {
+        for (uint256 i = 1; i <= 80; i++) {
             vm.prank(minter);
             ubiquiStick.safeMint(user);
         }

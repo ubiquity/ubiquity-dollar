@@ -54,7 +54,6 @@ library LibTWAPOracle {
             uint256[2] memory priceCumulative,
             uint256 blockTimestamp
         ) = currentCumulativePrices();
-
         if (blockTimestamp - ts.pricesBlockTimestampLast > 0) {
             // get the balances between now and the last price cumulative snapshot
             uint256[2] memory twapBalances = IMetaPool(ts.pool)
@@ -71,6 +70,7 @@ library LibTWAPOracle {
                 1 ether,
                 twapBalances
             );
+
             // price to exchange amountIn 3CRV to Ubiquity Dollar based on TWAP
             ts.price1Average = IMetaPool(ts.pool).get_dy(
                 1,

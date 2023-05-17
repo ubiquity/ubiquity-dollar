@@ -10,6 +10,7 @@ import {IDiamondLoupe} from "../../src/dollar/interfaces/IDiamondLoupe.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {AccessControlFacet} from "../../src/dollar/facets/AccessControlFacet.sol";
+import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet.sol";
 import {ChefFacet} from "../../src/dollar/facets/ChefFacet.sol";
@@ -46,6 +47,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     CollectableDustFacet collectableDustFacet;
     ChefFacet chefFacet;
     StakingFacet stakingFacet;
+    UbiquityPoolFacet ubiquityPoolFacet;
     StakingFormulasFacet stakingFormulasFacet;
     BondingCurveFacet bondingCurveFacet;
     CurveDollarIncentiveFacet curveDollarIncentiveFacet;
@@ -69,6 +71,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     CollectableDustFacet ICollectableDustFacet;
     ChefFacet IChefFacet;
     StakingFacet IStakingFacet;
+    UbiquityPoolFacet IUbiquityPoolFacet;
     StakingFormulasFacet IStakingFormulasFacet;
     CurveDollarIncentiveFacet ICurveDollarIncentiveFacet;
     OwnershipFacet IOwnershipFacet;
@@ -107,6 +110,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfCollectableDustFacet;
     bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfStakingFacet;
+    bytes4[] selectorsOfUbiquityPoolFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfBondingCurveFacet;
     bytes4[] selectorsOfCurveDollarIncentiveFacet;
@@ -311,6 +315,33 @@ abstract contract DiamondSetup is DiamondTestHelper {
         selectorsOfStakingFacet.push(stakingFacet.lpRewardForShares.selector);
         selectorsOfStakingFacet.push(stakingFacet.currentShareValue.selector);
 
+        // UbiquityPool
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.mintDollar.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.redeemDollar.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.collectRedemption.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(ubiquityPoolFacet.addToken.selector);
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.setRedeemActive.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.getRedeemActive.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.setMintActive.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.getRedeemCollateralBalances.selector
+        );
+        selectorsOfUbiquityPoolFacet.push(
+            ubiquityPoolFacet.getMintActive.selector
+        );
+
         // Staking Formulas
         selectorsOfStakingFormulasFacet.push(
             stakingFormulasFacet.sharesForLP.selector
@@ -328,28 +359,18 @@ abstract contract DiamondSetup is DiamondTestHelper {
             stakingFormulasFacet.durationMultiply.selector
         );
 
-         // Bonding Curve
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacet.setParams.selector
-        );
+        // Bonding Curve
+        selectorsOfBondingCurveFacet.push(bondingCurveFacet.setParams.selector);
         selectorsOfBondingCurveFacet.push(
             bondingCurveFacet.connectorWeight.selector
         );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacet.baseY.selector
-        );
+        selectorsOfBondingCurveFacet.push(bondingCurveFacet.baseY.selector);
         selectorsOfBondingCurveFacet.push(
             bondingCurveFacet.poolBalance.selector
         );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacet.deposit.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacet.getShare.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacet.withdraw.selector
-        );
+        selectorsOfBondingCurveFacet.push(bondingCurveFacet.deposit.selector);
+        selectorsOfBondingCurveFacet.push(bondingCurveFacet.getShare.selector);
+        selectorsOfBondingCurveFacet.push(bondingCurveFacet.withdraw.selector);
         selectorsOfBondingCurveFacet.push(
             bondingCurveFacet.purchaseTargetAmount.selector
         );
@@ -462,6 +483,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         collectableDustFacet = new CollectableDustFacet();
         chefFacet = new ChefFacet();
         stakingFacet = new StakingFacet();
+        ubiquityPoolFacet = new UbiquityPoolFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
         bondingCurveFacet = new BondingCurveFacet();
         curveDollarIncentiveFacet = new CurveDollarIncentiveFacet();
@@ -484,6 +506,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "CollectableDustFacet",
             "ChefFacet",
             "StakingFacet",
+            "UbiquityPoolFacet",
             "StakingFormulasFacet",
             "CurveDollarIncentiveFacet",
             "CreditNFTManagerFacet",
@@ -512,7 +535,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](17);
+        FacetCut[] memory cuts = new FacetCut[](18);
 
         cuts[0] = (
             FacetCut({
@@ -638,6 +661,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfCurveDollarIncentiveFacet
             })
         );
+        cuts[17] = (
+            FacetCut({
+                facetAddress: address(ubiquityPoolFacet),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfUbiquityPoolFacet
+            })
+        );
         // deploy diamond
         vm.prank(owner);
         diamond = new Diamond(_args, cuts);
@@ -651,9 +681,12 @@ abstract contract DiamondSetup is DiamondTestHelper {
         ICollectableDustFacet = CollectableDustFacet(address(diamond));
         IChefFacet = ChefFacet(address(diamond));
         IStakingFacet = StakingFacet(address(diamond));
+        IUbiquityPoolFacet = UbiquityPoolFacet(address(diamond));
         IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
         IBondingCurveFacet = BondingCurveFacet(address(diamond));
-        ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(address(diamond));
+        ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(
+            address(diamond)
+        );
         IOwnershipFacet = OwnershipFacet(address(diamond));
 
         ICreditNFTMgrFacet = CreditNftManagerFacet(address(diamond));

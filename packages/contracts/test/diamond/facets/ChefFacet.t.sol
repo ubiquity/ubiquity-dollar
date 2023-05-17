@@ -34,6 +34,7 @@ contract ZeroStateChef is DiamondSetup {
     StakingShare stakingShare;
     BondingShare stakingShareV1;
     IERC20Ubiquity governanceToken;
+
     event Deposit(
         address indexed user,
         uint256 amount,
@@ -45,8 +46,10 @@ contract ZeroStateChef is DiamondSetup {
         uint256 amount,
         uint256 indexed stakingShareId
     );
+
     IMetaPool metapool;
     address metaPoolAddress;
+
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
 
     event MinPriceDiffToUpdateMultiplierModified(
@@ -100,12 +103,11 @@ contract ZeroStateChef is DiamondSetup {
             address(stakingShareV1)
         );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
-        //  vm.stopPrank();
+
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
         address curve3CrvBasePool = address(
             new MockMetaPool(address(diamond), address(crvToken))
         );
-        //vm.prank(admin);
         IManager.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,

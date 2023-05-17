@@ -36,6 +36,7 @@ contract ZeroStateStaking is DiamondSetup {
     StakingShare stakingShare;
     BondingShare stakingShareV1;
     IERC20Ubiquity governanceToken;
+
     event Deposit(
         address indexed _user,
         uint256 indexed _id,
@@ -50,8 +51,10 @@ contract ZeroStateStaking is DiamondSetup {
         uint256 amount,
         uint256 indexed stakingShareId
     );
+
     IMetaPool metapool;
     address metaPoolAddress;
+
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
 
     event MinPriceDiffToUpdateMultiplierModified(

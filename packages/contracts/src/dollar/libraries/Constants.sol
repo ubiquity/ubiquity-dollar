@@ -46,7 +46,7 @@ uint256 constant ONE = uint256(1 ether); // 3Crv has 18 decimals
 
 uint256 constant ACCURACY = 10e18;
 uint256 constant BONDING_TOKEN_ID = 1;
-uint32  constant MAX_WEIGHT = 1e6;
+uint32 constant MAX_WEIGHT = 1e6;
 // bytes16 constant ONE = (uint256(1)).fromUInt();
 
 // keccak256("Permit(address owner,address spender,

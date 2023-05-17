@@ -80,7 +80,7 @@ contract UbiquiStickSaleTest is Test {
     function testSetAllowance_ShouldSetAllowance() public {
         vm.prank(owner);
         ubiquiStickSale.setAllowance(user1, 1, 2);
-        (uint count, uint price) = ubiquiStickSale.allowance(user1);
+        (uint256 count, uint256 price) = ubiquiStickSale.allowance(user1);
         assertEq(count, 1);
         assertEq(price, 2);
     }
@@ -89,8 +89,8 @@ contract UbiquiStickSaleTest is Test {
         vm.prank(user1);
         vm.expectRevert("Ownable: caller is not the owner");
         address[] memory targetAddresses;
-        uint[] memory targetCounts;
-        uint[] memory targetPrices;
+        uint256[] memory targetCounts;
+        uint256[] memory targetPrices;
         ubiquiStickSale.batchSetAllowances(
             targetAddresses,
             targetCounts,
@@ -103,11 +103,11 @@ contract UbiquiStickSaleTest is Test {
         targetAddresses[0] = user1;
         targetAddresses[1] = user2;
 
-        uint[] memory targetCounts = new uint[](2);
+        uint256[] memory targetCounts = new uint[](2);
         targetCounts[0] = 1;
         targetCounts[1] = 2;
 
-        uint[] memory targetPrices = new uint[](2);
+        uint256[] memory targetPrices = new uint[](2);
         targetPrices[0] = 3;
         targetPrices[1] = 4;
 
@@ -118,7 +118,7 @@ contract UbiquiStickSaleTest is Test {
             targetPrices
         );
 
-        (uint count, uint price) = ubiquiStickSale.allowance(user1);
+        (uint256 count, uint256 price) = ubiquiStickSale.allowance(user1);
         assertEq(count, 1);
         assertEq(price, 3);
 
@@ -130,7 +130,7 @@ contract UbiquiStickSaleTest is Test {
     function testAllowance_ShouldReturnAllowance() public {
         vm.prank(owner);
         ubiquiStickSale.setAllowance(user1, 1, 2);
-        (uint count, uint price) = ubiquiStickSale.allowance(user1);
+        (uint256 count, uint256 price) = ubiquiStickSale.allowance(user1);
         assertEq(count, 1);
         assertEq(price, 2);
     }

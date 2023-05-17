@@ -15,6 +15,7 @@ import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
+import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables
@@ -87,5 +88,11 @@ contract DiamondInit is Modifiers {
         // These arguments are used to execute an arbitrary function using delegatecall
         // in order to set state variables in the diamond during deployment or an upgrade
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface
+
+        LibUbiquityPool.UbiquityPoolStorage storage poolStore = LibUbiquityPool
+            .ubiquityPoolStorage();
+        poolStore.mintingFee = 0;
+        poolStore.redemptionFee = 0;
+        poolStore.dollarFloor = 1000000000000000000;
     }
 }

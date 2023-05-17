@@ -11,6 +11,7 @@ import {UintUtils} from "../../../src/dollar/libraries/UintUtils.sol";
 contract AccessControlFacetTest is DiamondSetup {
     using AddressUtils for address;
     using UintUtils for uint256;
+
     address mock_sender = address(0x111);
     address mock_recipient = address(0x222);
     address mock_operator = address(0x333);
