@@ -22,13 +22,16 @@ jobs:
         uses: onbjerg/foundry-toolchain@v1
         with:
           version: nightly
+      
+      - name: Install dependencies
+        run: sudo apt-get install lcov
 
       - name: Get development branch coverage
         id: coverage-development
         run: |
           cd packages/contracts
 
-          COVERAGE_DEVELOPMENT_OUTPUT=$(./coverage.sh)
+          COVERAGE_DEVELOPMENT_OUTPUT=$(sh coverage.sh)
           echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | awk '{print $4}' | tr -d '%') >> $GITHUB_OUTPUT
 
       - name: Checkout code in PR branch
@@ -39,7 +42,7 @@ jobs:
         run: |
           cd packages/contracts
 
-          COVERAGE_PR_OUTPUT=$(./coverage.sh)
+          COVERAGE_PR_OUTPUT=$(sh coverage.sh)
           echo COVERAGE=$(echo "${COVERAGE_PR_OUTPUT}" | tail -n 1 | awk '{print $4}' | tr -d '%') >> $GITHUB_OUTPUT
 
       - name: Print coverages
