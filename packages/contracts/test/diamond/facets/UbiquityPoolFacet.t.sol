@@ -271,7 +271,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         IUbiquityPoolFacet.setRedeemActive(address(collateral), true);
         vm.startPrank(fourthAccount);
         vm.expectRevert(
-            "UbiquityDollarToken value must be less than 1 USD to redeem"
+            "Ubiquity Dollar Token value must be less than 1 USD to redeem"
         );
         IUbiquityPoolFacet.redeemDollar(address(collateral), 1 ether, 0 ether);
         vm.stopPrank();

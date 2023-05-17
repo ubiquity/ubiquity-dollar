@@ -79,14 +79,14 @@ library LibUbiquityPool {
         uint256 dollarOutMin
     ) internal mintActive(collateralAddress) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        uint256 dollarPriceUSD = getDollarPriceUSD();
+        uint256 dollarPriceUSD = getDollarPriceUsd();
         require(
             checkCollateralToken(collateralAddress),
             "Collateral Token not approved"
         );
         require(
             dollarPriceUSD >= poolStorage.dollarFloor,
-            "UbiquityDollarToken value must be 1 USD or greater to mint"
+            "Ubiquity Dollar Token value must be 1 USD or greater to mint"
         );
 
         uint8 missingDecimals = poolStorage.missingDecimals[collateralAddress];
@@ -96,7 +96,7 @@ library LibUbiquityPool {
 
         uint256 dollarAmountD18 = calcMintDollarAmount(
             collateralAmountD18,
-            getCollateralPriceCurve3(collateralAddress),
+            getCollateralPriceCurve3Pool(collateralAddress),
             getCurve3PriceUSD()
         );
 
@@ -112,7 +112,6 @@ library LibUbiquityPool {
             .tokenBalances[collateralAddress]
             .add(collateralAmount);
 
-        AppStorage storage store = LibAppStorage.appStorage();
         IERC20Ubiquity ubiquityDollarToken = IERC20Ubiquity(
             LibAppStorage.appStorage().dollarTokenAddress
         );
@@ -126,7 +125,7 @@ library LibUbiquityPool {
     ) internal redeemActive(collateralAddress) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        uint256 dollarPriceUSD = getDollarPriceUSD();
+        uint256 dollarPriceUSD = getDollarPriceUsd();
 
         require(
             checkCollateralToken(collateralAddress),
@@ -134,7 +133,7 @@ library LibUbiquityPool {
         );
         require(
             dollarPriceUSD < poolStorage.dollarFloor,
-            "UbiquityDollarToken value must be less than 1 USD to redeem"
+            "Ubiquity Dollar Token value must be less than 1 USD to redeem"
         );
 
         uint256 dollarAmountPrecision = dollarAmount.div(
@@ -142,7 +141,7 @@ library LibUbiquityPool {
         );
         uint256 collateralOut = calcRedeemCollateralAmount(
             dollarAmountPrecision,
-            getCollateralPriceCurve3(collateralAddress),
+            getCollateralPriceCurve3Pool(collateralAddress),
             getCurve3PriceUSD()
         );
 
@@ -181,7 +180,7 @@ library LibUbiquityPool {
             poolStorage.lastRedeemed[msg.sender] +
                 poolStorage.redemptionDelay >=
                 block.number,
-            "Must wait for redemptionDelay blocks before collecting"
+            "Too soon to collect"
         );
 
         bool sendCollateral = false;
@@ -295,26 +294,26 @@ library LibUbiquityPool {
 
     function calcMintDollarAmount(
         uint256 collateralAmountD18,
-        uint256 collateralPriceCurve3,
+        uint256 collateralPriceCurve3Pool,
         uint256 curve3PriceUSD
-    ) internal view returns (uint256 dollarOut) {
-        dollarOut = collateralAmountD18.mul(collateralPriceCurve3).div(
+    ) internal pure returns (uint256 dollarOut) {
+        dollarOut = collateralAmountD18.mul(collateralPriceCurve3Pool).div(
             curve3PriceUSD
         );
     }
 
     function calcRedeemCollateralAmount(
         uint256 dollarAmountD18,
-        uint256 collateralPriceCurve3,
+        uint256 collateralPriceCurve3Pool,
         uint256 curve3PriceUSD
     ) internal pure returns (uint256 collateralOut) {
-        uint256 collateralPriceUSD = (collateralPriceCurve3.mul(10e18)).div(
+        uint256 collateralPriceUSD = (collateralPriceCurve3Pool.mul(10e18)).div(
             curve3PriceUSD
         );
         collateralOut = (dollarAmountD18.mul(10e18)).div(collateralPriceUSD);
     }
 
-    function getDollarPriceUSD()
+    function getDollarPriceUsd()
         internal
         view
         returns (uint256 dollarPriceUSD)
@@ -322,15 +321,14 @@ library LibUbiquityPool {
         dollarPriceUSD = LibTWAPOracle.getTwapPrice();
     }
 
-    function getCollateralPriceCurve3(
+    function getCollateralPriceCurve3Pool(
         address collateralAddress
-    ) internal view returns (uint256 collateralPriceCurve3) {
+    ) internal view returns (uint256 collateralPriceCurve3Pool) {
         IMetaPool collateralMetaPool = ubiquityPoolStorage()
             .collateralMetaPools[collateralAddress];
 
-        collateralPriceCurve3 = collateralMetaPool.get_price_cumulative_last()[
-            0
-        ];
+        collateralPriceCurve3Pool = collateralMetaPool
+            .get_price_cumulative_last()[0];
     }
 
     function getCurve3PriceUSD()
