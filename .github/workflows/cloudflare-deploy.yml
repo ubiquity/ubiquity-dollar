@@ -28,6 +28,9 @@ jobs:
       - name: Wrangler Install
         run: yarn add wrangler
 
+      - name: Build All
+        run: yarn build:all
+
       - name: Publish to Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
