@@ -45,7 +45,7 @@ jobs:
             echo "Project not found"
             npx wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
           fi
-          npx wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"
+          npx wrangler pages deploy "$OUTPUT_DIRECTORY" --project-name "$projectName" --commit-dirty=true
 
       - name: Get UbiquiBot Token
         uses: tibdex/github-app-token@v1.7.0
