@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e # exit on error
 
 # generates lcov.info
