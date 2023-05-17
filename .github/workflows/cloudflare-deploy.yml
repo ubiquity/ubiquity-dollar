@@ -33,7 +33,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           REPOSITORY: ${{ github.repository }}
           PRODUCTION_BRANCH: "development"
-          OUTPUT_DIRECTORY: "static"
+          OUTPUT_DIRECTORY: "packages/dapp/dist"
         run: |
           IFS='/' read -ra fields <<< "$REPOSITORY"
           projectName="${fields[1]}"
