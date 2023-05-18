@@ -20,7 +20,7 @@ lcov \
     --rc lcov_branch_coverage=1 \
     --remove merged-lcov.info \
     --output-file filtered-lcov.info \
-    "*node_modules*" "*test*" "*mock*" "*scriptscripting*"
+    "*node_modules*" "*test*" "*mock*" "*scripts*"
 
 
 # Generate summary
