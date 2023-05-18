@@ -22,7 +22,7 @@ type Coupons = {
   // cspell: disable-next-line
   uDEBT: Coupon[];
   // cspell: disable-next-line
-  uBOND: number;
+  stakingShare: number;
   // cspell: disable-next-line
   uAR: number;
 };
@@ -67,7 +67,7 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
   const uDebtExpirationTime = 1640217600000;
   const uDebtUbqRedemptionRate = 0.25;
   const uadTotalSupply = 233000;
-  const uBondTotalSupply = 10000;
+  const stakingShareTotalSupply = 10000;
   const uarTotalSupply = 30000;
   const uDebtTotalSupply = 12000;
   const coupons: Coupons = {
@@ -81,7 +81,7 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
       { amount: 666, expiration: 1636934400000, swap: { amount: 166.5, unit: "UBQ" } },
     ],
     // cspell: disable-next-line
-    uBOND: 1000,
+    stakingShare: 1000,
     // cspell: disable-next-line
     uAR: 3430,
   };
@@ -103,7 +103,7 @@ export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3P
           uDebtUbqRedemptionRate={uDebtUbqRedemptionRate}
           priceIncreaseFormula={priceIncreaseFormula}
           uadTotalSupply={uadTotalSupply}
-          uBondTotalSupply={uBondTotalSupply}
+          stakingShareSupply={stakingShareTotalSupply}
           uarTotalSupply={uarTotalSupply}
           uDebtTotalSupply={uDebtTotalSupply}
           coupons={coupons}
@@ -125,7 +125,7 @@ type DebtCouponProps = {
   uDebtExpirationTime: number;
   uDebtUbqRedemptionRate: number;
   uadTotalSupply: number;
-  uBondTotalSupply: number;
+  stakingShareSupply: number;
   uarTotalSupply: number;
   uDebtTotalSupply: number;
   coupons: Coupons | null;
@@ -144,7 +144,7 @@ const DebtCoupon = memo(
     uDebtExpirationTime,
     uDebtUbqRedemptionRate,
     uadTotalSupply,
-    uBondTotalSupply,
+    stakingShareSupply,
     uarTotalSupply,
     uDebtTotalSupply,
     coupons,
@@ -252,7 +252,7 @@ const DebtCoupon = memo(
         ) : (
           <Coupons
             uadTotalSupply={uadTotalSupply}
-            uBondTotalSupply={uBondTotalSupply}
+            stakingShareSupply={stakingShareSupply}
             uarTotalSupply={uarTotalSupply}
             uDebtTotalSupply={uDebtTotalSupply}
             coupons={coupons}
@@ -266,19 +266,19 @@ const DebtCoupon = memo(
 
 type CouponsProps = {
   uadTotalSupply: number;
-  uBondTotalSupply: number;
+  stakingShareSupply: number;
   uarTotalSupply: number;
   uDebtTotalSupply: number;
   coupons: Coupons | null;
   actions: Actions;
 };
 
-export const Coupons = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupply, uDebtTotalSupply, coupons, actions }: CouponsProps) => {
+export const Coupons = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uDebtTotalSupply, coupons, actions }: CouponsProps) => {
   return (
     <>
       <RewardCycleInfo
         uadTotalSupply={uadTotalSupply}
-        uBondTotalSupply={uBondTotalSupply}
+        stakingShareSupply={stakingShareSupply}
         uarTotalSupply={uarTotalSupply}
         uDebtTotalSupply={uDebtTotalSupply}
       />
@@ -298,7 +298,7 @@ type CouponRedeemProps = {
 
 export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
   const [uarAmount, setUarAmount] = useState("");
-  const [uBondAmount, setUBondAmount] = useState("");
+  const [stakingShareAmount, setStakingShareAmount] = useState("");
   const shouldDisableInput = (type: keyof Coupons) => {
     if (!coupons) {
       return true;
@@ -307,9 +307,9 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
       // cspell: disable-next-line
       return !coupons.uAR || coupons.uAR <= 0;
       // cspell: disable-next-line
-    } else if (type === "uBOND") {
+    } else if (type === "stakingShare") {
       // cspell: disable-next-line
-      return !coupons.uBOND || coupons.uBOND <= 0;
+      return !coupons.stakingShare || coupons.stakingShare <= 0;
     }
     return false;
   };
@@ -325,15 +325,15 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
     setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
   };
 
-  const handleInputUBond = async (e: ChangeEvent) => {
+  const handleInputStakingShare = async (e: ChangeEvent) => {
     // cspell: disable-next-line
-    if (!coupons || !coupons.uBOND) {
+    if (!coupons || !coupons.stakingShare) {
       return;
     }
     const amountEl = e.target as HTMLInputElement;
     const amountValue = amountEl?.value;
     // cspell: disable-next-line
-    setUBondAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uBOND)}`);
+    setStakingShareAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.stakingShare)}`);
   };
 
   const uarToUDebtFormula = (amount: string) => {
@@ -348,11 +348,11 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
           <div>
             <div>
               {/* cspell: disable-next-line */}
-              <span>uBOND {coupons?.uBOND.toLocaleString()}</span>
+              <span>Staking Share {coupons?.stakingShare.toLocaleString()}</span>
             </div>
             <div>
               {/* cspell: disable-next-line */}
-              <input type="number" value={uBondAmount} disabled={shouldDisableInput("uBOND")} onChange={handleInputUBond} />
+              <input type="number" value={stakingShareAmount} disabled={shouldDisableInput("stakingShare")} onChange={handleInputStakingShare} />
               <button onClick={actions.onRedeem}>Redeem</button>
             </div>
           </div>
@@ -390,12 +390,12 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
 
 type RewardCycleInfoProps = {
   uadTotalSupply: number;
-  uBondTotalSupply: number;
+  stakingShareSupply: number;
   uarTotalSupply: number;
   uDebtTotalSupply: number;
 };
 
-export const RewardCycleInfo = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupply, uDebtTotalSupply }: RewardCycleInfoProps) => {
+export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uDebtTotalSupply }: RewardCycleInfoProps) => {
   return (
     <>
       <div>
@@ -429,8 +429,8 @@ export const RewardCycleInfo = ({ uadTotalSupply, uBondTotalSupply, uarTotalSupp
           <div>
             <div>
               {/* cspell: disable-next-line */}
-              <div>uBOND</div>
-              <div>{uBondTotalSupply.toLocaleString()}</div>
+              <div>stakingShare</div>
+              <div>{stakingShareSupply.toLocaleString()}</div>
             </div>
             <div>
               {/* cspell: disable-next-line */}
