@@ -29,7 +29,7 @@ lcov \
     --list filtered-lcov.info
 
 # Open more granular breakdown in browser
-if [ "$CI" != "true" ]
+if [ $HTML_REPORT ]
 then
     genhtml \
         --rc genhtml_branch_coverage=1 \
