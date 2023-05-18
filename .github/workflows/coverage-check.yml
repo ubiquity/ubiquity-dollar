@@ -29,7 +29,9 @@ jobs:
       - name: Get development branch coverage
         id: coverage-development
         run: |
-          COVERAGE_DEVELOPMENT_OUTPUT=$( cd ./packages/contracts && sh coverage.sh)
+          cd ./packages/contracts
+          chmod +x ./coverage.sh
+          COVERAGE_DEVELOPMENT_OUTPUT=$(./coverage.sh)
           echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | cut -d % -f 1 | cut -d \| -f 2) >> $GITHUB_OUTPUT
 
       - name: Checkout code in PR branch
@@ -38,7 +40,9 @@ jobs:
       - name: Get PR branch coverage
         id: coverage-pr
         run: |
-          COVERAGE_DEVELOPMENT_OUTPUT=$( cd ./packages/contracts && sh coverage.sh)
+          cd ./packages/contracts
+          chmod +x ./coverage.sh
+          COVERAGE_DEVELOPMENT_OUTPUT=$(./coverage.sh)
           echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | cut -d % -f 1 | cut -d \| -f 2) >> $GITHUB_OUTPUT
 
       - name: Print coverages
