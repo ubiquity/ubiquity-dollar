@@ -6,12 +6,12 @@ import "../../src/dollar/libraries/Constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
     event Minting(
-        address indexed mock_addr1,
-        address indexed _minter,
-        uint256 _amount
+        address indexed mockAddr1,
+        address indexed minter,
+        uint256 amount
     );
 
-    event Burning(address indexed _burned, uint256 _amount);
+    event Burning(address indexed burned, uint256 amount);
 
     // create owner and spender addresses
     address erc20_owner;
