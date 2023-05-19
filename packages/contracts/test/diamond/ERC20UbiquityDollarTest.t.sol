@@ -137,7 +137,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testBurn_ShouldBurnTokens() public {
         // mint 100 tokens to user
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.prank(admin);
         IDollar.mint(mockAddress, 100);
         assertEq(IDollar.balanceOf(mockAddress), 100);
@@ -150,19 +150,19 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testBurnFrom_ShouldRevert_IfCalledNotByTheBurnerRole() public {
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.expectRevert("Dollar token: not burner");
         IDollar.burnFrom(mockAddress, 50);
     }
 
     function testBurnFrom_ShouldRevert_IfContractIsPaused() public {
         // mint 100 tokens to user
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.prank(admin);
         IDollar.mint(mockAddress, 100);
         assertEq(IDollar.balanceOf(mockAddress), 100);
         // create burner role
-        address burner = address(0x2);
+        address burner = makeAddr("burner");
         vm.prank(admin);
         IAccessCtrl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // admin pauses contract
@@ -176,12 +176,12 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testBurnFrom_ShouldBurnTokensFromAddress() public {
         // mint 100 tokens to user
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.prank(admin);
         IDollar.mint(mockAddress, 100);
         assertEq(IDollar.balanceOf(mockAddress), 100);
         // create burner role
-        address burner = address(0x2);
+        address burner = makeAddr("burner");
         vm.prank(admin);
         IAccessCtrl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // burn 50 tokens for user
@@ -193,7 +193,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testMint_ShouldRevert_IfCalledNotByTheMinterRole() public {
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.expectRevert("Dollar token: not minter");
         IDollar.mint(mockAddress, 100);
     }
@@ -201,14 +201,14 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     function testMint_ShouldRevert_IfContractIsPaused() public {
         vm.startPrank(admin);
         IDollar.pause();
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.expectRevert("Pausable: paused");
         IDollar.mint(mockAddress, 100);
         vm.stopPrank();
     }
 
     function testMint_ShouldMintTokens() public {
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         uint256 balanceBefore = IDollar.balanceOf(mockAddress);
         vm.prank(admin);
         vm.expectEmit(true, true, false, true);
@@ -262,7 +262,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.pause();
         // transfer tokens to user
-        address userAddress = address(0x1);
+        address userAddress = makeAddr("user1");
         vm.prank(admin);
         vm.expectRevert("Pausable: paused");
         IDollar.transfer(userAddress, 10);
@@ -270,8 +270,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testTransferFrom_ShouldRevert_IfContractIsPaused() public {
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         vm.prank(admin);
         IDollar.mint(userAddress, 100);
         // admin pauses contract
@@ -289,7 +289,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
+        address userAddress = makeAddr("user1");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 10);
@@ -302,8 +302,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 100);
@@ -324,8 +324,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 100);
@@ -346,8 +346,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 100);
