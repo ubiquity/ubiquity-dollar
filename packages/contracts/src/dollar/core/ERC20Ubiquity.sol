@@ -84,14 +84,7 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
      * - the caller must have allowance for ``accounts``'s tokens of at least
      * `amount`.
      */
-    function burnFrom(
-        address account,
-        uint256 amount
-    ) public virtual whenNotPaused onlyAdmin {
-        _spendAllowance(account, _msgSender(), amount);
-        _burn(account, amount);
-        emit Burning(msg.sender, amount);
-    }
+    function burnFrom(address account, uint256 amount) public virtual;
 
     function _beforeTokenTransfer(
         address from,
