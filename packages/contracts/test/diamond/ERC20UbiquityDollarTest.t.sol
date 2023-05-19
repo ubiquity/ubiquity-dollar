@@ -24,30 +24,6 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function setUp() public override {
         super.setUp();
-        token_addr = address(diamond);
-        dollar_manager_addr = address(diamond);
-    }
-
-    function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
-        vm.expectRevert("ERC20Ubiquity: not admin");
-        IDollar.setSymbol("ANY_SYMBOL");
-    }
-
-    function testSetSymbol_ShouldSetSymbol() public {
-        vm.prank(admin);
-        IDollar.setSymbol("ANY_SYMBOL");
-        assertEq(IDollar.symbol(), "ANY_SYMBOL");
-    }
-
-    function testSetName_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
-        vm.expectRevert("ERC20Ubiquity: not admin");
-        IDollar.setName("ANY_NAME");
-    }
-
-    function testSetName_ShouldSetName() public {
-        vm.prank(admin);
-        IDollar.setName("ANY_NAME");
-        assertEq(IDollar.name(), "ANY_NAME");
         // create owner and spender addresses
         (erc20_owner, erc20_ownerPrivateKey) = makeAddrAndKey("owner");
         (erc20_spender, erc20_spenderPrivateKey) = makeAddrAndKey("spender");

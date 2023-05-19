@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
+import {ERC20, ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
+import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
@@ -19,8 +19,6 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
     // solhint-disable-next-line var-name-mixedcase
     bytes32 public immutable DOMAIN_SEPARATOR;
     mapping(address => uint256) public nonces;
-    string private _tokenName;
-    string private _symbol;
 
     // modifiers
     modifier onlyPauser() {
@@ -44,8 +42,6 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) {
-        _tokenName = name_;
-        _symbol = symbol_;
         accessCtrl = IAccessControl(_manager);
 
         uint256 chainId;
@@ -78,18 +74,6 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
     /// @param _manager new manager address
     function setManager(address _manager) external onlyAdmin {
         accessCtrl = IAccessControl(_manager);
-    }
-
-    /// @notice setSymbol update token symbol
-    /// @param newSymbol new token symbol
-    function setSymbol(string memory newSymbol) external onlyAdmin {
-        _symbol = newSymbol;
-    }
-
-    /// @notice setName update token name
-    /// @param newName new token name
-    function setName(string memory newName) external onlyAdmin {
-        _tokenName = newName;
     }
 
     /// @notice permit spending of Ubiquity Dollar. owner has signed a message allowing
@@ -171,21 +155,6 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
         _spendAllowance(account, _msgSender(), amount);
         _burn(account, amount);
         emit Burning(msg.sender, amount);
-    }
-
-    /**
-     * @dev Returns the name of the token.
-     */
-    function name() public view override(ERC20) returns (string memory) {
-        return _tokenName;
-    }
-
-    /**
-     * @dev Returns the symbol of the token, usually a shorter version of the
-     * name.
-     */
-    function symbol() public view override(ERC20) returns (string memory) {
-        return _symbol;
     }
 
     function _beforeTokenTransfer(
