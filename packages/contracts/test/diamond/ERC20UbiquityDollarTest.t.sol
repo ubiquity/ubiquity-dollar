@@ -50,7 +50,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         );
         // run permit
         vm.prank(erc20_spender);
-        vm.expectRevert("Dollar: EXPIRED");
+        vm.expectRevert("ERC20Permit: expired deadline");
         IDollar.permit(erc20_owner, erc20_spender, 1 ether, 0, v, r, s);
     }
 
@@ -78,7 +78,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         );
         // run permit
         vm.prank(erc20_spender);
-        vm.expectRevert("Dollar: INVALID_SIGNATURE");
+        vm.expectRevert("ERC20Permit: invalid signature");
         IDollar.permit(
             erc20_owner,
             erc20_spender,

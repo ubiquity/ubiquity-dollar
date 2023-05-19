@@ -2,10 +2,11 @@
 pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol";
 
 /// @title ERC20 Ubiquity preset interface
 /// @author Ubiquity DAO
-interface IERC20Ubiquity is IERC20 {
+interface IERC20Ubiquity is IERC20, IERC20Permit {
     // ----------- Events -----------
     event Minting(
         address indexed _to,
@@ -17,16 +18,6 @@ interface IERC20Ubiquity is IERC20 {
 
     // ----------- State changing api -----------
     function burn(uint256 amount) external;
-
-    function permit(
-        address owner,
-        address spender,
-        uint256 value,
-        uint256 deadline,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external;
 
     // ----------- Burner only state changing api -----------
     function burnFrom(address account, uint256 amount) external;

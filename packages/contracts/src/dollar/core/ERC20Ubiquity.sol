@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import {ERC20, ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
-import "../libraries/Constants.sol";
+import {DEFAULT_ADMIN_ROLE, PAUSER_ROLE} from "../libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 
 /// @title ERC20 Ubiquity preset
@@ -13,12 +13,8 @@ import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 /// - ERC20 minter, burner and pauser
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
-abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
+abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
     IAccessControl public accessCtrl;
-
-    // solhint-disable-next-line var-name-mixedcase
-    bytes32 public immutable DOMAIN_SEPARATOR;
-    mapping(address => uint256) public nonces;
 
     // modifiers
     modifier onlyPauser() {
@@ -41,27 +37,8 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
         address _manager,
         string memory name_,
         string memory symbol_
-    ) ERC20(name_, symbol_) {
+    ) ERC20(name_, symbol_) ERC20Permit(name_) {
         accessCtrl = IAccessControl(_manager);
-
-        uint256 chainId;
-        // solhint-disable-next-line no-inline-assembly
-        assembly {
-            chainId := chainid()
-        }
-
-        DOMAIN_SEPARATOR = keccak256(
-            abi.encode(
-                keccak256(
-                    // solhint-disable-next-line max-line-length
-                    "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
-                ),
-                keccak256(bytes(name())),
-                keccak256(bytes("1")),
-                chainId,
-                address(this)
-            )
-        );
     }
 
     /// @notice getManager returns the manager address
@@ -74,47 +51,6 @@ abstract contract ERC20Ubiquity is ERC20, ERC20Pausable, IERC20Ubiquity {
     /// @param _manager new manager address
     function setManager(address _manager) external onlyAdmin {
         accessCtrl = IAccessControl(_manager);
-    }
-
-    /// @notice permit spending of Ubiquity Dollar. owner has signed a message allowing
-    ///         spender to transfer up to amount Ubiquity Dollar
-    /// @param owner the Ubiquity Dollar holder
-    /// @param spender the approved operator
-    /// @param value the amount approved
-    /// @param deadline the deadline after which the approval is no longer valid
-    function permit(
-        address owner,
-        address spender,
-        uint256 value,
-        uint256 deadline,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external override {
-        // solhint-disable-next-line not-rely-on-time
-        require(deadline >= block.timestamp, "Dollar: EXPIRED");
-        bytes32 digest = keccak256(
-            abi.encodePacked(
-                "\x19\x01",
-                DOMAIN_SEPARATOR,
-                keccak256(
-                    abi.encode(
-                        PERMIT_TYPEHASH,
-                        owner,
-                        spender,
-                        value,
-                        nonces[owner]++,
-                        deadline
-                    )
-                )
-            )
-        );
-        address recoveredAddress = ecrecover(digest, v, r, s);
-        require(
-            recoveredAddress != address(0) && recoveredAddress == owner,
-            "Dollar: INVALID_SIGNATURE"
-        );
-        _approve(owner, spender, value);
     }
 
     // @dev Pauses all token transfers.
