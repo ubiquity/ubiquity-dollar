@@ -16,6 +16,12 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     event Burning(address indexed _burned, uint256 _amount);
 
+    // create owner and spender addresses
+    address erc20_owner;
+    uint256 erc20_ownerPrivateKey;
+    address erc20_spender;
+    uint256 erc20_spenderPrivateKey;
+
     function setUp() public override {
         super.setUp();
         token_addr = address(diamond);
@@ -42,14 +48,12 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.setName("ANY_NAME");
         assertEq(IDollar.name(), "ANY_NAME");
+        // create owner and spender addresses
+        (erc20_owner, erc20_ownerPrivateKey) = makeAddrAndKey("owner");
+        (erc20_spender, erc20_spenderPrivateKey) = makeAddrAndKey("spender");
     }
 
     function testPermit_ShouldRevert_IfDeadlineExpired() public {
-        // create owner and spender addresses
-        uint256 ownerPrivateKey = 0x1;
-        uint256 spenderPrivateKey = 0x2;
-        address curOwner = vm.addr(ownerPrivateKey);
-        address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
         bytes32 digest = keccak256(
             abi.encodePacked(
@@ -58,28 +62,26 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
-                        curOwner,
-                        spender,
-                        1e18,
-                        IDollar.nonces(curOwner),
+                        erc20_owner,
+                        erc20_spender,
+                        1 ether,
+                        IDollar.nonces(erc20_owner),
                         0
                     )
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(
+            erc20_ownerPrivateKey,
+            digest
+        );
         // run permit
-        vm.prank(spender);
+        vm.prank(erc20_spender);
         vm.expectRevert("Dollar: EXPIRED");
-        IDollar.permit(curOwner, spender, 1e18, 0, v, r, s);
+        IDollar.permit(erc20_owner, erc20_spender, 1 ether, 0, v, r, s);
     }
 
     function testPermit_ShouldRevert_IfSignatureIsInvalid() public {
-        // create owner and spender addresses
-        uint256 ownerPrivateKey = 0x1;
-        uint256 spenderPrivateKey = 0x2;
-        address owner = vm.addr(ownerPrivateKey);
-        address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
         bytes32 digest = keccak256(
             abi.encodePacked(
@@ -88,28 +90,34 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
-                        owner,
-                        spender,
-                        1e18,
-                        IDollar.nonces(owner),
+                        erc20_owner,
+                        erc20_spender,
+                        1 ether,
+                        IDollar.nonces(erc20_owner),
                         block.timestamp + 1 days
                     )
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(spenderPrivateKey, digest);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(
+            erc20_spenderPrivateKey,
+            digest
+        );
         // run permit
-        vm.prank(spender);
+        vm.prank(erc20_spender);
         vm.expectRevert("Dollar: INVALID_SIGNATURE");
-        IDollar.permit(owner, spender, 1e18, block.timestamp + 1 days, v, r, s);
+        IDollar.permit(
+            erc20_owner,
+            erc20_spender,
+            1 ether,
+            block.timestamp + 1 days,
+            v,
+            r,
+            s
+        );
     }
 
     function testPermit_ShouldIncreaseSpenderAllowance() public {
-        // create owner and spender addresses
-        uint256 ownerPrivateKey = 0x1;
-        uint256 spenderPrivateKey = 0x2;
-        address owner = vm.addr(ownerPrivateKey);
-        address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
         bytes32 digest = keccak256(
             abi.encodePacked(
@@ -118,22 +126,33 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
-                        owner,
-                        spender,
-                        1e18,
-                        IDollar.nonces(owner),
+                        erc20_owner,
+                        erc20_spender,
+                        1 ether,
+                        IDollar.nonces(erc20_owner),
                         block.timestamp + 1 days
                     )
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(
+            erc20_ownerPrivateKey,
+            digest
+        );
         // run permit
-        uint256 noncesBefore = IDollar.nonces(owner);
-        vm.prank(spender);
-        IDollar.permit(owner, spender, 1e18, block.timestamp + 1 days, v, r, s);
-        assertEq(IDollar.allowance(owner, spender), 1e18);
-        assertEq(IDollar.nonces(owner), noncesBefore + 1);
+        uint256 noncesBefore = IDollar.nonces(erc20_owner);
+        vm.prank(erc20_spender);
+        IDollar.permit(
+            erc20_owner,
+            erc20_spender,
+            1 ether,
+            block.timestamp + 1 days,
+            v,
+            r,
+            s
+        );
+        assertEq(IDollar.allowance(erc20_owner, erc20_spender), 1 ether);
+        assertEq(IDollar.nonces(erc20_owner), noncesBefore + 1);
     }
 
     function testBurn_ShouldRevert_IfContractIsPaused() public {
