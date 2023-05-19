@@ -5,9 +5,6 @@ import "./DiamondTestSetup.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
-    address token_addr;
-    address dollar_manager_addr;
-
     event Minting(
         address indexed mock_addr1,
         address indexed _minter,
