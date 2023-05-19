@@ -282,6 +282,17 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.expectRevert("Pausable: paused");
         vm.prank(user2Address);
         IDollar.transferFrom(userAddress, user2Address, 100);
+
+        // admin unpauses contract
+        vm.prank(admin);
+        IDollar.unpause();
+
+        // transfer now should work
+        vm.prank(user2Address);
+        IDollar.transferFrom(userAddress, user2Address, 100);
+
+        assertEq(IDollar.balanceOf(userAddress), 0);
+        assertEq(IDollar.balanceOf(user2Address), 100);
     }
 
     function testTransfer_ShouldTransferTokens() public {
