@@ -95,8 +95,6 @@ contract Modifiers {
         _;
     }
 
-    // ... Rest of the modifiers ...
-
     modifier whenNotPaused() {
         require(!LibAppStorage.appStorage().paused, "Pausable: paused");
         _;
