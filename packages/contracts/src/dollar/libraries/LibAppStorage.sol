@@ -91,11 +91,43 @@ contract Modifiers {
         // https://eips.ethereum.org/EIPS/eip-2200)
         store.reentrancyStatus = store.NOT_ENTERED;
     }
-            
+
     modifier onlyOwner() {
         LibDiamond.enforceIsContractOwner();
         _;
     }
+    
+    modifier onlyAdmin() {
+        require(
+            LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            "Manager: Caller is not admin"
+        );
+        _;
+    }
+
+    modifier onlyMinter() {
+        require(
+            LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            "Governance token: not minter"
+        );
+        _;
+    }
+
+    modifier onlyBurner() {
+        require(
+            LibAccessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            "Governance token: not burner"
+        );
+        _;
+    }
+
+    /**
+     * @dev Modifier to make a function callable only when the contract is not paused.
+     *
+     * Requirements:
+     *
+     * - The contract must not be paused.
+     */
 
     modifier onlyCreditNFTManager() {
         require(
