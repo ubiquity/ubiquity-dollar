@@ -142,6 +142,13 @@ contract Modifiers {
         _;
     }
 
+    /**
+     * @dev Modifier to make a function callable only when the contract is paused.
+     *
+     * Requirements:
+     *
+     * - The contract must be paused.
+     */
     modifier whenPaused() {
         require(LibAppStorage.appStorage().paused, "Pausable: not paused");
         _;
