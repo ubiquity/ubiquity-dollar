@@ -44,10 +44,6 @@ library LibAppStorage {
 contract Modifiers {
     AppStorage internal store;
 
-    // reentrancy constants
-    uint256 constant private _NOT_ENTERED = 1;
-    uint256 constant private _ENTERED = 2;
-
     /**
      * @dev Prevents a contract from calling itself, directly or indirectly.
      * Calling a `nonReentrant` function from another `nonReentrant`
