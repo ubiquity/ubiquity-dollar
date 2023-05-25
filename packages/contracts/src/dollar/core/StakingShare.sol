@@ -8,10 +8,7 @@ import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
-contract StakingShare is
-    ERC1155Ubiquity,
-    ERC1155URIStorage
-{
+contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     using SafeAddArray for uint256[];
 
     struct Stake {
@@ -66,8 +63,7 @@ contract StakingShare is
     constructor(
         address _manager,
         string memory uri
-    ) ERC1155Ubiquity(_manager, uri) {
-    }
+    ) ERC1155Ubiquity(_manager, uri) {}
 
     /// @dev update stake LP amount , LP rewards debt and end block.
     /// @param _stakeId staking share id
@@ -187,7 +183,13 @@ contract StakingShare is
 
     function uri(
         uint256 tokenId
-    ) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory) {
+    )
+        public
+        view
+        virtual
+        override(ERC1155, ERC1155URIStorage)
+        returns (string memory)
+    {
         return super.uri(tokenId);
     }
 
@@ -204,15 +206,18 @@ contract StakingShare is
     }
 
     /**
-     *@dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     * @dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
      */
 
-    function setUri(uint256 tokenId, string memory tokenUri) external onlyMinter {
+    function setUri(
+        uint256 tokenId,
+        string memory tokenUri
+    ) external onlyMinter {
         _setURI(tokenId, tokenUri);
     }
 
     /**
-     *@dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
+     * @dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
      */
     function setBaseUri(string memory newUri) external onlyMinter {
         _setBaseURI(newUri);

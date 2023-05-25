@@ -85,7 +85,7 @@ contract UbiquiStickTest is Test {
         vm.prank(minter);
         ubiquiStick.setTokenURI(INVISIBLE_TYPE, "TOKEN_URI_INVISIBLE");
         // mint 42 tokens, token with id 42 is invisible
-        for (uint i = 1; i <= 42; i++) {
+        for (uint256 i = 1; i <= 42; i++) {
             vm.prank(minter);
             ubiquiStick.safeMint(user);
         }

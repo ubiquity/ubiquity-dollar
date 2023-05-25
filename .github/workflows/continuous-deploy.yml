@@ -21,6 +21,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.14.1"
+          
+      - name: Wrangler Install
+        run: npm install -g wrangler
 
       - name: "Download Artifact"
         uses: actions/github-script@v6.3.3
@@ -42,12 +45,23 @@ jobs:
           ls -la
 
       - name: Deploy Cloudflare
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: uad-ubq-fi
-          directory: ./dist
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          PRODUCTION_BRANCH: "development"      
+          OUTPUT_DIRECTORY: "dist"
+        run: |
+          IFS='/' read -ra fields <<< "$REPOSITORY"
+          projectName="${fields[1]}"
+          echo $projectName
+          wrangler pages project list > project_list.txt
+          if grep -q $projectName project_list.txt; then
+            echo "Project found"
+          else
+            echo "Project not found"
+            wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
+          fi
+          wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"
 
       # - name: Deploy Railway
       #   run: |

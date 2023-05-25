@@ -29,6 +29,7 @@ struct AppStorage {
     address ubiquiStickAddress;
     address bondingCurveAddress;
     address bancorFormulaAddress;
+    address curveDollarIncentiveAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;
@@ -51,7 +52,7 @@ contract Modifiers {
      * function is not supported. It is possible to prevent this from happening
      * by making the `nonReentrant` function external, and making it call a
      * `private` function that does the actual work.
-
+     *
      * @dev Works identically to OZ's nonReentrant.
      * @dev Used to avoid state storage collision within diamond.
      */
@@ -148,6 +149,7 @@ contract Modifiers {
         );
         _;
     }
+
     modifier onlyTokenManager() {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
@@ -160,6 +162,14 @@ contract Modifiers {
         require(
             LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditCalc: not admin"
+        );
+        _;
+    }
+
+    modifier onlyDollarManager() {
+        require(
+            LibAccessControl.hasRole(CURVE_DOLLAR_MANAGER_ROLE, msg.sender),
+            "CurveIncentive: Caller is not Ubiquity Dollar"
         );
         _;
     }

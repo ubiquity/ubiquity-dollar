@@ -12,6 +12,7 @@ library LibAccessControl {
     using AddressUtils for address;
     using EnumerableSet for EnumerableSet.AddressSet;
     using UintUtils for uint256;
+
     bytes32 constant ACCESS_CONTROL_STORAGE_SLOT =
         keccak256("ubiquity.contracts.access.control.storage");
 

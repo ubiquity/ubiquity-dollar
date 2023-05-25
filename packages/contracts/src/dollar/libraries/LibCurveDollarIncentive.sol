@@ -1,64 +1,65 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
-// TODO ADAPT FOR DIAMOND
-/*
-import "../core/TWAPOracleDollar3pool.sol";
-import "../core/UbiquityDollarManager.sol";
+pragma solidity ^0.8.19;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "./LibTWAPOracle.sol";
 import "../core/UbiquityDollarToken.sol";
 import "../interfaces/IUbiquityGovernance.sol";
-import "../interfaces/IIncentive.sol";
 import "abdk/ABDKMathQuad.sol";
+import "./Constants.sol";
+import {LibAppStorage} from "./LibAppStorage.sol";
 
- /// @title Curve trading incentive contract
-/// @author Ubiquity DAO
-/// @dev incentives
-contract CurveDollarIncentive is IIncentive {
+library LibCurveDollarIncentive {
+    using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    UbiquityDollarManager public immutable manager;
-    bool public isSellPenaltyOn = true;
-    bool public isBuyIncentiveOn = true;
-    bytes16 private immutable _one = (uint256(1 ether)).fromUInt();
-    mapping(address => bool) private _exempt;
+    bytes32 constant CURVE_DOLLAR_STORAGE_SLOT = 
+        keccak256("ubiquity.contracts.curve.storage");
+    
+    bytes16 constant _one = bytes16(abi.encodePacked(uint256(1 ether)));
 
-    event ExemptAddressUpdate(address indexed _account, bool _isExempt);
+    event ExemptAddressUpdate(
+        address indexed _account,
+        bool _isExempt
+    );
 
-    modifier onlyAdmin() {
-        require(
-            manager.hasRole(manager.INCENTIVE_MANAGER_ROLE(), msg.sender),
-            "CurveIncentive: not admin"
-        );
-        _;
+    struct CurveDollarData {
+        bool isSellPenaltyOn;
+        bool isBuyIncentiveOn;
+        mapping(address => bool) _exempt;
     }
 
-    modifier onlyDollar() {
-        require(
-            msg.sender == manager.dollarTokenAddress(),
-            "CurveIncentive: Caller is not Ubiquity Dollar"
-        );
-        _;
+    function curveDollarStorage() internal pure returns (CurveDollarData storage l) {
+        bytes32 slot = CURVE_DOLLAR_STORAGE_SLOT;
+        assembly {
+            l.slot := slot
+        }
     }
 
-    /// @notice CurveIncentive constructor
-    /// @param _manager Ubiquity Dollar Manager
-    constructor(UbiquityDollarManager _manager) {
-        manager = _manager;
+    function isSellPenaltyOn() internal view returns (bool) {
+        CurveDollarData storage ss = curveDollarStorage(); 
+        return ss.isSellPenaltyOn;
+    }
+
+    function isBuyIncentiveOn() internal view returns (bool) {
+        CurveDollarData storage ss = curveDollarStorage(); 
+        return ss.isBuyIncentiveOn;
     }
 
     function incentivize(
         address sender,
         address receiver,
-        address,
         uint256 amountIn
-    ) external override onlyDollar {
+    ) internal {
         require(sender != receiver, "CurveIncentive: cannot send self");
 
-        if (sender == manager.stableSwapMetaPoolAddress()) {
+        if (sender == LibAppStorage.appStorage().stableSwapMetaPoolAddress) {
             _incentivizeBuy(receiver, amountIn);
         }
 
-        if (receiver == manager.stableSwapMetaPoolAddress()) {
+        if (receiver == LibAppStorage.appStorage().stableSwapMetaPoolAddress) {
             _incentivizeSell(sender, amountIn);
         }
     }
@@ -69,29 +70,35 @@ contract CurveDollarIncentive is IIncentive {
     function setExemptAddress(
         address account,
         bool isExempt
-    ) external onlyAdmin {
-        _exempt[account] = isExempt;
+    ) internal {
+        CurveDollarData storage ss = curveDollarStorage();
+        ss._exempt[account] = isExempt;
         emit ExemptAddressUpdate(account, isExempt);
     }
 
     /// @notice switch the sell penalty
-    function switchSellPenalty() external onlyAdmin {
-        isSellPenaltyOn = !isSellPenaltyOn;
+    function switchSellPenalty() internal {
+        CurveDollarData storage ss = curveDollarStorage();
+        ss.isSellPenaltyOn = !ss.isSellPenaltyOn;
     }
 
     /// @notice switch the buy incentive
-    function switchBuyIncentive() external onlyAdmin {
-        isBuyIncentiveOn = !isBuyIncentiveOn;
+    function switchBuyIncentive() internal {
+        CurveDollarData storage ss = curveDollarStorage();
+        ss.isBuyIncentiveOn = !ss.isBuyIncentiveOn;
     }
 
     /// @notice returns true if account is marked as exempt
-    function isExemptAddress(address account) public view returns (bool) {
-        return _exempt[account];
+    function isExemptAddress(address account) internal view returns (bool) {
+        CurveDollarData storage ss = curveDollarStorage();
+        return ss._exempt[account];
     }
 
     function _incentivizeSell(address target, uint256 amount) internal {
-        _updateOracle();
-        if (isExemptAddress(target) || !isSellPenaltyOn) {
+
+        CurveDollarData storage ss = curveDollarStorage();
+
+        if (isExemptAddress(target) || !ss.isSellPenaltyOn) {
             return;
         }
 
@@ -112,22 +119,23 @@ contract CurveDollarIncentive is IIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityDollarToken(manager.dollarTokenAddress()).balanceOf(
+                UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress).balanceOf(
                     target
                 ) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
-            UbiquityDollarToken(manager.dollarTokenAddress()).burnFrom(
+            UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(
                 target,
                 penalty
             ); // burn from the recipient
         }
+        LibTWAPOracle.update();
     }
 
     function _incentivizeBuy(address target, uint256 amountIn) internal {
-        _updateOracle();
+        CurveDollarData storage ss = curveDollarStorage();
 
-        if (isExemptAddress(target) || !isBuyIncentiveOn) {
+        if (isExemptAddress(target) || !ss.isBuyIncentiveOn) {
             return;
         }
 
@@ -138,11 +146,12 @@ contract CurveDollarIncentive is IIncentive {
 
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of Governance Token
-            IUbiquityGovernanceToken(manager.governanceTokenAddress()).mint(
+            IUbiquityGovernanceToken(LibAppStorage.appStorage().dollarTokenAddress).mint(
                 target,
                 incentive
             );
         }
+        LibTWAPOracle.update();
     }
 
     /// @notice returns the percentage of deviation from the peg multiplied by amount
@@ -150,7 +159,6 @@ contract CurveDollarIncentive is IIncentive {
     function _getPercentDeviationFromUnderPeg(
         uint256 amount
     ) internal returns (uint256) {
-        _updateOracle();
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
@@ -159,17 +167,14 @@ contract CurveDollarIncentive is IIncentive {
         bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
         return res.div(_one).toUInt();
-    }
-
-    function _updateOracle() internal {
-        TWAPOracleDollar3pool(manager.twapOracleAddress()).update();
+        LibTWAPOracle.update();
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
         return
-            TWAPOracleDollar3pool(manager.twapOracleAddress()).consult(
-                manager.dollarTokenAddress()
+            LibTWAPOracle.consult(
+                LibAppStorage.appStorage().dollarTokenAddress
             );
     }
 }
- */
+

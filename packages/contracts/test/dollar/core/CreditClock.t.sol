@@ -70,7 +70,7 @@ contract CreditClockTest is LocalTestHelper {
     function calculateRate(
         bytes16 _rateStartValue,
         bytes16 _ratePerBlock,
-        uint blockDelta
+        uint256 blockDelta
     ) public view returns (bytes16 rate) {
         rate = _rateStartValue.mul(
             one.div(pow(one.add(_ratePerBlock), (blockDelta).fromUInt()))
@@ -78,7 +78,7 @@ contract CreditClockTest is LocalTestHelper {
     }
 
     function test() public {
-        uint rateStartBlock = block.number;
+        uint256 rateStartBlock = block.number;
         bytes16 rateStartValue = uint256(1000000).fromUInt();
         bytes16 ratePerBlock = uint256(1).fromUInt().div(
             uint256(100).fromUInt()

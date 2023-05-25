@@ -15,6 +15,7 @@ library LibCollectableDust {
     using AddressUtils for address;
     using EnumerableSet for EnumerableSet.AddressSet;
     using UintUtils for uint256;
+
     event DustSent(address _to, address token, uint256 amount);
     event ProtocolTokenAdded(address _token);
     event ProtocolTokenRemoved(address _token);
@@ -22,6 +23,7 @@ library LibCollectableDust {
     struct Tokens {
         EnumerableSet.AddressSet protocolTokens;
     }
+
     bytes32 constant COLLECTABLE_DUST_CONTROL_STORAGE_SLOT =
         keccak256("ubiquity.contracts.collectable.dust.storage");
 
