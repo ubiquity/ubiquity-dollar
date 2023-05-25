@@ -72,14 +72,13 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         baseY = bound(baseY, 1, 1000000);
         uint256 tokenIds;
 
-        vm.expectEmit(true, false, false, true);
-        emit Deposit(secondAccount, collateralDeposited);
-
         vm.prank(admin);
         IBondingCurveFacet.setParams(connectorWeight, baseY);
 
         uint256 initBal = IDollar.balanceOf(secondAccount);
 
+        vm.expectEmit(true, false, false, true);
+        emit Deposit(secondAccount, collateralDeposited);
         IBondingCurveFacet.deposit(collateralDeposited, secondAccount);
 
         uint256 finBal = IDollar.balanceOf(secondAccount);
