@@ -62,7 +62,8 @@ library LibCollectableDust {
             "collectable-dust::token-is-part-of-the-protocol"
         );
         if (_token == ETH_ADDRESS) {
-            payable(_to).transfer(_amount);
+            (bool result, ) = _to.call{value: _amount}("");
+            require(result, "Failed to send Ether");
         } else {
             IERC20(_token).safeTransfer(_to, _amount);
         }
