@@ -14,6 +14,7 @@ import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 /// - draft-ERC20 permit
 /// - Ubiquity Manager access control
 abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
+    string private _symbol;
     IAccessControl public accessCtrl;
 
     // modifiers
@@ -38,7 +39,18 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
         string memory name_,
         string memory symbol_
     ) ERC20(name_, symbol_) ERC20Permit(name_) {
+        _symbol = symbol_;
         accessCtrl = IAccessControl(_manager);
+    }
+
+    /// @notice setSymbol update token symbol
+    /// @param newSymbol new token symbol
+    function setSymbol(string memory newSymbol) external onlyAdmin {
+        _symbol = newSymbol;
+    }
+
+    function symbol() public view virtual override returns (string memory) {
+        return _symbol;
     }
 
     /// @notice getManager returns the manager address

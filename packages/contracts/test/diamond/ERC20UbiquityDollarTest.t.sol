@@ -26,6 +26,17 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         (erc20Spender, erc20SpenderPrivateKey) = makeAddrAndKey("spender");
     }
 
+    function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
+        vm.expectRevert("ERC20Ubiquity: not admin");
+        IDollar.setSymbol("ANY_SYMBOL");
+    }
+
+    function testSetSymbol_ShouldSetSymbol() public {
+        vm.prank(admin);
+        IDollar.setSymbol("ANY_SYMBOL");
+        assertEq(IDollar.symbol(), "ANY_SYMBOL");
+    }
+
     function testPermit_ShouldRevert_IfDeadlineExpired() public {
         // create owner's signature
         bytes32 digest = keccak256(
