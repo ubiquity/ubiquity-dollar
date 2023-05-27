@@ -56,6 +56,25 @@ contract Modifiers {
      * @dev Works identically to OZ's nonReentrant.
      * @dev Used to avoid state storage collision within diamond.
      */
+    // Getters and setters for each variable in AppStorage
+
+    function getDollarTokenAddress() internal view returns (address) {
+        return LibAppStorage.appStorage().dollarTokenAddress;
+    }
+
+    function setDollarTokenAddress(address newValue) internal {
+        LibAppStorage.appStorage().dollarTokenAddress = newValue;
+    }
+
+    function getCreditNftAddress() internal view returns (address) {
+        return LibAppStorage.appStorage().creditNftAddress;
+    }
+
+    function setCreditNftAddress(address newValue) internal {
+        LibAppStorage.appStorage().creditNftAddress = newValue;
+    }
+
+    // Implement getters and setters for other variables in AppStorage
 
     modifier nonReentrant() {
         // On the first call to nonReentrant, _notEntered will be true
@@ -77,15 +96,7 @@ contract Modifiers {
         LibDiamond.enforceIsContractOwner();
         _;
     }
-
-    modifier onlyCreditNFTManager() {
-        require(
-            LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
-            "Caller is not a Credit NFT manager"
-        );
-        _;
-    }
-
+    
     modifier onlyAdmin() {
         require(
             LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
@@ -117,8 +128,17 @@ contract Modifiers {
      *
      * - The contract must not be paused.
      */
+
+    modifier onlyCreditNFTManager() {
+        require(
+            LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            "Caller is not a Credit NFT manager"
+        );
+        _;
+    }
+
     modifier whenNotPaused() {
-        require(!LibAccessControl.paused(), "Pausable: paused");
+        require(!LibAppStorage.appStorage().paused, "Pausable: paused");
         _;
     }
 
@@ -130,7 +150,7 @@ contract Modifiers {
      * - The contract must be paused.
      */
     modifier whenPaused() {
-        require(LibAccessControl.paused(), "Pausable: not paused");
+        require(LibAppStorage.appStorage().paused, "Pausable: not paused");
         _;
     }
 
@@ -174,3 +194,4 @@ contract Modifiers {
         _;
     }
 }
+
