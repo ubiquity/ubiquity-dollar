@@ -220,6 +220,8 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         require(lpAmount >= 1 && lpAmount <= 100e18);
         require(lockup >= 1 && lockup <= 208);
         uint256 preBalance = metapool.balanceOf(stakingMinAccount);
+        vm.startPrank(stakingMinAccount);
+        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
         vm.expectEmit(true, false, false, true);
         emit Deposit(
             stakingMinAccount,
@@ -233,8 +235,6 @@ contract ZeroStateStakingTest is ZeroStateStaking {
             lockup,
             (block.number + lockup * IStakingFacet.blockCountInAWeek())
         );
-        vm.startPrank(stakingMinAccount);
-        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
         IStakingFacet.deposit(lpAmount, lockup);
         assertEq(metapool.balanceOf(stakingMinAccount), preBalance - lpAmount);
     }
