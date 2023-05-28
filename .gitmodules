@@ -1,30 +1,40 @@
 [submodule "packages/contracts/lib/Uniswap/v2-periphery"]
 	path = packages/contracts/lib/Uniswap/v2-periphery
 	url = https://github.com/Uniswap/v2-periphery.git
+	branch = master
 [submodule "packages/contracts/lib/Uniswap/v2-core"]
 	path = packages/contracts/lib/Uniswap/v2-core
 	url = https://github.com/Uniswap/v2-core.git
+	branch = master
 [submodule "packages/contracts/lib/solidity-linked-list"]
 	path = packages/contracts/lib/solidity-linked-list
 	url = https://github.com/vittominacori/solidity-linked-list
+	branch = master
 [submodule "packages/contracts/lib/openzeppelin-contracts"]
 	path = packages/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+	branch = master
 [submodule "packages/contracts/lib/forge-std"]
 	path = packages/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+	branch = master
 [submodule "packages/contracts/lib/abdk-libraries-solidity"]
 	path = packages/contracts/lib/abdk-libraries-solidity
 	url = https://github.com/abdk-consulting/abdk-libraries-solidity
+	branch = master
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
+	branch = main
 [submodule "packages/contracts/lib/Uniswap/v3-periphery"]
 	path = packages/contracts/lib/Uniswap/v3-periphery
 	url = https://github.com/Uniswap/v3-periphery.git
+	branch = main
 [submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-periphery"]
 	path = packages/contracts/packages/contracts/lib/Uniswap/v2-periphery
 	url = https://github.com/Uniswap/v2-periphery.git
+	branch = master
 [submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-core"]
 	path = packages/contracts/packages/contracts/lib/Uniswap/v2-core
 	url = https://github.com/Uniswap/v2-core
+	branch = master
