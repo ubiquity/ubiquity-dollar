@@ -36,6 +36,7 @@ const sendTokens = async () => {
       "10000000000000000000000", //10,000e18
       "--from",
       curveWhale,
+      "--unlocked",
     ],
     {
       stdio: "inherit",
