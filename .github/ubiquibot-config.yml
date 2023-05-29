@@ -22,7 +22,7 @@ time-labels:
   weight: 4
   value: 2592000
   target: 'Price: 400+ USD'
-priorityLabels:
+priority-labels:
 - name: 'Priority: 0 (Normal)'
   weight: 1
   target: 'Price: 100+ USD'
