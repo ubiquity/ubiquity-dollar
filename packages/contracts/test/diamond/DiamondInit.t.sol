@@ -21,5 +21,8 @@ contract DiamondInitTest is Test {
             creditNFTLengthBlocks: 100
         });
         dInit.init(initArgs);
+
+        uint256 reentrancyStatus = uint256(vm.load(address(dInit), 0));
+        assertEq(reentrancyStatus, 1);
     }
 }
