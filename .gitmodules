@@ -30,3 +30,11 @@
 	path = packages/contracts/lib/Uniswap/v3-periphery
 	url = https://github.com/Uniswap/v3-periphery.git
 	tag = v1.3.0
+[submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-periphery"]
+	path = packages/contracts/packages/contracts/lib/Uniswap/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery.git
+	tag = v1.0.0-beta.0
+[submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-core"]
+	path = packages/contracts/packages/contracts/lib/Uniswap/v2-core
+	url = https://github.com/Uniswap/v2-core
+	tag = v1.0.1
