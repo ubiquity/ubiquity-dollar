@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
+
 import "../../../../src/dollar/libraries/Constants.sol";
 import "forge-std/Script.sol";
 

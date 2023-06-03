@@ -119,12 +119,14 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         // Calculate any excess/unspent funds and transfer it back to the buyer
         if (msg.value > paid) {
             uint256 unspent = msg.value - paid;
-            payable(msg.sender).transfer(unspent);
+            (bool result, ) = msg.sender.call{value: unspent}("");
+            require(result, "Failed to send Ether");
             emit Payback(msg.sender, unspent);
         }
     }
 
     function withdraw() public nonReentrant onlyOwner {
-        payable(fundsAddress).transfer(address(this).balance);
+        (bool result, ) = fundsAddress.call{value: address(this).balance}("");
+        require(result, "Failed to send Ether");
     }
 }

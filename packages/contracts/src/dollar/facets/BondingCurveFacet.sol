@@ -5,16 +5,17 @@ import {LibBondingCurve} from "../libraries/LibBondingCurve.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
 import {IBondingCurve} from "../../dollar/interfaces/IBondingCurve.sol";
+
 /**
  * @title Bonding Curve
  * @dev Bonding curve contract based on Bancor formula
  * Inspired from Bancor protocol
  * https://github.com/bancorprotocol/contracts
  */
-contract BondingCurveFacet is Modifiers, IBondingCurve {
 
+contract BondingCurveFacet is Modifiers, IBondingCurve {
     function setParams(
-        uint32 _connectorWeight, 
+        uint32 _connectorWeight,
         uint256 _baseY
     ) external onlyAdmin {
         LibBondingCurve.setParams(_connectorWeight, _baseY);
@@ -32,13 +33,14 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         return LibBondingCurve.poolBalance();
     }
 
-    /// @notice 
-    /// @dev 
+    /// @notice
+    /// @dev
     /// @param _collateralDeposited Amount of collateral
     /// @param _recipient An address to receive the NFT
-    function deposit(uint256 _collateralDeposited, address _recipient)
-        external
-    {
+    function deposit(
+        uint256 _collateralDeposited,
+        address _recipient
+    ) external {
         LibBondingCurve.deposit(_collateralDeposited, _recipient);
     }
 
@@ -60,7 +62,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
      * @param _connectorWeight   connector weight, represented in ppm, 1 - 1,000,000
      * @param _supply          current Token supply
      * @param _connectorBalance   total connector balance
-     * 
+     *
      * @return amount of Tokens minted
      */
     function purchaseTargetAmount(
@@ -68,13 +70,14 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         uint32 _connectorWeight,
         uint256 _supply,
         uint256 _connectorBalance
-    ) external returns(uint256) {
-        return LibBondingCurve.purchaseTargetAmount(
-            _tokensDeposited,
-            _connectorWeight,
-            _supply,
-            _connectorBalance
-        );
+    ) external returns (uint256) {
+        return
+            LibBondingCurve.purchaseTargetAmount(
+                _tokensDeposited,
+                _connectorWeight,
+                _supply,
+                _connectorBalance
+            );
     }
 
     /**
@@ -87,7 +90,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
      * @param _connectorWeight      connector weight, represented in ppm, 1 - 1,000,000
      * @param _baseX                constant x
      * @param _baseY                expected price
-     * 
+     *
      * @return amount of Tokens minted
      */
     function purchaseTargetAmountFromZero(
@@ -96,11 +99,12 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         uint256 _baseX,
         uint256 _baseY
     ) external returns (uint256) {
-        return LibBondingCurve.purchaseTargetAmountFromZero(
-            _tokensDeposited,
-            _connectorWeight,
-            _baseX,
-            _baseY
-        );
+        return
+            LibBondingCurve.purchaseTargetAmountFromZero(
+                _tokensDeposited,
+                _connectorWeight,
+                _baseX,
+                _baseY
+            );
     }
 }

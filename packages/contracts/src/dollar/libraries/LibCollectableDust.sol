@@ -15,6 +15,7 @@ library LibCollectableDust {
     using AddressUtils for address;
     using EnumerableSet for EnumerableSet.AddressSet;
     using UintUtils for uint256;
+
     event DustSent(address _to, address token, uint256 amount);
     event ProtocolTokenAdded(address _token);
     event ProtocolTokenRemoved(address _token);
@@ -22,6 +23,7 @@ library LibCollectableDust {
     struct Tokens {
         EnumerableSet.AddressSet protocolTokens;
     }
+
     bytes32 constant COLLECTABLE_DUST_CONTROL_STORAGE_SLOT =
         bytes32(
             uint256(keccak256("ubiquity.contracts.collectable.dust.storage")) -
@@ -63,7 +65,8 @@ library LibCollectableDust {
             "collectable-dust::token-is-part-of-the-protocol"
         );
         if (_token == ETH_ADDRESS) {
-            payable(_to).transfer(_amount);
+            (bool result, ) = _to.call{value: _amount}("");
+            require(result, "Failed to send Ether");
         } else {
             IERC20(_token).safeTransfer(_to, _amount);
         }

@@ -23,6 +23,7 @@ contract DepositStakingShare is LocalTestHelper {
     uint256[] creationBlock;
     IMetaPool metapool;
     StakingShare stakingShare;
+
     event Paused(address _caller);
     event Unpaused(address _caller);
     event TransferSingle(
@@ -365,13 +366,13 @@ contract StakingShareTest is DepositStakingShare {
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
         "'image': 'https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/'}";
-        vm.prank(admin); 
+        vm.prank(admin);
         stakingShare.setUri(stringTest);
         assertEq(
             stakingShare.uri(1),
             stringTest,
             "the uri is not set correctly by the method"
-        ); 
+        );
     }
 
     function testSetUri_ShouldRevert_IfGovernanceTokenNotStakingManager()

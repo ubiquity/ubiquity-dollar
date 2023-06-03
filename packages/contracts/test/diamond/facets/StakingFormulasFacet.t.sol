@@ -95,7 +95,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
     }
 
     function testDurationMultiply_ShouldReturnAmount() public {
-        uint amount = IStakingFormulasFacet.durationMultiply(
+        uint256 amount = IStakingFormulasFacet.durationMultiply(
             100 ether,
             1,
             1000000 gwei

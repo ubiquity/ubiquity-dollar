@@ -5,20 +5,25 @@ import "./DiamondTestSetup.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
-    address token_addr;
-    address dollar_manager_addr;
     event Minting(
-        address indexed mock_addr1,
-        address indexed _minter,
-        uint256 _amount
+        address indexed mockAddr1,
+        address indexed minter,
+        uint256 amount
     );
 
-    event Burning(address indexed _burned, uint256 _amount);
+    event Burning(address indexed burned, uint256 amount);
+
+    // create owner and spender addresses
+    address erc20Owner;
+    uint256 erc20OwnerPrivateKey;
+    address erc20Spender;
+    uint256 erc20SpenderPrivateKey;
 
     function setUp() public override {
         super.setUp();
-        token_addr = address(diamond);
-        dollar_manager_addr = address(diamond);
+        // create owner and spender addresses
+        (erc20Owner, erc20OwnerPrivateKey) = makeAddrAndKey("owner");
+        (erc20Spender, erc20SpenderPrivateKey) = makeAddrAndKey("spender");
     }
 
     function testSetSymbol_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
@@ -32,23 +37,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         assertEq(IDollar.symbol(), "ANY_SYMBOL");
     }
 
-    function testSetName_ShouldRevert_IfMethodIsCalledNotByAdmin() public {
-        vm.expectRevert("ERC20Ubiquity: not admin");
-        IDollar.setName("ANY_NAME");
-    }
-
-    function testSetName_ShouldSetName() public {
-        vm.prank(admin);
-        IDollar.setName("ANY_NAME");
-        assertEq(IDollar.name(), "ANY_NAME");
-    }
-
     function testPermit_ShouldRevert_IfDeadlineExpired() public {
-        // create owner and spender addresses
-        uint256 ownerPrivateKey = 0x1;
-        uint256 spenderPrivateKey = 0x2;
-        address curOwner = vm.addr(ownerPrivateKey);
-        address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
         bytes32 digest = keccak256(
             abi.encodePacked(
@@ -57,28 +46,23 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
-                        curOwner,
-                        spender,
-                        1e18,
-                        IDollar.nonces(curOwner),
+                        erc20Owner,
+                        erc20Spender,
+                        1 ether,
+                        IDollar.nonces(erc20Owner),
                         0
                     )
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(erc20OwnerPrivateKey, digest);
         // run permit
-        vm.prank(spender);
-        vm.expectRevert("Dollar: EXPIRED");
-        IDollar.permit(curOwner, spender, 1e18, 0, v, r, s);
+        vm.prank(erc20Spender);
+        vm.expectRevert("ERC20Permit: expired deadline");
+        IDollar.permit(erc20Owner, erc20Spender, 1 ether, 0, v, r, s);
     }
 
     function testPermit_ShouldRevert_IfSignatureIsInvalid() public {
-        // create owner and spender addresses
-        uint256 ownerPrivateKey = 0x1;
-        uint256 spenderPrivateKey = 0x2;
-        address owner = vm.addr(ownerPrivateKey);
-        address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
         bytes32 digest = keccak256(
             abi.encodePacked(
@@ -87,28 +71,34 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
-                        owner,
-                        spender,
-                        1e18,
-                        IDollar.nonces(owner),
+                        erc20Owner,
+                        erc20Spender,
+                        1 ether,
+                        IDollar.nonces(erc20Owner),
                         block.timestamp + 1 days
                     )
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(spenderPrivateKey, digest);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(
+            erc20SpenderPrivateKey,
+            digest
+        );
         // run permit
-        vm.prank(spender);
-        vm.expectRevert("Dollar: INVALID_SIGNATURE");
-        IDollar.permit(owner, spender, 1e18, block.timestamp + 1 days, v, r, s);
+        vm.prank(erc20Spender);
+        vm.expectRevert("ERC20Permit: invalid signature");
+        IDollar.permit(
+            erc20Owner,
+            erc20Spender,
+            1 ether,
+            block.timestamp + 1 days,
+            v,
+            r,
+            s
+        );
     }
 
     function testPermit_ShouldIncreaseSpenderAllowance() public {
-        // create owner and spender addresses
-        uint256 ownerPrivateKey = 0x1;
-        uint256 spenderPrivateKey = 0x2;
-        address owner = vm.addr(ownerPrivateKey);
-        address spender = vm.addr(spenderPrivateKey);
         // create owner's signature
         bytes32 digest = keccak256(
             abi.encodePacked(
@@ -117,22 +107,30 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
                 keccak256(
                     abi.encode(
                         PERMIT_TYPEHASH,
-                        owner,
-                        spender,
-                        1e18,
-                        IDollar.nonces(owner),
+                        erc20Owner,
+                        erc20Spender,
+                        1 ether,
+                        IDollar.nonces(erc20Owner),
                         block.timestamp + 1 days
                     )
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(erc20OwnerPrivateKey, digest);
         // run permit
-        uint256 noncesBefore = IDollar.nonces(owner);
-        vm.prank(spender);
-        IDollar.permit(owner, spender, 1e18, block.timestamp + 1 days, v, r, s);
-        assertEq(IDollar.allowance(owner, spender), 1e18);
-        assertEq(IDollar.nonces(owner), noncesBefore + 1);
+        uint256 noncesBefore = IDollar.nonces(erc20Owner);
+        vm.prank(erc20Spender);
+        IDollar.permit(
+            erc20Owner,
+            erc20Spender,
+            1 ether,
+            block.timestamp + 1 days,
+            v,
+            r,
+            s
+        );
+        assertEq(IDollar.allowance(erc20Owner, erc20Spender), 1 ether);
+        assertEq(IDollar.nonces(erc20Owner), noncesBefore + 1);
     }
 
     function testBurn_ShouldRevert_IfContractIsPaused() public {
@@ -144,7 +142,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testBurn_ShouldBurnTokens() public {
         // mint 100 tokens to user
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.prank(admin);
         IDollar.mint(mockAddress, 100);
         assertEq(IDollar.balanceOf(mockAddress), 100);
@@ -157,19 +155,19 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testBurnFrom_ShouldRevert_IfCalledNotByTheBurnerRole() public {
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.expectRevert("Dollar token: not burner");
         IDollar.burnFrom(mockAddress, 50);
     }
 
     function testBurnFrom_ShouldRevert_IfContractIsPaused() public {
         // mint 100 tokens to user
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.prank(admin);
         IDollar.mint(mockAddress, 100);
         assertEq(IDollar.balanceOf(mockAddress), 100);
         // create burner role
-        address burner = address(0x2);
+        address burner = makeAddr("burner");
         vm.prank(admin);
         IAccessCtrl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // admin pauses contract
@@ -183,12 +181,12 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testBurnFrom_ShouldBurnTokensFromAddress() public {
         // mint 100 tokens to user
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.prank(admin);
         IDollar.mint(mockAddress, 100);
         assertEq(IDollar.balanceOf(mockAddress), 100);
         // create burner role
-        address burner = address(0x2);
+        address burner = makeAddr("burner");
         vm.prank(admin);
         IAccessCtrl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // burn 50 tokens for user
@@ -200,7 +198,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     }
 
     function testMint_ShouldRevert_IfCalledNotByTheMinterRole() public {
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.expectRevert("Dollar token: not minter");
         IDollar.mint(mockAddress, 100);
     }
@@ -208,14 +206,14 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
     function testMint_ShouldRevert_IfContractIsPaused() public {
         vm.startPrank(admin);
         IDollar.pause();
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         vm.expectRevert("Pausable: paused");
         IDollar.mint(mockAddress, 100);
         vm.stopPrank();
     }
 
     function testMint_ShouldMintTokens() public {
-        address mockAddress = address(0x1);
+        address mockAddress = makeAddr("user1");
         uint256 balanceBefore = IDollar.balanceOf(mockAddress);
         vm.prank(admin);
         vm.expectEmit(true, true, false, true);
@@ -269,7 +267,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.pause();
         // transfer tokens to user
-        address userAddress = address(0x1);
+        address userAddress = makeAddr("user1");
         vm.prank(admin);
         vm.expectRevert("Pausable: paused");
         IDollar.transfer(userAddress, 10);
@@ -277,8 +275,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testTransferFrom_ShouldRevert_IfContractIsPaused() public {
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         vm.prank(admin);
         IDollar.mint(userAddress, 100);
         // admin pauses contract
@@ -289,6 +287,17 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.expectRevert("Pausable: paused");
         vm.prank(user2Address);
         IDollar.transferFrom(userAddress, user2Address, 100);
+
+        // admin unpauses contract
+        vm.prank(admin);
+        IDollar.unpause();
+
+        // transfer now should work
+        vm.prank(user2Address);
+        IDollar.transferFrom(userAddress, user2Address, 100);
+
+        assertEq(IDollar.balanceOf(userAddress), 0);
+        assertEq(IDollar.balanceOf(user2Address), 100);
     }
 
     function testTransfer_ShouldTransferTokens() public {
@@ -296,7 +305,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
+        address userAddress = makeAddr("user1");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 10);
@@ -309,8 +318,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 100);
@@ -331,8 +340,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 100);
@@ -353,8 +362,8 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         vm.prank(admin);
         IDollar.mint(admin, 100);
         // transfer tokens to user
-        address userAddress = address(0x1);
-        address user2Address = address(0x12);
+        address userAddress = makeAddr("user1");
+        address user2Address = makeAddr("user2");
         assertEq(IDollar.balanceOf(userAddress), 0);
         vm.prank(admin);
         IDollar.transfer(userAddress, 100);
