@@ -21,7 +21,7 @@ jobs:
     - name: Run tests and generate coverage
       run: npm run coverage
 
-    - name: Send coverage information to Coveralls
-      uses: coverallsapp/github-action@v1.1.2
+    - name: Coveralls GitHub Action
+      uses: coverallsapp/github-action@v1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
