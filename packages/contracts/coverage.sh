@@ -25,7 +25,6 @@ lcov \
     "*test*" \
     "*mock*" \
     "*scripts*" \
-    "src/dollar/libraries/*" \
     "src/dollar/mocks/*" \
     "src/dollar/utils/*" \
     "src/ubiquistick/MockUBQmanager.sol" \
