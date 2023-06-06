@@ -121,8 +121,9 @@ contract UbiquiStick is
         address from,
         address to,
         uint256 tokenId
-    ) internal override(ERC721, ERC721Enumerable) {
-        super._beforeTokenTransfer(from, to, tokenId);
+    ) internal {
+        ERC721._beforeTokenTransfer(from, to, tokenId);
+        ERC721Enumerable._beforeTokenTransfer(from, to, tokenId);
     }
 
     function _beforeConsecutiveTokenTransfer(
