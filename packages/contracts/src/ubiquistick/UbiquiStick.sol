@@ -131,7 +131,7 @@ contract UbiquiStick is
         address,
         uint256,
         uint96
-    ) internal override(ERC721, ERC721Enumerable) {
+    ) internal {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 
