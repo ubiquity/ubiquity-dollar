@@ -1,32 +1,32 @@
 [submodule "packages/contracts/lib/Uniswap/v2-periphery"]
 	path = packages/contracts/lib/Uniswap/v2-periphery
 	url = https://github.com/Uniswap/v2-periphery.git
-	branch = master
+	tag = v1.0.0-beta.0
 [submodule "packages/contracts/lib/Uniswap/v2-core"]
 	path = packages/contracts/lib/Uniswap/v2-core
 	url = https://github.com/Uniswap/v2-core.git
-	branch = master
+	tag = v1.0.1
 [submodule "packages/contracts/lib/solidity-linked-list"]
 	path = packages/contracts/lib/solidity-linked-list
 	url = https://github.com/vittominacori/solidity-linked-list
-	branch = master
+	tag = v5.1.0
 [submodule "packages/contracts/lib/openzeppelin-contracts"]
 	path = packages/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
-	branch = release-v4.9
+	tag = v4.9.0
 [submodule "packages/contracts/lib/forge-std"]
 	path = packages/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-	branch = chore/v1.5.6
+	tag = v1.5.6
 [submodule "packages/contracts/lib/abdk-libraries-solidity"]
 	path = packages/contracts/lib/abdk-libraries-solidity
 	url = https://github.com/abdk-consulting/abdk-libraries-solidity
-	branch = master
+	tag = v3.2
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
-	branch = main
+	tag = v1.4.1
 [submodule "packages/contracts/lib/Uniswap/v3-periphery"]
 	path = packages/contracts/lib/Uniswap/v3-periphery
 	url = https://github.com/Uniswap/v3-periphery.git
-	branch = main
+	tag = v1.3.0
