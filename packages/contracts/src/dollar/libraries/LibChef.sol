@@ -52,8 +52,10 @@ library LibChef {
         uint256 totalShares;
     }
 
-    bytes32 public constant UBIQUITY_CHEF_STORAGE_POSITION =
-        keccak256("diamond.standard.ubiquity.chef.storage");
+    bytes32 constant UBIQUITY_CHEF_STORAGE_POSITION =
+        bytes32(
+            uint256(keccak256("diamond.standard.ubiquity.chef.storage")) - 1
+        );
 
     function chefStorage() internal pure returns (ChefStorage storage ds) {
         bytes32 position = UBIQUITY_CHEF_STORAGE_POSITION;
