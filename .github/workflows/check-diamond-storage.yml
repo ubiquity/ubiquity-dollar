@@ -24,5 +24,5 @@ jobs:
 
       - name: Run Diamond Storage Check
         run: |
-          cd ./utils
-          yes | npx tsx check-diamond-storage.ts
+          yarn workspace @ubiquity/contracts build
+          forge inspect Diamond storage
