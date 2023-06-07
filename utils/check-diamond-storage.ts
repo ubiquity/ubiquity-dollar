@@ -1,5 +1,5 @@
-import { ethers } from "hardhat";
-import diamondContract from "../../packages/contracts/src/dollar/Diamond.sol";
+import { ethers } from "ethers";
+import diamondContract from "../packages/contracts/src/dollar/Diamond.sol";
 
 async function main() {
   const diamondStorageSlot = ethers.utils.keccak256("diamond.standard.diamond.storage");
