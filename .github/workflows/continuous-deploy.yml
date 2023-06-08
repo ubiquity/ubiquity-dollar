@@ -90,4 +90,27 @@ jobs:
           script: |
             const fs = require("fs");
             const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
-            await print_deployments_log({github, context, fs});
+            const deploymentsLog = await print_deployments_log({ github, context, fs });
+
+            const { data: commits } = await github.rest.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 10, // Number of recent commits to retrieve
+            });
+      
+            const commitHashes = commits.map((commit) => commit.sha);
+      
+            const comment = `
+            Deployments Log:
+            ${deploymentsLog}
+      
+            Commit Hashes:
+            ${commitHashes.join('\n')}
+            `;
+      
+            await github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment.trim(),
+            });
