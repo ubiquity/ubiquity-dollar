@@ -32,8 +32,6 @@ jobs:
 
       - name: Run Diamond Storage Check
         uses: actions/upload-artifact@v3
-        run: |
-          yarn build:all
-          forge inspect Diamond storage
+        run: forge inspect Diamond storage
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
