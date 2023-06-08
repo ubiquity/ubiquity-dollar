@@ -32,7 +32,6 @@ jobs:
 
       - name: Run Diamond Storage Check
         run: |
-          yarn workspace @ubiquity/contracts build
           cd ./utils
           yes | npx tsx diamond-storage.ts
         env:
