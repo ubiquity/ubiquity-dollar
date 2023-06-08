@@ -14,7 +14,7 @@ const executeCommand = (command) => {
 };
 
 // Get Diamond storage value before creating the pull request
-executeCommand("yarn workspace @ubiquity/contracts build");
+// executeCommand("yarn workspace @ubiquity/contracts build");
 const beforeValue = executeCommand("forge inspect Diamond storage");
 
 // Check if a pull request exists
