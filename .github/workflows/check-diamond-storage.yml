@@ -2,9 +2,6 @@ name: Diamond Storage Check
 
 on:
   push:
-    branches:
-      - main
-      - development
 
 jobs:
   check-diamond-storage:
