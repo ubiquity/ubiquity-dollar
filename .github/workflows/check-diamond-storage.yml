@@ -22,6 +22,6 @@ jobs:
       - name: Run Diamond Storage Check
         run: |
           cd ./utils
-          yes | npx tsx diamond-storage.js
+          yes | npx tsx diamond-storage.ts
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
