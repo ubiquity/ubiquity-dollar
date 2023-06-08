@@ -21,6 +21,8 @@ jobs:
 
       - name: Run Diamond Storage Check
         run: |
+          yarn install
+          yarn workspace @ubiquity/contracts forge:install
           cd ./utils
           yes | npx tsx diamond-storage.ts
         env:
