@@ -30,9 +30,24 @@ jobs:
       - name: Setup Forge
         run: yarn workspace @ubiquity/contracts forge:install
 
+      - name: Prepare Deployment Artifact
+        env:
+          EVENT_NAME: ${{github.event_name}}
+          PR_NUMBER: ${{ github.event.number }}
+          SHA: ${{github.sha}}
+        run: |
+          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
+          mkdir -p ./pr
+          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
+          cd ./packages/dapp && zip -r pull-request.zip ./dist && cp pull-request.zip ../../pr
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pr
+          path: pr/
+
       - name: Run Diamond Storage Check
         run: |
-          yarn workspace @ubiquity/contracts build
+          yarn build:all
           forge inspect Diamond storage
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
