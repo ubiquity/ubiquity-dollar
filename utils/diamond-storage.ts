@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import axios from "axios";
 import fs from "fs";
+import path from "path";
 
 const executeCommand = (command) => {
   try {
@@ -13,6 +14,13 @@ const executeCommand = (command) => {
   }
 };
 
+const targetFolder = "./packages/contracts";
+
+if (fs.existsSync(targetFolder)) {
+  process.chdir(targetFolder);
+} else {
+  console.error("Target folder does not exist.");
+}
 // Get Diamond storage value before creating the pull request
 executeCommand("cd packages/contracts");
 const beforeValue = executeCommand("forge inspect Diamond storage");
