@@ -14,7 +14,7 @@ const executeCommand = (command) => {
   }
 };
 
-const targetFolder = "./packages/contracts";
+const targetFolder = "../packages/contracts";
 
 if (fs.existsSync(targetFolder)) {
   process.chdir(targetFolder);
