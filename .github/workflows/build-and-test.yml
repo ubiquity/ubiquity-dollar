@@ -63,11 +63,6 @@ jobs:
           name: pr
           path: pr/
 
-      - name: Run Diamond Storage Check
-        run: |
-          forge build
-          forge inspect Diamond storage
-
       - name: Run Server
         run: yarn dev:dapp &
         env:

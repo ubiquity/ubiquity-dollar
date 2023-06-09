@@ -30,11 +30,6 @@ jobs:
       - name: Setup Forge
         run: yarn workspace @ubiquity/contracts forge:install
 
-      - name: Prepare artifacts
-        run: |
-          cd packages/contracts
-          forge build
-
       - name: Run Diamond Storage Check
         run: |
           cd packages/contracts
