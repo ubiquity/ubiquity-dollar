@@ -25,8 +25,10 @@ if (fs.existsSync(targetFolder)) {
 const beforeValue = executeCommand("forge inspect Diamond storage");
 
 // Check if a pull request exists
-let prNumber = null;
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
+let prNumber = process.env.GITHUB_PR_NUMBER;
+console.log(`prNumber: ${prNumber}`);
+
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
   prNumber = eventData.pull_request?.number || null;

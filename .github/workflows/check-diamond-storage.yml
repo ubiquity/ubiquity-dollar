@@ -36,3 +36,4 @@ jobs:
           yes | npx tsx diamond-storage.ts
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
+          GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}"
