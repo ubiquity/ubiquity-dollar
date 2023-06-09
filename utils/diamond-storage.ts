@@ -22,7 +22,6 @@ if (fs.existsSync(targetFolder)) {
   console.error("Target folder does not exist.");
 }
 // Get Diamond storage value before creating the pull request
-executeCommand("cd packages/contracts");
 const beforeValue = executeCommand("forge inspect Diamond storage");
 
 // Check if a pull request exists
