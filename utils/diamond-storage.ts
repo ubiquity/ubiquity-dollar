@@ -27,8 +27,10 @@ const beforeValue = executeCommand("forge inspect Diamond storage");
 // Check if a pull request exists
 let prNumber = null;
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
+console.log(githubEventPath);
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
+  console.log(eventData);
   prNumber = eventData.pull_request?.number || null;
 }
 
@@ -41,9 +43,6 @@ if (prNumber) {
   } else {
     console.log("Diamond storage values are different.");
   }
-
-  console.log("Before value:", beforeValue);
-  console.log("After value:", afterValue);
 } else {
   // Pull request does not exist
   console.log("No pull request has been created yet.");
