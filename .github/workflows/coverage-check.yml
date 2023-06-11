@@ -4,6 +4,8 @@ name: Compare Test Coverage
 on:
   pull_request:
     branches: [development]
+  push:
+    branches: [development]
 
 jobs:
   test-coverage:
@@ -22,7 +24,7 @@ jobs:
         uses: onbjerg/foundry-toolchain@v1
         with:
           version: nightly
-      
+
       - name: Install dependencies
         run: sudo apt-get install lcov
 
