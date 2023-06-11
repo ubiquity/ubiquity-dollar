@@ -16,7 +16,7 @@ library LibBondingCurve {
     using ABDKMathQuad for bytes16;
 
     bytes32 constant BONDING_CONTROL_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.bonding.storage");
+        bytes32(uint256(keccak256("ubiquity.contracts.bonding.storage")) - 1);
 
     event Deposit(address indexed user, uint256 amount);
     event Withdraw(uint256 amount);

@@ -16,7 +16,7 @@ error InitializationFunctionReverted(
 
 library LibDiamond {
     bytes32 constant DIAMOND_STORAGE_POSITION =
-        keccak256("diamond.standard.diamond.storage");
+        bytes32(uint256(keccak256("diamond.standard.diamond.storage")) - 1);
 
     struct FacetAddressAndPosition {
         address facetAddress;

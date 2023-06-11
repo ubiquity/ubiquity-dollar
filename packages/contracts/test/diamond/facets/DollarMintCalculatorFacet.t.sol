@@ -21,7 +21,7 @@ contract DollarMintCalculatorFacetTest is DiamondSetup {
     function mockTwapFuncs(uint256 _twapPrice) public {
         uint256 TWAP_ORACLE_STORAGE_POSITION = uint256(
             keccak256("diamond.standard.twap.oracle.storage")
-        );
+        ) - 1;
         uint256 dollarPricePosition = TWAP_ORACLE_STORAGE_POSITION + 2;
         vm.store(
             address(diamond),

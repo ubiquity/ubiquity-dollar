@@ -9,7 +9,7 @@ module.exports = async ({ github, context, fs }) => {
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
   let defaultBody = deploymentsLog;
-  const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
+  const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.pages\.dev/gim);
   const botCommentsArray = [];
 
   if (uniqueDeployUrl) {

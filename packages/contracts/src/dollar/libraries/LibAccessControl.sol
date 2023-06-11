@@ -14,7 +14,9 @@ library LibAccessControl {
     using UintUtils for uint256;
 
     bytes32 constant ACCESS_CONTROL_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.access.control.storage");
+        bytes32(
+            uint256(keccak256("ubiquity.contracts.access.control.storage")) - 1
+        );
 
     struct RoleData {
         EnumerableSet.AddressSet members;
