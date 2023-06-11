@@ -58,7 +58,7 @@ jobs:
                   "src/dollar/mocks/*" \
                   "src/dollar/utils/*" \
                   "src/ubiquistick/MockUBQmanager.sol" \
-                  "test/*" \
+                  "test/*"
 
           # Generate summary
           COVERAGE_DEVELOPMENT_OUTPUT=$(lcov \
@@ -88,12 +88,13 @@ jobs:
               --add-tracefile lcov.info \
               --output-file merged-lcov-pr.info
 
-          # Filter out node_modules, test, and mock files
-          lcov \
-          --rc lcov_branch_coverage=1 \
-          --remove merged-lcov.info \
-          --output-file filtered-lcov.info \
-          "*node_modules*" "*test*" "*mock*" "*scripts*"
+          # Filter out node_modules, test, and
+          mock files
+          lcov
+          --rc lcov_branch_coverage=1
+          --remove merged-lcov-pr.info
+          --output-file filtered-lcov-pr.info
+          "node_modules" "test" "mock" "scripts"
           # Generate summary
           COVERAGE_PR_OUTPUT=$(lcov \
               --rc lcov_branch_coverage=1 \
