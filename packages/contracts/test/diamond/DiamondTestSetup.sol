@@ -124,6 +124,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     // deploys diamond and connects facets
     function setUp() public virtual {
+        string memory mainnetRPC = "https://eth.ubq.fi/v1/mainnet";
+        vm.createSelectFork(mainnetRPC);
         incentive_addr = address(new MockIncentive());
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
@@ -742,5 +744,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         IStakingShareToken = StakingShare(IManager.stakingShareAddress());
         assertEq(IDollar.decimals(), 18);
         vm.stopPrank();
+    }
+
+    function test_Fork() public virtual {
+        vm.activeFork(); //Active??
     }
 }
