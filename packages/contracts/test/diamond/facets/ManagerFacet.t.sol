@@ -1,18 +1,38 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+interface IManagerMainnet {
+    function stableSwapMetaPoolAddress() external view returns (address);
+    function deployStableSwapPool( address _curveFactory, address _crvBasePool, address _crv3PoolTokenAddress, uint256 _amplificationCoefficient, uint256 _fee) external;
+}
+
 import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
-import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
 contract ManagerFacetTest is DiamondSetup {
+
+    event MetaPoolDeployed(
+        address coin,
+        address base_pool,
+        uint256 A,
+        uint256 fee,
+        address deployer
+    );
+
+    IManagerMainnet manager = IManagerMainnet(0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98);
+    IERC20 curve3CrvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
+    IERC20 UbiquityDollarMainnet = IERC20(0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6);
+    address curveWhale = 0x4486083589A063ddEF47EE2E4467B5236C508fDe;
+    address UbiquityDollarWhale = 0xf51a97aaBE438a6A92Fa81448DA63EAd09FB9945;
+    address factory = 0x20955CB69Ae1515962177D164dfC9522feef567E;
+    address crvFactory = 0xB9fC157394Af804a3578134A6585C0dc9cc990d4; //0x0959158b6040D32d04c301A72CBFD6b39E21c9AE;
+    address adminPransker = 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd;
+    address basePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
+    //address metapool = 0x20955CB69Ae1515962177D164dfC9522feef567E;
+    
     function testCanCallGeneralFunctions_ShouldSucceed() public view {
         IManager.excessDollarsDistributor(contract1);
     }
@@ -132,19 +152,13 @@ contract ManagerFacetTest is DiamondSetup {
         assertEq(IManager.dollarTokenAddress(), address(IDollar));
     }
 
-    function testDeployStableSwapPool_ShouldSucceed() public {
-        assertEq(IDollar.decimals(), 18);
-        vm.startPrank(admin);
-
-        IDollar.mint(admin, 10000);
-
-        IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
-        MockERC20 curve3CrvToken = new MockERC20("3 CRV", "3CRV", 18);
+    function test_Minting() public {
         address secondAccount = address(0x3);
         address stakingZeroAccount = address(0x4);
         address stakingMinAccount = address(0x5);
         address stakingMaxAccount = address(0x6);
-
+        
+        vm.startPrank(UbiquityDollarWhale);
         address[6] memory mintings = [
             admin,
             address(diamond),
@@ -155,15 +169,74 @@ contract ManagerFacetTest is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(IDollar), mintings[i], 10000e18);
+            IERC20(UbiquityDollarMainnet).transfer(mintings[i], 1000e18);
         }
+        vm.stopPrank();
+
+        vm.startPrank(curveWhale);
+        address[4] memory crvDeal = [
+            //address(diamond),
+            stakingMaxAccount,
+            stakingMaxAccount,
+            stakingMinAccount,
+            secondAccount
+        ];
+
+        for (uint256 i; i < crvDeal.length; ++i) {
+            // distribute crv to the accounts
+            IERC20(curve3CrvToken).transfer(crvDeal[i], 10000e18);
+        }
+        vm.stopPrank();
+    }
+
+    function test_Transfer() public {
+        vm.startPrank(curveWhale);
+        IERC20(curve3CrvToken).transfer(address(this), 1 ether);
+        vm.stopPrank();
+    }
+
+    function test_TestCrv3FactoryMetaPool() public {
+        vm.startPrank(admin);
+        address curve3CrvBasePool = ICurveFactory(crvFactory).deploy_metapool(address(0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7), "UBIQUITYMETAPOOL", "3UBs", address(curve3CrvToken), 10, 4000000);
+        vm.stopPrank();
+    }
+
+    function testDeployStableSwapPool_ShouldSucceed() public {
+        //assertEq(IDollar.decimals(), 18);
+        vm.startPrank(admin);
+        
+        address secondAccount = address(0x3);
+        address stakingZeroAccount = address(0x4);
+        address stakingMinAccount = address(0x5);
+        address stakingMaxAccount = address(0x6);
+        vm.label(secondAccount, "SECOND ACCOUNT");
+        vm.label(stakingZeroAccount, "STAKING ZERO ACC");
+        vm.label(stakingMinAccount, "STAKING MIX ACCOUNT");
+        vm.label(stakingMaxAccount, "STAKING MAX ACCOUNT");
+
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
         IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
+        
+        vm.stopPrank();
+        
+        vm.startPrank(UbiquityDollarWhale);
+        address[6] memory mintings = [
+            admin,
+            address(diamond),
+            secondAccount,
+            stakingZeroAccount,
+            stakingMinAccount,
+            stakingMaxAccount
+        ];
 
+        for (uint256 i = 0; i < mintings.length; ++i) {
+            IERC20(UbiquityDollarMainnet).transfer(mintings[i], 1000e18);
+        }
         vm.stopPrank();
 
+        vm.startPrank(curveWhale);
         address[4] memory crvDeal = [
             address(diamond),
             stakingMaxAccount,
@@ -171,31 +244,26 @@ contract ManagerFacetTest is DiamondSetup {
             secondAccount
         ];
 
-        // curve3CrvBasePool Curve.fi: DAI/USDC/USDT Pool
-        // curve3CrvToken  TokenTracker that represents  Curve.fi DAI/USDC/USDT part in the pool  (3Crv)
-
         for (uint256 i; i < crvDeal.length; ++i) {
             // distribute crv to the accounts
-            curve3CrvToken.mint(crvDeal[i], 10000e18);
+            IERC20(curve3CrvToken).transfer(crvDeal[i], 10000e18);
         }
+        vm.stopPrank();
 
-        vm.startPrank(admin);
+        vm.startPrank(0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd);
+        vm.label(0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd, "MAINNET MANAGER");
 
-        ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
-        address curve3CrvBasePool = address(
-            new MockMetaPool(address(diamond), address(curve3CrvToken))
-        );
-        IManager.deployStableSwapPool(
-            address(curvePoolFactory),
-            curve3CrvBasePool,
-            address(curve3CrvToken),
-            10,
-            50000000
-        );
-
-        IMetaPool metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
-        address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
-        metapool.transfer(address(stakingV2Address), 100e18);
+        address curve3CrvBasePool = ICurveFactory(crvFactory).deploy_metapool(address(basePool), "UBIQUITYMETAPOOL", "3UBs", address(UbiquityDollarMainnet), 10, 4000000);
+        vm.label(curve3CrvBasePool, "CURVE DEPLOYED POOL");
+        vm.stopPrank();
+        vm.label(address(curve3CrvToken), "CURVE TOKEN");
+        vm.startPrank(0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd);
+        //vm.roll(17469224);
+        IManagerMainnet(manager).deployStableSwapPool(address(crvFactory), address(basePool), address(curve3CrvToken),10,4000000);
+        //IMetaPool metapool = IMetaPool(IManagerMainnet(manager).stableSwapMetaPoolAddress());
+        //IMetaPool metapool = IManagerMainnet(manager).stableSwapMetaPoolAddress();
+        //address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
+        //IMetaPool(factory).transfer(address(stakingV2Address), 1e18);
         vm.stopPrank();
     }
 }
