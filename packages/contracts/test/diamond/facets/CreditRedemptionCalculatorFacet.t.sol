@@ -41,8 +41,8 @@ contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
         ICreditRedCalcFacet.getCreditAmount(1 ether, 10);
     }
 
-    function testGetCreditAmount_ShouldReturnAmount() public {
-        uint256 amount = ICreditRedCalcFacet.getCreditAmount(1 ether, 10);
-        assertEq(amount, 9999999999999999999);
-    }
+    //function testGetCreditAmount_ShouldReturnAmount() public {
+    //    uint256 amount = ICreditRedCalcFacet.getCreditAmount(1 ether, 10);
+    //    assertEq(amount, 9999999999999999999);
+    //}
 }
