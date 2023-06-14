@@ -14,14 +14,6 @@ import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.s
 
 contract ManagerFacetTest is DiamondSetup {
 
-    event MetaPoolDeployed(
-        address coin,
-        address base_pool,
-        uint256 A,
-        uint256 fee,
-        address deployer
-    );
-
     IManagerMainnet manager = IManagerMainnet(0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98);
     IERC20 curve3CrvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
     IERC20 UbiquityDollarMainnet = IERC20(0x0F644658510c95CB46955e55D7BA9DDa9E9fBEc6);
@@ -32,6 +24,14 @@ contract ManagerFacetTest is DiamondSetup {
     address adminPransker = 0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd;
     address basePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
     //address metapool = 0x20955CB69Ae1515962177D164dfC9522feef567E;
+
+    function setUp() public override {
+        super.setUp();
+    }
+
+    function test_Fork() public override {
+        vm.activeFork(); //Active??
+    }
     
     function testCanCallGeneralFunctions_ShouldSucceed() public view {
         IManager.excessDollarsDistributor(contract1);
@@ -202,7 +202,6 @@ contract ManagerFacetTest is DiamondSetup {
     }
 
     function testDeployStableSwapPool_ShouldSucceed() public {
-        //assertEq(IDollar.decimals(), 18);
         vm.startPrank(admin);
         
         address secondAccount = address(0x3);
@@ -250,20 +249,20 @@ contract ManagerFacetTest is DiamondSetup {
         }
         vm.stopPrank();
 
-        vm.startPrank(0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd);
-        vm.label(0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd, "MAINNET MANAGER");
+        vm.startPrank(adminPransker);
+        vm.label(adminPransker, "MAINNET MANAGER");
 
         address curve3CrvBasePool = ICurveFactory(crvFactory).deploy_metapool(address(basePool), "UBIQUITYMETAPOOL", "3UBs", address(UbiquityDollarMainnet), 10, 4000000);
         vm.label(curve3CrvBasePool, "CURVE DEPLOYED POOL");
         vm.stopPrank();
         vm.label(address(curve3CrvToken), "CURVE TOKEN");
-        vm.startPrank(0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd);
-        //vm.roll(17469224);
+        vm.startPrank(adminPransker);
         IManagerMainnet(manager).deployStableSwapPool(address(crvFactory), address(basePool), address(curve3CrvToken),10,4000000);
-        //IMetaPool metapool = IMetaPool(IManagerMainnet(manager).stableSwapMetaPoolAddress());
-        //IMetaPool metapool = IManagerMainnet(manager).stableSwapMetaPoolAddress();
-        //address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
-        //IMetaPool(factory).transfer(address(stakingV2Address), 1e18);
+        address metapool = IManagerMainnet(manager).stableSwapMetaPoolAddress();
+        vm.label(metapool, "Stable Swap Address");
+        address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
+        vm.label(stakingV2Address, "PRE GENERATED STAKING2VADDRESS");
+        IMetaPool(metapool).transfer(address(stakingV2Address), 1e18);
         vm.stopPrank();
     }
 }

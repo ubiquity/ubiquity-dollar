@@ -28,7 +28,7 @@ contract TWAPOracleDollar3poolFacetTest is DiamondSetup {
         vm.prank(owner);
     }
 
-    function test_Fork() public {
+    function test_Fork() public override {
         vm.activeFork(); //Active??
     }
 
