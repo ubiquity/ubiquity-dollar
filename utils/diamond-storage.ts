@@ -10,7 +10,7 @@ const executeCommand = (command) => {
   } catch (error) {
     console.error(`Error executing command: ${command}`);
     console.error(error.message);
-    process.exit(1); 
+    process.exit(1);
   }
 };
 
@@ -30,6 +30,7 @@ let prNumber = null;
 
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
+  console.log("eventData", eventData);
   prNumber = eventData.pull_request?.number || null;
 }
 
