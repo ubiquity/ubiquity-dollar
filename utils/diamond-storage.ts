@@ -30,7 +30,6 @@ let prNumber = null;
 
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
-  console.log("eventData", eventData);
   prNumber = eventData.pull_request?.number || null;
 }
 
