@@ -124,7 +124,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     // deploys diamond and connects facets
     function setUp() public virtual {
-        vm.createSelectFork(vm.envString(MAINNET_ENDPOINT));
+        vm.createSelectFork(vm.envString("MAINNET_ENDPOINT"));
         incentive_addr = address(new MockIncentive());
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
