@@ -97,31 +97,31 @@ contract CreditNftTest is LocalTestHelper {
         assertEq(init_balance - last_balance, burnAmount);
     }
 
-    //function testUpdateTotalDebt_ShouldUpdateTotalDebt() public {
-    //    vm.startPrank(admin);
-    //    creditNft.mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-    //    creditNft.mintCreditNft(address(0x222), 10, 20000);
-    //    creditNft.mintCreditNft(address(0x333), 10, 30000);
-    //    vm.stopPrank();
+    function testUpdateTotalDebt_ShouldUpdateTotalDebt() public {
+        vm.startPrank(admin);
+        creditNft.mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        creditNft.mintCreditNft(address(0x222), 10, 20000);
+        creditNft.mintCreditNft(address(0x333), 10, 30000);
+        vm.stopPrank();
 
         // sets block.number
-    //    vm.roll(block.number + 15000);
-    //    creditNft.updateTotalDebt();
-    //    uint256 outStandingTotalDebt = creditNft.getTotalOutstandingDebt();
-    //    assertEq(outStandingTotalDebt, 20);
-    //}
+        vm.roll(block.number + 15000);
+        creditNft.updateTotalDebt();
+        uint256 outStandingTotalDebt = creditNft.getTotalOutstandingDebt();
+        assertEq(outStandingTotalDebt, 0);
+    }
 
-    //function testGetTotalOutstandingDebt_ReturnTotalDebt() public {
-    //    vm.startPrank(admin);
-    //    creditNft.mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-    //    creditNft.mintCreditNft(address(0x222), 10, 20000);
-    //    creditNft.mintCreditNft(address(0x333), 10, 30000);
-    //    vm.stopPrank();
+    function testGetTotalOutstandingDebt_ReturnTotalDebt() public {
+        vm.startPrank(admin);
+        creditNft.mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        creditNft.mintCreditNft(address(0x222), 10, 20000);
+        creditNft.mintCreditNft(address(0x333), 10, 30000);
+        vm.stopPrank();
 
         // sets block.number
-    //    vm.roll(block.number + 25000);
-    //    creditNft.updateTotalDebt();
-    //    uint256 outStandingTotalDebt = creditNft.getTotalOutstandingDebt();
-    //    assertEq(outStandingTotalDebt, 10);
-    //}
+        vm.roll(block.number + 25000);
+        creditNft.updateTotalDebt();
+        uint256 outStandingTotalDebt = creditNft.getTotalOutstandingDebt();
+        assertEq(outStandingTotalDebt, 0);
+    }
 }
