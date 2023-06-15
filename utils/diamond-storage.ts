@@ -10,7 +10,7 @@ const executeCommand = (command) => {
   } catch (error) {
     console.error(`Error executing command: ${command}`);
     console.error(error.message);
-    process.exit(1);
+    process.exit(1); 
   }
 };
 
