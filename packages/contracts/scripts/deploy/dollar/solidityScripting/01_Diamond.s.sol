@@ -73,11 +73,7 @@ contract DiamondScript is Constants {
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
 
-    UbiquityDollarToken IDollar;
-
-    address incentive_addr;
     string[] facetNames;
-    address[] facetAddressList;
 
     function run() public virtual {
         vm.startBroadcast(deployerPrivateKey);

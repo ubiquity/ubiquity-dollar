@@ -23,6 +23,22 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     mapping(address => uint256[]) private _holderBalances;
     uint256 private _totalSupply;
 
+    function accessTotalSupply() public view returns (uint256) {
+        return _totalSupply;
+    }
+
+    function _incrementTotalSupply() internal {
+        _totalSupply += 1;
+    }
+
+    function _decrementTotalSupply() internal {
+        _totalSupply -= 1;
+    }
+
+    function addToHolderBalances(address _address, uint256 _value) public {
+        _holderBalances[_address].push(_value);
+    }
+
     // ----------- Modifiers -----------
     modifier onlyMinter() virtual {
         require(
