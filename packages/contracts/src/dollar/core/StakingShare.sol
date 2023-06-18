@@ -99,10 +99,10 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         uint256 lpRewardDebt,
         uint256 endBlock
     ) public virtual onlyMinter whenNotPaused returns (uint256 id) {
-        id = accessTotalSupply() + 1;
+        id = _totalSupply + 1;
         _mint(to, id, 1, bytes(""));
-        _incrementTotalSupply();
-        addToHolderBalances(to, id);
+        _totalSupply += 1;
+        _holderBalances[to].add(id);
         Stake storage _stake = _stakes[id];
         _stake.minter = to;
         _stake.lpFirstDeposited = lpDeposited;
@@ -130,7 +130,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
      * @dev Total amount of tokens  .
      */
     function totalSupply() public view virtual override returns (uint256) {
-        return accessTotalSupply();
+        return _totalSupply;
     }
 
     /**
@@ -200,7 +200,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
         require(_stake.lpAmount == 0, "LP <> 0");
-        _decrementTotalSupply();
+        _totalSupply -= 1;
     }
 
     /**
