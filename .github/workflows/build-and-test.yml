@@ -18,7 +18,6 @@ jobs:
       - name: Display Commit Hashes
         run: |
           git log --oneline --format="%h %s"
-          echo "check hashes"
 
       - name: Setup Node
         uses: actions/setup-node@v3
