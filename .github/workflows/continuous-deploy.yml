@@ -38,10 +38,6 @@ jobs:
       - name: Extract Artifact
         run: unzip pr.zip && unzip pull-request.zip && ls
 
-      - name: test
-        run: |
-          ls -la
-
       - name: Deploy Netlify
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
@@ -94,5 +90,4 @@ jobs:
           script: |
             const fs = require("fs");
             const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
-            const deploymentsLog = await print_deployments_log({ github, context, fs });
-            console.log(deploymentsLog);
+            await print_deployments_log({github, context, fs});
