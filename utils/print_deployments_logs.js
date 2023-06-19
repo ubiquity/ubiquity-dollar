@@ -1,9 +1,8 @@
 //@ts-check
-module.exports = async ({ github, context, fs }) => {
-  const { payload } = context;
+module.exports = async ({ github, context }) => {
   const eventName = context.eventName;
-  const pullRequestNumber = eventName === 'pull_request' ? payload.pull_request.number : 0;
-  const commitSha = payload.after;
+  const pullRequestNumber = eventName === 'pull_request' ? context.payload.pull_request.number : 0;
+  const commitSha = context.payload.after;
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
   let defaultBody = deploymentsLog;
