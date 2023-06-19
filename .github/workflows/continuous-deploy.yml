@@ -94,4 +94,5 @@ jobs:
           script: |
             const fs = require("fs");
             const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
-            await print_deployments_log({github, context, fs});
+            const deploymentsLog = await print_deployments_log({ github, context, fs });
+            console.log(deploymentsLog);
