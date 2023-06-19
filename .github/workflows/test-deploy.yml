@@ -19,7 +19,7 @@ jobs:
           node-version: '14'
 
       - name: Install dependencies
-        run: npm ci
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
 
       - name: Test deploy
         uses: actions/github-script@v6
