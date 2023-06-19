@@ -98,4 +98,66 @@ module.exports = async ({ github, context, fs }) => {
     botCommentsArray.forEach(({ body }) => {
       commentBody = commentBody + `${GMTConverter(body)}\n`;
     });
-    const sortCommentBody = sortComments
+    const sortCommentBody = sortComments(commentBody);
+    await createNewPRComment(sortCommentBody);
+    await deleteExistingPRComments();
+  };
+
+  const processPRComments = async () => {
+    const perPage = 30;
+    let pageNumber = 1;
+    let hasMore = true;
+    const commentsArray = [];
+
+    while (hasMore) {
+      const { data: issueComments } = await github.rest.issues.listComments({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: pullRequestNumber,
+        per_page: perPage,
+        page: pageNumber,
+      });
+      pageNumber++;
+
+      if (issueComments.length > 0) {
+        commentsArray.push(...issueComments);
+      } else {
+        hasMore = false;
+      }
+    }
+
+    if (commentsArray.length > 0) {
+      commentsArray.forEach((elem) => {
+        if (elem.user.type === "Bot" && elem.user.login === "ubiquibot[bot]") {
+          botCommentsArray.push(elem);
+        }
+      });
+      const botLen = botCommentsArray.length;
+      switch (botLen) {
+        case 0:
+          //no (bot) comments
+          createNewPRComment();
+          break;
+        case 1:
+          //single (bot) comment []
+          editExistingPRComment();
+          break;
+        default:
+          //multiple (bot) comments []
+          mergeExistingPRComments();
+          break;
+      }
+    } else {
+      //no comments (user|bot) []
+      createNewPRComment();
+    }
+  };
+
+  if (eventName == "pull_request") {
+    console.log("Creating a comment for the pull request");
+    await processPRComments();
+  } else {
+    console.log("Creating a comment for the commit");
+    await createNewCommitComment();
+  }
+};
