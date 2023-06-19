@@ -10,7 +10,9 @@ module.exports = async ({ github, context, fs }) => {
 
   let defaultBody = deploymentsLog;
   const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
-  const botCommentsArray = ['test', 'test1', 'test2'];
+  const botCommentsArray = [];
+
+  console.log("test is displayed");
 
   if (uniqueDeployUrl) {
     defaultBody = `[Deployment: ${new Date()}](${uniqueDeployUrl})`;

@@ -1,0 +1,22 @@
+name: Test deploy
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: Test deploy
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Test deploy
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ steps.get_installation_token.outputs.token }}
+          script: |
+            const fs = require("fs");
+            const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
+            await print_deployments_log({github, context, fs});
