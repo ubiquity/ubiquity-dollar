@@ -25,7 +25,7 @@ jobs:
 
       - name: Create development-ci branch if it doesn't exist
         run: |
-          git branch --show-current | grep -q 'development-ci' || git branch development-ci
+          git branch | grep -q 'development-ci' || git branch development-ci
           git checkout development-ci
 
       - name: Merge changes from development
@@ -33,6 +33,5 @@ jobs:
           git merge development --no-edit -m "Sync development to development-ci"|| echo "No changes to merge"
 
       - name: Push changes to development-ci
-        
         run: |
           git push origin development-ci
