@@ -28,16 +28,11 @@ jobs:
             const fs = require("fs");
             const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
             
-            async function run() {
-              const { context } = github;
-              const { payload } = context;
+            const { context } = github;
+            const { payload } = context;
+          
+            const pullRequestNumber = payload.pull_request.number;
+            console.log(`Pull Request Number: ${pullRequestNumber}`);
+            // Pass pullRequestNumber to your print_deployments_log function
+            await print_deployments_log({ github, context, fs, pullRequestNumber });
             
-              if (context.eventName === 'pull_request') {
-                const pullRequestNumber = payload.pull_request.number;
-                console.log(`Pull Request Number: ${pullRequestNumber}`);
-                // Pass pullRequestNumber to your print_deployments_log function
-                await print_deployments_log({ github, context, fs, pullRequestNumber });
-              }
-            }
-            
-            run();
