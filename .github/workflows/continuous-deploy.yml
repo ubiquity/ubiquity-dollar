@@ -40,7 +40,6 @@ jobs:
 
       - name: Deploy Netlify
         run: |
-          echo ${{ secrets }}
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --dir=./dist --prod > ./deployments.log
           ls -la
