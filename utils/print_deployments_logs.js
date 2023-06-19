@@ -1,5 +1,5 @@
 //@ts-check
-module.exports = async ({ github, context }) => {
+module.exports = async ({ github, context, fs }) => {
   const eventName = context.eventName;
   const pullRequestNumber = eventName === 'pull_request' ? context.payload.pull_request.number : 0;
   const commitSha = context.payload.after;
