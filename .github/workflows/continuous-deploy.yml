@@ -35,6 +35,12 @@ jobs:
 
       - name: Extract Artifact
         run: unzip pr.zip && unzip pull-request.zip && ls
+        
+      - name: Deploy Netlify
+        run: |
+          netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
+          netlify deploy --dir=./dist --prod > ./deployments.log
+          ls -la
 
       - name: Deploy Cloudflare
         env:
