@@ -1,8 +1,11 @@
 //@ts-check
 module.exports = async ({ github, context, fs }) => {
-  const eventName = context.eventName;
-  const pullRequestNumber = eventName === 'pull_request' ? context.payload.pull_request.number : 0;
-  const commitSha = context.payload.after;
+  const pullRequestInfo = fs.readFileSync("./pr_number").toString("utf-8");
+  console.log({ pullRequestInfo });
+  const infoSubstring = pullRequestInfo.split(",");
+  const eventName = infoSubstring[0].split("=")[1];
+  const pullRequestNumber = infoSubstring[1].split("=")[1] ?? 0;
+  const commitSha = infoSubstring[2].split("=")[1];
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
   let defaultBody = deploymentsLog;
@@ -30,10 +33,10 @@ module.exports = async ({ github, context, fs }) => {
     const timeObj = {};
     bodyArray.forEach((element) => {
       const timestamp = new Date(
-          element
-              .match(/Deployment:.*\(UTC\)/)[0]
-              .replace("Deployment:", "")
-              .trim()
+        element
+          .match(/Deployment:.*\(UTC\)/)[0]
+          .replace("Deployment:", "")
+          .trim()
       ).getTime();
       timeArray.push(timestamp);
       timeObj[timestamp] = element;
@@ -49,23 +52,23 @@ module.exports = async ({ github, context, fs }) => {
   const createNewCommitComment = async (body = defaultBody) => {
     body = GMTConverter(body);
     verifyInput(body) &&
-    (await github.rest.repos.createCommitComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      commit_sha: commitSha,
-      body: body,
-    }));
+      (await github.rest.repos.createCommitComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        commit_sha: commitSha,
+        body: body,
+      }));
   };
 
   const createNewPRComment = async (body = defaultBody) => {
     body = GMTConverter(body);
     verifyInput(body) &&
-    (await github.rest.issues.createComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      issue_number: pullRequestNumber,
-      body: body,
-    }));
+      (await github.rest.issues.createComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: pullRequestNumber,
+        body: body,
+      }));
   };
 
   const editExistingPRComment = async () => {
@@ -73,12 +76,12 @@ module.exports = async ({ github, context, fs }) => {
     let commentBody = `${GMTConverter(defaultBody)}\n` + `${GMTConverter(botBody)}`;
     const sortCommentBody = sortComments(commentBody);
     verifyInput(sortCommentBody) &&
-    (await github.rest.issues.updateComment({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      comment_id: commentId,
-      body: sortCommentBody,
-    }));
+      (await github.rest.issues.updateComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        comment_id: commentId,
+        body: sortCommentBody,
+      }));
   };
 
   const deleteExistingPRComments = async () => {
