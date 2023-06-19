@@ -35,6 +35,4 @@ jobs:
       - name: Push changes to development-ci
         
         run: |
-          git config --global user.name 'me505'
-          git config --global user.email 'me505@users.noreply.github.com'
-          git push -f origin development-ci
+          git push origin development-ci
