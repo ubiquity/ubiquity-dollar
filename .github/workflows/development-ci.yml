@@ -1,0 +1,40 @@
+name: Development to Development-CI Sync
+
+on:
+  push:
+    branches:
+      - development
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    name: Sync changes from development to development-ci
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.14.1"
+
+      - name: Create development-ci branch if it doesn't exist
+        run: |
+          git branch --show-current | grep -q 'development-ci' || git branch development-ci
+          git checkout development-ci
+
+      - name: Merge changes from development
+        run: |
+          git merge development --no-edit -m "Sync development to development-ci"|| echo "No changes to merge"
+
+      - name: Push changes to development-ci
+        
+        run: |
+          git config --global user.name 'me505'
+          git config --global user.email 'me505@users.noreply.github.com'
+          git push -f origin development-ci
