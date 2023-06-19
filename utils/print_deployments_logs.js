@@ -8,14 +8,12 @@ module.exports = async ({ github, context, fs }) => {
   const commitSha = infoSubstring[2].split("=")[1];
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
-  console.log(deploymentsLog);
   let defaultBody = deploymentsLog;
   const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
-  const commitHashes = deploymentsLog.match(/Commit: ([a-f0-9]+)/gim);
   const botCommentsArray = [];
-
+  
   if (uniqueDeployUrl) {
-    defaultBody = `[Deployment: ${new Date()}](${uniqueDeployUrl})\n\nCommit Hashes:\n${commitHashes.join("\n")}`;
+    defaultBody = `[Deployment: ${new Date()}](${uniqueDeployUrl})`;
   }
 
   const verifyInput = (data) => {
