@@ -1,14 +1,19 @@
 //@ts-check
 module.exports = async ({ github, context, fs }) => {
-  const eventName = "pull_request";
-  const pullRequestNumber = "675";
-  const commitSha = "182a5d4464fea3f3230040c39689d6a0ac6c3320"
+  const pullRequestInfo = fs.readFileSync("./pr_number").toString("utf-8");
+  console.log({ pullRequestInfo });
+  const infoSubstring = pullRequestInfo.split(",");
+  const eventName = infoSubstring[0].split("=")[1];
+  const pullRequestNumber = infoSubstring[1].split("=")[1] ?? 0;
+  const commitSha = infoSubstring[2].split("=")[1];
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
   let defaultBody = deploymentsLog;
-  const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.pages\.dev/gim);
+  const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
   const botCommentsArray = [];
-  
+
+  console.log("test is displayed");
+
   if (uniqueDeployUrl) {
     defaultBody = `[Deployment: ${new Date()}](${uniqueDeployUrl})`;
   }
