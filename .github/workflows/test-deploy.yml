@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.1.0
