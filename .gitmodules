@@ -25,7 +25,7 @@
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
-	branch= main
+	branch= v1.4.0
 [submodule "packages/contracts/lib/Uniswap/v3-periphery"]
 	path = packages/contracts/lib/Uniswap/v3-periphery
 	url = https://github.com/Uniswap/v3-periphery.git
