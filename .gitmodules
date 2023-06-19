@@ -1,40 +1,33 @@
 [submodule "packages/contracts/lib/Uniswap/v2-periphery"]
 	path = packages/contracts/lib/Uniswap/v2-periphery
 	url = https://github.com/Uniswap/v2-periphery.git
-	tag = v1.0.0-beta.0
+	branch= master
 [submodule "packages/contracts/lib/Uniswap/v2-core"]
 	path = packages/contracts/lib/Uniswap/v2-core
 	url = https://github.com/Uniswap/v2-core.git
-	tag = v1.0.1
+	branch= master
 [submodule "packages/contracts/lib/solidity-linked-list"]
 	path = packages/contracts/lib/solidity-linked-list
 	url = https://github.com/vittominacori/solidity-linked-list
-	tag = v5.1.0
+	branch= master
 [submodule "packages/contracts/lib/openzeppelin-contracts"]
 	path = packages/contracts/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
-	tag = v4.9.0
+	branch = release-v4.9
 [submodule "packages/contracts/lib/forge-std"]
 	path = packages/contracts/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-	tag = v1.5.6
+	branch = chore/v1.5.6
 [submodule "packages/contracts/lib/abdk-libraries-solidity"]
 	path = packages/contracts/lib/abdk-libraries-solidity
 	url = https://github.com/abdk-consulting/abdk-libraries-solidity
-	tag = v3.2
+	branch= master
 [submodule "packages/contracts/lib/operator-filter-registry"]
 	path = packages/contracts/lib/operator-filter-registry
 	url = https://github.com/ProjectOpenSea/operator-filter-registry
-	tag = v1.4.1
+	branch= main
 [submodule "packages/contracts/lib/Uniswap/v3-periphery"]
 	path = packages/contracts/lib/Uniswap/v3-periphery
 	url = https://github.com/Uniswap/v3-periphery.git
-	tag = v1.3.0
-[submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-periphery"]
-	path = packages/contracts/packages/contracts/lib/Uniswap/v2-periphery
-	url = https://github.com/Uniswap/v2-periphery.git
-	tag = v1.0.0-beta.0
-[submodule "packages/contracts/packages/contracts/lib/Uniswap/v2-core"]
-	path = packages/contracts/packages/contracts/lib/Uniswap/v2-core
-	url = https://github.com/Uniswap/v2-core
-	tag = v1.0.1
+	branch= main
+
