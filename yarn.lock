@@ -3777,7 +3777,7 @@ __metadata:
     "@types/prettier": ^2
     "@typescript-eslint/eslint-plugin": ^5.32.0
     "@typescript-eslint/parser": ^5.32.0
-    cspell: latest
+    cspell: 6.31.1
     eslint: ^8.23.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
@@ -7010,7 +7010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cspell@npm:latest":
+"cspell@npm:6.31.1, cspell@npm:latest":
   version: 6.31.1
   resolution: "cspell@npm:6.31.1"
   dependencies:
