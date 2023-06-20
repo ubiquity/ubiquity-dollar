@@ -33,4 +33,4 @@ jobs:
 
       - name: Push changes to development-ci
         run: |
-          git push origin development-ci
+          git push -f origin development-ci
