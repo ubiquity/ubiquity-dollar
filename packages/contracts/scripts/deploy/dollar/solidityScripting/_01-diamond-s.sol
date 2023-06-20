@@ -28,7 +28,7 @@ import {UbiquityGovernanceToken} from "../../../../src/dollar/core/ubiquity-gove
 import {IDiamondCut} from "../../../../src/dollar/interfaces/i-diamond-cut.sol";
 //import "../../src/dollar/interfaces/i-diamond-loupe.sol";
 
-import "./00-constants-s.sol";
+import "./_00-constants-s.sol";
 
 contract DiamondScript is Constants {
     bytes4[] selectorsOfDiamondCutFacet;
