@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {ManagerFacet} from "../facets/manager-facet.sol";
-import {ERC20Ubiquity} from "erc-20-ubiquity.sol";
+import {ERC20Ubiquity} from "../../dollar/core/erc-20-ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";
 import "../libraries/constants.sol";
 

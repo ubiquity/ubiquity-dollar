@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.8.19;
 
-import {IMetaPool} from "./IMetaPool.sol";
+import {IMetaPool} from "./i-meta-pool.sol";
 
 interface IUbiquityPool {
     function mintDollar(

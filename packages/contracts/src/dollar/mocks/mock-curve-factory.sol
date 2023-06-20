@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ICurveFactory} from "../../dollar/interfaces/ICurveFactory.sol";
-import {MockMetaPool} from "../../dollar/mocks/MockMetaPool.sol";
+import {ICurveFactory} from "../../dollar/interfaces/i-curve-factory.sol";
+import {MockMetaPool} from "../../dollar/mocks/mock-meta-pool.sol";
 
 contract MockCurveFactory is ICurveFactory {
     // solhint-disable-next-line no-empty-blocks

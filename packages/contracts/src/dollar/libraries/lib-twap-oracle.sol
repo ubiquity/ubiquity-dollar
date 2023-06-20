@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.19;
 
-import {IMetaPool} from "../../dollar/interfaces/IMetaPool.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {IMetaPool} from "../../dollar/interfaces/i-meta-pool.sol";
+import {LibAppStorage} from "./lib-app-storage.sol";
 
 library LibTWAPOracle {
     struct TWAPOracleStorage {

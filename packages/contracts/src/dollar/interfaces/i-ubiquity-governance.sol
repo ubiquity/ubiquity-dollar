@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity 0.8.19;
 
-import "ierc-20-ubiquity.sol";
+import "src/dollar/interfaces/ierc-20-ubiquity.sol";
 
 /// @title Governance token interface
 /// @author Ubiquity DAO

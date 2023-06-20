@@ -2,11 +2,11 @@
 
 pragma solidity ^0.8.19;
 
-import {EnumerableSet} from "./EnumerableSet.sol";
-import {EnumerableSet} from "../libraries/EnumerableSet.sol";
-import {AddressUtils} from "../libraries/AddressUtils.sol";
-import {UintUtils} from "../libraries/UintUtils.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {EnumerableSet} from "./enumerable-set.sol";
+import {EnumerableSet} from "../libraries/enumerable-set.sol";
+import {AddressUtils} from "../libraries/address-utils.sol";
+import {UintUtils} from "../libraries/uint-utils.sol";
+import {LibAppStorage} from "./lib-app-storage.sol";
 
 library LibAccessControl {
     using AddressUtils for address;

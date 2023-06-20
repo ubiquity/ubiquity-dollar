@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {StakingShare} from "../core/StakingShare.sol";
+import {StakingShare} from "../core/staking-share.sol";
 
 interface IUbiquityFormulas {
     function durationMultiply(

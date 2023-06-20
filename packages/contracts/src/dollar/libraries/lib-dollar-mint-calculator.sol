@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IDollarMintCalculator} from "../../dollar/interfaces/i-dollar-mint-calculator.sol";
 import "abdk-libraries-solidity/ABDKMathQuad.sol";
-import "lib-twap-oracle.sol";
+import "./lib-twap-oracle.sol";
 import {LibAppStorage, AppStorage} from "./lib-app-storage.sol";
 
 /// @title Calculates amount of dollars ready to be minted when twapPrice > 1

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {LibStaking} from "../libraries/LibStaking.sol";
+import {LibStaking} from "../libraries/lib-staking.sol";
 import {Modifiers} from "../libraries/lib-app-storage.sol";
 
-import {IStaking} from "../../dollar/interfaces/IStaking.sol";
+import {IStaking} from "../../dollar/interfaces/i-staking.sol";
 
 contract StakingFacet is Modifiers, IStaking {
     /// @dev dollarPriceReset remove Ubiquity Dollar unilaterally from the curve LP share sitting inside

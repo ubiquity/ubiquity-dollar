@@ -5,7 +5,7 @@ pragma solidity ^0.8.19;
 /**
  * @dev https://github.com/solidstate-network/solidstate-solidity/blob/master/contracts/utils/AddressUtils.sol
  */
-import {UintUtils} from "./UintUtils.sol";
+import {UintUtils} from "./uint-utils.sol";
 
 library AddressUtils {
     using UintUtils for uint256;

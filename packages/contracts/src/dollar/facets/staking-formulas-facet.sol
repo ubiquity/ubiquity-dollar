@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {LibStakingFormulas} from "../libraries/LibStakingFormulas.sol";
-import {StakingShare} from "../core/StakingShare.sol";
+import {LibStakingFormulas} from "../libraries/lib-staking-formulas.sol";
+import {StakingShare} from "../core/staking-share.sol";
 
 contract StakingFormulasFacet {
     /// @dev formula Governance Rights corresponding to a staking shares LP amount

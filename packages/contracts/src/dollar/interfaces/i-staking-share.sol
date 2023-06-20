@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "ierc-1155-ubiquity.sol";
+import "../../dollar/interfaces/ierc-1155-ubiquity.sol";
 
 /// @title ERC1155 Ubiquity preset interface
 /// @author Ubiquity DAO

@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {MockERC20} from "./MockERC20.sol";
+import {MockERC20} from "./mock-erc-20.sol";
 
 contract MockMetaPool is MockERC20 {
     address token0;

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {LibCurveDollarIncentive} from "../libraries/LibCurveDollarIncentive.sol";
+import {LibCurveDollarIncentive} from "../libraries/lib-curve-dollar-incentive.sol";
 import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 contract CurveDollarIncentiveFacet is Modifiers {

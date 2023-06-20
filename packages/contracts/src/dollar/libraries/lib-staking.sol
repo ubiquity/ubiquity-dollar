@@ -3,9 +3,9 @@ pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "lib-twap-oracle.sol";
-import "lib-chef.sol";
-import "lib-staking-formulas.sol";
+import "./lib-twap-oracle.sol";
+import "./lib-chef.sol";
+import "./lib-staking-formulas.sol";
 import {StakingShare} from "../core/staking-share.sol";
 
 library LibStaking {

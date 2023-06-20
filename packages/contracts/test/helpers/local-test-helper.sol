@@ -1,20 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
-import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
-import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
-import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
-import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
-import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
-import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
-import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
-import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
-import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
-import {MockUbiquistick} from "../../src/dollar/mocks/MockUbiquistick.sol";
+import {MockCreditNft} from "../../src/dollar/mocks/mock-credit-nft.sol";
+import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/mock-twap-oracle-dollar-3-pool.sol";
+import {MockCreditToken} from "../../src/dollar/mocks/mock-credit-token.sol";
+import {DiamondSetup} from "../diamond/diamond-test-setup.sol";
+import {ManagerFacet} from "../../src/dollar/facets/manager-facet.sol";
+import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/twap-oracle-dollar-3-pool-facet.sol";
+import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/credit-redemption-calculator-facet.sol";
+import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/credit-nft-redemption-calculator-facet.sol";
+import {DollarMintCalculatorFacet} from "../../src/dollar/facets/dollar-mint-calculator-facet.sol";
+import {CreditNftManagerFacet} from "../../src/dollar/facets/credit-nft-manager-facet.sol";
+import {DollarMintExcessFacet} from "../../src/dollar/facets/dollar-mint-excess-facet.sol";
+import {UbiquityDollarToken} from "../../src/dollar/core/ubiquity-dollar-token.sol";
+import {MockMetaPool} from "../../src/dollar/mocks/mock-meta-pool.sol";
+import {MockUbiquistick} from "../../src/dollar/mocks/mock-ubiquistick.sol";
 
 contract MockCreditNftRedemptionCalculator {
     constructor() {}

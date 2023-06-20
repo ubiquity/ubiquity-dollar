@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {LibChef} from "../libraries/LibChef.sol";
+import {LibChef} from "../libraries/lib-chef.sol";
 import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 contract ChefFacet is Modifiers {

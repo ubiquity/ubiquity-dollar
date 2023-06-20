@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
+import {IDiamondCut} from "../interfaces/i-diamond-cut.sol";
 import {LibDiamond} from "../libraries/lib-diamond.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.

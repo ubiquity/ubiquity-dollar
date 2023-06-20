@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import {LibBondingCurve} from "../libraries/LibBondingCurve.sol";
+import {LibBondingCurve} from "../libraries/lib-bonding-curve.sol";
 import {Modifiers} from "../libraries/lib-app-storage.sol";
 
-import {IBondingCurve} from "../../dollar/interfaces/IBondingCurve.sol";
+import {IBondingCurve} from "../../dollar/interfaces/i-bonding-curve.sol";
 
 /**
  * @title Bonding Curve

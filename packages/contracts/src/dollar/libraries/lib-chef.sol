@@ -6,9 +6,9 @@ import "../../dollar/interfaces/ierc-20-ubiquity.sol";
 import "../../dollar/interfaces/itwap-oracle-dollar-3-pool.sol";
 import "../../dollar/interfaces/i-ubiquity-formulas.sol";
 import "../../dollar/interfaces/ierc-1155-ubiquity.sol";
-import "lib-app-storage.sol";
+import "./lib-app-storage.sol";
 import {LibTWAPOracle} from "./lib-twap-oracle.sol";
-import {LibStakingFormulas} from "lib-staking-formulas.sol";
+import {LibStakingFormulas} from "./lib-staking-formulas.sol";
 
 library LibChef {
     using SafeERC20 for IERC20Ubiquity;

@@ -4,15 +4,15 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {CreditNft} from "../../dollar/core/credit-nft.sol";
-import {CREDIT_NFT_MANAGER_ROLE} from "constants.sol";
+import {CREDIT_NFT_MANAGER_ROLE} from "./constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";
 import {IDollarMintExcess} from "../../dollar/interfaces/i-dollar-mint-excess.sol";
 import {LibAppStorage, AppStorage} from "./lib-app-storage.sol";
-import {LibCreditRedemptionCalculator} from "lib-credit-redemption-calculator.sol";
+import {LibCreditRedemptionCalculator} from "./lib-credit-redemption-calculator.sol";
 import {LibTWAPOracle} from "./lib-twap-oracle.sol";
-import {LibCreditNftRedemptionCalculator} from "lib-credit-nft-redemption-calculator.sol";
+import {LibCreditNftRedemptionCalculator} from "./lib-credit-nft-redemption-calculator.sol";
 import {UbiquityCreditToken} from "../../dollar/core/ubiquity-credit-token.sol";
-import {LibAccessControl} from "lib-access-control.sol";
+import {LibAccessControl} from "./lib-access-control.sol";
 import {IDollarMintCalculator} from "../../dollar/interfaces/i-dollar-mint-calculator.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders

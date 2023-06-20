@@ -4,9 +4,9 @@ pragma solidity ^0.8.19;
 // Modified from FraxPool.sol by Frax Finance
 // https://github.com/FraxFinance/frax-solidity/blob/master/src/hardhat/contracts/Frax/Pools/FraxPool.sol
 
-import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
+import {LibUbiquityPool} from "../libraries/lib-ubiquity-pool.sol";
 import {Modifiers} from "../libraries/lib-app-storage.sol";
-import {IMetaPool} from "../interfaces/IMetaPool.sol";
+import {IMetaPool} from "../interfaces/i-meta-pool.sol";
 import "forge-std/console.sol";
 
 contract UbiquityPoolFacet is Modifiers {
