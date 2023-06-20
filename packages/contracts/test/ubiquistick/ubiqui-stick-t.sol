@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import "forge-std/test.sol";
-import "operator-filter-registry/operator-filterer.sol";
+import "operator-filter-registry/OperatorFilterer.sol";
 
 import "../../src/ubiquistick/ubiqui-stick.sol";
 
@@ -12,7 +12,7 @@ contract UbiquiStickHarness is UbiquiStick {
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.difficulty,
+                        block.prevrandao,
                         block.timestamp,
                         msg.sender,
                         tokenIdNext
