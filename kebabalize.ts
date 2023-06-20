@@ -47,14 +47,14 @@ function renameAndReplaceFilesInDir(dir: string) {
       filePaths.push({ old: file, new: newPath });
     });
 
-    // Replace all references of oldName without extension with newName without extension in all .ts and .tsx files
+    // Replace all references of oldName without extension with newName without extension in all .ts, .tsx and .sol files
     filePaths.forEach(({ old, new: newPath }) => {
       const oldName = path.basename(old);
       const oldNameWithoutExtension = path.parse(oldName).name;
       const newNameWithoutExtension = _.kebabCase(oldNameWithoutExtension);
 
       filePaths.forEach((filePath) => {
-        if (filePath.new.endsWith(".ts") || filePath.new.endsWith(".tsx")) {
+        if (filePath.new.endsWith(".ts") || filePath.new.endsWith(".tsx") || filePath.new.endsWith(".sol")) {
           const data = fs.readFileSync(filePath.new, "utf-8");
           // Match only occurrences of oldNameWithoutExtension within quotes
           const regex = new RegExp(`(['"\`])${oldNameWithoutExtension}(['"\`])`, "g");
