@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/i-uniswap-v-2-pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/i-uniswap-v-2-router-01.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";

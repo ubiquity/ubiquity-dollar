@@ -2,8 +2,8 @@
 pragma solidity 0.8.19;
 
 import {Modifiers} from "../libraries/lib-app-storage.sol";
-import "@openzeppelin/contracts/token/ERC20/erc-20.sol";
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "../../dollar/interfaces/i-ubiquity-dollar-token.sol";
 import "../../dollar/interfaces/i-curve-factory.sol";

@@ -4,11 +4,11 @@ pragma solidity 0.8.19;
 // FORK from Land DAO -> https://github.com/Land-DAO/nft-contracts/blob/main/contracts/LandSale.sol
 
 import "@openzeppelin/contracts/access/ownable.sol";
-import "@openzeppelin/contracts/security/reentrancy-guard.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
-import "interfaces/i-ubiqui-stick.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "./interfaces/i-ubiqui-stick.sol";
 
 contract UbiquiStickSale is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;

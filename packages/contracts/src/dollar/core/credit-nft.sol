@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {ERC1155Ubiquity} from "erc-1155-ubiquity.sol";
-import "solidity-linked-list/contracts/structured-linked-list.sol";
+import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import {ICreditNft} from "../../dollar/interfaces/i-credit-nft.sol";
 import "../libraries/constants.sol";
 

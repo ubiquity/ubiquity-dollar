@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/access/i-access-control.sol";
+import "@openzeppelin/contracts/access/IAccessControl.sol";
 
 /// @title Ubiquity Dollar Manager interface
 /// @author Ubiquity DAO

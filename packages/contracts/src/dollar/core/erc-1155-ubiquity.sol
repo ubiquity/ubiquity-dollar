@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/erc-1155.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-pausable.sol";
+import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
 import "../interfaces/i-access-control.sol";
 import "../libraries/constants.sol";
 

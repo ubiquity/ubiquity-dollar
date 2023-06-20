@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 interface IJar is IERC20 {
     function claimInsurance() external; // NOTE: Only yDelegatedVault implements this

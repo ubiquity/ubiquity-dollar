@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 // Modified from FraxPool.sol by Frax Finance
 // https://github.com/FraxFinance/frax-solidity/blob/master/src/hardhat/contracts/Frax/Pools/FraxPool.sol
 
-import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {UbiquityDollarToken} from "../core/ubiquity-dollar-token.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/ierc-20-metadata.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";

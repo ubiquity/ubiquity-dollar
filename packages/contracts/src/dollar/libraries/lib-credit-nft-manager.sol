@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/utils/introspection/erc-165.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {CreditNft} from "../../dollar/core/credit-nft.sol";
 import {CREDIT_NFT_MANAGER_ROLE} from "constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";

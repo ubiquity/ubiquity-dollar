@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../../helpers/local-test-helper.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/i-meta-pool.sol";
 import {StakingShare} from "../../../src/dollar/core/staking-share.sol";

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "../diamond-test-setup.sol";
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract DollarMintCalculatorFacetTest is DiamondSetup {
     address dollarManagerAddress;

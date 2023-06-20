@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/ierc-721.sol";
-import "@openzeppelin/contracts/token/ERC20/erc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 import "../../src/ubiquistick/simple-bond.sol";
 import "../../src/ubiquistick/ubiqui-stick.sol";

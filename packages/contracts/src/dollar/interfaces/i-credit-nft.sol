@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/ierc-1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 /// @title A Credit Nft which corresponds to a ICreditNftRedemptionCalculator contract
 interface ICreditNft is IERC1155 {

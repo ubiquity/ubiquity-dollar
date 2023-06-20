@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICreditNftRedemptionCalculator} from "../../dollar/interfaces/i-credit-nft-redemption-calculator.sol";
 import {LibCreditNftRedemptionCalculator} from "../libraries/lib-credit-nft-redemption-calculator.sol";
 

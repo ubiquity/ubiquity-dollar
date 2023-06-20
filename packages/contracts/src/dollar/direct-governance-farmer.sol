@@ -6,15 +6,15 @@ pragma solidity 0.8.19;
  * @dev Ubiquity Dollar.
  */
 
-import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
-import "@openzeppelin/contracts/token/ERC1155/utils/erc-1155-receiver.sol";
-import "@openzeppelin/contracts/security/reentrancy-guard.sol";
-import "interfaces/i-deposit-zap.sol";
-import "interfaces/i-staking.sol";
-import "interfaces/i-staking-share.sol";
-import "interfaces/i-stable-swap-3-pool.sol";
-import {IUbiquityDollarManager} from "interfaces/i-ubiquity-dollar-manager.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "./interfaces/i-deposit-zap.sol";
+import "./interfaces/i-staking.sol";
+import "./interfaces/i-staking-share.sol";
+import "./interfaces/i-stable-swap-3-pool.sol";
+import {IUbiquityDollarManager} from "./interfaces/i-ubiquity-dollar-manager.sol";
 
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
