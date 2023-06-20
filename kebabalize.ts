@@ -6,6 +6,7 @@ function walk(dir: string, done: (err: Error | null, results?: string[]) => void
   let results: string[] = [];
   fs.readdir(dir, function (err, list) {
     if (err) return done(err);
+    list = list.filter((item) => !/(^|\/)\.[^/.]/g.test(item)); // Ignore hidden files/directories
     let pending = list.length;
     if (!pending) return done(null, results);
     list.forEach(function (file) {
@@ -46,8 +47,8 @@ function renameAndReplaceFilesInDir(dir: string) {
             const regex = new RegExp(oldName, "g");
             const result = data.replace(regex, newName);
             fs.writeFileSync(filePath, result, "utf-8");
-          } catch (e) {
-            console.error(e);
+          } catch (error) {
+            console.error(error);
           }
         }
       });
