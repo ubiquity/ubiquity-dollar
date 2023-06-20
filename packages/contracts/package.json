@@ -2,7 +2,7 @@
   "name": "@ubiquity/contracts",
   "version": "1.0.1-beta",
   "private": true,
-  "description": "Ubiquity Algorithmic Dollar smart contracts",
+  "description": "Ubiquity Dollar smart contracts",
   "author": "Ubiquity DAO",
   "license": "Apache-2.0",
   "homepage": "https://dao.ubq.fi/dollar",
@@ -29,15 +29,15 @@
     "start:anvil": "tsx ./scripts/anvil/anvil.ts",
     "prebuild": "run-p clean",
     "deploy": "tsx ./scripts/deploy/deploy.ts",
-    "deploy:development": "tsx ./scripts/deploy/dollar/DevelopmentDeploy.ts",
-    "deploy:diamond": "tsx ./scripts/deploy/manager/DiamondInAll.ts",
+    "deploy:development": "tsx ./scripts/deploy/dollar/development-deploy.ts",
+    "deploy:diamond": "tsx ./scripts/deploy/manager/diamond-in-all.ts",
     "clean": "run-p clean:*",
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",
     "build": "forge build",
     "forge:install": "forge install",
     "_hardhat-task": "tsx ./scripts/task/task.ts",
-    "migrate:metapool": "tsx ./scripts/task/dollar/MigrateMetapool.ts"
+    "migrate:metapool": "tsx ./scripts/task/dollar/migrate-metapool.ts"
   },
   "keywords": [
     "stablecoin",
