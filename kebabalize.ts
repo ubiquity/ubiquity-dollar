@@ -29,6 +29,10 @@ function walk(dir: string, done: (err: Error | null, results?: string[]) => void
 function renameAndReplaceFilesInDir(dir: string) {
   walk(dir, function (err, files) {
     if (err) throw err;
+
+    // Store old and new file paths
+    const filePaths: { old: string; new: string }[] = [];
+
     files!.forEach(function (file) {
       const oldName = path.basename(file);
       const newNameWithoutExtension = _.kebabCase(path.parse(oldName).name);
@@ -39,17 +43,23 @@ function renameAndReplaceFilesInDir(dir: string) {
       // Rename file
       fs.renameSync(file, newPath);
 
-      // Replace all references of oldName with newName in all .ts and .tsx files
-      files!.forEach((filePath) => {
-        if (filePath.endsWith(".ts") || filePath.endsWith(".tsx")) {
-          try {
-            const data = fs.readFileSync(filePath, "utf-8");
-            const regex = new RegExp(oldName, "g");
-            const result = data.replace(regex, newName);
-            fs.writeFileSync(filePath, result, "utf-8");
-          } catch (error) {
-            console.error(error);
-          }
+      // Store old and new file paths
+      filePaths.push({ old: file, new: newPath });
+    });
+
+    // Replace all references of oldName without extension with newName without extension in all .ts and .tsx files
+    filePaths.forEach(({ old, new: newPath }) => {
+      const oldName = path.basename(old);
+      const oldNameWithoutExtension = path.parse(oldName).name;
+      const newNameWithoutExtension = _.kebabCase(oldNameWithoutExtension);
+
+      filePaths.forEach((filePath) => {
+        if (filePath.new.endsWith(".ts") || filePath.new.endsWith(".tsx")) {
+          const data = fs.readFileSync(filePath.new, "utf-8");
+          // Match only occurrences of oldNameWithoutExtension within quotes
+          const regex = new RegExp(`(['"\`])${oldNameWithoutExtension}(['"\`])`, "g");
+          const result = data.replace(regex, `$1${newNameWithoutExtension}$2`);
+          fs.writeFileSync(filePath.new, result, "utf-8");
         }
       });
     });
