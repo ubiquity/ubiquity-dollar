@@ -1,4 +1,4 @@
-import BondingPool from "./BondingPool";
+import BondingPool from "./bonding-pool";
 import { PoolData, pools } from "./lib/pools";
 
 type FundingPoolParams = {

@@ -1,6 +1,6 @@
 import { ConnectKitButton } from "connectkit";
 import { useDisconnect } from "wagmi";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 
 const WalletConnect = () => {
   const { disconnect } = useDisconnect();

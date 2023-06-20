@@ -10,7 +10,7 @@ import useBalances from "../lib/hooks/useBalances";
 import useSigner from "../lib/hooks/useSigner";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";
 import useWalletAddress from "../lib/hooks/useWalletAddress";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import PositiveNumberInput from "../ui/PositiveNumberInput";
 
 const UcrNftRedeem = () => {

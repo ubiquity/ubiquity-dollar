@@ -8,7 +8,7 @@ import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
 import DepositShare from "./DepositShare";
 import useBalances from "../lib/hooks/useBalances";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import Icon from "../ui/Icon";
 import Loading from "../ui/Loading";
 

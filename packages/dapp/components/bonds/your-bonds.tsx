@@ -1,4 +1,4 @@
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import { BondData } from "./lib/hooks/useSimpleBond";
 import { format, formatFixed, round } from "./lib/utils";
 

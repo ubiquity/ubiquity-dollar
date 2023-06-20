@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useState } from "react";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import PositiveNumberInput, { TextInput } from "../ui/PositiveNumberInput";
 
 import { poolByAddress } from "./lib/pools";

@@ -1,4 +1,4 @@
-import { PossibleProviders } from "@/lib/hooks/useWeb3";
+import { PossibleProviders } from "@/lib/hooks/use-web-3";
 import { ethers } from "ethers";
 import { getERC20Contract, getUniswapV2PairContract, getUniswapV3PoolContract } from "@/components/utils/contracts";
 import { ERC20 } from '../../../types/ERC20';

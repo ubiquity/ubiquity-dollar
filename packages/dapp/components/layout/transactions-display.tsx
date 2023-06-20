@@ -1,5 +1,5 @@
 import useTransactionLogger, { Transaction } from "../lib/hooks/useTransactionLogger";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import Spinner from "../ui/Spinner";
 
 export const Transacting = (props: { transaction: Transaction; onDismiss: () => void }): JSX.Element | null => {
