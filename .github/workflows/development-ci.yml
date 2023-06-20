@@ -25,11 +25,12 @@ jobs:
       - name: Create development-ci branch if it doesn't exist and sync to the latest remote branch
         run: |
           git branch | grep -q 'development-ci' || git branch development-ci
-          git fetch origin 
+          git pull origin 
+
 
       - name: Merge changes from development
         run: |
-          git merge development --no-edit -m "Sync development to development-ci"|| echo "No changes to merge"
+          git merge development | echo "No changes to merge"
 
       - name: Push changes to development-ci
         run: |
