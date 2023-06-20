@@ -4,7 +4,7 @@ import { formatEther } from "@/lib/format";
 import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 // import Address from "./ui/Address";
-import Balance from "./ui/Balance";
+import Balance from "./ui/balance";
 // import { useConnectedContext } from "@/lib/connected";
 
 type State = null | MetapoolMonitorProps;

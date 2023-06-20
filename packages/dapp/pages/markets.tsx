@@ -1,5 +1,5 @@
 import { ButtonLink } from "@/components/ui/button";
-import Icon, { IconsNames } from "@/components/ui/Icon";
+import Icon, { IconsNames } from "@/components/ui/icon";
 import { FC } from "react";
 
 const Currency = ({ name, icon }: { name: string; icon: IconsNames }) => (

@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 
-import Icon from "../ui/Icon";
-import Inventory from "./Inventory";
-import Sidebar from "./Sidebar";
+import Icon from "../ui/icon";
+import Inventory from "./inventory";
+import Sidebar from "./sidebar";
 import TransactionsDisplay from "./transactions-display";
 
 type LayoutProps = {

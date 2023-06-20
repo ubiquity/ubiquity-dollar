@@ -2,7 +2,7 @@ import { useState } from "react";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
 import Button from "../ui/button";
 import PositiveNumberInput from "../ui/positive-number-input";
-import Tooltip from "../ui/Tooltip";
+import Tooltip from "../ui/tooltip";
 
 import { getPoolUrl, PoolData, PoolInfo } from "./lib/pools";
 import { format, round } from "./lib/utils";

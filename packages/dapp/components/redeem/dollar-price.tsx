@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from "ethers";
-import Tooltip from "../ui/Tooltip";
+import Tooltip from "../ui/tooltip";
 
 import usePrices from "./lib/use-prices";
 

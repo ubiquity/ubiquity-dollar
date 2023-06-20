@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Icon, { IconsNames } from "../ui/Icon";
+import Icon, { IconsNames } from "../ui/icon";
 import LightDarkMode from "./light-dark-mode";
 import BuildInfo from "./build-info";
 import WalletConnect from "./wallet-connect";

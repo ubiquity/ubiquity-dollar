@@ -4,7 +4,7 @@ import { formatEther } from "@/lib/format";
 import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 // import Address from "./ui/Address";
-import Balance from "./ui/Balance";
+import Balance from "./ui/balance";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {

@@ -9,8 +9,8 @@ import DepositShare from "./deposit-share";
 import useBalances from "../lib/hooks/use-balances";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
 import Button from "../ui/button";
-import Icon from "../ui/Icon";
-import Loading from "../ui/Loading";
+import Icon from "../ui/icon";
+import Loading from "../ui/loading";
 
 type ShareData = {
   id: number;
