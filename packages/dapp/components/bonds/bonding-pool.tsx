@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
-import Button from "../ui/_button";
+import Button from "../ui/button";
 import PositiveNumberInput from "../ui/positive-number-input";
 import Tooltip from "../ui/tooltip";
 

@@ -1,4 +1,4 @@
-import { ButtonLink } from "../ui/_button";
+import { ButtonLink } from "../ui/button";
 
 const WhitelistContainer = ({ isConnected, isLoaded, isWhitelisted }: { isConnected: boolean; isLoaded: boolean; isWhitelisted: boolean }) => {
   const status = !isConnected ? "not-connected" : !isLoaded ? "loading" : isWhitelisted ? "whitelisted" : "not-whitelisted";

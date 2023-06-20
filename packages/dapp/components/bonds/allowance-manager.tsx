@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../ui/_button";
+import Button from "../ui/button";
 import PositiveNumberInput, { TextInput } from "../ui/positive-number-input";
 
 type AllowanceData = {

@@ -1,4 +1,4 @@
-import { ButtonLink } from "@/components/ui/_button";
+import { ButtonLink } from "@/components/ui/button";
 import Icon, { IconsNames } from "@/components/ui/icon";
 import { FC } from "react";
 

@@ -1,4 +1,4 @@
-import { ButtonLink } from "../ui/_button";
+import { ButtonLink } from "../ui/button";
 import { format, round } from "./lib/utils";
 
 const Liquidate = ({ accumulated, poolAddress, uarUsdPrice }: { accumulated: number | null; poolAddress: string; uarUsdPrice: number | null }) => {
