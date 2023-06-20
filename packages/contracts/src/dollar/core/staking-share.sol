@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ERC1155Ubiquity} from "packages/contracts/src/dollar/core/erc-1155-ubiquity.sol";
+import {ERC1155Ubiquity} from "../../dollar/core/erc-1155-ubiquity.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 import "../../dollar/utils/safe-add-array.sol";
 import "../interfaces/i-access-control.sol";
