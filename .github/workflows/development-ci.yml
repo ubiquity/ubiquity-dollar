@@ -14,7 +14,6 @@ jobs:
     name: Sync changes from development to development-ci
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v2
 
@@ -23,10 +22,11 @@ jobs:
         with:
           node-version: "18.14.1"
 
-      - name: Create development-ci branch if it doesn't exist
+      - name: Create development-ci branch if it doesn't exist and sync to the latest remote branch
         run: |
           git branch | grep -q 'development-ci' || git branch development-ci
           git checkout development-ci
+          git pull origin development-ci
 
       - name: Merge changes from development
         run: |
