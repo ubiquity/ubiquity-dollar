@@ -83,5 +83,5 @@ jobs:
           github-token: ${{ steps.get_installation_token.outputs.token }}
           script: |
             const fs = require("fs");
-            const print_deployments_log = require('${{ github.workspace }}/utils/print-deployments-logs.js');
-            await print_deployments_log({github, context, fs});
+            const printDeploymentsLog = require('${{ github.workspace }}/utils/print-deployments-logs.js');
+            await printDeploymentsLog({github, context, fs});
