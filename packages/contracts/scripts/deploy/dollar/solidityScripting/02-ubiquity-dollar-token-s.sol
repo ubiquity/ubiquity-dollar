@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
-import "01-diamond-s.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./01-diamond-s.sol";
 
 contract DollarScript is DiamondScript {
     UbiquityDollarToken dollar;
