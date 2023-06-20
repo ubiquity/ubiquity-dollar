@@ -9,7 +9,7 @@ import "../libraries/lib-app-storage.sol";
 import "../libraries/lib-access-control.sol";
 import {UbiquityDollarToken} from "../core/ubiquity-dollar-token.sol";
 import {UbiquityGovernanceToken} from "../core/ubiquity-governance-token.sol";
-import "@openzeppelin/contracts/interfaces/ierc165.sol";
+import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {LibTWAPOracle} from "../libraries/lib-twap-oracle.sol";
 import {LibStaking} from "../libraries/lib-staking.sol";
 import {LibChef} from "../libraries/lib-chef.sol";

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/interfaces/ierc165.sol";
+import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {IDiamondCut} from "../../src/dollar/interfaces/i-diamond-cut.sol";
 import {DiamondCutFacet} from "../../src/dollar/facets/diamond-cut-facet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/diamond-loupe-facet.sol";
