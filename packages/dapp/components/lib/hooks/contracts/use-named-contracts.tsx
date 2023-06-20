@@ -1,4 +1,4 @@
-import useWeb3, { PossibleProviders } from "../useWeb3";
+import useWeb3, { PossibleProviders } from "../use-web-3";
 
 import Deployed_Contracts from "@ubiquity/contracts/deployments.json";
 import NAMED_ACCOUNTS from "../../../config/named-accounts.json";

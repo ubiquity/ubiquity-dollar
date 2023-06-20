@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { ChildrenShim } from "./children-shim";
+import { ChildrenShim } from "./children-shim-d";
 
 export type Transaction = {
   title: string;

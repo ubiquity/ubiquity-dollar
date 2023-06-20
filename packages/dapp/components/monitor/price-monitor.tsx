@@ -6,7 +6,7 @@ import { formatEther, formatMwei } from "@/lib/format";
 import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 // import Address from "./ui/Address";
-import PriceExchange from "./ui/PriceExchange";
+import PriceExchange from "./ui/price-exchange";
 
 type State = null | PriceMonitorProps;
 type PriceMonitorProps = {

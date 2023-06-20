@@ -1,7 +1,7 @@
 import { getDebtCouponManagerContract, getUbiquityManagerContract } from "@/components/utils/contracts";
 import { useMemo } from "react";
-import useDeployedAddress from "../useDeployedAddress";
-import useWeb3Provider from "../useWeb3Provider";
+import useDeployedAddress from "../use-deployed-address";
+import useWeb3Provider from "../use-web-3-provider";
 
 export type DeployedContracts = ReturnType<typeof useDeployedContracts> | null;
 const useDeployedContracts = () => {

@@ -1,4 +1,4 @@
-import useTransactionLogger, { Transaction } from "../lib/hooks/useTransactionLogger";
+import useTransactionLogger, { Transaction } from "../lib/hooks/use-transaction-logger";
 import Button from "../ui/button";
 import Spinner from "../ui/Spinner";
 

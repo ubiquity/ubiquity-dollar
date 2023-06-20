@@ -1,10 +1,10 @@
 import { erc1155BalanceOf } from "@/lib/utils";
 import { BigNumber, Contract } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
-import useManagerManaged from "./contracts/useManagerManaged";
-import useNamedContracts from "./contracts/useNamedContracts";
-import useWalletAddress from "./useWalletAddress";
-import { ChildrenShim } from "./children-shim";
+import useManagerManaged from "./contracts/use-manager-managed";
+import useNamedContracts from "./contracts/use-named-contracts";
+import useWalletAddress from "./use-wallet-address";
+import { ChildrenShim } from "./children-shim-d";
 
 export interface Balances {
   uad: BigNumber;

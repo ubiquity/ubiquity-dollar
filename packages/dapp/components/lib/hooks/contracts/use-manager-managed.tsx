@@ -18,9 +18,9 @@ import {
 } from "@/components/utils/contracts";
 import { ManagerFacet } from "types";
 import { createContext, useContext, useEffect, useState } from "react";
-import { ChildrenShim } from "../children-shim";
-import useWeb3, { PossibleProviders } from "../useWeb3";
-import useDeployedContracts from "./useDeployedContracts";
+import { ChildrenShim } from "../children-shim-d";
+import useWeb3, { PossibleProviders } from "../use-web-3";
+import useDeployedContracts from "./use-deployed-contracts";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;
 export const ManagedContractsContext = createContext<ManagedContracts>(null);

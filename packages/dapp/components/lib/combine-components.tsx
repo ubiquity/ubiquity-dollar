@@ -1,5 +1,5 @@
 import { ComponentProps, FC } from "react";
-import { ChildrenShim } from "./hooks/children-shim";
+import { ChildrenShim } from "./hooks/children-shim-d";
 export const combineComponents = (...components: FC<ChildrenShim>[]): FC<ChildrenShim> => {
   return components.reduce(
     (AccumulatedComponents, CurrentComponent) => {

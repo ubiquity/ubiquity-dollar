@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ensureERC1155Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
-import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
+import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 import useBalances from "../lib/hooks/useBalances";
 import useSigner from "../lib/hooks/useSigner";

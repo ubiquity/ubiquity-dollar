@@ -1,4 +1,4 @@
-import useWeb3 from "./useWeb3";
+import useWeb3 from "./use-web-3";
 
 const useSigner = () => {
   const { signer } = useWeb3();

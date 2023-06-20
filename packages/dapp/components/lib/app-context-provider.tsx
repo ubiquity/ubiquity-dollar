@@ -1,9 +1,9 @@
-import { ManagedContractsContextProvider } from "./hooks/contracts/useManagerManaged";
-import { BalancesContextProvider } from "./hooks/useBalances";
-import { TransactionsContextProvider } from "./hooks/useTransactionLogger";
-import { UseWeb3Provider } from "./hooks/useWeb3";
+import { ManagedContractsContextProvider } from "./hooks/contracts/use-manager-managed";
+import { BalancesContextProvider } from "./hooks/use-balances";
+import { TransactionsContextProvider } from "./hooks/use-transaction-logger";
+import { UseWeb3Provider } from "./hooks/use-web-3";
 
-import { combineComponents } from "./combineComponents";
+import { combineComponents } from "./combine-components";
 
 // const providers = [UseWeb3Provider, ManagedContractsContextProvider, TransactionsContextProvider, BalancesContextProvider];
 // @note Fix: (Error: missing revert data in call exception since Diamond isn't deployed yet)
