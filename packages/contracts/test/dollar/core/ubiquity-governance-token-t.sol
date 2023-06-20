@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {UbiquityGovernanceToken} from "../../../src/dollar/core/UbiquityGovernanceToken.sol";
 
-import "../../helpers/LocalTestHelper.sol";
+import "../../helpers/local-test-helper.sol";
 
 contract UbiquityGovernanceTokenTest is LocalTestHelper {
     address mock_sender = address(0x111);

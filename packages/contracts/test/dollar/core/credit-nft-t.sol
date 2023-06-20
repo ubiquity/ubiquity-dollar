@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
 import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 
-import "../../helpers/LocalTestHelper.sol";
+import "../../helpers/local-test-helper.sol";
 
 contract CreditNftTest is LocalTestHelper {
     address dollarManagerAddress;

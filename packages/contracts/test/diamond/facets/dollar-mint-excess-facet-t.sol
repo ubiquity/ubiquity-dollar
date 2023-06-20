@@ -6,7 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
-import "../DiamondTestSetup.sol";
+import "../diamond-test-setup.sol";
 
 contract DollarMintExcessFacetTest is DiamondSetup {
     address dollarManagerAddress;

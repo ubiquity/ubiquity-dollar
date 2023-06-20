@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/interfaces/IERC165.sol";
+import "@openzeppelin/contracts/interfaces/ierc-165.sol";
 import {IDiamondCut} from "../../../../src/dollar/interfaces/IDiamondCut.sol";
 import {DiamondCutFacet} from "../../../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../../../src/dollar/facets/DiamondLoupeFacet.sol";
@@ -26,9 +26,9 @@ import {UbiquityDollarToken} from "../../../../src/dollar/core/UbiquityDollarTok
 import {StakingShare} from "../../../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {IDiamondCut} from "../../../../src/dollar/interfaces/IDiamondCut.sol";
-//import "../../src/dollar/interfaces/IDiamondLoupe.sol";
+//import "../../src/dollar/interfaces/i-diamond-loupe.sol";
 
-import "./00_Constants.s.sol";
+import "00-constants-s.sol";
 
 contract DiamondScript is Constants {
     bytes4[] selectorsOfDiamondCutFacet;

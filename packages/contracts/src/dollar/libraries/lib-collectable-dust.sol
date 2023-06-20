@@ -2,13 +2,13 @@
 
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 import {EnumerableSet} from "./EnumerableSet.sol";
 import {AddressUtils} from "./AddressUtils.sol";
 import {UintUtils} from "./UintUtils.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
-import "./Constants.sol";
+import "constants.sol";
 
 library LibCollectableDust {
     using SafeERC20 for IERC20;

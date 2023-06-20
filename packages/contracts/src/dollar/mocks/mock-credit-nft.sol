@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/token/ERC1155/erc-1155.sol";
 
 contract MockCreditNft is ERC1155 {
     uint256 private _totalOutstandingDebt;

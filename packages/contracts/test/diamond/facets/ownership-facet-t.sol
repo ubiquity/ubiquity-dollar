@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import {OwnershipFacet} from "../../../src/dollar/facets/OwnershipFacet.sol";
-import "../../../src/dollar/libraries/Constants.sol";
-import "../DiamondTestSetup.sol";
+import "../../../src/dollar/libraries/constants.sol";
+import "../diamond-test-setup.sol";
 import {AddressUtils} from "../../../src/dollar/libraries/AddressUtils.sol";
 
 import {UintUtils} from "../../../src/dollar/libraries/UintUtils.sol";

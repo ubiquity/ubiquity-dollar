@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import "../libraries/Constants.sol";
+import "../libraries/constants.sol";
 
 contract UbiquityGovernanceToken is ERC20Ubiquity {
     constructor(

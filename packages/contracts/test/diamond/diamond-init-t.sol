@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {LibAppStorage} from "../../src/dollar/libraries/LibAppStorage.sol";
-import "forge-std/Test.sol";
+import "forge-std/test.sol";
 
 contract MockDiamondInit is DiamondInit {
     function toCheckNonReentrant() external nonReentrant {

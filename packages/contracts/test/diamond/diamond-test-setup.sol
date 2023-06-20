@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/interfaces/IERC165.sol";
+import "@openzeppelin/contracts/interfaces/ierc-165.sol";
 import {IDiamondCut} from "../../src/dollar/interfaces/IDiamondCut.sol";
 import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
@@ -31,7 +31,7 @@ import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
-import "../../src/dollar/libraries/Constants.sol";
+import "../../src/dollar/libraries/constants.sol";
 
 abstract contract DiamondSetup is DiamondTestHelper {
     // contract types of facets to be deployed

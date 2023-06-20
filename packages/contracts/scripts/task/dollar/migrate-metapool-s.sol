@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 /* 
-import "forge-std/Script.sol";
+import "forge-std/script.sol";
 
-import "src/dollar/interfaces/IMetaPool.sol";
-import "src/dollar/Staking.sol";
-import "../../../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import "src/dollar/core/TWAPOracleDollar3pool.sol";
-import "src/dollar/core/UbiquityDollarManager.sol";
+import "src/dollar/interfaces/i-meta-pool.sol";
+import "src/dollar/staking.sol";
+import "../../../lib/openzeppelin-contracts/contracts/token/ERC20/ierc-20.sol";
+import "src/dollar/core/twap-oracle-dollar-3-pool.sol";
+import "src/dollar/core/ubiquity-dollar-manager.sol";
 
 contract migrateFunds is Script {
     function run() public virtual {

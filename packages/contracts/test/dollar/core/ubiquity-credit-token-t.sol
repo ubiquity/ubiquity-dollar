@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "../../../src/dollar/core/UbiquityCreditToken.sol";
-import "../../helpers/LocalTestHelper.sol";
+import "../../../src/dollar/core/ubiquity-credit-token.sol";
+import "../../helpers/local-test-helper.sol";
 
 contract UbiquityCreditTokenTest is LocalTestHelper {
     UbiquityCreditToken ubiquityCreditToken;

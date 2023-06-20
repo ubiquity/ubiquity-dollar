@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "forge-std/Test.sol";
-import "operator-filter-registry/OperatorFilterer.sol";
+import "forge-std/test.sol";
+import "operator-filter-registry/operator-filterer.sol";
 
-import "../../src/ubiquistick/UbiquiStick.sol";
+import "../../src/ubiquistick/ubiqui-stick.sol";
 
 contract UbiquiStickHarness is UbiquiStick {
     function exposed_random() public view returns (uint256) {

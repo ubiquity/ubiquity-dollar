@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/erc-4626.sol";
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/erc-20.sol";
 
 contract ZozoVault is ERC4626 {
     constructor(ERC20 _asset) ERC4626(_asset) ERC20("ZoZo Vault", "vZOZO") {}

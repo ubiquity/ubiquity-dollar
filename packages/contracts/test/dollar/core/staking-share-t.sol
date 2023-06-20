@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "../../helpers/LocalTestHelper.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "../../helpers/local-test-helper.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
-import "../../../src/dollar/libraries/Constants.sol";
+import "../../../src/dollar/libraries/constants.sol";
 
 contract DepositStakingShare is LocalTestHelper {
     address treasury = address(0x3);

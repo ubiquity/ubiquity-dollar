@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "../../../../src/dollar/libraries/Constants.sol";
-import "forge-std/Script.sol";
+import "../../../../src/dollar/libraries/constants.sol";
+import "forge-std/script.sol";
 
 contract Constants is Script {
     uint256[] shareAmounts;

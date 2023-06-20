@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../DiamondTestSetup.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../diamond-test-setup.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 
 contract DollarMintCalculatorFacetTest is DiamondSetup {
     address dollarManagerAddress;

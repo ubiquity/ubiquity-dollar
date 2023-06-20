@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.16;
 
-import "../DiamondTestSetup.sol";
-import "../../../src/dollar/libraries/Constants.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "../diamond-test-setup.sol";
+import "../../../src/dollar/libraries/constants.sol";
+import "@openzeppelin/contracts/utils/math/safe-math.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import "forge-std/Test.sol";
+import "forge-std/test.sol";
 
 contract BondingCurveFacetTest is DiamondSetup {
     address treasury = address(0x3);

@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import "../DiamondTestSetup.sol";
+import "../diamond-test-setup.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
@@ -14,10 +14,10 @@ import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
-import "../../../src/dollar/libraries/Constants.sol";
+import "../../../src/dollar/libraries/constants.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import "forge-std/Test.sol";
+import "forge-std/test.sol";
 
 contract ZeroStateStaking is DiamondSetup {
     MockERC20 crvToken;

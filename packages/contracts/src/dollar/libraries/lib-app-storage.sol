@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {LibDiamond} from "./LibDiamond.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
-import "./Constants.sol";
+import "constants.sol";
 
 struct AppStorage {
     // reentrancy guard

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../DiamondTestSetup.sol";
+import "../diamond-test-setup.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 
 contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {

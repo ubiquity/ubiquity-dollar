@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../DiamondTestSetup.sol";
-import "abdk/ABDKMathQuad.sol";
+import "../diamond-test-setup.sol";
+import "abdk/abdk-math-quad.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 
 contract StakingFormulasFacetTest is DiamondSetup {

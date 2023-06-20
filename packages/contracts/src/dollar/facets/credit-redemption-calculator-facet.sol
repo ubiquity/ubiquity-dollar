@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../../dollar/interfaces/ICreditRedemptionCalculator.sol";
+import "../../dollar/interfaces/i-credit-redemption-calculator.sol";
 
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../../src/dollar/DirectGovernanceFarmer.sol";
-import "../../src/dollar/mocks/MockERC20.sol";
-import "../helpers/LocalTestHelper.sol";
+import "../../src/dollar/direct-governance-farmer.sol";
+import "../../src/dollar/mocks/mock-erc-20.sol";
+import "../helpers/local-test-helper.sol";
 import {IERC20Ubiquity} from "../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {IUbiquityDollarManager} from "../../src/dollar/interfaces/IUbiquityDollarManager.sol";
 

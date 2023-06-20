@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import "../DiamondTestSetup.sol";
+import "../diamond-test-setup.sol";
 
 contract TWAPOracleDollar3poolFacetTest is DiamondSetup {
     address curve3CRVTokenAddress = address(0x333);

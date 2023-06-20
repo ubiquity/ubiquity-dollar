@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "abdk/ABDKMathQuad.sol";
+import "abdk/abdk-math-quad.sol";
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
-import "../libraries/Constants.sol";
+import "../libraries/constants.sol";
 
 contract CreditClock {
     using ABDKMathQuad for uint256;

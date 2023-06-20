@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../libraries/LibCollectableDust.sol";
+import "../libraries/lib-collectable-dust.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {ICollectableDust} from "../../dollar/interfaces/utils/ICollectableDust.sol";
 

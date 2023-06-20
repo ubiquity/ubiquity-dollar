@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
-import "../../dollar/utils/SafeAddArray.sol";
-import "../interfaces/IAccessControl.sol";
-import "../libraries/Constants.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-uri-storage.sol";
+import "../../dollar/utils/safe-add-array.sol";
+import "../interfaces/i-access-control.sol";
+import "../libraries/constants.sol";
 
 contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     using SafeAddArray for uint256[];

@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IIncentive} from "../../dollar/interfaces/IIncentive.sol";
-import "../libraries/Constants.sol";
+import "../libraries/constants.sol";
 
 contract UbiquityDollarToken is ERC20Ubiquity {
     /// @notice get associated incentive contract, 0 address if N/A

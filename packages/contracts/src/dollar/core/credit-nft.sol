@@ -2,9 +2,9 @@
 pragma solidity 0.8.19;
 
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
+import "solidity-linked-list/contracts/structured-linked-list.sol";
 import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
-import "../libraries/Constants.sol";
+import "../libraries/constants.sol";
 
 /// @title A CreditNft redeemable for dollars with an expiry block number
 /// @notice An ERC1155 where the token ID is the expiry block number

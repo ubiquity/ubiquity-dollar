@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "../DiamondTestSetup.sol";
+import "../diamond-test-setup.sol";
 import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
-import "../../../src/dollar/libraries/Constants.sol";
+import "../../../src/dollar/libraries/constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";

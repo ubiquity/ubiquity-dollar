@@ -2,13 +2,13 @@
 pragma solidity 0.8.19;
 
 import {Modifiers} from "../libraries/LibAppStorage.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/erc-20.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 
-import "../../dollar/interfaces/IUbiquityDollarToken.sol";
-import "../../dollar/interfaces/ICurveFactory.sol";
-import "../../dollar/interfaces/IMetaPool.sol";
-import "../libraries/LibAccessControl.sol";
+import "../../dollar/interfaces/i-ubiquity-dollar-token.sol";
+import "../../dollar/interfaces/i-curve-factory.sol";
+import "../../dollar/interfaces/i-meta-pool.sol";
+import "../libraries/lib-access-control.sol";
 
 contract ManagerFacet is Modifiers {
     // TODO Add a generic setter for extra addresses that needs to be linked

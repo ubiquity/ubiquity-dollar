@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "../../dollar/interfaces/IERC20Ubiquity.sol";
-import "../../dollar/interfaces/ITWAPOracleDollar3pool.sol";
-import "../../dollar/interfaces/IUbiquityFormulas.sol";
-import "../../dollar/interfaces/IERC1155Ubiquity.sol";
-import "./LibAppStorage.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
+import "../../dollar/interfaces/ierc-20-ubiquity.sol";
+import "../../dollar/interfaces/itwap-oracle-dollar-3-pool.sol";
+import "../../dollar/interfaces/i-ubiquity-formulas.sol";
+import "../../dollar/interfaces/ierc-1155-ubiquity.sol";
+import "lib-app-storage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibStakingFormulas} from "./LibStakingFormulas.sol";
 

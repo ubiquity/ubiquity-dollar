@@ -9,8 +9,8 @@ import {CurveDollarIncentiveFacet} from "../../../src/dollar/facets/CurveDollarI
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import "../DiamondTestSetup.sol";
-import "forge-std/Test.sol";
+import "../diamond-test-setup.sol";
+import "forge-std/test.sol";
 
 contract CurveDollarIncentiveTest is DiamondSetup {
     address stableSwapMetaPoolAddress = address(0x123);

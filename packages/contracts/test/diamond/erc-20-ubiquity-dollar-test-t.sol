@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "./DiamondTestSetup.sol";
-import "../../src/dollar/libraries/Constants.sol";
+import "diamond-test-setup.sol";
+import "../../src/dollar/libraries/constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondSetup {
     event Minting(

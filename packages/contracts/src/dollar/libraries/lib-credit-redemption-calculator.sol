@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "abdk-libraries-solidity/abdk-math-quad.sol";
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 

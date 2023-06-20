@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "./IERC1155Ubiquity.sol";
+import "@openzeppelin/contracts/token/ERC1155/ierc-1155.sol";
+import "ierc-1155-ubiquity.sol";
 
 /// @title ERC1155 Ubiquity preset interface
 /// @author Ubiquity DAO

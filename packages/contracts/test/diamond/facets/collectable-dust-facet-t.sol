@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import {AccessControlFacet} from "../../../src/dollar/facets/AccessControlFacet.sol";
-import "../../../src/dollar/libraries/Constants.sol";
-import "../DiamondTestSetup.sol";
+import "../../../src/dollar/libraries/constants.sol";
+import "../diamond-test-setup.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 
 contract CollectableDustFacetTest is DiamondSetup {

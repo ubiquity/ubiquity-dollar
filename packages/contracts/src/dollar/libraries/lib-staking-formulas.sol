@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
-import "abdk/ABDKMathQuad.sol";
-import "./Constants.sol";
+import "abdk/abdk-math-quad.sol";
+import "constants.sol";
 
 library LibStakingFormulas {
     using ABDKMathQuad for uint256;

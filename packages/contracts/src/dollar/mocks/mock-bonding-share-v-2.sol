@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "../utils/SafeAddArray.sol";
-import "../../dollar/libraries/Constants.sol";
+import "@openzeppelin/contracts/token/ERC1155/erc-1155.sol";
+import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-burnable.sol";
+import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-pausable.sol";
+import "../utils/safe-add-array.sol";
+import "../../dollar/libraries/constants.sol";
 import {IUbiquityDollarManager} from "../interfaces/IUbiquityDollarManager.sol";
 
 //cspell:ignore BondingShareV2
