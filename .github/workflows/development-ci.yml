@@ -26,6 +26,7 @@ jobs:
         run: |
           git branch | grep -q 'development-ci' || git branch development-ci
           git checkout development-ci
+          git config pull.rebase true  
           git pull origin development-ci
 
       - name: Merge changes from development
