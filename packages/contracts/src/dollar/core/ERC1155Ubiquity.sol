@@ -20,8 +20,8 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
 
     IAccessControl public accessCtrl;
     // Mapping from account to operator approvals
-    mapping(address => uint256[]) public _holderBalances;
-    uint256 public _totalSupply;
+    mapping(address => uint256[]) public holderBalances;
+    uint256 public totalSupply;
 
     // ----------- Modifiers -----------
     modifier onlyMinter() virtual {
@@ -89,8 +89,8 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual onlyMinter {
         _mint(to, id, amount, data);
-        _totalSupply += amount;
-        _holderBalances[to].add(id);
+        totalSupply += amount;
+        holderBalances[to].add(id);
     }
 
     // @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] variant of {mint}.
@@ -101,12 +101,12 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
-        uint256 localTotalSupply = _totalSupply;
+        uint256 localTotalSupply = totalSupply;
         for (uint256 i = 0; i < ids.length; ++i) {
             localTotalSupply += amounts[i];
         }
-        _totalSupply = localTotalSupply;
-        _holderBalances[to].add(ids);
+        totalSupply = localTotalSupply;
+        holderBalances[to].add(ids);
     }
 
     /**
@@ -140,7 +140,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual override {
         super.safeTransferFrom(from, to, id, amount, data);
-        _holderBalances[to].add(id);
+        holderBalances[to].add(id);
     }
 
     /**
@@ -154,14 +154,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         bytes memory data
     ) public virtual override {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
-        _holderBalances[to].add(ids);
-    }
-
-    /**
-     * @dev Total amount of tokens in with a given id.
-     */
-    function totalSupply() public view virtual returns (uint256) {
-        return _totalSupply;
+        holderBalances[to].add(ids);
     }
 
     /**
@@ -170,7 +163,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     function holderTokens(
         address holder
     ) public view returns (uint256[] memory) {
-        return _holderBalances[holder];
+        return holderBalances[holder];
     }
 
     function _burn(
@@ -179,7 +172,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256 amount
     ) internal virtual override whenNotPaused {
         super._burn(account, id, amount);
-        _totalSupply -= amount;
+        totalSupply -= amount;
     }
 
     function _burnBatch(
@@ -189,7 +182,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     ) internal virtual override whenNotPaused {
         super._burnBatch(account, ids, amounts);
         for (uint256 i = 0; i < ids.length; ++i) {
-            _totalSupply -= amounts[i];
+            totalSupply -= amounts[i];
         }
     }
 
