@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {LibStaking} from "../libraries/LibStaking.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 import {IStaking} from "../../dollar/interfaces/IStaking.sol";
 

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.16;
 
 import {LibBondingCurve} from "../libraries/LibBondingCurve.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 import {IBondingCurve} from "../../dollar/interfaces/IBondingCurve.sol";
 

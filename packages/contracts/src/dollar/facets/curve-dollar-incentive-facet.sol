@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {LibCurveDollarIncentive} from "../libraries/LibCurveDollarIncentive.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 contract CurveDollarIncentiveFacet is Modifiers {
     function incentivize(

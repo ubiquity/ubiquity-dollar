@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.19;
 
-import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {LibTWAPOracle} from "../libraries/lib-twap-oracle.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
 
-import {ITWAPOracleDollar3pool} from "../../dollar/interfaces/ITWAPOracleDollar3pool.sol";
+import {ITWAPOracleDollar3pool} from "../../dollar/interfaces/itwap-oracle-dollar-3-pool.sol";
 
 contract TWAPOracleDollar3poolFacet is Modifiers, ITWAPOracleDollar3pool {
     function setPool(

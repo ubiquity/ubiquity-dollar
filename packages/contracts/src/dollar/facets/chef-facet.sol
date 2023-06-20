@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {LibChef} from "../libraries/LibChef.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 contract ChefFacet is Modifiers {
     function setGovernancePerBlock(

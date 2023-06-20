@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {IAccessControl} from "../interfaces/IAccessControl.sol";
-import {AccessControlInternal} from "../access/AccessControlInternal.sol";
-import {LibAccessControl} from "../libraries/LibAccessControl.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {IAccessControl} from "../interfaces/i-access-control.sol";
+import {AccessControlInternal} from "../access/access-control-internal.sol";
+import {LibAccessControl} from "../libraries/lib-access-control.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
 
 /**
  * @title Role-based access control system

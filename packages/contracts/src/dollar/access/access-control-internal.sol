@@ -5,7 +5,7 @@ pragma solidity 0.8.19;
 import {EnumerableSet} from "../libraries/EnumerableSet.sol";
 import {AddressUtils} from "../libraries/AddressUtils.sol";
 import {UintUtils} from "../libraries/UintUtils.sol";
-import {LibAccessControl} from "../libraries/LibAccessControl.sol";
+import {LibAccessControl} from "../libraries/lib-access-control.sol";
 
 /**
  * @title Role-based access control system
