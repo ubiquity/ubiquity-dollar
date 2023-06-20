@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "./_04-ubiquity-credit-s.sol";
+import "./ubiquity-credit-s.sol";
 
 contract StakingShareScript is CreditScript {
     function run() public virtual override {

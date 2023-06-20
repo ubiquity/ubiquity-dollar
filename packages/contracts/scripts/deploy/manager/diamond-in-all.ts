@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { getSelectorsFromFacet, getContractInstance, FacetCutAction } from "./DiamondDeployHelper";
+import { getSelectorsFromFacet, getContractInstance, FacetCutAction } from "./diamond-deploy-helper";
 import { OptionDefinition } from "command-line-args";
 import fs from "fs";
 import path from "path";

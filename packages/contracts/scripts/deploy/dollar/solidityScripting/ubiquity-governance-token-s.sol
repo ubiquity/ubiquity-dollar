@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "./_02-ubiquity-dollar-token-s.sol";
+import "./ubiquity-dollar-token-s.sol";
 
 contract GovernanceScript is DollarScript {
     UbiquityGovernanceToken governance;

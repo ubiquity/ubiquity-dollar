@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "./_03-ubiquity-governance-token-s.sol";
+import "./ubiquity-governance-token-s.sol";
 import {UbiquityCreditToken} from "../../../../src/dollar/core/ubiquity-credit-token.sol";
 import {CreditNft} from "../../../../src/dollar/core/credit-nft.sol";
 

@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./_01-diamond-s.sol";
+import "./diamond-s.sol";
 
 contract DollarScript is DiamondScript {
     UbiquityDollarToken dollar;
