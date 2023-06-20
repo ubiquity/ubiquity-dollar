@@ -28,10 +28,10 @@ jobs:
         with:
           script: |
             const fs = require("fs");
-            const download-artifact = require('${{ github.workspace }}/utils/download-artifact.js');
+            const downloadArtifact = require('${{ github.workspace }}/utils/download-artifact.js');
             const workflow_run_id = '${{ github.event.workflow_run.id }}';
             const workspace = '${{ github.workspace }}';
-            download-artifact({github, context, fs, workflow_run_id, workspace})
+            downloadArtifact({github, context, fs, workflow_run_id, workspace})
 
       - name: Extract Artifact
         run: unzip pr.zip && unzip pull-request.zip && ls
