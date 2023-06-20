@@ -27,7 +27,7 @@ const Inventory = () => {
   }
 
   return (
-    <div id="Inventory">
+    <div id="inventory">
       <div>
         {/* <span>My inventory</span> */}
         {/* <span> <Network /> </span> */}
@@ -91,7 +91,7 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
       const wasAdded = await ethereum.request({
         method: "wallet_watchAsset",
         params: {
-          type: "ERC20",
+          type: "erc-20",
           options: {
             address: tokenAddr,
             symbol: token,

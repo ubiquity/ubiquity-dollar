@@ -32,8 +32,8 @@ const simpleBondHandler = async (args: CommandLineOption) => {
   }
 
   const simpleBondAddress = result.deployedTo;
-  const { abi: sbAbi } = await deployments(chainId.toString(), "SimpleBond");
-  const { abi: ubsAbi } = await deployments(chainId.toString(), "UbiquiStick");
+  const { abi: sbAbi } = await deployments(chainId.toString(), "simple-bond");
+  const { abi: ubsAbi } = await deployments(chainId.toString(), "ubiqui-stick");
   const simpleBondContract = await getContract(simpleBondAddress, sbAbi);
   console.log("Setting up the sticker...");
   let tx = await simpleBondContract.setSticker(ubsAbi);
@@ -81,7 +81,7 @@ const ubiquiStickSaleHandler = async (args: CommandLineOption) => {
   }
 
   const ubiquiStickSaleAddress = result.deployedTo;
-  const ubiquiStickDeployments = await deployments(chainId.toString(), "UbiquiStick");
+  const ubiquiStickDeployments = await deployments(chainId.toString(), "ubiqui-stick");
 
   const { address: ubdAddr, abi: ubdAbi } = ubiquiStickDeployments;
   const ubiquiStickContract = await getContract(ubdAddr, ubdAbi);
@@ -91,7 +91,7 @@ const ubiquiStickSaleHandler = async (args: CommandLineOption) => {
   console.log("Granting minter role to UbiquiStickSale contract done!!!, hash: ", receipt.transactionHash);
 
   console.log("Setting up funds address and token contract...");
-  const { abi: ubsAbi } = await deployments(chainId.toString(), "UbiquiStickSale");
+  const { abi: ubsAbi } = await deployments(chainId.toString(), "ubiqui-stick-sale");
   const ubiquiStickSaleContract = await getContract(ubiquiStickSaleAddress, ubsAbi);
   tx = await ubiquiStickSaleContract.setFundsAddress(treasury);
   console.log("Setting funds address tx mined, tx: ", tx);
@@ -203,13 +203,13 @@ export const Deploy_Manager: DeployCallbackFn = {
     createHandler([autoRedeemName, autoRedeemSymbol, treasury], args, `${ubiquiStickPath}/UAR.sol:UAR`);
   },
   SimpleBond: (args: CommandLineOption) => {
-    standardHandler["SimpleBond"](args);
+    standardHandler["simple-bond"](args);
   },
   UbiquiStick: (args: CommandLineOption) => {
     //unfinished code
-    standardHandler["UbiquiStick"](args);
+    standardHandler["ubiqui-stick"](args);
   },
   UbiquiStickSale: (args: CommandLineOption) => {
-    standardHandler["UbiquiStickSale"](args);
+    standardHandler["ubiqui-stick-sale"](args);
   },
 };

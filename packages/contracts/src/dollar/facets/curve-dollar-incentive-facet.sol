@@ -5,17 +5,12 @@ import {LibCurveDollarIncentive} from "../libraries/LibCurveDollarIncentive.sol"
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
 contract CurveDollarIncentiveFacet is Modifiers {
-
     function incentivize(
         address sender,
         address receiver,
         uint256 amountIn
     ) external onlyDollarManager {
-        LibCurveDollarIncentive.incentivize(
-            sender,
-            receiver,
-            amountIn
-        );
+        LibCurveDollarIncentive.incentivize(sender, receiver, amountIn);
     }
 
     /// @notice set an address to be exempted from Curve trading incentives

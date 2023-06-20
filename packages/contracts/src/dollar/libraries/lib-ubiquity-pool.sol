@@ -21,7 +21,9 @@ library LibUbiquityPool {
     using SafeERC20 for IERC20;
 
     bytes32 constant UBIQUITY_POOL_STORAGE_POSITION =
-        bytes32(uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1);
+        bytes32(
+            uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1
+        );
 
     function ubiquityPoolStorage()
         internal
