@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {EnumerableSet} from "enumerable-set.sol";
 import {AddressUtils} from "address-utils.sol";
 import {UintUtils} from "uint-utils.sol";
-import {LibAppStorage} from "lib-app-storage.sol";
+import {LibAppStorage} from "./lib-app-storage.sol";
 import "constants.sol";
 
 library LibCollectableDust {

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {CreditClock} from "../../../src/dollar/core/credit-clock.sol";
-import "abdk-libraries-solidity/abdk-math-quad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 import "../../helpers/local-test-helper.sol";
 
 contract CreditClockTest is LocalTestHelper {

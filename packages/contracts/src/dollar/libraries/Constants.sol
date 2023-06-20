@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "ABDK/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 
 bytes32 constant DEFAULT_ADMIN_ROLE = 0x00;
 bytes32 constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256(

@@ -3,7 +3,7 @@ pragma solidity ^0.8.16;
 
 import "../diamond-test-setup.sol";
 import "../../../src/dollar/libraries/constants.sol";
-import "@openzeppelin/contracts/utils/math/safe-math.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {MockERC20} from "../../../src/dollar/mocks/mock-erc-20.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/mock-credit-nft.sol";
 import "forge-std/test.sol";

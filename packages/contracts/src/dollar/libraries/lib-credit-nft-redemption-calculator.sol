@@ -2,10 +2,10 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "abdk-libraries-solidity/abdk-math-quad.sol";
+import "abdk-libraries-solidity/ABDKMathQuad.sol";
 
 import {CreditNft} from "../../dollar/core/credit-nft.sol";
-import {LibAppStorage, AppStorage} from "lib-app-storage.sol";
+import {LibAppStorage, AppStorage} from "./lib-app-storage.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 library LibCreditNftRedemptionCalculator {
