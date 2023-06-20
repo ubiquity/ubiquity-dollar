@@ -10,7 +10,7 @@ import useBalances from "../lib/hooks/use-balances";
 import useSigner from "../lib/hooks/use-signer";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
 import useWalletAddress from "../lib/hooks/use-wallet-address";
-import Button from "../ui/button";
+import Button from "../ui/_button";
 import PositiveNumberInput from "../ui/positive-number-input";
 
 const UcrNftGenerator = () => {

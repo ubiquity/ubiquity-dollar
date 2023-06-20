@@ -1,5 +1,5 @@
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
-import Button from "../ui/button";
+import Button from "../ui/_button";
 import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/hooks/use-ubiquistick";
 import Whitelist from "./whitelist";
 

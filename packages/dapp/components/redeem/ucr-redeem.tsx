@@ -8,7 +8,7 @@ import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 import useBalances from "../lib/hooks/use-balances";
 import useSigner from "../lib/hooks/use-signer";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
-import Button from "../ui/button";
+import Button from "../ui/_button";
 import PositiveNumberInput from "../ui/positive-number-input";
 import useRouter from "../lib/hooks/use-router";
 import useTrade from "../lib/hooks/use-trade";
