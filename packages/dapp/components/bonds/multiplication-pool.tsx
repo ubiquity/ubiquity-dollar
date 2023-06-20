@@ -1,4 +1,4 @@
-import BondingPool from "./BondingPool";
+import BondingPool from "./bonding-pool";
 import { goldenPool, PoolData } from "./lib/pools";
 
 type MultiplicationPoolParams = {

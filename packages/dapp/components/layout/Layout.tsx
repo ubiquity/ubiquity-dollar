@@ -4,7 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Icon from "../ui/Icon";
 import Inventory from "./Inventory";
 import Sidebar from "./Sidebar";
-import TransactionsDisplay from "./TransactionsDisplay";
+import TransactionsDisplay from "./transactions-display";
 
 type LayoutProps = {
   children: React.ReactNode;

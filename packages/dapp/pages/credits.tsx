@@ -3,7 +3,7 @@ import DollarPrice from "@/components/redeem/DollarPrice";
 import UcrRedeem from "@/components/redeem/UcrRedeem";
 import UcrNftGenerator from "@/components/redeem/DebtCouponDeposit";
 import UcrNftRedeem from "@/components/redeem/UcrNftRedeem";
-import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
 // import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
 import dynamic from "next/dynamic";

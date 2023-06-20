@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { allPools } from "../pools";
-import useDeployedAddress from "@/components/lib/hooks/useDeployedAddress";
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import useDeployedAddress from "@/components/lib/hooks/use-deployed-address";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 import {
   getChainlinkPriceFeedContract,
   getERC20Contract,

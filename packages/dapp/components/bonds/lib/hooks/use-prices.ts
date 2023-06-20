@@ -2,7 +2,7 @@ import { ethers, Contract } from "ethers";
 import { useEffect, useState } from "react";
 
 import { goldenPool, PoolData } from "../pools";
-import { Contracts } from "./useLaunchPartyContracts";
+import { Contracts } from "./use-launch-party-contracts";
 
 const usePrices = (contracts: Contracts | null, tokensContracts: Contract[], poolsData: { [token: string]: PoolData }) => {
   const [uarUsdPrice, setUarUsdPrice] = useState<number | null>(null);

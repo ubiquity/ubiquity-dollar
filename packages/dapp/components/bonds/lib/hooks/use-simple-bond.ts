@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 import { ZERO_ADDRESS } from "@/lib/utils";
 
-import fetchUniswapPoolsData from "../fetchUniswapPoolsData";
+import fetchUniswapPoolsData from "../fetch-uniswap-pools-data";
 import { allPools, PoolData, poolsByToken } from "../pools";
 import { aprFromRatio, multiplierFromRatio } from "../utils";
-import { Contracts } from "./useLaunchPartyContracts";
-import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import { Contracts } from "./use-launch-party-contracts";
+import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 import { ERC20 } from "types";
 
 export type BondData = {

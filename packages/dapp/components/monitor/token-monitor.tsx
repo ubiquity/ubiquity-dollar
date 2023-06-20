@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
 import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
-import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 // import Address from "./ui/Address";
 import Balance from "./ui/Balance";
 

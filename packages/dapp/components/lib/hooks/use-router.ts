@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AlphaRouter } from "@uniswap/smart-order-router";
 import { Percent, TradeType } from "@uniswap/sdk-core";
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 import { uAD_TOKEN, uCR_TOKEN, USDC_TOKEN, USDT_TOKEN, DAI_TOKEN, parseAmount } from "../utils";
 
 const useRouter = (selectedToken: string, amountIn = "0"): [string | undefined, string | undefined] => {

@@ -1,7 +1,7 @@
-import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 import { useEffect, useState } from "react";
-import { Contracts } from "./useLaunchPartyContracts";
+import { Contracts } from "./use-launch-party-contracts";
 
 export type OwnedSticks = {
   black: number;

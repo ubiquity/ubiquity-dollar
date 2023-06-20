@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { FC, useState } from "react";
 import "@uniswap/widgets/fonts.css";
 
-import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
 import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
 import DollarPrice from "@/components/redeem/DollarPrice";
 

@@ -4,7 +4,7 @@ import { SwapWidget } from "@uniswap/widgets";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
 import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
-import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 import useBalances from "../lib/hooks/useBalances";
 import useSigner from "../lib/hooks/useSigner";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";
@@ -14,7 +14,7 @@ import useRouter from "../lib/hooks/useRouter";
 import useTrade from "../lib/hooks/useTrade";
 import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
 import { getUniswapV3RouterContract } from "../utils/contracts";
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 
 const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const { provider, walletAddress } = useWeb3();

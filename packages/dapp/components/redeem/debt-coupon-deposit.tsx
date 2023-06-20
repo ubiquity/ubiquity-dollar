@@ -5,7 +5,7 @@ import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
 import useDeployedContracts from "../lib/hooks/contracts/useDeployedContracts";
-import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 import useBalances from "../lib/hooks/useBalances";
 import useSigner from "../lib/hooks/useSigner";
 import useTransactionLogger from "../lib/hooks/useTransactionLogger";

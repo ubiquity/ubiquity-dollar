@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import { useState } from "react";
 import Button from "../ui/button";
-import PositiveNumberInput, { TextInput } from "../ui/PositiveNumberInput";
+import PositiveNumberInput, { TextInput } from "../ui/positive-number-input";
 
 import { poolByAddress } from "./lib/pools";
 import { aprFromRatio, multiplierFromRatio, round } from "./lib/utils";

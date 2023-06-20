@@ -1,7 +1,7 @@
 import { Percent, TradeType } from "@uniswap/sdk-core";
 import { AlphaRouter } from "@uniswap/smart-order-router";
 import { BigNumber } from "@ethersproject/bignumber";
-import useWeb3 from "@/components/lib/hooks/useWeb3";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 import { uAD_TOKEN, USDC_TOKEN, USDT_TOKEN, DAI_TOKEN, parseAmount, V3_ROUTER_ADDRESS } from "../utils";
 
 const useTrade = async (selectedToken: string, amountIn = "0") => {

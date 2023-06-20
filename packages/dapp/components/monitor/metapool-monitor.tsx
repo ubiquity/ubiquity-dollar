@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { formatEther } from "@/lib/format";
-import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
-import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
+import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
+import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 // import Address from "./ui/Address";
 import Balance from "./ui/Balance";
 // import { useConnectedContext } from "@/lib/connected";
