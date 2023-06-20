@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import "../../../../src/dollar/libraries/constants.sol";
-import "forge-std/script.sol";
+import "forge-std/Script.sol";
 
 contract Constants is Script {
     uint256[] shareAmounts;
