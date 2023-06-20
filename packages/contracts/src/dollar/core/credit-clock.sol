@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "abdk/abdk-math-quad.sol";
+import "abdk/ABDKMathQuad.sol";
 import {IAccessControl} from "../interfaces/i-access-control.sol";
 import "../libraries/constants.sol";
 

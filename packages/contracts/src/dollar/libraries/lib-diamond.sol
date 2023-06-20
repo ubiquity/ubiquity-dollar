@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {IDiamondCut} from "../interfaces/i-diamond-cut.sol";
 import {IDiamondLoupe} from "../interfaces/i-diamond-loupe.sol";
-import "@openzeppelin/contracts/interfaces/ierc-165.sol";
+import "@openzeppelin/contracts/interfaces/ierc165.sol";
 import {IERC173} from "../interfaces/ierc-173.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
