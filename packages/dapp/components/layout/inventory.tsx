@@ -27,7 +27,7 @@ const Inventory = () => {
   }
 
   return (
-    <div id="inventory">
+    <div id="Inventory">
       <div>
         {/* <span>My inventory</span> */}
         {/* <span> <Network /> </span> */}

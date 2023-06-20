@@ -4,7 +4,7 @@
  */
 export default function LightDarkMode() {
   return (
-    <div id="light-dark-mode">
+    <div id="LightDarkMode">
       <button id="LightDarkModeToggle" onClick={toggleDarkMode}></button>
     </div>
   );

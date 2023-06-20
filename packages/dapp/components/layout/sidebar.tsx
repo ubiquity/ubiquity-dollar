@@ -10,7 +10,7 @@ const Sidebar = () => {
   return (
     <>
       <input type="checkbox" />
-      <div id="sidebar">
+      <div id="Sidebar">
         <div>
           <ul>
             <li>
