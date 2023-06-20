@@ -1,4 +1,4 @@
-import useDeployedContracts from "@/components/lib/hooks/contracts/useDeployedContracts";
+import useDeployedContracts from "@/components/lib/hooks/contracts/use-deployed-contracts";
 import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
 import { BigNumber, utils } from "ethers";
 import { useEffect, useState } from "react";

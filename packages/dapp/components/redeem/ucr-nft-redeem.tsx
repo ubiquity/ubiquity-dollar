@@ -6,12 +6,12 @@ import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
 import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
-import useBalances from "../lib/hooks/useBalances";
-import useSigner from "../lib/hooks/useSigner";
-import useTransactionLogger from "../lib/hooks/useTransactionLogger";
-import useWalletAddress from "../lib/hooks/useWalletAddress";
+import useBalances from "../lib/hooks/use-balances";
+import useSigner from "../lib/hooks/use-signer";
+import useTransactionLogger from "../lib/hooks/use-transaction-logger";
+import useWalletAddress from "../lib/hooks/use-wallet-address";
 import Button from "../ui/button";
-import PositiveNumberInput from "../ui/PositiveNumberInput";
+import PositiveNumberInput from "../ui/positive-number-input";
 
 const UcrNftRedeem = () => {
   const [walletAddress] = useWalletAddress();

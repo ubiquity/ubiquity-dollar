@@ -1,10 +1,10 @@
 import { constrainNumber, formatTimeDiff } from "@/lib/utils";
-import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
+import withLoadedContext, { LoadedContext } from "@/lib/with-loaded-context";
 import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 import useBalances, { Balances } from "../lib/hooks/use-balances";
-import useTransactionLogger from "../lib/hooks/useTransactionLogger";
-import usePrices from "./lib/usePrices";
+import useTransactionLogger from "../lib/hooks/use-transaction-logger";
+import usePrices from "./lib/use-prices";
 
 type Actions = {
   onRedeem: () => void;

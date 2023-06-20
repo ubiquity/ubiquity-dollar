@@ -2,8 +2,8 @@ import { ConnectKitButton } from "connectkit";
 import React, { useState } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import { useAccount } from "wagmi";
-import useDidUpdate from "../lib/hooks/useDidUpdate";
-import useWalletAddress from "../lib/hooks/useWalletAddress";
+import useDidUpdate from "../lib/hooks/use-did-update";
+import useWalletAddress from "../lib/hooks/use-wallet-address";
 import { note } from "../utils/sounds";
 
 const WalletConnectionWall = ({ children }: { children: React.ReactNode }) => {

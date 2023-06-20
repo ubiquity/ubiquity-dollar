@@ -1,11 +1,11 @@
 import { BigNumber, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-import { ManagedContracts } from "@/lib/hooks/contracts/useManagerManaged";
+import { ManagedContracts } from "@/lib/hooks/contracts/use-manager-managed";
 import { constrainNumber } from "@/lib/utils";
-import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
+import withLoadedContext, { LoadedContext } from "@/lib/with-loaded-context";
 import Button from "../ui/button";
-import PositiveNumberInput from "../ui/PositiveNumberInput";
+import PositiveNumberInput from "../ui/positive-number-input";
 
 const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 const toNum = (n: BigNumber) => +n.toString();

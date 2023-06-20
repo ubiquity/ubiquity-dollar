@@ -3,11 +3,11 @@ import { memo, useCallback, useState } from "react";
 
 import { formatEther } from "@/lib/format";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
-import withLoadedContext, { LoadedContext } from "@/lib/withLoadedContext";
+import withLoadedContext, { LoadedContext } from "@/lib/with-loaded-context";
 
-import DepositShare from "./DepositShare";
-import useBalances from "../lib/hooks/useBalances";
-import useTransactionLogger from "../lib/hooks/useTransactionLogger";
+import DepositShare from "./deposit-share";
+import useBalances from "../lib/hooks/use-balances";
+import useTransactionLogger from "../lib/hooks/use-transaction-logger";
 import Button from "../ui/button";
 import Icon from "../ui/Icon";
 import Loading from "../ui/Loading";
