@@ -41,10 +41,14 @@ function renameAndReplaceFilesInDir(dir: string) {
       // Replace all references of oldName with newName in all .ts and .tsx files
       files!.forEach((filePath) => {
         if (filePath.endsWith(".ts") || filePath.endsWith(".tsx")) {
-          const data = fs.readFileSync(filePath, "utf-8");
-          const regex = new RegExp(oldName, "g");
-          const result = data.replace(regex, newName);
-          fs.writeFileSync(filePath, result, "utf-8");
+          try {
+            const data = fs.readFileSync(filePath, "utf-8");
+            const regex = new RegExp(oldName, "g");
+            const result = data.replace(regex, newName);
+            fs.writeFileSync(filePath, result, "utf-8");
+          } catch (e) {
+            console.error(e);
+          }
         }
       });
     });
@@ -52,4 +56,4 @@ function renameAndReplaceFilesInDir(dir: string) {
 }
 
 // Usage
-renameAndReplaceFilesInDir("./utils");
+renameAndReplaceFilesInDir("./packages");
