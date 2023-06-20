@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {LibDiamond} from "../libraries/LibDiamond.sol";
-import {IDiamondLoupe} from "../interfaces/IDiamondLoupe.sol";
-import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
-import {IERC173} from "../interfaces/IERC173.sol";
+import {LibDiamond} from "../libraries/lib-diamond.sol";
+import {IDiamondLoupe} from "../interfaces/i-diamond-loupe.sol";
+import {IDiamondCut} from "../interfaces/i-diamond-cut.sol";
+import {IERC173} from "../interfaces/ierc-173.sol";
 import "../libraries/lib-app-storage.sol";
 import "../libraries/lib-access-control.sol";
-import {UbiquityDollarToken} from "../core/UbiquityDollarToken.sol";
-import {UbiquityGovernanceToken} from "../core/UbiquityGovernanceToken.sol";
+import {UbiquityDollarToken} from "../core/ubiquity-dollar-token.sol";
+import {UbiquityGovernanceToken} from "../core/ubiquity-governance-token.sol";
 import "@openzeppelin/contracts/interfaces/ierc-165.sol";
-import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
-import {LibStaking} from "../libraries/LibStaking.sol";
-import {LibChef} from "../libraries/LibChef.sol";
-import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
-import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
-import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
+import {LibTWAPOracle} from "../libraries/lib-twap-oracle.sol";
+import {LibStaking} from "../libraries/lib-staking.sol";
+import {LibChef} from "../libraries/lib-chef.sol";
+import {LibCreditNftManager} from "../libraries/lib-credit-nft-manager.sol";
+import {LibCreditRedemptionCalculator} from "../libraries/lib-credit-redemption-calculator.sol";
+import {LibUbiquityPool} from "../libraries/lib-ubiquity-pool.sol";
 
 // It is expected that this contract is customized if you want to deploy your diamond
 // with data from a deployment script. Use the init function to initialize state variables

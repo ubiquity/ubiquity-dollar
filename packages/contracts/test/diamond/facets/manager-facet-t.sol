@@ -2,15 +2,15 @@
 pragma solidity ^0.8.19;
 
 import "../diamond-test-setup.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
-import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import {ICurveFactory} from "../../../src/dollar/interfaces/i-curve-factory.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/i-meta-pool.sol";
+import {MockDollarToken} from "../../../src/dollar/mocks/mock-dollar-token.sol";
+import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/mock-twap-oracle-dollar-3-pool.sol";
+import {LibAccessControl} from "../../../src/dollar/libraries/lib-access-control.sol";
+import {MockERC20} from "../../../src/dollar/mocks/mock-erc-20.sol";
+import {MockMetaPool} from "../../../src/dollar/mocks/mock-meta-pool.sol";
+import {MockCurveFactory} from "../../../src/dollar/mocks/mock-curve-factory.sol";
 
 contract ManagerFacetTest is DiamondSetup {
     function testCanCallGeneralFunctions_ShouldSucceed() public view {

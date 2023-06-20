@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
-import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
-import {CurveDollarIncentiveFacet} from "../../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
-import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import {ManagerFacet} from "../../../src/dollar/facets/manager-facet.sol";
+import {UbiquityDollarToken} from "../../../src/dollar/core/ubiquity-dollar-token.sol";
+import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/twap-oracle-dollar-3-pool-facet.sol";
+import {CurveDollarIncentiveFacet} from "../../../src/dollar/facets/curve-dollar-incentive-facet.sol";
+import {IERC20Ubiquity} from "../../../src/dollar/interfaces/ierc-20-ubiquity.sol";
+import {MockDollarToken} from "../../../src/dollar/mocks/mock-dollar-token.sol";
+import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/mock-twap-oracle-dollar-3-pool.sol";
 import "../diamond-test-setup.sol";
 import "forge-std/test.sol";
 

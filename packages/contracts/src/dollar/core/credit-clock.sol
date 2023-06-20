@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import "abdk/abdk-math-quad.sol";
-import {IAccessControl} from "../interfaces/IAccessControl.sol";
+import {IAccessControl} from "../interfaces/i-access-control.sol";
 import "../libraries/constants.sol";
 
 contract CreditClock {

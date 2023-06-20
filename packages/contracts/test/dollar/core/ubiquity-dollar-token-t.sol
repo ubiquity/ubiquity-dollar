@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
+import {UbiquityDollarToken} from "../../../src/dollar/core/ubiquity-dollar-token.sol";
+import {MockIncentive} from "../../../src/dollar/mocks/mock-incentive.sol";
 
 import "../../helpers/local-test-helper.sol";
 

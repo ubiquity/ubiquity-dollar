@@ -8,7 +8,7 @@ import "../core/ubiquity-dollar-token.sol";
 import "../interfaces/i-ubiquity-governance.sol";
 import "abdk/abdk-math-quad.sol";
 import "constants.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage} from "lib-app-storage.sol";
 
 library LibCurveDollarIncentive {
     using SafeERC20 for IERC20;

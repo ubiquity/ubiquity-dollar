@@ -3,8 +3,8 @@ pragma solidity ^0.8.19;
 
 import "../../dollar/interfaces/i-credit-redemption-calculator.sol";
 
-import {Modifiers} from "../libraries/LibAppStorage.sol";
-import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
+import {LibCreditRedemptionCalculator} from "../libraries/lib-credit-redemption-calculator.sol";
 
 /// @title Uses the following formula: ((1/(1-R)^2) - 1)
 contract CreditRedemptionCalculatorFacet is

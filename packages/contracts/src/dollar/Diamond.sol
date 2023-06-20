@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {LibDiamond} from "./libraries/LibDiamond.sol";
-import {IDiamondCut} from "./interfaces/IDiamondCut.sol";
-import {IDiamondLoupe} from "./interfaces/IDiamondLoupe.sol";
+import {LibDiamond} from "libraries/lib-diamond.sol";
+import {IDiamondCut} from "interfaces/i-diamond-cut.sol";
+import {IDiamondLoupe} from "interfaces/i-diamond-loupe.sol";
 import "@openzeppelin/contracts/interfaces/ierc-165.sol";
-import {IERC173} from "./interfaces/IERC173.sol";
-import {DiamondCutFacet} from "./facets/DiamondCutFacet.sol";
-import {DiamondLoupeFacet} from "./facets/DiamondLoupeFacet.sol";
-import {OwnershipFacet} from "./facets/OwnershipFacet.sol";
+import {IERC173} from "interfaces/ierc-173.sol";
+import {DiamondCutFacet} from "facets/diamond-cut-facet.sol";
+import {DiamondLoupeFacet} from "facets/diamond-loupe-facet.sol";
+import {OwnershipFacet} from "facets/ownership-facet.sol";
 
 struct DiamondArgs {
     address owner;

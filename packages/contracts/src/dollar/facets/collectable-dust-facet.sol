@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import "../libraries/lib-collectable-dust.sol";
-import {Modifiers} from "../libraries/LibAppStorage.sol";
-import {ICollectableDust} from "../../dollar/interfaces/utils/ICollectableDust.sol";
+import {Modifiers} from "../libraries/lib-app-storage.sol";
+import {ICollectableDust} from "../../dollar/interfaces/utils/i-collectable-dust.sol";
 
 contract CollectableDustFacet is ICollectableDust, Modifiers {
     /// Collectable Dust

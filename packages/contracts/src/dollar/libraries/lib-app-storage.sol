@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {LibDiamond} from "./LibDiamond.sol";
-import {LibAccessControl} from "./LibAccessControl.sol";
+import {LibDiamond} from "lib-diamond.sol";
+import {LibAccessControl} from "lib-access-control.sol";
 import "constants.sol";
 
 struct AppStorage {

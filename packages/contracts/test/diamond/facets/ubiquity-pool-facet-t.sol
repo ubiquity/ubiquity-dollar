@@ -2,18 +2,18 @@
 pragma solidity ^0.8.19;
 
 import "../diamond-test-setup.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
-import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
-import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/i-meta-pool.sol";
+import {MockMetaPool} from "../../../src/dollar/mocks/mock-meta-pool.sol";
+import {MockERC20} from "../../../src/dollar/mocks/mock-erc-20.sol";
+import {ICurveFactory} from "../../../src/dollar/interfaces/i-curve-factory.sol";
+import {MockCurveFactory} from "../../../src/dollar/mocks/mock-curve-factory.sol";
 
-import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
-import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
-import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
+import {IERC20Ubiquity} from "../../../src/dollar/interfaces/ierc-20-ubiquity.sol";
+import {StakingShare} from "../../../src/dollar/core/staking-share.sol";
+import {BondingShare} from "../../../src/dollar/mocks/mock-share-v-1.sol";
+import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/dollar-mint-calculator-facet.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/mock-credit-nft.sol";
+import {UbiquityCreditToken} from "../../../src/dollar/core/ubiquity-credit-token.sol";
 
 contract UbiquityPoolFacetTest is DiamondSetup {
     MockERC20 crvToken;

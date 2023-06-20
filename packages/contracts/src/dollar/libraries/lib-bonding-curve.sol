@@ -4,7 +4,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
 import "@openzeppelin/contracts/utils/math/safe-math.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage} from "lib-app-storage.sol";
 import "../../ubiquistick/interfaces/i-ubiqui-stick.sol";
 import "../interfaces/ierc-1155-ubiquity.sol";
 import "constants.sol";

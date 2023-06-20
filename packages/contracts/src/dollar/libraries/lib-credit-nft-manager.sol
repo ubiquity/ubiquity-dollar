@@ -3,17 +3,17 @@ pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/utils/introspection/erc-165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
-import {CreditNft} from "../../dollar/core/CreditNft.sol";
-import {CREDIT_NFT_MANAGER_ROLE} from "./Constants.sol";
-import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import {IDollarMintExcess} from "../../dollar/interfaces/IDollarMintExcess.sol";
-import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
-import {LibCreditRedemptionCalculator} from "./LibCreditRedemptionCalculator.sol";
-import {LibTWAPOracle} from "./LibTWAPOracle.sol";
-import {LibCreditNftRedemptionCalculator} from "./LibCreditNftRedemptionCalculator.sol";
-import {UbiquityCreditToken} from "../../dollar/core/UbiquityCreditToken.sol";
-import {LibAccessControl} from "./LibAccessControl.sol";
-import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
+import {CreditNft} from "../../dollar/core/credit-nft.sol";
+import {CREDIT_NFT_MANAGER_ROLE} from "constants.sol";
+import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";
+import {IDollarMintExcess} from "../../dollar/interfaces/i-dollar-mint-excess.sol";
+import {LibAppStorage, AppStorage} from "lib-app-storage.sol";
+import {LibCreditRedemptionCalculator} from "lib-credit-redemption-calculator.sol";
+import {LibTWAPOracle} from "lib-twap-oracle.sol";
+import {LibCreditNftRedemptionCalculator} from "lib-credit-nft-redemption-calculator.sol";
+import {UbiquityCreditToken} from "../../dollar/core/ubiquity-credit-token.sol";
+import {LibAccessControl} from "lib-access-control.sol";
+import {IDollarMintCalculator} from "../../dollar/interfaces/i-dollar-mint-calculator.sol";
 
 /// @title A basic credit issuing and redemption mechanism for Credit NFT holders
 /// @notice Allows users to burn their Ubiquity Dollar in exchange for Credit NFT

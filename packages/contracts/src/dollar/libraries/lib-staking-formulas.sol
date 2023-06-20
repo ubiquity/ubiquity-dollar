@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
+import {StakingShare} from "../../../src/dollar/core/staking-share.sol";
 import "abdk/abdk-math-quad.sol";
 import "constants.sol";
 

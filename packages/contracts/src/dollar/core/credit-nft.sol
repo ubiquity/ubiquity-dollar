@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
+import {ERC1155Ubiquity} from "erc-1155-ubiquity.sol";
 import "solidity-linked-list/contracts/structured-linked-list.sol";
-import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
+import {ICreditNft} from "../../dollar/interfaces/i-credit-nft.sol";
 import "../libraries/constants.sol";
 
 /// @title A CreditNft redeemable for dollars with an expiry block number

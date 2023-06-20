@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import "../diamond-test-setup.sol";
 import "abdk/abdk-math-quad.sol";
-import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
+import {StakingShare} from "../../../src/dollar/core/staking-share.sol";
 
 contract StakingFormulasFacetTest is DiamondSetup {
     using ABDKMathQuad for uint256;

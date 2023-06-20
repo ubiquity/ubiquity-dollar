@@ -14,7 +14,7 @@ import "interfaces/i-deposit-zap.sol";
 import "interfaces/i-staking.sol";
 import "interfaces/i-staking-share.sol";
 import "interfaces/i-stable-swap-3-pool.sol";
-import {IUbiquityDollarManager} from "./interfaces/IUbiquityDollarManager.sol";
+import {IUbiquityDollarManager} from "interfaces/i-ubiquity-dollar-manager.sol";
 
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;

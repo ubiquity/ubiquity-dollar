@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {IDiamondCut} from "../interfaces/IDiamondCut.sol";
-import {IDiamondLoupe} from "../interfaces/IDiamondLoupe.sol";
+import {IDiamondCut} from "../interfaces/i-diamond-cut.sol";
+import {IDiamondLoupe} from "../interfaces/i-diamond-loupe.sol";
 import "@openzeppelin/contracts/interfaces/ierc-165.sol";
-import {IERC173} from "../interfaces/IERC173.sol";
+import {IERC173} from "../interfaces/ierc-173.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard

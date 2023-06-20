@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "../diamond-test-setup.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/mock-credit-nft.sol";
 
 contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
     MockCreditNft _creditNFT;

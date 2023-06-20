@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.19;
 
-import {ManagerFacet} from "../facets/ManagerFacet.sol";
-import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
-import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
+import {ManagerFacet} from "../facets/manager-facet.sol";
+import {ERC20Ubiquity} from "erc-20-ubiquity.sol";
+import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";
 import "../libraries/constants.sol";
 
 contract UbiquityCreditToken is ERC20Ubiquity {

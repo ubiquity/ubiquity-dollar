@@ -2,17 +2,17 @@
 pragma solidity ^0.8.19;
 
 import "../diamond-test-setup.sol";
-import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManagerFacet.sol";
-import {CreditRedemptionCalculatorFacet} from "../../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
-import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
-import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
+import {CreditNftManagerFacet} from "../../../src/dollar/facets/credit-nft-manager-facet.sol";
+import {CreditRedemptionCalculatorFacet} from "../../../src/dollar/facets/credit-redemption-calculator-facet.sol";
+import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/dollar-mint-calculator-facet.sol";
+import {DollarMintExcessFacet} from "../../../src/dollar/facets/dollar-mint-excess-facet.sol";
+import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/twap-oracle-dollar-3-pool-facet.sol";
 import "../../../src/dollar/libraries/constants.sol";
-import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
-import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
+import {IERC20Ubiquity} from "../../../src/dollar/interfaces/ierc-20-ubiquity.sol";
+import {MockDollarToken} from "../../../src/dollar/mocks/mock-dollar-token.sol";
+import {MockCreditNft} from "../../../src/dollar/mocks/mock-credit-nft.sol";
+import {MockCreditToken} from "../../../src/dollar/mocks/mock-credit-token.sol";
+import {UbiquityCreditToken} from "../../../src/dollar/core/ubiquity-credit-token.sol";
 
 contract CreditNftManagerFacetTest is DiamondSetup {
     MockCreditNft _creditNFT;

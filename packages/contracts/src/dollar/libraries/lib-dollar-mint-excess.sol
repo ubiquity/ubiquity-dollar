@@ -5,10 +5,10 @@ import "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
 import "@uniswap/v2-core/contracts/interfaces/i-uniswap-v-2-pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/i-uniswap-v-2-router-01.sol";
-import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
+import {IERC20Ubiquity} from "../../dollar/interfaces/ierc-20-ubiquity.sol";
 import "../../dollar/interfaces/i-meta-pool.sol";
 import "abdk-libraries-solidity/abdk-math-quad.sol";
-import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
+import {LibAppStorage, AppStorage} from "lib-app-storage.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
 /// lp rewards and inflation rewards

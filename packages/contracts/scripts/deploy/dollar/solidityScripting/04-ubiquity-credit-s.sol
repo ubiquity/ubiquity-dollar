@@ -2,8 +2,8 @@
 pragma solidity 0.8.19;
 
 import "03-ubiquity-governance-token-s.sol";
-import {UbiquityCreditToken} from "../../../../src/dollar/core/UbiquityCreditToken.sol";
-import {CreditNft} from "../../../../src/dollar/core/CreditNft.sol";
+import {UbiquityCreditToken} from "../../../../src/dollar/core/ubiquity-credit-token.sol";
+import {CreditNft} from "../../../../src/dollar/core/credit-nft.sol";
 
 contract CreditScript is GovernanceScript {
     function run() public virtual override {

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/i-meta-pool.sol";
+import {MockMetaPool} from "../../../src/dollar/mocks/mock-meta-pool.sol";
 import "../diamond-test-setup.sol";
 
 contract TWAPOracleDollar3poolFacetTest is DiamondSetup {

@@ -5,15 +5,15 @@ pragma solidity ^0.8.19;
 // https://github.com/FraxFinance/frax-solidity/blob/master/src/hardhat/contracts/Frax/Pools/FraxPool.sol
 
 import "@openzeppelin/contracts/token/ERC20/utils/safe-erc-20.sol";
-import {UbiquityDollarToken} from "../core/UbiquityDollarToken.sol";
-import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
-import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import {IStableSwap3Pool} from "../interfaces/IStableSwap3Pool.sol";
-import {IMetaPool} from "../interfaces/IMetaPool.sol";
-import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
-import {LibTWAPOracle} from "./LibTWAPOracle.sol";
+import {UbiquityDollarToken} from "../core/ubiquity-dollar-token.sol";
+import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/ierc-20-metadata.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import {IERC20Ubiquity} from "../interfaces/ierc-20-ubiquity.sol";
+import {SafeMath} from "@openzeppelin/contracts/utils/math/safe-math.sol";
+import {IStableSwap3Pool} from "../interfaces/i-stable-swap-3-pool.sol";
+import {IMetaPool} from "../interfaces/i-meta-pool.sol";
+import {LibAppStorage, AppStorage} from "lib-app-storage.sol";
+import {LibTWAPOracle} from "lib-twap-oracle.sol";
 
 library LibUbiquityPool {
     using SafeMath for uint256;

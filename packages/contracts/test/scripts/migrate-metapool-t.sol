@@ -4,12 +4,12 @@ pragma solidity 0.8.19;
 //cspell:ignore BondingShareV2
 /*  TO BE DONE WITH THE DIAMOND 
 
-import {UbiquityDollarManager} from "src/dollar/core/UbiquityDollarManager.sol";
-import {Staking} from "src/dollar/Staking.sol";
-import {MockBondingShareV2} from "src/dollar/mocks/MockBondingShareV2.sol";
-import {IMetaPool} from "src/dollar/interfaces/IMetaPool.sol";
- import {TWAPOracleDollar3pool} from "src/dollar/core/TWAPOracleDollar3pool.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {UbiquityDollarManager} from "src/dollar/core/ubiquity-dollar-manager.sol";
+import {Staking} from "src/dollar/staking.sol";
+import {MockBondingShareV2} from "src/dollar/mocks/mock-bonding-share-v-2.sol";
+import {IMetaPool} from "src/dollar/interfaces/i-meta-pool.sol";
+ import {TWAPOracleDollar3pool} from "src/dollar/core/twap-oracle-dollar-3-pool.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
 
 import "forge-std/test.sol";
 

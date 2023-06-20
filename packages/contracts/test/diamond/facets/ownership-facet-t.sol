@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {OwnershipFacet} from "../../../src/dollar/facets/OwnershipFacet.sol";
+import {OwnershipFacet} from "../../../src/dollar/facets/ownership-facet.sol";
 import "../../../src/dollar/libraries/constants.sol";
 import "../diamond-test-setup.sol";
-import {AddressUtils} from "../../../src/dollar/libraries/AddressUtils.sol";
+import {AddressUtils} from "../../../src/dollar/libraries/address-utils.sol";
 
-import {UintUtils} from "../../../src/dollar/libraries/UintUtils.sol";
+import {UintUtils} from "../../../src/dollar/libraries/uint-utils.sol";
 
 contract OwnershipFacetTest is DiamondSetup {
     using AddressUtils for address;

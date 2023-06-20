@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
-import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
+import {ManagerFacet} from "../../../src/dollar/facets/manager-facet.sol";
+import {CreditNft} from "../../../src/dollar/core/credit-nft.sol";
 
 import "../../helpers/local-test-helper.sol";
 

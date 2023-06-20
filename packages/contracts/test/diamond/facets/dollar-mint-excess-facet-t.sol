@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
-import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
+import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/i-uniswap-v-2-router-01.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/ierc-20.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/i-meta-pool.sol";
+import {ManagerFacet} from "../../../src/dollar/facets/manager-facet.sol";
+import {DollarMintExcessFacet} from "../../../src/dollar/facets/dollar-mint-excess-facet.sol";
 import "../diamond-test-setup.sol";
 
 contract DollarMintExcessFacetTest is DiamondSetup {

@@ -108,15 +108,15 @@ const solidityFilePaths = [
 solidityFilePaths.forEach((filePath) => {
   const data = fs.readFileSync(filePath, "utf8");
 
-  const result = data.replace(/import\s+"([^"]*[A-Z][^"]*)";/g, (match, p1) => {
-    const dir = path.dirname(p1);
-    const base = path.basename(p1);
+  const result = data.replace(/(import .*?from\s+")(.*?)([^"]*[A-Z][^"]*)(";)/g, (match, p1, p2, p3, p4) => {
+    const dir = path.dirname(p3);
+    const base = path.basename(p3);
     const ext = path.extname(base);
     const nameWithoutExt = path.basename(base, ext);
     const kebabCaseName = _.kebabCase(nameWithoutExt);
     const newBase = `${kebabCaseName}${ext}`;
-    const newImportPath = path.join(dir, newBase);
-    return `import "${newImportPath}";`;
+    const newImportPath = path.join(p2, dir, newBase);
+    return `${p1}${newImportPath}${p4}`;
   });
 
   fs.writeFileSync(filePath, result, "utf8");

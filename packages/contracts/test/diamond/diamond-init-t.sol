@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
-import {LibAppStorage} from "../../src/dollar/libraries/LibAppStorage.sol";
+import {DiamondInit} from "../../src/dollar/upgradeInitializers/diamond-init.sol";
+import {LibAppStorage} from "../../src/dollar/libraries/lib-app-storage.sol";
 import "forge-std/test.sol";
 
 contract MockDiamondInit is DiamondInit {

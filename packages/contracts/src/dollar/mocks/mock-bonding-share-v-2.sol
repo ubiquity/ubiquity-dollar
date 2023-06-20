@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-burnable.sol";
 import "@openzeppelin/contracts/token/ERC1155/extensions/erc-1155-pausable.sol";
 import "../utils/safe-add-array.sol";
 import "../../dollar/libraries/constants.sol";
-import {IUbiquityDollarManager} from "../interfaces/IUbiquityDollarManager.sol";
+import {IUbiquityDollarManager} from "../interfaces/i-ubiquity-dollar-manager.sol";
 
 //cspell:ignore BondingShareV2
 contract MockBondingShareV2 is ERC1155, ERC1155Burnable, ERC1155Pausable {

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {AccessControlFacet} from "../../../src/dollar/facets/AccessControlFacet.sol";
+import {AccessControlFacet} from "../../../src/dollar/facets/access-control-facet.sol";
 import "../../../src/dollar/libraries/constants.sol";
 import "../diamond-test-setup.sol";
-import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
+import {MockERC20} from "../../../src/dollar/mocks/mock-erc-20.sol";
 
 contract CollectableDustFacetTest is DiamondSetup {
     address mock_sender = address(0x111);
