@@ -1,0 +1,34 @@
+name: Enforce kebab-case
+
+on: [push, pull_request]
+
+jobs:
+  check-filenames:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Enforce kebab-case
+        run: |
+          non_compliant_files=()
+          find . -type f | while read -r file; do
+            # Extract the base file name
+            basefile=$(basename "$file")
+
+            # If the file is within a hidden directory, is a file in the root directory, is in node_modules or .git or dist or build or vendor or .next, or is a .sql or .md file
+            if echo "$file" | grep -q -E "^\.\/\..*\/|^\.\/[^\/]*$|^\.\/node_modules|^\.\/\.git|^\.\/dist|^\.\/build|^\.\/vendor|^\.\/\.next|\.sql$|\.md$"; then
+              continue
+            # If the file is not in kebab-case
+            elif ! echo "$basefile" | grep -q -E "^([a-z0-9]+-)*[a-z0-9]+(\.[a-zA-Z0-9]+)?$"; then
+              non_compliant_files+=("$file")
+            fi
+          done
+
+          if [ ${#non_compliant_files[@]} -ne 0 ]; then
+            echo "The following files are not in kebab-case:"
+            for file in "${non_compliant_files[@]}"; do
+              echo "  - $file"
+            done
+            exit 1
+          fi
