@@ -17,7 +17,7 @@ import {DollarMintExcessFacet} from "../../../src/dollar/facets/dollar-mint-exce
 import "../../../src/dollar/libraries/constants.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/mock-curve-factory.sol";
 import {MockERC20} from "../../../src/dollar/mocks/mock-erc-20.sol";
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 
 contract ZeroStateStaking is DiamondSetup {
     MockERC20 crvToken;

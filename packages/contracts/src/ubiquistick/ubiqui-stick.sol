@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/access/ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "operator-filter-registry/DefaultOperatorFilterer.sol";
 
 // With this "The UbiquiStick" NFT contract you can :

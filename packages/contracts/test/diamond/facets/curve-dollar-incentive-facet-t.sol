@@ -10,7 +10,7 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/ierc-20-ubiquity.so
 import {MockDollarToken} from "../../../src/dollar/mocks/mock-dollar-token.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/mock-twap-oracle-dollar-3-pool.sol";
 import "../diamond-test-setup.sol";
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 
 contract CurveDollarIncentiveTest is DiamondSetup {
     address stableSwapMetaPoolAddress = address(0x123);

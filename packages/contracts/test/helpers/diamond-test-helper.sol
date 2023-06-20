@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 // import "forge-std/vm.sol";
 import "../../src/dollar/interfaces/i-diamond-cut.sol";
 import "../../src/dollar/interfaces/i-diamond-loupe.sol";

@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 // FORK from Land DAO -> https://github.com/Land-DAO/nft-contracts/blob/main/contracts/LandSale.sol
 
-import "@openzeppelin/contracts/access/ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";

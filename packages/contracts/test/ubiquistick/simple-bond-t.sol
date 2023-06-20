@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "../../src/ubiquistick/simple-bond.sol";
 import "../../src/ubiquistick/ubiqui-stick.sol";
 
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 
 contract ZeroState is Test {
     address admin;

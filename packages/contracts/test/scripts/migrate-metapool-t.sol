@@ -11,7 +11,7 @@ import {IMetaPool} from "src/dollar/interfaces/i-meta-pool.sol";
  import {TWAPOracleDollar3pool} from "src/dollar/core/twap-oracle-dollar-3-pool.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 
 contract MigrateMetapool is Test {
     /// Ubiquity Admin EOA public address

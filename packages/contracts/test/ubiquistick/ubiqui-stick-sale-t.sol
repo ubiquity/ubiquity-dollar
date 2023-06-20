@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 
 import "../../src/ubiquistick/ubiqui-stick.sol";
 import "../../src/ubiquistick/ubiqui-stick-sale.sol";
