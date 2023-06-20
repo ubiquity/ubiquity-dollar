@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC721/erc-721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/erc-721-burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/erc-721-enumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/ownable.sol";
-import "operator-filter-registry/default-operator-filterer.sol";
+import "operator-filter-registry/DefaultOperatorFilterer.sol";
 
 // With this "The UbiquiStick" NFT contract you can :
 // - get all ERC721 functionality https://eips.ethereum.org/EIPS/eip-721
