@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
-import DollarPrice from "@/components/redeem/DollarPrice";
-import UcrRedeem from "@/components/redeem/UcrRedeem";
-import UcrNftGenerator from "@/components/redeem/DebtCouponDeposit";
-import UcrNftRedeem from "@/components/redeem/UcrNftRedeem";
-import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
-import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
+import DollarPrice from "@/components/redeem/dollar-price";
+import UcrRedeem from "@/components/redeem/ucr-redeem";
+import UcrNftGenerator from "@/components/redeem/debt-coupon-deposit";
+import UcrNftRedeem from "@/components/redeem/ucr-nft-redeem";
+import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
+import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 // import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
 import dynamic from "next/dynamic";
-const WalletConnectionWall = dynamic(() => import("@/components/ui/WalletConnectionWall"), { ssr: false }); //@note Fix: (Hydration Error)
+const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connection-wall"), { ssr: false }); //@note Fix: (Hydration Error)
 
 const PriceStabilization: FC = (): JSX.Element => {
   const [twapInteger, setTwapInteger] = useState<number>(0);

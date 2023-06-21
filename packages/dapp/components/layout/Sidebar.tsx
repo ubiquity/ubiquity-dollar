@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Icon, { IconsNames } from "../ui/Icon";
-import LightDarkMode from "./LightDarkMode";
-import BuildInfo from "./BuildInfo";
-import WalletConnect from "./WalletConnect";
+import Icon, { IconsNames } from "../ui/icon";
+import LightDarkMode from "./light-dark-mode";
+import BuildInfo from "./build-info";
+import WalletConnect from "./wallet-connect";
 
 const PROD = process.env.NODE_ENV == "production";
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { jsxSvgIcons } from "./jsxIcons";
+import { jsxSvgIcons } from "./jsx-icons";
 
 export type IconsNames = keyof typeof jsxSvgIcons;
 

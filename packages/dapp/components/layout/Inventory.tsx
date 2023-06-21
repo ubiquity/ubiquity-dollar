@@ -2,13 +2,13 @@ import Tippy from "@tippyjs/react";
 import { BaseContract, BigNumber, ethers } from "ethers";
 import { useEffect } from "react";
 
-import useWeb3 from "@/lib/hooks/useWeb3";
+import useWeb3 from "@/lib/hooks/use-web-3";
 import icons from "@/ui/icons";
 
-import useManagerManaged from "../lib/hooks/contracts/useManagerManaged";
-import useNamedContracts from "../lib/hooks/contracts/useNamedContracts";
-import useBalances, { Balances } from "../lib/hooks/useBalances";
-import { ManagedContracts } from "../lib/hooks/contracts/useManagerManaged";
+import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
+import useBalances, { Balances } from "../lib/hooks/use-balances";
+import { ManagedContracts } from "../lib/hooks/contracts/use-manager-managed";
 
 const Inventory = () => {
   const { walletAddress } = useWeb3();
@@ -51,13 +51,18 @@ const Inventory = () => {
     </div>
   );
 
-  function showIfBalanceExists(key: keyof Balances | keyof typeof namedContracts, name: keyof typeof tokenSvg, id: string) {
+  function showIfBalanceExists(key: keyof Balances, name: keyof typeof tokenSvg, id: string) {
     const usdcFix = function () {
       if (key == "usdc" || key == "usdt") return 6;
       else return 18;
     };
 
-    const balance = (balances as Balances)[key];
+    if (!balances) {
+      console.warn("balances not loaded");
+      return null;
+    }
+
+    const balance = balances[key];
     if (Number(balance) && managedContracts) {
       let selectedContract = managedContracts[id as keyof ManagedContracts] as BaseContract;
       if (!selectedContract && namedContracts) {
@@ -91,7 +96,7 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
       const wasAdded = await ethereum.request({
         method: "wallet_watchAsset",
         params: {
-          type: "ERC20",
+          type: "erc-20",
           options: {
             address: tokenAddr,
             symbol: token,

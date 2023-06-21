@@ -1,7 +1,7 @@
-import useTransactionLogger from "../lib/hooks/useTransactionLogger";
-import Button from "../ui/Button";
-import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/hooks/useUbiquistick";
-import Whitelist from "./Whitelist";
+import useTransactionLogger from "../lib/hooks/use-transaction-logger";
+import Button from "../ui/button";
+import { OwnedSticks, SticksAllowance, TokenData, TokenMedia } from "./lib/hooks/use-ubiquistick";
+import Whitelist from "./whitelist";
 
 // const mockAccount = typeof document !== "undefined" && document.location.search === "?test" ? "0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd" : null;
 
