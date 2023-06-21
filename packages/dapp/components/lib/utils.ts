@@ -1,4 +1,4 @@
-import { PossibleProviders } from "@/lib/hooks/useWeb3";
+import { PossibleProviders } from "@/lib/hooks/use-web-3";
 import { BigNumber, Contract, ContractTransaction, ethers } from "ethers";
 import { useEffect } from "react";
 import { parseUnits } from "@ethersproject/units";
