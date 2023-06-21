@@ -27,15 +27,15 @@ import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/
 import _Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 
 // ABIs
-import ChainlinkPriceFeedABI from "../config/abis/ChainlinkPriceFeed.json";
-import DAITokenABI from "../config/abis/DAIToken.json";
-import ERC20ABI from "../config/abis/ERC20.json";
-import UniswapV2PairABI from "../config/abis/UniswapV2Pair.json";
-import UniswapV3PoolABI from "../config/abis/UniswapV3Pool.json";
-import UniswapV3RouterABI from "../config/abis/UniswapV3Router.json";
-import USDCTokenABI from "../config/abis/USDCToken.json";
-import USDTTokenABI from "../config/abis/USDTToken.json";
-import YieldProxyABI from "../config/abis/YieldProxy.json";
+import ChainlinkPriceFeedABI from "../config/abis/chainlink-price-feed.json";
+import DAITokenABI from "../config/abis/dai-token.json";
+import ERC20ABI from "../config/abis/erc-20.json";
+import UniswapV2PairABI from "../config/abis/uniswap-v-2-pair.json";
+import UniswapV3PoolABI from "../config/abis/uniswap-v-3-pool.json";
+import UniswapV3RouterABI from "../config/abis/uniswap-v-3-router.json";
+import USDCTokenABI from "../config/abis/usdc-token.json";
+import USDTTokenABI from "../config/abis/usdt-token.json";
+import YieldProxyABI from "../config/abis/yield-proxy.json";
 
 import {
   CreditNft,
