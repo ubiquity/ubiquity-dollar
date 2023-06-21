@@ -35,7 +35,7 @@
     "test:all": "yarn workspace @ubiquity/contracts run test:unit",
     "coverage": "yarn workspace @ubiquity/contracts run test:coverage",
     "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
-    "prettier:all": "prettier packages/ --write",
+    "format:all": "prettier packages/ --write",
     "clean:all": "yarn workspaces foreach run clean && rimraf node_modules",
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:netlify": "yarn build:all",
