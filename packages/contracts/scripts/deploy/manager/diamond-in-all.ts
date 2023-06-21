@@ -214,7 +214,7 @@ async function deployDiamond() {
   const twapOracleFacetCut = {
     facetAddress: twapOracleFacetResult.deployedTo,
     action: FacetCutAction.Add,
-    functionSelectors: await getSelectorsFromFacet("TwapOracleDollar3PoolFacet"),
+    functionSelectors: await getSelectorsFromFacet("TWAPOracleDollar3poolFacet"),
   };
 
   // add DiamondCutFacetCut DiamondLoupeFacet, OwnershipFacet and ManagerFacet
