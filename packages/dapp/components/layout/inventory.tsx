@@ -96,7 +96,7 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
       const wasAdded = await ethereum.request({
         method: "wallet_watchAsset",
         params: {
-          type: "erc-20",
+          type: "ERC20",
           options: {
             address: tokenAddr,
             symbol: token,
