@@ -33,12 +33,12 @@
     "build:dapp": "yarn workspace @ubiquity/dapp run build",
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
     "test:all": "yarn workspace @ubiquity/contracts run test:unit",
+    "format:all": "prettier packages/ --write",
     "coverage": "yarn workspace @ubiquity/contracts run test:coverage",
     "purge:all": "yarn workspaces foreach run purge && rimraf node_modules",
     "clean:all": "yarn workspaces foreach run clean && rimraf node_modules",
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:netlify": "yarn build:all",
-    "format:all": "prettier packages/ --write",
     "postinstall": "husky install",
     "lint:cspell:all:watch": "nodemon -e sol,ts,tsx --exec 'yarn lint:cspell:all --fail-fast'",
     "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
