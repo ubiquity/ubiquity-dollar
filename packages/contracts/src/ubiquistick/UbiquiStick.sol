@@ -86,10 +86,9 @@ contract UbiquiStick is
 
     function safeMint(address to) public onlyMinter {
         uint256 tokenId = tokenIdNext;
-        tokenIdNext += 1;
-
+        uint256 randomValue = random() % uint256(GOLD_FREQ);
         // Gold one
-        if (random() % uint256(GOLD_FREQ) == 0) {
+        if (randomValue == 0) {
             if (tokenId != INVISIBLE_TOKEN_ID) {
                 gold[tokenId] = true;
             }
@@ -98,9 +97,12 @@ contract UbiquiStick is
     }
 
     function batchSafeMint(address to, uint256 count) public onlyMinter {
+        uint256 total = 1;
         for (uint256 i = 0; i < count; i++) {
+            total += 1;
             safeMint(to);
         }
+        tokenIdNext = total;
     }
 
     function random() private view returns (uint256) {

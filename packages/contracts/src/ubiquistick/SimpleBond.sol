@@ -160,13 +160,18 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     /// @notice Claim all rewards
     /// @return claimed Rewards claimed successfully
     function claim() public override whenNotPaused returns (uint256 claimed) {
+        uint256 total_claimAmount = 0;
         for (
             uint256 index = 0;
             (index < bonds[msg.sender].length);
             index += 1
         ) {
+            Bond storage bnd = bonds[msg.sender][index];
+            uint256 claimAmount = _bondClaimableRewards(bnd);
             claimed += claimBond(index);
+            total_claimAmount += claimAmount;
         }
+        totalClaimedRewards = total_claimAmount;
     }
 
     /// @notice Claim bond rewards
@@ -176,16 +181,14 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     ) public override whenNotPaused returns (uint256 claimed) {
         Bond storage bnd = bonds[msg.sender][index];
         uint256 claimAmount = _bondClaimableRewards(bnd);
-
         if (claimAmount > 0) {
             bnd.claimed += claimAmount;
-            totalClaimedRewards += claimAmount;
 
             assert(bnd.claimed <= bnd.rewards);
             IUAR(tokenRewards).raiseCapital(claimAmount);
             IERC20(tokenRewards).safeTransferFrom(
-                treasury,
                 msg.sender,
+                treasury,
                 claimAmount
             );
         }
