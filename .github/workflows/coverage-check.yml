@@ -106,11 +106,6 @@ jobs:
           echo Development branch coverage: ${{ steps.coverage-development.outputs.COVERAGE }}
           echo PR branch coverage: ${{ steps.coverage-pr.outputs.COVERAGE }}
 
-      - name: Echo coverage percentages
-        run: |
-          echo "The old coverage percentage is ${{ steps.coverage-development.outputs.COVERAGE }}"
-          echo "The new coverage percentage is ${{ steps.coverage-pr.outputs.COVERAGE }}"
-
       - name: Compare coverages
         if: ${{ steps.coverage-development.outputs.COVERAGE > steps.coverage-pr.outputs.COVERAGE }}
         run: |
