@@ -7,9 +7,9 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import Script from "next/script"; //@note Fix: (next/script warning)
 
-import AppContextProvider from "@/lib/AppContextProvider";
-import Background from "../components/layout/Background";
-import Layout from "@/components/layout/Layout";
+import AppContextProvider from "@/lib/app-context-provider";
+import Background from "../components/layout/background";
+import Layout from "@/components/layout/layout";
 
 const noOverlayWorkaroundScript = `
 ;(function () {

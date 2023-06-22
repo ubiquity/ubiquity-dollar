@@ -1,7 +1,7 @@
 body {
   background: #000;
   color: #fff;
-  font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
+  font-family: "Proxima Nova", Avenir, sans-serif;
   margin: 0;
   font-weight: 400;
 }
@@ -32,7 +32,7 @@ input {
   background: #ffffff10;
   margin-right: 3px;
   margin-bottom: 3px;
-  font-family: "Ubiquity Nova", "Proxima Nova", Avenir, sans-serif;
+  font-family: "Proxima Nova", Avenir, sans-serif;
   font-weight: 400;
   color: #fff;
 }
@@ -44,10 +44,10 @@ button:hover,
 input:hover {
   background: #ffffff20;
 }
-button[disabled="disabled"],
 button:disabled,
-input[disabled="disabled"],
-input:disabled {
+button[disabled="disabled"],
+input:disabled,
+input[disabled="disabled"] {
   pointer-events: none;
   opacity: 0.5;
 }
@@ -63,7 +63,6 @@ input:disabled {
   text-align: center;
   position: absolute;
   padding: 12px 0;
-  /* background: radial-gradient(#000000ff, #101010ff); */
 }
 #Inventory > div {
   overflow: auto;
@@ -112,27 +111,23 @@ video {
   position: relative;
 }
 #Sidebar {
-  /* background: radial-gradient(#000000ff, #101010ff); */
   display: inline-table;
   min-height: 100vh;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   text-rendering: geometricPrecision;
   font-size: 12px;
-  /* max-width: 200px; */
   padding-left: 16px;
   text-align: center;
 }
 #Foreground input[type="checkbox"] {
   display: none;
 }
-
 #Sidebar > div {
   display: table-cell;
   vertical-align: middle;
 }
 #MainContent {
-  /* max-width: 87.5vw; */
   display: inline-table;
   width: calc(100vw - 216px);
   text-align: center;
@@ -162,26 +157,17 @@ video {
 #Sidebar ul li a:hover {
   opacity: 1;
 }
-
 #Sidebar button {
   width: 100%;
 }
-
 #WalletConnect {
   position: relative;
-  /* padding: var(--button-pad); */
 }
-
 .wallet-connect__connect {
   visibility: hidden;
 }
-
 #WalletConnect button {
-  /* box-shadow: 0 0 48px 4px #00ffff; */
   border: 1px solid #80ffff;
-  /* background-color: #00ffff; */
-  /* color: #000; */
-  /* font-weight: 900; */
 }
 #Inventory {
   max-width: 100vw;
@@ -308,8 +294,6 @@ th {
   margin: 24px auto;
   margin-right: 3px;
   border-radius: 4px;
-  /* border-radius: 3px; */
-  /* border-right: 3px solid #000000ff; */
   padding: 12px 48px 24px;
   display: inline-block;
   vertical-align: top;
@@ -324,7 +308,6 @@ td {
   padding: 0 8px;
 }
 #Logo svg {
-  /* float: right; */
   height: 24px;
   width: 24px;
 }
@@ -348,9 +331,7 @@ td {
 #Markets > div > div > span {
   margin-left: 6px;
 }
-
 #WalletConnect {
-  /* position: fixed; */
   word-break: break-all;
   top: 0;
   text-transform: initial;
@@ -358,9 +339,6 @@ td {
 #WalletConnect.connected button {
   border: transparent;
 }
-
-/* spinner */
-
 #Spinner {
   display: inline-block;
   position: relative;
@@ -375,10 +353,10 @@ td {
   width: 16px;
   height: 16px;
   margin: 1px;
-  border: 1px solid #ffffff;
+  border: 1px solid #fff;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #ffffff transparent transparent transparent;
+  border-color: #fff transparent transparent transparent;
 }
 #Spinner div:nth-child(1) {
   animation-delay: -0.45s;
@@ -391,23 +369,15 @@ td {
 }
 @keyframes lds-ring {
   0% {
-    transform: rotate(0deg);
+    transform: rotate(0);
   }
   100% {
     transform: rotate(360deg);
   }
 }
-
-/* spinner */
-
 #Sidebar > div > ul:nth-child(3) li {
   display: inline-block;
 }
-/*
-#Sidebar > div > ul:nth-child(3) li {
-  display: inline-block;
-} */
-
 @keyframes logo-ani {
   0% {
     opacity: 1;
@@ -452,7 +422,7 @@ td {
   transition: 1s all cubic-bezier(0.25, 0, 0, 1);
   overflow: hidden;
   opacity: 1;
-  background: transparent;
+  background: 0 0;
   margin: 24px auto;
   margin-right: 3px;
   border-radius: 4px;
@@ -552,7 +522,6 @@ td {
   filter: drop-shadow(0 0 16px #fff);
   top: calc(100% + 12px);
 }
-
 .WalletNotConnected__transition-enter {
   opacity: 0;
 }
@@ -567,40 +536,33 @@ td {
 }
 .WalletNotConnected__transition-enter-active,
 .WalletNotConnected__transition-exit-active {
-  transition: opacity 1000ms;
+  transition: opacity 1s;
 }
-
-#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__after > div,
-#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__after > div {
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__after > div,
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__after > div {
   animation: rotation-a 64s linear 0s infinite;
 }
-
-#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__before > div,
-#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__before > div {
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__before > div,
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__before > div {
   animation: rotation-b 64s linear 0s infinite;
 }
-
-#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__svg,
-#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__svg {
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__svg,
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__svg {
   fill-opacity: 0.75;
   fill: transparent;
 }
-
-#WalletNotConnected.WalletNotConnected__transition-exit-active,
-#WalletNotConnected.WalletNotConnected__transition-enter-active {
+#WalletNotConnected.WalletNotConnected__transition-enter-active,
+#WalletNotConnected.WalletNotConnected__transition-exit-active {
   transform: scale(4);
   opacity: 0;
 }
-
-#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__text,
-#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__text {
+#WalletNotConnected.WalletNotConnected__transition-enter-active .WalletNotConnected__text,
+#WalletNotConnected.WalletNotConnected__transition-exit-active .WalletNotConnected__text {
   opacity: 0;
 }
-
 aside {
   color: #bfbfbf;
 }
-
 #MintUcr,
 #RedeemUcr {
   opacity: 0.25;
@@ -610,7 +572,6 @@ aside {
 #RedeemUcr > div {
   pointer-events: none;
 }
-
 #CreditOperations[data-twap^="0."] #MintUcr,
 #CreditOperations[data-twap^="1."] #RedeemUcr {
   opacity: 1;
@@ -621,8 +582,6 @@ aside {
 #CreditOperations[data-twap^="1."] #RedeemUcr > div {
   pointer-events: unset;
 }
-
-/* Page 404 styles */
 #Page404 {
   display: flex;
 }
@@ -642,8 +601,6 @@ aside {
   font-size: 4rem;
   padding: 16px;
 }
-
-/* Build info with commit hash URL block styles */
 #BuildInfo {
   opacity: 0.5;
   color: #fff;
@@ -651,7 +608,6 @@ aside {
 #BuildInfo:hover {
   opacity: 1;
 }
-
 #__CONNECTKIT__ svg {
   max-height: unset;
   vertical-align: unset;
