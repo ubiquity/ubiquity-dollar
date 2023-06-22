@@ -40,7 +40,6 @@ jobs:
 
       - name: Deploy Netlify
         run: |
-          netlify link --id b5030bc4-27d6-4786-84d7-c686f4b2f950
           netlify deploy --prod > ./deployments.log
           ls -la
 
