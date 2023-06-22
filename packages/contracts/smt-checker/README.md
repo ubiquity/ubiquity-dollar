@@ -3,7 +3,7 @@
 This repository provides SMT-Checker support for testing smart contracts. Follow these steps to get started:
 
 
-## Make Sure Your System Has Z3 Installed >= "Version"
+## Make Sure Your System Has Z3 Installed >= "4.8.11"
 
 Ensure that your system has Z3 installed with a version number greater than or equal to the required version.
 
