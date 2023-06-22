@@ -30,9 +30,24 @@ Ensure that your system has Z3 installed with a version number greater than or e
 
 ## Step 3: Use Forge to Test Contracts Using SMT
 
+
+
+https://github.com/molecula451/ubiquity-dollar/assets/41552663/cdcf3982-94a4-4cf5-8962-c49982b7c83a
+
+
+
 Ensure that your repository is up-to-date with the latest npm/yarn packages, then run the following command:
 
 ```
+npx tsx smt-checker/smt.ts
+```
+https://github.com/molecula451/ubiquity-dollar/assets/41552663/a4cad18e-0686-4637-bd0e-e229159543fe
+
+
+
+This will prompt you to select a contract. Once selected, check that the contract was updated in Foundry, then build it using Forge. Wait for the SMT-Checker results to appear after compiling.
+
+
 npx tsx smt-checker/smt.ts
 ```
 
