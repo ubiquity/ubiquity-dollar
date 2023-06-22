@@ -47,7 +47,7 @@ https://github.com/molecula451/ubiquity-dollar/assets/41552663/a4cad18e-0686-463
 
 This will prompt you to select a contract. Once selected, check that the contract was updated in Foundry, then build it using Forge. Wait for the SMT-Checker results to appear after compiling.
 
-
+```
 npx tsx smt-checker/smt.ts
 ```
 
