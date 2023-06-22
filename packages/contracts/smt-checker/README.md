@@ -49,5 +49,5 @@ This will prompt you to select a contract. Once selected, check that the contrac
 npx tsx smt-checker/smt.ts
 ```
 
-This will prompt you to select a contract. Once selected, check that the contract was updated in Foundry, then build it using Forge. Wait for the SMT-Checker results to appear after compiling.
+This will prompt you to select a contract. Once selected, check that the contract was updated in Foundry, then build it using forge build. Wait for the SMT-Checker results to appear after compiling.
 
