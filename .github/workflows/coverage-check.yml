@@ -118,3 +118,8 @@ jobs:
         run: |
           echo "Error: test coverage decreased"
           exit 1
+
+      - name: Upload test coverage report to coveralls.io
+        uses: coverallsapp/github-action@v2
+        with:
+          file: packages/contracts/filtered-lcov.info
