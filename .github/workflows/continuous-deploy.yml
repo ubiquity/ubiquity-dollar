@@ -40,7 +40,8 @@ jobs:
 
       - name: Deploy Netlify
         run: |
-          netlify deploy --prod > ./deployments.log
+          netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
+          netlify deploy --dir=./dist --prod > ./deployments.log
           ls -la
 
       - name: Deploy Cloudflare
