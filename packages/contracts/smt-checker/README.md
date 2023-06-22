@@ -2,6 +2,11 @@
 
 This repository provides SMT-Checker support for testing smart contracts. Follow these steps to get started:
 
+
+## Make Sure Your System Has Z3 Installed >= "Version"
+
+Ensure that your system has Z3 installed with a version number greater than or equal to the required version.
+
 ## Step 1: Download and Install Z3
 
 Before proceeding, ensure that you have `g++` and `python3` installed on your system. To download and install Z3, enter the following commands in your terminal:
@@ -21,10 +26,6 @@ sudo make install
 ```
 
 Once installed, you can verify that Z3 is correctly installed by checking the version number.
-
-## Step 2: Make Sure Your System Has Z3 Installed >= "Version"
-
-Ensure that your system has Z3 installed with a version number greater than or equal to the required version.
 
 ## Step 3: Use Forge to Test Contracts Using SMT
 
