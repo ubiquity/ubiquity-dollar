@@ -18,3 +18,4 @@ force = false
 
 [rpc_endpoints]
 mainnet = "https://eth.ubq.fi/v1/mainnet"
+
