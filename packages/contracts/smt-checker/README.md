@@ -15,11 +15,9 @@ sudo tar -zxvf z3-4.11.0.tar.gz
 cd z3-z3-4.11.0
 python3 scripts/mk_make.py
 cd build
-echo $PWDs
 sudo make -j$(nproc)
 sudo make install
-sudo cp libz3.so libz3.so.4.11
-sudo mv libz3.so.4.11 x86_64-linux-gnu
+./smt-checker/ubiquity-dollar/packages/contracts/smt-checker/copy.sh
 ```
 
 Once installed, you can verify that Z3 is correctly installed by checking the version number.
