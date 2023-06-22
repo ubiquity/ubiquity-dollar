@@ -35,6 +35,12 @@ npx tsx smt-checker/smt/update.ts
 
 This will add a new pre-defined profile to foundry.toml for testing & compiling contracts using SMTChecker
 
+### Export a foundry env variable to make use of the profile
+
+```
+export FOUNDRY_PROFILE=SMT
+```
+
 
 https://github.com/molecula451/ubiquity-dollar/assets/41552663/cdcf3982-94a4-4cf5-8962-c49982b7c83a
 
