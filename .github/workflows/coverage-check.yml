@@ -2,6 +2,8 @@ name: Compare Test Coverage
 # This compares test coverage and throws an error if test coverage is lower than the previous run.
 
 on:
+  push:
+    branches: [development]
   pull_request:
     branches: [development]
 
