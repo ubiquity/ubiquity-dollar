@@ -12,7 +12,7 @@ contract UbiquiStickHarness is UbiquiStick {
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.difficulty,
+                        block.prevrandao,
                         block.timestamp,
                         msg.sender,
                         tokenIdNext
