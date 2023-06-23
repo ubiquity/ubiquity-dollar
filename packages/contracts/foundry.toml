@@ -5,7 +5,6 @@ out = 'out'
 libs = ['lib']
 script = 'scripts'
 solc_version = '0.8.19'
-evm_version = 'shanghai'
 extra_output = [
   "abi",
   "evm.bytecode",
@@ -15,6 +14,7 @@ extra_output = [
 optimizer = true
 optimizer_runs = 20_000
 force = false
+evm_version = 'shanghai'
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
 
 [rpc_endpoints]
