@@ -1,11 +1,11 @@
 name: Development to Development-CI Sync
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - development
-  workflow_dispatch:
-    descriptions: "Manually sync Development to Development-CI"
+
 permissions:
   contents: write
 
