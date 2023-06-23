@@ -5,7 +5,6 @@ out = 'out'
 libs = ['lib']
 script = 'scripts'
 solc_version = '0.8.19'
-evm_version = 'london'
 extra_output = [
   "abi",
   "evm.bytecode",
