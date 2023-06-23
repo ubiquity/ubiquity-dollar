@@ -24,9 +24,9 @@ jobs:
         run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
 
       - name: Setup Foundry
-        uses: foundry-rs/foundry-toolchain@v1.0.9
+        uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly-048ecf339c1b3d9f84ffc158599440d5925e5b7c
+          version: nightly-20971940efb091e51e4df9225d0f775c0ebe43b4
 
       - name: Yarn Install
         run: yarn install --mode=skip-build && yarn allow-scripts
