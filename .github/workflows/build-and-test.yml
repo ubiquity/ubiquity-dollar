@@ -46,8 +46,8 @@ jobs:
         env: 
           FOUNDRY_DENY_WARNINGS: true
           RUST_BACKTRACE: 1
-          RUST_BACKTRACE: full
-          FOUNDRY_EVM_VERSION: 'paris'
+          RUST_BACKTRACE: 'full'
+          FOUNDRY_EVM_VERSION: 'Shanghai'
         run: yarn build
 
       - name: Test All
