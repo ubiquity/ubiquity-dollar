@@ -48,6 +48,8 @@ targets = [
   'outOfBounds',
   'overflow',
   'popEmptyArray',
+  'underflow',
+  'balance',
 ]
 `;
   return modelCheckerSectionContent.trim() + "\n";
