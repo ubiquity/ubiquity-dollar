@@ -46,6 +46,7 @@ jobs:
         env: 
           FOUNDRY_DENY_WARNINGS: true
           RUST_BACKTRACE: 1
+          RUST_BACKTRACE: full
           FOUNDRY_EVM_VERSION: 'paris'
         run: yarn build
 
