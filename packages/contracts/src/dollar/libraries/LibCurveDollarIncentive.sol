@@ -158,8 +158,8 @@ library LibCurveDollarIncentive {
 
         bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
-        return res.div(_one).toUInt();
         LibTWAPOracle.update();
+        return res.div(_one).toUInt();
     }
 
     function _getTWAPPrice() internal view returns (uint256) {

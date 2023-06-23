@@ -15,9 +15,9 @@ contract BondingCurveFacetTest is DiamondSetup {
     address fourthAccount = address(0x6);
     address fifthAccount = address(0x7);
 
-    uint256 constant ACCURACY = 10e18;
-    uint32 constant MAX_WEIGHT = 1e6;
-    bytes32 constant ONE = keccak256(abi.encodePacked(uint256(1)));
+    uint256 constant _ACCURACY = 10e18;
+    uint32 constant _MAX_WEIGHT = 1e6;
+    bytes32 constant _ONE = keccak256(abi.encodePacked(uint256(1)));
 
     mapping(address => uint256) public share;
 
@@ -70,7 +70,6 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 connWeight;
         connectorWeight = uint32(bound(connWeight, 1, 1000000));
         baseY = bound(baseY, 1, 1000000);
-        uint256 tokenIds;
 
         vm.prank(admin);
         IBondingCurveFacet.setParams(connectorWeight, baseY);
@@ -103,7 +102,6 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         assertEq(tokReturned, IBondingCurveFacet.getShare(secondAccount));
         assertEq(tokReturned, IUbiquityNFT.balanceOf(secondAccount, 1));
 
-        uint256 newDeposit;
     }
 
     function testWithdraw(uint32 connectorWeight, uint256 baseY) public {
@@ -135,7 +133,6 @@ contract ZeroStateBonding is BondingCurveFacetTest {
     function testPurchaseTargetAmountShouldRevertIfSupplyZero() public {
         uint256 collateralDeposited;
         uint256 connWeight;
-        uint256 poolBalance;
         uint32 connectorWeight = uint32(bound(connWeight, 1, MAX_WEIGHT));
 
         vm.expectRevert("ERR_INVALID_SUPPLY");
@@ -151,8 +148,6 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 collateralDeposited;
         uint256 bal;
         uint256 poolBalance = bound(bal, 1, 1000000);
-        uint256 connWeight;
-        uint32 connectorWeight = uint32(bound(connWeight, 1, MAX_WEIGHT));
 
         vm.expectRevert("ERR_INVALID_WEIGHT");
         IBondingCurveFacet.purchaseTargetAmount(

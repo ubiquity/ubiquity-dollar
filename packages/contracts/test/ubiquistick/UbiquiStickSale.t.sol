@@ -145,7 +145,7 @@ contract UbiquiStickSaleTest is Test {
         // user1 tries to buy token
         vm.deal(user1, 1 ether);
         vm.prank(user1);
-        (bool isSuccess, bytes memory data) = address(ubiquiStickSale).call{
+        (bool isSuccess, /* bytes memory data */) = address(ubiquiStickSale).call{
             value: 1 ether
         }("");
         assertEq(isSuccess, false);
@@ -155,8 +155,9 @@ contract UbiquiStickSaleTest is Test {
         // user1 tries to buy token
         vm.deal(user1, 1 ether);
         vm.prank(user1);
-        address(ubiquiStickSale).call{value: 1 ether}("");
-        (bool isSuccess, bytes memory data) = address(ubiquiStickSale).call{
+        (bool success,) = address(ubiquiStickSale).call{value: 1 ether}("");
+        require(!success, "receive() call should have reverted due to insufficient allowance");
+        (bool isSuccess, /* bytes memory data */) = address(ubiquiStickSale).call{
             value: 1 ether
         }("");
         assertEq(isSuccess, false);
