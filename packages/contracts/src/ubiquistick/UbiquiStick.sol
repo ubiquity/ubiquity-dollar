@@ -108,7 +108,7 @@ contract UbiquiStick is
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.prevrandao,
+                        block.difficulty,
                         block.timestamp,
                         msg.sender,
                         tokenIdNext
