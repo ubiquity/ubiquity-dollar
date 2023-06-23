@@ -2,6 +2,8 @@ name: Compare Test Coverage
 # This compares test coverage and throws an error if test coverage is lower than the previous run.
 
 on:
+  push:
+    branches: [development]
   pull_request:
     branches: [development]
 
@@ -118,3 +120,8 @@ jobs:
         run: |
           echo "Error: test coverage decreased"
           exit 1
+
+      - name: Upload test coverage report to coveralls.io
+        uses: coverallsapp/github-action@v2
+        with:
+          file: packages/contracts/filtered-lcov.info
