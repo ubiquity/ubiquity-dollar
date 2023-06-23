@@ -43,6 +43,8 @@ jobs:
         run: yarn workspace @ubiquity/contracts forge:install
 
       - name: Build All
+        env: 
+          FOUNDRY_DENY_WARNINGS: true
         run: yarn build
 
       - name: Test All
