@@ -19,7 +19,6 @@ force = false
 [rpc_endpoints]
 mainnet = "https://eth.ubq.fi/v1/mainnet"
 
-
 [profile.SMT.model_checker]
 contracts = { }
 engine = 'chc'
@@ -36,4 +35,3 @@ targets = [
   'underflow',
   'balance',
 ]
-

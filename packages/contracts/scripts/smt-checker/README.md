@@ -41,7 +41,7 @@ https://github.com/molecula451/ubiquity-dollar/assets/41552663/cdcf3982-94a4-4cf
 Ensure that your repository is up-to-date with the latest npm/yarn packages, then run the following command:
 
 ```
-npx tsx smt-checker/smt/smt.ts
+sh ./run-smt-setup.sh
 ```
 
 
