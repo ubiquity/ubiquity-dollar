@@ -11,18 +11,9 @@ Ensure that your system has Z3 installed with a version number greater than or e
 
 Before proceeding, ensure that you have `g++` and `python3` installed on your system. To download and install Z3, enter the following commands in your terminal:
 
+### Run script:
 ```
-sudo apt-get install g++
-sudo apt-get install z3
-sudo apt-get install libz3-dev
-sudo wget https://github.com/Z3Prover/z3/archive/refs/tags/z3-4.11.0.tar.gz
-sudo tar -zxvf z3-4.11.0.tar.gz
-cd z3-z3-4.11.0
-python3 scripts/mk_make.py
-cd build
-sudo make -j$(nproc)
-sudo make install
-./smt-checker/ubiquity-dollar/packages/contracts/smt-checker/copy.sh
+sh ./update-dependencies.sh
 ```
 
 Once installed, you can verify that Z3 is correctly installed by checking the version number.
