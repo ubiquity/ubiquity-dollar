@@ -152,13 +152,13 @@ library LibCurveDollarIncentive {
         uint256 amount
     ) internal returns (uint256) {
         uint256 curPrice = _getTWAPPrice();
+        LibTWAPOracle.update();
         if (curPrice >= 1 ether) {
             return 0;
         }
 
         bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
-        LibTWAPOracle.update();
         return res.div(_one).toUInt();
     }
 
