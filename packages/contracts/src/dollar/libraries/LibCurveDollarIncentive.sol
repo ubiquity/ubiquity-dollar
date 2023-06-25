@@ -150,7 +150,7 @@ library LibCurveDollarIncentive {
     //          when Ubiquity Dollar is <1$
     function _getPercentDeviationFromUnderPeg(
         uint256 amount
-    ) internal view returns (uint256) {
+    ) internal returns (uint256) {
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
@@ -158,7 +158,7 @@ library LibCurveDollarIncentive {
 
         bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
-        //LibTWAPOracle.update();
+        LibTWAPOracle.update();
         return res.div(_one).toUInt();
     }
 
