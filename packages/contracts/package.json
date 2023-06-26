@@ -24,8 +24,8 @@
   "scripts": {
     "test:unit": "forge test",
     "test:slither": "slither . --compile-force-framework foundry",
-    "test:coverage": "sh ./coverage.sh",
     "test:echidna": "echidna-test . --config echidna.config.yml",
+    "test:coverage": "sh ./coverage.sh",
     "start:anvil": "tsx ./scripts/anvil/anvil.ts",
     "prebuild": "run-p clean",
     "deploy:development": "tsx ./scripts/deploy/dollar/development-deploy.ts",
