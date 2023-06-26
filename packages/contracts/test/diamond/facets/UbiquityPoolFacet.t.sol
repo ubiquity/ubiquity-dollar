@@ -201,12 +201,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     function test_mintDollarShouldFailWhenSlippageIsReached() public {
         MockERC20 collateral = new MockERC20("collateral", "collateral", 18);
         collateral.mint(fourthAccount, 10 ether);
-        // add collateral
-        IMetaPool metaPoolCollateral = IMetaPool(
-            address(new MockMetaPool(address(collateral), curve3CrvToken))
-        );
-        // IMetaPool metaPoolCollateral = IMetaPool(address(metaPoolAddress));
-        // MockERC20 collateral = MockERC20(curve3CrvToken);
         vm.prank(admin);
         IUbiquityPoolFacet.addToken(address(collateral), (metapool));
         vm.prank(admin);
@@ -225,12 +219,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     function test_mintDollarShouldWork() public {
         MockERC20 collateral = new MockERC20("collateral", "collateral", 18);
         collateral.mint(fourthAccount, 10 ether);
-        // add collateral
-        IMetaPool metaPoolCollateral = IMetaPool(
-            address(new MockMetaPool(address(collateral), curve3CrvToken))
-        );
-        // IMetaPool metaPoolCollateral = IMetaPool(address(metaPoolAddress));
-        // MockERC20 collateral = MockERC20(curve3CrvToken);
         vm.prank(admin);
         IUbiquityPoolFacet.addToken(address(collateral), (metapool));
         assertEq(collateral.balanceOf(fourthAccount), 10 ether);
@@ -248,12 +236,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     function test_redeemDollarShouldFailWhenDollarIAboveOne() public {
         MockERC20 collateral = new MockERC20("collateral", "collateral", 18);
         collateral.mint(fourthAccount, 10 ether);
-        // add collateral
-        IMetaPool metaPoolCollateral = IMetaPool(
-            address(new MockMetaPool(address(collateral), curve3CrvToken))
-        );
-        // IMetaPool metaPoolCollateral = IMetaPool(address(metaPoolAddress));
-        // MockERC20 collateral = MockERC20(curve3CrvToken);
         vm.prank(admin);
         IUbiquityPoolFacet.addToken(address(collateral), (metapool));
         assertEq(collateral.balanceOf(fourthAccount), 10 ether);
@@ -280,12 +262,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     function test_redeemDollarShouldWork() public {
         MockERC20 collateral = new MockERC20("collateral", "collateral", 18);
         collateral.mint(fourthAccount, 10 ether);
-        // add collateral
-        IMetaPool metaPoolCollateral = IMetaPool(
-            address(new MockMetaPool(address(collateral), curve3CrvToken))
-        );
-        // IMetaPool metaPoolCollateral = IMetaPool(address(metaPoolAddress));
-        // MockERC20 collateral = MockERC20(curve3CrvToken);
         vm.prank(admin);
         IUbiquityPoolFacet.addToken(address(collateral), (metapool));
         assertEq(collateral.balanceOf(fourthAccount), 10 ether);
@@ -326,12 +302,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     function collectRedemptionShouldWork() public {
         MockERC20 collateral = new MockERC20("collateral", "collateral", 18);
         collateral.mint(fourthAccount, 10 ether);
-        // add collateral
-        IMetaPool metaPoolCollateral = IMetaPool(
-            address(new MockMetaPool(address(collateral), curve3CrvToken))
-        );
-        // IMetaPool metaPoolCollateral = IMetaPool(address(metaPoolAddress));
-        // MockERC20 collateral = MockERC20(curve3CrvToken);
         vm.prank(admin);
         IUbiquityPoolFacet.addToken(address(collateral), (metapool));
         assertEq(collateral.balanceOf(fourthAccount), 10 ether);

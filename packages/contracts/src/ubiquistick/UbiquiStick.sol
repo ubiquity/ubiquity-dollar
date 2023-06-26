@@ -108,7 +108,7 @@ contract UbiquiStick is
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.difficulty,
+                        block.prevrandao,
                         block.timestamp,
                         msg.sender,
                         tokenIdNext
@@ -131,7 +131,7 @@ contract UbiquiStick is
         address,
         uint256,
         uint96
-    ) internal {
+    ) internal pure {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 
