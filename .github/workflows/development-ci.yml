@@ -1,0 +1,37 @@
+name: Development to Development-CI Sync
+
+on:
+  push:
+    branches:
+      - development
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    name: Sync changes from development to development-ci
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Run merge
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git checkout development-ci
+          echo "debug information"
+          git status
+          git branch -avv
+          git log --graph --pretty=oneline --abbrev-commit --all -20
+          echo "git diff"
+          git diff development
+          echo "== merging =="
+          (git merge development\
+            && git push\
+            && echo "successfully rebased features to development-ci")\
+          || (echo "cannot automatically sync due to merge conflicts" && exit 1)
