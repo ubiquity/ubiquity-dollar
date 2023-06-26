@@ -19,3 +19,20 @@ force = false
 
 [rpc_endpoints]
 mainnet = "https://eth.ubq.fi/v1/mainnet"
+
+[profile.SMT.model_checker]
+contracts = { }
+engine = 'chc'
+solvers = ['z3']
+show_unproved = true
+timeout = 0
+targets = [
+  'assert',
+  'constantCondition',
+  'divByZero',
+  'outOfBounds',
+  'overflow',
+  'popEmptyArray',
+  'underflow',
+  'balance',
+]
