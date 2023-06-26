@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 

@@ -7,7 +7,7 @@ import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import "../../dollar/interfaces/IMetaPool.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
 /// @title An excess dollar distributor which sends dollars to treasury,
