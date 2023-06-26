@@ -8,8 +8,9 @@ import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {IMetaPool} from "../interfaces/IMetaPool.sol";
 import "forge-std/console.sol";
+import "../interfaces/IUbiquityPool.sol";
 
-contract UbiquityPoolFacet is Modifiers {
+contract UbiquityPoolFacet is Modifiers, IUbiquityPool {
     /// @dev Mints 1 UbiquityDollarToken for every 1USD of CollateralToken deposited
     /// @param collateralAddress address of collateral token being deposited
     /// @param collateralAmount amount of collateral tokens being deposited

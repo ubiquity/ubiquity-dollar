@@ -25,10 +25,8 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     }
 
     // Mapping from account to operator approvals
-    mapping(address => uint256[]) private _holderBalances;
     mapping(uint256 => Stake) private _stakes;
     uint256 private _totalLP;
-    uint256 private _totalSupply;
 
     string private _baseURI = "";
 
@@ -101,10 +99,10 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         uint256 lpRewardDebt,
         uint256 endBlock
     ) public virtual onlyMinter whenNotPaused returns (uint256 id) {
-        id = _totalSupply + 1;
+        id = totalSupply + 1;
         _mint(to, id, 1, bytes(""));
-        _totalSupply += 1;
-        _holderBalances[to].add(id);
+        totalSupply += 1;
+        holderBalances[to].add(id);
         Stake storage _stake = _stakes[id];
         _stake.minter = to;
         _stake.lpFirstDeposited = lpDeposited;
@@ -126,13 +124,6 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         bytes memory data
     ) public override(ERC1155, ERC1155Ubiquity) whenNotPaused {
         super.safeTransferFrom(from, to, id, amount, data);
-    }
-
-    /**
-     * @dev Total amount of tokens  .
-     */
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
     }
 
     /**
@@ -202,7 +193,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
         require(_stake.lpAmount == 0, "LP <> 0");
-        _totalSupply -= 1;
+        totalSupply -= 1;
     }
 
     /**

@@ -1,7 +1,7 @@
 {
   "exclude_informational": true,
   "exclude_low": true,
-  "detectors_to_exclude": "naming-conventions,different-pragma-directives-are-used,external-function,assembly,incorrect-equality,incorrect-versions-of-solidity,unused-return",
+  "detectors_to_exclude": "naming-conventions,different-pragma-directives-are-used,external-function,assembly,incorrect-equality,solc-version,unused-return",
   "exclude_medium": false,
   "exclude_high": false,
   "disable_color": false,
