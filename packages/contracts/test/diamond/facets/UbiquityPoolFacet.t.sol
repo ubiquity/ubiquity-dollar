@@ -272,7 +272,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
 
         IUbiquityPoolFacet.mintDollar(address(collateral), 10 ether, 0 ether);
         uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
-        uint256 balanceCollateralBefore = collateral.balanceOf(fourthAccount);
         vm.stopPrank();
         MockMetaPool mock = MockMetaPool(IManager.stableSwapMetaPoolAddress());
         // set the mock data for meta pool
