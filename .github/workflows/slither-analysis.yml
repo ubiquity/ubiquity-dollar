@@ -1,6 +1,6 @@
 name: Slither Analysis
 
-on: workflow_dispatch
+on: [push, pull_request]
 jobs:
   slither-analysis:
     name: Slither Analysis
@@ -18,14 +18,6 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-
-      - name: Install solc-select
-        run: pip3 install solc-select
-
-      - name: Install solc 0.8.16
-        run: |
-          solc-select install 0.8.16
-          solc-select use 0.8.16
 
       - name: Install Slither
         run: pip3 install slither-analyzer
