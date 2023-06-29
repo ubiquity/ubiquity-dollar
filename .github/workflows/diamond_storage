@@ -1,0 +1,22 @@
+name: Diamond Storage Protection
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+jobs:
+  check_diamond_storage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check for diamond storage changes
+        run: |
+          git diff --name-only HEAD^ HEAD | grep "^diamond_storage/"
+          if [ $? -eq 0 ]; then
+            echo "ERROR: Changes detected in diamond storage!"
+            exit 1
+          fi
