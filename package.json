@@ -3,17 +3,23 @@
   "version": "1.0.0",
   "description": "Template repository with TypeScript support.",
   "main": "index.ts",
+  "author": "Ubiquity DAO",
+  "license": "MIT",
+  "engines": {
+    "node": ">=v20.3.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format": "run-s format:prettier format:lint",
+    "format:lint": "eslint --fix .",
+    "format:prettier": "prettier --write ."
   },
   "keywords": [
     "typescript",
-    "nodejs",
-    "dotenv",
-    "conventional-commits"
+    "template",
+    "dao",
+    "ubiquity",
+    "open-source"
   ],
-  "author": "Ubiquity DAO",
-  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.3.1"
   },
@@ -21,10 +27,13 @@
     "@commitlint/cli": "^17.6.6",
     "@commitlint/config-conventional": "^17.6.6",
     "@types/node": "^20.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.43.0",
     "husky": "^8.0.3",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.8.8",
     "tsx": "^3.12.7",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.0"
   }
 }
