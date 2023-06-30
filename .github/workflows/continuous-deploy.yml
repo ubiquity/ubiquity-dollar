@@ -38,7 +38,7 @@ jobs:
       - name: Extract Artifact
         run: unzip pr.zip && unzip pull-request.zip && ls
 
-      - name: Deploy Netlify 
+      - name: Deploy Netlify
         run: |
           netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
           netlify deploy --dir=./dist --prod > ./deployments.log
@@ -70,12 +70,12 @@ jobs:
       #     RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT_ID }}
       #     RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway up
 
-      - name: Get UbiquiBot Token
-        uses: tibdex/github-app-token@v1.7.0
-        id: get_installation_token
-        with:
-          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
-          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+#      - name: Get UbiquiBot Token
+#        uses: tibdex/github-app-token@v1.7.0
+#        id: get_installation_token
+#        with:
+#          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
+#          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
       - name: Save UbiquiBot Token
         env:
