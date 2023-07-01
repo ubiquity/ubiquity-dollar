@@ -7,7 +7,6 @@ pragma solidity ^0.8.19;
 import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {IMetaPool} from "../interfaces/IMetaPool.sol";
-import "forge-std/console.sol";
 import "../interfaces/IUbiquityPool.sol";
 
 contract UbiquityPoolFacet is Modifiers, IUbiquityPool {
@@ -20,7 +19,6 @@ contract UbiquityPoolFacet is Modifiers, IUbiquityPool {
         uint256 collateralAmount,
         uint256 dollarOutMin
     ) external {
-        console.log("mintDollar");
         LibUbiquityPool.mintDollar(
             collateralAddress,
             collateralAmount,
