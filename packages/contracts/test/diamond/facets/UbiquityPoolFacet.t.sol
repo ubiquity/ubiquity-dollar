@@ -298,7 +298,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.stopPrank();
     }
 
-    function collectRedemptionShouldWork() public {
+    function test_collectRedemptionShouldWork() public {
         MockERC20 collateral = new MockERC20("collateral", "collateral", 18);
         collateral.mint(fourthAccount, 10 ether);
         vm.prank(admin);
