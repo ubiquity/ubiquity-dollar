@@ -35,7 +35,7 @@
     "@uniswap/sdk-core": "^3.1.0",
     "@uniswap/smart-order-router": "^2.10.1",
     "@uniswap/widgets": "2.18.0",
-    "@walletconnect/ethereum-provider": "^2.5.2",
+    "@walletconnect/ethereum-provider": "^2.8.6",
     "autoprefixer": "^10.4.8",
     "btoa": "^1.2.1",
     "classnames": "^2.3.1",
