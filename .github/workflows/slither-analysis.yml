@@ -1,11 +1,7 @@
 name: Slither Analysis
 
-on:
-  push:
-    branches:
-      - development
-      - main
-  pull_request:
+on: [push, pull_request]
+ 
 
 jobs:
   slither-analysis:
