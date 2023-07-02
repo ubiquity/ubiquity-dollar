@@ -29,8 +29,6 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
 
     uint256 public constant MAXIMUM_SUPPLY = 1024;
     uint256 public constant MAXIMUM_PER_TX = 10;
-    address private constant ETH_ADDRESS =
-        0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     event Mint(address from, uint256 count, uint256 price);
 
@@ -93,6 +91,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         // and had enough allowance with enough funds
         uint256 count;
         uint256 price;
+        uint256 paid;
         (count, price) = allowance(msg.sender);
         require(
             count > 0,
@@ -101,18 +100,16 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
 
         if (remainingTokenCount < count) {
             count = remainingTokenCount;
+            paid = remainingTokenCount;
         }
         if (msg.value < count * price) {
+            paid = (msg.value * price) / price;
             count = msg.value / price;
         }
         if (MAXIMUM_PER_TX < count) {
+            paid = MAXIMUM_PER_TX;
             count = MAXIMUM_PER_TX;
         }
-        require(count > 0, "Not enough Funds");
-
-        _allowances[msg.sender].count -= count;
-
-        uint256 paid = count * price;
         tokenContract.batchSafeMint(msg.sender, count);
         emit Mint(msg.sender, count, paid);
 

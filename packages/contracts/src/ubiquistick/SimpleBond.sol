@@ -135,10 +135,13 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         // @dev must set token allowance for this smart contract previously
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
 
-        Bond memory bnd;
-        bnd.token = token;
-        bnd.amount = amount;
-        bnd.block = block.number;
+        Bond memory bnd = Bond({
+            token: token,
+            amount: amount,
+            block: block.number,
+            rewards: 0,
+            claimed: 0
+        });
 
         uint256 rewards = (amount * rewardsRatio[token]) / 1_000_000_000;
         bnd.rewards = rewards;
