@@ -81,6 +81,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
     }
 
     // Handles token purchases
+    //slither-disable-next-line unchecked-lowlevel
     receive() external payable nonReentrant {
         // Check if tokens are still available for sale
         require(tokenContract.totalSupply() < MAXIMUM_SUPPLY, "Sold Out");
@@ -91,7 +92,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         // and had enough allowance with enough funds
         uint256 count;
         uint256 price;
-        uint256 paid;
+        uint256 paid = 0;
         (count, price) = allowance(msg.sender);
         require(
             count > 0,
@@ -122,6 +123,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         }
     }
 
+    //slither-disable-next-line unchecked-lowlevel
     function withdraw() public nonReentrant onlyOwner {
         (bool result, ) = fundsAddress.call{value: address(this).balance}("");
         require(result, "Failed to send Ether");
