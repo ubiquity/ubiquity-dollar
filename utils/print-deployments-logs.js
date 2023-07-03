@@ -9,7 +9,7 @@ module.exports = async ({ github, context, fs }) => {
   const deploymentsLog = fs.readFileSync("./deployments.log").toString("utf-8");
 
   let defaultBody = deploymentsLog;
-  const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.netlify\.app/gim);
+  const uniqueDeployUrl = deploymentsLog.match(/https:\/\/.+\.pages\.dev/gim);
   const botCommentsArray = [];
 
   if (uniqueDeployUrl) {
@@ -155,7 +155,7 @@ module.exports = async ({ github, context, fs }) => {
   };
 
   if (eventName == "pull_request") {
-    console.log("Creating a comment for the pull request does this change?");
+    console.log("Creating a comment for the pull request");
     await processPRComments();
   } else {
     console.log("Creating a comment for the commit");
