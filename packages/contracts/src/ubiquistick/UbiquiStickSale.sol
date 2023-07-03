@@ -111,6 +111,10 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
             paid = MAXIMUM_PER_TX;
             count = MAXIMUM_PER_TX;
         }
+        require(count > 0, "Not enough Funds");
+
+        _allowances[msg.sender].count -= count;
+
         tokenContract.batchSafeMint(msg.sender, count);
         emit Mint(msg.sender, count, paid);
 
