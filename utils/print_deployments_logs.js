@@ -14,8 +14,8 @@ module.exports = async ({ github, context, fs }) => {
 
   if (uniqueDeployUrl) {
     defaultBody = `[Deployment: ${new Date()} | Commit: ${commitSha}](${uniqueDeployUrl})`;
-    console.log(defaultBody);
   }
+    console.log("Default body: " + defaultBody);
 
   const verifyInput = (data) => {
     return data !== "";
