@@ -155,7 +155,7 @@ module.exports = async ({ github, context, fs }) => {
   };
 
   if (eventName == "pull_request") {
-    console.log("Creating a comment for the pull request");
+    console.log("Creating a comment for the pull request does this change?");
     await processPRComments();
   } else {
     console.log("Creating a comment for the commit");
