@@ -5,6 +5,7 @@ out = 'out'
 libs = ['lib']
 script = 'scripts'
 solc_version = '0.8.19'
+evm_version = 'shanghai'
 extra_output = [
   "abi",
   "evm.bytecode",
@@ -15,11 +16,23 @@ optimizer = true
 optimizer_runs = 20_000
 force = false
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
-[fmt]
-line_length = 80
-tab_width = 4
-bracket_spacing = false
-quote_style = 'double'
 
 [rpc_endpoints]
 mainnet = "https://eth.ubq.fi/v1/mainnet"
+
+[profile.SMT.model_checker]
+contracts = { }
+engine = 'chc'
+solvers = ['z3']
+show_unproved = true
+timeout = 0
+targets = [
+  'assert',
+  'constantCondition',
+  'divByZero',
+  'outOfBounds',
+  'overflow',
+  'popEmptyArray',
+  'underflow',
+  'balance',
+]

@@ -5,15 +5,12 @@ import "../../../../src/dollar/libraries/Constants.sol";
 import "forge-std/Script.sol";
 
 contract Constants is Script {
-    uint256[] shareAmounts;
-    uint256[] ids;
-
-    string uri;
-    address curve3PoolToken = 0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
-    address basePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
-    address curveFactory = 0xB9fC157394Af804a3578134A6585C0dc9cc990d4;
-    uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-    address admin = vm.envAddress("PUBLIC_KEY");
+    address constant curve3PoolToken =
+        0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
+    address constant basePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
+    address constant curveFactory = 0xB9fC157394Af804a3578134A6585C0dc9cc990d4;
+    uint256 immutable deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+    address immutable admin = vm.envAddress("PUBLIC_KEY");
 
     address[] public users = [
         0x89eae71B865A2A39cBa62060aB1b40bbFFaE5b0D,
@@ -55,42 +52,42 @@ contract Constants is Script {
     ];
 
     uint256[] public lpAmounts = [
-        1301000000000000000,
-        3500000000000000000000,
+        1301e15,
+        35e20,
         9351040526163838324896,
         44739174270101943975392,
         74603879373206500005186,
-        2483850000000000000000,
+        248385e16,
         1878674425540571814543,
         8991650309086743220575,
         1111050988607803612915,
         4459109737462155546375,
-        21723000000000000000000,
-        38555895255762442000000,
+        21723e18,
+        38555895255762442e6,
         5919236274824521937931,
         1569191092350025897388,
         10201450658519659933880,
         890339946944155414434,
         5021119790948940093253,
-        761000000000000000000,
+        761e18,
         49172294677407855270013,
         25055256356185888278372,
         1576757078627228869179,
-        3664000000000000000000,
+        3664e18,
         1902189597146391302863,
         34959771702943278635904,
         9380006436252701023610,
         6266995559166564365470,
-        100000000000000000000,
+        1e20,
         3696476262155265118082,
-        740480000000000000000,
-        2266000000000000000000,
+        74048e16,
+        2266e18,
         1480607760433248019987,
         24702171480214199310951,
-        605000000000000000000,
+        605e18,
         1694766661387270251234,
-        14857000000000000000000,
-        26000000000000000000
+        14857e18,
+        26e18
     ];
 
     uint256[] public terms = [

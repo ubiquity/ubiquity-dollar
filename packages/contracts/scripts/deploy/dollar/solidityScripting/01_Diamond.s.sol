@@ -73,11 +73,7 @@ contract DiamondScript is Constants {
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
 
-    UbiquityDollarToken IDollar;
-
-    address incentive_addr;
     string[] facetNames;
-    address[] facetAddressList;
 
     function run() public virtual {
         vm.startBroadcast(deployerPrivateKey);
@@ -149,7 +145,7 @@ contract DiamondScript is Constants {
         vm.stopBroadcast();
     }
 
-    function setFacet(IDiamondCut.FacetCut[] memory cuts) internal {
+    function setFacet(IDiamondCut.FacetCut[] memory cuts) internal view {
         cuts[0] = (
             IDiamondCut.FacetCut({
                 facetAddress: address(dCutFacet),

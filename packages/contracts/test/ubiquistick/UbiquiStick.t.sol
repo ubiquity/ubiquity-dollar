@@ -12,7 +12,7 @@ contract UbiquiStickHarness is UbiquiStick {
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.difficulty,
+                        block.prevrandao,
                         block.timestamp,
                         msg.sender,
                         tokenIdNext
@@ -26,7 +26,7 @@ contract UbiquiStickHarness is UbiquiStick {
         address address2,
         uint256 value1,
         uint96 value2
-    ) public {
+    ) public pure {
         _beforeConsecutiveTokenTransfer(address1, address2, value1, value2);
     }
 }

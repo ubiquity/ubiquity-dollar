@@ -8,11 +8,11 @@ contract MockCurveFactory is ICurveFactory {
     // solhint-disable-next-line no-empty-blocks
     function deploy_metapool(
         address _base_pool,
-        string memory _name,
-        string memory _symbol,
+        string memory /* _name */,
+        string memory /* _symbol */,
         address _coin,
-        uint256 _A,
-        uint256 _fee
+        uint256 /* _A */,
+        uint256 /* _fee */
     ) external returns (address) {
         MockMetaPool metaPoolAddress = new MockMetaPool(
             _coin,

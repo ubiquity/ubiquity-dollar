@@ -73,11 +73,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     //TODO create updateConfig method
     /// Needs to check that Operator is Authorized, From is Valid, ID exists
     function onERC1155Received(
-        address operator,
-        address from,
-        uint256 id,
-        uint256 value,
-        bytes calldata data
+        address /* operator */,
+        address /* from */,
+        uint256 /* id */,
+        uint256 /* value */,
+        bytes calldata /* data */
     ) public virtual returns (bytes4) {
         // Called when receiving ERC1155 token at staking.
         // operator: Staking contract

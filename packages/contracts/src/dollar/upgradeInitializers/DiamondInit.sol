@@ -96,6 +96,6 @@ contract DiamondInit is Modifiers {
             .ubiquityPoolStorage();
         poolStore.mintingFee = 0;
         poolStore.redemptionFee = 0;
-        poolStore.dollarFloor = 1000000000000000000;
+        poolStore.dollarFloor = 1e18;
     }
 }
