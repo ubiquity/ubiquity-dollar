@@ -27,7 +27,6 @@ lcov \
     "*scripts*" \
     "src/dollar/mocks/*" \
     "src/dollar/utils/*" \
-    "src/ubiquistick/MockUBQmanager.sol" \
     "test/*"
 
 # Generate summary
