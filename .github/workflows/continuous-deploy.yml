@@ -28,7 +28,7 @@ jobs:
         with:
           script: |
             const fs = require("fs");
-            const download_artifact = require('${{ github.workspace }}/utils/download_artifact.js');
+            const downloadArtifact = require('${{ github.workspace }}/utils/download-artifact.js');
             const workflow_run_id = '${{ github.event.workflow_run.id }}';
             const workspace = '${{ github.workspace }}';
             downloadArtifact({github, context, fs, workflow_run_id, workspace})
@@ -73,7 +73,7 @@ jobs:
 
       - name: Save UbiquiBot Token
         env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
+          TOKEN: ${{ steps.get_installation_token.outputs.token }}
         run: |
           echo "The generated token is masked: ${TOKEN}"
 
