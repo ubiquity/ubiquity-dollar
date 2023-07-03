@@ -24,12 +24,12 @@ jobs:
 
       - name: Install dependencies
         run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
-
+      
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly-31d6498c79af595577f200fc2136b31f43885397
-
+      
       - name: Yarn Install
         run: yarn install --mode=skip-build && yarn allow-scripts
 
@@ -62,6 +62,7 @@ jobs:
           mkdir -p ./pr
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
           cd ./packages/dapp && zip -r pull-request.zip ./dist && cp pull-request.zip ../../pr
+
       - uses: actions/upload-artifact@v3
         with:
           name: pr
