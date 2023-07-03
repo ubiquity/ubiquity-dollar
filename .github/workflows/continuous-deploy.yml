@@ -77,7 +77,7 @@ jobs:
 #          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
 #          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
-      - name: Save UbiquiBot Token
+      - name: Save UbiquiBot Token 
         env:
           TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
