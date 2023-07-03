@@ -3,13 +3,15 @@ name: Build & Test
 on:
   push:
   pull_request:
+    types: [opened, synchronize]
 
 jobs:
   build-and-test:
     name: Build & Test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: read
+      deployments: write
 
     steps:
       - name: Checkout repository
@@ -64,6 +66,11 @@ jobs:
         with:
           name: pr
           path: pr/
+
+      - name: Spell Check
+        run: |
+          LIST="$(find . -type f \( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
+          yes | npx cspell $LIST
 
       - name: Run Server
         run: yarn dev:dapp &
