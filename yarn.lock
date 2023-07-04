@@ -3787,7 +3787,6 @@ __metadata:
     classnames: ^2.3.1
     connectkit: ^1.2.2
     ethers: ^5.7.2
-    hardhat: ^2.10.1
     immer: ^9.0.17
     jotai: ^1.13.0
     jotai-immer: 0.1.0
@@ -9040,7 +9039,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hardhat@npm:^2.0.0, hardhat@npm:^2.10.1":
+"hardhat@npm:^2.0.0":
   version: 2.13.0
   resolution: "hardhat@npm:2.13.0"
   dependencies:
