@@ -17,7 +17,8 @@ const index: FC = (): JSX.Element => {
   useEffectAsync(async () => {
     if (managedContracts != null) {
       try {
-        console.log(twapPrice, "priced in ");
+        //console.log(twapPrice, "priced in ");
+        setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
       } catch (error) {
         console.log("Error occurred while executing contract call", error);
         setTwapPrice(null);
