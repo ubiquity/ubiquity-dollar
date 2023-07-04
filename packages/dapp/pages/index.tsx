@@ -15,8 +15,16 @@ const index: FC = (): JSX.Element => {
   const managedContracts = useManagerManaged();
 
   useEffectAsync(async () => {
-    if (managedContracts) {
-      setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
+    if (managedContracts != null) {
+      try {
+        console.log("priced in ");
+      } catch (error) {
+        console.log("Error occurred while executing contract call", error);
+        setTwapPrice(null);
+      }
+    } else {
+      console.log("managedContracts is null");
+      setTwapPrice(null);
     }
   }, [managedContracts]);
 
