@@ -5,6 +5,7 @@ import "@uniswap/widgets/fonts.css";
 import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
 import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 import DollarPrice from "@/components/redeem/dollar-price";
+import { fetchData } from "@/components/utils/local-data";
 
 import dynamic from "next/dynamic";
 const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connection-wall"), { ssr: false }); //@note Fix: (Hydration Error)
@@ -18,6 +19,10 @@ const index: FC = (): JSX.Element => {
       setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
     }
   }, [managedContracts]);
+
+  if (process.env.DEBUG === "true") {
+    fetchData();
+  }
 
   return (
     <WalletConnectionWall>
