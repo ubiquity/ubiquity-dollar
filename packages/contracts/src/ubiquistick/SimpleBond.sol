@@ -174,7 +174,6 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
     /// @notice Claim bond rewards
     /// @return claimed Rewards claimed successfully
-    ////slither-disable-next-line arbitrary-send-erc20
     function claimBond(
         uint256 index
     ) public override whenNotPaused returns (uint256 claimed) {
@@ -187,6 +186,7 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
             assert(bnd.claimed <= bnd.rewards);
             IUAR(tokenRewards).raiseCapital(claimAmount);
+            //slither-disable-next-line arbitrary-send-erc20
             IERC20(tokenRewards).safeTransferFrom(
                 treasury,
                 msg.sender,
