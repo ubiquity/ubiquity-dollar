@@ -89,6 +89,7 @@ contract UbiquiStick is
         tokenIdNext += 1;
 
         // Gold one
+        //slither-disable-next-line weak-prng
         if (_random() % uint256(_GOLD_FREQ) == 0) {
             if (tokenId != _INVISIBLE_TOKEN_ID) {
                 gold[tokenId] = true;

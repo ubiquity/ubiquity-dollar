@@ -100,7 +100,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         );
 
         if (remainingTokenCount < count) {
-            count = remainingTokenCount;
+            count = remainingTokenCount * price;
             paid = remainingTokenCount;
         }
         if (msg.value < count * price) {
@@ -108,7 +108,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
             count = msg.value / price;
         }
         if (MAXIMUM_PER_TX < count) {
-            paid = MAXIMUM_PER_TX;
+            paid = MAXIMUM_PER_TX * price;
             count = MAXIMUM_PER_TX;
         }
         require(count > 0, "Not enough Funds");

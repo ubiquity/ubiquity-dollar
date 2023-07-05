@@ -5,9 +5,8 @@ import {ManagerFacet} from "../facets/ManagerFacet.sol";
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import "../libraries/Constants.sol";
-import {IUAR} from "../../ubiquistick/interfaces/IUAR.sol";
 
-contract UbiquityCreditToken is ERC20Ubiquity, IUAR {
+contract UbiquityCreditToken is ERC20Ubiquity {
     constructor(
         address _manager
     )
