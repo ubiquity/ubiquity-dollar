@@ -103,7 +103,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
             paid = remainingTokenCount * price;
         }
         if (msg.value < count * price) {
-            paid = (msg.value * price) / price;
+            paid = msg.value * price;
             count = msg.value / price;
         }
         if (MAXIMUM_PER_TX < count) {
