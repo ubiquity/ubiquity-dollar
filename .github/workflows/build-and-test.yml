@@ -54,7 +54,7 @@ jobs:
         env:
           EVENT_NAME: ${{github.event_name}}
           PR_NUMBER: ${{ github.event.number }}
-          SHA: ${{github.sha}}
+          SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: |
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
           mkdir -p ./pr
