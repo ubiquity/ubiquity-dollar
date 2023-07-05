@@ -98,7 +98,6 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
             count > 0,
             "Not Whitelisted For The Sale Or Insufficient Allowance"
         );
-
         if (remainingTokenCount < count) {
             count = remainingTokenCount * price;
             paid = remainingTokenCount;
