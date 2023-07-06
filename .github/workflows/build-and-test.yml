@@ -35,7 +35,7 @@ jobs:
         env:
           INFURA_ID: ${{ secrets.INFURA_ID }}
           API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
-          NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT}}
+          NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID}}
         run: |
           echo "INFURA_ID=$INFURA_ID" > ./packages/dapp/.env
           echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
