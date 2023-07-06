@@ -13,9 +13,11 @@ module.exports = async ({ github, context, fs }) => {
   const botCommentsArray = [];
 
   if (uniqueDeployUrl) {
-    defaultBody = `[Deployment: ${new Date()} | Commit: ${commitSha}](${uniqueDeployUrl})`;
+    const slicedSha = commitSha.slice(0, -33);
+
+    defaultBody = `- [${slicedSha}](${uniqueDeployUrl})`;
   }
-    console.log("Default body: " + defaultBody);
+  console.log("Default body: " + defaultBody);
 
   const verifyInput = (data) => {
     return data !== "";
