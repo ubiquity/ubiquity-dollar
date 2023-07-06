@@ -72,8 +72,5 @@
       "napi-macros/example": true,
       "husky": true
     }
-  },
-  "dependencies": {
-    "dotenv": "^16.3.1"
   }
 }
