@@ -34,7 +34,7 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   for (let i = 0; i < fileNames.length; i++) {
     const fileName = fileNames[i];
     const storageCheck = executeCommand("forge inspect " + fileName + " storage");
-    console.log("storageCheck", storageCheck);
+    console.log("type of: ", typeof storageCheck);
   }
 });
 
