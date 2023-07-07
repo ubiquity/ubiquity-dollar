@@ -38,10 +38,17 @@ const Sidebar = () => {
           <ul>
             <Item text="Docs" href="https://github.com/ubiquity/ubiquity-dollar/wiki" icon="📑"></Item>
             <Item text="Blog" href="https://dao.ubq.fi/" icon="📰"></Item>
-            <li>
-              <hr />
-            </li>
           </ul>
+          <hr />
+
+          <footer>
+            <div className="utils">
+              <BuildInfo />
+              <LightDarkMode />
+            </div>
+            <WalletConnect />
+          </footer>
+          <hr />
           <ul>
             <li>
               <SocialLinkItem href="https://twitter.com/UbiquityDAO" alt="Twitter" icon="twitter" />
@@ -56,14 +63,6 @@ const Sidebar = () => {
               <SocialLinkItem href="https://discord.gg/SjymJ5maJ4" alt="Discord" icon="discord" />
             </li>
           </ul>
-          <footer>
-            <hr />
-            <div className="utils">
-              <BuildInfo />
-              <LightDarkMode />
-            </div>
-            <WalletConnect />
-          </footer>
         </div>
       </div>
     </>
