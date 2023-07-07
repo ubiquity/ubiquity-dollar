@@ -2,7 +2,7 @@ const fs = require('fs');
 
 
 function getFacetsName(facetsFolder, callback) {
-  fs.readdir(facetsFolder, (err, files) => {
+  fs.readdirSync(facetsFolder, (err, files) => {
     if (err) {
       callback(err, null);
       return;
