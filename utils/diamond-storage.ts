@@ -25,6 +25,8 @@ if (fs.existsSync(targetFolder)) {
 }
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
+
+let storageOutput = "";
 facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   if (err) {
     console.error("Error:", err);
@@ -34,9 +36,11 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   for (let i = 0; i < fileNames.length; i++) {
     const fileName = fileNames[i];
     const storageCheck = executeCommand("forge inspect " + fileName + " storage");
-    console.log("type of: ", typeof storageCheck);
+    storageOutput += storageCheck;
   }
 });
+
+console.log("Storage Outpud: " + storageOutput);
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
