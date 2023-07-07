@@ -25,9 +25,14 @@ if (fs.existsSync(targetFolder)) {
 }
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
-executeCommand(`cd src`);
-const ls = executeCommand(`ls`);
-console.log("LS: ", ls);
+facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
+  if (err) {
+    console.error("Error:", err);
+    return;
+  }
+
+  console.log("File names:", fileNames);
+});
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
