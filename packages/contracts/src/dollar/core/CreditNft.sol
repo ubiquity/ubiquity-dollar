@@ -98,7 +98,6 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         bool reachedEndOfExpiredKeys = false;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
         uint256 outstandingDebt = _totalOutstandingDebt;
-        uint256 localTotalOutstandingDebt = outstandingDebt;
         //if list is empty, currentBlockNumber will be 0
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {
             if (currentBlockNumber > block.number) {

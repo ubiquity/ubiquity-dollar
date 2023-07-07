@@ -20,8 +20,14 @@ lcov \
     --rc lcov_branch_coverage=1 \
     --remove merged-lcov.info \
     --output-file filtered-lcov.info \
-    "*node_modules*" "*test*" "*mock*" "*scripts*"
-
+    --ignore-errors unused \
+    "*node_modules*" \
+    "*test*" \
+    "*mock*" \
+    "*scripts*" \
+    "src/dollar/mocks/*" \
+    "src/dollar/utils/*" \
+    "test/*"
 
 # Generate summary
 lcov \

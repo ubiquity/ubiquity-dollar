@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "abdk-libraries-solidity/ABDKMathQuad.sol";
+import "abdk/ABDKMathQuad.sol";
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
@@ -27,7 +27,13 @@ library LibCreditRedemptionCalculator {
     }
 
     bytes32 constant CREDIT_REDEMPTION_CALCULATOR_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.credit.redemption.calculator.storage");
+        bytes32(
+            uint256(
+                keccak256(
+                    "ubiquity.contracts.credit.redemption.calculator.storage"
+                )
+            ) - 1
+        );
 
     /// @notice set the constant for Credit Token calculation
     /// @param coef new constant for Credit Token calculation in ETH format

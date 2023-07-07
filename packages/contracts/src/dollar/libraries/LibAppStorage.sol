@@ -7,8 +7,6 @@ import "./Constants.sol";
 
 struct AppStorage {
     // reentrancy guard
-    uint256 NOT_ENTERED;
-    uint256 ENTERED;
     uint256 reentrancyStatus;
     // others
     address dollarTokenAddress;
@@ -60,17 +58,17 @@ contract Modifiers {
     modifier nonReentrant() {
         // On the first call to nonReentrant, _notEntered will be true
         require(
-            store.reentrancyStatus != store.ENTERED,
+            store.reentrancyStatus != _ENTERED,
             "ReentrancyGuard: reentrant call"
         );
 
         // Any calls to nonReentrant after this point will fail
-        store.reentrancyStatus = store.ENTERED;
+        store.reentrancyStatus = _ENTERED;
         _;
 
         // By storing the original value once again, a refund is triggered (see
         // https://eips.ethereum.org/EIPS/eip-2200)
-        store.reentrancyStatus = store.NOT_ENTERED;
+        store.reentrancyStatus = _NOT_ENTERED;
     }
 
     modifier onlyOwner() {
@@ -172,5 +170,9 @@ contract Modifiers {
             "CurveIncentive: Caller is not Ubiquity Dollar"
         );
         _;
+    }
+
+    function _initReentrancyGuard() internal {
+        store.reentrancyStatus = _NOT_ENTERED;
     }
 }

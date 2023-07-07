@@ -15,15 +15,12 @@ library LibCurveDollarIncentive {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    bytes32 constant CURVE_DOLLAR_STORAGE_SLOT = 
-        keccak256("ubiquity.contracts.curve.storage");
-    
+    bytes32 constant CURVE_DOLLAR_STORAGE_SLOT =
+        bytes32(uint256(keccak256("ubiquity.contracts.curve.storage")) - 1);
+
     bytes16 constant _one = bytes16(abi.encodePacked(uint256(1 ether)));
 
-    event ExemptAddressUpdate(
-        address indexed _account,
-        bool _isExempt
-    );
+    event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
     struct CurveDollarData {
         bool isSellPenaltyOn;
@@ -31,7 +28,11 @@ library LibCurveDollarIncentive {
         mapping(address => bool) _exempt;
     }
 
-    function curveDollarStorage() internal pure returns (CurveDollarData storage l) {
+    function curveDollarStorage()
+        internal
+        pure
+        returns (CurveDollarData storage l)
+    {
         bytes32 slot = CURVE_DOLLAR_STORAGE_SLOT;
         assembly {
             l.slot := slot
@@ -39,12 +40,12 @@ library LibCurveDollarIncentive {
     }
 
     function isSellPenaltyOn() internal view returns (bool) {
-        CurveDollarData storage ss = curveDollarStorage(); 
+        CurveDollarData storage ss = curveDollarStorage();
         return ss.isSellPenaltyOn;
     }
 
     function isBuyIncentiveOn() internal view returns (bool) {
-        CurveDollarData storage ss = curveDollarStorage(); 
+        CurveDollarData storage ss = curveDollarStorage();
         return ss.isBuyIncentiveOn;
     }
 
@@ -67,10 +68,7 @@ library LibCurveDollarIncentive {
     /// @notice set an address to be exempted from Curve trading incentives
     /// @param account the address to update
     /// @param isExempt a flag for whether to flag as exempt or not
-    function setExemptAddress(
-        address account,
-        bool isExempt
-    ) internal {
+    function setExemptAddress(address account, bool isExempt) internal {
         CurveDollarData storage ss = curveDollarStorage();
         ss._exempt[account] = isExempt;
         emit ExemptAddressUpdate(account, isExempt);
@@ -95,14 +93,12 @@ library LibCurveDollarIncentive {
     }
 
     function _incentivizeSell(address target, uint256 amount) internal {
-
         CurveDollarData storage ss = curveDollarStorage();
 
         if (isExemptAddress(target) || !ss.isSellPenaltyOn) {
             return;
         }
 
-        
         // WARNING
         // From curve doc :Tokens that take a fee upon a successful transfer may cause the curve pool
         // to break or act in unexpected ways.
@@ -112,22 +108,19 @@ library LibCurveDollarIncentive {
         // take the penalty so if penalty + amount > balance then we revert
         // swapping Ubiquity Dollar for 3CRV (or underlying) (aka selling Ubiquity Dollar) will burn x% of Ubiquity Dollar
         // Where x = (1- TWAP_Price) *100.
-         
 
         uint256 penalty = _getPercentDeviationFromUnderPeg(amount);
         if (penalty != 0) {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress).balanceOf(
-                    target
-                ) >= penalty + amount,
+                UbiquityDollarToken(
+                    LibAppStorage.appStorage().dollarTokenAddress
+                ).balanceOf(target) >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
-            UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(
-                target,
-                penalty
-            ); // burn from the recipient
+            UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress)
+                .burnFrom(target, penalty); // burn from the recipient
         }
         LibTWAPOracle.update();
     }
@@ -140,16 +133,15 @@ library LibCurveDollarIncentive {
         }
 
         uint256 incentive = _getPercentDeviationFromUnderPeg(amountIn);
-            // swapping 3CRV (or underlying) for Ubiquity Dollar (aka buying Ubiquity Dollar) will mint x% of Governance Token.
-            //  Where x = (1- TWAP_Price) * amountIn.
-            // E.g. Ubiquity Dollar = 0.8, you buy 1000 Ubiquity Dollar, you get (1-0.8)*1000 = 200 Governance Token  
+        // swapping 3CRV (or underlying) for Ubiquity Dollar (aka buying Ubiquity Dollar) will mint x% of Governance Token.
+        //  Where x = (1- TWAP_Price) * amountIn.
+        // E.g. Ubiquity Dollar = 0.8, you buy 1000 Ubiquity Dollar, you get (1-0.8)*1000 = 200 Governance Token
 
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of Governance Token
-            IUbiquityGovernanceToken(LibAppStorage.appStorage().dollarTokenAddress).mint(
-                target,
-                incentive
-            );
+            IUbiquityGovernanceToken(
+                LibAppStorage.appStorage().dollarTokenAddress
+            ).mint(target, incentive);
         }
         LibTWAPOracle.update();
     }
@@ -158,7 +150,7 @@ library LibCurveDollarIncentive {
     //          when Ubiquity Dollar is <1$
     function _getPercentDeviationFromUnderPeg(
         uint256 amount
-    ) internal returns (uint256) {
+    ) internal view returns (uint256) {
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
@@ -167,7 +159,6 @@ library LibCurveDollarIncentive {
         bytes16 res = _one.sub(curPrice.fromUInt()).mul(amount.fromUInt());
         // returns (1- TWAP_Price) * amount.
         return res.div(_one).toUInt();
-        LibTWAPOracle.update();
     }
 
     function _getTWAPPrice() internal view returns (uint256) {
@@ -177,4 +168,3 @@ library LibCurveDollarIncentive {
             );
     }
 }
-

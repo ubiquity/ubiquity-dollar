@@ -33,16 +33,16 @@ contract UbiquiStick is
     address public minter;
 
     string private _tokenURI;
-    uint256 private constant STANDARD_TYPE = 0;
+    uint256 private constant _STANDARD_TYPE = 0;
 
     string private _goldTokenURI;
     mapping(uint256 => bool) public gold;
-    uint256 private constant GOLD_FREQ = 64;
-    uint256 private constant GOLD_TYPE = 1;
+    uint256 private constant _GOLD_FREQ = 64;
+    uint256 private constant _GOLD_TYPE = 1;
 
     string private _invisibleTokenURI;
-    uint256 private constant INVISIBLE_TOKEN_ID = 42;
-    uint256 private constant INVISIBLE_TYPE = 2;
+    uint256 private constant _INVISIBLE_TOKEN_ID = 42;
+    uint256 private constant _INVISIBLE_TYPE = 2;
 
     modifier onlyMinter() {
         require(msg.sender == minter, "Not minter");
@@ -61,7 +61,7 @@ contract UbiquiStick is
             gold[tokenId]
                 ? _goldTokenURI
                 : (
-                    tokenId == INVISIBLE_TOKEN_ID
+                    tokenId == _INVISIBLE_TOKEN_ID
                         ? _invisibleTokenURI
                         : _tokenURI
                 );
@@ -71,11 +71,11 @@ contract UbiquiStick is
         uint256 ntype,
         string memory tokenURI_
     ) public onlyMinter {
-        if (ntype == STANDARD_TYPE) {
+        if (ntype == _STANDARD_TYPE) {
             _tokenURI = tokenURI_;
-        } else if (ntype == GOLD_TYPE) {
+        } else if (ntype == _GOLD_TYPE) {
             _goldTokenURI = tokenURI_;
-        } else if (ntype == INVISIBLE_TYPE) {
+        } else if (ntype == _INVISIBLE_TYPE) {
             _invisibleTokenURI = tokenURI_;
         }
     }
@@ -89,8 +89,8 @@ contract UbiquiStick is
         tokenIdNext += 1;
 
         // Gold one
-        if (random() % uint256(GOLD_FREQ) == 0) {
-            if (tokenId != INVISIBLE_TOKEN_ID) {
+        if (_random() % uint256(_GOLD_FREQ) == 0) {
+            if (tokenId != _INVISIBLE_TOKEN_ID) {
                 gold[tokenId] = true;
             }
         }
@@ -103,12 +103,12 @@ contract UbiquiStick is
         }
     }
 
-    function random() private view returns (uint256) {
+    function _random() private view returns (uint256) {
         return
             uint256(
                 keccak256(
                     abi.encodePacked(
-                        block.difficulty,
+                        block.prevrandao,
                         block.timestamp,
                         msg.sender,
                         tokenIdNext
@@ -120,9 +120,10 @@ contract UbiquiStick is
     function _beforeTokenTransfer(
         address from,
         address to,
-        uint256 tokenId
+        uint256 tokenId,
+        uint256 batchSize
     ) internal override(ERC721, ERC721Enumerable) {
-        super._beforeTokenTransfer(from, to, tokenId);
+        super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
     function _beforeConsecutiveTokenTransfer(
@@ -130,7 +131,7 @@ contract UbiquiStick is
         address,
         uint256,
         uint96
-    ) internal override(ERC721, ERC721Enumerable) {
+    ) internal pure {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 

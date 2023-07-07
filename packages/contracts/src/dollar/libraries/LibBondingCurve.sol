@@ -16,7 +16,7 @@ library LibBondingCurve {
     using ABDKMathQuad for bytes16;
 
     bytes32 constant BONDING_CONTROL_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.bonding.storage");
+        bytes32(uint256(keccak256("ubiquity.contracts.bonding.storage")) - 1);
 
     event Deposit(address indexed user, uint256 amount);
     event Withdraw(uint256 amount);
@@ -53,15 +53,15 @@ library LibBondingCurve {
         emit ParamsSet(_connectorWeight, _baseY);
     }
 
-    function connectorWeight() internal returns (uint32) {
+    function connectorWeight() internal view returns (uint32) {
         return bondingCurveStorage().connectorWeight;
     }
 
-    function baseY() internal returns (uint256) {
+    function baseY() internal view returns (uint256) {
         return bondingCurveStorage().baseY;
     }
 
-    function poolBalance() internal returns (uint256) {
+    function poolBalance() internal view returns (uint256) {
         return bondingCurveStorage().poolBalance;
     }
 
@@ -106,7 +106,7 @@ library LibBondingCurve {
         emit Deposit(_recipient, _collateralDeposited);
     }
 
-    function getShare(address _recipient) internal returns (uint256) {
+    function getShare(address _recipient) internal view returns (uint256) {
         BondingCurveData storage ss = bondingCurveStorage();
         return ss.share[_recipient];
     }
@@ -126,7 +126,7 @@ library LibBondingCurve {
         uint256 toTransfer = _amount;
         dollar.safeTransfer(
             LibAppStorage.appStorage().treasuryAddress,
-            _amount
+            toTransfer
         );
 
         ss.poolBalance -= _amount;
@@ -152,7 +152,7 @@ library LibBondingCurve {
         uint32 _connectorWeight,
         uint256 _supply,
         uint256 _connectorBalance
-    ) internal view returns (uint256) {
+    ) internal pure returns (uint256) {
         // validate input
         require(_connectorBalance > 0, "ERR_INVALID_SUPPLY");
         require(
@@ -202,7 +202,7 @@ library LibBondingCurve {
         uint256 _connectorWeight,
         uint256 _baseX,
         uint256 _baseY
-    ) internal view returns (uint256) {
+    ) internal pure returns (uint256) {
         // (MAX_WEIGHT/reserveWeight -1)
         bytes16 _one = uintToBytes16(ONE);
 

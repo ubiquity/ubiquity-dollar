@@ -25,7 +25,10 @@ library LibCollectableDust {
     }
 
     bytes32 constant COLLECTABLE_DUST_CONTROL_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.collectable.dust.storage");
+        bytes32(
+            uint256(keccak256("ubiquity.contracts.collectable.dust.storage")) -
+                1
+        );
 
     function collectableDustStorage() internal pure returns (Tokens storage l) {
         bytes32 slot = COLLECTABLE_DUST_CONTROL_STORAGE_SLOT;

@@ -63,6 +63,9 @@ contract DiamondInit is Modifiers {
         ls.stakingDiscountMultiplier = uint256(0.001 ether); // 0.001
         ls.blockCountInAWeek = 45361;
 
+        // reentrancy guard
+        _initReentrancyGuard();
+
         // ubiquity chef before doing that we should have a metapool address
         LibChef.initialize(
             _args.tos,
@@ -93,6 +96,6 @@ contract DiamondInit is Modifiers {
             .ubiquityPoolStorage();
         poolStore.mintingFee = 0;
         poolStore.redemptionFee = 0;
-        poolStore.dollarFloor = 1000000000000000000;
+        poolStore.dollarFloor = 1e18;
     }
 }

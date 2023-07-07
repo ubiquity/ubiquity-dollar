@@ -10,8 +10,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-22.04
-    env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
@@ -21,7 +19,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18.14.1"
-          
+
       - name: Wrangler Install
         run: npm install -g wrangler
 
@@ -30,25 +28,19 @@ jobs:
         with:
           script: |
             const fs = require("fs");
-            const download_artifact = require('${{ github.workspace }}/utils/download_artifact.js');
+            const downloadArtifact = require('${{ github.workspace }}/utils/download-artifact.js');
             const workflow_run_id = '${{ github.event.workflow_run.id }}';
             const workspace = '${{ github.workspace }}';
-            download_artifact({github, context, fs, workflow_run_id, workspace})
+            downloadArtifact({github, context, fs, workflow_run_id, workspace})
 
       - name: Extract Artifact
         run: unzip pr.zip && unzip pull-request.zip && ls
-
-      - name: Deploy Netlify
-        run: |
-          netlify link --id ${{ secrets.NETLIFY_SITE_ID_DEVELOPMENT }}
-          netlify deploy --dir=./dist --prod > ./deployments.log
-          ls -la
 
       - name: Deploy Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           REPOSITORY: ${{ github.repository }}
-          PRODUCTION_BRANCH: "development"      
+          PRODUCTION_BRANCH: "development"
           OUTPUT_DIRECTORY: "dist"
         run: |
           IFS='/' read -ra fields <<< "$REPOSITORY"
@@ -61,7 +53,9 @@ jobs:
             echo "Project not found"
             wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
           fi
-          wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"
+          wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName" > ./deployments.log
+          ls -la
+          cat deployments.log
 
       # - name: Deploy Railway
       #   run: |
@@ -79,7 +73,7 @@ jobs:
 
       - name: Save UbiquiBot Token
         env:
-          TOKEN: ${{ steps.generate_token.outputs.token }}
+          TOKEN: ${{ steps.get_installation_token.outputs.token }}
         run: |
           echo "The generated token is masked: ${TOKEN}"
 
@@ -89,5 +83,5 @@ jobs:
           github-token: ${{ steps.get_installation_token.outputs.token }}
           script: |
             const fs = require("fs");
-            const print_deployments_log = require('${{ github.workspace }}/utils/print_deployments_logs.js');
-            await print_deployments_log({github, context, fs});
+            const printDeploymentsLog = require('${{ github.workspace }}/utils/print-deployments-logs.js');
+            await printDeploymentsLog({github, context, fs});

@@ -2,6 +2,8 @@ name: Compare Test Coverage
 # This compares test coverage and throws an error if test coverage is lower than the previous run.
 
 on:
+  push:
+    branches: [development]
   pull_request:
     branches: [development]
 
@@ -22,7 +24,7 @@ jobs:
         uses: onbjerg/foundry-toolchain@v1
         with:
           version: nightly
-      
+
       - name: Install dependencies
         run: sudo apt-get install lcov
 
@@ -49,7 +51,13 @@ jobs:
               --rc lcov_branch_coverage=1 \
               --remove merged-lcov.info \
               --output-file filtered-lcov.info \
-              "*node_modules*" "*test*" "*mock*" "*scripts*"
+                  "*node_modules*" \
+                  "*test*" \
+                  "*mock*" \
+                  "*scripts*" \
+                  "src/dollar/mocks/*" \
+                  "src/dollar/utils/*" \
+                  "test/*" \
 
 
           # Generate summary
@@ -85,7 +93,13 @@ jobs:
               --rc lcov_branch_coverage=1 \
               --remove merged-lcov.info \
               --output-file filtered-lcov.info \
-              "*node_modules*" "*test*" "*mock*" "*scripts*"
+                  "*node_modules*" \
+                  "*test*" \
+                  "*mock*" \
+                  "*scripts*" \
+                  "src/dollar/mocks/*" \
+                  "src/dollar/utils/*" \
+                  "test/*" \
 
 
           # Generate summary
@@ -104,3 +118,8 @@ jobs:
         run: |
           echo "Error: test coverage decreased"
           exit 1
+
+      - name: Upload test coverage report to coveralls.io
+        uses: coverallsapp/github-action@v2
+        with:
+          file: packages/contracts/filtered-lcov.info

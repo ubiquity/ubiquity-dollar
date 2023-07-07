@@ -24,7 +24,11 @@ library LibCreditNftManager {
     using SafeERC20 for IERC20Ubiquity;
 
     bytes32 constant CREDIT_NFT_MANAGER_STORAGE_SLOT =
-        keccak256("ubiquity.contracts.credit.nft.manager.storage");
+        bytes32(
+            uint256(
+                keccak256("ubiquity.contracts.credit.nft.manager.storage")
+            ) - 1
+        );
 
     event ExpiredCreditNFTConversionRateChanged(
         uint256 newRate,
