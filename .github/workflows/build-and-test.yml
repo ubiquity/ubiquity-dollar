@@ -36,10 +36,14 @@ jobs:
           INFURA_ID: ${{ secrets.INFURA_ID }}
           API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
           NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
+          NEXT_PUBLIC_DEBUG: true
+          DEBUG: true
         run: |
           echo "INFURA_ID=$INFURA_ID" > ./packages/dapp/.env
           echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
           echo "NEXT_PUBLIC_WALLET_CONNECT_ID=$NEXT_PUBLIC_WALLET_CONNECT_ID" >> ./packages/dapp/.env
+          echo "DEBUG=$DEBUG" >> ./packages/dapp/.env
+          echp "NEXT_PUBLIC_DEBUG=$NEXT_PUBLIC_DEBUG" >> ./packages/dapp.env
 
       - name: Setup Forge
         run: yarn workspace @ubiquity/contracts forge:install
