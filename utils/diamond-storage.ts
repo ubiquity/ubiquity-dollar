@@ -2,6 +2,9 @@ import { execSync } from "child_process";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
+import facetsHelper from '../packages/contracts/src/dollar/facets-helper';
+
+const facetsFolder = '../packages/contracts/src/dollar/facets';
 
 const executeCommand = (command) => {
   try {
@@ -23,7 +26,8 @@ if (fs.existsSync(targetFolder)) {
 }
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
-console.log("Before value: ", beforeValue);
+const ls = executeCommand("ls");
+console.log("LS: ", ls);
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
@@ -37,7 +41,6 @@ if (githubEventPath) {
 if (prNumber) {
   // Get Diamond storage value after creating the pull request
   const afterValue = executeCommand("forge inspect ChefFacet storage");
-  console.log("After value: ", afterValue);
 
   if (beforeValue === afterValue) {
     console.log("Diamond storage values are the same.");
@@ -45,6 +48,5 @@ if (prNumber) {
     console.log("Diamond storage values are different.");
   }
 } else {
-  // Pull request does not exist
   console.log("No pull request has been created yet.");
 }
