@@ -31,14 +31,11 @@ const Sidebar = () => {
             <Item text="Staking" href="/staking" icon="⛏"></Item>
             <Item text="Credits" href="/credits" icon="💸"></Item>
             <Item text="Markets" href="/markets" icon="🔁"></Item>
-            {PROD ? null : <Item text="Bonds" href="/bonds" icon="🎉"></Item>}
-            {PROD ? null : <Item text="Vaults" href="/vaults" icon="🚜"></Item>}
           </ul>
 
           <ul>
             <Item text="Docs" href="https://github.com/ubiquity/ubiquity-dollar/wiki" icon="📑"></Item>
             <Item text="Blog" href="https://dao.ubq.fi/" icon="📰"></Item>
-            <Item text="Security" href="https://dao.ubq.fi/security-bounty-program" icon="🚨"></Item>
           </ul>
           <ul>
             <li>
