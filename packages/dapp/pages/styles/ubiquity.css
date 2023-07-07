@@ -420,7 +420,7 @@ td {
 #WalletNotConnected {
   all: unset;
   transition: 1s all cubic-bezier(0.25, 0, 0, 1);
-  overflow: hidden;
+  /* overflow: hidden; */
   opacity: 1;
   background: 0 0;
   margin: 24px auto;
@@ -509,18 +509,23 @@ td {
   text-transform: uppercase;
   font-size: 12px;
   position: absolute;
-  padding: 8px;
-  text-transform: uppercase;
-  color: #fff;
+  /* padding: 8px; */
+  /* text-transform: uppercase; */
+  /* color: #fff; */
   text-rendering: geometricPrecision;
   border-radius: 8px;
   padding: 0;
-  left: 0;
-  right: 0;
+  /* left: 0; */
+  /* right: 0; */
   letter-spacing: 1px;
-  text-align: center;
-  filter: drop-shadow(0 0 16px #fff);
-  top: calc(100% + 12px);
+  /* text-align: center; */
+  /* filter: drop-shadow(0 0 16px #fff); */
+  /* top: calc(100% + 12px); */
+  height: calc(100% + 32px) !important;
+}
+.WalletNotConnected__text > div {
+  display: table-cell;
+  vertical-align: bottom;
 }
 .WalletNotConnected__transition-enter {
   opacity: 0;
