@@ -113,7 +113,7 @@ async function deployDiamond() {
   let args;
   try {
     args = CommandLineArgs(options);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Argument parse failed!, error: ${error}`);
     return;
   }
@@ -130,7 +130,7 @@ async function deployDiamond() {
   const twapOracleDollar3poolFacetContract = "src/diamond/facets/TWAPOracleDollar3poolFacet.sol:TWAPOracleDollar3poolFacet";
   const { stderr: diamondCutFacetError, result: diamondCutFacetResult } = await create({
     ...env,
-    name: "diamond-cut-facet",
+    name: "DiamondCutFacet",
     network: args.network,
     contractInstance: diamondCutFacetContract,
   });
@@ -140,7 +140,7 @@ async function deployDiamond() {
   }
   const { stderr: diamondInitError, result: diamondInitResult } = await create({
     ...env,
-    name: "diamond-init",
+    name: "DiamondInit",
     network: args.network,
     contractInstance: diamondInitContract,
   });
@@ -150,7 +150,7 @@ async function deployDiamond() {
   }
   const { stderr: diamondLoupeFacetError, result: diamondLoupeFacetResult } = await create({
     ...env,
-    name: "diamond-loupe-facet",
+    name: "DiamondLoupeFacet",
     network: args.network,
     contractInstance: diamondLoupeFacetContract,
   });
@@ -160,7 +160,7 @@ async function deployDiamond() {
   }
   const { stderr: ownershipFacetError, result: ownershipFacetResult } = await create({
     ...env,
-    name: "ownership-facet",
+    name: "OwnershipFacet",
     network: args.network,
     contractInstance: ownershipFacetContract,
   });
@@ -170,7 +170,7 @@ async function deployDiamond() {
   }
   const { stderr: managerFacetError, result: managerFacetResult } = await create({
     ...env,
-    name: "manager-facet",
+    name: "ManagerFacet",
     network: args.network,
     contractInstance: managerFacetContract,
   });
@@ -193,28 +193,28 @@ async function deployDiamond() {
   const diamondCutFacetCut = {
     facetAddress: diamondCutFacetResult.deployedTo,
     action: FacetCutAction.Add,
-    functionSelectors: await getSelectorsFromFacet("diamond-cut-facet"),
+    functionSelectors: await getSelectorsFromFacet("DiamondCutFacet"),
   };
   const diamondLoupeFacetCut = {
     facetAddress: diamondLoupeFacetResult.deployedTo,
     action: FacetCutAction.Add,
-    functionSelectors: await getSelectorsFromFacet("diamond-loupe-facet"),
+    functionSelectors: await getSelectorsFromFacet("DiamondLoupeFacet"),
   };
   const ownershipFacetCut = {
     facetAddress: ownershipFacetResult.deployedTo,
     action: FacetCutAction.Add,
-    functionSelectors: await getSelectorsFromFacet("ownership-facet"),
+    functionSelectors: await getSelectorsFromFacet("OwnershipFacet"),
   };
   const managerFacetCut = {
     facetAddress: managerFacetResult.deployedTo,
     action: FacetCutAction.Add,
-    functionSelectors: await getSelectorsFromFacet("manager-facet"),
+    functionSelectors: await getSelectorsFromFacet("ManagerFacet"),
   };
 
   const twapOracleFacetCut = {
     facetAddress: twapOracleFacetResult.deployedTo,
     action: FacetCutAction.Add,
-    functionSelectors: await getSelectorsFromFacet("twap-oracle-dollar-3-pool-facet"),
+    functionSelectors: await getSelectorsFromFacet("TWAPOracleDollar3poolFacet"),
   };
 
   // add DiamondCutFacetCut DiamondLoupeFacet, OwnershipFacet and ManagerFacet
@@ -223,7 +223,7 @@ async function deployDiamond() {
   console.log("Diamond Cut:", cut);
 
   // call to init function
-  const diamondInitInstance = await getContractInstance("diamond-init");
+  const diamondInitInstance = await getContractInstance("DiamondInit");
 
   const initArgs: any = [
     {

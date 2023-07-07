@@ -45,7 +45,7 @@ const TransactionsDisplay = () => {
   const [transactions, , , dismissTransaction] = useTransactionLogger();
 
   return (
-    <div id="transactions-display">
+    <div id="TransactionsDisplay">
       {Object.entries(transactions).map(([key, transaction]) => (
         <Transacting key={key} transaction={transaction as Transaction} onDismiss={() => dismissTransaction(key)} />
       ))}

@@ -21,7 +21,10 @@ contract DollarScript is DiamondScript {
         uint256 adminBal = IERC20(curve3PoolToken).balanceOf(admin);
         console.log("----ADMIN 3CRV bal:", adminBal);
         // deployer needs 10000  3CRV to deploy the pool
-        IERC20(curve3PoolToken).transfer(address(diamond), 10000e18);
+        require(
+            IERC20(curve3PoolToken).transfer(address(diamond), 10000e18),
+            "Transfer failed"
+        );
         uint256 diamondBal = IERC20(curve3PoolToken).balanceOf(
             address(diamond)
         );
@@ -32,7 +35,7 @@ contract DollarScript is DiamondScript {
             basePool,
             curve3PoolToken,
             10,
-            5000000
+            5e6
         );
 
         metapool = IManager.stableSwapMetaPoolAddress();

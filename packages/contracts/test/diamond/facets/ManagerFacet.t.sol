@@ -138,7 +138,6 @@ contract ManagerFacetTest is DiamondSetup {
 
         IDollar.mint(admin, 10000);
 
-        IERC20 crvToken = IERC20(0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490);
         MockERC20 curve3CrvToken = new MockERC20("3 CRV", "3CRV", 18);
         address secondAccount = address(0x3);
         address stakingZeroAccount = address(0x4);

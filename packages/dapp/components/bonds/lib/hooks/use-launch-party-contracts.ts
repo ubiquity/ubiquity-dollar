@@ -24,7 +24,7 @@ export type Contracts = {
 };
 
 const useLaunchPartyContracts = (): [Contracts | null, ERC20[], { isSaleContractOwner: boolean; isSimpleBondOwner: boolean }] => {
-  const [UbiquiStickAddress, UbiquiStickSaleAddress, SimpleBondAddress] = useDeployedAddress("ubiqui-stick", "ubiqui-stick-sale", "simple-bond");
+  const [UbiquiStickAddress, UbiquiStickSaleAddress, SimpleBondAddress] = useDeployedAddress("UbiquiStick", "UbiquiStickSale", "SimpleBond");
   const { provider, walletAddress } = useWeb3();
   const [contracts, setContracts] = useState<Contracts | null>(null);
   const [tokensContracts, setTokensContracts] = useState<ERC20[]>([]);

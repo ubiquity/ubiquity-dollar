@@ -26,7 +26,7 @@ jobs:
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly-87bc53fc6c874bd4c92d97ed180b949e3a36d78c
+          version: nightly-cc5637a979050c39b3d06bc4cc6134f0591ee8d0
 
       - name: Yarn Install
         run: yarn install --mode=skip-build && yarn allow-scripts
@@ -43,6 +43,8 @@ jobs:
         run: yarn workspace @ubiquity/contracts forge:install
 
       - name: Build All
+        env:
+          FOUNDRY_DENY_WARNINGS: true
         run: yarn build
 
       - name: Test All
@@ -52,7 +54,7 @@ jobs:
         env:
           EVENT_NAME: ${{github.event_name}}
           PR_NUMBER: ${{ github.event.number }}
-          SHA: ${{github.sha}}
+          SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         run: |
           echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
           mkdir -p ./pr

@@ -28,7 +28,6 @@
     "test:coverage": "sh ./coverage.sh",
     "start:anvil": "tsx ./scripts/anvil/anvil.ts",
     "prebuild": "run-p clean",
-    "deploy": "tsx ./scripts/deploy/deploy.ts",
     "deploy:development": "tsx ./scripts/deploy/dollar/development-deploy.ts",
     "deploy:diamond": "tsx ./scripts/deploy/manager/diamond-in-all.ts",
     "clean": "run-p clean:*",
@@ -68,6 +67,7 @@
     "@types/node": "^18.11.18",
     "@types/react-transition-group": "^4",
     "cspell": "latest",
+    "glob": "^10.3.0",
     "prettier-plugin-solidity": "^1.1.2",
     "typescript": "^4.9.4"
   }

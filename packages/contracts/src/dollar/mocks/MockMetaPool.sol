@@ -31,9 +31,9 @@ contract MockMetaPool is MockERC20 {
     }
 
     function get_twap_balances(
-        uint256[2] memory _first_balances,
-        uint256[2] memory _last_balances,
-        uint256 _time_elapsed
+        uint256[2] memory /* _first_balances */,
+        uint256[2] memory /* _last_balances */,
+        uint256 /* _time_elapsed */
     ) external view returns (uint256[2] memory) {
         return balances;
     }
@@ -41,8 +41,8 @@ contract MockMetaPool is MockERC20 {
     function get_dy(
         int128 i,
         int128 j,
-        uint256 dx,
-        uint256[2] memory _balances
+        uint256 /* dx */,
+        uint256[2] memory /* _balances */
     ) external view returns (uint256) {
         if (i == 0 && j == 1) {
             return dy_values[1];
@@ -69,18 +69,19 @@ contract MockMetaPool is MockERC20 {
         uint256[2] memory _amounts,
         uint256 _min_mint_amount,
         address _receiver
-    ) external returns (uint256) {
+    ) external returns (uint256 result) {
         mint(
             _receiver,
             _min_mint_amount == 0
                 ? _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1]
                 : _min_mint_amount
         );
+        return result;
     }
 
     function calc_token_amount(
         uint256[2] memory _amounts,
-        bool _is_deposit
+        bool /* _is_deposit */
     ) external pure returns (uint256) {
         return _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1];
     }

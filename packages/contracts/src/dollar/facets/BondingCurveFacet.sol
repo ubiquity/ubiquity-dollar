@@ -21,15 +21,15 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         LibBondingCurve.setParams(_connectorWeight, _baseY);
     }
 
-    function connectorWeight() external returns (uint32) {
+    function connectorWeight() external view returns (uint32) {
         return LibBondingCurve.connectorWeight();
     }
 
-    function baseY() external returns (uint256) {
+    function baseY() external view returns (uint256) {
         return LibBondingCurve.baseY();
     }
 
-    function poolBalance() external returns (uint256) {
+    function poolBalance() external view returns (uint256) {
         return LibBondingCurve.poolBalance();
     }
 
@@ -44,7 +44,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         LibBondingCurve.deposit(_collateralDeposited, _recipient);
     }
 
-    function getShare(address _recipient) external returns (uint256) {
+    function getShare(address _recipient) external view returns (uint256) {
         return LibBondingCurve.getShare(_recipient);
     }
 
@@ -70,7 +70,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         uint32 _connectorWeight,
         uint256 _supply,
         uint256 _connectorBalance
-    ) external returns (uint256) {
+    ) external pure returns (uint256) {
         return
             LibBondingCurve.purchaseTargetAmount(
                 _tokensDeposited,
@@ -98,7 +98,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         uint256 _connectorWeight,
         uint256 _baseX,
         uint256 _baseY
-    ) external returns (uint256) {
+    ) external pure returns (uint256) {
         return
             LibBondingCurve.purchaseTargetAmountFromZero(
                 _tokensDeposited,

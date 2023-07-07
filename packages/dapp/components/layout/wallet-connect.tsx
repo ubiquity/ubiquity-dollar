@@ -8,7 +8,7 @@ const WalletConnect = () => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, isConnecting, show, address, truncatedAddress, ensName }) => (
-        <div id="wallet-connect" className={address ? "connected" : "reset"}>
+        <div id="WalletConnect" className={address ? "connected" : "reset"}>
           {isConnected ? (
             <div className="wallet-connect__disconnect">
               <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer" id="Address">
