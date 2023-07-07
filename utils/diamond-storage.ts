@@ -25,7 +25,7 @@ if (fs.existsSync(targetFolder)) {
 }
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
-executeCommand(`cd ${facetsFolder}`);
+executeCommand(`cd ./src/dolldar/facets`);
 const ls = executeCommand(`ls`);
 console.log("LS: ", ls);
 
