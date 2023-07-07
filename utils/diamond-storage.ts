@@ -9,8 +9,9 @@ const targetFolder = "../packages/contracts";
 
 const executeCommand = (command) => {
   try {
+    console.log("Command: " + command);
     const output = execSync(command);
-    return output.toString().trim();
+    return output.toString();
   } catch (error) {
     console.error(`Error executing command: ${command}`);
     console.error(error.message);
@@ -25,7 +26,6 @@ if (fs.existsSync(targetFolder)) {
 }
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
-console.log("before value: " + beforeValue);
 facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   if (err) {
     console.error("Error:", err);
