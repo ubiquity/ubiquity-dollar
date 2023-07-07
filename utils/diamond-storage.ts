@@ -41,7 +41,7 @@ const getStorageOutput = facetsHelper.getFacetsName(facetsFolder, (err, fileName
   return storageOutput;
 });
 
-console.log("getStorageOutput" + getStorageOutput);
+console.log("getStorageOutput" + getStorageOutput());
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
