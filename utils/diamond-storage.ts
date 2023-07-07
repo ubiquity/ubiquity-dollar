@@ -31,12 +31,18 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
     return;
   }
 
-  console.log("File names:", fileNames);
+  for (let i = 0; i < fileNames.length; i++) {
+    const fileName = fileNames[i];
+    executeCommand(`forge inspect ${fileName} storage > ${fileName}.json`);
+  }
 });
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
 let prNumber = null;
+
+const ls = executeCommand("ls");
+console.log(ls);
 
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
