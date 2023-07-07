@@ -22,7 +22,7 @@ if (fs.existsSync(targetFolder)) {
   console.error("Target folder does not exist.");
 }
 // Get Diamond storage value before creating the pull request
-const beforeValue = executeCommand("forge inspect Diamond storage");
+const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
@@ -35,7 +35,7 @@ if (githubEventPath) {
 
 if (prNumber) {
   // Get Diamond storage value after creating the pull request
-  const afterValue = executeCommand("forge inspect Diamond storage");
+  const afterValue = executeCommand("forge inspect ChefFacet storage");
 
   if (beforeValue === afterValue) {
     console.log("Diamond storage values are the same.");
