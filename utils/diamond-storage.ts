@@ -33,8 +33,8 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
 
   for (let i = 0; i < fileNames.length; i++) {
     const fileName = fileNames[i];
-    const storageCheck = executeCommand(`forge inspect ${fileName} storage > ${fileName}.json`);
-    console.log(storageCheck);
+    const storageCheck = executeCommand(`forge inspect ChefFacet storage > ChefFacet.json`);
+    console.log("storageCheck", storageCheck);
   }
 });
 
@@ -43,7 +43,7 @@ const githubEventPath = process.env.GITHUB_EVENT_PATH;
 let prNumber = null;
 
 const ls = executeCommand("ls");
-console.log(ls);
+console.log("LS: ", ls);
 
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
