@@ -43,7 +43,7 @@ jobs:
           echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
           echo "NEXT_PUBLIC_WALLET_CONNECT_ID=$NEXT_PUBLIC_WALLET_CONNECT_ID" >> ./packages/dapp/.env
           echo "DEBUG=$DEBUG" >> ./packages/dapp/.env
-          echp "NEXT_PUBLIC_DEBUG=$NEXT_PUBLIC_DEBUG" >> ./packages/dapp.env
+          echo "NEXT_PUBLIC_DEBUG=$NEXT_PUBLIC_DEBUG" >> ./packages/dapp.env
 
       - name: Setup Forge
         run: yarn workspace @ubiquity/contracts forge:install
