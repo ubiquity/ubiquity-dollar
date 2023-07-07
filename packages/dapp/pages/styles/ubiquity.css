@@ -636,8 +636,6 @@ hr {
   vertical-align: middle;
 }
 
-#LightDarkModeToggle {
-}
 
 .wallet-connect__disconnect > div {
   margin: 4px;
@@ -646,3 +644,12 @@ hr {
 #Sidebar footer .utils > div {
   margin: 4px;
 }
+
+
+
+#Disconnect .svg-background::before {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23fff" height="48" viewBox="0 -960 960 960" width="48"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>');
+  }
+  #__next.light-mode #Disconnect .svg-background::before {
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000" height="48" viewBox="0 -960 960 960" width="48"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>');
+  }
