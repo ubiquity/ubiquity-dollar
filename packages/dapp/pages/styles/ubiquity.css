@@ -617,3 +617,32 @@ aside {
   max-height: unset;
   vertical-align: unset;
 }
+
+hr {
+  border-width: 1px;
+  margin: unset;
+  border-color: #80808040;
+}
+#Sidebar hr {
+  margin: 12px;
+}
+#Sidebar footer button {
+  width: unset;
+  /* padding: 16px; */
+}
+
+#Sidebar footer div {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#LightDarkModeToggle {
+}
+
+.wallet-connect__disconnect > div {
+  margin: 4px;
+}
+
+#Sidebar footer .utils > div {
+  margin: 4px;
+}
