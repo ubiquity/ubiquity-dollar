@@ -9,7 +9,6 @@ const targetFolder = "../packages/contracts";
 
 const executeCommand = (command) => {
   try {
-    console.log("Command: " + command);
     const output = execSync(command);
     return output.toString();
   } catch (error) {
@@ -32,12 +31,8 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
     return;
   }
 
-  const testCommand = "forge inspect " + fileNames[0] + " storage > ChefFacet.json";
-  console.log("testCommand: " + testCommand);
-
   for (let i = 0; i < fileNames.length; i++) {
     const fileName = fileNames[i];
-    console.log(fileName);
     const storageCheck = executeCommand("forge inspect " + fileName + " storage");
     console.log("storageCheck", storageCheck);
   }
