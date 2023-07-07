@@ -10,8 +10,8 @@ export async function fetchData() {
     const provider = new ethers.providers.JsonRpcProvider(LOCAL_NODE_ADDRESS);
     const signer = provider.getSigner();
     try {
-      const managerAddress = "0x4e037B9A8Ce977462DA4E10Fc164363C827abfc6";
-      const managerContract = await getUbiquityManagerContract(managerAddress, provider);
+      const diamondAddress = "0xbe0efAbc83686a81903C1D4a2515f8111e53B5Cb";
+      const managerContract = await getUbiquityManagerContract(diamondAddress, provider);
 
       console.log(await managerContract.connect(signer).twapOracleAddress(), "Twap Oracle Address");
       console.log(await managerContract.connect(signer).creditCalculatorAddress(), "Credit Calculator Address");
