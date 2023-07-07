@@ -29,10 +29,13 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   if (err) {
     console.error("Error:", err);
     return;
+  } else {
+    console.log(fileNames);
   }
 
   for (let i = 0; i < fileNames.length; i++) {
     const fileName = fileNames[i];
+    console.log(fileName);
     const storageCheck = executeCommand("forge inspect ChefFacet storage > ChefFacet.json");
     console.log("storageCheck", storageCheck);
   }
