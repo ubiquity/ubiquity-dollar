@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { getUbiquityManagerContract } from "@/components/utils/contracts";
-import { Signer, ethers } from "ethers";
+import { ethers } from "ethers";
 import { LOCAL_NODE_ADDRESS } from "@/components/lib/hooks/use-web-3";
 
 dotenv.config();
