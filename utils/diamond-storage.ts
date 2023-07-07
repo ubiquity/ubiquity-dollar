@@ -2,9 +2,9 @@ import { execSync } from "child_process";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
-import facetsHelper from '../packages/contracts/src/dollar/facets-helper';
+import facetsHelper from "../packages/contracts/src/dollar/facets-helper";
 
-const facetsFolder = '../packages/contracts/src/dollar/facets';
+const facetsFolder = "../packages/contracts/src/dollar/facets";
 
 const executeCommand = (command) => {
   try {
@@ -26,7 +26,8 @@ if (fs.existsSync(targetFolder)) {
 }
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
-const ls = executeCommand("ls");
+executeCommand(`cd ${facetsFolder}`);
+const ls = executeCommand(`ls`);
 console.log("LS: ", ls);
 
 // Check if a pull request exists
