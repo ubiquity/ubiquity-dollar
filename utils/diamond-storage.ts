@@ -4,7 +4,8 @@ import fs from "fs";
 import path from "path";
 import facetsHelper from "../packages/contracts/src/dollar/facets-helper";
 
-const facetsFolder = "../packages/contracts/src/dollar/facets";
+const facetsFolder = "./src/dollar/facets";
+const targetFolder = "../packages/contracts";
 
 const executeCommand = (command) => {
   try {
@@ -16,8 +17,6 @@ const executeCommand = (command) => {
     process.exit(1);
   }
 };
-
-const targetFolder = "../packages/contracts";
 
 if (fs.existsSync(targetFolder)) {
   process.chdir(targetFolder);
