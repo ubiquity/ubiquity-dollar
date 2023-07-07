@@ -38,9 +38,8 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
     const storageCheck = executeCommand("forge inspect " + fileName + " storage");
     storageOutput += storageCheck;
   }
+  console.log("Storage Output: " + storageOutput);
 });
-
-console.log("Storage Outpud: " + storageOutput);
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
