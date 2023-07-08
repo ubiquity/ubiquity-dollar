@@ -29,8 +29,6 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
 
     uint256 public constant MAXIMUM_SUPPLY = 1024;
     uint256 public constant MAXIMUM_PER_TX = 10;
-    address private constant ETH_ADDRESS =
-        0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     event Mint(address from, uint256 count, uint256 price);
 
@@ -83,6 +81,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
     }
 
     // Handles token purchases
+    //slither-disable-next-line unchecked-lowlevel
     receive() external payable nonReentrant {
         // Check if tokens are still available for sale
         require(tokenContract.totalSupply() < MAXIMUM_SUPPLY, "Sold Out");
@@ -93,26 +92,28 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         // and had enough allowance with enough funds
         uint256 count;
         uint256 price;
+        uint256 paid = 0;
         (count, price) = allowance(msg.sender);
         require(
             count > 0,
             "Not Whitelisted For The Sale Or Insufficient Allowance"
         );
-
         if (remainingTokenCount < count) {
             count = remainingTokenCount;
+            paid = remainingTokenCount * price;
         }
         if (msg.value < count * price) {
+            paid = msg.value;
             count = msg.value / price;
         }
         if (MAXIMUM_PER_TX < count) {
+            paid = MAXIMUM_PER_TX * price;
             count = MAXIMUM_PER_TX;
         }
         require(count > 0, "Not enough Funds");
 
         _allowances[msg.sender].count -= count;
 
-        uint256 paid = count * price;
         tokenContract.batchSafeMint(msg.sender, count);
         emit Mint(msg.sender, count, paid);
 
@@ -125,6 +126,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         }
     }
 
+    //slither-disable-next-line unchecked-lowlevel
     function withdraw() public nonReentrant onlyOwner {
         (bool result, ) = fundsAddress.call{value: address(this).balance}("");
         require(result, "Failed to send Ether");
