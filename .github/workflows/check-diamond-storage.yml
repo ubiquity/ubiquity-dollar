@@ -85,7 +85,7 @@ jobs:
       - name: Build All
         env:
           FOUNDRY_DENY_WARNINGS: true
-        run: yarn build
+        run: yarn build 
 
       - name: Run Diamond Storage Check - PR branch
         run: |
