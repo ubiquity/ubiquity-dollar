@@ -49,8 +49,8 @@ getFileNamesFromFolder(facetsFolder)
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      const newFileName = fileName + "-" + branchName + ".json";
-      executeCommand("forge inspect " + fileName + " storage > " + newFileName);
+      // const newFileName = fileName
+      executeCommand("forge inspect " + fileName + " storage > " + fileName + "-" + branchName + ".json");
 
       // if (branchName === 'development') {
       //   const fullFileName =
