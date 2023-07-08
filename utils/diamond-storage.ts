@@ -36,7 +36,7 @@ function getFileNamesFromFolder(folderPath) {
         return;
       }
 
-      fileNames = files.map((file) => file);
+      fileNames = files.map((file) => file.split(".")[0]);
       resolve(fileNames);
     });
   });
