@@ -45,26 +45,26 @@ function getFileNamesFromFolder(folderPath) {
 getFileNamesFromFolder(facetsFolder)
   .then(() => {
     const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
-    const prStorageName = [];
+    let prStorageOutput = "";
+    let devStorageOutput = "";
 
     console.log("BRANCH NAME: " + branchName);
 
+    // trebuie sa le adaug in arrays pentru ca nu se salveaza valoarea si nu am cum sa compar
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
       const newFileName = fileName + "-" + branchName + ".json";
 
-      executeCommand("forge inspect " + fileName + " storage > " + newFileName);
+      const storageOutput = executeCommand("forge inspect " + fileName + " storage > " + newFileName);
 
       if (branchName === "development") {
-        if (_.isEqual(newFileName, prStorageName[i])) {
-          console.log("EQUAL");
-        } else {
-          console.log("NOT EQUAL");
-        }
+        devStorageOutput += storageOutput;
       } else {
-        prStorageName.push(newFileName);
+        prStorageOutput += storageOutput;
       }
     }
+    console.log("DEV: " + devStorageOutput);
+    console.log("PR: " + prStorageOutput);
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
@@ -72,26 +72,26 @@ getFileNamesFromFolder(facetsFolder)
     console.error("Error:", err);
   });
 
-console.log("Waiting for storage output...");
-
-// Check if a pull request exists
-const githubEventPath = process.env.GITHUB_EVENT_PATH;
-let prNumber = null;
-
-if (githubEventPath) {
-  const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
-  prNumber = eventData.pull_request?.number || null;
-}
-
-if (prNumber) {
-  // Get Diamond storage value after creating the pull request
-  const afterValue = executeCommand("forge inspect ChefFacet storage");
-
-  if (beforeValue === afterValue) {
-    console.log("Diamond storage values are the same.");
-  } else {
-    console.log("Diamond storage values are different.");
-  }
-} else {
-  console.log("No pull request has been created yet.");
-}
+// console.log("Waiting for storage output...");
+//
+// // Check if a pull request exists
+// const githubEventPath = process.env.GITHUB_EVENT_PATH;
+// let prNumber = null;
+//
+// if (githubEventPath) {
+//   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
+//   prNumber = eventData.pull_request?.number || null;
+// }
+//
+// if (prNumber) {
+//   // Get Diamond storage value after creating the pull request
+//   const afterValue = executeCommand("forge inspect ChefFacet storage");
+//
+//   if (beforeValue === afterValue) {
+//     console.log("Diamond storage values are the same.");
+//   } else {
+//     console.log("Diamond storage values are different.");
+//   }
+// } else {
+//   console.log("No pull request has been created yet.");
+// }
