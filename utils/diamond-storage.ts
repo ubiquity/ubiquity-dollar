@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import axios from "axios";
 import fs from "fs";
+import _ from "lodash";
 import path from "path";
 
 const facetsFolder = "./src/dollar/facets";
@@ -44,12 +45,22 @@ function getFileNamesFromFolder(folderPath) {
 getFileNamesFromFolder(facetsFolder)
   .then(() => {
     const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
+    const prStorageName = [];
+
     console.log("BRANCH NAME: " + branchName);
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      executeCommand("forge inspect " + fileName + " storage > " + fileName + "-" + branchName + ".json");
+      const newFileName = fileName + "-" + branchName + ".json";
+
+      executeCommand("forge inspect " + fileName + " storage > " + newFileName);
+
+      if (branchName === 'development') {
+      } else {
+        prStorageName.push(newFileName);
+      }
     }
+    console.log("PR STORAGE NAME: " + prStorageName);
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
