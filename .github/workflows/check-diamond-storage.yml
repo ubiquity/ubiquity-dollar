@@ -38,6 +38,11 @@ jobs:
       - name: Setup Forge
         run: yarn workspace @ubiquity/contracts forge:install
 
+      - name: Build All
+        env:
+          FOUNDRY_DENY_WARNINGS: true
+        run: yarn build
+
       - name: Run Diamond Storage Check - development
         run: |
           cd ./utils
