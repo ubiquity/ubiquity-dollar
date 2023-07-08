@@ -9,7 +9,7 @@ function getFacetsName(facetsFolder, callback) {
     }
 
     const fileNames = files.map(file => file.split('.')[0]);
-    callback(null, fileNames);
+    return callback(null, fileNames);
   });
 }
 

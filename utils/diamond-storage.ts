@@ -27,7 +27,7 @@ if (fs.existsSync(targetFolder)) {
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
 let storageOutput = "";
-facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
+const test = facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   if (err) {
     console.error("Error:", err);
     return;
@@ -41,6 +41,8 @@ facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
   console.log("Storage Output: " + storageOutput);
   return storageOutput;
 });
+
+console.log("test: " + test);
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
