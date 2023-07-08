@@ -47,23 +47,22 @@ getFileNamesFromFolder(facetsFolder)
     console.log("File names:", fileNames);
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      const storageCheck = executeCommand("forge inspect " + fileName + " storage");
+      const storageCheck = executeCommand("forge inspect " + fileName + " storage > " + fileName + ".json");
       storageOutput += storageCheck;
     }
-    console.log("Storage: " + storageOutput);
+    const ls = executeCommand("ls");
+    console.log("LS: " + ls);
+    // console.log("Storage: " + storageOutput);
   })
   .catch((err) => {
     console.error("Error:", err);
   });
 
-console.log("Waiting for file names...");
+console.log("Waiting for storage output...");
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
 let prNumber = null;
-
-const ls = executeCommand("ls");
-console.log("LS: ", ls);
 
 if (githubEventPath) {
   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
