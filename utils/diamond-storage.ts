@@ -2,7 +2,6 @@ import { execSync } from "child_process";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
-import facetsHelper from "../packages/contracts/src/dollar/facets-helper";
 
 const facetsFolder = "./src/dollar/facets";
 const targetFolder = "../packages/contracts";
@@ -26,23 +25,31 @@ if (fs.existsSync(targetFolder)) {
 // Get Diamond storage value before creating the pull request
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
-let storageOutput = "";
-const test = facetsHelper.getFacetsName(facetsFolder, (err, fileNames) => {
-  if (err) {
+let fileNames = []; // Variable to store the file names
+
+function getFileNamesFromFolder(folderPath) {
+  return new Promise((resolve, reject) => {
+    fs.readdir(folderPath, (err, files) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      fileNames = files.map((file) => file);
+      resolve(fileNames);
+    });
+  });
+}
+
+getFileNamesFromFolder(facetsFolder)
+  .then(() => {
+    console.log("File names:", fileNames);
+  })
+  .catch((err) => {
     console.error("Error:", err);
-    return;
-  }
+  });
 
-  for (let i = 0; i < fileNames.length; i++) {
-    const fileName = fileNames[i];
-    const storageCheck = executeCommand("forge inspect " + fileName + " storage");
-    storageOutput += storageCheck;
-  }
-  console.log("Storage Output: " + storageOutput);
-  return storageOutput;
-});
-
-console.log("test: " + test);
+console.log("Waiting for file names...");
 
 // Check if a pull request exists
 const githubEventPath = process.env.GITHUB_EVENT_PATH;
