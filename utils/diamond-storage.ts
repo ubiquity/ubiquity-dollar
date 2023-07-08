@@ -44,15 +44,15 @@ function getFileNamesFromFolder(folderPath) {
 
 getFileNamesFromFolder(facetsFolder)
   .then(() => {
-    console.log("File names:", fileNames);
+    const branchName = executeCommand("git rev-parse --abbrev-ref HEAD");
+
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      const storageCheck = executeCommand("forge inspect " + fileName + " storage > " + fileName + ".json");
+      const storageCheck = executeCommand("forge inspect " + fileName + " storage > " + fileName + "-" + branchName + ".json");
       storageOutput += storageCheck;
     }
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
-    // console.log("Storage: " + storageOutput);
   })
   .catch((err) => {
     console.error("Error:", err);
