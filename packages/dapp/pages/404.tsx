@@ -1,5 +1,3 @@
-import React from "react";
-
 const Custom404 = () => {
   return (
     <div id="Page404">
