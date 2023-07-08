@@ -56,12 +56,15 @@ getFileNamesFromFolder(facetsFolder)
       executeCommand("forge inspect " + fileName + " storage > " + newFileName);
 
       if (branchName === "development") {
-        console.log("Test");
+        if (_.isEqual(newFileName, prStorageName[i])) {
+          console.log("EQUAL");
+        } else {
+          console.log("NOT EQUAL");
+        }
       } else {
         prStorageName.push(newFileName);
       }
     }
-    console.log("PR STORAGE NAME: " + prStorageName);
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
