@@ -3825,7 +3825,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-tsc: ^2.0.0
-    husky: ^8.0.0
+    husky: ^8.0.3
     lint-staged: ^13.0.3
     nodemon: ^2.0.19
     prettier: 2.8.8
@@ -9284,7 +9284,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"husky@npm:^8.0.0":
+"husky@npm:^8.0.3":
   version: 8.0.3
   resolution: "husky@npm:8.0.3"
   bin:
