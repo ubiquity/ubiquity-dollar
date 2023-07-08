@@ -26,6 +26,7 @@ if (fs.existsSync(targetFolder)) {
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
 let fileNames = []; // Variable to store the file names
+let storageOutput = "";
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
@@ -44,6 +45,12 @@ function getFileNamesFromFolder(folderPath) {
 getFileNamesFromFolder(facetsFolder)
   .then(() => {
     console.log("File names:", fileNames);
+    for (let i = 0; i < fileNames.length; i++) {
+      const fileName = fileNames[i];
+      const storageCheck = executeCommand("forge inspect " + fileName + " storage");
+      storageOutput += storageCheck;
+    }
+    console.log("Storage: " + storageOutput);
   })
   .catch((err) => {
     console.error("Error:", err);
