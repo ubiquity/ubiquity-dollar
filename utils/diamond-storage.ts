@@ -53,9 +53,8 @@ getFileNamesFromFolder(facetsFolder)
     // trebuie sa le adaug in arrays pentru ca nu se salveaza valoarea si nu am cum sa compar
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      const newFileName = fileName + "-" + branchName + ".json";
 
-      const storageOutput = executeCommand("forge inspect " + fileName + " storage > " + newFileName);
+      const storageOutput = executeCommand("forge inspect " + fileName + " storage");
 
       if (branchName === "development") {
         devStorageOutput += storageOutput;
