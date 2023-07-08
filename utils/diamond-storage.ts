@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import axios from "axios";
 import fs from "fs";
+import _ from "lodash";
 import path from "path";
 
 const facetsFolder = "./src/dollar/facets";
@@ -48,7 +49,13 @@ getFileNamesFromFolder(facetsFolder)
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      executeCommand("forge inspect " + fileName + " storage > " + fileName + "-" + branchName + ".json");
+      const newFileName = fileName + "-" + branchName + ".json";
+      executeCommand("forge inspect " + fileName + " storage > " + newFileName);
+
+      // if (branchName === 'development') {
+      //   const fullFileName =
+      //   if ()
+      // }
     }
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
