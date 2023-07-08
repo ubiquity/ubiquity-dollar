@@ -55,7 +55,8 @@ getFileNamesFromFolder(facetsFolder)
 
       executeCommand("forge inspect " + fileName + " storage > " + newFileName);
 
-      if (branchName === 'development') {
+      if (branchName === "development") {
+        console.log("Test");
       } else {
         prStorageName.push(newFileName);
       }
