@@ -26,7 +26,6 @@ if (fs.existsSync(targetFolder)) {
 const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
 let fileNames = []; // Variable to store the file names
-let storageOutput = "";
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
@@ -44,15 +43,13 @@ function getFileNamesFromFolder(folderPath) {
 
 getFileNamesFromFolder(facetsFolder)
   .then(() => {
-    // const branchName = executeCommand("git rev-parse --abbrev-ref HEAD");
-    // console.log("BRANCH NAME: " + branchName);
+    const branchName = executeCommand("git rev-parse --abbrev-ref HEAD");
+    console.log("BRANCH NAME: " + branchName);
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
-      const storageCheck = executeCommand("forge inspect " + fileName + " storage > " + fileName + ".json");
-      storageOutput += storageCheck;
+      executeCommand("forge inspect " + fileName + " storage > " + fileName + "-" + branchName + ".json");
     }
-    console.log("Storage output: " + storageOutput);
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
