@@ -52,12 +52,10 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
       "prettier --write",
-      "eslint --fix",
-      "cspell --no-must-find-files"
+      "eslint --fix"
     ],
     "*.sol": [
-      "prettier --write",
-      "cspell --no-must-find-files"
+      "prettier --write"
     ]
   },
   "packageManager": "yarn@3.2.3",
