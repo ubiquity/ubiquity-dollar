@@ -44,8 +44,8 @@ function getFileNamesFromFolder(folderPath) {
 
 getFileNamesFromFolder(facetsFolder)
   .then(() => {
-    const branchName = executeCommand("git rev-parse --abbrev-ref HEAD");
-    console.log("BRANCH NAME: " + branchName);
+    // const branchName = executeCommand("git rev-parse --abbrev-ref HEAD");
+    // console.log("BRANCH NAME: " + branchName);
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
