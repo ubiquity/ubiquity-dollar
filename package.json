@@ -20,7 +20,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tsc": "^2.0.0",
-    "husky": "^8.0.2",
+    "husky": "^8.0.0",
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
     "prettier": "2.8.8",
@@ -41,6 +41,12 @@
     "postinstall": "husky install",
     "lint:cspell:all:watch": "nodemon -e sol,ts,tsx --exec 'yarn lint:cspell:all --fail-fast'",
     "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint-staged && yarn cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')",
+      "commit-msg": "yarn commitlint"
+    }
   },
   "engines": {
     "node": ">=18"

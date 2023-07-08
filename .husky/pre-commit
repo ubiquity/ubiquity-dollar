@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn lint-staged --verbose
+yarn lint-staged
+yarn cspell $"(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')" --no-must-find-files 
