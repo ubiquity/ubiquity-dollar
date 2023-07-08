@@ -135,24 +135,27 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
         // @dev must set token allowance for this smart contract previously
         IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
 
-        Bond memory bnd;
-        bnd.token = token;
-        bnd.amount = amount;
-        bnd.block = block.number;
+        Bond memory bondState = Bond({
+            token: token,
+            amount: amount,
+            block: block.number,
+            rewards: 0,
+            claimed: 0
+        });
 
         uint256 rewards = (amount * rewardsRatio[token]) / 1_000_000_000;
-        bnd.rewards = rewards;
+        bondState.rewards = rewards;
         totalRewards += rewards;
 
         bondId = bonds[msg.sender].length;
-        bonds[msg.sender].push(bnd);
+        bonds[msg.sender].push(bondState);
 
         emit LogBond(
             msg.sender,
-            bnd.token,
-            bnd.amount,
-            bnd.rewards,
-            bnd.block,
+            bondState.token,
+            bondState.amount,
+            bondState.rewards,
+            bondState.block,
             bondId
         );
     }
@@ -174,15 +177,16 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
     function claimBond(
         uint256 index
     ) public override whenNotPaused returns (uint256 claimed) {
-        Bond storage bnd = bonds[msg.sender][index];
-        uint256 claimAmount = _bondClaimableRewards(bnd);
+        Bond storage bondState = bonds[msg.sender][index];
+        uint256 claimAmount = _bondClaimableRewards(bondState);
 
         if (claimAmount > 0) {
-            bnd.claimed += claimAmount;
+            bondState.claimed += claimAmount;
             totalClaimedRewards += claimAmount;
 
-            assert(bnd.claimed <= bnd.rewards);
+            assert(bondState.claimed <= bondState.rewards);
             IUAR(tokenRewards).raiseCapital(claimAmount);
+            //slither-disable-next-line arbitrary-send-erc20
             IERC20(tokenRewards).safeTransferFrom(
                 treasury,
                 msg.sender,
@@ -245,10 +249,10 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
             uint256 rewardsClaimable
         )
     {
-        Bond memory bnd = bonds[addr][index];
-        rewards = bnd.rewards;
-        rewardsClaimed = bnd.claimed;
-        rewardsClaimable = _bondClaimableRewards(bnd);
+        Bond memory bondState = bonds[addr][index];
+        rewards = bondState.rewards;
+        rewardsClaimed = bondState.claimed;
+        rewardsClaimable = _bondClaimableRewards(bondState);
     }
 
     /// @notice Get number of bonds for address
@@ -259,20 +263,20 @@ contract SimpleBond is ISimpleBond, Ownable, Pausable {
 
     /// @dev calculate claimable rewards during vesting period, or all claimable rewards after, minus already claimed
     function _bondClaimableRewards(
-        Bond memory bnd
+        Bond memory bondState
     ) internal view returns (uint256 claimable) {
-        assert(block.number >= bnd.block);
+        assert(block.number >= bondState.block);
 
-        uint256 blocks = block.number - bnd.block;
+        uint256 blocks = block.number - bondState.block;
         uint256 totalClaimable;
 
         if (blocks < vestingBlocks) {
-            totalClaimable = (bnd.rewards * blocks) / vestingBlocks;
+            totalClaimable = (bondState.rewards * blocks) / vestingBlocks;
         } else {
-            totalClaimable = bnd.rewards;
+            totalClaimable = bondState.rewards;
         }
 
-        assert(totalClaimable >= bnd.claimed);
-        claimable = totalClaimable - bnd.claimed;
+        assert(totalClaimable >= bondState.claimed);
+        claimable = totalClaimable - bondState.claimed;
     }
 }
