@@ -52,6 +52,7 @@ getFileNamesFromFolder(facetsFolder)
       const storageCheck = executeCommand("forge inspect " + fileName + " storage > " + fileName + ".json");
       storageOutput += storageCheck;
     }
+    console.log("Storage output: " + storageOutput);
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
