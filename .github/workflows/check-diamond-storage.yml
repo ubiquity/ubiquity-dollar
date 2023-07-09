@@ -49,7 +49,6 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
-          sleep 500s
           cat pr_output_first.txt
           cat pr_output_second.txt
           echo "::set-output name=pr-output-first::$(cat pr_output_first.txt)"

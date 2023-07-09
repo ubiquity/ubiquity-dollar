@@ -69,9 +69,12 @@ getFileNamesFromFolder(facetsFolder)
 
     const prOutputFirstContent = fs.readFileSync("pr_output_first.txt", "utf8");
     const prOutputSecondContent = fs.readFileSync("pr_output_second.txt", "utf8");
+    console.log("S-au creat fisierele");
+    console.log("prOutputSecondContent" + prOutputSecondContent);
+    console.log("prOutputFirstContent" + prOutputFirstContent);
 
-    console.log("PR OUTPUT FIRST: ", prOutputFirstContent);
-    console.log("PR OUTPUT SECOND: ", prOutputSecondContent);
+    // console.log("PR OUTPUT FIRST: ", prOutputFirstContent);
+    // console.log("PR OUTPUT SECOND: ", prOutputSecondContent);
 
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
