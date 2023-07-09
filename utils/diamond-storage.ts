@@ -51,6 +51,7 @@ getFileNamesFromFolder(facetsFolder)
     console.log("BRANCH NAME: " + branchName);
 
     for (let i = 0; i < fileNames.length; i++) {
+      console.log("TEST");
       const fileName = fileNames[i];
 
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
