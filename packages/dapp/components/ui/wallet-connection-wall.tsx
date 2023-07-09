@@ -58,7 +58,9 @@ const WalletConnectionWall = ({ children }: { children: React.ReactNode }) => {
                         </svg>
                       </div>
                     </div>
-                    <div className="WalletNotConnected__text">{isConnecting ? "Connecting..." : "Connect Wallet"}</div>
+                    <div className="WalletNotConnected__text">
+                      <div>{isConnecting ? "Connecting..." : "Connect Wallet"}</div>
+                    </div>
                   </div>
                 </button>
               )}

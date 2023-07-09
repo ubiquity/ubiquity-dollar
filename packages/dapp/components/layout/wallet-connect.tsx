@@ -11,10 +11,16 @@ const WalletConnect = () => {
         <div id="WalletConnect" className={address ? "connected" : "reset"}>
           {isConnected ? (
             <div className="wallet-connect__disconnect">
-              <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer" id="Address">
-                {ensName || truncatedAddress}
-              </a>
-              <Button onClick={() => disconnect()}>Disconnect Wallet</Button>
+              <div>
+                <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noopener noreferrer" id="Address">
+                  {ensName || truncatedAddress}
+                </a>
+              </div>
+              <div>
+                <div id="Disconnect">
+                  <button className="svg-background" onClick={() => disconnect()}></button>
+                </div>
+              </div>
             </div>
           ) : (
             <Button className="wallet-connect__connect" disabled={isConnecting} onClick={show}>
