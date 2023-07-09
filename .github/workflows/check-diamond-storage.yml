@@ -45,19 +45,20 @@ jobs:
         run: yarn build
 
       - name: Run Diamond Storage Check - PR branch
-        id: storage_pr
+        id: save_output
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
+          echo "::set-output name=pr-output-first::$(cat pr_output_first.txt)"
+          echo "::set-output name=pr-output-second::$(cat pr_output_second.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
-      - name: Save output to variable
-        id: save_output
-        run: echo "OUTPUT=${{ steps.storage_pr.outputs.stdout }}" >> $GITHUB_ENV
+      - name: Display PR output (First)
+        run: echo ${{ steps.save_output.outputs.pr-output-first }}
 
-      - name: Print variable
-        run: echo $OUTPUT
+      - name: Display PR output (Second)
+        run: echo ${{ steps.save_output.outputs.pr-output-second }}
 
 #      - name: Checkout to development
 #        uses: actions/checkout@v2

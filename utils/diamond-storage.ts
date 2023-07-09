@@ -50,7 +50,6 @@ getFileNamesFromFolder(facetsFolder)
 
     console.log("BRANCH NAME: " + branchName);
 
-    // trebuie sa le adaug in arrays pentru ca nu se salveaza valoarea si nu am cum sa compar
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
 
@@ -64,6 +63,8 @@ getFileNamesFromFolder(facetsFolder)
     }
     console.log("DEV: " + devStorageOutput);
     console.log("PR: " + prStorageOutput);
+    fs.writeFileSync("pr_output_first.txt", prStorageOutput);
+    fs.writeFileSync("pr_output_second.txt", devStorageOutput);
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
