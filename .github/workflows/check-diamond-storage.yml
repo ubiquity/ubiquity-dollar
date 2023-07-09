@@ -49,6 +49,8 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
+          echo "::set-output name=pr-output-first::$(cat pr_output_first.txt)"
+          echo "::set-output name=pr-output-second::$(cat pr_output_second.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
