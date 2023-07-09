@@ -512,7 +512,9 @@ td {
   border-radius: 8px;
   padding: 0;
   letter-spacing: 1px;
-  height: calc(100% + 32px) !important;
+}
+.WalletNotConnected__text.WalletNotConnected__text {
+  height: calc(100% + 32px);
 }
 .WalletNotConnected__text > div {
   display: table-cell;
