@@ -51,7 +51,6 @@ getFileNamesFromFolder(facetsFolder)
     console.log("BRANCH NAME: " + branchName);
 
     for (let i = 0; i < fileNames.length; i++) {
-      console.log("TEST");
       const fileName = fileNames[i];
 
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
@@ -62,19 +61,8 @@ getFileNamesFromFolder(facetsFolder)
         prStorageOutput += storageOutput;
       }
     }
-    // console.log("DEV: " + devStorageOutput);
-    // console.log("PR: " + prStorageOutput);
     fs.writeFileSync("pr_output_first.txt", prStorageOutput);
     fs.writeFileSync("pr_output_second.txt", devStorageOutput);
-
-    const prOutputFirstContent = fs.readFileSync("pr_output_first.txt", "utf8");
-    const prOutputSecondContent = fs.readFileSync("pr_output_second.txt", "utf8");
-    console.log("S-au creat fisierele");
-    console.log("prOutputSecondContent" + prOutputSecondContent);
-    console.log("prOutputFirstContent" + prOutputFirstContent);
-
-    // console.log("PR OUTPUT FIRST: ", prOutputFirstContent);
-    // console.log("PR OUTPUT SECOND: ", prOutputSecondContent);
 
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
