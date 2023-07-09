@@ -29,6 +29,8 @@ contract Diamond {
         );
     }
 
+    receive() external payable {}
+
     // Find facet for function that is called and execute the
     // function if a facet is found and return any value.
     fallback() external payable {
@@ -52,6 +54,4 @@ contract Diamond {
             }
         }
     }
-
-    receive() external payable {}
 }
