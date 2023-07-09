@@ -61,10 +61,17 @@ getFileNamesFromFolder(facetsFolder)
         prStorageOutput += storageOutput;
       }
     }
-    console.log("DEV: " + devStorageOutput);
-    console.log("PR: " + prStorageOutput);
+    // console.log("DEV: " + devStorageOutput);
+    // console.log("PR: " + prStorageOutput);
     fs.writeFileSync("pr_output_first.txt", prStorageOutput);
     fs.writeFileSync("pr_output_second.txt", devStorageOutput);
+
+    const prOutputFirstContent = fs.readFileSync("pr_output_first.txt", "utf8");
+    const prOutputSecondContent = fs.readFileSync("pr_output_second.txt", "utf8");
+
+    console.log("PR OUTPUT FIRST: ", prOutputFirstContent);
+    console.log("PR OUTPUT SECOND: ", prOutputSecondContent);
+
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
   })
