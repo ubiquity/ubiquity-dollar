@@ -65,3 +65,4 @@ packages/contracts/broadcast/*
 packages/dapp/types/
 .vscode/
 /packages/contracts/*.info
+/packages/contracts/docs
