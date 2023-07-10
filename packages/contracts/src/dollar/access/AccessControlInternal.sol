@@ -8,8 +8,8 @@ import {UintUtils} from "../libraries/UintUtils.sol";
 import {LibAccessControl} from "../libraries/LibAccessControl.sol";
 
 /**
- * @title Role-based access control system
- * @dev derived from https://github.com/OpenZeppelin/openzeppelin-contracts (MIT license)
+ * @notice Role-based access control system
+ * @dev Derived from https://github.com/OpenZeppelin/openzeppelin-contracts (MIT license)
  * @dev https://github.com/solidstate-network/solidstate-solidity/blob/master/contracts/access/access_control/AccessControlInternal.sol
  */
 abstract contract AccessControlInternal {
@@ -17,16 +17,20 @@ abstract contract AccessControlInternal {
     using EnumerableSet for EnumerableSet.AddressSet;
     using UintUtils for uint256;
 
+    /**
+     * @notice Checks that a method can only be called by the provided role
+     * @param role Role name
+     */
     modifier onlyRole(bytes32 role) {
         _checkRole(role);
         _;
     }
 
-    /*
-     * @notice query whether role is assigned to account
-     * @param role role to query
-     * @param account account to query
-     * @return whether role is assigned to account
+    /**
+     * @notice Checks whether role is assigned to account
+     * @param role Role to check
+     * @param account Account address to check
+     * @return Whether role is assigned to account
      */
     function _hasRole(
         bytes32 role,
@@ -41,17 +45,17 @@ abstract contract AccessControlInternal {
     }
 
     /**
-     * @notice revert if sender does not have given role
-     * @param role role to query
+     * @notice Reverts if sender does not have a given role
+     * @param role Role to query
      */
     function _checkRole(bytes32 role) internal view virtual {
         _checkRole(role, msg.sender);
     }
 
     /**
-     * @notice revert if given account does not have given role
-     * @param role role to query
-     * @param account to query
+     * @notice Reverts if given account does not have a given role
+     * @param role Role to query
+     * @param account Address to query
      */
     function _checkRole(bytes32 role, address account) internal view virtual {
         if (!_hasRole(role, account)) {
@@ -68,10 +72,10 @@ abstract contract AccessControlInternal {
         }
     }
 
-    /*
-     * @notice query admin role for given role
-     * @param role role to query
-     * @return admin role
+    /**
+     * @notice Returns admin role for a given role
+     * @param role Role to query
+     * @return Admin role for the provided role
      */
     function _getRoleAdmin(
         bytes32 role
@@ -79,10 +83,10 @@ abstract contract AccessControlInternal {
         return LibAccessControl.accessControlStorage().roles[role].adminRole;
     }
 
-    /*
-     * @notice assign role to given account
-     * @param role role to assign
-     * @param account recipient of role assignment
+    /**
+     * @notice Assigns role to a given account
+     * @param role Role to assign
+     * @param account Recipient of role assignment
      */
     function _grantRole(bytes32 role, address account) internal virtual {
         LibAccessControl.accessControlStorage().roles[role].members.add(
@@ -91,10 +95,10 @@ abstract contract AccessControlInternal {
         emit LibAccessControl.RoleGranted(role, account, msg.sender);
     }
 
-    /*
-     * @notice unassign role from given account
-     * @param role role to unassign
-     * @parm account
+    /**
+     * @notice Unassigns role from given account
+     * @param role Role to unassign
+     * @param account Account to revoke a role from
      */
     function _revokeRole(bytes32 role, address account) internal virtual {
         LibAccessControl.accessControlStorage().roles[role].members.remove(
@@ -104,8 +108,8 @@ abstract contract AccessControlInternal {
     }
 
     /**
-     * @notice relinquish role
-     * @param role role to relinquish
+     * @notice Renounces role
+     * @param role Role to renounce
      */
     function _renounceRole(bytes32 role) internal virtual {
         _revokeRole(role, msg.sender);
