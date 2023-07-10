@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ubiquity/action-conventional-commits@v1.1.2
+      - uses: ubiquity/action-conventional-commits@master
