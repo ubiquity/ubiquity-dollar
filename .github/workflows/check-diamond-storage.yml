@@ -51,8 +51,9 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           ls
-          echo "::set-output name=pr-output-first::$(cat pr_output_first.json)"
-          echo "::set-output name=pr-output-second::$(cat pr_output_second.json)"
+          sleep 300s
+          echo "::set-output name=pr-output-first::$(cat pr_output_first.txt)"
+          echo "::set-output name=pr-output-second::$(cat pr_output_second.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -62,47 +63,47 @@ jobs:
       - name: Display PR output (Second)
         run: echo ${{ steps.save_output.outputs.pr-output-second }}
 
-#      - name: Checkout to development
-#        uses: actions/checkout@v2
-#        with:
-#          ref: development
-#
-#      - name: Set up Node.js
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: "18.14.1"
-#
-#      - name: Install dependencies
-#        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
-#
-#      - name: Setup Foundry
-#        uses: foundry-rs/foundry-toolchain@v1
-#        with:
-#          version: nightly-cc5637a979050c39b3d06bc4cc6134f0591ee8d0
-#
-#      - name: Yarn Install
-#        run: yarn install --mode=skip-build && yarn allow-scripts
-#
-#      - name: Set Environment Variables
-#        env:
-#          INFURA_ID: ${{ secrets.INFURA_ID }}
-#          API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
-#        run: |
-#          echo "INFURA_ID=$INFURA_ID" > ./packages/dapp/.env
-#          echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
-#
-#      - name: Setup Forge
-#        run: yarn workspace @ubiquity/contracts forge:install
-#
-#      - name: Build All
-#        env:
-#          FOUNDRY_DENY_WARNINGS: true
-#        run: yarn build
-#
-#      - name: Run Diamond Storage Check - development
-#        run: |
-#          cd ./utils
-#          yes 2>/dev/null | npx tsx ./diamond-storage.ts
-#        env:
-#          GITHUB_EVENT_PATH: ${{ github.event_path }}
-#
+      - name: Checkout to development
+        uses: actions/checkout@v2
+        with:
+          ref: development
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.14.1"
+
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly-cc5637a979050c39b3d06bc4cc6134f0591ee8d0
+
+      - name: Yarn Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+
+      - name: Set Environment Variables
+        env:
+          INFURA_ID: ${{ secrets.INFURA_ID }}
+          API_KEY_ALCHEMY: ${{ secrets.API_KEY_ALCHEMY }}
+        run: |
+          echo "INFURA_ID=$INFURA_ID" > ./packages/dapp/.env
+          echo "API_KEY_ALCHEMY=$API_KEY_ALCHEMY" >> ./packages/dapp/.env
+
+      - name: Setup Forge
+        run: yarn workspace @ubiquity/contracts forge:install
+
+      - name: Build All
+        env:
+          FOUNDRY_DENY_WARNINGS: true
+        run: yarn build
+
+      - name: Run Diamond Storage Check - development
+        run: |
+          cd ./utils
+          yes 2>/dev/null | npx tsx ./diamond-storage.ts
+        env:
+          GITHUB_EVENT_PATH: ${{ github.event_path }}
+

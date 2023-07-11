@@ -61,8 +61,8 @@ getFileNamesFromFolder(facetsFolder)
         prStorageOutput += storageOutput;
       }
     }
-    fs.writeFileSync("pr_output_first.json", prStorageOutput);
-    fs.writeFileSync("pr_output_second.json", devStorageOutput);
+    fs.writeFileSync("pr_output_first.txt", prStorageOutput);
+    fs.writeFileSync("pr_output_second.txt", devStorageOutput);
 
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
