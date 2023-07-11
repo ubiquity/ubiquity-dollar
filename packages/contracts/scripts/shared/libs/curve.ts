@@ -1,13 +1,14 @@
 // cspell: disable
 // Utility functions for curve lp pool
 
-import { BigNumber, constants, utils } from "ethers";
+import { BigNumber, constants } from "ethers";
+import { ethers } from "ethers";
 
 export const N_COINS = 2;
 export const A_PRECISION = 100;
-export const PRECISION = utils.parseEther("1");
-export const FEE_DENOMINATOR = utils.parseUnits("1", 10);
-export const RATE_MULTIPLIER = utils.parseEther("1");
+export const PRECISION = ethers.parseEther("1");
+export const FEE_DENOMINATOR = ethers.parseUnits("1", 10);
+export const RATE_MULTIPLIER = ethers.parseEther("1");
 
 const get_D = (_xp: BigNumber[], _amp: BigNumber): BigNumber => {
   let S = constants.Zero;
