@@ -23,8 +23,6 @@ if (fs.existsSync(targetFolder)) {
 } else {
   console.error("Target folder does not exist.");
 }
-// Get Diamond storage value before creating the pull request
-const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
 let fileNames = []; // Variable to store the file names
 
@@ -37,8 +35,7 @@ function getFileNamesFromFolder(folderPath) {
         reject(err);
         return;
       }
-
-      fileNames = fileContracts.map((file) => file.split(".")[0]);
+      fileNames = fileContracts.map((file) => path.parse(file).name);
       resolve(fileNames);
     });
   });
