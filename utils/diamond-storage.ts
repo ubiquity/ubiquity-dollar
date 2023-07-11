@@ -56,7 +56,7 @@ getFileNamesFromFolder(facetsFolder)
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
 
       if (branchName === "development") {
-        devStorageOutput += storageOutput;
+        devStorageOutput += storageOutput; 
       } else {
         prStorageOutput += storageOutput;
       }
