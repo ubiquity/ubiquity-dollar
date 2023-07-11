@@ -9,10 +9,6 @@ const targetFolder = "../packages/contracts";
 
 const executeCommand = (command) => {
   try {
-    if (typeof command !== "string") {
-      throw new Error("Invalid command");
-    }
-
     const output = execSync(command);
     return output.toString();
   } catch (error) {
@@ -27,21 +23,13 @@ if (fs.existsSync(targetFolder)) {
 } else {
   console.error("Target folder does not exist.");
 }
+// Get Diamond storage value before creating the pull request
+const beforeValue = executeCommand("forge inspect ChefFacet storage");
 
 let fileNames = []; // Variable to store the file names
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
-    if (typeof folderPath !== "string") {
-      reject(new Error("Invalid folder path"));
-      return;
-    }
-
-    if (!fs.existsSync(folderPath)) {
-      reject(new Error("Invalid folder path"));
-      return;
-    }
-
     fs.readdir(folderPath, (err, files) => {
       if (err) {
         reject(err);
@@ -61,29 +49,48 @@ getFileNamesFromFolder(facetsFolder)
     let devStorageOutput = "";
 
     console.log("BRANCH NAME: " + branchName);
-    let storageOutputString;
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
 
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
-      storageOutputString = JSON.stringify(storageOutput);
 
       if (branchName === "development") {
-        devStorageOutput += storageOutputString;
+        devStorageOutput += storageOutput;
       } else {
-        prStorageOutput += storageOutputString;
+        prStorageOutput += storageOutput;
       }
     }
+    fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
+    fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
 
-    if (branchName === "development") {
-      fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
-    } else {
-      fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
-    }
+    const ls = executeCommand("ls");
+    console.log("LS: " + ls);
   })
   .catch((err) => {
     console.error("Error:", err);
   });
 
-console.log("Waiting for storage output...");
+// console.log("Waiting for storage output...");
+//
+// // Check if a pull request exists
+// const githubEventPath = process.env.GITHUB_EVENT_PATH;
+// let prNumber = null;
+//
+// if (githubEventPath) {
+//   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
+//   prNumber = eventData.pull_request?.number || null;
+// }
+//
+// if (prNumber) {
+//   // Get Diamond storage value after creating the pull request
+//   const afterValue = executeCommand("forge inspect ChefFacet storage");
+//
+//   if (beforeValue === afterValue) {
+//     console.log("Diamond storage values are the same.");
+//   } else {
+//     console.log("Diamond storage values are different.");
+//   }
+// } else {
+//   console.log("No pull request has been created yet.");
+// }
