@@ -30,7 +30,9 @@ let fileNames = []; // Variable to store the file names
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
-    fs.readdir(folderPath, (err, fileContracts) => {
+    const normalizedPath = path.normalize(folderPath);
+
+    fs.readdir(normalizedPath, (err, fileContracts) => {
       if (err) {
         reject(err);
         return;
