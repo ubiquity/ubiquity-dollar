@@ -51,9 +51,7 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           ls
-          sleep 300s
-          echo "::set-output name=pr-output-first::$(cat pr_output_first.txt)"
-          echo "::set-output name=pr-output-second::$(cat pr_output_second.txt)"
+          echo "::set-output name=pr-output-first::$(cat pr_storage_output.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -98,6 +96,9 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
+          cd ../packages/contracts
+          ls
+          echo "::set-output name=pr-output-first::$(cat dev_storage_output.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
