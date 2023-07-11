@@ -55,7 +55,6 @@ getFileNamesFromFolder(facetsFolder)
 
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
       const storageOutputString = JSON.stringify(storageOutput);
-      console.log("storageOutputString: " + storageOutputString);
 
       if (branchName === "development") {
         devStorageOutput += storageOutputString;
@@ -63,6 +62,7 @@ getFileNamesFromFolder(facetsFolder)
         prStorageOutput += storageOutputString;
       }
     }
+    console.log("storageOutputString: " + storageOutputString);
 
     if (branchName === "development") {
       fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
