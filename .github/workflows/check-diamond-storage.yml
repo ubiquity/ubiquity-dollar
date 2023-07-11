@@ -103,9 +103,11 @@ jobs:
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
-      - name: Display PR output (First)
-        run: echo ${{ steps.save_pr_output.outputs.pr-storage-output }}
-
-      - name: Display PR output (Second)
-        run: echo ${{ steps.save_dev_output.outputs.dev-storage-output }}
+      - name: Compare Storage
+        run: |
+          if [[ "${{ steps.save_pr_output.outputs.pr-storage-output }}" == "${{ steps.save_dev_output.outputs.dev-storage-output }}" ]]; then
+            echo "Diamond storage is the same"
+          else
+            echo "Diamond storage is different"
+          fi
 
