@@ -32,6 +32,16 @@ let fileNames = []; // Variable to store the file names
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
+    if (typeof folderPath !== "string") {
+      reject(new Error("Invalid folder path"));
+      return;
+    }
+
+    if (!fs.existsSync(folderPath)) {
+      reject(new Error("Invalid folder path"));
+      return;
+    }
+
     fs.readdir(folderPath, (err, files) => {
       if (err) {
         reject(err);
