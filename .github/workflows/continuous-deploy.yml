@@ -10,16 +10,18 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-22.04
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3.1.0
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3 
         with:
           node-version: "18.14.1"
-
+          
       - name: Wrangler Install
         run: npm install -g wrangler
 
@@ -64,24 +66,24 @@ jobs:
       #     RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT_ID }}
       #     RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway up
 
-      - name: Get UbiquiBot Token
-        uses: tibdex/github-app-token@v1.7.0
-        id: get_installation_token
-        with:
-          app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
-          private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
+#       - name: Get UbiquiBot Token
+#         uses: tibdex/github-app-token@v1.7.0
+#         id: get_installation_token
+#         with:
+#           app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
+#           private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
 
-      - name: Save UbiquiBot Token
-        env:
-          TOKEN: ${{ steps.get_installation_token.outputs.token }}
-        run: |
-          echo "The generated token is masked: ${TOKEN}"
+#       - name: Save UbiquiBot Token
+#         env:
+#           TOKEN: ${{ steps.generate_token.outputs.token }}
+#         run: |
+#           echo "The generated token is masked: ${TOKEN}"
 
       - name: Deploy Comment as UbiquiBot
         uses: actions/github-script@v6
         with:
-          github-token: ${{ steps.get_installation_token.outputs.token }}
+          github-token: ${{ secrets.GH_TOKEN }}
           script: |
             const fs = require("fs");
-            const printDeploymentsLog = require('${{ github.workspace }}/utils/print-deployments-logs.js');
-            await printDeploymentsLog({github, context, fs});
+            const print_deployments_log = require('${{ github.workspace }}/utils/print-deployments-logs.js');
+            await print_deployments_log({github, context, fs});
