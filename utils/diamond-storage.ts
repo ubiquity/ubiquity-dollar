@@ -9,6 +9,10 @@ const targetFolder = "../packages/contracts";
 
 const executeCommand = (command) => {
   try {
+    if (typeof command !== "string") {
+      throw new Error("Invalid command");
+    }
+
     const output = execSync(command);
     return output.toString();
   } catch (error) {
@@ -28,14 +32,13 @@ let fileNames = []; // Variable to store the file names
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
-    const normalizedPath = path.normalize(folderPath);
-
-    fs.readdir(normalizedPath, (err, fileContracts) => {
+    fs.readdir(folderPath, (err, files) => {
       if (err) {
         reject(err);
         return;
       }
-      fileNames = fileContracts.map((file) => path.parse(file).name);
+
+      fileNames = files.map((file) => file.split(".")[0]);
       resolve(fileNames);
     });
   });

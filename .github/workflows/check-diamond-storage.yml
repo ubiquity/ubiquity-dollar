@@ -50,7 +50,6 @@ jobs:
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
-          ls
           echo "::set-output name=pr-storage-output::$(cat pr_storage_output.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
@@ -98,7 +97,6 @@ jobs:
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
-          ls
           echo "::set-output name=dev-storage-output::$(cat dev_storage_output.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
