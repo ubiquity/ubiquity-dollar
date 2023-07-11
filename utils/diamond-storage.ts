@@ -30,13 +30,13 @@ let fileNames = []; // Variable to store the file names
 
 function getFileNamesFromFolder(folderPath) {
   return new Promise((resolve, reject) => {
-    fs.readdir(folderPath, (err, files) => {
+    fs.readdir(folderPath, (err, fileContracts) => {
       if (err) {
         reject(err);
         return;
       }
 
-      fileNames = files.map((file) => file.split(".")[0]);
+      fileNames = fileContracts.map((file) => file.split(".")[0]);
       resolve(fileNames);
     });
   });
