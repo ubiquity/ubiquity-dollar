@@ -5,7 +5,7 @@
 export default function LightDarkMode() {
   return (
     <div id="LightDarkMode">
-      <button id="LightDarkModeToggle" onClick={toggleDarkMode}></button>
+      <button className="svg-background" onClick={toggleDarkMode}></button>
     </div>
   );
 }
@@ -15,7 +15,7 @@ function toggleDarkMode() {
   if (!__next) {
     throw new Error("Could not find '__next' element");
   }
-  const lightDarkModeToggle = document.getElementById("LightDarkModeToggle");
+  const lightDarkModeToggle = document.getElementById("LightDarkMode")?.children[0];
   const isLightMode = __next.classList.contains("light-mode");
 
   if (isLightMode) {

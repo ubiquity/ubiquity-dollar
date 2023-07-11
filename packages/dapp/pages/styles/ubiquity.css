@@ -375,7 +375,7 @@ td {
     transform: rotate(360deg);
   }
 }
-#Sidebar > div > ul:nth-child(3) li {
+#Sidebar > div > ul:last-child li {
   display: inline-block;
 }
 @keyframes logo-ani {
@@ -420,7 +420,6 @@ td {
 #WalletNotConnected {
   all: unset;
   transition: 1s all cubic-bezier(0.25, 0, 0, 1);
-  overflow: hidden;
   opacity: 1;
   background: 0 0;
   margin: 24px auto;
@@ -509,18 +508,17 @@ td {
   text-transform: uppercase;
   font-size: 12px;
   position: absolute;
-  padding: 8px;
-  text-transform: uppercase;
-  color: #fff;
   text-rendering: geometricPrecision;
   border-radius: 8px;
   padding: 0;
-  left: 0;
-  right: 0;
   letter-spacing: 1px;
-  text-align: center;
-  filter: drop-shadow(0 0 16px #fff);
-  top: calc(100% + 12px);
+}
+.WalletNotConnected__text.WalletNotConnected__text {
+  height: calc(100% + 32px);
+}
+.WalletNotConnected__text > div {
+  display: table-cell;
+  vertical-align: bottom;
 }
 .WalletNotConnected__transition-enter {
   opacity: 0;
@@ -611,4 +609,31 @@ aside {
 #__CONNECTKIT__ svg {
   max-height: unset;
   vertical-align: unset;
+}
+hr {
+  border-width: 1px;
+  margin: unset;
+  border-color: #80808040;
+}
+#Sidebar hr {
+  margin: 12px;
+}
+#Sidebar footer button {
+  width: unset;
+}
+#Sidebar footer div {
+  display: inline-block;
+  vertical-align: middle;
+}
+.wallet-connect__disconnect > div {
+  margin: 4px;
+}
+#Sidebar footer .utils > div {
+  margin: 4px;
+}
+#Disconnect .svg-background::before {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23fff" height="48" viewBox="0 -960 960 960" width="48"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>');
+}
+#__next.light-mode #Disconnect .svg-background::before {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000" height="48" viewBox="0 -960 960 960" width="48"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>');
 }
