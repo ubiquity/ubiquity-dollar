@@ -63,7 +63,7 @@ getFileNamesFromFolder(facetsFolder)
     }
 
     if (branchName === "development") {
-      fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
+      fs.writeFileSync("dev_storage_output.txt", devStorageOutput); 
     } else {
       fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
     }
