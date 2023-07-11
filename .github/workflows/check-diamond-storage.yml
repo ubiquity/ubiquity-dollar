@@ -57,12 +57,6 @@ jobs:
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
-      - name: Display PR output (First)
-        run: echo ${{ steps.save_output.outputs.pr-output-first }}
-
-      - name: Display PR output (Second)
-        run: echo ${{ steps.save_output.outputs.pr-output-second }}
-
       - name: Checkout to development
         uses: actions/checkout@v2
         with:
@@ -106,4 +100,10 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
+
+      - name: Display PR output (First)
+        run: echo ${{ steps.save_output.outputs.pr-output-first }}
+
+      - name: Display PR output (Second)
+        run: echo ${{ steps.save_output.outputs.pr-output-second }}
 
