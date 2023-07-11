@@ -45,13 +45,13 @@ jobs:
         run: yarn build
 
       - name: Run Diamond Storage Check - PR branch
-        id: save_output
+        id: save_pr_output
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           ls
-          echo "::set-output name=pr-output-first::$(cat pr_storage_output.txt)"
+          echo "::set-output name=pr-storage-output::$(cat pr_storage_output.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -93,18 +93,19 @@ jobs:
         run: yarn build
 
       - name: Run Diamond Storage Check - development
+        id: save_dev_output
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           ls
-          echo "::set-output name=pr-output-first::$(cat dev_storage_output.txt)"
+          echo "::set-output name=dev-storage-output::$(cat dev_storage_output.txt)"
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
       - name: Display PR output (First)
-        run: echo ${{ steps.save_output.outputs.pr-output-first }}
+        run: echo ${{ steps.save_pr_output.outputs.pr-storage-output }}
 
       - name: Display PR output (Second)
-        run: echo ${{ steps.save_output.outputs.pr-output-second }}
+        run: echo ${{ steps.save_dev_output.outputs.dev-storage-output }}
 
