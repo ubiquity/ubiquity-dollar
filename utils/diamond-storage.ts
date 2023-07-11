@@ -61,8 +61,12 @@ getFileNamesFromFolder(facetsFolder)
         prStorageOutput += storageOutput;
       }
     }
-    fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
-    fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
+
+    if (branchName === "development") {
+      fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
+    } else {
+      fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
+    }
 
     const ls = executeCommand("ls");
     console.log("LS: " + ls);
