@@ -60,7 +60,7 @@ getFileNamesFromFolder(facetsFolder)
       if (branchName === "development") {
         devStorageOutput += storageOutputString;
       } else {
-        prStorageOutput += storageOutputString;
+        prStorageOutput += storageOutputString; 
       }
     }
     console.log("storageOutputString: " + storageOutputString);
