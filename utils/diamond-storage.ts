@@ -49,12 +49,13 @@ getFileNamesFromFolder(facetsFolder)
     let devStorageOutput = "";
 
     console.log("BRANCH NAME: " + branchName);
+    let storageOutputString;
 
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
 
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
-      const storageOutputString = JSON.stringify(storageOutput);
+      storageOutputString = JSON.stringify(storageOutput);
 
       if (branchName === "development") {
         devStorageOutput += storageOutputString;
