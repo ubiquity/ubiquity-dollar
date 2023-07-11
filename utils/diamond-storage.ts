@@ -54,16 +54,17 @@ getFileNamesFromFolder(facetsFolder)
       const fileName = fileNames[i];
 
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
+      const storageOutputString = JSON.stringify(storageOutput);
 
       if (branchName === "development") {
-        devStorageOutput += storageOutput;
+        devStorageOutput += storageOutputString;
       } else {
-        prStorageOutput += storageOutput;
+        prStorageOutput += storageOutputString;
       }
     }
 
     if (branchName === "development") {
-      fs.writeFileSync("dev_storage_output.txt", devStorageOutput); 
+      fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
     } else {
       fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
     }
