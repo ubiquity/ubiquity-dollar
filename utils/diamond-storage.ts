@@ -60,44 +60,18 @@ getFileNamesFromFolder(facetsFolder)
       if (branchName === "development") {
         devStorageOutput += storageOutputString;
       } else {
-        prStorageOutput += storageOutputString; 
+        prStorageOutput += storageOutputString;
       }
     }
-    console.log("storageOutputString: " + storageOutputString);
 
     if (branchName === "development") {
       fs.writeFileSync("dev_storage_output.txt", devStorageOutput);
     } else {
       fs.writeFileSync("pr_storage_output.txt", prStorageOutput);
     }
-
-    const ls = executeCommand("ls");
-    console.log("LS: " + ls);
   })
   .catch((err) => {
     console.error("Error:", err);
   });
 
-// console.log("Waiting for storage output...");
-//
-// // Check if a pull request exists
-// const githubEventPath = process.env.GITHUB_EVENT_PATH;
-// let prNumber = null;
-//
-// if (githubEventPath) {
-//   const eventData = JSON.parse(fs.readFileSync(githubEventPath, "utf8"));
-//   prNumber = eventData.pull_request?.number || null;
-// }
-//
-// if (prNumber) {
-//   // Get Diamond storage value after creating the pull request
-//   const afterValue = executeCommand("forge inspect ChefFacet storage");
-//
-//   if (beforeValue === afterValue) {
-//     console.log("Diamond storage values are the same.");
-//   } else {
-//     console.log("Diamond storage values are different.");
-//   }
-// } else {
-//   console.log("No pull request has been created yet.");
-// }
+console.log("Waiting for storage output...");
