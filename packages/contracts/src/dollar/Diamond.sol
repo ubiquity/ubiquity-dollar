@@ -10,13 +10,23 @@ import {DiamondCutFacet} from "./facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "./facets/DiamondLoupeFacet.sol";
 import {OwnershipFacet} from "./facets/OwnershipFacet.sol";
 
+/// @notice Struct used for `Diamond` constructor args
 struct DiamondArgs {
     address owner;
     address init;
     bytes initCalldata;
 }
 
+/**
+ * @notice Contract that implements diamond proxy pattern
+ * @dev Main protocol's entrypoint
+ */
 contract Diamond {
+    /**
+     * @notice Diamond constructor
+     * @param _args Init args
+     * @param _diamondCutFacets Facets with selectors to add
+     */
     constructor(
         DiamondArgs memory _args,
         IDiamondCut.FacetCut[] memory _diamondCutFacets
@@ -29,8 +39,10 @@ contract Diamond {
         );
     }
 
-    // Find facet for function that is called and execute the
-    // function if a facet is found and return any value.
+    /**
+     * @notice Finds facet for function that is called and executes the
+     * function if a facet is found and returns any value
+     */
     fallback() external payable {
         LibDiamond.DiamondStorage storage ds;
         bytes32 position = LibDiamond.DIAMOND_STORAGE_POSITION;
