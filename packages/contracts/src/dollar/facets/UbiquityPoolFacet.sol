@@ -15,11 +15,13 @@ contract UbiquityPoolFacet is Modifiers, IUbiquityPool {
     /// @param collateralAmount amount of collateral tokens being deposited
     /// @param dollarOutMin minimum amount of UbiquityDollarToken that'll be minted, used to set acceptable slippage
     function mintDollar(
+        address user,
         address collateralAddress,
         uint256 collateralAmount,
         uint256 dollarOutMin
     ) external {
         LibUbiquityPool.mintDollar(
+            user,
             collateralAddress,
             collateralAmount,
             dollarOutMin

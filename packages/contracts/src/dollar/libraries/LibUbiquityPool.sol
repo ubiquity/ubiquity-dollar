@@ -21,7 +21,9 @@ library LibUbiquityPool {
     using SafeERC20 for IERC20;
 
     bytes32 constant UBIQUITY_POOL_STORAGE_POSITION =
-        bytes32(uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1);
+        bytes32(
+            uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1
+        );
 
     function ubiquityPoolStorage()
         internal
@@ -74,6 +76,7 @@ library LibUbiquityPool {
     /// User Functions ///
 
     function mintDollar(
+        address user,
         address collateralAddress,
         uint256 collateralAmount,
         uint256 dollarOutMin
@@ -103,7 +106,7 @@ library LibUbiquityPool {
         dollarAmountD18 = dollarAmountD18.sub(poolStorage.mintingFee);
         require(dollarOutMin <= dollarAmountD18, "Slippage limit reached");
         IERC20(collateralAddress).safeTransferFrom(
-            msg.sender,
+            user,
             address(this),
             collateralAmount
         );
@@ -115,7 +118,7 @@ library LibUbiquityPool {
         IERC20Ubiquity ubiquityDollarToken = IERC20Ubiquity(
             LibAppStorage.appStorage().dollarTokenAddress
         );
-        ubiquityDollarToken.mint(msg.sender, dollarAmountD18);
+        ubiquityDollarToken.mint(user, dollarAmountD18);
     }
 
     function redeemDollar(
