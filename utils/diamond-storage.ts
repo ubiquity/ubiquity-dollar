@@ -76,7 +76,7 @@ getFileNamesFromFolder(facetsFolder)
 
 console.log("Waiting for storage output...");
 
-getFileNamesFromFolder(facetsFolder)
+getFileNamesFromFolder(libsFolder)
   .then(() => {
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
