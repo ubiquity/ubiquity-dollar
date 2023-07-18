@@ -52,6 +52,7 @@ getFileNamesFromFolder(facetsFolder)
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
 
+      console.log("File name: " + fileName);
       const storageOutput = executeCommand("forge inspect " + fileName + " storage");
       storageOutputString = JSON.stringify(storageOutput);
 
