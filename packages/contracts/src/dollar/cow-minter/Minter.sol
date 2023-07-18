@@ -2,6 +2,7 @@
 pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
+import {IUbiquityPool} from "../interfaces/IUbiquityPool.sol";
 
 contract Minter {
     address public immutable ubiquityPool;
@@ -112,16 +113,7 @@ contract MintAccount {
         );
     }
 
-    function withdraw(address token, uint256 amount) external {
-        IERC20(token).transfer(user, amount);
+    function withdraw(address token, uint256 amount) external returns (bool) {
+        return IERC20(token).transfer(user, amount);
     }
-}
-
-interface IUbiquityPool {
-    function mintDollar(
-        address user,
-        address collateralAddress,
-        uint256 collateralAmount,
-        uint256 dollarOutMin
-    ) external;
 }
