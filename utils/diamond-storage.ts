@@ -5,6 +5,7 @@ import _ from "lodash";
 import path from "path";
 
 const facetsFolder = "./src/dollar/facets";
+const libsFolder = "./src/dollar/libraries";
 const targetFolder = "../packages/contracts";
 
 const executeCommand = (command) => {
@@ -74,3 +75,15 @@ getFileNamesFromFolder(facetsFolder)
   });
 
 console.log("Waiting for storage output...");
+
+getFileNamesFromFolder(facetsFolder)
+  .then(() => {
+    for (let i = 0; i < fileNames.length; i++) {
+      const fileName = fileNames[i];
+
+      console.log("File name: " + fileName);
+    }
+  })
+  .catch((err) => {
+    console.error("Error:", err);
+  });
