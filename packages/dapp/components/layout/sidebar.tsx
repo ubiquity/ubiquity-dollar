@@ -4,7 +4,7 @@ import LightDarkMode from "./light-dark-mode";
 import BuildInfo from "./build-info";
 import WalletConnect from "./wallet-connect";
 
-const PROD = process.env.NODE_ENV == "production";
+//const PROD = process.env.NODE_ENV == "production";
 
 const Sidebar = () => {
   return (

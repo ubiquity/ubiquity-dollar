@@ -8,7 +8,10 @@ let optimalRPC;
 
 const envPath = path.join(__dirname, "/../../.env");
 if (!fs.existsSync(envPath)) {
-  throw new Error("Env file not found");
+  const envExamplePath = path.join(__dirname, "/../../.env.example");
+  fs.copyFileSync(envExamplePath, envPath);
+  console.log(".env file created from .env.example");
+  console.log("check .env for changes when in need");
 }
 
 const env = loadEnv(envPath);
