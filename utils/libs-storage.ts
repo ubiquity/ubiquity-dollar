@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const libsFolder = "./src/dollar/libraries";
+const libsFolder = "../packages/contracts/src/dollar/libraries";
 
 fs.readdir(libsFolder, (err, files) => {
   if (err) {
