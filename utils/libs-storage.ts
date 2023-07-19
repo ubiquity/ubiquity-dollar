@@ -63,11 +63,11 @@ fs.readdir(libsFolder, (err, files) => {
       console.log("BRANCH NAME: " + branchName);
 
       if (branchName === "development") {
-        fs.writeFileSync("dev_libs_storage_output.txt", structBlocks);
+        fs.writeFileSync("dev_libs_storage_output.txt", currentStruct);
       } else {
-        fs.writeFileSync("pr_libs_storage_output.txt", structBlocks);
+        fs.writeFileSync("pr_libs_storage_output.txt", currentStruct);
       }
-      console.log(structBlocks);
+      console.log(currentStruct);
     });
   });
 });
