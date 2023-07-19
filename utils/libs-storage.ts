@@ -60,14 +60,13 @@ fs.readdir(libsFolder, (err, files) => {
       }
 
       const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
-      console.log("BRANCH NAME: " + branchName);
 
       if (branchName === "development") {
         fs.writeFileSync("dev_libs_storage_output.txt", currentStruct);
       } else {
         fs.writeFileSync("pr_libs_storage_output.txt", currentStruct);
       }
-      console.log(currentStruct);
+      console.log(structBlocks);
     });
   });
 });
