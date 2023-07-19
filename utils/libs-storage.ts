@@ -66,7 +66,7 @@ fs.readdir(libsFolder, (err, files) => {
       } else {
         fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
       }
-      // console.log(structBlocks);
+      console.log(structBlocks.toString());
     });
   });
 });
