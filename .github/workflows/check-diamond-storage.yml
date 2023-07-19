@@ -57,7 +57,10 @@ jobs:
       - name: Run Libs Storage Check - PR branch
         id: save_libs_pr_output
         run: |
+          ls
           cd ./utils
+          echo "LS 2"
+          ls
           yes 2>/dev/null | npx tsx ./libs-storage.ts
 #          cd ../packages/contracts
 #          echo "::set-output name=pr-storage-output::$(cat pr_storage_output.txt)"
