@@ -1,7 +1,19 @@
 const fs = require('fs');
 const path = require('path');
+import { execSync } from "child_process";
 
 const libsFolder = "../packages/contracts/src/dollar/libraries";
+
+const executeCommand = (command) => {
+  try {
+    const output = execSync(command);
+    return output.toString();
+  } catch (error) {
+    console.error(`Error executing command: ${command}`);
+    console.error(error.message);
+    process.exit(1);
+  }
+};
 
 fs.readdir(libsFolder, (err, files) => {
   if (err) {
@@ -9,10 +21,8 @@ fs.readdir(libsFolder, (err, files) => {
     return;
   }
 
-  // Filter out only files (excluding directories)
   const fileNames = files.filter((file) => fs.statSync(path.join(libsFolder, file)).isFile());
 
-  // Process each file
   fileNames.forEach((fileName) => {
     const filePath = path.join(libsFolder, fileName);
     fs.readFile(filePath, 'utf8', (err, data) => {
@@ -23,7 +33,6 @@ fs.readdir(libsFolder, (err, files) => {
 
       console.log(`Content of ${fileName}:`);
 
-      // Split the data into an array of lines
       const dataArray = data.split('\n');
 
       const structBlocks = [];
@@ -39,7 +48,6 @@ fs.readdir(libsFolder, (err, files) => {
           insideStruct = true;
           currentStruct = lineWithoutComments;
         } else if (insideStruct) {
-          // If inside a struct block, add the line to currentStruct
           if (lineWithoutComments === '}') {
             // Check if the line ends with "}"
             insideStruct = false;
@@ -51,7 +59,14 @@ fs.readdir(libsFolder, (err, files) => {
         }
       }
 
-      // Now you have an array with the content of each struct block
+      const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
+      console.log("BRANCH NAME: " + branchName);
+
+      if (branchName === "development") {
+        fs.writeFileSync("dev_libs_storage_output.txt", structBlocks);
+      } else {
+        fs.writeFileSync("pr_libs_storage_output.txt", structBlocks);
+      }
       console.log(structBlocks);
     });
   });
