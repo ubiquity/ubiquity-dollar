@@ -31,8 +31,6 @@ fs.readdir(libsFolder, (err, files) => {
         return;
       }
 
-      console.log(`Content of ${fileName}:`);
-
       const dataArray = data.split('\n');
 
       const structBlocks = [];

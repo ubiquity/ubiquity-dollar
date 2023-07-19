@@ -59,6 +59,7 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./libs-storage.ts
+          ls
           cat pr_libs_storage_output.txt
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
