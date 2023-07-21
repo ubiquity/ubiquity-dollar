@@ -6,7 +6,14 @@ import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import "../libraries/Constants.sol";
 
+/**
+ * @notice Credit token contract
+ */
 contract UbiquityCreditToken is ERC20Ubiquity {
+    /**
+     * @notice Contract constructor
+     * @param _manager Access control address
+     */
     constructor(
         address _manager
     )
@@ -15,6 +22,8 @@ contract UbiquityCreditToken is ERC20Ubiquity {
     {} // solhint-disable-line no-empty-blocks
 
     // ----------- Modifiers -----------
+
+    /// @notice Modifier checks that the method is called by a user with the "Credit minter" role
     modifier onlyCreditMinter() {
         require(
             accessCtrl.hasRole(CREDIT_TOKEN_MINTER_ROLE, msg.sender),
@@ -23,6 +32,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Credit burner" role
     modifier onlyCreditBurner() {
         require(
             accessCtrl.hasRole(CREDIT_TOKEN_BURNER_ROLE, msg.sender),
@@ -31,18 +41,22 @@ contract UbiquityCreditToken is ERC20Ubiquity {
         _;
     }
 
-    /// @notice raise capital in form of Ubiquity Credit Token (only redeemable when Ubiquity Dollar > 1$)
-    /// @param amount the amount to be minted
-    /// @dev you should be minter to call that function
+    /**
+     * @notice Raises capital in the form of Ubiquity Credit Token (only redeemable when Ubiquity Dollar > 1$)
+     * @param amount Amount to be minted
+     * @dev You should be minter to call this function
+     */
     function raiseCapital(uint256 amount) external {
         address treasuryAddress = ManagerFacet(address(accessCtrl))
             .treasuryAddress();
         mint(treasuryAddress, amount);
     }
 
-    /// @notice burn Ubiquity Credit tokens from specified account
-    /// @param account the account to burn from
-    /// @param amount the amount to burn
+    /**
+     * @notice Burns Ubiquity Credit tokens from specified account
+     * @param account Account to burn from
+     * @param amount Amount to burn
+     */
     function burnFrom(
         address account,
         uint256 amount
@@ -51,7 +65,11 @@ contract UbiquityCreditToken is ERC20Ubiquity {
         emit Burning(account, amount);
     }
 
-    // @dev Creates `amount` new Credit tokens for `to`.
+    /**
+     * @notice Creates `amount` new Credit tokens for `to`
+     * @param to Account to mint Credit tokens to
+     * @param amount Amount of Credit tokens to mint
+     */
     function mint(
         address to,
         uint256 amount
