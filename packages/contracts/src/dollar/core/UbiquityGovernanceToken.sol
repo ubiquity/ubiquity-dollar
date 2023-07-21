@@ -5,7 +5,14 @@ import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import "../libraries/Constants.sol";
 
+/**
+ * @notice Ubiquity Governance token contract
+ */
 contract UbiquityGovernanceToken is ERC20Ubiquity {
+    /**
+     * @notice Contract constructor
+     * @param _manager Access control address
+     */
     constructor(
         address _manager
     )
@@ -14,6 +21,8 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
     {} // solhint-disable-line no-empty-blocks, max-line-length
 
     // ----------- Modifiers -----------
+
+    /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyGovernanceMinter() {
         require(
             accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
@@ -22,6 +31,7 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyGovernanceBurner() {
         require(
             accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
@@ -30,9 +40,11 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
         _;
     }
 
-    /// @notice burn Ubiquity Dollar tokens from specified account
-    /// @param account the account to burn from
-    /// @param amount the amount to burn
+    /**
+     * @notice Burns Governance tokens from the `account` address
+     * @param account Address to burn tokens from
+     * @param amount Amount of tokens to burn
+     */
     function burnFrom(
         address account,
         uint256 amount
@@ -41,7 +53,11 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
         emit Burning(account, amount);
     }
 
-    // @dev Creates `amount` new tokens for `to`.
+    /**
+     * @notice Mints Governance tokens to the `to` address
+     * @param to Address to mint tokens to
+     * @param amount Amount of tokens to mint
+     */
     function mint(
         address to,
         uint256 amount
