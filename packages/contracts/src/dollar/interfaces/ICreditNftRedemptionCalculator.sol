@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 /**
  * @notice Contract interface for calculating amount of Credit NFTs to mint on Dollars burn
  * @notice Users can burn their Dollars in exchange for Credit NFTs which are minted with a premium.
- * Premium is calculated with the following formular: `1 / ((1 - R) ^ 2) - 1` where `R` represents Credit NFT
+ * Premium is calculated with the following formula: `1 / ((1 - R) ^ 2) - 1` where `R` represents Credit NFT
  * total oustanding debt divived by Dollar total supply. When users burn Dollars and mint Credit NFTs then
  * total oustading debt of Credit NFT is increased. On the contrary, when Credit NFTs are burned then
  * Credit NFT total oustanding debt is decreased.
