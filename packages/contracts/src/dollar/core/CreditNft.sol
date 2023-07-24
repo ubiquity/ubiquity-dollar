@@ -10,6 +10,7 @@ import "../libraries/Constants.sol";
  * @notice CreditNft redeemable for Dollars with an expiry block number
  * @notice ERC1155 where the token ID is the expiry block number
  * @dev Implements ERC1155 so receiving contracts must implement `IERC1155Receiver`
+ * @dev 1 Credit NFT = 1 whole Ubiquity Dollar, not 1 wei
  */
 contract CreditNft is ERC1155Ubiquity, ICreditNft {
     using StructuredLinkedList for StructuredLinkedList.List;

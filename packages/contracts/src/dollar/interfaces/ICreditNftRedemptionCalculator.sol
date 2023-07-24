@@ -20,6 +20,8 @@ import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
  * 2. When user burns 200 Dollars then `200 + 200 * (1 / ((1 - (9_000 / 10_000)) ^ 2) - 1) = 20_000` Credit NFTs are minted
  *
  * @notice So the more Credit NFT oustanding debt (i.e. Credit NFT total supply) the more premium applied for minting Credit NFTs
+ *
+ * @dev 1 Credit NFT = 1 whole Ubiquity Dollar, not 1 wei
  */
 interface ICreditNftRedemptionCalculator {
     /**
