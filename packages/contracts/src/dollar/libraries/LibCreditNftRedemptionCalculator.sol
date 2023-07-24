@@ -7,11 +7,16 @@ import "abdk/ABDKMathQuad.sol";
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
-/// @title Uses the following formula: ((1/(1-R)^2) - 1)
+/// @notice Library for calculating amount of Credit NFTs to mint on Dollars burn
 library LibCreditNftRedemptionCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
+    /**
+     * @notice Returns Credit NFT amount minted for `dollarsToBurn` amount of Dollars to burn
+     * @param dollarsToBurn Amount of Dollars to burn
+     * @return Amount of Credit NFTs to mint
+     */
     function getCreditNFTAmount(
         uint256 dollarsToBurn
     ) internal view returns (uint256) {
