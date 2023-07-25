@@ -10,11 +10,14 @@ import "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibStakingFormulas} from "./LibStakingFormulas.sol";
 
+/**
+ * @notice Library for staking Dollar-3CRV LP tokens for Governance tokens reward
+ */
 library LibChef {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
 
-    // Info of each user.
+    /// @notice User's staking share info
     struct StakingShareInfo {
         uint256 amount; // staking rights.
         uint256 rewardDebt; // Reward debt. See explanation below.
@@ -30,13 +33,14 @@ library LibChef {
         //   3. User's `amount` gets updated.
         //   4. User's `rewardDebt` gets updated.
     }
-    // Info of each pool.
 
+    /// @notice Pool info
     struct PoolInfo {
         uint256 lastRewardBlock; // Last block number that Governance Token distribution occurs.
         uint256 accGovernancePerShare; // Accumulated Governance Tokens per share, times 1e12. See below.
     }
 
+    /// @notice Struct used as a storage for the current library
     struct ChefStorage {
         // Governance Tokens created per block.
         uint256 governancePerBlock;
@@ -52,11 +56,16 @@ library LibChef {
         uint256 totalShares;
     }
 
+    /// @notice Storage slot used to store data for this library
     bytes32 constant UBIQUITY_CHEF_STORAGE_POSITION =
         bytes32(
             uint256(keccak256("diamond.standard.ubiquity.chef.storage")) - 1
         );
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return ds Struct used as a storage
+     */
     function chefStorage() internal pure returns (ChefStorage storage ds) {
         bytes32 position = UBIQUITY_CHEF_STORAGE_POSITION;
         assembly {
@@ -64,24 +73,35 @@ library LibChef {
         }
     }
 
+    /// @notice Emitted when Dollar-3CRV LP tokens are deposited to the contract
     event Deposit(
         address indexed user,
         uint256 amount,
         uint256 indexed stakingShareId
     );
 
+    /// @notice Emitted when Dollar-3CRV LP tokens are withdrawn from the contract
     event Withdraw(
         address indexed user,
         uint256 amount,
         uint256 indexed stakingShareId
     );
 
+    /// @notice Emitted when amount of Governance tokens minted per block is updated
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
 
+    /// @notice Emitted when min Dollar price diff for governance multiplier change is updated
     event MinPriceDiffToUpdateMultiplierModified(
         uint256 indexed minPriceDiffToUpdateMultiplier
     );
 
+    /**
+     * @notice Initializes staking
+     * @param _tos Array of addresses for initial deposits
+     * @param _amounts Array of LP amounts for initial deposits
+     * @param _stakingShareIDs Array of staking share IDs for initial deposits
+     * @param _governancePerBlock Amount of Governance tokens minted each block
+     */
     function initialize(
         address[] memory _tos,
         uint256[] memory _amounts,
@@ -108,34 +128,67 @@ library LibChef {
         }
     }
 
+    /**
+     * @notice Sets amount of Governance tokens minted each block
+     * @param _governancePerBlock Amount of Governance tokens minted each block
+     */
     function setGovernancePerBlock(uint256 _governancePerBlock) internal {
         chefStorage().governancePerBlock = _governancePerBlock;
         emit GovernancePerBlockModified(_governancePerBlock);
     }
 
+    /**
+     * @notice Returns amount of Governance tokens minted each block
+     * @return Amount of Governance tokens minted each block
+     */
     function governancePerBlock() internal view returns (uint256) {
         return chefStorage().governancePerBlock;
     }
 
+    /**
+     * @notice Returns governance divider param
+     * @notice Example: if `_governanceDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @return Governance divider param value
+     */
     function governanceDivider() internal view returns (uint256) {
         return chefStorage().governanceDivider;
     }
 
+    /**
+     * @notice Returns pool info
+     * @return Pool info:
+     * - last block number when Governance tokens distribution occurred
+     * - Governance tokens per share, times 1e12
+     */
     function pool() internal view returns (PoolInfo memory) {
         return chefStorage().pool;
     }
 
+    /**
+     * @notice Returns min price difference between the old and the new Dollar prices
+     * required to update the governance multiplier
+     * @return Min Dollar price diff to update the governance multiplier
+     */
     function minPriceDiffToUpdateMultiplier() internal view returns (uint256) {
         return chefStorage().minPriceDiffToUpdateMultiplier;
     }
 
-    // the bigger governanceDivider is the less extra Governance Tokens will be minted for the treasury
+    /**
+     * @notice Sets Governance token divider param. The bigger `_governanceDivider` the less extra
+     * Governance tokens will be minted for the treasury.
+     * @notice Example: if `_governanceDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @param _governanceDivider Governance divider param value
+     */
     function setGovernanceShareForTreasury(
         uint256 _governanceDivider
     ) internal {
         chefStorage().governanceDivider = _governanceDivider;
     }
 
+    /**
+     * @notice Sets min price difference between the old and the new Dollar prices
+     * @param _minPriceDiffToUpdateMultiplier Min price diff to update governance multiplier
+     */
     function setMinPriceDiffToUpdateMultiplier(
         uint256 _minPriceDiffToUpdateMultiplier
     ) internal {
@@ -146,7 +199,12 @@ library LibChef {
         );
     }
 
-    // Withdraw LP tokens from MasterChef.
+    /**
+     * @notice Withdraws Dollar-3CRV LP tokens from staking
+     * @param to Address where to transfer pending Governance token rewards
+     * @param _amount Amount of LP tokens to withdraw
+     * @param _stakingShareID Staking share id
+     */
     function withdraw(
         address to,
         uint256 _amount,
@@ -166,9 +224,11 @@ library LibChef {
         emit Withdraw(to, _amount, _stakingShareID);
     }
 
-    /// @dev get pending Governance Token rewards from MasterChef.
-    /// @return amount of pending rewards transferred to msg.sender
-    /// @notice only send pending rewards
+    /**
+     * @notice Withdraws pending Governance token rewards
+     * @param stakingShareID Staking share id
+     * @return Reward amount transferred to `msg.sender`
+     */
     function getRewards(uint256 stakingShareID) internal returns (uint256) {
         require(
             IERC1155Ubiquity(LibAppStorage.appStorage().stakingShareAddress)
@@ -187,6 +247,11 @@ library LibChef {
         return pending;
     }
 
+    /**
+     * @notice Returns staking share info
+     * @param _id Staking share id
+     * @return Array of amount of shares and reward debt
+     */
     function getStakingShareInfo(
         uint256 _id
     ) internal view returns (uint256[2] memory) {
@@ -194,11 +259,19 @@ library LibChef {
         return [ss.amount, ss.rewardDebt];
     }
 
+    /**
+     * @notice Total amount of Dollar-3CRV LP tokens deposited to the Staking contract
+     * @return Total amount of deposited LP tokens
+     */
     function totalShares() internal view returns (uint256) {
         return chefStorage().totalShares;
     }
 
-    // View function to see pending Governance Tokens on frontend.
+    /**
+     * @notice Returns amount of pending reward Governance tokens
+     * @param stakingShareID Staking share id
+     * @return Amount of pending reward Governance tokens
+     */
     function pendingGovernance(
         uint256 stakingShareID
     ) internal view returns (uint256) {
@@ -217,7 +290,12 @@ library LibChef {
         return (user.amount * accGovernancePerShare) / 1e12 - user.rewardDebt;
     }
 
-    // _Deposit LP tokens to MasterChef for Governance Token allocation.
+    /**
+     * @notice Deposits Dollar-3CRV LP tokens to staking for Governance tokens allocation
+     * @param to Address where to transfer pending Governance token rewards
+     * @param _amount Amount of LP tokens to deposit
+     * @param _stakingShareID Staking share id
+     */
     function deposit(
         address to,
         uint256 _amount,
@@ -237,7 +315,9 @@ library LibChef {
         emit Deposit(to, _amount, _stakingShareID);
     }
 
-    // UPDATE Governance Token multiplier
+    /**
+     * @notice Updates Governance token multiplier if Dollar price diff > `minPriceDiffToUpdateMultiplier`
+     */
     function _updateGovernanceMultiplier() internal {
         ChefStorage storage cs = chefStorage();
         // (1.05/(1+abs(1-TWAP_PRICE)))
@@ -260,7 +340,9 @@ library LibChef {
         }
     }
 
-    // Update reward variables of the given pool to be up-to-date.
+    /**
+     * @notice Updates reward variables of the given pool to be up-to-date
+     */
     function _updatePool() internal {
         ChefStorage storage cs = chefStorage();
         PoolInfo storage _pool = cs.pool;
@@ -294,8 +376,12 @@ library LibChef {
         _pool.lastRewardBlock = block.number;
     }
 
-    // Safe Governance Token transfer function, just in case if rounding
-    // error causes pool to not have enough Governance Tokens.
+    /**
+     * @notice Safe Governance Token transfer function, just in case if rounding
+     * error causes pool not to have enough Governance tokens
+     * @param _to Address where to transfer Governance tokens
+     * @param _amount Amount of Governance tokens to transfer
+     */
     function _safeGovernanceTransfer(address _to, uint256 _amount) internal {
         IERC20Ubiquity governanceToken = IERC20Ubiquity(
             LibAppStorage.appStorage().governanceTokenAddress
@@ -308,12 +394,20 @@ library LibChef {
         }
     }
 
+    /**
+     * @notice Returns Governance token bonus multiplier based on number of passed blocks
+     * @return Governance token bonus multiplier
+     */
     function _getMultiplier() internal view returns (uint256) {
         uint256 lastRewardBlock = chefStorage().pool.lastRewardBlock;
         uint256 governanceMultiplier = chefStorage().governanceMultiplier;
         return (block.number - lastRewardBlock) * governanceMultiplier;
     }
 
+    /**
+     * @notice Returns governance multiplier
+     * @return Governance multiplier
+     */
     function _getGovernanceMultiplier() internal view returns (uint256) {
         return chefStorage().governanceMultiplier;
     }
