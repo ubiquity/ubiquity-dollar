@@ -4,9 +4,9 @@ pragma solidity ^0.8.19;
 import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
 import {LibDollarMintCalculator} from "../libraries/LibDollarMintCalculator.sol";
 
-/// @title Calculates amount of dollars ready to be minted when twapPrice > 1
+/// @notice Calculates amount of Dollars ready to be minted when TWAP price (i.e. Dollar price) > 1$
 contract DollarMintCalculatorFacet is IDollarMintCalculator {
-    /// @notice returns (TWAP_PRICE  -1) * Ubiquity_Dollar_Total_Supply
+    /// @inheritdoc IDollarMintCalculator
     function getDollarsToMint() external view override returns (uint256) {
         return LibDollarMintCalculator.getDollarsToMint();
     }
