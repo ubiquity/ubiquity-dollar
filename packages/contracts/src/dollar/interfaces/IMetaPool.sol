@@ -97,6 +97,14 @@ interface IMetaPool {
         address _receiver
     ) external returns (uint256);
 
+    /**
+     * @notice Calculates the price for exchanging a token with index `i` to token
+     * with index `j` and amount `dx` given the `_balances` provided
+     * @param i The index of the coin being sent to the pool, as it related to the metapool
+     * @param j The index of the coin being received from the pool, as it relates to the metapool
+     * @param dx The amount of `i` being sent to the pool
+     * @return Returns the quote / price as `dy` given `dx`
+     */
     function get_dy(
         int128 i,
         int128 j,
@@ -118,6 +126,20 @@ interface IMetaPool {
         int128 j,
         uint256 dx,
         uint256[2] memory _balances
+    ) external view returns (uint256);
+
+    /**
+     * @notice Gets the amount received (“dy”) when swapping between two underlying assets within the pool
+     * @notice Index values can be found using `get_underlying_coins()` within the factory contract
+     * @param i Index value of the token to send
+     * @param j Index value of the token to receive
+     * @param dx The amount of `i` being exchanged
+     * @return Returns the amount of `j` received
+     */
+    function get_dy_underlying(
+        int128 i,
+        int128 j,
+        uint256 dx
     ) external view returns (uint256);
 
     /**
