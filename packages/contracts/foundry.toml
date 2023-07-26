@@ -36,3 +36,6 @@ targets = [
   'underflow',
   'balance',
 ]
+
+[profile.docs]
+src = 'src/dollar'

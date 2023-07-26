@@ -35,6 +35,7 @@
     "clean:forge": "forge clean",
     "build": "forge build",
     "forge:install": "forge install",
+    "docs": "FOUNDRY_PROFILE=docs forge doc --build",
     "_hardhat-task": "tsx ./scripts/task/task.ts",
     "migrate:metapool": "tsx ./scripts/task/dollar/migrate-metapool.ts"
   },
