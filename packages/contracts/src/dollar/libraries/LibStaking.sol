@@ -8,18 +8,22 @@ import "./LibChef.sol";
 import "./LibStakingFormulas.sol";
 import {StakingShare} from "../core/StakingShare.sol";
 
+/// @notice Staking library
 library LibStaking {
     using SafeERC20 for IERC20;
 
+    /// @notice Storage slot used to store data for this library
     bytes32 constant STAKING_CONTROL_STORAGE_SLOT =
         bytes32(uint256(keccak256("ubiquity.contracts.staking.storage")) - 1);
 
+    /// @notice Emitted when Dollar or 3CRV tokens are removed from Curve MetaPool
     event PriceReset(
         address _tokenWithdrawn,
         uint256 _amountWithdrawn,
         uint256 _amountTransferred
     );
 
+    /// @notice Emitted when user deposits Dollar-3CRV LP tokens to the staking contract
     event Deposit(
         address indexed _user,
         uint256 indexed _id,
@@ -28,6 +32,8 @@ library LibStaking {
         uint256 _weeks,
         uint256 _endBlock
     );
+
+    /// @notice Emitted when user removes liquidity from stake
     event RemoveLiquidityFromStake(
         address indexed _user,
         uint256 indexed _id,
@@ -37,6 +43,7 @@ library LibStaking {
         uint256 _stakingShareAmount
     );
 
+    /// @notice Emitted when user adds liquidity to stake
     event AddLiquidityFromStake(
         address indexed _user,
         uint256 indexed _id,
@@ -44,9 +51,13 @@ library LibStaking {
         uint256 _stakingShareAmount
     );
 
+    /// @notice Emitted when staking discount multiplier is updated
     event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
+
+    /// @notice Emitted when number of blocks in week is updated
     event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
 
+    /// @notice Struct used as a storage for the current library
     struct StakingData {
         uint256 stakingDiscountMultiplier;
         uint256 blockCountInAWeek;
@@ -55,6 +66,10 @@ library LibStaking {
         uint256 totalLpToMigrate;
     }
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return l Struct used as a storage
+     */
     function stakingStorage() internal pure returns (StakingData storage l) {
         bytes32 slot = STAKING_CONTROL_STORAGE_SLOT;
         assembly {
@@ -62,11 +77,13 @@ library LibStaking {
         }
     }
 
-    /// @dev dollarPriceReset remove Ubiquity Dollar unilaterally from the curve LP share sitting inside
-    ///      the staking contract and send the Ubiquity Dollar received to the treasury.
-    ///      This will have the immediate effect of pushing the Ubiquity Dollar price HIGHER
-    /// @param amount of LP token to be removed for Ubiquity Dollar
-    /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
+    /**
+     * @notice Removes Ubiquity Dollar unilaterally from the curve LP share sitting inside
+     * the staking contract and sends the Ubiquity Dollar received to the treasury. This will
+     * have the immediate effect of pushing the Ubiquity Dollar price HIGHER
+     * @notice It will remove one coin only from the curve LP share sitting in the staking contract
+     * @param amount Amount of LP token to be removed for Ubiquity Dollar
+     */
     function dollarPriceReset(uint256 amount) internal {
         IMetaPool metaPool = IMetaPool(LibTWAPOracle.twapOracleStorage().pool);
         // remove one coin
@@ -83,11 +100,13 @@ library LibStaking {
         emit PriceReset(store.dollarTokenAddress, coinWithdrawn, toTransfer);
     }
 
-    /// @dev crvPriceReset remove 3CRV unilaterally from the curve LP share sitting inside
-    ///      the staking contract and send the 3CRV received to the treasury
-    ///      This will have the immediate effect of pushing the Ubiquity Dollar price LOWER
-    /// @param amount of LP token to be removed for 3CRV tokens
-    /// @notice it will remove one coin only from the curve LP share sitting in the staking contract
+    /**
+     * @notice Remove 3CRV unilaterally from the curve LP share sitting inside
+     * the staking contract and send the 3CRV received to the treasury. This will
+     * have the immediate effect of pushing the Ubiquity Dollar price LOWER.
+     * @notice It will remove one coin only from the curve LP share sitting in the staking contract
+     * @param amount Amount of LP token to be removed for 3CRV tokens
+     */
     function crvPriceReset(uint256 amount) internal {
         LibTWAPOracle.TWAPOracleStorage memory ts = LibTWAPOracle
             .twapOracleStorage();
@@ -109,6 +128,10 @@ library LibStaking {
         emit PriceReset(ts.token1, coinWithdrawn, toTransfer);
     }
 
+    /**
+     * @notice Sets staking discount multiplier
+     * @param _stakingDiscountMultiplier New staking discount multiplier
+     */
     function setStakingDiscountMultiplier(
         uint256 _stakingDiscountMultiplier
     ) internal {
@@ -116,23 +139,38 @@ library LibStaking {
         emit StakingDiscountMultiplierUpdated(_stakingDiscountMultiplier);
     }
 
+    /**
+     * @notice Returns staking discount multiplier
+     * @return Staking discount multiplier
+     */
     function stakingDiscountMultiplier() internal view returns (uint256) {
         return stakingStorage().stakingDiscountMultiplier;
     }
 
+    /**
+     * @notice Returns number of blocks in a week
+     * @return Number of blocks in a week
+     */
     function blockCountInAWeek() internal view returns (uint256) {
         return stakingStorage().blockCountInAWeek;
     }
 
+    /**
+     * @notice Sets number of blocks in a week
+     * @param _blockCountInAWeek Number of blocks in a week
+     */
     function setBlockCountInAWeek(uint256 _blockCountInAWeek) internal {
         stakingStorage().blockCountInAWeek = _blockCountInAWeek;
         emit BlockCountInAWeekUpdated(_blockCountInAWeek);
     }
 
-    /// @dev deposit UbiquityDollar-3CRV LP tokens for a duration to receive staking shares
-    /// @param _lpsAmount of LP token to send
-    /// @param _weeks during lp token will be held
-    /// @notice weeks act as a multiplier for the amount of staking shares to be received
+    /**
+     * @notice Deposits UbiquityDollar-3CRV LP tokens for a duration to receive staking shares
+     * @notice Weeks act as a multiplier for the amount of staking shares to be received
+     * @param _lpsAmount Amount of LP tokens to send
+     * @param _weeks Number of weeks during which LP tokens will be held
+     * @return _id Staking share id
+     */
     function deposit(
         uint256 _lpsAmount,
         uint256 _weeks
@@ -174,11 +212,13 @@ library LibStaking {
         );
     }
 
-    /// @dev Add an amount of UbiquityDollar-3CRV LP tokens
-    /// @param _amount of LP token to deposit
-    /// @param _id staking shares id
-    /// @param _weeks during lp token will be held
-    /// @notice staking shares are ERC1155 (aka NFT) because they have an expiration date
+    /**
+     * @notice Adds an amount of UbiquityDollar-3CRV LP tokens
+     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
+     * @param _amount Amount of LP token to deposit
+     * @param _id Staking share id
+     * @param _weeks Number of weeks during which LP tokens will be held
+     */
     function addLiquidity(
         uint256 _amount,
         uint256 _id,
@@ -251,10 +291,12 @@ library LibStaking {
         );
     }
 
-    /// @dev Remove an amount of UbiquityDollar-3CRV LP tokens
-    /// @param _amount of LP token deposited when _id was created to be withdrawn
-    /// @param _id staking shares id
-    /// @notice staking shares are ERC1155 (aka NFT) because they have an expiration date
+    /**
+     * @notice Removes an amount of UbiquityDollar-3CRV LP tokens
+     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
+     * @param _amount Amount of LP token deposited when `_id` was created to be withdrawn
+     * @param _id Staking share id
+     */
     function removeLiquidity(uint256 _amount, uint256 _id) internal {
         (
             uint256[2] memory bs,
@@ -324,7 +366,11 @@ library LibStaking {
         );
     }
 
-    // View function to see pending lpRewards on frontend.
+    /**
+     * @notice View function to see pending LP rewards on frontend
+     * @param _id Staking share id
+     * @return Amount of LP rewards
+     */
     function pendingLpRewards(uint256 _id) internal view returns (uint256) {
         StakingData storage ss = stakingStorage();
         address stakingShareAddress = LibAppStorage
@@ -358,9 +404,12 @@ library LibStaking {
         return 0;
     }
 
-    /// @dev return the amount of Lp token rewards an amount of shares entitled
-    /// @param amount of staking shares
-    /// @param lpRewardDebt lp rewards that has already been distributed
+    /**
+     * @notice Returns the amount of LP token rewards an amount of shares entitled
+     * @param amount Amount of staking shares
+     * @param lpRewardDebt Amount of LP rewards that have already been distributed
+     * @return pendingLpReward Amount of pending LP rewards
+     */
     function lpRewardForShares(
         uint256 amount,
         uint256 lpRewardDebt
@@ -374,6 +423,10 @@ library LibStaking {
         }
     }
 
+    /**
+     * @notice Returns current share price
+     * @return priceShare Share price
+     */
     function currentShareValue() internal view returns (uint256 priceShare) {
         uint256 totalShares = LibChef.totalShares();
         address stakingShareAddress = LibAppStorage
@@ -387,7 +440,9 @@ library LibStaking {
         );
     }
 
-    /// @dev update the accumulated excess LP per share
+    /**
+     * @notice Updates the accumulated excess LP per share
+     */
     function _updateLpPerShare() internal {
         address stakingShareAddress = LibAppStorage
             .appStorage()
@@ -419,6 +474,14 @@ library LibStaking {
         }
     }
 
+    /**
+     * @notice Mints a staking share on deposit
+     * @param to Address where to mint a staking share
+     * @param lpAmount Amount of LP tokens
+     * @param shares Amount of shares
+     * @param endBlock Staking share end block
+     * @return Staking share id
+     */
     function _mint(
         address to,
         uint256 lpAmount,
@@ -442,6 +505,12 @@ library LibStaking {
             );
     }
 
+    /**
+     * @notice Returns staking share info
+     * @param _id Staking share id
+     * @return bs Array of amount of shares and reward debt
+     * @return stake Stake info
+     */
     function _checkForLiquidity(
         uint256 _id
     ) internal returns (uint256[2] memory bs, StakingShare.Stake memory stake) {
