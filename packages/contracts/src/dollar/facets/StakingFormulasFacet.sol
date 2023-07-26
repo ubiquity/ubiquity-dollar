@@ -5,11 +5,17 @@ import {LibStakingFormulas} from "../libraries/LibStakingFormulas.sol";
 import {StakingShare} from "../core/StakingShare.sol";
 import "../interfaces/IUbiquityFormulas.sol";
 
+/// @notice Contract facet staking formulas
 contract StakingFormulasFacet is IUbiquityFormulas {
-    /// @dev formula Governance Rights corresponding to a staking shares LP amount
-    /// @param _stake , staking share
-    /// @param _amount , amount of LP tokens
-    /// @notice shares = (stake.shares * _amount )  / stake.lpAmount ;
+    /**
+     * @notice Formula of governance rights corresponding to a staking shares LP amount
+     * @notice Used on removing liquidity from staking
+     * @notice `shares = (stake.shares * _amount)  / stake.lpAmount`
+     * @param _stake Stake info of staking share
+     * @param _shareInfo Array of share amounts
+     * @param _amount Amount of LP tokens
+     * @return _uLP Amount of shares
+     */
     function sharesForLP(
         StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
@@ -18,12 +24,14 @@ contract StakingFormulasFacet is IUbiquityFormulas {
         return LibStakingFormulas.sharesForLP(_stake, _shareInfo, _amount);
     }
 
-    /// @dev formula may add a decreasing rewards if locking end is near when removing liquidity
-    /// @param _stake , staking share
-    /// @param _amount , amount of LP tokens
-    /// @notice rewards = _amount;
-    // solhint-disable-block  no-unused-vars
-    /* solhint-disable no-unused-vars */
+    /**
+     * @notice Formula may add a decreasing rewards if locking end is near when removing liquidity
+     * @notice `rewards = _amount`
+     * @param _stake Stake info of staking share
+     * @param _shareInfo Array of share amounts
+     * @param _amount Amount of LP tokens
+     * @return Amount of LP rewards
+     */
     function lpRewardsRemoveLiquidityNormalization(
         StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
@@ -37,13 +45,14 @@ contract StakingFormulasFacet is IUbiquityFormulas {
             );
     }
 
-    /* solhint-enable no-unused-vars */
-    /// @dev formula may add a decreasing rewards if locking end is near when adding liquidity
-    /// @param _stake , staking share
-    /// @param _amount , amount of LP tokens
-    /// @notice rewards = _amount;
-    // solhint-disable-block  no-unused-vars
-    /* solhint-disable no-unused-vars */
+    /**
+     * @notice Formula may add a decreasing rewards if locking end is near when adding liquidity
+     * @notice `rewards = _amount`
+     * @param _stake Stake info of staking share
+     * @param _shareInfo Array of share amounts
+     * @param _amount Amount of LP tokens
+     * @return Amount of LP rewards
+     */
     function lpRewardsAddLiquidityNormalization(
         StakingShare.Stake memory _stake,
         uint256[2] memory _shareInfo,
@@ -57,15 +66,16 @@ contract StakingFormulasFacet is IUbiquityFormulas {
             );
     }
 
-    /* solhint-enable no-unused-vars */
-
-    /// @dev formula to calculate the corrected amount to withdraw based on the proportion of
-    ///      lp deposited against actual LP token on the staking contract
-    /// @param _totalLpDeposited , Total amount of LP deposited by users
-    /// @param _stakingLpBalance , actual staking contract LP tokens balance minus lp rewards
-    /// @param _amount , amount of LP tokens
-    /// @notice corrected_amount = amount * ( stakingLpBalance / totalLpDeposited)
-    ///         if there is more or the same amount of LP than deposited then do nothing
+    /**
+     * @notice Formula to calculate the corrected amount to withdraw based on the proportion of
+     * LP deposited against actual LP tokens in the staking contract
+     * @notice `corrected_amount = amount * (stakingLpBalance / totalLpDeposited)`
+     * @notice If there is more or the same amount of LP than deposited then do nothing
+     * @param _totalLpDeposited Total amount of LP deposited by users
+     * @param _stakingLpBalance Actual staking contract LP tokens balance minus LP rewards
+     * @param _amount Amount of LP tokens
+     * @return Amount of LP tokens to redeem
+     */
     function correctedAmountToWithdraw(
         uint256 _totalLpDeposited,
         uint256 _stakingLpBalance,
@@ -79,14 +89,16 @@ contract StakingFormulasFacet is IUbiquityFormulas {
             );
     }
 
-    /// @dev formula duration multiply
-    /// @param _uLP , amount of LP tokens
-    /// @param _weeks , minimum duration of staking period
-    /// @param _multiplier , staking discount multiplier = 0.0001
-    /// @return _shares , amount of shares
-    /// @notice _shares = (1 + _multiplier * _weeks^3/2) * _uLP
-    //          D32 = D^3/2
-    //          S = m * D32 * A + A
+    /**
+     * @notice Formula duration multiply
+     * @notice `_shares = (1 + _multiplier * _weeks^3/2) * _uLP`
+     * @notice `D32 = D^3/2`
+     * @notice `S = m * D32 * A + A`
+     * @param _uLP Amount of LP tokens
+     * @param _weeks Minimum duration of staking period
+     * @param _multiplier Staking discount multiplier = 0.0001
+     * @return _shares Amount of shares
+     */
     function durationMultiply(
         uint256 _uLP,
         uint256 _weeks,
