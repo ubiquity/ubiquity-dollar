@@ -10,24 +10,35 @@ import "abdk/ABDKMathQuad.sol";
 import "./Constants.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 
+/**
+ * @notice Library adds buy incentive and sell penalty for Curve's Dollar-3CRV MetaPool
+ */
 library LibCurveDollarIncentive {
     using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
+    /// @notice Storage slot used to store data for this library
     bytes32 constant CURVE_DOLLAR_STORAGE_SLOT =
         bytes32(uint256(keccak256("ubiquity.contracts.curve.storage")) - 1);
 
+    /// @notice One point in `bytes16`
     bytes16 constant _one = bytes16(abi.encodePacked(uint256(1 ether)));
 
+    /// @notice Emitted when `_account` exempt is updated
     event ExemptAddressUpdate(address indexed _account, bool _isExempt);
 
+    /// @notice Struct used as a storage for the current library
     struct CurveDollarData {
         bool isSellPenaltyOn;
         bool isBuyIncentiveOn;
         mapping(address => bool) _exempt;
     }
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return l Struct used as a storage
+     */
     function curveDollarStorage()
         internal
         pure
@@ -39,16 +50,30 @@ library LibCurveDollarIncentive {
         }
     }
 
+    /**
+     * @notice Checks whether sell penalty is enabled
+     * @return Whether sell penalty is enabled
+     */
     function isSellPenaltyOn() internal view returns (bool) {
         CurveDollarData storage ss = curveDollarStorage();
         return ss.isSellPenaltyOn;
     }
 
+    /**
+     * @notice Checks whether buy incentive is enabled
+     * @return Whether buy incentive is enabled
+     */
     function isBuyIncentiveOn() internal view returns (bool) {
         CurveDollarData storage ss = curveDollarStorage();
         return ss.isBuyIncentiveOn;
     }
 
+    /**
+     * @notice Adds buy and sell incentives
+     * @param sender Sender address
+     * @param receiver Receiver address
+     * @param amountIn Trade amount
+     */
     function incentivize(
         address sender,
         address receiver,
@@ -65,33 +90,43 @@ library LibCurveDollarIncentive {
         }
     }
 
-    /// @notice set an address to be exempted from Curve trading incentives
-    /// @param account the address to update
-    /// @param isExempt a flag for whether to flag as exempt or not
+    /**
+     * @notice Sets an address to be exempted from Curve trading incentives
+     * @param account Address to update
+     * @param isExempt Flag for whether to flag as exempt or not
+     */
     function setExemptAddress(address account, bool isExempt) internal {
         CurveDollarData storage ss = curveDollarStorage();
         ss._exempt[account] = isExempt;
         emit ExemptAddressUpdate(account, isExempt);
     }
 
-    /// @notice switch the sell penalty
+    /// @notice Switches the sell penalty
     function switchSellPenalty() internal {
         CurveDollarData storage ss = curveDollarStorage();
         ss.isSellPenaltyOn = !ss.isSellPenaltyOn;
     }
 
-    /// @notice switch the buy incentive
+    /// @notice Switches the buy incentive
     function switchBuyIncentive() internal {
         CurveDollarData storage ss = curveDollarStorage();
         ss.isBuyIncentiveOn = !ss.isBuyIncentiveOn;
     }
 
-    /// @notice returns true if account is marked as exempt
+    /**
+     * @notice Checks whether `account` is marked as exempt
+     * @notice Whether `account` is exempt from buy incentive and sell penalty
+     */
     function isExemptAddress(address account) internal view returns (bool) {
         CurveDollarData storage ss = curveDollarStorage();
         return ss._exempt[account];
     }
 
+    /**
+     * @notice Adds penalty for selling `amount` of Dollars for `target` address
+     * @param target Address to penalize
+     * @param amount Trade amount
+     */
     function _incentivizeSell(address target, uint256 amount) internal {
         CurveDollarData storage ss = curveDollarStorage();
 
@@ -125,6 +160,11 @@ library LibCurveDollarIncentive {
         LibTWAPOracle.update();
     }
 
+    /**
+     * @notice Adds incentive for buying `amountIn` of Dollars for `target` address
+     * @param target Address to incentivize
+     * @param amountIn Trade amount
+     */
     function _incentivizeBuy(address target, uint256 amountIn) internal {
         CurveDollarData storage ss = curveDollarStorage();
 
@@ -146,8 +186,11 @@ library LibCurveDollarIncentive {
         LibTWAPOracle.update();
     }
 
-    /// @notice returns the percentage of deviation from the peg multiplied by amount
-    //          when Ubiquity Dollar is <1$
+    /**
+     * @notice Returns the percentage of deviation from the peg multiplied by amount when Dollar < 1$
+     * @param amount Trade amount
+     * @return Percentage of deviation
+     */
     function _getPercentDeviationFromUnderPeg(
         uint256 amount
     ) internal view returns (uint256) {
@@ -161,6 +204,11 @@ library LibCurveDollarIncentive {
         return res.div(_one).toUInt();
     }
 
+    /**
+     * @notice Returns current Dollar price
+     * @dev Returns 3CRV LP / Dollar quote, i.e. how many 3CRV LP tokens user will get for 1 Dollar
+     * @return Dollar price
+     */
     function _getTWAPPrice() internal view returns (uint256) {
         return
             LibTWAPOracle.consult(
