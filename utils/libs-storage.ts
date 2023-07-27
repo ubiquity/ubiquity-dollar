@@ -61,12 +61,13 @@ fs.readdir(libsFolder, (err, files) => {
       const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
 
       console.log("Branch name: " + branchName);
-      // if (branchName === "development") {
+      if (branchName === "development") {
         fs.writeFileSync("dev_libs_storage_output.txt", structBlocks.toString());
-      // } else {
-      //   fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
-      // }
-      // console.log(structBlocks.toString());
+      } else {
+        console.log("intra aici");
+        fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
+      }
+      console.log(structBlocks.toString());
     });
   });
 });
