@@ -42,7 +42,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
     }
 
     /**
-     * @notice Raises capital in the form of Ubiquity Credit Token (only redeemable when Ubiquity Dollar > 1$)
+     * @notice Raises capital in the form of Ubiquity Credit Token
      * @param amount Amount to be minted
      * @dev You should be minter to call this function
      */
