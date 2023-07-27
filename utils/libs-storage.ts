@@ -22,7 +22,6 @@ fs.readdir(libsFolder, (err, files) => {
   }
 
   const fileNames = files.filter((file) => fs.statSync(path.join(libsFolder, file)).isFile());
-  console.log("File names: " + fileNames);
 
   fileNames.forEach((fileName) => {
     const filePath = path.join(libsFolder, fileName);
@@ -64,7 +63,6 @@ fs.readdir(libsFolder, (err, files) => {
       if (branchName === "development") {
         fs.writeFileSync("dev_libs_storage_output.txt", structBlocks.toString());
       } else {
-        console.log("intra aici");
         fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
       }
       console.log(structBlocks.toString());
