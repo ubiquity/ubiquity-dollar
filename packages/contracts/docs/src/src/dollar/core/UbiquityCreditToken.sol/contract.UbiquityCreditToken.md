@@ -1,5 +1,5 @@
 # UbiquityCreditToken
-[Git Source](https://github.com/rndquu/ubiquity-dollar/blob/acaf5012d59fae725859d662b4b531abaa7ec8f5/src/dollar/core/UbiquityCreditToken.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ccc689b8b816039996240d21714a491a27963d57/packages/contracts/src/dollar/core/UbiquityCreditToken.sol)
 
 **Inherits:**
 [ERC20Ubiquity](/src/dollar/core/ERC20Ubiquity.sol/abstract.ERC20Ubiquity.md)
@@ -43,9 +43,9 @@ modifier onlyCreditBurner();
 
 ### raiseCapital
 
-Raises capital in the form of Ubiquity Credit Token (only redeemable when Ubiquity Dollar > 1$)
+Raises capital in the form of Ubiquity Credit Token
 
-*You should be minter to call this function*
+*CREDIT_TOKEN_MINTER_ROLE access control role is required to call this function*
 
 
 ```solidity
