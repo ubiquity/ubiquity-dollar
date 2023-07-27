@@ -3,23 +3,48 @@
 pragma solidity ^0.8.19;
 
 /**
- * @title utility functions for uint256 operations
- * @dev derived from https://github.com/OpenZeppelin/openzeppelin-contracts/ (MIT license)
+ * @title Utility functions for uint256 operations
+ * @dev Derived from https://github.com/OpenZeppelin/openzeppelin-contracts/ (MIT license)
  * @dev https://github.com/solidstate-network/solidstate-solidity/blob/master/contracts/utils/UintUtils.sol
  */
 library UintUtils {
+    /// @notice Thrown on insufficient hex length in `toHexString()`
     error UintUtils__InsufficientHexLength();
 
+    /// @notice Hex symbols
     bytes16 private constant HEX_SYMBOLS = "0123456789abcdef";
 
+    /**
+     * @notice Returns the addition of two unsigned integers, reverting on
+     * overflow.
+     *
+     * Counterpart to Solidity's `+` operator.
+     *
+     * Requirements:
+     *
+     * - Addition cannot overflow.
+     */
     function add(uint256 a, int256 b) internal pure returns (uint256) {
         return b < 0 ? sub(a, -b) : a + uint256(b);
     }
 
+    /**
+     * @notice Returns the subtraction of two unsigned integers, reverting on
+     * overflow (when the result is negative).
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     *
+     * - Subtraction cannot overflow.
+     */
     function sub(uint256 a, int256 b) internal pure returns (uint256) {
         return b < 0 ? add(a, -b) : a - uint256(b);
     }
 
+    /**
+     * @notice Converts a `uint256` to its ASCII `string` decimal representation.
+     */
     function toString(uint256 value) internal pure returns (string memory) {
         if (value == 0) {
             return "0";
@@ -44,6 +69,9 @@ library UintUtils {
         return string(buffer);
     }
 
+    /**
+     * @notice Converts a `uint256` to its ASCII `string` decimal representation.
+     */
     function toHexString(uint256 value) internal pure returns (string memory) {
         if (value == 0) {
             return "0x00";
@@ -60,6 +88,9 @@ library UintUtils {
         return toHexString(value, length);
     }
 
+    /**
+     * @notice Converts a `uint256` to its ASCII `string` hexadecimal representation with fixed length.
+     */
     function toHexString(
         uint256 value,
         uint256 length
