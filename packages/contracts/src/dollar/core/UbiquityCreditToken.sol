@@ -44,7 +44,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
     /**
      * @notice Raises capital in the form of Ubiquity Credit Token
      * @param amount Amount to be minted
-     * @dev You should be minter to call this function
+     * @dev CREDIT_TOKEN_MINTER_ROLE access control role is required to call this function
      */
     function raiseCapital(uint256 amount) external {
         address treasuryAddress = ManagerFacet(address(accessCtrl))
