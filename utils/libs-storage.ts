@@ -22,6 +22,7 @@ fs.readdir(libsFolder, (err, files) => {
   }
 
   const fileNames = files.filter((file) => fs.statSync(path.join(libsFolder, file)).isFile());
+  console.log("File names: " + fileNames);
 
   fileNames.forEach((fileName) => {
     const filePath = path.join(libsFolder, fileName);
@@ -59,6 +60,7 @@ fs.readdir(libsFolder, (err, files) => {
 
       const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
 
+      console.log("Branch name: " + branchName);
       // if (branchName === "development") {
         fs.writeFileSync("dev_libs_storage_output.txt", structBlocks.toString());
       // } else {
