@@ -6,28 +6,35 @@ import {IDiamondLoupe} from "../interfaces/IDiamondLoupe.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 import {IERC173} from "../interfaces/IERC173.sol";
 
-// Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
-// The loupe functions are required by the EIP2535 Diamonds standard
-
+/// @notice Error thrown when `initializeDiamondCut()` fails
 error InitializationFunctionReverted(
     address _initializationContractAddress,
     bytes _calldata
 );
 
+/**
+ * @notice Library used for diamond facets and selector modifications
+ * @dev Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
+ * The loupe functions are required by the EIP2535 Diamonds standard.
+ */
 library LibDiamond {
+    /// @notice Storage slot used to store data for this library
     bytes32 constant DIAMOND_STORAGE_POSITION =
         bytes32(uint256(keccak256("diamond.standard.diamond.storage")) - 1);
 
+    /// @notice Struct used as a mapping of facet to function selector position
     struct FacetAddressAndPosition {
         address facetAddress;
         uint96 functionSelectorPosition; // position in facetFunctionSelectors.functionSelectors array
     }
 
+    /// @notice Struct used as a mapping of facet to function selectors
     struct FacetFunctionSelectors {
         bytes4[] functionSelectors;
         uint256 facetAddressPosition; // position of facetAddress in facetAddresses array
     }
 
+    /// @notice Struct used as a storage for this library
     struct DiamondStorage {
         // maps function selector to the facet address and
         // the position of the selector in the facetFunctionSelectors.selectors array
@@ -43,6 +50,10 @@ library LibDiamond {
         address contractOwner;
     }
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return ds Struct used as a storage
+     */
     function diamondStorage()
         internal
         pure
@@ -54,11 +65,16 @@ library LibDiamond {
         }
     }
 
+    /// @notice Emitted when contract owner is updated
     event OwnershipTransferred(
         address indexed previousOwner,
         address indexed newOwner
     );
 
+    /**
+     * @notice Updates contract owner
+     * @param _newOwner New contract owner
+     */
     function setContractOwner(address _newOwner) internal {
         DiamondStorage storage ds = diamondStorage();
         address previousOwner = ds.contractOwner;
@@ -66,10 +82,15 @@ library LibDiamond {
         emit OwnershipTransferred(previousOwner, _newOwner);
     }
 
+    /**
+     * @notice Returns contract owner
+     * @param contractOwner_ Contract owner
+     */
     function contractOwner() internal view returns (address contractOwner_) {
         contractOwner_ = diamondStorage().contractOwner;
     }
 
+    /// @notice Checks that `msg.sender` is a contract owner
     function enforceIsContractOwner() internal view {
         require(
             msg.sender == diamondStorage().contractOwner,
@@ -77,13 +98,20 @@ library LibDiamond {
         );
     }
 
+    /// @notice Emitted when facet is modified
     event DiamondCut(
         IDiamondCut.FacetCut[] _diamondCut,
         address _init,
         bytes _calldata
     );
 
-    // Internal function version of diamondCut
+    /**
+     * @notice Add/replace/remove any number of functions and optionally execute a function with delegatecall
+     * @param _diamondCut Contains the facet addresses and function selectors
+     * @param _init The address of the contract or facet to execute _calldata
+     * @param _calldata A function call, including function selector and arguments
+     * @dev `_calldata` is executed with delegatecall on `_init`
+     */
     function diamondCut(
         IDiamondCut.FacetCut[] memory _diamondCut,
         address _init,
@@ -118,6 +146,11 @@ library LibDiamond {
         initializeDiamondCut(_init, _calldata);
     }
 
+    /**
+     * @notice Adds new functions to a facet
+     * @param _facetAddress Facet address
+     * @param _functionSelectors Function selectors to add
+     */
     function addFunctions(
         address _facetAddress,
         bytes4[] memory _functionSelectors
@@ -156,6 +189,11 @@ library LibDiamond {
         }
     }
 
+    /**
+     * @notice Replaces functions in a facet
+     * @param _facetAddress Facet address
+     * @param _functionSelectors Function selectors to replace with
+     */
     function replaceFunctions(
         address _facetAddress,
         bytes4[] memory _functionSelectors
@@ -195,6 +233,11 @@ library LibDiamond {
         }
     }
 
+    /**
+     * @notice Removes functions from a facet
+     * @param _facetAddress Facet address
+     * @param _functionSelectors Function selectors to remove
+     */
     function removeFunctions(
         address _facetAddress,
         bytes4[] memory _functionSelectors
@@ -222,6 +265,11 @@ library LibDiamond {
         }
     }
 
+    /**
+     * @notice Adds a new diamond facet
+     * @param ds Struct used as a storage
+     * @param _facetAddress Facet address to add
+     */
     function addFacet(
         DiamondStorage storage ds,
         address _facetAddress
@@ -236,6 +284,13 @@ library LibDiamond {
         ds.facetAddresses.push(_facetAddress);
     }
 
+    /**
+     * @notice Adds new function to a facet
+     * @param ds Struct used as a storage
+     * @param _selector Function selector to add
+     * @param _selectorPosition Position in `FacetFunctionSelectors.functionSelectors` array
+     * @param _facetAddress Facet address
+     */
     function addFunction(
         DiamondStorage storage ds,
         bytes4 _selector,
@@ -251,6 +306,12 @@ library LibDiamond {
         ds.selectorToFacetAndPosition[_selector].facetAddress = _facetAddress;
     }
 
+    /**
+     * @notice Removes function from a facet
+     * @param ds Struct used as a storage
+     * @param _facetAddress Facet address
+     * @param _selector Function selector to add
+     */
     function removeFunction(
         DiamondStorage storage ds,
         address _facetAddress,
@@ -312,6 +373,12 @@ library LibDiamond {
         }
     }
 
+    /**
+     * @notice Function called on diamond cut modification
+     * @param _init The address of the contract or facet to execute _calldata
+     * @param _calldata A function call, including function selector and arguments
+     * @dev `_calldata` is executed with delegatecall on `_init`
+     */
     function initializeDiamondCut(
         address _init,
         bytes memory _calldata
@@ -338,6 +405,11 @@ library LibDiamond {
         }
     }
 
+    /**
+     * @notice Reverts if `_contract` address doesn't have any code
+     * @param _contract Contract address to check for empty code
+     * @param _errorMessage Error message
+     */
     function enforceHasContractCode(
         address _contract,
         string memory _errorMessage

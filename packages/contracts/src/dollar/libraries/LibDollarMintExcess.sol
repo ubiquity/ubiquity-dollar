@@ -10,18 +10,32 @@ import "../../dollar/interfaces/IMetaPool.sol";
 import "abdk/ABDKMathQuad.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
-/// @title An excess dollar distributor which sends dollars to treasury,
-/// lp rewards and inflation rewards
+/**
+ * @notice Library for distributing excess Dollars when `mintClaimableDollars()` is called
+ * @notice Excess Dollars are distributed this way:
+ * - 50% goes to the treasury address
+ * - 10% goes for burning Dollar-Governance LP tokens in a DEX pool
+ * - 40% goes to the Staking contract
+ */
 library LibDollarMintExcess {
     using SafeERC20 for IERC20Ubiquity;
     using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
+    /// @notice Min amount of Dollars to distribute
     uint256 private constant _minAmountToDistribute = 100 ether;
+
+    /// @notice DEX router address
     IUniswapV2Router01 private constant _router =
         IUniswapV2Router01(0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F); // SushiV2Router02
 
+    /**
+     * @notice Distributes excess Dollars:
+     * - 50% goes to the treasury address
+     * - 10% goes for burning Dollar-Governance LP tokens in a DEX pool
+     * - 40% goes to the Staking contract
+     */
     function distributeDollars() internal {
         //the excess dollars which were sent to this contract by the coupon manager
         AppStorage storage store = LibAppStorage.appStorage();
@@ -50,7 +64,11 @@ library LibDollarMintExcess {
         }
     }
 
-    // swap half amount to Governance Token
+    /**
+     * @notice Swaps Dollars for Governance tokens in a DEX
+     * @param amountIn Amount of Dollars to swap
+     * @return Amount of Governance tokens returned
+     */
     function _swapDollarsForGovernance(
         bytes16 amountIn
     ) internal returns (uint256) {
@@ -69,7 +87,11 @@ library LibDollarMintExcess {
         return amounts[1];
     }
 
-    // buy-back and burn Governance Token
+    /**
+     * @notice Swaps half of `amount` Dollars for Governance tokens and adds
+     * them as a liquidity to a DEX pool burning the result LP tokens
+     * @param amount Amount of Dollars
+     */
     function _governanceBuyBackLPAndBurn(uint256 amount) internal {
         bytes16 amountDollars = (amount.fromUInt()).div(uint256(2).fromUInt());
 
@@ -102,10 +124,13 @@ library LibDollarMintExcess {
         );
     }
 
-    // @dev convert to curve LP
-    // @param amount to convert to curve LP by swapping to 3CRV
-    //        and deposit the 3CRV as liquidity to get UbiquityDollar-3CRV LP tokens
-    //        the LP token are sent to the staking contract
+    /**
+     * @notice Swaps `amount` Dollars for 3CRV LP tokens in the MetaPool, adds
+     * 3CRV LP tokens to the MetaPool and transfers the result Dollar-3CRV LP tokens
+     * to the Staking contract
+     * @param amount Dollars amount
+     * @return Amount of Dollar-3CRV LP tokens minted
+     */
     function _convertToCurveLPAndTransfer(
         uint256 amount
     ) internal returns (uint256) {

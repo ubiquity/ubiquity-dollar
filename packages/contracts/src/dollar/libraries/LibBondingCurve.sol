@@ -10,18 +10,30 @@ import "../interfaces/IERC1155Ubiquity.sol";
 import "./Constants.sol";
 import "abdk/ABDKMathQuad.sol";
 
+/**
+ * @notice Bonding curve library based on Bancor formula
+ * @notice Inspired from Bancor protocol https://github.com/bancorprotocol/contracts
+ * @notice Used on UbiquiStick NFT minting
+ */
 library LibBondingCurve {
     using SafeERC20 for IERC20;
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
+    /// @notice Storage slot used to store data for this library
     bytes32 constant BONDING_CONTROL_STORAGE_SLOT =
         bytes32(uint256(keccak256("ubiquity.contracts.bonding.storage")) - 1);
 
+    /// @notice Emitted when collateral is deposited
     event Deposit(address indexed user, uint256 amount);
+
+    /// @notice Emitted when collateral is withdrawn
     event Withdraw(uint256 amount);
+
+    /// @notice Emitted when parameters are updated
     event ParamsSet(uint32 connectorWeight, uint256 baseY);
 
+    /// @notice Struct used as a storage for the current library
     struct BondingCurveData {
         uint32 connectorWeight;
         uint256 baseY;
@@ -30,6 +42,10 @@ library LibBondingCurve {
         mapping(address => uint256) share;
     }
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return l Struct used as a storage
+     */
     function bondingCurveStorage()
         internal
         pure
@@ -41,6 +57,11 @@ library LibBondingCurve {
         }
     }
 
+    /**
+     * @notice Sets bonding curve params
+     * @param _connectorWeight Connector weight
+     * @param _baseY Base Y
+     */
     function setParams(uint32 _connectorWeight, uint256 _baseY) internal {
         require(
             _connectorWeight > 0 && _connectorWeight <= 1000000,
@@ -53,18 +74,35 @@ library LibBondingCurve {
         emit ParamsSet(_connectorWeight, _baseY);
     }
 
+    /**
+     * @notice Returns `connectorWeight` value
+     * @return Connector weight value
+     */
     function connectorWeight() internal view returns (uint32) {
         return bondingCurveStorage().connectorWeight;
     }
 
+    /**
+     * @notice Returns `baseY` value
+     * @return Base Y value
+     */
     function baseY() internal view returns (uint256) {
         return bondingCurveStorage().baseY;
     }
 
+    /**
+     * @notice Returns total balance of deposited collateral
+     * @return Amount of deposited collateral
+     */
     function poolBalance() internal view returns (uint256) {
         return bondingCurveStorage().poolBalance;
     }
 
+    /**
+     * @notice Deposits collateral tokens in exchange for UbiquiStick NFT
+     * @param _collateralDeposited Amount of collateral
+     * @param _recipient Address to receive the NFT
+     */
     function deposit(
         uint256 _collateralDeposited,
         address _recipient
@@ -106,11 +144,21 @@ library LibBondingCurve {
         emit Deposit(_recipient, _collateralDeposited);
     }
 
+    /**
+     * @notice Returns number of NFTs a `_recipient` holds
+     * @param _recipient User address
+     * @return Amount of NFTs for `_recipient`
+     */
     function getShare(address _recipient) internal view returns (uint256) {
         BondingCurveData storage ss = bondingCurveStorage();
         return ss.share[_recipient];
     }
 
+    /**
+     * @notice Converts `x` to `bytes`
+     * @param x Value to convert to `bytes`
+     * @return b `x` value converted to `bytes`
+     */
     function toBytes(uint256 x) internal pure returns (bytes memory b) {
         b = new bytes(32);
         assembly {
@@ -118,6 +166,10 @@ library LibBondingCurve {
         }
     }
 
+    /**
+     * @notice Withdraws collateral tokens to treasury
+     * @param _amount Amount of collateral tokens to withdraw
+     */
     function withdraw(uint256 _amount) internal {
         BondingCurveData storage ss = bondingCurveStorage();
         require(_amount <= ss.poolBalance, "invalid amount");
@@ -135,17 +187,16 @@ library LibBondingCurve {
     }
 
     /**
-     * @dev Given a token supply, reserve balance, weight and a deposit amount (in the reserve token),
+     * @notice Given a token supply, reserve balance, weight and a deposit amount (in the reserve token),
      * calculates the target amount for a given conversion (in the main token)
      *
-     * @dev _supply * ((1 + _tokensDeposited / _connectorBalance) ^ (_connectorWeight / 1000000) - 1)
+     * @notice `_supply * ((1 + _tokensDeposited / _connectorBalance) ^ (_connectorWeight / 1000000) - 1)`
      *
-     * @param _tokensDeposited   amount of collateral tokens to deposit
-     * @param _connectorWeight   connector weight, represented in ppm, 1 - 1,000,000
-     * @param _supply          current Token supply
-     * @param _connectorBalance   total connector balance
-     *
-     * @return amount of Tokens minted
+     * @param _tokensDeposited Amount of collateral tokens to deposit
+     * @param _connectorWeight Connector weight, represented in ppm, 1 - 1,000,000
+     * @param _supply Current token supply
+     * @param _connectorBalance Total connector balance
+     * @return Amount of tokens minted
      */
     function purchaseTargetAmount(
         uint256 _tokensDeposited,
@@ -185,17 +236,16 @@ library LibBondingCurve {
     }
 
     /**
-     * @notice Given a deposit (in the collateral token) Token supply of 0, calculates the return
+     * @notice Given a deposit (in the collateral token) token supply of 0, calculates the return
      * for a given conversion (in the token)
      *
-     * @dev _supply * ((1 + _tokensDeposited / _connectorBalance) ^ (_connectorWeight / 1000000) - 1)
+     * @notice `_supply * ((1 + _tokensDeposited / _connectorBalance) ^ (_connectorWeight / 1000000) - 1)`
      *
-     * @param _tokensDeposited      amount of collateral tokens to deposit
-     * @param _connectorWeight      connector weight, represented in ppm, 1 - 1,000,000
-     * @param _baseX                constant x
-     * @param _baseY                expected price
-     *
-     * @return amount of Tokens minted
+     * @param _tokensDeposited Amount of collateral tokens to deposit
+     * @param _connectorWeight Connector weight, represented in ppm, 1 - 1,000,000
+     * @param _baseX Constant x
+     * @param _baseY Expected price
+     * @return Amount of tokens minted
      */
     function purchaseTargetAmountFromZero(
         uint256 _tokensDeposited,
@@ -222,6 +272,11 @@ library LibBondingCurve {
         return result.toUInt();
     }
 
+    /**
+     * @notice Converts `x` to `bytes16`
+     * @param x Value to convert to `bytes16`
+     * @return b `x` value converted to `bytes16`
+     */
     function uintToBytes16(uint256 x) internal pure returns (bytes16 b) {
         require(
             x <= 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF,

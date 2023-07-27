@@ -1,11 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-/**
- * @title Ubiquity.
- * @dev Ubiquity Dollar.
- */
-
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Receiver.sol";
@@ -16,18 +11,40 @@ import "./interfaces/IStakingShare.sol";
 import "./interfaces/IStableSwap3Pool.sol";
 import {IUbiquityDollarManager} from "./interfaces/IUbiquityDollarManager.sol";
 
+/**
+ * @notice Contract for simpler staking
+ * @notice How it works:
+ * 1. User sends stablecoins (DAI / USDC / USDT / Dollar)
+ * 2. Deposited stablecoins are added to Dollar-3CRV Curve MetaPool
+ * 3. User gets Dollar-3CRV LP tokens
+ * 4. Dollar-3CRV LP tokens are transferred to the staking contract
+ * 5. User gets a staking share id
+ */
 contract DirectGovernanceFarmer is ReentrancyGuard {
     using SafeERC20 for IERC20;
 
+    /// @notice USDT address
     address public immutable token2; //USDT decimal 6
+
+    /// @notice USDC address
     address public immutable token1; //USDC decimal 6
+
+    /// @notice DAI address
     address public immutable token0; //DAI
+
+    /// @notice Dollar-3CRV Curve MetaPool address
     address public immutable ubiquity3PoolLP;
+
+    /// @notice Dollar address
     address public immutable ubiquityDollar;
+
+    /// @notice Curve Deposit Zap address
     address public immutable depositZapUbiquityDollar;
 
+    /// @notice Dollar manager address
     IUbiquityDollarManager public immutable manager;
 
+    /// @notice Emitted when user deposits a single token
     event DepositSingle(
         address indexed sender,
         address token,
@@ -35,6 +52,8 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint256 durationWeeks,
         uint256 stakingShareId
     );
+
+    /// @notice Emitted when user deposits multiple tokens
     event DepositMulti(
         address indexed sender,
         uint256[4] amounts,
@@ -42,18 +61,27 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         uint256 stakingShareId
     );
 
+    /// @notice Emitted when user withdraws a single token
     event Withdraw(
         address indexed sender,
         uint256 stakingShareId,
         address token,
         uint256 amount
     );
+
+    /// @notice Emitted when user withdraws multiple tokens
     event WithdrawAll(
         address indexed sender,
         uint256 stakingShareId,
         uint256[4] amounts
     );
 
+    /**
+     * @notice Contract constructor
+     * @param _manager Dollar manager address
+     * @param base3Pool Curve TriPool address (DAI, USDC, USDT)
+     * @param depositZap Curve Deposit Zap address
+     */
     constructor(
         IUbiquityDollarManager _manager,
         address base3Pool,
@@ -70,8 +98,18 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         token2 = IStableSwap3Pool(base3Pool).coins(2); //USDT: 0xdAC17F958D2ee523a2206206994597C13D831ec7
     }
 
-    //TODO create updateConfig method
-    /// Needs to check that Operator is Authorized, From is Valid, ID exists
+    /**
+     * @notice Handles the receipt of a single ERC1155 token type. This function is
+     * called at the end of a `safeTransferFrom` after the balance has been updated.
+     *
+     * TODO: create updateConfig method, need to check that `operator` is authorized, `from` is Valid, `id` exists
+     *
+     * @notice To accept the transfer, this must return
+     * `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
+     * (i.e. 0xf23a6e61, or its own function selector).
+     *
+     * @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
+     */
     function onERC1155Received(
         address /* operator */,
         address /* from */,
@@ -90,13 +128,18 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     /**
-     * @dev Deposit into Ubiquity protocol
-     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingShare
-     * @notice STEP 1 : Change (DAI / USDC / USDT / Ubiquity dollar) to 3CRV at uAD3CRV MetaPool
-     * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingShare
+     * @notice Deposits a single token to staking
+     * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => Dollar-3CRV LP => Ubiquity Staking
+     * @notice How it works:
+     * 1. User sends stablecoins (DAI / USDC / USDT / Dollar)
+     * 2. Deposited stablecoins are added to Dollar-3CRV Curve MetaPool
+     * 3. User gets Dollar-3CRV LP tokens
+     * 4. Dollar-3CRV LP tokens are transferred to the staking contract
+     * 5. User gets a staking share id
      * @param token Token deposited : DAI, USDC, USDT or Ubiquity Dollar
      * @param amount Amount of tokens to deposit (For max: `uint256(-1)`)
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
+     * @return stakingShareId Staking share id
      */
     function depositSingle(
         address token,
@@ -160,12 +203,13 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     /**
-     * @dev Deposit into Ubiquity protocol
+     * @notice Deposits into Ubiquity protocol
      * @notice Stable coins (DAI / USDC / USDT / Ubiquity Dollar) => uAD3CRV-f => Ubiquity StakingShare
      * @notice STEP 1 : Change (DAI / USDC / USDT / Ubiquity dollar) to 3CRV at uAD3CRV MetaPool
      * @notice STEP 2 : uAD3CRV-f => Ubiquity StakingShare
      * @param tokenAmounts Amount of tokens to deposit (For max: `uint256(-1)`) it MUST follow this order [Ubiquity Dollar, DAI, USDC, USDT]
      * @param durationWeeks Duration in weeks tokens will be locked (1-208)
+     * @return stakingShareId Staking share id
      */
     function depositMulti(
         uint256[4] calldata tokenAmounts,
@@ -263,13 +307,13 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     /**
-     * @dev Withdraw from Ubiquity protocol
+     * @notice Withdraws from Ubiquity protocol
      * @notice Ubiquity StakingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @notice STEP 1 : Ubiquity StakingShare  => uAD3CRV-f
      * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @param stakingShareId Staking Share Id to withdraw
+     * @return tokenAmounts Array of token amounts [Ubiquity Dollar, DAI, USDC, USDT]
      */
-
     function withdraw(
         uint256 stakingShareId
     ) external nonReentrant returns (uint256[4] memory tokenAmounts) {
@@ -332,12 +376,13 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
     }
 
     /**
-     * @dev Withdraw from Ubiquity protocol
+     * @notice Withdraws from Ubiquity protocol
      * @notice Ubiquity StakingShare => uAD3CRV-f  => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @notice STEP 1 : Ubiquity StakingShare  => uAD3CRV-f
      * @notice STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
      * @param stakingShareId Staking Share Id to withdraw
      * @param token Token to withdraw to : DAI, USDC, USDT, 3CRV or Ubiquity Dollar
+     * @return tokenAmount Amount of token withdrawn
      */
     function withdraw(
         uint256 stakingShareId,
@@ -413,6 +458,12 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         emit Withdraw(msg.sender, stakingShareId, token, tokenAmount);
     }
 
+    /**
+     * @notice Checks whether `id` exists in `idList[]`
+     * @param idList Array to search in
+     * @param id Value to search in `idList`
+     * @return Whether `id` exists in `idList[]`
+     */
     function isIdIncluded(
         uint256[] memory idList,
         uint256 id
@@ -425,6 +476,11 @@ contract DirectGovernanceFarmer is ReentrancyGuard {
         return false;
     }
 
+    /**
+     * @notice Checks that `token` is one of the underlying MetaPool tokens or stablecoin from MetaPool
+     * @param token Token address to check
+     * @return Whether `token` is one of the underlying MetaPool tokens or stablecoin from MetaPool
+     */
     function isMetaPoolCoin(address token) public view returns (bool) {
         return (token == token2 ||
             token == token1 ||

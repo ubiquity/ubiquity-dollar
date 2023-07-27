@@ -2,45 +2,43 @@
 
 pragma solidity 0.8.19;
 
-/**
- * @title AccessControl interface
- */
+/// @notice Access contol interface
 interface IAccessControl {
-    /*
-     * @notice query whether role is assigned to account
-     * @param role role to query
-     * @param account account to query
-     * @return whether role is assigned to account
+    /**
+     * @notice Checks whether role is assigned to account
+     * @param role Role to check
+     * @param account Address to check
+     * @return Whether role is assigned to account
      */
     function hasRole(
         bytes32 role,
         address account
     ) external view returns (bool);
 
-    /*
-     * @notice query admin role for given role
-     * @param role role to query
-     * @return admin role
+    /**
+     * @notice Returns admin role for a given role
+     * @param role Role to query
+     * @return Admin role for a provided role
      */
     function getRoleAdmin(bytes32 role) external view returns (bytes32);
 
-    /*
-     * @notice assign role to given account
-     * @param role role to assign
-     * @param account recipient of role assignment
+    /**
+     * @notice Assigns role to a given account
+     * @param role Role to assign
+     * @param account Recipient address of role assignment
      */
     function grantRole(bytes32 role, address account) external;
 
-    /*
-     * @notice unassign role from given account
-     * @param role role to unassign
-     * @parm account
+    /**
+     * @notice Unassign role from a given account
+     * @param role Role to unassign
+     * @param account Address from which the provided role should be unassigned
      */
     function revokeRole(bytes32 role, address account) external;
 
     /**
-     * @notice relinquish role
-     * @param role role to relinquish
+     * @notice Renounce role
+     * @param role Role to renounce
      */
     function renounceRole(bytes32 role) external;
 }

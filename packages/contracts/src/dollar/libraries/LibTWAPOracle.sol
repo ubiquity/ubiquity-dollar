@@ -4,20 +4,30 @@ pragma solidity 0.8.19;
 import {IMetaPool} from "../../dollar/interfaces/IMetaPool.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 
+/**
+ * @notice Library used for Curve TWAP oracle in the Dollar MetaPool
+ */
 library LibTWAPOracle {
+    /// @notice Struct used as a storage for this library
     struct TWAPOracleStorage {
-        address pool; // stable swap metapool address : Ubiquity Dollar <=> 3 Pool
+        address pool; // curve metapool address : Ubiquity Dollar <=> 3 Pool
         // address token0; will always be address(this)
-        address token1; // curve 3pool token address
+        address token1; // curve 3pool LP token address
         uint256 price0Average;
         uint256 price1Average;
         uint256 pricesBlockTimestampLast;
         uint256[2] priceCumulativeLast;
     }
 
+    /// @notice Storage slot used to store data for this library
     bytes32 constant TWAP_ORACLE_STORAGE_POSITION =
         bytes32(uint256(keccak256("diamond.standard.twap.oracle.storage")) - 1);
 
+    /**
+     * @notice Sets Curve MetaPool to be used as a TWAP oracle
+     * @param _pool Curve MetaPool address, pool for 2 tokens [Dollar, 3CRV LP]
+     * @param _curve3CRVToken1 Curve 3Pool LP token address
+     */
     function setPool(address _pool, address _curve3CRVToken1) internal {
         require(
             IMetaPool(_pool).coins(0) ==
@@ -48,6 +58,13 @@ library LibTWAPOracle {
         ts.price1Average = 1 ether;
     }
 
+    /**
+     * @notice Updates the following state variables to the latest values from MetaPool:
+     * - Dollar / 3CRV LP quote
+     * - 3CRV LP / Dollar quote
+     * - cumulative prices
+     * - update timestamp
+     */
     function update() internal {
         TWAPOracleStorage storage ts = twapOracleStorage();
         (
@@ -84,6 +101,13 @@ library LibTWAPOracle {
         }
     }
 
+    /**
+     * @notice Returns the quote for the provided `token` address
+     * @notice If the `token` param is Dollar then returns 3CRV LP / Dollar quote
+     * @notice If the `token` param is 3CRV LP then returns Dollar / 3CRV LP quote
+     * @param token Token address
+     * @return amountOut Token price, Dollar / 3CRV LP or 3CRV LP / Dollar quote
+     */
     function consult(address token) internal view returns (uint256 amountOut) {
         TWAPOracleStorage memory ts = twapOracleStorage();
 
@@ -97,6 +121,11 @@ library LibTWAPOracle {
         }
     }
 
+    /**
+     * @notice Returns current cumulative prices from metapool with updated timestamp
+     * @return priceCumulative Current cumulative prices for pool tokens
+     * @return blockTimestamp Current update timestamp
+     */
     function currentCumulativePrices()
         internal
         view
@@ -107,6 +136,10 @@ library LibTWAPOracle {
         blockTimestamp = IMetaPool(metapool).block_timestamp_last();
     }
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return ds Struct used as a storage
+     */
     function twapOracleStorage()
         internal
         pure
@@ -118,6 +151,11 @@ library LibTWAPOracle {
         }
     }
 
+    /**
+     * @notice Returns current Dollar price
+     * @dev Returns 3CRV LP / Dollar quote, i.e. how many 3CRV LP tokens user will get for 1 Dollar
+     * @return Dollar price
+     */
     function getTwapPrice() internal view returns (uint256) {
         return
             LibTWAPOracle.consult(

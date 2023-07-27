@@ -4,9 +4,9 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "./IERC1155Ubiquity.sol";
 
-/// @title ERC1155 Ubiquity preset interface
-/// @author Ubiquity DAO
+/// @notice Interface representing a staking share in the form of ERC1155 token
 interface IStakingShare is IERC1155Ubiquity {
+    /// @notice Stake struct
     struct Stake {
         // address of the minter
         address minter;
@@ -20,5 +20,10 @@ interface IStakingShare is IERC1155Ubiquity {
         uint256 lpAmount;
     }
 
+    /**
+     * @notice Returns stake info by stake `id`
+     * @param id Stake id
+     * @return Stake info
+     */
     function getStake(uint256 id) external view returns (Stake memory);
 }

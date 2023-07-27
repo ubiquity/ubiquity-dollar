@@ -15,14 +15,27 @@ import {IMetaPool} from "../interfaces/IMetaPool.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 
+/**
+ * @notice Ubiquity pool library
+ * @notice Allows users to:
+ * - deposit collateral in exchange for Ubiquity Dollars
+ * - redeem Ubiquity Dollars in exchange for the earlier provided collateral
+ */
 library LibUbiquityPool {
     using SafeMath for uint256;
     using SafeMath for uint8;
     using SafeERC20 for IERC20;
 
+    /// @notice Storage slot used to store data for this library
     bytes32 constant UBIQUITY_POOL_STORAGE_POSITION =
-        bytes32(uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1);
+        bytes32(
+            uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1
+        );
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return uPoolStorage Struct used as a storage
+     */
     function ubiquityPoolStorage()
         internal
         pure
@@ -34,6 +47,7 @@ library LibUbiquityPool {
         }
     }
 
+    /// @notice Struct used as a storage for this library
     struct UbiquityPoolStorage {
         /* ========== STATE VARIABLES ========== */
         address[] collateralAddresses;
@@ -57,8 +71,9 @@ library LibUbiquityPool {
         uint256 dollarFloor;
     }
 
-    /// Custom Modifiers ///
+    // Custom Modifiers //
 
+    /// @notice Checks whether redeem is enabled for the `collateralAddress` token
     modifier redeemActive(address collateralAddress) {
         require(
             ubiquityPoolStorage().collateralRedeemActive[collateralAddress]
@@ -66,13 +81,20 @@ library LibUbiquityPool {
         _;
     }
 
+    /// @notice Checks whether mint is enabled for the `collateralAddress` token
     modifier mintActive(address collateralAddress) {
         require(ubiquityPoolStorage().collateralMintActive[collateralAddress]);
         _;
     }
 
-    /// User Functions ///
+    // User Functions //
 
+    /**
+     * @notice Mints 1 Ubiquity Dollar for every 1 USD of `collateralAddress` token deposited
+     * @param collateralAddress address of collateral token being deposited
+     * @param collateralAmount amount of collateral tokens being deposited
+     * @param dollarOutMin minimum amount of Ubiquity Dollars that'll be minted, used to set acceptable slippage
+     */
     function mintDollar(
         address collateralAddress,
         uint256 collateralAmount,
@@ -118,6 +140,16 @@ library LibUbiquityPool {
         ubiquityDollarToken.mint(msg.sender, dollarAmountD18);
     }
 
+    /**
+     * @notice Burns redeemable Ubiquity Dollars and sends back 1 USD of collateral token for every 1 Ubiquity Dollar burned
+     * @dev Redeem process is split in two steps:
+     * @dev 1. `redeemDollar()`
+     * @dev 2. `collectRedemption()`
+     * @dev This is done in order to prevent someone using a flash loan of a collateral token to mint, redeem, and collect in a single transaction/block
+     * @param collateralAddress address of collateral token being withdrawn
+     * @param dollarAmount amount of Ubiquity Dollars being burned
+     * @param collateralOutMin minimum amount of collateral tokens that'll be withdrawn, used to set acceptable slippage
+     */
     function redeemDollar(
         address collateralAddress,
         uint256 dollarAmount,
@@ -174,6 +206,14 @@ library LibUbiquityPool {
         ubiquityDollarToken.burnFrom(msg.sender, dollarAmount);
     }
 
+    /**
+     * @notice Used to collect collateral tokens after redeeming/burning Ubiquity Dollars
+     * @dev Redeem process is split in two steps:
+     * @dev 1. `redeemDollar()`
+     * @dev 2. `collectRedemption()`
+     * @dev This is done in order to prevent someone using a flash loan of a collateral token to mint, redeem, and collect in a single transaction/block
+     * @param collateralAddress address of the collateral token being collected
+     */
     function collectRedemption(address collateralAddress) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
@@ -212,8 +252,13 @@ library LibUbiquityPool {
         }
     }
 
-    /// ADMIN FUNCTIONS ///
+    // ADMIN FUNCTIONS //
 
+    /**
+     * @notice Admin function for whitelisting a token as collateral
+     * @param collateralAddress Address of the token being whitelisted
+     * @param collateralMetaPool 3CRV Metapool for the token being whitelisted
+     */
     function addToken(
         address collateralAddress,
         IMetaPool collateralMetaPool
@@ -236,6 +281,16 @@ library LibUbiquityPool {
         );
     }
 
+    /**
+     * @notice Returns the amount of collateral ready for collecting after redeeming
+     * @dev Redeem process is split in two steps:
+     * @dev 1. `redeemDollar()`
+     * @dev 2. `collectRedemption()`
+     * @dev This is done in order to prevent someone using a flash loan of a collateral token to mint, redeem, and collect in a single transaction/block
+     * @param account Account address for which to check the balance ready to be collected
+     * @param collateralAddress Collateral token address
+     * @return Collateral token balance ready to be collected after redeeming
+     */
     function getRedeemCollateralBalances(
         address account,
         address collateralAddress
@@ -246,38 +301,63 @@ library LibUbiquityPool {
             ];
     }
 
+    /**
+     * @notice Admin function to pause and unpause redemption for a specific collateral token
+     * @param collateralAddress Address of the token being affected
+     * @param notRedeemPaused True to turn on redemption for token, false to pause redemption of token
+     */
     function setRedeemActive(
         address collateralAddress,
-        bool redeemPaused_
+        bool notRedeemPaused
     ) internal {
         ubiquityPoolStorage().collateralRedeemActive[
             collateralAddress
-        ] = redeemPaused_;
+        ] = notRedeemPaused;
     }
 
+    /**
+     * @notice Checks whether redeem is enabled for the `collateralAddress` token
+     * @param collateralAddress Token address to check
+     * @return Whether redeem is enabled for the `collateralAddress` token
+     */
     function getRedeemActive(
         address collateralAddress
     ) internal view returns (bool) {
         return ubiquityPoolStorage().collateralRedeemActive[collateralAddress];
     }
 
+    /**
+     * @notice Checks whether mint is enabled for the `collateralAddress` token
+     * @param collateralAddress Token address to check
+     * @return Whether mint is enabled for the `collateralAddress` token
+     */
     function getMintActive(
         address collateralAddress
     ) internal view returns (bool) {
         return ubiquityPoolStorage().collateralMintActive[collateralAddress];
     }
 
+    /**
+     * @notice Admin function to pause and unpause minting for a specific collateral token
+     * @param collateralAddress Address of the token being affected
+     * @param notMintPaused True to turn on minting for token, false to pause minting for token
+     */
     function setMintActive(
         address collateralAddress,
-        bool mintPaused_
+        bool notMintPaused
     ) internal {
         ubiquityPoolStorage().collateralMintActive[
             collateralAddress
-        ] = mintPaused_;
+        ] = notMintPaused;
     }
 
-    /// CHECK FUNCTIONS ///
+    // CHECK FUNCTIONS //
 
+    /**
+     * @notice Checks whether `collateralAddress` token is approved by admin to be used as a collateral
+     * @param collateralAddress Token address
+     * @return isCollateral Whether token is approved to be used as a collateral
+     */
     function checkCollateralToken(
         address collateralAddress
     ) internal view returns (bool isCollateral) {
@@ -290,8 +370,15 @@ library LibUbiquityPool {
         }
     }
 
-    /// CALC FUNCTIONS ///
+    // CALC FUNCTIONS //
 
+    /**
+     * @notice Returns the amount of dollars to mint
+     * @param collateralAmountD18 Amount of collateral tokens
+     * @param collateralPriceCurve3Pool USD price of a single collateral token
+     * @param curve3PriceUSD USD price from the Curve Tri-Pool (DAI, USDC, USDT)
+     * @return dollarOut Amount of Ubiquity Dollars to mint
+     */
     function calcMintDollarAmount(
         uint256 collateralAmountD18,
         uint256 collateralPriceCurve3Pool,
@@ -302,6 +389,17 @@ library LibUbiquityPool {
         );
     }
 
+    /**
+     * @notice Returns the amount of collateral tokens ready for collecting
+     * @dev Redeem process is split in two steps:
+     * @dev 1. `redeemDollar()`
+     * @dev 2. `collectRedemption()`
+     * @dev This is done in order to prevent someone using a flash loan of a collateral token to mint, redeem, and collect in a single transaction/block
+     * @param dollarAmountD18 Amount of Ubiquity Dollars to redeem
+     * @param collateralPriceCurve3Pool USD price of a single collateral token
+     * @param curve3PriceUSD USD price from the Curve Tri-Pool (DAI, USDC, USDT)
+     * @return collateralOut Amount of collateral tokens ready to be collectable
+     */
     function calcRedeemCollateralAmount(
         uint256 dollarAmountD18,
         uint256 collateralPriceCurve3Pool,
@@ -313,6 +411,10 @@ library LibUbiquityPool {
         collateralOut = (dollarAmountD18.mul(10e18)).div(collateralPriceUSD);
     }
 
+    /**
+     * @notice Returns Ubiquity Dollar token USD price from Metapool (Ubiquity Dollar, Curve Tri-Pool LP)
+     * @return dollarPriceUSD USD price of Ubiquity Dollar
+     */
     function getDollarPriceUsd()
         internal
         view
@@ -321,6 +423,11 @@ library LibUbiquityPool {
         dollarPriceUSD = LibTWAPOracle.getTwapPrice();
     }
 
+    /**
+     * @notice Returns the latest price of the `collateralAddress` token from Curve Metapool
+     * @param collateralAddress Collateral token address
+     * @return collateralPriceCurve3Pool Collateral token price from Curve Metapool
+     */
     function getCollateralPriceCurve3Pool(
         address collateralAddress
     ) internal view returns (uint256 collateralPriceCurve3Pool) {
@@ -331,6 +438,10 @@ library LibUbiquityPool {
             .get_price_cumulative_last()[0];
     }
 
+    /**
+     * @notice Returns USD price from Tri-Pool (DAI, USDC, USDT)
+     * @return curve3PriceUSD USD price
+     */
     function getCurve3PriceUSD()
         internal
         view

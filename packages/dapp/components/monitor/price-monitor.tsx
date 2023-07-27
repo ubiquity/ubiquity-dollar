@@ -35,7 +35,7 @@ const fetchPrices = async (
   ]);
 
   const metaPoolGet = async (i1: BigNumber, i2: BigNumber): Promise<BigNumber> => {
-    return await metaPool["get_dy_underlying(int128,int128,uint256)"](i1, i2, ethers.utils.parseEther("1"));
+    return await metaPool.get_dy_underlying(i1, i2, ethers.utils.parseEther("1"));
   };
 
   const [daiUsdt, uadUsdc, uadDai, uadUsdt, uadCrv, crvUad] = await Promise.all([
