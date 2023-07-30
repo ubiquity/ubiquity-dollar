@@ -67,7 +67,7 @@ export async function fetchData() {
 
         console.log((await CreditNFTManager.connect(signer).getCreditNFTReturnedForDollars(signer.getAddress())).toBigInt(), "Credit NFT Returned Dollars");
 
-        // Call CreditNFT ManagerFacet
+        // Call CreditNft ManagerFacet
         console.log("Anvil Block Number", block);
         console.log("Connected to Chain ID", LOCAL_CHAIN);
 

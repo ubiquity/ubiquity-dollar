@@ -22,12 +22,12 @@ string private _symbol;
 ```
 
 
-### accessCtrl
+### accessControl
 Access control interface
 
 
 ```solidity
-IAccessControl public accessCtrl;
+IAccessControl public accessControl;
 ```
 
 

@@ -44,7 +44,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @notice Modifier checks that the method is called by a user with the "CreditNft manager" role
     modifier onlyCreditNftManager() {
         require(
-            accessCtrl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a CreditNft manager"
         );
         _;

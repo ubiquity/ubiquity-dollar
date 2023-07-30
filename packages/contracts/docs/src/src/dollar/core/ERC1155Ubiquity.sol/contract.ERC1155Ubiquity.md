@@ -13,12 +13,12 @@ ERC1155 with:
 
 
 ## State Variables
-### accessCtrl
+### accessControl
 Access control interface
 
 
 ```solidity
-IAccessControl public accessCtrl;
+IAccessControl public accessControl;
 ```
 
 

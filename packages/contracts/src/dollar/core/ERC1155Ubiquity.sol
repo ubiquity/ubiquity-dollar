@@ -20,7 +20,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
 
     /// @notice Access control interface
-    IAccessControl public accessCtrl;
+    IAccessControl public accessControl;
 
     /// @notice Mapping from account to array of token ids held by the account
     mapping(address => uint256[]) public holderBalances;
@@ -33,7 +33,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyMinter() virtual {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
             "ERC1155Ubiquity: not minter"
         );
         _;
@@ -42,7 +42,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyBurner() virtual {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
             "ERC1155Ubiquity: not burner"
         );
         _;
@@ -51,7 +51,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() virtual {
         require(
-            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "ERC1155Ubiquity: not pauser"
         );
         _;
@@ -60,7 +60,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Admin" role
     modifier onlyAdmin() {
         require(
-            accessCtrl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "ERC20Ubiquity: not admin"
         );
         _;
@@ -72,7 +72,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
      * @param uri Base URI
      */
     constructor(address _manager, string memory uri) ERC1155(uri) {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
     /**
@@ -80,7 +80,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
      * @return Access control address
      */
     function getManager() external view returns (address) {
-        return address(accessCtrl);
+        return address(accessControl);
     }
 
     /**
@@ -88,7 +88,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
      * @param _manager New access control address
      */
     function setManager(address _manager) external onlyAdmin {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
     /**

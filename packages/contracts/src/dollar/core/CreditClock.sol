@@ -13,7 +13,7 @@ contract CreditClock {
     using ABDKMathQuad for bytes16;
 
     /// @notice Access control contract
-    IAccessControl public accessCtrl;
+    IAccessControl public accessControl;
 
     /// @notice ABDKMathQuad with value of 1.
     bytes16 private immutable one = uint256(1).fromUInt();
@@ -37,7 +37,7 @@ contract CreditClock {
     /// @notice Modifier checks that the method is called by a user with the "Incentive manager" role
     modifier onlyAdmin() {
         require(
-            accessCtrl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditClock: not admin"
         );
         _;
@@ -54,7 +54,7 @@ contract CreditClock {
         bytes16 _rateStartValue,
         bytes16 _ratePerBlock
     ) {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
         rateStartBlock = block.number;
         rateStartValue = _rateStartValue;
         ratePerBlock = _ratePerBlock;
@@ -67,7 +67,7 @@ contract CreditClock {
      * @param _manager New manager address
      */
     function setManager(address _manager) external onlyAdmin {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
     /**
@@ -75,7 +75,7 @@ contract CreditClock {
      * @return Manager address
      */
     function getManager() external view returns (address) {
-        return address(accessCtrl);
+        return address(accessControl);
     }
 
     /**

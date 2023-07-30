@@ -38,7 +38,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Dollar minter" role
     modifier onlyDollarMinter() {
         require(
-            accessCtrl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, msg.sender),
             "Dollar token: not minter"
         );
         _;
@@ -47,7 +47,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Dollar burner" role
     modifier onlyDollarBurner() {
         require(
-            accessCtrl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, msg.sender),
             "Dollar token: not burner"
         );
         _;
@@ -65,7 +65,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
      */
     function setIncentiveContract(address account, address incentive) external {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
             "Dollar: must have admin role"
         );
 

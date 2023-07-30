@@ -25,7 +25,7 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyGovernanceMinter() {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
             "Governance token: not minter"
         );
         _;
@@ -34,7 +34,7 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyGovernanceBurner() {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
             "Governance token: not burner"
         );
         _;

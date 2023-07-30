@@ -26,7 +26,7 @@ library LibCreditNftRedemptionCalculator {
         require(
             cNFT.getTotalOutstandingDebt() <
                 IERC20(store.dollarTokenAddress).totalSupply(),
-            "CreditNFT to Dollar: DEBT_TOO_HIGH"
+            "CreditNft to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
         bytes16 totalDebt = cNFT.getTotalOutstandingDebt().fromUInt();

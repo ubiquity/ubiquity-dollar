@@ -24,7 +24,7 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
             totalSupply + 1
         );
 
-        vm.expectRevert("CreditNFT to Dollar: DEBT_TOO_HIGH");
+        vm.expectRevert("CreditNft to Dollar: DEBT_TOO_HIGH");
         ICreditNFTRedCalcFacet.getCreditNftAmount(0);
     }
 

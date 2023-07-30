@@ -5,12 +5,12 @@ CreditClock contract
 
 
 ## State Variables
-### accessCtrl
+### accessControl
 Access control contract
 
 
 ```solidity
-IAccessControl public accessCtrl;
+IAccessControl public accessControl;
 ```
 
 
