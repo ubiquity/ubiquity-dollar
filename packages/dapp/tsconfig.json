@@ -26,6 +26,6 @@
       "@/types/contracts": ["types/contracts"]
     }
   },
-  "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", "components/ubiquity-pool/cow-zap.tsx"],
   "exclude": ["node_modules"]
 }

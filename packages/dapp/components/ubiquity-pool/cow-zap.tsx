@@ -29,7 +29,7 @@ const VAULT_RELAYER = new ethers.Contract("0xC92E8bdf79f0507f65a392b0ab4667716BF
 
 const chainId = await signer?.getChainId();
 
-async function cowZap(sellToken, sellAmount, minterAddress) {
+async function cowZap(sellToken: string, sellAmount: number, minterAddress: string) {
   const Token = new ethers.Contract(
     sellToken,
     [
@@ -56,6 +56,22 @@ async function cowZap(sellToken, sellAmount, minterAddress) {
     signer
   );
 
+  const permit = {
+    owner: walletAddress,
+    spender: VAULT_RELAYER.address,
+    value: orderConfig.sellAmount,
+    nonce: await Token.nonces(walletAddress),
+    deadline: ethers.constants.MaxUint256,
+  };
+
+  const permitParams = [permit.owner, permit.spender, permit.value, permit.deadline, permitSignature.v, permitSignature.r, permitSignature.s];
+
+  const permitHook = {
+    target: Token.address,
+    callData: Token.interface.encodeFunctionData("permit", permitParams),
+    gasLimit: `${await Token.estimateGas.permit(...permitParams)}`,
+  };
+
   const orderConfig = {
     sellToken: Token.address,
     buyToken: LUSD.address,
@@ -75,16 +91,8 @@ async function cowZap(sellToken, sellAmount, minterAddress) {
     }),
   };
 
-  const permit = {
-    owner: walletAddress,
-    spender: VAULT_RELAYER.address,
-    value: orderConfig.sellAmount,
-    nonce: await Token.nonces(walletAddress),
-    deadline: ethers.constants.MaxUint256,
-  };
-
   const permitSignature = ethers.utils.splitSignature(
-    await signer?._signTypedData(
+    await signer!._signTypedData(
       {
         name: await Token.name(),
         version: await Token.version(),
@@ -103,13 +111,6 @@ async function cowZap(sellToken, sellAmount, minterAddress) {
       permit
     )
   );
-
-  const permitParams = [permit.owner, permit.spender, permit.value, permit.deadline, permitSignature.v, permitSignature.r, permitSignature.s];
-  const permitHook = {
-    target: Token.address,
-    callData: Token.interface.encodeFunctionData("permit", permitParams),
-    gasLimit: `${await Token.estimateGas.permit(...permitParams)}`,
-  };
 
   orderConfig.receiver = await MINTER.getAccountAddress(walletAddress);
   const bridgeHook = {

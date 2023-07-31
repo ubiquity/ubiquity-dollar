@@ -33,7 +33,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     StakingShare stakingShare;
     BondingShare stakingShareV1;
 
-    function setUp() public override {
+    function setUp() public virtual override {
         super.setUp();
         crvToken = new MockERC20("3 CRV", "3CRV", 18);
         curve3CrvToken = address(crvToken);
