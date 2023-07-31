@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import {Minter, MintAccount} from "../../src/dollar/cow-minter/Minter.sol";
 import {UbiquityPoolFacetTest} from "../diamond/facets/UbiquityPoolFacet.t.sol";
 import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
+import "forge-std/console.sol";
 
 contract MinterTest is UbiquityPoolFacetTest {
     Minter public minter;
@@ -35,7 +36,7 @@ contract MinterTest is UbiquityPoolFacetTest {
         assembly {
             codeSize_ := extcodesize(mintAccount_)
         }
-        assertGt(codeSize, 0);
+        assertGt(codeSize_, 0);
     }
 
     function test_MintFunction() public {
@@ -45,6 +46,7 @@ contract MinterTest is UbiquityPoolFacetTest {
         collateral.transfer(address(mintAccount), 5 ether);
         minter.mintAll(secondAccount, address(collateral), 0);
         minter.withdrawAll(secondAccount, address(IDollar));
-        assertGt(IDollar.balanceOf(secondAccount), preBal);
+        uint256 postBal = IDollar.balanceOf(secondAccount);
+        assertGt(postBal, preBal);
     }
 }

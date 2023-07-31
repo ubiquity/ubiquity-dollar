@@ -209,7 +209,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
         vm.expectRevert("Slippage limit reached");
         IUbiquityPoolFacet.mintDollar(
-            fourthAccount,
             address(collateral),
             10 ether,
             10000 ether
@@ -229,12 +228,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
         uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
-        IUbiquityPoolFacet.mintDollar(
-            fourthAccount,
-            address(collateral),
-            1 ether,
-            0 ether
-        );
+        IUbiquityPoolFacet.mintDollar(address(collateral), 1 ether, 0 ether);
         assertGt(IDollar.balanceOf(fourthAccount), balanceBefore);
         vm.stopPrank();
     }
@@ -251,12 +245,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
         uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
-        IUbiquityPoolFacet.mintDollar(
-            fourthAccount,
-            address(collateral),
-            1 ether,
-            0 ether
-        );
+        IUbiquityPoolFacet.mintDollar(address(collateral), 1 ether, 0 ether);
         assertGt(IDollar.balanceOf(fourthAccount), balanceBefore);
         vm.stopPrank();
 
@@ -281,12 +270,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.startPrank(fourthAccount);
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
-        IUbiquityPoolFacet.mintDollar(
-            fourthAccount,
-            address(collateral),
-            10 ether,
-            0 ether
-        );
+        IUbiquityPoolFacet.mintDollar(address(collateral), 10 ether, 0 ether);
         uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
         vm.stopPrank();
         MockMetaPool mock = MockMetaPool(IManager.stableSwapMetaPoolAddress());
@@ -325,12 +309,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.startPrank(fourthAccount);
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
-        IUbiquityPoolFacet.mintDollar(
-            fourthAccount,
-            address(collateral),
-            10 ether,
-            0 ether
-        );
+        IUbiquityPoolFacet.mintDollar(address(collateral), 10 ether, 0 ether);
         uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
         uint256 balanceCollateralBefore = collateral.balanceOf(fourthAccount);
         vm.stopPrank();

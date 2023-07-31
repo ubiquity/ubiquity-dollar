@@ -5,7 +5,6 @@ import {IMetaPool} from "./IMetaPool.sol";
 
 interface IUbiquityPool {
     function mintDollar(
-        address user,
         address collateralAddress,
         uint256 collateralAmount,
         uint256 dollarOutMin

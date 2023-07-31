@@ -105,12 +105,7 @@ contract MintAccount {
         uint256 amountOutMin
     ) external {
         IERC20(token).approve(ubiquityPool, amountIn);
-        IUbiquityPool(ubiquityPool).mintDollar(
-            user,
-            token,
-            amountIn,
-            amountOutMin
-        );
+        IUbiquityPool(ubiquityPool).mintDollar(token, amountIn, amountOutMin);
     }
 
     function withdraw(address token, uint256 amount) external returns (bool) {
