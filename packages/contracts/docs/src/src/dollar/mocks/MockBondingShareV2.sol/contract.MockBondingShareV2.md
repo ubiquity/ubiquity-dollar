@@ -1,5 +1,5 @@
 # MockBondingShareV2
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ccc689b8b816039996240d21714a491a27963d57/packages/contracts/src/dollar/mocks/MockBondingShareV2.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/fc55925e18af3f4cb5171ecd66ba4c48dc994260/src/dollar/mocks/MockBondingShareV2.sol)
 
 **Inherits:**
 ERC1155, ERC1155Burnable, ERC1155Pausable
