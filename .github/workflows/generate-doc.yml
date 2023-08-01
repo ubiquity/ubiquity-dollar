@@ -1,6 +1,7 @@
 name: Auto Generate Doc
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - development
@@ -21,9 +22,6 @@ jobs:
         with:
           node-version: "18.14.1"
 
-      - name: Install dependencies
-        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
-
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
@@ -31,9 +29,6 @@ jobs:
 
       - name: Yarn Install
         run: yarn install --mode=skip-build && yarn allow-scripts
-        
-      - name: Setup Forge
-        run: yarn workspace @ubiquity/contracts forge:install
 
       - name: Generate Docs
         run: yarn workspace @ubiquity/contracts docs
