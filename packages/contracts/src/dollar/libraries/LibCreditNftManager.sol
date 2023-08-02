@@ -34,25 +34,25 @@ library LibCreditNftManager {
         );
 
     /// @notice Emitted when Credit NFT to Governance conversion rate was updated
-    event ExpiredCreditNFTConversionRateChanged(
+    event ExpiredCreditNftConversionRateChanged(
         uint256 newRate,
         uint256 previousRate
     );
 
     /// @notice Emitted when Credit NFT block expiration length was updated
-    event CreditNFTLengthChanged(
-        uint256 newCreditNFTLengthBlocks,
-        uint256 previousCreditNFTLengthBlocks
+    event CreditNftLengthChanged(
+        uint256 newCreditNftLengthBlocks,
+        uint256 previousCreditNftLengthBlocks
     );
 
     /// @notice Struct used as a storage for the current library
-    struct CreditNFTMgrData {
+    struct CreditNftMgrData {
         //the amount of dollars we minted this cycle, so we can calculate delta.
         // should be reset to 0 when cycle ends
         uint256 dollarsMintedThisCycle;
         uint256 blockHeightDebt;
-        uint256 creditNFTLengthBlocks;
-        uint256 expiredCreditNFTConversionRate;
+        uint256 creditNftLengthBlocks;
+        uint256 expiredCreditNftConversionRate;
         bool debtCycle;
     }
 
@@ -60,10 +60,10 @@ library LibCreditNftManager {
      * @notice Returns struct used as a storage for this library
      * @return l Struct used as a storage
      */
-    function creditNFTStorage()
+    function creditNftStorage()
         internal
         pure
-        returns (CreditNFTMgrData storage l)
+        returns (CreditNftMgrData storage l)
     {
         bytes32 slot = CREDIT_NFT_MANAGER_STORAGE_SLOT;
         assembly {
@@ -75,8 +75,8 @@ library LibCreditNftManager {
      * @notice Returns Credit NFT to Governance conversion rate
      * @return Conversion rate
      */
-    function expiredCreditNFTConversionRate() internal view returns (uint256) {
-        return creditNFTStorage().expiredCreditNFTConversionRate;
+    function expiredCreditNftConversionRate() internal view returns (uint256) {
+        return creditNftStorage().expiredCreditNftConversionRate;
     }
 
     /**
@@ -85,25 +85,25 @@ library LibCreditNftManager {
      * Governance tokens using `rate` conversion rate
      * @param rate Credit NFT to Governance tokens conversion rate
      */
-    function setExpiredCreditNFTConversionRate(uint256 rate) internal {
-        emit ExpiredCreditNFTConversionRateChanged(
+    function setExpiredCreditNftConversionRate(uint256 rate) internal {
+        emit ExpiredCreditNftConversionRateChanged(
             rate,
-            creditNFTStorage().expiredCreditNFTConversionRate
+            creditNftStorage().expiredCreditNftConversionRate
         );
-        creditNFTStorage().expiredCreditNFTConversionRate = rate;
+        creditNftStorage().expiredCreditNftConversionRate = rate;
     }
 
     /**
      * @notice Sets Credit NFT block lifespan
-     * @param _creditNFTLengthBlocks The number of blocks during which Credit NFTs can be
+     * @param _creditNftLengthBlocks The number of blocks during which Credit NFTs can be
      * redeemed for Dollars
      */
-    function setCreditNFTLength(uint256 _creditNFTLengthBlocks) internal {
-        emit CreditNFTLengthChanged(
-            _creditNFTLengthBlocks,
-            creditNFTStorage().creditNFTLengthBlocks
+    function setCreditNftLength(uint256 _creditNftLengthBlocks) internal {
+        emit CreditNftLengthChanged(
+            _creditNftLengthBlocks,
+            creditNftStorage().creditNftLengthBlocks
         );
-        creditNFTStorage().creditNFTLengthBlocks = _creditNFTLengthBlocks;
+        creditNftStorage().creditNftLengthBlocks = _creditNftLengthBlocks;
     }
 
     /**
@@ -111,8 +111,8 @@ library LibCreditNftManager {
      * @return Number of blocks during which Credit NFTs can be
      * redeemed for Dollars
      */
-    function creditNFTLengthBlocks() internal view returns (uint256) {
-        return creditNFTStorage().creditNFTLengthBlocks;
+    function creditNftLengthBlocks() internal view returns (uint256) {
+        return creditNftStorage().creditNftLengthBlocks;
     }
 
     /**
@@ -135,7 +135,7 @@ library LibCreditNftManager {
             LibAppStorage.appStorage().creditNftAddress
         );
         creditNft.updateTotalDebt();
-        CreditNFTMgrData storage cs = creditNFTStorage();
+        CreditNftMgrData storage cs = creditNftStorage();
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
         if (!cs.debtCycle) {
@@ -144,8 +144,8 @@ library LibCreditNftManager {
             cs.dollarsMintedThisCycle = 0;
         }
 
-        uint256 creditNFTToMint = LibCreditNftRedemptionCalculator
-            .getCreditNFTAmount(amount);
+        uint256 creditNftToMint = LibCreditNftRedemptionCalculator
+            .getCreditNftAmount(amount);
 
         // we burn user's dollars.
         IERC20Ubiquity(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(
@@ -153,8 +153,8 @@ library LibCreditNftManager {
             amount
         );
 
-        uint256 expiryBlockNumber = block.number + (cs.creditNFTLengthBlocks);
-        creditNft.mintCreditNft(msg.sender, creditNFTToMint, expiryBlockNumber);
+        uint256 expiryBlockNumber = block.number + (cs.creditNftLengthBlocks);
+        creditNft.mintCreditNft(msg.sender, creditNftToMint, expiryBlockNumber);
 
         //give the caller the block number of the minted nft
         return expiryBlockNumber;
@@ -178,8 +178,8 @@ library LibCreditNftManager {
 
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
-        if (!creditNFTStorage().debtCycle) {
-            CreditNFTMgrData storage cs = creditNFTStorage();
+        if (!creditNftStorage().debtCycle) {
+            CreditNftMgrData storage cs = creditNftStorage();
             cs.debtCycle = true;
             cs.blockHeightDebt = block.number;
             cs.dollarsMintedThisCycle = 0;
@@ -187,7 +187,7 @@ library LibCreditNftManager {
 
         uint256 creditToMint = LibCreditRedemptionCalculator.getCreditAmount(
             amount,
-            creditNFTStorage().blockHeightDebt
+            creditNftStorage().blockHeightDebt
         );
 
         // we burn user's dollars.
@@ -207,10 +207,10 @@ library LibCreditNftManager {
      * @param amount Amount of Dollars to burn
      * @return Amount of Credit NFTs to be minted
      */
-    function getCreditNFTReturnedForDollars(
+    function getCreditNftReturnedForDollars(
         uint256 amount
     ) internal view returns (uint256) {
-        return LibCreditNftRedemptionCalculator.getCreditNFTAmount(amount);
+        return LibCreditNftRedemptionCalculator.getCreditNftAmount(amount);
     }
 
     /**
@@ -224,7 +224,7 @@ library LibCreditNftManager {
         return
             LibCreditRedemptionCalculator.getCreditAmount(
                 amount,
-                creditNFTStorage().blockHeightDebt
+                creditNftStorage().blockHeightDebt
             );
     }
 
@@ -261,12 +261,12 @@ library LibCreditNftManager {
     }
 
     /**
-     * @notice Burns expired Credit NFTs for Governance tokens at `expiredCreditNFTConversionRate` rate
+     * @notice Burns expired Credit NFTs for Governance tokens at `expiredCreditNftConversionRate` rate
      * @param id Credit NFT timestamp
      * @param amount Amount of Credit NFTs to burn
      * @return governanceAmount Amount of Governance tokens minted to Credit NFT holder
      */
-    function burnExpiredCreditNFTForGovernance(
+    function burnExpiredCreditNftForGovernance(
         uint256 id,
         uint256 amount
     ) public returns (uint256 governanceAmount) {
@@ -289,7 +289,7 @@ library LibCreditNftManager {
         );
         governanceAmount =
             amount /
-            creditNFTStorage().expiredCreditNFTConversionRate;
+            creditNftStorage().expiredCreditNftConversionRate;
         governanceToken.mint(msg.sender, governanceAmount);
     }
 
@@ -300,7 +300,7 @@ library LibCreditNftManager {
      * @param amount Amount of Credit NFTs to burn
      * @return Credit tokens balance of `msg.sender`
      */
-    function burnCreditNFTForCredit(
+    function burnCreditNftForCredit(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
@@ -337,8 +337,8 @@ library LibCreditNftManager {
     ) public returns (uint256) {
         uint256 twapPrice = LibTWAPOracle.getTwapPrice();
         require(twapPrice > 1 ether, "Price must be above 1");
-        if (creditNFTStorage().debtCycle) {
-            creditNFTStorage().debtCycle = false;
+        if (creditNftStorage().debtCycle) {
+            creditNftStorage().debtCycle = false;
         }
         UbiquityCreditToken creditToken = UbiquityCreditToken(
             LibAppStorage.appStorage().creditTokenAddress
@@ -373,7 +373,7 @@ library LibCreditNftManager {
      * @param amount Amount of Credit NFTs to burn
      * @return Amount of unredeemed Credit NFTs
      */
-    function redeemCreditNFT(
+    function redeemCreditNft(
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
@@ -383,8 +383,8 @@ library LibCreditNftManager {
             twapPrice > 1 ether,
             "Price must be above 1 to redeem Credit NFT"
         );
-        if (creditNFTStorage().debtCycle) {
-            creditNFTStorage().debtCycle = false;
+        if (creditNftStorage().debtCycle) {
+            creditNftStorage().debtCycle = false;
         }
         AppStorage storage store = LibAppStorage.appStorage();
         CreditNft creditNft = CreditNft(store.creditNftAddress);
@@ -406,24 +406,24 @@ library LibCreditNftManager {
             creditToken.totalSupply() <= dollar.balanceOf(address(this)),
             "There aren't enough Dollar to redeem currently"
         );
-        uint256 maxRedeemableCreditNFT = dollar.balanceOf(address(this)) -
+        uint256 maxRedeemableCreditNft = dollar.balanceOf(address(this)) -
             creditToken.totalSupply();
-        uint256 creditNFTToRedeem = amount;
+        uint256 creditNftToRedeem = amount;
 
-        if (amount > maxRedeemableCreditNFT) {
-            creditNFTToRedeem = maxRedeemableCreditNFT;
+        if (amount > maxRedeemableCreditNft) {
+            creditNftToRedeem = maxRedeemableCreditNft;
         }
         require(
             dollar.balanceOf(address(this)) > 0,
             "There aren't any Dollar to redeem currently"
         );
 
-        // creditNFTManager must be an operator to transfer on behalf of msg.sender
-        creditNft.burnCreditNft(msg.sender, creditNFTToRedeem, id);
+        // creditNftManager must be an operator to transfer on behalf of msg.sender
+        creditNft.burnCreditNft(msg.sender, creditNftToRedeem, id);
 
-        dollar.transfer(msg.sender, creditNFTToRedeem);
+        dollar.transfer(msg.sender, creditNftToRedeem);
 
-        return amount - (creditNFTToRedeem);
+        return amount - (creditNftToRedeem);
     }
 
     /**
@@ -442,9 +442,9 @@ library LibCreditNftManager {
         uint256 totalMintableDollars = IDollarMintCalculator(address(this))
             .getDollarsToMint();
         uint256 dollarsToMint = totalMintableDollars -
-            (creditNFTStorage().dollarsMintedThisCycle);
+            (creditNftStorage().dollarsMintedThisCycle);
         //update the dollars for this cycle
-        creditNFTStorage().dollarsMintedThisCycle = totalMintableDollars;
+        creditNftStorage().dollarsMintedThisCycle = totalMintableDollars;
 
         // Dollar should be minted to address(this)
         IERC20Ubiquity dollar = IERC20Ubiquity(store.dollarTokenAddress);

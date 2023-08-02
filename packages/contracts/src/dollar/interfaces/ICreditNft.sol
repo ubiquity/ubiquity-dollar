@@ -14,9 +14,9 @@ interface ICreditNft is IERC1155 {
 
     /**
      * @notice Burns an `amount` of CreditNfts expiring at `expiryBlockNumber` from `creditNftOwner` balance
-     * @param creditNftOwner Owner of those CreditNFTs
+     * @param creditNftOwner Owner of those CreditNfts
      * @param amount Amount of tokens to burn
-     * @param expiryBlockNumber Expiration block number of the CreditNFTs to burn
+     * @param expiryBlockNumber Expiration block number of the CreditNfts to burn
      */
     function burnCreditNft(
         address creditNftOwner,
@@ -28,7 +28,7 @@ interface ICreditNft is IERC1155 {
      * @notice Mint an `amount` of CreditNfts expiring at `expiryBlockNumber` for a certain `recipient`
      * @param recipient Address where to mint tokens
      * @param amount Amount of tokens to mint
-     * @param expiryBlockNumber Expiration block number of the CreditNFTs to mint
+     * @param expiryBlockNumber Expiration block number of the CreditNfts to mint
      */
     function mintCreditNft(
         address recipient,

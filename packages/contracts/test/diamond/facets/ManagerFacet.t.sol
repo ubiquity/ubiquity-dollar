@@ -30,7 +30,7 @@ contract ManagerFacetTest is DiamondSetup {
         assertEq(IManager.creditTokenAddress(), contract1);
     }
 
-    function testSetCreditNFTAddress_ShouldSucceed() public prankAs(admin) {
+    function testSetCreditNftAddress_ShouldSucceed() public prankAs(admin) {
         IManager.setCreditNftAddress(contract1);
         assertEq(IManager.creditNftAddress(), contract1);
     }

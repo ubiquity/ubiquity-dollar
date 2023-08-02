@@ -46,10 +46,10 @@ abstract contract LocalTestHelper is DiamondSetup {
         super.setUp();
 
         twapOracle = ITWAPOracleDollar3pool;
-        creditNftRedemptionCalculator = ICreditNFTRedCalcFacet;
+        creditNftRedemptionCalculator = ICreditNftRedCalcFacet;
         creditRedemptionCalculator = ICreditRedCalcFacet;
         dollarMintCalculator = IDollarMintCalcFacet;
-        creditNftManager = ICreditNFTMgrFacet;
+        creditNftManager = ICreditNftMgrFacet;
         dollarMintExcess = IDollarMintExcessFacet;
 
         vm.startPrank(admin);

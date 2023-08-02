@@ -21,7 +21,7 @@ import "forge-std/Test.sol";
 
 contract ZeroStateStaking is DiamondSetup {
     MockERC20 crvToken;
-    uint256 creditNFTLengthBlocks = 100;
+    uint256 creditNftLengthBlocks = 100;
     address treasury = address(0x3);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);
