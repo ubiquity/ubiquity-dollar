@@ -27,7 +27,7 @@ contract DiamondInitTest is Test {
             amounts: new uint256[](0),
             stakingShareIDs: new uint256[](0),
             governancePerBlock: 10e18,
-            creditNFTLengthBlocks: 100
+            creditNftLengthBlocks: 100
         });
         dInit.init(initArgs);
 

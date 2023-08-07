@@ -26,7 +26,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Credit minter" role
     modifier onlyCreditMinter() {
         require(
-            accessCtrl.hasRole(CREDIT_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_TOKEN_MINTER_ROLE, msg.sender),
             "Credit token: not minter"
         );
         _;
@@ -35,7 +35,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Credit burner" role
     modifier onlyCreditBurner() {
         require(
-            accessCtrl.hasRole(CREDIT_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_TOKEN_BURNER_ROLE, msg.sender),
             "Credit token: not burner"
         );
         _;
@@ -47,7 +47,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
      * @dev CREDIT_TOKEN_MINTER_ROLE access control role is required to call this function
      */
     function raiseCapital(uint256 amount) external {
-        address treasuryAddress = ManagerFacet(address(accessCtrl))
+        address treasuryAddress = ManagerFacet(address(accessControl))
             .treasuryAddress();
         mint(treasuryAddress, amount);
     }

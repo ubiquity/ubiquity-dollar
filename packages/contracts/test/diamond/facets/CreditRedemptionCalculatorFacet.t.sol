@@ -6,7 +6,7 @@ import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
-    MockCreditNft _creditNFT;
+    MockCreditNft _creditNft;
 
     function setUp() public virtual override {
         super.setUp();
@@ -14,9 +14,9 @@ contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
         IDollar.mint(admin, 10000e18);
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
-        _creditNFT = new MockCreditNft(100);
+        _creditNft = new MockCreditNft(100);
         vm.prank(admin);
-        IManager.setCreditNftAddress(address(_creditNFT));
+        IManager.setCreditNftAddress(address(_creditNft));
     }
 
     function testSetConstant_ShouldRevert_IfCalledNotByAdmin() public {

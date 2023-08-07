@@ -69,8 +69,8 @@ library LibCreditRedemptionCalculator {
         uint256 blockHeightDebt
     ) internal view returns (uint256) {
         AppStorage storage store = LibAppStorage.appStorage();
-        address creditNFTAddress = store.creditNftAddress;
-        CreditNft cNFT = CreditNft(creditNFTAddress);
+        address creditNftAddress = store.creditNftAddress;
+        CreditNft cNFT = CreditNft(creditNftAddress);
         require(
             cNFT.getTotalOutstandingDebt() <
                 IERC20(store.dollarTokenAddress).totalSupply(),

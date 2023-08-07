@@ -44,7 +44,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @notice Modifier checks that the method is called by a user with the "CreditNft manager" role
     modifier onlyCreditNftManager() {
         require(
-            accessCtrl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a CreditNft manager"
         );
         _;
@@ -63,7 +63,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
      * @notice Mint an `amount` of CreditNfts expiring at `expiryBlockNumber` for a certain `recipient`
      * @param recipient Address where to mint tokens
      * @param amount Amount of tokens to mint
-     * @param expiryBlockNumber Expiration block number of the CreditNFTs to mint
+     * @param expiryBlockNumber Expiration block number of the CreditNfts to mint
      */
     function mintCreditNft(
         address recipient,
@@ -86,9 +86,9 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
     /**
      * @notice Burns an `amount` of CreditNfts expiring at `expiryBlockNumber` from `creditNftOwner` balance
-     * @param creditNftOwner Owner of those CreditNFTs
+     * @param creditNftOwner Owner of those CreditNfts
      * @param amount Amount of tokens to burn
-     * @param expiryBlockNumber Expiration block number of the CreditNFTs to burn
+     * @param expiryBlockNumber Expiration block number of the CreditNfts to burn
      */
     function burnCreditNft(
         address creditNftOwner,

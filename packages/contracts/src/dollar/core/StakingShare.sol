@@ -40,7 +40,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     /// @notice Modifier checks that the method is called by a user with the "Staking share minter" role
     modifier onlyMinter() override {
         require(
-            accessCtrl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
             "Staking Share: not minter"
         );
         _;
@@ -49,7 +49,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     /// @notice Modifier checks that the method is called by a user with the "Staking share burner" role
     modifier onlyBurner() override {
         require(
-            accessCtrl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
             "Staking Share: not burner"
         );
         _;
@@ -58,7 +58,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() override {
         require(
-            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "Staking Share: not pauser"
         );
         _;

@@ -9,7 +9,7 @@ contract StakingShareScript is CreditScript {
         vm.startBroadcast(deployerPrivateKey);
 
         // grant diamond token minter rights
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
         // add staking shares
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";

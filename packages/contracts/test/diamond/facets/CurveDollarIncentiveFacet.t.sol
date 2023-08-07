@@ -30,7 +30,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         twapOracleAddress = address(diamond);
 
         vm.startPrank(admin);
-        IAccessCtrl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
+        IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
         MockDollarToken(IManager.dollarTokenAddress()).mint(
             mockSender,
             10000e18

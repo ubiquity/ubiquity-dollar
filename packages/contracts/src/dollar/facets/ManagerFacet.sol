@@ -328,7 +328,7 @@ contract ManagerFacet is Modifiers {
      * @notice Returns Credit NFT redemption calculator address
      * @return Credit NFT redemption calculator address
      */
-    function creditNFTCalculatorAddress() external view returns (address) {
+    function creditNftCalculatorAddress() external view returns (address) {
         return address(this);
     }
 

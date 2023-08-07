@@ -26,7 +26,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.startPrank(admin);
         dollar_addr = address(IDollar);
 
-        IAccessCtrl.grantRole(
+        IAccessControl.grantRole(
             keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"),
             admin
         );

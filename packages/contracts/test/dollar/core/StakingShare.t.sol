@@ -38,7 +38,7 @@ contract DepositStakingShare is LocalTestHelper {
         super.setUp();
         // grant diamond token staking share right rights
         vm.prank(admin);
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
         metapool = IMetaPool(metaPoolAddress);
         fourthBal = metapool.balanceOf(fourthAccount);
         minBal = metapool.balanceOf(stakingMinAccount);
@@ -83,7 +83,7 @@ contract StakingShareTest is DepositStakingShare {
         uint256 end
     ) public {
         vm.prank(admin);
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -121,7 +121,7 @@ contract StakingShareTest is DepositStakingShare {
         uint256 end
     ) public {
         vm.prank(admin);
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
         vm.prank(admin);
         uint256 id = stakingShare.mint(
             secondAccount,
@@ -176,33 +176,33 @@ contract StakingShareTest is DepositStakingShare {
         emit Paused(admin);
 
         vm.prank(admin);
-        IAccessCtrl.pause();
+        IAccessControl.pause();
     }
 
     function testPause_ShouldRevert_IfNotPauser() public {
         vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
-        IAccessCtrl.pause();
+        IAccessControl.pause();
     }
 
     function testUnpause_ShouldUnpause() public {
         vm.prank(admin);
-        IAccessCtrl.pause();
+        IAccessControl.pause();
 
         vm.expectEmit(true, false, false, true);
         emit Unpaused(admin);
 
         vm.prank(admin);
-        IAccessCtrl.unpause();
+        IAccessControl.unpause();
     }
 
     function testUnpause_ShouldRevert_IfNotPauser() public {
         vm.prank(admin);
-        IAccessCtrl.pause();
+        IAccessControl.pause();
 
         vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
-        IAccessCtrl.unpause();
+        IAccessControl.unpause();
     }
 
     function testSafeTransferFrom_ShouldTransferTokenId() public {
@@ -329,7 +329,7 @@ contract StakingShareTest is DepositStakingShare {
 
     function testSetUri_ShouldSetUri() public {
         vm.prank(admin);
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
@@ -345,7 +345,7 @@ contract StakingShareTest is DepositStakingShare {
 
     function testSetBaseUri_ShouldSetUri() public {
         vm.prank(admin);
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
@@ -361,7 +361,7 @@ contract StakingShareTest is DepositStakingShare {
 
     function testSetUriSingle_ShouldSetUri() public {
         vm.prank(admin);
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
