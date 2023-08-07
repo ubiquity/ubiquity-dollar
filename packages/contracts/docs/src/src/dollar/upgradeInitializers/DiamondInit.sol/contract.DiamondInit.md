@@ -44,7 +44,7 @@ struct Args {
     uint256[] amounts;
     uint256[] stakingShareIDs;
     uint256 governancePerBlock;
-    uint256 creditNFTLengthBlocks;
+    uint256 creditNftLengthBlocks;
 }
 ```
 

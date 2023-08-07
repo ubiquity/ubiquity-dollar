@@ -78,9 +78,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     BondingCurveFacet IBondingCurveFacet;
 
-    CreditNftManagerFacet ICreditNftMgrFacet;
-    CreditNftRedemptionCalculatorFacet ICreditNftRedCalcFacet;
-    CreditRedemptionCalculatorFacet ICreditRedCalcFacet;
+    CreditNftManagerFacet ICreditNftManagerFacet;
+    CreditNftRedemptionCalculatorFacet ICreditNftRedemptionCalculationFacet;
+    CreditRedemptionCalculatorFacet ICreditRedemptionCalculationFacet;
 
     DollarMintCalculatorFacet IDollarMintCalcFacet;
     DollarMintExcessFacet IDollarMintExcessFacet;
@@ -96,7 +96,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     address owner;
     address admin;
-    address tokenMgr;
+    address tokenManager;
     address user1;
     address contract1;
     address contract2;
@@ -127,7 +127,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         incentive_addr = address(new MockIncentive());
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
-        tokenMgr = generateAddress("TokenMgr", false, 10 ether);
+        tokenManager = generateAddress("TokenManager", false, 10 ether);
 
         user1 = generateAddress("User1", false, 10 ether);
         contract1 = generateAddress("Contract1", true, 10 ether);
@@ -689,11 +689,11 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         IOwnershipFacet = OwnershipFacet(address(diamond));
 
-        ICreditNftMgrFacet = CreditNftManagerFacet(address(diamond));
-        ICreditNftRedCalcFacet = CreditNftRedemptionCalculatorFacet(
+        ICreditNftManagerFacet = CreditNftManagerFacet(address(diamond));
+        ICreditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
         );
-        ICreditRedCalcFacet = CreditRedemptionCalculatorFacet(address(diamond));
+        ICreditRedemptionCalculationFacet = CreditRedemptionCalculatorFacet(address(diamond));
 
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));

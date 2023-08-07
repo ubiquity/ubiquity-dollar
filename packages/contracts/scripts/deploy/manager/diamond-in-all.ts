@@ -232,7 +232,7 @@ async function deployDiamond() {
       amounts: [0],
       stakingShareIDs: [0],
       governancePerBlock: ethers.utils.parseEther("10"),
-      creditNFTLengthBlocks: 100,
+      creditNftLengthBlocks: 100,
     },
   ];
   const functionCall = diamondInitInstance.interface.encodeFunctionData("init", initArgs);

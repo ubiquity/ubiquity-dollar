@@ -46,7 +46,7 @@ library LibCreditNftManager {
     );
 
     /// @notice Struct used as a storage for the current library
-    struct CreditNftMgrData {
+    struct CreditNftManagerData {
         //the amount of dollars we minted this cycle, so we can calculate delta.
         // should be reset to 0 when cycle ends
         uint256 dollarsMintedThisCycle;
@@ -63,7 +63,7 @@ library LibCreditNftManager {
     function creditNftStorage()
         internal
         pure
-        returns (CreditNftMgrData storage l)
+        returns (CreditNftManagerData storage l)
     {
         bytes32 slot = CREDIT_NFT_MANAGER_STORAGE_SLOT;
         assembly {
@@ -135,7 +135,7 @@ library LibCreditNftManager {
             LibAppStorage.appStorage().creditNftAddress
         );
         creditNft.updateTotalDebt();
-        CreditNftMgrData storage cs = creditNftStorage();
+        CreditNftManagerData storage cs = creditNftStorage();
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
         if (!cs.debtCycle) {
@@ -179,7 +179,7 @@ library LibCreditNftManager {
         //we are in a down cycle so reset the cycle counter
         // and set the blockHeight Debt
         if (!creditNftStorage().debtCycle) {
-            CreditNftMgrData storage cs = creditNftStorage();
+            CreditNftManagerData storage cs = creditNftStorage();
             cs.debtCycle = true;
             cs.blockHeightDebt = block.number;
             cs.dollarsMintedThisCycle = 0;

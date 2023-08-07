@@ -14,7 +14,7 @@ Allows users to:
 
 
 ## Functions
-### setExpiredCreditNFTConversionRate
+### setExpiredCreditNftConversionRate
 
 Credit NFT to Governance conversion rate
 
@@ -23,7 +23,7 @@ Governance tokens using `rate` conversion rate
 
 
 ```solidity
-function setExpiredCreditNFTConversionRate(uint256 rate) external onlyCreditNFTManager;
+function setExpiredCreditNftConversionRate(uint256 rate) external onlyCreditNftManager;
 ```
 **Parameters**
 
@@ -32,13 +32,13 @@ function setExpiredCreditNFTConversionRate(uint256 rate) external onlyCreditNFTM
 |`rate`|`uint256`|Credit NFT to Governance tokens conversion rate|
 
 
-### expiredCreditNFTConversionRate
+### expiredCreditNftConversionRate
 
 Returns Credit NFT to Governance conversion rate
 
 
 ```solidity
-function expiredCreditNFTConversionRate() external view returns (uint256);
+function expiredCreditNftConversionRate() external view returns (uint256);
 ```
 **Returns**
 
@@ -47,28 +47,28 @@ function expiredCreditNFTConversionRate() external view returns (uint256);
 |`<none>`|`uint256`|Conversion rate|
 
 
-### setCreditNFTLength
+### setCreditNftLength
 
 Sets Credit NFT block lifespan
 
 
 ```solidity
-function setCreditNFTLength(uint256 _creditNFTLengthBlocks) external onlyCreditNFTManager;
+function setCreditNftLength(uint256 _creditNftLengthBlocks) external onlyCreditNftManager;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_creditNFTLengthBlocks`|`uint256`|The number of blocks during which Credit NFTs can be redeemed for Dollars|
+|`_creditNftLengthBlocks`|`uint256`|The number of blocks during which Credit NFTs can be redeemed for Dollars|
 
 
-### creditNFTLengthBlocks
+### creditNftLengthBlocks
 
 Returns Credit NFT block lifespan
 
 
 ```solidity
-function creditNFTLengthBlocks() external view returns (uint256);
+function creditNftLengthBlocks() external view returns (uint256);
 ```
 **Returns**
 
@@ -123,13 +123,13 @@ function exchangeDollarsForCredit(uint256 amount) external returns (uint256);
 |`<none>`|`uint256`|Amount of Credits minted|
 
 
-### getCreditNFTReturnedForDollars
+### getCreditNftReturnedForDollars
 
 Returns amount of Credit NFTs to be minted for the `amount` of Dollars to burn
 
 
 ```solidity
-function getCreditNFTReturnedForDollars(uint256 amount) external view returns (uint256);
+function getCreditNftReturnedForDollars(uint256 amount) external view returns (uint256);
 ```
 **Parameters**
 
@@ -220,13 +220,13 @@ function onERC1155BatchReceived(address, address, uint256[] calldata, uint256[] 
 |`<none>`|`bytes4`|`bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))` if transfer is allowed|
 
 
-### burnExpiredCreditNFTForGovernance
+### burnExpiredCreditNftForGovernance
 
-Burns expired Credit NFTs for Governance tokens at `expiredCreditNFTConversionRate` rate
+Burns expired Credit NFTs for Governance tokens at `expiredCreditNftConversionRate` rate
 
 
 ```solidity
-function burnExpiredCreditNFTForGovernance(uint256 id, uint256 amount) public returns (uint256 governanceAmount);
+function burnExpiredCreditNftForGovernance(uint256 id, uint256 amount) public returns (uint256 governanceAmount);
 ```
 **Parameters**
 
@@ -242,7 +242,7 @@ function burnExpiredCreditNFTForGovernance(uint256 id, uint256 amount) public re
 |`governanceAmount`|`uint256`|Amount of Governance tokens minted to Credit NFT holder|
 
 
-### burnCreditNFTForCredit
+### burnCreditNftForCredit
 
 TODO: Should we leave it ?
 
@@ -250,7 +250,7 @@ Burns Credit NFTs for Credit tokens
 
 
 ```solidity
-function burnCreditNFTForCredit(uint256 id, uint256 amount) public returns (uint256);
+function burnCreditNftForCredit(uint256 id, uint256 amount) public returns (uint256);
 ```
 **Parameters**
 

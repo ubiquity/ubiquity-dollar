@@ -33,9 +33,9 @@ function burnCreditNft(address creditNftOwner, uint256 amount, uint256 expiryBlo
 
 |Name|Type|Description|
 |----|----|-----------|
-|`creditNftOwner`|`address`|Owner of those CreditNFTs|
+|`creditNftOwner`|`address`|Owner of those CreditNfts|
 |`amount`|`uint256`|Amount of tokens to burn|
-|`expiryBlockNumber`|`uint256`|Expiration block number of the CreditNFTs to burn|
+|`expiryBlockNumber`|`uint256`|Expiration block number of the CreditNfts to burn|
 
 
 ### mintCreditNft
@@ -52,7 +52,7 @@ function mintCreditNft(address recipient, uint256 amount, uint256 expiryBlockNum
 |----|----|-----------|
 |`recipient`|`address`|Address where to mint tokens|
 |`amount`|`uint256`|Amount of tokens to mint|
-|`expiryBlockNumber`|`uint256`|Expiration block number of the CreditNFTs to mint|
+|`expiryBlockNumber`|`uint256`|Expiration block number of the CreditNfts to mint|
 
 
 ### getTotalOutstandingDebt

@@ -435,13 +435,13 @@ function creditCalculatorAddress() external view returns (address);
 |`<none>`|`address`|Credit redemption calculator address|
 
 
-### creditNFTCalculatorAddress
+### creditNftCalculatorAddress
 
 Returns Credit NFT redemption calculator address
 
 
 ```solidity
-function creditNFTCalculatorAddress() external view returns (address);
+function creditNftCalculatorAddress() external view returns (address);
 ```
 **Returns**
 

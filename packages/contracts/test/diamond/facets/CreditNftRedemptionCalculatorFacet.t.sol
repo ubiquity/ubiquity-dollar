@@ -25,7 +25,7 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
         );
 
         vm.expectRevert("CreditNft to Dollar: DEBT_TOO_HIGH");
-        ICreditNftRedCalcFacet.getCreditNftAmount(0);
+        ICreditNftRedemptionCalculationFacet.getCreditNftAmount(0);
     }
 
     function test_getCreditNftAmount() public {
@@ -33,6 +33,6 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
         MockCreditNft(IManager.creditNftAddress()).setTotalOutstandingDebt(
             totalSupply / 2
         );
-        assertEq(ICreditNftRedCalcFacet.getCreditNftAmount(10000), 40000);
+        assertEq(ICreditNftRedemptionCalculationFacet.getCreditNftAmount(10000), 40000);
     }
 }

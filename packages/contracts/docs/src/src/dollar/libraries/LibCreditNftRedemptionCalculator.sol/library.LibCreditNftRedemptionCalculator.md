@@ -5,13 +5,13 @@ Library for calculating amount of Credit NFTs to mint on Dollars burn
 
 
 ## Functions
-### getCreditNFTAmount
+### getCreditNftAmount
 
 Returns Credit NFT amount minted for `dollarsToBurn` amount of Dollars to burn
 
 
 ```solidity
-function getCreditNFTAmount(uint256 dollarsToBurn) internal view returns (uint256);
+function getCreditNftAmount(uint256 dollarsToBurn) internal view returns (uint256);
 ```
 **Parameters**
 
