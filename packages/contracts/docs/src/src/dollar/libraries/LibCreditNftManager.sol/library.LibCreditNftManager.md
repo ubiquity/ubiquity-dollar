@@ -1,5 +1,5 @@
 # LibCreditNftManager
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/611472a5f67a5f2afa638846e4a81d1dc887f439/src/dollar/libraries/LibCreditNftManager.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c4890e02aea7bcfd69c21e5e480e0b3a22e5e740/src/dollar/libraries/LibCreditNftManager.sol)
 
 Library for basic credit issuing and redemption mechanism for Credit NFT and Credit holders
 
@@ -28,13 +28,13 @@ Returns struct used as a storage for this library
 
 
 ```solidity
-function creditNftStorage() internal pure returns (CreditNftMgrData storage l);
+function creditNftStorage() internal pure returns (CreditNftManagerData storage l);
 ```
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`l`|`CreditNftMgrData`|Struct used as a storage|
+|`l`|`CreditNftManagerData`|Struct used as a storage|
 
 
 ### expiredCreditNftConversionRate
@@ -341,12 +341,12 @@ event CreditNftLengthChanged(uint256 newCreditNftLengthBlocks, uint256 previousC
 ```
 
 ## Structs
-### CreditNftMgrData
+### CreditNftManagerData
 Struct used as a storage for the current library
 
 
 ```solidity
-struct CreditNftMgrData {
+struct CreditNftManagerData {
     uint256 dollarsMintedThisCycle;
     uint256 blockHeightDebt;
     uint256 creditNftLengthBlocks;

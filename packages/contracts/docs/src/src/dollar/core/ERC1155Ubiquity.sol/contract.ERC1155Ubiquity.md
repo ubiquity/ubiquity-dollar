@@ -1,5 +1,5 @@
 # ERC1155Ubiquity
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/611472a5f67a5f2afa638846e4a81d1dc887f439/src/dollar/core/ERC1155Ubiquity.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c4890e02aea7bcfd69c21e5e480e0b3a22e5e740/src/dollar/core/ERC1155Ubiquity.sol)
 
 **Inherits:**
 ERC1155, ERC1155Burnable, ERC1155Pausable
@@ -13,12 +13,12 @@ ERC1155 with:
 
 
 ## State Variables
-### accessCtrl
+### accessControl
 Access control interface
 
 
 ```solidity
-IAccessControl public accessCtrl;
+IAccessControl public accessControl;
 ```
 
 
