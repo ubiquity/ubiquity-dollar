@@ -13,9 +13,9 @@ contract CreditScript is GovernanceScript {
         UbiquityCreditToken credit = new UbiquityCreditToken(address(diamond));
         IManager.setCreditTokenAddress(address(credit));
 
-        IAccessCtrl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
+        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
 
         CreditNft creditNft = new CreditNft(address(diamond));
         IManager.setCreditNftAddress(address(creditNft));

@@ -41,13 +41,13 @@ Checks that method is called by a contract owner
 modifier onlyOwner();
 ```
 
-### onlyCreditNFTManager
+### onlyCreditNftManager
 
 Checks that method is called by address with the `CREDIT_NFT_MANAGER_ROLE` role
 
 
 ```solidity
-modifier onlyCreditNFTManager();
+modifier onlyCreditNftManager();
 ```
 
 ### onlyAdmin

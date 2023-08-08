@@ -169,7 +169,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // create burner role
         address burner = makeAddr("burner");
         vm.prank(admin);
-        IAccessCtrl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
+        IAccessControl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // admin pauses contract
         vm.prank(admin);
         IDollar.pause();
@@ -188,7 +188,7 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // create burner role
         address burner = makeAddr("burner");
         vm.prank(admin);
-        IAccessCtrl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
+        IAccessControl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // burn 50 tokens for user
         vm.prank(burner);
         vm.expectEmit(true, true, true, true);
@@ -245,10 +245,10 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testUnpause_ShouldUnpauseContract() public {
         vm.startPrank(admin);
-        IAccessCtrl.pause();
-        assertTrue(IAccessCtrl.paused());
-        IAccessCtrl.unpause();
-        assertFalse(IAccessCtrl.paused());
+        IAccessControl.pause();
+        assertTrue(IAccessControl.paused());
+        IAccessControl.unpause();
+        assertFalse(IAccessControl.paused());
         vm.stopPrank();
     }
 

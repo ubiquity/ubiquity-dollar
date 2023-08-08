@@ -19,12 +19,12 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
     string private _symbol;
 
     /// @notice Access control interface
-    IAccessControl public accessCtrl;
+    IAccessControl public accessControl;
 
     /// @notice Modifier checks that the method is called by a user with the "pauser" role
     modifier onlyPauser() {
         require(
-            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "ERC20Ubiquity: not pauser"
         );
         _;
@@ -33,7 +33,7 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "admin" role
     modifier onlyAdmin() {
         require(
-            accessCtrl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "ERC20Ubiquity: not admin"
         );
         _;
@@ -51,7 +51,7 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
         string memory symbol_
     ) ERC20(name_, symbol_) ERC20Permit(name_) {
         _symbol = symbol_;
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
     /**
@@ -75,7 +75,7 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
      * @return Access control address
      */
     function getManager() external view returns (address) {
-        return address(accessCtrl);
+        return address(accessControl);
     }
 
     /**
@@ -83,7 +83,7 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
      * @param _manager New access control address
      */
     function setManager(address _manager) external onlyAdmin {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
     /// @notice Pauses all token transfers

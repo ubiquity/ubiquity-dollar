@@ -12,6 +12,6 @@ contract CreditNftRedemptionCalculatorFacet is ICreditNftRedemptionCalculator {
         uint256 dollarsToBurn
     ) external view override returns (uint256) {
         return
-            LibCreditNftRedemptionCalculator.getCreditNFTAmount(dollarsToBurn);
+            LibCreditNftRedemptionCalculator.getCreditNftAmount(dollarsToBurn);
     }
 }

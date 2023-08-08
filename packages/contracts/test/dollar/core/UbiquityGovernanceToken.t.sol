@@ -13,7 +13,7 @@ contract UbiquityGovernanceTokenTest is LocalTestHelper {
     function setUp() public override {
         super.setUp();
         vm.startPrank(admin);
-        IAccessCtrl.grantRole(
+        IAccessControl.grantRole(
             keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"),
             admin
         );

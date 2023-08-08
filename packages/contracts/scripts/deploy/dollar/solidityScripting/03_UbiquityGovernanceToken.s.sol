@@ -14,8 +14,8 @@ contract GovernanceScript is DollarScript {
 
         IManager.setGovernanceTokenAddress(address(governance));
         // grant diamond token admin rights
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
 
         vm.stopBroadcast();
     }

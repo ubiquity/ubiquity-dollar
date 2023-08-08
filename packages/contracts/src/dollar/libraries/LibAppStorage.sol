@@ -12,7 +12,7 @@ struct AppStorage {
     // others
     address dollarTokenAddress;
     address creditNftAddress;
-    address creditNFTCalculatorAddress;
+    address creditNftCalculatorAddress;
     address dollarMintCalculatorAddress;
     address stakingShareAddress;
     address stakingContractAddress;
@@ -85,7 +85,7 @@ contract Modifiers {
     }
 
     /// @notice Checks that method is called by address with the `CREDIT_NFT_MANAGER_ROLE` role
-    modifier onlyCreditNFTManager() {
+    modifier onlyCreditNftManager() {
         require(
             LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a Credit NFT manager"

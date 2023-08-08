@@ -35,7 +35,7 @@ contract DiamondInit is Modifiers {
         uint256[] amounts;
         uint256[] stakingShareIDs;
         uint256 governancePerBlock;
-        uint256 creditNFTLengthBlocks;
+        uint256 creditNftLengthBlocks;
     }
 
     /**
@@ -83,14 +83,14 @@ contract DiamondInit is Modifiers {
             _args.stakingShareIDs,
             _args.governancePerBlock
         );
-        // creditNFTManager
-        /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
+        // creditNftManager
+        /// @param _creditNftLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)
-        LibCreditNftManager.creditNFTStorage().creditNFTLengthBlocks = _args
-            .creditNFTLengthBlocks;
+        LibCreditNftManager.creditNftStorage().creditNftLengthBlocks = _args
+            .creditNftLengthBlocks;
         LibCreditNftManager
-            .creditNFTStorage()
-            .expiredCreditNFTConversionRate = 2;
+            .creditNftStorage()
+            .expiredCreditNftConversionRate = 2;
 
         LibCreditRedemptionCalculator
             .creditRedemptionCalculatorStorage()

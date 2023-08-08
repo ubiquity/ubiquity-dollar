@@ -37,8 +37,8 @@ export async function fetchData() {
 
     // NFTAddress
     const NFTMinter = ethers.Wallet.createRandom().address;
-    const CreditNFTFacet = getDebtCouponContract(await diamondContract.creditNftAddress(), provider);
-    const CreditNFTManager = getDebtCouponManagerContract(diamondAddress, provider);
+    const CreditNftFacet = getDebtCouponContract(await diamondContract.creditNftAddress(), provider);
+    const CreditNftManager = getDebtCouponManagerContract(diamondAddress, provider);
     const TWAPOracle = getTWAPOracleContract(await diamondContract.twapOracleAddress(), provider);
 
     {
@@ -55,19 +55,19 @@ export async function fetchData() {
         console.log(await diamondContract.creditNftAddress(), "Credit NFT Address");
 
         // Needs dynamism and more debugging but works mints and burns!
-        console.log((await CreditNFTFacet.connect(signer).mintCreditNft(signer.getAddress(), "1", 2000000 + 300)).hash);
-        console.log((await CreditNFTFacet.connect(signer).burnCreditNft(signer.getAddress(), 0, "1000000")).hash);
+        console.log((await CreditNftFacet.connect(signer).mintCreditNft(signer.getAddress(), "1", 2000000 + 300)).hash);
+        console.log((await CreditNftFacet.connect(signer).burnCreditNft(signer.getAddress(), 0, "1000000")).hash);
 
-        console.log((await CreditNFTFacet.totalSupply()).toBigInt(), "Credit NFT Total Supply");
-        console.log((await CreditNFTFacet.balanceOf(signer.getAddress(), "0")).toBigInt(), "Credit NFT Balance");
-        console.log((await CreditNFTFacet.holderTokens(signer.getAddress())).toString(), "Credit Holders");
+        console.log((await CreditNftFacet.totalSupply()).toBigInt(), "Credit NFT Total Supply");
+        console.log((await CreditNftFacet.balanceOf(signer.getAddress(), "0")).toBigInt(), "Credit NFT Balance");
+        console.log((await CreditNftFacet.holderTokens(signer.getAddress())).toString(), "Credit Holders");
 
         // Diamond Address
-        console.log(await CreditNFTFacet.getManager(), "Manager");
+        console.log(await CreditNftFacet.getManager(), "Manager");
 
-        console.log((await CreditNFTManager.connect(signer).getCreditNFTReturnedForDollars(signer.getAddress())).toBigInt(), "Credit NFT Returned Dollars");
+        console.log((await CreditNftManager.connect(signer).getCreditNftReturnedForDollars(signer.getAddress())).toBigInt(), "Credit NFT Returned Dollars");
 
-        // Call CreditNFT ManagerFacet
+        // Call CreditNft ManagerFacet
         console.log("Anvil Block Number", block);
         console.log("Connected to Chain ID", LOCAL_CHAIN);
 
@@ -116,10 +116,10 @@ export async function fetchData() {
     console.log("%c" + TWAPOracle.address, "color: yellow", "twap address");
 
     // Working
-    console.log((await CreditNFTManager.connect(signer).setExpiredCreditNFTConversionRate(100)).hash, "Set Expired Credit NFT Conversion");
-    console.log((await CreditNFTManager.connect(signer).expiredCreditNFTConversionRate()).toBigInt(), "Expired Credit NFT Conversion Rate");
-    console.log((await CreditNFTManager.connect(signer).setCreditNFTLength(1000000000)).hash, "Set Credit NFT Length Blocks");
-    console.log((await CreditNFTManager.connect(signer).creditNFTLengthBlocks()).toBigInt(), "Credit NFT Length Blocks");
+    console.log((await CreditNftManager.connect(signer).setExpiredCreditNftConversionRate(100)).hash, "Set Expired Credit NFT Conversion");
+    console.log((await CreditNftManager.connect(signer).expiredCreditNftConversionRate()).toBigInt(), "Expired Credit NFT Conversion Rate");
+    console.log((await CreditNftManager.connect(signer).setCreditNftLength(1000000000)).hash, "Set Credit NFT Length Blocks");
+    console.log((await CreditNftManager.connect(signer).creditNftLengthBlocks()).toBigInt(), "Credit NFT Length Blocks");
 
     // Caller
     console.log(await signer.getAddress(), "Caller Address");

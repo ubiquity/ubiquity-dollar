@@ -19,7 +19,7 @@ import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 contract ZeroStateChef is DiamondSetup {
     MockERC20 crvToken;
     address curve3CrvToken;
-    uint256 creditNFTLengthBlocks = 100;
+    uint256 creditNftLengthBlocks = 100;
     address treasury = address(0x3);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);
@@ -98,7 +98,7 @@ contract ZeroStateChef is DiamondSetup {
         stakingShareV1 = new BondingShare(address(diamond));
         IManager.setStakingShareAddress(address(stakingShareV1));
         stakingShareV1.setApprovalForAll(address(diamond), true);
-        IAccessCtrl.grantRole(
+        IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(stakingShareV1)
         );
@@ -125,11 +125,11 @@ contract ZeroStateChef is DiamondSetup {
 
         vm.startPrank(admin);
 
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
-        IAccessCtrl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
+        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
 
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
         UbiquityCreditToken creditToken = new UbiquityCreditToken(
             address(IManager)
         );
@@ -175,7 +175,7 @@ contract ZeroStateChef is DiamondSetup {
         vm.startPrank(admin);
         stakingShare = new StakingShare(address(diamond), uri);
         IManager.setStakingShareAddress(address(stakingShare));
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
         IStakingFacet.setBlockCountInAWeek(420);
 
         vm.stopPrank();

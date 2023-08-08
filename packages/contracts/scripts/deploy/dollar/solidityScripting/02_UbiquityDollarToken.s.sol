@@ -14,8 +14,8 @@ contract DollarScript is DiamondScript {
 
         dollar = new UbiquityDollarToken(address(diamond));
         IManager.setDollarTokenAddress(address(dollar));
-        IAccessCtrl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
+        IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
 
         dollar.mint(address(diamond), 10000e18);
         uint256 adminBal = IERC20(curve3PoolToken).balanceOf(admin);
