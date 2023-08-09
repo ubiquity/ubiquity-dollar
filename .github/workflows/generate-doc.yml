@@ -9,6 +9,7 @@ on:
 jobs:
   generate-doc:
     name: Generate Doc
+    if: github.repository == 'ubiquity/ubiquity-dollar'
     runs-on: ubuntu-22.04
     permissions:
       contents: write
