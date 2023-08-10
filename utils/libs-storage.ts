@@ -22,6 +22,7 @@ fs.readdir(libsFolder, (err, files) => {
   }
 
   const fileNames = files.filter((file) => fs.statSync(path.join(libsFolder, file)).isFile());
+  let i = 0;
 
   fileNames.forEach((fileName) => {
     const filePath = path.join(libsFolder, fileName);
@@ -37,7 +38,6 @@ fs.readdir(libsFolder, (err, files) => {
       let insideStruct = false;
       let currentStruct = '';
 
-      let i = 0;
       for (const line of dataArray) {
         // Remove comments starting with "//" until the end of the line
         const lineWithoutComments = line.replace(/\/\/.*$/, '').trim();
