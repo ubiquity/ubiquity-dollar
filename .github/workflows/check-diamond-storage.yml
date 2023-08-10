@@ -81,7 +81,7 @@ jobs:
 
       - name: Display PR Files
         run: |
-          ls ${{ runner.workspace }}/pr_files
+          ls ${{ github.workspace }}/pr_files
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
