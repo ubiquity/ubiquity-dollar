@@ -37,6 +37,7 @@ fs.readdir(libsFolder, (err, files) => {
       let insideStruct = false;
       let currentStruct = '';
 
+      let i = 0;
       for (const line of dataArray) {
         // Remove comments starting with "//" until the end of the line
         const lineWithoutComments = line.replace(/\/\/.*$/, '').trim();
@@ -50,6 +51,8 @@ fs.readdir(libsFolder, (err, files) => {
             // Check if the line ends with "}"
             insideStruct = false;
             currentStruct += ' ' + lineWithoutComments;
+            i++;
+            console.log("Struct #i " + currentStruct);
             structBlocks.push(currentStruct);
           } else {
             currentStruct += ' ' + lineWithoutComments;
