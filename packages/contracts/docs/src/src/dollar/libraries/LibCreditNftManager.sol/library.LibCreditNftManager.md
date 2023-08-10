@@ -1,5 +1,5 @@
 # LibCreditNftManager
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/45e53ee37d9a8440a7cebde4e1d8182112836cab/src/dollar/libraries/LibCreditNftManager.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/3bd8ebfb9c040c43bc7387d834825102cd1e7687/src/dollar/libraries/LibCreditNftManager.sol)
 
 Library for basic credit issuing and redemption mechanism for Credit NFT and Credit holders
 

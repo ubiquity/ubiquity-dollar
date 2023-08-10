@@ -1,5 +1,5 @@
 # ERC20Ubiquity
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/45e53ee37d9a8440a7cebde4e1d8182112836cab/src/dollar/core/ERC20Ubiquity.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/3bd8ebfb9c040c43bc7387d834825102cd1e7687/src/dollar/core/ERC20Ubiquity.sol)
 
 **Inherits:**
 ERC20Permit, ERC20Pausable, [IERC20Ubiquity](/src/dollar/interfaces/IERC20Ubiquity.sol/interface.IERC20Ubiquity.md)
