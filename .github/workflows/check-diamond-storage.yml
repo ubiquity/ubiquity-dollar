@@ -81,8 +81,7 @@ jobs:
 
       - name: Display PR Files
         run: |
-          ls ./pr_files
-          cat ./pr_files/pr_libs_storage_output_*.txt
+          ls ${{ runner.workspace }}/pr_files
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
