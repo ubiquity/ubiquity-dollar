@@ -24,6 +24,8 @@ fs.readdir(libsFolder, (err, files) => {
   const fileNames = files.filter((file) => fs.statSync(path.join(libsFolder, file)).isFile());
   let i = 0;
 
+  const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
+
   fileNames.forEach((fileName) => {
     const filePath = path.join(libsFolder, fileName);
     fs.readFile(filePath, 'utf8', (err, data) => {
@@ -53,6 +55,11 @@ fs.readdir(libsFolder, (err, files) => {
             currentStruct += ' ' + lineWithoutComments;
             i++;
             console.log("Struct #" + i + ": " + currentStruct);
+            if (branchName === "development") {
+              fs.writeFileSync("dev_libs_storage_output_" + i + ".txt", currentStruct);
+            } else {
+              fs.writeFileSync("pr_libs_storage_output_" + i + ".txt", currentStruct);
+            }
             structBlocks.push(currentStruct);
           } else {
             currentStruct += ' ' + lineWithoutComments;
@@ -60,13 +67,12 @@ fs.readdir(libsFolder, (err, files) => {
         }
       }
 
-      const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
 
-      if (branchName === "development") {
-        fs.writeFileSync("dev_libs_storage_output.txt", structBlocks.toString());
-      } else {
-        fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
-      }
+      // if (branchName === "development") {
+      //   fs.writeFileSync("dev_libs_storage_output.txt", structBlocks.toString());
+      // } else {
+      //   fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
+      // }
     });
   });
 });
