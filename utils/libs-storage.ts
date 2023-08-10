@@ -52,7 +52,7 @@ fs.readdir(libsFolder, (err, files) => {
             insideStruct = false;
             currentStruct += ' ' + lineWithoutComments;
             i++;
-            console.log("Struct #i " + currentStruct);
+            console.log("Struct #" + i + ": " + currentStruct);
             structBlocks.push(currentStruct);
           } else {
             currentStruct += ' ' + lineWithoutComments;
