@@ -81,7 +81,8 @@ jobs:
 
       - name: Display PR Files
         run: |
-          ls ${{ github.workspace }}/pr_files
+          echo "Display PR files: "
+          ls
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
