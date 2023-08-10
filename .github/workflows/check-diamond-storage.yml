@@ -59,10 +59,20 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./libs-storage.ts
+          mkdir pr_files
+          echo "LS1: "
           ls
-          cat pr_libs_storage_output_1.txt
+          mv pr_libs_storage_output_*.txt pr_files/
+          echo "LS2: "
+          ls
+          cat pr_files/
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
+        - name: Save PR Files
+            uses: actions/upload-artifact@v2
+            with:
+              name: pr_files
+              path: pr_files
 
       - name: Checkout to development
         uses: actions/checkout@v2
