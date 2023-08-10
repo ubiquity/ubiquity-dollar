@@ -65,7 +65,6 @@ jobs:
           mv pr_libs_storage_output_*.txt pr_files/
           echo "LS2: "
           ls
-          cat pr_files/
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -79,6 +78,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: development
+
+      - name: Display PR Files
+        run: |
+          ls ./pr_files
+          cat ./pr_files/pr_libs_storage_output_*.txt
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -111,10 +115,6 @@ jobs:
         env:
           FOUNDRY_DENY_WARNINGS: true
         run: yarn build
-
-      - name: Compare Files
-          run: |
-            pr_files="${{ runner.workspace }}/pr_files"
 #
       - name: Run Diamond Storage Check - development
         id: save_dev_output
@@ -135,6 +135,12 @@ jobs:
           cat dev_libs_storage_output.txt
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
+
+      - name: Save Dev Files as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dev_files
+          path: ./utils/dev_files
 #
 #      - name: Compare Storage
 #        run: |
