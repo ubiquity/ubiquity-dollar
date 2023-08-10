@@ -1,5 +1,5 @@
 # OwnershipFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/3bd8ebfb9c040c43bc7387d834825102cd1e7687/src/dollar/facets/OwnershipFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4da66552f85ae90db9b5364f35c1e245da8194ec/src/dollar/facets/OwnershipFacet.sol)
 
 **Inherits:**
 [IERC173](/src/dollar/interfaces/IERC173.sol/interface.IERC173.md)
