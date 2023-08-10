@@ -68,11 +68,6 @@ jobs:
           cat pr_files/
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
-        - name: Save PR Files
-            uses: actions/upload-artifact@v2
-            with:
-              name: pr_files
-              path: pr_files
 
       - name: Checkout to development
         uses: actions/checkout@v2
