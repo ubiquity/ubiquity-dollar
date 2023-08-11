@@ -163,11 +163,11 @@ jobs:
 
       - name: Compare Files
         run: |
-          for dev_file in ./dev_files/dev_libs_storage_output_*.txt; do
+          for dev_file in dev_libs_storage_output_*.txt; do
             dev_content=$(cat "$dev_file")
             dev_file_name=$(basename "$dev_file")
           
-            for pr_file in ./pr_files/pr_libs_storage_output_*.txt; do
+            for pr_file in pr_libs_storage_output_*.txt; do
               pr_content=$(cat "$pr_file")
               pr_file_name=$(basename "$pr_file")
           
