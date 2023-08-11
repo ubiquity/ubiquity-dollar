@@ -161,12 +161,23 @@ jobs:
         with:
           name: dev_files
 
-      - name: Compare PR and Dev Files
+      - name: Compare Files
         run: |
-          echo "PR files: "
-          cat pr_libs_storage_output_*.txt
-          echo "Dev files: "
-          cat dev_libs_storage_output_*.txt
+          for dev_file in ./dev_files/dev_libs_storage_output_*.txt; do
+            dev_content=$(cat "$dev_file")
+            dev_file_name=$(basename "$dev_file")
+          
+            for pr_file in ./pr_files/pr_libs_storage_output_*.txt; do
+              pr_content=$(cat "$pr_file")
+              pr_file_name=$(basename "$pr_file")
+          
+              if [[ "$dev_content" == "$pr_content" ]]; then
+                echo "Content of $dev_file_name is the same as $pr_file_name"
+              else
+                echo "Content of $dev_file_name is different from $pr_file_name"
+              fi
+            done
+          done
 #
 #      - name: Compare Storage
 #        run: |
