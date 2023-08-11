@@ -100,3 +100,5 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
 }
 
 export default () => useContext(ManagedContractsContext);
+
+//refactor
