@@ -21,7 +21,9 @@ fs.readdir(libsFolder, (err, files) => {
     return;
   }
 
-  const fileNames = files.filter((file) => fs.statSync(path.join(libsFolder, file)).isFile());
+  const fileNames = files
+                    .filter((file) => fs.statSync(path.join(libsFolder, file)).isFile())
+                    .sort((a, b) => a.localeCompare(b));
   let i = 0;
 
   const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
@@ -36,7 +38,6 @@ fs.readdir(libsFolder, (err, files) => {
 
       const dataArray = data.split('\n');
 
-      const structBlocks = [];
       let insideStruct = false;
       let currentStruct = '';
 
