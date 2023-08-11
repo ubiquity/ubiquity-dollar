@@ -176,16 +176,20 @@ jobs:
             dev_file="dev_libs_storage_output_$i.txt"
             pr_file="pr_libs_storage_output_$i.txt"
           
-            echo "Test: "
-            cat pr_libs_storage_output_1.txt
-          
             dev_content=$(cat "$dev_file" 2>/dev/null)
             pr_content=$(cat "$pr_file" 2>/dev/null)
           
-            if [[ "$dev_content" == "$pr_content" ]]; then
-              echo "Content of $dev_file is the same as $pr_file"
+          # Remove common content from the beginning
+            dev_content_trimmed="${dev_content#$pr_content}"
+            pr_content_trimmed="${pr_content#$dev_content}"
+          
+            echo "Test: "
+            cat pr_content_trimmed
+          
+            if [[ "$dev_content_trimmed" != "$dev_content" || "$pr_content_trimmed" != "$pr_content" ]]; then
+              echo "Modifications found in $dev_file or $pr_file"
             else
-              echo "Content of $dev_file is different from $pr_file"
+              echo "No modifications found in $dev_file or $pr_file"
             fi
           done
 #
