@@ -164,11 +164,9 @@ jobs:
       - name: Compare PR and Dev Files
         run: |
           echo "PR files: "
-          ls
-          cat pr_files/pr_libs_storage_output_*.txt
+          cat pr_libs_storage_output_*.txt
           echo "Dev files: "
-          ls dev_files
-          cat dev_files/dev_libs_storage_output_*.txt
+          cat dev_libs_storage_output_*.txt
 #
 #      - name: Compare Storage
 #        run: |
