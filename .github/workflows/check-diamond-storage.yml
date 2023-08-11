@@ -183,10 +183,10 @@ jobs:
             dev_content_trimmed="${dev_content#$pr_content}"
             pr_content_trimmed="${pr_content#$dev_content}"
           
-            if [[ "$dev_content_trimmed" != "$dev_content" || "$pr_content_trimmed" != "$pr_content" ]]; then
-              echo "Modifications found in $dev_file or $pr_file"
+            if [[ "$pr_content" == "$dev_content"* ]]; then
+              echo "No modifications found at the start or in the middle of $dev_file or $pr_file"
             else
-              echo "No modifications found in $dev_file or $pr_file"
+              echo "Modifications found at the start or in the middle of $dev_file or $pr_file"
             fi
           done
 #
