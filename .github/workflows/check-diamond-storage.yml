@@ -184,7 +184,7 @@ jobs:
             pr_content_trimmed="${pr_content#$dev_content}"
           
             echo "Test: "
-            cat pr_content_trimmed
+            cat $pr_content_trimmed
           
             if [[ "$dev_content_trimmed" != "$dev_content" || "$pr_content_trimmed" != "$pr_content" ]]; then
               echo "Modifications found in $dev_file or $pr_file"
