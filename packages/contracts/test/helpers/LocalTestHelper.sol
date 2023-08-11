@@ -14,7 +14,6 @@ import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFac
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
-import {MockUbiquistick} from "../../src/dollar/mocks/MockUbiquistick.sol";
 
 contract MockCreditNftRedemptionCalculator {
     constructor() {}
@@ -40,7 +39,6 @@ abstract contract LocalTestHelper is DiamondSetup {
     CreditNftManagerFacet creditNftManager;
     DollarMintExcessFacet dollarMintExcess;
     address metaPoolAddress;
-    MockUbiquistick ubiquiStick;
 
     function setUp() public virtual override {
         super.setUp();
@@ -79,10 +77,6 @@ abstract contract LocalTestHelper is DiamondSetup {
             _twap_balances,
             _dy_values
         );
-
-        // deploy ubiquistick
-        // ubiquiStick = new MockUbiquistick();
-        // IManager.setUbiquiStickAddress(address(ubiquiStick));
 
         // deploy credit token
         creditToken = new UbiquityCreditToken(address(diamond));
