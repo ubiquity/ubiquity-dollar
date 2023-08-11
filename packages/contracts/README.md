@@ -4,10 +4,12 @@
 
 ## Install
 
-You need to have [Foundry](https://github.com/foundry-rs/foundry) installed locally first.
+You need to have [Foundry](https://github.com/foundry-rs/foundry) installed locally first. Check [Foundry Book](https://book.getfoundry.sh/getting-started/installation)
+
+Then you'll be able to:
 
 ```bash
-yarn workspace @ubiquity/contracts forge install
+yarn workspace @ubiquity/contracts run forge:install
 ```
 
 ## Build
@@ -19,13 +21,7 @@ yarn workspace @ubiquity/contracts run build
 ## Test
 
 ```bash
-yarn workspace @ubiquity/contracts run test
-```
-
-## Prettier
-
-```bash
-yarn workspace @ubiquity/contracts prettier
+yarn workspace @ubiquity/contracts run test:unit
 ```
 
 ## Deploy
@@ -33,10 +29,10 @@ yarn workspace @ubiquity/contracts prettier
 Deploy script has been built on top of `forge create` and typescript to manage deployments locally.
 
 ```sh
-# DEPLOY_NAME - Must be configured in `scripts/manager.ts`
-# ARGUMENTS - Deploy Arguments which has been configured per smart contract. You can find them in each deploy script file.
+# Deploy Local Development
 
-yarn workspace @ubiquity/contracts deploy DEPLOY_NAME ...ARGUMENTS
-# e.g. yarn workspace @ubiquity/contracts deploy CreditNft --manager 0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98 --network mainnet
+yarn start:anvil
+
+yarn deploy:development
 
 ```
