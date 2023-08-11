@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - development
+    paths:
+      - '**.sol'
 
 jobs:
   generate-doc:
