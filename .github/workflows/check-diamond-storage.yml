@@ -132,7 +132,7 @@ jobs:
           cd ./utils
           yes 2>/dev/null | npx tsx ./libs-storage.ts
           mkdir dev_files
-          echo "LS1: "
+          echo "LS1: " 
           ls
           mv dev_libs_storage_output_*.txt dev_files/
           echo "LS2: "
