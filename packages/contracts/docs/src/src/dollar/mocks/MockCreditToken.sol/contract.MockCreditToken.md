@@ -1,5 +1,5 @@
 # MockCreditToken
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4da66552f85ae90db9b5364f35c1e245da8194ec/src/dollar/mocks/MockCreditToken.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f7ea83705c682caf40f2ca987d85e510aa7c0600/src/dollar/mocks/MockCreditToken.sol)
 
 **Inherits:**
 ERC20
