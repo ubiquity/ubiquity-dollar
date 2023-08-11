@@ -163,20 +163,27 @@ jobs:
 
       - name: Compare Files
         run: |
-          for dev_file in dev_libs_storage_output_*.txt; do
-            dev_content=$(cat "$dev_file")
-            dev_file_name=$(basename "$dev_file")
+          total_dev_files=$(ls dev_libs_storage_output_*.txt 2>/dev/null | wc -l)
+          total_pr_files=$(ls pr_libs_storage_output_*.txt 2>/dev/null | wc -l)
           
-            for pr_file in pr_libs_storage_output_*.txt; do
-              pr_content=$(cat "$pr_file")
-              pr_file_name=$(basename "$pr_file")
+          if [[ $total_dev_files -gt $total_pr_files ]]; then
+            total_files=$total_dev_files
+          else
+            total_files=$total_pr_files
+          fi
           
-              if [[ "$dev_content" == "$pr_content" ]]; then
-                echo "Content of $dev_file_name is the same as $pr_file_name"
-              else
-                echo "Content of $dev_file_name is different from $pr_file_name"
-              fi
-            done
+          for ((i = 1; i <= $total_files; i++)); do
+            dev_file="dev_libs_storage_output_$i.txt"
+            pr_file="pr_libs_storage_output_$i.txt"
+          
+            dev_content=$(cat "$dev_file" 2>/dev/null)
+            pr_content=$(cat "$pr_file" 2>/dev/null)
+          
+            if [[ "$dev_content" == "$pr_content" ]]; then
+              echo "Content of $dev_file is the same as $pr_file" >> comparison_results.txt
+            else
+              echo "Content of $dev_file is different from $pr_file" >> comparison_results.txt
+            fi
           done
 #
 #      - name: Compare Storage
