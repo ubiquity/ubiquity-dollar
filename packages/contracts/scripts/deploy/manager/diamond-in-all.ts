@@ -92,7 +92,8 @@ const create = async (args: ForgeArguments): Promise<{ result: DeploymentResult 
     stderr = err?.stderr;
   }
   if (stdout) {
-    const regex = /{(?:[^{}]*|(R))*}/g;
+    //debug regex
+    const regex = /{[^{}]*}/g;
     const found = stdout.match(regex);
     if (found && JSON.parse(found[0])?.deployedTo) {
       const { deployedTo, deployer, transactionHash } = JSON.parse(found[0]);
