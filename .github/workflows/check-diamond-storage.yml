@@ -75,7 +75,6 @@ jobs:
           path: ./utils/pr_files
 
 
-  check-diamond-storage:
   generate_and_save_dev_files:
     runs-on: ubuntu-latest
 
