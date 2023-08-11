@@ -176,6 +176,9 @@ jobs:
             dev_file="dev_libs_storage_output_$i.txt"
             pr_file="pr_libs_storage_output_$i.txt"
           
+            echo "Test: "
+            cat pr_libs_storage_output_1.txt
+          
             dev_content=$(cat "$dev_file" 2>/dev/null)
             pr_content=$(cat "$pr_file" 2>/dev/null)
           

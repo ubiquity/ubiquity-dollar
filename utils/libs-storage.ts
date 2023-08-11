@@ -44,27 +44,49 @@ fs.readdir(libsFolder, (err, files) => {
         // Remove comments starting with "//" until the end of the line
         const lineWithoutComments = line.replace(/\/\/.*$/, '').trim();
 
-        // Check if the line starts with "struct "
-        if (lineWithoutComments.startsWith('struct ')) {
-          insideStruct = true;
-          currentStruct = lineWithoutComments;
-        } else if (insideStruct) {
+        if (insideStruct) {
           if (lineWithoutComments === '}') {
             // Check if the line ends with "}"
             insideStruct = false;
-            currentStruct += ' ' + lineWithoutComments;
             i++;
-            console.log("Struct #" + i + ": " + currentStruct);
-            if (branchName === "development") {
-              fs.writeFileSync("dev_libs_storage_output_" + i + ".txt", currentStruct);
-            } else {
-              fs.writeFileSync("pr_libs_storage_output_" + i + ".txt", currentStruct);
-            }
-            structBlocks.push(currentStruct);
+
+            // Write to files based on the branchName condition
+            const fileName = branchName === 'development' ?
+              'dev_libs_storage_output_' + i + '.txt' :
+              'pr_libs_storage_output_' + i + '.txt';
+
+            fs.writeFileSync(fileName, currentStruct);
+
+            currentStruct = ''; // Reset the currentStruct for the next struct block
           } else {
             currentStruct += ' ' + lineWithoutComments;
           }
+        } else if (lineWithoutComments.startsWith('struct ')) {
+          insideStruct = true;
+          currentStruct = lineWithoutComments;
         }
+
+        // Check if the line starts with "struct "
+        // if (lineWithoutComments.startsWith('struct ')) {
+        //   insideStruct = true;
+        //   currentStruct = lineWithoutComments;
+        // } else if (insideStruct) {
+        //   if (lineWithoutComments === '}') {
+        //     // Check if the line ends with "}"
+        //     insideStruct = false;
+        //     currentStruct += ' ' + lineWithoutComments;
+        //     i++;
+        //     console.log("Struct #" + i + ": " + currentStruct);
+        //     if (branchName === "development") {
+        //       fs.writeFileSync("dev_libs_storage_output_" + i + ".txt", currentStruct);
+        //     } else {
+        //       fs.writeFileSync("pr_libs_storage_output_" + i + ".txt", currentStruct);
+        //     }
+        //     structBlocks.push(currentStruct);
+        //   } else {
+        //     currentStruct += ' ' + lineWithoutComments;
+        //   }
+        // }
       }
 
 
