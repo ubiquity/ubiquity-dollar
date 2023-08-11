@@ -5,14 +5,14 @@ on:
   pull_request:
 
 jobs:
-  check-diamond-storage:
-    runs-on: ubuntu-22.04
+  generate_and_save_pr_files:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "18.14.1"
@@ -74,15 +74,16 @@ jobs:
           name: pr_files
           path: ./utils/pr_files
 
+
+  check-diamond-storage:
+  generate_and_save_dev_files:
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Checkout to development
         uses: actions/checkout@v2
         with:
           ref: development
-
-      - name: Display PR Files
-        run: |
-          echo "Display PR files: "
-          ls
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -141,6 +142,30 @@ jobs:
         with:
           name: dev_files
           path: ./utils/dev_files
+
+  compare_storage_files:
+    needs: [ generate_and_save_pr_files, generate_and_save_dev_files ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download PR Files Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: pr_files
+
+      - name: Download Dev Files Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: dev_files
+
+      - name: Compare PR and Dev Files
+        run: |
+          echo "PR files: "
+          ls pr_files
+          cat pr_files/pr_libs_storage_output_*.txt
+          echo "Dev files: "
+          ls dev_files
+          cat dev_files/dev_libs_storage_output_*.txt
 #
 #      - name: Compare Storage
 #        run: |
