@@ -164,17 +164,13 @@ jobs:
       - name: Compare Files
         run: |
           total_dev_files=$(ls dev_libs_storage_output_*.txt 2>/dev/null | wc -l)
-          cat $total_dev_files
           total_pr_files=$(ls pr_libs_storage_output_*.txt 2>/dev/null | wc -l)
-          cat $total_pr_files
           
           if [[ $total_dev_files -gt $total_pr_files ]]; then
             total_files=$total_dev_files
           else
             total_files=$total_pr_files
           fi
-          
-          cat $total_files
           
           for ((i = 1; i <= $total_files; i++)); do
             dev_file="dev_libs_storage_output_$i.txt"
@@ -184,9 +180,9 @@ jobs:
             pr_content=$(cat "$pr_file" 2>/dev/null)
           
             if [[ "$dev_content" == "$pr_content" ]]; then
-              echo "Content of $dev_file is the same as $pr_file" >> comparison_results.txt
+              echo "Content of $dev_file is the same as $pr_file"
             else
-              echo "Content of $dev_file is different from $pr_file" >> comparison_results.txt
+              echo "Content of $dev_file is different from $pr_file"
             fi
           done
 #
