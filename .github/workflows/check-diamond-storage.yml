@@ -51,6 +51,7 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           echo "::set-output name=pr-storage-output::$(cat pr_storage_output.txt)"
+          cat pr_storage_output.txt
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -123,6 +124,7 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           echo "::set-output name=dev-storage-output::$(cat dev_storage_output.txt)"
+          cat dev_storage_output.txt
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -179,9 +181,9 @@ jobs:
             dev_content=$(cat "$dev_file" 2>/dev/null)
             pr_content=$(cat "$pr_file" 2>/dev/null)
           
-            echo "Dev file:"
+            echo "Dev file:\n"
             cat "$dev_file" 2>/dev/null
-            echo "PR file:"
+            echo "PR file:\n"
             cat "$pr_file" 2>/dev/null
           
           # Remove common content from the beginning
@@ -189,17 +191,17 @@ jobs:
             pr_content_trimmed="${pr_content#$dev_content}"
           
             if [[ "$pr_content" == "$dev_content"* ]]; then
-              echo "No modifications found at the start or in the middle of $dev_file or $pr_file"
+              echo "\nNo modifications found at the start or in the middle of $dev_file or $pr_file"
             else
-              echo "Modifications found at the start or in the middle of $dev_file or $pr_file"
+              echo "\nModifications found at the start or in the middle of $dev_file or $pr_file"
             fi
           done
-#
-#      - name: Compare Storage
-#        run: |
-#          if [[ '${{ steps.save_pr_output.outputs.pr-storage-output }}' = '${{ steps.save_dev_output.outputs.dev-storage-output }}' ]]; then
-#            echo "Diamond storage is the same"
-#          else
-#            echo "Diamond storage is different"
-#          fi
-#
+
+      - name: Compare Storage
+        run: |
+          if [[ '${{ steps.save_pr_output.outputs.pr-storage-output }}' == '${{ steps.save_dev_output.outputs.dev-storage-output }}' ]]; then
+            echo "Diamond storage is the same"
+          else
+            echo "Diamond storage is different"
+          fi
+
