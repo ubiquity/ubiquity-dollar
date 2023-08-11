@@ -1,5 +1,5 @@
 # Diamond
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f7ea83705c682caf40f2ca987d85e510aa7c0600/src/dollar/Diamond.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/2f1735fba83e3ef378f1fe9179c677069814edba/src/dollar/Diamond.sol)
 
 Contract that implements diamond proxy pattern
 

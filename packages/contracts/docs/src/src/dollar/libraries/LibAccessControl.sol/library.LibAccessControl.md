@@ -1,5 +1,5 @@
 # LibAccessControl
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f7ea83705c682caf40f2ca987d85e510aa7c0600/src/dollar/libraries/LibAccessControl.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/2f1735fba83e3ef378f1fe9179c677069814edba/src/dollar/libraries/LibAccessControl.sol)
 
 Access control library
 
