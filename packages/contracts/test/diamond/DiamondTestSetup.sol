@@ -693,7 +693,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
         ICreditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
         );
-        ICreditRedemptionCalculationFacet = CreditRedemptionCalculatorFacet(address(diamond));
+        ICreditRedemptionCalculationFacet = CreditRedemptionCalculatorFacet(
+            address(diamond)
+        );
 
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
@@ -704,8 +706,14 @@ abstract contract DiamondSetup is DiamondTestHelper {
         // grant diamond dollar minting and burning rights
         IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
         IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
+        // grand diamond Credit token minting and burning rights
+        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
         // grant diamond token admin rights
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(diamond));
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MANAGER_ROLE,
+            address(diamond)
+        );
         // grant diamond token minter rights
         IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
         IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));

@@ -10,7 +10,6 @@ import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleD
 import "../../../src/dollar/libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
 contract CreditNftManagerFacetTest is DiamondSetup {
@@ -44,7 +43,9 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         creditNftAddress = address(_creditNft);
         governanceTokenAddress = IManager.governanceTokenAddress();
         // deploy credit token
-        MockCreditToken _creditToken = new MockCreditToken(0);
+        UbiquityCreditToken _creditToken = new UbiquityCreditToken(
+            address(diamond)
+        );
         creditTokenAddress = address(_creditToken);
         vm.prank(admin);
         IManager.setCreditTokenAddress(creditTokenAddress);
@@ -52,6 +53,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         // set this contract as minter
         vm.startPrank(admin);
         IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(this));
+        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(this));
         vm.stopPrank();
     }
 
@@ -238,7 +240,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockTwapFuncs(2e18);
         mockDollarMintCalcFuncs(1e18);
         address account1 = address(0x123);
-        MockCreditToken(creditTokenAddress).mint(account1, 100e18);
+        UbiquityCreditToken(creditTokenAddress).mint(account1, 100e18);
         vm.prank(account1);
         uint256 unredeemed = ICreditNftManagerFacet.burnCreditTokensForDollars(
             10e18
@@ -283,7 +285,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
             100,
             expiryBlockNumber
         );
-        MockCreditToken(creditTokenAddress).mint(
+        UbiquityCreditToken(creditTokenAddress).mint(
             creditNftManagerAddress,
             20000e18
         );
@@ -341,7 +343,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
             100,
             expiryBlockNumber
         );
-        MockCreditToken(creditTokenAddress).mint(
+        UbiquityCreditToken(creditTokenAddress).mint(
             creditNftManagerAddress,
             10000e18
         );
