@@ -5,7 +5,6 @@ import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
@@ -158,8 +157,14 @@ contract ManagerFacetTest is DiamondSetup {
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            stakingV1Address
+        );
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            stakingV1Address
+        );
 
         vm.stopPrank();
 
