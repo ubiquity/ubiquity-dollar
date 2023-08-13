@@ -51,7 +51,6 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           echo "::set-output name=pr-storage-output::$(cat pr_storage_output.txt)"
-          cat pr_storage_output.txt
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -124,7 +123,6 @@ jobs:
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
           cd ../packages/contracts
           echo "::set-output name=dev-storage-output::$(cat dev_storage_output.txt)"
-          cat dev_storage_output.txt
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -181,11 +179,6 @@ jobs:
             dev_content=$(cat "$dev_file" 2>/dev/null)
             pr_content=$(cat "$pr_file" 2>/dev/null)
           
-            echo "Dev file:\n"
-            cat "$dev_file" 2>/dev/null
-            echo "PR file:\n"
-            cat "$pr_file" 2>/dev/null
-          
           # Remove common content from the beginning
             dev_content_trimmed="${dev_content#$pr_content}"
             pr_content_trimmed="${pr_content#$dev_content}"
@@ -199,6 +192,8 @@ jobs:
 
       - name: Compare Storage
         run: |
+          echo "PR Storage Output: ${{ steps.save_pr_output.outputs.pr-storage-output }}"
+          echo "PR Storage Output: ${{ steps.save_dev_output.outputs.dev-storage-output }}"
           if [[ '${{ steps.save_pr_output.outputs.pr-storage-output }}' == '${{ steps.save_dev_output.outputs.dev-storage-output }}' ]]; then
             echo "Diamond storage is the same"
           else
