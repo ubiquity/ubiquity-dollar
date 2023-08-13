@@ -49,8 +49,7 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
-          cd ../packages/contracts
-          echo "::set-output name=pr-storage-output::$(cat pr_storage_output.txt)"
+          ls
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -68,11 +67,17 @@ jobs:
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
-      - name: Save PR Files as Artifact
+      - name: Save PR Libs as Artifact
         uses: actions/upload-artifact@v2
         with:
           name: pr_files
           path: ./utils/pr_files
+
+      - name: Save PR Diamond as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr_diamond_files
+          path: ./packages/contracts/pr_storage_output.txt
 
 
   generate_and_save_dev_files:
@@ -121,12 +126,11 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
-          cd ../packages/contracts
-          echo "::set-output name=dev-storage-output::$(cat dev_storage_output.txt)"
+          ls
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
-      - name: Run Libs  Storage Check - development
+      - name: Run Libs Storage Check - development
         id: save_libs_dev_output
         run: |
           cd ./utils
@@ -140,11 +144,17 @@ jobs:
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
-      - name: Save Dev Files as Artifact
+      - name: Save Dev Libs as Artifact
         uses: actions/upload-artifact@v2
         with:
           name: dev_files
           path: ./utils/dev_files
+
+      - name: Save Dev Diamond as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dev_diamond_files
+          path: ./packages/contracts/dev_storage_output.txt
 
   check_diamond_storage:
     needs: [ generate_and_save_pr_files, generate_and_save_dev_files ]
@@ -160,6 +170,16 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: dev_files
+
+      - name: Download PR Diamond Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: pr_diamond_files
+
+      - name: Download Dev Diamond Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: dev_diamond_files
 
       - name: Compare Files
         run: |
