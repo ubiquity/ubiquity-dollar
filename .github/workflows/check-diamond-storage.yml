@@ -212,6 +212,10 @@ jobs:
 
       - name: Compare Storage
         run: |
+          echo "Test"
+          cat dev_storage_output.txt
+          dev_diamond_content=$(cat dev_storage_output.txt 2>/dev/null)
+          pr_diamond_content=$(cat pr_storage_output.txt 2>/dev/null)
           echo "PR Storage Output: ${{ steps.save_pr_output.outputs.pr-storage-output }}"
           echo "PR Storage Output: ${{ steps.save_dev_output.outputs.dev-storage-output }}"
           if [[ '${{ steps.save_pr_output.outputs.pr-storage-output }}' == '${{ steps.save_dev_output.outputs.dev-storage-output }}' ]]; then
