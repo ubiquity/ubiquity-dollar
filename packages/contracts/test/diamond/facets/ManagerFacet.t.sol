@@ -5,7 +5,6 @@ import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
@@ -30,7 +29,7 @@ contract ManagerFacetTest is DiamondSetup {
         assertEq(IManager.creditTokenAddress(), contract1);
     }
 
-    function testSetCreditNFTAddress_ShouldSucceed() public prankAs(admin) {
+    function testSetCreditNftAddress_ShouldSucceed() public prankAs(admin) {
         IManager.setCreditNftAddress(contract1);
         assertEq(IManager.creditNftAddress(), contract1);
     }
@@ -102,11 +101,11 @@ contract ManagerFacetTest is DiamondSetup {
 
     function testSetIncentiveToDollar_ShouldSucceed() public prankAs(admin) {
         assertEq(
-            IAccessCtrl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
+            IAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
             true
         );
         assertEq(
-            IAccessCtrl.hasRole(
+            IAccessControl.hasRole(
                 GOVERNANCE_TOKEN_MANAGER_ROLE,
                 address(diamond)
             ),
@@ -120,7 +119,7 @@ contract ManagerFacetTest is DiamondSetup {
         prankAs(admin)
     {
         assertEq(
-            IAccessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
+            IAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
             true
         );
     }
@@ -158,8 +157,14 @@ contract ManagerFacetTest is DiamondSetup {
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            stakingV1Address
+        );
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            stakingV1Address
+        );
 
         vm.stopPrank();
 

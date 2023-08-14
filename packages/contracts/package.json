@@ -29,14 +29,13 @@
     "start:anvil": "tsx ./scripts/anvil/anvil.ts",
     "prebuild": "run-p clean",
     "deploy:development": "tsx ./scripts/deploy/dollar/development-deploy.ts",
-    "deploy:diamond": "tsx ./scripts/deploy/manager/diamond-in-all.ts",
     "clean": "run-p clean:*",
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",
     "build": "forge build",
     "forge:install": "forge install",
-    "_hardhat-task": "tsx ./scripts/task/task.ts",
-    "migrate:metapool": "tsx ./scripts/task/dollar/migrate-metapool.ts"
+    "docs": "FOUNDRY_PROFILE=docs forge doc --build",
+    "_hardhat-task": "tsx ./scripts/task/task.ts"
   },
   "keywords": [
     "stablecoin",

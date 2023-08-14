@@ -9,79 +9,103 @@ import "../libraries/Constants.sol";
 
 import "../../../src/dollar/utils/SafeAddArray.sol";
 
-/// @title ERC1155 Ubiquity preset
-/// @author Ubiquity DAO
-/// @notice ERC1155 with :
-/// - ERC1155 minter, burner and pauser
-/// - TotalSupply per id
-/// - Ubiquity Manager access control
+/**
+ * @notice ERC1155 Ubiquity preset
+ * @notice ERC1155 with:
+ * - ERC1155 minter, burner and pauser
+ * - TotalSupply per id
+ * - Ubiquity Manager access control
+ */
 contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     using SafeAddArray for uint256[];
 
-    IAccessControl public accessCtrl;
-    // Mapping from account to operator approvals
+    /// @notice Access control interface
+    IAccessControl public accessControl;
+
+    /// @notice Mapping from account to array of token ids held by the account
     mapping(address => uint256[]) public holderBalances;
+
+    /// @notice Total supply among all token ids
     uint256 public totalSupply;
 
     // ----------- Modifiers -----------
+
+    /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyMinter() virtual {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
             "ERC1155Ubiquity: not minter"
         );
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyBurner() virtual {
         require(
-            accessCtrl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
             "ERC1155Ubiquity: not burner"
         );
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() virtual {
         require(
-            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "ERC1155Ubiquity: not pauser"
         );
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Admin" role
     modifier onlyAdmin() {
         require(
-            accessCtrl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "ERC20Ubiquity: not admin"
         );
         _;
     }
 
     /**
-     * @dev constructor
+     * @notice Contract constructor
+     * @param _manager Access control address
+     * @param uri Base URI
      */
     constructor(address _manager, string memory uri) ERC1155(uri) {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
-    /// @notice getManager returns the manager address
-    /// @return manager address
+    /**
+     * @notice Returns access control address
+     * @return Access control address
+     */
     function getManager() external view returns (address) {
-        return address(accessCtrl);
+        return address(accessControl);
     }
 
-    /// @notice setManager update the manager address
-    /// @param _manager new manager address
+    /**
+     * @notice Sets access control address
+     * @param _manager New access control address
+     */
     function setManager(address _manager) external onlyAdmin {
-        accessCtrl = IAccessControl(_manager);
+        accessControl = IAccessControl(_manager);
     }
 
-    /// @notice setUri update the URI
-    /// @param newURI new URI
+    /**
+     * @notice Sets base URI
+     * @param newURI New URI
+     */
     function setUri(string memory newURI) external onlyAdmin {
         _setURI(newURI);
     }
 
-    // @dev Creates `amount` new tokens for `to`, of token type `id`.
+    /**
+     * @notice Creates `amount` new tokens for `to`, of token type `id`
+     * @param to Address where to mint tokens
+     * @param id Token type id
+     * @param amount Tokens amount to mint
+     * @param data Arbitrary data
+     */
     function mint(
         address to,
         uint256 id,
@@ -93,7 +117,13 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         holderBalances[to].add(id);
     }
 
-    // @dev xref:ROOT:erc1155.adoc#batch-operations[Batched] variant of {mint}.
+    /**
+     * @notice Mints multiple token types for `to` address
+     * @param to Address where to mint tokens
+     * @param ids Array of token type ids
+     * @param amounts Array of token amounts
+     * @param data Arbitrary data
+     */
     function mintBatch(
         address to,
         uint256[] memory ids,
@@ -109,28 +139,28 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         holderBalances[to].add(ids);
     }
 
-    /**
-     * @dev Pauses all token transfers.
-     *
-     * See {ERC1155Pausable} and {Pausable-_pause}.
-     *
-     */
+    /// @notice Pauses all token transfers
     function pause() public virtual onlyPauser {
         _pause();
     }
 
-    /**
-     * @dev Unpauses all token transfers.
-     *
-     * See {ERC1155Pausable} and {Pausable-_unpause}.
-     *
-     */
+    /// @notice Unpauses all token transfers
     function unpause() public virtual onlyPauser {
         _unpause();
     }
 
     /**
-     * @dev See {IERC1155-safeTransferFrom}.
+     * @notice Transfers `amount` tokens of token type `id` from `from` to `to`.
+     *
+     * Emits a `TransferSingle` event.
+     *
+     * Requirements:
+     *
+     * - `to` cannot be the zero address.
+     * - If the caller is not `from`, it must have been approved to spend ``from``'s tokens via `setApprovalForAll`.
+     * - `from` must have a balance of tokens of type `id` of at least `amount`.
+     * - If `to` refers to a smart contract, it must implement `IERC1155Receiver-onERC1155Received` and return the
+     * acceptance magic value.
      */
     function safeTransferFrom(
         address from,
@@ -144,7 +174,15 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     }
 
     /**
-     * @dev See {IERC1155-safeBatchTransferFrom}.
+     * @notice Batched version of `safeTransferFrom()`
+     *
+     * Emits a `TransferBatch` event.
+     *
+     * Requirements:
+     *
+     * - `ids` and `amounts` must have the same length.
+     * - If `to` refers to a smart contract, it must implement `IERC1155Receiver-onERC1155BatchReceived` and return the
+     * acceptance magic value.
      */
     function safeBatchTransferFrom(
         address from,
@@ -158,7 +196,9 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     }
 
     /**
-     * @dev array of token Id held by the msg.sender.
+     * @notice Returns array of token ids held by the `holder`
+     * @param holder Account to check tokens for
+     * @return Array of tokens which `holder` has
      */
     function holderTokens(
         address holder
@@ -166,6 +206,16 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         return holderBalances[holder];
     }
 
+    /**
+     * @notice Destroys `amount` tokens of token type `id` from `account`
+     *
+     * Emits a `TransferSingle` event.
+     *
+     * Requirements:
+     *
+     * - `account` cannot be the zero address.
+     * - `account` must have at least `amount` tokens of token type `id`.
+     */
     function _burn(
         address account,
         uint256 id,
@@ -175,6 +225,15 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         totalSupply -= amount;
     }
 
+    /**
+     * @notice Batched version of `_burn()`
+     *
+     * Emits a `TransferBatch` event.
+     *
+     * Requirements:
+     *
+     * - `ids` and `amounts` must have the same length.
+     */
     function _burnBatch(
         address account,
         uint256[] memory ids,
@@ -186,6 +245,24 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         }
     }
 
+    /**
+     * @notice Hook that is called before any token transfer. This includes minting
+     * and burning, as well as batched variants.
+     *
+     * The same hook is called on both single and batched variants. For single
+     * transfers, the length of the `ids` and `amounts` arrays will be 1.
+     *
+     * Calling conditions (for each `id` and `amount` pair):
+     *
+     * - When `from` and `to` are both non-zero, `amount` of ``from``'s tokens
+     * of token type `id` will be  transferred to `to`.
+     * - When `from` is zero, `amount` tokens of token type `id` will be minted
+     * for `to`.
+     * - when `to` is zero, `amount` of ``from``'s tokens of token type `id`
+     * will be burned.
+     * - `from` and `to` are never both zero.
+     * - `ids` and `amounts` have the same, non-zero length.
+     */
     function _beforeTokenTransfer(
         address operator,
         address from,

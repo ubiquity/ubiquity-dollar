@@ -1,0 +1,52 @@
+name: Auto Generate Doc
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - development
+    paths:
+      - '**.sol'
+
+jobs:
+  generate-doc:
+    name: Generate Doc
+    if: github.repository == 'ubiquity/ubiquity-dollar'
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.14.1"
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly-d369d2486f85576eec4ca41d277391dfdae21ba7
+
+      - name: Yarn Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+
+      - name: Generate Docs
+        run: yarn workspace @ubiquity/contracts docs
+
+      - name: Push docs changed
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          echo "Check git information"
+          git status
+          git branch -avv
+          git log --graph --pretty=oneline --abbrev-commit --all -20
+          echo "git diff"
+          git diff
+          git add .
+          git commit -m "docs: auto generate NATSPEC docs"
+          echo "do git push to development branch"
+          git push origin development

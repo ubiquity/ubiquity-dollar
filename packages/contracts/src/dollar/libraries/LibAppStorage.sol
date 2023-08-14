@@ -5,13 +5,14 @@ import {LibDiamond} from "./LibDiamond.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
 import "./Constants.sol";
 
+/// @notice Shared struct used as a storage in the `LibAppStorage` library
 struct AppStorage {
     // reentrancy guard
     uint256 reentrancyStatus;
     // others
     address dollarTokenAddress;
     address creditNftAddress;
-    address creditNFTCalculatorAddress;
+    address creditNftCalculatorAddress;
     address dollarMintCalculatorAddress;
     address stakingShareAddress;
     address stakingContractAddress;
@@ -33,7 +34,12 @@ struct AppStorage {
     bool paused;
 }
 
+/// @notice Library used as a shared storage among all protocol libraries
 library LibAppStorage {
+    /**
+     * @notice Returns `AppStorage` struct used as a shared storage among all libraries
+     * @return ds `AppStorage` struct used as a shared storage
+     */
     function appStorage() internal pure returns (AppStorage storage ds) {
         assembly {
             ds.slot := 0
@@ -41,11 +47,13 @@ library LibAppStorage {
     }
 }
 
+/// @notice Contract includes modifiers shared across all protocol's contracts
 contract Modifiers {
+    /// @notice Shared struct used as a storage across all protocol's contracts
     AppStorage internal store;
 
     /**
-     * @dev Prevents a contract from calling itself, directly or indirectly.
+     * @notice Prevents a contract from calling itself, directly or indirectly.
      * Calling a `nonReentrant` function from another `nonReentrant`
      * function is not supported. It is possible to prevent this from happening
      * by making the `nonReentrant` function external, and making it call a
@@ -54,7 +62,6 @@ contract Modifiers {
      * @dev Works identically to OZ's nonReentrant.
      * @dev Used to avoid state storage collision within diamond.
      */
-
     modifier nonReentrant() {
         // On the first call to nonReentrant, _notEntered will be true
         require(
@@ -71,12 +78,14 @@ contract Modifiers {
         store.reentrancyStatus = _NOT_ENTERED;
     }
 
+    /// @notice Checks that method is called by a contract owner
     modifier onlyOwner() {
         LibDiamond.enforceIsContractOwner();
         _;
     }
 
-    modifier onlyCreditNFTManager() {
+    /// @notice Checks that method is called by address with the `CREDIT_NFT_MANAGER_ROLE` role
+    modifier onlyCreditNftManager() {
         require(
             LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a Credit NFT manager"
@@ -84,6 +93,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `DEFAULT_ADMIN_ROLE` role
     modifier onlyAdmin() {
         require(
             LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
@@ -92,6 +102,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_MINTER_ROLE` role
     modifier onlyMinter() {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
@@ -100,6 +111,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_BURNER_ROLE` role
     modifier onlyBurner() {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
@@ -108,30 +120,19 @@ contract Modifiers {
         _;
     }
 
-    /**
-     * @dev Modifier to make a function callable only when the contract is not paused.
-     *
-     * Requirements:
-     *
-     * - The contract must not be paused.
-     */
+    /// @notice Modifier to make a function callable only when the contract is not paused
     modifier whenNotPaused() {
         require(!LibAccessControl.paused(), "Pausable: paused");
         _;
     }
 
-    /**
-     * @dev Modifier to make a function callable only when the contract is paused.
-     *
-     * Requirements:
-     *
-     * - The contract must be paused.
-     */
+    /// @notice Modifier to make a function callable only when the contract is paused
     modifier whenPaused() {
         require(LibAccessControl.paused(), "Pausable: not paused");
         _;
     }
 
+    /// @notice Checks that method is called by address with the `STAKING_MANAGER_ROLE` role
     modifier onlyStakingManager() {
         require(
             LibAccessControl.hasRole(STAKING_MANAGER_ROLE, msg.sender),
@@ -140,6 +141,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `PAUSER_ROLE` role
     modifier onlyPauser() {
         require(
             LibAccessControl.hasRole(PAUSER_ROLE, msg.sender),
@@ -148,6 +150,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_MANAGER_ROLE` role
     modifier onlyTokenManager() {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
@@ -156,6 +159,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `INCENTIVE_MANAGER_ROLE` role
     modifier onlyIncentiveAdmin() {
         require(
             LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
@@ -164,6 +168,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Checks that method is called by address with the `CURVE_DOLLAR_MANAGER_ROLE` role
     modifier onlyDollarManager() {
         require(
             LibAccessControl.hasRole(CURVE_DOLLAR_MANAGER_ROLE, msg.sender),
@@ -172,6 +177,7 @@ contract Modifiers {
         _;
     }
 
+    /// @notice Initializes reentrancy guard on contract deployment
     function _initReentrancyGuard() internal {
         store.reentrancyStatus = _NOT_ENTERED;
     }

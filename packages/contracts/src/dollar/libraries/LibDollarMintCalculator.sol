@@ -7,12 +7,15 @@ import "abdk/ABDKMathQuad.sol";
 import "./LibTWAPOracle.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
-/// @title Calculates amount of dollars ready to be minted when twapPrice > 1
+/// @notice Calculates amount of Dollars ready to be minted when TWAP price (i.e. Dollar price) > 1$
 library LibDollarMintCalculator {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
-    /// @notice returns (TWAP_PRICE  -1) * Ubiquity_Dollar_Total_Supply
+    /**
+     * @notice Returns amount of Dollars to be minted based on formula `(TWAP_PRICE - 1) * DOLLAR_TOTAL_SUPPLY`
+     * @return Amount of Dollars to be minted
+     */
     function getDollarsToMint() internal view returns (uint256) {
         AppStorage storage store = LibAppStorage.appStorage();
         uint256 twapPrice = LibTWAPOracle.consult(store.dollarTokenAddress);

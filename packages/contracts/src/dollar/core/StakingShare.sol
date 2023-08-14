@@ -8,9 +8,11 @@ import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
+/// @notice Contract representing a staking share in the form of ERC1155 token
 contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     using SafeAddArray for uint256[];
 
+    /// @notice Stake struct
     struct Stake {
         // address of the minter
         address minter;
@@ -24,50 +26,61 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         uint256 lpAmount;
     }
 
-    // Mapping from account to operator approvals
+    /// @notice Mapping of stake id to stake info
     mapping(uint256 => Stake) private _stakes;
+
+    /// @notice Total LP amount staked
     uint256 private _totalLP;
 
+    /// @notice Base token URI
     string private _baseURI = "";
 
     // ----------- Modifiers -----------
+
+    /// @notice Modifier checks that the method is called by a user with the "Staking share minter" role
     modifier onlyMinter() override {
         require(
-            accessCtrl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
             "Staking Share: not minter"
         );
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Staking share burner" role
     modifier onlyBurner() override {
         require(
-            accessCtrl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
             "Staking Share: not burner"
         );
         _;
     }
 
+    /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() override {
         require(
-            accessCtrl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "Staking Share: not pauser"
         );
         _;
     }
 
     /**
-     * @dev constructor
+     * @notice Contract constructor
+     * @param _manager Access control address
+     * @param _uri URI string
      */
     constructor(
         address _manager,
         string memory _uri
     ) ERC1155Ubiquity(_manager, _uri) {}
 
-    /// @dev update stake LP amount , LP rewards debt and end block.
-    /// @param _stakeId staking share id
-    /// @param _lpAmount amount of LP token deposited
-    /// @param _lpRewardDebt amount of excess LP token inside the staking contract
-    /// @param _endBlock end locking period block number
+    /**
+     * @notice Updates a staking share
+     * @param _stakeId Staking share id
+     * @param _lpAmount Amount of Dollar-3CRV LP tokens deposited
+     * @param _lpRewardDebt Amount of excess LP token inside the staking contract
+     * @param _endBlock Block number when the locking period ends
+     */
     function updateStake(
         uint256 _stakeId,
         uint256 _lpAmount,
@@ -88,11 +101,14 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         stake.endBlock = _endBlock;
     }
 
-    // @dev Creates `amount` new tokens for `to`, of token type `id`.
-    /// @param to owner address
-    /// @param lpDeposited amount of LP token deposited
-    /// @param lpRewardDebt amount of excess LP token inside the staking contract
-    /// @param endBlock block number when the locking period ends
+    /**
+     * @notice Mints a single staking share token for the `to` address
+     * @param to Owner address
+     * @param lpDeposited Amount of Dollar-3CRV LP tokens deposited
+     * @param lpRewardDebt Amount of excess LP tokens inside the staking contract
+     * @param endBlock Block number when the locking period ends
+     * @return id Minted staking share id
+     */
     function mint(
         address to,
         uint256 lpDeposited,
@@ -114,7 +130,17 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     }
 
     /**
-     * @dev See {IERC1155-safeTransferFrom}.
+     * @notice Transfers `amount` tokens of token type `id` from `from` to `to`.
+     *
+     * Emits a {TransferSingle} event.
+     *
+     * Requirements:
+     *
+     * - `to` cannot be the zero address.
+     * - If the caller is not `from`, it must have been approved to spend ``from``'s tokens via {setApprovalForAll}.
+     * - `from` must have a balance of tokens of type `id` of at least `amount`.
+     * - If `to` refers to a smart contract, it must implement {IERC1155Receiver-onERC1155Received} and return the
+     * acceptance magic value.
      */
     function safeTransferFrom(
         address from,
@@ -127,22 +153,23 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     }
 
     /**
-     * @dev Total amount of LP tokens deposited.
+     * @notice Returns total amount of Dollar-3CRV LP tokens deposited
+     * @return Total amount of LP tokens deposited
      */
     function totalLP() public view virtual returns (uint256) {
         return _totalLP;
     }
 
     /**
-     * @dev return stake details.
+     * @notice Returns stake info
+     * @param id Staking share id
+     * @return Staking share info
      */
     function getStake(uint256 id) public view returns (Stake memory) {
         return _stakes[id];
     }
 
-    /**
-     * @dev See {IERC1155-safeBatchTransferFrom}.
-     */
+    /// @inheritdoc ERC1155Ubiquity
     function safeBatchTransferFrom(
         address from,
         address to,
@@ -153,6 +180,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
     }
 
+    /// @inheritdoc ERC1155Ubiquity
     function _burnBatch(
         address account,
         uint256[] memory ids,
@@ -161,6 +189,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         super._burnBatch(account, ids, amounts);
     }
 
+    /// @inheritdoc ERC1155Ubiquity
     function _beforeTokenTransfer(
         address operator,
         address from,
@@ -172,6 +201,11 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
+    /**
+     * @notice Returns URI by token id
+     * @param tokenId Token id
+     * @return URI string
+     */
     function uri(
         uint256 tokenId
     )
@@ -184,6 +218,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         return super.uri(tokenId);
     }
 
+    /// @inheritdoc ERC1155Ubiquity
     function _burn(
         address account,
         uint256 id,
@@ -197,9 +232,10 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     }
 
     /**
-     * @dev this function is used to allow the staking manage to fix the uri should anything be wrong with the current one.
+     * @notice Sets URI for token type `tokenId`
+     * @param tokenId Token type id
+     * @param tokenUri Token URI
      */
-
     function setUri(
         uint256 tokenId,
         string memory tokenUri
@@ -208,13 +244,18 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     }
 
     /**
-     * @dev this function is used to allow the staking manage to fix the base uri should anything be wrong with the current one.
+     * @notice Sets base URI for all token types
+     * @param newUri New URI string
      */
     function setBaseUri(string memory newUri) external onlyMinter {
         _setBaseURI(newUri);
         _baseURI = newUri;
     }
 
+    /**
+     * @notice Returns base URI for all token types
+     * @return Base URI string
+     */
     function getBaseUri() external view returns (string memory) {
         return _baseURI;
     }

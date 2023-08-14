@@ -17,22 +17,32 @@ import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
 
-// It is expected that this contract is customized if you want to deploy your diamond
-// with data from a deployment script. Use the init function to initialize state variables
-// of your diamond. Add parameters to the init function if you need to.
-
+/**
+ * @notice It is expected that this contract is customized if you want to deploy your diamond
+ * with data from a deployment script. Use the init function to initialize state variables
+ * of your diamond. Add parameters to the init function if you need to.
+ *
+ * @notice How it works:
+ * 1. New `Diamond` contract is created
+ * 2. Inside the diamond's constructor there a `delegatecall()` to `DiamondInit` with the provided args
+ * 3. `DiamondInit` updates diamond storage
+ */
 contract DiamondInit is Modifiers {
+    /// @notice Struct used for diamond initialization
     struct Args {
         address admin;
         address[] tos;
         uint256[] amounts;
         uint256[] stakingShareIDs;
         uint256 governancePerBlock;
-        uint256 creditNFTLengthBlocks;
+        uint256 creditNftLengthBlocks;
     }
 
-    // You can add parameters to this function in order to pass in
-    // data to set your own state variables
+    /**
+     * @notice Initializes a diamond with state variables
+     * @dev You can add parameters to this function in order to pass in data to set your own state variables
+     * @param _args Init args
+     */
     function init(Args memory _args) external {
         // adding ERC165 data
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
@@ -73,14 +83,14 @@ contract DiamondInit is Modifiers {
             _args.stakingShareIDs,
             _args.governancePerBlock
         );
-        // creditNFTManager
-        /// @param _creditNFTLengthBlocks how many blocks Credit NFT last. can't be changed
+        // creditNftManager
+        /// @param _creditNftLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)
-        LibCreditNftManager.creditNFTStorage().creditNFTLengthBlocks = _args
-            .creditNFTLengthBlocks;
+        LibCreditNftManager.creditNftStorage().creditNftLengthBlocks = _args
+            .creditNftLengthBlocks;
         LibCreditNftManager
-            .creditNFTStorage()
-            .expiredCreditNFTConversionRate = 2;
+            .creditNftStorage()
+            .expiredCreditNftConversionRate = 2;
 
         LibCreditRedemptionCalculator
             .creditRedemptionCalculatorStorage()

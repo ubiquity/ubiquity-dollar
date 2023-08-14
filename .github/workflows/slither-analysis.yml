@@ -4,7 +4,11 @@ on:
     branches:
       - development
       - main
+    paths:
+      - '**.sol'
   pull_request:
+    paths:
+      - '**.sol'
 
 jobs:
   slither-analysis:

@@ -5,12 +5,13 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICreditNftRedemptionCalculator} from "../../dollar/interfaces/ICreditNftRedemptionCalculator.sol";
 import {LibCreditNftRedemptionCalculator} from "../libraries/LibCreditNftRedemptionCalculator.sol";
 
-/// @title Uses the following formula: ((1/(1-R)^2) - 1)
+/// @notice Contract facet for calculating amount of Credit NFTs to mint on Dollars burn
 contract CreditNftRedemptionCalculatorFacet is ICreditNftRedemptionCalculator {
+    /// @inheritdoc ICreditNftRedemptionCalculator
     function getCreditNftAmount(
         uint256 dollarsToBurn
     ) external view override returns (uint256) {
         return
-            LibCreditNftRedemptionCalculator.getCreditNFTAmount(dollarsToBurn);
+            LibCreditNftRedemptionCalculator.getCreditNftAmount(dollarsToBurn);
     }
 }

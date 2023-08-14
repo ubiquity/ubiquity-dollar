@@ -52,8 +52,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
     BondingCurveFacet bondingCurveFacet;
     CurveDollarIncentiveFacet curveDollarIncentiveFacet;
 
-    CreditNftManagerFacet creditNFTManagerFacet;
-    CreditNftRedemptionCalculatorFacet creditNFTRedemptionCalculatorFacet;
+    CreditNftManagerFacet creditNftManagerFacet;
+    CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacet;
 
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
@@ -66,7 +66,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     IDiamondCut ICut;
     ManagerFacet IManager;
     TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
-    AccessControlFacet IAccessCtrl;
+    AccessControlFacet IAccessControl;
 
     CollectableDustFacet ICollectableDustFacet;
     ChefFacet IChefFacet;
@@ -78,9 +78,9 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     BondingCurveFacet IBondingCurveFacet;
 
-    CreditNftManagerFacet ICreditNFTMgrFacet;
-    CreditNftRedemptionCalculatorFacet ICreditNFTRedCalcFacet;
-    CreditRedemptionCalculatorFacet ICreditRedCalcFacet;
+    CreditNftManagerFacet ICreditNftManagerFacet;
+    CreditNftRedemptionCalculatorFacet ICreditNftRedemptionCalculationFacet;
+    CreditRedemptionCalculatorFacet ICreditRedemptionCalculationFacet;
 
     DollarMintCalculatorFacet IDollarMintCalcFacet;
     DollarMintExcessFacet IDollarMintExcessFacet;
@@ -96,7 +96,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     address owner;
     address admin;
-    address tokenMgr;
+    address tokenManager;
     address user1;
     address contract1;
     address contract2;
@@ -115,8 +115,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
     bytes4[] selectorsOfBondingCurveFacet;
     bytes4[] selectorsOfCurveDollarIncentiveFacet;
 
-    bytes4[] selectorsOfCreditNFTManagerFacet;
-    bytes4[] selectorsOfCreditNFTRedemptionCalculatorFacet;
+    bytes4[] selectorsOfCreditNftManagerFacet;
+    bytes4[] selectorsOfCreditNftRedemptionCalculatorFacet;
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
 
     bytes4[] selectorsOfDollarMintCalculatorFacet;
@@ -127,7 +127,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         incentive_addr = address(new MockIncentive());
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
-        tokenMgr = generateAddress("TokenMgr", false, 10 ether);
+        tokenManager = generateAddress("TokenManager", false, 10 ether);
 
         user1 = generateAddress("User1", false, 10 ether);
         contract1 = generateAddress("Contract1", true, 10 ether);
@@ -218,7 +218,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             managerFacet.creditCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
-            managerFacet.creditNFTCalculatorAddress.selector
+            managerFacet.creditNftCalculatorAddress.selector
         );
         selectorsOfManagerFacet.push(
             managerFacet.dollarMintCalculatorAddress.selector
@@ -402,55 +402,55 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
 
         // Credit facets
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.creditNFTLengthBlocks.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.creditNftLengthBlocks.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.expiredCreditNFTConversionRate.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.expiredCreditNftConversionRate.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.setExpiredCreditNFTConversionRate.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.setExpiredCreditNftConversionRate.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.setCreditNFTLength.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.setCreditNftLength.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.exchangeDollarsForCreditNft.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.exchangeDollarsForCreditNft.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.exchangeDollarsForCredit.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.exchangeDollarsForCredit.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.getCreditNFTReturnedForDollars.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.getCreditNftReturnedForDollars.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.getCreditReturnedForDollars.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.getCreditReturnedForDollars.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.onERC1155Received.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.onERC1155Received.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.onERC1155BatchReceived.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.onERC1155BatchReceived.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.burnExpiredCreditNFTForGovernance.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.burnExpiredCreditNftForGovernance.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.burnCreditNFTForCredit.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.burnCreditNftForCredit.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.burnCreditTokensForDollars.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.burnCreditTokensForDollars.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.redeemCreditNft.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.redeemCreditNft.selector
         );
-        selectorsOfCreditNFTManagerFacet.push(
-            creditNFTManagerFacet.mintClaimableDollars.selector
+        selectorsOfCreditNftManagerFacet.push(
+            creditNftManagerFacet.mintClaimableDollars.selector
         );
 
         // Credit NFT Redemption Calculator
-        selectorsOfCreditNFTRedemptionCalculatorFacet.push(
-            creditNFTRedemptionCalculatorFacet.getCreditNftAmount.selector
+        selectorsOfCreditNftRedemptionCalculatorFacet.push(
+            creditNftRedemptionCalculatorFacet.getCreditNftAmount.selector
         );
 
         // Credit Redemption Calculator
@@ -488,8 +488,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
         bondingCurveFacet = new BondingCurveFacet();
         curveDollarIncentiveFacet = new CurveDollarIncentiveFacet();
 
-        creditNFTManagerFacet = new CreditNftManagerFacet();
-        creditNFTRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
+        creditNftManagerFacet = new CreditNftManagerFacet();
+        creditNftRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacet = new CreditRedemptionCalculatorFacet();
 
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
@@ -509,8 +509,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "UbiquityPoolFacet",
             "StakingFormulasFacet",
             "CurveDollarIncentiveFacet",
-            "CreditNFTManagerFacet",
-            "CreditNFTRedemptionCalculatorFacet",
+            "CreditNftManagerFacet",
+            "CreditNftRedemptionCalculatorFacet",
             "CreditRedemptionCalculatorFacet",
             "DollarMintCalculatorFacet",
             "DollarMintExcessFacet",
@@ -523,7 +523,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
             amounts: new uint256[](0),
             stakingShareIDs: new uint256[](0),
             governancePerBlock: 10e18,
-            creditNFTLengthBlocks: 100
+            creditNftLengthBlocks: 100
         });
         // diamond arguments
         DiamondArgs memory _args = DiamondArgs({
@@ -614,16 +614,16 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         cuts[10] = (
             FacetCut({
-                facetAddress: address(creditNFTManagerFacet),
+                facetAddress: address(creditNftManagerFacet),
                 action: FacetCutAction.Add,
-                functionSelectors: selectorsOfCreditNFTManagerFacet
+                functionSelectors: selectorsOfCreditNftManagerFacet
             })
         );
         cuts[11] = (
             FacetCut({
-                facetAddress: address(creditNFTRedemptionCalculatorFacet),
+                facetAddress: address(creditNftRedemptionCalculatorFacet),
                 action: FacetCutAction.Add,
-                functionSelectors: selectorsOfCreditNFTRedemptionCalculatorFacet
+                functionSelectors: selectorsOfCreditNftRedemptionCalculatorFacet
             })
         );
         cuts[12] = (
@@ -675,7 +675,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
         ILoupe = IDiamondLoupe(address(diamond));
         ICut = IDiamondCut(address(diamond));
         IManager = ManagerFacet(address(diamond));
-        IAccessCtrl = AccessControlFacet(address(diamond));
+        IAccessControl = AccessControlFacet(address(diamond));
         ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
 
         ICollectableDustFacet = CollectableDustFacet(address(diamond));
@@ -689,11 +689,13 @@ abstract contract DiamondSetup is DiamondTestHelper {
         );
         IOwnershipFacet = OwnershipFacet(address(diamond));
 
-        ICreditNFTMgrFacet = CreditNftManagerFacet(address(diamond));
-        ICreditNFTRedCalcFacet = CreditNftRedemptionCalculatorFacet(
+        ICreditNftManagerFacet = CreditNftManagerFacet(address(diamond));
+        ICreditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
         );
-        ICreditRedCalcFacet = CreditRedemptionCalculatorFacet(address(diamond));
+        ICreditRedemptionCalculationFacet = CreditRedemptionCalculatorFacet(
+            address(diamond)
+        );
 
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
@@ -702,13 +704,19 @@ abstract contract DiamondSetup is DiamondTestHelper {
         facetAddressList = ILoupe.facetAddresses();
         vm.startPrank(admin);
         // grant diamond dollar minting and burning rights
-        IAccessCtrl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
+        IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
+        // grand diamond Credit token minting and burning rights
+        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
         // grant diamond token admin rights
-        IAccessCtrl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, address(diamond));
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MANAGER_ROLE,
+            address(diamond)
+        );
         // grant diamond token minter rights
-        IAccessCtrl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
-        IAccessCtrl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
+        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
         // add staking shares
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";

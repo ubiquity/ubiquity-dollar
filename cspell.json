@@ -127,6 +127,7 @@
     "TYPEHASH",
     "Ubiqui",
     "UbiquiStick",
+    "Unassigns",
     "uncollateralized",
     "usedapp",
     "Vitalik",
@@ -136,5 +137,6 @@
     "zozo",
     "UbiquiBot"
   ],
+  "flagWords":["creditNFT","CreditNFT"],
   "language": "en-US"
 }

@@ -14,7 +14,7 @@ jobs:
           non_compliant_files=()
           while read -r file; do
             basefile=$(basename "$file")
-            if echo "$file" | grep -q -E "^\.\/\..*\/|^\.\/[^\/]*$|^\.\/node_modules|^\.\/\.git|^\.\/dist|^\.\/build|^\.\/vendor|^\.\/\.next|\.sql$|\.md$|LICENSE|echidna\.config\.yml|\.env\.example|slither\.config\.json|\.npmrc|global\.d\.ts|_app\.tsx|next-env\.d\.ts|next\.config\.js|\.sol$"; then
+            if echo "$file" | grep -q -E "^\.\/\..*\/|^\.\/[^\/]*$|^\.\/node_modules|^\.\/\.git|^\.\/dist|^\.\/build|^\.\/vendor|^\.\/\.next|\.sql$|\.md$|LICENSE|echidna\.config\.yml|\.env\.example|slither\.config\.json|\.npmrc|global\.d\.ts|_app\.tsx|next-env\.d\.ts|next\.config\.js|docs|\.sol$"; then
               continue
             elif ! echo "$basefile" | grep -q -E "^([a-z0-9]+-)*[a-z0-9]+(\.[a-zA-Z0-9]+)?$|^([a-z0-9]+_)*[a-z0-9]+(\.[a-zA-Z0-9]+)?$"; then
               non_compliant_files+=("$file")

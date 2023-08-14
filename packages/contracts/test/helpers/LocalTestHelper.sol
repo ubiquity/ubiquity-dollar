@@ -3,7 +3,6 @@ pragma solidity ^0.8.19;
 
 import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {MockCreditToken} from "../../src/dollar/mocks/MockCreditToken.sol";
 import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
@@ -13,8 +12,8 @@ import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalcu
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
+import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
-import {MockUbiquistick} from "../../src/dollar/mocks/MockUbiquistick.sol";
 
 contract MockCreditNftRedemptionCalculator {
     constructor() {}
@@ -34,22 +33,21 @@ abstract contract LocalTestHelper is DiamondSetup {
     TWAPOracleDollar3poolFacet twapOracle;
 
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculator;
-    MockCreditToken creditToken;
+    UbiquityCreditToken creditToken;
     CreditRedemptionCalculatorFacet creditRedemptionCalculator;
     DollarMintCalculatorFacet dollarMintCalculator;
     CreditNftManagerFacet creditNftManager;
     DollarMintExcessFacet dollarMintExcess;
     address metaPoolAddress;
-    MockUbiquistick ubiquiStick;
 
     function setUp() public virtual override {
         super.setUp();
 
         twapOracle = ITWAPOracleDollar3pool;
-        creditNftRedemptionCalculator = ICreditNFTRedCalcFacet;
-        creditRedemptionCalculator = ICreditRedCalcFacet;
+        creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
+        creditRedemptionCalculator = ICreditRedemptionCalculationFacet;
         dollarMintCalculator = IDollarMintCalcFacet;
-        creditNftManager = ICreditNFTMgrFacet;
+        creditNftManager = ICreditNftManagerFacet;
         dollarMintExcess = IDollarMintExcessFacet;
 
         vm.startPrank(admin);
@@ -80,12 +78,8 @@ abstract contract LocalTestHelper is DiamondSetup {
             _dy_values
         );
 
-        // deploy ubiquistick
-        // ubiquiStick = new MockUbiquistick();
-        // IManager.setUbiquiStickAddress(address(ubiquiStick));
-
         // deploy credit token
-        creditToken = new MockCreditToken(0);
+        creditToken = new UbiquityCreditToken(address(diamond));
         IManager.setCreditTokenAddress(address(creditToken));
 
         // set treasury address

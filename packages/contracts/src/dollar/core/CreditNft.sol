@@ -6,49 +6,65 @@ import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
 import "../libraries/Constants.sol";
 
-/// @title A CreditNft redeemable for dollars with an expiry block number
-/// @notice An ERC1155 where the token ID is the expiry block number
-/// @dev Implements ERC1155 so receiving contracts must implement IERC1155Receiver
+/**
+ * @notice CreditNft redeemable for Dollars with an expiry block number
+ * @notice ERC1155 where the token ID is the expiry block number
+ * @dev Implements ERC1155 so receiving contracts must implement `IERC1155Receiver`
+ * @dev 1 Credit NFT = 1 whole Ubiquity Dollar, not 1 wei
+ */
 contract CreditNft is ERC1155Ubiquity, ICreditNft {
     using StructuredLinkedList for StructuredLinkedList.List;
 
-    //not public as if called externally can give inaccurate value. see method
+    /**
+     * @notice Total amount of CreditNfts minted
+     * @dev Not public as if called externally can give inaccurate value, see method
+     */
     uint256 private _totalOutstandingDebt;
 
-    //represents tokenSupply of each expiry (since 1155 doesn't have this)
+    /// @notice Mapping of block number and amount of CreditNfts to expire on that block number
     mapping(uint256 => uint256) private _tokenSupplies;
 
-    //ordered list of CreditNft expiries
+    /// @notice Ordered list of CreditNft expiries
     StructuredLinkedList.List private _sortedBlockNumbers;
 
+    /// @notice Emitted on CreditNfts mint
     event MintedCreditNft(
         address recipient,
         uint256 expiryBlock,
         uint256 amount
     );
 
+    /// @notice Emitted on CreditNfts burn
     event BurnedCreditNft(
         address creditNftHolder,
         uint256 expiryBlock,
         uint256 amount
     );
 
+    /// @notice Modifier checks that the method is called by a user with the "CreditNft manager" role
     modifier onlyCreditNftManager() {
         require(
-            accessCtrl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a CreditNft manager"
         );
         _;
     }
 
-    //@dev URI param is if we want to add an off-chain meta data uri associated with this contract
+    /**
+     * @notice Contract constructor
+     * @dev URI param is if we want to add an off-chain meta data uri associated with this contract
+     * @param _manager Access control address
+     */
     constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
         _totalOutstandingDebt = 0;
     }
 
-    /// @notice Mint an amount of CreditNfts expiring at a certain block for a certain recipient
-    /// @param amount amount of tokens to mint
-    /// @param expiryBlockNumber the expiration block number of the CreditNFTs to mint
+    /**
+     * @notice Mint an `amount` of CreditNfts expiring at `expiryBlockNumber` for a certain `recipient`
+     * @param recipient Address where to mint tokens
+     * @param amount Amount of tokens to mint
+     * @param expiryBlockNumber Expiration block number of the CreditNfts to mint
+     */
     function mintCreditNft(
         address recipient,
         uint256 amount,
@@ -68,11 +84,12 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         _totalOutstandingDebt = _totalOutstandingDebt + (amount);
     }
 
-    /// @notice Burn an amount of CreditNfts expiring at a certain block from
-    /// a certain holder's balance
-    /// @param creditNftOwner the owner of those CreditNFTs
-    /// @param amount amount of tokens to burn
-    /// @param expiryBlockNumber the expiration block number of the CreditNFTs to burn
+    /**
+     * @notice Burns an `amount` of CreditNfts expiring at `expiryBlockNumber` from `creditNftOwner` balance
+     * @param creditNftOwner Owner of those CreditNfts
+     * @param amount Amount of tokens to burn
+     * @param expiryBlockNumber Expiration block number of the CreditNfts to burn
+     */
     function burnCreditNft(
         address creditNftOwner,
         uint256 amount,
@@ -92,8 +109,11 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         _totalOutstandingDebt = _totalOutstandingDebt - (amount);
     }
 
-    /// @notice Should be called prior to any state changing functions.
-    // Updates debt according to current block number
+    /**
+     * @notice Updates debt according to current block number
+     * @notice Invalidates expired CreditNfts
+     * @dev Should be called prior to any state changing functions
+     */
     function updateTotalDebt() public {
         bool reachedEndOfExpiredKeys = false;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
