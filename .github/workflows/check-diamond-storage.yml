@@ -210,7 +210,7 @@ jobs:
           
           dev_diamond_content=$(cat dev_storage_output.txt 2>/dev/null)
           pr_diamond_content=$(cat pr_storage_output.txt 2>/dev/null)
-          if [[ "dev_diamond_content" == "pr_diamond_content" ]]; then
+          if [[ "$dev_diamond_content" == "$pr_diamond_content" ]]; then
             echo "Diamond storage is the same"
           else
             echo "Diamond storage is different"
