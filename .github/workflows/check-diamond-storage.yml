@@ -196,7 +196,7 @@ jobs:
             pr_content_trimmed="${pr_content#$dev_content}"
           
             if [[ "$pr_content" == "$dev_content"* ]]; then
-              echo "No modifications found..."
+              echo "No modifications found.."
             else
               echo "Modifications found!"
             fi
