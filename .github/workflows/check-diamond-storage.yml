@@ -175,6 +175,8 @@ jobs:
         run: |
           total_dev_files=$(ls dev_libs_storage_output_*.txt 2>/dev/null | wc -l)
           total_pr_files=$(ls pr_libs_storage_output_*.txt 2>/dev/null | wc -l)
+          dev_files=($(ls dev_libs_storage_output_*.txt 2>/dev/null))
+          pr_files=($(ls pr_libs_storage_output_*.txt 2>/dev/null))
           
           if [[ $total_dev_files -gt $total_pr_files ]]; then
             total_files=$total_dev_files
@@ -182,9 +184,9 @@ jobs:
             total_files=$total_pr_files
           fi
           
-          for ((i = 1; i <= $total_files; i++)); do
-            dev_file="dev_libs_storage_output_$i.txt"
-            pr_file="pr_libs_storage_output_$i.txt"
+          for ((i = 0; i < $total_files; i++)); do
+            dev_file="${dev_files[i]}"
+            pr_file="${pr_files[i]}"
           
             dev_content=$(cat "$dev_file" 2>/dev/null)
             pr_content=$(cat "$pr_file" 2>/dev/null)
