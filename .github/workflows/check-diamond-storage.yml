@@ -191,12 +191,6 @@ jobs:
             dev_content=$(cat "$dev_file" 2>/dev/null)
             pr_content=$(cat "$pr_file" 2>/dev/null)
           
-            echo "DEV file content: " 
-            cat "$dev_file" 2>/dev/null
-          
-            echo "PR file content: " 
-            cat "$pr_file" 2>/dev/null
-          
           # Remove common content from the beginning
             dev_content_trimmed="${dev_content#$pr_content}"
             pr_content_trimmed="${pr_content#$dev_content}"
