@@ -7,83 +7,15 @@ on:
       - completed
 
 jobs:
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-22.04
-    env:
-      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  deploy-to-cloudflare:
+    name: Deploy to Cloudflare Pages
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3.1.0
-
-      - name: Setup Node
-        uses: actions/setup-node@v3 
-        with:
-          node-version: "18.14.1"
-          
-      - name: Wrangler Install
-        run: npm install -g wrangler
-
-      - name: "Download Artifact"
-        uses: actions/github-script@v6.3.3
-        with:
-          script: |
-            const fs = require("fs");
-            const downloadArtifact = require('${{ github.workspace }}/utils/download-artifact.js');
-            const workflow_run_id = '${{ github.event.workflow_run.id }}';
-            const workspace = '${{ github.workspace }}';
-            downloadArtifact({github, context, fs, workflow_run_id, workspace})
-
-      - name: Extract Artifact
-        run: unzip pr.zip && unzip pull-request.zip && ls
-
-      - name: Deploy Cloudflare
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-          PRODUCTION_BRANCH: "development"
-          OUTPUT_DIRECTORY: "dist"
-        run: |
-          IFS='/' read -ra fields <<< "$REPOSITORY"
-          projectName="${fields[1]}"
-          echo $projectName
-          wrangler pages project list > project_list.txt
-          if grep -q $projectName project_list.txt; then
-            echo "Project found"
-          else
-            echo "Project not found"
-            wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
-          fi
-          wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName" > ./deployments.log
-          ls -la
-          cat deployments.log
-
-      # - name: Deploy Railway
-      #   run: |
-      #     cd dist
-      #     npm i -g @railway/cli
-      #     RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway link ${{ secrets.RAILWAY_PROJECT_ID }}
-      #     RAILWAY_TOKEN=${{ secrets.RAILWAY_API_TOKEN }} railway up
-
-#       - name: Get UbiquiBot Token
-#         uses: tibdex/github-app-token@v1.7.0
-#         id: get_installation_token
-#         with:
-#           app_id: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
-#           private_key: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
-
-#       - name: Save UbiquiBot Token
-#         env:
-#           TOKEN: ${{ steps.generate_token.outputs.token }}
-#         run: |
-#           echo "The generated token is masked: ${TOKEN}"
-
-      - name: Deploy Comment as UbiquiBot
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          script: |
-            const fs = require("fs");
-            const print_deployments_log = require('${{ github.workspace }}/utils/print-deployments-logs.js');
-            await print_deployments_log({github, context, fs});
+    uses: ubiquity/.github/.github/workflows/deploy.yml@main
+    permissions:
+      contents: read
+      pull-requests: write
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      UBIQUITY_BOUNTY_BOT_APP_ID: ${{ secrets.UBIQUITY_BOUNTY_BOT_APP_ID }}
+      UBIQUITY_BOUNTY_BOT_PRIVATE_KEY: ${{ secrets.UBIQUITY_BOUNTY_BOT_PRIVATE_KEY }}
