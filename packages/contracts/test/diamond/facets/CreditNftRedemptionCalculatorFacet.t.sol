@@ -29,7 +29,6 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
     }
 
     function test_getCreditNftAmount() public {
-        uint256 totalSupply = IDollar.totalSupply();
         _creditNft.mintCreditNft(user1, 5000 ether, 10);
         assertEq(
             ICreditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
