@@ -66,36 +66,7 @@ fs.readdir(libsFolder, (err, files) => {
           insideStruct = true;
           currentStruct = lineWithoutComments;
         }
-
-        // Check if the line starts with "struct "
-        // if (lineWithoutComments.startsWith('struct ')) {
-        //   insideStruct = true;
-        //   currentStruct = lineWithoutComments;
-        // } else if (insideStruct) {
-        //   if (lineWithoutComments === '}') {
-        //     // Check if the line ends with "}"
-        //     insideStruct = false;
-        //     currentStruct += ' ' + lineWithoutComments;
-        //     i++;
-        //     console.log("Struct #" + i + ": " + currentStruct);
-        //     if (branchName === "development") {
-        //       fs.writeFileSync("dev_libs_storage_output_" + i + ".txt", currentStruct);
-        //     } else {
-        //       fs.writeFileSync("pr_libs_storage_output_" + i + ".txt", currentStruct);
-        //     }
-        //     structBlocks.push(currentStruct);
-        //   } else {
-        //     currentStruct += ' ' + lineWithoutComments;
-        //   }
-        // }
       }
-
-
-      // if (branchName === "development") {
-      //   fs.writeFileSync("dev_libs_storage_output.txt", structBlocks.toString());
-      // } else {
-      //   fs.writeFileSync("pr_libs_storage_output.txt", structBlocks.toString());
-      // }
     });
   });
 });

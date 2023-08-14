@@ -49,7 +49,6 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
-          ls
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -59,11 +58,7 @@ jobs:
           cd ./utils
           yes 2>/dev/null | npx tsx ./libs-storage.ts
           mkdir pr_files
-          echo "LS1: "
-          ls
           mv pr_libs_storage_output_*.txt pr_files/
-          echo "LS2: "
-          ls
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -126,7 +121,6 @@ jobs:
         run: |
           cd ./utils
           yes 2>/dev/null | npx tsx ./diamond-storage.ts
-          ls
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -136,11 +130,7 @@ jobs:
           cd ./utils
           yes 2>/dev/null | npx tsx ./libs-storage.ts
           mkdir dev_files
-          echo "LS1: " 
-          ls
           mv dev_libs_storage_output_*.txt dev_files/
-          echo "LS2: "
-          ls
         env:
           GITHUB_EVENT_PATH: ${{ github.event_path }}
 
@@ -212,13 +202,15 @@ jobs:
 
       - name: Compare Storage
         run: |
-          echo "Test"
+          echo "Dev Storage Output"
           cat dev_storage_output.txt
+          
+          echo "PR Storage Output"
+          cat pr_storage_output.txt
+          
           dev_diamond_content=$(cat dev_storage_output.txt 2>/dev/null)
           pr_diamond_content=$(cat pr_storage_output.txt 2>/dev/null)
-          echo "PR Storage Output: ${{ steps.save_pr_output.outputs.pr-storage-output }}"
-          echo "PR Storage Output: ${{ steps.save_dev_output.outputs.dev-storage-output }}"
-          if [[ '${{ steps.save_pr_output.outputs.pr-storage-output }}' == '${{ steps.save_dev_output.outputs.dev-storage-output }}' ]]; then
+          if [[ "dev_diamond_content" == "pr_diamond_content" ]]; then
             echo "Diamond storage is the same"
           else
             echo "Diamond storage is different"
