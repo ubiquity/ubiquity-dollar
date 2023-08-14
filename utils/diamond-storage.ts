@@ -52,7 +52,7 @@ getFileNamesFromFolder(facetsFolder)
     for (let i = 0; i < fileNames.length; i++) {
       const fileName = fileNames[i];
 
-      const storageOutput = executeCommand("forge inspect " + fileName + " storage");
+      const storageOutput = executeCommand("forge inspect " + fileName + " storage --pretty");
       storageOutputString = JSON.stringify(storageOutput);
 
       if (branchName === "development") {
