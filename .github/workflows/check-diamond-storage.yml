@@ -194,25 +194,20 @@ jobs:
             pr_content_trimmed="${pr_content#$dev_content}"
           
             if [[ "$pr_content" == "$dev_content"* ]]; then
-              echo "\nNo modifications found at the start or in the middle of $dev_file or $pr_file"
+              echo "No modifications found..."
             else
-              echo "\nModifications found at the start or in the middle of $dev_file or $pr_file"
+              echo "Modifications found!"
             fi
           done
 
       - name: Compare Storage
         run: |
-          echo "Dev Storage Output"
-          cat dev_storage_output.txt
-          
-          echo "PR Storage Output"
-          cat pr_storage_output.txt
-          
           dev_diamond_content=$(cat dev_storage_output.txt 2>/dev/null)
           pr_diamond_content=$(cat pr_storage_output.txt 2>/dev/null)
+          
           if [[ "$dev_diamond_content" == "$pr_diamond_content" ]]; then
-            echo "Diamond storage is the same"
+            echo "Diamond storage is the same!"
           else
-            echo "Diamond storage is different"
+            echo "Diamond storage is different!"
           fi
 
