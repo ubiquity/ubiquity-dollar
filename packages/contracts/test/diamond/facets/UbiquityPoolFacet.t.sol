@@ -12,7 +12,6 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol"
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
 import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
 contract UbiquityPoolFacetTest is DiamondSetup {
@@ -105,9 +104,15 @@ contract UbiquityPoolFacetTest is DiamondSetup {
 
         IAccessControl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
         IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(diamond)
+        );
 
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, address(diamond));
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            address(diamond)
+        );
         UbiquityCreditToken creditToken = new UbiquityCreditToken(
             address(IManager)
         );
