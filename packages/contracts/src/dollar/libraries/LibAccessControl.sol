@@ -22,6 +22,7 @@ library LibAccessControl {
     /// @notice Structure to keep all role members with their admin role
     struct RoleData {
         EnumerableSet.AddressSet members;
+        bytes32 test;
         bytes32 adminRole;
     }
 
