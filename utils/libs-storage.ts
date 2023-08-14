@@ -25,6 +25,7 @@ fs.readdir(libsFolder, (err, files) => {
                     .filter((file) => fs.statSync(path.join(libsFolder, file)).isFile())
                     .sort((a, b) => a.localeCompare(b));
   let i = 0;
+  console.log("File names: " + fileNames);
 
   const branchName = executeCommand("git rev-parse --abbrev-ref HEAD").replace(/[\n\r\s]+$/, "");
 
