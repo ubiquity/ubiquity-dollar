@@ -5,9 +5,7 @@ import { UseWeb3Provider } from "./hooks/use-web-3";
 
 import { combineComponents } from "./combine-components";
 
-// const providers = [UseWeb3Provider, ManagedContractsContextProvider, TransactionsContextProvider, BalancesContextProvider];
-// @note Fix: (Error: missing revert data in call exception since Diamond isn't deployed yet)
-const providers = [UseWeb3Provider, TransactionsContextProvider, BalancesContextProvider];
+const providers = [UseWeb3Provider, ManagedContractsContextProvider, TransactionsContextProvider, BalancesContextProvider];
 
 const AppContextProvider = combineComponents(...providers);
 
