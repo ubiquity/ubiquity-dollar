@@ -30,3 +30,16 @@ export interface PoolState {
   feeProtocol: number;
   unlocked: boolean;
 }
+
+export interface Balances {
+  uad: ethers.BigNumber;
+  _3crv: ethers.BigNumber;
+  uad3crv: ethers.BigNumber;
+  ucr: ethers.BigNumber;
+  ucrNft: ethers.BigNumber;
+  ubq: ethers.BigNumber;
+  stakingShares: ethers.BigNumber;
+  usdc: ethers.BigNumber;
+  dai: ethers.BigNumber;
+  usdt: ethers.BigNumber;
+}
