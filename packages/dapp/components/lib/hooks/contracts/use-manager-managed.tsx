@@ -21,6 +21,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { ChildrenShim } from "../children-shim-d";
 import useWeb3, { PossibleProviders } from "../use-web-3";
 import useDeployedContracts from "./use-deployed-contracts";
+import { ZERO_ADDRESS } from "../../utils";
 
 export type ManagedContracts = Awaited<ReturnType<typeof connectManagerContracts>> | null;
 export const ManagedContractsContext = createContext<ManagedContracts>(null);
@@ -79,7 +80,7 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
   const creditNftCalculator = manager.address;
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
 
-  const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
+  const governanceMarket = getUniswapV2PairContract(ZERO_ADDRESS, provider);
 
   return {
     dollarToken: getDollarContract(dollarToken, provider),
