@@ -29,9 +29,10 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   const { provider } = useWeb3();
   const deployedContracts = useDeployedContracts();
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);
+  const NETWORK_ANVIL_ID = 31337;
 
   useEffect(() => {
-    if (deployedContracts && provider) {
+    if (deployedContracts && provider && provider.network.chainId === NETWORK_ANVIL_ID) {
       (async () => {
         setManagedContracts(await connectManagerContracts(deployedContracts.manager, provider));
       })();
@@ -41,7 +42,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-async function connectManagerContracts(manager: ManagerFacet, provider: NonNullable<PossibleProviders>) {
+export async function connectManagerContracts(manager: ManagerFacet, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
@@ -77,7 +78,7 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
   const creditNftCalculator = manager.address;
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
 
-  const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
+  //const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
 
   return {
     dollarToken: getDollarContract(dollarToken, provider),
@@ -92,11 +93,12 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
     staking: getBondingV2Contract(staking, provider),
     masterChef: getMasterChefV2Contract(masterChef, provider),
     sushiSwapPool: sushiSwapPoolContract,
-    governanceMarket: governanceMarket,
+    //governanceMarket: governanceMarket,
     ubiquityFormulas: getUbiquityFormulasContract(ubiquityFormulas, provider),
     creditNftCalculator: getICouponsForDollarsCalculatorContract(creditNftCalculator, provider),
     creditCalculator: getIUARForDollarsCalculatorContract(creditCalculator, provider),
   };
 }
+
 
 export default () => useContext(ManagedContractsContext);
