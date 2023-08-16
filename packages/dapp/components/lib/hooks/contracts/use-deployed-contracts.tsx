@@ -7,7 +7,7 @@ export type DeployedContracts = ReturnType<typeof useDeployedContracts> | null;
 const useDeployedContracts = () => {
   const provider = useWeb3Provider();
   // cspell: disable-next-line
-  const [addr1, addr2] = useDeployedAddress("Diamond");
+  const [addr1, addr2] = useDeployedAddress("Diamond", "Diamond");
   return useMemo(
     () =>
       addr1 && addr2 && provider
