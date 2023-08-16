@@ -42,7 +42,7 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   return <ManagedContractsContext.Provider value={managedContracts}>{children}</ManagedContractsContext.Provider>;
 };
 
-export async function connectManagerContracts(manager: ManagerFacet, provider: NonNullable<PossibleProviders>) {
+async function connectManagerContracts(manager: ManagerFacet, provider: NonNullable<PossibleProviders>) {
   // 4
   const [
     dollarToken,
