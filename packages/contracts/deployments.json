@@ -8270,6 +8270,82 @@
   "31337": {
     "name": "hardhat",
     "chainId": "31337",
-    "contracts": {}
+    "contracts": {
+      "Diamond": {
+        "address": "0xbe0efAbc83686a81903C1D4a2515f8111e53B5Cb",
+        "abi": [
+          {
+            "inputs": [
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "address",
+                    "name": "init",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "bytes",
+                    "name": "initCalldata",
+                    "type": "bytes"
+                  }
+                ],
+                "internalType": "struct DiamondArgs",
+                "name": "_args",
+                "type": "tuple"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "facetAddress",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "enum IDiamondCut.FacetCutAction",
+                    "name": "action",
+                    "type": "uint8"
+                  },
+                  {
+                    "internalType": "bytes4[]",
+                    "name": "functionSelectors",
+                    "type": "bytes4[]"
+                  }
+                ],
+                "internalType": "struct IDiamondCut.FacetCut[]",
+                "name": "_diamondCutFacets",
+                "type": "tuple[]"
+              }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+          },
+          {
+            "inputs": [
+              {
+                "internalType": "address",
+                "name": "_initializationContractAddress",
+                "type": "address"
+              },
+              {
+                "internalType": "bytes",
+                "name": "_calldata",
+                "type": "bytes"
+              }
+            ],
+            "name": "InitializationFunctionReverted",
+            "type": "error"
+          },
+          {
+            "stateMutability": "payable",
+            "type": "fallback"
+          }
+        ]
+      }
+    }
   }
 }
