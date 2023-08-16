@@ -17,6 +17,9 @@ const index: FC = (): JSX.Element => {
   useEffectAsync(async () => {
     if (managedContracts != null) {
       try {
+        //DEBUG
+        console.log(managedContracts?.dollarToken.address, "MANAGED DOLLAR");
+        console.log(managedContracts);
         console.log(twapPrice, "priced in ");
       } catch (error) {
         console.log("Error occurred while executing contract call", error);
@@ -29,6 +32,7 @@ const index: FC = (): JSX.Element => {
   }, [managedContracts]);
 
   if (process.env.DEBUG === "true") {
+    //DEBUG
     fetchData();
   }
 
