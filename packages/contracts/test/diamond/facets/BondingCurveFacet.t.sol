@@ -5,7 +5,6 @@ import "../DiamondTestSetup.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
 import "forge-std/Test.sol";
 
 contract BondingCurveFacetTest is DiamondSetup {
@@ -29,7 +28,10 @@ contract BondingCurveFacetTest is DiamondSetup {
         super.setUp();
 
         vm.startPrank(admin);
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
+        IAccessControl.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(diamond)
+        );
 
         vm.stopPrank();
     }

@@ -88,7 +88,6 @@
       - [LibUbiquityPool](src/dollar/libraries/LibUbiquityPool.sol/library.LibUbiquityPool.md)
       - [UintUtils](src/dollar/libraries/UintUtils.sol/library.UintUtils.md)
     - [❱ mocks](src/dollar/mocks/README.md)
-      - [MockCreditNft](src/dollar/mocks/MockCreditNft.sol/contract.MockCreditNft.md)
       - [MockCurveFactory](src/dollar/mocks/MockCurveFactory.sol/contract.MockCurveFactory.md)
       - [MockERC20](src/dollar/mocks/MockERC20.sol/contract.MockERC20.md)
       - [MockIncentive](src/dollar/mocks/MockIncentive.sol/contract.MockIncentive.md)
