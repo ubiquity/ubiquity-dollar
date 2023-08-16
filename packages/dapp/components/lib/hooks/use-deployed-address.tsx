@@ -1,4 +1,4 @@
-// @dev you need to run a build to generate these fixtures.
+//@dev you need to run a build to generate these fixtures.
 import contractDeployments from "@ubiquity/contracts/deployments.json";
 import { useNetwork } from "wagmi";
 
