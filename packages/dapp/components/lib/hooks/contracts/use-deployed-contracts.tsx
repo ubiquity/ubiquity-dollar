@@ -7,15 +7,16 @@ export type DeployedContracts = ReturnType<typeof useDeployedContracts> | null;
 const useDeployedContracts = () => {
   const provider = useWeb3Provider();
   // cspell: disable-next-line
-  const [addr1] = useDeployedAddress("Diamond");
+  const [addr1, addr2] = useDeployedAddress("Diamond");
   return useMemo(
     () =>
-      addr1 && provider
+      addr1 && addr2 && provider
         ? {
             manager: getUbiquityManagerContract(addr1, provider),
+            debtCouponManager: getDebtCouponManagerContract(addr2, provider),
           }
         : null,
-    [addr1, provider]
+    [addr1, addr2, provider]
   );
 };
 

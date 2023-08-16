@@ -30,9 +30,10 @@ export const ManagedContractsContextProvider: React.FC<ChildrenShim> = ({ childr
   const deployedContracts = useDeployedContracts();
   const [managedContracts, setManagedContracts] = useState<ManagedContracts>(null);
   const NETWORK_ANVIL_ID = 31337;
+  const PROVIDER_ID = provider?.network.chainId;
 
   useEffect(() => {
-    if (deployedContracts && provider && provider.network.chainId === NETWORK_ANVIL_ID) {
+    if (deployedContracts && provider && PROVIDER_ID === NETWORK_ANVIL_ID) {
       (async () => {
         setManagedContracts(await connectManagerContracts(deployedContracts.manager, provider));
       })();
@@ -78,7 +79,7 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
   const creditNftCalculator = manager.address;
   const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
 
-  //const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
+  const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
 
   return {
     dollarToken: getDollarContract(dollarToken, provider),
@@ -93,7 +94,7 @@ async function connectManagerContracts(manager: ManagerFacet, provider: NonNulla
     staking: getBondingV2Contract(staking, provider),
     masterChef: getMasterChefV2Contract(masterChef, provider),
     sushiSwapPool: sushiSwapPoolContract,
-    //governanceMarket: governanceMarket,
+    governanceMarket: governanceMarket,
     ubiquityFormulas: getUbiquityFormulasContract(ubiquityFormulas, provider),
     creditNftCalculator: getICouponsForDollarsCalculatorContract(creditNftCalculator, provider),
     creditCalculator: getIUARForDollarsCalculatorContract(creditCalculator, provider),
