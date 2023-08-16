@@ -39,7 +39,7 @@ const client = createClient(
     autoConnect: true,
     connectors: [
       new MetaMaskConnector({
-        chains: defaultChains,
+        chains: [hardhat],
         options: {
           shimDisconnect: true,
           UNSTABLE_shimOnConnectSelectAccount: true
