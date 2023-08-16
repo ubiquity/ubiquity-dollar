@@ -9,9 +9,7 @@ import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcess
 import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {MockDollarToken} from "../../../src/dollar/mocks/MockDollarToken.sol";
 import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
-import {MockCreditToken} from "../../../src/dollar/mocks/MockCreditToken.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
 contract CreditNftManagerFacetTest is DiamondSetup {
@@ -45,7 +43,9 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         creditNftAddress = address(_creditNft);
         governanceTokenAddress = IManager.governanceTokenAddress();
         // deploy credit token
-        MockCreditToken _creditToken = new MockCreditToken(0);
+        UbiquityCreditToken _creditToken = new UbiquityCreditToken(
+            address(diamond)
+        );
         creditTokenAddress = address(_creditToken);
         vm.prank(admin);
         IManager.setCreditTokenAddress(creditTokenAddress);
@@ -53,6 +53,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         // set this contract as minter
         vm.startPrank(admin);
         IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(this));
+        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(this));
         vm.stopPrank();
     }
 
@@ -105,13 +106,10 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         address mockSender = address(0x123);
         vm.roll(10000);
         // Mint some dollarTokens to mockSender and then approve all
-        MockDollarToken(dollarTokenAddress).mint(mockSender, 10000e18);
+        IDollar.mint(mockSender, 10000e18);
         vm.startPrank(mockSender);
 
-        MockDollarToken(dollarTokenAddress).approve(
-            creditNftManagerAddress,
-            10000e18
-        );
+        IDollar.approve(creditNftManagerAddress, 10000e18);
 
         uint256 expiryBlockNumber = ICreditNftManagerFacet
             .exchangeDollarsForCreditNft(100);
@@ -130,15 +128,14 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockTwapFuncs(5e17);
         address mockSender = address(0x123);
         vm.roll(10000); // Mint some dollarTokens to mockSender and then approve all
-        MockDollarToken(dollarTokenAddress).mint(mockSender, 10000e18);
+        IDollar.mint(mockSender, 10000e18);
         vm.startPrank(mockSender);
 
-        MockDollarToken(dollarTokenAddress).approve(
-            creditNftManagerAddress,
-            10000e18
-        );
+        IDollar.approve(creditNftManagerAddress, 10000e18);
 
-        uint256 creditAmount = ICreditNftManagerFacet.exchangeDollarsForCredit(100);
+        uint256 creditAmount = ICreditNftManagerFacet.exchangeDollarsForCredit(
+            100
+        );
         assertEq(creditAmount, 100);
     }
 
@@ -243,7 +240,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockTwapFuncs(2e18);
         mockDollarMintCalcFuncs(1e18);
         address account1 = address(0x123);
-        MockCreditToken(creditTokenAddress).mint(account1, 100e18);
+        UbiquityCreditToken(creditTokenAddress).mint(account1, 100e18);
         vm.prank(account1);
         uint256 unredeemed = ICreditNftManagerFacet.burnCreditTokensForDollars(
             10e18
@@ -288,7 +285,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
             100,
             expiryBlockNumber
         );
-        MockCreditToken(creditTokenAddress).mint(
+        UbiquityCreditToken(creditTokenAddress).mint(
             creditNftManagerAddress,
             20000e18
         );
@@ -346,7 +343,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
             100,
             expiryBlockNumber
         );
-        MockCreditToken(creditTokenAddress).mint(
+        UbiquityCreditToken(creditTokenAddress).mint(
             creditNftManagerAddress,
             10000e18
         );
@@ -380,13 +377,9 @@ contract CreditNftManagerFacetTest is DiamondSetup {
             abi.encode()
         );
 
-        uint256 beforeBalance = MockDollarToken(dollarTokenAddress).balanceOf(
-            creditNftManagerAddress
-        );
+        uint256 beforeBalance = IDollar.balanceOf(creditNftManagerAddress);
         ICreditNftManagerFacet.mintClaimableDollars();
-        uint256 afterBalance = MockDollarToken(dollarTokenAddress).balanceOf(
-            creditNftManagerAddress
-        );
+        uint256 afterBalance = IDollar.balanceOf(creditNftManagerAddress);
         assertEq(afterBalance - beforeBalance, 50);
     }
 }

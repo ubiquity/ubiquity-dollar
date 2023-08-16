@@ -1,5 +1,5 @@
 # UbiquityGovernanceToken
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7de99efbd24b43cb89b03b0f63c9241a23e6a660/src/dollar/core/UbiquityGovernanceToken.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/9b081c9a3593a6c50107cbbe15494a939de0a708/src/dollar/core/UbiquityGovernanceToken.sol)
 
 **Inherits:**
 [ERC20Ubiquity](/src/dollar/core/ERC20Ubiquity.sol/abstract.ERC20Ubiquity.md)
