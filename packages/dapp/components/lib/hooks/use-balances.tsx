@@ -5,19 +5,8 @@ import useManagerManaged from "./contracts/use-manager-managed";
 import useNamedContracts from "./contracts/use-named-contracts";
 import useWalletAddress from "./use-wallet-address";
 import { ChildrenShim } from "./children-shim-d";
+import { Balances } from "../types";
 
-export interface Balances {
-  uad: BigNumber;
-  _3crv: BigNumber;
-  uad3crv: BigNumber;
-  ucr: BigNumber;
-  ucrNft: BigNumber;
-  ubq: BigNumber;
-  stakingShares: BigNumber;
-  usdc: BigNumber;
-  dai: BigNumber;
-  usdt: BigNumber;
-}
 
 type RefreshBalances = () => Promise<void>;
 
@@ -39,9 +28,9 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         managedContracts.governanceToken.balanceOf(walletAddress),
         erc1155BalanceOf(walletAddress, managedContracts.creditNft),
         erc1155BalanceOf(walletAddress, managedContracts.stakingToken),
-        namedContracts.usdc.balanceOf(walletAddress),
-        namedContracts.dai.balanceOf(walletAddress),
-        namedContracts.usdt.balanceOf(walletAddress),
+        (await namedContracts).usdc.balanceOf(walletAddress),
+        (await namedContracts).dai.balanceOf(walletAddress,),
+        (await namedContracts).usdt.balanceOf(walletAddress),
       ]);
 
       setBalances({
