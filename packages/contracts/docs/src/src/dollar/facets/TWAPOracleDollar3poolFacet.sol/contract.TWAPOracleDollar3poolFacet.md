@@ -1,5 +1,5 @@
 # TWAPOracleDollar3poolFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/9b081c9a3593a6c50107cbbe15494a939de0a708/src/dollar/facets/TWAPOracleDollar3poolFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/66e97ec8763806fd714a23d6e8eaecfdd8d08108/src/dollar/facets/TWAPOracleDollar3poolFacet.sol)
 
 **Inherits:**
 [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md), [ITWAPOracleDollar3pool](/src/dollar/interfaces/ITWAPOracleDollar3pool.sol/interface.ITWAPOracleDollar3pool.md)

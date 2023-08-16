@@ -1,7 +1,6 @@
 
 
 # Contents
-- [MockCreditNft](MockCreditNft.sol/contract.MockCreditNft.md)
 - [MockCurveFactory](MockCurveFactory.sol/contract.MockCurveFactory.md)
 - [MockERC20](MockERC20.sol/contract.MockERC20.md)
 - [MockIncentive](MockIncentive.sol/contract.MockIncentive.md)

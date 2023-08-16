@@ -1,5 +1,5 @@
 # MockIncentive
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/9b081c9a3593a6c50107cbbe15494a939de0a708/src/dollar/mocks/MockIncentive.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/66e97ec8763806fd714a23d6e8eaecfdd8d08108/src/dollar/mocks/MockIncentive.sol)
 
 
 ## Functions
