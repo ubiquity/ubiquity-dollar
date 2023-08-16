@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {MockCreditNft} from "../../src/dollar/mocks/MockCreditNft.sol";
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
@@ -14,16 +13,6 @@ import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFac
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
-
-contract MockCreditNftRedemptionCalculator {
-    constructor() {}
-
-    function getCreditNftAmount(
-        uint256 dollarsToBurn
-    ) external pure returns (uint256) {
-        return dollarsToBurn;
-    }
-}
 
 abstract contract LocalTestHelper is DiamondSetup {
     address public constant NATIVE_ASSET = address(0);

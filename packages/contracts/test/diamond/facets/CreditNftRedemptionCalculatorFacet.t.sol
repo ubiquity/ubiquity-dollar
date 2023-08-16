@@ -2,10 +2,10 @@
 pragma solidity ^0.8.19;
 
 import "../DiamondTestSetup.sol";
-import {MockCreditNft} from "../../../src/dollar/mocks/MockCreditNft.sol";
+import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 
 contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
-    MockCreditNft _creditNft;
+    CreditNft _creditNft;
 
     function setUp() public virtual override {
         super.setUp();
@@ -13,26 +13,26 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
         IDollar.mint(admin, 10000e18);
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
-        _creditNft = new MockCreditNft(100);
-        vm.prank(admin);
+        _creditNft = new CreditNft(address(diamond));
+
+        vm.startPrank(admin);
         IManager.setCreditNftAddress(address(_creditNft));
+        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        vm.stopPrank();
     }
 
     function test_getCreditNftAmount_revertsIfDebtTooHigh() public {
-        uint256 totalSupply = IDollar.totalSupply();
-        MockCreditNft(IManager.creditNftAddress()).setTotalOutstandingDebt(
-            totalSupply + 1
-        );
-
+        _creditNft.mintCreditNft(user1, 100000 ether, 1000);
         vm.expectRevert("CreditNft to Dollar: DEBT_TOO_HIGH");
         ICreditNftRedemptionCalculationFacet.getCreditNftAmount(0);
     }
 
     function test_getCreditNftAmount() public {
-        uint256 totalSupply = IDollar.totalSupply();
-        MockCreditNft(IManager.creditNftAddress()).setTotalOutstandingDebt(
-            totalSupply / 2
+        _creditNft.mintCreditNft(user1, 5000 ether, 10);
+        assertEq(
+            ICreditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
+            40000
         );
-        assertEq(ICreditNftRedemptionCalculationFacet.getCreditNftAmount(10000), 40000);
     }
 }
