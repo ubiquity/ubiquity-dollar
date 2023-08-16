@@ -1,5 +1,4 @@
 import { erc1155BalanceOf } from "@/lib/utils";
-import { BigNumber, Contract } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import useManagerManaged from "./contracts/use-manager-managed";
 import useNamedContracts from "./contracts/use-named-contracts";
