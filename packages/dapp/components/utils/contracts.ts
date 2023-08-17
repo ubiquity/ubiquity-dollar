@@ -25,6 +25,7 @@ import _UbiquityManager from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFa
 import _Dollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
 import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import _Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
+import _Diamond from "@ubiquity/contracts/out/Diamond.sol/Diamond.json";
 
 // ABIs
 import ChainlinkPriceFeedABI from "../config/abis/chainlink-price-feed.json";
@@ -68,6 +69,46 @@ const getContract = (abi: ContractInterface, address: string, provider: Provider
   return new ethers.Contract(address, abi, provider);
 };
 
+//@notice Facets
+//@notice ManagerFacet holds many of the facet addresses
+export const getUbiquityManagerContract = (address: string, provider: Provider) => {
+  return getContract(_UbiquityManager.abi, address, provider) as ManagerFacet;
+};
+
+export const getDebtCouponManagerContract = (address: string, provider: Provider) => {
+  return getContract(_DebtCouponManager.abi, address, provider) as CreditNftManagerFacet;
+};
+
+export const getBondingV2Contract = (address: string, provider: Provider) => {
+  return getContract(_Staking.abi, address, provider) as StakingFacet;
+};
+
+export const getMasterChefV2Contract = (address: string, provider: Provider) => {
+  return getContract(_MasterChefV2.abi, address, provider) as ChefFacet;
+};
+
+export const getDollarMintCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculatorFacet;
+};
+
+export const getICouponsForDollarsCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_ICouponsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
+};
+
+export const getIUARForDollarsCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_IUARForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
+};
+
+export const getUbiquityFormulasContract = (address: string, provider: Provider) => {
+  return getContract(_UbiquityFormulas.abi, address, provider) as StakingFormulasFacet;
+};
+
+//@notice Core Contracts (not facets)
+
+export const getDebtCouponContract = (address: string, provider: Provider) => {
+  return getContract(_DebtCoupon.abi, address, provider) as CreditNft;
+};
+
 export const getUniswapV2PairContract = (address: string, provider: Provider) => {
   return getContract(UniswapV2PairABI, address, provider) as IUniswapV2Pair;
 };
@@ -107,10 +148,6 @@ export const getIJarContract = (address: string, provider: Provider) => {
   return getContract(_IJar.abi, address, provider) as IJar;
 };
 
-export const getDebtCouponManagerContract = (address: string, provider: Provider) => {
-  return getContract(_DebtCouponManager.abi, address, provider) as CreditNftManagerFacet;
-};
-
 export const getCurveFactoryContract = (address: string, provider: Provider) => {
   return getContract(_ICurveFactory.abi, address, provider) as ICurveFactory;
 };
@@ -123,44 +160,16 @@ export const getStakingShareContract = (address: string, provider: Provider) => 
   return getContract(_StakingToken.abi, address, provider) as StakingShare;
 };
 
-export const getBondingV2Contract = (address: string, provider: Provider) => {
-  return getContract(_Staking.abi, address, provider) as StakingFacet;
-};
-
-export const getDebtCouponContract = (address: string, provider: Provider) => {
-  return getContract(_DebtCoupon.abi, address, provider) as CreditNft;
-};
-
 export const getTWAPOracleContract = (address: string, provider: Provider) => {
   return getContract(_TWAPOracle.abi, address, provider) as ITWAPOracleDollar3pool;
-};
-
-export const getDollarMintCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculatorFacet;
-};
-
-export const getICouponsForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_ICouponsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
-};
-
-export const getIUARForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_IUARForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
 };
 
 export const getIMetaPoolContract = (address: string, provider: Provider) => {
   return getContract(_IMetaPool.abi, address, provider) as IMetaPool;
 };
 
-export const getMasterChefV2Contract = (address: string, provider: Provider) => {
-  return getContract(_MasterChefV2.abi, address, provider) as ChefFacet;
-};
-
 export const getSushiSwapPoolContract = (address: string, provider: Provider) => {
   return getContract(_SushiSwapPool.abi, address, provider) as SushiSwapPool;
-};
-
-export const getUbiquityManagerContract = (address: string, provider: Provider) => {
-  return getContract(_UbiquityManager.abi, address, provider) as ManagerFacet;
 };
 
 export const getDollarContract = (address: string, provider: Provider) => {
@@ -169,10 +178,6 @@ export const getDollarContract = (address: string, provider: Provider) => {
 
 export const getCreditContract = (address: string, provider: Provider) => {
   return getContract(_Credit.abi, address, provider) as UbiquityCreditToken;
-};
-
-export const getUbiquityFormulasContract = (address: string, provider: Provider) => {
-  return getContract(_UbiquityFormulas.abi, address, provider) as StakingFormulasFacet;
 };
 
 export const getGovernanceContract = (address: string, provider: Provider) => {
