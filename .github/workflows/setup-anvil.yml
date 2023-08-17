@@ -19,7 +19,12 @@ jobs:
           version: "latest"
       - name: Tunnel Anvil
         id: tunnel
-        run: cloudflared tunnel --url http://localhost:8545 &
+        run: cloudflared tunnel --url http://localhost:8545 --logfile cloudflared.log &
+        shell: bash
+      - name: Extract Cloudflared URL
+        run: |
+          grep -E "https://.*.trycloudflare.com" cloudflared.log | cut -d'|' -f2 | tr -d ' ' > cloudflare-url.txt
+          cat cloudflare-url.txt
         shell: bash
       - name: Run Anvil
         run: anvil
