@@ -3,27 +3,32 @@ import { Provider } from "@ethersproject/providers";
 import { ContractInterface, ethers } from "ethers";
 
 // ARTIFACTS
-import _DebtCoupon from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
+
+// Facets
 import _DebtCouponManager from "@ubiquity/contracts/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json";
 import _DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json";
-import _ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
+import _Staking from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
+import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
+import _TWAPOracle from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import _ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
 import _IUARForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
+import _UbiquityManager from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
+import _MasterChefV2 from "@ubiquity/contracts/out/ChefFacet.sol/ChefFacet.json";
+
+// Core (not facets)
+import _DebtCoupon from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
+import _ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
 import _ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
 import _IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import _IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import _SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
-import _Staking from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
+
 import _StakingToken from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import _SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
-import _TWAPOracle from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import _UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import _UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
-import _MasterChefV2 from "@ubiquity/contracts/out/ChefFacet.sol/ChefFacet.json";
 import _Credit from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
-import _UbiquityManager from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
 import _Dollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
-import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import _Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 
 // ABIs
