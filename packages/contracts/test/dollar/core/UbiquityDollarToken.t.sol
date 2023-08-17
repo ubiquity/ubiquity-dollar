@@ -2,12 +2,21 @@
 pragma solidity ^0.8.19;
 
 import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {MockIncentive} from "../../../src/dollar/mocks/MockIncentive.sol";
+import {IIncentive} from "../../../src/dollar/interfaces/IIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
+contract Incentive is IIncentive {
+    function incentivize(
+        address sender,
+        address recipient,
+        address operator,
+        uint256 amount
+    ) public {}
+}
+
 contract UbiquityDollarTokenTest is LocalTestHelper {
-    // address incentive_addr;
+    address incentive_addr;
     address dollar_addr;
     address dollar_manager_address;
 
@@ -21,7 +30,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
     );
 
     function setUp() public override {
-        incentive_addr = address(new MockIncentive());
+        incentive_addr = address(new Incentive());
         super.setUp();
         vm.startPrank(admin);
         dollar_addr = address(IDollar);
@@ -76,7 +85,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.expectCall(
             incentive_addr,
             abi.encodeWithSelector(
-                MockIncentive.incentivize.selector,
+                Incentive.incentivize.selector,
                 mock_sender,
                 userB,
                 mock_sender,
@@ -89,7 +98,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.expectCall(
             incentive_addr,
             abi.encodeWithSelector(
-                MockIncentive.incentivize.selector,
+                Incentive.incentivize.selector,
                 userA,
                 mock_recipient,
                 userA,
