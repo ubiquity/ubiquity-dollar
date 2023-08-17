@@ -27,7 +27,7 @@ export type Web3State = {
 
 const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 
-const defaultChains = [hardhat, mainnet, localhost];
+const defaultChains = [mainnet, hardhat, localhost];
 
 const client = createClient(
   getDefaultClient({

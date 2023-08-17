@@ -15,7 +15,7 @@ export type LoadedContext = {
 };
 
 // @notice EL = element
-// @notice Loaded context with generic types and function parameters
+// @notice Loaded context with generic types and parametized functions
 // @notice renders an element
 export default function withLoadedContext<T>(El: (params: LoadedContext & T) => JSX.Element, ElNull?: () => JSX.Element) {
   return (otherParams: T) => {
