@@ -90,7 +90,6 @@
     - [❱ mocks](src/dollar/mocks/README.md)
       - [MockCurveFactory](src/dollar/mocks/MockCurveFactory.sol/contract.MockCurveFactory.md)
       - [MockERC20](src/dollar/mocks/MockERC20.sol/contract.MockERC20.md)
-      - [MockIncentive](src/dollar/mocks/MockIncentive.sol/contract.MockIncentive.md)
       - [MockMetaPool](src/dollar/mocks/MockMetaPool.sol/contract.MockMetaPool.md)
       - [BondingShare](src/dollar/mocks/MockShareV1.sol/contract.BondingShare.md)
       - [MockTWAPOracleDollar3pool](src/dollar/mocks/MockTWAPOracleDollar3pool.sol/contract.MockTWAPOracleDollar3pool.md)
