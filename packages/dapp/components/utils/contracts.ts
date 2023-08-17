@@ -25,7 +25,6 @@ import _UbiquityManager from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFa
 import _Dollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
 import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import _Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
-import _Diamond from "@ubiquity/contracts/out/Diamond.sol/Diamond.json";
 
 // ABIs
 import ChainlinkPriceFeedABI from "../config/abis/chainlink-price-feed.json";
