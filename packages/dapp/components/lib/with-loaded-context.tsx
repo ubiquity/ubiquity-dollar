@@ -14,6 +14,8 @@ export type LoadedContext = {
   signer: ethers.providers.JsonRpcSigner;
 };
 
+// @notice EL = element
+
 export default function withLoadedContext<T>(El: (params: LoadedContext & T) => JSX.Element, ElNull?: () => JSX.Element) {
   return (otherParams: T) => {
     const { walletAddress, signer, provider } = useWeb3();
