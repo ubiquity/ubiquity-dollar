@@ -15,7 +15,8 @@ export type LoadedContext = {
 };
 
 // @notice EL = element
-
+// @notice Loaded context with generic types and function parameters
+// @notice renders an element
 export default function withLoadedContext<T>(El: (params: LoadedContext & T) => JSX.Element, ElNull?: () => JSX.Element) {
   return (otherParams: T) => {
     const { walletAddress, signer, provider } = useWeb3();

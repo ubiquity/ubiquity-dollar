@@ -27,7 +27,7 @@ export type Web3State = {
 
 const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 
-const defaultChains = [mainnet, hardhat, localhost];
+const defaultChains = [hardhat, mainnet, localhost];
 
 const client = createClient(
   getDefaultClient({
@@ -39,7 +39,7 @@ const client = createClient(
     autoConnect: true,
     connectors: [
       new MetaMaskConnector({
-        chains: defaultChains,
+        chains: defaultChains.slice(),
         options: {
           shimDisconnect: true,
           UNSTABLE_shimOnConnectSelectAccount: true
