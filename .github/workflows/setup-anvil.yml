@@ -26,17 +26,6 @@ jobs:
           grep -E "https://.*.trycloudflare.com" cloudflared.log | cut -d'|' -f2 | tr -d ' ' > cloudflare-url.txt
           cat cloudflare-url.txt
         shell: bash
-      - name: Store URL
-        uses: actions/upload-artifact@v3
-        with:
-          name: cloudflare-url
-          path: cloudflare-url.txt
-          retention-days: 1
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          issue-number: 1
-          body-path: 'cloudflare-url.txt'
       - name: Run Anvil
         run: anvil
         shell: bash
