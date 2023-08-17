@@ -25,7 +25,6 @@ import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFac
 import {Diamond, DiamondArgs} from "../../src/dollar/Diamond.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
-import {MockIncentive} from "../../src/dollar/mocks/MockIncentive.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
@@ -89,8 +88,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
     // adding governance token
     UbiquityGovernanceToken IGovToken;
 
-    address incentive_addr;
-
     string[] facetNames;
     address[] facetAddressList;
 
@@ -124,7 +121,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     // deploys diamond and connects facets
     function setUp() public virtual {
-        incentive_addr = address(new MockIncentive());
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
         tokenManager = generateAddress("TokenManager", false, 10 ether);
