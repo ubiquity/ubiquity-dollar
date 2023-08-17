@@ -27,9 +27,9 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         managedContracts.governanceToken.balanceOf(walletAddress),
         erc1155BalanceOf(walletAddress, managedContracts.creditNft),
         erc1155BalanceOf(walletAddress, managedContracts.stakingToken),
-        (await namedContracts).usdc.balanceOf(walletAddress),
-        (await namedContracts).dai.balanceOf(walletAddress),
-        (await namedContracts).usdt.balanceOf(walletAddress),
+        namedContracts.usdc.balanceOf(walletAddress),
+        namedContracts.dai.balanceOf(walletAddress),
+        namedContracts.usdt.balanceOf(walletAddress),
       ]);
 
       setBalances({
