@@ -135,8 +135,13 @@
     "webp",
     "zapaz",
     "zozo",
-    "UbiquiBot"
+    "UbiquiBot",
+    "pranking",
+    "viem",
+    "Rpc",
+    "rpcs",
+    "rpc"
   ],
-  "flagWords":["creditNFT","CreditNFT"],
+  "flagWords": ["creditNFT", "CreditNFT"],
   "language": "en-US"
 }
