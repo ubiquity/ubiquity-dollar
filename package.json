@@ -72,5 +72,8 @@
       "napi-macros/example": true,
       "husky": true
     }
+  },
+  "dependencies": {
+    "viem": "^1.6.3"
   }
 }
