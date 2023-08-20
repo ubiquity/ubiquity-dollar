@@ -642,13 +642,8 @@ hr {
   bottom: 0;
   left: 0;
   display: grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  align-items: flex-end;
   width: 100%;
   overflow-y: scroll;
-  justify-content: center;
-  align-content: center;
-  text-align: center;
   position: fixed;
   z-index: 1;
   background-color: black;
@@ -656,8 +651,7 @@ hr {
 }
 
 .rpc-method-container::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
+  display: none;
 }
 
 

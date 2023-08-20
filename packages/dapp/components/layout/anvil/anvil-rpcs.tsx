@@ -3,6 +3,8 @@ import Button from "../../ui/button";
 import { createTestClient, http } from "viem";
 import { foundry } from "viem/chains";
 import { methodConfigs } from "./method-configs";
+import Image from "next/image";
+import Download from "../../../public/download.svg";
 
 export default function AnvilRpcs() {
   const [isHidden, setIsHidden] = React.useState<boolean>(true);
@@ -38,12 +40,40 @@ export default function AnvilRpcs() {
       }
     });
 
-    const result = await testClient.request({
-      method: method?.methodName,
-      params: args,
-    });
+    let result;
+    try {
+      result = await testClient.request({
+        method: method?.methodName,
+        params: args,
+      });
+    } catch (err) {
+      const name = method?.methodName;
+
+      name === "sendUnsignedTransaction"
+        ? await testClient.sendUnsignedTransaction({
+            from: args[0],
+            to: args[1],
+            value: args[2],
+          })
+        : null;
+    }
     setMethodArgs({});
+    document.getElementById("inputs").value = "";
+
     console.log(result);
+
+    if (method.download) {
+      const blob = new Blob([JSON.stringify(result)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = method.methodName + ".json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
   };
 
   return (
@@ -70,7 +100,7 @@ export default function AnvilRpcs() {
             </div>
             {isVisible == 1 && (
               <>
-                <Button style={{ maxWidth: "250px" }} onClick={() => setIsVisible(0)}>
+                <Button style={{ maxWidth: "250px", marginBottom: "6px" }} onClick={() => setIsVisible(0)}>
                   Back
                 </Button>
                 <tb>
@@ -88,11 +118,15 @@ export default function AnvilRpcs() {
 
                       return (
                         <tr key={method.methodName}>
-                          <td>{method.name}</td>
+                          <td>
+                            {method.name}
+                            {"  "}
+                            {method.download ? <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
+                          </td>
                           <td>
                             {method.params.map((param) => (
                               <div key={param.name}>
-                                <input type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
+                                <input id="inputs" type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
                               </div>
                             ))}
                           </td>
@@ -108,7 +142,7 @@ export default function AnvilRpcs() {
 
             {isVisible == 2 && (
               <>
-                <Button style={{ maxWidth: "250px" }} onClick={() => setIsVisible(0)}>
+                <Button style={{ maxWidth: "250px", marginBottom: "6px" }} onClick={() => setIsVisible(0)}>
                   Back
                 </Button>
                 <tb>
@@ -126,11 +160,15 @@ export default function AnvilRpcs() {
 
                       return (
                         <tr key={method.methodName}>
-                          <td>{method.name}</td>
+                          <td>
+                            {method.name}
+                            {"  "}
+                            {method.download ? <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
+                          </td>
                           <td>
                             {method.params.map((param) => (
                               <div key={param.name}>
-                                <input type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
+                                <input id="inputs" type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
                               </div>
                             ))}
                           </td>
@@ -146,7 +184,7 @@ export default function AnvilRpcs() {
 
             {isVisible == 3 && (
               <>
-                <Button style={{ maxWidth: "250px" }} onClick={() => setIsVisible(0)}>
+                <Button style={{ maxWidth: "250px", marginBottom: "6px" }} onClick={() => setIsVisible(0)}>
                   Back
                 </Button>
                 <tb>
@@ -164,11 +202,19 @@ export default function AnvilRpcs() {
 
                       return (
                         <tr key={method.methodName}>
-                          <td>{method.name}</td>
+                          <td>
+                            {method.name}
+                            {"  "}
+                            {method.download ? (
+                              <a href={method.download} download>
+                                <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} />
+                              </a>
+                            ) : null}{" "}
+                          </td>
                           <td>
                             {method.params.map((param) => (
                               <div key={param.name}>
-                                <input type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
+                                <input id="inputs" type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
                               </div>
                             ))}
                           </td>
