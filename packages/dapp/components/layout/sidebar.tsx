@@ -3,7 +3,7 @@ import Icon, { IconsNames } from "../ui/icon";
 import LightDarkMode from "./light-dark-mode";
 import BuildInfo from "./build-info";
 import WalletConnect from "./wallet-connect";
-import AnvilRpcs from "./anvil-rpcs";
+import AnvilRpcs from "./anvil/anvil-rpcs";
 
 const PROD = process.env.NODE_ENV == "production";
 

@@ -642,63 +642,51 @@ hr {
   bottom: 0;
   left: 0;
   display: grid;
-  /* flex-direction: row; */
+  grid-template-columns: 1fr 3fr 1fr;
   align-items: flex-end;
   width: 100%;
-  margin-bottom: 4px;
+  overflow-y: scroll;
   justify-content: center;
   align-content: center;
+  text-align: center;
   position: fixed;
   z-index: 1;
   background-color: black;
+  max-height: calc(100vh - 216px);
 }
-.rpc-method-container div {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  margin-right: 4px;
-  text-align: center;
+
+.rpc-method-container::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+
+.table.container {
+  width: 100%;
+  align-items: center;
   justify-content: center;
-  align-content: center;
-  z-index: 1;
-  width: 100%;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 4px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 4px;
-  z-index: 0;
-}
-
-.grid-container > div {
+  left: 0;
+  bottom: 0;
+  /* display: flex; */
   text-align: center;
-  padding: 4px 0;
-  z-index: 0;
-  margin-top: 2px;
-  margin-bottom: 2px;
 }
 
-.grid-container-Button {
-  width: calc(100vw - 216px);
-  max-width: calc(100vw - 216px);
-
-  margin: 0 auto;
-  padding: 2px 4px;
-}
-
-.grid-container > div Button:hover {
-  background-color: #02020a;
-}
-.grid-container input {
-  width: calc(100vw - 216px);
-  max-width: calc(100vw - 216px);
-  margin: 0 auto;
-  margin-top: 2px;
-  margin-bottom: 4px;
-  padding: 4px 0;
+.table-container table {
+  border-collapse: collapse;
+  overflow-y: scroll;
+  width: 800px;
+  left: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
   text-align: center;
+}
+
+.table-container th,
+.table-container td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 100%;
 }

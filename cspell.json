@@ -140,7 +140,10 @@
     "viem",
     "Rpc",
     "rpcs",
-    "rpc"
+    "rpc",
+    "Automine",
+    "Txpool",
+    "utlity"
   ],
   "flagWords": ["creditNFT", "CreditNFT"],
   "language": "en-US"
