@@ -143,7 +143,9 @@
     "rpc",
     "Automine",
     "Txpool",
-    "utlity"
+    "nomicfoundation",
+    "blockhash",
+    "Merkle"
   ],
   "flagWords": ["creditNFT", "CreditNFT"],
   "language": "en-US"

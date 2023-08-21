@@ -2,6 +2,14 @@
 
 export const methodConfigs = [
   {
+    name: "Get Block Number",
+    methodName: "eth_blockNumber",
+    description: "Returns the bigint of most recent block.",
+    params: [],
+    download: true,
+    type: "utility",
+  },
+  {
     name: "Logging Enabled",
     methodName: "anvil_setLoggingEnabled",
     description: "Enable or disable logging on the test node network.",
@@ -49,6 +57,86 @@ export const methodConfigs = [
     type: "utility",
   },
   {
+    name: "Set Automine",
+    methodName: "anvil_setAutomine",
+    description: "Enables or disables the automatic mining of new blocks with each new transaction submitted to the network.",
+    params: [{ name: "boolean", type: "boolean" }],
+    type: "utility",
+  },
+  {
+    name: "Get Automine",
+    methodName: "anvil_getAutomine",
+    description: "Returns the automatic mining status of the node.",
+    params: [],
+    type: "utility",
+  },
+  {
+    name: "Get Block By Hash",
+    methodName: "eth_getBlockByHash",
+    description: "Returns information about a block by hash.",
+    params: [
+      { name: "hash", type: "string" },
+      { name: "full", type: "boolean" },
+    ],
+    download: true,
+    type: "utility",
+  },
+  {
+    name: "Drop Transaction",
+    methodName: "anvil_dropTransaction",
+    description: "Removes a transaction from the mempool.",
+    params: [{ name: "hash", type: "string" }],
+    type: "utility",
+  },
+  {
+    name: "Set New Filter",
+    methodName: "eth_newFilter",
+    description: "Creates a filter object, based on filter options, to notify when the state changes (logs).",
+    params: [
+      { name: "fromBlock", type: "string" },
+      { name: "toBlock", type: "string" },
+      { name: "address", type: "string" },
+      { name: "topics", type: "string[]" },
+    ],
+    type: "utility",
+  },
+  {
+    name: "Get Block Filter Changes",
+    methodName: "eth_getFilterChanges",
+    description: "Polling method for a filter, which returns an array of logs which occurred since last poll.",
+    params: [{ name: "id", type: "string" }],
+    download: true,
+    type: "utility",
+  },
+  {
+    name: "Remove Block Filter",
+    methodName: "eth_uninstallFilter",
+    description: "Uninstalls a filter with given id.",
+    params: [{ name: "id", type: "string" }],
+    type: "utility",
+  },
+  {
+    name: "Get Code",
+    methodName: "eth_getCode",
+    description: "Returns the bytecode stored at an address.",
+    params: [
+      { name: "address", type: "string" },
+      { name: "blockNumber", type: "string" },
+    ],
+    download: true,
+    type: "utility",
+  },
+  {
+    name: "Set Code",
+    methodName: "anvil_setCode",
+    description: "Modifies the bytecode stored at an address.",
+    params: [
+      { name: "address", type: "string" },
+      { name: "bytecode", type: "string" },
+    ],
+    type: "utility",
+  },
+  {
     name: "Get Storage At",
     methodName: "eth_getStorageAt",
     description: "Returns the value of a storage slot at a given address.",
@@ -57,9 +145,9 @@ export const methodConfigs = [
       { name: "index", type: "string" },
       { name: "blockNumber", type: "string" },
     ],
+    download: true,
     type: "utility",
   },
-
   {
     name: "Set Storage At",
     methodName: "anvil_setStorageAt",
@@ -71,24 +159,54 @@ export const methodConfigs = [
     ],
     type: "utility",
   },
-
   {
-    name: "Set Anvil RPC",
-    methodName: "anvil_setRpcUrl",
-    description: "Sets the backend RPC URL.",
-    params: [{ name: "url", type: "string" }],
-    type: "chain",
-  },
-  {
-    name: "Set Nonce",
-    methodName: "anvil_setNonce",
-    description: "Modifies (overrides) the nonce of an account.",
+    name: "Get Proof",
+    methodName: "eth_getProof",
+    description: "Returns a Merkle-proof for a storage slot of an account.",
     params: [
       { name: "address", type: "string" },
-      { name: "nonce", type: "number" },
+      { name: "index", type: "string" },
+      { name: "blockNumber", type: "string" },
     ],
-    type: "user",
+    download: true,
+    type: "utility",
   },
+  {
+    name: "Get Logs",
+    methodName: "eth_getLogs",
+    description: "Returns an array of all logs matching a given filter object.",
+    params: [
+      { name: "fromBlock", type: "string" },
+      { name: "toBlock", type: "string" },
+      { name: "address", type: "string" },
+      { name: "topics", type: "string[]" },
+      { name: "blockhash", type: "string" },
+    ],
+    download: true,
+    type: "utility",
+  },
+  {
+    name: "Get Filter Logs",
+    methodName: "eth_getFilterLogs",
+    description: "Returns an array of all logs matching filter with given id.",
+    params: [
+      { name: "address", type: "string" },
+      { name: "topics", type: "string[]" },
+      { name: "data", type: "string" },
+      { name: "blockNumber", type: "string" },
+      { name: "transactionIndex", type: "string" },
+      { name: "blockHash", type: "string" },
+      { name: "logIndex", type: "string" },
+      { name: "removed", type: "string" },
+    ],
+    download: true,
+    type: "utility",
+  },
+
+  ///////////////////////////////////////////////////////////
+  ////////////////////////// CHAIN //////////////////////////
+  ///////////////////////////////////////////////////////////
+
   {
     name: "Increase Time",
     methodName: "anvil_increaseTime",
@@ -97,9 +215,16 @@ export const methodConfigs = [
     type: "chain",
   },
   {
+    name: "Set Anvil RPC",
+    methodName: "anvil_setRpcUrl",
+    description: "Sets the backend RPC URL.",
+    params: [{ name: "url", type: "string" }],
+    type: "chain",
+  },
+  {
     name: "Mine",
     methodName: "anvil_mine",
-    description: "Mine a specified number of blocks.",
+    description: "Mine a specified bigint of blocks.",
     params: [{ name: "blocks", type: "number" }],
     type: "chain",
   },
@@ -117,14 +242,13 @@ export const methodConfigs = [
     params: [{ name: "baseFeePerGas", type: "number" }],
     type: "chain",
   },
-  {
-    name: "Set Min Gas Price",
-    methodName: "anvil_setMinGasPrice",
-    description: "Change the minimum gas price accepted by the network (in wei).",
-    params: [{ name: "minGasPrice", type: "number" }],
-    type: "chain",
-  },
-
+  // { ## EIP-1559 ##
+  //   name: "Set Min Gas Price",
+  //   methodName: "anvil_setMinGasPrice",
+  //   description: "Change the minimum gas price accepted by the network (in wei).",
+  //   params: [{ name: "minGasPrice", type: "bigint" }],
+  //   type: "chain",
+  // },
   {
     name: "Mining Interval",
     methodName: "anvil_setIntervalMining",
@@ -139,88 +263,21 @@ export const methodConfigs = [
     params: [{ name: "address", type: "string" }],
     type: "chain",
   },
-  {
-    name: "Set Code",
-    methodName: "anvil_setCode",
-    description: "Modifies the bytecode stored at an address.",
-    params: [
-      { name: "address", type: "string" },
-      { name: "bytecode", type: "string" },
-    ],
-    type: "utility",
-  },
 
   {
     name: "Block Gas Limit",
     methodName: "anvil_setBlockGasLimit",
     description: "Sets the block's gas limit.",
-    params: [{ name: "gasLimit", type: "number" }],
+    params: [{ name: "gasLimit", type: "bigint" }],
     type: "chain",
   },
-  {
-    name: "Automine",
-    methodName: "anvil_setAutomine",
-    description: "Enables or disables the automatic mining of new blocks with each new transaction submitted to the network.",
-    params: [{ name: "boolean", type: "boolean" }],
-    type: "chain",
-  },
-  {
-    name: "Unsigned Transaction",
-    methodName: "sendUnsignedTransaction",
-    description: "Sends an unsigned transaction.",
-    params: [
-      { name: "from", type: "string" },
-      { name: "to", type: "string" },
-      { name: "value", type: "number" },
-    ],
-    type: "user",
-  },
+
   {
     name: "Revert",
     methodName: "anvil_revert",
     description: "Revert the state of the blockchain at the current block.",
     params: [{ name: "id", type: "bigint" }],
     type: "chain",
-  },
-
-  {
-    name: "Get Automine",
-    methodName: "anvil_getAutomine",
-    description: "Returns the automatic mining status of the node.",
-    params: [],
-    type: "utility",
-  },
-  {
-    name: "Drop Transaction",
-    methodName: "anvil_dropTransaction",
-    description: "Removes a transaction from the mempool.",
-    params: [{ name: "hash", type: "string" }],
-    type: "utlity",
-  },
-  {
-    name: "Impersonate Account",
-    methodName: "anvil_impersonateAccount",
-    description:
-      "Impersonate an account or contract address. This lets you send transactions from that account even if you don't have access to its private key.",
-    params: [{ name: "address", type: "string" }],
-    type: "user",
-  },
-  {
-    name: "Stop Impersonating",
-    methodName: "anvil_stopImpersonatingAccount",
-    description: "Stop impersonating an account after having previously used anvil_impersonateAccount.",
-    params: [{ name: "address", type: "string" }],
-    type: "user",
-  },
-  {
-    name: "Set Balance",
-    methodName: "anvil_setBalance",
-    description: "Modifies the balance of an account.",
-    params: [
-      { name: "address", type: "string" },
-      { name: "value", type: "number" },
-    ],
-    type: "user",
   },
   {
     name: "Reset",
@@ -244,31 +301,122 @@ export const methodConfigs = [
     params: [],
     type: "chain",
   },
+  // { ## Requires GETH ##
+  //   name: "Inspect Txpool",
+  //   methodName: "eth_inspectTxpool",
+  //   description:
+  //     "Returns a summary of all the transactions currently pending for inclusion in the next block(s), as well as the ones that are being scheduled for future execution only.",
+  //   params: [],
+  //   download: true,
+  //   type: "chain",
+  // },
+  // {
+  //   name: "Txpool Status",
+  //   methodName: "eth_getTxpoolStatus",
+  //   description:
+  //     "Returns a summary of all the transactions currently pending for inclusion in the next block(s), as well as the ones that are being scheduled for future execution only.",
+  //   params: [],
+  //   download: true,
+  //   type: "chain",
+  // },
+  // {
+  //   name: "Txpool Content",
+  //   methodName: "eth_getTxpoolContent",
+  //   description:
+  //     "Returns the details of all transactions currently pending for inclusion in the next block(s), as well as the ones that are being scheduled for future execution only.",
+  //   params: [],
+  //   download: true,
+  //   type: "chain",
+  // },
+
+  ///////////////////////////////////////////////////////////
+  ////////////////////////// USER ///////////////////////////
+  ///////////////////////////////////////////////////////////
+
   {
-    name: "Inspect Txpool",
-    methodName: "anvil_inspectTxpool",
-    description:
-      "Returns a summary of all the transactions currently pending for inclusion in the next block(s), as well as the ones that are being scheduled for future execution only.",
-    params: [],
-    download: true,
-    type: "chain",
+    name: "Set Nonce",
+    methodName: "anvil_setNonce",
+    description: "Modifies (overrides) the nonce of an account.",
+    params: [
+      { name: "address", type: "string" },
+      { name: "nonce", type: "bigint" },
+    ],
+    type: "user",
   },
   {
-    name: "Txpool Status",
-    methodName: "anvil_getTxpoolStatus",
-    description:
-      "Returns a summary of all the transactions currently pending for inclusion in the next block(s), as well as the ones that are being scheduled for future execution only.",
-    params: [],
-    download: true,
-    type: "chain",
+    name: "Set Balance",
+    methodName: "anvil_setBalance",
+    description: "Modifies the balance of an account.",
+    params: [
+      { name: "address", type: "string" },
+      { name: "value", type: "number" },
+    ],
+    type: "user",
   },
   {
-    name: "Txpool Content",
-    methodName: "anvil_getTxpoolContent",
+    name: "Unsigned Transaction",
+    methodName: "sendUnsignedTransaction",
+    description: "Sends an unsigned transaction.",
+    params: [
+      { name: "from", type: "string" },
+      { name: "to", type: "string" },
+      { name: "value", type: "bigint" },
+    ],
+    type: "user",
+  },
+  {
+    name: "Send Transaction",
+    methodName: "sendTransaction",
+    description: "Sends a transaction.",
+    params: [
+      { name: "from", type: "string" },
+      { name: "to", type: "string" },
+      // { name: "gasLimit", type: "bigint" },
+      // { name: "maxFeePerGas", type: "bigint" },
+      // { name: "maxPriorityFeePerGas", type: "bigint" },
+      // { name: "nonce", type: "bigint" },
+      { name: "value", type: "bigint" },
+    ],
+    type: "user",
+  },
+  {
+    name: "Eth Sign",
+    methodName: "eth_sign",
+    description: "Signs a message.",
+    params: [
+      { name: "address", type: "string" },
+      { name: "message", type: "string" },
+    ],
+    type: "user",
+  },
+  // { ## Requires Public Client ##
+  //   name: "Sign Transaction",
+  //   methodName: "eth_signTransaction",
+  //   description: "Signs a transaction.",
+  //   params: [
+  //     { name: "from", type: "string" },
+  //     { name: "to", type: "string" },
+  //     { name: "gas", type: "bigint" },
+  //     { name: "gasPrice", type: "bigint" },
+  //     { name: "value", type: "bigint" },
+  //     { name: "data", type: "string" },
+  //     { name: "nonce", type: "bigint" },
+  //   ],
+  //   type: "user",
+  // },
+  {
+    name: "Impersonate Account",
+    methodName: "anvil_impersonateAccount",
     description:
-      "Returns the details of all transactions currently pending for inclusion in the next block(s), as well as the ones that are being scheduled for future execution only.",
-    params: [],
-    download: true,
-    type: "chain",
+      "Impersonate an account or contract address. This lets you send transactions from that account even if you don't have access to its private key.",
+    params: [{ name: "address", type: "string" }],
+    type: "user",
+  },
+  {
+    name: "Stop Impersonating",
+    methodName: "anvil_stopImpersonatingAccount",
+    description: "Stop impersonating an account after having previously used anvil_impersonateAccount.",
+    params: [{ name: "address", type: "string" }],
+    type: "user",
   },
 ];

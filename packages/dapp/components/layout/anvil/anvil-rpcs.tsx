@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "../../ui/button";
-import { createTestClient, http } from "viem";
+import { createTestClient, http, publicActions, walletActions } from "viem";
 import { foundry } from "viem/chains";
 import { methodConfigs } from "./method-configs";
 import Image from "next/image";
@@ -12,67 +12,91 @@ export default function AnvilRpcs() {
   const [methodArgs, setMethodArgs] = React.useState<Record<string, string>>({});
 
   const testClient = createTestClient({
+    // Defaults to same deployer as /contracts/.env
+    // Is required if you want to call sendTransaction
+    // Current setup does not allow access to Anvil's 10 accounts
+    // for testing I ran a standalone node and used account[0]
+    // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+    account: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
     chain: foundry,
     mode: "anvil",
     transport: http(),
-  });
+  })
+    .extend(walletActions)
+    .extend(publicActions);
 
   const handleMethodCall = async (meth: string) => {
     const method = methodConfigs.find((method) => method.methodName === meth);
 
     if (!method) {
-      console.error("Method not found");
+      console.error(`No method found for ${meth} in methodConfigs`);
       return;
     }
 
     const args = method.params.map((arg) => methodArgs[arg.name]);
-
+    console.log("args", args);
     const methodArgTypes = method.params.map((arg) => arg.type);
-
+    console.log("methodArgTypes", methodArgTypes);
     args.forEach((arg, i) => {
-      arg = arg.trim();
+      try {
+        arg = arg.trim();
+      } catch (e) {
+        /* empty */
+      }
       if (methodArgTypes[i] === "number") {
         args[i] = Number(arg);
       } else if (methodArgTypes[i] === "boolean") {
-        args[i] = arg === "true";
+        args[i] = Boolean(arg);
       } else if (methodArgTypes[i] === "bigint") {
         args[i] = BigInt(arg);
       }
     });
 
     let result;
+
     try {
+      if (method.methodName === "sendTransaction" || method.methodName === "sendUnsignedTransaction") {
+        throw new Error();
+      }
       result = await testClient.request({
         method: method?.methodName,
         params: args,
       });
-    } catch (err) {
+    } catch (error0) {
       const name = method?.methodName;
-
-      name === "sendUnsignedTransaction"
-        ? await testClient.sendUnsignedTransaction({
-            from: args[0],
-            to: args[1],
-            value: args[2],
-          })
-        : null;
+      console.log("error0", error0);
+      try {
+        name === "sendUnsignedTransaction"
+          ? await testClient.sendUnsignedTransaction({
+              from: args[0],
+              to: args[1],
+              value: args[2],
+            })
+          : name === "sendTransaction"
+          ? await testClient.sendTransaction({
+              from: args[0],
+              to: args[1],
+              value: args[2],
+            })
+          : null;
+      } catch (error1) {
+        console.error(`Fallback failed - Error0: ${error0} - Error1: ${error1}`);
+      }
     }
+    for (let i = 0; i < args.length; i++) {
+      document.getElementById(`${method.methodName}-input-${i}}`).value = "";
+    }
+
     setMethodArgs({});
-    document.getElementById("inputs").value = "";
 
     console.log(result);
 
     if (method.download) {
+      if (!result) return console.log("No result");
+
       const blob = new Blob([JSON.stringify(result)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-
-      a.href = url;
-      a.download = method.methodName + ".json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      document.getElementById(`${method.methodName}-output`)?.setAttribute("href", url);
     }
   };
 
@@ -124,9 +148,14 @@ export default function AnvilRpcs() {
                             {method.download ? <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
-                            {method.params.map((param) => (
+                            {method.params.map((param, i) => (
                               <div key={param.name}>
-                                <input id="inputs" type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
+                                <input
+                                  id={`${method.methodName}-input-${i}}`}
+                                  type="text"
+                                  placeholder={param.name}
+                                  onChange={(e) => handleInputChange(param.name, e.target.value)}
+                                />
                               </div>
                             ))}
                           </td>
@@ -166,9 +195,14 @@ export default function AnvilRpcs() {
                             {method.download ? <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
-                            {method.params.map((param) => (
+                            {method.params.map((param, i) => (
                               <div key={param.name}>
-                                <input id="inputs" type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
+                                <input
+                                  id={`${method.methodName}-input-${i}}`}
+                                  type="text"
+                                  placeholder={param.name}
+                                  onChange={(e) => handleInputChange(param.name, e.target.value)}
+                                />
                               </div>
                             ))}
                           </td>
@@ -206,15 +240,20 @@ export default function AnvilRpcs() {
                             {method.name}
                             {"  "}
                             {method.download ? (
-                              <a href={method.download} download>
+                              <a id={`${method.methodName}-output`} href={method.download} download={`${method.methodName}-output`}>
                                 <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} />
                               </a>
                             ) : null}{" "}
                           </td>
                           <td>
-                            {method.params.map((param) => (
+                            {method.params.map((param, i) => (
                               <div key={param.name}>
-                                <input id="inputs" type="text" placeholder={param.name} onChange={(e) => handleInputChange(param.name, e.target.value)} />
+                                <input
+                                  id={`${method.methodName}-input-${i}}`}
+                                  type="text"
+                                  placeholder={param.name}
+                                  onChange={(e) => handleInputChange(param.name, e.target.value)}
+                                />
                               </div>
                             ))}
                           </td>
