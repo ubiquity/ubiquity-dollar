@@ -56,7 +56,6 @@
     "react-transition-group": "^4.4.5",
     "rimraf": "3.0.2",
     "typechain": "^8.1.0",
-    "viem": "^1.6.3",
     "wagmi": "^0.12.9"
   }
 }

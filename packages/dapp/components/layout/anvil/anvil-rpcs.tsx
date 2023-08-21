@@ -1,29 +1,15 @@
 import React from "react";
 import Button from "../../ui/button";
-import { createTestClient, http, publicActions, walletActions } from "viem";
-import { foundry } from "viem/chains";
 import { methodConfigs } from "./method-configs";
 import Image from "next/image";
 import Download from "../../../public/download.svg";
+import useWeb3 from "../../lib/hooks/use-web-3";
 
 export default function AnvilRpcs() {
   const [isHidden, setIsHidden] = React.useState<boolean>(true);
   const [isVisible, setIsVisible] = React.useState<number>(0);
   const [methodArgs, setMethodArgs] = React.useState<Record<string, string>>({});
-
-  const testClient = createTestClient({
-    // Defaults to same deployer as /contracts/.env
-    // Is required if you want to call sendTransaction
-    // Current setup does not allow access to Anvil's 10 accounts
-    // for testing I ran a standalone node and used account[0]
-    // 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
-    account: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-    chain: foundry,
-    mode: "anvil",
-    transport: http(),
-  })
-    .extend(walletActions)
-    .extend(publicActions);
+  const { provider } = useWeb3();
 
   const handleMethodCall = async (meth: string) => {
     const method = methodConfigs.find((method) => method.methodName === meth);
@@ -58,31 +44,24 @@ export default function AnvilRpcs() {
       if (method.methodName === "sendTransaction" || method.methodName === "sendUnsignedTransaction") {
         throw new Error();
       }
-      result = await testClient.request({
-        method: method?.methodName,
-        params: args,
-      });
-    } catch (error0) {
-      const name = method?.methodName;
-      console.log("error0", error0);
-      try {
-        name === "sendUnsignedTransaction"
-          ? await testClient.sendUnsignedTransaction({
-              from: args[0],
-              to: args[1],
-              value: args[2],
-            })
-          : name === "sendTransaction"
-          ? await testClient.sendTransaction({
-              from: args[0],
-              to: args[1],
-              value: args[2],
-            })
-          : null;
-      } catch (error1) {
-        console.error(`Fallback failed - Error0: ${error0} - Error1: ${error1}`);
-      }
+      result = await fetch("http://localhost:8545", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: method.methodName,
+          params: args,
+        }),
+      }).then((res) => res.json());
+
+      console.log("result", result);
+    } catch (error) {
+      console.log("error", error);
     }
+
     for (let i = 0; i < args.length; i++) {
       document.getElementById(`${method.methodName}-input-${i}}`).value = "";
     }
