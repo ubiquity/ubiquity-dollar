@@ -1,0 +1,59 @@
+name: Deep Fuzz
+on:
+  push:
+  pull_request:
+
+jobs:
+  deep-fuzz:
+    name: Deep Fuzz
+    runs-on: ubuntu-22.04
+    env:
+      FOUNDRY_PROFILE: intense
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18.14.1"
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly-d369d2486f85576eec4ca41d277391dfdae21ba7
+
+      - name: Get changed Solidity contracts
+        id: changed-files
+        uses: tj-actions/changed-files@v37
+        with:
+          files: packages/contracts/src/**
+
+      - name: Forge install
+        working-directory: packages/contracts
+        run: forge install
+
+      - name: Deep Fuzz Solidity Contracts
+        working-directory: packages/contracts
+        run: |
+          if ${{ github.event_name == 'pull_request' }}; then
+            forge test
+          fi
+          if ${{ github.event_name == 'push' }}; then
+            if [ -z "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
+              echo "No Solidity contracts were modified, skipping deep fuzzing..."
+              exit 0
+            fi
+            touch fuzz.txt
+            for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+              echo "${file} was changed"
+              f=$(basename -- $file)
+              forge tree | grep -E "^test|^src|${f}" | grep -B1 ${f} | grep ^test | cut -d' ' -f1 >> fuzz.txt
+            done
+            echo "Deep fuzzing tests:"
+            cat fuzz.txt | sort | uniq -u
+            cat fuzz.txt | sort | uniq -u | xargs -I{} forge test --match-path {}
+          fi
