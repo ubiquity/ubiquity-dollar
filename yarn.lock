@@ -2505,17 +2505,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nomicfoundation/hardhat-foundry@npm:^1.0.2":
-  version: 1.0.3
-  resolution: "@nomicfoundation/hardhat-foundry@npm:1.0.3"
-  dependencies:
-    chalk: ^2.4.2
-  peerDependencies:
-    hardhat: ^2.12.6
-  checksum: b2db268059137383a33a68b82de0338366e7e4749de235af379c5c3fe871dfec9e8c5172977d95b318fd80e61d40556453d9e95c5778a6fd72e9a35f3550258b
-  languageName: node
-  linkType: hard
-
 "@nomicfoundation/solidity-analyzer-darwin-arm64@npm:0.1.1":
   version: 0.1.1
   resolution: "@nomicfoundation/solidity-analyzer-darwin-arm64@npm:0.1.1"
@@ -3783,7 +3772,6 @@ __metadata:
     "@ethersproject/bytes": ^5.0.0
     "@ethersproject/providers": ^5.6.8
     "@next/eslint-plugin-next": ^13.2.4
-    "@nomicfoundation/hardhat-foundry": ^1.0.2
     "@tippyjs/react": ^4.2.5
     "@typechain/ethers-v5": ^10.1.0
     "@types/btoa": ^1.2.3
