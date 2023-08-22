@@ -34,9 +34,6 @@ export default function AnvilRpcs() {
     let result;
 
     try {
-      if (method.methodName === "sendTransaction" || method.methodName === "sendUnsignedTransaction") {
-        throw new Error();
-      }
       result = await fetch("http://localhost:8545", {
         method: "POST",
         headers: {
@@ -69,7 +66,17 @@ export default function AnvilRpcs() {
 
       const blob = new Blob([JSON.stringify(result)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
-      document.getElementById(`${method.methodName}-output`)?.setAttribute("href", url);
+      const downloadButton = document.getElementById(`${method.methodName}-output`);
+      if (!downloadButton) return console.log("No download button");
+      downloadButton.setAttribute("href", url);
+      downloadButton.setAttribute("download", `${method.methodName}-output`);
+      const img = downloadButton.querySelector("img");
+      if (!img) return console.log("No img");
+      const replace = document.createElement("img");
+      replace.width = 50;
+      replace.style.cursor = "pointer";
+      replace.className = "downloadButton";
+      img.replaceWith(replace);
     }
   };
 
@@ -118,7 +125,7 @@ export default function AnvilRpcs() {
                           <td>
                             {method.name}
                             {"  "}
-                            {method.download ? <img className="downloadButton" width={50} style={{ cursor: "pointer" }} /> : null}{" "}
+                            {method.download ? <img className="downloadButton" width={50} hidden={true} style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
                             {method.params.map((param, i) => (
@@ -165,7 +172,7 @@ export default function AnvilRpcs() {
                           <td>
                             {method.name}
                             {"  "}
-                            {method.download ? <img className="downloadButton" width={50} style={{ cursor: "pointer" }} /> : null}{" "}
+                            {method.download ? <img className="downloadButton" width={50} hidden={true} style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
                             {method.params.map((param, i) => (
@@ -214,7 +221,7 @@ export default function AnvilRpcs() {
                             {"  "}
                             {method.download ? (
                               <a id={`${method.methodName}-output`} download={`${method.methodName}-output`}>
-                                <img className="downloadButton" width={50} style={{ cursor: "pointer" }} />
+                                <img className="downloadButton" width={50} hidden={true} style={{ cursor: "pointer" }} />
                               </a>
                             ) : null}{" "}
                           </td>
