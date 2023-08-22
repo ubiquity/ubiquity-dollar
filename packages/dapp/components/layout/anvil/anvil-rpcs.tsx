@@ -1,15 +1,12 @@
 import React from "react";
 import Button from "../../ui/button";
 import { methodConfigs } from "./method-configs";
-import Image from "next/image";
 import Download from "../../../public/download.svg";
-import useWeb3 from "../../lib/hooks/use-web-3";
 
 export default function AnvilRpcs() {
   const [isHidden, setIsHidden] = React.useState<boolean>(true);
   const [isVisible, setIsVisible] = React.useState<number>(0);
   const [methodArgs, setMethodArgs] = React.useState<Record<string, string>>({});
-  const { provider } = useWeb3();
 
   const handleMethodCall = async (meth: string) => {
     const method = methodConfigs.find((method) => method.methodName === meth);
@@ -29,13 +26,10 @@ export default function AnvilRpcs() {
       } catch (e) {
         /* empty */
       }
-      if (methodArgTypes[i] === "number") {
-        args[i] = Number(arg);
-      } else if (methodArgTypes[i] === "boolean") {
-        args[i] = Boolean(arg);
-      } else if (methodArgTypes[i] === "bigint") {
-        args[i] = BigInt(arg);
-      }
+
+      arg as bigint | number | boolean | string;
+
+      args[i] = arg;
     });
 
     let result;
@@ -63,7 +57,8 @@ export default function AnvilRpcs() {
     }
 
     for (let i = 0; i < args.length; i++) {
-      document.getElementById(`${method.methodName}-input-${i}}`).value = "";
+      const ele = document.getElementById(`${method.methodName}-input-${i}}`);
+      if (ele) ele.textContent = "";
     }
 
     setMethodArgs({});
@@ -106,7 +101,7 @@ export default function AnvilRpcs() {
                 <Button style={{ maxWidth: "250px", marginBottom: "6px" }} onClick={() => setIsVisible(0)}>
                   Back
                 </Button>
-                <tb>
+                <tbody>
                   <tr>
                     <th>Method</th>
                     <th>Params</th>
@@ -115,7 +110,7 @@ export default function AnvilRpcs() {
                   {methodConfigs
                     .filter((method) => method.type === "chain")
                     .map((method) => {
-                      const handleInputChange = (argName, value) => {
+                      const handleInputChange = (argName: string, value: string) => {
                         setMethodArgs((prevArgs) => ({ ...prevArgs, [argName]: value }));
                       };
 
@@ -124,7 +119,7 @@ export default function AnvilRpcs() {
                           <td>
                             {method.name}
                             {"  "}
-                            {method.download ? <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
+                            {method.download ? <img src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
                             {method.params.map((param, i) => (
@@ -144,7 +139,7 @@ export default function AnvilRpcs() {
                         </tr>
                       );
                     })}
-                </tb>
+                </tbody>
               </>
             )}
 
@@ -153,7 +148,7 @@ export default function AnvilRpcs() {
                 <Button style={{ maxWidth: "250px", marginBottom: "6px" }} onClick={() => setIsVisible(0)}>
                   Back
                 </Button>
-                <tb>
+                <tbody>
                   <tr>
                     <th>Method</th>
                     <th>Params</th>
@@ -162,7 +157,7 @@ export default function AnvilRpcs() {
                   {methodConfigs
                     .filter((method) => method.type === "user")
                     .map((method) => {
-                      const handleInputChange = (argName, value) => {
+                      const handleInputChange = (argName: string, value: string) => {
                         setMethodArgs((prevArgs) => ({ ...prevArgs, [argName]: value }));
                       };
 
@@ -171,7 +166,7 @@ export default function AnvilRpcs() {
                           <td>
                             {method.name}
                             {"  "}
-                            {method.download ? <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
+                            {method.download ? <img src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
                             {method.params.map((param, i) => (
@@ -191,7 +186,7 @@ export default function AnvilRpcs() {
                         </tr>
                       );
                     })}
-                </tb>
+                </tbody>
               </>
             )}
 
@@ -200,7 +195,7 @@ export default function AnvilRpcs() {
                 <Button style={{ maxWidth: "250px", marginBottom: "6px" }} onClick={() => setIsVisible(0)}>
                   Back
                 </Button>
-                <tb>
+                <tbody>
                   <tr>
                     <th>Method</th>
                     <th>Params</th>
@@ -209,7 +204,7 @@ export default function AnvilRpcs() {
                   {methodConfigs
                     .filter((method) => method.type === "utility")
                     .map((method) => {
-                      const handleInputChange = (argName, value) => {
+                      const handleInputChange = (argName: string, value: string) => {
                         setMethodArgs((prevArgs) => ({ ...prevArgs, [argName]: value }));
                       };
 
@@ -219,8 +214,8 @@ export default function AnvilRpcs() {
                             {method.name}
                             {"  "}
                             {method.download ? (
-                              <a id={`${method.methodName}-output`} href={method.download} download={`${method.methodName}-output`}>
-                                <Image src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} />
+                              <a id={`${method.methodName}-output`} download={`${method.methodName}-output`}>
+                                <img src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} />
                               </a>
                             ) : null}{" "}
                           </td>
@@ -242,7 +237,7 @@ export default function AnvilRpcs() {
                         </tr>
                       );
                     })}
-                </tb>
+                </tbody>
               </>
             )}
           </div>
