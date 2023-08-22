@@ -227,14 +227,14 @@ export const methodConfigs = [
     type: "chain",
   },
   {
-    name: "Set Next block.timestamp",
+    name: "Set Next Block timestamp",
     methodName: "anvil_setNextBlockTimestamp",
     description: "Sets the next block's timestamp.",
     params: [{ name: "timestamp", type: "number" }],
     type: "chain",
   },
   {
-    name: "Set Next block.baseFeePerGas",
+    name: "Set Next Block baseFeePerGas",
     methodName: "anvil_setNextBlockBaseFeePerGas",
     description: "Sets the next block's base fee per gas.",
     params: [{ name: "baseFeePerGas", type: "number" }],

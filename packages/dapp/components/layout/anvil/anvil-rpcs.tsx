@@ -19,6 +19,8 @@ export default function AnvilRpcs() {
     console.log("args", args);
     const methodArgTypes = method.params.map((arg) => arg.type);
     console.log("methodArgTypes", methodArgTypes);
+    const typedArgs: (string | number | bigint | boolean)[] = [];
+
     args.forEach((arg, i) => {
       try {
         arg = arg.trim();
@@ -26,9 +28,24 @@ export default function AnvilRpcs() {
         /* empty */
       }
 
-      arg as bigint | number | boolean | string;
+      function convertToArgType(arg: string, type: string) {
+        let argTyped = arg as bigint | number | boolean | string;
+        switch (type) {
+          case "bigint":
+            return (argTyped = BigInt(arg));
+          case "number":
+            return (argTyped = Number(arg));
+          case "boolean":
+            return (argTyped = Boolean(arg));
+          case "string":
+            return (argTyped = String(arg));
+          default:
+            return argTyped;
+        }
+      }
 
-      args[i] = arg;
+      const convertedArg = convertToArgType(arg, methodArgTypes[i]);
+      typedArgs.push(convertedArg);
     });
 
     let result;
@@ -43,7 +60,7 @@ export default function AnvilRpcs() {
           jsonrpc: "2.0",
           id: 1,
           method: method.methodName,
-          params: args,
+          params: typedArgs,
         }),
       }).then((res) => res.json());
 
