@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "../../ui/button";
 import { methodConfigs } from "./method-configs";
-import Download from "../../../public/download.svg";
 
 export default function AnvilRpcs() {
   const [isHidden, setIsHidden] = React.useState<boolean>(true);
@@ -119,7 +118,7 @@ export default function AnvilRpcs() {
                           <td>
                             {method.name}
                             {"  "}
-                            {method.download ? <img src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
+                            {method.download ? <img className="downloadButton" width={50} style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
                             {method.params.map((param, i) => (
@@ -166,7 +165,7 @@ export default function AnvilRpcs() {
                           <td>
                             {method.name}
                             {"  "}
-                            {method.download ? <img src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} /> : null}{" "}
+                            {method.download ? <img className="downloadButton" width={50} style={{ cursor: "pointer" }} /> : null}{" "}
                           </td>
                           <td>
                             {method.params.map((param, i) => (
@@ -215,7 +214,7 @@ export default function AnvilRpcs() {
                             {"  "}
                             {method.download ? (
                               <a id={`${method.methodName}-output`} download={`${method.methodName}-output`}>
-                                <img src={Download} width={250} alt="logo" style={{ cursor: "pointer" }} />
+                                <img className="downloadButton" width={50} style={{ cursor: "pointer" }} />
                               </a>
                             ) : null}{" "}
                           </td>

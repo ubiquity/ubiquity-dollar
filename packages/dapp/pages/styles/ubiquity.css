@@ -58,6 +58,11 @@ input[disabled="disabled"] {
   background-image: url(/grid-1.png);
   background-repeat: repeat;
 }
+
+.downloadButton {
+  background-image: url(/download.svg);
+}
+
 #Inventory {
   width: 100vw;
   text-align: center;
