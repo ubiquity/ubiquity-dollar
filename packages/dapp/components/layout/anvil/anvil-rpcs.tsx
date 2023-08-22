@@ -49,7 +49,7 @@ export default function AnvilRpcs() {
 
       console.log("result", result);
     } catch (error) {
-      console.log("error", error);
+      /* empty */
     }
 
     for (let i = 0; i < args.length; i++) {
