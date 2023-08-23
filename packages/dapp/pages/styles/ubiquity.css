@@ -58,6 +58,11 @@ input[disabled="disabled"] {
   background-image: url(/grid-1.png);
   background-repeat: repeat;
 }
+
+.downloadButton {
+  background-image: url(/download.svg);
+}
+
 #Inventory {
   width: 100vw;
   text-align: center;
@@ -636,4 +641,51 @@ hr {
 }
 #__next.light-mode #Disconnect .svg-background::before {
   background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23000" height="48" viewBox="0 -960 960 960" width="48"><path d="m249-207-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" /></svg>');
+}
+
+.rpc-method-container {
+  bottom: 0;
+  left: 0;
+  display: grid;
+  width: 100%;
+  overflow-y: scroll;
+  position: fixed;
+  z-index: 1;
+  background-color: black;
+  max-height: calc(100vh - 216px);
+}
+
+.rpc-method-container::-webkit-scrollbar {
+  display: none;
+}
+
+
+.table.container {
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  bottom: 0;
+  /* display: flex; */
+  text-align: center;
+}
+
+.table-container table {
+  border-collapse: collapse;
+  overflow-y: scroll;
+  width: 800px;
+  left: 0;
+  bottom: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  text-align: center;
+}
+
+.table-container th,
+.table-container td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  width: 100%;
 }

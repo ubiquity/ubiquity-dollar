@@ -1,7 +1,7 @@
 import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { useAccount, useProvider, useSigner } from "wagmi";
 import { WagmiConfig, createClient } from "wagmi";
-import { mainnet, hardhat, localhost } from "wagmi/chains";
+import { mainnet, hardhat, localhost, foundry } from "wagmi/chains";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
@@ -27,7 +27,7 @@ export type Web3State = {
 
 const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
 
-const defaultChains = [mainnet, hardhat, localhost];
+const defaultChains = [mainnet, localhost, foundry /*, hardhat*/];
 
 const client = createClient(
   getDefaultClient({
