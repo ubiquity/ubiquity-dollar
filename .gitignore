@@ -52,7 +52,7 @@ fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
 packages/contracts/broadcast/*/*/*
-
+!packages/contracts/broadcast/**/run-latest.json
 
 .yarn
 .yarn/*
@@ -61,7 +61,6 @@ packages/contracts/broadcast/*/*/*
 cache
 build
 out
-packages/contracts/broadcast/*
 packages/dapp/types/
 .vscode/
 /packages/contracts/*.info
