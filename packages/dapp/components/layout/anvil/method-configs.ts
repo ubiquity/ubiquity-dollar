@@ -352,6 +352,24 @@ export const methodConfigs = [
     type: "user",
   },
   {
+    name: "Send Unsigned Transaction",
+    methodName: "eth_sendRawTransaction",
+    description: "Creates new message call transaction or a contract creation, if the data field contains code.",
+    params: [{ name: "data", type: "string" }],
+    type: "user",
+  },
+  {
+    name: "Send Transaction",
+    methodName: "eth_sendTransaction",
+    description: "Creates new message call transaction or a contract creation, if the data field contains code.",
+    params: [
+      { name: "from", type: "string" },
+      { name: "to", type: "string" },
+      { name: "value", type: "string" },
+    ],
+    type: "user",
+  },
+  {
     name: "Eth Sign",
     methodName: "eth_sign",
     description: "Signs a message.",

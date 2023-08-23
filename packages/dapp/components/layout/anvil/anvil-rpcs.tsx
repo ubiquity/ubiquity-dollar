@@ -1,11 +1,30 @@
 import React from "react";
 import Button from "../../ui/button";
 import { methodConfigs } from "./method-configs";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 
 export default function AnvilRpcs() {
   const [isHidden, setIsHidden] = React.useState<boolean>(true);
   const [isVisible, setIsVisible] = React.useState<number>(0);
   const [methodArgs, setMethodArgs] = React.useState<Record<string, string>>({});
+  const { signer } = useWeb3();
+
+  const handleFetch = async (method: string, params: unknown[]) => {
+    const result = await fetch("http://localhost:8545", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: method,
+        params: params,
+      }),
+    }).then((res) => res.json());
+
+    return result;
+  };
 
   const handleMethodCall = async (meth: string) => {
     const method = methodConfigs.find((method) => method.methodName === meth);
@@ -51,20 +70,23 @@ export default function AnvilRpcs() {
     let result;
 
     try {
-      result = await fetch("http://localhost:8545", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          jsonrpc: "2.0",
-          id: 1,
-          method: method.methodName,
-          params: typedArgs,
-        }),
-      }).then((res) => res.json());
+      if (method.methodName == "eth_sendTransaction") {
+        const nonce = await signer?.getTransactionCount();
+        let nonceToHex = nonce?.toString(16);
+        nonceToHex = "0x" + nonceToHex;
 
-      console.log("result", result);
+        const tx = {
+          to: args[1],
+          from: args[0],
+          nonce: nonceToHex,
+        };
+
+        const transaction = await handleFetch(method.methodName, [tx]);
+        console.log("transaction: ", transaction);
+        return;
+      } else {
+        result = await handleFetch(method.methodName, typedArgs);
+      }
     } catch (error) {
       /* empty */
     }
