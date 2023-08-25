@@ -130,6 +130,6 @@ contract Constants is Script {
     ];
 
     //CreditClockFacet
-    bytes16 _rateStartValue = (0x00);
-    bytes16 _ratePerBlock = (0x00);
+    bytes16 constant RATE_START_VALUE = (0x00);
+    bytes16 constant RATE_PER_BLOCK = (0x00);
 }
