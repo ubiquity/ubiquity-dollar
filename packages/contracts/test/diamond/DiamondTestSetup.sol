@@ -29,6 +29,7 @@ import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol
 import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
+import {CreditClockFacet} from "../../src/dollar/facets/CreditClockFacet.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
@@ -57,6 +58,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
+    CreditClockFacet creditClockFacet;
 
     UbiquityDollarToken IDollar;
     ERC1155Ubiquity IUbiquityNFT;
@@ -83,6 +85,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     DollarMintCalculatorFacet IDollarMintCalcFacet;
     DollarMintExcessFacet IDollarMintExcessFacet;
+    CreditClockFacet ICreditClockFacet;
 
     StakingShare IStakingShareToken;
     // adding governance token
@@ -118,6 +121,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
+    bytes4[] selectorsOfCreditClockFacet;
 
     // deploys diamond and connects facets
     function setUp() public virtual {
@@ -469,6 +473,18 @@ abstract contract DiamondSetup is DiamondTestHelper {
             (dollarMintExcessFacet.distributeDollars.selector)
         );
 
+        //CreditClockFacet
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacet.getManager.selector)
+        );
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacet.setManager.selector)
+        );
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacet.setRatePerBlock.selector)
+        );
+        selectorsOfCreditClockFacet.push((creditClockFacet.getRate.selector));
+
         //deploy facets
         dCutFacet = new DiamondCutFacet();
         dLoupeFacet = new DiamondLoupeFacet();
@@ -490,6 +506,11 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
         dollarMintExcessFacet = new DollarMintExcessFacet();
+        creditClockFacet = new CreditClockFacet(
+            address(diamond),
+            bytes16(0x00),
+            bytes16(0x00)
+        );
 
         dInit = new DiamondInit();
         facetNames = [
@@ -510,7 +531,8 @@ abstract contract DiamondSetup is DiamondTestHelper {
             "CreditRedemptionCalculatorFacet",
             "DollarMintCalculatorFacet",
             "DollarMintExcessFacet",
-            "BondingCurveFacet"
+            "BondingCurveFacet",
+            "CreditClockFacet"
         ];
 
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -695,6 +717,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
+        ICreditClockFacet = CreditClockFacet(address(diamond));
 
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
