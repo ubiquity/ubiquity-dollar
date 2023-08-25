@@ -27,6 +27,7 @@ import StakingFacetArtifact from "@ubiquity/contracts/out/StakingFacet.sol/Staki
 import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
+import CreditClockFacetArtifact from "@ubiquity/contracts/out/CreditClockFacet.sol/CreditClockFacet.json";
 
 /**
  * Returns all of the available protocol contracts.
@@ -80,6 +81,7 @@ const useProtocolContracts = () => {
     stakingFormulasFacet: Contract | null,
     twapOracleDollar3poolFacet: Contract | null,
     ubiquityPoolFacet: Contract | null,
+    creditClockFacet: Contract | null,
   } = {
     // separately deployed contracts (i.e. not part of the diamond)
     creditNft: null,
@@ -103,6 +105,7 @@ const useProtocolContracts = () => {
     stakingFormulasFacet: null,
     twapOracleDollar3poolFacet: null,
     ubiquityPoolFacet: null,
+    creditClockFacet: null,
   };
 
   let diamondAddress = '';
@@ -147,6 +150,7 @@ const useProtocolContracts = () => {
   protocolContracts.stakingFormulasFacet = new ethers.Contract(diamondAddress, StakingFormulasFacetArtifact.abi, <Provider>provider);
   protocolContracts.twapOracleDollar3poolFacet = new ethers.Contract(diamondAddress, TWAPOracleDollar3poolFacetArtifact.abi, <Provider>provider);
   protocolContracts.ubiquityPoolFacet = new ethers.Contract(diamondAddress, UbiquityPoolFacetArtifact.abi, <Provider>provider);
+  protocolContracts.creditClockFacet = new ethers.Contract(diamondAddress, CreditClockFacetArtifact.abi, <Provider>provider);
 
   return protocolContracts;
 };
