@@ -12,17 +12,10 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       FOUNDRY_PROFILE: intense
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.14.1"
 
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
