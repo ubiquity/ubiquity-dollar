@@ -128,4 +128,8 @@ contract Constants is Script {
         4,
         208
     ];
+
+    //CreditClockFacet
+    bytes16 _rateStartValue = (0x00);
+    bytes16 _ratePerBlock = (0x00);
 }

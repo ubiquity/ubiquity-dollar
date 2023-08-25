@@ -6,11 +6,18 @@ import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 /**
- * @notice CreditClock contract
+ * @notice CreditClockFacet contract
  */
-contract CreditClock {
+contract CreditClockFacet {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
+
+    /// @notice Emitted when depreciation rate per block is updated
+    event SetRatePerBlock(
+        uint256 rateStartBlock,
+        bytes16 rateStartValue,
+        bytes16 ratePerBlock
+    );
 
     /// @notice Access control contract
     IAccessControl public accessControl;
@@ -26,13 +33,6 @@ contract CreditClock {
 
     /// @notice Deprecation rate. How many Dollars are deprecated on each block.
     bytes16 public ratePerBlock;
-
-    /// @notice Emitted when depreciation rate per block is updated
-    event SetRatePerBlock(
-        uint256 rateStartBlock,
-        bytes16 rateStartValue,
-        bytes16 ratePerBlock
-    );
 
     /// @notice Modifier checks that the method is called by a user with the "Incentive manager" role
     modifier onlyAdmin() {

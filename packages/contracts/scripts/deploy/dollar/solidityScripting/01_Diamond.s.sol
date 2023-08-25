@@ -26,6 +26,7 @@ import {UbiquityDollarToken} from "../../../../src/dollar/core/UbiquityDollarTok
 import {StakingShare} from "../../../../src/dollar/core/StakingShare.sol";
 import {UbiquityGovernanceToken} from "../../../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {IDiamondCut} from "../../../../src/dollar/interfaces/IDiamondCut.sol";
+import {CreditClockFacet} from "../../../../src/dollar/facets/CreditClockFacet.sol";
 //import "../../src/dollar/interfaces/IDiamondLoupe.sol";
 
 import "./00_Constants.s.sol";
@@ -48,6 +49,7 @@ contract DiamondScript is Constants {
 
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
+    bytes4[] selectorsOfCreditClockFacet;
     // contract types of facets to be deployed
     Diamond diamond;
     DiamondCutFacet dCutFacet;
@@ -72,6 +74,7 @@ contract DiamondScript is Constants {
 
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
+    CreditClockFacet creditClockFacet;
 
     string[] facetNames;
 
@@ -96,6 +99,11 @@ contract DiamondScript is Constants {
 
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
         dollarMintExcessFacet = new DollarMintExcessFacet();
+        creditClockFacet = new CreditClockFacet(
+            address(diamond),
+            _rateStartValue,
+            _ratePerBlock
+        );
 
         dInit = new DiamondInit();
         facetNames = [
@@ -113,7 +121,8 @@ contract DiamondScript is Constants {
             "CreditNftRedemptionCalculatorFacet",
             "CreditRedemptionCalculatorFacet",
             "DollarMintCalculatorFacet",
-            "DollarMintExcessFacet"
+            "DollarMintExcessFacet",
+            "CreditClockFacet"
         ];
 
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -133,7 +142,7 @@ contract DiamondScript is Constants {
                 initArgs
             )
         });
-        IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](15);
+        IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](16);
         setFacet(cuts);
         // deploy diamond
 
@@ -254,6 +263,14 @@ contract DiamondScript is Constants {
                 facetAddress: address(dollarMintExcessFacet),
                 action: IDiamondCut.FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintExcessFacet
+            })
+        );
+
+        cuts[15] = (
+            IDiamondCut.FacetCut({
+                facetAddress: address(creditClockFacet),
+                action: IDiamondCut.FacetCutAction.Add,
+                functionSelectors: selectorsOfCreditClockFacet
             })
         );
     }
@@ -521,5 +538,17 @@ contract DiamondScript is Constants {
         selectorsOfDollarMintExcessFacet.push(
             (dollarMintExcessFacet.distributeDollars.selector)
         );
+
+        //CreditClockFacet
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacet.getManager.selector)
+        );
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacet.setManager.selector)
+        );
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacet.setRatePerBlock.selector)
+        );
+        selectorsOfCreditClockFacet.push((creditClockFacet.getRate.selector));
     }
 }
