@@ -24,7 +24,7 @@ contract StakingShareScript is CreditScript {
         );
         IStakingShareToken = new StakingShare();
         proxyStakingShare = new UupsProxy(
-            address(stakingShare),
+            address(IStakingShareToken),
             manAndUriPayload
         );
         stakingShare = StakingShare(address(proxyStakingShare));
