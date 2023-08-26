@@ -3,15 +3,12 @@ pragma solidity ^0.8.19;
 
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
-import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
 import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
-import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 
 abstract contract LocalTestHelper is DiamondSetup {
@@ -22,7 +19,6 @@ abstract contract LocalTestHelper is DiamondSetup {
     TWAPOracleDollar3poolFacet twapOracle;
 
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculator;
-    UbiquityCreditToken creditToken;
     CreditRedemptionCalculatorFacet creditRedemptionCalculator;
     DollarMintCalculatorFacet dollarMintCalculator;
     CreditNftManagerFacet creditNftManager;
@@ -31,6 +27,7 @@ abstract contract LocalTestHelper is DiamondSetup {
 
     function setUp() public virtual override {
         super.setUp();
+        __setupUUPS(address(diamond));
 
         twapOracle = ITWAPOracleDollar3pool;
         creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
@@ -68,8 +65,6 @@ abstract contract LocalTestHelper is DiamondSetup {
         );
 
         // deploy credit token
-        creditToken = new UbiquityCreditToken(address(diamond));
-        IManager.setCreditTokenAddress(address(creditToken));
 
         // set treasury address
         IManager.setTreasuryAddress(treasuryAddress);

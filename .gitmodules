@@ -30,7 +30,7 @@
 	path = packages/contracts/lib/Uniswap/v3-periphery
 	url = https://github.com/Uniswap/v3-periphery.git
 	branch= main
-[submodule "packages/contracts/lib/openzeppelin-upgradeable"]
-	path = packages/contracts/lib/openzeppelin-upgradeable
-	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
-	branch = release-v4.9.3
+[submodule "packages/contracts/lib/openzeppelinUpgradeable"]
+	path = packages/contracts/lib/openzeppelinUpgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable/
+	branch = release-v4.9

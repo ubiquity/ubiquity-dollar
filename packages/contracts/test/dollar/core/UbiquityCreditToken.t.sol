@@ -11,7 +11,7 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
         super.setUp();
 
         vm.prank(admin);
-        ubiquityCreditToken = new UbiquityCreditToken(address(diamond));
+        ubiquityCreditToken = creditToken;
     }
 
     function testRaiseCapital_ShouldMintTokens() public {

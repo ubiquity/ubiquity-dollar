@@ -29,8 +29,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     address fourthAccount = address(0x6);
     address fifthAccount = address(0x7);
     address stakingZeroAccount = address(0x8);
-    StakingShare stakingShare;
-    BondingShare stakingShareV1;
 
     function setUp() public override {
         super.setUp();
@@ -112,9 +110,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
-        );
-        UbiquityCreditToken creditToken = new UbiquityCreditToken(
-            address(IManager)
         );
         IManager.setCreditTokenAddress(address(creditToken));
 

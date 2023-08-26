@@ -5,7 +5,8 @@ import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC11
 import {ERC1155BurnableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
 import {ERC1155PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
-
+import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 import "../../../src/dollar/utils/SafeAddArray.sol";
@@ -18,7 +19,7 @@ import "../../../src/dollar/utils/SafeAddArray.sol";
  * - Ubiquity Manager access control
  */
 contract ERC1155Ubiquity is
-    ERC1155Upgradeable,
+    Initializable,
     ERC1155BurnableUpgradeable,
     ERC1155PausableUpgradeable,
     UUPSUpgradeable
@@ -300,7 +301,7 @@ contract ERC1155Ubiquity is
 
     function _authorizeUpgrade(
         address newImplementation
-    ) internal override onlyAdmin {}
+    ) internal virtual override onlyAdmin {}
 
     uint256[50] private __gap;
 }

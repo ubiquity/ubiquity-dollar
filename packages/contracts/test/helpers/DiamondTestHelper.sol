@@ -5,8 +5,9 @@ import "forge-std/Test.sol";
 import "forge-std/Vm.sol";
 import "../../src/dollar/interfaces/IDiamondCut.sol";
 import "../../src/dollar/interfaces/IDiamondLoupe.sol";
+import {UupsTestHelper} from "../helpers/UupstestHelper.sol";
 
-contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
+contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, UupsTestHelper, Test {
     uint256 private seed;
 
     modifier prankAs(address caller) {

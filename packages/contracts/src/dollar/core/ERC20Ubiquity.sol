@@ -5,11 +5,13 @@ pragma solidity ^0.8.19;
 // import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import {DEFAULT_ADMIN_ROLE, PAUSER_ROLE} from "../libraries/Constants.sol";
-import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-
+import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/ERC20Upgradeable.sol";
 import {ERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
 import {ERC20PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
+import {IERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
+import {IERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
 
 /**
  * @notice Base contract for Ubiquity ERC20 tokens (Dollar, Credit, Governance)
@@ -19,15 +21,24 @@ import {ERC20PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token
  * - Ubiquity Manager access control
  */
 abstract contract ERC20Ubiquity is
+    Initializable,
+    UUPSUpgradeable,
+    ERC20Upgradeable,
     ERC20PermitUpgradeable,
-    ERC20PausableUpgradeable,
-    IERC20Ubiquity
+    ERC20PausableUpgradeable
 {
     /// @notice Token symbol
     string private _symbol;
 
     /// @notice Access control interface
     IAccessControl public accessControl;
+
+    event Burning(address indexed _burned, uint256 _amount);
+    event Minting(
+        address indexed _to,
+        address indexed _minter,
+        uint256 _amount
+    );
 
     /// @notice Modifier checks that the method is called by a user with the "pauser" role
     modifier onlyPauser() {
@@ -68,10 +79,10 @@ abstract contract ERC20Ubiquity is
 
     function __ERC20Ubiquity_init(
         address _manager,
-        string calldata name_,
-        string calldata symbol_
+        string memory name_,
+        string memory symbol_
     ) public onlyInitializing {
-        __ERC20_init(name, symbol_);
+        __ERC20_init(name_, symbol_);
         __ERC20Permit_init(name_);
         __ERC20Pausable_init();
         _symbol = symbol_;
@@ -183,7 +194,87 @@ abstract contract ERC20Ubiquity is
 
     function _authorizeUpgrade(
         address newImplementation
-    ) internal override onlyAdmin {}
+    ) internal virtual override onlyAdmin {}
+
+    function allowance(
+        address owner,
+        address spender
+    ) public view override(ERC20Upgradeable) returns (uint256) {
+        return super.allowance(owner, spender);
+    }
+
+    function approve(
+        address spender,
+        uint256 amount
+    ) public override(ERC20Upgradeable) returns (bool) {
+        return super.approve(spender, amount);
+    }
+
+    function balanceOf(
+        address account
+    ) public view override(ERC20Upgradeable) returns (uint256) {
+        return super.balanceOf(account);
+    }
+
+    function decimals() public view override returns (uint8) {
+        return super.decimals();
+    }
+
+    function decreaseAllowance(
+        address spender,
+        uint256 subtractedValue
+    ) public override returns (bool) {
+        return super.decreaseAllowance(spender, subtractedValue);
+    }
+
+    function increaseAllowance(
+        address spender,
+        uint256 addedValue
+    ) public override returns (bool) {
+        return super.increaseAllowance(spender, addedValue);
+    }
+
+    function nonces(
+        address owner
+    ) public view override(ERC20PermitUpgradeable) returns (uint256) {
+        return super.nonces(owner);
+    }
+
+    function permit(
+        address owner,
+        address spender,
+        uint256 value,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) public override(ERC20PermitUpgradeable) {
+        super.permit(owner, spender, value, deadline, v, r, s);
+    }
+
+    function totalSupply()
+        public
+        view
+        override(ERC20Upgradeable)
+        returns (uint256)
+    {
+        return super.totalSupply();
+    }
+
+    function transfer(
+        address recipient,
+        uint256 amount
+    ) public override(ERC20Upgradeable) returns (bool) {
+        return super.transfer(recipient, amount);
+    }
+
+    function transferFrom(
+        address sender,
+        address recipient,
+        uint256 amount
+    ) public override(ERC20Upgradeable) returns (bool) {
+        return super.transferFrom(sender, recipient, amount);
+    }
 
     uint256[50] private __gap;
 }

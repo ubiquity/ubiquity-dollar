@@ -13,7 +13,7 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
         IDollar.mint(admin, 10000e18);
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
-        _creditNft = new CreditNft(address(diamond));
+        _creditNft = IUbiquityNft;
 
         vm.startPrank(admin);
         IManager.setCreditNftAddress(address(_creditNft));

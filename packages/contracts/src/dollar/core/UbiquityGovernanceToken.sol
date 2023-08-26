@@ -3,12 +3,14 @@ pragma solidity ^0.8.19;
 
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
+import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+
 import "../libraries/Constants.sol";
 
 /**
  * @notice Ubiquity Governance token contract
  */
-contract UbiquityGovernanceToken is ERC20Ubiquity {
+contract UbiquityGovernanceToken is Initializable, ERC20Ubiquity {
     // /**
     //  * @notice Contract constructor
     //  * @param _manager Access control address
@@ -70,7 +72,7 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
     function mint(
         address to,
         uint256 amount
-    ) public override onlyGovernanceMinter whenNotPaused {
+    ) public onlyGovernanceMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }

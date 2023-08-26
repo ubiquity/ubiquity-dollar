@@ -146,7 +146,8 @@
     "blockhash",
     "Merkle",
     "UUPS",
-    "Initializable"
+    "Initializable",
+    "Uupstest"
   ],
   "flagWords": ["creditNFT", "CreditNFT"],
   "language": "en-US"

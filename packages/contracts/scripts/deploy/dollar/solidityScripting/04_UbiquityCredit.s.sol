@@ -6,19 +6,39 @@ import {UbiquityCreditToken} from "../../../../src/dollar/core/UbiquityCreditTok
 import {CreditNft} from "../../../../src/dollar/core/CreditNft.sol";
 
 contract CreditScript is GovernanceScript {
+    UbiquityCreditToken public uCreditToken;
+    UbiquityCreditToken public creditToken;
+    UupsProxy public proxyUCreditToken;
+
+    CreditNft public creditNft;
+    CreditNft public IUbiquityNft;
+    UupsProxy public proxyCreditNft;
+
     function run() public virtual override {
         super.run();
         vm.startBroadcast(deployerPrivateKey);
+        bytes memory managerPayload = abi.encodeWithSignature(
+            "initialize(address)",
+            address(diamond)
+        );
+        uCreditToken = new UbiquityCreditToken();
+        proxyUCreditToken = new UupsProxy(
+            address(uCreditToken),
+            managerPayload
+        );
+        creditToken = UbiquityCreditToken(address(proxyUCreditToken));
 
-        UbiquityCreditToken credit = new UbiquityCreditToken(address(diamond));
-        IManager.setCreditTokenAddress(address(credit));
+        IManager.setCreditTokenAddress(address(creditToken));
 
         IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
         IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
         IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
 
-        CreditNft creditNft = new CreditNft(address(diamond));
-        IManager.setCreditNftAddress(address(creditNft));
+        creditNft = new CreditNft();
+        proxyCreditNft = new UupsProxy(address(creditNft), managerPayload);
+        IUbiquityNft = CreditNft(address(proxyCreditNft));
+
+        IManager.setCreditNftAddress(address(IUbiquityNft));
 
         vm.stopBroadcast();
     }

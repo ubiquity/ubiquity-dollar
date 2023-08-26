@@ -32,7 +32,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
-        _creditNft = new CreditNft(address(diamond));
+        _creditNft = creditNft;
         vm.prank(admin);
         IManager.setCreditNftAddress(address(_creditNft));
 
@@ -43,9 +43,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         creditNftAddress = address(_creditNft);
         governanceTokenAddress = IManager.governanceTokenAddress();
         // deploy credit token
-        UbiquityCreditToken _creditToken = new UbiquityCreditToken(
-            address(diamond)
-        );
+        UbiquityCreditToken _creditToken = creditToken;
         creditTokenAddress = address(_creditToken);
         vm.prank(admin);
         IManager.setCreditTokenAddress(creditTokenAddress);

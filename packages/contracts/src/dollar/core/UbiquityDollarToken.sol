@@ -4,12 +4,14 @@ pragma solidity ^0.8.19;
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IIncentive} from "../../dollar/interfaces/IIncentive.sol";
+import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+
 import "../libraries/Constants.sol";
 
 /**
  * @notice Ubiquity Dollar token contract
  */
-contract UbiquityDollarToken is ERC20Ubiquity {
+contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
     /**
      * @notice Mapping of account and incentive contract address
      * @dev Address is 0 if there is no incentive contract for the account
@@ -186,7 +188,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     function mint(
         address to,
         uint256 amount
-    ) public override onlyDollarMinter whenNotPaused {
+    ) public onlyDollarMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }

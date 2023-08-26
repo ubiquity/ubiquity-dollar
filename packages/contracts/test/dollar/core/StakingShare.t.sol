@@ -22,7 +22,6 @@ contract DepositStakingShare is LocalTestHelper {
     uint256 maxBal;
     uint256[] creationBlock;
     IMetaPool metapool;
-    StakingShare stakingShare;
 
     event Paused(address _caller);
     event Unpaused(address _caller);

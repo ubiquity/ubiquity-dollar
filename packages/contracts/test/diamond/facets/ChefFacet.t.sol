@@ -30,9 +30,6 @@ contract ZeroStateChef is DiamondSetup {
 
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-    StakingShare stakingShare;
-    BondingShare stakingShareV1;
-    IERC20Ubiquity governanceToken;
 
     event Deposit(
         address indexed user,
@@ -101,7 +98,6 @@ contract ZeroStateChef is DiamondSetup {
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(stakingShareV1)
         );
-        governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
         address curve3CrvBasePool = address(
@@ -134,9 +130,6 @@ contract ZeroStateChef is DiamondSetup {
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
-        );
-        UbiquityCreditToken creditToken = new UbiquityCreditToken(
-            address(IManager)
         );
         IManager.setCreditTokenAddress(address(creditToken));
 
@@ -178,7 +171,7 @@ contract ZeroStateChef is DiamondSetup {
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
         vm.startPrank(admin);
-        stakingShare = new StakingShare(address(diamond), uri);
+        stakingShare = IStakingShareToken;
         IManager.setStakingShareAddress(address(stakingShare));
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
@@ -294,7 +287,7 @@ contract DepositStateChefTest is DepositStateChef {
         blocks = bound(blocks, 45361, 2 ** 128 - 1);
         assertEq(IChefFacet.totalShares(), shares);
 
-        uint256 preBal = governanceToken.balanceOf(fourthAccount);
+        uint256 preBal = IGovToken.balanceOf(fourthAccount);
         (uint256 lastRewardBlock, ) = IChefFacet.pool();
         // currentBlock = block.number;
         vm.roll(currentBlock + blocks);
@@ -311,7 +304,7 @@ contract DepositStateChefTest is DepositStateChef {
         uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
         IStakingFacet.removeLiquidity(amount, fourthID);
-        assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
+        assertEq(preBal + userReward, IGovToken.balanceOf(fourthAccount));
     }
 
     function testGetRewards(uint256 blocks) public {

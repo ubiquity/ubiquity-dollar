@@ -9,7 +9,6 @@ import "../../helpers/LocalTestHelper.sol";
 contract CreditNftTest is LocalTestHelper {
     address dollarManagerAddress;
     address creditNftAddress;
-    CreditNft creditNft;
 
     event MintedCreditNft(
         address recipient,
@@ -27,7 +26,7 @@ contract CreditNftTest is LocalTestHelper {
         super.setUp();
 
         // deploy Credit NFT token
-        creditNft = new CreditNft(address(diamond));
+        creditNft = IUbiquityNft;
         creditNftAddress = address(creditNft);
         vm.prank(admin);
         IManager.setCreditNftAddress(address(creditNftAddress));

@@ -4,12 +4,14 @@ pragma solidity ^0.8.19;
 import {ManagerFacet} from "../facets/ManagerFacet.sol";
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
+import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+
 import "../libraries/Constants.sol";
 
 /**
  * @notice Credit token contract
  */
-contract UbiquityCreditToken is ERC20Ubiquity {
+contract UbiquityCreditToken is Initializable, ERC20Ubiquity {
     // /**
     //  * @notice Contract constructor
     //  * @param _manager Access control address
@@ -82,7 +84,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
     function mint(
         address to,
         uint256 amount
-    ) public override onlyCreditMinter whenNotPaused {
+    ) public onlyCreditMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }
