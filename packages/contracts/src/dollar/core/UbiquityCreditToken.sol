@@ -4,14 +4,13 @@ pragma solidity ^0.8.19;
 import {ManagerFacet} from "../facets/ManagerFacet.sol";
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
 
 import "../libraries/Constants.sol";
 
 /**
  * @notice Credit token contract
  */
-contract UbiquityCreditToken is Initializable, ERC20Ubiquity {
+contract UbiquityCreditToken is ERC20Ubiquity {
     // /**
     //  * @notice Contract constructor
     //  * @param _manager Access control address
@@ -37,7 +36,7 @@ contract UbiquityCreditToken is Initializable, ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Credit minter" role
     modifier onlyCreditMinter() {
         require(
-            accessControl.hasRole(CREDIT_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_TOKEN_MINTER_ROLE, _msgSender()),
             "Credit token: not minter"
         );
         _;
@@ -46,7 +45,7 @@ contract UbiquityCreditToken is Initializable, ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Credit burner" role
     modifier onlyCreditBurner() {
         require(
-            accessControl.hasRole(CREDIT_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_TOKEN_BURNER_ROLE, _msgSender()),
             "Credit token: not burner"
         );
         _;
@@ -86,12 +85,6 @@ contract UbiquityCreditToken is Initializable, ERC20Ubiquity {
         uint256 amount
     ) public onlyCreditMinter whenNotPaused {
         _mint(to, amount);
-        emit Minting(to, msg.sender, amount);
+        emit Minting(to, _msgSender(), amount);
     }
-
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyAdmin {}
-
-    uint256[50] private __gap;
 }

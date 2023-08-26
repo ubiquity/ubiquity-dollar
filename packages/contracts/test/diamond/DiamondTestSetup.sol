@@ -685,14 +685,14 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
-        // __setupUUPS(address(diamond));
+
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
         vm.startPrank(admin);
         // // grant diamond dollar minting and burning rights
         IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
         // add staking shares
-
+        __setupUUPS(address(diamond));
         vm.stopPrank();
     }
 }

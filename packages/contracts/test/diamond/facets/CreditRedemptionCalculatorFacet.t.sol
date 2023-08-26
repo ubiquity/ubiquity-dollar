@@ -15,7 +15,7 @@ contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
-        _creditNft = creditNft;
+        _creditNft = IUbiquityNft;
         vm.startPrank(admin);
         IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
         _creditNft.mintCreditNft(user1, 100, 10);

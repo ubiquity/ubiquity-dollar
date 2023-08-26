@@ -2,15 +2,11 @@
 pragma solidity 0.8.19;
 
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import {IERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/IERC1155Upgradeable.sol";
-import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/ERC1155Upgradeable.sol";
-import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
-import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
-import "../libraries/Constants.sol";
 import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {IERC165Upgradeable} from "@openzeppelinUpgradeable/contracts/utils/introspection/IERC165Upgradeable.sol";
+import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/ERC1155Upgradeable.sol";
+import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
+import "solidity-linked-list/contracts/StructuredLinkedList.sol";
+import "../libraries/Constants.sol";
 
 /**
  * @notice CreditNft redeemable for Dollars with an expiry block number
@@ -18,12 +14,7 @@ import {IERC165Upgradeable} from "@openzeppelinUpgradeable/contracts/utils/intro
  * @dev Implements ERC1155 so receiving contracts must implement `IERC1155Receiver`
  * @dev 1 Credit NFT = 1 whole Ubiquity Dollar, not 1 wei
  */
-contract CreditNft is
-    Initializable,
-    UUPSUpgradeable,
-    ERC1155Ubiquity,
-    ICreditNft
-{
+contract CreditNft is ERC1155Ubiquity, ICreditNft {
     using StructuredLinkedList for StructuredLinkedList.List;
 
     /**
@@ -55,7 +46,7 @@ contract CreditNft is
     /// @notice Modifier checks that the method is called by a user with the "CreditNft manager" role
     modifier onlyCreditNftManager() {
         require(
-            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, _msgSender()),
             "Caller is not a CreditNft manager"
         );
         _;
@@ -76,6 +67,8 @@ contract CreditNft is
 
     function initialize(address _manager) public initializer {
         __ERC1155Ubiquity_init(_manager, "URI");
+        __ERC1155Burnable_init();
+        __ERC1155Pausable_init();
         _totalOutstandingDebt = 0;
     }
 
@@ -182,89 +175,7 @@ contract CreditNft is
 
     function _authorizeUpgrade(
         address newImplementation
-    ) internal override(UUPSUpgradeable, ERC1155Ubiquity) onlyAdmin {}
-
-    // Overrides required by Solidity:
-
-    function setApprovalForAll(
-        address operator,
-        bool approved
-    ) public virtual override(ERC1155Upgradeable, IERC1155Upgradeable) {
-        super.setApprovalForAll(operator, approved);
-    }
-
-    function isApprovedForAll(
-        address account,
-        address operator
-    )
-        public
-        view
-        virtual
-        override(ERC1155Upgradeable, IERC1155Upgradeable)
-        returns (bool)
-    {
-        return super.isApprovedForAll(account, operator);
-    }
-
-    function safeBatchTransferFrom(
-        address from,
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) public virtual override(ERC1155Ubiquity, IERC1155Upgradeable) {
-        super.safeBatchTransferFrom(from, to, ids, amounts, data);
-    }
-
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public virtual override(ERC1155Ubiquity, IERC1155Upgradeable) {
-        super.safeTransferFrom(from, to, id, amount, data);
-    }
-
-    function supportsInterface(
-        bytes4 interfaceId
-    )
-        public
-        view
-        virtual
-        override(ERC1155Upgradeable, IERC165Upgradeable)
-        returns (bool)
-    {
-        return
-            interfaceId == type(ICreditNft).interfaceId ||
-            super.supportsInterface(interfaceId);
-    }
-
-    function balanceOf(
-        address account,
-        uint256 id
-    )
-        public
-        view
-        virtual
-        override(IERC1155Upgradeable, ERC1155Upgradeable)
-        returns (uint256)
-    {
-        return super.balanceOf(account, id);
-    }
-
-    function balanceOfBatch(
-        address[] memory accounts,
-        uint256[] memory ids
-    )
-        public
-        view
-        virtual
-        override(ERC1155Upgradeable, IERC1155Upgradeable)
-        returns (uint256[] memory)
-    {
-        return super.balanceOfBatch(accounts, ids);
-    }
+    ) internal override(ERC1155Ubiquity) onlyAdmin {}
 
     uint256[50] private __gap;
 }

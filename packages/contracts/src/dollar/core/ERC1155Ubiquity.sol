@@ -40,7 +40,7 @@ contract ERC1155Ubiquity is
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyMinter() virtual {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not minter"
         );
         _;
@@ -49,7 +49,7 @@ contract ERC1155Ubiquity is
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyBurner() virtual {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not burner"
         );
         _;
@@ -58,7 +58,7 @@ contract ERC1155Ubiquity is
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() virtual {
         require(
-            accessControl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not pauser"
         );
         _;
@@ -67,7 +67,7 @@ contract ERC1155Ubiquity is
     /// @notice Modifier checks that the method is called by a user with the "Admin" role
     modifier onlyAdmin() {
         require(
-            accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            accessControl.hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
             "ERC20Ubiquity: not admin"
         );
         _;
@@ -89,10 +89,8 @@ contract ERC1155Ubiquity is
     function __ERC1155Ubiquity_init(
         address _manager,
         string memory uri
-    ) internal onlyInitializing {
+    ) public initializer onlyInitializing {
         __ERC1155_init(uri);
-        __ERC1155Burnable_init();
-        __ERC1155Pausable_init();
         accessControl = IAccessControl(_manager);
     }
 
@@ -294,7 +292,7 @@ contract ERC1155Ubiquity is
     )
         internal
         virtual
-        override(ERC1155Upgradeable, ERC1155PausableUpgradeable)
+        override(ERC1155PausableUpgradeable, ERC1155Upgradeable)
     {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }

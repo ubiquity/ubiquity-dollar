@@ -12,6 +12,8 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol"
 import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
+import "forge-std/Test.sol";
+
 contract CreditNftManagerFacetTest is DiamondSetup {
     CreditNft _creditNft;
     address dollarManagerAddress;
@@ -32,7 +34,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
-        _creditNft = creditNft;
+        _creditNft = IUbiquityNft;
         vm.prank(admin);
         IManager.setCreditNftAddress(address(_creditNft));
 
@@ -155,7 +157,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
     {
         address mockMessageSender = address(0x123);
         vm.prank(admin);
-        CreditNft(creditNftAddress).mintCreditNft(mockMessageSender, 100, 500);
+        IUbiquityNft.mintCreditNft(mockMessageSender, 100, 500);
         vm.roll(1000);
         vm.prank(mockMessageSender);
         vm.expectRevert("User not enough Credit NFT");
@@ -166,11 +168,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        CreditNft(creditNftAddress).mintCreditNft(
-            mockMessageSender,
-            2e18,
-            expiryBlockNumber
-        );
+        IUbiquityNft.mintCreditNft(mockMessageSender, 2e18, expiryBlockNumber);
         IAccessControl.grantRole(
             keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"),
             creditNftManagerAddress
@@ -178,7 +176,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         vm.stopPrank();
         vm.roll(1000);
         vm.startPrank(mockMessageSender);
-        CreditNft(creditNftAddress).setApprovalForAll(address(diamond), true);
+        IUbiquityNft.setApprovalForAll(address(diamond), true);
         ICreditNftManagerFacet.burnExpiredCreditNftForGovernance(
             expiryBlockNumber,
             1e18
@@ -205,11 +203,8 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         address mockMessageSender = address(0x123);
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
-        CreditNft(creditNftAddress).mintCreditNft(
-            mockMessageSender,
-            2e18,
-            expiryBlockNumber
-        );
+
+        IUbiquityNft.mintCreditNft(mockMessageSender, 2e18, expiryBlockNumber);
         IAccessControl.grantRole(
             keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"),
             creditNftManagerAddress
@@ -217,11 +212,10 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         vm.stopPrank();
         vm.startPrank(mockMessageSender);
         vm.warp(expiryBlockNumber - 1);
-        CreditNft(creditNftAddress).setApprovalForAll(address(diamond), true);
+        IUbiquityNft.setApprovalForAll(address(diamond), true);
         ICreditNftManagerFacet.burnCreditNftForCredit(expiryBlockNumber, 1e18);
         vm.stopPrank();
-        uint256 redeemBalance = UbiquityCreditToken(creditTokenAddress)
-            .balanceOf(mockMessageSender);
+        uint256 redeemBalance = creditToken.balanceOf(mockMessageSender);
         assertEq(redeemBalance, 1e18);
     }
 
@@ -273,11 +267,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        CreditNft(creditNftAddress).mintCreditNft(
-            account1,
-            100,
-            expiryBlockNumber
-        );
+        IUbiquityNft.mintCreditNft(account1, 100, expiryBlockNumber);
         vm.expectRevert("User not enough Credit NFT");
         vm.prank(account1);
         vm.roll(expiryBlockNumber - 1);
@@ -293,11 +283,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockTwapFuncs(2e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        CreditNft(creditNftAddress).mintCreditNft(
-            account1,
-            100,
-            expiryBlockNumber
-        );
+        IUbiquityNft.mintCreditNft(account1, 100, expiryBlockNumber);
         UbiquityCreditToken(creditTokenAddress).mint(
             creditNftManagerAddress,
             20000e18
@@ -328,11 +314,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockDollarMintCalcFuncs(0);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        CreditNft(creditNftAddress).mintCreditNft(
-            account1,
-            100,
-            expiryBlockNumber
-        );
+        IUbiquityNft.mintCreditNft(account1, 100, expiryBlockNumber);
         // MockAutoRedeem(creditTokenAddress).mint(creditNftManagerAddress, 20000e18);
 
         // set excess dollar distributor for creditNftAddress
@@ -361,15 +343,8 @@ contract CreditNftManagerFacetTest is DiamondSetup {
         mockDollarMintCalcFuncs(20000e18);
         address account1 = address(0x123);
         uint256 expiryBlockNumber = 123123;
-        CreditNft(creditNftAddress).mintCreditNft(
-            account1,
-            100,
-            expiryBlockNumber
-        );
-        UbiquityCreditToken(creditTokenAddress).mint(
-            creditNftManagerAddress,
-            10000e18
-        );
+        IUbiquityNft.mintCreditNft(account1, 100, expiryBlockNumber);
+        creditToken.mint(creditNftManagerAddress, 10000e18);
 
         // set excess dollar distributor for debtCouponAddress
         vm.mockCall(
@@ -380,7 +355,7 @@ contract CreditNftManagerFacetTest is DiamondSetup {
             abi.encode()
         );
         vm.startPrank(account1);
-        CreditNft(creditNftAddress).setApprovalForAll(address(diamond), true);
+        IUbiquityNft.setApprovalForAll(address(diamond), true);
         vm.roll(expiryBlockNumber - 1);
         uint256 unredeemedCreditNft = ICreditNftManagerFacet.redeemCreditNft(
             expiryBlockNumber,

@@ -96,7 +96,6 @@ contract ZeroStateStaking is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        stakingShareV1 = new BondingShare(address(diamond));
         IManager.setStakingShareAddress(address(stakingShareV1));
         stakingShareV1.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(

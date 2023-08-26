@@ -10,12 +10,13 @@ import {CreditNft} from "../../src/dollar/core/CreditNft.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {AccessControlFacet} from "../../src/dollar/facets/AccessControlFacet.sol";
 import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
-import {BondingShare} from "../../src/dollar/mocks/MockShareV1.sol";
 import "../../src/dollar/libraries/Constants.sol";
+import "forge-std/Test.sol";
 
 contract UupsTestHelper {
     CreditNft public creditNft;
     StakingShare public stakingShare;
+    ERC1155Ubiquity public uStakingShareV1;
     UbiquityCreditToken public uCreditToken;
     UbiquityDollarToken public uDollarToken;
     UbiquityGovernanceToken public uGovToken;
@@ -27,7 +28,7 @@ contract UupsTestHelper {
     UbiquityDollarToken public IDollar;
     UbiquityGovernanceToken public IGovToken;
     ERC1155Ubiquity public IUbiquiStick;
-    BondingShare public stakingShareV1;
+    ERC1155Ubiquity public stakingShareV1;
 
     UupsProxy public proxyCreditNft;
     UupsProxy public proxyStakingShare;
@@ -35,6 +36,7 @@ contract UupsTestHelper {
     UupsProxy public proxyUDollarToken;
     UupsProxy public proxyUGovToken;
     UupsProxy public proxyUbiquiStick;
+    UupsProxy public proxyStakingShareV1;
 
     ManagerFacet iManager;
     AccessControlFacet IAccessControl;
@@ -84,9 +86,22 @@ contract UupsTestHelper {
         proxyUGovToken = new UupsProxy(address(uGovToken), managerPayload);
         IGovToken = UbiquityGovernanceToken(address(proxyUGovToken));
 
+        bytes memory ubq1155Payload = abi.encodeWithSignature(
+            "__ERC1155Ubiquity_init(address,string)",
+            manager,
+            uri
+        );
+
         ubiquiStick = new ERC1155Ubiquity();
-        proxyUbiquiStick = new UupsProxy(address(ubiquiStick), managerPayload);
+        proxyUbiquiStick = new UupsProxy(address(ubiquiStick), ubq1155Payload);
         IUbiquiStick = ERC1155Ubiquity(address(proxyUbiquiStick));
+
+        uStakingShareV1 = new ERC1155Ubiquity();
+        proxyStakingShareV1 = new UupsProxy(
+            address(uStakingShareV1),
+            ubq1155Payload
+        );
+        stakingShareV1 = ERC1155Ubiquity(address(proxyStakingShareV1));
 
         iManager.setUbiquistickAddress(address(IUbiquiStick));
         iManager.setStakingShareAddress(address(IStakingShareToken));
@@ -94,10 +109,6 @@ contract UupsTestHelper {
         iManager.setDollarTokenAddress(address(IDollar));
         iManager.setGovernanceTokenAddress(address(IGovToken));
         iManager.setCreditNftAddress(address(IUbiquityNft));
-
-        IDollar = UbiquityDollarToken(iManager.dollarTokenAddress());
-        IGovToken = UbiquityGovernanceToken(iManager.governanceTokenAddress());
-        IStakingShareToken = StakingShare(iManager.stakingShareAddress());
         // grant diamond dollar minting and burning rights
         IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(manager));
         IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(manager));

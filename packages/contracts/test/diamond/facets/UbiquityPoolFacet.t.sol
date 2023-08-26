@@ -69,12 +69,11 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        stakingShareV1 = new BondingShare(address(diamond));
-        IManager.setStakingShareAddress(address(stakingShareV1));
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        IManager.setStakingShareAddress(address(stakingShare));
+        stakingShare.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(stakingShareV1)
+            address(stakingShare)
         );
         governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
         //  vm.stopPrank();

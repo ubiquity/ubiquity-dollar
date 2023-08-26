@@ -91,12 +91,11 @@ contract ZeroStateChef is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        stakingShareV1 = new BondingShare(address(diamond));
-        IManager.setStakingShareAddress(address(stakingShareV1));
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        IManager.setStakingShareAddress(address(stakingShare));
+        stakingShare.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(stakingShareV1)
+            address(stakingShare)
         );
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
@@ -182,10 +181,10 @@ contract ZeroStateChef is DiamondSetup {
         vm.stopPrank();
 
         vm.prank(secondAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
 
         vm.prank(thirdAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
     }
 }
 

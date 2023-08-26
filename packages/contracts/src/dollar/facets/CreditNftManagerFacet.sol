@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-
+import "@openzeppelin/contracts/utils/Context.sol";
 import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
@@ -14,7 +14,7 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
  * - redeem individual Credit NFT or batch redeem Credit NFT on a first-come first-serve basis
  * - redeem Credits for Dollars
  */
-contract CreditNftManagerFacet is Modifiers {
+contract CreditNftManagerFacet is Context, Modifiers {
     /**
      * @notice Credit NFT to Governance conversion rate
      * @notice When Credit NFTs are expired they can be converted to

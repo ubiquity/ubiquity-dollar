@@ -4,14 +4,13 @@ pragma solidity ^0.8.19;
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IIncentive} from "../../dollar/interfaces/IIncentive.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
 
 import "../libraries/Constants.sol";
 
 /**
  * @notice Ubiquity Dollar token contract
  */
-contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
+contract UbiquityDollarToken is ERC20Ubiquity {
     /**
      * @notice Mapping of account and incentive contract address
      * @dev Address is 0 if there is no incentive contract for the account
@@ -49,7 +48,7 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Dollar minter" role
     modifier onlyDollarMinter() {
         require(
-            accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, _msgSender()),
             "Dollar token: not minter"
         );
         _;
@@ -58,7 +57,7 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Dollar burner" role
     modifier onlyDollarBurner() {
         require(
-            accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, _msgSender()),
             "Dollar token: not burner"
         );
         _;
@@ -76,7 +75,7 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
      */
     function setIncentiveContract(address account, address incentive) external {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, _msgSender()),
             "Dollar: must have admin role"
         );
 
@@ -101,7 +100,7 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
             IIncentive(senderIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
@@ -112,22 +111,22 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
             IIncentive(recipientIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
 
         // incentive on operator
-        address operatorIncentive = incentiveContract[msg.sender];
+        address operatorIncentive = incentiveContract[_msgSender()];
         if (
-            msg.sender != sender &&
-            msg.sender != recipient &&
+            _msgSender() != sender &&
+            _msgSender() != recipient &&
             operatorIncentive != address(0)
         ) {
             IIncentive(operatorIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
@@ -138,7 +137,7 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
             IIncentive(allIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
@@ -190,12 +189,6 @@ contract UbiquityDollarToken is Initializable, ERC20Ubiquity {
         uint256 amount
     ) public onlyDollarMinter whenNotPaused {
         _mint(to, amount);
-        emit Minting(to, msg.sender, amount);
+        emit Minting(to, _msgSender(), amount);
     }
-
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyAdmin {}
-
-    uint256[50] private __gap;
 }

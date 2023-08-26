@@ -89,7 +89,8 @@ contract StakingShare is
         string memory _uri
     ) public initializer {
         __ERC1155Ubiquity_init(_manager, _uri);
-        __ERC1155URIStorage_init();
+        __ERC1155Burnable_init();
+        __ERC1155Pausable_init();
     }
 
     /**

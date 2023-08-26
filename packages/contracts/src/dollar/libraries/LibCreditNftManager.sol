@@ -308,7 +308,6 @@ library LibCreditNftManager {
         CreditNft creditNft = CreditNft(
             LibAppStorage.appStorage().creditNftAddress
         );
-
         require(id > block.timestamp, "Credit NFT has expired");
         require(
             creditNft.balanceOf(msg.sender, id) >= amount,

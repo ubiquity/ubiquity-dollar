@@ -275,6 +275,4 @@ abstract contract ERC20Ubiquity is
     ) public override(ERC20Upgradeable) returns (bool) {
         return super.transferFrom(sender, recipient, amount);
     }
-
-    uint256[50] private __gap;
 }

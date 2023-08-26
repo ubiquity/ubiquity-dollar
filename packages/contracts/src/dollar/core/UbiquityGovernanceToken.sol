@@ -36,7 +36,7 @@ contract UbiquityGovernanceToken is Initializable, ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyGovernanceMinter() {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
             "Governance token: not minter"
         );
         _;
@@ -45,7 +45,7 @@ contract UbiquityGovernanceToken is Initializable, ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyGovernanceBurner() {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
             "Governance token: not burner"
         );
         _;
@@ -74,12 +74,6 @@ contract UbiquityGovernanceToken is Initializable, ERC20Ubiquity {
         uint256 amount
     ) public onlyGovernanceMinter whenNotPaused {
         _mint(to, amount);
-        emit Minting(to, msg.sender, amount);
+        emit Minting(to, _msgSender(), amount);
     }
-
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyAdmin {}
-
-    uint256[50] private __gap;
 }

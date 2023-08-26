@@ -27,7 +27,6 @@ abstract contract LocalTestHelper is DiamondSetup {
 
     function setUp() public virtual override {
         super.setUp();
-        __setupUUPS(address(diamond));
 
         twapOracle = ITWAPOracleDollar3pool;
         creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
