@@ -22,16 +22,25 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         address indexed _incentiveContract
     );
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     */
-    constructor(
-        address _manager
-    )
+    // /**
+    //  * @notice Contract constructor
+    //  * @param _manager Access control address
+    //  */
+    // constructor(
+    //     address _manager
+    // )
+    //     // cspell: disable-next-line
+    //     ERC20Ubiquity(_manager, "Ubiquity Dollar", "uAD")
+    // {} // solhint-disable-line no-empty-blocks, max-line-length
+
+    constructor() {
+        _disableInitializers();
+    }
+
+    function initialize(address _manager) public initializer {
         // cspell: disable-next-line
-        ERC20Ubiquity(_manager, "Ubiquity Dollar", "uAD")
-    {} // solhint-disable-line no-empty-blocks, max-line-length
+        __ERC20Ubiquity_init(_manager, "Ubiquity Dollar", "uAD");
+    }
 
     // ----------- Modifiers -----------
 
@@ -181,4 +190,10 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
+
+    uint256[50] private __gap;
 }

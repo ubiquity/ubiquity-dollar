@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import {ERC1155URIStorageUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
 import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 /// @notice Contract representing a staking share in the form of ERC1155 token
-contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
+contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
     using SafeAddArray for uint256[];
 
     /// @notice Stake struct
@@ -33,7 +33,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     uint256 private _totalLP;
 
     /// @notice Base token URI
-    string private _baseURI = "";
+    string private _baseURI;
 
     // ----------- Modifiers -----------
 
@@ -64,15 +64,27 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     * @param _uri URI string
-     */
-    constructor(
+    // /**
+    //  * @notice Contract constructor
+    //  * @param _manager Access control address
+    //  * @param _uri URI string
+    //  */
+    // constructor(
+    //     address _manager,
+    //     string memory _uri
+    // ) ERC1155Ubiquity(_manager, _uri) {}
+
+    constructor() {
+        _disableInitializers();
+    }
+
+    function initialize(
         address _manager,
         string memory _uri
-    ) ERC1155Ubiquity(_manager, _uri) {}
+    ) public initializer {
+        __ERC1155Ubiquity_init(_manager, _uri);
+        __ERC1155URIStorage_init();
+    }
 
     /**
      * @notice Updates a staking share
@@ -259,4 +271,10 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     function getBaseUri() external view returns (string memory) {
         return _baseURI;
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
+
+    uint256[50] private __gap;
 }

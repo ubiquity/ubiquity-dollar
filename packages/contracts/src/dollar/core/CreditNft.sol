@@ -6,13 +6,20 @@ import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
 import "../libraries/Constants.sol";
 
+import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
+
 /**
  * @notice CreditNft redeemable for Dollars with an expiry block number
  * @notice ERC1155 where the token ID is the expiry block number
  * @dev Implements ERC1155 so receiving contracts must implement `IERC1155Receiver`
  * @dev 1 Credit NFT = 1 whole Ubiquity Dollar, not 1 wei
  */
-contract CreditNft is ERC1155Ubiquity, ICreditNft {
+contract CreditNft is
+    Initializable,
+    UUPSUpgradeable,
+    ERC1155Ubiquity,
+    ICreditNft
+{
     using StructuredLinkedList for StructuredLinkedList.List;
 
     /**
@@ -50,12 +57,21 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @dev URI param is if we want to add an off-chain meta data uri associated with this contract
-     * @param _manager Access control address
-     */
-    constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
+    // /**
+    //  * @notice Contract constructor
+    //  * @dev URI param is if we want to add an off-chain meta data uri associated with this contract
+    //  * @param _manager Access control address
+    //  */
+    // constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
+    //     _totalOutstandingDebt = 0;
+    // }
+
+    constructor() {
+        _disableInitializers();
+    }
+
+    function initialize(address _manager) public initializer {
+        __ERC1155Ubiquity_init(_manager, "URI");
         _totalOutstandingDebt = 0;
     }
 
@@ -159,4 +175,10 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
         return outstandingDebt;
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
+
+    uint256[50] private __gap;
 }

@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ERC20, ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
-import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
+// import {ERC20, ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
+// import {ERC20Pausable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Pausable.sol";
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import {DEFAULT_ADMIN_ROLE, PAUSER_ROLE} from "../libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
+
+import {ERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/ERC20Upgradeable.sol";
+import {ERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {ERC20PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
 
 /**
  * @notice Base contract for Ubiquity ERC20 tokens (Dollar, Credit, Governance)
@@ -14,7 +18,11 @@ import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
  * - draft-ERC20 permit
  * - Ubiquity Manager access control
  */
-abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
+abstract contract ERC20Ubiquity is
+    ERC20PermitUpgradeable,
+    ERC20PausableUpgradeable,
+    IERC20Ubiquity
+{
     /// @notice Token symbol
     string private _symbol;
 
@@ -39,17 +47,33 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     * @param name_ Token name
-     * @param symbol_ Token symbol
-     */
-    constructor(
+    // /**
+    //  * @notice Contract constructor
+    //  * @param _manager Access control address
+    //  * @param name_ Token name
+    //  * @param symbol_ Token symbol
+    //  */
+    // constructor(
+    //     address _manager,
+    //     string memory name_,
+    //     string memory symbol_
+    // ) ERC20(name_, symbol_) ERC20Permit(name_) {
+    //     _symbol = symbol_;
+    //     accessControl = IAccessControl(_manager);
+    // }
+
+    constructor() {
+        _disableInitializers();
+    }
+
+    function __ERC20Ubiquity_init(
         address _manager,
-        string memory name_,
-        string memory symbol_
-    ) ERC20(name_, symbol_) ERC20Permit(name_) {
+        string calldata name_,
+        string calldata symbol_
+    ) public onlyInitializing {
+        __ERC20_init(name, symbol_);
+        __ERC20Permit_init(name_);
+        __ERC20Pausable_init();
         _symbol = symbol_;
         accessControl = IAccessControl(_manager);
     }
@@ -131,7 +155,7 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
         address from,
         address to,
         uint256 amount
-    ) internal virtual override(ERC20, ERC20Pausable) {
+    ) internal virtual override(ERC20Upgradeable, ERC20PausableUpgradeable) {
         super._beforeTokenTransfer(from, to, amount);
     }
 
@@ -156,4 +180,10 @@ abstract contract ERC20Ubiquity is ERC20Permit, ERC20Pausable, IERC20Ubiquity {
     ) internal virtual override whenNotPaused {
         super._transfer(sender, recipient, amount);
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
+
+    uint256[50] private __gap;
 }

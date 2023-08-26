@@ -7,13 +7,6 @@ export const methodConfigs = [
     download: true,
     type: "utility",
   },
-  // {
-  //   name: "Logging Enabled",
-  //   methodName: "anvil_setLoggingEnabled",
-  //   description: "Enable or disable logging on the test node network.",
-  //   params: [{ name: "boolean", type: "boolean" }],
-  //   type: "utility",
-  // },
   {
     name: "Load State",
     methodName: "anvil_loadState",
@@ -44,6 +37,13 @@ export const methodConfigs = [
   //   methodName: "anvil_enableTraces",
   //   description: "Turn on call traces for transactions that are returned to the user when they execute a transaction (instead of just txhash/receipt).",
   //   params: [],
+  //   type: "utility",
+  // },
+  // {
+  //   name: "Set Logging Enabled",
+  //   methodName: "anvil_setLoggingEnabled",
+  //   description: "Enable or disable logging on the test node network.",
+  //   params: [{ name: "boolean", type: "boolean" }],
   //   type: "utility",
   // },
   {

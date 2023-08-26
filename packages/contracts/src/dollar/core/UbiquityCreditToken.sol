@@ -10,16 +10,25 @@ import "../libraries/Constants.sol";
  * @notice Credit token contract
  */
 contract UbiquityCreditToken is ERC20Ubiquity {
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     */
-    constructor(
-        address _manager
-    )
+    // /**
+    //  * @notice Contract constructor
+    //  * @param _manager Access control address
+    //  */
+    // constructor(
+    //     address _manager
+    // )
+    //     // cspell: disable-next-line
+    //     ERC20Ubiquity(_manager, "Ubiquity Credit", "uCR")
+    // {} // solhint-disable-line no-empty-blocks
+
+    constructor() {
+        _disableInitializers();
+    }
+
+    function initialize(address _manager) public initializer {
         // cspell: disable-next-line
-        ERC20Ubiquity(_manager, "Ubiquity Credit", "uCR")
-    {} // solhint-disable-line no-empty-blocks
+        __ERC20Ubiquity_init(_manager, "Ubiquity Credit", "uCR");
+    }
 
     // ----------- Modifiers -----------
 
@@ -77,4 +86,10 @@ contract UbiquityCreditToken is ERC20Ubiquity {
         _mint(to, amount);
         emit Minting(to, msg.sender, amount);
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
+
+    uint256[50] private __gap;
 }

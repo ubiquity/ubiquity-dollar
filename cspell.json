@@ -144,7 +144,9 @@
     "Txpool",
     "nomicfoundation",
     "blockhash",
-    "Merkle"
+    "Merkle",
+    "UUPS",
+    "Initializable"
   ],
   "flagWords": ["creditNFT", "CreditNFT"],
   "language": "en-US"

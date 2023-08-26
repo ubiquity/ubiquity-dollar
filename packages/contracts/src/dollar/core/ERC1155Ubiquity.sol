@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
-import "../interfaces/IAccessControl.sol";
+import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/ERC1155Upgradeable.sol";
+import {ERC1155BurnableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
+import {ERC1155PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
+
 import "../libraries/Constants.sol";
 
 import "../../../src/dollar/utils/SafeAddArray.sol";
@@ -16,7 +17,12 @@ import "../../../src/dollar/utils/SafeAddArray.sol";
  * - TotalSupply per id
  * - Ubiquity Manager access control
  */
-contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract ERC1155Ubiquity is
+    ERC1155Upgradeable,
+    ERC1155BurnableUpgradeable,
+    ERC1155PausableUpgradeable,
+    UUPSUpgradeable
+{
     using SafeAddArray for uint256[];
 
     /// @notice Access control interface
@@ -66,12 +72,26 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     * @param uri Base URI
-     */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
+    // /**
+    //  * @notice Contract constructor
+    //  * @param _manager Access control address
+    //  * @param uri Base URI
+    //  */
+    // constructor(address _manager, string memory uri) ERC1155(uri) {
+    //     accessControl = IAccessControl(_manager);
+    // }
+
+    constructor() {
+        _disableInitializers();
+    }
+
+    function __ERC1155Ubiquity_init(
+        address _manager,
+        string memory uri
+    ) internal onlyInitializing {
+        __ERC1155_init(uri);
+        __ERC1155Burnable_init();
+        __ERC1155Pausable_init();
         accessControl = IAccessControl(_manager);
     }
 
@@ -270,7 +290,17 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155, ERC1155Pausable) {
+    )
+        internal
+        virtual
+        override(ERC1155Upgradeable, ERC1155PausableUpgradeable)
+    {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
+
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
+
+    uint256[50] private __gap;
 }
