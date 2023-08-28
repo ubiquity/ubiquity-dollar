@@ -39,3 +39,6 @@ targets = [
 
 [profile.docs]
 src = 'src/dollar'
+
+[profile.intense.fuzz]
+runs = 100000
