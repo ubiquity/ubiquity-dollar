@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
 import {OwnershipFacet} from "../../../src/dollar/facets/OwnershipFacet.sol";
 import "../../../src/dollar/libraries/Constants.sol";
