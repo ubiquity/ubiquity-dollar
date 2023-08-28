@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import {AccessControlInternal} from "../access/AccessControlInternal.sol";
