@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
 import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";

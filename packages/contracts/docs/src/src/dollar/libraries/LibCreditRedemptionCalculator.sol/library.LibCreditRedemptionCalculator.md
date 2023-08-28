@@ -1,5 +1,5 @@
 # LibCreditRedemptionCalculator
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/d47ba67ecbe94bc364a206fbde6b184405f4ec97/src/dollar/libraries/LibCreditRedemptionCalculator.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/libraries/LibCreditRedemptionCalculator.sol)
 
 Library for calculating amount of Credits to mint on Dollars burn
 

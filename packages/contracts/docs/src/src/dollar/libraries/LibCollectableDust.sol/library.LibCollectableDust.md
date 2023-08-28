@@ -1,5 +1,5 @@
 # LibCollectableDust
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/d47ba67ecbe94bc364a206fbde6b184405f4ec97/src/dollar/libraries/LibCollectableDust.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/libraries/LibCollectableDust.sol)
 
 Library for collecting dust (i.e. not part of a protocol) tokens sent to a contract
 
