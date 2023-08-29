@@ -1,9 +1,2 @@
----
 price-multiplier: 2
 payment-permit-max-price: 1000
-time-labels:
-  - name: "Time: <1 Hour"
-  - name: "Time: <2 Hours"
-  - name: "Time: <4 Hours"
-  - name: "Time: <1 Day"
-  - name: "Time: <1 Week"
