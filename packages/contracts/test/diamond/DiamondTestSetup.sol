@@ -506,11 +506,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
         dollarMintExcessFacet = new DollarMintExcessFacet();
-        creditClockFacet = new CreditClockFacet(
-            address(diamond),
-            bytes16(0x00),
-            bytes16(0x00)
-        );
+        creditClockFacet = new CreditClockFacet();
 
         dInit = new DiamondInit();
         facetNames = [

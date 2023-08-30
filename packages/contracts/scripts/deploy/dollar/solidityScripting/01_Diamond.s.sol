@@ -99,11 +99,7 @@ contract DiamondScript is Constants {
 
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
         dollarMintExcessFacet = new DollarMintExcessFacet();
-        creditClockFacet = new CreditClockFacet(
-            address(diamond),
-            RATE_START_VALUE,
-            RATE_PER_BLOCK
-        );
+        creditClockFacet = new CreditClockFacet();
 
         dInit = new DiamondInit();
         facetNames = [
