@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
 import {CreditClockFacet} from "../../../src/dollar/facets/CreditClockFacet.sol";
 import "abdk/ABDKMathQuad.sol";
@@ -24,24 +24,17 @@ contract CreditClockFacetTest is LocalTestHelper {
         creditClock = new CreditClockFacet();
     }
 
-    //function testSetManager_ShouldRevert_WhenNotAdmin() public {
-    //    vm.prank(address(0x123abc));
-    //    vm.expectRevert("CreditClock: not admin");
-    //    creditClock.setManager(address(0x123abc));
-    //}
+    function testSetManager_ShouldRevert_WhenNotAdmin() public {
+        vm.prank(address(0x123abc));
+        vm.expectRevert("Manager: Caller is not admin");
+        creditClock.setManager(address(0x123abc));
+    }
 
-    //function testSetManager_ShouldSetDiamond() public {
-    //    address newDiamond = address(0x123abc);
-    //    vm.prank(admin);
-    //    creditClock.setManager(newDiamond);
-    //    require(creditClock.getManager() == newDiamond);
-    //}
-
-    //function testSetRatePerBlock_ShouldRevert_WhenNotAdmin() public {
-    //    vm.prank(address(0x123abc));
-    //    vm.expectRevert("CreditClock: not admin");
-    //    creditClock.setRatePerBlock(uint256(1).fromUInt());
-    //}
+    function testSetRatePerBlock_ShouldRevert_WhenNotAdmin() public {
+        vm.prank(address(0x123abc));
+        vm.expectRevert("Manager: Caller is not admin");
+        creditClock.setRatePerBlock(uint256(1).fromUInt());
+    }
 
     function testGetRate_ShouldRevert_WhenBlockIsInThePast() public {
         vm.roll(block.number + 10);
@@ -72,95 +65,4 @@ contract CreditClockFacetTest is LocalTestHelper {
             one.div(pow(one.add(_ratePerBlock), (blockDelta).fromUInt()))
         );
     }
-
-    //function test() public {
-    //    uint256 rateStartBlock = block.number;
-    //    bytes16 rateStartValue = uint256(1000000).fromUInt();
-    //    bytes16 ratePerBlock = uint256(1).fromUInt().div(
-    //        uint256(100).fromUInt()
-    //    );
-
-    //    require(creditClock.rateStartBlock() == rateStartBlock);
-    //    require(creditClock.rateStartValue() == rateStartValue);
-    //    require(creditClock.ratePerBlock() == ratePerBlock);
-
-    //    require(creditClock.getRate(0) == rateStartValue);
-
-    //    for (uint256 i = 0; i < 1000; i++) {
-    //        require(
-    //            creditClock.getRate(rateStartBlock + i) ==
-    //                calculateRate(rateStartValue, ratePerBlock, i)
-    //        );
-    //    }
-
-    //    rateStartBlock += 3578;
-    //    rateStartValue = calculateRate(rateStartValue, ratePerBlock, 3578);
-    //    ratePerBlock = uint256(2).fromUInt().div(uint256(100).fromUInt());
-
-    //    vm.expectEmit(false, false, false, true);
-    //    emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
-    //    vm.roll(rateStartBlock);
-    //    vm.prank(admin);
-    //    creditClock.setRatePerBlock(ratePerBlock);
-
-    //    require(creditClock.rateStartBlock() == rateStartBlock);
-    //    require(creditClock.rateStartValue() == rateStartValue);
-    //    require(creditClock.ratePerBlock() == ratePerBlock);
-
-    //    require(creditClock.getRate(0) == rateStartValue);
-
-    //    for (uint256 i = 0; i < 1000; i++) {
-    //        require(
-    //            creditClock.getRate(rateStartBlock + i) ==
-    //                calculateRate(rateStartValue, ratePerBlock, i)
-    //        );
-    //    }
-
-    //    rateStartBlock += 8447483;
-    //    rateStartValue = calculateRate(rateStartValue, ratePerBlock, 8447483);
-    //    ratePerBlock = uint256(3).fromUInt().div(uint256(100).fromUInt());
-
-    //    vm.expectEmit(false, false, false, true);
-    //    emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
-    //    vm.roll(rateStartBlock);
-    //    vm.prank(admin);
-    //    creditClock.setRatePerBlock(ratePerBlock);
-
-    //    require(creditClock.rateStartBlock() == rateStartBlock);
-    //    require(creditClock.rateStartValue() == rateStartValue);
-    //    require(creditClock.ratePerBlock() == ratePerBlock);
-
-    //    require(creditClock.getRate(0) == rateStartValue);
-
-    //    for (uint256 i = 0; i < 1000; i++) {
-    //        require(
-    //            creditClock.getRate(rateStartBlock + i) ==
-    //                calculateRate(rateStartValue, ratePerBlock, i)
-    //        );
-    //    }
-
-    //    rateStartBlock += 1345;
-    //    rateStartValue = calculateRate(rateStartValue, ratePerBlock, 1345);
-    //    ratePerBlock = uint256(17).fromUInt().div(uint256(100).fromUInt());
-
-    //    vm.expectEmit(false, false, false, true);            creditClock.getRate(rateStartBlock + i) ==
-
-    //    emit SetRatePerBlock(rateStartBlock, rateStartValue, ratePerBlock);
-    //    vm.roll(rateStartBlock);
-    //    vm.prank(admin);
-    //    creditClock.setRatePerBlock(ratePerBlock);
-
-    //    require(creditClock.rateStartBlock() == rateStartBlock);
-    //    require(creditClock.rateStartValue() == rateStartValue);
-    //    require(creditClock.ratePerBlock() == ratePerBlock);
-
-    //    require(creditClock.getRate(0) == rateStartValue);
-
-    //    for (uint256 i = 0; i < 1000; i++) {
-    //        require(
-    //            creditClock.getRate(rateStartBlock + i) ==
-    //                calculateRate(rateStartValue, ratePerBlock, i)
-    //        );
-    //    }
-    // }
 }
