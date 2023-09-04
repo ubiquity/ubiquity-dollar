@@ -67,8 +67,6 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
     function initialize(address _manager) public initializer {
         __ERC1155Ubiquity_init(_manager, "URI");
-        __ERC1155Burnable_init();
-        __ERC1155Pausable_init();
         _totalOutstandingDebt = 0;
     }
 
@@ -176,6 +174,4 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     function _authorizeUpgrade(
         address newImplementation
     ) internal override(ERC1155Ubiquity) onlyAdmin {}
-
-    uint256[50] private __gap;
 }

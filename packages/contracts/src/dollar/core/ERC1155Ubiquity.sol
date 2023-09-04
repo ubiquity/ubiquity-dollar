@@ -91,6 +91,9 @@ contract ERC1155Ubiquity is
         string memory uri
     ) public initializer onlyInitializing {
         __ERC1155_init(uri);
+        __ERC1155Burnable_init();
+        __ERC1155Pausable_init();
+        __UUPSUpgradeable_init();
         accessControl = IAccessControl(_manager);
     }
 

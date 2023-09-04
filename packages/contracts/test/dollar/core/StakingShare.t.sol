@@ -7,6 +7,12 @@ import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 
+contract StakingShareOneChange is StakingShare {
+    function hasUpgraded() public pure returns (bool) {
+        return true;
+    }
+}
+
 contract DepositStakingShare is LocalTestHelper {
     address treasury = address(0x3);
     address secondAccount = address(0x4);
@@ -381,5 +387,30 @@ contract StakingShareTest is DepositStakingShare {
         vm.expectRevert("Staking Share: not minter");
         vm.prank(fifthAccount);
         stakingShare.setUri(1, stringTest);
+    }
+
+    function testUUPS_ShouldUpgradeAndCall() external {
+        StakingShareOneChange stakingShareOneChange = new StakingShareOneChange();
+
+        string
+            memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
+
+        vm.startPrank(admin);
+        bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
+
+        (bool success, ) = address(IStakingShareToken).call(hasUpgradedCall);
+        assertEq(success, false, "should not have upgraded yet");
+        require(success == false, "should not have upgraded yet");
+
+        IStakingShareToken.upgradeTo(address(stakingShareOneChange));
+
+        (success, ) = address(IStakingShareToken).call(hasUpgradedCall);
+        assertEq(success, true, "should have upgraded");
+        require(success == true, "should have upgraded");
+
+        vm.expectRevert();
+        IStakingShareToken.initialize(address(diamond), uri);
+
+        vm.stopPrank();
     }
 }

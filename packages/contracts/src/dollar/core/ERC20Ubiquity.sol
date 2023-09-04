@@ -85,6 +85,7 @@ abstract contract ERC20Ubiquity is
         __ERC20_init(name_, symbol_);
         __ERC20Permit_init(name_);
         __ERC20Pausable_init();
+        __UUPSUpgradeable_init();
         _symbol = symbol_;
         accessControl = IAccessControl(_manager);
     }
@@ -275,4 +276,6 @@ abstract contract ERC20Ubiquity is
     ) public override(ERC20Upgradeable) returns (bool) {
         return super.transferFrom(sender, recipient, amount);
     }
+
+    uint256[50] private __gap;
 }
