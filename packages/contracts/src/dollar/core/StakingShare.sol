@@ -70,20 +70,14 @@ contract StakingShare is
         _;
     }
 
-    // /**
-    //  * @notice Contract constructor
-    //  * @param _manager Access control address
-    //  * @param _uri URI string
-    //  */
-    // constructor(
-    //     address _manager,
-    //     string memory _uri
-    // ) ERC1155Ubiquity(_manager, _uri) {}
-
+    /// @notice Ensures initialize cannot be called on the implementation contract
     constructor() {
         _disableInitializers();
     }
 
+    /// @notice Initializes this contract
+    /// @param _manager Address of the manager of the contract
+    /// @param _uri Base URI
     function initialize(
         address _manager,
         string memory _uri
@@ -292,9 +286,9 @@ contract StakingShare is
         return _baseURI;
     }
 
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
     function _authorizeUpgrade(
         address newImplementation
     ) internal override onlyAdmin {}
-
-    uint256[50] private __gap;
 }

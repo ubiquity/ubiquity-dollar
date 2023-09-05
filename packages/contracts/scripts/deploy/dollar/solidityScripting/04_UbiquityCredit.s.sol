@@ -6,13 +6,11 @@ import {UbiquityCreditToken} from "../../../../src/dollar/core/UbiquityCreditTok
 import {CreditNft} from "../../../../src/dollar/core/CreditNft.sol";
 
 contract CreditScript is GovernanceScript {
-    UbiquityCreditToken public uCreditToken;
     UbiquityCreditToken public creditToken;
-    UupsProxy public proxyUCreditToken;
-
     CreditNft public creditNft;
-    CreditNft public IUbiquityNft;
-    UupsProxy public proxyCreditNft;
+
+    ERC1967Proxy public proxyCreditToken;
+    ERC1967Proxy public proxyCreditNft;
 
     function run() public virtual override {
         super.run();
@@ -21,12 +19,12 @@ contract CreditScript is GovernanceScript {
             "initialize(address)",
             address(diamond)
         );
-        uCreditToken = new UbiquityCreditToken();
-        proxyUCreditToken = new UupsProxy(
-            address(uCreditToken),
+
+        proxyCreditToken = new ERC1967Proxy(
+            address(new UbiquityCreditToken()),
             managerPayload
         );
-        creditToken = UbiquityCreditToken(address(proxyUCreditToken));
+        creditToken = UbiquityCreditToken(address(proxyCreditToken));
 
         IManager.setCreditTokenAddress(address(creditToken));
 
@@ -34,11 +32,13 @@ contract CreditScript is GovernanceScript {
         IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
         IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
 
-        creditNft = new CreditNft();
-        proxyCreditNft = new UupsProxy(address(creditNft), managerPayload);
-        IUbiquityNft = CreditNft(address(proxyCreditNft));
+        proxyCreditNft = new ERC1967Proxy(
+            address(new CreditNft()),
+            managerPayload
+        );
+        creditNft = CreditNft(address(proxyCreditNft));
 
-        IManager.setCreditNftAddress(address(IUbiquityNft));
+        IManager.setCreditNftAddress(address(creditNft));
 
         vm.stopBroadcast();
     }

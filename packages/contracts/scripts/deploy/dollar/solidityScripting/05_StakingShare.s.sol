@@ -5,8 +5,7 @@ import "./04_UbiquityCredit.s.sol";
 
 contract StakingShareScript is CreditScript {
     StakingShare public stakingShare;
-    StakingShare public IStakingShareToken;
-    UupsProxy public proxyStakingShare;
+    ERC1967Proxy public proxyStakingShare;
 
     function run() public virtual override {
         super.run();
@@ -22,11 +21,11 @@ contract StakingShareScript is CreditScript {
             address(diamond),
             uri
         );
-        IStakingShareToken = new StakingShare();
-        proxyStakingShare = new UupsProxy(
-            address(IStakingShareToken),
+        proxyStakingShare = new ERC1967Proxy(
+            address(new StakingShare()),
             manAndUriPayload
         );
+
         stakingShare = StakingShare(address(proxyStakingShare));
 
         IManager.setStakingShareAddress(address(stakingShare));

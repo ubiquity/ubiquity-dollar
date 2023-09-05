@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {UupsProxy} from "./UupsProxy.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol";
@@ -35,13 +35,13 @@ contract UupsTestHelper {
     ERC1155Ubiquity public IUbiquiStick;
     ERC1155Ubiquity public stakingShareV1;
 
-    UupsProxy public proxyCreditNft;
-    UupsProxy public proxyStakingShare;
-    UupsProxy public proxyUCreditToken;
-    UupsProxy public proxyUDollarToken;
-    UupsProxy public proxyUGovToken;
-    UupsProxy public proxyUbiquiStick;
-    UupsProxy public proxyStakingShareV1;
+    ERC1967Proxy public proxyCreditNft;
+    ERC1967Proxy public proxyStakingShare;
+    ERC1967Proxy public proxyUCreditToken;
+    ERC1967Proxy public proxyUDollarToken;
+    ERC1967Proxy public proxyUGovToken;
+    ERC1967Proxy public proxyUbiquiStick;
+    ERC1967Proxy public proxyStakingShareV1;
 
     ManagerFacet iManager;
     AccessControlFacet IAccessControl;
@@ -63,32 +63,32 @@ contract UupsTestHelper {
         );
 
         creditNft = new CreditNft();
-        proxyCreditNft = new UupsProxy(address(creditNft), managerPayload);
+        proxyCreditNft = new ERC1967Proxy(address(creditNft), managerPayload);
         IUbiquityNft = CreditNft(address(proxyCreditNft));
 
         stakingShare = new StakingShare();
-        proxyStakingShare = new UupsProxy(
+        proxyStakingShare = new ERC1967Proxy(
             address(stakingShare),
             manAndUriPayload
         );
         IStakingShareToken = StakingShare(address(proxyStakingShare));
 
         uCreditToken = new UbiquityCreditToken();
-        proxyUCreditToken = new UupsProxy(
+        proxyUCreditToken = new ERC1967Proxy(
             address(uCreditToken),
             managerPayload
         );
         creditToken = UbiquityCreditToken(address(proxyUCreditToken));
 
         uDollarToken = new UbiquityDollarToken();
-        proxyUDollarToken = new UupsProxy(
+        proxyUDollarToken = new ERC1967Proxy(
             address(uDollarToken),
             managerPayload
         );
         IDollar = UbiquityDollarToken(address(proxyUDollarToken));
 
         uGovToken = new UbiquityGovernanceToken();
-        proxyUGovToken = new UupsProxy(address(uGovToken), managerPayload);
+        proxyUGovToken = new ERC1967Proxy(address(uGovToken), managerPayload);
         IGovToken = UbiquityGovernanceToken(address(proxyUGovToken));
 
         bytes memory ubq1155Payload = abi.encodeWithSignature(
@@ -98,11 +98,14 @@ contract UupsTestHelper {
         );
 
         ubiquiStick = new ERC1155Ubiquity();
-        proxyUbiquiStick = new UupsProxy(address(ubiquiStick), ubq1155Payload);
+        proxyUbiquiStick = new ERC1967Proxy(
+            address(ubiquiStick),
+            ubq1155Payload
+        );
         IUbiquiStick = ERC1155Ubiquity(address(proxyUbiquiStick));
 
         uStakingShareV1 = new ERC1155Ubiquity();
-        proxyStakingShareV1 = new UupsProxy(
+        proxyStakingShareV1 = new ERC1967Proxy(
             address(uStakingShareV1),
             ubq1155Payload
         );

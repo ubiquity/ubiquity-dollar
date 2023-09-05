@@ -73,24 +73,19 @@ contract ERC1155Ubiquity is
         _;
     }
 
-    // /**
-    //  * @notice Contract constructor
-    //  * @param _manager Access control address
-    //  * @param uri Base URI
-    //  */
-    // constructor(address _manager, string memory uri) ERC1155(uri) {
-    //     accessControl = IAccessControl(_manager);
-    // }
-
+    /// @notice Ensures __ERC1155Ubiquity_init cannot be called on the implementation contract
     constructor() {
         _disableInitializers();
     }
 
+    /// @notice Initializes this contract which is only possible through inheritance
+    /// @param _manager Address of the manager of the contract
+    /// @param _uri Base URI
     function __ERC1155Ubiquity_init(
         address _manager,
-        string memory uri
+        string memory _uri
     ) public initializer onlyInitializing {
-        __ERC1155_init(uri);
+        __ERC1155_init(_uri);
         __ERC1155Burnable_init();
         __ERC1155Pausable_init();
         __UUPSUpgradeable_init();
@@ -300,9 +295,12 @@ contract ERC1155Ubiquity is
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
     function _authorizeUpgrade(
         address newImplementation
     ) internal virtual override onlyAdmin {}
 
+    /// @notice Allows for future upgrades on the base contract without affecting the storage of the derived contract
     uint256[50] private __gap;
 }

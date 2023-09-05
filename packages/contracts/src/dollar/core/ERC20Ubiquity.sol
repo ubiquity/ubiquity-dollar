@@ -58,25 +58,15 @@ abstract contract ERC20Ubiquity is
         _;
     }
 
-    // /**
-    //  * @notice Contract constructor
-    //  * @param _manager Access control address
-    //  * @param name_ Token name
-    //  * @param symbol_ Token symbol
-    //  */
-    // constructor(
-    //     address _manager,
-    //     string memory name_,
-    //     string memory symbol_
-    // ) ERC20(name_, symbol_) ERC20Permit(name_) {
-    //     _symbol = symbol_;
-    //     accessControl = IAccessControl(_manager);
-    // }
-
+    /// @notice Ensures __ERC20Ubiquity_init cannot be called on the implementation contract
     constructor() {
         _disableInitializers();
     }
 
+    /// @notice Initializes this contract which is only possible through inheritance
+    /// @param _manager Address of the manager of the contract
+    /// @param name_ Token name
+    /// @param symbol_ Token symbol
     function __ERC20Ubiquity_init(
         address _manager,
         string memory name_,
@@ -193,10 +183,6 @@ abstract contract ERC20Ubiquity is
         super._transfer(sender, recipient, amount);
     }
 
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal virtual override onlyAdmin {}
-
     function allowance(
         address owner,
         address spender
@@ -277,5 +263,12 @@ abstract contract ERC20Ubiquity is
         return super.transferFrom(sender, recipient, amount);
     }
 
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyAdmin {}
+
+    /// @notice Allows for future upgrades on the base contract without affecting the storage of the derived contract
     uint256[50] private __gap;
 }

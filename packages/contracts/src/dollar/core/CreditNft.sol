@@ -52,19 +52,13 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         _;
     }
 
-    // /**
-    //  * @notice Contract constructor
-    //  * @dev URI param is if we want to add an off-chain meta data uri associated with this contract
-    //  * @param _manager Access control address
-    //  */
-    // constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
-    //     _totalOutstandingDebt = 0;
-    // }
-
+    /// @notice Ensures initialize cannot be called on the implementation contract
     constructor() {
         _disableInitializers();
     }
 
+    /// @notice Initializes the contract
+    /// @param _manager Address of the manager of the contract
     function initialize(address _manager) public initializer {
         __ERC1155Ubiquity_init(_manager, "URI");
         _totalOutstandingDebt = 0;
@@ -171,6 +165,8 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
         return outstandingDebt;
     }
 
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
     function _authorizeUpgrade(
         address newImplementation
     ) internal override(ERC1155Ubiquity) onlyAdmin {}
