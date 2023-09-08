@@ -115,7 +115,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
      * @dev Should be called prior to any state changing functions
      */
     function updateTotalDebt() public {
-        bool reachedEndOfExpiredKeys = false;
+        bool reachedEndOfExpiredKeys;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
         uint256 outstandingDebt = _totalOutstandingDebt;
         //if list is empty, currentBlockNumber will be 0
@@ -141,7 +141,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @notice Returns outstanding debt by fetching current tally and removing any expired debt
     function getTotalOutstandingDebt() public view returns (uint256) {
         uint256 outstandingDebt = _totalOutstandingDebt;
-        bool reachedEndOfExpiredKeys = false;
+        bool reachedEndOfExpiredKeys;
         (, uint256 currentBlockNumber) = _sortedBlockNumbers.getNextNode(0);
 
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {
