@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity 0.8.19;
 
 import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
 import {LibDollarMintCalculator} from "../libraries/LibDollarMintCalculator.sol";
