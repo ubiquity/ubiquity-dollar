@@ -9,8 +9,6 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
 
     function setUp() public override {
         super.setUp();
-
-        vm.prank(admin);
         ubiquityCreditToken = creditToken;
     }
 

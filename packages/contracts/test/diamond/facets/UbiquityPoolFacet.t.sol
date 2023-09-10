@@ -19,7 +19,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     address curve3CrvToken;
     address metaPoolAddress;
     address twapOracleAddress;
-    IERC20Ubiquity governanceToken;
 
     IMetaPool metapool;
     address stakingMinAccount = address(0x9);
@@ -75,7 +74,6 @@ contract UbiquityPoolFacetTest is DiamondSetup {
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(stakingShare)
         );
-        governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
         //  vm.stopPrank();
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
         address curve3CrvBasePool = address(

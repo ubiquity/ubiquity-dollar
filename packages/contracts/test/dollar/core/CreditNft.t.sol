@@ -26,7 +26,6 @@ contract CreditNftTest is LocalTestHelper {
         super.setUp();
 
         // deploy Credit NFT token
-        creditNft = IUbiquityNft;
         creditNftAddress = address(creditNft);
         vm.prank(admin);
         IManager.setCreditNftAddress(address(creditNftAddress));
@@ -98,9 +97,9 @@ contract CreditNftTest is LocalTestHelper {
 
     function testUpdateTotalDebt_ShouldUpdateTotalDebt() public {
         vm.startPrank(admin);
-        creditNft.mintCreditNft(address(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
-        creditNft.mintCreditNft(address(0x222), 10, 20000);
-        creditNft.mintCreditNft(address(0x333), 10, 30000);
+        creditNft.mintCreditNft(vm.addr(0x111), 10, 10000); // 10 -> amount, 10000 -> expiryBlockNumber
+        creditNft.mintCreditNft(vm.addr(0x222), 10, 20000);
+        creditNft.mintCreditNft(vm.addr(0x333), 10, 30000);
         vm.stopPrank();
 
         // sets block.number

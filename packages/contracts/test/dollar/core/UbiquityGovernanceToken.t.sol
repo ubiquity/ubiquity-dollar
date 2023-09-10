@@ -23,13 +23,13 @@ contract UbiquityGovernanceTokenTest is LocalTestHelper {
     function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("ERC20Ubiquity: not admin");
-        IGovToken.setManager(address(0x123abc));
+        governanceToken.setManager(address(0x123abc));
     }
 
     function testSetManager_ShouldSetManager() public {
         address newManager = address(0x123abc);
         vm.prank(admin);
-        IGovToken.setManager(newManager);
-        require(IGovToken.getManager() == newManager);
+        governanceToken.setManager(newManager);
+        require(governanceToken.getManager() == newManager);
     }
 }

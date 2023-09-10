@@ -81,7 +81,7 @@ contract StakingShare is
     function initialize(
         address _manager,
         string memory _uri
-    ) public initializer {
+    ) public virtual initializer {
         __ERC1155Ubiquity_init(_manager, _uri);
     }
 

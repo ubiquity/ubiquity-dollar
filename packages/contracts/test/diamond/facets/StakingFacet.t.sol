@@ -96,11 +96,10 @@ contract ZeroStateStaking is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        IManager.setStakingShareAddress(address(stakingShareV1));
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(stakingShareV1)
+            address(stakingShare)
         );
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
@@ -177,8 +176,6 @@ contract ZeroStateStaking is DiamondSetup {
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
         vm.startPrank(admin);
-        stakingShare = IStakingShareToken;
-        IManager.setStakingShareAddress(address(stakingShare));
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
@@ -188,10 +185,10 @@ contract ZeroStateStaking is DiamondSetup {
         vm.stopPrank();
 
         vm.prank(secondAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
 
         vm.prank(thirdAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
     }
 }
 
@@ -315,7 +312,7 @@ contract DepositStateTest is DepositStateStaking {
         blocks = bound(blocks, 45361, 2 ** 128 - 1);
         assertEq(IChefFacet.totalShares(), shares);
 
-        uint256 preBal = IGovToken.balanceOf(fourthAccount);
+        uint256 preBal = governanceToken.balanceOf(fourthAccount);
         (uint256 lastRewardBlock, ) = IChefFacet.pool();
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
@@ -333,7 +330,7 @@ contract DepositStateTest is DepositStateStaking {
         vm.prank(fourthAccount);
         IStakingFacet.removeLiquidity(amount, fourthID);
 
-        assertEq(preBal + userReward, IGovToken.balanceOf(fourthAccount));
+        assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
     }
 
     function testGetRewards(uint256 blocks) public {

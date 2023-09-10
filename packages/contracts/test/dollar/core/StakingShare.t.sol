@@ -6,12 +6,7 @@ import "../../helpers/LocalTestHelper.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import "../../../src/dollar/libraries/Constants.sol";
-
-contract StakingShareOneChange is StakingShare {
-    function hasUpgraded() public pure returns (bool) {
-        return true;
-    }
-}
+import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
 
 contract DepositStakingShare is LocalTestHelper {
     address treasury = address(0x3);
@@ -74,7 +69,6 @@ contract DepositStakingShare is LocalTestHelper {
             IStakingFacet.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
         }
-        stakingShare = IStakingShareToken;
     }
 }
 
@@ -390,7 +384,7 @@ contract StakingShareTest is DepositStakingShare {
     }
 
     function testUUPS_ShouldUpgradeAndCall() external {
-        StakingShareOneChange stakingShareOneChange = new StakingShareOneChange();
+        BondingShare bondingShare = new BondingShare();
 
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
@@ -398,19 +392,131 @@ contract StakingShareTest is DepositStakingShare {
         vm.startPrank(admin);
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
 
-        (bool success, ) = address(IStakingShareToken).call(hasUpgradedCall);
+        // trying to directly call will fail and exit early so call it like this
+        (bool success, ) = address(stakingShare).call(hasUpgradedCall);
         assertEq(success, false, "should not have upgraded yet");
         require(success == false, "should not have upgraded yet");
 
-        IStakingShareToken.upgradeTo(address(stakingShareOneChange));
+        stakingShare.upgradeTo(address(bondingShare));
 
-        (success, ) = address(IStakingShareToken).call(hasUpgradedCall);
+        // It will also fail unless cast so we'll use the same pattern as above
+        (success, ) = address(stakingShare).call(hasUpgradedCall);
         assertEq(success, true, "should have upgraded");
         require(success == true, "should have upgraded");
 
         vm.expectRevert();
-        IStakingShareToken.initialize(address(diamond), uri);
+        stakingShare.initialize(address(diamond), uri);
 
         vm.stopPrank();
+    }
+
+    function testUUPS_ImplChanges() external {
+        BondingShare bondingShare = new BondingShare();
+
+        address oldImpl = address(IStakingShareToken);
+        address newImpl = address(bondingShare);
+
+        vm.prank(admin);
+        stakingShare.upgradeTo(newImpl);
+
+        bytes memory getImplCall = abi.encodeWithSignature("getImpl()");
+
+        (bool success, bytes memory data) = address(stakingShare).call(
+            getImplCall
+        );
+        assertEq(success, true, "should have upgraded");
+
+        address newAddrViaNewFunc = abi.decode(data, (address));
+
+        assertEq(
+            newAddrViaNewFunc,
+            newImpl,
+            "should be the new implementation"
+        );
+        assertTrue(
+            newAddrViaNewFunc != oldImpl,
+            "should not be the old implementation"
+        );
+    }
+
+    function testUUPS_InitializedVersion() external {
+        uint expectedVersion = 1;
+        uint baseExpectedVersion = 255;
+
+        BondingShare bondingShare = new BondingShare();
+        BondingShareT bondingShareT = new BondingShareT();
+
+        vm.startPrank(admin);
+        stakingShare.upgradeTo(address(bondingShare));
+
+        bytes memory getVersionCall = abi.encodeWithSignature("getVersion()");
+
+        (bool success, bytes memory data) = address(stakingShare).call(
+            getVersionCall
+        );
+        assertEq(success, true, "should have upgraded");
+        uint8 version = abi.decode(data, (uint8));
+
+        assertEq(
+            version,
+            expectedVersion,
+            "should be the same version as only initialized once"
+        );
+
+        stakingShare.upgradeTo(address(bondingShareT));
+
+        (success, data) = address(stakingShare).call(getVersionCall);
+        assertEq(success, true, "should have upgraded");
+        version = abi.decode(data, (uint8));
+
+        assertEq(
+            version,
+            expectedVersion,
+            "should be the same version as only initialized once"
+        );
+
+        (success, data) = address(bondingShare).call(getVersionCall);
+        assertEq(success, true, "should succeed");
+        version = abi.decode(data, (uint8));
+
+        //staking share doesn't expose a function to check the version but it follows the same logic
+        assertEq(
+            version,
+            baseExpectedVersion,
+            "should be maxed as initializers are disabled."
+        );
+    }
+
+    function testUUPS_initialization() external {
+        BondingShare bondingShare = new BondingShare();
+
+        vm.startPrank(admin);
+        vm.expectRevert();
+        bondingShare.initialize(address(diamond), "test");
+
+        vm.expectRevert();
+        IStakingShareToken.initialize(address(diamond), "test");
+
+        vm.expectRevert();
+        stakingShare.initialize(address(diamond), "test");
+
+        stakingShare.upgradeTo(address(bondingShare));
+
+        vm.expectRevert();
+        stakingShare.initialize(address(diamond), "test");
+    }
+}
+
+contract BondingShareT is BondingShare {
+    function hasUpgraded() public pure override returns (bool) {
+        return true;
+    }
+
+    function getVersion() public view override returns (uint8) {
+        return super._getInitializedVersion();
+    }
+
+    function getImpl() public view override returns (address) {
+        return super._getImplementation();
     }
 }
