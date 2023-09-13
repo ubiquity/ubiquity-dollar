@@ -444,7 +444,7 @@ contract StakingShareTest is DepositStakingShare {
         uint baseExpectedVersion = 255;
 
         BondingShare bondingShare = new BondingShare();
-        BondingShareT bondingShareT = new BondingShareT();
+        BondingShareUpgraded bondingShareUpgraded = new BondingShareUpgraded();
 
         vm.startPrank(admin);
         stakingShare.upgradeTo(address(bondingShare));
@@ -463,7 +463,7 @@ contract StakingShareTest is DepositStakingShare {
             "should be the same version as only initialized once"
         );
 
-        stakingShare.upgradeTo(address(bondingShareT));
+        stakingShare.upgradeTo(address(bondingShareUpgraded));
 
         (success, data) = address(stakingShare).call(getVersionCall);
         assertEq(success, true, "should have upgraded");
@@ -479,7 +479,6 @@ contract StakingShareTest is DepositStakingShare {
         assertEq(success, true, "should succeed");
         version = abi.decode(data, (uint8));
 
-        //staking share doesn't expose a function to check the version but it follows the same logic
         assertEq(
             version,
             baseExpectedVersion,
@@ -505,9 +504,29 @@ contract StakingShareTest is DepositStakingShare {
         vm.expectRevert();
         stakingShare.initialize(address(diamond), "test");
     }
+
+    function testUUPS_AdminAuth() external {
+        BondingShare bondingShare = new BondingShare();
+
+        vm.expectRevert();
+        stakingShare.upgradeTo(address(bondingShare));
+
+        vm.prank(admin);
+        stakingShare.upgradeTo(address(bondingShare));
+
+        bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
+        (bool success, bytes memory data) = address(stakingShare).call(
+            hasUpgradedCall
+        );
+        bool hasUpgraded = abi.decode(data, (bool));
+
+        assertEq(hasUpgraded, true, "should have upgraded");
+        assertEq(success, true, "should have upgraded");
+        require(success == true, "should have upgraded");
+    }
 }
 
-contract BondingShareT is BondingShare {
+contract BondingShareUpgraded is BondingShare {
     function hasUpgraded() public pure override returns (bool) {
         return true;
     }

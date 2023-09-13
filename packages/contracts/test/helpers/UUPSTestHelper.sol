@@ -13,9 +13,6 @@ import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import "../../src/dollar/libraries/Constants.sol";
 import "forge-std/Test.sol";
 
-import "../../src/dollar/interfaces/IDiamondCut.sol";
-import "../../src/dollar/interfaces/IDiamondLoupe.sol";
-
 contract UUPSTestHelper {
     CreditNft internal IUbiquityNft;
     StakingShare internal IStakingShareToken;

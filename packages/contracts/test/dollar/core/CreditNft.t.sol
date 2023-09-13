@@ -122,4 +122,159 @@ contract CreditNftTest is LocalTestHelper {
         uint256 outStandingTotalDebt = creditNft.getTotalOutstandingDebt();
         assertEq(outStandingTotalDebt, 10);
     }
+
+    function testUUPS_ShouldUpgradeAndCall() external {
+        CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
+
+        string memory uri = "test";
+
+        vm.startPrank(admin);
+        bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
+
+        // trying to directly call will fail and exit early so call it like this
+        (bool success, ) = address(creditNft).call(hasUpgradedCall);
+        assertEq(success, false, "should not have upgraded yet");
+        require(success == false, "should not have upgraded yet");
+
+        creditNft.upgradeTo(address(creditNftUpgraded));
+
+        // It will also fail unless cast so we'll use the same pattern as above
+        (success, ) = address(creditNft).call(hasUpgradedCall);
+        assertEq(success, true, "should have upgraded");
+        require(success == true, "should have upgraded");
+
+        vm.expectRevert();
+        creditNft.initialize(address(diamond));
+
+        vm.stopPrank();
+    }
+
+    function testUUPS_ImplChanges() external {
+        CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
+
+        address oldImpl = address(creditNft);
+        address newImpl = address(creditNftUpgraded);
+
+        vm.prank(admin);
+        creditNft.upgradeTo(newImpl);
+
+        bytes memory getImplCall = abi.encodeWithSignature("getImpl()");
+
+        (bool success, bytes memory data) = address(creditNft).call(
+            getImplCall
+        );
+        assertEq(success, true, "should have upgraded");
+
+        address newAddrViaNewFunc = abi.decode(data, (address));
+
+        assertEq(
+            newAddrViaNewFunc,
+            newImpl,
+            "should be the new implementation"
+        );
+        assertTrue(
+            newAddrViaNewFunc != oldImpl,
+            "should not be the old implementation"
+        );
+    }
+
+    function testUUPS_InitializedVersion() external {
+        uint expectedVersion = 1;
+        uint baseExpectedVersion = 255;
+
+        CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
+        CreditNftUpgraded creditNftT = new CreditNftUpgraded();
+
+        vm.startPrank(admin);
+        creditNft.upgradeTo(address(creditNftUpgraded));
+
+        bytes memory getVersionCall = abi.encodeWithSignature("getVersion()");
+
+        (bool success, bytes memory data) = address(creditNft).call(
+            getVersionCall
+        );
+        assertEq(success, true, "should have upgraded");
+        uint8 version = abi.decode(data, (uint8));
+
+        assertEq(
+            version,
+            expectedVersion,
+            "should be the same version as only initialized once"
+        );
+
+        creditNft.upgradeTo(address(creditNftT));
+
+        (success, data) = address(creditNft).call(getVersionCall);
+        assertEq(success, true, "should have upgraded");
+        version = abi.decode(data, (uint8));
+
+        assertEq(
+            version,
+            expectedVersion,
+            "should be the same version as only initialized once"
+        );
+
+        (success, data) = address(creditNftT).call(getVersionCall);
+        assertEq(success, true, "should succeed");
+        version = abi.decode(data, (uint8));
+
+        assertEq(
+            version,
+            baseExpectedVersion,
+            "should be maxed as initializers are disabled."
+        );
+    }
+
+    function testUUPS_initialization() external {
+        CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
+
+        vm.startPrank(admin);
+        vm.expectRevert();
+        creditNftUpgraded.initialize(address(diamond));
+
+        vm.expectRevert();
+        creditNft.initialize(address(diamond));
+
+        vm.expectRevert();
+        creditNft.initialize(address(diamond));
+
+        creditNft.upgradeTo(address(creditNftUpgraded));
+
+        vm.expectRevert();
+        creditNft.initialize(address(diamond));
+    }
+
+    function testUUPS_AdminAuth() external {
+        CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
+
+        vm.expectRevert();
+        creditNft.upgradeTo(address(creditNftUpgraded));
+
+        vm.prank(admin);
+        creditNft.upgradeTo(address(creditNftUpgraded));
+
+        bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
+        (bool success, bytes memory data) = address(creditNft).call(
+            hasUpgradedCall
+        );
+        bool hasUpgraded = abi.decode(data, (bool));
+
+        assertEq(hasUpgraded, true, "should have upgraded");
+        assertEq(success, true, "should have upgraded");
+        require(success == true, "should have upgraded");
+    }
+}
+
+contract CreditNftUpgraded is CreditNft {
+    function hasUpgraded() public pure returns (bool) {
+        return true;
+    }
+
+    function getVersion() public view returns (uint8) {
+        return super._getInitializedVersion();
+    }
+
+    function getImpl() public view returns (address) {
+        return super._getImplementation();
+    }
 }
