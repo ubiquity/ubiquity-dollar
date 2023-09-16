@@ -49,7 +49,7 @@ jobs:
         with:
           version: nightly
         
-      - name: Verify storage layout
+      - name: Check For Diamond Storage Changes
         uses: gitcoindev/foundry-storage-check@main
         with:
           workingDirectory: packages/contracts
