@@ -1,4 +1,4 @@
-name: Check diamond storage
+name: Check For Diamond Storage Changes
 
 on:
   push:
