@@ -1,0 +1,54 @@
+name: Check For Core Contracts Storage Changes
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+
+jobs:
+  provide_contracts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - id: set-matrix
+        working-directory: packages/contracts
+        run: |
+          forge tree | grep -E '^src/dollar/core' | cut -d' ' -f1 | xargs basename -s | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
+          echo "::set-output name=matrix::$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')"
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  check_storage_layout:
+    needs: provide_contracts
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        contract: ${{ fromJSON(needs.provide_contracts.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: onbjerg/foundry-toolchain@v1
+        with:
+          version: nightly
+        
+      - name: Check For Core Contracts Storage Changes
+        uses: Rubilmax/foundry-storage-check@main
+        with:
+          workingDirectory: packages/contracts
+          contract: ${{ matrix.contract }}
