@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity 0.8.19;
 
-import {IUbiquityAMOPool} from "../../dollar/interfaces/IUbiquityAMOPool.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {LibUbiquityAMOPool} from "../libraries/LibUbiquityAMOPool.sol";
+
+import {IUbiquityAMOPool} from "../../dollar/interfaces/IUbiquityAMOPool.sol";
 
 /**
  * @notice Ubiquity AMO Pool contract based on Frax Finance
