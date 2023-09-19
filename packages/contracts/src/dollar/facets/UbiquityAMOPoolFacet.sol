@@ -10,12 +10,12 @@ import {IUbiquityAMOPool} from "../../dollar/interfaces/IUbiquityAMOPool.sol";
  * @notice Ubiquity AMO Pool contract based on Frax Finance
  * @notice Inspired from Frax Finance https://github.com/FraxFinance/frax-solidity
  */
-contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
-    function collateral_information(
-        address _collat_address
-    ) external view returns (CollateralInformation memory return_data) {
-        return LibUbiquityAMOPool.collateral_information();
-    }
+contract UbiquityAMOPoolFacet is Modifiers, IUbiquityAMOPool {
+    // function collateral_information(
+    //     address _collateral_address
+    // ) external view returns (CollateralInformation memory return_data) {
+    //     return LibUbiquityAMOPool.collateral_information();
+    // }
 
     function allCollaterals() external view returns (address[] memory) {
         return LibUbiquityAMOPool.allCollaterals();
@@ -133,9 +133,7 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
             );
     }
 
-    function amoMinterBorrow(
-        uint256 _collateral_amount
-    ) external onlyAMOMinters {
+    function amoMinterBorrow(uint256 _collateral_amount) external onlyMinter {
         LibUbiquityAMOPool.amoMinterBorrow(_collateral_amount);
     }
 
@@ -150,29 +148,31 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
 
     /* ========== RESTRICTED FUNCTIONS, GOVERNANCE ONLY ========== */
 
-    function addAMOMinter(address _amo_minter_addr) external onlyByOwnGov {
+    function addAMOMinter(address _amo_minter_addr) external onlyTokenManager {
         LibUbiquityAMOPool.addAMOMinter(_amo_minter_addr);
     }
 
-    function removeAMOMinter(address _amo_minter_addr) external onlyByOwnGov {
+    function removeAMOMinter(
+        address _amo_minter_addr
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.removeAMOMinter(_amo_minter_addr);
     }
 
     function setCollateralPrice(
         uint256 _col_idx,
         uint256 _new_price
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setCollateralPrice(_col_idx, _new_price);
     }
 
-    function toggleCollateral(uint256 _col_idx) external onlyByOwnGov {
+    function toggleCollateral(uint256 _col_idx) external onlyTokenManager {
         LibUbiquityAMOPool.toggleCollateral(_col_idx);
     }
 
     function setPoolCeiling(
         uint256 _col_idx,
         uint256 _new_ceiling
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setPoolCeiling(_col_idx, _new_ceiling);
     }
 
@@ -182,7 +182,7 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
         uint256 _new_redeem_fee,
         uint256 _new_buyback_fee,
         uint256 _new_collateral_fee
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setFees(
             _col_idx,
             _new_mint_fee,
@@ -195,7 +195,7 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
     function setPoolParameters(
         uint256 _new_bonus_rate,
         uint256 _new_redemption_delay
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setPoolParameters(
             _new_bonus_rate,
             _new_redemption_delay
@@ -205,7 +205,7 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
     function setPriceThresholds(
         uint256 _new_mint_price_threshold,
         uint256 _new_redeem_price_threshold
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setPriceThresholds(
             _new_mint_price_threshold,
             _new_redeem_price_threshold
@@ -215,7 +215,7 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
     function setBbkRctPerHour(
         uint256 _bbkMaxColE18OutPerHour,
         uint256 _rctMaxFxsOutPerHour
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setBbkRctPerHour(
             _bbkMaxColE18OutPerHour,
             _rctMaxFxsOutPerHour
@@ -225,18 +225,18 @@ contract UbiquityAMOPoolFacet is IUbiquityAMOPool {
     function setOracles(
         address _uad_usd_chainlink_addr,
         address _gov_token_usd_chainlink_addr
-    ) external onlyByOwnGov {
+    ) external onlyTokenManager {
         LibUbiquityAMOPool.setOracles(
             _uad_usd_chainlink_addr,
             _gov_token_usd_chainlink_addr
         );
     }
 
-    function setCustodian(address _new_custodian) external onlyByOwnGov {
+    function setCustodian(address _new_custodian) external onlyTokenManager {
         LibUbiquityAMOPool.setCustodian(_new_custodian);
     }
 
-    function setTimelock(address _new_timelock) external onlyByOwnGov {
+    function setTimelock(address _new_timelock) external onlyTokenManager {
         LibUbiquityAMOPool.setTimelock(_new_timelock);
     }
 }

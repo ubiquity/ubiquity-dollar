@@ -28,6 +28,8 @@ struct AppStorage {
     address ubiquiStickAddress;
     address bondingCurveAddress;
     address bancorFormulaAddress;
+    address ubiquityAmoPoolAddress;
+    address ubiquityAmoMinterAddress;
     address curveDollarIncentiveAddress;
     mapping(address => address) _excessDollarDistributors;
     // pausable
@@ -164,6 +166,15 @@ contract Modifiers {
         require(
             LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditCalc: not admin"
+        );
+        _;
+    }
+
+    /// @notice Checks that method is called by address with the `INCENTIVE_MANAGER_ROLE` role
+    modifier onlyGovCustodian() {
+        require(
+            LibAccessControl.hasRole(GOV_CUSTODIAN_ROLE, msg.sender),
+            "GovCustodian: not admin"
         );
         _;
     }
