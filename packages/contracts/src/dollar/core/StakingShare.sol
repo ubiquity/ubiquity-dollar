@@ -1,21 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/ERC1155Upgradeable.sol";
-import {IERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
+import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
+import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import {ERC1155URIStorageUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+import {ERC1155URIStorageUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 /// @notice Contract representing a staking share in the form of ERC1155 token
-contract StakingShare is
-    Initializable,
-    ERC1155Ubiquity,
-    ERC1155URIStorageUpgradeable
-{
+contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
     using SafeAddArray for uint256[];
 
     /// @notice Stake struct

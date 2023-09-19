@@ -126,8 +126,6 @@ contract CreditNftTest is LocalTestHelper {
     function testUUPS_ShouldUpgradeAndCall() external {
         CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
 
-        string memory uri = "test";
-
         vm.startPrank(admin);
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
 

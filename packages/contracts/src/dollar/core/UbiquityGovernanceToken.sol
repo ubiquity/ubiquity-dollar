@@ -3,14 +3,14 @@ pragma solidity ^0.8.19;
 
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "../libraries/Constants.sol";
 
 /**
  * @notice Ubiquity Governance token contract
  */
-contract UbiquityGovernanceToken is Initializable, ERC20Ubiquity {
+contract UbiquityGovernanceToken is ERC20Ubiquity {
     /// @notice Ensures initialize cannot be called on the implementation contract
     constructor() {
         _disableInitializers();
