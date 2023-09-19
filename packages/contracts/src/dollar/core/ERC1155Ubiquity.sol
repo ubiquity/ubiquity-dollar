@@ -78,17 +78,27 @@ contract ERC1155Ubiquity is
         _disableInitializers();
     }
 
-    /// @notice Initializes this contract which is only possible through inheritance
+    /// @notice Initializes this contract with all base(parent) contracts
     /// @param _manager Address of the manager of the contract
     /// @param _uri Base URI
     function __ERC1155Ubiquity_init(
         address _manager,
         string memory _uri
     ) public initializer onlyInitializing {
+        // init base contracts
         __ERC1155_init(_uri);
         __ERC1155Burnable_init();
         __ERC1155Pausable_init();
         __UUPSUpgradeable_init();
+        // init current contract
+        __ERC1155Ubiquity_init_unchained(_manager);
+    }
+
+    /// @notice Initializes the current contract
+    /// @param _manager Address of the manager of the contract
+    function __ERC1155Ubiquity_init_unchained(
+        address _manager
+    ) public initializer onlyInitializing {
         accessControl = IAccessControl(_manager);
     }
 

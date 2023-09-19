@@ -64,7 +64,7 @@ abstract contract ERC20Ubiquity is
         _disableInitializers();
     }
 
-    /// @notice Initializes this contract which is only possible through inheritance
+    /// @notice Initializes this contract with all base(parent) contracts
     /// @param _manager Address of the manager of the contract
     /// @param name_ Token name
     /// @param symbol_ Token symbol
@@ -72,11 +72,23 @@ abstract contract ERC20Ubiquity is
         address _manager,
         string memory name_,
         string memory symbol_
-    ) public onlyInitializing {
+    ) internal onlyInitializing {
+        // init base contracts
         __ERC20_init(name_, symbol_);
         __ERC20Permit_init(name_);
         __ERC20Pausable_init();
         __UUPSUpgradeable_init();
+        // init the current contract
+        __ERC20Ubiquity_init_unchained(_manager, symbol_);
+    }
+
+    /// @notice Initializes the current contract
+    /// @param _manager Address of the manager of the contract
+    /// @param symbol_ Token symbol
+    function __ERC20Ubiquity_init_unchained(
+        address _manager,
+        string memory symbol_
+    ) internal onlyInitializing {
         _symbol = symbol_;
         accessControl = IAccessControl(_manager);
     }
