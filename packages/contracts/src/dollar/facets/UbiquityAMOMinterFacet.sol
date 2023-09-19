@@ -20,15 +20,15 @@ contract UbiquityAMOMinterFacet is Modifiers, IUbiquityAMOMinter {
         view
         returns (uint256 _uAD_val_e18, uint256 _collateral_val_e18)
     {
-        LibUbiquityAMOMinter.dollarBalances(_uAD_val_e18, _collateral_val_e18);
+        LibUbiquityAMOMinter.dollarBalances();
     }
 
     function allAMOAddresses() external view returns (address[] memory) {
-        return LibUbiquityAMOMinter.allAMOAddresses;
+        return LibUbiquityAMOMinter.allAMOAddresses();
     }
 
     function allAMOsLength() external view returns (uint256) {
-        return LibUbiquityAMOMinter.allAMOsLength;
+        return LibUbiquityAMOMinter.allAMOsLength();
     }
 
     function uADTrackedGlobal() external view returns (int256) {

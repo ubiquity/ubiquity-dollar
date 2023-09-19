@@ -48,6 +48,7 @@ library LibUbiquityAMOPool {
     event CollateralPriceSet(uint256 col_idx, uint256 new_price);
 
     struct AmoPoolData {
+        address[] collateral_addresses;
         mapping(address => bool) enabled_collaterals;
     }
 
@@ -89,4 +90,8 @@ library LibUbiquityAMOPool {
     //         recollat_fee[idx] // [15]
     //     );
     // }
+
+    function allCollaterals() internal view returns (address[] memory) {
+        return amoPoolStorage().collateral_addresses;
+    }
 }
