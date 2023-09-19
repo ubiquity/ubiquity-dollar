@@ -11,11 +11,7 @@ import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 /// @notice Contract representing a staking share in the form of ERC1155 token
-contract StakingShare is
-    Initializable,
-    ERC1155Ubiquity,
-    ERC1155URIStorageUpgradeable
-{
+contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
     using SafeAddArray for uint256[];
 
     /// @notice Stake struct

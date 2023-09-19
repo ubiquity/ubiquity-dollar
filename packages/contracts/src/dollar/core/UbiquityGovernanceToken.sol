@@ -10,7 +10,7 @@ import "../libraries/Constants.sol";
 /**
  * @notice Ubiquity Governance token contract
  */
-contract UbiquityGovernanceToken is Initializable, ERC20Ubiquity {
+contract UbiquityGovernanceToken is ERC20Ubiquity {
     /// @notice Ensures initialize cannot be called on the implementation contract
     constructor() {
         _disableInitializers();
