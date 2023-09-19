@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 
 import "../libraries/Constants.sol";
 

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/ERC1155Upgradeable.sol";
-import {ERC1155BurnableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
-import {ERC1155PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
-import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
+import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
+import {ERC1155BurnableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
+import {ERC1155PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 

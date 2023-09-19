@@ -2,8 +2,8 @@
 pragma solidity 0.8.19;
 
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
-import {ERC1155Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC1155/ERC1155Upgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
 import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "../libraries/Constants.sol";

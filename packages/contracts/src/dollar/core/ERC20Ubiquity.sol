@@ -3,13 +3,13 @@ pragma solidity ^0.8.19;
 
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import {DEFAULT_ADMIN_ROLE, PAUSER_ROLE} from "../libraries/Constants.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {ERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/ERC20Upgradeable.sol";
-import {ERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
-import {ERC20PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
-import {IERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
-import {IERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {ERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {ERC20PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
+import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import {IERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
 
 /**
  * @notice Base contract for Ubiquity ERC20 tokens (Dollar, Credit, Governance)
