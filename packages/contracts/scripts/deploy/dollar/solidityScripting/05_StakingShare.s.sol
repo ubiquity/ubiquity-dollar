@@ -16,14 +16,14 @@ contract StakingShareScript is CreditScript {
         // add staking shares
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-        bytes memory manAndUriPayload = abi.encodeWithSignature(
+        bytes memory initData = abi.encodeWithSignature(
             "initialize(address,string)",
             address(diamond),
             uri
         );
         proxyStakingShare = new ERC1967Proxy(
             address(new StakingShare()),
-            manAndUriPayload
+            initData
         );
 
         stakingShare = StakingShare(address(proxyStakingShare));

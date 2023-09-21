@@ -3,13 +3,13 @@ pragma solidity ^0.8.19;
 
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import {DEFAULT_ADMIN_ROLE, PAUSER_ROLE} from "../libraries/Constants.sol";
-import {Initializable} from "@openzeppelinUpgradeable/contracts/proxy/utils/Initializable.sol";
-import {UUPSUpgradeable} from "@openzeppelinUpgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
-import {ERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/ERC20Upgradeable.sol";
-import {ERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
-import {ERC20PausableUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
-import {IERC20Upgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/IERC20Upgradeable.sol";
-import {IERC20PermitUpgradeable} from "@openzeppelinUpgradeable/contracts/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import {ERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {ERC20PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
+import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import {IERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
 
 /**
  * @notice Base contract for Ubiquity ERC20 tokens (Dollar, Credit, Governance)
@@ -64,7 +64,7 @@ abstract contract ERC20Ubiquity is
         _disableInitializers();
     }
 
-    /// @notice Initializes this contract which is only possible through inheritance
+    /// @notice Initializes this contract with all base(parent) contracts
     /// @param _manager Address of the manager of the contract
     /// @param name_ Token name
     /// @param symbol_ Token symbol
@@ -72,11 +72,23 @@ abstract contract ERC20Ubiquity is
         address _manager,
         string memory name_,
         string memory symbol_
-    ) public onlyInitializing {
+    ) internal onlyInitializing {
+        // init base contracts
         __ERC20_init(name_, symbol_);
         __ERC20Permit_init(name_);
         __ERC20Pausable_init();
         __UUPSUpgradeable_init();
+        // init the current contract
+        __ERC20Ubiquity_init_unchained(_manager, symbol_);
+    }
+
+    /// @notice Initializes the current contract
+    /// @param _manager Address of the manager of the contract
+    /// @param symbol_ Token symbol
+    function __ERC20Ubiquity_init_unchained(
+        address _manager,
+        string memory symbol_
+    ) internal onlyInitializing {
         _symbol = symbol_;
         accessControl = IAccessControl(_manager);
     }

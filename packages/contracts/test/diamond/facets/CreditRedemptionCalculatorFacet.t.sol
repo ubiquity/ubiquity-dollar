@@ -2,12 +2,9 @@
 pragma solidity 0.8.19;
 
 import "../DiamondTestSetup.sol";
-import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
-    CreditNft _creditNft;
-
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);
@@ -15,11 +12,10 @@ contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
         uint256 admSupply = IDollar.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
-        _creditNft = creditNft;
         vm.startPrank(admin);
         IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        _creditNft.mintCreditNft(user1, 100, 10);
-        IManager.setCreditNftAddress(address(_creditNft));
+        creditNft.mintCreditNft(user1, 100, 10);
+        IManager.setCreditNftAddress(address(creditNft));
         vm.stopPrank();
     }
 

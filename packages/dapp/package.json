@@ -12,7 +12,7 @@
     "start": "next dev",
     "clean": "rimraf next types node_modules",
     "build:next": "next build",
-    "build:types": "typechain --show-stack-traces --target ethers-v5 '../contracts/out/**/!(test*|Test*||*.t.sol|*.s.sol|access*)/**/!(*IAccessControl).json' --out-dir types"
+    "build:types": "typechain --show-stack-traces --target ethers-v5 ../contracts/out/**/!(test*|Test*|*.t.sol|*.s.sol)/*.json --out-dir=types"
   },
   "devDependencies": {
     "@ethersproject/abi": "^5.0.0",
