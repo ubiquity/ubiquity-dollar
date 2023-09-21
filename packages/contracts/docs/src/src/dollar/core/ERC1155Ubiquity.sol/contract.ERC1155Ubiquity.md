@@ -1,8 +1,8 @@
 # ERC1155Ubiquity
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/core/ERC1155Ubiquity.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/919c4559f6ae676c73c366738eca4b6eb0896e37/src/dollar/core/ERC1155Ubiquity.sol)
 
 **Inherits:**
-ERC1155, ERC1155Burnable, ERC1155Pausable
+Initializable, ERC1155BurnableUpgradeable, ERC1155PausableUpgradeable, UUPSUpgradeable
 
 ERC1155 Ubiquity preset
 
@@ -37,6 +37,15 @@ Total supply among all token ids
 
 ```solidity
 uint256 public totalSupply;
+```
+
+
+### __gap
+Allows for future upgrades on the base contract without affecting the storage of the derived contract
+
+
+```solidity
+uint256[50] private __gap;
 ```
 
 
@@ -79,18 +88,42 @@ modifier onlyAdmin();
 
 ### constructor
 
-Contract constructor
+Ensures __ERC1155Ubiquity_init cannot be called on the implementation contract
 
 
 ```solidity
-constructor(address _manager, string memory uri) ERC1155(uri);
+constructor();
+```
+
+### __ERC1155Ubiquity_init
+
+Initializes this contract with all base(parent) contracts
+
+
+```solidity
+function __ERC1155Ubiquity_init(address _manager, string memory _uri) public initializer onlyInitializing;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_manager`|`address`|Access control address|
-|`uri`|`string`|Base URI|
+|`_manager`|`address`|Address of the manager of the contract|
+|`_uri`|`string`|Base URI|
+
+
+### __ERC1155Ubiquity_init_unchained
+
+Initializes the current contract
+
+
+```solidity
+function __ERC1155Ubiquity_init_unchained(address _manager) public initializer onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_manager`|`address`|Address of the manager of the contract|
 
 
 ### getManager
@@ -310,6 +343,21 @@ function _beforeTokenTransfer(
     uint256[] memory ids,
     uint256[] memory amounts,
     bytes memory data
-) internal virtual override(ERC1155, ERC1155Pausable);
+) internal virtual override(ERC1155PausableUpgradeable, ERC1155Upgradeable);
 ```
+
+### _authorizeUpgrade
+
+Allows an admin to upgrade to another implementation contract
+
+
+```solidity
+function _authorizeUpgrade(address newImplementation) internal virtual override onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newImplementation`|`address`|Address of the new implementation contract|
+
 

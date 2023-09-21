@@ -1,8 +1,8 @@
 # ERC20Ubiquity
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/core/ERC20Ubiquity.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/919c4559f6ae676c73c366738eca4b6eb0896e37/src/dollar/core/ERC20Ubiquity.sol)
 
 **Inherits:**
-ERC20Permit, ERC20Pausable, [IERC20Ubiquity](/src/dollar/interfaces/IERC20Ubiquity.sol/interface.IERC20Ubiquity.md)
+Initializable, UUPSUpgradeable, ERC20Upgradeable, ERC20PermitUpgradeable, ERC20PausableUpgradeable
 
 Base contract for Ubiquity ERC20 tokens (Dollar, Credit, Governance)
 
@@ -31,6 +31,15 @@ IAccessControl public accessControl;
 ```
 
 
+### __gap
+Allows for future upgrades on the base contract without affecting the storage of the derived contract
+
+
+```solidity
+uint256[50] private __gap;
+```
+
+
 ## Functions
 ### onlyPauser
 
@@ -52,18 +61,43 @@ modifier onlyAdmin();
 
 ### constructor
 
-Contract constructor
+Ensures __ERC20Ubiquity_init cannot be called on the implementation contract
 
 
 ```solidity
-constructor(address _manager, string memory name_, string memory symbol_) ERC20(name_, symbol_) ERC20Permit(name_);
+constructor();
+```
+
+### __ERC20Ubiquity_init
+
+Initializes this contract with all base(parent) contracts
+
+
+```solidity
+function __ERC20Ubiquity_init(address _manager, string memory name_, string memory symbol_) internal onlyInitializing;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_manager`|`address`|Access control address|
+|`_manager`|`address`|Address of the manager of the contract|
 |`name_`|`string`|Token name|
+|`symbol_`|`string`|Token symbol|
+
+
+### __ERC20Ubiquity_init_unchained
+
+Initializes the current contract
+
+
+```solidity
+function __ERC20Ubiquity_init_unchained(address _manager, string memory symbol_) internal onlyInitializing;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`_manager`|`address`|Address of the manager of the contract|
 |`symbol_`|`string`|Token symbol|
 
 
@@ -196,7 +230,7 @@ will be transferred to `to`.
 function _beforeTokenTransfer(address from, address to, uint256 amount)
     internal
     virtual
-    override(ERC20, ERC20Pausable);
+    override(ERC20Upgradeable, ERC20PausableUpgradeable);
 ```
 
 ### _transfer
@@ -213,5 +247,37 @@ Requirements:
 
 ```solidity
 function _transfer(address sender, address recipient, uint256 amount) internal virtual override whenNotPaused;
+```
+
+### _authorizeUpgrade
+
+Allows an admin to upgrade to another implementation contract
+
+
+```solidity
+function _authorizeUpgrade(address newImplementation) internal virtual override onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newImplementation`|`address`|Address of the new implementation contract|
+
+
+## Events
+### Burning
+Emitted when tokens are burned
+
+
+```solidity
+event Burning(address indexed _burned, uint256 _amount);
+```
+
+### Minting
+Emitted when tokens are minted
+
+
+```solidity
+event Minting(address indexed _to, address indexed _minter, uint256 _amount);
 ```
 

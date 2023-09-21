@@ -1,5 +1,5 @@
 # UbiquityGovernanceToken
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/core/UbiquityGovernanceToken.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/919c4559f6ae676c73c366738eca4b6eb0896e37/src/dollar/core/UbiquityGovernanceToken.sol)
 
 **Inherits:**
 [ERC20Ubiquity](/src/dollar/core/ERC20Ubiquity.sol/abstract.ERC20Ubiquity.md)
@@ -10,17 +10,26 @@ Ubiquity Governance token contract
 ## Functions
 ### constructor
 
-Contract constructor
+Ensures initialize cannot be called on the implementation contract
 
 
 ```solidity
-constructor(address _manager) ERC20Ubiquity(_manager, "Ubiquity", "UBQ");
+constructor();
+```
+
+### initialize
+
+Initializes the contract
+
+
+```solidity
+function initialize(address _manager) public initializer;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_manager`|`address`|Access control address|
+|`_manager`|`address`|Address of the Ubiquity Manager|
 
 
 ### onlyGovernanceMinter
@@ -63,7 +72,7 @@ Mints Governance tokens to the `to` address
 
 
 ```solidity
-function mint(address to, uint256 amount) public override onlyGovernanceMinter whenNotPaused;
+function mint(address to, uint256 amount) public onlyGovernanceMinter whenNotPaused;
 ```
 **Parameters**
 
@@ -71,5 +80,20 @@ function mint(address to, uint256 amount) public override onlyGovernanceMinter w
 |----|----|-----------|
 |`to`|`address`|Address to mint tokens to|
 |`amount`|`uint256`|Amount of tokens to mint|
+
+
+### _authorizeUpgrade
+
+Allows an admin to upgrade to another implementation contract
+
+
+```solidity
+function _authorizeUpgrade(address newImplementation) internal override onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newImplementation`|`address`|Address of the new implementation contract|
 
 

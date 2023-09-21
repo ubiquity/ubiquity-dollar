@@ -1,5 +1,5 @@
 # CreditNft
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/core/CreditNft.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/919c4559f6ae676c73c366738eca4b6eb0896e37/src/dollar/core/CreditNft.sol)
 
 **Inherits:**
 [ERC1155Ubiquity](/src/dollar/core/ERC1155Ubiquity.sol/contract.ERC1155Ubiquity.md), [ICreditNft](/src/dollar/interfaces/ICreditNft.sol/interface.ICreditNft.md)
@@ -55,19 +55,26 @@ modifier onlyCreditNftManager();
 
 ### constructor
 
-Contract constructor
-
-*URI param is if we want to add an off-chain meta data uri associated with this contract*
+Ensures initialize cannot be called on the implementation contract
 
 
 ```solidity
-constructor(address _manager) ERC1155Ubiquity(_manager, "URI");
+constructor();
+```
+
+### initialize
+
+Initializes the contract
+
+
+```solidity
+function initialize(address _manager) public initializer;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_manager`|`address`|Access control address|
+|`_manager`|`address`|Address of the manager of the contract|
 
 
 ### mintCreditNft
@@ -125,6 +132,21 @@ Returns outstanding debt by fetching current tally and removing any expired debt
 ```solidity
 function getTotalOutstandingDebt() public view returns (uint256);
 ```
+
+### _authorizeUpgrade
+
+Allows an admin to upgrade to another implementation contract
+
+
+```solidity
+function _authorizeUpgrade(address newImplementation) internal override(ERC1155Ubiquity) onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newImplementation`|`address`|Address of the new implementation contract|
+
 
 ## Events
 ### MintedCreditNft

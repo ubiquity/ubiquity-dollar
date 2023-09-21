@@ -1,8 +1,8 @@
 # StakingShare
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e88784f36aa579c1fdb9437e9ef9cdafefb31fa7/src/dollar/core/StakingShare.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/919c4559f6ae676c73c366738eca4b6eb0896e37/src/dollar/core/StakingShare.sol)
 
 **Inherits:**
-[ERC1155Ubiquity](/src/dollar/core/ERC1155Ubiquity.sol/contract.ERC1155Ubiquity.md), ERC1155URIStorage
+[ERC1155Ubiquity](/src/dollar/core/ERC1155Ubiquity.sol/contract.ERC1155Ubiquity.md), ERC1155URIStorageUpgradeable
 
 Contract representing a staking share in the form of ERC1155 token
 
@@ -31,7 +31,7 @@ Base token URI
 
 
 ```solidity
-string private _baseURI = "";
+string private _baseURI;
 ```
 
 
@@ -65,18 +65,27 @@ modifier onlyPauser() override;
 
 ### constructor
 
-Contract constructor
+Ensures initialize cannot be called on the implementation contract
 
 
 ```solidity
-constructor(address _manager, string memory _uri) ERC1155Ubiquity(_manager, _uri);
+constructor();
+```
+
+### initialize
+
+Initializes this contract
+
+
+```solidity
+function initialize(address _manager, string memory _uri) public virtual initializer;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_manager`|`address`|Access control address|
-|`_uri`|`string`|URI string|
+|`_manager`|`address`|Address of the manager of the contract|
+|`_uri`|`string`|Base URI|
 
 
 ### updateStake
@@ -144,7 +153,7 @@ acceptance magic value.
 ```solidity
 function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes memory data)
     public
-    override(ERC1155, ERC1155Ubiquity)
+    override(ERC1155Upgradeable, ERC1155Ubiquity)
     whenNotPaused;
 ```
 
@@ -201,7 +210,7 @@ function safeBatchTransferFrom(
     uint256[] memory ids,
     uint256[] memory amounts,
     bytes memory data
-) public virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused;
+) public virtual override(ERC1155Upgradeable, ERC1155Ubiquity) whenNotPaused;
 ```
 
 ### _burnBatch
@@ -216,7 +225,7 @@ Requirements:
 function _burnBatch(address account, uint256[] memory ids, uint256[] memory amounts)
     internal
     virtual
-    override(ERC1155, ERC1155Ubiquity)
+    override(ERC1155Upgradeable, ERC1155Ubiquity)
     whenNotPaused;
 ```
 
@@ -245,7 +254,7 @@ function _beforeTokenTransfer(
     uint256[] memory ids,
     uint256[] memory amounts,
     bytes memory data
-) internal virtual override(ERC1155, ERC1155Ubiquity);
+) internal virtual override(ERC1155Upgradeable, ERC1155Ubiquity);
 ```
 
 ### uri
@@ -254,7 +263,12 @@ Returns URI by token id
 
 
 ```solidity
-function uri(uint256 tokenId) public view virtual override(ERC1155, ERC1155URIStorage) returns (string memory);
+function uri(uint256 tokenId)
+    public
+    view
+    virtual
+    override(ERC1155Upgradeable, ERC1155URIStorageUpgradeable)
+    returns (string memory);
 ```
 **Parameters**
 
@@ -282,7 +296,7 @@ Requirements:
 function _burn(address account, uint256 id, uint256 amount)
     internal
     virtual
-    override(ERC1155, ERC1155Ubiquity)
+    override(ERC1155Upgradeable, ERC1155Ubiquity)
     whenNotPaused;
 ```
 
@@ -330,6 +344,21 @@ function getBaseUri() external view returns (string memory);
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`string`|Base URI string|
+
+
+### _authorizeUpgrade
+
+Allows an admin to upgrade to another implementation contract
+
+
+```solidity
+function _authorizeUpgrade(address newImplementation) internal override onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newImplementation`|`address`|Address of the new implementation contract|
 
 
 ## Structs
