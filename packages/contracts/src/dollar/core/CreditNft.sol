@@ -2,8 +2,10 @@
 pragma solidity 0.8.19;
 
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import "solidity-linked-list/contracts/StructuredLinkedList.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
+import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import {ICreditNft} from "../../dollar/interfaces/ICreditNft.sol";
+import "solidity-linked-list/contracts/StructuredLinkedList.sol";
 import "../libraries/Constants.sol";
 
 /**
@@ -44,18 +46,21 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @notice Modifier checks that the method is called by a user with the "CreditNft manager" role
     modifier onlyCreditNftManager() {
         require(
-            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, _msgSender()),
             "Caller is not a CreditNft manager"
         );
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @dev URI param is if we want to add an off-chain meta data uri associated with this contract
-     * @param _manager Access control address
-     */
-    constructor(address _manager) ERC1155Ubiquity(_manager, "URI") {
+    /// @notice Ensures initialize cannot be called on the implementation contract
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @notice Initializes the contract
+    /// @param _manager Address of the manager of the contract
+    function initialize(address _manager) public initializer {
+        __ERC1155Ubiquity_init(_manager, "URI");
         _totalOutstandingDebt = 0;
     }
 
@@ -159,4 +164,10 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
         return outstandingDebt;
     }
+
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override(ERC1155Ubiquity) onlyAdmin {}
 }

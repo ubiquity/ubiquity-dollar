@@ -4,6 +4,9 @@ pragma solidity 0.8.19;
 import "./04_UbiquityCredit.s.sol";
 
 contract StakingShareScript is CreditScript {
+    StakingShare public stakingShare;
+    ERC1967Proxy public proxyStakingShare;
+
     function run() public virtual override {
         super.run();
         vm.startBroadcast(deployerPrivateKey);
@@ -13,11 +16,19 @@ contract StakingShareScript is CreditScript {
         // add staking shares
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-
-        address stakingShareAddress = address(
-            new StakingShare(address(diamond), uri)
+        bytes memory initData = abi.encodeWithSignature(
+            "initialize(address,string)",
+            address(diamond),
+            uri
         );
-        IManager.setStakingShareAddress(stakingShareAddress);
+        proxyStakingShare = new ERC1967Proxy(
+            address(new StakingShare()),
+            initData
+        );
+
+        stakingShare = StakingShare(address(proxyStakingShare));
+
+        IManager.setStakingShareAddress(address(stakingShare));
 
         vm.stopBroadcast();
     }

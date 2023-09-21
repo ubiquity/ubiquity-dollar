@@ -4,6 +4,7 @@ pragma solidity ^0.8.19;
 import {ERC20Ubiquity} from "./ERC20Ubiquity.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IIncentive} from "../../dollar/interfaces/IIncentive.sol";
+
 import "../libraries/Constants.sol";
 
 /**
@@ -22,23 +23,24 @@ contract UbiquityDollarToken is ERC20Ubiquity {
         address indexed _incentiveContract
     );
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     */
-    constructor(
-        address _manager
-    )
+    /// @notice Ensures initialize cannot be called on the implementation contract
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @notice Initializes the contract
+    /// @param _manager Address of the Ubiquity Manager
+    function initialize(address _manager) public initializer {
         // cspell: disable-next-line
-        ERC20Ubiquity(_manager, "Ubiquity Dollar", "uAD")
-    {} // solhint-disable-line no-empty-blocks, max-line-length
+        __ERC20Ubiquity_init(_manager, "Ubiquity Dollar", "uAD");
+    }
 
     // ----------- Modifiers -----------
 
     /// @notice Modifier checks that the method is called by a user with the "Dollar minter" role
     modifier onlyDollarMinter() {
         require(
-            accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, _msgSender()),
             "Dollar token: not minter"
         );
         _;
@@ -47,7 +49,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     /// @notice Modifier checks that the method is called by a user with the "Dollar burner" role
     modifier onlyDollarBurner() {
         require(
-            accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, _msgSender()),
             "Dollar token: not burner"
         );
         _;
@@ -65,7 +67,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
      */
     function setIncentiveContract(address account, address incentive) external {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, _msgSender()),
             "Dollar: must have admin role"
         );
 
@@ -90,7 +92,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
             IIncentive(senderIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
@@ -101,22 +103,22 @@ contract UbiquityDollarToken is ERC20Ubiquity {
             IIncentive(recipientIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
 
         // incentive on operator
-        address operatorIncentive = incentiveContract[msg.sender];
+        address operatorIncentive = incentiveContract[_msgSender()];
         if (
-            msg.sender != sender &&
-            msg.sender != recipient &&
+            _msgSender() != sender &&
+            _msgSender() != recipient &&
             operatorIncentive != address(0)
         ) {
             IIncentive(operatorIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
@@ -127,7 +129,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
             IIncentive(allIncentive).incentivize(
                 sender,
                 recipient,
-                msg.sender,
+                _msgSender(),
                 amount
             );
         }
@@ -177,8 +179,14 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     function mint(
         address to,
         uint256 amount
-    ) public override onlyDollarMinter whenNotPaused {
+    ) public onlyDollarMinter whenNotPaused {
         _mint(to, amount);
-        emit Minting(to, msg.sender, amount);
+        emit Minting(to, _msgSender(), amount);
     }
+
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
 }

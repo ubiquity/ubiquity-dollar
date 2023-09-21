@@ -102,7 +102,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         assertEq(collateralDeposited, finBal - initBal);
         assertEq(tokReturned, result);
         assertEq(tokReturned, IBondingCurveFacet.getShare(secondAccount));
-        assertEq(tokReturned, IUbiquityNFT.balanceOf(secondAccount, 1));
+        assertEq(tokReturned, creditNft.balanceOf(secondAccount, 1));
     }
 
     function testWithdraw(uint32 connectorWeight, uint256 baseY) public {

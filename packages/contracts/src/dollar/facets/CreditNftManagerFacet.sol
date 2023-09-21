@@ -3,7 +3,6 @@ pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-
 import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 

@@ -25,10 +25,7 @@ import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFac
 import {Diamond, DiamondArgs} from "../../src/dollar/Diamond.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
-import {UbiquityDollarToken} from "../../src/dollar/core/UbiquityDollarToken.sol";
 import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
-import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
-import {UbiquityGovernanceToken} from "../../src/dollar/core/UbiquityGovernanceToken.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
@@ -58,14 +55,11 @@ abstract contract DiamondSetup is DiamondTestHelper {
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
 
-    UbiquityDollarToken IDollar;
-    ERC1155Ubiquity IUbiquityNFT;
     // interfaces with Facet ABI connected to diamond address
     IDiamondLoupe ILoupe;
     IDiamondCut ICut;
     ManagerFacet IManager;
     TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
-    AccessControlFacet IAccessControl;
 
     CollectableDustFacet ICollectableDustFacet;
     ChefFacet IChefFacet;
@@ -83,10 +77,6 @@ abstract contract DiamondSetup is DiamondTestHelper {
 
     DollarMintCalculatorFacet IDollarMintCalcFacet;
     DollarMintExcessFacet IDollarMintExcessFacet;
-
-    StakingShare IStakingShareToken;
-    // adding governance token
-    UbiquityGovernanceToken IGovToken;
 
     string[] facetNames;
     address[] facetAddressList;
@@ -699,52 +689,10 @@ abstract contract DiamondSetup is DiamondTestHelper {
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
         vm.startPrank(admin);
-        // grant diamond dollar minting and burning rights
-        IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
-        // grand diamond Credit token minting and burning rights
-        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
-        // grant diamond token admin rights
-        IAccessControl.grantRole(
-            GOVERNANCE_TOKEN_MANAGER_ROLE,
-            address(diamond)
-        );
-        // grant diamond token minter rights
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        // // grant diamond dollar minting and burning rights
         IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
         // add staking shares
-        string
-            memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-
-        address stakingShareAddress = address(
-            new StakingShare(address(diamond), uri)
-        );
-        // adding governance token
-        address governanceTokenAddress = address(
-            new UbiquityGovernanceToken(address(diamond))
-        );
-        // adding dollar token
-        address dollarTokenAddress = address(
-            new UbiquityDollarToken(address(diamond))
-        );
-        // adding ubiquistick
-        address ubiquiStickAddress = address(
-            new ERC1155Ubiquity(address(diamond), uri)
-        );
-        IUbiquityNFT = new ERC1155Ubiquity(address(diamond), uri);
-
-        // add staking shares
-        IManager.setStakingShareAddress(stakingShareAddress);
-        // adding governance token
-        IManager.setGovernanceTokenAddress(governanceTokenAddress);
-        // adding dollar token
-        IManager.setDollarTokenAddress(dollarTokenAddress);
-        IManager.setUbiquistickAddress(ubiquiStickAddress);
-        IDollar = UbiquityDollarToken(IManager.dollarTokenAddress());
-        IGovToken = UbiquityGovernanceToken(IManager.governanceTokenAddress());
-        IStakingShareToken = StakingShare(IManager.stakingShareAddress());
-        assertEq(IDollar.decimals(), 18);
+        __setupUUPS(address(diamond));
         vm.stopPrank();
     }
 }

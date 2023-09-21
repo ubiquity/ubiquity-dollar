@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
+import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import {ERC1155Ubiquity} from "./ERC1155Ubiquity.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import {ERC1155URIStorageUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155URIStorageUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../../dollar/utils/SafeAddArray.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
 /// @notice Contract representing a staking share in the form of ERC1155 token
-contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
+contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
     using SafeAddArray for uint256[];
 
     /// @notice Stake struct
@@ -33,7 +35,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     uint256 private _totalLP;
 
     /// @notice Base token URI
-    string private _baseURI = "";
+    string private _baseURI;
 
     // ----------- Modifiers -----------
 
@@ -64,15 +66,20 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     * @param _uri URI string
-     */
-    constructor(
+    /// @notice Ensures initialize cannot be called on the implementation contract
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @notice Initializes this contract
+    /// @param _manager Address of the manager of the contract
+    /// @param _uri Base URI
+    function initialize(
         address _manager,
         string memory _uri
-    ) ERC1155Ubiquity(_manager, _uri) {}
+    ) public virtual initializer {
+        __ERC1155Ubiquity_init(_manager, _uri);
+    }
 
     /**
      * @notice Updates a staking share
@@ -148,7 +155,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         uint256 id,
         uint256 amount,
         bytes memory data
-    ) public override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+    ) public override(ERC1155Upgradeable, ERC1155Ubiquity) whenNotPaused {
         super.safeTransferFrom(from, to, id, amount, data);
     }
 
@@ -176,7 +183,12 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) public virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+    )
+        public
+        virtual
+        override(ERC1155Upgradeable, ERC1155Ubiquity)
+        whenNotPaused
+    {
         super.safeBatchTransferFrom(from, to, ids, amounts, data);
     }
 
@@ -185,7 +197,12 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         address account,
         uint256[] memory ids,
         uint256[] memory amounts
-    ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+    )
+        internal
+        virtual
+        override(ERC1155Upgradeable, ERC1155Ubiquity)
+        whenNotPaused
+    {
         super._burnBatch(account, ids, amounts);
     }
 
@@ -197,7 +214,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155, ERC1155Ubiquity) {
+    ) internal virtual override(ERC1155Upgradeable, ERC1155Ubiquity) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
@@ -212,7 +229,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         public
         view
         virtual
-        override(ERC1155, ERC1155URIStorage)
+        override(ERC1155Upgradeable, ERC1155URIStorageUpgradeable)
         returns (string memory)
     {
         return super.uri(tokenId);
@@ -223,7 +240,12 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
         address account,
         uint256 id,
         uint256 amount
-    ) internal virtual override(ERC1155, ERC1155Ubiquity) whenNotPaused {
+    )
+        internal
+        virtual
+        override(ERC1155Upgradeable, ERC1155Ubiquity)
+        whenNotPaused
+    {
         require(amount == 1, "amount <> 1");
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
@@ -259,4 +281,10 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorage {
     function getBaseUri() external view returns (string memory) {
         return _baseURI;
     }
+
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyAdmin {}
 }

@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "forge-std/Test.sol";
-import "forge-std/Vm.sol";
 import "../../src/dollar/interfaces/IDiamondCut.sol";
 import "../../src/dollar/interfaces/IDiamondLoupe.sol";
 
-contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, Test {
+import "./UUPSTestHelper.sol";
+
+contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, UUPSTestHelper, Test {
     uint256 private seed;
 
     modifier prankAs(address caller) {

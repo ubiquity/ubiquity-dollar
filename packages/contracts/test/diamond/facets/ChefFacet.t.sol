@@ -30,9 +30,6 @@ contract ZeroStateChef is DiamondSetup {
 
     string uri =
         "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
-    StakingShare stakingShare;
-    BondingShare stakingShareV1;
-    IERC20Ubiquity governanceToken;
 
     event Deposit(
         address indexed user,
@@ -94,14 +91,12 @@ contract ZeroStateChef is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        stakingShareV1 = new BondingShare(address(diamond));
-        IManager.setStakingShareAddress(address(stakingShareV1));
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        IManager.setStakingShareAddress(address(stakingShare));
+        stakingShare.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(stakingShareV1)
+            address(stakingShare)
         );
-        governanceToken = IERC20Ubiquity(IManager.governanceTokenAddress());
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
         address curve3CrvBasePool = address(
@@ -134,9 +129,6 @@ contract ZeroStateChef is DiamondSetup {
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
-        );
-        UbiquityCreditToken creditToken = new UbiquityCreditToken(
-            address(IManager)
         );
         IManager.setCreditTokenAddress(address(creditToken));
 
@@ -178,8 +170,6 @@ contract ZeroStateChef is DiamondSetup {
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
         vm.startPrank(admin);
-        stakingShare = new StakingShare(address(diamond), uri);
-        IManager.setStakingShareAddress(address(stakingShare));
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
@@ -189,10 +179,10 @@ contract ZeroStateChef is DiamondSetup {
         vm.stopPrank();
 
         vm.prank(secondAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
 
         vm.prank(thirdAccount);
-        stakingShareV1.setApprovalForAll(address(diamond), true);
+        stakingShare.setApprovalForAll(address(diamond), true);
     }
 }
 

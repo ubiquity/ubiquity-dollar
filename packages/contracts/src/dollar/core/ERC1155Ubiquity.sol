@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Pausable.sol";
+import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
+import {ERC1155BurnableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
+import {ERC1155PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
+import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
@@ -16,7 +18,12 @@ import "../../../src/dollar/utils/SafeAddArray.sol";
  * - TotalSupply per id
  * - Ubiquity Manager access control
  */
-contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
+contract ERC1155Ubiquity is
+    Initializable,
+    ERC1155BurnableUpgradeable,
+    ERC1155PausableUpgradeable,
+    UUPSUpgradeable
+{
     using SafeAddArray for uint256[];
 
     /// @notice Access control interface
@@ -33,7 +40,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyMinter() virtual {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not minter"
         );
         _;
@@ -42,7 +49,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyBurner() virtual {
         require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
+            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not burner"
         );
         _;
@@ -51,7 +58,7 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() virtual {
         require(
-            accessControl.hasRole(PAUSER_ROLE, msg.sender),
+            accessControl.hasRole(PAUSER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not pauser"
         );
         _;
@@ -60,18 +67,38 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
     /// @notice Modifier checks that the method is called by a user with the "Admin" role
     modifier onlyAdmin() {
         require(
-            accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
+            accessControl.hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
             "ERC20Ubiquity: not admin"
         );
         _;
     }
 
-    /**
-     * @notice Contract constructor
-     * @param _manager Access control address
-     * @param uri Base URI
-     */
-    constructor(address _manager, string memory uri) ERC1155(uri) {
+    /// @notice Ensures __ERC1155Ubiquity_init cannot be called on the implementation contract
+    constructor() {
+        _disableInitializers();
+    }
+
+    /// @notice Initializes this contract with all base(parent) contracts
+    /// @param _manager Address of the manager of the contract
+    /// @param _uri Base URI
+    function __ERC1155Ubiquity_init(
+        address _manager,
+        string memory _uri
+    ) public initializer onlyInitializing {
+        // init base contracts
+        __ERC1155_init(_uri);
+        __ERC1155Burnable_init();
+        __ERC1155Pausable_init();
+        __UUPSUpgradeable_init();
+        // init current contract
+        __ERC1155Ubiquity_init_unchained(_manager);
+    }
+
+    /// @notice Initializes the current contract
+    /// @param _manager Address of the manager of the contract
+    function __ERC1155Ubiquity_init_unchained(
+        address _manager
+    ) public initializer onlyInitializing {
         accessControl = IAccessControl(_manager);
     }
 
@@ -270,7 +297,20 @@ contract ERC1155Ubiquity is ERC1155, ERC1155Burnable, ERC1155Pausable {
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    ) internal virtual override(ERC1155, ERC1155Pausable) {
+    )
+        internal
+        virtual
+        override(ERC1155PausableUpgradeable, ERC1155Upgradeable)
+    {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
+
+    /// @notice Allows an admin to upgrade to another implementation contract
+    /// @param newImplementation Address of the new implementation contract
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal virtual override onlyAdmin {}
+
+    /// @notice Allows for future upgrades on the base contract without affecting the storage of the derived contract
+    uint256[50] private __gap;
 }
