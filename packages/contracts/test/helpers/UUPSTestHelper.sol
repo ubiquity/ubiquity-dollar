@@ -14,25 +14,24 @@ import "../../src/dollar/libraries/Constants.sol";
 import "forge-std/Test.sol";
 
 contract UUPSTestHelper {
-    CreditNft internal creditNft;
-    StakingShare internal stakingShare;
-    UbiquityCreditToken internal creditToken;
-    UbiquityDollarToken internal IDollar;
-    UbiquityGovernanceToken internal governanceToken;
-    ERC1155Ubiquity internal IUbiquiStick;
+    CreditNft creditNft;
+    StakingShare stakingShare;
+    UbiquityCreditToken creditToken;
+    UbiquityDollarToken IDollar;
+    UbiquityGovernanceToken governanceToken;
+    ERC1155Ubiquity ubiquiStick;
 
-    ERC1967Proxy internal proxyCreditNft;
-    ERC1967Proxy internal proxyStakingShare;
-    ERC1967Proxy internal proxyCreditToken;
-    ERC1967Proxy internal proxyDollarToken;
-    ERC1967Proxy internal proxyGovernanceToken;
-    ERC1967Proxy internal proxyUbiquiStick;
+    ERC1967Proxy proxyCreditNft;
+    ERC1967Proxy proxyStakingShare;
+    ERC1967Proxy proxyCreditToken;
+    ERC1967Proxy proxyDollarToken;
+    ERC1967Proxy proxyGovernanceToken;
+    ERC1967Proxy proxyUbiquiStick;
 
-    ManagerFacet internal iManager;
-    AccessControlFacet internal IAccessControl;
+    AccessControlFacet IAccessControl;
 
     function __setupUUPS(address manager) public {
-        iManager = ManagerFacet(manager);
+        ManagerFacet managerFacet = ManagerFacet(manager);
         IAccessControl = AccessControlFacet(manager);
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
@@ -85,18 +84,19 @@ contract UUPSTestHelper {
             uri
         );
 
+        // TODO: move from UUPSTestHelper
         proxyUbiquiStick = new ERC1967Proxy(
             address(new ERC1155Ubiquity()),
             ubq1155Payload
         );
-        IUbiquiStick = ERC1155Ubiquity(address(proxyUbiquiStick));
+        ubiquiStick = ERC1155Ubiquity(address(proxyUbiquiStick));
 
-        iManager.setUbiquistickAddress(address(IUbiquiStick));
-        iManager.setStakingShareAddress(address(stakingShare));
-        iManager.setCreditTokenAddress(address(creditToken));
-        iManager.setDollarTokenAddress(address(IDollar));
-        iManager.setGovernanceTokenAddress(address(governanceToken));
-        iManager.setCreditNftAddress(address(creditNft));
+        managerFacet.setUbiquistickAddress(address(ubiquiStick));
+        managerFacet.setStakingShareAddress(address(stakingShare));
+        managerFacet.setCreditTokenAddress(address(creditToken));
+        managerFacet.setDollarTokenAddress(address(IDollar));
+        managerFacet.setGovernanceTokenAddress(address(governanceToken));
+        managerFacet.setCreditNftAddress(address(creditNft));
         // grant diamond dollar minting and burning rights
         IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(manager));
         IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(manager));
