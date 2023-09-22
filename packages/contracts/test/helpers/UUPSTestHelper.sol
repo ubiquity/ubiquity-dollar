@@ -13,7 +13,16 @@ import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import "../../src/dollar/libraries/Constants.sol";
 import "forge-std/Test.sol";
 
+/**
+ * Initializes core contracts with UUPS upgradeability:
+ * - UbiquityDollarToken
+ * - UbiquityCreditToken
+ * - UbiquityGovernanceToken
+ * - CreditNft
+ * - StakingShare
+ */
 contract UUPSTestHelper {
+    // core contracts pointing to proxies
     CreditNft creditNft;
     StakingShare stakingShare;
     UbiquityCreditToken creditToken;
@@ -21,6 +30,7 @@ contract UUPSTestHelper {
     UbiquityGovernanceToken governanceToken;
     ERC1155Ubiquity ubiquiStick;
 
+    // proxies for core contracts
     ERC1967Proxy proxyCreditNft;
     ERC1967Proxy proxyStakingShare;
     ERC1967Proxy proxyCreditToken;
@@ -28,100 +38,108 @@ contract UUPSTestHelper {
     ERC1967Proxy proxyGovernanceToken;
     ERC1967Proxy proxyUbiquiStick;
 
-    function __setupUUPS(address manager) public {
-        ManagerFacet managerFacet = ManagerFacet(manager);
-        AccessControlFacet accessControlFacet = AccessControlFacet(manager);
+    /**
+     * Initializes core contracts with UUPS upgradeability
+     */
+    function __setupUUPS(address diamond) public {
+        bytes memory initData;
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
 
-        bytes memory managerPayload = abi.encodeWithSignature(
-            "initialize(address)",
-            manager
-        );
-        bytes memory manAndUriPayload = abi.encodeWithSignature(
-            "initialize(address,string)",
-            manager,
-            uri
-        );
-
-        proxyCreditNft = new ERC1967Proxy(
-            address(new CreditNft()),
-            managerPayload
-        );
+        // deploy CreditNft
+        initData = abi.encodeWithSignature("initialize(address)", diamond);
+        proxyCreditNft = new ERC1967Proxy(address(new CreditNft()), initData);
         creditNft = CreditNft(address(proxyCreditNft));
 
+        // deploy StakingShare
+        initData = abi.encodeWithSignature(
+            "initialize(address,string)",
+            diamond,
+            uri
+        );
         proxyStakingShare = new ERC1967Proxy(
             address(new StakingShare()),
-            manAndUriPayload
+            initData
         );
         stakingShare = StakingShare(address(proxyStakingShare));
 
+        // deploy UbiquityCreditToken
+        initData = abi.encodeWithSignature("initialize(address)", diamond);
         proxyCreditToken = new ERC1967Proxy(
             address(new UbiquityCreditToken()),
-            managerPayload
+            initData
         );
         creditToken = UbiquityCreditToken(address(proxyCreditToken));
 
+        // deploy UbiquityDollarToken
+        initData = abi.encodeWithSignature("initialize(address)", diamond);
         proxyDollarToken = new ERC1967Proxy(
             address(new UbiquityDollarToken()),
-            managerPayload
+            initData
         );
         dollarToken = UbiquityDollarToken(address(proxyDollarToken));
 
+        // deploy UbiquityGovernanceToken
+        initData = abi.encodeWithSignature("initialize(address)", diamond);
         proxyGovernanceToken = new ERC1967Proxy(
             address(new UbiquityGovernanceToken()),
-            managerPayload
+            initData
         );
         governanceToken = UbiquityGovernanceToken(
             address(proxyGovernanceToken)
         );
 
-        // deploy Ubiquistick
+        // deploy UbiquiStick (not a core contract, not upgradeable)
         // TODO: move from UUPSTestHelper to a more relevant place
-        bytes memory ubq1155Payload = abi.encodeWithSignature(
+        initData = abi.encodeWithSignature(
             "__ERC1155Ubiquity_init(address,string)",
-            manager,
+            diamond,
             uri
         );
         proxyUbiquiStick = new ERC1967Proxy(
             address(new ERC1155Ubiquity()),
-            ubq1155Payload
+            initData
         );
         ubiquiStick = ERC1155Ubiquity(address(proxyUbiquiStick));
 
+        // set addresses of the newly deployed contracts in the Diamond
+        ManagerFacet managerFacet = ManagerFacet(diamond);
         managerFacet.setUbiquistickAddress(address(ubiquiStick));
         managerFacet.setStakingShareAddress(address(stakingShare));
         managerFacet.setCreditTokenAddress(address(creditToken));
         managerFacet.setDollarTokenAddress(address(dollarToken));
         managerFacet.setGovernanceTokenAddress(address(governanceToken));
         managerFacet.setCreditNftAddress(address(creditNft));
+
+        // set access control
+        AccessControlFacet accessControlFacet = AccessControlFacet(diamond);
         // grant diamond dollar minting and burning rights
         accessControlFacet.grantRole(
             DOLLAR_TOKEN_MINTER_ROLE,
-            address(manager)
+            address(diamond)
         );
         accessControlFacet.grantRole(
             DOLLAR_TOKEN_BURNER_ROLE,
-            address(manager)
+            address(diamond)
         );
         // grand diamond Credit token minting and burning rights
         accessControlFacet.grantRole(
             CREDIT_TOKEN_MINTER_ROLE,
-            address(manager)
+            address(diamond)
         );
         accessControlFacet.grantRole(
             CREDIT_TOKEN_BURNER_ROLE,
-            address(manager)
+            address(diamond)
         );
         // grant diamond token admin rights
         accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MANAGER_ROLE,
-            address(manager)
+            address(diamond)
         );
         // grant diamond token minter rights
         accessControlFacet.grantRole(
             STAKING_SHARE_MINTER_ROLE,
-            address(manager)
+            address(diamond)
         );
     }
 }
