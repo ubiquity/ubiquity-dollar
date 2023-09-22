@@ -14,7 +14,7 @@ contract TWAPOracleDollar3poolFacetTest is DiamondSetup {
         super.setUp();
 
         metaPoolAddress = address(
-            new MockMetaPool(address(IDollar), curve3CRVTokenAddress)
+            new MockMetaPool(address(dollarToken), curve3CRVTokenAddress)
         );
         vm.prank(owner);
         ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CRVTokenAddress);
@@ -37,7 +37,9 @@ contract TWAPOracleDollar3poolFacetTest is DiamondSetup {
         );
         ITWAPOracleDollar3pool.update();
 
-        uint256 amount0Out = ITWAPOracleDollar3pool.consult(address(IDollar));
+        uint256 amount0Out = ITWAPOracleDollar3pool.consult(
+            address(dollarToken)
+        );
         uint256 amount1Out = ITWAPOracleDollar3pool.consult(
             curve3CRVTokenAddress
         );

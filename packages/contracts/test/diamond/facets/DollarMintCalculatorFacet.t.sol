@@ -15,7 +15,7 @@ contract DollarMintCalculatorFacetTest is DiamondSetup {
         dollarManagerAddress = address(diamond);
         twapOracleAddress = address(diamond);
         dollarMintCalculatorAddress = address(diamond);
-        dollarAddress = address(IDollar);
+        dollarAddress = address(dollarToken);
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {

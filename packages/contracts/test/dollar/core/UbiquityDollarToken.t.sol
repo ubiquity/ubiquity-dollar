@@ -33,7 +33,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         incentive_addr = address(new Incentive());
         super.setUp();
         vm.startPrank(admin);
-        dollar_addr = address(IDollar);
+        dollar_addr = address(dollarToken);
 
         IAccessControl.grantRole(
             keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"),
@@ -45,40 +45,40 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
     function testSetManager_ShouldRevert_WhenNotAdmin() public {
         vm.prank(address(0x123abc));
         vm.expectRevert("ERC20Ubiquity: not admin");
-        IDollar.setManager(address(0x123abc));
+        dollarToken.setManager(address(0x123abc));
     }
 
     function testSetManager_ShouldSetManager() public {
         address newDiamond = address(0x123abc);
         vm.prank(admin);
-        IDollar.setManager(newDiamond);
-        require(IDollar.getManager() == newDiamond);
+        dollarToken.setManager(newDiamond);
+        require(dollarToken.getManager() == newDiamond);
     }
 
     function testSetIncentiveContract_ShouldRevert_IfNotAdmin() public {
         vm.prank(mock_sender);
         vm.expectRevert("Dollar: must have admin role");
-        IDollar.setIncentiveContract(mock_sender, incentive_addr);
+        dollarToken.setIncentiveContract(mock_sender, incentive_addr);
 
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit IncentiveContractUpdate(mock_sender, incentive_addr);
-        IDollar.setIncentiveContract(mock_sender, incentive_addr);
+        dollarToken.setIncentiveContract(mock_sender, incentive_addr);
     }
 
     function testTransfer_ShouldCallIncentivize_IfValidTransfer() public {
         address userA = address(0x100001);
         address userB = address(0x100001);
         vm.startPrank(admin);
-        IDollar.mint(userA, 100);
-        IDollar.mint(userB, 100);
-        IDollar.mint(mock_sender, 100);
+        dollarToken.mint(userA, 100);
+        dollarToken.mint(userB, 100);
+        dollarToken.mint(mock_sender, 100);
 
-        IDollar.setIncentiveContract(mock_sender, incentive_addr);
-        IDollar.setIncentiveContract(mock_recipient, incentive_addr);
-        IDollar.setIncentiveContract(mock_operator, incentive_addr);
-        IDollar.setIncentiveContract(address(0), incentive_addr);
-        IDollar.setIncentiveContract(dollar_addr, incentive_addr);
+        dollarToken.setIncentiveContract(mock_sender, incentive_addr);
+        dollarToken.setIncentiveContract(mock_recipient, incentive_addr);
+        dollarToken.setIncentiveContract(mock_operator, incentive_addr);
+        dollarToken.setIncentiveContract(address(0), incentive_addr);
+        dollarToken.setIncentiveContract(dollar_addr, incentive_addr);
         vm.stopPrank();
 
         vm.prank(mock_sender);
@@ -92,7 +92,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
                 1
             )
         );
-        IDollar.transfer(userB, 1);
+        dollarToken.transfer(userB, 1);
 
         vm.prank(userA);
         vm.expectCall(
@@ -105,7 +105,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
                 1
             )
         );
-        IDollar.transfer(mock_recipient, 1);
+        dollarToken.transfer(mock_recipient, 1);
     }
 
     function testUUPS_ShouldUpgradeAndCall() external {
@@ -115,33 +115,35 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
 
         // trying to directly call will fail and exit early so call it like this
-        (bool success, ) = address(IDollar).call(hasUpgradedCall);
+        (bool success, ) = address(dollarToken).call(hasUpgradedCall);
         assertEq(success, false, "should not have upgraded yet");
         require(success == false, "should not have upgraded yet");
 
-        IDollar.upgradeTo(address(newImpl));
+        dollarToken.upgradeTo(address(newImpl));
 
         // It will also fail unless cast so we'll use the same pattern as above
-        (success, ) = address(IDollar).call(hasUpgradedCall);
+        (success, ) = address(dollarToken).call(hasUpgradedCall);
         assertEq(success, true, "should have upgraded");
         require(success == true, "should have upgraded");
 
         vm.expectRevert();
-        IDollar.initialize(address(diamond));
+        dollarToken.initialize(address(diamond));
     }
 
     function testUUPS_ImplChanges() external {
         UbiquityDollarTokenUpgraded newImpl = new UbiquityDollarTokenUpgraded();
 
-        address oldImpl = address(IDollar);
+        address oldImpl = address(dollarToken);
         address newImplAddr = address(newImpl);
 
         vm.prank(admin);
-        IDollar.upgradeTo(newImplAddr);
+        dollarToken.upgradeTo(newImplAddr);
 
         bytes memory getImplCall = abi.encodeWithSignature("getImpl()");
 
-        (bool success, bytes memory data) = address(IDollar).call(getImplCall);
+        (bool success, bytes memory data) = address(dollarToken).call(
+            getImplCall
+        );
         assertEq(success, true, "should have upgraded");
 
         address newAddrViaNewFunc = abi.decode(data, (address));
@@ -165,10 +167,10 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         UbiquityDollarTokenUpgraded newImplT = new UbiquityDollarTokenUpgraded();
 
         vm.startPrank(admin);
-        IDollar.upgradeTo(address(newImpl));
+        dollarToken.upgradeTo(address(newImpl));
         bytes memory getVersionCall = abi.encodeWithSignature("getVersion()");
 
-        (bool success, bytes memory data) = address(IDollar).call(
+        (bool success, bytes memory data) = address(dollarToken).call(
             getVersionCall
         );
         assertEq(success, true, "should have upgraded");
@@ -180,9 +182,9 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
             "should be the same version as only initialized once"
         );
 
-        IDollar.upgradeTo(address(newImplT));
+        dollarToken.upgradeTo(address(newImplT));
 
-        (success, data) = address(IDollar).call(getVersionCall);
+        (success, data) = address(dollarToken).call(getVersionCall);
         assertEq(success, true, "should have upgraded");
         version = abi.decode(data, (uint8));
 
@@ -211,25 +213,25 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         newImpl.initialize(address(diamond));
 
         vm.expectRevert();
-        IDollar.initialize(address(diamond));
+        dollarToken.initialize(address(diamond));
 
-        IDollar.upgradeTo(address(newImpl));
+        dollarToken.upgradeTo(address(newImpl));
 
         vm.expectRevert();
-        IDollar.initialize(address(diamond));
+        dollarToken.initialize(address(diamond));
     }
 
     function testUUPS_AdminAuth() external {
         UbiquityDollarTokenUpgraded newImpl = new UbiquityDollarTokenUpgraded();
 
         vm.expectRevert();
-        IDollar.upgradeTo(address(newImpl));
+        dollarToken.upgradeTo(address(newImpl));
 
         vm.prank(admin);
-        IDollar.upgradeTo(address(newImpl));
+        dollarToken.upgradeTo(address(newImpl));
 
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
-        (bool success, bytes memory data) = address(IDollar).call(
+        (bool success, bytes memory data) = address(dollarToken).call(
             hasUpgradedCall
         );
         bool hasUpgraded = abi.decode(data, (bool));

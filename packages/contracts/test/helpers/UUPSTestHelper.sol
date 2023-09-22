@@ -17,7 +17,7 @@ contract UUPSTestHelper {
     CreditNft creditNft;
     StakingShare stakingShare;
     UbiquityCreditToken creditToken;
-    UbiquityDollarToken IDollar;
+    UbiquityDollarToken dollarToken;
     UbiquityGovernanceToken governanceToken;
     ERC1155Ubiquity ubiquiStick;
 
@@ -68,7 +68,7 @@ contract UUPSTestHelper {
             address(new UbiquityDollarToken()),
             managerPayload
         );
-        IDollar = UbiquityDollarToken(address(proxyDollarToken));
+        dollarToken = UbiquityDollarToken(address(proxyDollarToken));
 
         proxyGovernanceToken = new ERC1967Proxy(
             address(new UbiquityGovernanceToken()),
@@ -94,7 +94,7 @@ contract UUPSTestHelper {
         managerFacet.setUbiquistickAddress(address(ubiquiStick));
         managerFacet.setStakingShareAddress(address(stakingShare));
         managerFacet.setCreditTokenAddress(address(creditToken));
-        managerFacet.setDollarTokenAddress(address(IDollar));
+        managerFacet.setDollarTokenAddress(address(dollarToken));
         managerFacet.setGovernanceTokenAddress(address(governanceToken));
         managerFacet.setCreditNftAddress(address(creditNft));
         // grant diamond dollar minting and burning rights

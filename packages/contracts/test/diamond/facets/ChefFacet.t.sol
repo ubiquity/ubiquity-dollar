@@ -57,7 +57,7 @@ contract ZeroStateChef is DiamondSetup {
         crvToken = new MockERC20("3 CRV", "3CRV", 18);
         curve3CrvToken = address(crvToken);
         metaPoolAddress = address(
-            new MockMetaPool(address(IDollar), curve3CrvToken)
+            new MockMetaPool(address(dollarToken), curve3CrvToken)
         );
 
         vm.startPrank(owner);
@@ -75,7 +75,7 @@ contract ZeroStateChef is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(IDollar), mintings[i], 10000e18);
+            deal(address(dollarToken), mintings[i], 10000e18);
         }
 
         address[5] memory crvDeal = [
@@ -135,16 +135,16 @@ contract ZeroStateChef is DiamondSetup {
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
-        IDollar.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
         vm.startPrank(stakingMaxAccount);
-        IDollar.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
         vm.startPrank(fourthAccount);
-        IDollar.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
