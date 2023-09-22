@@ -28,11 +28,9 @@ contract UUPSTestHelper {
     ERC1967Proxy proxyGovernanceToken;
     ERC1967Proxy proxyUbiquiStick;
 
-    AccessControlFacet IAccessControl;
-
     function __setupUUPS(address manager) public {
         ManagerFacet managerFacet = ManagerFacet(manager);
-        IAccessControl = AccessControlFacet(manager);
+        AccessControlFacet accessControlFacet = AccessControlFacet(manager);
         string
             memory uri = "https://bafybeifibz4fhk4yag5reupmgh5cdbm2oladke4zfd7ldyw7avgipocpmy.ipfs.infura-ipfs.io/";
 
@@ -78,13 +76,13 @@ contract UUPSTestHelper {
             address(proxyGovernanceToken)
         );
 
+        // deploy Ubiquistick
+        // TODO: move from UUPSTestHelper to a more relevant place
         bytes memory ubq1155Payload = abi.encodeWithSignature(
             "__ERC1155Ubiquity_init(address,string)",
             manager,
             uri
         );
-
-        // TODO: move from UUPSTestHelper
         proxyUbiquiStick = new ERC1967Proxy(
             address(new ERC1155Ubiquity()),
             ubq1155Payload
@@ -98,17 +96,32 @@ contract UUPSTestHelper {
         managerFacet.setGovernanceTokenAddress(address(governanceToken));
         managerFacet.setCreditNftAddress(address(creditNft));
         // grant diamond dollar minting and burning rights
-        IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(manager));
-        IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(manager));
+        accessControlFacet.grantRole(
+            DOLLAR_TOKEN_MINTER_ROLE,
+            address(manager)
+        );
+        accessControlFacet.grantRole(
+            DOLLAR_TOKEN_BURNER_ROLE,
+            address(manager)
+        );
         // grand diamond Credit token minting and burning rights
-        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(manager));
-        IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(manager));
+        accessControlFacet.grantRole(
+            CREDIT_TOKEN_MINTER_ROLE,
+            address(manager)
+        );
+        accessControlFacet.grantRole(
+            CREDIT_TOKEN_BURNER_ROLE,
+            address(manager)
+        );
         // grant diamond token admin rights
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MANAGER_ROLE,
             address(manager)
         );
         // grant diamond token minter rights
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(manager));
+        accessControlFacet.grantRole(
+            STAKING_SHARE_MINTER_ROLE,
+            address(manager)
+        );
     }
 }

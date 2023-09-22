@@ -69,6 +69,7 @@ abstract contract DiamondSetup is DiamondTestHelper {
     CurveDollarIncentiveFacet ICurveDollarIncentiveFacet;
     OwnershipFacet IOwnershipFacet;
 
+    AccessControlFacet IAccessControl;
     BondingCurveFacet IBondingCurveFacet;
 
     CreditNftManagerFacet ICreditNftManagerFacet;
