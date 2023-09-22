@@ -413,7 +413,7 @@ contract StakingShareTest is DepositStakingShare {
     function testUUPS_ImplChanges() external {
         BondingShare bondingShare = new BondingShare();
 
-        address oldImpl = address(IStakingShareToken);
+        address oldImpl = address(stakingShare);
         address newImpl = address(bondingShare);
 
         vm.prank(admin);
@@ -494,7 +494,7 @@ contract StakingShareTest is DepositStakingShare {
         bondingShare.initialize(address(diamond), "test");
 
         vm.expectRevert();
-        IStakingShareToken.initialize(address(diamond), "test");
+        stakingShare.initialize(address(diamond), "test");
 
         vm.expectRevert();
         stakingShare.initialize(address(diamond), "test");
