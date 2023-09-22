@@ -38,15 +38,15 @@ abstract contract LocalTestHelper is DiamondSetup {
         vm.startPrank(admin);
 
         //mint some dollar token
-        IDollar.mint(address(0x1045256), 10000e18);
+        dollarToken.mint(address(0x1045256), 10000e18);
         require(
-            IDollar.balanceOf(address(0x1045256)) == 10000e18,
+            dollarToken.balanceOf(address(0x1045256)) == 10000e18,
             "dollar balance is not 10000e18"
         );
 
         // twapPrice oracle
         metaPoolAddress = address(
-            new MockMetaPool(address(IDollar), curve3CRVTokenAddress)
+            new MockMetaPool(address(dollarToken), curve3CRVTokenAddress)
         );
         // set the mock data for meta pool
         uint256[2] memory _price_cumulative_last = [

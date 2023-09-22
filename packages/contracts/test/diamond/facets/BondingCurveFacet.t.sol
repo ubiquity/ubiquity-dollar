@@ -76,13 +76,13 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         vm.prank(admin);
         IBondingCurveFacet.setParams(connectorWeight, baseY);
 
-        uint256 initBal = IDollar.balanceOf(secondAccount);
+        uint256 initBal = dollarToken.balanceOf(secondAccount);
 
         vm.expectEmit(true, false, false, true);
         emit Deposit(secondAccount, collateralDeposited);
         IBondingCurveFacet.deposit(collateralDeposited, secondAccount);
 
-        uint256 finBal = IDollar.balanceOf(secondAccount);
+        uint256 finBal = dollarToken.balanceOf(secondAccount);
 
         uint256 tokReturned = IBondingCurveFacet.purchaseTargetAmountFromZero(
             collateralDeposited,
@@ -128,7 +128,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 balance = poolBalance - _amount;
 
         assertEq(IBondingCurveFacet.poolBalance(), balance);
-        assertEq(IDollar.balanceOf(IManager.treasuryAddress()), _amount);
+        assertEq(dollarToken.balanceOf(IManager.treasuryAddress()), _amount);
     }
 
     function testPurchaseTargetAmountShouldRevertIfSupplyZero() public {

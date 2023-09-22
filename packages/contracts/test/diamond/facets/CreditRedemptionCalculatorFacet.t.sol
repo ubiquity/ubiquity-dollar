@@ -8,8 +8,8 @@ contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);
-        IDollar.mint(admin, 10000e18);
-        uint256 admSupply = IDollar.balanceOf(admin);
+        dollarToken.mint(admin, 10000e18);
+        uint256 admSupply = dollarToken.balanceOf(admin);
         assertEq(admSupply, 10000e18);
 
         vm.startPrank(admin);

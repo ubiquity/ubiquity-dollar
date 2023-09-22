@@ -34,7 +34,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         crvToken = new MockERC20("3 CRV", "3CRV", 18);
         curve3CrvToken = address(crvToken);
         metaPoolAddress = address(
-            new MockMetaPool(address(IDollar), curve3CrvToken)
+            new MockMetaPool(address(dollarToken), curve3CrvToken)
         );
 
         vm.startPrank(owner);
@@ -52,7 +52,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(IDollar), mintings[i], 10000e18);
+            deal(address(dollarToken), mintings[i], 10000e18);
         }
 
         address[5] memory crvDeal = [
@@ -113,16 +113,16 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
-        IDollar.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
         vm.startPrank(stakingMaxAccount);
-        IDollar.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
         vm.startPrank(fourthAccount);
-        IDollar.approve(address(metapool), 10000e18);
+        dollarToken.approve(address(metapool), 10000e18);
         crvToken.approve(address(metapool), 10000e18);
         vm.stopPrank();
 
@@ -173,7 +173,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
     function test_addTokenShouldWorkIfAdmin() public {
         vm.prank(admin);
         IUbiquityPoolFacet.addToken(
-            address(IDollar),
+            address(dollarToken),
             IMetaPool(metaPoolAddress)
         );
     }
@@ -183,14 +183,17 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.expectRevert("0 address detected");
         IUbiquityPoolFacet.addToken(address(0), IMetaPool(metaPoolAddress));
         vm.expectRevert("0 address detected");
-        IUbiquityPoolFacet.addToken(address(IDollar), IMetaPool(address(0)));
+        IUbiquityPoolFacet.addToken(
+            address(dollarToken),
+            IMetaPool(address(0))
+        );
         vm.stopPrank();
     }
 
     function test_addTokenShouldFailIfNotAdmin() public {
         vm.expectRevert("Manager: Caller is not admin");
         IUbiquityPoolFacet.addToken(
-            address(IDollar),
+            address(dollarToken),
             IMetaPool(address(0x444))
         );
     }
@@ -224,9 +227,9 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.startPrank(fourthAccount);
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
-        uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
+        uint256 balanceBefore = dollarToken.balanceOf(fourthAccount);
         IUbiquityPoolFacet.mintDollar(address(collateral), 1 ether, 0 ether);
-        assertGt(IDollar.balanceOf(fourthAccount), balanceBefore);
+        assertGt(dollarToken.balanceOf(fourthAccount), balanceBefore);
         vm.stopPrank();
     }
 
@@ -241,9 +244,9 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.startPrank(fourthAccount);
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
-        uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
+        uint256 balanceBefore = dollarToken.balanceOf(fourthAccount);
         IUbiquityPoolFacet.mintDollar(address(collateral), 1 ether, 0 ether);
-        assertGt(IDollar.balanceOf(fourthAccount), balanceBefore);
+        assertGt(dollarToken.balanceOf(fourthAccount), balanceBefore);
         vm.stopPrank();
 
         vm.prank(admin);
@@ -268,7 +271,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
         IUbiquityPoolFacet.mintDollar(address(collateral), 10 ether, 0 ether);
-        uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
+        uint256 balanceBefore = dollarToken.balanceOf(fourthAccount);
         vm.stopPrank();
         MockMetaPool mock = MockMetaPool(IManager.stableSwapMetaPoolAddress());
         // set the mock data for meta pool
@@ -291,7 +294,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.startPrank(fourthAccount);
         IUbiquityPoolFacet.redeemDollar(address(collateral), 1 ether, 0 ether);
 
-        assertLt(IDollar.balanceOf(fourthAccount), balanceBefore);
+        assertLt(dollarToken.balanceOf(fourthAccount), balanceBefore);
         vm.stopPrank();
     }
 
@@ -307,7 +310,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         collateral.approve(address(IUbiquityPoolFacet), type(uint256).max);
 
         IUbiquityPoolFacet.mintDollar(address(collateral), 10 ether, 0 ether);
-        uint256 balanceBefore = IDollar.balanceOf(fourthAccount);
+        uint256 balanceBefore = dollarToken.balanceOf(fourthAccount);
         uint256 balanceCollateralBefore = collateral.balanceOf(fourthAccount);
         vm.stopPrank();
         MockMetaPool mock = MockMetaPool(IManager.stableSwapMetaPoolAddress());
@@ -331,7 +334,7 @@ contract UbiquityPoolFacetTest is DiamondSetup {
         vm.startPrank(fourthAccount);
         IUbiquityPoolFacet.redeemDollar(address(collateral), 1 ether, 0 ether);
 
-        assertLt(IDollar.balanceOf(fourthAccount), balanceBefore);
+        assertLt(dollarToken.balanceOf(fourthAccount), balanceBefore);
         IUbiquityPoolFacet.collectRedemption(address(collateral));
         assertGt(collateral.balanceOf(fourthAccount), balanceCollateralBefore);
         vm.stopPrank();

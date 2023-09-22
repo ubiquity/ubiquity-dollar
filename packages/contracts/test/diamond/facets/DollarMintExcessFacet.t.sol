@@ -95,14 +95,14 @@ contract DollarMintExcessFacetTest is DiamondSetup {
         mockSushiSwapRouter(10e18);
         mockMetaPool(address(0x55555), 10e18, 10e18);
         mockManagerAddresses(address(0x123), address(0x456));
-        IDollar.mint(excessDollarsDistributorAddress, 200e18);
+        dollarToken.mint(excessDollarsDistributorAddress, 200e18);
 
         // 10% should be transferred to the treasury address
-        uint256 _before_treasury_bal = IDollar.balanceOf(treasuryAddress);
+        uint256 _before_treasury_bal = dollarToken.balanceOf(treasuryAddress);
 
         DollarMintExcessFacet(excessDollarsDistributorAddress)
             .distributeDollars();
-        uint256 _after_treasury_bal = IDollar.balanceOf(treasuryAddress);
+        uint256 _after_treasury_bal = dollarToken.balanceOf(treasuryAddress);
         assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
     }
 }

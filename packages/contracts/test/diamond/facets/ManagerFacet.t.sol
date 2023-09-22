@@ -21,7 +21,7 @@ contract ManagerFacetTest is DiamondSetup {
     }
 
     function testSetDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
-        assertEq(IManager.dollarTokenAddress(), address(IDollar));
+        assertEq(IManager.dollarTokenAddress(), address(dollarToken));
     }
 
     function testSetCreditTokenAddress_ShouldSucceed() public prankAs(admin) {
@@ -128,14 +128,14 @@ contract ManagerFacetTest is DiamondSetup {
         public
         prankAs(admin)
     {
-        assertEq(IManager.dollarTokenAddress(), address(IDollar));
+        assertEq(IManager.dollarTokenAddress(), address(dollarToken));
     }
 
     function testDeployStableSwapPool_ShouldSucceed() public {
-        assertEq(IDollar.decimals(), 18);
+        assertEq(dollarToken.decimals(), 18);
         vm.startPrank(admin);
 
-        IDollar.mint(admin, 10000);
+        dollarToken.mint(admin, 10000);
 
         MockERC20 curve3CrvToken = new MockERC20("3 CRV", "3CRV", 18);
         address secondAccount = address(0x3);
@@ -153,7 +153,7 @@ contract ManagerFacetTest is DiamondSetup {
         ];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
-            deal(address(IDollar), mintings[i], 10000e18);
+            deal(address(dollarToken), mintings[i], 10000e18);
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
