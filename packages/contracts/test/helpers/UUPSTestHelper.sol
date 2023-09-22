@@ -8,7 +8,6 @@ import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {CreditNft} from "../../src/dollar/core/CreditNft.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
-import {AccessControlFacet} from "../../src/dollar/facets/AccessControlFacet.sol";
 import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import "../../src/dollar/libraries/Constants.sol";
 import "forge-std/Test.sol";
@@ -110,36 +109,5 @@ contract UUPSTestHelper {
         managerFacet.setDollarTokenAddress(address(dollarToken));
         managerFacet.setGovernanceTokenAddress(address(governanceToken));
         managerFacet.setCreditNftAddress(address(creditNft));
-
-        // set access control
-        AccessControlFacet accessControlFacet = AccessControlFacet(diamond);
-        // grant diamond dollar minting and burning rights
-        accessControlFacet.grantRole(
-            DOLLAR_TOKEN_MINTER_ROLE,
-            address(diamond)
-        );
-        accessControlFacet.grantRole(
-            DOLLAR_TOKEN_BURNER_ROLE,
-            address(diamond)
-        );
-        // grand diamond Credit token minting and burning rights
-        accessControlFacet.grantRole(
-            CREDIT_TOKEN_MINTER_ROLE,
-            address(diamond)
-        );
-        accessControlFacet.grantRole(
-            CREDIT_TOKEN_BURNER_ROLE,
-            address(diamond)
-        );
-        // grant diamond token admin rights
-        accessControlFacet.grantRole(
-            GOVERNANCE_TOKEN_MANAGER_ROLE,
-            address(diamond)
-        );
-        // grant diamond token minter rights
-        accessControlFacet.grantRole(
-            STAKING_SHARE_MINTER_ROLE,
-            address(diamond)
-        );
     }
 }
