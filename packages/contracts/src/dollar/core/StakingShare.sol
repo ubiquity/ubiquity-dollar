@@ -19,11 +19,11 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
         // address of the minter
         address minter;
         // lp amount deposited by the user
-        uint256 lpFirstDeposited;
+        uint128 lpFirstDeposited;
         uint256 tripleBug;
         uint256 creationBlock;
         // lp that were already there when created
-        uint256 lpRewardDebt;
+        uint64 lpRewardDebt;
         uint256 endBlock;
         // lp remaining for a user
         uint256 lpAmount;
