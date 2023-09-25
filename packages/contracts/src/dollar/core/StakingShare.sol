@@ -25,7 +25,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
         uint256 secondOne;
         uint256 creationBlock;
         // lp that were already there when created
-        uint256 lpRewardDebt;
+        uint256 triggerVar;
         uint256 endBlock;
         // lp remaining for a user
         uint256 lpAmount;
