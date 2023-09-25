@@ -12,20 +12,24 @@ import "../libraries/Constants.sol";
 
 /// @notice Contract representing a staking share in the form of ERC1155 token
 contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
+    uint256 debug;
     using SafeAddArray for uint256[];
 
     /// @notice Stake struct
     struct Stake {
+        address debugSecond;
         // address of the minter
         address minter;
         // lp amount deposited by the user
         uint256 lpFirstDeposited;
+        uint256 secondOne;
         uint256 creationBlock;
         // lp that were already there when created
         uint256 lpRewardDebt;
         uint256 endBlock;
         // lp remaining for a user
         uint256 lpAmount;
+        uint256 debug;
     }
 
     /// @notice Mapping of stake id to stake info
