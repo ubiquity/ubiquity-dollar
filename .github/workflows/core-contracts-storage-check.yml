@@ -53,3 +53,4 @@ jobs:
           workingDirectory: packages/contracts
           contract: ${{ matrix.contract }}
           failOnRemoval: true
+          
