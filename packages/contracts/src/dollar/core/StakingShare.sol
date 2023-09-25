@@ -12,6 +12,7 @@ import "../libraries/Constants.sol";
 
 /// @notice Contract representing a staking share in the form of ERC1155 token
 contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
+    address unused;
     using SafeAddArray for uint256[];
 
     /// @notice Stake struct
