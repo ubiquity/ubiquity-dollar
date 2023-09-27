@@ -52,7 +52,7 @@ jobs:
           version: nightly
         
       - name: Check For Diamond Storage Changes
-        uses: gitcoindev/foundry-storage-check@main
+        uses: ubiquity/foundry-storage-check@main
         with:
           workingDirectory: packages/contracts
           contract: ${{ matrix.contract }}
