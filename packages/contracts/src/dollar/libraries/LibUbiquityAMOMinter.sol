@@ -69,7 +69,7 @@ library LibUbiquityAMOMinter {
 
     function uADTrackedAMO(
         address _amo_address
-    ) external view returns (int256) {
+    ) internal view returns (int256) {
         (uint256 uad_val_e18, ) = IAMO(_amo_address).dollarBalances();
         int256 uad_val_e18_corrected = int256(uad_val_e18) +
             amoMinterStorage().correction_offsets_amos[_amo_address][0];
@@ -78,5 +78,34 @@ library LibUbiquityAMOMinter {
             amoMinterStorage().uad_mint_balances[_amo_address] -
             ((amoMinterStorage().collat_borrowed_balances[_amo_address]) *
                 int256(10 ** amoMinterStorage().missing_decimals));
+    }
+
+    function syncDollarBalances() internal {
+        uint256 total_uad_value_d18 = 0;
+        uint256 total_collateral_value_d18 = 0;
+        for (uint i = 0; i < amoMinterStorage().amos_array.length; i++) {
+            // Exclude null addresses
+            address amo_address = amoMinterStorage().amos_array[i];
+            if (amo_address != address(0)) {
+                (uint256 uad_val_e18, uint256 collat_val_e18) = IAMO(
+                    amo_address
+                ).dollarBalances();
+                total_uad_value_d18 += uint256(
+                    int256(uad_val_e18) +
+                        amoMinterStorage().correction_offsets_amos[amo_address][
+                            0
+                        ]
+                );
+                total_collateral_value_d18 += uint256(
+                    int256(collat_val_e18) +
+                        amoMinterStorage().correction_offsets_amos[amo_address][
+                            1
+                        ]
+                );
+            }
+        }
+        amoMinterStorage().uadDollarBalanceStored = total_uad_value_d18;
+        amoMinterStorage()
+            .collatDollarBalanceStored = total_collateral_value_d18;
     }
 }
