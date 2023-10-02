@@ -8,7 +8,6 @@ import {UbiquityCreditToken} from "../../src/dollar/core/UbiquityCreditToken.sol
 import {StakingShare} from "../../src/dollar/core/StakingShare.sol";
 import {CreditNft} from "../../src/dollar/core/CreditNft.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
-import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import "../../src/dollar/libraries/Constants.sol";
 import "forge-std/Test.sol";
 
@@ -27,7 +26,6 @@ contract UUPSTestHelper {
     UbiquityCreditToken creditToken;
     UbiquityDollarToken dollarToken;
     UbiquityGovernanceToken governanceToken;
-    ERC1155Ubiquity ubiquiStick;
 
     // proxies for core contracts
     ERC1967Proxy proxyCreditNft;
@@ -88,22 +86,8 @@ contract UUPSTestHelper {
             address(proxyGovernanceToken)
         );
 
-        // deploy UbiquiStick (not a core contract, not upgradeable)
-        // TODO: move from UUPSTestHelper to a more relevant place
-        initData = abi.encodeWithSignature(
-            "__ERC1155Ubiquity_init(address,string)",
-            diamond,
-            uri
-        );
-        proxyUbiquiStick = new ERC1967Proxy(
-            address(new ERC1155Ubiquity()),
-            initData
-        );
-        ubiquiStick = ERC1155Ubiquity(address(proxyUbiquiStick));
-
         // set addresses of the newly deployed contracts in the Diamond
         ManagerFacet managerFacet = ManagerFacet(diamond);
-        managerFacet.setUbiquistickAddress(address(ubiquiStick));
         managerFacet.setStakingShareAddress(address(stakingShare));
         managerFacet.setCreditTokenAddress(address(creditToken));
         managerFacet.setDollarTokenAddress(address(dollarToken));
