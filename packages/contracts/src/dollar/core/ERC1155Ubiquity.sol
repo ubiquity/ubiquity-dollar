@@ -18,7 +18,7 @@ import "../../../src/dollar/utils/SafeAddArray.sol";
  * - TotalSupply per id
  * - Ubiquity Manager access control
  */
-contract ERC1155Ubiquity is
+abstract contract ERC1155Ubiquity is
     Initializable,
     ERC1155BurnableUpgradeable,
     ERC1155PausableUpgradeable,
@@ -84,7 +84,7 @@ contract ERC1155Ubiquity is
     function __ERC1155Ubiquity_init(
         address _manager,
         string memory _uri
-    ) public initializer onlyInitializing {
+    ) internal onlyInitializing {
         // init base contracts
         __ERC1155_init(_uri);
         __ERC1155Burnable_init();
@@ -98,7 +98,7 @@ contract ERC1155Ubiquity is
     /// @param _manager Address of the manager of the contract
     function __ERC1155Ubiquity_init_unchained(
         address _manager
-    ) public initializer onlyInitializing {
+    ) internal onlyInitializing {
         accessControl = IAccessControl(_manager);
     }
 
