@@ -1,0 +1,37 @@
+on: workflow_dispatch
+
+name: Setup Anvil on managed Cloudflared tunnel
+
+jobs:
+  setup-anvil:
+    name: Setup Anvil
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly  
+      - name: Setup Cloudflared
+        uses: AnimMouse/setup-cloudflared@v1
+        with:
+          cloudflare_tunnel_credential: ${{ secrets.CLOUDFLARE_TUNNEL_CREDENTIAL }}
+          cloudflare_tunnel_configuration: ${{ secrets.CLOUDFLARE_TUNNEL_CONFIGURATION }}
+          cloudflare_tunnel_id: ${{ secrets.CLOUDFLARE_TUNNEL_ID }}
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: 1
+          body: |
+            Cloudflared tunnel started.
+      - name: Start Anvil
+        run: timeout 3m anvil || true
+        shell: bash
+      - name: Shutdown and view logs of cloudflared
+        if: always()
+        uses: AnimMouse/setup-cloudflared/shutdown@v1
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: 1
+          body: |
+            Cloudflared tunnel shutdown.
