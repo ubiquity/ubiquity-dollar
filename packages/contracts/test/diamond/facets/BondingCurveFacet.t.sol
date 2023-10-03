@@ -4,7 +4,10 @@ pragma solidity 0.8.19;
 import "../DiamondTestSetup.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
+import {ERC1155Ubiquity} from "../../../src/dollar/core/ERC1155Ubiquity.sol";
+import {UbiquiStick} from "../../../src/ubiquistick/UbiquiStick.sol";
 import "forge-std/Test.sol";
 
 contract BondingCurveFacetTest is DiamondSetup {
@@ -28,10 +31,16 @@ contract BondingCurveFacetTest is DiamondSetup {
         super.setUp();
 
         vm.startPrank(admin);
+
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
+
+        // deploy UbiquiStick
+        UbiquiStick ubiquiStick = new UbiquiStick();
+        ubiquiStick.setMinter(address(diamond));
+        IManager.setUbiquistickAddress(address(ubiquiStick));
 
         vm.stopPrank();
     }

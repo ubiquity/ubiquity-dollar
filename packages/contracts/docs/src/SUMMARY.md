@@ -7,7 +7,7 @@
     - [❱ core](src/dollar/core/README.md)
       - [CreditClock](src/dollar/core/CreditClock.sol/contract.CreditClock.md)
       - [CreditNft](src/dollar/core/CreditNft.sol/contract.CreditNft.md)
-      - [ERC1155Ubiquity](src/dollar/core/ERC1155Ubiquity.sol/contract.ERC1155Ubiquity.md)
+      - [ERC1155Ubiquity](src/dollar/core/ERC1155Ubiquity.sol/abstract.ERC1155Ubiquity.md)
       - [ERC20Ubiquity](src/dollar/core/ERC20Ubiquity.sol/abstract.ERC20Ubiquity.md)
       - [StakingShare](src/dollar/core/StakingShare.sol/contract.StakingShare.md)
       - [UbiquityCreditToken](src/dollar/core/UbiquityCreditToken.sol/contract.UbiquityCreditToken.md)

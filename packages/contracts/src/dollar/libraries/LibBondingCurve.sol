@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
+import {UbiquiStick} from "../../ubiquistick/UbiquiStick.sol";
 import "../../ubiquistick/interfaces/IUbiquiStick.sol";
 import "../interfaces/IERC1155Ubiquity.sol";
 import "./Constants.sol";
@@ -132,14 +133,13 @@ library LibBondingCurve {
         dollar.transferFrom(_recipient, address(this), _collateralDeposited);
 
         ss.poolBalance = ss.poolBalance + _collateralDeposited;
-        bytes memory tokReturned = toBytes(tokensReturned);
         ss.share[_recipient] += tokensReturned;
         ss.tokenIds += 1;
 
-        IERC1155Ubiquity bNFT = IERC1155Ubiquity(
+        UbiquiStick ubiquiStick = UbiquiStick(
             LibAppStorage.appStorage().ubiquiStickAddress
         );
-        bNFT.mint(_recipient, ss.tokenIds, tokensReturned, tokReturned);
+        ubiquiStick.batchSafeMint(_recipient, tokensReturned);
 
         emit Deposit(_recipient, _collateralDeposited);
     }
