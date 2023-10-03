@@ -142,6 +142,35 @@ contract DiamondTestHelper is IDiamondCut, IDiamondLoupe, UUPSTestHelper, Test {
             keccak256(abi.encodePacked((b))));
     }
 
+    /**
+     * @notice Returns array of function selectors by the provided contract's ABI path
+     * @dev Foundry's build output ABI files contain the "methodIdentifiers" object which
+     * is a "key:value" mapping of function signatures to their 4 bytes selectors.
+     * Example:
+     * "methodIdentifiers": {
+     *   "getRoleAdmin(bytes32)": "248a9ca3",
+     *   "grantRole(bytes32,address)": "2f2ff15d"
+     * }
+     * @param abiPath Path to ABI (relative to foundry project root)
+     * @return Array of selectors
+     */
+    function getSelectorsFromAbi(
+        string memory abiPath
+    ) public view returns (bytes4[] memory) {
+        string memory path = string.concat(vm.projectRoot(), abiPath);
+        string memory abiJson = vm.readFile(path);
+        string[] memory keys = vm.parseJsonKeys(abiJson, "$.methodIdentifiers");
+        bytes4[] memory selectorsArray = new bytes4[](keys.length);
+        for (uint i = 0; i < keys.length; i++) {
+            bytes memory selector = vm.parseJsonBytes(
+                abiJson,
+                string.concat('$.methodIdentifiers.["', keys[i], '"]')
+            );
+            selectorsArray[i] = bytes4(selector);
+        }
+        return selectorsArray;
+    }
+
     // implement dummy override functions
     function diamondCut(
         FacetCut[] calldata _diamondCut,

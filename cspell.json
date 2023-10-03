@@ -46,6 +46,7 @@
     "coef",
     "collateralized",
     "commitlint",
+    "concat",
     "connectkit",
     "Consts",
     "Cpath",
