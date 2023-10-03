@@ -25,11 +25,12 @@ import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFac
 import {Diamond, DiamondArgs} from "../../src/dollar/Diamond.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
+import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
 import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
-abstract contract DiamondSetup is DiamondTestHelper {
+abstract contract DiamondSetup is DiamondTestHelper, UUPSTestHelper {
     // contract types of facets to be deployed
     Diamond diamond;
     DiamondCutFacet dCutFacet;

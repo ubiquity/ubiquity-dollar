@@ -2,9 +2,10 @@
 pragma solidity 0.8.19;
 
 import "../../../../src/dollar/libraries/Constants.sol";
+import {DiamondTestHelper} from "../../../../test/helpers/DiamondTestHelper.sol";
 import "forge-std/Script.sol";
 
-contract Constants is Script {
+contract Constants is DiamondTestHelper, Script {
     address constant curve3PoolToken =
         0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490;
     address constant basePool = 0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7;
