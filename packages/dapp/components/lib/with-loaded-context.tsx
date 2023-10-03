@@ -1,13 +1,10 @@
 import { ethers } from "ethers";
-import useDeployedContracts, { DeployedContracts } from "./hooks/contracts/use-deployed-contracts";
-import { ManagedContracts } from "./hooks/contracts/use-manager-managed";
+import useProtocolContracts, { ProtocolContracts } from "./hooks/contracts/use-protocol-contracts";
 import useNamedContracts, { NamedContracts } from "./hooks/contracts/use-named-contracts";
 import useWeb3, { PossibleProviders } from "./hooks/use-web-3";
 
-import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
 export type LoadedContext = {
-  managedContracts: NonNullable<ManagedContracts>;
-  deployedContracts: NonNullable<DeployedContracts>;
+  protocolContracts: NonNullable<ProtocolContracts>;
   namedContracts: NonNullable<NamedContracts>;
   web3Provider: NonNullable<PossibleProviders>;
   walletAddress: string;
@@ -17,19 +14,17 @@ export type LoadedContext = {
 export default function withLoadedContext<T>(El: (params: LoadedContext & T) => JSX.Element, ElNull?: () => JSX.Element) {
   return (otherParams: T) => {
     const { walletAddress, signer, provider } = useWeb3();
-    const managedContracts = useManagerManaged();
-    const deployedContracts = useDeployedContracts();
     const namedContracts = useNamedContracts();
+    const protocolContracts = useProtocolContracts();
 
-    if (provider && walletAddress && signer && managedContracts && deployedContracts && namedContracts) {
+    if (provider && walletAddress && signer && protocolContracts && namedContracts) {
       return (
         <El
           web3Provider={provider}
           walletAddress={walletAddress}
           signer={signer}
           namedContracts={namedContracts}
-          managedContracts={managedContracts}
-          deployedContracts={deployedContracts}
+          protocolContracts={protocolContracts}
           {...otherParams}
         />
       );

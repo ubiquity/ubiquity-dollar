@@ -52,6 +52,7 @@ import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet
  * Contracts on hold (i.e. obsolete) until we find a better utility for them:
  * - https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts/src/ubiquistick
  */
+export type ProtocolContracts = ReturnType<typeof useProtocolContracts> | null;
 const useProtocolContracts = () => {
   // get current web3 provider
   const { provider } = useWeb3();
