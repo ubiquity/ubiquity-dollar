@@ -33,7 +33,7 @@ const uDEBT = "uDEBT";
 const uAR = "uAR";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+export const DebtCouponContainer = ({ protocolContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction] = useTransactionLogger();
