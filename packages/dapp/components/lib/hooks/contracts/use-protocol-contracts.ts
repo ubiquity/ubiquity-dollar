@@ -28,11 +28,9 @@ import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormula
 import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
 // other related contracts
-import {
-  getSushiSwapPoolContract,
-  getUniswapV2PairContract,
-  getIMetaPoolContract
-} from "@/components/utils/contracts";
+import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
+import IMetaPoolArtifact from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
+import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
 
 /**
  * Returns all of the available protocol contracts.
@@ -62,32 +60,6 @@ export type ProtocolContracts = ReturnType<typeof useProtocolContracts> | null;
 const useProtocolContracts = async () => {
   // get current web3 provider
   const { provider } = useWeb3();
-  if(!provider) {
-    return {
-      creditNft: null,
-      creditToken: null,
-      dollarToken: null,
-      governanceToken: null,
-      stakingShare: null,
-      accessControlFacet: null,
-      chefFacet: null,
-      collectableDustFacet: null,
-      creditNftManagerFacet: null,
-      creditNftRedemptionCalculatorFacet: null,
-      creditRedemptionCalculatorFacet: null,
-      curveDollarIncentiveFacet: null,
-      dollarMintCalculatorFacet: null,
-      dollarMintExcessFacet: null,
-      managerFacet: null,
-      ownershipFacet: null,
-      stakingFacet: null,
-      stakingFormulasFacet: null,
-      twapOracleDollar3poolFacet: null,
-      ubiquityPoolFacet: null,
-      governanceMarket: null,
-      metaPool: null,
-    }; 
-  }
 
   // all protocol contracts
   const protocolContracts: {
@@ -189,12 +161,12 @@ const useProtocolContracts = async () => {
 
   // other related contracts
   const sushiSwapPool = await protocolContracts.managerFacet.sushiSwapPoolAddress();
-  const sushiSwapPoolContract = getSushiSwapPoolContract(sushiSwapPool, provider);
-  const governanceMarket = getUniswapV2PairContract(await sushiSwapPoolContract.pair(), provider);
+  const sushiSwapPoolContract = new ethers.Contract(sushiSwapPool, SushiSwapPoolArtifact.abi, <Provider>provider);
+  const governanceMarket = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
   protocolContracts.governanceMarket = governanceMarket;
 
   const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
-  const metaPool = getIMetaPoolContract(dollar3poolMarket, provider);
+  const metaPool = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
   protocolContracts.metaPool = metaPool
 
   return protocolContracts;
