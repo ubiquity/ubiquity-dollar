@@ -36,39 +36,37 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
     if (!walletAddress || !namedContracts || !protocolContracts || !provider) {
       return;
     }
+   
+    const _3crvToken = await protocolContracts.managerFacet!.curve3PoolTokenAddress();
+    const dollar3poolMarket = await protocolContracts.managerFacet!.stableSwapMetaPoolAddress();
+    const _3crvTokenContract = getERC20Contract(_3crvToken, provider);
+    const dollarMetapool = getIMetaPoolContract(dollar3poolMarket, provider);
 
-    if(protocolContracts.managerFacet && protocolContracts.dollarToken && protocolContracts.creditToken && protocolContracts.governanceToken && protocolContracts.creditNft && protocolContracts.stakingShare) {
-      const _3crvToken = await protocolContracts.managerFacet.curve3PoolTokenAddress();
-      const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
-      const _3crvTokenContract = getERC20Contract(_3crvToken, provider);
-      const dollarMetapool = getIMetaPoolContract(dollar3poolMarket, provider);
+    const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
+      protocolContracts.dollarToken!.balanceOf(walletAddress),
+      _3crvTokenContract.balanceOf(walletAddress),
+      dollarMetapool.balanceOf(walletAddress),
+      protocolContracts.creditToken!.balanceOf(walletAddress),
+      protocolContracts.governanceToken!.balanceOf(walletAddress),
+      erc1155BalanceOf(walletAddress, protocolContracts.creditNft!),
+      erc1155BalanceOf(walletAddress, protocolContracts.stakingShare!),
+      namedContracts.usdc.balanceOf(walletAddress),
+      namedContracts.dai.balanceOf(walletAddress),
+      namedContracts.usdt.balanceOf(walletAddress),
+    ]);
 
-      const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
-        protocolContracts.dollarToken.balanceOf(walletAddress),
-        _3crvTokenContract.balanceOf(walletAddress),
-        dollarMetapool.balanceOf(walletAddress),
-        protocolContracts.creditToken.balanceOf(walletAddress),
-        protocolContracts.governanceToken.balanceOf(walletAddress),
-        erc1155BalanceOf(walletAddress, protocolContracts.creditNft),
-        erc1155BalanceOf(walletAddress, protocolContracts.stakingShare),
-        namedContracts.usdc.balanceOf(walletAddress),
-        namedContracts.dai.balanceOf(walletAddress),
-        namedContracts.usdt.balanceOf(walletAddress),
-      ]);
-  
-      setBalances({
-        uad,
-        _3crv,
-        uad3crv,
-        ucr,
-        ucrNft,
-        ubq,
-        stakingShares,
-        usdc,
-        dai,
-        usdt,
-      });
-    }
+    setBalances({
+      uad,
+      _3crv,
+      uad3crv,
+      ucr,
+      ucrNft,
+      ubq,
+      stakingShares,
+      usdc,
+      dai,
+      usdt,
+    });
   }
 
   useEffect(() => {

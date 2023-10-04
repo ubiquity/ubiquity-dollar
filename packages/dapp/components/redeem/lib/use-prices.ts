@@ -17,15 +17,13 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
         return;
       }
 
-      if(protocolContracts.managerFacet && protocolContracts.twapOracleDollar3poolFacet) {
-        const dollarTokenAddress = await protocolContracts.managerFacet.dollarTokenAddress();
-        const newTwapPrice = await protocolContracts.twapOracleDollar3poolFacet.consult(dollarTokenAddress);
-        const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
-        const dollarMetapool = getIMetaPoolContract(dollar3poolMarket, provider)
-        const newSpotPrice = await dollarMetapool["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
-        setTwapPrice(newTwapPrice);
-        setSpotPrice(newSpotPrice);
-      }
+      const dollarTokenAddress = await protocolContracts.managerFacet!.dollarTokenAddress();
+      const newTwapPrice = await protocolContracts.twapOracleDollar3poolFacet!.consult(dollarTokenAddress);
+      const dollar3poolMarket = await protocolContracts.managerFacet!.stableSwapMetaPoolAddress();
+      const dollarMetapool = getIMetaPoolContract(dollar3poolMarket, provider)
+      const newSpotPrice = await dollarMetapool["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
+      setTwapPrice(newTwapPrice);
+      setSpotPrice(newSpotPrice);
 
     } catch (error) {
       console.log("Error in refreshPrices: ", error)

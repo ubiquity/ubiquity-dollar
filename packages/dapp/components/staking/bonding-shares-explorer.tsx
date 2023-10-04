@@ -46,9 +46,6 @@ const USD_TO_LP = 0.7460387929;
 const LP_TO_USD = 1 / USD_TO_LP;
 
 export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
-  if (!protocolContracts.chefFacet || !protocolContracts.stakingFacet || !protocolContracts.stakingShare || !protocolContracts.managerFacet) {
-    return <></>;
-  }
   const [model, setModel] = useState<Model | null>(null);
   const [, doTransaction] = useTransactionLogger();
   const [, refreshBalances] = useBalances();
@@ -60,12 +57,12 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
     console.time("BondingShareExplorerContainer contract loading");
     const currentBlock = await web3Provider.getBlockNumber();
     // cspell: disable-next-line
-    const blockCountInAWeek = +(await bonding.blockCountInAWeek()).toString();
-    const totalShares = await chefFacet.totalShares();
+    const blockCountInAWeek = +(await bonding!.blockCountInAWeek()).toString();
+    const totalShares = await chefFacet!.totalShares();
     // cspell: disable-next-line
-    const bondingShareIds = await bondingToken.holderTokens(walletAddress);
+    const bondingShareIds = await bondingToken!.holderTokens(walletAddress);
 
-    const dollar3poolMarket = await managerFacet.stableSwapMetaPoolAddress();
+    const dollar3poolMarket = await managerFacet!.stableSwapMetaPoolAddress();
     const metaPool = getIMetaPoolContract(dollar3poolMarket, web3Provider);
     const walletLpBalance = await metaPool.balanceOf(walletAddress);
 
@@ -76,12 +73,12 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
         // cspell: disable-next-line
         const [ugov, bond, bondingShareInfo, tokenBalance] = await Promise.all([
           // cspell: disable-next-line
-          chefFacet.pendingGovernance(id),
+          chefFacet!.pendingGovernance(id),
           // cspell: disable-next-line
-          bondingToken.getStake(id),
-          chefFacet.getStakingShareInfo(id),
+          bondingToken!.getStake(id),
+          chefFacet!.getStakingShareInfo(id),
           // cspell: disable-next-line
-          bondingToken.balanceOf(walletAddress, id),
+          bondingToken!.balanceOf(walletAddress, id),
         ]);
 
         const endBlock = +bond.endBlock.toString();
@@ -123,19 +120,19 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
         doTransaction("Withdrawing LP...", async () => {
           try {
             // cspell: disable-next-line
-            const isAllowed = await bondingToken.isApprovedForAll(walletAddress, bonding.address);
+            const isAllowed = await bondingToken!.isApprovedForAll(walletAddress, bonding!.address);
             if (!isAllowed) {
               // cspell: disable-next-line
               // Allow bonding contract to control account share
               // cspell: disable-next-line
-              if (!(await performTransaction(bondingToken.connect(signer).setApprovalForAll(bonding.address, true)))) {
+              if (!(await performTransaction(bondingToken!.connect(signer).setApprovalForAll(bonding!.address, true)))) {
                 return; // TODO: Show transaction errors to user
               }
             }
 
             const bigNumberAmount = amount ? ethers.utils.parseEther(amount.toString()) : allLpAmount(id);
             // cspell: disable-next-line
-            await performTransaction(bonding.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
+            await performTransaction(bonding!.connect(signer).removeLiquidity(bigNumberAmount, BigNumber.from(id)));
           } catch (error) {
             console.log(`Withdrawing LP from ${id} failed:`, error);
             // throws exception to update the transaction log
@@ -156,7 +153,7 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
         setModel((prevModel) => (prevModel ? { ...prevModel, processing: [...prevModel.processing, id] } : null));
         doTransaction("Claiming Ubiquity Governance tokens...", async () => {
           try {
-            await performTransaction(chefFacet.connect(signer).getRewards(BigNumber.from(id)));
+            await performTransaction(chefFacet!.connect(signer).getRewards(BigNumber.from(id)));
           } catch (error) {
             console.log(`Claiming Ubiquity Governance token rewards from ${id} failed:`, error);
             // throws exception to update the transaction log
@@ -176,21 +173,21 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
         console.log(`Staking ${amount} for ${weeks} weeks`);
         doTransaction("Staking...", async () => {});
 
-        const dollar3poolMarket = await managerFacet.stableSwapMetaPoolAddress();
+        const dollar3poolMarket = await managerFacet!.stableSwapMetaPoolAddress();
         const metaPool = getIMetaPoolContract(dollar3poolMarket, web3Provider);
         // cspell: disable-next-line
-        const allowance = await metaPool.allowance(walletAddress, bonding.address);
+        const allowance = await metaPool.allowance(walletAddress, bonding!.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
         console.log("lpsAmount", ethers.utils.formatEther(amount));
         if (allowance.lt(amount)) {
           // cspell: disable-next-line
-          await performTransaction(metaPool.connect(signer).approve(bonding.address, amount));
+          await performTransaction(metaPool.connect(signer).approve(bonding!.address, amount));
           // cspell: disable-next-line
-          const allowance2 = await metaPool.allowance(walletAddress, bonding.address);
+          const allowance2 = await metaPool.allowance(walletAddress, bonding!.address);
           console.log("allowance2", ethers.utils.formatEther(allowance2));
         }
         // cspell: disable-next-line
-        await performTransaction(bonding.connect(signer).deposit(amount, weeks));
+        await performTransaction(bonding!.connect(signer).deposit(amount, weeks));
 
         fetchSharesInformation();
         refreshBalances();
