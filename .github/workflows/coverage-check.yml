@@ -25,10 +25,6 @@ jobs:
         with:
           version: nightly-96ab9131e6735df35aca0249968c7d339590de20
 
-      - name: Forge install
-        working-directory: packages/contracts
-        run: forge install
-
       - name: Install dependencies
         run: sudo apt-get install lcov
 
@@ -73,6 +69,10 @@ jobs:
 
       - name: Checkout code in PR branch
         uses: actions/checkout@v3
+
+      - name: Update Forge Dependencies
+        working-directory: packages/contracts
+        run: forge update
 
       - name: Get PR branch coverage
         id: coverage-pr
