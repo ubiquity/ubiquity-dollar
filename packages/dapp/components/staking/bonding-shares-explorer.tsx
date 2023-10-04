@@ -4,7 +4,6 @@ import { memo, useCallback, useState } from "react";
 import { formatEther } from "@/lib/format";
 import { performTransaction, useAsyncInit } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/with-loaded-context";
-import { getIMetaPoolContract } from "@/components/utils/contracts";
 
 import DepositShare from "./deposit-share";
 import useBalances from "../lib/hooks/use-balances";
@@ -49,11 +48,11 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
   const [model, setModel] = useState<Model | null>(null);
   const [, doTransaction] = useTransactionLogger();
   const [, refreshBalances] = useBalances();
-  // cspell: disable-next-line
-  const { stakingFacet: bonding, chefFacet, stakingShare: bondingToken, managerFacet } = protocolContracts;
 
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation(processedShareId?: ShareData["id"]) {
+    // cspell: disable-next-line
+    const { stakingFacet: bonding, chefFacet, stakingShare: bondingToken, metaPool } = await protocolContracts;
     console.time("BondingShareExplorerContainer contract loading");
     const currentBlock = await web3Provider.getBlockNumber();
     // cspell: disable-next-line
@@ -62,9 +61,7 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
     // cspell: disable-next-line
     const bondingShareIds = await bondingToken!.holderTokens(walletAddress);
 
-    const dollar3poolMarket = await managerFacet!.stableSwapMetaPoolAddress();
-    const metaPool = getIMetaPoolContract(dollar3poolMarket, web3Provider);
-    const walletLpBalance = await metaPool.balanceOf(walletAddress);
+    const walletLpBalance = await metaPool!.balanceOf(walletAddress);
 
     const shares: ShareData[] = [];
     await Promise.all(
@@ -114,6 +111,7 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
   const actions: Actions = {
     onWithdrawLp: useCallback(
       async ({ id, amount }) => {
+        const { stakingFacet: bonding, stakingShare: bondingToken } = await protocolContracts;
         if (!model || model.processing.includes(id)) return;
         console.log(`Withdrawing ${amount ? amount : "ALL"} LP from ${id}`);
         setModel((prevModel) => (prevModel ? { ...prevModel, processing: [...prevModel.processing, id] } : null));
@@ -148,6 +146,7 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
 
     onClaimUbq: useCallback(
       async (id) => {
+        const { chefFacet } = await protocolContracts;
         if (!model) return;
         console.log(`Claiming Ubiquity Governance token rewards from ${id}`);
         setModel((prevModel) => (prevModel ? { ...prevModel, processing: [...prevModel.processing, id] } : null));
@@ -169,21 +168,20 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
 
     onStake: useCallback(
       async ({ amount, weeks }) => {
+        const { stakingFacet: bonding, metaPool } = await protocolContracts;
         if (!model || model.processing.length) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         doTransaction("Staking...", async () => {});
 
-        const dollar3poolMarket = await managerFacet!.stableSwapMetaPoolAddress();
-        const metaPool = getIMetaPoolContract(dollar3poolMarket, web3Provider);
         // cspell: disable-next-line
-        const allowance = await metaPool.allowance(walletAddress, bonding!.address);
+        const allowance = await metaPool!.allowance(walletAddress, bonding!.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
         console.log("lpsAmount", ethers.utils.formatEther(amount));
         if (allowance.lt(amount)) {
           // cspell: disable-next-line
-          await performTransaction(metaPool.connect(signer).approve(bonding!.address, amount));
+          await performTransaction(metaPool!.connect(signer).approve(bonding!.address, amount));
           // cspell: disable-next-line
-          const allowance2 = await metaPool.allowance(walletAddress, bonding!.address);
+          const allowance2 = await metaPool!.allowance(walletAddress, bonding!.address);
           console.log("allowance2", ethers.utils.formatEther(allowance2));
         }
         // cspell: disable-next-line
