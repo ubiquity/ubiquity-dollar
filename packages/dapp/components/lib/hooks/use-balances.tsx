@@ -5,7 +5,7 @@ import useNamedContracts from "./contracts/use-named-contracts";
 import useWalletAddress from "./use-wallet-address";
 import { ChildrenShim } from "./children-shim-d";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
-import { getERC20Contract, getIMetaPoolContract } from "@/components/utils/contracts";
+import { getERC20Contract } from "@/components/utils/contracts";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
 
 export interface Balances {
@@ -40,14 +40,12 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
     const contracts = await protocolContracts;
    
     const _3crvToken = await contracts.managerFacet!.curve3PoolTokenAddress();
-    const dollar3poolMarket = await contracts.managerFacet!.stableSwapMetaPoolAddress();
     const _3crvTokenContract = getERC20Contract(_3crvToken, provider);
-    const dollarMetapool = getIMetaPoolContract(dollar3poolMarket, provider);
 
     const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
       contracts.dollarToken!.balanceOf(walletAddress),
       _3crvTokenContract.balanceOf(walletAddress),
-      dollarMetapool.balanceOf(walletAddress),
+      contracts.curveMetaPoolDollarTriPoolLp!.balanceOf(walletAddress),
       contracts.creditToken!.balanceOf(walletAddress),
       contracts.governanceToken!.balanceOf(walletAddress),
       erc1155BalanceOf(walletAddress, contracts.creditNft!),
