@@ -52,7 +52,7 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
   useAsyncInit(fetchSharesInformation);
   async function fetchSharesInformation(processedShareId?: ShareData["id"]) {
     // cspell: disable-next-line
-    const { stakingFacet: bonding, chefFacet, stakingShare: bondingToken, metaPool } = await protocolContracts;
+    const { stakingFacet: bonding, chefFacet, stakingShare: bondingToken, curveMetaPoolDollarTriPoolLp } = await protocolContracts;
     console.time("BondingShareExplorerContainer contract loading");
     const currentBlock = await web3Provider.getBlockNumber();
     // cspell: disable-next-line
@@ -61,7 +61,7 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
     // cspell: disable-next-line
     const bondingShareIds = await bondingToken!.holderTokens(walletAddress);
 
-    const walletLpBalance = await metaPool!.balanceOf(walletAddress);
+    const walletLpBalance = await curveMetaPoolDollarTriPoolLp!.balanceOf(walletAddress);
 
     const shares: ShareData[] = [];
     await Promise.all(
@@ -168,20 +168,20 @@ export const BondingSharesExplorerContainer = ({ protocolContracts, web3Provider
 
     onStake: useCallback(
       async ({ amount, weeks }) => {
-        const { stakingFacet: bonding, metaPool } = await protocolContracts;
+        const { stakingFacet: bonding, curveMetaPoolDollarTriPoolLp } = await protocolContracts;
         if (!model || model.processing.length) return;
         console.log(`Staking ${amount} for ${weeks} weeks`);
         doTransaction("Staking...", async () => {});
 
         // cspell: disable-next-line
-        const allowance = await metaPool!.allowance(walletAddress, bonding!.address);
+        const allowance = await curveMetaPoolDollarTriPoolLp!.allowance(walletAddress, bonding!.address);
         console.log("allowance", ethers.utils.formatEther(allowance));
         console.log("lpsAmount", ethers.utils.formatEther(amount));
         if (allowance.lt(amount)) {
           // cspell: disable-next-line
-          await performTransaction(metaPool!.connect(signer).approve(bonding!.address, amount));
+          await performTransaction(curveMetaPoolDollarTriPoolLp!.connect(signer).approve(bonding!.address, amount));
           // cspell: disable-next-line
-          const allowance2 = await metaPool!.allowance(walletAddress, bonding!.address);
+          const allowance2 = await curveMetaPoolDollarTriPoolLp!.allowance(walletAddress, bonding!.address);
           console.log("allowance2", ethers.utils.formatEther(allowance2));
         }
         // cspell: disable-next-line

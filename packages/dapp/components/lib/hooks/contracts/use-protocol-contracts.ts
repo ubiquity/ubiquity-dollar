@@ -86,8 +86,8 @@ const useProtocolContracts = async () => {
     twapOracleDollar3poolFacet: Contract | null,
     ubiquityPoolFacet: Contract | null,
     // related contracts
-    governanceMarket: Contract | null,
-    metaPool: Contract | null,
+    sushiPoolGovernanceDollarLp: Contract | null,
+    curveMetaPoolDollarTriPoolLp: Contract | null,
   } = {
     // separately deployed contracts (i.e. not part of the diamond)
     creditNft: null,
@@ -112,8 +112,8 @@ const useProtocolContracts = async () => {
     twapOracleDollar3poolFacet: null,
     ubiquityPoolFacet: null,
     // related contracts
-    governanceMarket: null,
-    metaPool: null,
+    sushiPoolGovernanceDollarLp: null,
+    curveMetaPoolDollarTriPoolLp: null,
   };
 
   let diamondAddress = '';
@@ -162,12 +162,12 @@ const useProtocolContracts = async () => {
   // other related contracts
   const sushiSwapPool = await protocolContracts.managerFacet.sushiSwapPoolAddress();
   const sushiSwapPoolContract = new ethers.Contract(sushiSwapPool, SushiSwapPoolArtifact.abi, <Provider>provider);
-  const governanceMarket = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
-  protocolContracts.governanceMarket = governanceMarket;
+  const UniswapV2PairContract = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
+  protocolContracts.sushiPoolGovernanceDollarLp = UniswapV2PairContract;
 
   const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
-  const metaPool = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
-  protocolContracts.metaPool = metaPool
+  const metaPoolContract = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
+  protocolContracts.curveMetaPoolDollarTriPoolLp = metaPoolContract;
 
   return protocolContracts;
 };

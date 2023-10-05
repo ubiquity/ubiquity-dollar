@@ -17,7 +17,7 @@ const MAX_WEEKS = 208;
 type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
 async function prefetchConstants(contracts: NonNullable<ProtocolContracts>): Promise<PrefetchedConstants> {
   const contract = await contracts;
-  const reserves = contract.governanceMarket!.getReserves();
+  const reserves = contract.sushiPoolGovernanceDollarLp!.getReserves();
   const ubqPrice = +reserves[0].toString() / +reserves[1].toString();
   const ubqPerBlock = contract.chefFacet!.governancePerBlock();
   const ubqMultiplier = contract.chefFacet!.governanceMultiplier();
