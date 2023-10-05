@@ -28,7 +28,7 @@ jobs:
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly-96ab9131e6735df35aca0249968c7d339590de20
+          version: nightly-ddca274340319fbd264dfa019a6de2a8146f50f6
 
       - name: Yarn Install
         run: yarn install --mode=skip-build && yarn allow-scripts
