@@ -37,14 +37,14 @@ contract CollectableDustFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         vm.expectEmit(true, true, true, true);
         emit ProtocolTokenAdded(address(diamond));
-        ICollectableDustFacet.addProtocolToken(address(diamond));
+        collectableDustFacet.addProtocolToken(address(diamond));
         // mint dollar
 
         dollarToken.mint(address(diamond), 100);
         vm.stopPrank();
         vm.prank(stakingManager);
         vm.expectRevert("collectable-dust::token-is-part-of-the-protocol");
-        ICollectableDustFacet.sendDust(mock_recipient, address(diamond), 100);
+        collectableDustFacet.sendDust(mock_recipient, address(diamond), 100);
     }
 
     // test sendDust function should work only for staking manager
@@ -53,7 +53,7 @@ contract CollectableDustFacetTest is DiamondTestSetup {
         vm.prank(stakingManager);
         vm.expectEmit(true, true, true, true);
         emit DustSent(mock_recipient, address(mockToken), 100);
-        ICollectableDustFacet.sendDust(mock_recipient, address(mockToken), 100);
+        collectableDustFacet.sendDust(mock_recipient, address(mockToken), 100);
         assertEq(mockToken.balanceOf(mock_recipient), 100);
     }
 
@@ -61,10 +61,10 @@ contract CollectableDustFacetTest is DiamondTestSetup {
     function testSendDust_ShouldWorkWhenNotPartOfTheProtocol() public {
         vm.startPrank(admin);
 
-        ICollectableDustFacet.addProtocolToken(address(diamond));
+        collectableDustFacet.addProtocolToken(address(diamond));
         vm.expectEmit(true, true, true, true);
         emit ProtocolTokenRemoved(address(diamond));
-        ICollectableDustFacet.removeProtocolToken(address(diamond));
+        collectableDustFacet.removeProtocolToken(address(diamond));
         // mint dollar
 
         dollarToken.mint(address(diamond), 100);
@@ -72,7 +72,7 @@ contract CollectableDustFacetTest is DiamondTestSetup {
         assertEq(dollarToken.balanceOf(address(diamond)), 100);
         vm.prank(stakingManager);
 
-        ICollectableDustFacet.sendDust(
+        collectableDustFacet.sendDust(
             mock_recipient,
             address(dollarToken),
             100
