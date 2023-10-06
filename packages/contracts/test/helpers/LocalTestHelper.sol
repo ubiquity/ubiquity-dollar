@@ -26,7 +26,7 @@ abstract contract LocalTestHelper is DiamondTestSetup {
     function setUp() public virtual override {
         super.setUp();
 
-        creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
+        creditNftRedemptionCalculator = creditNftRedemptionCalculationFacet;
         creditRedemptionCalculator = creditRedemptionCalculationFacet;
         dollarMintCalculator = dollarMintCalculatorFacet;
         creditNftManager = ICreditNftManagerFacet;

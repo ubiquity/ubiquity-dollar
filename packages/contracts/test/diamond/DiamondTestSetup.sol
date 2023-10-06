@@ -43,7 +43,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     ChefFacet IChefFacet;
     CollectableDustFacet ICollectableDustFacet;
     CreditNftManagerFacet ICreditNftManagerFacet;
-    CreditNftRedemptionCalculatorFacet ICreditNftRedemptionCalculationFacet;
+    CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculationFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculationFacet;
     CurveDollarIncentiveFacet curveDollarIncentiveFacet;
     DiamondCutFacet diamondCutFacet;
@@ -766,7 +766,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         IChefFacet = ChefFacet(address(diamond));
         ICollectableDustFacet = CollectableDustFacet(address(diamond));
         ICreditNftManagerFacet = CreditNftManagerFacet(address(diamond));
-        ICreditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
+        creditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
         );
         creditRedemptionCalculationFacet = CreditRedemptionCalculatorFacet(
