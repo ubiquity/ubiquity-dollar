@@ -28,7 +28,7 @@ abstract contract LocalTestHelper is DiamondTestSetup {
 
         creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
         creditRedemptionCalculator = ICreditRedemptionCalculationFacet;
-        dollarMintCalculator = IDollarMintCalcFacet;
+        dollarMintCalculator = dollarMintCalculatorFacet;
         creditNftManager = ICreditNftManagerFacet;
         dollarMintExcess = dollarMintExcessFacet;
 
