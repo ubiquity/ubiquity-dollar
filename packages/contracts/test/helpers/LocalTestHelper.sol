@@ -16,8 +16,6 @@ abstract contract LocalTestHelper is DiamondTestSetup {
     address curve3CRVTokenAddress = address(0x101);
     address public treasuryAddress = address(0x111222333);
 
-    TWAPOracleDollar3poolFacet twapOracle;
-
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculator;
     CreditRedemptionCalculatorFacet creditRedemptionCalculator;
     DollarMintCalculatorFacet dollarMintCalculator;
@@ -28,7 +26,6 @@ abstract contract LocalTestHelper is DiamondTestSetup {
     function setUp() public virtual override {
         super.setUp();
 
-        twapOracle = ITWAPOracleDollar3pool;
         creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
         creditRedemptionCalculator = ICreditRedemptionCalculationFacet;
         dollarMintCalculator = IDollarMintCalcFacet;
@@ -70,7 +67,10 @@ abstract contract LocalTestHelper is DiamondTestSetup {
 
         vm.stopPrank();
         vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CRVTokenAddress);
-        ITWAPOracleDollar3pool.update();
+        twapOracleDollar3PoolFacet.setPool(
+            metaPoolAddress,
+            curve3CRVTokenAddress
+        );
+        twapOracleDollar3PoolFacet.update();
     }
 }
