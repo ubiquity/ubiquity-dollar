@@ -46,7 +46,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     CreditNftRedemptionCalculatorFacet ICreditNftRedemptionCalculationFacet;
     CreditRedemptionCalculatorFacet ICreditRedemptionCalculationFacet;
     CurveDollarIncentiveFacet ICurveDollarIncentiveFacet;
-    IDiamondCut ICut;
+    DiamondCutFacet diamondCutFacet;
     DiamondLoupeFacet diamondLoupeFacet;
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
@@ -775,7 +775,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(
             address(diamond)
         );
-        ICut = IDiamondCut(address(diamond));
+        diamondCutFacet = DiamondCutFacet(address(diamond));
         diamondLoupeFacet = DiamondLoupeFacet(address(diamond));
         dollarMintCalculatorFacet = DollarMintCalculatorFacet(address(diamond));
         dollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
