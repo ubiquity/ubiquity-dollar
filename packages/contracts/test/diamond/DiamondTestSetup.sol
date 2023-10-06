@@ -49,7 +49,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     IDiamondCut ICut;
     IDiamondLoupe ILoupe;
     DollarMintCalculatorFacet IDollarMintCalcFacet;
-    DollarMintExcessFacet IDollarMintExcessFacet;
+    DollarMintExcessFacet dollarMintExcessFacet;
     ManagerFacet managerFacet;
     OwnershipFacet ownershipFacet;
     StakingFacet stakingFacet;
@@ -778,7 +778,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         ICut = IDiamondCut(address(diamond));
         ILoupe = IDiamondLoupe(address(diamond));
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
-        IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
+        dollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
         managerFacet = ManagerFacet(address(diamond));
         ownershipFacet = OwnershipFacet(address(diamond));
         stakingFacet = StakingFacet(address(diamond));

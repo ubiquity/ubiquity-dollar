@@ -30,7 +30,7 @@ abstract contract LocalTestHelper is DiamondTestSetup {
         creditRedemptionCalculator = ICreditRedemptionCalculationFacet;
         dollarMintCalculator = IDollarMintCalcFacet;
         creditNftManager = ICreditNftManagerFacet;
-        dollarMintExcess = IDollarMintExcessFacet;
+        dollarMintExcess = dollarMintExcessFacet;
 
         vm.startPrank(admin);
 
