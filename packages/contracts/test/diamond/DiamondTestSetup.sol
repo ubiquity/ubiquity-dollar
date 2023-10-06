@@ -40,7 +40,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     // diamond facets (which point to the core diamond and should be used across the tests)
     AccessControlFacet IAccessControl;
     BondingCurveFacet IBondingCurveFacet;
-    ChefFacet IChefFacet;
+    ChefFacet chefFacet;
     CollectableDustFacet collectableDustFacet;
     CreditNftManagerFacet creditNftManagerFacet;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculationFacet;
@@ -763,7 +763,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         // initialize diamond facets which point to the core diamond contract
         IAccessControl = AccessControlFacet(address(diamond));
         IBondingCurveFacet = BondingCurveFacet(address(diamond));
-        IChefFacet = ChefFacet(address(diamond));
+        chefFacet = ChefFacet(address(diamond));
         collectableDustFacet = CollectableDustFacet(address(diamond));
         creditNftManagerFacet = CreditNftManagerFacet(address(diamond));
         creditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
