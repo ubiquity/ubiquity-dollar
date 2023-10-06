@@ -17,17 +17,17 @@ const MAX_WEEKS = 208;
 type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
 async function prefetchConstants(contracts: NonNullable<ProtocolContracts>): Promise<PrefetchedConstants> {
   const contract = await contracts;
-  const reserves = contract.sushiPoolGovernanceDollarLp!.getReserves();
+  const reserves = await contract.sushiPoolGovernanceDollarLp!.getReserves();
   const ubqPrice = +reserves[0].toString() / +reserves[1].toString();
-  const ubqPerBlock = contract.chefFacet!.governancePerBlock();
-  const ubqMultiplier = contract.chefFacet!.governanceMultiplier();
+  const ubqPerBlock = await contract.chefFacet!.governancePerBlock();
+  const ubqMultiplier = await contract.chefFacet!.governanceMultiplier();
   const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));
-  const blockCountInAWeek = toNum(contract.stakingFacet!.blockCountInAWeek());
+  const blockCountInAWeek = toNum(await contract.stakingFacet!.blockCountInAWeek());
   const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
-  const totalShares = toEtherNum(contract.chefFacet!.totalShares());
+  const totalShares = toEtherNum(await contract.chefFacet!.totalShares());
   const usdPerWeek = ubqPerWeek * ubqPrice;
   // cspell: disable-next-line
-  const bondingDiscountMultiplier = contract.stakingFacet!.stakingDiscountMultiplier();
+  const bondingDiscountMultiplier = await contract.stakingFacet!.stakingDiscountMultiplier();
   // cspell: disable-next-line
   return { totalShares, usdPerWeek, bondingDiscountMultiplier };
 }

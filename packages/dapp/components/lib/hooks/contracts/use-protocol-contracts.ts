@@ -160,13 +160,15 @@ const useProtocolContracts = async () => {
   protocolContracts.ubiquityPoolFacet = new ethers.Contract(diamondAddress, UbiquityPoolFacetArtifact.abi, <Provider>provider);
 
   // other related contracts
-  const sushiSwapPool = await protocolContracts.managerFacet.sushiSwapPoolAddress();
-  const sushiSwapPoolContract = new ethers.Contract(sushiSwapPool, SushiSwapPoolArtifact.abi, <Provider>provider);
-  const UniswapV2PairContract = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
+  // const sushiSwapPool = await protocolContracts.managerFacet.sushiSwapPoolAddress();
+  // const sushiSwapPoolContract = new ethers.Contract(sushiSwapPool, SushiSwapPoolArtifact.abi, <Provider>provider);
+  // const UniswapV2PairContract = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
+  const UniswapV2PairContract = new ethers.Contract("0x41e087485f47538752A1195D984109cB8Dc0E429", UniswapV2PairABI, <Provider>provider);
   protocolContracts.sushiPoolGovernanceDollarLp = UniswapV2PairContract;
 
-  const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
-  const metaPoolContract = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
+  // const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
+  // const metaPoolContract = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
+  const metaPoolContract = new ethers.Contract("0x20955CB69Ae1515962177D164dfC9522feef567E", IMetaPoolArtifact.abi, <Provider>provider);
   protocolContracts.curveMetaPoolDollarTriPoolLp = metaPoolContract;
 
   return protocolContracts;
