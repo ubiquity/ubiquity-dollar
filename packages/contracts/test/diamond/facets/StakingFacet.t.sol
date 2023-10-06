@@ -117,7 +117,7 @@ contract ZeroStateStaking is DiamondTestSetup {
         );
         //
         metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
-        metapool.transfer(address(IStakingFacet), 100e18);
+        metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
         vm.prank(owner);
@@ -183,7 +183,7 @@ contract ZeroStateStaking is DiamondTestSetup {
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
-        IStakingFacet.setBlockCountInAWeek(420);
+        stakingFacet.setBlockCountInAWeek(420);
 
         vm.stopPrank();
 
@@ -202,16 +202,16 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         vm.expectEmit(true, false, false, true);
         emit StakingDiscountMultiplierUpdated(x);
         vm.prank(admin);
-        IStakingFacet.setStakingDiscountMultiplier(x);
-        assertEq(x, IStakingFacet.stakingDiscountMultiplier());
+        stakingFacet.setStakingDiscountMultiplier(x);
+        assertEq(x, stakingFacet.stakingDiscountMultiplier());
     }
 
     function testSetBlockCountInAWeek(uint256 x) public {
         vm.expectEmit(true, false, false, true);
         emit BlockCountInAWeekUpdated(x);
         vm.prank(admin);
-        IStakingFacet.setBlockCountInAWeek(x);
-        assertEq(x, IStakingFacet.blockCountInAWeek());
+        stakingFacet.setBlockCountInAWeek(x);
+        assertEq(x, stakingFacet.blockCountInAWeek());
     }
 
     function testDeposit_Staking(uint256 lpAmount, uint256 lockup) public {
@@ -221,7 +221,7 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         require(lockup >= 1 && lockup <= 208);
         uint256 preBalance = metapool.balanceOf(stakingMinAccount);
         vm.startPrank(stakingMinAccount);
-        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
+        metapool.approve(address(stakingFacet), 2 ** 256 - 1);
         vm.expectEmit(true, false, false, true);
         emit Deposit(
             stakingMinAccount,
@@ -230,12 +230,12 @@ contract ZeroStateStakingTest is ZeroStateStaking {
             stakingFormulasFacet.durationMultiply(
                 lpAmount,
                 lockup,
-                IStakingFacet.stakingDiscountMultiplier()
+                stakingFacet.stakingDiscountMultiplier()
             ),
             lockup,
-            (block.number + lockup * IStakingFacet.blockCountInAWeek())
+            (block.number + lockup * stakingFacet.blockCountInAWeek())
         );
-        IStakingFacet.deposit(lpAmount, lockup);
+        stakingFacet.deposit(lpAmount, lockup);
         assertEq(metapool.balanceOf(stakingMinAccount), preBalance - lpAmount);
     }
 
@@ -244,13 +244,13 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         uint256 maxLP = metapool.balanceOf(stakingMaxAccount);
 
         vm.startPrank(stakingMaxAccount);
-        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
-        IStakingFacet.deposit(maxLP, 208);
+        metapool.approve(address(stakingFacet), 2 ** 256 - 1);
+        stakingFacet.deposit(maxLP, 208);
         vm.stopPrank();
 
         vm.startPrank(stakingMinAccount);
-        metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
-        IStakingFacet.deposit(minLP, 1);
+        metapool.approve(address(stakingFacet), 2 ** 256 - 1);
+        stakingFacet.deposit(minLP, 1);
         vm.stopPrank();
 
         uint256[2] memory bsMaxAmount = IChefFacet.getStakingShareInfo(1);
@@ -263,13 +263,13 @@ contract ZeroStateStakingTest is ZeroStateStaking {
         _weeks = bound(_weeks, 209, 2 ** 256 - 1);
         vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
-        IStakingFacet.deposit(1, _weeks);
+        stakingFacet.deposit(1, _weeks);
     }
 
     function testCannotDepositZeroWeeks() public {
         vm.expectRevert("Staking: duration must be between 1 and 208 weeks");
         vm.prank(fourthAccount);
-        IStakingFacet.deposit(1, 0);
+        stakingFacet.deposit(1, 0);
     }
 }
 
@@ -286,14 +286,14 @@ contract DepositStateStaking is ZeroStateStaking {
         shares = stakingFormulasFacet.durationMultiply(
             fourthBal,
             1,
-            IStakingFacet.stakingDiscountMultiplier()
+            stakingFacet.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         fourthID = stakingShare.totalSupply() + 1;
         vm.stopPrank();
         vm.startPrank(fourthAccount);
         metapool.approve(address(diamond), fourthBal);
-        IStakingFacet.deposit(fourthBal, 1);
+        stakingFacet.deposit(fourthBal, 1);
 
         assertEq(stakingShare.totalSupply(), fourthID);
         assertEq(stakingShare.balanceOf(fourthAccount, fourthID), 1);
@@ -331,7 +331,7 @@ contract DepositStateTest is DepositStateStaking {
         uint256 userReward = (shares * governancePerShare) / 1e12;
 
         vm.prank(fourthAccount);
-        IStakingFacet.removeLiquidity(amount, fourthID);
+        stakingFacet.removeLiquidity(amount, fourthID);
 
         assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
     }
