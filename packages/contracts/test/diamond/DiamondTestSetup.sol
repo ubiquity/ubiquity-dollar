@@ -47,7 +47,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     CreditRedemptionCalculatorFacet ICreditRedemptionCalculationFacet;
     CurveDollarIncentiveFacet ICurveDollarIncentiveFacet;
     IDiamondCut ICut;
-    IDiamondLoupe ILoupe;
+    DiamondLoupeFacet diamondLoupeFacet;
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
     ManagerFacet managerFacet;
@@ -776,7 +776,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             address(diamond)
         );
         ICut = IDiamondCut(address(diamond));
-        ILoupe = IDiamondLoupe(address(diamond));
+        diamondLoupeFacet = DiamondLoupeFacet(address(diamond));
         dollarMintCalculatorFacet = DollarMintCalculatorFacet(address(diamond));
         dollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
         managerFacet = ManagerFacet(address(diamond));
@@ -789,7 +789,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
 
         // get all addresses
-        facetAddressList = ILoupe.facetAddresses();
+        facetAddressList = diamondLoupeFacet.facetAddresses();
         vm.startPrank(admin);
         // grant diamond dollar minting and burning rights
         IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
