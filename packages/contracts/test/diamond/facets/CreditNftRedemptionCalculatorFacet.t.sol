@@ -21,13 +21,13 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondTestSetup {
     function test_getCreditNftAmount_revertsIfDebtTooHigh() public {
         creditNft.mintCreditNft(user1, 100000 ether, 1000);
         vm.expectRevert("CreditNft to Dollar: DEBT_TOO_HIGH");
-        ICreditNftRedemptionCalculationFacet.getCreditNftAmount(0);
+        creditNftRedemptionCalculationFacet.getCreditNftAmount(0);
     }
 
     function test_getCreditNftAmount() public {
         creditNft.mintCreditNft(user1, 5000 ether, 10);
         assertEq(
-            ICreditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
+            creditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
             40000
         );
     }
