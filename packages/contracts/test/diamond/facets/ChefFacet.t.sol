@@ -213,7 +213,7 @@ contract ZeroStateChefTest is ZeroStateChef {
         uint256 LPBalance = metapool.balanceOf(fourthAccount);
         lpAmount = bound(lpAmount, 1, LPBalance);
         // lock for 10 weeks
-        uint256 shares = IStakingFormulasFacet.durationMultiply(
+        uint256 shares = stakingFormulasFacet.durationMultiply(
             lpAmount,
             10,
             IStakingFacet.stakingDiscountMultiplier()
@@ -253,7 +253,7 @@ contract DepositStateChef is ZeroStateChef {
         super.setUp();
         assertEq(IChefFacet.totalShares(), 0);
         fourthBal = metapool.balanceOf(fourthAccount);
-        shares = IStakingFormulasFacet.durationMultiply(
+        shares = stakingFormulasFacet.durationMultiply(
             fourthBal,
             1,
             IStakingFacet.stakingDiscountMultiplier()

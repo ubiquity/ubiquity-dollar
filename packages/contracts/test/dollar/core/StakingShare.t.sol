@@ -311,7 +311,7 @@ contract StakingShareTest is DepositStakingShare {
             fourthAccount,
             fourthBal,
             creationBlock[1],
-            IStakingFormulasFacet.durationMultiply(
+            stakingFormulasFacet.durationMultiply(
                 fourthBal,
                 52,
                 IStakingFacet.stakingDiscountMultiplier()
