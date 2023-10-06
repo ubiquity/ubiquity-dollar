@@ -1,120 +1,117 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/interfaces/IERC165.sol";
+import {IERC165} from "@openzeppelin/contracts/interfaces/IERC165.sol";
+import {Diamond, DiamondArgs} from "../../src/dollar/Diamond.sol";
+import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {IDiamondCut} from "../../src/dollar/interfaces/IDiamondCut.sol";
-import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
-import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
-import {IERC173} from "../../src/dollar/interfaces/IERC173.sol";
 import {IDiamondLoupe} from "../../src/dollar/interfaces/IDiamondLoupe.sol";
-import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
-import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
+import {IERC173} from "../../src/dollar/interfaces/IERC173.sol";
 import {AccessControlFacet} from "../../src/dollar/facets/AccessControlFacet.sol";
-import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
-import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet.sol";
+import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
 import {ChefFacet} from "../../src/dollar/facets/ChefFacet.sol";
-import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
-import {CurveDollarIncentiveFacet} from "../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
-import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
+import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet.sol";
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
+import {CurveDollarIncentiveFacet} from "../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
+import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
+import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
 import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {Diamond, DiamondArgs} from "../../src/dollar/Diamond.sol";
+import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
+import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
+import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
+import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
+import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
+import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
-import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
-import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
-import "../../src/dollar/libraries/Constants.sol";
+import {CREDIT_NFT_MANAGER_ROLE, CREDIT_TOKEN_BURNER_ROLE, CREDIT_TOKEN_MINTER_ROLE, CURVE_DOLLAR_MANAGER_ROLE, DOLLAR_TOKEN_BURNER_ROLE, DOLLAR_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE, GOVERNANCE_TOKEN_MANAGER_ROLE, GOVERNANCE_TOKEN_MINTER_ROLE, STAKING_SHARE_MINTER_ROLE} from "../../src/dollar/libraries/Constants.sol";
 
+/**
+ * @notice Deploys diamond contract with all of the facets
+ */
 abstract contract DiamondTestSetup is DiamondTestHelper {
-    // contract types of facets to be deployed
+    // diamond related contracts
     Diamond diamond;
-    DiamondCutFacet dCutFacet;
-    DiamondLoupeFacet dLoupeFacet;
-    OwnershipFacet ownerFacet;
-    ManagerFacet managerFacet;
-    DiamondInit dInit;
-    // actual implementation of facets
-    AccessControlFacet accessControlFacet;
-    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
-    CollectableDustFacet collectableDustFacet;
-    ChefFacet chefFacet;
-    StakingFacet stakingFacet;
-    UbiquityPoolFacet ubiquityPoolFacet;
-    StakingFormulasFacet stakingFormulasFacet;
-    BondingCurveFacet bondingCurveFacet;
-    CurveDollarIncentiveFacet curveDollarIncentiveFacet;
+    DiamondInit diamondInit;
 
-    CreditNftManagerFacet creditNftManagerFacet;
-    CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacet;
-    CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacet;
-
-    DollarMintCalculatorFacet dollarMintCalculatorFacet;
-    DollarMintExcessFacet dollarMintExcessFacet;
-
-    // interfaces with Facet ABI connected to diamond address
-    IDiamondLoupe ILoupe;
-    IDiamondCut ICut;
-    ManagerFacet IManager;
-    TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
-
-    CollectableDustFacet ICollectableDustFacet;
-    ChefFacet IChefFacet;
-    StakingFacet IStakingFacet;
-    UbiquityPoolFacet IUbiquityPoolFacet;
-    StakingFormulasFacet IStakingFormulasFacet;
-    CurveDollarIncentiveFacet ICurveDollarIncentiveFacet;
-    OwnershipFacet IOwnershipFacet;
-
+    // diamond facets (which point to the core diamond and should be used across the tests)
     AccessControlFacet IAccessControl;
     BondingCurveFacet IBondingCurveFacet;
-
+    ChefFacet IChefFacet;
+    CollectableDustFacet ICollectableDustFacet;
     CreditNftManagerFacet ICreditNftManagerFacet;
     CreditNftRedemptionCalculatorFacet ICreditNftRedemptionCalculationFacet;
     CreditRedemptionCalculatorFacet ICreditRedemptionCalculationFacet;
-
+    CurveDollarIncentiveFacet ICurveDollarIncentiveFacet;
+    IDiamondCut ICut;
+    IDiamondLoupe ILoupe;
     DollarMintCalculatorFacet IDollarMintCalcFacet;
     DollarMintExcessFacet IDollarMintExcessFacet;
+    ManagerFacet IManager;
+    OwnershipFacet IOwnershipFacet;
+    StakingFacet IStakingFacet;
+    StakingFormulasFacet IStakingFormulasFacet;
+    TWAPOracleDollar3poolFacet ITWAPOracleDollar3pool;
+    UbiquityPoolFacet IUbiquityPoolFacet;
 
+    // diamond facet implementation instances (should not be used in tests, use only on upgrades)
+    AccessControlFacet accessControlFacet;
+    BondingCurveFacet bondingCurveFacet;
+    ChefFacet chefFacet;
+    CollectableDustFacet collectableDustFacet;
+    CreditNftManagerFacet creditNftManagerFacet;
+    CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacet;
+    CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacet;
+    CurveDollarIncentiveFacet curveDollarIncentiveFacet;
+    DiamondCutFacet diamondCutFacetImplementation;
+    DiamondLoupeFacet dLoupeFacet;
+    DollarMintCalculatorFacet dollarMintCalculatorFacet;
+    DollarMintExcessFacet dollarMintExcessFacet;
+    ManagerFacet managerFacet;
+    OwnershipFacet ownerFacet;
+    StakingFacet stakingFacet;
+    StakingFormulasFacet stakingFormulasFacet;
+    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
+    UbiquityPoolFacet ubiquityPoolFacet;
+
+    // facet names with addresses
     string[] facetNames;
     address[] facetAddressList;
 
+    // helper addresses
     address owner;
     address admin;
-    address tokenManager;
     address user1;
     address contract1;
     address contract2;
 
-    bytes4[] selectorsOfDiamondCutFacet;
-    bytes4[] selectorsOfDiamondLoupeFacet;
-    bytes4[] selectorsOfOwnershipFacet;
-    bytes4[] selectorsOfManagerFacet;
+    // selectors for all of the facets
     bytes4[] selectorsOfAccessControlFacet;
-    bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
-    bytes4[] selectorsOfCollectableDustFacet;
-    bytes4[] selectorsOfChefFacet;
-    bytes4[] selectorsOfStakingFacet;
-    bytes4[] selectorsOfUbiquityPoolFacet;
-    bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfBondingCurveFacet;
-    bytes4[] selectorsOfCurveDollarIncentiveFacet;
-
+    bytes4[] selectorsOfChefFacet;
+    bytes4[] selectorsOfCollectableDustFacet;
     bytes4[] selectorsOfCreditNftManagerFacet;
     bytes4[] selectorsOfCreditNftRedemptionCalculatorFacet;
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
-
+    bytes4[] selectorsOfCurveDollarIncentiveFacet;
+    bytes4[] selectorsOfDiamondCutFacet;
+    bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
+    bytes4[] selectorsOfManagerFacet;
+    bytes4[] selectorsOfOwnershipFacet;
+    bytes4[] selectorsOfStakingFacet;
+    bytes4[] selectorsOfStakingFormulasFacet;
+    bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
+    bytes4[] selectorsOfUbiquityPoolFacet;
 
-    // deploys diamond and connects facets
+    /// @notice Deploys diamond and connects facets
     function setUp() public virtual {
         owner = generateAddress("Owner", false, 10 ether);
         admin = generateAddress("Admin", false, 10 ether);
-        tokenManager = generateAddress("TokenManager", false, 10 ether);
 
         user1 = generateAddress("User1", false, 10 ether);
         contract1 = generateAddress("Contract1", true, 10 ether);
@@ -461,7 +458,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         );
 
         //deploy facets
-        dCutFacet = new DiamondCutFacet();
+        diamondCutFacetImplementation = new DiamondCutFacet();
         dLoupeFacet = new DiamondLoupeFacet();
         ownerFacet = new OwnershipFacet();
         managerFacet = new ManagerFacet();
@@ -482,7 +479,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
         dollarMintExcessFacet = new DollarMintExcessFacet();
 
-        dInit = new DiamondInit();
+        diamondInit = new DiamondInit();
         facetNames = [
             "DiamondCutFacet",
             "DiamondLoupeFacet",
@@ -515,7 +512,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         // diamond arguments
         DiamondArgs memory _args = DiamondArgs({
             owner: owner,
-            init: address(dInit),
+            init: address(diamondInit),
             initCalldata: abi.encodeWithSelector(
                 DiamondInit.init.selector,
                 initArgs
@@ -526,7 +523,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
 
         cuts[0] = (
             FacetCut({
-                facetAddress: address(dCutFacet),
+                facetAddress: address(diamondCutFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondCutFacet
             })
