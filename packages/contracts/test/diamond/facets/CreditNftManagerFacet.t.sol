@@ -84,26 +84,26 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
     function test_setExpiredCreditNftConversionRate() public {
         vm.expectRevert("Caller is not a Credit NFT manager");
-        ICreditNftManagerFacet.setExpiredCreditNftConversionRate(100);
+        creditNftManagerFacet.setExpiredCreditNftConversionRate(100);
 
         vm.prank(admin);
-        ICreditNftManagerFacet.setExpiredCreditNftConversionRate(100);
-        assertEq(ICreditNftManagerFacet.expiredCreditNftConversionRate(), 100);
+        creditNftManagerFacet.setExpiredCreditNftConversionRate(100);
+        assertEq(creditNftManagerFacet.expiredCreditNftConversionRate(), 100);
     }
 
     function test_setCreditNftLength() public {
         vm.expectRevert("Caller is not a Credit NFT manager");
-        ICreditNftManagerFacet.setCreditNftLength(100);
+        creditNftManagerFacet.setCreditNftLength(100);
 
         vm.prank(admin);
-        ICreditNftManagerFacet.setCreditNftLength(100);
-        assertEq(ICreditNftManagerFacet.creditNftLengthBlocks(), 100);
+        creditNftManagerFacet.setCreditNftLength(100);
+        assertEq(creditNftManagerFacet.creditNftLengthBlocks(), 100);
     }
 
     function test_exchangeDollarsForCreditNft() public {
         mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint Credit NFT");
-        ICreditNftManagerFacet.exchangeDollarsForCreditNft(100);
+        creditNftManagerFacet.exchangeDollarsForCreditNft(100);
 
         mockTwapFuncs(5e17);
         address mockSender = address(0x123);
@@ -114,7 +114,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
         dollarToken.approve(creditNftManagerAddress, 10000e18);
 
-        uint256 expiryBlockNumber = ICreditNftManagerFacet
+        uint256 expiryBlockNumber = creditNftManagerFacet
             .exchangeDollarsForCreditNft(100);
         assertEq(expiryBlockNumber, 10000 + creditNftLengthBlocks);
     }
@@ -124,7 +124,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
     {
         mockTwapFuncs(2e18);
         vm.expectRevert("Price must be below 1 to mint Credit");
-        ICreditNftManagerFacet.exchangeDollarsForCredit(100);
+        creditNftManagerFacet.exchangeDollarsForCredit(100);
     }
 
     function test_exchangeDollarsForCreditWorks() public {
@@ -136,7 +136,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
         dollarToken.approve(creditNftManagerAddress, 10000e18);
 
-        uint256 creditAmount = ICreditNftManagerFacet.exchangeDollarsForCredit(
+        uint256 creditAmount = creditNftManagerFacet.exchangeDollarsForCredit(
             100
         );
         assertEq(creditAmount, 100);
@@ -147,7 +147,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
     {
         vm.roll(1000);
         vm.expectRevert("Credit NFT has not expired");
-        ICreditNftManagerFacet.burnExpiredCreditNftForGovernance(2000, 1e18);
+        creditNftManagerFacet.burnExpiredCreditNftForGovernance(2000, 1e18);
     }
 
     function test_burnExpiredCreditNftForGovernanceRevertsIfNotEnoughBalance()
@@ -159,7 +159,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.roll(1000);
         vm.prank(mockMessageSender);
         vm.expectRevert("User not enough Credit NFT");
-        ICreditNftManagerFacet.burnExpiredCreditNftForGovernance(500, 1e18);
+        creditNftManagerFacet.burnExpiredCreditNftForGovernance(500, 1e18);
     }
 
     function test_burnExpiredCreditNftForGovernanceWorks() public {
@@ -175,7 +175,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.roll(1000);
         vm.startPrank(mockMessageSender);
         creditNft.setApprovalForAll(address(diamond), true);
-        ICreditNftManagerFacet.burnExpiredCreditNftForGovernance(
+        creditNftManagerFacet.burnExpiredCreditNftForGovernance(
             expiryBlockNumber,
             1e18
         );
@@ -188,13 +188,13 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
     function test_burnCreditNftForCreditRevertsIfExpired() public {
         vm.warp(1000);
         vm.expectRevert("Credit NFT has expired");
-        ICreditNftManagerFacet.burnCreditNftForCredit(500, 1e18);
+        creditNftManagerFacet.burnCreditNftForCredit(500, 1e18);
     }
 
     function test_burnCreditNftForCreditRevertsIfNotEnoughBalance() public {
         vm.warp(1000);
         vm.expectRevert("User not enough Credit NFT");
-        ICreditNftManagerFacet.burnCreditNftForCredit(1001, 1e18);
+        creditNftManagerFacet.burnCreditNftForCredit(1001, 1e18);
     }
 
     function test_burnCreditNftForCreditWorks() public {
@@ -211,7 +211,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.startPrank(mockMessageSender);
         vm.warp(expiryBlockNumber - 1);
         creditNft.setApprovalForAll(address(diamond), true);
-        ICreditNftManagerFacet.burnCreditNftForCredit(expiryBlockNumber, 1e18);
+        creditNftManagerFacet.burnCreditNftForCredit(expiryBlockNumber, 1e18);
         vm.stopPrank();
         uint256 redeemBalance = creditToken.balanceOf(mockMessageSender);
         assertEq(redeemBalance, 1e18);
@@ -222,13 +222,13 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
     {
         mockTwapFuncs(5e17);
         vm.expectRevert("Price must be above 1");
-        ICreditNftManagerFacet.burnCreditTokensForDollars(100);
+        creditNftManagerFacet.burnCreditTokensForDollars(100);
     }
 
     function test_burnCreditTokensForDollarsIfNotEnoughBalance() public {
         mockTwapFuncs(2e18);
         vm.expectRevert("User doesn't have enough Credit pool tokens.");
-        ICreditNftManagerFacet.burnCreditTokensForDollars(100);
+        creditNftManagerFacet.burnCreditTokensForDollars(100);
     }
 
     function test_burnCreditTokensForDollarsWorks() public {
@@ -237,7 +237,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         address account1 = address(0x123);
         UbiquityCreditToken(creditTokenAddress).mint(account1, 100e18);
         vm.prank(account1);
-        uint256 unredeemed = ICreditNftManagerFacet.burnCreditTokensForDollars(
+        uint256 unredeemed = creditNftManagerFacet.burnCreditTokensForDollars(
             10e18
         );
         assertEq(unredeemed, 10e18 - 1e18);
@@ -246,14 +246,14 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
     function test_redeemCreditNftRevertsIfPriceLowerThan1Ether() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("Price must be above 1 to redeem Credit NFT");
-        ICreditNftManagerFacet.redeemCreditNft(123123123, 100);
+        creditNftManagerFacet.redeemCreditNft(123123123, 100);
     }
 
     function test_redeemCreditNftRevertsIfCreditNftExpired() public {
         mockTwapFuncs(2e18);
         vm.roll(10000);
         vm.expectRevert("Credit NFT has expired");
-        ICreditNftManagerFacet.redeemCreditNft(5555, 100);
+        creditNftManagerFacet.redeemCreditNft(5555, 100);
     }
 
     function test_redeemCreditNftRevertsIfNotEnoughBalance() public {
@@ -269,7 +269,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.expectRevert("User not enough Credit NFT");
         vm.prank(account1);
         vm.roll(expiryBlockNumber - 1);
-        ICreditNftManagerFacet.redeemCreditNft(expiryBlockNumber, 200);
+        creditNftManagerFacet.redeemCreditNft(expiryBlockNumber, 200);
     }
 
     function test_redeemCreditNftRevertsIfNotEnoughDollars() public {
@@ -299,7 +299,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.prank(account1);
         vm.expectRevert("There aren't enough Dollar to redeem currently");
         vm.roll(expiryBlockNumber - 1);
-        ICreditNftManagerFacet.redeemCreditNft(expiryBlockNumber, 99);
+        creditNftManagerFacet.redeemCreditNft(expiryBlockNumber, 99);
     }
 
     function test_redeemCreditNftRevertsIfZeroAmountOfDollars() public {
@@ -328,7 +328,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.prank(account1);
         vm.expectRevert("There aren't any Dollar to redeem currently");
         vm.roll(expiryBlockNumber - 1);
-        ICreditNftManagerFacet.redeemCreditNft(expiryBlockNumber, 99);
+        creditNftManagerFacet.redeemCreditNft(expiryBlockNumber, 99);
     }
 
     function test_redeemCreditNftWorks() public {
@@ -355,7 +355,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.startPrank(account1);
         creditNft.setApprovalForAll(address(diamond), true);
         vm.roll(expiryBlockNumber - 1);
-        uint256 unredeemedCreditNft = ICreditNftManagerFacet.redeemCreditNft(
+        uint256 unredeemedCreditNft = creditNftManagerFacet.redeemCreditNft(
             expiryBlockNumber,
             99
         );
@@ -377,7 +377,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         );
 
         uint256 beforeBalance = dollarToken.balanceOf(creditNftManagerAddress);
-        ICreditNftManagerFacet.mintClaimableDollars();
+        creditNftManagerFacet.mintClaimableDollars();
         uint256 afterBalance = dollarToken.balanceOf(creditNftManagerAddress);
         assertEq(afterBalance - beforeBalance, 50);
     }
