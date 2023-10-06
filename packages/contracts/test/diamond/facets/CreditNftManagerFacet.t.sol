@@ -34,19 +34,19 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
         _creditNft = creditNft;
         vm.prank(admin);
-        IManager.setCreditNftAddress(address(_creditNft));
+        managerFacet.setCreditNftAddress(address(_creditNft));
 
         twapOracleAddress = address(diamond);
         dollarTokenAddress = address(dollarToken);
         creditNftManagerAddress = address(diamond);
-        creditCalculatorAddress = IManager.creditCalculatorAddress();
+        creditCalculatorAddress = managerFacet.creditCalculatorAddress();
         creditNftAddress = address(_creditNft);
-        governanceTokenAddress = IManager.governanceTokenAddress();
+        governanceTokenAddress = managerFacet.governanceTokenAddress();
         // deploy credit token
         UbiquityCreditToken _creditToken = creditToken;
         creditTokenAddress = address(_creditToken);
         vm.prank(admin);
-        IManager.setCreditTokenAddress(creditTokenAddress);
+        managerFacet.setCreditTokenAddress(creditTokenAddress);
 
         // set this contract as minter
         vm.startPrank(admin);

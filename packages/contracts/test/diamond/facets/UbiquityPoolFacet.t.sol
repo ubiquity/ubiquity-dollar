@@ -68,7 +68,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         }
 
         vm.startPrank(admin);
-        IManager.setStakingShareAddress(address(stakingShare));
+        managerFacet.setStakingShareAddress(address(stakingShare));
         stakingShare.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
@@ -80,7 +80,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             new MockMetaPool(address(diamond), address(crvToken))
         );
         //vm.prank(admin);
-        IManager.deployStableSwapPool(
+        managerFacet.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
             curve3CrvToken,
@@ -88,7 +88,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             50000000
         );
         //
-        metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
+        metapool = IMetaPool(managerFacet.stableSwapMetaPoolAddress());
         metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
@@ -108,7 +108,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
         );
-        IManager.setCreditTokenAddress(address(creditToken));
+        managerFacet.setCreditTokenAddress(address(creditToken));
 
         vm.stopPrank();
 
@@ -270,7 +270,9 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.mintDollar(address(collateral), 10 ether, 0 ether);
         uint256 balanceBefore = dollarToken.balanceOf(fourthAccount);
         vm.stopPrank();
-        MockMetaPool mock = MockMetaPool(IManager.stableSwapMetaPoolAddress());
+        MockMetaPool mock = MockMetaPool(
+            managerFacet.stableSwapMetaPoolAddress()
+        );
         // set the mock data for meta pool
         uint256[2] memory _price_cumulative_last = [
             uint256(100e18),
@@ -310,7 +312,9 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 balanceBefore = dollarToken.balanceOf(fourthAccount);
         uint256 balanceCollateralBefore = collateral.balanceOf(fourthAccount);
         vm.stopPrank();
-        MockMetaPool mock = MockMetaPool(IManager.stableSwapMetaPoolAddress());
+        MockMetaPool mock = MockMetaPool(
+            managerFacet.stableSwapMetaPoolAddress()
+        );
         // set the mock data for meta pool
         uint256[2] memory _price_cumulative_last = [
             uint256(100e18),

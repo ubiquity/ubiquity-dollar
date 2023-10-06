@@ -21,7 +21,7 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         twapOracleAddress = address(diamond);
 
         excessDollarsDistributorAddress = address(IDollarMintExcessFacet);
-        treasuryAddress = IManager.treasuryAddress();
+        treasuryAddress = managerFacet.treasuryAddress();
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {

@@ -108,7 +108,7 @@ contract ZeroStateStaking is DiamondTestSetup {
         );
 
         //vm.prank(admin);
-        IManager.deployStableSwapPool(
+        managerFacet.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
             address(crvToken),
@@ -116,7 +116,7 @@ contract ZeroStateStaking is DiamondTestSetup {
             50000000
         );
         //
-        metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
+        metapool = IMetaPool(managerFacet.stableSwapMetaPoolAddress());
         metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
@@ -139,7 +139,7 @@ contract ZeroStateStaking is DiamondTestSetup {
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
         );
-        IManager.setCreditTokenAddress(address(creditToken));
+        managerFacet.setCreditTokenAddress(address(creditToken));
 
         vm.stopPrank();
 

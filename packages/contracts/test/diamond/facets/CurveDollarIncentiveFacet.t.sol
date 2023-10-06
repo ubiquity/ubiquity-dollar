@@ -67,8 +67,9 @@ contract CurveDollarIncentiveTest is DiamondTestSetup {
     function testIncentivizeBuy() public {
         vm.startPrank(admin);
 
-        address stableSwapPoolAddress = IManager.stableSwapMetaPoolAddress();
-        IERC20 governanceToken = IERC20(IManager.governanceTokenAddress());
+        address stableSwapPoolAddress = managerFacet
+            .stableSwapMetaPoolAddress();
+        IERC20 governanceToken = IERC20(managerFacet.governanceTokenAddress());
         uint256 amountIn;
 
         // 1. do nothing if the target address is included to exempt list
@@ -135,8 +136,9 @@ contract CurveDollarIncentiveTest is DiamondTestSetup {
     }
 
     function testIncentivizeSell() public {
-        address stableSwapPoolAddress = IManager.stableSwapMetaPoolAddress();
-        address dollarAddress = IManager.dollarTokenAddress();
+        address stableSwapPoolAddress = managerFacet
+            .stableSwapMetaPoolAddress();
+        address dollarAddress = managerFacet.dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);
 
         // 1. do nothing if the target address is included to exempt list

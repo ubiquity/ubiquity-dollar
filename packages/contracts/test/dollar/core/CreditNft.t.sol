@@ -28,7 +28,7 @@ contract CreditNftTest is LocalTestHelper {
         // deploy Credit NFT token
         creditNftAddress = address(creditNft);
         vm.prank(admin);
-        IManager.setCreditNftAddress(address(creditNftAddress));
+        managerFacet.setCreditNftAddress(address(creditNftAddress));
     }
 
     function testSetManager_ShouldRevert_WhenNotAdmin() public {
