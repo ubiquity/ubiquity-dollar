@@ -38,7 +38,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     DiamondInit diamondInit;
 
     // diamond facets (which point to the core diamond and should be used across the tests)
-    AccessControlFacet IAccessControl;
+    AccessControlFacet accessControlFacet;
     BondingCurveFacet bondingCurveFacet;
     ChefFacet chefFacet;
     CollectableDustFacet collectableDustFacet;
@@ -761,7 +761,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         diamond = new Diamond(_args, cuts);
 
         // initialize diamond facets which point to the core diamond contract
-        IAccessControl = AccessControlFacet(address(diamond));
+        accessControlFacet = AccessControlFacet(address(diamond));
         bondingCurveFacet = BondingCurveFacet(address(diamond));
         chefFacet = ChefFacet(address(diamond));
         collectableDustFacet = CollectableDustFacet(address(diamond));
@@ -790,20 +790,38 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         facetAddressList = diamondLoupeFacet.facetAddresses();
         vm.startPrank(admin);
         // grant diamond dollar minting and burning rights
-        IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
+            CURVE_DOLLAR_MANAGER_ROLE,
+            address(diamond)
+        );
         // grant diamond dollar minting and burning rights
-        IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessControl.grantRole(DOLLAR_TOKEN_BURNER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
+            DOLLAR_TOKEN_MINTER_ROLE,
+            address(diamond)
+        );
+        accessControlFacet.grantRole(
+            DOLLAR_TOKEN_BURNER_ROLE,
+            address(diamond)
+        );
         // grand diamond Credit token minting and burning rights
-        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(diamond));
-        IAccessControl.grantRole(CREDIT_TOKEN_BURNER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
+            CREDIT_TOKEN_MINTER_ROLE,
+            address(diamond)
+        );
+        accessControlFacet.grantRole(
+            CREDIT_TOKEN_BURNER_ROLE,
+            address(diamond)
+        );
         // grant diamond token admin rights
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MANAGER_ROLE,
             address(diamond)
         );
         // grant diamond token minter rights
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
+            STAKING_SHARE_MINTER_ROLE,
+            address(diamond)
+        );
         // init UUPS core contracts
         __setupUUPS(address(diamond));
         vm.stopPrank();

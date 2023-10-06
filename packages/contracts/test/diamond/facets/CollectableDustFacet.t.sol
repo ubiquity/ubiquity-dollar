@@ -22,7 +22,7 @@ contract CollectableDustFacetTest is DiamondTestSetup {
 
         vm.startPrank(admin);
 
-        IAccessControl.grantRole(STAKING_MANAGER_ROLE, stakingManager);
+        accessControlFacet.grantRole(STAKING_MANAGER_ROLE, stakingManager);
 
         // deploy mock token
         mockToken = new MockERC20("Mock", "MCK", 18);

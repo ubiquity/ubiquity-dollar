@@ -29,7 +29,7 @@ contract CurveDollarIncentiveTest is DiamondTestSetup {
         twapOracleAddress = address(diamond);
 
         vm.startPrank(admin);
-        IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
+        accessControlFacet.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
         vm.stopPrank();
     }
 
