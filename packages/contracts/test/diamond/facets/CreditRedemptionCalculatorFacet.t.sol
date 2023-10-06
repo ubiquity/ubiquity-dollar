@@ -15,7 +15,7 @@ contract CreditRedemptionCalculatorFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
         creditNft.mintCreditNft(user1, 100, 10);
-        IManager.setCreditNftAddress(address(creditNft));
+        managerFacet.setCreditNftAddress(address(creditNft));
         vm.stopPrank();
     }
 
@@ -33,7 +33,7 @@ contract CreditRedemptionCalculatorFacetTest is DiamondTestSetup {
 
     function testGetCreditAmount_ShouldRevert_IfDebtIsTooHigh() public {
         vm.mockCall(
-            IManager.dollarTokenAddress(),
+            managerFacet.dollarTokenAddress(),
             abi.encodeWithSelector(IERC20.totalSupply.selector),
             abi.encode(1)
         );

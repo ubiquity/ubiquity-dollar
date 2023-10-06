@@ -91,7 +91,7 @@ contract ZeroStateChef is DiamondTestSetup {
         }
 
         vm.startPrank(admin);
-        IManager.setStakingShareAddress(address(stakingShare));
+        managerFacet.setStakingShareAddress(address(stakingShare));
         stakingShare.setApprovalForAll(address(diamond), true);
         IAccessControl.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
@@ -102,7 +102,7 @@ contract ZeroStateChef is DiamondTestSetup {
         address curve3CrvBasePool = address(
             new MockMetaPool(address(diamond), address(crvToken))
         );
-        IManager.deployStableSwapPool(
+        managerFacet.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
             curve3CrvToken,
@@ -110,7 +110,7 @@ contract ZeroStateChef is DiamondTestSetup {
             50000000
         );
         //
-        metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
+        metapool = IMetaPool(managerFacet.stableSwapMetaPoolAddress());
         metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
@@ -130,7 +130,7 @@ contract ZeroStateChef is DiamondTestSetup {
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
         );
-        IManager.setCreditTokenAddress(address(creditToken));
+        managerFacet.setCreditTokenAddress(address(creditToken));
 
         vm.stopPrank();
 

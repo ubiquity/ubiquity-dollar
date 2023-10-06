@@ -63,7 +63,7 @@ abstract contract LocalTestHelper is DiamondTestSetup {
         // deploy credit token
 
         // set treasury address
-        IManager.setTreasuryAddress(treasuryAddress);
+        managerFacet.setTreasuryAddress(treasuryAddress);
 
         vm.stopPrank();
         vm.prank(owner);

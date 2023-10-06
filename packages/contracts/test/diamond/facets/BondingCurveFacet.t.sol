@@ -40,7 +40,7 @@ contract BondingCurveFacetTest is DiamondTestSetup {
         // deploy UbiquiStick
         UbiquiStick ubiquiStick = new UbiquiStick();
         ubiquiStick.setMinter(address(diamond));
-        IManager.setUbiquistickAddress(address(ubiquiStick));
+        managerFacet.setUbiquistickAddress(address(ubiquiStick));
 
         vm.stopPrank();
     }
@@ -137,7 +137,10 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 balance = poolBalance - _amount;
 
         assertEq(IBondingCurveFacet.poolBalance(), balance);
-        assertEq(dollarToken.balanceOf(IManager.treasuryAddress()), _amount);
+        assertEq(
+            dollarToken.balanceOf(managerFacet.treasuryAddress()),
+            _amount
+        );
     }
 
     function testPurchaseTargetAmountShouldRevertIfSupplyZero() public {
