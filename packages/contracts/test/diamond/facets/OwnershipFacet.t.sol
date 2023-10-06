@@ -23,26 +23,26 @@ contract OwnershipFacetTest is DiamondTestSetup {
 
     // test OwnershipFacet transferOwnership should revert if sender is not owner
     function testTransferOwnership_ShouldRevertWhenNotOwner() public {
-        assertEq(IOwnershipFacet.owner(), owner);
+        assertEq(ownershipFacet.owner(), owner);
         vm.prank(mock_sender);
         vm.expectRevert(abi.encodePacked("LibDiamond: Must be contract owner"));
-        IOwnershipFacet.transferOwnership(mock_recipient);
-        assertEq(IOwnershipFacet.owner(), owner);
+        ownershipFacet.transferOwnership(mock_recipient);
+        assertEq(ownershipFacet.owner(), owner);
     }
 
     // test OwnershipFacet transferOwnership should revert if new owner is zero address
     function testTransferOwnership_ShouldRevertWhenNewOwnerIsZeroAddress()
         public
     {
-        assertEq(IOwnershipFacet.owner(), owner);
+        assertEq(ownershipFacet.owner(), owner);
         vm.prank(owner);
         vm.expectRevert(
             abi.encodePacked(
                 "OwnershipFacet: New owner cannot be the zero address"
             )
         );
-        IOwnershipFacet.transferOwnership(address(0));
-        assertEq(IOwnershipFacet.owner(), owner);
+        ownershipFacet.transferOwnership(address(0));
+        assertEq(ownershipFacet.owner(), owner);
     }
 
     // test OwnershipFacet transferOwnership should work if new owner is not contract
@@ -52,7 +52,7 @@ contract OwnershipFacetTest is DiamondTestSetup {
         vm.prank(owner);
         vm.expectEmit(true, true, true, true);
         emit OwnershipTransferred(owner, mock_recipient);
-        IOwnershipFacet.transferOwnership(mock_recipient);
-        assertEq(IOwnershipFacet.owner(), mock_recipient);
+        ownershipFacet.transferOwnership(mock_recipient);
+        assertEq(ownershipFacet.owner(), mock_recipient);
     }
 }
