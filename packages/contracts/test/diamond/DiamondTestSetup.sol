@@ -29,7 +29,7 @@ import {ERC1155Ubiquity} from "../../src/dollar/core/ERC1155Ubiquity.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
-abstract contract DiamondSetup is DiamondTestHelper {
+abstract contract DiamondTestSetup is DiamondTestHelper {
     // contract types of facets to be deployed
     Diamond diamond;
     DiamondCutFacet dCutFacet;

@@ -5,7 +5,7 @@ import "../DiamondTestSetup.sol";
 import "abdk/ABDKMathQuad.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 
-contract StakingFormulasFacetTest is DiamondSetup {
+contract StakingFormulasFacetTest is DiamondTestSetup {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 

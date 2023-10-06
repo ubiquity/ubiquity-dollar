@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "../DiamondTestSetup.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract DollarMintCalculatorFacetTest is DiamondSetup {
+contract DollarMintCalculatorFacetTest is DiamondTestSetup {
     address dollarManagerAddress;
     address dollarAddress;
     address twapOracleAddress;

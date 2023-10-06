@@ -5,7 +5,7 @@ import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import "../DiamondTestSetup.sol";
 
-contract TWAPOracleDollar3poolFacetTest is DiamondSetup {
+contract TWAPOracleDollar3poolFacetTest is DiamondTestSetup {
     address curve3CRVTokenAddress = address(0x333);
     address twapOracleAddress;
     address metaPoolAddress;
