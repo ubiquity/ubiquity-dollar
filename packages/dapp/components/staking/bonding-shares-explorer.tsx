@@ -212,7 +212,7 @@ export const BondingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   // cspell: disable-next-line
   const totalPendingUgov = shares.reduce((sum, val) => sum.add(val.ugov), BigNumber.from(0));
 
-  const poolPercentage = formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
+  const poolPercentage = totalShares.isZero() ? 0 : formatEther(totalUserShares.mul(ethers.utils.parseEther("100")).div(totalShares));
   // cspell: disable-next-line
   const filteredShares = shares.filter(({ bond: { lpAmount }, ugov }) => lpAmount.gt(0) || ugov.gt(0));
 
