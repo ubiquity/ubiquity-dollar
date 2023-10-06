@@ -20,7 +20,7 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         dollarManagerAddress = address(diamond);
         twapOracleAddress = address(diamond);
 
-        excessDollarsDistributorAddress = address(IDollarMintExcessFacet);
+        excessDollarsDistributorAddress = address(dollarMintExcessFacet);
         treasuryAddress = managerFacet.treasuryAddress();
     }
 
