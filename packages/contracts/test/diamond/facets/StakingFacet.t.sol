@@ -227,7 +227,7 @@ contract ZeroStateStakingTest is ZeroStateStaking {
             stakingMinAccount,
             stakingShare.totalSupply(),
             lpAmount,
-            IStakingFormulasFacet.durationMultiply(
+            stakingFormulasFacet.durationMultiply(
                 lpAmount,
                 lockup,
                 IStakingFacet.stakingDiscountMultiplier()
@@ -283,7 +283,7 @@ contract DepositStateStaking is ZeroStateStaking {
 
         assertEq(IChefFacet.totalShares(), 0);
         fourthBal = metapool.balanceOf(fourthAccount);
-        shares = IStakingFormulasFacet.durationMultiply(
+        shares = stakingFormulasFacet.durationMultiply(
             fourthBal,
             1,
             IStakingFacet.stakingDiscountMultiplier()
