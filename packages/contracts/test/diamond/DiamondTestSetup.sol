@@ -761,23 +761,10 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         diamond = new Diamond(_args, cuts);
 
         // initialize diamond facets which point to the core diamond contract
-        ILoupe = IDiamondLoupe(address(diamond));
-        ICut = IDiamondCut(address(diamond));
-        IManager = ManagerFacet(address(diamond));
         IAccessControl = AccessControlFacet(address(diamond));
-        ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
-
-        ICollectableDustFacet = CollectableDustFacet(address(diamond));
-        IChefFacet = ChefFacet(address(diamond));
-        IStakingFacet = StakingFacet(address(diamond));
-        IUbiquityPoolFacet = UbiquityPoolFacet(address(diamond));
-        IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
         IBondingCurveFacet = BondingCurveFacet(address(diamond));
-        ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(
-            address(diamond)
-        );
-        IOwnershipFacet = OwnershipFacet(address(diamond));
-
+        IChefFacet = ChefFacet(address(diamond));
+        ICollectableDustFacet = CollectableDustFacet(address(diamond));
         ICreditNftManagerFacet = CreditNftManagerFacet(address(diamond));
         ICreditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
@@ -785,9 +772,19 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         ICreditRedemptionCalculationFacet = CreditRedemptionCalculatorFacet(
             address(diamond)
         );
-
+        ICurveDollarIncentiveFacet = CurveDollarIncentiveFacet(
+            address(diamond)
+        );
+        ICut = IDiamondCut(address(diamond));
+        ILoupe = IDiamondLoupe(address(diamond));
         IDollarMintCalcFacet = DollarMintCalculatorFacet(address(diamond));
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
+        IManager = ManagerFacet(address(diamond));
+        IOwnershipFacet = OwnershipFacet(address(diamond));
+        IStakingFacet = StakingFacet(address(diamond));
+        IStakingFormulasFacet = StakingFormulasFacet(address(diamond));
+        ITWAPOracleDollar3pool = TWAPOracleDollar3poolFacet(address(diamond));
+        IUbiquityPoolFacet = UbiquityPoolFacet(address(diamond));
 
         // get all addresses
         facetAddressList = ILoupe.facetAddresses();
