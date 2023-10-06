@@ -101,11 +101,11 @@ contract ManagerFacetTest is DiamondTestSetup {
 
     function testSetIncentiveToDollar_ShouldSucceed() public prankAs(admin) {
         assertEq(
-            IAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
+            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
             true
         );
         assertEq(
-            IAccessControl.hasRole(
+            accessControlFacet.hasRole(
                 GOVERNANCE_TOKEN_MANAGER_ROLE,
                 address(diamond)
             ),
@@ -119,7 +119,7 @@ contract ManagerFacetTest is DiamondTestSetup {
         prankAs(admin)
     {
         assertEq(
-            IAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
+            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
             true
         );
     }
@@ -157,11 +157,11 @@ contract ManagerFacetTest is DiamondTestSetup {
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             stakingV1Address
         );
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             stakingV1Address
         );

@@ -13,7 +13,7 @@ contract CreditRedemptionCalculatorFacetTest is DiamondTestSetup {
         assertEq(admSupply, 10000e18);
 
         vm.startPrank(admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
         creditNft.mintCreditNft(user1, 100, 10);
         managerFacet.setCreditNftAddress(address(creditNft));
         vm.stopPrank();

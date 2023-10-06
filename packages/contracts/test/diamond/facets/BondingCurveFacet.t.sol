@@ -32,7 +32,7 @@ contract BondingCurveFacetTest is DiamondTestSetup {
 
         vm.startPrank(admin);
 
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );

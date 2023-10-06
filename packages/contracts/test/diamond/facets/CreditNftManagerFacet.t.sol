@@ -50,13 +50,13 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
         // set this contract as minter
         vm.startPrank(admin);
-        IAccessControl.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(this));
-        IAccessControl.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(this));
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(DOLLAR_TOKEN_MINTER_ROLE, address(this));
+        accessControlFacet.grantRole(CREDIT_TOKEN_MINTER_ROLE, address(this));
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
         vm.stopPrank();
     }
 
@@ -167,7 +167,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         uint256 expiryBlockNumber = 500;
         vm.startPrank(admin);
         creditNft.mintCreditNft(mockMessageSender, 2e18, expiryBlockNumber);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"),
             creditNftManagerAddress
         );
@@ -203,7 +203,7 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
 
         creditNft.mintCreditNft(mockMessageSender, 2e18, expiryBlockNumber);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             keccak256("GOVERNANCE_TOKEN_MINTER_ROLE"),
             creditNftManagerAddress
         );
@@ -258,8 +258,11 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
     function test_redeemCreditNftRevertsIfNotEnoughBalance() public {
         vm.startPrank(admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(this)
+        );
         vm.stopPrank();
 
         mockTwapFuncs(2e18);
@@ -274,8 +277,11 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
     function test_redeemCreditNftRevertsIfNotEnoughDollars() public {
         vm.startPrank(admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(this)
+        );
         vm.stopPrank();
 
         mockTwapFuncs(2e18);
@@ -304,8 +310,11 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
     function test_redeemCreditNftRevertsIfZeroAmountOfDollars() public {
         vm.startPrank(admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(this)
+        );
         vm.stopPrank();
 
         mockTwapFuncs(2e18);
@@ -333,8 +342,11 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
     function test_redeemCreditNftWorks() public {
         vm.startPrank(admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(this)
+        );
         vm.stopPrank();
 
         mockTwapFuncs(2e18);

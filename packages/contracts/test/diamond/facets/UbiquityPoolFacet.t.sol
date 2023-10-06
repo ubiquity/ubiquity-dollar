@@ -70,7 +70,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         managerFacet.setStakingShareAddress(address(stakingShare));
         stakingShare.setApprovalForAll(address(diamond), true);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(stakingShare)
         );
@@ -97,14 +97,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
 
         vm.startPrank(admin);
 
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
 
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
         );
