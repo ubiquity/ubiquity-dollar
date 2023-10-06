@@ -52,7 +52,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     DollarMintExcessFacet IDollarMintExcessFacet;
     ManagerFacet IManager;
     OwnershipFacet IOwnershipFacet;
-    StakingFacet IStakingFacet;
+    StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
@@ -781,7 +781,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         IDollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
         IManager = ManagerFacet(address(diamond));
         IOwnershipFacet = OwnershipFacet(address(diamond));
-        IStakingFacet = StakingFacet(address(diamond));
+        stakingFacet = StakingFacet(address(diamond));
         stakingFormulasFacet = StakingFormulasFacet(address(diamond));
         twapOracleDollar3PoolFacet = TWAPOracleDollar3poolFacet(
             address(diamond)

@@ -64,9 +64,9 @@ contract DepositStakingShare is LocalTestHelper {
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
-            metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
+            metapool.approve(address(stakingFacet), 2 ** 256 - 1);
             creationBlock.push(block.number);
-            IStakingFacet.deposit(depositAmounts[i], lockupWeeks[i]);
+            stakingFacet.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
         }
     }
@@ -314,9 +314,9 @@ contract StakingShareTest is DepositStakingShare {
             stakingFormulasFacet.durationMultiply(
                 fourthBal,
                 52,
-                IStakingFacet.stakingDiscountMultiplier()
+                stakingFacet.stakingDiscountMultiplier()
             ),
-            IStakingFacet.blockCountInAWeek() * 52,
+            stakingFacet.blockCountInAWeek() * 52,
             fourthBal
         );
 

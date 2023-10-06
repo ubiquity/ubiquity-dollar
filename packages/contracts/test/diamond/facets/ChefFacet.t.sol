@@ -111,7 +111,7 @@ contract ZeroStateChef is DiamondTestSetup {
         );
         //
         metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
-        metapool.transfer(address(IStakingFacet), 100e18);
+        metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
         vm.prank(owner);
@@ -174,7 +174,7 @@ contract ZeroStateChef is DiamondTestSetup {
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
-        IStakingFacet.setBlockCountInAWeek(420);
+        stakingFacet.setBlockCountInAWeek(420);
 
         vm.stopPrank();
 
@@ -216,7 +216,7 @@ contract ZeroStateChefTest is ZeroStateChef {
         uint256 shares = stakingFormulasFacet.durationMultiply(
             lpAmount,
             10,
-            IStakingFacet.stakingDiscountMultiplier()
+            stakingFacet.stakingDiscountMultiplier()
         );
         uint256 id = stakingShare.totalSupply() + 1;
 
@@ -234,7 +234,7 @@ contract ZeroStateChefTest is ZeroStateChef {
 
         emit Deposit(fourthAccount, shares, id);
         vm.prank(fourthAccount);
-        IStakingFacet.deposit(lpAmount, 10);
+        stakingFacet.deposit(lpAmount, 10);
 
         (, uint256 accGovernance) = IChefFacet.pool();
         uint256[2] memory info1 = [shares, (shares * accGovernance) / 1e12];
@@ -256,14 +256,14 @@ contract DepositStateChef is ZeroStateChef {
         shares = stakingFormulasFacet.durationMultiply(
             fourthBal,
             1,
-            IStakingFacet.stakingDiscountMultiplier()
+            stakingFacet.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         fourthID = stakingShare.totalSupply() + 1;
         vm.stopPrank();
         vm.startPrank(fourthAccount);
         metapool.approve(address(diamond), fourthBal);
-        IStakingFacet.deposit(fourthBal, 1);
+        stakingFacet.deposit(fourthBal, 1);
         assertEq(stakingShare.totalSupply(), fourthID);
         assertEq(stakingShare.balanceOf(fourthAccount, fourthID), 1);
 
@@ -300,7 +300,7 @@ contract DepositStateChefTest is DepositStateChef {
         // calculate the reward in governance token for the user based on all his shares
         uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
-        IStakingFacet.removeLiquidity(amount, fourthID);
+        stakingFacet.removeLiquidity(amount, fourthID);
         assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
     }
 

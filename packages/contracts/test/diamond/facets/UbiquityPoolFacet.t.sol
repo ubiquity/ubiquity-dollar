@@ -89,7 +89,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
         //
         metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
-        metapool.transfer(address(IStakingFacet), 100e18);
+        metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
         vm.prank(owner);
