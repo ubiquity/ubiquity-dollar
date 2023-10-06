@@ -62,7 +62,7 @@ contract ZeroStateChef is DiamondTestSetup {
 
         vm.startPrank(owner);
 
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CrvToken);
+        twapOracleDollar3PoolFacet.setPool(metaPoolAddress, curve3CrvToken);
 
         address[7] memory mintings = [
             admin,
@@ -115,7 +115,7 @@ contract ZeroStateChef is DiamondTestSetup {
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
         vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
+        twapOracleDollar3PoolFacet.setPool(address(metapool), curve3CrvToken);
 
         vm.startPrank(admin);
 

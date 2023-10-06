@@ -17,7 +17,10 @@ contract TWAPOracleDollar3poolFacetTest is DiamondTestSetup {
             new MockMetaPool(address(dollarToken), curve3CRVTokenAddress)
         );
         vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CRVTokenAddress);
+        twapOracleDollar3PoolFacet.setPool(
+            metaPoolAddress,
+            curve3CRVTokenAddress
+        );
     }
 
     function test_overall() public {
@@ -35,12 +38,12 @@ contract TWAPOracleDollar3poolFacetTest is DiamondTestSetup {
             _twap_balances,
             _dy_values
         );
-        ITWAPOracleDollar3pool.update();
+        twapOracleDollar3PoolFacet.update();
 
-        uint256 amount0Out = ITWAPOracleDollar3pool.consult(
+        uint256 amount0Out = twapOracleDollar3PoolFacet.consult(
             address(dollarToken)
         );
-        uint256 amount1Out = ITWAPOracleDollar3pool.consult(
+        uint256 amount1Out = twapOracleDollar3PoolFacet.consult(
             curve3CRVTokenAddress
         );
         assertEq(amount0Out, 100e18);
