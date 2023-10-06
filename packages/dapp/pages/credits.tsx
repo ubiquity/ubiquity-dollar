@@ -3,7 +3,7 @@ import DollarPrice from "@/components/redeem/dollar-price";
 import UcrRedeem from "@/components/redeem/ucr-redeem";
 import UcrNftGenerator from "@/components/redeem/debt-coupon-deposit";
 import UcrNftRedeem from "@/components/redeem/ucr-nft-redeem";
-import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 // import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
 import dynamic from "next/dynamic";
@@ -11,17 +11,19 @@ const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connec
 
 const PriceStabilization: FC = (): JSX.Element => {
   const [twapInteger, setTwapInteger] = useState<number>(0);
-  const managedContracts = useManagerManaged();
+  const protocolContracts = useProtocolContracts();
 
   useEffectAsync(async () => {
-    if (managedContracts) {
-      const twapPrice = await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address);
+    const contracts = await protocolContracts;
+    if (contracts) {
+      const dollarTokenAddress = await contracts.managerFacet!.dollarTokenAddress();
+      const twapPrice = await contracts.twapOracleDollar3poolFacet!.consult(dollarTokenAddress);
       if (twapPrice) {
         const twapPriceInteger = (twapPrice as unknown as number) / 1e18;
         setTwapInteger(twapPriceInteger);
       }
     }
-  }, [managedContracts]);
+  }, [protocolContracts]);
 
   return (
     <WalletConnectionWall>

@@ -4,8 +4,7 @@ import { useState } from "react";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { formatEther } from "@/lib/format";
 import { safeParseEther } from "@/lib/utils";
-import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
-import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useBalances from "../lib/hooks/use-balances";
 import useSigner from "../lib/hooks/use-signer";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
@@ -18,8 +17,7 @@ const UcrNftGenerator = () => {
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction, doingTransaction] = useTransactionLogger();
-  const deployedContracts = useDeployedContracts();
-  const managedContracts = useManagerManaged();
+  const protocolContracts = useProtocolContracts();
 
   const [inputVal, setInputVal] = useState("");
   const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber | null>(null);
@@ -28,15 +26,15 @@ const UcrNftGenerator = () => {
     return <span>Connect wallet</span>;
   }
 
-  if (!balances || !managedContracts || !deployedContracts) {
+  if (!balances || !protocolContracts) {
     return <span>· · ·</span>;
   }
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
-    const { debtCouponManager } = deployedContracts;
+    const contracts = await protocolContracts;
     // cspell: disable-next-line
-    await ensureERC20Allowance("uAD -> DebtCouponManager", managedContracts.dollarToken, amount, signer, debtCouponManager.address);
-    await (await debtCouponManager.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
+    await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.dollarToken!, amount, signer, contracts.creditNftManagerFacet!.address);
+    await (await contracts.creditNftManagerFacet!.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
     refreshBalances();
   };
 
@@ -52,11 +50,12 @@ const UcrNftGenerator = () => {
   };
 
   const handleInput = async (val: string) => {
+    const contracts = await protocolContracts;
     setInputVal(val);
     const amount = extractValidAmount(val);
     if (amount) {
       setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await managedContracts.creditNftCalculator.connect(signer).getCreditNftAmount(amount));
+      setExpectedDebtCoupon(await contracts.creditNftRedemptionCalculatorFacet!.connect(signer).getCreditNftAmount(amount));
     }
   };
 

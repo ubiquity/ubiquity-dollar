@@ -3,8 +3,7 @@ import { useState } from "react";
 import { SwapWidget } from "@uniswap/widgets";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
 import { safeParseEther } from "@/lib/utils";
-import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
-import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useBalances from "../lib/hooks/use-balances";
 import useSigner from "../lib/hooks/use-signer";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
@@ -21,8 +20,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction, doingTransaction] = useTransactionLogger();
-  const deployedContracts = useDeployedContracts();
-  const managedContracts = useManagerManaged();
+  const protocolContracts = useProtocolContracts();
 
   const [inputVal, setInputVal] = useState("0");
   // cspell: disable-next-line
@@ -34,20 +32,20 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     return <span>Connect wallet</span>;
   }
 
-  if (!managedContracts || !deployedContracts || !balances) {
+  if (!protocolContracts || !balances) {
     return <span>· · ·</span>;
   }
 
   const redeemUcr = async (amount: BigNumber) => {
-    const { debtCouponManager } = deployedContracts;
+    const contracts = await protocolContracts;
     // cspell: disable-next-line
-    await ensureERC20Allowance("uCR -> DebtCouponManager", managedContracts.creditToken, amount, signer, debtCouponManager.address);
-    await (await debtCouponManager.connect(signer).burnCreditTokensForDollars(amount)).wait();
+    await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.creditToken!, amount, signer, contracts.creditNftManagerFacet!.address);
+    await (await contracts.creditNftManagerFacet!.connect(signer).burnCreditTokensForDollars(amount)).wait();
     refreshBalances();
     // cspell: disable-next-line
     if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
       const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
-      await (await routerContract.connect(signer).approveMax(managedContracts.dollarToken.address)).wait();
+      await (await routerContract.connect(signer).approveMax(contracts.dollarToken!.address)).wait();
       await useTrade(selectedRedeemToken, quoteAmount);
       refreshBalances();
     }
