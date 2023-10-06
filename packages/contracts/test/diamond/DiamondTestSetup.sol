@@ -41,7 +41,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     AccessControlFacet IAccessControl;
     BondingCurveFacet IBondingCurveFacet;
     ChefFacet IChefFacet;
-    CollectableDustFacet ICollectableDustFacet;
+    CollectableDustFacet collectableDustFacet;
     CreditNftManagerFacet creditNftManagerFacet;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculationFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculationFacet;
@@ -764,7 +764,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         IAccessControl = AccessControlFacet(address(diamond));
         IBondingCurveFacet = BondingCurveFacet(address(diamond));
         IChefFacet = ChefFacet(address(diamond));
-        ICollectableDustFacet = CollectableDustFacet(address(diamond));
+        collectableDustFacet = CollectableDustFacet(address(diamond));
         creditNftManagerFacet = CreditNftManagerFacet(address(diamond));
         creditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
