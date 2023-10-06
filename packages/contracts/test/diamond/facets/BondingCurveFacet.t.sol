@@ -59,10 +59,10 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         emit ParamsSet(connectorWeight, baseY);
 
         vm.prank(admin);
-        IBondingCurveFacet.setParams(connectorWeight, baseY);
+        bondingCurveFacet.setParams(connectorWeight, baseY);
 
-        assertEq(connectorWeight, IBondingCurveFacet.connectorWeight());
-        assertEq(baseY, IBondingCurveFacet.baseY());
+        assertEq(connectorWeight, bondingCurveFacet.connectorWeight());
+        assertEq(baseY, bondingCurveFacet.baseY());
     }
 
     function testSetParamsShouldRevertNotAdmin() public {
@@ -73,7 +73,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
 
         vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
-        IBondingCurveFacet.setParams(connectorWeight, baseY);
+        bondingCurveFacet.setParams(connectorWeight, baseY);
     }
 
     function testDeposit(uint32 connectorWeight, uint256 baseY) public {
@@ -83,17 +83,17 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         baseY = bound(baseY, 1, 1000000);
 
         vm.prank(admin);
-        IBondingCurveFacet.setParams(connectorWeight, baseY);
+        bondingCurveFacet.setParams(connectorWeight, baseY);
 
         uint256 initBal = dollarToken.balanceOf(secondAccount);
 
         vm.expectEmit(true, false, false, true);
         emit Deposit(secondAccount, collateralDeposited);
-        IBondingCurveFacet.deposit(collateralDeposited, secondAccount);
+        bondingCurveFacet.deposit(collateralDeposited, secondAccount);
 
         uint256 finBal = dollarToken.balanceOf(secondAccount);
 
-        uint256 tokReturned = IBondingCurveFacet.purchaseTargetAmountFromZero(
+        uint256 tokReturned = bondingCurveFacet.purchaseTargetAmountFromZero(
             collateralDeposited,
             connectorWeight,
             ACCURACY,
@@ -107,10 +107,10 @@ contract ZeroStateBonding is BondingCurveFacetTest {
             .mul(SafeMath.sub((power ** (connectorWeight)), 10 ** 18))
             .div(10 ** 18);
 
-        assertEq(collateralDeposited, IBondingCurveFacet.poolBalance());
+        assertEq(collateralDeposited, bondingCurveFacet.poolBalance());
         assertEq(collateralDeposited, finBal - initBal);
         assertEq(tokReturned, result);
-        assertEq(tokReturned, IBondingCurveFacet.getShare(secondAccount));
+        assertEq(tokReturned, bondingCurveFacet.getShare(secondAccount));
         assertEq(tokReturned, creditNft.balanceOf(secondAccount, 1));
     }
 
@@ -121,22 +121,22 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         baseY = bound(baseY, 1, 1000000);
 
         vm.startPrank(admin);
-        IBondingCurveFacet.setParams(connectorWeight, baseY);
+        bondingCurveFacet.setParams(connectorWeight, baseY);
 
-        IBondingCurveFacet.deposit(collateralDeposited, secondAccount);
+        bondingCurveFacet.deposit(collateralDeposited, secondAccount);
 
         uint256 _amount = bound(baseY, 0, collateralDeposited);
 
         vm.expectEmit(true, false, false, true);
         emit Withdraw(collateralDeposited);
 
-        IBondingCurveFacet.withdraw(_amount);
+        bondingCurveFacet.withdraw(_amount);
         vm.stopPrank();
 
-        uint256 poolBalance = IBondingCurveFacet.poolBalance();
+        uint256 poolBalance = bondingCurveFacet.poolBalance();
         uint256 balance = poolBalance - _amount;
 
-        assertEq(IBondingCurveFacet.poolBalance(), balance);
+        assertEq(bondingCurveFacet.poolBalance(), balance);
         assertEq(
             dollarToken.balanceOf(managerFacet.treasuryAddress()),
             _amount
@@ -149,7 +149,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint32 connectorWeight = uint32(bound(connWeight, 1, MAX_WEIGHT));
 
         vm.expectRevert("ERR_INVALID_SUPPLY");
-        IBondingCurveFacet.purchaseTargetAmount(
+        bondingCurveFacet.purchaseTargetAmount(
             collateralDeposited,
             connectorWeight,
             1,
@@ -163,7 +163,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 poolBalance = bound(bal, 1, 1000000);
 
         vm.expectRevert("ERR_INVALID_WEIGHT");
-        IBondingCurveFacet.purchaseTargetAmount(
+        bondingCurveFacet.purchaseTargetAmount(
             collateralDeposited,
             0,
             1,
@@ -182,7 +182,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
 
         // 1. Should do nothing if tokens deposited is zero
         vm.prank(secondAccount);
-        IBondingCurveFacet.purchaseTargetAmount(
+        bondingCurveFacet.purchaseTargetAmount(
             0,
             connectorWeight,
             1,
@@ -191,7 +191,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
 
         // 2. Special case if max weight is 100%
         vm.prank(thirdAccount);
-        uint256 result = IBondingCurveFacet.purchaseTargetAmount(
+        uint256 result = bondingCurveFacet.purchaseTargetAmount(
             tokensDeposited,
             MAX_WEIGHT,
             tokenIds,
