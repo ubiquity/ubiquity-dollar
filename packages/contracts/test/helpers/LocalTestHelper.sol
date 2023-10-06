@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
+import {DiamondTestSetup} from "../diamond/DiamondTestSetup.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
@@ -11,7 +11,7 @@ import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFac
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 
-abstract contract LocalTestHelper is DiamondSetup {
+abstract contract LocalTestHelper is DiamondTestSetup {
     address public constant NATIVE_ASSET = address(0);
     address curve3CRVTokenAddress = address(0x101);
     address public treasuryAddress = address(0x111222333);

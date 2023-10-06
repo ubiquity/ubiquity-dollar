@@ -18,7 +18,7 @@ import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import "forge-std/Test.sol";
 
-contract ZeroStateStaking is DiamondSetup {
+contract ZeroStateStaking is DiamondTestSetup {
     MockERC20 crvToken;
     uint256 creditNftLengthBlocks = 100;
     address treasury = address(0x3);

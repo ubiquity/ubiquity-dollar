@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 import "../DiamondTestSetup.sol";
 
-contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
+contract CreditNftRedemptionCalculatorFacetTest is DiamondTestSetup {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);

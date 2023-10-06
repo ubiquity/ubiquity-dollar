@@ -8,7 +8,7 @@ import {AddressUtils} from "../../../src/dollar/libraries/AddressUtils.sol";
 
 import {UintUtils} from "../../../src/dollar/libraries/UintUtils.sol";
 
-contract OwnershipFacetTest is DiamondSetup {
+contract OwnershipFacetTest is DiamondTestSetup {
     using AddressUtils for address;
     using UintUtils for uint256;
 

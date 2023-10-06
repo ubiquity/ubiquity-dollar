@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract CreditRedemptionCalculatorFacetTest is DiamondSetup {
+contract CreditRedemptionCalculatorFacetTest is DiamondTestSetup {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);

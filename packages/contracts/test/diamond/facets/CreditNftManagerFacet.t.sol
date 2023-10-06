@@ -12,7 +12,7 @@ import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol"
 import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
-contract CreditNftManagerFacetTest is DiamondSetup {
+contract CreditNftManagerFacetTest is DiamondTestSetup {
     CreditNft _creditNft;
     address dollarManagerAddress;
     address dollarTokenAddress;

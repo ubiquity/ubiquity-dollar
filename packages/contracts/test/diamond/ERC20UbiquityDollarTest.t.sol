@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "./DiamondTestSetup.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
-contract ERC20UbiquityDollarTest is DiamondSetup {
+contract ERC20UbiquityDollarTest is DiamondTestSetup {
     event Minting(
         address indexed mockAddr1,
         address indexed minter,

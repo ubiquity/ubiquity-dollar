@@ -11,7 +11,7 @@ import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
-contract ManagerFacetTest is DiamondSetup {
+contract ManagerFacetTest is DiamondTestSetup {
     function testCanCallGeneralFunctions_ShouldSucceed() public view {
         IManager.excessDollarsDistributor(contract1);
     }

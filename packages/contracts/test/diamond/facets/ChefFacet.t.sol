@@ -15,7 +15,7 @@ import "../../../src/dollar/libraries/Constants.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
-contract ZeroStateChef is DiamondSetup {
+contract ZeroStateChef is DiamondTestSetup {
     MockERC20 crvToken;
     address curve3CrvToken;
     uint256 creditNftLengthBlocks = 100;

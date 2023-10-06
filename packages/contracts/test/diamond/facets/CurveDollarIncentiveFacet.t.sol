@@ -11,7 +11,7 @@ import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracl
 import "../DiamondTestSetup.sol";
 import "forge-std/Test.sol";
 
-contract CurveDollarIncentiveTest is DiamondSetup {
+contract CurveDollarIncentiveTest is DiamondTestSetup {
     address stableSwapMetaPoolAddress = address(0x123);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);

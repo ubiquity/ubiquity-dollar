@@ -10,7 +10,7 @@ import {ERC1155Ubiquity} from "../../../src/dollar/core/ERC1155Ubiquity.sol";
 import {UbiquiStick} from "../../../src/ubiquistick/UbiquiStick.sol";
 import "forge-std/Test.sol";
 
-contract BondingCurveFacetTest is DiamondSetup {
+contract BondingCurveFacetTest is DiamondTestSetup {
     address treasury = address(0x3);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);

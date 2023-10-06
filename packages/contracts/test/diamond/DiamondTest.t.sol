@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 import "./DiamondTestSetup.sol";
 
-contract TestDiamond is DiamondSetup {
+contract TestDiamond is DiamondTestSetup {
     function test_ShouldSupportInspectingFacetsAndFunctions() public {
         bool isSupported = IERC165(address(diamond)).supportsInterface(
             type(IDiamondLoupe).interfaceId

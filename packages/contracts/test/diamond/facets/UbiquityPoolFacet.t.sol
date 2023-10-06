@@ -14,7 +14,7 @@ import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
 import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {UbiquityCreditToken} from "../../../src/dollar/core/UbiquityCreditToken.sol";
 
-contract UbiquityPoolFacetTest is DiamondSetup {
+contract UbiquityPoolFacetTest is DiamondTestSetup {
     MockERC20 crvToken;
     address curve3CrvToken;
     address metaPoolAddress;
