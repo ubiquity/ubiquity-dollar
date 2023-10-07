@@ -32,10 +32,12 @@ const UcrNftGenerator = () => {
 
   const depositDollarForDebtCoupons = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
-    // cspell: disable-next-line
-    await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.dollarToken!, amount, signer, contracts.creditNftManagerFacet!.address);
-    await (await contracts.creditNftManagerFacet!.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
-    refreshBalances();
+    if (contracts.dollarToken && contracts.creditNftManagerFacet) {
+      // cspell: disable-next-line
+      await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.dollarToken, amount, signer, contracts.creditNftManagerFacet.address);
+      await (await contracts.creditNftManagerFacet.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
+      refreshBalances();
+    }
   };
 
   const handleBurn = async () => {
@@ -53,9 +55,9 @@ const UcrNftGenerator = () => {
     const contracts = await protocolContracts;
     setInputVal(val);
     const amount = extractValidAmount(val);
-    if (amount) {
+    if (amount && contracts.creditNftRedemptionCalculatorFacet) {
       setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await contracts.creditNftRedemptionCalculatorFacet!.connect(signer).getCreditNftAmount(amount));
+      setExpectedDebtCoupon(await contracts.creditNftRedemptionCalculatorFacet.connect(signer).getCreditNftAmount(amount));
     }
   };
 

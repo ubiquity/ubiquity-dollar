@@ -33,8 +33,8 @@ const UcrNftRedeem = () => {
 
   useEffectAsync(async () => {
     const contracts = await protocolContracts;
-    if (contracts && walletAddress) {
-      fetchDebts(walletAddress, contracts.creditNft!);
+    if (contracts.creditNft && walletAddress) {
+      fetchDebts(walletAddress, contracts.creditNft);
     }
   }, [protocolContracts, walletAddress]);
 
@@ -69,10 +69,12 @@ const UcrNftRedeem = () => {
   const redeemUcrNftForUad = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
     const debtId = debtIds[selectedDebtId];
-    if (debtId && (await ensureERC1155Allowance("uCR-NFT -> CreditNftManagerFacet", contracts.creditNft!, signer, contracts.creditNftManagerFacet!.address))) {
-      await (await contracts.creditNftManagerFacet!.connect(signer).redeemCreditNft(debtId, amount)).wait();
-      refreshBalances();
-      fetchDebts(walletAddress, contracts.creditNft!);
+    if (contracts.creditNft && contracts.creditNftManagerFacet) {
+      if (debtId && (await ensureERC1155Allowance("uCR-NFT -> CreditNftManagerFacet", contracts.creditNft, signer, contracts.creditNftManagerFacet.address))) {
+        await (await contracts.creditNftManagerFacet.connect(signer).redeemCreditNft(debtId, amount)).wait();
+        refreshBalances();
+        fetchDebts(walletAddress, contracts.creditNft);
+      }
     }
   };
 

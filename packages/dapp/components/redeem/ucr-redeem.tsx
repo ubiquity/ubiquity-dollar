@@ -1,4 +1,4 @@
-import { BigNumber, Contract, ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { useState } from "react";
 import { SwapWidget } from "@uniswap/widgets";
 import { ensureERC20Allowance } from "@/lib/contracts-shortcuts";
@@ -11,7 +11,7 @@ import Button from "../ui/button";
 import PositiveNumberInput from "../ui/positive-number-input";
 import useRouter from "../lib/hooks/use-router";
 import useTrade from "../lib/hooks/use-trade";
-import { USDC_ADDRESS, SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
+import { SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
 import { getUniswapV3RouterContract } from "../utils/contracts";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
 
@@ -38,16 +38,18 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
 
   const redeemUcr = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
-    // cspell: disable-next-line
-    await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.creditToken!, amount, signer, contracts.creditNftManagerFacet!.address);
-    await (await contracts.creditNftManagerFacet!.connect(signer).burnCreditTokensForDollars(amount)).wait();
-    refreshBalances();
-    // cspell: disable-next-line
-    if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
-      const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
-      await (await routerContract.connect(signer).approveMax(contracts.dollarToken!.address)).wait();
-      await useTrade(selectedRedeemToken, quoteAmount);
+    if (contracts.creditToken && contracts.creditNftManagerFacet && contracts.dollarToken) {
+      // cspell: disable-next-line
+      await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.creditToken, amount, signer, contracts.creditNftManagerFacet.address);
+      await (await contracts.creditNftManagerFacet.connect(signer).burnCreditTokensForDollars(amount)).wait();
       refreshBalances();
+      // cspell: disable-next-line
+      if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
+        const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
+        await (await routerContract.connect(signer).approveMax(contracts.dollarToken.address)).wait();
+        await useTrade(selectedRedeemToken, quoteAmount);
+        refreshBalances();
+      }
     }
   };
 

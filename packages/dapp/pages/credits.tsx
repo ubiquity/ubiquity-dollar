@@ -16,8 +16,8 @@ const PriceStabilization: FC = (): JSX.Element => {
   useEffectAsync(async () => {
     const contracts = await protocolContracts;
     if (contracts) {
-      const dollarTokenAddress = await contracts.managerFacet!.dollarTokenAddress();
-      const twapPrice = await contracts.twapOracleDollar3poolFacet!.consult(dollarTokenAddress);
+      const dollarTokenAddress = await contracts.managerFacet?.dollarTokenAddress();
+      const twapPrice = await contracts.twapOracleDollar3poolFacet?.consult(dollarTokenAddress);
       if (twapPrice) {
         const twapPriceInteger = (twapPrice as unknown as number) / 1e18;
         setTwapInteger(twapPriceInteger);
