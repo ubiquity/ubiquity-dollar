@@ -36,7 +36,7 @@ const UcrNftRedeem = () => {
     if (contracts.creditNft && walletAddress) {
       fetchDebts(walletAddress, contracts.creditNft);
     }
-  }, [protocolContracts, walletAddress]);
+  }, [walletAddress]);
 
   if (!walletAddress || !signer) return <span>Connect wallet</span>;
   if (!protocolContracts || !debtIds) return <span>· · ·</span>;

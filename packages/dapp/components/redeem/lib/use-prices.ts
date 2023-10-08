@@ -33,7 +33,7 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
 
   useEffect(() => {
     refreshPrices();
-  }, [protocolContracts, provider]);
+  }, [provider]);
 
   return [twapPrice, spotPrice, refreshPrices];
 };

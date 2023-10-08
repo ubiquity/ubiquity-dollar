@@ -23,7 +23,7 @@ const PriceStabilization: FC = (): JSX.Element => {
         setTwapInteger(twapPriceInteger);
       }
     }
-  }, [protocolContracts]);
+  }, []);
 
   return (
     <WalletConnectionWall>
