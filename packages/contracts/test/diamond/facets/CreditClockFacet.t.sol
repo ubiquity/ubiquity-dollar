@@ -46,8 +46,4 @@ contract CreditClockFacetTest is DiamondTestSetup {
         vm.expectRevert("CreditClock: block number must not be in the past.");
         creditClockFacet.getRate(block.number - 1);
     }
-
-    function test_ReturnThisAddress() public view returns (address) {
-        return address(this);
-    }
 }

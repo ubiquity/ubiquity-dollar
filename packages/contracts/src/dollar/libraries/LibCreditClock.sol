@@ -6,6 +6,7 @@ import {LibAccessControl} from "./LibAccessControl.sol";
 import {IAccessControl} from "../interfaces/IAccessControl.sol";
 import "../libraries/Constants.sol";
 
+/// @notice Library for Credit Clock Facet
 library LibCreditClock {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
@@ -23,7 +24,7 @@ library LibCreditClock {
             uint256(keccak256("ubiquity.contracts.credit.clock.storage")) - 1
         );
 
-    /// @notice Access control contract
+    /// @notice Struct used as a storage for the current library
     struct CreditClockData {
         IAccessControl accessControl;
         uint256 rateStartBlock;
@@ -32,6 +33,10 @@ library LibCreditClock {
         bytes16 one;
     }
 
+    /**
+     * @notice Returns struct used as a storage for this library
+     * @return data Struct used as a storage
+     */
     function creditClockStorage()
         internal
         pure
