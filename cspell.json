@@ -6,7 +6,6 @@
   "enableFiletypes": ["solidity"],
 
   "words": [
-    "!",
     "!UbiquityDollar",
     "!UbiquityCredit",
     "!UbiquityGovernance",
