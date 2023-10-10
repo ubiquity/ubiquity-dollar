@@ -15,7 +15,7 @@ import "../../../src/dollar/libraries/Constants.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
-contract ZeroStateChef is DiamondSetup {
+contract ZeroStateChef is DiamondTestSetup {
     MockERC20 crvToken;
     address curve3CrvToken;
     uint256 creditNftLengthBlocks = 100;
@@ -62,7 +62,7 @@ contract ZeroStateChef is DiamondSetup {
 
         vm.startPrank(owner);
 
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CrvToken);
+        twapOracleDollar3PoolFacet.setPool(metaPoolAddress, curve3CrvToken);
 
         address[7] memory mintings = [
             admin,
@@ -91,9 +91,9 @@ contract ZeroStateChef is DiamondSetup {
         }
 
         vm.startPrank(admin);
-        IManager.setStakingShareAddress(address(stakingShare));
+        managerFacet.setStakingShareAddress(address(stakingShare));
         stakingShare.setApprovalForAll(address(diamond), true);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(stakingShare)
         );
@@ -102,7 +102,7 @@ contract ZeroStateChef is DiamondSetup {
         address curve3CrvBasePool = address(
             new MockMetaPool(address(diamond), address(crvToken))
         );
-        IManager.deployStableSwapPool(
+        managerFacet.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
             curve3CrvToken,
@@ -110,27 +110,27 @@ contract ZeroStateChef is DiamondSetup {
             50000000
         );
         //
-        metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
-        metapool.transfer(address(IStakingFacet), 100e18);
+        metapool = IMetaPool(managerFacet.stableSwapMetaPoolAddress());
+        metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();
         vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(address(metapool), curve3CrvToken);
+        twapOracleDollar3PoolFacet.setPool(address(metapool), curve3CrvToken);
 
         vm.startPrank(admin);
 
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin);
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
 
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             address(diamond)
         );
-        IManager.setCreditTokenAddress(address(creditToken));
+        managerFacet.setCreditTokenAddress(address(creditToken));
 
         vm.stopPrank();
 
@@ -170,11 +170,11 @@ contract ZeroStateChef is DiamondSetup {
         metapool.add_liquidity(amounts_, (dyuAD2LP * 99) / 100, fourthAccount);
 
         vm.startPrank(admin);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             address(diamond)
         );
-        IStakingFacet.setBlockCountInAWeek(420);
+        stakingFacet.setBlockCountInAWeek(420);
 
         vm.stopPrank();
 
@@ -188,57 +188,57 @@ contract ZeroStateChef is DiamondSetup {
 
 contract ZeroStateChefTest is ZeroStateChef {
     function testSetGovernancePerBlock(uint256 governancePerBlock) public {
-        vm.expectEmit(true, false, false, true, address(IChefFacet));
+        vm.expectEmit(true, false, false, true, address(chefFacet));
         emit GovernancePerBlockModified(governancePerBlock);
         vm.prank(admin);
-        IChefFacet.setGovernancePerBlock(governancePerBlock);
-        assertEq(IChefFacet.governancePerBlock(), governancePerBlock);
+        chefFacet.setGovernancePerBlock(governancePerBlock);
+        assertEq(chefFacet.governancePerBlock(), governancePerBlock);
     }
 
     function testSetGovernanceDiv(uint256 div) public {
         vm.prank(admin);
-        IChefFacet.setGovernanceShareForTreasury(div);
-        assertEq(IChefFacet.governanceDivider(), div);
+        chefFacet.setGovernanceShareForTreasury(div);
+        assertEq(chefFacet.governanceDivider(), div);
     }
 
     function testSetMinPriceDiff(uint256 minPriceDiff) public {
-        vm.expectEmit(true, false, false, true, address(IChefFacet));
+        vm.expectEmit(true, false, false, true, address(chefFacet));
         emit MinPriceDiffToUpdateMultiplierModified(minPriceDiff);
         vm.prank(admin);
-        IChefFacet.setMinPriceDiffToUpdateMultiplier(minPriceDiff);
-        assertEq(IChefFacet.minPriceDiffToUpdateMultiplier(), minPriceDiff);
+        chefFacet.setMinPriceDiffToUpdateMultiplier(minPriceDiff);
+        assertEq(chefFacet.minPriceDiffToUpdateMultiplier(), minPriceDiff);
     }
 
     function testDepositFromZeroState(uint256 lpAmount) public {
         uint256 LPBalance = metapool.balanceOf(fourthAccount);
         lpAmount = bound(lpAmount, 1, LPBalance);
         // lock for 10 weeks
-        uint256 shares = IStakingFormulasFacet.durationMultiply(
+        uint256 shares = stakingFormulasFacet.durationMultiply(
             lpAmount,
             10,
-            IStakingFacet.stakingDiscountMultiplier()
+            stakingFacet.stakingDiscountMultiplier()
         );
         uint256 id = stakingShare.totalSupply() + 1;
 
         uint256 allowance = metapool.allowance(
             fourthAccount,
-            address(IChefFacet)
+            address(chefFacet)
         );
 
         uint256 fourthBalance = metapool.balanceOf(fourthAccount);
 
         vm.prank(fourthAccount);
         metapool.approve(address(diamond), fourthBalance);
-        allowance = metapool.allowance(fourthAccount, address(IChefFacet));
-        vm.expectEmit(true, true, true, true, address(IChefFacet));
+        allowance = metapool.allowance(fourthAccount, address(chefFacet));
+        vm.expectEmit(true, true, true, true, address(chefFacet));
 
         emit Deposit(fourthAccount, shares, id);
         vm.prank(fourthAccount);
-        IStakingFacet.deposit(lpAmount, 10);
+        stakingFacet.deposit(lpAmount, 10);
 
-        (, uint256 accGovernance) = IChefFacet.pool();
+        (, uint256 accGovernance) = chefFacet.pool();
         uint256[2] memory info1 = [shares, (shares * accGovernance) / 1e12];
-        uint256[2] memory info2 = IChefFacet.getStakingShareInfo(id);
+        uint256[2] memory info2 = chefFacet.getStakingShareInfo(id);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }
@@ -251,19 +251,19 @@ contract DepositStateChef is ZeroStateChef {
 
     function setUp() public virtual override {
         super.setUp();
-        assertEq(IChefFacet.totalShares(), 0);
+        assertEq(chefFacet.totalShares(), 0);
         fourthBal = metapool.balanceOf(fourthAccount);
-        shares = IStakingFormulasFacet.durationMultiply(
+        shares = stakingFormulasFacet.durationMultiply(
             fourthBal,
             1,
-            IStakingFacet.stakingDiscountMultiplier()
+            stakingFacet.stakingDiscountMultiplier()
         );
         vm.startPrank(admin);
         fourthID = stakingShare.totalSupply() + 1;
         vm.stopPrank();
         vm.startPrank(fourthAccount);
         metapool.approve(address(diamond), fourthBal);
-        IStakingFacet.deposit(fourthBal, 1);
+        stakingFacet.deposit(fourthBal, 1);
         assertEq(stakingShare.totalSupply(), fourthID);
         assertEq(stakingShare.balanceOf(fourthAccount, fourthID), 1);
 
@@ -273,41 +273,41 @@ contract DepositStateChef is ZeroStateChef {
 
 contract DepositStateChefTest is DepositStateChef {
     function testTotalShares() public {
-        assertEq(IChefFacet.totalShares(), shares);
+        assertEq(chefFacet.totalShares(), shares);
     }
 
     function testRemoveLiquidity(uint256 amount, uint256 blocks) public {
-        assertEq(IChefFacet.totalShares(), shares);
+        assertEq(chefFacet.totalShares(), shares);
 
         // advance the block number to  staking time so the withdraw is possible
         uint256 currentBlock = block.number;
         blocks = bound(blocks, 45361, 2 ** 128 - 1);
-        assertEq(IChefFacet.totalShares(), shares);
+        assertEq(chefFacet.totalShares(), shares);
 
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
-        (uint256 lastRewardBlock, ) = IChefFacet.pool();
+        (uint256 lastRewardBlock, ) = chefFacet.pool();
         // currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
         uint256 governancePerBlock = 10e18;
         uint256 reward = ((multiplier * governancePerBlock) / 1e18);
         uint256 governancePerShare = (reward * 1e12) / shares;
-        assertEq(IChefFacet.totalShares(), shares);
+        assertEq(chefFacet.totalShares(), shares);
         // we have to bound the amount of LP token to withdraw to max what account four has deposited
         amount = bound(amount, 1, fourthBal);
-        assertEq(IChefFacet.totalShares(), shares);
+        assertEq(chefFacet.totalShares(), shares);
 
         // calculate the reward in governance token for the user based on all his shares
         uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
-        IStakingFacet.removeLiquidity(amount, fourthID);
+        stakingFacet.removeLiquidity(amount, fourthID);
         assertEq(preBal + userReward, governanceToken.balanceOf(fourthAccount));
     }
 
     function testGetRewards(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
-        (uint256 lastRewardBlock, ) = IChefFacet.pool();
+        (uint256 lastRewardBlock, ) = chefFacet.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
@@ -315,20 +315,20 @@ contract DepositStateChefTest is DepositStateChef {
         uint256 governancePerShare = (reward * 1e12) / shares;
         uint256 userReward = (shares * governancePerShare) / 1e12;
         vm.prank(fourthAccount);
-        uint256 rewardSent = IChefFacet.getRewards(1);
+        uint256 rewardSent = chefFacet.getRewards(1);
         assertEq(userReward, rewardSent);
     }
 
     function testCannotGetRewardsOtherAccount() public {
         vm.expectRevert("MS: caller is not owner");
         vm.prank(stakingMinAccount);
-        IChefFacet.getRewards(1);
+        chefFacet.getRewards(1);
     }
 
     function testPendingGovernance(uint256 blocks) public {
         blocks = bound(blocks, 1, 2 ** 128 - 1);
 
-        (uint256 lastRewardBlock, ) = IChefFacet.pool();
+        (uint256 lastRewardBlock, ) = chefFacet.pool();
         uint256 currentBlock = block.number;
         vm.roll(currentBlock + blocks);
         uint256 multiplier = (block.number - lastRewardBlock) * 1e18;
@@ -336,13 +336,13 @@ contract DepositStateChefTest is DepositStateChef {
         uint256 governancePerShare = (reward * 1e12) / shares;
         uint256 userPending = (shares * governancePerShare) / 1e12;
 
-        uint256 pendingGovernance = IChefFacet.pendingGovernance(1);
+        uint256 pendingGovernance = chefFacet.pendingGovernance(1);
         assertEq(userPending, pendingGovernance);
     }
 
     function testGetStakingShareInfo() public {
         uint256[2] memory info1 = [shares, 0];
-        uint256[2] memory info2 = IChefFacet.getStakingShareInfo(1);
+        uint256[2] memory info2 = chefFacet.getStakingShareInfo(1);
         assertEq(info1[0], info2[0]);
         assertEq(info1[1], info2[1]);
     }

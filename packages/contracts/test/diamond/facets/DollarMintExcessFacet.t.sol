@@ -8,7 +8,7 @@ import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
 import "../DiamondTestSetup.sol";
 
-contract DollarMintExcessFacetTest is DiamondSetup {
+contract DollarMintExcessFacetTest is DiamondTestSetup {
     address dollarManagerAddress;
     address treasuryAddress;
     address twapOracleAddress;
@@ -20,8 +20,8 @@ contract DollarMintExcessFacetTest is DiamondSetup {
         dollarManagerAddress = address(diamond);
         twapOracleAddress = address(diamond);
 
-        excessDollarsDistributorAddress = address(IDollarMintExcessFacet);
-        treasuryAddress = IManager.treasuryAddress();
+        excessDollarsDistributorAddress = address(dollarMintExcessFacet);
+        treasuryAddress = managerFacet.treasuryAddress();
     }
 
     function mockSushiSwapRouter(uint256 _expected_swap_amount) public {

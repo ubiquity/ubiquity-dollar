@@ -1,5 +1,5 @@
 # LibCreditNftRedemptionCalculator
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bcb66d35bbc0a307e64d5a207866fc5188d3a6f8/src/dollar/libraries/LibCreditNftRedemptionCalculator.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/edf5f533467baa5ab7defe2b4b5180fa47724cdb/src/dollar/libraries/LibCreditNftRedemptionCalculator.sol)
 
 Library for calculating amount of Credit NFTs to mint on Dollars burn
 

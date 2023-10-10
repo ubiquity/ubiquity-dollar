@@ -11,107 +11,107 @@ import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
-contract ManagerFacetTest is DiamondSetup {
+contract ManagerFacetTest is DiamondTestSetup {
     function testCanCallGeneralFunctions_ShouldSucceed() public view {
-        IManager.excessDollarsDistributor(contract1);
+        managerFacet.excessDollarsDistributor(contract1);
     }
 
     function testSetTwapOracleAddress_ShouldSucceed() public prankAs(admin) {
-        assertEq(IManager.twapOracleAddress(), address(diamond));
+        assertEq(managerFacet.twapOracleAddress(), address(diamond));
     }
 
     function testSetDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
-        assertEq(IManager.dollarTokenAddress(), address(dollarToken));
+        assertEq(managerFacet.dollarTokenAddress(), address(dollarToken));
     }
 
     function testSetCreditTokenAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setCreditTokenAddress(contract1);
-        assertEq(IManager.creditTokenAddress(), contract1);
+        managerFacet.setCreditTokenAddress(contract1);
+        assertEq(managerFacet.creditTokenAddress(), contract1);
     }
 
     function testSetCreditNftAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setCreditNftAddress(contract1);
-        assertEq(IManager.creditNftAddress(), contract1);
+        managerFacet.setCreditNftAddress(contract1);
+        assertEq(managerFacet.creditNftAddress(), contract1);
     }
 
     function testSetGovernanceTokenAddress_ShouldSucceed()
         public
         prankAs(admin)
     {
-        IManager.setGovernanceTokenAddress(contract1);
-        assertEq(IManager.governanceTokenAddress(), contract1);
+        managerFacet.setGovernanceTokenAddress(contract1);
+        assertEq(managerFacet.governanceTokenAddress(), contract1);
     }
 
     function testSetSushiSwapPoolAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setSushiSwapPoolAddress(contract1);
-        assertEq(IManager.sushiSwapPoolAddress(), contract1);
+        managerFacet.setSushiSwapPoolAddress(contract1);
+        assertEq(managerFacet.sushiSwapPoolAddress(), contract1);
     }
 
     function testSetDollarMintCalculatorAddress_ShouldSucceed()
         public
         prankAs(admin)
     {
-        IManager.setDollarMintCalculatorAddress(contract1);
-        assertEq(IManager.dollarMintCalculatorAddress(), contract1);
+        managerFacet.setDollarMintCalculatorAddress(contract1);
+        assertEq(managerFacet.dollarMintCalculatorAddress(), contract1);
     }
 
     function testSetExcessDollarsDistributor_ShouldSucceed()
         public
         prankAs(admin)
     {
-        IManager.setExcessDollarsDistributor(contract1, contract2);
-        assertEq(IManager.excessDollarsDistributor(contract1), contract2);
+        managerFacet.setExcessDollarsDistributor(contract1, contract2);
+        assertEq(managerFacet.excessDollarsDistributor(contract1), contract2);
     }
 
     function testSetMasterChefAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setMasterChefAddress(contract1);
-        assertEq(IManager.masterChefAddress(), contract1);
+        managerFacet.setMasterChefAddress(contract1);
+        assertEq(managerFacet.masterChefAddress(), contract1);
     }
 
     function testSetFormulasAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setFormulasAddress(contract1);
-        assertEq(IManager.formulasAddress(), contract1);
+        managerFacet.setFormulasAddress(contract1);
+        assertEq(managerFacet.formulasAddress(), contract1);
     }
 
     function testSetStakingShareAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setStakingShareAddress(contract1);
-        assertEq(IManager.stakingShareAddress(), contract1);
+        managerFacet.setStakingShareAddress(contract1);
+        assertEq(managerFacet.stakingShareAddress(), contract1);
     }
 
     function testSetStableSwapMetaPoolAddress_ShouldSucceed()
         public
         prankAs(admin)
     {
-        IManager.setStableSwapMetaPoolAddress(contract1);
-        assertEq(IManager.stableSwapMetaPoolAddress(), contract1);
+        managerFacet.setStableSwapMetaPoolAddress(contract1);
+        assertEq(managerFacet.stableSwapMetaPoolAddress(), contract1);
     }
 
     function testSetStakingContractAddress_ShouldSucceed()
         public
         prankAs(admin)
     {
-        IManager.setStakingContractAddress(contract1);
-        assertEq(IManager.stakingContractAddress(), contract1);
+        managerFacet.setStakingContractAddress(contract1);
+        assertEq(managerFacet.stakingContractAddress(), contract1);
     }
 
     function testSetTreasuryAddress_ShouldSucceed() public prankAs(admin) {
-        IManager.setTreasuryAddress(contract1);
-        assertEq(IManager.treasuryAddress(), contract1);
+        managerFacet.setTreasuryAddress(contract1);
+        assertEq(managerFacet.treasuryAddress(), contract1);
     }
 
     function testSetIncentiveToDollar_ShouldSucceed() public prankAs(admin) {
         assertEq(
-            IAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
+            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
             true
         );
         assertEq(
-            IAccessControl.hasRole(
+            accessControlFacet.hasRole(
                 GOVERNANCE_TOKEN_MANAGER_ROLE,
                 address(diamond)
             ),
             true
         );
-        IManager.setIncentiveToDollar(user1, contract1);
+        managerFacet.setIncentiveToDollar(user1, contract1);
     }
 
     function testSetMinterRoleWhenInitializing_ShouldSucceed()
@@ -119,7 +119,7 @@ contract ManagerFacetTest is DiamondSetup {
         prankAs(admin)
     {
         assertEq(
-            IAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
+            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
             true
         );
     }
@@ -128,7 +128,7 @@ contract ManagerFacetTest is DiamondSetup {
         public
         prankAs(admin)
     {
-        assertEq(IManager.dollarTokenAddress(), address(dollarToken));
+        assertEq(managerFacet.dollarTokenAddress(), address(dollarToken));
     }
 
     function testDeployStableSwapPool_ShouldSucceed() public {
@@ -157,11 +157,11 @@ contract ManagerFacetTest is DiamondSetup {
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_MINTER_ROLE,
             stakingV1Address
         );
-        IAccessControl.grantRole(
+        accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
             stakingV1Address
         );
@@ -189,7 +189,7 @@ contract ManagerFacetTest is DiamondSetup {
         address curve3CrvBasePool = address(
             new MockMetaPool(address(diamond), address(curve3CrvToken))
         );
-        IManager.deployStableSwapPool(
+        managerFacet.deployStableSwapPool(
             address(curvePoolFactory),
             curve3CrvBasePool,
             address(curve3CrvToken),
@@ -197,7 +197,9 @@ contract ManagerFacetTest is DiamondSetup {
             50000000
         );
 
-        IMetaPool metapool = IMetaPool(IManager.stableSwapMetaPoolAddress());
+        IMetaPool metapool = IMetaPool(
+            managerFacet.stableSwapMetaPoolAddress()
+        );
         address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
         metapool.transfer(address(stakingV2Address), 100e18);
         vm.stopPrank();

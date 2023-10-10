@@ -59,7 +59,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
 
     function setUp() public override {
         super.setUp();
-        dollarManagerAddress = address(IManager);
+        dollarManagerAddress = address(managerFacet);
         dollar = IERC20Ubiquity(
             IUbiquityDollarManager(dollarManagerAddress).dollarTokenAddress()
         );
@@ -94,7 +94,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
         );
         // create direct governance farmer contract instance
         directGovernanceFarmer = new DirectGovernanceFarmer(
-            IUbiquityDollarManager(address(IManager)),
+            IUbiquityDollarManager(address(managerFacet)),
             base3PoolAddress,
             depositZapAddress
         );
@@ -585,7 +585,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncludedReturnTrueIfIdIsInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                IUbiquityDollarManager(address(IManager)),
+                IUbiquityDollarManager(address(managerFacet)),
                 base3PoolAddress,
                 depositZapAddress
             );
@@ -598,7 +598,7 @@ contract DirectGovernanceFarmerTest is LocalTestHelper {
     function testIsIdIncludedReturnFalseIfIdIsNotInTheList() public {
         // deploy contract with exposed internal methods
         DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                IUbiquityDollarManager(address(IManager)),
+                IUbiquityDollarManager(address(managerFacet)),
                 base3PoolAddress,
                 depositZapAddress
             );
