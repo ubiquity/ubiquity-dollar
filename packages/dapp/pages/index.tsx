@@ -26,7 +26,7 @@ const index: FC = (): JSX.Element => {
       console.log("protocolContracts is null");
       setTwapPrice(null);
     }
-  }, [protocolContracts]);
+  }, []);
 
   if (process.env.DEBUG === "true") {
     fetchData();
