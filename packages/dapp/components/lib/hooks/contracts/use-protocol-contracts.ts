@@ -3,6 +3,7 @@ import { Contract, ethers } from "ethers";
 
 import latestDeployment from "@ubiquity/contracts/broadcast/05_StakingShare.s.sol/31337/run-latest.json";
 import useWeb3 from "../use-web-3";
+import { sushiSwapPoolAddress, dollar3poolMarketAddress } from "@/lib/utils";
 
 // contract build artifacts
 // separately deployed contracts
@@ -27,6 +28,10 @@ import StakingFacetArtifact from "@ubiquity/contracts/out/StakingFacet.sol/Staki
 import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
+// other related contracts
+// import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
+import IMetaPoolArtifact from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
+import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
 
 /**
  * Returns all of the available protocol contracts.
@@ -52,7 +57,8 @@ import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet
  * Contracts on hold (i.e. obsolete) until we find a better utility for them:
  * - https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts/src/ubiquistick
  */
-const useProtocolContracts = () => {
+export type ProtocolContracts = ReturnType<typeof useProtocolContracts> | null;
+const useProtocolContracts = async () => {
   // get current web3 provider
   const { provider } = useWeb3();
 
@@ -80,6 +86,9 @@ const useProtocolContracts = () => {
     stakingFormulasFacet: Contract | null,
     twapOracleDollar3poolFacet: Contract | null,
     ubiquityPoolFacet: Contract | null,
+    // related contracts
+    sushiPoolGovernanceDollarLp: Contract | null,
+    curveMetaPoolDollarTriPoolLp: Contract | null,
   } = {
     // separately deployed contracts (i.e. not part of the diamond)
     creditNft: null,
@@ -103,6 +112,9 @@ const useProtocolContracts = () => {
     stakingFormulasFacet: null,
     twapOracleDollar3poolFacet: null,
     ubiquityPoolFacet: null,
+    // related contracts
+    sushiPoolGovernanceDollarLp: null,
+    curveMetaPoolDollarTriPoolLp: null,
   };
 
   let diamondAddress = '';
@@ -147,6 +159,18 @@ const useProtocolContracts = () => {
   protocolContracts.stakingFormulasFacet = new ethers.Contract(diamondAddress, StakingFormulasFacetArtifact.abi, <Provider>provider);
   protocolContracts.twapOracleDollar3poolFacet = new ethers.Contract(diamondAddress, TWAPOracleDollar3poolFacetArtifact.abi, <Provider>provider);
   protocolContracts.ubiquityPoolFacet = new ethers.Contract(diamondAddress, UbiquityPoolFacetArtifact.abi, <Provider>provider);
+
+  // other related contracts
+  // const sushiSwapPool = await protocolContracts.managerFacet.sushiSwapPoolAddress();
+  // const sushiSwapPoolContract = new ethers.Contract(sushiSwapPool, SushiSwapPoolArtifact.abi, <Provider>provider);
+  // const UniswapV2PairContract = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
+  const UniswapV2PairContract = new ethers.Contract(sushiSwapPoolAddress, UniswapV2PairABI, <Provider>provider);
+  protocolContracts.sushiPoolGovernanceDollarLp = UniswapV2PairContract;
+
+  // const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
+  // const metaPoolContract = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
+  const metaPoolContract = new ethers.Contract(dollar3poolMarketAddress, IMetaPoolArtifact.abi, <Provider>provider);
+  protocolContracts.curveMetaPoolDollarTriPoolLp = metaPoolContract;
 
   return protocolContracts;
 };

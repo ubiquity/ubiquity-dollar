@@ -1,4 +1,3 @@
-import { getIMetaPoolContract } from "@/components/utils/contracts";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
 import { BigNumber, utils } from "ethers";
@@ -17,12 +16,12 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
         return;
       }
 
-      if(protocolContracts.managerFacet && protocolContracts.twapOracleDollar3poolFacet) {
-        const dollarTokenAddress = await protocolContracts.managerFacet.dollarTokenAddress();
-        const newTwapPrice = await protocolContracts.twapOracleDollar3poolFacet.consult(dollarTokenAddress);
-        const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
-        const dollarMetapool = getIMetaPoolContract(dollar3poolMarket, provider)
-        const newSpotPrice = await dollarMetapool["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
+      const contracts = await protocolContracts;
+
+      if(contracts.curveMetaPoolDollarTriPoolLp) {
+        const dollarTokenAddress = await contracts.managerFacet?.dollarTokenAddress();
+        const newTwapPrice = await contracts.twapOracleDollar3poolFacet?.consult(dollarTokenAddress);
+        const newSpotPrice = await contracts.curveMetaPoolDollarTriPoolLp["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
         setTwapPrice(newTwapPrice);
         setSpotPrice(newSpotPrice);
       }
@@ -34,7 +33,7 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
 
   useEffect(() => {
     refreshPrices();
-  }, [protocolContracts, provider]);
+  }, [provider]);
 
   return [twapPrice, spotPrice, refreshPrices];
 };

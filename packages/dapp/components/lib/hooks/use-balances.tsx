@@ -1,10 +1,12 @@
-import { erc1155BalanceOf } from "@/lib/utils";
-import { BigNumber, Contract } from "ethers";
+import { erc1155BalanceOf, _3crvTokenAddress } from "@/lib/utils";
+import { BigNumber } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
-import useManagerManaged from "./contracts/use-manager-managed";
 import useNamedContracts from "./contracts/use-named-contracts";
 import useWalletAddress from "./use-wallet-address";
 import { ChildrenShim } from "./children-shim-d";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
+import { getERC20Contract } from "@/components/utils/contracts";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
 
 export interface Balances {
   uad: BigNumber;
@@ -26,24 +28,34 @@ export const BalancesContext = createContext<[Balances | null, RefreshBalances]>
 export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) => {
   const [balances, setBalances] = useState<Balances | null>(null);
   const [walletAddress] = useWalletAddress();
-  const managedContracts = useManagerManaged();
   const namedContracts = useNamedContracts();
+  const protocolContracts = useProtocolContracts();
+  const { provider } = useWeb3();
 
   async function refreshBalances() {
-    if (walletAddress && managedContracts && namedContracts) {
+    if (!walletAddress || !namedContracts || !protocolContracts || !provider) {
+      return;
+    }
+
+    const contracts = await protocolContracts;
+
+    if(contracts.creditNft && contracts.stakingShare) {
+      // const _3crvTokenAddress = await contracts.managerFacet?.curve3PoolTokenAddress();
+      const _3crvTokenContract = getERC20Contract(_3crvTokenAddress, provider);
+  
       const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
-        managedContracts.dollarToken.balanceOf(walletAddress),
-        managedContracts._3crvToken.balanceOf(walletAddress),
-        managedContracts.dollarMetapool.balanceOf(walletAddress),
-        managedContracts.creditToken.balanceOf(walletAddress),
-        managedContracts.governanceToken.balanceOf(walletAddress),
-        erc1155BalanceOf(walletAddress, managedContracts.creditNft),
-        erc1155BalanceOf(walletAddress, managedContracts.stakingToken),
+        contracts.dollarToken?.balanceOf(walletAddress),
+        _3crvTokenContract.balanceOf(walletAddress),
+        contracts.curveMetaPoolDollarTriPoolLp?.balanceOf(walletAddress),
+        contracts.creditToken?.balanceOf(walletAddress),
+        contracts.governanceToken?.balanceOf(walletAddress),
+        erc1155BalanceOf(walletAddress, contracts.creditNft),
+        erc1155BalanceOf(walletAddress, contracts.stakingShare),
         namedContracts.usdc.balanceOf(walletAddress),
         namedContracts.dai.balanceOf(walletAddress),
         namedContracts.usdt.balanceOf(walletAddress),
       ]);
-
+  
       setBalances({
         uad,
         _3crv,
@@ -61,7 +73,7 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
 
   useEffect(() => {
     refreshBalances();
-  }, [walletAddress, managedContracts]);
+  }, [walletAddress, protocolContracts]);
 
   return <BalancesContext.Provider value={[balances, refreshBalances]}>{children}</BalancesContext.Provider>;
 };
