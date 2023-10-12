@@ -122,6 +122,10 @@ export const uCR_USDT_ADDRESS = "0x9d498aB38Aa889AE0f4A865d30da2116ee9716bC";
 // Uniswap Router address
 export const V3_ROUTER_ADDRESS = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
 
+export const sushiSwapPoolAddress = "0x41e087485f47538752A1195D984109cB8Dc0E429";
+export const dollar3poolMarketAddress = "0x20955CB69Ae1515962177D164dfC9522feef567E";
+export const _3crvTokenAddress = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
+
 export const safeParseEther = (val: string) => {
   try {
     return ethers.utils.parseEther(val);

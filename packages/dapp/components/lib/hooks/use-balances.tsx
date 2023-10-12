@@ -1,4 +1,4 @@
-import { erc1155BalanceOf } from "@/lib/utils";
+import { erc1155BalanceOf, _3crvTokenAddress } from "@/lib/utils";
 import { BigNumber } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import useNamedContracts from "./contracts/use-named-contracts";
@@ -40,9 +40,8 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
     const contracts = await protocolContracts;
 
     if(contracts.creditNft && contracts.stakingShare) {
-      // const _3crvToken = await contracts.managerFacet?.curve3PoolTokenAddress();
-      const _3crvToken = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
-      const _3crvTokenContract = getERC20Contract(_3crvToken, provider);
+      // const _3crvTokenAddress = await contracts.managerFacet?.curve3PoolTokenAddress();
+      const _3crvTokenContract = getERC20Contract(_3crvTokenAddress, provider);
   
       const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
         contracts.dollarToken?.balanceOf(walletAddress),

@@ -3,6 +3,7 @@ import { Contract, ethers } from "ethers";
 
 import latestDeployment from "@ubiquity/contracts/broadcast/05_StakingShare.s.sol/31337/run-latest.json";
 import useWeb3 from "../use-web-3";
+import { sushiSwapPoolAddress, dollar3poolMarketAddress } from "@/lib/utils";
 
 // contract build artifacts
 // separately deployed contracts
@@ -28,7 +29,7 @@ import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormula
 import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
 // other related contracts
-import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
+// import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import IMetaPoolArtifact from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
 
@@ -163,12 +164,12 @@ const useProtocolContracts = async () => {
   // const sushiSwapPool = await protocolContracts.managerFacet.sushiSwapPoolAddress();
   // const sushiSwapPoolContract = new ethers.Contract(sushiSwapPool, SushiSwapPoolArtifact.abi, <Provider>provider);
   // const UniswapV2PairContract = new ethers.Contract(await sushiSwapPoolContract.pair(), UniswapV2PairABI, <Provider>provider);
-  const UniswapV2PairContract = new ethers.Contract("0x41e087485f47538752A1195D984109cB8Dc0E429", UniswapV2PairABI, <Provider>provider);
+  const UniswapV2PairContract = new ethers.Contract(sushiSwapPoolAddress, UniswapV2PairABI, <Provider>provider);
   protocolContracts.sushiPoolGovernanceDollarLp = UniswapV2PairContract;
 
   // const dollar3poolMarket = await protocolContracts.managerFacet.stableSwapMetaPoolAddress();
   // const metaPoolContract = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
-  const metaPoolContract = new ethers.Contract("0x20955CB69Ae1515962177D164dfC9522feef567E", IMetaPoolArtifact.abi, <Provider>provider);
+  const metaPoolContract = new ethers.Contract(dollar3poolMarketAddress, IMetaPoolArtifact.abi, <Provider>provider);
   protocolContracts.curveMetaPoolDollarTriPoolLp = metaPoolContract;
 
   return protocolContracts;
