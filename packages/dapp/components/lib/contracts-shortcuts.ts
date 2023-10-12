@@ -1,11 +1,10 @@
 import { BigNumber, ethers, Contract } from "ethers";
-import { ERC1155Ubiquity, ERC20 } from "types";
 
 import { performTransaction } from "./utils";
 
 export async function ensureERC20Allowance(
   logName: string,
-  contract: ERC20 | Contract,
+  contract: Contract,
   amount: BigNumber,
   signer: ethers.providers.JsonRpcSigner,
   spender: string,
@@ -25,7 +24,7 @@ export async function ensureERC20Allowance(
   return true;
 }
 
-export async function ensureERC1155Allowance(logName: string, contract: ERC1155Ubiquity | Contract, signer: ethers.providers.JsonRpcSigner, spender: string): Promise<boolean> {
+export async function ensureERC1155Allowance(logName: string, contract: Contract, signer: ethers.providers.JsonRpcSigner, spender: string): Promise<boolean> {
   const signerAddress = await signer.getAddress();
   const isAllowed = await contract.isApprovedForAll(signerAddress, spender);
   console.log(`${logName} isAllowed: `, isAllowed);
