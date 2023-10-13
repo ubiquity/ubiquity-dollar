@@ -35,14 +35,14 @@ import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
 
 /**
  * Returns all of the available protocol contracts
- * 
+ *
  * Right now the Ubiquity org uses:
  * - separately deployed contracts (https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts/src/dollar/core)
  * - contracts deployed as diamond proxy facets (https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts/src/dollar/facets)
- * 
+ *
  * The following contracts are not exported for various reasons (but feel free
  * to export new contracts when you need them):
- * 
+ *
  * Contracts not used in the UI (as far as I understand):
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/core/ERC1155Ubiquity.sol
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/core/ERC20Ubiquity.sol
@@ -50,10 +50,10 @@ import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/facets/DiamondLoupeFacet.sol
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/Diamond.sol
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/DirectGovernanceFarmer.sol
- * 
+ *
  * Contracts not yet integrated (i.e. not used in other solidity contracts):
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/core/CreditClock.sol
- * 
+ *
  * Contracts on hold (i.e. obsolete) until we find a better utility for them:
  * - https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts/src/ubiquistick
  */
@@ -115,8 +115,7 @@ const useProtocolContracts = async () => {
     sushiPoolGovernanceDollarLp: null,
     curveMetaPoolDollarTriPoolLp: null,
   };
-
-  let diamondAddress = '';
+  let diamondAddress = "";
 
   // for all of the deployment transactions
   latestDeployment.transactions.map((tx) => {

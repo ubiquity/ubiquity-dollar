@@ -14,7 +14,7 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
     try {
       if(!protocolContracts || !provider) {
         return;
-      }
+      };
 
       const contracts = await protocolContracts;
 
@@ -25,7 +25,6 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
         setTwapPrice(newTwapPrice);
         setSpotPrice(newSpotPrice);
       }
-
     } catch (error) {
       console.log("Error in refreshPrices: ", error)
     }
