@@ -1,16 +1,17 @@
-import React from "react";
 import Button from "../../ui/button";
 import { methodConfigs } from "./method-configs";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
+import { LOCAL_NODE_ADDRESS } from "@/components/lib/hooks/use-web-3";
+import { useState } from "react";
 
 export default function AnvilRpcs() {
-  const [isHidden, setIsHidden] = React.useState<boolean>(true);
-  const [isVisible, setIsVisible] = React.useState<number>(0);
-  const [methodArgs, setMethodArgs] = React.useState<Record<string, string>>({});
+  const [isHidden, setIsHidden] = useState<boolean>(true);
+  const [isVisible, setIsVisible] = useState<number>(0);
+  const [methodArgs, setMethodArgs] = useState<Record<string, string>>({});
   const { signer } = useWeb3();
 
   const handleFetch = async (method: string, params: unknown[]) => {
-    const result = await fetch("http://localhost:8545", {
+    const result = await fetch(LOCAL_NODE_ADDRESS, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

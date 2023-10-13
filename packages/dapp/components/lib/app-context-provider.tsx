@@ -1,4 +1,3 @@
-import { ManagedContractsContextProvider } from "./hooks/contracts/use-manager-managed";
 import { BalancesContextProvider } from "./hooks/use-balances";
 import { TransactionsContextProvider } from "./hooks/use-transaction-logger";
 import { UseWeb3Provider } from "./hooks/use-web-3";

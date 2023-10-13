@@ -34,7 +34,7 @@ import IMetaPoolArtifact from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.j
 import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
 
 /**
- * Returns all of the available protocol contracts.
+ * Returns all of the available protocol contracts
  * 
  * Right now the Ubiquity org uses:
  * - separately deployed contracts (https://github.com/ubiquity/ubiquity-dollar/tree/development/packages/contracts/src/dollar/core)
@@ -65,30 +65,29 @@ const useProtocolContracts = async () => {
   // all protocol contracts
   const protocolContracts: {
     // separately deployed contracts (i.e. not part of the diamond)
-    creditNft: Contract | null,
-    creditToken: Contract | null,
-    dollarToken: Contract | null,
-    governanceToken: Contract | null,
-    stakingShare: Contract | null,
+    creditNft: Contract | null;
+    creditToken: Contract | null;
+    dollarToken: Contract | null;
+    governanceToken: Contract | null;
+    stakingShare: Contract | null;
     // diamond facets
-    accessControlFacet: Contract | null,
-    chefFacet: Contract | null,
-    collectableDustFacet: Contract | null,
-    creditNftManagerFacet: Contract | null,
-    creditNftRedemptionCalculatorFacet: Contract | null,
-    creditRedemptionCalculatorFacet: Contract | null,
-    curveDollarIncentiveFacet: Contract | null,
-    dollarMintCalculatorFacet: Contract | null,
-    dollarMintExcessFacet: Contract | null,
-    managerFacet: Contract | null,
-    ownershipFacet: Contract | null,
-    stakingFacet: Contract | null,
-    stakingFormulasFacet: Contract | null,
-    twapOracleDollar3poolFacet: Contract | null,
-    ubiquityPoolFacet: Contract | null,
-    // related contracts
-    sushiPoolGovernanceDollarLp: Contract | null,
-    curveMetaPoolDollarTriPoolLp: Contract | null,
+    accessControlFacet: Contract | null;
+    chefFacet: Contract | null;
+    collectableDustFacet: Contract | null;
+    creditNftManagerFacet: Contract | null;
+    creditNftRedemptionCalculatorFacet: Contract | null;
+    creditRedemptionCalculatorFacet: Contract | null;
+    curveDollarIncentiveFacet: Contract | null;
+    dollarMintCalculatorFacet: Contract | null;
+    dollarMintExcessFacet: Contract | null;
+    managerFacet: Contract | null;
+    ownershipFacet: Contract | null;
+    stakingFacet: Contract | null;
+    stakingFormulasFacet: Contract | null;
+    twapOracleDollar3poolFacet: Contract | null;
+    ubiquityPoolFacet: Contract | null;
+    sushiPoolGovernanceDollarLp: Contract | null;
+    curveMetaPoolDollarTriPoolLp: Contract | null;
   } = {
     // separately deployed contracts (i.e. not part of the diamond)
     creditNft: null,
@@ -120,26 +119,26 @@ const useProtocolContracts = async () => {
   let diamondAddress = '';
 
   // for all of the deployment transactions
-  latestDeployment.transactions.map(tx => {
-    if (tx.transactionType === 'CREATE') {
+  latestDeployment.transactions.map((tx) => {
+    if (tx.transactionType === "CREATE") {
       // find contracts that deployed separately (i.e. not part of the diamond)
-      if (tx.contractName === 'CreditNft') {
+      if (tx.contractName === "CreditNft") {
         protocolContracts.creditNft = new ethers.Contract(tx.contractAddress, CreditNftArtifact.abi, <Provider>provider);
       }
-      if (tx.contractName === 'UbiquityCreditToken') {
+      if (tx.contractName === "UbiquityCreditToken") {
         protocolContracts.creditToken = new ethers.Contract(tx.contractAddress, UbiquityCreditTokenArtifact.abi, <Provider>provider);
       }
-      if (tx.contractName === 'UbiquityDollarToken') {
+      if (tx.contractName === "UbiquityDollarToken") {
         protocolContracts.dollarToken = new ethers.Contract(tx.contractAddress, UbiquityDollarTokenArtifact.abi, <Provider>provider);
       }
-      if (tx.contractName === 'UbiquityGovernanceToken') {
+      if (tx.contractName === "UbiquityGovernanceToken") {
         protocolContracts.governanceToken = new ethers.Contract(tx.contractAddress, UbiquityGovernanceTokenArtifact.abi, <Provider>provider);
       }
-      if (tx.contractName === 'StakingShare') {
+      if (tx.contractName === "StakingShare") {
         protocolContracts.stakingShare = new ethers.Contract(tx.contractAddress, StakingShareArtifact.abi, <Provider>provider);
       }
       // find the diamond address
-      if (tx.contractName === 'Diamond') diamondAddress = tx.contractAddress;
+      if (tx.contractName === "Diamond") diamondAddress = tx.contractAddress;
     }
   });
 
