@@ -12,22 +12,21 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
 
   async function refreshPrices() {
     try {
-      if(!protocolContracts || !provider) {
+      if (!protocolContracts || !provider) {
         return;
       }
 
       const contracts = await protocolContracts;
 
-      if(contracts.curveMetaPoolDollarTriPoolLp) {
+      if (contracts.curveMetaPoolDollarTriPoolLp) {
         const dollarTokenAddress = await contracts.managerFacet?.dollarTokenAddress();
         const newTwapPrice = await contracts.twapOracleDollar3poolFacet?.consult(dollarTokenAddress);
         const newSpotPrice = await contracts.curveMetaPoolDollarTriPoolLp["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
         setTwapPrice(newTwapPrice);
         setSpotPrice(newSpotPrice);
       }
-
     } catch (error) {
-      console.log("Error in refreshPrices: ", error)
+      console.log("Error in refreshPrices: ", error);
     }
   }
 
