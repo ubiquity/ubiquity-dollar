@@ -1,5 +1,4 @@
 import { erc1155BalanceOf, _3crvTokenAddress } from "@/lib/utils";
-import { BigNumber } from "ethers";
 import { createContext, useContext, useEffect, useState } from "react";
 import useNamedContracts from "./contracts/use-named-contracts";
 import useWalletAddress from "./use-wallet-address";
@@ -7,19 +6,7 @@ import { ChildrenShim } from "./children-shim-d";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import { getERC20Contract } from "@/components/utils/contracts";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
-
-export interface Balances {
-  uad: BigNumber;
-  _3crv: BigNumber;
-  uad3crv: BigNumber;
-  ucr: BigNumber;
-  ucrNft: BigNumber;
-  ubq: BigNumber;
-  stakingShares: BigNumber;
-  usdc: BigNumber;
-  dai: BigNumber;
-  usdt: BigNumber;
-}
+import { Balances } from "../types";
 
 type RefreshBalances = () => Promise<void>;
 
@@ -39,10 +26,9 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
 
     const contracts = await protocolContracts;
 
-    if(contracts.creditNft && contracts.stakingShare) {
+    if (contracts.creditNft && contracts.stakingShare) {
       // const _3crvTokenAddress = await contracts.managerFacet?.curve3PoolTokenAddress();
       const _3crvTokenContract = getERC20Contract(_3crvTokenAddress, provider);
-  
       const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
         contracts.dollarToken?.balanceOf(walletAddress),
         _3crvTokenContract.balanceOf(walletAddress),
@@ -55,7 +41,6 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         namedContracts.dai.balanceOf(walletAddress),
         namedContracts.usdt.balanceOf(walletAddress),
       ]);
-  
       setBalances({
         uad,
         _3crv,

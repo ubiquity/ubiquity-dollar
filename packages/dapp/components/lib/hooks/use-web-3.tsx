@@ -1,7 +1,7 @@
 import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
 import { useAccount, useProvider, useSigner } from "wagmi";
 import { WagmiConfig, createClient } from "wagmi";
-import { mainnet, hardhat, localhost, foundry } from "wagmi/chains";
+import { mainnet, localhost, foundry } from "wagmi/chains";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
@@ -25,7 +25,7 @@ export type Web3State = {
   signer?: JsonRpcSigner;
 };
 
-const metamaskInstalled = typeof window !== "undefined" ? !!window?.ethereum?.request : false;
+const metamaskInstalled = (typeof window !== "undefined" ? window.ethereum : undefined);
 
 const defaultChains = [mainnet, localhost, foundry /*, hardhat*/];
 
@@ -42,15 +42,15 @@ const client = createClient(
         chains: defaultChains,
         options: {
           shimDisconnect: true,
-          UNSTABLE_shimOnConnectSelectAccount: true
-        }
+          UNSTABLE_shimOnConnectSelectAccount: true,
+        },
       }),
       new InjectedConnector({
         chains: defaultChains,
         options: {
           name: "Injected Wallet",
           getProvider: () => typeof window !== 'undefined' ? window.ethereum : undefined,
-          shimDisconnect: true
+          shimDisconnect: true,
         },
       }),
       new CoinbaseWalletConnector({
@@ -60,8 +60,8 @@ const client = createClient(
           appLogoUrl: "https://dao.ubq.fi/favicon.ico",
           darkMode: true,
           headlessMode: true,
-          jsonRpcUrl: process.env.NEXT_PUBLIC_JSON_RPC_URL || ""
-        }
+          jsonRpcUrl: process.env.NEXT_PUBLIC_JSON_RPC_URL || "",
+        },
       }),
       new WalletConnectConnector({
         chains: defaultChains,
@@ -72,11 +72,11 @@ const client = createClient(
             name: "Ubiquity DAO",
             description: "World's first scalable digital dollar",
             url: "https://dao.ubq.fi/",
-            icons: ["https://dao.ubq.fi/favicon.ico"]
+            icons: ["https://dao.ubq.fi/favicon.ico"],
           },
-        }
-      })
-    ]
+        },
+      }),
+    ],
   })
 );
 
