@@ -58,7 +58,7 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
 
   useEffect(() => {
     refreshBalances();
-  }, [walletAddress, protocolContracts]);
+  }, [walletAddress]);
 
   return <BalancesContext.Provider value={[balances, refreshBalances]}>{children}</BalancesContext.Provider>;
 };
