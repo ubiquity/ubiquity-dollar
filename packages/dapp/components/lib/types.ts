@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 export interface EthAccount {
   balance: number;
@@ -29,4 +29,17 @@ export interface PoolState {
   observationCardinalityNext: number;
   feeProtocol: number;
   unlocked: boolean;
+}
+
+export interface Balances {
+  uad: BigNumber;
+  _3crv: BigNumber;
+  uad3crv: BigNumber;
+  ucr: BigNumber;
+  ucrNft: BigNumber;
+  ubq: BigNumber;
+  stakingShares: BigNumber;
+  usdc: BigNumber;
+  dai: BigNumber;
+  usdt: BigNumber;
 }

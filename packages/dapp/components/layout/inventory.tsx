@@ -7,8 +7,9 @@ import icons from "@/ui/icons";
 
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
-import useBalances, { Balances } from "../lib/hooks/use-balances";
+import useBalances from "../lib/hooks/use-balances";
 import { ManagedContracts } from "../lib/hooks/contracts/use-manager-managed";
+import { Balances } from "../lib/types";
 
 const Inventory = () => {
   const { walletAddress } = useWeb3();
