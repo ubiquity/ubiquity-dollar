@@ -5,16 +5,17 @@ import { useEffect } from "react";
 import useWeb3 from "@/lib/hooks/use-web-3";
 import icons from "@/ui/icons";
 
-import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
 import useBalances from "../lib/hooks/use-balances";
-import { ManagedContracts } from "../lib/hooks/contracts/use-manager-managed";
 import { Balances } from "../lib/types";
+
+type ProtocolContracts = NonNullable<Awaited<ReturnType<typeof useProtocolContracts>>>;
 
 const Inventory = () => {
   const { walletAddress } = useWeb3();
   const [balances, refreshBalances] = useBalances();
-  const managedContracts = useManagerManaged();
+  const protocolContracts = useProtocolContracts();
   const namedContracts = useNamedContracts();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const Inventory = () => {
     }
   }, [walletAddress]);
 
-  if (!walletAddress || !balances || !managedContracts || !namedContracts) {
+  if (!walletAddress || !balances || !namedContracts) {
     return null;
   }
 
@@ -64,14 +65,17 @@ const Inventory = () => {
     }
 
     const balance = balances[key];
-    if (Number(balance) && managedContracts) {
-      let selectedContract = managedContracts[id as keyof ManagedContracts] as BaseContract;
-      if (!selectedContract && namedContracts) {
-        selectedContract = namedContracts[key as keyof typeof namedContracts];
-      }
+    (async function () {
+      const contracts = await protocolContracts;
+      if (Number(balance) && contracts) {
+        let selectedContract = contracts[id as keyof ProtocolContracts] as BaseContract;
+        if (!selectedContract && namedContracts) {
+          selectedContract = namedContracts[key as keyof typeof namedContracts];
+        }
 
-      return <Token token={name} balance={balance} accountAddr={walletAddress as string} tokenAddr={selectedContract.address} decimals={usdcFix()} />;
-    }
+        return <Token token={name} balance={balance} accountAddr={walletAddress as string} tokenAddr={selectedContract.address} decimals={usdcFix()} />;
+      }
+    })();
   }
 };
 
