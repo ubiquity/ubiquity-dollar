@@ -20,7 +20,7 @@ type ShareData = {
     minter: string;
     lpFirstDeposited: BigNumber;
     creationBlock: BigNumber;
-    lpRewardDebt: BigNumber;
+    lpRewardCredit: BigNumber;
     endBlock: BigNumber;
     lpAmount: BigNumber;
   };

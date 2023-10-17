@@ -14,7 +14,7 @@ const MIN_WEEKS = 1;
 const MAX_WEEKS = 208;
 
 // cspell: disable-next-line
-type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
+type PrefetchedConstants = { totalShares: number; usdPerWeek: number; stakingDiscountMultiplier: BigNumber };
 async function prefetchConstants(contracts: NonNullable<ProtocolContracts>): Promise<PrefetchedConstants> {
   const contract = await contracts;
   const reserves = await contract.sushiPoolGovernanceDollarLp?.getReserves();
@@ -27,21 +27,21 @@ async function prefetchConstants(contracts: NonNullable<ProtocolContracts>): Pro
   const totalShares = toEtherNum(await contract.chefFacet?.totalShares());
   const usdPerWeek = ubqPerWeek * ubqPrice;
   // cspell: disable-next-line
-  const bondingDiscountMultiplier = await contract.stakingFacet?.stakingDiscountMultiplier();
+  const stakingDiscountMultiplier = await contract.stakingFacet?.stakingDiscountMultiplier();
   // cspell: disable-next-line
-  return { totalShares, usdPerWeek, bondingDiscountMultiplier };
+  return { totalShares, usdPerWeek, stakingDiscountMultiplier };
 }
 
 async function calculateApyForWeeks(contracts: NonNullable<ProtocolContracts>, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
   const contract = await contracts;
   // cspell: disable-next-line
-  const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
+  const { totalShares, usdPerWeek, stakingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
   const usdAsLp = 0.7460387929; // TODO: Get this number from the Curve contract
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
   const weeks = BigNumber.from(weeksNum.toString());
   // cspell: disable-next-line
-  const shares = toEtherNum(contract.stakingFormulasFacet?.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
+  const shares = toEtherNum(contract.stakingFormulasFacet?.durationMultiply(bigNumberOneUsdAsLp, weeks, stakingDiscountMultiplier));
   const rewardsPerWeek = (shares / totalShares) * usdPerWeek;
   const yearlyYield = (rewardsPerWeek / 7) * DAYS_IN_A_YEAR * 100;
   return Math.round(yearlyYield * 100) / 100;

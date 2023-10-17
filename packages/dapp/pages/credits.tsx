@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import DollarPrice from "@/components/redeem/dollar-price";
 import UcrRedeem from "@/components/redeem/ucr-redeem";
-import UcrNftGenerator from "@/components/redeem/debt-coupon-deposit";
+import UcrNftGenerator from "@/components/redeem/credit-nft-deposit";
 import UcrNftRedeem from "@/components/redeem/ucr-nft-redeem";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useEffectAsync from "@/components/lib/hooks/use-effect-async";

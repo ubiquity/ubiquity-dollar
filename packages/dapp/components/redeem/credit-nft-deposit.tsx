@@ -20,7 +20,7 @@ const UcrNftGenerator = () => {
   const protocolContracts = useProtocolContracts();
 
   const [inputVal, setInputVal] = useState("");
-  const [expectedDebtCoupon, setExpectedDebtCoupon] = useState<BigNumber | null>(null);
+  const [expectedCreditNft, setExpectedCreditNft] = useState<BigNumber | null>(null);
 
   if (!walletAddress || !signer) {
     return <span>Connect wallet</span>;
@@ -30,7 +30,7 @@ const UcrNftGenerator = () => {
     return <span>· · ·</span>;
   }
 
-  const depositDollarForDebtCoupons = async (amount: BigNumber) => {
+  const depositDollarForCreditNfts = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
     if (contracts.dollarToken && contracts.creditNftManagerFacet) {
       // cspell: disable-next-line
@@ -46,7 +46,7 @@ const UcrNftGenerator = () => {
       // cspell: disable-next-line
       doTransaction("Burning uAD...", async () => {
         setInputVal("");
-        await depositDollarForDebtCoupons(amount);
+        await depositDollarForCreditNfts(amount);
       });
     }
   };
@@ -56,8 +56,8 @@ const UcrNftGenerator = () => {
     setInputVal(val);
     const amount = extractValidAmount(val);
     if (amount && contracts.creditNftRedemptionCalculatorFacet) {
-      setExpectedDebtCoupon(null);
-      setExpectedDebtCoupon(await contracts.creditNftRedemptionCalculatorFacet.connect(signer).getCreditNftAmount(amount));
+      setExpectedCreditNft(null);
+      setExpectedCreditNft(await contracts.creditNftRedemptionCalculatorFacet.connect(signer).getCreditNftAmount(amount));
     }
   };
 
@@ -76,7 +76,7 @@ const UcrNftGenerator = () => {
         {/* cspell: disable-next-line */}
         Redeem uAD for uCR-NFT
       </Button>
-      {expectedDebtCoupon && inputVal && <p>expected uCR-NFT {formatEther(expectedDebtCoupon)}</p>}
+      {expectedCreditNft && inputVal && <p>expected uCR-NFT {formatEther(expectedCreditNft)}</p>}
     </div>
   );
 };

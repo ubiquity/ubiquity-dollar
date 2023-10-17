@@ -1,10 +1,10 @@
 import { FC } from "react";
-import DebtCoupon from "@/components/redeem/debt-coupon";
+import CreditNft from "@/components/redeem/credit-nft";
 import useWalletAddress from "@/components/lib/hooks/use-wallet-address";
 
-const DebtCouponPage: FC = (): JSX.Element => {
+const CreditNftPage: FC = (): JSX.Element => {
   const [walletAddress] = useWalletAddress();
-  return <div>{walletAddress && <DebtCoupon />}</div>;
+  return <div>{walletAddress && <CreditNft />}</div>;
 };
 
-export default DebtCouponPage;
+export default CreditNftPage;

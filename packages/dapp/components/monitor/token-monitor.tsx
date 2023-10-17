@@ -9,9 +9,9 @@ import useEffectAsync from "../lib/hooks/use-effect-async";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {
-  debtCouponAddress: string;
-  debtCouponManagerAddress: string;
-  totalOutstandingDebt: number;
+  creditNftAddress: string;
+  creditNftManagerAddress: string;
+  totalOutstandingCredit: number;
   totalRedeemable: number;
 };
 
@@ -24,15 +24,15 @@ const TokenMonitorContainer = () => {
     const contracts = await protocolContracts;
     if (contracts && contracts.creditNftManagerFacet) {
       if (creditNft && dollarToken) {
-        const [totalOutstandingDebt, totalRedeemable] = await Promise.all([
-          creditNft.getTotalOutstandingDebt(),
+        const [totalOutstandingCredit, totalRedeemable] = await Promise.all([
+          creditNft.getTotalOutstandingCredit(),
           dollarToken.balanceOf(contracts.creditNftManagerFacet.address),
         ]);
 
         setTokenMonitorProps({
-          debtCouponAddress: creditNft.address,
-          debtCouponManagerAddress: contracts.creditNftManagerFacet.address,
-          totalOutstandingDebt: +formatEther(totalOutstandingDebt),
+          creditNftAddress: creditNft.address,
+          creditNftManagerAddress: contracts.creditNftManagerFacet.address,
+          totalOutstandingCredit: +formatEther(totalOutstandingCredit),
           totalRedeemable: +formatEther(totalRedeemable),
         });
       }
@@ -47,12 +47,12 @@ const TokenMonitor = (props: TokenMonitorProps) => {
     <div className="panel">
       <h2>Credit Monitor</h2>
       <div>
-        <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingDebt} />
-        {/* <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} /> */}
+        <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingCredit} />
+        {/* <Address title="Credit Nft Manager" address={props.creditNftManagerAddress} /> */}
       </div>
       <div>
         <Balance title="Total Redeemable" unit="uCR-NFT" balance={props.totalRedeemable} />
-        {/* <Address title="Debt Coupon" address={props.debtCouponAddress} /> */}
+        {/* <Address title="Credit Nft" address={props.creditNftAddress} /> */}
       </div>
     </div>
   );

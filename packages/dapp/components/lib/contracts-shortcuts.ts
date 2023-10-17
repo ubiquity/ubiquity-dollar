@@ -42,7 +42,7 @@ export async function ensureERC1155Allowance(logName: string, contract: Contract
 // const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 // const toNum = (n: BigNumber) => +n.toString();
 
-// export async function logBondingUbqInfo(contracts: Contracts) {
+// export async function logStakingUbqInfo(contracts: Contracts) {
 //   const reserves = await contracts.ugovUadPair.getReserves();
 //   const ubqReserve = +reserves.reserve0.toString();
 //   const uadReserve = +reserves.reserve1.toString();
@@ -58,7 +58,7 @@ export async function ensureERC1155Allowance(logName: string, contract: Contract
 //   const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));
 //   console.log("Actual UBQ per block", actualUbqPerBlock);
 //   console.log("Extra UBQ per block to treasury", actualUbqPerBlock / ugovDivider);
-//   const blockCountInAWeek = toNum(await contracts.bonding.blockCountInAWeek());
+//   const blockCountInAWeek = toNum(await contracts.staking.blockCountInAWeek());
 //   console.log("Block count in a week", blockCountInAWeek);
 
 //   const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
@@ -67,7 +67,7 @@ export async function ensureERC1155Allowance(logName: string, contract: Contract
 
 //   const DAYS_IN_A_YEAR = 365.2422;
 //   const totalShares = toEtherNum(await contracts.masterChef.totalShares());
-//   console.log("Total Bonding Shares", totalShares);
+//   console.log("Total Staking Shares", totalShares);
 //   const usdPerWeek = ubqPerWeek * ubqPrice;
 //   const usdPerDay = usdPerWeek / 7;
 //   const usdPerYear = usdPerDay * DAYS_IN_A_YEAR;
@@ -77,11 +77,11 @@ export async function ensureERC1155Allowance(logName: string, contract: Contract
 //   const usdAsLp = 0.7460387929;
 //   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
 
-//   const bondingDiscountMultiplier = await contracts.bonding.bondingDiscountMultiplier();
+//   const stakingDiscountMultiplier = await contracts.staking.stakingDiscountMultiplier();
 //   const sharesResults = await Promise.all(
 //     [1, 50, 100, 208].map(async (i) => {
 //       const weeks = BigNumber.from(i.toString());
-//       const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
+//       const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, stakingDiscountMultiplier));
 //       return [i, shares];
 //     })
 //   );

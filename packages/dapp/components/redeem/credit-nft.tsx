@@ -13,15 +13,15 @@ type Actions = {
   onBurn: (uadAmount: string, setErrMsg: Dispatch<SetStateAction<string | undefined>>) => void;
 };
 
-type Coupon = {
+type Nft = {
   amount: number;
   expiration: number;
   swap: { amount: number; unit: string };
 };
 
-type Coupons = {
+type Nfts = {
   // cspell: disable-next-line
-  uDEBT: Coupon[];
+  uCREDIT: Nft[];
   // cspell: disable-next-line
   stakingShare: number;
   // cspell: disable-next-line
@@ -29,12 +29,12 @@ type Coupons = {
 };
 
 // cspell: disable-next-line
-const uDEBT = "uDEBT";
+const uCREDIT = "uCREDIT";
 // cspell: disable-next-line
 const uAR = "uAR";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const DebtCouponContainer = ({ protocolContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+export const CreditNftContainer = ({ protocolContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction] = useTransactionLogger();
@@ -63,17 +63,17 @@ export const DebtCouponContainer = ({ protocolContracts, web3Provider, walletAdd
   const cycleStartDate = 1637625600000;
   const uarDeprecationRate = 0.0001;
   const uarCurrentRewardPct = 0.05;
-  const uDebtDeprecationRate = 0.0015;
-  const uDebtCurrentRewardPct = 0.05;
-  const uDebtExpirationTime = 1640217600000;
-  const uDebtUbqRedemptionRate = 0.25;
+  const uCreditDeprecationRate = 0.0015;
+  const uCreditCurrentRewardPct = 0.05;
+  const uCreditExpirationTime = 1640217600000;
+  const uCreditUbqRedemptionRate = 0.25;
   const uadTotalSupply = 233000;
   const stakingShareTotalSupply = 10000;
   const uarTotalSupply = 30000;
-  const uDebtTotalSupply = 12000;
-  const coupons: Coupons = {
+  const uCreditTotalSupply = 12000;
+  const nfts: Nfts = {
     // cspell: disable-next-line
-    uDEBT: [
+    uCREDIT: [
       // cspell: disable-next-line
       { amount: 1000, expiration: 1640390400000, swap: { amount: 800, unit: "uAR" } },
       // cspell: disable-next-line
@@ -89,75 +89,75 @@ export const DebtCouponContainer = ({ protocolContracts, web3Provider, walletAdd
 
   return (
     <div>
-      <h2>Debt Coupon</h2>
+      <h2>Credit Nft</h2>
       {balances && (
-        <DebtCoupon
+        <CreditNft
           twapPrice={twapPrice}
           balances={balances}
           actions={actions}
           cycleStartDate={cycleStartDate}
           uarDeprecationRate={uarDeprecationRate}
           uarCurrentRewardPct={uarCurrentRewardPct}
-          uDebtDeprecationRate={uDebtDeprecationRate}
-          uDebtCurrentRewardPct={uDebtCurrentRewardPct}
-          uDebtExpirationTime={uDebtExpirationTime}
-          uDebtUbqRedemptionRate={uDebtUbqRedemptionRate}
+          uCreditDeprecationRate={uCreditDeprecationRate}
+          uCreditCurrentRewardPct={uCreditCurrentRewardPct}
+          uCreditExpirationTime={uCreditExpirationTime}
+          uCreditUbqRedemptionRate={uCreditUbqRedemptionRate}
           priceIncreaseFormula={priceIncreaseFormula}
           uadTotalSupply={uadTotalSupply}
           stakingShareSupply={stakingShareTotalSupply}
           uarTotalSupply={uarTotalSupply}
-          uDebtTotalSupply={uDebtTotalSupply}
-          coupons={coupons}
+          uCreditTotalSupply={uCreditTotalSupply}
+          nfts={nfts}
         />
       )}
     </div>
   );
 };
 
-type DebtCouponProps = {
+type CreditNftProps = {
   twapPrice: BigNumber | null;
   balances: Balances;
   actions: Actions;
   cycleStartDate: number;
   uarDeprecationRate: number;
   uarCurrentRewardPct: number;
-  uDebtDeprecationRate: number;
-  uDebtCurrentRewardPct: number;
-  uDebtExpirationTime: number;
-  uDebtUbqRedemptionRate: number;
+  uCreditDeprecationRate: number;
+  uCreditCurrentRewardPct: number;
+  uCreditExpirationTime: number;
+  uCreditUbqRedemptionRate: number;
   uadTotalSupply: number;
   stakingShareSupply: number;
   uarTotalSupply: number;
-  uDebtTotalSupply: number;
-  coupons: Coupons | null;
+  uCreditTotalSupply: number;
+  nfts: Nfts | null;
   priceIncreaseFormula: (amount: number) => Promise<number>;
 };
 
-const DebtCoupon = memo(
+const CreditNft = memo(
   ({
     twapPrice,
     actions,
     cycleStartDate,
     uarDeprecationRate,
     uarCurrentRewardPct,
-    uDebtDeprecationRate,
-    uDebtCurrentRewardPct,
-    uDebtExpirationTime,
-    uDebtUbqRedemptionRate,
+    uCreditDeprecationRate,
+    uCreditCurrentRewardPct,
+    uCreditExpirationTime,
+    uCreditUbqRedemptionRate,
     uadTotalSupply,
     stakingShareSupply,
     uarTotalSupply,
-    uDebtTotalSupply,
-    coupons,
+    uCreditTotalSupply,
+    nfts,
     priceIncreaseFormula,
-  }: DebtCouponProps) => {
+  }: CreditNftProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
     // cspell: disable-next-line
-    const [selectedCurrency, selectCurrency] = useState(uDEBT);
+    const [selectedCurrency, selectCurrency] = useState(uCREDIT);
     const [increasedValue, setIncreasedValue] = useState(0);
     const [errMsg, setErrMsg] = useState<string>();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [expectedCoupon, setExpectedCoupon] = useState<BigNumber>();
+    const [expectedNft, setExpectedNft] = useState<BigNumber>();
     const [uadAmount, setUadAmount] = useState("");
 
     const handleTabSelect = (tab: string) => {
@@ -178,12 +178,12 @@ const DebtCoupon = memo(
       }
     }, [cycleStartDate]);
 
-    const calculatedUDebtExpirationTime = useMemo(() => {
-      if (uDebtExpirationTime) {
-        const diff = uDebtExpirationTime - Date.now();
+    const calculatedUCreditExpirationTime = useMemo(() => {
+      if (uCreditExpirationTime) {
+        const diff = uCreditExpirationTime - Date.now();
         return formatTimeDiff(diff);
       }
-    }, [uDebtExpirationTime]);
+    }, [uCreditExpirationTime]);
 
     const handleInputUAD = async (e: ChangeEvent) => {
       setErrMsg("");
@@ -217,7 +217,7 @@ const DebtCoupon = memo(
 
     useEffect(() => {
       if (uadAmount) {
-        // _expectedCoupon(uadAmount, contracts, selectedCurrency, setExpectedCoupon);
+        // _expectedNft(uadAmount, contracts, selectedCurrency, setExpectedNft);
       }
     }, [uadAmount, selectedCurrency]);
 
@@ -235,10 +235,10 @@ const DebtCoupon = memo(
             <PumpCycle
               uarDeprecationRate={uarDeprecationRate}
               uarCurrentRewardPct={uarCurrentRewardPct}
-              uDebtDeprecationRate={uDebtDeprecationRate}
-              uDebtCurrentRewardPct={uDebtCurrentRewardPct}
-              uDebtUbqRedemptionRate={uDebtUbqRedemptionRate}
-              calculatedUDebtExpirationTime={calculatedUDebtExpirationTime}
+              uCreditDeprecationRate={uCreditDeprecationRate}
+              uCreditCurrentRewardPct={uCreditCurrentRewardPct}
+              uCreditUbqRedemptionRate={uCreditUbqRedemptionRate}
+              calculatedUCreditExpirationTime={calculatedUCreditExpirationTime}
             />
             <UadBurning
               handleInputUAD={handleInputUAD}
@@ -246,17 +246,17 @@ const DebtCoupon = memo(
               handleTabSelect={handleTabSelect}
               handleBurn={handleBurn}
               errMsg={errMsg}
-              expectedCoupon={expectedCoupon}
+              expectedNft={expectedNft}
               increasedValue={increasedValue}
             />
           </>
         ) : (
-          <Coupons
+          <Nfts
             uadTotalSupply={uadTotalSupply}
             stakingShareSupply={stakingShareSupply}
             uarTotalSupply={uarTotalSupply}
-            uDebtTotalSupply={uDebtTotalSupply}
-            coupons={coupons}
+            uCreditTotalSupply={uCreditTotalSupply}
+            nfts={nfts}
             actions={actions}
           />
         )}
@@ -265,79 +265,79 @@ const DebtCoupon = memo(
   }
 );
 
-type CouponsProps = {
+type NftsProps = {
   uadTotalSupply: number;
   stakingShareSupply: number;
   uarTotalSupply: number;
-  uDebtTotalSupply: number;
-  coupons: Coupons | null;
+  uCreditTotalSupply: number;
+  nfts: Nfts | null;
   actions: Actions;
 };
 
-export const Coupons = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uDebtTotalSupply, coupons, actions }: CouponsProps) => {
+export const Nfts = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uCreditTotalSupply, nfts, actions }: NftsProps) => {
   return (
     <>
       <RewardCycleInfo
         uadTotalSupply={uadTotalSupply}
         stakingShareSupply={stakingShareSupply}
         uarTotalSupply={uarTotalSupply}
-        uDebtTotalSupply={uDebtTotalSupply}
+        uCreditTotalSupply={uCreditTotalSupply}
       />
       <div>
-        <span>Your Coupons</span>
+        <span>Your Nfts</span>
       </div>
-      <CouponRedeem coupons={coupons} actions={actions} />
-      <CouponTable coupons={coupons} onRedeem={actions.onRedeem} onSwap={actions.onSwap} />
+      <NftRedeem nfts={nfts} actions={actions} />
+      <NftTable nfts={nfts} onRedeem={actions.onRedeem} onSwap={actions.onSwap} />
     </>
   );
 };
 
-type CouponRedeemProps = {
-  coupons: Coupons | null;
+type NftRedeemProps = {
+  nfts: Nfts | null;
   actions: Actions;
 };
 
-export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
+export const NftRedeem = ({ nfts, actions }: NftRedeemProps) => {
   const [uarAmount, setUarAmount] = useState("");
   const [stakingShareAmount, setStakingShareAmount] = useState("");
-  const shouldDisableInput = (type: keyof Coupons) => {
-    if (!coupons) {
+  const shouldDisableInput = (type: keyof Nfts) => {
+    if (!nfts) {
       return true;
       // cspell: disable-next-line
     } else if (type === "uAR") {
       // cspell: disable-next-line
-      return !coupons.uAR || coupons.uAR <= 0;
+      return !nfts.uAR || nfts.uAR <= 0;
       // cspell: disable-next-line
     } else if (type === "stakingShare") {
       // cspell: disable-next-line
-      return !coupons.stakingShare || coupons.stakingShare <= 0;
+      return !nfts.stakingShare || nfts.stakingShare <= 0;
     }
     return false;
   };
 
   const handleInputUAR = async (e: ChangeEvent) => {
     // cspell: disable-next-line
-    if (!coupons || !coupons.uAR) {
+    if (!nfts || !nfts.uAR) {
       return;
     }
     const amountEl = e.target as HTMLInputElement;
     const amountValue = amountEl?.value;
     // cspell: disable-next-line
-    setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.uAR)}`);
+    setUarAmount(`${constrainNumber(parseFloat(amountValue), 0, nfts.uAR)}`);
   };
 
   const handleInputStakingShare = async (e: ChangeEvent) => {
     // cspell: disable-next-line
-    if (!coupons || !coupons.stakingShare) {
+    if (!nfts || !nfts.stakingShare) {
       return;
     }
     const amountEl = e.target as HTMLInputElement;
     const amountValue = amountEl?.value;
     // cspell: disable-next-line
-    setStakingShareAmount(`${constrainNumber(parseFloat(amountValue), 0, coupons.stakingShare)}`);
+    setStakingShareAmount(`${constrainNumber(parseFloat(amountValue), 0, nfts.stakingShare)}`);
   };
 
-  const uarToUDebtFormula = (amount: string) => {
+  const uarToUCreditFormula = (amount: string) => {
     const parsedValue = parseFloat(amount);
     return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
   };
@@ -349,7 +349,7 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
           <div>
             <div>
               {/* cspell: disable-next-line */}
-              <span>Staking Share {coupons?.stakingShare.toLocaleString()}</span>
+              <span>Staking Share {nfts?.stakingShare.toLocaleString()}</span>
             </div>
             <div>
               {/* cspell: disable-next-line */}
@@ -362,7 +362,7 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
           <div>
             <div>
               {/* cspell: disable-next-line */}
-              <span>uAR {coupons?.uAR.toLocaleString()} - $2,120</span>
+              <span>uAR {nfts?.uAR.toLocaleString()} - $2,120</span>
             </div>
             <div>
               {/* cspell: disable-next-line */}
@@ -378,9 +378,9 @@ export const CouponRedeem = ({ coupons, actions }: CouponRedeemProps) => {
             </div>
             <div>
               {/* cspell: disable-next-line */}
-              <span>{uarToUDebtFormula(uarAmount).toLocaleString()} uDEBT</span>
+              <span>{uarToUCreditFormula(uarAmount).toLocaleString()} uCREDIT</span>
               {/* cspell: disable-next-line */}
-              <button onClick={() => actions.onSwap(2120, uDEBT)}>Swap</button>
+              <button onClick={() => actions.onSwap(2120, uCREDIT)}>Swap</button>
             </div>
           </div>
         </div>
@@ -393,10 +393,10 @@ type RewardCycleInfoProps = {
   uadTotalSupply: number;
   stakingShareSupply: number;
   uarTotalSupply: number;
-  uDebtTotalSupply: number;
+  uCreditTotalSupply: number;
 };
 
-export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uDebtTotalSupply }: RewardCycleInfoProps) => {
+export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uCreditTotalSupply }: RewardCycleInfoProps) => {
   return (
     <>
       <div>
@@ -425,7 +425,7 @@ export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSu
       <div>
         <div>
           <div>
-            <span>Total debt</span>
+            <span>Total credit</span>
           </div>
           <div>
             <div>
@@ -440,8 +440,8 @@ export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSu
             </div>
             <div>
               {/* cspell: disable-next-line */}
-              <div>uDEBT</div>
-              <div>{uDebtTotalSupply.toLocaleString()}</div>
+              <div>uCREDIT</div>
+              <div>{uCreditTotalSupply.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -465,14 +465,14 @@ export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSu
 type UadBurningProps = {
   selectedCurrency: string;
   errMsg: string | undefined;
-  expectedCoupon: BigNumber | undefined;
+  expectedNft: BigNumber | undefined;
   increasedValue: number;
   handleInputUAD: (e: ChangeEvent) => Promise<void>;
   handleTabSelect: (tab: string) => void;
   handleBurn: () => void;
 };
 
-export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedCoupon, errMsg }: UadBurningProps) => {
+export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedNft, errMsg }: UadBurningProps) => {
   return (
     <>
       <div>
@@ -483,14 +483,14 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
           {/* cspell: disable-next-line */}
           <button onClick={() => handleTabSelect(uAR)}>uAR</button>
           {/* cspell: disable-next-line */}
-          <button onClick={() => handleTabSelect(uDEBT)}>uDEBT</button>
+          <button onClick={() => handleTabSelect(uCREDIT)}>uCREDIT</button>
         </nav>
         <button onClick={handleBurn}>Burn</button>
       </div>
       <p>{errMsg}</p>
-      {expectedCoupon && (
+      {expectedNft && (
         <p>
-          expected {selectedCurrency} {ethers.utils.formatEther(expectedCoupon)}
+          expected {selectedCurrency} {ethers.utils.formatEther(expectedNft)}
         </p>
       )}
       <div>
@@ -503,19 +503,19 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
 type PumpCycleProps = {
   uarDeprecationRate: number;
   uarCurrentRewardPct: number;
-  uDebtDeprecationRate: number;
-  uDebtCurrentRewardPct: number;
-  uDebtUbqRedemptionRate: number;
-  calculatedUDebtExpirationTime: string | undefined;
+  uCreditDeprecationRate: number;
+  uCreditCurrentRewardPct: number;
+  uCreditUbqRedemptionRate: number;
+  calculatedUCreditExpirationTime: string | undefined;
 };
 
 export const PumpCycle = ({
   uarDeprecationRate,
   uarCurrentRewardPct,
-  uDebtDeprecationRate,
-  uDebtCurrentRewardPct,
-  uDebtUbqRedemptionRate,
-  calculatedUDebtExpirationTime,
+  uCreditDeprecationRate,
+  uCreditCurrentRewardPct,
+  uCreditUbqRedemptionRate,
+  calculatedUCreditExpirationTime,
 }: PumpCycleProps) => {
   return (
     <>
@@ -549,20 +549,20 @@ export const PumpCycle = ({
         </div>
         <div>
           {/* cspell: disable-next-line */}
-          <span>Non-fungible (uDEBT)</span>
+          <span>Non-fungible (uCREDIT)</span>
           <table>
             <tbody>
               <tr>
                 <td>Deprecation rate</td>
-                <td>{uDebtDeprecationRate * 100}%</td>
+                <td>{uCreditDeprecationRate * 100}%</td>
               </tr>
               <tr>
                 <td>Current reward %</td>
-                <td>{uDebtCurrentRewardPct * 100}%</td>
+                <td>{uCreditCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
                 <td>Expires?</td>
-                <td>After {calculatedUDebtExpirationTime}</td>
+                <td>After {calculatedUCreditExpirationTime}</td>
               </tr>
             </tbody>
           </table>
@@ -571,7 +571,7 @@ export const PumpCycle = ({
           </div>
           <div>
             {/* cspell: disable-next-line */}
-            <span>Can be redeemed for UBQ at {uDebtUbqRedemptionRate * 100}% rate</span>
+            <span>Can be redeemed for UBQ at {uCreditUbqRedemptionRate * 100}% rate</span>
           </div>
           <a href="">Learn more</a>
         </div>
@@ -633,27 +633,27 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
       <div>
         <span>
           {/* cspell: disable-next-line */}
-          {parseFloat(price) <= 1 ? "Burn uAD for debt coupons and help pump the price back up" : "Time to redeem debts coupons and help move the price down"}
+          {parseFloat(price) <= 1 ? "Burn uAD for credit nfts and help pump the price back up" : "Time to redeem credits nfts and help move the price down"}
         </span>
       </div>
     </>
   );
 };
 
-type CouponTableProps = {
-  coupons: Coupons | null;
+type NftTableProps = {
+  nfts: Nfts | null;
   onRedeem: Actions["onRedeem"];
   onSwap: Actions["onSwap"];
 };
 
-export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => {
+export const NftTable = ({ nfts, onRedeem, onSwap }: NftTableProps) => {
   return (
     <div>
       <table>
         <thead>
           <tr>
             {/* cspell: disable-next-line */}
-            <th>uDEBT</th>
+            <th>uCREDIT</th>
             <th>Expiration</th>
             <th>Swap</th>
             <th></th>
@@ -662,9 +662,9 @@ export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => 
 
         <tbody>
           {/* cspell: disable-next-line */}
-          {coupons && coupons.uDEBT && coupons.uDEBT.length
+          {nfts && nfts.uCREDIT && nfts.uCREDIT.length
             ? // cspell: disable-next-line
-              coupons.uDEBT.map((coupon, index) => <CouponRow coupon={coupon} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
+              nfts.uCREDIT.map((nft, index) => <NftRow nft={nft} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
             : null}
         </tbody>
       </table>
@@ -672,32 +672,32 @@ export const CouponTable = ({ coupons, onRedeem, onSwap }: CouponTableProps) => 
   );
 };
 
-type CouponRowProps = {
-  coupon: Coupon;
+type NftRowProps = {
+  nft: Nft;
   onRedeem: Actions["onRedeem"];
   onSwap: Actions["onSwap"];
 };
 
-export const CouponRow = ({ coupon, onRedeem, onSwap }: CouponRowProps) => {
-  const timeDiff = coupon.expiration - Date.now();
+export const NftRow = ({ nft, onRedeem, onSwap }: NftRowProps) => {
+  const timeDiff = nft.expiration - Date.now();
 
   const handleSwap = () => {
-    onSwap(coupon.swap.amount, coupon.swap.unit);
+    onSwap(nft.swap.amount, nft.swap.unit);
   };
 
   return (
     <tr>
-      <td>{coupon.amount.toLocaleString()}</td>
+      <td>{nft.amount.toLocaleString()}</td>
       <td>
         {formatTimeDiff(Math.abs(timeDiff))}
         {timeDiff < 0 ? " ago" : ""}
       </td>
       <td>
-        <button onClick={handleSwap}>{`${coupon.swap.amount.toLocaleString()} ${coupon.swap.unit}`}</button>
+        <button onClick={handleSwap}>{`${nft.swap.amount.toLocaleString()} ${nft.swap.unit}`}</button>
       </td>
       <td>{timeDiff > 0 ? <button onClick={onRedeem}>Redeem</button> : null}</td>
     </tr>
   );
 };
 
-export default withLoadedContext(DebtCouponContainer);
+export default withLoadedContext(CreditNftContainer);
