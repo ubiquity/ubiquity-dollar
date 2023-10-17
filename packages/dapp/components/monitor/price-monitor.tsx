@@ -1,10 +1,12 @@
 import { BigNumber, ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import useEffectAsync from "../lib/hooks/use-effect-async";
 
 import NAMED_ACCOUNTS from "../config/named-accounts.json";
 import { formatEther, formatMwei } from "@/lib/format";
 import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
-import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts, { ProtocolContracts } from "@/components/lib/hooks/contracts/use-protocol-contracts";
+// import Address from "./ui/Address";
 import PriceExchange from "./ui/price-exchange";
 
 type State = null | PriceMonitorProps;
@@ -21,57 +23,66 @@ type PriceMonitorProps = {
   dollarToBeMinted: number | null;
 };
 
-type ManagedContracts = NonNullable<Awaited<ReturnType<typeof useManagerManaged>>>;
 type NamedContracts = NonNullable<Awaited<ReturnType<typeof useNamedContracts>>>;
 
-const fetchPrices = async (
-  { dollarToken: uad, dollarMetapool: metaPool, dollarTwapOracle: twapOracle, dollarMintCalculator: dollarMintCalc }: ManagedContracts,
-  { curvePool }: NamedContracts
-): Promise<PriceMonitorProps> => {
-  const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
-    curvePool.get_coin_indices(metaPool.address, NAMED_ACCOUNTS.DAI, NAMED_ACCOUNTS.USDT),
-    curvePool.get_coin_indices(metaPool.address, uad.address, NAMED_ACCOUNTS.USDC),
-  ]);
+const fetchPrices = async (protocolContracts: ProtocolContracts, { curvePool }: NamedContracts): Promise<PriceMonitorProps | undefined> => {
+  const contracts = await protocolContracts;
+  if (contracts) {
+    const {
+      dollarToken: dollarToken,
+      curveMetaPoolDollarTriPoolLp: metaPool,
+      twapOracleDollar3poolFacet: twapOracle,
+      dollarMintCalculatorFacet: dollarMintCalc,
+    } = contracts;
 
-  const metaPoolGet = async (i1: BigNumber, i2: BigNumber): Promise<BigNumber> => {
-    return await metaPool.get_dy_underlying(i1, i2, ethers.utils.parseEther("1"));
-  };
+    if (dollarToken && metaPool && twapOracle && dollarMintCalc) {
+      const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
+        curvePool.get_coin_indices(metaPool.address, NAMED_ACCOUNTS.DAI, NAMED_ACCOUNTS.USDT),
+        curvePool.get_coin_indices(metaPool.address, dollarToken.address, NAMED_ACCOUNTS.USDC),
+      ]);
 
-  const [daiUsdt, uadUsdc, uadDai, uadUsdt, uadCrv, crvUad] = await Promise.all([
-    metaPoolGet(daiIndex, usdtIndex),
-    metaPoolGet(uadIndex, usdcIndex),
-    metaPoolGet(uadIndex, daiIndex),
-    metaPoolGet(uadIndex, usdtIndex),
-    twapOracle.consult(uad.address),
-    twapOracle.consult(NAMED_ACCOUNTS.curve3CrvToken),
-  ]);
+      const metaPoolGet = async (i1: BigNumber, i2: BigNumber): Promise<BigNumber> => {
+        return await metaPool.get_dy_underlying(i1, i2, ethers.utils.parseEther("1"));
+      };
 
-  return {
-    metaPoolAddress: metaPool.address,
-    daiUsdt: +formatMwei(daiUsdt),
-    uadUsdc: +formatMwei(uadUsdc),
-    uadDai: +formatEther(uadDai),
-    uadUsdt: +formatMwei(uadUsdt),
-    twapAddress: twapOracle.address,
-    uadCrv: +formatEther(uadCrv),
-    crvUad: +formatEther(crvUad),
-    dollarMintCalcAddress: dollarMintCalc.address,
-    dollarToBeMinted: uadCrv.gt(ethers.utils.parseEther("1")) ? +formatEther(await dollarMintCalc.getDollarsToMint()) : null,
-  };
+      const [daiUsdt, uadUsdc, uadDai, uadUsdt, uadCrv, crvUad] = await Promise.all([
+        metaPoolGet(daiIndex, usdtIndex),
+        metaPoolGet(uadIndex, usdcIndex),
+        metaPoolGet(uadIndex, daiIndex),
+        metaPoolGet(uadIndex, usdtIndex),
+        twapOracle.consult(dollarToken.address),
+        twapOracle.consult(NAMED_ACCOUNTS.curve3CrvToken),
+      ]);
+
+      return {
+        metaPoolAddress: metaPool.address,
+        daiUsdt: +formatMwei(daiUsdt),
+        uadUsdc: +formatMwei(uadUsdc),
+        uadDai: +formatEther(uadDai),
+        uadUsdt: +formatMwei(uadUsdt),
+        twapAddress: twapOracle.address,
+        uadCrv: +formatEther(uadCrv),
+        crvUad: +formatEther(crvUad),
+        dollarMintCalcAddress: dollarMintCalc.address,
+        dollarToBeMinted: uadCrv.gt(ethers.utils.parseEther("1")) ? +formatEther(await dollarMintCalc.getDollarsToMint()) : null,
+      };
+    }
+  }
 };
 
 const PriceMonitorContainer = () => {
-  const managedContracts = useManagerManaged();
   const namedContracts = useNamedContracts();
+  const protocolContracts = useProtocolContracts();
   const [priceMonitorProps, setPriceMonitorProps] = useState<State>(null);
 
-  useEffect(() => {
-    if (managedContracts && namedContracts) {
-      (async function () {
-        setPriceMonitorProps(await fetchPrices(managedContracts, namedContracts));
-      })();
+  useEffectAsync(async () => {
+    if (protocolContracts && namedContracts) {
+      const prices = await fetchPrices(protocolContracts, namedContracts);
+      if (prices) {
+        setPriceMonitorProps(prices);
+      }
     }
-  }, [managedContracts, namedContracts]);
+  }, [namedContracts]);
 
   return priceMonitorProps && <PriceMonitor {...priceMonitorProps} />;
 };

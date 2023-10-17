@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { formatEther } from "@/lib/format";
-import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
 // import Address from "./ui/Address";
 import Balance from "./ui/balance";
+import useEffectAsync from "../lib/hooks/use-effect-async";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {
@@ -15,28 +16,28 @@ type TokenMonitorProps = {
 };
 
 const TokenMonitorContainer = () => {
-  const { debtCouponManager } = useDeployedContracts() || {};
-  const { creditNft: debtCouponToken, dollarToken: uad } = useManagerManaged() || {};
-
+  const protocolContracts = useProtocolContracts();
+  const { creditNft, dollarToken } = useManagerManaged() || {};
   const [tokenMonitorPRops, setTokenMonitorProps] = useState<State>(null);
 
-  useEffect(() => {
-    if (debtCouponManager && debtCouponToken && uad) {
-      (async function () {
+  useEffectAsync(async () => {
+    const contracts = await protocolContracts;
+    if (contracts && contracts.creditNftManagerFacet) {
+      if (creditNft && dollarToken) {
         const [totalOutstandingDebt, totalRedeemable] = await Promise.all([
-          debtCouponToken.getTotalOutstandingDebt(),
-          uad.balanceOf(debtCouponManager.address),
+          creditNft.getTotalOutstandingDebt(),
+          dollarToken.balanceOf(contracts.creditNftManagerFacet.address),
         ]);
 
         setTokenMonitorProps({
-          debtCouponAddress: debtCouponToken.address,
-          debtCouponManagerAddress: debtCouponManager.address,
+          debtCouponAddress: creditNft.address,
+          debtCouponManagerAddress: contracts.creditNftManagerFacet.address,
           totalOutstandingDebt: +formatEther(totalOutstandingDebt),
           totalRedeemable: +formatEther(totalRedeemable),
         });
-      })();
+      }
     }
-  }, [debtCouponManager, debtCouponToken, uad]);
+  }, [creditNft, dollarToken]);
 
   return tokenMonitorPRops && <TokenMonitor {...tokenMonitorPRops} />;
 };
