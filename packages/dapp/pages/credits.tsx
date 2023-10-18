@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
 import DollarPrice from "@/components/redeem/dollar-price";
-import UcrRedeem from "@/components/redeem/ucr-redeem";
-import UcrNftGenerator from "@/components/redeem/credit-nft-deposit";
-import UcrNftRedeem from "@/components/redeem/ucr-nft-redeem";
+import CreditRedeem from "@/components/redeem/credit-redeem";
+import CreditNftGenerator from "@/components/redeem/credit-nft-deposit";
+import CreditNftRedeem from "@/components/redeem/credit-nft-redeem";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 // import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
@@ -29,16 +29,16 @@ const PriceStabilization: FC = (): JSX.Element => {
     <WalletConnectionWall>
       <div id="CreditOperations" data-twap={twapInteger}>
         <DollarPrice />
-        <div id="MintUcr" className="panel">
+        <div id="MintCredit" className="panel">
           <h2>Generate Ubiquity Credit NFTs</h2>
           <aside>When TWAP is below peg</aside>
-          <UcrNftGenerator />
+          <CreditNftGenerator />
         </div>
-        <div id="RedeemUcr" className="panel">
+        <div id="RedeemCredit" className="panel">
           <h2>Redeem Ubiquity Credits</h2>
           <div>
-            <UcrRedeem twapInteger={twapInteger} />
-            <UcrNftRedeem />
+            <CreditRedeem twapInteger={twapInteger} />
+            <CreditNftRedeem />
           </div>
         </div>
       </div>

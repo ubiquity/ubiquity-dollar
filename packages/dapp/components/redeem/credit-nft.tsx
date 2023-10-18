@@ -10,7 +10,7 @@ import { Balances } from "../lib/types";
 type Actions = {
   onRedeem: () => void;
   onSwap: (amount: number, unit: string) => void;
-  onBurn: (uadAmount: string, setErrMsg: Dispatch<SetStateAction<string | undefined>>) => void;
+  onBurn: (dollarAmount: string, setErrMsg: Dispatch<SetStateAction<string | undefined>>) => void;
 };
 
 type Nft = {
@@ -21,7 +21,7 @@ type Nft = {
 
 type Nfts = {
   // cspell: disable-next-line
-  uCREDIT: Nft[];
+  credit: Nft[];
   // cspell: disable-next-line
   stakingShare: number;
   // cspell: disable-next-line
@@ -29,7 +29,7 @@ type Nfts = {
 };
 
 // cspell: disable-next-line
-const uCREDIT = "uCREDIT";
+const CREDIT = "CREDIT";
 // cspell: disable-next-line
 const uAR = "uAR";
 
@@ -48,10 +48,10 @@ export const CreditNftContainer = ({ protocolContracts, web3Provider, walletAddr
     onSwap: () => {
       console.log("onSwap");
     },
-    onBurn: async (uadAmount, setErrMsg) => {
+    onBurn: async (dollarAmount, setErrMsg) => {
       setErrMsg("");
       // cspell: disable-next-line
-      await doTransaction("Burning uAD...", async () => {});
+      await doTransaction("Burning DOLLAR...", async () => {});
     },
   };
 
@@ -63,23 +63,23 @@ export const CreditNftContainer = ({ protocolContracts, web3Provider, walletAddr
   const cycleStartDate = 1637625600000;
   const uarDeprecationRate = 0.0001;
   const uarCurrentRewardPct = 0.05;
-  const uCreditDeprecationRate = 0.0015;
-  const uCreditCurrentRewardPct = 0.05;
-  const uCreditExpirationTime = 1640217600000;
-  const uCreditUbqRedemptionRate = 0.25;
-  const uadTotalSupply = 233000;
+  const creditDeprecationRate = 0.0015;
+  const creditCurrentRewardPct = 0.05;
+  const creditExpirationTime = 1640217600000;
+  const creditGovernanceRedemptionRate = 0.25;
+  const dollarTotalSupply = 233000;
   const stakingShareTotalSupply = 10000;
   const uarTotalSupply = 30000;
-  const uCreditTotalSupply = 12000;
+  const creditTotalSupply = 12000;
   const nfts: Nfts = {
     // cspell: disable-next-line
-    uCREDIT: [
+    credit: [
       // cspell: disable-next-line
       { amount: 1000, expiration: 1640390400000, swap: { amount: 800, unit: "uAR" } },
       // cspell: disable-next-line
       { amount: 500, expiration: 1639526400000, swap: { amount: 125, unit: "uAR" } },
       // cspell: disable-next-line
-      { amount: 666, expiration: 1636934400000, swap: { amount: 166.5, unit: "UBQ" } },
+      { amount: 666, expiration: 1636934400000, swap: { amount: 166.5, unit: "GOVERNANCE" } },
     ],
     // cspell: disable-next-line
     stakingShare: 1000,
@@ -98,15 +98,15 @@ export const CreditNftContainer = ({ protocolContracts, web3Provider, walletAddr
           cycleStartDate={cycleStartDate}
           uarDeprecationRate={uarDeprecationRate}
           uarCurrentRewardPct={uarCurrentRewardPct}
-          uCreditDeprecationRate={uCreditDeprecationRate}
-          uCreditCurrentRewardPct={uCreditCurrentRewardPct}
-          uCreditExpirationTime={uCreditExpirationTime}
-          uCreditUbqRedemptionRate={uCreditUbqRedemptionRate}
+          creditDeprecationRate={creditDeprecationRate}
+          creditCurrentRewardPct={creditCurrentRewardPct}
+          creditExpirationTime={creditExpirationTime}
+          creditGovernanceRedemptionRate={creditGovernanceRedemptionRate}
           priceIncreaseFormula={priceIncreaseFormula}
-          uadTotalSupply={uadTotalSupply}
+          dollarTotalSupply={dollarTotalSupply}
           stakingShareSupply={stakingShareTotalSupply}
           uarTotalSupply={uarTotalSupply}
-          uCreditTotalSupply={uCreditTotalSupply}
+          creditTotalSupply={creditTotalSupply}
           nfts={nfts}
         />
       )}
@@ -121,14 +121,14 @@ type CreditNftProps = {
   cycleStartDate: number;
   uarDeprecationRate: number;
   uarCurrentRewardPct: number;
-  uCreditDeprecationRate: number;
-  uCreditCurrentRewardPct: number;
-  uCreditExpirationTime: number;
-  uCreditUbqRedemptionRate: number;
-  uadTotalSupply: number;
+  creditDeprecationRate: number;
+  creditCurrentRewardPct: number;
+  creditExpirationTime: number;
+  creditGovernanceRedemptionRate: number;
+  dollarTotalSupply: number;
   stakingShareSupply: number;
   uarTotalSupply: number;
-  uCreditTotalSupply: number;
+  creditTotalSupply: number;
   nfts: Nfts | null;
   priceIncreaseFormula: (amount: number) => Promise<number>;
 };
@@ -140,25 +140,25 @@ const CreditNft = memo(
     cycleStartDate,
     uarDeprecationRate,
     uarCurrentRewardPct,
-    uCreditDeprecationRate,
-    uCreditCurrentRewardPct,
-    uCreditExpirationTime,
-    uCreditUbqRedemptionRate,
-    uadTotalSupply,
+    creditDeprecationRate,
+    creditCurrentRewardPct,
+    creditExpirationTime,
+    creditGovernanceRedemptionRate,
+    dollarTotalSupply,
     stakingShareSupply,
     uarTotalSupply,
-    uCreditTotalSupply,
+    creditTotalSupply,
     nfts,
     priceIncreaseFormula,
   }: CreditNftProps) => {
     const [formattedSwapPrice, setFormattedSwapPrice] = useState("");
     // cspell: disable-next-line
-    const [selectedCurrency, selectCurrency] = useState(uCREDIT);
+    const [selectedCurrency, selectCurrency] = useState(CREDIT);
     const [increasedValue, setIncreasedValue] = useState(0);
     const [errMsg, setErrMsg] = useState<string>();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [expectedNft, setExpectedNft] = useState<BigNumber>();
-    const [uadAmount, setUadAmount] = useState("");
+    const [dollarAmount, setDollarAmount] = useState("");
 
     const handleTabSelect = (tab: string) => {
       selectCurrency(tab);
@@ -178,19 +178,19 @@ const CreditNft = memo(
       }
     }, [cycleStartDate]);
 
-    const calculatedUCreditExpirationTime = useMemo(() => {
-      if (uCreditExpirationTime) {
-        const diff = uCreditExpirationTime - Date.now();
+    const calculatedCreditExpirationTime = useMemo(() => {
+      if (creditExpirationTime) {
+        const diff = creditExpirationTime - Date.now();
         return formatTimeDiff(diff);
       }
-    }, [uCreditExpirationTime]);
+    }, [creditExpirationTime]);
 
-    const handleInputUAD = async (e: ChangeEvent) => {
+    const handleInputDOLLAR = async (e: ChangeEvent) => {
       setErrMsg("");
       const missing = `Missing input value for`;
       const bignumberErr = `can't parse BigNumber from`;
       // cspell: disable-next-line
-      const subject = `uAD amount`;
+      const subject = `DOLLAR amount`;
       const amountEl = e.target as HTMLInputElement;
       const amountValue = amountEl?.value;
       if (!amountValue) {
@@ -206,20 +206,20 @@ const CreditNft = memo(
         setErrMsg(`${subject} should be greater than 0`);
         return;
       }
-      setUadAmount(amountValue);
+      setDollarAmount(amountValue);
     };
 
     const handleBurn = () => {
-      actions.onBurn(uadAmount, setErrMsg);
+      actions.onBurn(dollarAmount, setErrMsg);
     };
 
     const isLessThanOne = () => parseFloat(formattedSwapPrice) <= 1;
 
     useEffect(() => {
-      if (uadAmount) {
-        // _expectedNft(uadAmount, contracts, selectedCurrency, setExpectedNft);
+      if (dollarAmount) {
+        // _expectedNft(dollarAmount, contracts, selectedCurrency, setExpectedNft);
       }
-    }, [uadAmount, selectedCurrency]);
+    }, [dollarAmount, selectedCurrency]);
 
     useEffect(() => {
       priceIncreaseFormula(10).then((value) => {
@@ -235,13 +235,13 @@ const CreditNft = memo(
             <PumpCycle
               uarDeprecationRate={uarDeprecationRate}
               uarCurrentRewardPct={uarCurrentRewardPct}
-              uCreditDeprecationRate={uCreditDeprecationRate}
-              uCreditCurrentRewardPct={uCreditCurrentRewardPct}
-              uCreditUbqRedemptionRate={uCreditUbqRedemptionRate}
-              calculatedUCreditExpirationTime={calculatedUCreditExpirationTime}
+              creditDeprecationRate={creditDeprecationRate}
+              creditCurrentRewardPct={creditCurrentRewardPct}
+              creditGovernanceRedemptionRate={creditGovernanceRedemptionRate}
+              calculatedCreditExpirationTime={calculatedCreditExpirationTime}
             />
-            <UadBurning
-              handleInputUAD={handleInputUAD}
+            <DollarBurning
+              handleInputDOLLAR={handleInputDOLLAR}
               selectedCurrency={selectedCurrency}
               handleTabSelect={handleTabSelect}
               handleBurn={handleBurn}
@@ -252,10 +252,10 @@ const CreditNft = memo(
           </>
         ) : (
           <Nfts
-            uadTotalSupply={uadTotalSupply}
+            dollarTotalSupply={dollarTotalSupply}
             stakingShareSupply={stakingShareSupply}
             uarTotalSupply={uarTotalSupply}
-            uCreditTotalSupply={uCreditTotalSupply}
+            creditTotalSupply={creditTotalSupply}
             nfts={nfts}
             actions={actions}
           />
@@ -266,22 +266,22 @@ const CreditNft = memo(
 );
 
 type NftsProps = {
-  uadTotalSupply: number;
+  dollarTotalSupply: number;
   stakingShareSupply: number;
   uarTotalSupply: number;
-  uCreditTotalSupply: number;
+  creditTotalSupply: number;
   nfts: Nfts | null;
   actions: Actions;
 };
 
-export const Nfts = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uCreditTotalSupply, nfts, actions }: NftsProps) => {
+export const Nfts = ({ dollarTotalSupply, stakingShareSupply, uarTotalSupply, creditTotalSupply, nfts, actions }: NftsProps) => {
   return (
     <>
       <RewardCycleInfo
-        uadTotalSupply={uadTotalSupply}
+        dollarTotalSupply={dollarTotalSupply}
         stakingShareSupply={stakingShareSupply}
         uarTotalSupply={uarTotalSupply}
-        uCreditTotalSupply={uCreditTotalSupply}
+        creditTotalSupply={creditTotalSupply}
       />
       <div>
         <span>Your Nfts</span>
@@ -337,7 +337,7 @@ export const NftRedeem = ({ nfts, actions }: NftRedeemProps) => {
     setStakingShareAmount(`${constrainNumber(parseFloat(amountValue), 0, nfts.stakingShare)}`);
   };
 
-  const uarToUCreditFormula = (amount: string) => {
+  const uarToCreditFormula = (amount: string) => {
     const parsedValue = parseFloat(amount);
     return isNaN(parsedValue) ? 0 : parsedValue * 0.9;
   };
@@ -378,9 +378,9 @@ export const NftRedeem = ({ nfts, actions }: NftRedeemProps) => {
             </div>
             <div>
               {/* cspell: disable-next-line */}
-              <span>{uarToUCreditFormula(uarAmount).toLocaleString()} uCREDIT</span>
+              <span>{uarToCreditFormula(uarAmount).toLocaleString()} CREDIT</span>
               {/* cspell: disable-next-line */}
-              <button onClick={() => actions.onSwap(2120, uCREDIT)}>Swap</button>
+              <button onClick={() => actions.onSwap(2120, CREDIT)}>Swap</button>
             </div>
           </div>
         </div>
@@ -390,13 +390,13 @@ export const NftRedeem = ({ nfts, actions }: NftRedeemProps) => {
 };
 
 type RewardCycleInfoProps = {
-  uadTotalSupply: number;
+  dollarTotalSupply: number;
   stakingShareSupply: number;
   uarTotalSupply: number;
-  uCreditTotalSupply: number;
+  creditTotalSupply: number;
 };
 
-export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSupply, uCreditTotalSupply }: RewardCycleInfoProps) => {
+export const RewardCycleInfo = ({ dollarTotalSupply, stakingShareSupply, uarTotalSupply, creditTotalSupply }: RewardCycleInfoProps) => {
   return (
     <>
       <div>
@@ -406,11 +406,11 @@ export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSu
         <div>
           <div>
             {/* cspell: disable-next-line */}
-            <span>uAD</span>
+            <span>DOLLAR</span>
           </div>
           <div>
             <div>Total Supply</div>
-            <div>{uadTotalSupply.toLocaleString()}</div>
+            <div>{dollarTotalSupply.toLocaleString()}</div>
           </div>
           <div>
             <div>Minted</div>
@@ -440,8 +440,8 @@ export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSu
             </div>
             <div>
               {/* cspell: disable-next-line */}
-              <div>uCREDIT</div>
-              <div>{uCreditTotalSupply.toLocaleString()}</div>
+              <div>CREDIT</div>
+              <div>{creditTotalSupply.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -462,28 +462,36 @@ export const RewardCycleInfo = ({ uadTotalSupply, stakingShareSupply, uarTotalSu
   );
 };
 
-type UadBurningProps = {
+type DollarBurningProps = {
   selectedCurrency: string;
   errMsg: string | undefined;
   expectedNft: BigNumber | undefined;
   increasedValue: number;
-  handleInputUAD: (e: ChangeEvent) => Promise<void>;
+  handleInputDOLLAR: (e: ChangeEvent) => Promise<void>;
   handleTabSelect: (tab: string) => void;
   handleBurn: () => void;
 };
 
-export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, handleBurn, increasedValue, expectedNft, errMsg }: UadBurningProps) => {
+export const DollarBurning = ({
+  handleInputDOLLAR,
+  selectedCurrency,
+  handleTabSelect,
+  handleBurn,
+  increasedValue,
+  expectedNft,
+  errMsg,
+}: DollarBurningProps) => {
   return (
     <>
       <div>
         {/* cspell: disable-next-line */}
-        <span>uAD</span>
-        <input type="number" onChange={handleInputUAD} />
+        <span>DOLLAR</span>
+        <input type="number" onChange={handleInputDOLLAR} />
         <nav>
           {/* cspell: disable-next-line */}
           <button onClick={() => handleTabSelect(uAR)}>uAR</button>
           {/* cspell: disable-next-line */}
-          <button onClick={() => handleTabSelect(uCREDIT)}>uCREDIT</button>
+          <button onClick={() => handleTabSelect(CREDIT)}>CREDIT</button>
         </nav>
         <button onClick={handleBurn}>Burn</button>
       </div>
@@ -503,19 +511,19 @@ export const UadBurning = ({ handleInputUAD, selectedCurrency, handleTabSelect, 
 type PumpCycleProps = {
   uarDeprecationRate: number;
   uarCurrentRewardPct: number;
-  uCreditDeprecationRate: number;
-  uCreditCurrentRewardPct: number;
-  uCreditUbqRedemptionRate: number;
-  calculatedUCreditExpirationTime: string | undefined;
+  creditDeprecationRate: number;
+  creditCurrentRewardPct: number;
+  creditGovernanceRedemptionRate: number;
+  calculatedCreditExpirationTime: string | undefined;
 };
 
 export const PumpCycle = ({
   uarDeprecationRate,
   uarCurrentRewardPct,
-  uCreditDeprecationRate,
-  uCreditCurrentRewardPct,
-  uCreditUbqRedemptionRate,
-  calculatedUCreditExpirationTime,
+  creditDeprecationRate,
+  creditCurrentRewardPct,
+  creditGovernanceRedemptionRate,
+  calculatedCreditExpirationTime,
 }: PumpCycleProps) => {
   return (
     <>
@@ -549,20 +557,20 @@ export const PumpCycle = ({
         </div>
         <div>
           {/* cspell: disable-next-line */}
-          <span>Non-fungible (uCREDIT)</span>
+          <span>Non-fungible (CREDIT)</span>
           <table>
             <tbody>
               <tr>
                 <td>Deprecation rate</td>
-                <td>{uCreditDeprecationRate * 100}%</td>
+                <td>{creditDeprecationRate * 100}%</td>
               </tr>
               <tr>
                 <td>Current reward %</td>
-                <td>{uCreditCurrentRewardPct * 100}%</td>
+                <td>{creditCurrentRewardPct * 100}%</td>
               </tr>
               <tr>
                 <td>Expires?</td>
-                <td>After {calculatedUCreditExpirationTime}</td>
+                <td>After {calculatedCreditExpirationTime}</td>
               </tr>
             </tbody>
           </table>
@@ -571,7 +579,7 @@ export const PumpCycle = ({
           </div>
           <div>
             {/* cspell: disable-next-line */}
-            <span>Can be redeemed for UBQ at {uCreditUbqRedemptionRate * 100}% rate</span>
+            <span>Can be redeemed for GOVERNANCE at {creditGovernanceRedemptionRate * 100}% rate</span>
           </div>
           <a href="">Learn more</a>
         </div>
@@ -633,7 +641,7 @@ export const TwapPriceBar = ({ price, date }: TwapPriceBarProps) => {
       <div>
         <span>
           {/* cspell: disable-next-line */}
-          {parseFloat(price) <= 1 ? "Burn uAD for credit nfts and help pump the price back up" : "Time to redeem credits nfts and help move the price down"}
+          {parseFloat(price) <= 1 ? "Burn DOLLAR for credit nfts and help pump the price back up" : "Time to redeem credits nfts and help move the price down"}
         </span>
       </div>
     </>
@@ -653,7 +661,7 @@ export const NftTable = ({ nfts, onRedeem, onSwap }: NftTableProps) => {
         <thead>
           <tr>
             {/* cspell: disable-next-line */}
-            <th>uCREDIT</th>
+            <th>CREDIT</th>
             <th>Expiration</th>
             <th>Swap</th>
             <th></th>
@@ -662,9 +670,9 @@ export const NftTable = ({ nfts, onRedeem, onSwap }: NftTableProps) => {
 
         <tbody>
           {/* cspell: disable-next-line */}
-          {nfts && nfts.uCREDIT && nfts.uCREDIT.length
+          {nfts && nfts.credit && nfts.credit.length
             ? // cspell: disable-next-line
-              nfts.uCREDIT.map((nft, index) => <NftRow nft={nft} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
+              nfts.credit.map((nft, index) => <NftRow nft={nft} onRedeem={onRedeem} onSwap={onSwap} key={index} />)
             : null}
         </tbody>
       </table>

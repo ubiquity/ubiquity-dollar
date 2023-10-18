@@ -13,7 +13,7 @@ import Button from "../ui/button";
 import PositiveNumberInput from "../ui/positive-number-input";
 import useEffectAsync from "../lib/hooks/use-effect-async";
 
-const UcrNftRedeem = () => {
+const CreditNftRedeem = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [, refreshBalances] = useBalances();
@@ -40,7 +40,7 @@ const UcrNftRedeem = () => {
 
   if (!walletAddress || !signer) return <span>Connect wallet</span>;
   if (!protocolContracts || !creditIds) return <span>· · ·</span>;
-  if (creditIds.length === 0) return <span>No uCR-NFT Nfts</span>;
+  if (creditIds.length === 0) return <span>No CREDIT-NFT Nfts</span>;
 
   async function fetchCredits(address: string, contract: Contract) {
     const ids = await contract.holderTokens(address);
@@ -59,20 +59,20 @@ const UcrNftRedeem = () => {
   const handleRedeem = async () => {
     const amount = extractValidAmount(inputVal);
     if (amount) {
-      doTransaction("Redeeming uCR-NFT...", async () => {
+      doTransaction("Redeeming CREDIT-NFT...", async () => {
         setInputVal("");
-        await redeemUcrNftForUad(amount);
+        await redeemCreditNftForDollar(amount);
       });
     }
   };
 
-  const redeemUcrNftForUad = async (amount: BigNumber) => {
+  const redeemCreditNftForDollar = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
     const creditId = creditIds[selectedCreditId];
     if (contracts.creditNft && contracts.creditNftManagerFacet) {
       if (
         creditId &&
-        (await ensureERC1155Allowance("uCR-NFT -> CreditNftManagerFacet", contracts.creditNft, signer, contracts.creditNftManagerFacet.address))
+        (await ensureERC1155Allowance("CREDIT-NFT -> CreditNftManagerFacet", contracts.creditNft, signer, contracts.creditNftManagerFacet.address))
       ) {
         await (await contracts.creditNftManagerFacet.connect(signer).redeemCreditNft(creditId, amount)).wait();
         refreshBalances();
@@ -94,16 +94,16 @@ const UcrNftRedeem = () => {
           ))}
         </select>
         <div>
-          <PositiveNumberInput value={inputVal} onChange={setInputVal} placeholder="uCR-NFT Amount" />
+          <PositiveNumberInput value={inputVal} onChange={setInputVal} placeholder="CREDIT-NFT Amount" />
           <div onClick={() => setMax()}>MAX</div>
         </div>
       </div>
       <Button disabled={!submitEnabled} onClick={handleRedeem}>
         {/* cspell: disable-next-line */}
-        Redeem uCR-NFT for uAD
+        Redeem CREDIT-NFT for DOLLAR
       </Button>
     </div>
   );
 };
 
-export default UcrNftRedeem;
+export default CreditNftRedeem;

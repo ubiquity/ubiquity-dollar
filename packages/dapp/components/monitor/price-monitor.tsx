@@ -13,12 +13,12 @@ type State = null | PriceMonitorProps;
 type PriceMonitorProps = {
   metaPoolAddress: string;
   daiUsdt: number;
-  uadUsdc: number;
-  uadDai: number;
-  uadUsdt: number;
+  dollarUsdc: number;
+  dollarDai: number;
+  dollarUsdt: number;
   twapAddress: string;
-  uadCrv: number;
-  crvUad: number;
+  dollarCrv: number;
+  crvDollar: number;
   dollarMintCalcAddress: string;
   dollarToBeMinted: number | null;
 };
@@ -36,7 +36,7 @@ const fetchPrices = async (protocolContracts: ProtocolContracts, { curvePool }: 
     } = contracts;
 
     if (dollarToken && metaPool && twapOracle && dollarMintCalc) {
-      const [[daiIndex, usdtIndex], [uadIndex, usdcIndex]] = await Promise.all([
+      const [[daiIndex, usdtIndex], [dollarIndex, usdcIndex]] = await Promise.all([
         curvePool.get_coin_indices(metaPool.address, NAMED_ACCOUNTS.DAI, NAMED_ACCOUNTS.USDT),
         curvePool.get_coin_indices(metaPool.address, dollarToken.address, NAMED_ACCOUNTS.USDC),
       ]);
@@ -45,11 +45,11 @@ const fetchPrices = async (protocolContracts: ProtocolContracts, { curvePool }: 
         return await metaPool.get_dy_underlying(i1, i2, ethers.utils.parseEther("1"));
       };
 
-      const [daiUsdt, uadUsdc, uadDai, uadUsdt, uadCrv, crvUad] = await Promise.all([
+      const [daiUsdt, dollarUsdc, dollarDai, dollarUsdt, dollarCrv, crvDollar] = await Promise.all([
         metaPoolGet(daiIndex, usdtIndex),
-        metaPoolGet(uadIndex, usdcIndex),
-        metaPoolGet(uadIndex, daiIndex),
-        metaPoolGet(uadIndex, usdtIndex),
+        metaPoolGet(dollarIndex, usdcIndex),
+        metaPoolGet(dollarIndex, daiIndex),
+        metaPoolGet(dollarIndex, usdtIndex),
         twapOracle.consult(dollarToken.address),
         twapOracle.consult(NAMED_ACCOUNTS.curve3CrvToken),
       ]);
@@ -57,14 +57,14 @@ const fetchPrices = async (protocolContracts: ProtocolContracts, { curvePool }: 
       return {
         metaPoolAddress: metaPool.address,
         daiUsdt: +formatMwei(daiUsdt),
-        uadUsdc: +formatMwei(uadUsdc),
-        uadDai: +formatEther(uadDai),
-        uadUsdt: +formatMwei(uadUsdt),
+        dollarUsdc: +formatMwei(dollarUsdc),
+        dollarDai: +formatEther(dollarDai),
+        dollarUsdt: +formatMwei(dollarUsdt),
         twapAddress: twapOracle.address,
-        uadCrv: +formatEther(uadCrv),
-        crvUad: +formatEther(crvUad),
+        dollarCrv: +formatEther(dollarCrv),
+        crvDollar: +formatEther(crvDollar),
         dollarMintCalcAddress: dollarMintCalc.address,
-        dollarToBeMinted: uadCrv.gt(ethers.utils.parseEther("1")) ? +formatEther(await dollarMintCalc.getDollarsToMint()) : null,
+        dollarToBeMinted: dollarCrv.gt(ethers.utils.parseEther("1")) ? +formatEther(await dollarMintCalc.getDollarsToMint()) : null,
       };
     }
   }
@@ -92,18 +92,18 @@ const PriceMonitor = (props: PriceMonitorProps) => {
     <div className="panel">
       <h2>Spot</h2>
       {/* cspell: disable-next-line */}
-      <PriceExchange from="uAD" to="USDC" value={props.uadUsdc} />
+      <PriceExchange from="DOLLAR" to="USDC" value={props.dollarUsdc} />
       <h3>Time Weighted Average</h3>
       {/* cspell: disable-next-line */}
-      <PriceExchange from="uAD" to="3CRV" value={props.uadCrv} />
+      <PriceExchange from="Dollar" to="3CRV" value={props.dollarCrv} />
       {/* cspell: disable-next-line */}
-      <PriceExchange from="3CRV" to="uAD" value={props.crvUad} />
+      <PriceExchange from="3CRV" to="Dollar" value={props.crvDollar} />
       <h3>Dollar Minting</h3>
       <div>
         {props.dollarToBeMinted ? (
           <div>
             {/* cspell: disable-next-line */}
-            {props.dollarToBeMinted} <span> uAD</span> to be minted
+            {props.dollarToBeMinted} <span> Dollar</span> to be minted
           </div>
         ) : (
           "No minting needed"

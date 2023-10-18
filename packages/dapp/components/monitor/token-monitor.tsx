@@ -43,11 +43,11 @@ const TokenMonitor = (props: TokenMonitorProps) => {
     <div className="panel">
       <h2>Credit Monitor</h2>
       <div>
-        <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingCredit} />
+        <Balance title="Total Outstanding" unit="CREDIT-NFT" balance={props.totalOutstandingCredit} />
         {/* <Address title="Credit Nft Manager" address={props.creditNftManagerAddress} /> */}
       </div>
       <div>
-        <Balance title="Total Redeemable" unit="uCR-NFT" balance={props.totalRedeemable} />
+        <Balance title="Total Redeemable" unit="CREDIT-NFT" balance={props.totalRedeemable} />
         {/* <Address title="Credit Nft" address={props.creditNftAddress} /> */}
       </div>
     </div>

@@ -12,7 +12,7 @@ import useWalletAddress from "../lib/hooks/use-wallet-address";
 import Button from "../ui/button";
 import PositiveNumberInput from "../ui/positive-number-input";
 
-const UcrNftGenerator = () => {
+const CreditNftGenerator = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
@@ -34,7 +34,7 @@ const UcrNftGenerator = () => {
     const contracts = await protocolContracts;
     if (contracts.dollarToken && contracts.creditNftManagerFacet) {
       // cspell: disable-next-line
-      await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.dollarToken, amount, signer, contracts.creditNftManagerFacet.address);
+      await ensureERC20Allowance("CREDIT -> CreditNftManagerFacet", contracts.dollarToken, amount, signer, contracts.creditNftManagerFacet.address);
       await (await contracts.creditNftManagerFacet.connect(signer).exchangeDollarsForCreditNft(amount)).wait();
       refreshBalances();
     }
@@ -44,7 +44,7 @@ const UcrNftGenerator = () => {
     const amount = extractValidAmount();
     if (amount) {
       // cspell: disable-next-line
-      doTransaction("Burning uAD...", async () => {
+      doTransaction("Burning Dollar...", async () => {
         setInputVal("");
         await depositDollarForCreditNfts(amount);
       });
@@ -63,7 +63,7 @@ const UcrNftGenerator = () => {
 
   const extractValidAmount = (val: string = inputVal): null | BigNumber => {
     const amount = safeParseEther(val);
-    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.uad) ? amount : null;
+    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.dollar) ? amount : null;
   };
 
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
@@ -71,14 +71,14 @@ const UcrNftGenerator = () => {
   return (
     <div>
       {/* cspell: disable-next-line */}
-      <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="uAD Amount" />
+      <PositiveNumberInput value={inputVal} onChange={handleInput} placeholder="Dollar Amount" />
       <Button onClick={handleBurn} disabled={!submitEnabled}>
         {/* cspell: disable-next-line */}
-        Redeem uAD for uCR-NFT
+        Redeem Dollar for CREDIT-NFT
       </Button>
-      {expectedCreditNft && inputVal && <p>expected uCR-NFT {formatEther(expectedCreditNft)}</p>}
+      {expectedCreditNft && inputVal && <p>expected CREDIT-NFT {formatEther(expectedCreditNft)}</p>}
     </div>
   );
 };
 
-export default UcrNftGenerator;
+export default CreditNftGenerator;

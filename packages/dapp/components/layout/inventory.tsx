@@ -37,14 +37,14 @@ const Inventory = () => {
       <div>
         <div>
           {/* cspell: disable-next-line */}
-          {showIfBalanceExists("uad", "uAD", "dollarToken")}
+          {showIfBalanceExists("dollar", "DOLLAR", "dollarToken")}
           {/* cspell: disable-next-line */}
-          {showIfBalanceExists("ucr", "uCR", "creditToken")}
-          {showIfBalanceExists("ucrNft", "uCR-NFT", "creditNft")}
+          {showIfBalanceExists("credit", "CREDIT", "creditToken")}
+          {showIfBalanceExists("creditNft", "CREDIT-NFT", "creditNft")}
           {/* cspell: disable-next-line */}
-          {showIfBalanceExists("ubq", "UBQ", "governanceToken")}
+          {showIfBalanceExists("governance", "GOVERNANCE", "governanceToken")}
           {showIfBalanceExists("_3crv", "3crv", "_3crvToken")}
-          {showIfBalanceExists("uad3crv", "uAD3CRV-f", "dollarMetapool")}
+          {showIfBalanceExists("dollar3crv", "dollar3CRV-f", "dollarMetapool")}
           {showIfBalanceExists("usdc", "USDC", "usdc")}
           {showIfBalanceExists("dai", "DAI", "dai")}
           {showIfBalanceExists("usdt", "USDT", "usdt")}
@@ -150,17 +150,17 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
 
 const tokenSvg = {
   // cspell: disable-next-line
-  uAD: () => icons.SVGs.uad,
+  DOLLAR: () => icons.SVGs.dollar,
   // cspell: disable-next-line
-  uCR: () => icons.SVGs.ucr,
-  "uCR-NFT": () => icons.SVGs.ucrNft,
+  CREDIT: () => icons.SVGs.credit,
+  "CREDIT-NFT": () => icons.SVGs.creditNft,
   // cspell: disable-next-line
-  UBQ: () => icons.SVGs.ubq,
+  GOVERNANCE: () => icons.SVGs.governance,
   USDC: () => icons.SVGs.usdc,
   DAI: () => icons.SVGs.dai,
   USDT: () => icons.SVGs.usdt,
   "3crv": () => <img src={icons.base64s["3crv"]} />,
-  "uAD3CRV-f": () => <img src={icons.base64s["uad3crv-f"]} />,
+  "dollar3CRV-f": () => <img src={icons.base64s["dollar3crv-f"]} />,
 };
 
 export default Inventory;

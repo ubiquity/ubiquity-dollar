@@ -29,7 +29,7 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
     if (contracts.creditNft && contracts.stakingShare) {
       // const _3crvTokenAddress = await contracts.managerFacet?.curve3PoolTokenAddress();
       const _3crvTokenContract = getERC20Contract(_3crvTokenAddress, provider);
-      const [uad, _3crv, uad3crv, ucr, ubq, ucrNft, stakingShares, usdc, dai, usdt] = await Promise.all([
+      const [dollar, _3crv, dollar3crv, credit, governance, creditNft, stakingShares, usdc, dai, usdt] = await Promise.all([
         contracts.dollarToken?.balanceOf(walletAddress),
         _3crvTokenContract.balanceOf(walletAddress),
         contracts.curveMetaPoolDollarTriPoolLp?.balanceOf(walletAddress),
@@ -42,12 +42,12 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         namedContracts.usdt.balanceOf(walletAddress),
       ]);
       setBalances({
-        uad,
+        dollar,
         _3crv,
-        uad3crv,
-        ucr,
-        ucrNft,
-        ubq,
+        dollar3crv,
+        credit,
+        creditNft,
+        governance,
         stakingShares,
         usdc,
         dai,
