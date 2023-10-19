@@ -1,10 +1,9 @@
-import { erc1155BalanceOf, _3crvTokenAddress } from "@/lib/utils";
+import { erc1155BalanceOf } from "@/lib/utils";
 import { createContext, useContext, useEffect, useState } from "react";
 import useNamedContracts from "./contracts/use-named-contracts";
 import useWalletAddress from "./use-wallet-address";
 import { ChildrenShim } from "./children-shim-d";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
-import { getERC20Contract } from "@/components/utils/contracts";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
 import { Balances } from "../types";
 
@@ -27,11 +26,9 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
     const contracts = await protocolContracts;
 
     if (contracts.creditNft && contracts.stakingShare) {
-      // const _3crvTokenAddress = await contracts.managerFacet?.curve3PoolTokenAddress();
-      const _3crvTokenContract = getERC20Contract(_3crvTokenAddress, provider);
       const [dollar, _3crv, dollar3crv, credit, governance, creditNft, stakingShares, usdc, dai, usdt] = await Promise.all([
         contracts.dollarToken?.balanceOf(walletAddress),
-        _3crvTokenContract.balanceOf(walletAddress),
+        contracts._3crvToken?.balanceOf(walletAddress),
         contracts.curveMetaPoolDollarTriPoolLp?.balanceOf(walletAddress),
         contracts.creditToken?.balanceOf(walletAddress),
         contracts.governanceToken?.balanceOf(walletAddress),

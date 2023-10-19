@@ -3,7 +3,7 @@ import { Contract, ethers } from "ethers";
 
 import latestDeployment from "@ubiquity/contracts/broadcast/05_StakingShare.s.sol/31337/run-latest.json";
 import useWeb3 from "../use-web-3";
-import { sushiSwapPoolAddress, dollar3poolMarketAddress } from "@/lib/utils";
+import { sushiSwapPoolAddress, dollar3poolMarketAddress, _3crvTokenAddress } from "@/lib/utils";
 
 // contract build artifacts
 // separately deployed contracts
@@ -32,6 +32,7 @@ import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet
 // import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import IMetaPoolArtifact from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import UniswapV2PairABI from "@/components/config/abis/uniswap-v-2-pair.json";
+import ERC20ABI from "@/components/config/abis/erc-20.json";
 
 /**
  * Returns all of the available protocol contracts
@@ -88,6 +89,7 @@ const useProtocolContracts = async () => {
     ubiquityPoolFacet: Contract | null;
     sushiPoolGovernanceDollarLp: Contract | null;
     curveMetaPoolDollarTriPoolLp: Contract | null;
+    _3crvToken: Contract | null;
   } = {
     // separately deployed contracts (i.e. not part of the diamond)
     creditNft: null,
@@ -114,6 +116,7 @@ const useProtocolContracts = async () => {
     // related contracts
     sushiPoolGovernanceDollarLp: null,
     curveMetaPoolDollarTriPoolLp: null,
+    _3crvToken: null,
   };
   let diamondAddress = "";
 
@@ -169,6 +172,10 @@ const useProtocolContracts = async () => {
   // const metaPoolContract = new ethers.Contract(dollar3poolMarket, IMetaPoolArtifact.abi, <Provider>provider);
   const metaPoolContract = new ethers.Contract(dollar3poolMarketAddress, IMetaPoolArtifact.abi, <Provider>provider);
   protocolContracts.curveMetaPoolDollarTriPoolLp = metaPoolContract;
+
+  // const _3crvTokenAddress = await protocolContracts.managerFacet.curve3PoolTokenAddress();
+  const _3crvTokenContract = new ethers.Contract(_3crvTokenAddress, ERC20ABI, <Provider>provider);
+  protocolContracts._3crvToken = _3crvTokenContract;
 
   return protocolContracts;
 };

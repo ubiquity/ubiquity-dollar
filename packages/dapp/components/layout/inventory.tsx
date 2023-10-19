@@ -44,7 +44,7 @@ const Inventory = () => {
           {/* cspell: disable-next-line */}
           {showIfBalanceExists("governance", "GOVERNANCE", "governanceToken")}
           {showIfBalanceExists("_3crv", "3crv", "_3crvToken")}
-          {showIfBalanceExists("dollar3crv", "dollar3CRV-f", "dollarMetapool")}
+          {showIfBalanceExists("dollar3crv", "dollar3CRV-f", "curveMetaPoolDollarTriPoolLp")}
           {showIfBalanceExists("usdc", "USDC", "usdc")}
           {showIfBalanceExists("dai", "DAI", "dai")}
           {showIfBalanceExists("usdt", "USDT", "usdt")}
