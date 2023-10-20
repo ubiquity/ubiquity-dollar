@@ -90,33 +90,34 @@ interface TokenInterface {
 const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenInterface) => {
   const Svg = tokenSvg[token] || (() => <></>);
 
-  const ethereum = window.ethereum;
-
   const addTokenToWallet = async () => {
-    if (!ethereum?.request) {
-      return;
-    }
-    try {
-      const base64Img = icons.base64s[token.toLowerCase()];
-      const wasAdded = await ethereum.request({
-        method: "wallet_watchAsset",
-        params: {
-          type: "ERC20",
-          options: {
-            address: tokenAddr,
-            symbol: token,
-            decimals: decimals,
-            image: base64Img,
-          },
-        },
-      });
-      if (wasAdded) {
-        console.log("Thanks for your interest!");
-      } else {
-        console.log("Your loss!");
+    if (typeof window !== "undefined") {
+      const ethereum = window.ethereum;
+      if (!ethereum?.request) {
+        return;
       }
-    } catch (error) {
-      console.log(error);
+      try {
+        const base64Img = icons.base64s[token.toLowerCase()];
+        const wasAdded = await ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: tokenAddr,
+              symbol: token,
+              decimals: decimals,
+              image: base64Img,
+            },
+          },
+        });
+        if (wasAdded) {
+          console.log("Thanks for your interest!");
+        } else {
+          console.log("Your loss!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
