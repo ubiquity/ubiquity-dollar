@@ -2,9 +2,10 @@ import { constrainNumber, formatTimeDiff } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/with-loaded-context";
 import { BigNumber, ethers } from "ethers";
 import { ChangeEvent, Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
-import useBalances, { Balances } from "../lib/hooks/use-balances";
+import useBalances from "../lib/hooks/use-balances";
 import useTransactionLogger from "../lib/hooks/use-transaction-logger";
 import usePrices from "./lib/use-prices";
+import { Balances } from "../lib/types";
 
 type Actions = {
   onRedeem: () => void;
@@ -33,7 +34,7 @@ const uDEBT = "uDEBT";
 const uAR = "uAR";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const DebtCouponContainer = ({ managedContracts, deployedContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
+export const DebtCouponContainer = ({ protocolContracts, web3Provider, walletAddress, signer }: LoadedContext) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [balances, refreshBalances] = useBalances();
   const [, doTransaction] = useTransactionLogger();

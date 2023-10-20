@@ -122,6 +122,10 @@ export const uCR_USDT_ADDRESS = "0x9d498aB38Aa889AE0f4A865d30da2116ee9716bC";
 // Uniswap Router address
 export const V3_ROUTER_ADDRESS = "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45";
 
+export const sushiSwapPoolAddress = "0x41e087485f47538752A1195D984109cB8Dc0E429";
+export const dollar3poolMarketAddress = "0x20955CB69Ae1515962177D164dfC9522feef567E";
+export const _3crvTokenAddress = "0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490";
+
 export const safeParseEther = (val: string) => {
   try {
     return ethers.utils.parseEther(val);
@@ -138,7 +142,7 @@ export const USDC_TOKEN = new Token(1, "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB
 export const USDT_TOKEN = new Token(1, "0xdAC17F958D2ee523a2206206994597C13D831ec7", 6, "USDT", "Tether USD");
 export const DAI_TOKEN = new Token(1, "0x6B175474E89094C44Da98b954EedeAC495271d0F", 18, "DAI", "Dai Stablecoin");
 
-export class CurrencyAmount extends CurrencyAmountRaw<Currency> { }
+export class CurrencyAmount extends CurrencyAmountRaw<Currency> {}
 
 // Try to parse a user entered amount for a given token
 export function parseAmount(value: string, currency: Currency): CurrencyAmount {
