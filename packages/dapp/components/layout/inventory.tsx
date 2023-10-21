@@ -1,6 +1,7 @@
 import Tippy from "@tippyjs/react";
 import { BaseContract, BigNumber, ethers } from "ethers";
-import { useEffect } from "react";
+import { useState } from "react";
+import useEffectAsync from "../lib/hooks/use-effect-async";
 
 import useWeb3 from "@/lib/hooks/use-web-3";
 import icons from "@/ui/icons";
@@ -17,8 +18,12 @@ const Inventory = () => {
   const [balances, refreshBalances] = useBalances();
   const protocolContracts = useProtocolContracts();
   const namedContracts = useNamedContracts();
+  const [contracts, setContracts] = useState<ProtocolContracts>();
 
-  useEffect(() => {
+  useEffectAsync(async () => {
+    const contract = await protocolContracts;
+    setContracts(contract);
+
     if (walletAddress) {
       refreshBalances();
     }
@@ -65,17 +70,14 @@ const Inventory = () => {
     }
 
     const balance = balances[key];
-    (async function () {
-      const contracts = await protocolContracts;
-      if (Number(balance) && contracts) {
-        let selectedContract = contracts[id as keyof ProtocolContracts] as BaseContract;
-        if (!selectedContract && namedContracts) {
-          selectedContract = namedContracts[key as keyof typeof namedContracts];
-        }
-
-        return <Token token={name} balance={balance} accountAddr={walletAddress as string} tokenAddr={selectedContract.address} decimals={usdcFix()} />;
+    if (Number(balance) && contracts) {
+      let selectedContract = contracts[id as keyof ProtocolContracts] as BaseContract;
+      if (!selectedContract && namedContracts) {
+        selectedContract = namedContracts[key as keyof typeof namedContracts];
       }
-    })();
+
+      return <Token token={name} balance={balance} accountAddr={walletAddress as string} tokenAddr={selectedContract.address} decimals={usdcFix()} />;
+    }
   }
 };
 
