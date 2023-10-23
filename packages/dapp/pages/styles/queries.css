@@ -127,4 +127,7 @@
   #Staking > tbody > tr > td:nth-child(4) {
     display: none;
   }
+  #Inventory {
+    bottom: 0;
+  }
 }
