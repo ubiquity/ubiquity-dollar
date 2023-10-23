@@ -7,8 +7,8 @@ import _CreditNft from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
 import _CreditNftManager from "@ubiquity/contracts/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json";
 import _DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json";
 import _ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
-import _INftsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
-import _ICreditForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
+import _ICreditNftRedemptionCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
+import _ICreditRedemptionCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
 import _ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
 import _IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import _IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
@@ -139,12 +139,12 @@ export const getDollarMintCalculatorContract = (address: string, provider: Provi
   return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculatorFacet;
 };
 
-export const getINftsForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_INftsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
+export const getCreditNftRedemptionCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_ICreditNftRedemptionCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
 };
 
-export const getICreditForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_ICreditForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
+export const getCreditRedemptionCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_ICreditRedemptionCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
 };
 
 export const getIMetaPoolContract = (address: string, provider: Provider) => {
