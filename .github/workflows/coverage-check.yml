@@ -72,7 +72,7 @@ jobs:
 
       - name: Update Forge Dependencies
         working-directory: packages/contracts
-        run: forge update
+        run: forge update lib/forge-std
 
       - name: Get PR branch coverage
         id: coverage-pr
