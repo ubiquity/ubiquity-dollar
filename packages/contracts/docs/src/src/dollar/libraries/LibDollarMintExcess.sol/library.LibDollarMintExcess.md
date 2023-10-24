@@ -1,5 +1,5 @@
 # LibDollarMintExcess
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/edf5f533467baa5ab7defe2b4b5180fa47724cdb/src/dollar/libraries/LibDollarMintExcess.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/8e774eecb089180805d9583f0e7776529582e747/src/dollar/libraries/LibDollarMintExcess.sol)
 
 Library for distributing excess Dollars when `mintClaimableDollars()` is called
 

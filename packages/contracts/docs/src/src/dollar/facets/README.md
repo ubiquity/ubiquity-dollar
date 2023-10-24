@@ -5,6 +5,7 @@
 - [BondingCurveFacet](BondingCurveFacet.sol/contract.BondingCurveFacet.md)
 - [ChefFacet](ChefFacet.sol/contract.ChefFacet.md)
 - [CollectableDustFacet](CollectableDustFacet.sol/contract.CollectableDustFacet.md)
+- [CreditClockFacet](CreditClockFacet.sol/contract.CreditClockFacet.md)
 - [CreditNftManagerFacet](CreditNftManagerFacet.sol/contract.CreditNftManagerFacet.md)
 - [CreditNftRedemptionCalculatorFacet](CreditNftRedemptionCalculatorFacet.sol/contract.CreditNftRedemptionCalculatorFacet.md)
 - [CreditRedemptionCalculatorFacet](CreditRedemptionCalculatorFacet.sol/contract.CreditRedemptionCalculatorFacet.md)

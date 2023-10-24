@@ -1,5 +1,5 @@
 # DiamondLoupeFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/edf5f533467baa5ab7defe2b4b5180fa47724cdb/src/dollar/facets/DiamondLoupeFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/8e774eecb089180805d9583f0e7776529582e747/src/dollar/facets/DiamondLoupeFacet.sol)
 
 **Inherits:**
 [IDiamondLoupe](/src/dollar/interfaces/IDiamondLoupe.sol/interface.IDiamondLoupe.md), IERC165
