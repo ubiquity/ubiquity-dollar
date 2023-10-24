@@ -32,12 +32,12 @@ export interface PoolState {
 }
 
 export interface Balances {
-  uad: BigNumber;
+  dollar: BigNumber;
   _3crv: BigNumber;
-  uad3crv: BigNumber;
-  ucr: BigNumber;
-  ucrNft: BigNumber;
-  ubq: BigNumber;
+  dollar3crv: BigNumber;
+  credit: BigNumber;
+  creditNft: BigNumber;
+  governance: BigNumber;
   stakingShares: BigNumber;
   usdc: BigNumber;
   dai: BigNumber;

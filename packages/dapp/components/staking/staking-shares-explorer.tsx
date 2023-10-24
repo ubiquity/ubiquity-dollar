@@ -20,7 +20,7 @@ type ShareData = {
     minter: string;
     lpFirstDeposited: BigNumber;
     creationBlock: BigNumber;
-    lpRewardDebt: BigNumber;
+    lpRewardCredit: BigNumber;
     endBlock: BigNumber;
     lpAmount: BigNumber;
   };
@@ -37,7 +37,7 @@ type Model = {
 
 type Actions = {
   onWithdrawLp: (payload: { id: number; amount: null | number }) => void;
-  onClaimUbq: (id: number) => void;
+  onClaimGovernance: (id: number) => void;
   onStake: (payload: { amount: BigNumber; weeks: BigNumber }) => void;
 };
 
@@ -146,7 +146,7 @@ export const StakingSharesExplorerContainer = ({ protocolContracts, web3Provider
       [model]
     ),
 
-    onClaimUbq: useCallback(
+    onClaimGovernance: useCallback(
       async (id) => {
         const { chefFacet } = await protocolContracts;
         if (!model) return;
@@ -203,7 +203,7 @@ export const StakingSharesExplorer = memo(({ model, actions }: { model: Model | 
   return <>{model ? <StakingSharesInformation {...model} {...actions} /> : <Loading text="Loading existing shares information" />}</>;
 });
 
-export const StakingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimUbq, onStake, processing, walletLpBalance }: Model & Actions) => {
+export const StakingSharesInformation = ({ shares, totalShares, onWithdrawLp, onClaimGovernance, onStake, processing, walletLpBalance }: Model & Actions) => {
   const totalUserShares = shares.reduce((sum, val) => {
     return sum.add(val.sharesBalance);
   }, BigNumber.from(0));
@@ -233,7 +233,13 @@ export const StakingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
         {filteredShares.length > 0 ? (
           <tbody>
             {filteredShares.map((share) => (
-              <StakingShareRow key={share.id} {...share} disabled={processing.includes(share.id)} onWithdrawLp={onWithdrawLp} onClaimUbq={onClaimUbq} />
+              <StakingShareRow
+                key={share.id}
+                {...share}
+                disabled={processing.includes(share.id)}
+                onWithdrawLp={onWithdrawLp}
+                onClaimGovernance={onClaimGovernance}
+              />
             ))}
           </tbody>
         ) : (
@@ -252,7 +258,7 @@ export const StakingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
               <span>Pending</span>
             </td>
             <td>
-              <Icon icon="ubq" />
+              <Icon icon="governance" />
             </td>
             <td>
               {/* cspell: disable-next-line */}
@@ -279,9 +285,9 @@ export const StakingSharesInformation = ({ shares, totalShares, onWithdrawLp, on
   );
 };
 
-type StakingShareRowProps = ShareData & { disabled: boolean; onWithdrawLp: Actions["onWithdrawLp"]; onClaimUbq: Actions["onClaimUbq"] };
+type StakingShareRowProps = ShareData & { disabled: boolean; onWithdrawLp: Actions["onWithdrawLp"]; onClaimGovernance: Actions["onClaimGovernance"] };
 // cspell: disable-next-line
-const StakingShareRow = ({ id, governanceToken, stake, weeksLeft, disabled, onWithdrawLp, onClaimUbq }: StakingShareRowProps) => {
+const StakingShareRow = ({ id, governanceToken, stake, weeksLeft, disabled, onWithdrawLp, onClaimGovernance }: StakingShareRowProps) => {
   const [withdrawAmount] = useState("");
 
   const numLpAmount = +formatEther(stake.lpAmount);
@@ -305,7 +311,7 @@ const StakingShareRow = ({ id, governanceToken, stake, weeksLeft, disabled, onWi
           </button>
         ) : // cspell: disable-next-line
         governanceToken.gt(0) ? (
-          <Button disabled={disabled} onClick={() => onClaimUbq(+id.toString())}>
+          <Button disabled={disabled} onClick={() => onClaimGovernance(+id.toString())}>
             Claim reward
           </Button>
         ) : null}
@@ -313,7 +319,7 @@ const StakingShareRow = ({ id, governanceToken, stake, weeksLeft, disabled, onWi
       <td>
         <div>
           {/* cspell: disable-next-line */}
-          <Icon icon="ubq" /> <span>{formatEther(governanceToken)}</span>
+          <Icon icon="governance" /> <span>{formatEther(governanceToken)}</span>
         </div>
       </td>
       <td>{weeksLeft <= 0 ? "Ready" : <span>{weeksLeft}w</span>}</td>

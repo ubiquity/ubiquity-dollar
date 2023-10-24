@@ -13,7 +13,7 @@ import Button from "../ui/button";
 import PositiveNumberInput from "../ui/positive-number-input";
 import useEffectAsync from "../lib/hooks/use-effect-async";
 
-const UcrNftRedeem = () => {
+const CreditNftRedeem = () => {
   const [walletAddress] = useWalletAddress();
   const signer = useSigner();
   const [, refreshBalances] = useBalances();
@@ -21,59 +21,62 @@ const UcrNftRedeem = () => {
   const protocolContracts = useProtocolContracts();
 
   const [inputVal, setInputVal] = useState("");
-  const [debtIds, setDebtIds] = useState<BigNumber[] | null>(null);
-  const [debtBalances, setDebtBalances] = useState<BigNumber[]>([]);
-  const [selectedDebtId, setSelectedDebtId] = useState(0);
+  const [creditIds, setCreditIds] = useState<BigNumber[] | null>(null);
+  const [creditBalances, setCreditBalances] = useState<BigNumber[]>([]);
+  const [selectedCreditId, setSelectedCreditId] = useState(0);
 
   const setMax = () => {
-    if (debtBalances[selectedDebtId]) {
-      setInputVal(ethers.utils.formatEther(debtBalances[selectedDebtId]));
+    if (creditBalances[selectedCreditId]) {
+      setInputVal(ethers.utils.formatEther(creditBalances[selectedCreditId]));
     }
   };
 
   useEffectAsync(async () => {
     const contracts = await protocolContracts;
     if (contracts.creditNft && walletAddress) {
-      fetchDebts(walletAddress, contracts.creditNft);
+      fetchCredits(walletAddress, contracts.creditNft);
     }
   }, [walletAddress]);
 
   if (!walletAddress || !signer) return <span>Connect wallet</span>;
-  if (!protocolContracts || !debtIds) return <span>· · ·</span>;
-  if (debtIds.length === 0) return <span>No uCR-NFT coupons</span>;
+  if (!protocolContracts || !creditIds) return <span>· · ·</span>;
+  if (creditIds.length === 0) return <span>No CREDIT-NFT Nfts</span>;
 
-  async function fetchDebts(address: string, contract: Contract) {
+  async function fetchCredits(address: string, contract: Contract) {
     const ids = await contract.holderTokens(address);
     const newBalances = await Promise.all(ids.map(async (id: string) => await contract.balanceOf(address, id)));
-    setDebtIds(ids);
-    setSelectedDebtId(0);
-    setDebtBalances(newBalances);
+    setCreditIds(ids);
+    setSelectedCreditId(0);
+    setCreditBalances(newBalances);
   }
 
   const extractValidAmount = (val: string = inputVal): null | BigNumber => {
     const amount = safeParseEther(val);
-    const selectedCouponBalance = debtBalances[selectedDebtId];
-    return amount && amount.gt(BigNumber.from(0)) && amount.lte(selectedCouponBalance) ? amount : null;
+    const selectedNftBalance = creditBalances[selectedCreditId];
+    return amount && amount.gt(BigNumber.from(0)) && amount.lte(selectedNftBalance) ? amount : null;
   };
 
   const handleRedeem = async () => {
     const amount = extractValidAmount(inputVal);
     if (amount) {
-      doTransaction("Redeeming uCR-NFT...", async () => {
+      doTransaction("Redeeming CREDIT-NFT...", async () => {
         setInputVal("");
-        await redeemUcrNftForUad(amount);
+        await redeemCreditNftForDollar(amount);
       });
     }
   };
 
-  const redeemUcrNftForUad = async (amount: BigNumber) => {
+  const redeemCreditNftForDollar = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
-    const debtId = debtIds[selectedDebtId];
+    const creditId = creditIds[selectedCreditId];
     if (contracts.creditNft && contracts.creditNftManagerFacet) {
-      if (debtId && (await ensureERC1155Allowance("uCR-NFT -> CreditNftManagerFacet", contracts.creditNft, signer, contracts.creditNftManagerFacet.address))) {
-        await (await contracts.creditNftManagerFacet.connect(signer).redeemCreditNft(debtId, amount)).wait();
+      if (
+        creditId &&
+        (await ensureERC1155Allowance("CREDIT-NFT -> CreditNftManagerFacet", contracts.creditNft, signer, contracts.creditNftManagerFacet.address))
+      ) {
+        await (await contracts.creditNftManagerFacet.connect(signer).redeemCreditNft(creditId, amount)).wait();
         refreshBalances();
-        fetchDebts(walletAddress, contracts.creditNft);
+        fetchCredits(walletAddress, contracts.creditNft);
       }
     }
   };
@@ -83,24 +86,24 @@ const UcrNftRedeem = () => {
   return (
     <div>
       <div>
-        <select value={selectedDebtId} onChange={(ev) => setSelectedDebtId(parseInt(ev.target.value))}>
-          {debtIds.map((debtId, i) => (
+        <select value={selectedCreditId} onChange={(ev) => setSelectedCreditId(parseInt(ev.target.value))}>
+          {creditIds.map((creditId, i) => (
             <option key={i} value={i}>
-              {debtBalances[i] && `$${formatEther(debtBalances[i])}`}
+              {creditBalances[i] && `$${formatEther(creditBalances[i])}`}
             </option>
           ))}
         </select>
         <div>
-          <PositiveNumberInput value={inputVal} onChange={setInputVal} placeholder="uCR-NFT Amount" />
+          <PositiveNumberInput value={inputVal} onChange={setInputVal} placeholder="CREDIT-NFT Amount" />
           <div onClick={() => setMax()}>MAX</div>
         </div>
       </div>
       <Button disabled={!submitEnabled} onClick={handleRedeem}>
         {/* cspell: disable-next-line */}
-        Redeem uCR-NFT for uAD
+        Redeem CREDIT-NFT for DOLLAR
       </Button>
     </div>
   );
 };
 
-export default UcrNftRedeem;
+export default CreditNftRedeem;

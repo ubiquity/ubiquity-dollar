@@ -15,7 +15,7 @@ import { SWAP_WIDGET_TOKEN_LIST, V3_ROUTER_ADDRESS } from "@/lib/utils";
 import { getUniswapV3RouterContract } from "../utils/contracts";
 import useWeb3 from "@/components/lib/hooks/use-web-3";
 
-const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
+const CreditRedeem = ({ twapInteger }: { twapInteger: number }) => {
   const { provider, walletAddress } = useWeb3();
   const signer = useSigner();
   const [balances, refreshBalances] = useBalances();
@@ -24,7 +24,7 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
 
   const [inputVal, setInputVal] = useState("0");
   // cspell: disable-next-line
-  const [selectedRedeemToken, setSelectedRedeemToken] = useState("uAD");
+  const [selectedRedeemToken, setSelectedRedeemToken] = useState("DOLLAR");
   const [quoteAmount, lastQuoteAmount] = useRouter(selectedRedeemToken, inputVal);
   const currentlyAbovePeg = twapInteger > 1;
 
@@ -36,15 +36,15 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     return <span>· · ·</span>;
   }
 
-  const redeemUcr = async (amount: BigNumber) => {
+  const redeemCredit = async (amount: BigNumber) => {
     const contracts = await protocolContracts;
     if (contracts.creditToken && contracts.creditNftManagerFacet && contracts.dollarToken) {
       // cspell: disable-next-line
-      await ensureERC20Allowance("uCR -> CreditNftManagerFacet", contracts.creditToken, amount, signer, contracts.creditNftManagerFacet.address);
+      await ensureERC20Allowance("CREDIT -> CreditNftManagerFacet", contracts.creditToken, amount, signer, contracts.creditNftManagerFacet.address);
       await (await contracts.creditNftManagerFacet.connect(signer).burnCreditTokensForDollars(amount)).wait();
       refreshBalances();
       // cspell: disable-next-line
-      if (provider && quoteAmount && selectedRedeemToken !== "uAD") {
+      if (provider && quoteAmount && selectedRedeemToken !== "DOLLAR") {
         const routerContract = getUniswapV3RouterContract(V3_ROUTER_ADDRESS, provider);
         await (await routerContract.connect(signer).approveMax(contracts.dollarToken.address)).wait();
         await useTrade(selectedRedeemToken, quoteAmount);
@@ -57,22 +57,22 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
     const amount = extractValidAmount();
     if (amount) {
       // cspell: disable-next-line
-      doTransaction("Redeeming uCR...", async () => {
+      doTransaction("Redeeming CREDIT...", async () => {
         setInputVal("");
-        await redeemUcr(amount);
+        await redeemCredit(amount);
       });
     }
   };
 
   const extractValidAmount = (val: string = inputVal): null | BigNumber => {
     const amount = safeParseEther(val);
-    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.ucr) ? amount : null;
+    return amount && amount.gt(BigNumber.from(0)) && amount.lte(balances.credit) ? amount : null;
   };
 
   const submitEnabled = !!(extractValidAmount() && !doingTransaction);
 
   const handleMax = () => {
-    const creditTokenValue = ethers.utils.formatEther(balances.ucr);
+    const creditTokenValue = ethers.utils.formatEther(balances.credit);
     setInputVal(parseInt(creditTokenValue).toString());
   };
 
@@ -88,9 +88,9 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
           <div onChange={onChangeValue}>
             <p>Please select a token to redeem for:</p>
             {/* cspell: disable-next-line */}
-            <input type="radio" id="tokenChoice1" name="redeemToken" value="uAD" checked={selectedRedeemToken === "uAD"} readOnly />
+            <input type="radio" id="tokenChoice1" name="redeemToken" value="DOLLAR" checked={selectedRedeemToken === "DOLLAR"} readOnly />
             {/* cspell: disable-next-line */}
-            <label htmlFor="tokenChoice1">uAD</label>
+            <label htmlFor="tokenChoice1">DOLLAR</label>
 
             <input type="radio" id="tokenChoice2" name="redeemToken" value="USDC" checked={selectedRedeemToken === "USDC"} readOnly />
             <label htmlFor="tokenChoice2">USDC</label>
@@ -103,26 +103,26 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
           </div>
           <div>
             {/* cspell: disable-next-line */}
-            <PositiveNumberInput placeholder="uCR Amount" value={inputVal} onChange={setInputVal} />
+            <PositiveNumberInput placeholder="CREDIT Amount" value={inputVal} onChange={setInputVal} />
             <span onClick={handleMax}>MAX</span>
           </div>
           {/* cspell: disable-next-line */}
-          {inputVal && selectedRedeemToken === "uAD" && quoteAmount && (
+          {inputVal && selectedRedeemToken === "DOLLAR" && quoteAmount && (
             <div>
               {/* cspell: disable-next-line */}
-              {inputVal} uCR -&gt; {quoteAmount} uAD.
+              {inputVal} CREDIT -&gt; {quoteAmount} DOLLAR.
             </div>
           )}
           {/* cspell: disable-next-line */}
-          {inputVal && selectedRedeemToken !== "uAD" && quoteAmount && lastQuoteAmount && (
+          {inputVal && selectedRedeemToken !== "DOLLAR" && quoteAmount && lastQuoteAmount && (
             <div>
               {/* cspell: disable-next-line */}
-              {inputVal} uCR -&gt; {quoteAmount} uAD -&gt; {lastQuoteAmount} {selectedRedeemToken}.
+              {inputVal} CREDIT -&gt; {quoteAmount} DOLLAR -&gt; {lastQuoteAmount} {selectedRedeemToken}.
             </div>
           )}
           <Button onClick={handleRedeem} disabled={!submitEnabled}>
             {/* cspell: disable-next-line */}
-            Redeem uCR for {selectedRedeemToken}
+            Redeem CREDIT for {selectedRedeemToken}
           </Button>
         </div>
       ) : (
@@ -135,4 +135,4 @@ const UcrRedeem = ({ twapInteger }: { twapInteger: number }) => {
   );
 };
 
-export default UcrRedeem;
+export default CreditRedeem;

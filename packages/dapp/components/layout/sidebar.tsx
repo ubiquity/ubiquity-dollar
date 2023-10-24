@@ -19,7 +19,7 @@ const Sidebar = () => {
                 <Link href="/" id="Logo">
                   <div>
                     <div>
-                      <Icon icon="uad" />
+                      <Icon icon="dollar" />
                     </div>
                     <div>
                       <span>Ubiquity Dollar (Beta)</span>
