@@ -33,7 +33,7 @@ import {CREDIT_NFT_MANAGER_ROLE, CREDIT_TOKEN_BURNER_ROLE, CREDIT_TOKEN_MINTER_R
 /**
  * @notice Deploys diamond contract with all of the facets
  */
-abstract contract DiamondTestSetup is DiamondTestHelper {
+abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     // diamond related contracts
     Diamond diamond;
     DiamondInit diamondInit;
