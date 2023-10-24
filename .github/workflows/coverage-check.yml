@@ -70,10 +70,6 @@ jobs:
       - name: Checkout code in PR branch
         uses: actions/checkout@v3
 
-      - name: Update Forge Dependencies
-        working-directory: packages/contracts
-        run: forge update
-
       - name: Get PR branch coverage
         id: coverage-pr
         run: |
