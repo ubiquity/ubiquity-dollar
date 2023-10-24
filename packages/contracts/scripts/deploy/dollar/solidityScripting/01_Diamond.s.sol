@@ -280,6 +280,9 @@ contract DiamondScript is Constants {
         selectorsOfCollectableDustFacet = getSelectorsFromAbi(
             "/out/CollectableDustFacet.sol/CollectableDustFacet.json"
         );
+        selectorsOfCreditClockFacet = getSelectorsFromAbi(
+            "/out/CreditClockFacet.sol/CreditClockFacet.json"
+        );
         selectorsOfCreditNftManagerFacet = getSelectorsFromAbi(
             "/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json"
         );
@@ -315,18 +318,6 @@ contract DiamondScript is Constants {
         );
         selectorsOfTWAPOracleDollar3poolFacet = getSelectorsFromAbi(
             "/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json"
-        );
-
-        // Credit Clock Facet
-        selectorsOfCreditClockFacet.push((creditClockFacet.getRate.selector));
-        selectorsOfCreditClockFacet.push(
-            creditClockFacet.setRatePerBlock.selector
-        );
-        selectorsOfCreditClockFacet.push(
-            (creditClockFacet.setManager.selector)
-        );
-        selectorsOfCreditClockFacet.push(
-            (creditClockFacet.getManager.selector)
         );
     }
 }
