@@ -11,6 +11,7 @@
 - [LibBondingCurve](LibBondingCurve.sol/library.LibBondingCurve.md)
 - [LibChef](LibChef.sol/library.LibChef.md)
 - [LibCollectableDust](LibCollectableDust.sol/library.LibCollectableDust.md)
+- [LibCreditClock](LibCreditClock.sol/library.LibCreditClock.md)
 - [LibCreditNftManager](LibCreditNftManager.sol/library.LibCreditNftManager.md)
 - [LibCreditNftRedemptionCalculator](LibCreditNftRedemptionCalculator.sol/library.LibCreditNftRedemptionCalculator.md)
 - [LibCreditRedemptionCalculator](LibCreditRedemptionCalculator.sol/library.LibCreditRedemptionCalculator.md)

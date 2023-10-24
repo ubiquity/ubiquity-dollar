@@ -14,6 +14,7 @@ import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
+import {CreditClockFacet} from "../../src/dollar/facets/CreditClockFacet.sol";
 import {CurveDollarIncentiveFacet} from "../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
 import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
@@ -43,6 +44,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     BondingCurveFacet bondingCurveFacet;
     ChefFacet chefFacet;
     CollectableDustFacet collectableDustFacet;
+    CreditClockFacet creditClockFacet;
     CreditNftManagerFacet creditNftManagerFacet;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculationFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculationFacet;
@@ -63,6 +65,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     BondingCurveFacet bondingCurveFacetImplementation;
     ChefFacet chefFacetImplementation;
     CollectableDustFacet collectableDustFacetImplementation;
+    CreditClockFacet creditClockFacetImplementation;
     CreditNftManagerFacet creditNftManagerFacetImplementation;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacetImplementation;
     CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacetImplementation;
@@ -94,6 +97,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfBondingCurveFacet;
     bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfCollectableDustFacet;
+    bytes4[] selectorsOfCreditClockFacet;
     bytes4[] selectorsOfCreditNftManagerFacet;
     bytes4[] selectorsOfCreditNftRedemptionCalculatorFacet;
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
@@ -130,6 +134,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         selectorsOfCollectableDustFacet = getSelectorsFromAbi(
             "/out/CollectableDustFacet.sol/CollectableDustFacet.json"
+        );
+        selectorsOfCreditClockFacet = getSelectorsFromAbi(
+            "/out/CreditClockFacet.sol/CreditClockFacet.json"
         );
         selectorsOfCreditNftManagerFacet = getSelectorsFromAbi(
             "/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json"
@@ -179,6 +186,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         bondingCurveFacetImplementation = new BondingCurveFacet();
         chefFacetImplementation = new ChefFacet();
         collectableDustFacetImplementation = new CollectableDustFacet();
+        creditClockFacetImplementation = new CreditClockFacet();
         creditNftManagerFacetImplementation = new CreditNftManagerFacet();
         creditNftRedemptionCalculatorFacetImplementation = new CreditNftRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacetImplementation = new CreditRedemptionCalculatorFacet();
@@ -201,6 +209,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "BondingCurveFacet",
             "ChefFacet",
             "CollectableDustFacet",
+            "CreditClockFacet",
             "CreditNftManagerFacet",
             "CreditNftRedemptionCalculatorFacet",
             "CreditRedemptionCalculatorFacet",
@@ -234,7 +243,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](18);
+        FacetCut[] memory cuts = new FacetCut[](19);
 
         cuts[0] = (
             FacetCut({
@@ -266,12 +275,19 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         cuts[4] = (
             FacetCut({
+                facetAddress: address(creditClockFacetImplementation),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfCreditClockFacet
+            })
+        );
+        cuts[5] = (
+            FacetCut({
                 facetAddress: address(creditNftManagerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCreditNftManagerFacet
             })
         );
-        cuts[5] = (
+        cuts[6] = (
             FacetCut({
                 facetAddress: address(
                     creditNftRedemptionCalculatorFacetImplementation
@@ -280,7 +296,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfCreditNftRedemptionCalculatorFacet
             })
         );
-        cuts[6] = (
+        cuts[7] = (
             FacetCut({
                 facetAddress: address(
                     creditRedemptionCalculatorFacetImplementation
@@ -289,77 +305,77 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfCreditRedemptionCalculatorFacet
             })
         );
-        cuts[7] = (
+        cuts[8] = (
             FacetCut({
                 facetAddress: address(curveDollarIncentiveFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCurveDollarIncentiveFacet
             })
         );
-        cuts[8] = (
+        cuts[9] = (
             FacetCut({
                 facetAddress: address(diamondCutFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondCutFacet
             })
         );
-        cuts[9] = (
+        cuts[10] = (
             FacetCut({
                 facetAddress: address(diamondLoupeFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondLoupeFacet
             })
         );
-        cuts[10] = (
+        cuts[11] = (
             FacetCut({
                 facetAddress: address(dollarMintCalculatorFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintCalculatorFacet
             })
         );
-        cuts[11] = (
+        cuts[12] = (
             FacetCut({
                 facetAddress: address(dollarMintExcessFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintExcessFacet
             })
         );
-        cuts[12] = (
+        cuts[13] = (
             FacetCut({
                 facetAddress: address(managerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfManagerFacet
             })
         );
-        cuts[13] = (
+        cuts[14] = (
             FacetCut({
                 facetAddress: address(ownershipFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfOwnershipFacet
             })
         );
-        cuts[14] = (
+        cuts[15] = (
             FacetCut({
                 facetAddress: address(stakingFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfStakingFacet
             })
         );
-        cuts[15] = (
+        cuts[16] = (
             FacetCut({
                 facetAddress: address(stakingFormulasFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfStakingFormulasFacet
             })
         );
-        cuts[16] = (
+        cuts[17] = (
             FacetCut({
                 facetAddress: address(twapOracleDollar3PoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
             })
         );
-        cuts[17] = (
+        cuts[18] = (
             FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
@@ -376,6 +392,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         bondingCurveFacet = BondingCurveFacet(address(diamond));
         chefFacet = ChefFacet(address(diamond));
         collectableDustFacet = CollectableDustFacet(address(diamond));
+        creditClockFacet = CreditClockFacet(address(diamond));
         creditNftManagerFacet = CreditNftManagerFacet(address(diamond));
         creditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)

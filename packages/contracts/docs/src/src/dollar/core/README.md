@@ -1,7 +1,6 @@
 
 
 # Contents
-- [CreditClock](CreditClock.sol/contract.CreditClock.md)
 - [CreditNft](CreditNft.sol/contract.CreditNft.md)
 - [ERC1155Ubiquity](ERC1155Ubiquity.sol/abstract.ERC1155Ubiquity.md)
 - [ERC20Ubiquity](ERC20Ubiquity.sol/abstract.ERC20Ubiquity.md)
