@@ -14,6 +14,7 @@ import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
+import {CreditClockFacet} from "../../src/dollar/facets/CreditClockFacet.sol";
 import {CurveDollarIncentiveFacet} from "../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
 import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
@@ -56,6 +57,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     StakingFormulasFacet stakingFormulasFacet;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
+    CreditClockFacet creditClockFacet;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
     AccessControlFacet accessControlFacetImplementation;
@@ -76,6 +78,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     StakingFormulasFacet stakingFormulasFacetImplementation;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
+    CreditClockFacet creditClockFacetImplementation;
 
     // facet names with addresses
     string[] facetNames;
@@ -107,6 +110,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
+    bytes4[] selectorsOfCreditClockFacet;
 
     /// @notice Deploys diamond and connects facets
     function setUp() public virtual {
@@ -563,6 +567,20 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             (dollarMintExcessFacetImplementation.distributeDollars.selector)
         );
 
+        // Credit Clock Facet
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacetImplementation.getRate.selector)
+        );
+        selectorsOfCreditClockFacet.push(
+            creditClockFacetImplementation.setRatePerBlock.selector
+        );
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacetImplementation.setManager.selector)
+        );
+        selectorsOfCreditClockFacet.push(
+            (creditClockFacetImplementation.getManager.selector)
+        );
+
         // deploy facet implementation instances
         accessControlFacetImplementation = new AccessControlFacet();
         bondingCurveFacetImplementation = new BondingCurveFacet();
@@ -582,6 +600,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         stakingFormulasFacetImplementation = new StakingFormulasFacet();
         twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
+        creditClockFacetImplementation = new CreditClockFacet();
 
         // prepare diamond init args
         diamondInit = new DiamondInit();
@@ -603,7 +622,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             "StakingFacet",
             "StakingFormulasFacet",
             "TWAPOracleDollar3poolFacet",
-            "UbiquityPoolFacet"
+            "UbiquityPoolFacet",
+            "CreditClockFacet"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: admin,
@@ -623,7 +643,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](18);
+        FacetCut[] memory cuts = new FacetCut[](19);
 
         cuts[0] = (
             FacetCut({
@@ -755,6 +775,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfUbiquityPoolFacet
             })
         );
+        cuts[18] = (
+            FacetCut({
+                facetAddress: address(creditClockFacetImplementation),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfCreditClockFacet
+            })
+        );
 
         // deploy diamond
         vm.prank(owner);
@@ -785,6 +812,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             address(diamond)
         );
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
+        creditClockFacet = CreditClockFacet(address(diamond));
 
         // get all addresses
         facetAddressList = diamondLoupeFacet.facetAddresses();
