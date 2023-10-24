@@ -1,9 +1,9 @@
 import { ethers } from "ethers";
 import {
   getUbiquityManagerContract,
-  getERC20Contract,
-  getDebtCouponContract,
-  getDebtCouponManagerContract,
+  // getERC20Contract,
+  getCreditNftContract,
+  getCreditNftManagerContract,
   getTWAPOracleContract,
   getDollarContract,
 } from "@/components/utils/contracts";
@@ -37,8 +37,8 @@ export async function fetchData() {
 
     // NFTAddress
     const NFTMinter = ethers.Wallet.createRandom().address;
-    const CreditNftFacet = getDebtCouponContract(await diamondContract.creditNftAddress(), provider);
-    const CreditNftManager = getDebtCouponManagerContract(diamondAddress, provider);
+    const CreditNftFacet = getCreditNftContract(await diamondContract.creditNftAddress(), provider);
+    const CreditNftManager = getCreditNftManagerContract(diamondAddress, provider);
     const TWAPOracle = getTWAPOracleContract(await diamondContract.twapOracleAddress(), provider);
 
     {

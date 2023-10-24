@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "../DiamondTestSetup.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract DollarMintCalculatorFacetTest is DiamondSetup {
+contract DollarMintCalculatorFacetTest is DiamondTestSetup {
     address dollarManagerAddress;
     address dollarAddress;
     address twapOracleAddress;
@@ -33,13 +33,13 @@ contract DollarMintCalculatorFacetTest is DiamondSetup {
     function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {
         mockTwapFuncs(5e17);
         vm.expectRevert("DollarMintCalculator: not > 1");
-        IDollarMintCalcFacet.getDollarsToMint();
+        dollarMintCalculatorFacet.getDollarsToMint();
     }
 
     function test_getDollarsToMintWorks() public {
         mockTwapFuncs(2e18);
         uint256 totalSupply = IERC20(dollarAddress).totalSupply();
-        uint256 amountToMint = IDollarMintCalcFacet.getDollarsToMint();
+        uint256 amountToMint = dollarMintCalculatorFacet.getDollarsToMint();
         assertEq(amountToMint, totalSupply);
     }
 }

@@ -1,28 +1,35 @@
 import Tippy from "@tippyjs/react";
 import { BaseContract, BigNumber, ethers } from "ethers";
-import { useEffect } from "react";
+import { useState } from "react";
+import useEffectAsync from "../lib/hooks/use-effect-async";
 
 import useWeb3 from "@/lib/hooks/use-web-3";
 import icons from "@/ui/icons";
 
-import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useNamedContracts from "../lib/hooks/contracts/use-named-contracts";
-import useBalances, { Balances } from "../lib/hooks/use-balances";
-import { ManagedContracts } from "../lib/hooks/contracts/use-manager-managed";
+import useBalances from "../lib/hooks/use-balances";
+import { Balances } from "../lib/types";
+
+type ProtocolContracts = NonNullable<Awaited<ReturnType<typeof useProtocolContracts>>>;
 
 const Inventory = () => {
   const { walletAddress } = useWeb3();
   const [balances, refreshBalances] = useBalances();
-  const managedContracts = useManagerManaged();
+  const protocolContracts = useProtocolContracts();
   const namedContracts = useNamedContracts();
+  const [contracts, setContracts] = useState<ProtocolContracts>();
 
-  useEffect(() => {
+  useEffectAsync(async () => {
+    const contract = await protocolContracts;
+    setContracts(contract);
+
     if (walletAddress) {
       refreshBalances();
     }
   }, [walletAddress]);
 
-  if (!walletAddress || !balances || !managedContracts || !namedContracts) {
+  if (!walletAddress || !balances || !namedContracts) {
     return null;
   }
 
@@ -35,14 +42,14 @@ const Inventory = () => {
       <div>
         <div>
           {/* cspell: disable-next-line */}
-          {showIfBalanceExists("uad", "uAD", "dollarToken")}
+          {showIfBalanceExists("dollar", "DOLLAR", "dollarToken")}
           {/* cspell: disable-next-line */}
-          {showIfBalanceExists("ucr", "uCR", "creditToken")}
-          {showIfBalanceExists("ucrNft", "uCR-NFT", "creditNft")}
+          {showIfBalanceExists("credit", "CREDIT", "creditToken")}
+          {showIfBalanceExists("creditNft", "CREDIT-NFT", "creditNft")}
           {/* cspell: disable-next-line */}
-          {showIfBalanceExists("ubq", "UBQ", "governanceToken")}
+          {showIfBalanceExists("governance", "GOVERNANCE", "governanceToken")}
           {showIfBalanceExists("_3crv", "3crv", "_3crvToken")}
-          {showIfBalanceExists("uad3crv", "uAD3CRV-f", "dollarMetapool")}
+          {showIfBalanceExists("dollar3crv", "dollar3CRV-f", "curveMetaPoolDollarTriPoolLp")}
           {showIfBalanceExists("usdc", "USDC", "usdc")}
           {showIfBalanceExists("dai", "DAI", "dai")}
           {showIfBalanceExists("usdt", "USDT", "usdt")}
@@ -63,8 +70,8 @@ const Inventory = () => {
     }
 
     const balance = balances[key];
-    if (Number(balance) && managedContracts) {
-      let selectedContract = managedContracts[id as keyof ManagedContracts] as BaseContract;
+    if (Number(balance) && contracts) {
+      let selectedContract = contracts[id as keyof ProtocolContracts] as BaseContract;
       if (!selectedContract && namedContracts) {
         selectedContract = namedContracts[key as keyof typeof namedContracts];
       }
@@ -85,33 +92,34 @@ interface TokenInterface {
 const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenInterface) => {
   const Svg = tokenSvg[token] || (() => <></>);
 
-  const ethereum = window.ethereum;
-
   const addTokenToWallet = async () => {
-    if (!ethereum?.request) {
-      return;
-    }
-    try {
-      const base64Img = icons.base64s[token.toLowerCase()];
-      const wasAdded = await ethereum.request({
-        method: "wallet_watchAsset",
-        params: {
-          type: "ERC20",
-          options: {
-            address: tokenAddr,
-            symbol: token,
-            decimals: decimals,
-            image: base64Img,
-          },
-        },
-      });
-      if (wasAdded) {
-        console.log("Thanks for your interest!");
-      } else {
-        console.log("Your loss!");
+    if (typeof window !== "undefined") {
+      const ethereum = window.ethereum;
+      if (!ethereum?.request) {
+        return;
       }
-    } catch (error) {
-      console.log(error);
+      try {
+        const base64Img = icons.base64s[token.toLowerCase()];
+        const wasAdded = await ethereum.request({
+          method: "wallet_watchAsset",
+          params: {
+            type: "ERC20",
+            options: {
+              address: tokenAddr,
+              symbol: token,
+              decimals: decimals,
+              image: base64Img,
+            },
+          },
+        });
+        if (wasAdded) {
+          console.log("Thanks for your interest!");
+        } else {
+          console.log("Your loss!");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -145,17 +153,17 @@ const Token = ({ balance, token, tokenAddr, accountAddr, decimals = 18 }: TokenI
 
 const tokenSvg = {
   // cspell: disable-next-line
-  uAD: () => icons.SVGs.uad,
+  DOLLAR: () => icons.SVGs.dollar,
   // cspell: disable-next-line
-  uCR: () => icons.SVGs.ucr,
-  "uCR-NFT": () => icons.SVGs.ucrNft,
+  CREDIT: () => icons.SVGs.credit,
+  "CREDIT-NFT": () => icons.SVGs.creditNft,
   // cspell: disable-next-line
-  UBQ: () => icons.SVGs.ubq,
+  GOVERNANCE: () => icons.SVGs.governance,
   USDC: () => icons.SVGs.usdc,
   DAI: () => icons.SVGs.dai,
   USDT: () => icons.SVGs.usdt,
   "3crv": () => <img src={icons.base64s["3crv"]} />,
-  "uAD3CRV-f": () => <img src={icons.base64s["uad3crv-f"]} />,
+  "dollar3CRV-f": () => <img src={icons.base64s["dollar3crv-f"]} />,
 };
 
 export default Inventory;

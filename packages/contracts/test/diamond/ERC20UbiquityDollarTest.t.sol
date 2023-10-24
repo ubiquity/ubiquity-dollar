@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "./DiamondTestSetup.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
-contract ERC20UbiquityDollarTest is DiamondSetup {
+contract ERC20UbiquityDollarTest is DiamondTestSetup {
     event Minting(
         address indexed mockAddr1,
         address indexed minter,
@@ -169,7 +169,10 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // create burner role
         address burner = makeAddr("burner");
         vm.prank(admin);
-        IAccessControl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
+        accessControlFacet.grantRole(
+            keccak256("DOLLAR_TOKEN_BURNER_ROLE"),
+            burner
+        );
         // admin pauses contract
         vm.prank(admin);
         dollarToken.pause();
@@ -188,7 +191,10 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
         // create burner role
         address burner = makeAddr("burner");
         vm.prank(admin);
-        IAccessControl.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
+        accessControlFacet.grantRole(
+            keccak256("DOLLAR_TOKEN_BURNER_ROLE"),
+            burner
+        );
         // burn 50 tokens for user
         vm.prank(burner);
         vm.expectEmit(true, true, true, true);
@@ -245,10 +251,10 @@ contract ERC20UbiquityDollarTest is DiamondSetup {
 
     function testUnpause_ShouldUnpauseContract() public {
         vm.startPrank(admin);
-        IAccessControl.pause();
-        assertTrue(IAccessControl.paused());
-        IAccessControl.unpause();
-        assertFalse(IAccessControl.paused());
+        accessControlFacet.pause();
+        assertTrue(accessControlFacet.paused());
+        accessControlFacet.unpause();
+        assertFalse(accessControlFacet.paused());
         vm.stopPrank();
     }
 

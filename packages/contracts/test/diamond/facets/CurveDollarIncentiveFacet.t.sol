@@ -11,7 +11,7 @@ import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracl
 import "../DiamondTestSetup.sol";
 import "forge-std/Test.sol";
 
-contract CurveDollarIncentiveTest is DiamondSetup {
+contract CurveDollarIncentiveTest is DiamondTestSetup {
     address stableSwapMetaPoolAddress = address(0x123);
     address secondAccount = address(0x4);
     address thirdAccount = address(0x5);
@@ -29,7 +29,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         twapOracleAddress = address(diamond);
 
         vm.startPrank(admin);
-        IAccessControl.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
+        accessControlFacet.grantRole(CURVE_DOLLAR_MANAGER_ROLE, managerAddr);
         vm.stopPrank();
     }
 
@@ -47,7 +47,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
 
     function testIncentivizeShouldRevertWhenCallerNotUAD() public {
         vm.expectRevert("CurveIncentive: Caller is not Ubiquity Dollar");
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             address(0x111),
             address(0x112),
             100
@@ -57,7 +57,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
     function testIncentivizeShouldRevertIfSenderEqualToReceiver() public {
         vm.startPrank(managerAddr);
         vm.expectRevert("CurveIncentive: cannot send self");
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             address(0x111),
             address(0x111),
             100
@@ -67,18 +67,19 @@ contract CurveDollarIncentiveTest is DiamondSetup {
     function testIncentivizeBuy() public {
         vm.startPrank(admin);
 
-        address stableSwapPoolAddress = IManager.stableSwapMetaPoolAddress();
-        IERC20 governanceToken = IERC20(IManager.governanceTokenAddress());
+        address stableSwapPoolAddress = managerFacet
+            .stableSwapMetaPoolAddress();
+        IERC20 governanceToken = IERC20(managerFacet.governanceTokenAddress());
         uint256 amountIn;
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = governanceToken.balanceOf(mockReceiver);
 
-        ICurveDollarIncentiveFacet.setExemptAddress(mockReceiver, true);
+        curveDollarIncentiveFacet.setExemptAddress(mockReceiver, true);
         vm.stopPrank();
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
             amountIn
@@ -90,11 +91,11 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         // 2. do nothing if buyIncentive is off
         init_balance = governanceToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
-        ICurveDollarIncentiveFacet.setExemptAddress(mockReceiver, false);
+        curveDollarIncentiveFacet.setExemptAddress(mockReceiver, false);
         vm.stopPrank();
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
             100e18
@@ -107,11 +108,11 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         mockTwapFuncs(1e18);
         init_balance = governanceToken.balanceOf(mockReceiver);
         vm.startPrank(admin);
-        ICurveDollarIncentiveFacet.setExemptAddress(mockReceiver, false);
+        curveDollarIncentiveFacet.setExemptAddress(mockReceiver, false);
         vm.stopPrank();
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
             100e18
@@ -124,7 +125,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         init_balance = governanceToken.balanceOf(mockReceiver);
         mockTwapFuncs(5e17);
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             stableSwapPoolAddress,
             mockReceiver,
             100e18
@@ -135,17 +136,18 @@ contract CurveDollarIncentiveTest is DiamondSetup {
     }
 
     function testIncentivizeSell() public {
-        address stableSwapPoolAddress = IManager.stableSwapMetaPoolAddress();
-        address dollarAddress = IManager.dollarTokenAddress();
+        address stableSwapPoolAddress = managerFacet
+            .stableSwapMetaPoolAddress();
+        address dollarAddress = managerFacet.dollarTokenAddress();
         IERC20 dollarToken = IERC20(dollarAddress);
 
         // 1. do nothing if the target address is included to exempt list
         uint256 init_balance = dollarToken.balanceOf(mockSender);
         vm.prank(admin);
-        ICurveDollarIncentiveFacet.setExemptAddress(mockSender, true);
+        curveDollarIncentiveFacet.setExemptAddress(mockSender, true);
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             mockSender,
             stableSwapPoolAddress,
             100e18
@@ -157,11 +159,11 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         // 2. do nothing if buyIncentive is off
         init_balance = dollarToken.balanceOf(mockSender);
         vm.startPrank(admin);
-        ICurveDollarIncentiveFacet.setExemptAddress(mockSender, false);
+        curveDollarIncentiveFacet.setExemptAddress(mockSender, false);
         vm.stopPrank();
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             mockSender,
             stableSwapPoolAddress,
             100e18
@@ -174,11 +176,11 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         mockTwapFuncs(1e18);
         init_balance = dollarToken.balanceOf(mockSender);
         vm.startPrank(admin);
-        ICurveDollarIncentiveFacet.setExemptAddress(mockSender, false);
+        curveDollarIncentiveFacet.setExemptAddress(mockSender, false);
         vm.stopPrank();
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             mockSender,
             stableSwapPoolAddress,
             100e18
@@ -194,7 +196,7 @@ contract CurveDollarIncentiveTest is DiamondSetup {
         mockTwapFuncs(5e17);
 
         vm.prank(managerAddr);
-        ICurveDollarIncentiveFacet.incentivize(
+        curveDollarIncentiveFacet.incentivize(
             mockSender,
             stableSwapPoolAddress,
             100e18
@@ -207,39 +209,39 @@ contract CurveDollarIncentiveTest is DiamondSetup {
     function testSetExemptAddress_ShouldRevertOrSet_IfAdmin() public {
         address exemptAddress = address(0x123);
         vm.expectRevert("Manager: Caller is not admin");
-        ICurveDollarIncentiveFacet.setExemptAddress(exemptAddress, true);
+        curveDollarIncentiveFacet.setExemptAddress(exemptAddress, true);
 
         assertEq(
-            ICurveDollarIncentiveFacet.isExemptAddress(exemptAddress),
+            curveDollarIncentiveFacet.isExemptAddress(exemptAddress),
             false
         );
         vm.prank(admin);
         vm.expectEmit(true, true, false, true);
         emit ExemptAddressUpdate(exemptAddress, true);
-        ICurveDollarIncentiveFacet.setExemptAddress(exemptAddress, true);
+        curveDollarIncentiveFacet.setExemptAddress(exemptAddress, true);
         assertEq(
-            ICurveDollarIncentiveFacet.isExemptAddress(exemptAddress),
+            curveDollarIncentiveFacet.isExemptAddress(exemptAddress),
             true
         );
     }
 
     function testSwitchSellPenalty_ShouldRevertOrSwitch_IfAdmin() public {
         vm.expectRevert("Manager: Caller is not admin");
-        ICurveDollarIncentiveFacet.switchSellPenalty();
+        curveDollarIncentiveFacet.switchSellPenalty();
 
-        assertEq(ICurveDollarIncentiveFacet.isSellPenaltyOn(), false);
+        assertEq(curveDollarIncentiveFacet.isSellPenaltyOn(), false);
         vm.prank(admin);
-        ICurveDollarIncentiveFacet.switchSellPenalty();
-        assertEq(ICurveDollarIncentiveFacet.isSellPenaltyOn(), true);
+        curveDollarIncentiveFacet.switchSellPenalty();
+        assertEq(curveDollarIncentiveFacet.isSellPenaltyOn(), true);
     }
 
     function testSwitchBuyIncentive_ShouldRevertOrSwitch_IfAdmin() public {
         vm.expectRevert("Manager: Caller is not admin");
-        ICurveDollarIncentiveFacet.switchBuyIncentive();
+        curveDollarIncentiveFacet.switchBuyIncentive();
 
-        assertEq(ICurveDollarIncentiveFacet.isBuyIncentiveOn(), false);
+        assertEq(curveDollarIncentiveFacet.isBuyIncentiveOn(), false);
         vm.prank(admin);
-        ICurveDollarIncentiveFacet.switchBuyIncentive();
-        assertEq(ICurveDollarIncentiveFacet.isBuyIncentiveOn(), true);
+        curveDollarIncentiveFacet.switchBuyIncentive();
+        assertEq(curveDollarIncentiveFacet.isBuyIncentiveOn(), true);
     }
 }

@@ -1,11 +1,10 @@
-import { BigNumber, ethers } from "ethers";
-import { ERC1155Ubiquity, ERC20 } from "types";
+import { BigNumber, ethers, Contract } from "ethers";
 
 import { performTransaction } from "./utils";
 
 export async function ensureERC20Allowance(
   logName: string,
-  contract: ERC20,
+  contract: Contract,
   amount: BigNumber,
   signer: ethers.providers.JsonRpcSigner,
   spender: string,
@@ -25,7 +24,7 @@ export async function ensureERC20Allowance(
   return true;
 }
 
-export async function ensureERC1155Allowance(logName: string, contract: ERC1155Ubiquity, signer: ethers.providers.JsonRpcSigner, spender: string): Promise<boolean> {
+export async function ensureERC1155Allowance(logName: string, contract: Contract, signer: ethers.providers.JsonRpcSigner, spender: string): Promise<boolean> {
   const signerAddress = await signer.getAddress();
   const isAllowed = await contract.isApprovedForAll(signerAddress, spender);
   console.log(`${logName} isAllowed: `, isAllowed);
@@ -43,33 +42,33 @@ export async function ensureERC1155Allowance(logName: string, contract: ERC1155U
 // const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
 // const toNum = (n: BigNumber) => +n.toString();
 
-// export async function logBondingUbqInfo(contracts: Contracts) {
-//   const reserves = await contracts.ugovUadPair.getReserves();
-//   const ubqReserve = +reserves.reserve0.toString();
-//   const uadReserve = +reserves.reserve1.toString();
-//   const ubqPrice = uadReserve / ubqReserve;
-//   console.log("uAD-UBQ Pool", uadReserve, ubqReserve);
-//   console.log("UBQ Price", ubqPrice);
-//   const ubqPerBlock = await contracts.masterChef.uGOVPerBlock();
-//   const ubqMultiplier = await contracts.masterChef.uGOVmultiplier();
+// export async function logStakingGovernanceInfo(contracts: Contracts) {
+//   const reserves = await contracts.ugovDollarPair.getReserves();
+//   const governanceReserve = +reserves.reserve0.toString();
+//   const dollarReserve = +reserves.reserve1.toString();
+//   const governancePrice = dollarReserve / governanceReserve;
+//   console.log("DOLLAR-GOVERNANCE Pool", dollarReserve, governanceReserve);
+//   console.log("GOVERNANCE Price", governancePrice);
+//   const governancePerBlock = await contracts.masterChef.uGOVPerBlock();
+//   const governanceMultiplier = await contracts.masterChef.uGOVmultiplier();
 //   const ugovDivider = toNum(await contracts.masterChef.uGOVDivider());
 
-//   console.log("UBQ per block", toEtherNum(ubqPerBlock));
-//   console.log("UBQ Multiplier", toEtherNum(ubqMultiplier));
-//   const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));
-//   console.log("Actual UBQ per block", actualUbqPerBlock);
-//   console.log("Extra UBQ per block to treasury", actualUbqPerBlock / ugovDivider);
-//   const blockCountInAWeek = toNum(await contracts.bonding.blockCountInAWeek());
+//   console.log("GOVERNANCE per block", toEtherNum(governancePerBlock));
+//   console.log("GOVERNANCE Multiplier", toEtherNum(governanceMultiplier));
+//   const actualGovernancePerBlock = toEtherNum(governancePerBlock.mul(governanceMultiplier).div(`${1e18}`));
+//   console.log("Actual GOVERNANCE per block", actualGovernancePerBlock);
+//   console.log("Extra GOVERNANCE per block to treasury", actualGovernancePerBlock / ugovDivider);
+//   const blockCountInAWeek = toNum(await contracts.staking.blockCountInAWeek());
 //   console.log("Block count in a week", blockCountInAWeek);
 
-//   const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
-//   console.log("UBQ Minted per week", ubqPerWeek);
-//   console.log("Extra UBQ minted per week to treasury", ubqPerWeek / ugovDivider);
+//   const governancePerWeek = actualGovernancePerBlock * blockCountInAWeek;
+//   console.log("GOVERNANCE Minted per week", governancePerWeek);
+//   console.log("Extra GOVERNANCE minted per week to treasury", governancePerWeek / ugovDivider);
 
 //   const DAYS_IN_A_YEAR = 365.2422;
 //   const totalShares = toEtherNum(await contracts.masterChef.totalShares());
-//   console.log("Total Bonding Shares", totalShares);
-//   const usdPerWeek = ubqPerWeek * ubqPrice;
+//   console.log("Total Staking Shares", totalShares);
+//   const usdPerWeek = governancePerWeek * governancePrice;
 //   const usdPerDay = usdPerWeek / 7;
 //   const usdPerYear = usdPerDay * DAYS_IN_A_YEAR;
 //   console.log("USD Minted per day", usdPerDay);
@@ -78,11 +77,11 @@ export async function ensureERC1155Allowance(logName: string, contract: ERC1155U
 //   const usdAsLp = 0.7460387929;
 //   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
 
-//   const bondingDiscountMultiplier = await contracts.bonding.bondingDiscountMultiplier();
+//   const stakingDiscountMultiplier = await contracts.staking.stakingDiscountMultiplier();
 //   const sharesResults = await Promise.all(
 //     [1, 50, 100, 208].map(async (i) => {
 //       const weeks = BigNumber.from(i.toString());
-//       const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
+//       const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, stakingDiscountMultiplier));
 //       return [i, shares];
 //     })
 //   );

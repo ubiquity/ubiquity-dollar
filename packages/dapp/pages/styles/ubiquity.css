@@ -179,7 +179,7 @@ video {
   text-align: center;
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: 32px;
   width: 100%;
 }
 #Inventory > div:nth-child(2) > div > div > div {
@@ -566,23 +566,23 @@ td {
 aside {
   color: #bfbfbf;
 }
-#MintUcr,
-#RedeemUcr {
+#MintCredit,
+#RedeemCredit {
   opacity: 0.25;
   cursor: not-allowed;
 }
-#MintUcr > div,
-#RedeemUcr > div {
+#MintCredit > div,
+#RedeemCredit > div {
   pointer-events: none;
 }
-#CreditOperations[data-twap^="0."] #MintUcr,
-#CreditOperations[data-twap^="1."] #RedeemUcr {
+#CreditOperations[data-twap^="0."] #MintCredit,
+#CreditOperations[data-twap^="1."] #RedeemCredit {
   opacity: 1;
   display: inline-block;
   cursor: unset;
 }
-#CreditOperations[data-twap^="0."] #MintUcr > div,
-#CreditOperations[data-twap^="1."] #RedeemUcr > div {
+#CreditOperations[data-twap^="0."] #MintCredit > div,
+#CreditOperations[data-twap^="1."] #RedeemCredit > div {
   pointer-events: unset;
 }
 #Page404 {

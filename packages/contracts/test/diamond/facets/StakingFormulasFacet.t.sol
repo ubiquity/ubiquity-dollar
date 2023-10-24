@@ -5,7 +5,7 @@ import "../DiamondTestSetup.sol";
 import "abdk/ABDKMathQuad.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 
-contract StakingFormulasFacetTest is DiamondSetup {
+contract StakingFormulasFacetTest is DiamondTestSetup {
     using ABDKMathQuad for uint256;
     using ABDKMathQuad for bytes16;
 
@@ -31,7 +31,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _amount = 10;
 
         assertEq(
-            IStakingFormulasFacet.sharesForLP(_stake, _shareInfo, _amount),
+            stakingFormulasFacet.sharesForLP(_stake, _shareInfo, _amount),
             10
         );
     }
@@ -42,7 +42,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _amount
     ) public {
         assertEq(
-            IStakingFormulasFacet.lpRewardsRemoveLiquidityNormalization(
+            stakingFormulasFacet.lpRewardsRemoveLiquidityNormalization(
                 _stake,
                 _shareInfo,
                 _amount
@@ -57,7 +57,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _amount
     ) public {
         assertEq(
-            IStakingFormulasFacet.lpRewardsAddLiquidityNormalization(
+            stakingFormulasFacet.lpRewardsAddLiquidityNormalization(
                 _stake,
                 _shareInfo,
                 _amount
@@ -71,7 +71,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _stakingLpBalance = 20000;
         uint256 _amount = 100;
         assertEq(
-            IStakingFormulasFacet.correctedAmountToWithdraw(
+            stakingFormulasFacet.correctedAmountToWithdraw(
                 _totalLpDeposited,
                 _stakingLpBalance,
                 _amount
@@ -85,7 +85,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
         uint256 _stakingLpBalance = 5000;
         uint256 _amount = 100;
         assertEq(
-            IStakingFormulasFacet.correctedAmountToWithdraw(
+            stakingFormulasFacet.correctedAmountToWithdraw(
                 _totalLpDeposited,
                 _stakingLpBalance,
                 _amount
@@ -95,7 +95,7 @@ contract StakingFormulasFacetTest is DiamondSetup {
     }
 
     function testDurationMultiply_ShouldReturnAmount() public {
-        uint256 amount = IStakingFormulasFacet.durationMultiply(
+        uint256 amount = stakingFormulasFacet.durationMultiply(
             100 ether,
             1,
             1000000 gwei

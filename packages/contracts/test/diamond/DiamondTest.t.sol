@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 import "./DiamondTestSetup.sol";
 
-contract TestDiamond is DiamondSetup {
+contract TestDiamond is DiamondTestSetup {
     function test_ShouldSupportInspectingFacetsAndFunctions() public {
         bool isSupported = IERC165(address(diamond)).supportsInterface(
             type(IDiamondLoupe).interfaceId
@@ -17,9 +17,8 @@ contract TestDiamond is DiamondSetup {
 
     function testFacetsHaveCorrectSelectors() public {
         for (uint256 i = 0; i < facetAddressList.length; i++) {
-            bytes4[] memory fromLoupeFacet = ILoupe.facetFunctionSelectors(
-                facetAddressList[i]
-            );
+            bytes4[] memory fromLoupeFacet = diamondLoupeFacet
+                .facetFunctionSelectors(facetAddressList[i]);
             if (compareStrings(facetNames[i], "DiamondCutFacet")) {
                 assertTrue(
                     sameMembers(fromLoupeFacet, selectorsOfDiamondCutFacet)
@@ -46,28 +45,36 @@ contract TestDiamond is DiamondSetup {
                 for (uint256 j; j < selectorsOfDiamondCutFacet.length; j++) {
                     assertEq(
                         facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfDiamondCutFacet[j])
+                        diamondLoupeFacet.facetAddress(
+                            selectorsOfDiamondCutFacet[j]
+                        )
                     );
                 }
             } else if (compareStrings(facetNames[i], "DiamondLoupeFacet")) {
                 for (uint256 j; j < selectorsOfDiamondLoupeFacet.length; j++) {
                     assertEq(
                         facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfDiamondLoupeFacet[j])
+                        diamondLoupeFacet.facetAddress(
+                            selectorsOfDiamondLoupeFacet[j]
+                        )
                     );
                 }
             } else if (compareStrings(facetNames[i], "OwnershipFacet")) {
                 for (uint256 j; j < selectorsOfOwnershipFacet.length; j++) {
                     assertEq(
                         facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfOwnershipFacet[j])
+                        diamondLoupeFacet.facetAddress(
+                            selectorsOfOwnershipFacet[j]
+                        )
                     );
                 }
             } else if (compareStrings(facetNames[i], "ManagerFacet")) {
                 for (uint256 j; j < selectorsOfManagerFacet.length; j++) {
                     assertEq(
                         facetAddressList[i],
-                        ILoupe.facetAddress(selectorsOfManagerFacet[j])
+                        diamondLoupeFacet.facetAddress(
+                            selectorsOfManagerFacet[j]
+                        )
                     );
                 }
             }

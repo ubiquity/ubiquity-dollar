@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { FC, useState } from "react";
 import "@uniswap/widgets/fonts.css";
 
-import useManagerManaged from "@/components/lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 import DollarPrice from "@/components/redeem/dollar-price";
 import { fetchData } from "@/components/utils/local-data";
@@ -12,10 +12,10 @@ const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connec
 
 const index: FC = (): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
-  const managedContracts = useManagerManaged();
+  const protocolContracts = useProtocolContracts();
 
   useEffectAsync(async () => {
-    if (managedContracts != null) {
+    if (protocolContracts != null) {
       try {
         console.log(twapPrice, "priced in ");
       } catch (error) {
@@ -23,10 +23,10 @@ const index: FC = (): JSX.Element => {
         setTwapPrice(null);
       }
     } else {
-      console.log("managedContracts is null");
+      console.log("protocolContracts is null");
       setTwapPrice(null);
     }
-  }, [managedContracts]);
+  }, []);
 
   if (process.env.DEBUG === "true") {
     fetchData();

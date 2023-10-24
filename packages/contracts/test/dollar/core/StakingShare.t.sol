@@ -38,7 +38,10 @@ contract DepositStakingShare is LocalTestHelper {
         super.setUp();
         // grant diamond token staking share right rights
         vm.prank(admin);
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(diamond));
+        accessControlFacet.grantRole(
+            STAKING_SHARE_MINTER_ROLE,
+            address(diamond)
+        );
         metapool = IMetaPool(metaPoolAddress);
         fourthBal = metapool.balanceOf(fourthAccount);
         minBal = metapool.balanceOf(stakingMinAccount);
@@ -64,9 +67,9 @@ contract DepositStakingShare is LocalTestHelper {
 
         for (uint256 i; i < depositingAccounts.length; ++i) {
             vm.startPrank(depositingAccounts[i]);
-            metapool.approve(address(IStakingFacet), 2 ** 256 - 1);
+            metapool.approve(address(stakingFacet), 2 ** 256 - 1);
             creationBlock.push(block.number);
-            IStakingFacet.deposit(depositAmounts[i], lockupWeeks[i]);
+            stakingFacet.deposit(depositAmounts[i], lockupWeeks[i]);
             vm.stopPrank();
         }
     }
@@ -82,7 +85,7 @@ contract StakingShareTest is DepositStakingShare {
         uint256 end
     ) public {
         vm.prank(admin);
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        accessControlFacet.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
         vm.prank(admin);
         stakingShare.updateStake(1, uint256(amount), uint256(debt), end);
         StakingShare.Stake memory stake = stakingShare.getStake(1);
@@ -120,7 +123,7 @@ contract StakingShareTest is DepositStakingShare {
         uint256 end
     ) public {
         vm.prank(admin);
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        accessControlFacet.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
         vm.prank(admin);
         uint256 id = stakingShare.mint(
             secondAccount,
@@ -175,33 +178,33 @@ contract StakingShareTest is DepositStakingShare {
         emit Paused(admin);
 
         vm.prank(admin);
-        IAccessControl.pause();
+        accessControlFacet.pause();
     }
 
     function testPause_ShouldRevert_IfNotPauser() public {
         vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
-        IAccessControl.pause();
+        accessControlFacet.pause();
     }
 
     function testUnpause_ShouldUnpause() public {
         vm.prank(admin);
-        IAccessControl.pause();
+        accessControlFacet.pause();
 
         vm.expectEmit(true, false, false, true);
         emit Unpaused(admin);
 
         vm.prank(admin);
-        IAccessControl.unpause();
+        accessControlFacet.unpause();
     }
 
     function testUnpause_ShouldRevert_IfNotPauser() public {
         vm.prank(admin);
-        IAccessControl.pause();
+        accessControlFacet.pause();
 
         vm.expectRevert("Manager: Caller is not admin");
         vm.prank(secondAccount);
-        IAccessControl.unpause();
+        accessControlFacet.unpause();
     }
 
     function testSafeTransferFrom_ShouldTransferTokenId() public {
@@ -311,12 +314,12 @@ contract StakingShareTest is DepositStakingShare {
             fourthAccount,
             fourthBal,
             creationBlock[1],
-            IStakingFormulasFacet.durationMultiply(
+            stakingFormulasFacet.durationMultiply(
                 fourthBal,
                 52,
-                IStakingFacet.stakingDiscountMultiplier()
+                stakingFacet.stakingDiscountMultiplier()
             ),
-            IStakingFacet.blockCountInAWeek() * 52,
+            stakingFacet.blockCountInAWeek() * 52,
             fourthBal
         );
 
@@ -328,7 +331,7 @@ contract StakingShareTest is DepositStakingShare {
 
     function testSetUri_ShouldSetUri() public {
         vm.prank(admin);
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        accessControlFacet.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
@@ -344,7 +347,7 @@ contract StakingShareTest is DepositStakingShare {
 
     function testSetBaseUri_ShouldSetUri() public {
         vm.prank(admin);
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        accessControlFacet.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"
@@ -360,7 +363,7 @@ contract StakingShareTest is DepositStakingShare {
 
     function testSetUriSingle_ShouldSetUri() public {
         vm.prank(admin);
-        IAccessControl.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
+        accessControlFacet.grantRole(STAKING_SHARE_MINTER_ROLE, address(admin));
 
         string memory stringTest = "{'name':'Staking Share','description':,"
         "'Ubiquity Staking Share',"

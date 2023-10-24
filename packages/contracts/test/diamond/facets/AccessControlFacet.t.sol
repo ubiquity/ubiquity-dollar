@@ -8,7 +8,7 @@ import {AddressUtils} from "../../../src/dollar/libraries/AddressUtils.sol";
 
 import {UintUtils} from "../../../src/dollar/libraries/UintUtils.sol";
 
-contract AccessControlFacetTest is DiamondSetup {
+contract AccessControlFacetTest is DiamondTestSetup {
     using AddressUtils for address;
     using UintUtils for uint256;
 
@@ -33,7 +33,10 @@ contract AccessControlFacetTest is DiamondSetup {
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit RoleGranted(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient, admin);
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient);
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
     }
 
     // test grantRole function should revert if sender is not admin
@@ -48,19 +51,28 @@ contract AccessControlFacetTest is DiamondSetup {
                 uint256(DEFAULT_ADMIN_ROLE).toHexString(32)
             )
         );
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient);
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
     }
 
     // test revokeRole function should work only for admin
     function testRevokeRole_ShouldWork() public {
         vm.prank(admin);
         emit RoleGranted(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient, admin);
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient);
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
 
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit RoleRevoked(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient, admin);
-        IAccessControl.revokeRole(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient);
+        accessControlFacet.revokeRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
     }
 
     // test revokeRole function should revert if sender is not admin
@@ -75,7 +87,10 @@ contract AccessControlFacetTest is DiamondSetup {
                 uint256(DEFAULT_ADMIN_ROLE).toHexString(32)
             )
         );
-        IAccessControl.revokeRole(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient);
+        accessControlFacet.revokeRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
     }
 
     // test renounceRole function should work for grantee
@@ -83,7 +98,10 @@ contract AccessControlFacetTest is DiamondSetup {
         vm.prank(admin);
         vm.expectEmit(true, true, true, true);
         emit RoleGranted(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient, admin);
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, mock_recipient);
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
 
         vm.prank(mock_recipient);
         vm.expectEmit(true, true, true, true);
@@ -92,6 +110,6 @@ contract AccessControlFacetTest is DiamondSetup {
             mock_recipient,
             mock_recipient
         );
-        IAccessControl.renounceRole(GOVERNANCE_TOKEN_BURNER_ROLE);
+        accessControlFacet.renounceRole(GOVERNANCE_TOKEN_BURNER_ROLE);
     }
 }

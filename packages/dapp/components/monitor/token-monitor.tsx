@@ -1,42 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { formatEther } from "@/lib/format";
-import useDeployedContracts from "../lib/hooks/contracts/use-deployed-contracts";
-import useManagerManaged from "../lib/hooks/contracts/use-manager-managed";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 // import Address from "./ui/Address";
 import Balance from "./ui/balance";
+import useEffectAsync from "../lib/hooks/use-effect-async";
 
 type State = null | TokenMonitorProps;
 type TokenMonitorProps = {
-  debtCouponAddress: string;
-  debtCouponManagerAddress: string;
-  totalOutstandingDebt: number;
+  creditNftAddress: string;
+  creditNftManagerAddress: string;
+  totalOutstandingCredit: number;
   totalRedeemable: number;
 };
 
 const TokenMonitorContainer = () => {
-  const { debtCouponManager } = useDeployedContracts() || {};
-  const { creditNft: debtCouponToken, dollarToken: uad } = useManagerManaged() || {};
-
+  const protocolContracts = useProtocolContracts();
   const [tokenMonitorPRops, setTokenMonitorProps] = useState<State>(null);
 
-  useEffect(() => {
-    if (debtCouponManager && debtCouponToken && uad) {
-      (async function () {
-        const [totalOutstandingDebt, totalRedeemable] = await Promise.all([
-          debtCouponToken.getTotalOutstandingDebt(),
-          uad.balanceOf(debtCouponManager.address),
-        ]);
+  useEffectAsync(async () => {
+    const contracts = await protocolContracts;
+    if (contracts && contracts.creditNft && contracts.creditNftManagerFacet) {
+      const [totalOutstandingCredit, totalRedeemable] = await Promise.all([
+        contracts.creditNft?.getTotalOutstandingDebt(),
+        contracts.dollarToken?.balanceOf(contracts.creditNftManagerFacet.address),
+      ]);
 
-        setTokenMonitorProps({
-          debtCouponAddress: debtCouponToken.address,
-          debtCouponManagerAddress: debtCouponManager.address,
-          totalOutstandingDebt: +formatEther(totalOutstandingDebt),
-          totalRedeemable: +formatEther(totalRedeemable),
-        });
-      })();
+      setTokenMonitorProps({
+        creditNftAddress: contracts.creditNft.address,
+        creditNftManagerAddress: contracts.creditNftManagerFacet.address,
+        totalOutstandingCredit: +formatEther(totalOutstandingCredit),
+        totalRedeemable: +formatEther(totalRedeemable),
+      });
     }
-  }, [debtCouponManager, debtCouponToken, uad]);
+  }, []);
 
   return tokenMonitorPRops && <TokenMonitor {...tokenMonitorPRops} />;
 };
@@ -46,12 +43,12 @@ const TokenMonitor = (props: TokenMonitorProps) => {
     <div className="panel">
       <h2>Credit Monitor</h2>
       <div>
-        <Balance title="Total Outstanding" unit="uCR-NFT" balance={props.totalOutstandingDebt} />
-        {/* <Address title="Debt Coupon Manager" address={props.debtCouponManagerAddress} /> */}
+        <Balance title="Total Outstanding" unit="CREDIT-NFT" balance={props.totalOutstandingCredit} />
+        {/* <Address title="Credit Nft Manager" address={props.creditNftManagerAddress} /> */}
       </div>
       <div>
-        <Balance title="Total Redeemable" unit="uCR-NFT" balance={props.totalRedeemable} />
-        {/* <Address title="Debt Coupon" address={props.debtCouponAddress} /> */}
+        <Balance title="Total Redeemable" unit="CREDIT-NFT" balance={props.totalRedeemable} />
+        {/* <Address title="Credit Nft" address={props.creditNftAddress} /> */}
       </div>
     </div>
   );

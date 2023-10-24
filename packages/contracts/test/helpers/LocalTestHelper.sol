@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {MockTWAPOracleDollar3pool} from "../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
-import {DiamondSetup} from "../diamond/DiamondTestSetup.sol";
+import {DiamondTestSetup} from "../diamond/DiamondTestSetup.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CreditRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
@@ -11,12 +11,10 @@ import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFac
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
 import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 
-abstract contract LocalTestHelper is DiamondSetup {
+abstract contract LocalTestHelper is DiamondTestSetup {
     address public constant NATIVE_ASSET = address(0);
     address curve3CRVTokenAddress = address(0x101);
     address public treasuryAddress = address(0x111222333);
-
-    TWAPOracleDollar3poolFacet twapOracle;
 
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculator;
     CreditRedemptionCalculatorFacet creditRedemptionCalculator;
@@ -28,12 +26,11 @@ abstract contract LocalTestHelper is DiamondSetup {
     function setUp() public virtual override {
         super.setUp();
 
-        twapOracle = ITWAPOracleDollar3pool;
-        creditNftRedemptionCalculator = ICreditNftRedemptionCalculationFacet;
-        creditRedemptionCalculator = ICreditRedemptionCalculationFacet;
-        dollarMintCalculator = IDollarMintCalcFacet;
-        creditNftManager = ICreditNftManagerFacet;
-        dollarMintExcess = IDollarMintExcessFacet;
+        creditNftRedemptionCalculator = creditNftRedemptionCalculationFacet;
+        creditRedemptionCalculator = creditRedemptionCalculationFacet;
+        dollarMintCalculator = dollarMintCalculatorFacet;
+        creditNftManager = creditNftManagerFacet;
+        dollarMintExcess = dollarMintExcessFacet;
 
         vm.startPrank(admin);
 
@@ -66,11 +63,14 @@ abstract contract LocalTestHelper is DiamondSetup {
         // deploy credit token
 
         // set treasury address
-        IManager.setTreasuryAddress(treasuryAddress);
+        managerFacet.setTreasuryAddress(treasuryAddress);
 
         vm.stopPrank();
         vm.prank(owner);
-        ITWAPOracleDollar3pool.setPool(metaPoolAddress, curve3CRVTokenAddress);
-        ITWAPOracleDollar3pool.update();
+        twapOracleDollar3PoolFacet.setPool(
+            metaPoolAddress,
+            curve3CRVTokenAddress
+        );
+        twapOracleDollar3PoolFacet.update();
     }
 }

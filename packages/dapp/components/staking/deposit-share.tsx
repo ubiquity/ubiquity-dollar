@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 import { useEffect, useState } from "react";
 
-import { ManagedContracts } from "@/lib/hooks/contracts/use-manager-managed";
+import { ProtocolContracts } from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import { constrainNumber } from "@/lib/utils";
 import withLoadedContext, { LoadedContext } from "@/lib/with-loaded-context";
 import Button from "../ui/button";
@@ -14,33 +14,34 @@ const MIN_WEEKS = 1;
 const MAX_WEEKS = 208;
 
 // cspell: disable-next-line
-type PrefetchedConstants = { totalShares: number; usdPerWeek: number; bondingDiscountMultiplier: BigNumber };
-async function prefetchConstants(contracts: NonNullable<ManagedContracts>): Promise<PrefetchedConstants> {
-  const reserves = await contracts.governanceMarket.getReserves();
-
-  const ubqPrice = +reserves[0].toString() / +reserves[1].toString();
-  const ubqPerBlock = await contracts.masterChef.governancePerBlock();
-  const ubqMultiplier = await contracts.masterChef.governanceMultiplier();
-  const actualUbqPerBlock = toEtherNum(ubqPerBlock.mul(ubqMultiplier).div(`${1e18}`));
-  const blockCountInAWeek = toNum(await contracts.staking.blockCountInAWeek());
-  const ubqPerWeek = actualUbqPerBlock * blockCountInAWeek;
-  const totalShares = toEtherNum(await contracts.masterChef.totalShares());
-  const usdPerWeek = ubqPerWeek * ubqPrice;
+type PrefetchedConstants = { totalShares: number; usdPerWeek: number; stakingDiscountMultiplier: BigNumber };
+async function prefetchConstants(contracts: NonNullable<ProtocolContracts>): Promise<PrefetchedConstants> {
+  const contract = await contracts;
+  const reserves = await contract.sushiPoolGovernanceDollarLp?.getReserves();
+  const governancePrice = +reserves[0].toString() / +reserves[1].toString();
+  const governancePerBlock = await contract.chefFacet?.governancePerBlock();
+  const governanceMultiplier = await contract.chefFacet?.governanceMultiplier();
+  const actualGovernancePerBlock = toEtherNum(governancePerBlock.mul(governanceMultiplier).div(`${1e18}`));
+  const blockCountInAWeek = toNum(await contract.stakingFacet?.blockCountInAWeek());
+  const governancePerWeek = actualGovernancePerBlock * blockCountInAWeek;
+  const totalShares = toEtherNum(await contract.chefFacet?.totalShares());
+  const usdPerWeek = governancePerWeek * governancePrice;
   // cspell: disable-next-line
-  const bondingDiscountMultiplier = await contracts.staking.stakingDiscountMultiplier();
+  const stakingDiscountMultiplier = await contract.stakingFacet?.stakingDiscountMultiplier();
   // cspell: disable-next-line
-  return { totalShares, usdPerWeek, bondingDiscountMultiplier };
+  return { totalShares, usdPerWeek, stakingDiscountMultiplier };
 }
 
-async function calculateApyForWeeks(contracts: NonNullable<ManagedContracts>, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
+async function calculateApyForWeeks(contracts: NonNullable<ProtocolContracts>, prefetch: PrefetchedConstants, weeksNum: number): Promise<number> {
+  const contract = await contracts;
   // cspell: disable-next-line
-  const { totalShares, usdPerWeek, bondingDiscountMultiplier } = prefetch;
+  const { totalShares, usdPerWeek, stakingDiscountMultiplier } = prefetch;
   const DAYS_IN_A_YEAR = 365.2422;
   const usdAsLp = 0.7460387929; // TODO: Get this number from the Curve contract
   const bigNumberOneUsdAsLp = ethers.utils.parseEther(usdAsLp.toString());
   const weeks = BigNumber.from(weeksNum.toString());
   // cspell: disable-next-line
-  const shares = toEtherNum(await contracts.ubiquityFormulas.durationMultiply(bigNumberOneUsdAsLp, weeks, bondingDiscountMultiplier));
+  const shares = toEtherNum(contract.stakingFormulasFacet?.durationMultiply(bigNumberOneUsdAsLp, weeks, stakingDiscountMultiplier));
   const rewardsPerWeek = (shares / totalShares) * usdPerWeek;
   const yearlyYield = (rewardsPerWeek / 7) * DAYS_IN_A_YEAR * 100;
   return Math.round(yearlyYield * 100) / 100;
@@ -52,7 +53,7 @@ type DepositShareProps = {
   maxLp: BigNumber;
 } & LoadedContext;
 
-const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }: DepositShareProps) => {
+const DepositShare = ({ onStake, disabled, maxLp, protocolContracts: contracts }: DepositShareProps) => {
   const [amount, setAmount] = useState("");
   const [weeks, setWeeks] = useState("");
   const [currentApy, setCurrentApy] = useState<number | null>(null);
@@ -62,7 +63,7 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   function validateAmount(): string | null {
     if (amount) {
       const amountBig = ethers.utils.parseEther(amount);
-      if (amountBig.gt(maxLp)) return `You don't have enough uAD-3CRV tokens`;
+      if (amountBig.gt(maxLp)) return `You don't have enough DOLLAR-3CRV tokens`;
     }
     return null;
   }
@@ -115,10 +116,10 @@ const DepositShare = ({ onStake, disabled, maxLp, managedContracts: contracts }:
   return (
     <div className="panel">
       {/* cspell: disable-next-line */}
-      <h2>Stake liquidity to receive UBQ</h2>
+      <h2>Stake liquidity to receive GOVERNANCE</h2>
       <div>APR {currentApy ? `${currentApy}%` : aprBounds ? `${aprBounds[1]}%` : "..."}</div>
       <div>
-        <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="uAD-3CRV LP Tokens" />
+        <PositiveNumberInput value={amount} onChange={onAmountChange} disabled={disabled} placeholder="DOLLAR-3CRV LP Tokens" />
         <PositiveNumberInput value={weeks} fraction={false} onChange={onWeeksChange} disabled={disabled} placeholder={`Weeks (${MIN_WEEKS}-${MAX_WEEKS})`} />
         <Button disabled={disabled} onClick={onClickMax}>
           MAX

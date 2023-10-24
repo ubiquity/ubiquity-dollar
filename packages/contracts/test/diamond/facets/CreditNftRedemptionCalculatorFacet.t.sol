@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 import "../DiamondTestSetup.sol";
 
-contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
+contract CreditNftRedemptionCalculatorFacetTest is DiamondTestSetup {
     function setUp() public virtual override {
         super.setUp();
         vm.prank(admin);
@@ -12,22 +12,25 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondSetup {
         assertEq(admSupply, 10000e18);
 
         vm.startPrank(admin);
-        IManager.setCreditNftAddress(address(creditNft));
-        IAccessControl.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        IAccessControl.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
+        managerFacet.setCreditNftAddress(address(creditNft));
+        accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_MINTER_ROLE,
+            address(this)
+        );
         vm.stopPrank();
     }
 
     function test_getCreditNftAmount_revertsIfDebtTooHigh() public {
         creditNft.mintCreditNft(user1, 100000 ether, 1000);
         vm.expectRevert("CreditNft to Dollar: DEBT_TOO_HIGH");
-        ICreditNftRedemptionCalculationFacet.getCreditNftAmount(0);
+        creditNftRedemptionCalculationFacet.getCreditNftAmount(0);
     }
 
     function test_getCreditNftAmount() public {
         creditNft.mintCreditNft(user1, 5000 ether, 10);
         assertEq(
-            ICreditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
+            creditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
             40000
         );
     }

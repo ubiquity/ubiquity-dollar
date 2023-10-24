@@ -3,12 +3,12 @@ import { Provider } from "@ethersproject/providers";
 import { ContractInterface, ethers } from "ethers";
 
 // ARTIFACTS
-import _DebtCoupon from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
-import _DebtCouponManager from "@ubiquity/contracts/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json";
+import _CreditNft from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
+import _CreditNftManager from "@ubiquity/contracts/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json";
 import _DollarMintCalculator from "@ubiquity/contracts/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json";
 import _ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC1155Ubiquity.json";
-import _ICouponsForDollarsCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
-import _IUARForDollarsCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
+import _ICreditNftRedemptionCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
+import _ICreditRedemptionCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
 import _ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
 import _IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import _IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
@@ -107,8 +107,8 @@ export const getIJarContract = (address: string, provider: Provider) => {
   return getContract(_IJar.abi, address, provider) as IJar;
 };
 
-export const getDebtCouponManagerContract = (address: string, provider: Provider) => {
-  return getContract(_DebtCouponManager.abi, address, provider) as CreditNftManagerFacet;
+export const getCreditNftManagerContract = (address: string, provider: Provider) => {
+  return getContract(_CreditNftManager.abi, address, provider) as CreditNftManagerFacet;
 };
 
 export const getCurveFactoryContract = (address: string, provider: Provider) => {
@@ -123,12 +123,12 @@ export const getStakingShareContract = (address: string, provider: Provider) => 
   return getContract(_StakingToken.abi, address, provider) as StakingShare;
 };
 
-export const getBondingV2Contract = (address: string, provider: Provider) => {
+export const getStakingV2Contract = (address: string, provider: Provider) => {
   return getContract(_Staking.abi, address, provider) as StakingFacet;
 };
 
-export const getDebtCouponContract = (address: string, provider: Provider) => {
-  return getContract(_DebtCoupon.abi, address, provider) as CreditNft;
+export const getCreditNftContract = (address: string, provider: Provider) => {
+  return getContract(_CreditNft.abi, address, provider) as CreditNft;
 };
 
 export const getTWAPOracleContract = (address: string, provider: Provider) => {
@@ -139,12 +139,12 @@ export const getDollarMintCalculatorContract = (address: string, provider: Provi
   return getContract(_DollarMintCalculator.abi, address, provider) as DollarMintCalculatorFacet;
 };
 
-export const getICouponsForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_ICouponsForDollarsCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
+export const getCreditNftRedemptionCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_ICreditNftRedemptionCalculator.abi, address, provider) as CreditNftRedemptionCalculatorFacet;
 };
 
-export const getIUARForDollarsCalculatorContract = (address: string, provider: Provider) => {
-  return getContract(_IUARForDollarsCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
+export const getCreditRedemptionCalculatorContract = (address: string, provider: Provider) => {
+  return getContract(_ICreditRedemptionCalculator.abi, address, provider) as CreditRedemptionCalculatorFacet;
 };
 
 export const getIMetaPoolContract = (address: string, provider: Provider) => {
