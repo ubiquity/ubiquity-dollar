@@ -28,12 +28,13 @@ import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDoll
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
+import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
 import {CREDIT_NFT_MANAGER_ROLE, CREDIT_TOKEN_BURNER_ROLE, CREDIT_TOKEN_MINTER_ROLE, CURVE_DOLLAR_MANAGER_ROLE, DOLLAR_TOKEN_BURNER_ROLE, DOLLAR_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE, GOVERNANCE_TOKEN_MANAGER_ROLE, GOVERNANCE_TOKEN_MINTER_ROLE, STAKING_SHARE_MINTER_ROLE} from "../../src/dollar/libraries/Constants.sol";
 
 /**
  * @notice Deploys diamond contract with all of the facets
  */
-abstract contract DiamondTestSetup is DiamondTestHelper {
+abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     // diamond related contracts
     Diamond diamond;
     DiamondInit diamondInit;
@@ -43,6 +44,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     BondingCurveFacet bondingCurveFacet;
     ChefFacet chefFacet;
     CollectableDustFacet collectableDustFacet;
+    CreditClockFacet creditClockFacet;
     CreditNftManagerFacet creditNftManagerFacet;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculationFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculationFacet;
@@ -57,13 +59,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     StakingFormulasFacet stakingFormulasFacet;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
-    CreditClockFacet creditClockFacet;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
     AccessControlFacet accessControlFacetImplementation;
     BondingCurveFacet bondingCurveFacetImplementation;
     ChefFacet chefFacetImplementation;
     CollectableDustFacet collectableDustFacetImplementation;
+    CreditClockFacet creditClockFacetImplementation;
     CreditNftManagerFacet creditNftManagerFacetImplementation;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacetImplementation;
     CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacetImplementation;
@@ -78,7 +80,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     StakingFormulasFacet stakingFormulasFacetImplementation;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
-    CreditClockFacet creditClockFacetImplementation;
 
     // facet names with addresses
     string[] facetNames;
@@ -96,6 +97,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     bytes4[] selectorsOfBondingCurveFacet;
     bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfCollectableDustFacet;
+    bytes4[] selectorsOfCreditClockFacet;
     bytes4[] selectorsOfCreditNftManagerFacet;
     bytes4[] selectorsOfCreditNftRedemptionCalculatorFacet;
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
@@ -110,7 +112,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
     bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
-    bytes4[] selectorsOfCreditClockFacet;
 
     /// @notice Deploys diamond and connects facets
     function setUp() public virtual {
@@ -122,463 +123,62 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         contract2 = generateAddress("Contract2", true, 10 ether);
 
         // set all function selectors
-        // Diamond Cut selectors
-        selectorsOfDiamondCutFacet.push(IDiamondCut.diamondCut.selector);
-
-        // Diamond Loupe
-        selectorsOfDiamondLoupeFacet.push(
-            diamondLoupeFacetImplementation.facets.selector
+        selectorsOfAccessControlFacet = getSelectorsFromAbi(
+            "/out/AccessControlFacet.sol/AccessControlFacet.json"
         );
-        selectorsOfDiamondLoupeFacet.push(
-            diamondLoupeFacetImplementation.facetFunctionSelectors.selector
+        selectorsOfBondingCurveFacet = getSelectorsFromAbi(
+            "/out/BondingCurveFacet.sol/BondingCurveFacet.json"
         );
-        selectorsOfDiamondLoupeFacet.push(
-            diamondLoupeFacetImplementation.facetAddresses.selector
+        selectorsOfChefFacet = getSelectorsFromAbi(
+            "/out/ChefFacet.sol/ChefFacet.json"
         );
-        selectorsOfDiamondLoupeFacet.push(
-            diamondLoupeFacetImplementation.facetAddress.selector
+        selectorsOfCollectableDustFacet = getSelectorsFromAbi(
+            "/out/CollectableDustFacet.sol/CollectableDustFacet.json"
         );
-        selectorsOfDiamondLoupeFacet.push(
-            diamondLoupeFacetImplementation.supportsInterface.selector
+        selectorsOfCreditClockFacet = getSelectorsFromAbi(
+            "/out/CreditClockFacet.sol/CreditClockFacet.json"
         );
-
-        // Ownership
-        selectorsOfOwnershipFacet.push(IERC173.transferOwnership.selector);
-        selectorsOfOwnershipFacet.push(IERC173.owner.selector);
-
-        // Manager selectors
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setCreditTokenAddress.selector
+        selectorsOfCreditNftManagerFacet = getSelectorsFromAbi(
+            "/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setCreditNftAddress.selector
+        selectorsOfCreditNftRedemptionCalculatorFacet = getSelectorsFromAbi(
+            "/out/CreditNftRedemptionCalculatorFacet.sol/CreditNftRedemptionCalculatorFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setGovernanceTokenAddress.selector
+        selectorsOfCreditRedemptionCalculatorFacet = getSelectorsFromAbi(
+            "/out/CreditRedemptionCalculatorFacet.sol/CreditRedemptionCalculatorFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setDollarTokenAddress.selector
+        selectorsOfCurveDollarIncentiveFacet = getSelectorsFromAbi(
+            "/out/CurveDollarIncentiveFacet.sol/CurveDollarIncentiveFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setUbiquistickAddress.selector
+        selectorsOfDiamondCutFacet = getSelectorsFromAbi(
+            "/out/DiamondCutFacet.sol/DiamondCutFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setSushiSwapPoolAddress.selector
+        selectorsOfDiamondLoupeFacet = getSelectorsFromAbi(
+            "/out/DiamondLoupeFacet.sol/DiamondLoupeFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setDollarMintCalculatorAddress.selector
+        selectorsOfDollarMintCalculatorFacet = getSelectorsFromAbi(
+            "/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setExcessDollarsDistributor.selector
+        selectorsOfDollarMintExcessFacet = getSelectorsFromAbi(
+            "/out/DollarMintExcessFacet.sol/DollarMintExcessFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setMasterChefAddress.selector
+        selectorsOfManagerFacet = getSelectorsFromAbi(
+            "/out/ManagerFacet.sol/ManagerFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setFormulasAddress.selector
+        selectorsOfOwnershipFacet = getSelectorsFromAbi(
+            "/out/OwnershipFacet.sol/OwnershipFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setStakingShareAddress.selector
+        selectorsOfStakingFacet = getSelectorsFromAbi(
+            "/out/StakingFacet.sol/StakingFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setCurveDollarIncentiveAddress.selector
+        selectorsOfStakingFormulasFacet = getSelectorsFromAbi(
+            "/out/StakingFormulasFacet.sol/StakingFormulasFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setStableSwapMetaPoolAddress.selector
+        selectorsOfTWAPOracleDollar3poolFacet = getSelectorsFromAbi(
+            "/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json"
         );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setStakingContractAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setBondingCurveAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setTreasuryAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.setIncentiveToDollar.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.deployStableSwapPool.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.twapOracleAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.dollarTokenAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.creditTokenAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.creditNftAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.curve3PoolTokenAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.governanceTokenAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.sushiSwapPoolAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.creditCalculatorAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.creditNftCalculatorAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.dollarMintCalculatorAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.excessDollarsDistributor.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.masterChefAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.formulasAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.stakingShareAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.stableSwapMetaPoolAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.stakingContractAddress.selector
-        );
-        selectorsOfManagerFacet.push(
-            managerFacetImplementation.treasuryAddress.selector
-        );
-
-        // Access Control
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.grantRole.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.hasRole.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.renounceRole.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.getRoleAdmin.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.revokeRole.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.pause.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.unpause.selector
-        );
-        selectorsOfAccessControlFacet.push(
-            accessControlFacetImplementation.paused.selector
-        );
-
-        // TWAP Oracle
-        selectorsOfTWAPOracleDollar3poolFacet.push(
-            twapOracleDollar3PoolFacetImplementation.setPool.selector
-        );
-        selectorsOfTWAPOracleDollar3poolFacet.push(
-            twapOracleDollar3PoolFacetImplementation.update.selector
-        );
-        selectorsOfTWAPOracleDollar3poolFacet.push(
-            twapOracleDollar3PoolFacetImplementation.consult.selector
-        );
-
-        // Collectable Dust
-        selectorsOfCollectableDustFacet.push(
-            collectableDustFacetImplementation.addProtocolToken.selector
-        );
-        selectorsOfCollectableDustFacet.push(
-            collectableDustFacetImplementation.removeProtocolToken.selector
-        );
-        selectorsOfCollectableDustFacet.push(
-            collectableDustFacetImplementation.sendDust.selector
-        );
-        // Chef
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.setGovernancePerBlock.selector
-        );
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.governancePerBlock.selector
-        );
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.governanceDivider.selector
-        );
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.minPriceDiffToUpdateMultiplier.selector
-        );
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.setGovernanceShareForTreasury.selector
-        );
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.setMinPriceDiffToUpdateMultiplier.selector
-        );
-        selectorsOfChefFacet.push(chefFacetImplementation.getRewards.selector);
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.pendingGovernance.selector
-        );
-        selectorsOfChefFacet.push(
-            chefFacetImplementation.getStakingShareInfo.selector
-        );
-        selectorsOfChefFacet.push(chefFacetImplementation.totalShares.selector);
-        selectorsOfChefFacet.push(chefFacetImplementation.pool.selector);
-
-        // Staking
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.dollarPriceReset.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.crvPriceReset.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.setStakingDiscountMultiplier.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.stakingDiscountMultiplier.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.setBlockCountInAWeek.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.blockCountInAWeek.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.deposit.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.addLiquidity.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.removeLiquidity.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.pendingLpRewards.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.lpRewardForShares.selector
-        );
-        selectorsOfStakingFacet.push(
-            stakingFacetImplementation.currentShareValue.selector
-        );
-
-        // UbiquityPool
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.mintDollar.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.redeemDollar.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.collectRedemption.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.addToken.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.setRedeemActive.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.getRedeemActive.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.setMintActive.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.getRedeemCollateralBalances.selector
-        );
-        selectorsOfUbiquityPoolFacet.push(
-            ubiquityPoolFacetImplementation.getMintActive.selector
-        );
-
-        // Staking Formulas
-        selectorsOfStakingFormulasFacet.push(
-            stakingFormulasFacetImplementation.sharesForLP.selector
-        );
-        selectorsOfStakingFormulasFacet.push(
-            stakingFormulasFacetImplementation
-                .lpRewardsRemoveLiquidityNormalization
-                .selector
-        );
-        selectorsOfStakingFormulasFacet.push(
-            stakingFormulasFacetImplementation
-                .lpRewardsAddLiquidityNormalization
-                .selector
-        );
-        selectorsOfStakingFormulasFacet.push(
-            stakingFormulasFacetImplementation
-                .correctedAmountToWithdraw
-                .selector
-        );
-        selectorsOfStakingFormulasFacet.push(
-            stakingFormulasFacetImplementation.durationMultiply.selector
-        );
-
-        // Bonding Curve
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.setParams.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.connectorWeight.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.baseY.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.poolBalance.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.deposit.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.getShare.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.withdraw.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation.purchaseTargetAmount.selector
-        );
-        selectorsOfBondingCurveFacet.push(
-            bondingCurveFacetImplementation
-                .purchaseTargetAmountFromZero
-                .selector
-        );
-
-        // Curve Dollar Incentive Facet
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.incentivize.selector
-        );
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.setExemptAddress.selector
-        );
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.switchSellPenalty.selector
-        );
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.switchBuyIncentive.selector
-        );
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.isExemptAddress.selector
-        );
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.isSellPenaltyOn.selector
-        );
-        selectorsOfCurveDollarIncentiveFacet.push(
-            curveDollarIncentiveFacetImplementation.isBuyIncentiveOn.selector
-        );
-
-        // Credit facets
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.creditNftLengthBlocks.selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .expiredCreditNftConversionRate
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .setExpiredCreditNftConversionRate
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.setCreditNftLength.selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .exchangeDollarsForCreditNft
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .exchangeDollarsForCredit
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .getCreditNftReturnedForDollars
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .getCreditReturnedForDollars
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.onERC1155Received.selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.onERC1155BatchReceived.selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .burnExpiredCreditNftForGovernance
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.burnCreditNftForCredit.selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation
-                .burnCreditTokensForDollars
-                .selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.redeemCreditNft.selector
-        );
-        selectorsOfCreditNftManagerFacet.push(
-            creditNftManagerFacetImplementation.mintClaimableDollars.selector
-        );
-
-        // Credit NFT Redemption Calculator
-        selectorsOfCreditNftRedemptionCalculatorFacet.push(
-            creditNftRedemptionCalculatorFacetImplementation
-                .getCreditNftAmount
-                .selector
-        );
-
-        // Credit Redemption Calculator
-        selectorsOfCreditRedemptionCalculatorFacet.push(
-            (creditRedemptionCalculatorFacetImplementation.setConstant.selector)
-        );
-        selectorsOfCreditRedemptionCalculatorFacet.push(
-            (creditRedemptionCalculatorFacetImplementation.getConstant.selector)
-        );
-        selectorsOfCreditRedemptionCalculatorFacet.push(
-            (
-                creditRedemptionCalculatorFacetImplementation
-                    .getCreditAmount
-                    .selector
-            )
-        );
-
-        // Dollar Mint Calculator
-        selectorsOfDollarMintCalculatorFacet.push(
-            (dollarMintCalculatorFacetImplementation.getDollarsToMint.selector)
-        );
-        // Dollar Mint Excess
-        selectorsOfDollarMintExcessFacet.push(
-            (dollarMintExcessFacetImplementation.distributeDollars.selector)
-        );
-
-        // Credit Clock Facet
-        selectorsOfCreditClockFacet.push(
-            (creditClockFacetImplementation.getRate.selector)
-        );
-        selectorsOfCreditClockFacet.push(
-            creditClockFacetImplementation.setRatePerBlock.selector
-        );
-        selectorsOfCreditClockFacet.push(
-            (creditClockFacetImplementation.setManager.selector)
-        );
-        selectorsOfCreditClockFacet.push(
-            (creditClockFacetImplementation.getManager.selector)
+        selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
+            "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
 
         // deploy facet implementation instances
@@ -586,6 +186,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         bondingCurveFacetImplementation = new BondingCurveFacet();
         chefFacetImplementation = new ChefFacet();
         collectableDustFacetImplementation = new CollectableDustFacet();
+        creditClockFacetImplementation = new CreditClockFacet();
         creditNftManagerFacetImplementation = new CreditNftManagerFacet();
         creditNftRedemptionCalculatorFacetImplementation = new CreditNftRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacetImplementation = new CreditRedemptionCalculatorFacet();
@@ -600,7 +201,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         stakingFormulasFacetImplementation = new StakingFormulasFacet();
         twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
-        creditClockFacetImplementation = new CreditClockFacet();
 
         // prepare diamond init args
         diamondInit = new DiamondInit();
@@ -609,6 +209,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             "BondingCurveFacet",
             "ChefFacet",
             "CollectableDustFacet",
+            "CreditClockFacet",
             "CreditNftManagerFacet",
             "CreditNftRedemptionCalculatorFacet",
             "CreditRedemptionCalculatorFacet",
@@ -622,8 +223,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             "StakingFacet",
             "StakingFormulasFacet",
             "TWAPOracleDollar3poolFacet",
-            "UbiquityPoolFacet",
-            "CreditClockFacet"
+            "UbiquityPoolFacet"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: admin,
@@ -675,12 +275,19 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         );
         cuts[4] = (
             FacetCut({
+                facetAddress: address(creditClockFacetImplementation),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfCreditClockFacet
+            })
+        );
+        cuts[5] = (
+            FacetCut({
                 facetAddress: address(creditNftManagerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCreditNftManagerFacet
             })
         );
-        cuts[5] = (
+        cuts[6] = (
             FacetCut({
                 facetAddress: address(
                     creditNftRedemptionCalculatorFacetImplementation
@@ -689,7 +296,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfCreditNftRedemptionCalculatorFacet
             })
         );
-        cuts[6] = (
+        cuts[7] = (
             FacetCut({
                 facetAddress: address(
                     creditRedemptionCalculatorFacetImplementation
@@ -698,88 +305,81 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
                 functionSelectors: selectorsOfCreditRedemptionCalculatorFacet
             })
         );
-        cuts[7] = (
+        cuts[8] = (
             FacetCut({
                 facetAddress: address(curveDollarIncentiveFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCurveDollarIncentiveFacet
             })
         );
-        cuts[8] = (
+        cuts[9] = (
             FacetCut({
                 facetAddress: address(diamondCutFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondCutFacet
             })
         );
-        cuts[9] = (
+        cuts[10] = (
             FacetCut({
                 facetAddress: address(diamondLoupeFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondLoupeFacet
             })
         );
-        cuts[10] = (
+        cuts[11] = (
             FacetCut({
                 facetAddress: address(dollarMintCalculatorFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintCalculatorFacet
             })
         );
-        cuts[11] = (
+        cuts[12] = (
             FacetCut({
                 facetAddress: address(dollarMintExcessFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintExcessFacet
             })
         );
-        cuts[12] = (
+        cuts[13] = (
             FacetCut({
                 facetAddress: address(managerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfManagerFacet
             })
         );
-        cuts[13] = (
+        cuts[14] = (
             FacetCut({
                 facetAddress: address(ownershipFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfOwnershipFacet
             })
         );
-        cuts[14] = (
+        cuts[15] = (
             FacetCut({
                 facetAddress: address(stakingFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfStakingFacet
             })
         );
-        cuts[15] = (
+        cuts[16] = (
             FacetCut({
                 facetAddress: address(stakingFormulasFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfStakingFormulasFacet
             })
         );
-        cuts[16] = (
+        cuts[17] = (
             FacetCut({
                 facetAddress: address(twapOracleDollar3PoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
             })
         );
-        cuts[17] = (
+        cuts[18] = (
             FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfUbiquityPoolFacet
-            })
-        );
-        cuts[18] = (
-            FacetCut({
-                facetAddress: address(creditClockFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfCreditClockFacet
             })
         );
 
@@ -792,6 +392,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
         bondingCurveFacet = BondingCurveFacet(address(diamond));
         chefFacet = ChefFacet(address(diamond));
         collectableDustFacet = CollectableDustFacet(address(diamond));
+        creditClockFacet = CreditClockFacet(address(diamond));
         creditNftManagerFacet = CreditNftManagerFacet(address(diamond));
         creditNftRedemptionCalculationFacet = CreditNftRedemptionCalculatorFacet(
             address(diamond)
@@ -812,7 +413,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper {
             address(diamond)
         );
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
-        creditClockFacet = CreditClockFacet(address(diamond));
 
         // get all addresses
         facetAddressList = diamondLoupeFacet.facetAddresses();

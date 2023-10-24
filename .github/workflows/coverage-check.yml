@@ -21,7 +21,7 @@ jobs:
           ref: development
 
       - name: Setup Foundry
-        uses: onbjerg/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly-5be158ba6dc7c798a6f032026fe60fc01686b33b
 
@@ -69,6 +69,10 @@ jobs:
 
       - name: Checkout code in PR branch
         uses: actions/checkout@v3
+
+      - name: Update Forge Dependencies
+        working-directory: packages/contracts
+        run: forge update lib/forge-std
 
       - name: Get PR branch coverage
         id: coverage-pr
