@@ -19,6 +19,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: development
+          path: development
+
+      - name: Checkout code in PR branch
+        uses: actions/checkout@v3
+        with:
+          path: pr
 
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -30,11 +36,10 @@ jobs:
 
       - name: Get development branch coverage
         id: coverage-development
+        working-directory: development/packages/contracts
         run: |
-          cd ./packages/contracts
-
           # generates lcov.info
-          forge coverage --report lcov
+          forge build && forge coverage --report lcov
 
           # Foundry uses relative paths but Hardhat uses absolute paths.
           # Convert absolute paths to relative paths for consistency.
@@ -58,7 +63,6 @@ jobs:
                   "src/dollar/mocks/*" \
                   "src/dollar/utils/*" \
                   "test/*" \
-
 
           # Generate summary
           COVERAGE_DEVELOPMENT_OUTPUT=$(lcov \
@@ -67,20 +71,12 @@ jobs:
 
           echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | cut -d % -f 1 | cut -d \| -f 2) >> $GITHUB_OUTPUT
 
-      - name: Checkout code in PR branch
-        uses: actions/checkout@v3
-
-      - name: Update Forge Dependencies
-        working-directory: packages/contracts
-        run: forge update lib/forge-std
-
       - name: Get PR branch coverage
         id: coverage-pr
+        working-directory: pr/packages/contracts
         run: |
-          cd ./packages/contracts
-
           # generates lcov.info
-          forge coverage --report lcov
+          forge build && forge coverage --report lcov
 
           # Foundry uses relative paths but Hardhat uses absolute paths.
           # Convert absolute paths to relative paths for consistency.
@@ -104,7 +100,6 @@ jobs:
                   "src/dollar/mocks/*" \
                   "src/dollar/utils/*" \
                   "test/*" \
-
 
           # Generate summary
           COVERAGE_DEVELOPMENT_OUTPUT=$(lcov \
@@ -126,4 +121,4 @@ jobs:
       - name: Upload test coverage report to coveralls.io
         uses: coverallsapp/github-action@v2
         with:
-          file: packages/contracts/filtered-lcov.info
+          file: pr/packages/contracts/filtered-lcov.info
