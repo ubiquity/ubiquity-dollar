@@ -21,11 +21,6 @@ jobs:
           ref: development
           path: development
 
-      - name: Checkout code in PR branch
-        uses: actions/checkout@v3
-        with:
-          path: pr
-
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
@@ -71,9 +66,15 @@ jobs:
 
           echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | cut -d % -f 1 | cut -d \| -f 2) >> $GITHUB_OUTPUT
 
+      - name: Delete development branch folder
+        run: rm -rf development
+
+      - name: Checkout code in PR branch
+        uses: actions/checkout@v3
+
       - name: Get PR branch coverage
         id: coverage-pr
-        working-directory: pr/packages/contracts
+        working-directory: packages/contracts
         run: |
           # generates lcov.info
           forge build && forge coverage --report lcov
@@ -121,4 +122,4 @@ jobs:
       - name: Upload test coverage report to coveralls.io
         uses: coverallsapp/github-action@v2
         with:
-          file: pr/packages/contracts/filtered-lcov.info
+          file: packages/contracts/filtered-lcov.info
