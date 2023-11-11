@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity 0.8.19;
 
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -546,6 +547,56 @@ library LibUbiquityPoolV2 {
         poolStorage.amoMinterAddresses[amoMinterAddress] = true;
 
         emit AmoMinterAdded(amoMinterAddress);
+    }
+
+    /**
+     * @notice Adds a new collateral token
+     * @param collateralAddress Collateral token address
+     * @param poolCeiling Max amount of available tokens for collateral
+     * @param initialFees Array of initial fees, 1_000_000 = 100%, index 0 - mint fee, index 1 - redemption fee
+     */
+    function addCollateralToken(
+        address collateralAddress,
+        uint256 poolCeiling,
+        uint256[] memory initialFees
+    ) internal {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+
+        uint256 collateralIndex = poolStorage.collateralAddresses.length;
+
+        // for fast collateral address -> collateral idx lookups later
+        poolStorage.collateralAddressToIndex[
+            collateralAddress
+        ] = collateralIndex;
+
+        // set collateral initially to disabled
+        poolStorage.enabledCollaterals[collateralAddress] = false;
+
+        // add in the missing decimals
+        poolStorage.missingDecimals.push(
+            uint256(18).sub(ERC20(collateralAddress).decimals())
+        );
+
+        // add in the collateral symbols
+        poolStorage.collateralSymbols.push(ERC20(collateralAddress).symbol());
+
+        // initialize unclaimed pool collateral
+        poolStorage.unclaimedPoolCollateral.push(0);
+
+        // initialize paused prices to $1 as a backup
+        poolStorage.collateralPrices.push(UBIQUITY_POOL_PRICE_PRECISION);
+
+        // handle the fees
+        poolStorage.mintingFee.push(initialFees[0]);
+        poolStorage.redemptionFee.push(initialFees[1]);
+
+        // handle the pauses
+        poolStorage.mintPaused.push(false);
+        poolStorage.redeemPaused.push(false);
+        poolStorage.borrowingPaused.push(false);
+
+        // pool ceiling
+        poolStorage.poolCeilings.push(poolCeiling);
     }
 
     /**
