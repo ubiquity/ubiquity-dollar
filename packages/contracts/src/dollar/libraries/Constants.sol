@@ -86,3 +86,6 @@ bytes32 constant PERMIT_TYPEHASH = 0x6e71edae12b1b97f4d1f60370fef10105fa2faae012
 uint256 constant _NOT_ENTERED = 1;
 /// @dev Reentrancy constant
 uint256 constant _ENTERED = 2;
+
+/// @dev Ubiquity pool price precision
+uint256 constant UBIQUITY_POOL_PRICE_PRECISION = 1e6;
