@@ -26,6 +26,7 @@ import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
 import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
+import {UbiquityPoolFacetV2} from "../../src/dollar/facets/UbiquityPoolFacetV2.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
@@ -59,6 +60,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     StakingFormulasFacet stakingFormulasFacet;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
+    UbiquityPoolFacetV2 ubiquityPoolFacetV2;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
     AccessControlFacet accessControlFacetImplementation;
@@ -80,6 +82,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     StakingFormulasFacet stakingFormulasFacetImplementation;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
+    UbiquityPoolFacetV2 ubiquityPoolFacetV2Implementation;
 
     // facet names with addresses
     string[] facetNames;
@@ -112,6 +115,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
+    bytes4[] selectorsOfUbiquityPoolFacetV2;
 
     /// @notice Deploys diamond and connects facets
     function setUp() public virtual {
@@ -180,6 +184,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
             "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
+        selectorsOfUbiquityPoolFacetV2 = getSelectorsFromAbi(
+            "/out/UbiquityPoolFacetV2.sol/UbiquityPoolFacetV2.json"
+        );
 
         // deploy facet implementation instances
         accessControlFacetImplementation = new AccessControlFacet();
@@ -201,6 +208,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         stakingFormulasFacetImplementation = new StakingFormulasFacet();
         twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
+        ubiquityPoolFacetV2Implementation = new UbiquityPoolFacetV2();
 
         // prepare diamond init args
         diamondInit = new DiamondInit();
@@ -223,7 +231,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "StakingFacet",
             "StakingFormulasFacet",
             "TWAPOracleDollar3poolFacet",
-            "UbiquityPoolFacet"
+            "UbiquityPoolFacet",
+            "UbiquityPoolFacetV2"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: admin,
@@ -243,7 +252,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](19);
+        FacetCut[] memory cuts = new FacetCut[](20);
 
         cuts[0] = (
             FacetCut({
@@ -382,6 +391,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfUbiquityPoolFacet
             })
         );
+        cuts[19] = (
+            FacetCut({
+                facetAddress: address(ubiquityPoolFacetV2Implementation),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfUbiquityPoolFacetV2
+            })
+        );
 
         // deploy diamond
         vm.prank(owner);
@@ -413,6 +429,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             address(diamond)
         );
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
+        ubiquityPoolFacetV2 = UbiquityPoolFacetV2(address(diamond));
 
         // get all addresses
         facetAddressList = diamondLoupeFacet.facetAddresses();

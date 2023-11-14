@@ -143,12 +143,10 @@ interface IUbiquityPoolV2 {
      * @notice Adds a new collateral token
      * @param collateralAddress Collateral token address
      * @param poolCeiling Max amount of available tokens for collateral
-     * @param initialFees Array of initial fees, 1_000_000 = 100%, index 0 - mint fee, index 1 - redemption fee
      */
     function addCollateralToken(
         address collateralAddress,
-        uint256 poolCeiling,
-        uint256[] memory initialFees
+        uint256 poolCeiling
     ) external;
 
     /**

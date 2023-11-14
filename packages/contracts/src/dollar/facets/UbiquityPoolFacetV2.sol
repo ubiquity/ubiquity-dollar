@@ -16,10 +16,12 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
     // Views
     //=====================
 
+    /// @inheritdoc IUbiquityPoolV2
     function allCollaterals() external view returns (address[] memory) {
         return LibUbiquityPoolV2.allCollaterals();
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function collateralInformation(
         address collateralAddress
     )
@@ -30,6 +32,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
         return LibUbiquityPoolV2.collateralInformation(collateralAddress);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function collateralUsdBalance()
         external
         view
@@ -38,12 +41,14 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
         return LibUbiquityPoolV2.collateralUsdBalance();
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function freeCollateralBalance(
         uint256 collateralIndex
     ) external view returns (uint256) {
         return LibUbiquityPoolV2.freeCollateralBalance(collateralIndex);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function getDollarInCollateral(
         uint256 collateralIndex,
         uint256 dollarAmount
@@ -55,6 +60,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
             );
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function getDollarPriceUsd()
         external
         view
@@ -67,6 +73,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
     // Public functions
     //====================
 
+    /// @inheritdoc IUbiquityPoolV2
     function mintDollar(
         uint256 collateralIndex,
         uint256 dollarAmount,
@@ -82,6 +89,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
             );
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function redeemDollar(
         uint256 collateralIndex,
         uint256 dollarAmount,
@@ -95,6 +103,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
             );
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function collectRedemption(
         uint256 collateralIndex
     ) external returns (uint256 collateralAmount) {
@@ -105,6 +114,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
     // AMO minters functions
     //=========================
 
+    /// @inheritdoc IUbiquityPoolV2
     function amoMinterBorrow(uint256 collateralAmount) external {
         LibUbiquityPoolV2.amoMinterBorrow(collateralAmount);
     }
@@ -113,26 +123,25 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
     // Restricted functions
     //========================
 
+    /// @inheritdoc IUbiquityPoolV2
     function addAmoMinter(address amoMinterAddress) external onlyAdmin {
         LibUbiquityPoolV2.addAmoMinter(amoMinterAddress);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function addCollateralToken(
         address collateralAddress,
-        uint256 poolCeiling,
-        uint256[] memory initialFees
+        uint256 poolCeiling
     ) external onlyAdmin {
-        LibUbiquityPoolV2.addCollateralToken(
-            collateralAddress,
-            poolCeiling,
-            initialFees
-        );
+        LibUbiquityPoolV2.addCollateralToken(collateralAddress, poolCeiling);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function removeAmoMinter(address amoMinterAddress) external onlyAdmin {
         LibUbiquityPoolV2.removeAmoMinter(amoMinterAddress);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function setCollateralPrice(
         uint256 collateralIndex,
         uint256 newPrice
@@ -140,6 +149,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
         LibUbiquityPoolV2.setCollateralPrice(collateralIndex, newPrice);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function setFees(
         uint256 collateralIndex,
         uint256 newMintFee,
@@ -148,6 +158,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
         LibUbiquityPoolV2.setFees(collateralIndex, newMintFee, newRedeemFee);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function setPoolCeiling(
         uint256 collateralIndex,
         uint256 newCeiling
@@ -155,6 +166,7 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
         LibUbiquityPoolV2.setPoolCeiling(collateralIndex, newCeiling);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function setPriceThresholds(
         uint256 newMintPriceThreshold,
         uint256 newRedeemPriceThreshold
@@ -165,14 +177,17 @@ contract UbiquityPoolFacetV2 is IUbiquityPoolV2, Modifiers {
         );
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function setRedemptionDelay(uint256 newRedemptionDelay) external onlyAdmin {
         LibUbiquityPoolV2.setRedemptionDelay(newRedemptionDelay);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function toggleCollateral(uint256 collateralIndex) external onlyAdmin {
         LibUbiquityPoolV2.toggleCollateral(collateralIndex);
     }
 
+    /// @inheritdoc IUbiquityPoolV2
     function toggleMRB(
         uint256 collateralIndex,
         uint8 toggleIndex

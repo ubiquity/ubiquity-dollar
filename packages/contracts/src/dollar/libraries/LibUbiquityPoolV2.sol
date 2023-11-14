@@ -553,16 +553,17 @@ library LibUbiquityPoolV2 {
      * @notice Adds a new collateral token
      * @param collateralAddress Collateral token address
      * @param poolCeiling Max amount of available tokens for collateral
-     * @param initialFees Array of initial fees, 1_000_000 = 100%, index 0 - mint fee, index 1 - redemption fee
      */
     function addCollateralToken(
         address collateralAddress,
-        uint256 poolCeiling,
-        uint256[] memory initialFees
+        uint256 poolCeiling
     ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         uint256 collateralIndex = poolStorage.collateralAddresses.length;
+
+        // add collateral address to all collaterals
+        poolStorage.collateralAddresses.push(collateralAddress);
 
         // for fast collateral address -> collateral idx lookups later
         poolStorage.collateralAddressToIndex[
@@ -586,9 +587,9 @@ library LibUbiquityPoolV2 {
         // initialize paused prices to $1 as a backup
         poolStorage.collateralPrices.push(UBIQUITY_POOL_PRICE_PRECISION);
 
-        // handle the fees
-        poolStorage.mintingFee.push(initialFees[0]);
-        poolStorage.redemptionFee.push(initialFees[1]);
+        // set fees to 0 by default
+        poolStorage.mintingFee.push(0);
+        poolStorage.redemptionFee.push(0);
 
         // handle the pauses
         poolStorage.mintPaused.push(false);
