@@ -61,7 +61,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
 
         // add collateral token to the pool
-        uint poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
+        uint256 poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
         ubiquityPoolFacet.addCollateralToken(
             address(collateralToken),
             poolCeiling
@@ -185,7 +185,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             100e18 // max collateral to send
         );
 
-        uint balanceTally = ubiquityPoolFacet.collateralUsdBalance();
+        uint256 balanceTally = ubiquityPoolFacet.collateralUsdBalance();
         assertEq(balanceTally, 100e18);
     }
 
@@ -215,19 +215,21 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             90e18 // min collateral out
         );
 
-        uint freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(0);
+        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(
+            0
+        );
         assertEq(freeCollateralAmount, 2.98e18);
     }
 
     function testGetDollarInCollateral_ShouldReturnAmountOfDollarsWhichShouldBeMintedForInputCollateral()
         public
     {
-        uint amount = ubiquityPoolFacet.getDollarInCollateral(0, 100e18);
+        uint256 amount = ubiquityPoolFacet.getDollarInCollateral(0, 100e18);
         assertEq(amount, 100e18);
     }
 
     function testGetDollarPriceUsd_ShouldReturnDollarPriceInUsd() public {
-        uint dollarPriceUsd = ubiquityPoolFacet.getDollarPriceUsd();
+        uint256 dollarPriceUsd = ubiquityPoolFacet.getDollarPriceUsd();
         assertEq(dollarPriceUsd, 1_000_000);
     }
 
@@ -486,7 +488,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(collateralToken.balanceOf(user), 0);
 
         vm.prank(user);
-        uint collateralAmount = ubiquityPoolFacet.collectRedemption(0);
+        uint256 collateralAmount = ubiquityPoolFacet.collectRedemption(0);
         assertEq(collateralAmount, 97.02e18); // $99 - 2% redemption fee
 
         // balances after
@@ -605,7 +607,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             .collateralInformation(address(collateralToken));
         assertEq(info.price, 1_000_000);
 
-        uint newCollateralPrice = 1_100_000;
+        uint256 newCollateralPrice = 1_100_000;
         vm.expectEmit(address(ubiquityPoolFacet));
         emit CollateralPriceSet(0, newCollateralPrice);
         ubiquityPoolFacet.setCollateralPrice(0, newCollateralPrice);
@@ -691,7 +693,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     function testToggleMRB_ShouldToggleMinting() public {
         vm.startPrank(admin);
 
-        uint collateralIndex = 0;
+        uint256 collateralIndex = 0;
         uint8 toggleIndex = 0;
 
         LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
@@ -713,7 +715,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     function testToggleMRB_ShouldToggleRedeeming() public {
         vm.startPrank(admin);
 
-        uint collateralIndex = 0;
+        uint256 collateralIndex = 0;
         uint8 toggleIndex = 1;
 
         LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
@@ -735,7 +737,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     function testToggleMRB_ShouldToggleBorrowingByAmoMinter() public {
         vm.startPrank(admin);
 
-        uint collateralIndex = 0;
+        uint256 collateralIndex = 0;
         uint8 toggleIndex = 2;
 
         LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet

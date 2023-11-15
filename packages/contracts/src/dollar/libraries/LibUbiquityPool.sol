@@ -236,7 +236,7 @@ library LibUbiquityPool {
         returns (uint256 balanceTally)
     {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        uint collateralTokensCount = poolStorage.collateralAddresses.length;
+        uint256 collateralTokensCount = poolStorage.collateralAddresses.length;
         balanceTally = 0;
         for (uint256 i = 0; i < collateralTokensCount; i++) {
             balanceTally += freeCollateralBalance(i)

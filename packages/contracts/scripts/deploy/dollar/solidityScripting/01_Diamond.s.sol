@@ -154,7 +154,7 @@ contract DiamondScript is Constants {
 
         // init UbiquityPool
         // add collateral LUSD token
-        uint poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
+        uint256 poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
         address lusdAddress = 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0;
         UbiquityPoolFacet(address(diamond)).addCollateralToken(
             lusdAddress,
