@@ -151,6 +151,28 @@ contract DiamondScript is Constants {
         IAccessControl = AccessControlFacet(address(diamond));
         StakingFacet IStakingFacet = StakingFacet(address(diamond));
         IStakingFacet.setBlockCountInAWeek(420);
+
+        // init UbiquityPool
+        // add collateral LUSD token
+        uint poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
+        address lusdAddress = 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0;
+        UbiquityPoolFacet(address(diamond)).addCollateralToken(
+            lusdAddress,
+            poolCeiling
+        );
+        // enable collateral at index 0
+        UbiquityPoolFacet(address(diamond)).toggleCollateral(0);
+        // set mint and redeem fees
+        UbiquityPoolFacet(address(diamond)).setFees(
+            0, // collateral index
+            0, // 0% mint fee
+            0 // 0% redeem fee
+        );
+        // set redemption delay to 2 blocks
+        UbiquityPoolFacet(address(diamond)).setRedemptionDelay(2);
+        // set mint price threshold to $1.01 and redeem price to $0.99
+        UbiquityPoolFacet(address(diamond)).setPriceThresholds(1010000, 990000);
+
         vm.stopBroadcast();
     }
 

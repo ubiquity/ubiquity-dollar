@@ -101,23 +101,5 @@ contract DiamondInit is Modifiers {
         // These arguments are used to execute an arbitrary function using delegatecall
         // in order to set state variables in the diamond during deployment or an upgrade
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface
-
-        // init UbiquityPool
-        // add collateral LUSD token
-        uint poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
-        address lusdAddress = 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0;
-        LibUbiquityPool.addCollateralToken(lusdAddress, poolCeiling);
-        // enable collateral at index 0
-        LibUbiquityPool.toggleCollateral(0);
-        // set mint and redeem fees
-        LibUbiquityPool.setFees(
-            0, // collateral index
-            0, // 0% mint fee
-            0 // 0% redeem fee
-        );
-        // set redemption delay to 2 blocks
-        LibUbiquityPool.setRedemptionDelay(2);
-        // set mint price threshold to $1.01 and redeem price to $0.99
-        LibUbiquityPool.setPriceThresholds(1010000, 990000);
     }
 }
