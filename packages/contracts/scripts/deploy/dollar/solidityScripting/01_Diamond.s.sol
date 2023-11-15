@@ -21,6 +21,7 @@ import {CreditNftRedemptionCalculatorFacet} from "../../../../src/dollar/facets/
 import {CreditRedemptionCalculatorFacet} from "../../../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {DollarMintCalculatorFacet} from "../../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../../../src/dollar/facets/DollarMintExcessFacet.sol";
+import {UbiquityPoolFacet} from "../../../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {Diamond, DiamondArgs} from "../../../../src/dollar/Diamond.sol";
 import {DiamondInit} from "../../../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {UbiquityDollarToken} from "../../../../src/dollar/core/UbiquityDollarToken.sol";
@@ -48,6 +49,7 @@ contract DiamondScript is Constants {
     bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
+    bytes4[] selectorsOfUbiquityPoolFacet;
 
     // contract types of facets to be deployed
     Diamond diamond;
@@ -66,6 +68,7 @@ contract DiamondScript is Constants {
     ChefFacet chefFacet;
     StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
+    UbiquityPoolFacet ubiquityPoolFacet;
 
     CreditNftManagerFacet creditNftManagerFacet;
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacet;
@@ -91,6 +94,7 @@ contract DiamondScript is Constants {
         chefFacet = new ChefFacet();
         stakingFacet = new StakingFacet();
         stakingFormulasFacet = new StakingFormulasFacet();
+        ubiquityPoolFacet = new UbiquityPoolFacet();
 
         creditNftManagerFacet = new CreditNftManagerFacet();
         creditNftRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
@@ -117,7 +121,8 @@ contract DiamondScript is Constants {
             "CreditRedemptionCalculatorFacet",
             "DollarMintCalculatorFacet",
             "DollarMintExcessFacet",
-            "CreditClockFacet"
+            "CreditClockFacet",
+            "UbiquityPoolFacet"
         ];
 
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -137,7 +142,7 @@ contract DiamondScript is Constants {
                 initArgs
             )
         });
-        IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](16);
+        IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](17);
         setFacet(cuts);
         // deploy diamond
 
@@ -267,6 +272,13 @@ contract DiamondScript is Constants {
                 functionSelectors: selectorsOfCreditClockFacet
             })
         );
+        cuts[16] = (
+            IDiamondCut.FacetCut({
+                facetAddress: address(ubiquityPoolFacet),
+                action: IDiamondCut.FacetCutAction.Add,
+                functionSelectors: selectorsOfUbiquityPoolFacet
+            })
+        );
     }
 
     function getSelectors() internal {
@@ -318,6 +330,9 @@ contract DiamondScript is Constants {
         );
         selectorsOfTWAPOracleDollar3poolFacet = getSelectorsFromAbi(
             "/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json"
+        );
+        selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
+            "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
     }
 }
