@@ -51,7 +51,6 @@
       - [IERC173](src/dollar/interfaces/IERC173.sol/interface.IERC173.md)
       - [IERC20Ubiquity](src/dollar/interfaces/IERC20Ubiquity.sol/interface.IERC20Ubiquity.md)
       - [IIncentive](src/dollar/interfaces/IIncentive.sol/interface.IIncentive.md)
-      - [IJar](src/dollar/interfaces/IJar.sol/interface.IJar.md)
       - [IMetaPool](src/dollar/interfaces/IMetaPool.sol/interface.IMetaPool.md)
       - [IStableSwap3Pool](src/dollar/interfaces/IStableSwap3Pool.sol/interface.IStableSwap3Pool.md)
       - [IStaking](src/dollar/interfaces/IStaking.sol/interface.IStaking.md)

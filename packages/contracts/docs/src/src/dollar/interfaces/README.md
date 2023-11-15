@@ -18,7 +18,6 @@
 - [IERC173](IERC173.sol/interface.IERC173.md)
 - [IERC20Ubiquity](IERC20Ubiquity.sol/interface.IERC20Ubiquity.md)
 - [IIncentive](IIncentive.sol/interface.IIncentive.md)
-- [IJar](IJar.sol/interface.IJar.md)
 - [IMetaPool](IMetaPool.sol/interface.IMetaPool.md)
 - [IStableSwap3Pool](IStableSwap3Pool.sol/interface.IStableSwap3Pool.md)
 - [IStaking](IStaking.sol/interface.IStaking.md)

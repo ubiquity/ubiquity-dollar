@@ -1,5 +1,5 @@
 # IStakingShare
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7c3a0bb87e5e9b32000b3291b4e7da4b119ff3fa/src/dollar/interfaces/IStakingShare.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/cf74a629a29bca3e8c540cfcb5edbc6c276ee501/src/dollar/interfaces/IStakingShare.sol)
 
 **Inherits:**
 [IERC1155Ubiquity](/src/dollar/interfaces/IERC1155Ubiquity.sol/interface.IERC1155Ubiquity.md)
