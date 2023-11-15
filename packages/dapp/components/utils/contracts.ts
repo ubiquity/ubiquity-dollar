@@ -10,7 +10,6 @@ import _ERC1155Ubiquity from "@ubiquity/contracts/out/ERC1155Ubiquity.sol/ERC115
 import _ICreditNftRedemptionCalculator from "@ubiquity/contracts/out/ICreditNftRedemptionCalculator.sol/ICreditNftRedemptionCalculator.json";
 import _ICreditRedemptionCalculator from "@ubiquity/contracts/out/ICreditRedemptionCalculator.sol/ICreditRedemptionCalculator.json";
 import _ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
-import _IJar from "@ubiquity/contracts/out/IJar.sol/IJar.json";
 import _IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import _SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
 import _Staking from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
@@ -46,7 +45,6 @@ import {
   ERC1155Ubiquity,
   ERC20,
   ICurveFactory,
-  IJar,
   IMetaPool,
   ITWAPOracleDollar3pool,
   IUniswapV2Pair,
@@ -101,10 +99,6 @@ export const getUbiquiStickContract = (address: string, provider: Provider) => {
 
 export const getUbiquiStickSaleContract = (address: string, provider: Provider) => {
   return getContract(_UbiquiStickSale.abi, address, provider) as UbiquiStickSale;
-};
-
-export const getIJarContract = (address: string, provider: Provider) => {
-  return getContract(_IJar.abi, address, provider) as IJar;
 };
 
 export const getCreditNftManagerContract = (address: string, provider: Provider) => {
