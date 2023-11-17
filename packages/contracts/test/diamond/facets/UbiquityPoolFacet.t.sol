@@ -452,7 +452,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         public
     {
         vm.prank(user);
-        vm.expectRevert("Too soon");
+        vm.expectRevert("Too soon to collect redemption");
         ubiquityPoolFacet.collectRedemption(0);
     }
 

@@ -462,7 +462,7 @@ library LibUbiquityPool {
                     poolStorage.redemptionDelay
                 )
             ) <= block.number,
-            "Too soon"
+            "Too soon to collect redemption"
         );
 
         bool sendCollateral = false;
