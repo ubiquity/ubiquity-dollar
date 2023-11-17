@@ -1,13 +1,9 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity 0.8.19;
 
-// Modified from FraxPool.sol by Frax Finance
-// https://github.com/FraxFinance/frax-solidity/blob/master/src/hardhat/contracts/Frax/Pools/FraxPool.sol
-
-import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
+import {IUbiquityPool} from "../interfaces/IUbiquityPool.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
-import {IMetaPool} from "../interfaces/IMetaPool.sol";
-import "../interfaces/IUbiquityPool.sol";
+import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
 
 /**
  * @notice Ubiquity pool facet
@@ -15,85 +11,187 @@ import "../interfaces/IUbiquityPool.sol";
  * - deposit collateral in exchange for Ubiquity Dollars
  * - redeem Ubiquity Dollars in exchange for the earlier provided collateral
  */
-contract UbiquityPoolFacet is Modifiers, IUbiquityPool {
+contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
+    //=====================
+    // Views
+    //=====================
+
+    /// @inheritdoc IUbiquityPool
+    function allCollaterals() external view returns (address[] memory) {
+        return LibUbiquityPool.allCollaterals();
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function collateralInformation(
+        address collateralAddress
+    )
+        external
+        view
+        returns (LibUbiquityPool.CollateralInformation memory returnData)
+    {
+        return LibUbiquityPool.collateralInformation(collateralAddress);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function collateralUsdBalance()
+        external
+        view
+        returns (uint256 balanceTally)
+    {
+        return LibUbiquityPool.collateralUsdBalance();
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function freeCollateralBalance(
+        uint256 collateralIndex
+    ) external view returns (uint256) {
+        return LibUbiquityPool.freeCollateralBalance(collateralIndex);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function getDollarInCollateral(
+        uint256 collateralIndex,
+        uint256 dollarAmount
+    ) external view returns (uint256) {
+        return
+            LibUbiquityPool.getDollarInCollateral(
+                collateralIndex,
+                dollarAmount
+            );
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function getDollarPriceUsd()
+        external
+        view
+        returns (uint256 dollarPriceUsd)
+    {
+        return LibUbiquityPool.getDollarPriceUsd();
+    }
+
+    //====================
+    // Public functions
+    //====================
+
     /// @inheritdoc IUbiquityPool
     function mintDollar(
-        address collateralAddress,
-        uint256 collateralAmount,
-        uint256 dollarOutMin
-    ) external {
-        LibUbiquityPool.mintDollar(
-            collateralAddress,
-            collateralAmount,
-            dollarOutMin
-        );
+        uint256 collateralIndex,
+        uint256 dollarAmount,
+        uint256 dollarOutMin,
+        uint256 maxCollateralIn
+    ) external returns (uint256 totalDollarMint, uint256 collateralNeeded) {
+        return
+            LibUbiquityPool.mintDollar(
+                collateralIndex,
+                dollarAmount,
+                dollarOutMin,
+                maxCollateralIn
+            );
     }
 
     /// @inheritdoc IUbiquityPool
     function redeemDollar(
-        address collateralAddress,
+        uint256 collateralIndex,
         uint256 dollarAmount,
         uint256 collateralOutMin
-    ) external {
-        LibUbiquityPool.redeemDollar(
-            collateralAddress,
-            dollarAmount,
-            collateralOutMin
+    ) external returns (uint256 collateralOut) {
+        return
+            LibUbiquityPool.redeemDollar(
+                collateralIndex,
+                dollarAmount,
+                collateralOutMin
+            );
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function collectRedemption(
+        uint256 collateralIndex
+    ) external returns (uint256 collateralAmount) {
+        return LibUbiquityPool.collectRedemption(collateralIndex);
+    }
+
+    //=========================
+    // AMO minters functions
+    //=========================
+
+    /// @inheritdoc IUbiquityPool
+    function amoMinterBorrow(uint256 collateralAmount) external {
+        LibUbiquityPool.amoMinterBorrow(collateralAmount);
+    }
+
+    //========================
+    // Restricted functions
+    //========================
+
+    /// @inheritdoc IUbiquityPool
+    function addAmoMinter(address amoMinterAddress) external onlyAdmin {
+        LibUbiquityPool.addAmoMinter(amoMinterAddress);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function addCollateralToken(
+        address collateralAddress,
+        uint256 poolCeiling
+    ) external onlyAdmin {
+        LibUbiquityPool.addCollateralToken(collateralAddress, poolCeiling);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function removeAmoMinter(address amoMinterAddress) external onlyAdmin {
+        LibUbiquityPool.removeAmoMinter(amoMinterAddress);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function setCollateralPrice(
+        uint256 collateralIndex,
+        uint256 newPrice
+    ) external onlyAdmin {
+        LibUbiquityPool.setCollateralPrice(collateralIndex, newPrice);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function setFees(
+        uint256 collateralIndex,
+        uint256 newMintFee,
+        uint256 newRedeemFee
+    ) external onlyAdmin {
+        LibUbiquityPool.setFees(collateralIndex, newMintFee, newRedeemFee);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function setPoolCeiling(
+        uint256 collateralIndex,
+        uint256 newCeiling
+    ) external onlyAdmin {
+        LibUbiquityPool.setPoolCeiling(collateralIndex, newCeiling);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function setPriceThresholds(
+        uint256 newMintPriceThreshold,
+        uint256 newRedeemPriceThreshold
+    ) external onlyAdmin {
+        LibUbiquityPool.setPriceThresholds(
+            newMintPriceThreshold,
+            newRedeemPriceThreshold
         );
     }
 
     /// @inheritdoc IUbiquityPool
-    function collectRedemption(address collateralAddress) external {
-        LibUbiquityPool.collectRedemption(collateralAddress);
+    function setRedemptionDelay(uint256 newRedemptionDelay) external onlyAdmin {
+        LibUbiquityPool.setRedemptionDelay(newRedemptionDelay);
     }
 
     /// @inheritdoc IUbiquityPool
-    function addToken(
-        address collateralAddress,
-        IMetaPool collateralMetaPool
+    function toggleCollateral(uint256 collateralIndex) external onlyAdmin {
+        LibUbiquityPool.toggleCollateral(collateralIndex);
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function toggleMRB(
+        uint256 collateralIndex,
+        uint8 toggleIndex
     ) external onlyAdmin {
-        LibUbiquityPool.addToken(collateralAddress, collateralMetaPool);
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function setRedeemActive(
-        address collateralAddress,
-        bool notRedeemPaused
-    ) external onlyAdmin {
-        LibUbiquityPool.setRedeemActive(collateralAddress, notRedeemPaused);
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function getRedeemActive(
-        address _collateralAddress
-    ) external view returns (bool) {
-        return LibUbiquityPool.getRedeemActive(_collateralAddress);
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function setMintActive(
-        address collateralAddress,
-        bool notMintPaused
-    ) external onlyAdmin {
-        LibUbiquityPool.setMintActive(collateralAddress, notMintPaused);
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function getMintActive(
-        address _collateralAddress
-    ) external view returns (bool) {
-        return LibUbiquityPool.getMintActive(_collateralAddress);
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function getRedeemCollateralBalances(
-        address account,
-        address collateralAddress
-    ) external view returns (uint256) {
-        return
-            LibUbiquityPool.getRedeemCollateralBalances(
-                account,
-                collateralAddress
-            );
+        LibUbiquityPool.toggleMRB(collateralIndex, toggleIndex);
     }
 }
