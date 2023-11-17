@@ -1,5 +1,5 @@
 # IUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/cf74a629a29bca3e8c540cfcb5edbc6c276ee501/src/dollar/interfaces/IUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/10739ec9952bac4f588bde7bc4ca191d941f1dc7/src/dollar/interfaces/IUbiquityPool.sol)
 
 Ubiquity pool interface
 
@@ -9,21 +9,143 @@ Allows users to:
 
 
 ## Functions
-### mintDollar
+### allCollaterals
 
-Mints 1 Ubiquity Dollar for every 1 USD of `collateralAddress` token deposited
+Returns all collateral addresses
 
 
 ```solidity
-function mintDollar(address collateralAddress, uint256 collateralAmount, uint256 dollarOutMin) external;
+function allCollaterals() external view returns (address[] memory);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`address[]`|All collateral addresses|
+
+
+### collateralInformation
+
+Returns collateral information
+
+
+```solidity
+function collateralInformation(address collateralAddress)
+    external
+    view
+    returns (LibUbiquityPool.CollateralInformation memory returnData);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`collateralAddress`|`address`|address of collateral token being deposited|
-|`collateralAmount`|`uint256`|amount of collateral tokens being deposited|
-|`dollarOutMin`|`uint256`|minimum amount of Ubiquity Dollars that'll be minted, used to set acceptable slippage|
+|`collateralAddress`|`address`|Address of the collateral token|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`returnData`|`LibUbiquityPool.CollateralInformation`|Collateral info|
+
+
+### collateralUsdBalance
+
+Returns USD value of all collateral tokens held in the pool, in E18
+
+
+```solidity
+function collateralUsdBalance() external view returns (uint256 balanceTally);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`balanceTally`|`uint256`|USD value of all collateral tokens|
+
+
+### freeCollateralBalance
+
+Returns free collateral balance (i.e. that can be borrowed by AMO minters)
+
+
+```solidity
+function freeCollateralBalance(uint256 collateralIndex) external view returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|collateral token index|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|Amount of free collateral|
+
+
+### getDollarInCollateral
+
+Returns Dollar value in collateral tokens
+
+
+```solidity
+function getDollarInCollateral(uint256 collateralIndex, uint256 dollarAmount) external view returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|collateral token index|
+|`dollarAmount`|`uint256`|Amount of Dollars|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|Value in collateral tokens|
+
+
+### getDollarPriceUsd
+
+Returns Ubiquity Dollar token USD price (1e6 precision) from Curve Metapool (Ubiquity Dollar, Curve Tri-Pool LP)
+
+
+```solidity
+function getDollarPriceUsd() external view returns (uint256 dollarPriceUsd);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`dollarPriceUsd`|`uint256`|USD price of Ubiquity Dollar|
+
+
+### mintDollar
+
+Mints Dollars in exchange for collateral tokens
+
+
+```solidity
+function mintDollar(uint256 collateralIndex, uint256 dollarAmount, uint256 dollarOutMin, uint256 maxCollateralIn)
+    external
+    returns (uint256 totalDollarMint, uint256 collateralNeeded);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|Collateral token index|
+|`dollarAmount`|`uint256`|Amount of dollars to mint|
+|`dollarOutMin`|`uint256`|Min amount of dollars to mint (slippage protection)|
+|`maxCollateralIn`|`uint256`|Max amount of collateral to send (slippage protection)|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`totalDollarMint`|`uint256`|Amount of Dollars minted|
+|`collateralNeeded`|`uint256`|Amount of collateral sent to the pool|
 
 
 ### redeemDollar
@@ -40,15 +162,23 @@ Burns redeemable Ubiquity Dollars and sends back 1 USD of collateral token for e
 
 
 ```solidity
-function redeemDollar(address collateralAddress, uint256 dollarAmount, uint256 collateralOutMin) external;
+function redeemDollar(uint256 collateralIndex, uint256 dollarAmount, uint256 collateralOutMin)
+    external
+    returns (uint256 collateralOut);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`collateralAddress`|`address`|address of collateral token being withdrawn|
-|`dollarAmount`|`uint256`|amount of Ubiquity Dollars being burned|
-|`collateralOutMin`|`uint256`|minimum amount of collateral tokens that'll be withdrawn, used to set acceptable slippage|
+|`collateralIndex`|`uint256`|Collateral token index being withdrawn|
+|`dollarAmount`|`uint256`|Amount of Ubiquity Dollars being burned|
+|`collateralOutMin`|`uint256`|Minimum amount of collateral tokens that'll be withdrawn, used to set acceptable slippage|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralOut`|`uint256`|Amount of collateral tokens ready for redemption|
 
 
 ### collectRedemption
@@ -65,132 +195,201 @@ Used to collect collateral tokens after redeeming/burning Ubiquity Dollars
 
 
 ```solidity
-function collectRedemption(address collateralAddress) external;
+function collectRedemption(uint256 collateralIndex) external returns (uint256 collateralAmount);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`collateralAddress`|`address`|address of the collateral token being collected|
-
-
-### addToken
-
-Admin function for whitelisting a token as collateral
-
-
-```solidity
-function addToken(address collateralAddress, IMetaPool collateralMetaPool) external;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`collateralAddress`|`address`|Address of the token being whitelisted|
-|`collateralMetaPool`|`IMetaPool`|3CRV Metapool for the token being whitelisted|
-
-
-### setRedeemActive
-
-Admin function to pause and unpause redemption for a specific collateral token
-
-
-```solidity
-function setRedeemActive(address collateralAddress, bool notRedeemPaused) external;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`collateralAddress`|`address`|Address of the token being affected|
-|`notRedeemPaused`|`bool`|True to turn on redemption for token, false to pause redemption of token|
-
-
-### getRedeemActive
-
-Checks whether redeem is enabled for the `_collateralAddress` token
-
-
-```solidity
-function getRedeemActive(address _collateralAddress) external view returns (bool);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_collateralAddress`|`address`|Token address to check|
+|`collateralIndex`|`uint256`|Collateral token index being collected|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`bool`|Whether redeem is enabled for the `_collateralAddress` token|
+|`collateralAmount`|`uint256`|Amount of collateral tokens redeemed|
 
 
-### setMintActive
+### amoMinterBorrow
 
-Admin function to pause and unpause minting for a specific collateral token
+Allows AMO minters to borrow collateral to make yield in external
+protocols like Compound, Curve, erc...
+
+*Bypasses the gassy mint->redeem cycle for AMOs to borrow collateral*
 
 
 ```solidity
-function setMintActive(address collateralAddress, bool notMintPaused) external;
+function amoMinterBorrow(uint256 collateralAmount) external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`collateralAddress`|`address`|Address of the token being affected|
-|`notMintPaused`|`bool`|True to turn on minting for token, false to pause minting for token|
+|`collateralAmount`|`uint256`|Amount of collateral to borrow|
 
 
-### getMintActive
+### addAmoMinter
 
-Checks whether mint is enabled for the `_collateralAddress` token
+Adds a new AMO minter
 
 
 ```solidity
-function getMintActive(address _collateralAddress) external view returns (bool);
+function addAmoMinter(address amoMinterAddress) external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_collateralAddress`|`address`|Token address to check|
+|`amoMinterAddress`|`address`|AMO minter address|
 
-**Returns**
+
+### addCollateralToken
+
+Adds a new collateral token
+
+
+```solidity
+function addCollateralToken(address collateralAddress, uint256 poolCeiling) external;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`bool`|Whether mint is enabled for the `_collateralAddress` token|
+|`collateralAddress`|`address`|Collateral token address|
+|`poolCeiling`|`uint256`|Max amount of available tokens for collateral|
 
 
-### getRedeemCollateralBalances
+### removeAmoMinter
 
-Returns the amount of collateral ready for collecting after redeeming
+Removes AMO minter
 
-*Redeem process is split in two steps:*
+
+```solidity
+function removeAmoMinter(address amoMinterAddress) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`amoMinterAddress`|`address`|AMO minter address to remove|
+
+
+### setCollateralPrice
+
+Sets collateral token price in USD
+
+
+```solidity
+function setCollateralPrice(uint256 collateralIndex, uint256 newPrice) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|Collateral token index|
+|`newPrice`|`uint256`|New USD price (precision 1e6)|
+
+
+### setFees
+
+Sets mint and redeem fees, 1_000_000 = 100%
+
+
+```solidity
+function setFees(uint256 collateralIndex, uint256 newMintFee, uint256 newRedeemFee) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|Collateral token index|
+|`newMintFee`|`uint256`|New mint fee|
+|`newRedeemFee`|`uint256`|New redeem fee|
+
+
+### setPoolCeiling
+
+Sets max amount of collateral for a particular collateral token
+
+
+```solidity
+function setPoolCeiling(uint256 collateralIndex, uint256 newCeiling) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|Collateral token index|
+|`newCeiling`|`uint256`|Max amount of collateral|
+
+
+### setPriceThresholds
+
+Sets mint and redeem price thresholds, 1_000_000 = $1.00
+
+
+```solidity
+function setPriceThresholds(uint256 newMintPriceThreshold, uint256 newRedeemPriceThreshold) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newMintPriceThreshold`|`uint256`|New mint price threshold|
+|`newRedeemPriceThreshold`|`uint256`|New redeem price threshold|
+
+
+### setRedemptionDelay
+
+Sets a redemption delay in blocks
+
+*Redeeming is split in 2 actions:*
 
 *1. `redeemDollar()`*
 
 *2. `collectRedemption()`*
 
-*This is done in order to prevent someone using a flash loan of a collateral token to mint, redeem, and collect in a single transaction/block*
+*`newRedemptionDelay` sets number of blocks that should be mined after which user can call `collectRedemption()`*
 
 
 ```solidity
-function getRedeemCollateralBalances(address account, address collateralAddress) external view returns (uint256);
+function setRedemptionDelay(uint256 newRedemptionDelay) external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`account`|`address`|Account address for which to check the balance ready to be collected|
-|`collateralAddress`|`address`|Collateral token address|
+|`newRedemptionDelay`|`uint256`|Redemption delay in blocks|
 
-**Returns**
+
+### toggleCollateral
+
+Toggles (i.e. enables/disables) a particular collateral token
+
+
+```solidity
+function toggleCollateral(uint256 collateralIndex) external;
+```
+**Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint256`|Collateral token balance ready to be collected after redeeming|
+|`collateralIndex`|`uint256`|Collateral token index|
+
+
+### toggleMRB
+
+Toggles pause for mint/redeem/borrow methods
+
+
+```solidity
+function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|Collateral token index|
+|`toggleIndex`|`uint8`|Method index. 0 - toggle mint pause, 1 - toggle redeem pause, 2 - toggle borrow by AMO pause|
 
 

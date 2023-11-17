@@ -12,6 +12,7 @@
 - [IDepositZap](IDepositZap.sol/interface.IDepositZap.md)
 - [IDiamondCut](IDiamondCut.sol/interface.IDiamondCut.md)
 - [IDiamondLoupe](IDiamondLoupe.sol/interface.IDiamondLoupe.md)
+- [IDollarAmoMinter](IDollarAmoMinter.sol/interface.IDollarAmoMinter.md)
 - [IDollarMintCalculator](IDollarMintCalculator.sol/interface.IDollarMintCalculator.md)
 - [IDollarMintExcess](IDollarMintExcess.sol/interface.IDollarMintExcess.md)
 - [IERC1155Ubiquity](IERC1155Ubiquity.sol/interface.IERC1155Ubiquity.md)

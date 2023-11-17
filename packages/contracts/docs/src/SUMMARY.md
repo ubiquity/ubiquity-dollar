@@ -45,6 +45,7 @@
       - [IDepositZap](src/dollar/interfaces/IDepositZap.sol/interface.IDepositZap.md)
       - [IDiamondCut](src/dollar/interfaces/IDiamondCut.sol/interface.IDiamondCut.md)
       - [IDiamondLoupe](src/dollar/interfaces/IDiamondLoupe.sol/interface.IDiamondLoupe.md)
+      - [IDollarAmoMinter](src/dollar/interfaces/IDollarAmoMinter.sol/interface.IDollarAmoMinter.md)
       - [IDollarMintCalculator](src/dollar/interfaces/IDollarMintCalculator.sol/interface.IDollarMintCalculator.md)
       - [IDollarMintExcess](src/dollar/interfaces/IDollarMintExcess.sol/interface.IDollarMintExcess.md)
       - [IERC1155Ubiquity](src/dollar/interfaces/IERC1155Ubiquity.sol/interface.IERC1155Ubiquity.md)
