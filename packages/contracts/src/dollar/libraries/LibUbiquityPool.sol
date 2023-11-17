@@ -326,7 +326,7 @@ library LibUbiquityPool {
             "Minting is paused"
         );
 
-        // prevent unneccessary mints
+        // prevent unnecessary mints
         require(
             getDollarPriceUsd() >= poolStorage.mintPriceThreshold,
             "Dollar price too low"
