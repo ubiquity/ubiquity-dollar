@@ -10,6 +10,7 @@ import {IDiamondLoupe} from "../../../../src/dollar/interfaces/IDiamondLoupe.sol
 import {OwnershipFacet} from "../../../../src/dollar/facets/OwnershipFacet.sol";
 import {ManagerFacet} from "../../../../src/dollar/facets/ManagerFacet.sol";
 import {AccessControlFacet} from "../../../../src/dollar/facets/AccessControlFacet.sol";
+import {DirectGovernanceFarmerFacet} from "../../../../src/dollar/facets/DirectGovernanceFarmerFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CollectableDustFacet} from "../../../../src/dollar/facets/CollectableDustFacet.sol";
 import {ChefFacet} from "../../../../src/dollar/facets/ChefFacet.sol";
@@ -42,6 +43,7 @@ contract DiamondScript is Constants {
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
     bytes4[] selectorsOfDiamondCutFacet;
     bytes4[] selectorsOfDiamondLoupeFacet;
+    bytes4[] selectorsOfDirectGovernanceFacet;
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
     bytes4[] selectorsOfManagerFacet;
@@ -74,6 +76,7 @@ contract DiamondScript is Constants {
     CreditNftRedemptionCalculatorFacet creditNftRedemptionCalculatorFacet;
     CreditRedemptionCalculatorFacet creditRedemptionCalculatorFacet;
 
+    DirectGovernanceFarmerFacet directGovernanceFarmerFacet;
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
     CreditClockFacet creditClockFacet;
@@ -100,6 +103,7 @@ contract DiamondScript is Constants {
         creditNftRedemptionCalculatorFacet = new CreditNftRedemptionCalculatorFacet();
         creditRedemptionCalculatorFacet = new CreditRedemptionCalculatorFacet();
 
+        directGovernanceFarmerFacet = new DirectGovernanceFarmerFacet();
         dollarMintCalculatorFacet = new DollarMintCalculatorFacet();
         dollarMintExcessFacet = new DollarMintExcessFacet();
         creditClockFacet = new CreditClockFacet();
@@ -119,6 +123,7 @@ contract DiamondScript is Constants {
             "CreditNftManagerFacet",
             "CreditNftRedemptionCalculatorFacet",
             "CreditRedemptionCalculatorFacet",
+            "DirectGovernanceFarmerFacet",
             "DollarMintCalculatorFacet",
             "DollarMintExcessFacet",
             "CreditClockFacet",
@@ -142,7 +147,7 @@ contract DiamondScript is Constants {
                 initArgs
             )
         });
-        IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](17);
+        IDiamondCut.FacetCut[] memory cuts = new IDiamondCut.FacetCut[](18);
         setFacet(cuts);
         // deploy diamond
 
@@ -301,6 +306,13 @@ contract DiamondScript is Constants {
                 functionSelectors: selectorsOfUbiquityPoolFacet
             })
         );
+        cuts[17] = (
+            IDiamondCut.FacetCut({
+                facetAddress: address(directGovernanceFarmerFacet),
+                action: IDiamondCut.FacetCutAction.Add,
+                functionSelectors: selectorsOfDirectGovernanceFacet
+            })
+        );
     }
 
     function getSelectors() internal {
@@ -325,6 +337,9 @@ contract DiamondScript is Constants {
         );
         selectorsOfCreditRedemptionCalculatorFacet = getSelectorsFromAbi(
             "/out/CreditRedemptionCalculatorFacet.sol/CreditRedemptionCalculatorFacet.json"
+        );
+        selectorsOfDirectGovernanceFarmerFacet = getSelectorsFromAbi(
+            "/out/DirectGovernanceFarmerFacet.sol/DirectGovernanceFarmerFacet.json"
         );
         selectorsOfDiamondCutFacet = getSelectorsFromAbi(
             "/out/DiamondCutFacet.sol/DiamondCutFacet.json"
