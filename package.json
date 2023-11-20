@@ -52,7 +52,7 @@
       "cspell --no-must-find-files"
     ],
     "*.sol": [
-      "prettier --write",
+      "prettier --plugin=prettier-plugin-solidity --write",
       "cspell --no-must-find-files"
     ]
   },
