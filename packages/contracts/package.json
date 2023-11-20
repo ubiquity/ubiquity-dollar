@@ -34,6 +34,7 @@
     "clean:forge": "forge clean",
     "build": "forge build",
     "forge:install": "forge install",
+    "format": "prettier --plugin=prettier-plugin-solidity src/**/*.sol test/**/*.sol --write",
     "docs": "FOUNDRY_PROFILE=docs forge doc --build",
     "_hardhat-task": "tsx ./scripts/task/task.ts"
   },
