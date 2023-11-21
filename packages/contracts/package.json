@@ -34,6 +34,7 @@
     "clean:forge": "forge clean",
     "build": "forge build",
     "forge:install": "forge install",
+    "format": "prettier --plugin=prettier-plugin-solidity src/**/*.sol test/**/*.sol --write",
     "docs": "FOUNDRY_PROFILE=docs forge doc --build",
     "_hardhat-task": "tsx ./scripts/task/task.ts"
   },
@@ -67,7 +68,8 @@
     "@types/react-transition-group": "^4",
     "cspell": "latest",
     "glob": "^10.3.0",
-    "prettier-plugin-solidity": "^1.1.2",
+    "prettier": "^3.1.0",
+    "prettier-plugin-solidity": "^1.2.0",
     "typescript": "^4.9.4"
   }
 }
