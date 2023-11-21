@@ -1,5 +1,5 @@
 # IUbiquityChef
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/10739ec9952bac4f588bde7bc4ca191d941f1dc7/src/dollar/interfaces/IUbiquityChef.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f091cd4ba5dd663d35be00c9fd51b8d69e991a45/src/dollar/interfaces/IUbiquityChef.sol)
 
 Interface for staking Dollar-3CRV LP tokens for Governance tokens reward
 
