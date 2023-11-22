@@ -104,32 +104,25 @@ library LibDirectGovernanceFarmer {
      * called at the end of a `safeTransferFrom` after the balance has been updated.
      *
      * NOTE: To accept the transfer, this must return
-     * `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
-     * (i.e. 0xf23a6e61, or its own function selector).
+     * `bytes4(keccak256("onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"))`
+     * (i.e. 0x7abeba72, or its own function selector).
      *
-     * @param operator The address which initiated the transfer (i.e. msg.sender)
-     * @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
+     * @return `bytes4(keccak256("onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"))` if transfer is allowed
      */
-    /*function onERC1155Received(
-        address operator,
+    function onERC1155ReceivedDirectGovernance(
+        address,
         address,
         uint256,
         uint256,
         bytes calldata
-    ) internal view returns (bytes4) {
-        if (LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, operator)) {
-            //allow the transfer since it originated from this contract
-            return
-                bytes4(
-                    keccak256(
-                        "onERC1155Received(address,address,uint256,uint256,bytes)"
-                    )
-                );
-        } else {
-            //reject the transfer
-            return "";
-        }
-    }*/
+    ) internal pure returns (bytes4) {
+        return
+            bytes4(
+                keccak256(
+                    "onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"
+                )
+            );
+    }
 
     /**
      * @notice Deposits a single token to staking
