@@ -24,7 +24,7 @@
     "lint-staged": "^13.0.3",
     "nodemon": "^2.0.19",
     "prettier": "2.8.8",
-    "prettier-plugin-solidity": "1.1.3",
+    "prettier-plugin-solidity": "^1.2.0",
     "rimraf": "3.0.2",
     "yarn-audit-fix": "^9.3.7"
   },
@@ -34,7 +34,7 @@
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
     "test:all": "yarn workspace @ubiquity/contracts run test:unit",
     "coverage": "yarn workspace @ubiquity/contracts run test:coverage",
-    "format:all": "prettier packages/ --write",
+    "format:all": "yarn workspaces foreach run format",
     "clean:all": "yarn workspaces foreach run clean && rimraf node_modules",
     "lint:all": "yarn workspaces foreach run lint",
     "build:ci:netlify": "yarn build:all",
@@ -52,7 +52,7 @@
       "cspell --no-must-find-files"
     ],
     "*.sol": [
-      "prettier --write",
+      "prettier --plugin=prettier-plugin-solidity --write",
       "cspell --no-must-find-files"
     ]
   },

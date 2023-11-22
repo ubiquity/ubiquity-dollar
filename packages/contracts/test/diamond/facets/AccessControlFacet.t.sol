@@ -112,4 +112,27 @@ contract AccessControlFacetTest is DiamondTestSetup {
         );
         accessControlFacet.renounceRole(GOVERNANCE_TOKEN_BURNER_ROLE);
     }
+
+    // test hasRole function should return true if role is granted
+    function testHasRole_ShouldReturnTrue() public {
+        vm.prank(admin);
+        accessControlFacet.grantRole(
+            GOVERNANCE_TOKEN_BURNER_ROLE,
+            mock_recipient
+        );
+        assertTrue(
+            accessControlFacet.hasRole(
+                GOVERNANCE_TOKEN_BURNER_ROLE,
+                mock_recipient
+            )
+        );
+    }
+
+    // test getRoleAdmin function should return correct admin role
+    function testGetRoleAdmin_ShouldReturnAdminRole() public {
+        bytes32 adminRole = accessControlFacet.getRoleAdmin(
+            GOVERNANCE_TOKEN_BURNER_ROLE
+        );
+        assertEq(adminRole, DEFAULT_ADMIN_ROLE);
+    }
 }
