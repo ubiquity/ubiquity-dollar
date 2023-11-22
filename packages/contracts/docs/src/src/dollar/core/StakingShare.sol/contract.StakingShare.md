@@ -1,5 +1,5 @@
 # StakingShare
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f091cd4ba5dd663d35be00c9fd51b8d69e991a45/src/dollar/core/StakingShare.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ffeaddd1fd1406665ab0a20ce038bfd2170d6f36/src/dollar/core/StakingShare.sol)
 
 **Inherits:**
 [ERC1155Ubiquity](/src/dollar/core/ERC1155Ubiquity.sol/abstract.ERC1155Ubiquity.md), ERC1155URIStorageUpgradeable
