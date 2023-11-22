@@ -76,13 +76,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     DiamondLoupeFacet diamondLoupeFacetImplementation;
     DollarMintCalculatorFacet dollarMintCalculatorFacetImplementation;
     DollarMintExcessFacet dollarMintExcessFacetImplementation;
+    DirectGovernanceFarmerFacet directGovernanceFarmerFacetImplementation;
     ManagerFacet managerFacetImplementation;
     OwnershipFacet ownershipFacetImplementation;
     StakingFacet stakingFacetImplementation;
     StakingFormulasFacet stakingFormulasFacetImplementation;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
-    DirectGovernanceFarmerFacet directGovernanceFarmerFacetImplementation;
 
     // facet names with addresses
     string[] facetNames;
@@ -160,14 +160,14 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfDiamondLoupeFacet = getSelectorsFromAbi(
             "/out/DiamondLoupeFacet.sol/DiamondLoupeFacet.json"
         );
-        selectorsOfDirectGovernanceFarmerFacet = getSelectorsFromAbi(
-            "/out/DirectGovernanceFarmerFacet.sol/DirectGovernanceFarmerFacet.json"
-        );
         selectorsOfDollarMintCalculatorFacet = getSelectorsFromAbi(
             "/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json"
         );
         selectorsOfDollarMintExcessFacet = getSelectorsFromAbi(
             "/out/DollarMintExcessFacet.sol/DollarMintExcessFacet.json"
+        );
+        selectorsOfDirectGovernanceFarmerFacet = getSelectorsFromAbi(
+            "/out/DirectGovernanceFarmerFacet.sol/DirectGovernanceFarmerFacet.json"
         );
         selectorsOfManagerFacet = getSelectorsFromAbi(
             "/out/ManagerFacet.sol/ManagerFacet.json"
@@ -202,13 +202,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         diamondLoupeFacetImplementation = new DiamondLoupeFacet();
         dollarMintCalculatorFacetImplementation = new DollarMintCalculatorFacet();
         dollarMintExcessFacetImplementation = new DollarMintExcessFacet();
+        directGovernanceFarmerFacetImplementation = new DirectGovernanceFarmerFacet();
         managerFacetImplementation = new ManagerFacet();
         ownershipFacetImplementation = new OwnershipFacet();
         stakingFacetImplementation = new StakingFacet();
         stakingFormulasFacetImplementation = new StakingFormulasFacet();
         twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
-        directGovernanceFarmerFacetImplementation = new DirectGovernanceFarmerFacet();
 
         // prepare diamond init args
         diamondInit = new DiamondInit();
@@ -351,53 +351,53 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         cuts[13] = (
             FacetCut({
+                facetAddress: address(
+                    directGovernanceFarmerFacetImplementation
+                ),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfDirectGovernanceFarmerFacet
+            })
+        );
+        cuts[14] = (
+            FacetCut({
                 facetAddress: address(managerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfManagerFacet
             })
         );
-        cuts[14] = (
+        cuts[15] = (
             FacetCut({
                 facetAddress: address(ownershipFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfOwnershipFacet
             })
         );
-        cuts[15] = (
+        cuts[16] = (
             FacetCut({
                 facetAddress: address(stakingFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfStakingFacet
             })
         );
-        cuts[16] = (
+        cuts[17] = (
             FacetCut({
                 facetAddress: address(stakingFormulasFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfStakingFormulasFacet
             })
         );
-        cuts[17] = (
+        cuts[18] = (
             FacetCut({
                 facetAddress: address(twapOracleDollar3PoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
             })
         );
-        cuts[18] = (
+        cuts[19] = (
             FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfUbiquityPoolFacet
-            })
-        );
-        cuts[19] = (
-            FacetCut({
-                facetAddress: address(
-                    directGovernanceFarmerFacetImplementation
-                ),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfDirectGovernanceFarmerFacet
             })
         );
 
