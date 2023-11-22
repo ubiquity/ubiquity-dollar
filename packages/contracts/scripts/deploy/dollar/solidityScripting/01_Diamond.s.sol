@@ -43,7 +43,7 @@ contract DiamondScript is Constants {
     bytes4[] selectorsOfCreditRedemptionCalculatorFacet;
     bytes4[] selectorsOfDiamondCutFacet;
     bytes4[] selectorsOfDiamondLoupeFacet;
-    bytes4[] selectorsOfDirectGovernanceFacet;
+    bytes4[] selectorsOfDirectGovernanceFarmerFacet;
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
     bytes4[] selectorsOfManagerFacet;
@@ -310,7 +310,7 @@ contract DiamondScript is Constants {
             IDiamondCut.FacetCut({
                 facetAddress: address(directGovernanceFarmerFacet),
                 action: IDiamondCut.FacetCutAction.Add,
-                functionSelectors: selectorsOfDirectGovernanceFacet
+                functionSelectors: selectorsOfDirectGovernanceFarmerFacet
             })
         );
     }

@@ -20,6 +20,7 @@ import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
 import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
+import {DirectGovernanceFarmerFacet} from "../../src/dollar/facets/DirectGovernanceFarmerFacet.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
 import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
@@ -53,6 +54,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     DiamondLoupeFacet diamondLoupeFacet;
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
+    DirectGovernanceFarmerFacet directGovernanceFarmerFacet;
     ManagerFacet managerFacet;
     OwnershipFacet ownershipFacet;
     StakingFacet stakingFacet;
@@ -80,6 +82,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     StakingFormulasFacet stakingFormulasFacetImplementation;
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
+    DirectGovernanceFarmerFacet directGovernanceFarmerFacetImplementation;
 
     // facet names with addresses
     string[] facetNames;
@@ -106,6 +109,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
+    bytes4[] selectorsOfDirectGovernanceFacet;
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfOwnershipFacet;
     bytes4[] selectorsOfStakingFacet;
@@ -156,6 +160,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfDiamondLoupeFacet = getSelectorsFromAbi(
             "/out/DiamondLoupeFacet.sol/DiamondLoupeFacet.json"
         );
+        selectorsOfDirectGovernanceFacet = getSelectorsFromAbi(
+            "/out/DirectGovernanceFarmerFacet.sol/DirectGovernanceFarmerFacet.json"
+        );
         selectorsOfDollarMintCalculatorFacet = getSelectorsFromAbi(
             "/out/DollarMintCalculatorFacet.sol/DollarMintCalculatorFacet.json"
         );
@@ -201,6 +208,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         stakingFormulasFacetImplementation = new StakingFormulasFacet();
         twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
+        directGovernanceFarmerFacetImplementation = new DirectGovernanceFarmerFacet();
 
         // prepare diamond init args
         diamondInit = new DiamondInit();
@@ -218,6 +226,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "DiamondLoupeFacet",
             "DollarMintCalculatorFacet",
             "DollarMintExcessFacet",
+            "DirectGovernanceFarmerFacet",
             "ManagerFacet",
             "OwnershipFacet",
             "StakingFacet",
@@ -243,7 +252,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](19);
+        FacetCut[] memory cuts = new FacetCut[](20);
 
         cuts[0] = (
             FacetCut({
@@ -382,6 +391,15 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfUbiquityPoolFacet
             })
         );
+        cuts[19] = (
+            FacetCut({
+                facetAddress: address(
+                    directGovernanceFarmerFacetImplementation
+                ),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfDirectGovernanceFacet
+            })
+        );
 
         // deploy diamond
         vm.prank(owner);
@@ -405,6 +423,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         diamondLoupeFacet = DiamondLoupeFacet(address(diamond));
         dollarMintCalculatorFacet = DollarMintCalculatorFacet(address(diamond));
         dollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
+        directGovernanceFarmerFacet = DirectGovernanceFarmerFacet(
+            address(diamond)
+        );
         managerFacet = ManagerFacet(address(diamond));
         ownershipFacet = OwnershipFacet(address(diamond));
         stakingFacet = StakingFacet(address(diamond));
