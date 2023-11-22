@@ -29,6 +29,7 @@
     "start:anvil": "tsx ./scripts/anvil/anvil.ts",
     "prebuild": "run-p clean",
     "deploy:development": "tsx ./scripts/deploy/dollar/development-deploy.ts",
+    "deploy:mainnet": "migrations/mainnet/deploy.sh",
     "clean": "run-p clean:*",
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",
