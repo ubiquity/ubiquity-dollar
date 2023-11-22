@@ -109,7 +109,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
-    bytes4[] selectorsOfDirectGovernanceFacet;
+    bytes4[] selectorsOfDirectGovernanceFarmerFacet;
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfOwnershipFacet;
     bytes4[] selectorsOfStakingFacet;
@@ -160,7 +160,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfDiamondLoupeFacet = getSelectorsFromAbi(
             "/out/DiamondLoupeFacet.sol/DiamondLoupeFacet.json"
         );
-        selectorsOfDirectGovernanceFacet = getSelectorsFromAbi(
+        selectorsOfDirectGovernanceFarmerFacet = getSelectorsFromAbi(
             "/out/DirectGovernanceFarmerFacet.sol/DirectGovernanceFarmerFacet.json"
         );
         selectorsOfDollarMintCalculatorFacet = getSelectorsFromAbi(
@@ -397,7 +397,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                     directGovernanceFarmerFacetImplementation
                 ),
                 action: FacetCutAction.Add,
-                functionSelectors: selectorsOfDirectGovernanceFacet
+                functionSelectors: selectorsOfDirectGovernanceFarmerFacet
             })
         );
 
