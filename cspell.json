@@ -11,7 +11,8 @@
     "**/cspell.json",
     "**/node_modules/**",
     "packages/contracts/src/old/*",
-    "packages/contracts/migrations/development/Deploy002_Governance.s.sol"
+    "packages/contracts/migrations/development/Deploy002_Governance.s.sol",
+    "packages/contracts/migrations/mainnet/Deploy002_Governance.s.sol"
   ],
   "readonly": true,
   "useGitignore": true,
