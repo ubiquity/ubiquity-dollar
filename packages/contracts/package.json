@@ -30,6 +30,7 @@
     "prebuild": "run-p clean",
     "deploy:development": "tsx ./scripts/deploy/dollar/development-deploy.ts",
     "deploy:mainnet": "migrations/mainnet/deploy.sh",
+    "deploy:testnet": "migrations/testnet/deploy.sh",
     "clean": "run-p clean:*",
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",
