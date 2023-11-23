@@ -1,6 +1,18 @@
 {
   "version": "0.2",
-  "ignorePaths": ["**/*.json", "**/*.log", "**/*.svg", "**/*.lock", "**/lib/*", "**/interfaces/*", "**/dist/*", "**/cspell.json", "**/node_modules/**"],
+  "ignorePaths": [
+    "**/*.json",
+    "**/*.log",
+    "**/*.svg",
+    "**/*.lock",
+    "**/lib/*",
+    "**/interfaces/*",
+    "**/dist/*",
+    "**/cspell.json",
+    "**/node_modules/**",
+    "packages/contracts/src/old/*",
+    "packages/contracts/migrations/testnet/Deploy002_Governance.s.sol"
+  ],
   "readonly": true,
   "useGitignore": true,
   "enableFiletypes": ["solidity"],
