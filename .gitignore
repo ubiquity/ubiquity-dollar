@@ -51,8 +51,15 @@ contracts/dollar/tasks/library/distributor/fixtures/operators.json
 fixtures/abi/types/
 dist/
 fixtures/contracts-addresses/*
+
+# Ignore all transaction logs except:
+# - latest development log
+# - mainnet logs
+# - sepolia testnet logs
 packages/contracts/broadcast/*/*/*
 !packages/contracts/broadcast/**/run-latest.json
+!packages/contracts/broadcast/**/1/*
+!packages/contracts/broadcast/**/11155111/*
 
 .yarn
 .yarn/*
