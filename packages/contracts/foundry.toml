@@ -1,5 +1,5 @@
 [profile.default]
-src = 'src'
+src = 'src/dollar'
 test = 'test'
 out = 'out'
 libs = ['lib']
