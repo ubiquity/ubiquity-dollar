@@ -18,5 +18,8 @@ jobs:
         with:
           node-version: "18.14.1"
 
+      - name: Install dependencies
+        run: yarn install
+
       - name: Audit
-        run: yes | npx yarn-audit-fix
+        run: yes | yarn yarn-audit-fix
