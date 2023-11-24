@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 import "./interfaces/IUbiquityAlgorithmicDollar.sol";
-import "./interfaces/ICurveFactory.sol";
-import "./interfaces/IMetaPool.sol";
+import "../dollar/interfaces/ICurveFactory.sol";
+import "../dollar/interfaces/IMetaPool.sol";
 
 import "./TWAPOracle.sol";
 
