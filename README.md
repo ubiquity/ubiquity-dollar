@@ -21,11 +21,12 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 
 git clone https://github.com/ubiquity/ubiquity-dollar.git
 cd ubiquity-dollar/
-yarn
+yarn # fetch dependencies
 yarn build:all # builds the smart contracts and user interface
-yarn start & # starts the user interface and daemonize'd to continue to run tests in the background
+yarn start # starts the user interface and daemonize'd to continue to run tests in the background
 yarn test:all
 ```
+
 ## Running workspace specific commands
 Utilizing yarn workspaces, you can invoke scripts for each workspace individually.
 ```sh
@@ -63,7 +64,7 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 In two separate terminals run the following commands:
 
 ```sh
-yarn workspace @ubiquity/contracts start:anvil # starts the anvil testnet
+yarn workspace @ubiquity/contracts start:anvil # starts the anvil forked mainnet network
 ```
 
 ```sh
