@@ -2,8 +2,8 @@
 pragma solidity 0.8.19;
 
 import {Script} from "forge-std/Script.sol";
-import {UbiquityAlgorithmicDollarManager} from "../../src/old/UbiquityAlgorithmicDollarManager.sol";
-import {UbiquityGovernance} from "../../src/old/UbiquityGovernance.sol";
+import {UbiquityAlgorithmicDollarManager} from "../../src/deprecated/UbiquityAlgorithmicDollarManager.sol";
+import {UbiquityGovernance} from "../../src/deprecated/UbiquityGovernance.sol";
 
 /// @notice Migration contract
 /// @dev This migration is used only for reference that we use already deployed

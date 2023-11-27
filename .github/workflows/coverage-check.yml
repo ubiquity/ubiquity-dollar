@@ -53,7 +53,7 @@ jobs:
                   "*scripts*" \
                   "src/dollar/mocks/*" \
                   "src/dollar/utils/*" \
-                  "src/old/*" \
+                  "src/deprecated/*" \
                   "test/*" \
 
           # Generate summary
@@ -93,7 +93,7 @@ jobs:
                   "*scripts*" \
                   "src/dollar/mocks/*" \
                   "src/dollar/utils/*" \
-                  "src/old/*" \
+                  "src/deprecated/*" \
                   "test/*" \
 
           # Generate summary
