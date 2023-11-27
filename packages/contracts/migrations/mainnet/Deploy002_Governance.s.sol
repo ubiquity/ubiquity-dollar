@@ -14,12 +14,12 @@ contract Deploy002_Governance is Script {
     UbiquityGovernance ubiquityGovernance;
 
     function run() public virtual {
-        // use already deployed UbiquityAlgorithmicDollarManager
+        // using already deployed (on mainnet) UbiquityAlgorithmicDollarManager
         ubiquityAlgorithmicDollarManager = UbiquityAlgorithmicDollarManager(
             0x4DA97a8b831C345dBe6d16FF7432DF2b7b776d98
         );
 
-        // use already deployed Governance token
+        // using already deployed (on mainnet) Governance token
         ubiquityGovernance = UbiquityGovernance(
             0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0
         );
