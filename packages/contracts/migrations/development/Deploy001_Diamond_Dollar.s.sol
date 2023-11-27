@@ -65,7 +65,29 @@ contract DiamondInit is Modifiers {
     }
 }
 
-/// @notice Migration contract
+/**
+ * @notice Migration contract
+ * @dev Initial production migration includes the following contracts:
+ * - Dollar token
+ * - Governance token (already deployed https://etherscan.io/address/0x4e38D89362f7e5db0096CE44ebD021c3962aA9a0)
+ * - UbiquityPool (which is a facet of the Diamond contract)
+ *
+ * So we're deploying only contracts and facets necessary for features
+ * connected with the contracts above. Hence we omit the following facets
+ * from deployment:
+ * - BondingCurveFacet (used for UbiquiStick NFT, "on hold" now)
+ * - ChefFacet (staking is not a part of the initial deployment)
+ * - CollectableDustFacet (could be useful but not a must now)
+ * - CreditClockFacet (used for CreditNft which is not a part of the initial deployment)
+ * - CreditNftManagerFacet (used for CreditNft which is not a part of the initial deployment)
+ * - CreditNftRedemptionCalculatorFacet (used for CreditNft which is not a part of the initial deployment)
+ * - CreditRedemptionCalculatorFacet (used for Credit token which is not a part of the initial deployment)
+ * - CurveDollarIncentiveFacet (deprecated)
+ * - DollarMintCalculatorFacet (used for Dollar/Credit mint/burn mechanism which is not a part of the initial deployment)
+ * - DollarMintExcessFacet (used for Dollar/Credit mint/burn mechanism which is not a part of the initial deployment)
+ * - StakingFacet (staking is not a part of the initial deployment)
+ * - StakingFormulasFacet (staking is not a part of the initial deployment)
+ */
 contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     // Dollar related contracts
     UbiquityDollarToken public dollarToken;
