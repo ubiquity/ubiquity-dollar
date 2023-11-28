@@ -18,6 +18,7 @@
 - [LibCurveDollarIncentive](LibCurveDollarIncentive.sol/library.LibCurveDollarIncentive.md)
 - [InitializationFunctionReverted](LibDiamond.sol/error.InitializationFunctionReverted.md)
 - [LibDiamond](LibDiamond.sol/library.LibDiamond.md)
+- [LibDirectGovernanceFarmer](LibDirectGovernanceFarmer.sol/library.LibDirectGovernanceFarmer.md)
 - [LibDollarMintCalculator](LibDollarMintCalculator.sol/library.LibDollarMintCalculator.md)
 - [LibDollarMintExcess](LibDollarMintExcess.sol/library.LibDollarMintExcess.md)
 - [LibStaking](LibStaking.sol/library.LibStaking.md)
