@@ -100,31 +100,6 @@ library LibDirectGovernanceFarmer {
     }
 
     /**
-     * @notice Handles the receipt of a single ERC1155 token type. This function is
-     * called at the end of a `safeTransferFrom` after the balance has been updated.
-     *
-     * NOTE: To accept the transfer, this must return
-     * `bytes4(keccak256("onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"))`
-     * (i.e. 0x7abeba72, or its own function selector).
-     *
-     * @return `bytes4(keccak256("onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"))` if transfer is allowed
-     */
-    function onERC1155ReceivedDirectGovernance(
-        address,
-        address,
-        uint256,
-        uint256,
-        bytes calldata
-    ) internal pure returns (bytes4) {
-        return
-            bytes4(
-                keccak256(
-                    "onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"
-                )
-            );
-    }
-
-    /**
      * @notice Deposits a single token to staking
      * @notice Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => Dollar-3CRV LP => Ubiquity Staking
      * @notice How it works:

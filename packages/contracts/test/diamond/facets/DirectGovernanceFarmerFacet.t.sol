@@ -108,27 +108,6 @@ contract DirectGovernanceFarmerFacetTest is DiamondTestSetup {
         dollar.mint(user1, 100e18);
     }
 
-    function testOnERC1155Received_ShouldReturnSelector() public {
-        vm.prank(admin);
-        address stakingShareAddress = address(0x101);
-        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
-            stakingShareAddress
-        );
-        directGovernanceFarmerFacet.onERC1155ReceivedDirectGovernance.selector;
-        assertEq(
-            directGovernanceFarmerFacet.onERC1155ReceivedDirectGovernance(
-                address(stakingShareAddress),
-                address(stakingShareAddress),
-                3,
-                4,
-                ""
-            ),
-            directGovernanceFarmerFacet
-                .onERC1155ReceivedDirectGovernance
-                .selector
-        );
-    }
-
     function testDeposit_ShouldRevert_IfAmountIsNotPositive() public {
         address userAddress = address(0x100);
         vm.prank(userAddress);

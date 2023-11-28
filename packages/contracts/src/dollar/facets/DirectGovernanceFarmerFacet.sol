@@ -43,34 +43,6 @@ contract DirectGovernanceFarmerFacet is Modifiers {
         );
     }
 
-    /**
-     * @notice Handles the receipt of a single ERC1155 token type. This function is
-     * called at the end of a `safeTransferFrom` after the balance has been updated.
-     *
-     * NOTE: To accept the transfer, this must return
-     * `bytes4(keccak256("onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"))`
-     * (i.e. 0x7abeba72, or its own function selector).
-     *
-     * @return `bytes4(keccak256("onERC1155ReceivedDirectGovernance(address,address,uint256,uint256,bytes)"))` if transfer is allowed
-     */
-
-    function onERC1155ReceivedDirectGovernance(
-        address operator,
-        address from,
-        uint256 id,
-        uint256 value,
-        bytes calldata data
-    ) external pure returns (bytes4) {
-        return
-            LibDirectGovernanceFarmer.onERC1155ReceivedDirectGovernance(
-                operator,
-                from,
-                id,
-                value,
-                data
-            );
-    }
-
     //====================
     // Public/User functions
     //====================
