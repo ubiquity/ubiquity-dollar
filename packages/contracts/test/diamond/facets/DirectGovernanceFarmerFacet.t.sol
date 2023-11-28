@@ -614,30 +614,105 @@ contract DirectGovernanceFarmerFacetTest is DiamondTestSetup {
 
     // END Multiple
 
-    /*function testIsIdIncludedReturnTrueIfIdIsInTheList() public {
-        // deploy contract with exposed internal methods
-        DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                IUbiquityDollarManager(address(managerFacet)),
-                base3PoolAddress,
-                depositZapAddress
-            );
+    function testIsIdIncludedReturnTrueIfIdIsInTheList() public {
+        address userAddress = address(0x100);
+        address stakingAddress = address(0x101);
+        address stakingShareAddress = address(0x102);
+
+        // admin sets staking and staking share addresses
+        vm.startPrank(admin);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+            stakingAddress
+        );
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+            stakingShareAddress
+        );
+        vm.stopPrank();
+
+        vm.startPrank(userAddress);
+        token0.mint(userAddress, 100e18);
+        token0.approve(address(directGovernanceFarmerFacet), 100e18);
+
+        // prepare mocks for deposit
+        vm.mockCall(
+            depositZapAddress,
+            abi.encodeWithSelector(IDepositZap.add_liquidity.selector),
+            abi.encode(100e18)
+        );
+        vm.mockCall(
+            stakingAddress,
+            abi.encodeWithSelector(IStaking.deposit.selector),
+            abi.encode(1)
+        );
+        vm.mockCall(
+            stakingShareAddress,
+            abi.encodeWithSignature(
+                "safeTransferFrom(address,address,uint256,uint256,bytes)",
+                address(directGovernanceFarmerFacet),
+                userAddress,
+                1,
+                1,
+                "0x"
+            ),
+            ""
+        );
+
+        directGovernanceFarmerFacet.depositSingle(address(token0), 1, 1);
+        vm.stopPrank();
         // run assertions
         uint256[] memory list = new uint256[](1);
         list[0] = 1;
-        assertTrue(directGovernanceFarmerHarness.exposed_isIdIncluded(list, 1));
+        assertTrue(directGovernanceFarmerFacet.isIdIncluded(list, 1));
     }
 
     function testIsIdIncludedReturnFalseIfIdIsNotInTheList() public {
-        // deploy contract with exposed internal methods
-        DirectGovernanceFarmerHarness directGovernanceFarmerHarness = new DirectGovernanceFarmerHarness(
-                IUbiquityDollarManager(address(managerFacet)),
-                base3PoolAddress,
-                depositZapAddress
-            );
+        address userAddress = address(0x100);
+        address stakingAddress = address(0x101);
+        address stakingShareAddress = address(0x102);
+
+        // admin sets staking and staking share addresses
+        vm.startPrank(admin);
+        IUbiquityDollarManager(dollarManagerAddress).setStakingContractAddress(
+            stakingAddress
+        );
+        IUbiquityDollarManager(dollarManagerAddress).setStakingShareAddress(
+            stakingShareAddress
+        );
+        vm.stopPrank();
+
+        vm.startPrank(userAddress);
+        token0.mint(userAddress, 100e18);
+        token0.approve(address(directGovernanceFarmerFacet), 100e18);
+
+        // prepare mocks for deposit
+        vm.mockCall(
+            depositZapAddress,
+            abi.encodeWithSelector(IDepositZap.add_liquidity.selector),
+            abi.encode(100e18)
+        );
+        vm.mockCall(
+            stakingAddress,
+            abi.encodeWithSelector(IStaking.deposit.selector),
+            abi.encode(1)
+        );
+        vm.mockCall(
+            stakingShareAddress,
+            abi.encodeWithSignature(
+                "safeTransferFrom(address,address,uint256,uint256,bytes)",
+                address(directGovernanceFarmerFacet),
+                userAddress,
+                1,
+                1,
+                "0x"
+            ),
+            ""
+        );
+
+        directGovernanceFarmerFacet.depositSingle(address(token0), 1, 1);
+        vm.stopPrank();
+
         // run assertions
         uint256[] memory list = new uint256[](1);
-        assertFalse(
-            directGovernanceFarmerHarness.exposed_isIdIncluded(list, 1)
-        );
-    }*/
+        assertFalse(directGovernanceFarmerFacet.isIdIncluded(list, 2));
+    }
 }
