@@ -11,4 +11,3 @@
 - [utils](/src/dollar/utils)
 - [DiamondArgs](Diamond.sol/struct.DiamondArgs.md)
 - [Diamond](Diamond.sol/contract.Diamond.md)
-- [DirectGovernanceFarmer](DirectGovernanceFarmer.sol/contract.DirectGovernanceFarmer.md)
