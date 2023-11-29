@@ -1,5 +1,5 @@
 # MockTWAPOracleDollar3pool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ffeaddd1fd1406665ab0a20ce038bfd2170d6f36/src/dollar/mocks/MockTWAPOracleDollar3pool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c84a9cbe167218aefb4a9feb40e2abcd74899167/src/dollar/mocks/MockTWAPOracleDollar3pool.sol)
 
 
 ## State Variables

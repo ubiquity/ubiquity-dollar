@@ -12,6 +12,7 @@
 - [CurveDollarIncentiveFacet](CurveDollarIncentiveFacet.sol/contract.CurveDollarIncentiveFacet.md)
 - [DiamondCutFacet](DiamondCutFacet.sol/contract.DiamondCutFacet.md)
 - [DiamondLoupeFacet](DiamondLoupeFacet.sol/contract.DiamondLoupeFacet.md)
+- [DirectGovernanceFarmerFacet](DirectGovernanceFarmerFacet.sol/contract.DirectGovernanceFarmerFacet.md)
 - [DollarMintCalculatorFacet](DollarMintCalculatorFacet.sol/contract.DollarMintCalculatorFacet.md)
 - [DollarMintExcessFacet](DollarMintExcessFacet.sol/contract.DollarMintExcessFacet.md)
 - [ManagerFacet](ManagerFacet.sol/contract.ManagerFacet.md)
