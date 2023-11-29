@@ -20,13 +20,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "20.3.0"
+          node-version: "20.10.0"
 
       - name: Yarn Install
         run: yarn install
 
+      - name: Build the project
+        run: yarn build
+
       - name: Wrangler Install
-        run: npm install -g wrangler
+        run: yarn add wrangler
 
       - name: Publish to Cloudflare
         env:
@@ -38,11 +41,11 @@ jobs:
           IFS='/' read -ra fields <<< "$REPOSITORY"
           projectName="${fields[1]}"
           echo $projectName
-          wrangler pages project list > project_list.txt
+          yarn wrangler pages project list > project_list.txt
           if grep -q $projectName project_list.txt; then
             echo "Project found"
           else
             echo "Project not found"
-            wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
+            yarn wrangler pages project create "$projectName" --production-branch "$PRODUCTION_BRANCH"
           fi
-          wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"
+          yarn wrangler pages publish "$OUTPUT_DIRECTORY" --project-name "$projectName"

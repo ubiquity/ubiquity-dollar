@@ -6,6 +6,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "ignorePatterns": ["**/*.js"],
   "rules": {
     "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }], // Disallow arrow functions as expressions
     "func-style": ["warn", "declaration", { "allowArrowFunctions": false }], // Disallow the use of function expressions
