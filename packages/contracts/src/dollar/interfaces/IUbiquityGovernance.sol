@@ -6,6 +6,4 @@ import "./IERC20Ubiquity.sol";
 /**
  * @notice Ubiquity Governance token interface
  */
-interface IUbiquityGovernanceToken is IERC20Ubiquity {
-
-}
+interface IUbiquityGovernanceToken is IERC20Ubiquity {}

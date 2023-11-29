@@ -195,10 +195,31 @@ contract ZeroStateChefTest is ZeroStateChef {
         assertEq(chefFacet.governancePerBlock(), governancePerBlock);
     }
 
+    // test setGovernancePerBlock function should revert if not admin
+    function testSetGovernancePerBlock_ShouldRevertWhenNotAdmin() public {
+        vm.prank(secondAccount);
+        vm.expectRevert("MasterChef: not Governance Token manager");
+        chefFacet.setGovernancePerBlock(100);
+    }
+
     function testSetGovernanceDiv(uint256 div) public {
         vm.prank(admin);
         chefFacet.setGovernanceShareForTreasury(div);
         assertEq(chefFacet.governanceDivider(), div);
+    }
+
+    function testGetInitialGovernanceMul() public {
+        vm.prank(admin);
+        assertEq(chefFacet.governanceMultiplier(), 1e18);
+    }
+
+    // test setGovernanceShareForTreasury function should revert if not admin
+    function testSetGovernanceShareForTreasury_ShouldRevertWhenNotAdmin()
+        public
+    {
+        vm.prank(secondAccount);
+        vm.expectRevert("MasterChef: not Governance Token manager");
+        chefFacet.setGovernanceShareForTreasury(100);
     }
 
     function testSetMinPriceDiff(uint256 minPriceDiff) public {
@@ -207,6 +228,15 @@ contract ZeroStateChefTest is ZeroStateChef {
         vm.prank(admin);
         chefFacet.setMinPriceDiffToUpdateMultiplier(minPriceDiff);
         assertEq(chefFacet.minPriceDiffToUpdateMultiplier(), minPriceDiff);
+    }
+
+    // test setMinPriceDiffToUpdateMultiplier function should revert if not admin
+    function testSetMinPriceDiffToUpdateMultiplier_ShouldRevertWhenNotAdmin()
+        public
+    {
+        vm.prank(secondAccount);
+        vm.expectRevert("MasterChef: not Governance Token manager");
+        chefFacet.setMinPriceDiffToUpdateMultiplier(100);
     }
 
     function testDepositFromZeroState(uint256 lpAmount) public {

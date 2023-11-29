@@ -1,10 +1,10 @@
-# DirectGovernanceFarmer
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ffeaddd1fd1406665ab0a20ce038bfd2170d6f36/src/dollar/DirectGovernanceFarmer.sol)
+# DirectGovernanceFarmerFacet
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c84a9cbe167218aefb4a9feb40e2abcd74899167/src/dollar/facets/DirectGovernanceFarmerFacet.sol)
 
 **Inherits:**
-ReentrancyGuard
+[Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
 
-Contract for simpler staking
+Simpler Staking Facet
 
 How it works:
 1. User sends stablecoins (DAI / USDC / USDT / Dollar)
@@ -14,107 +14,30 @@ How it works:
 5. User gets a staking share id
 
 
-## State Variables
-### token2
-USDT address
-
-
-```solidity
-address public immutable token2;
-```
-
-
-### token1
-USDC address
-
-
-```solidity
-address public immutable token1;
-```
-
-
-### token0
-DAI address
-
-
-```solidity
-address public immutable token0;
-```
-
-
-### ubiquity3PoolLP
-Dollar-3CRV Curve MetaPool address
-
-
-```solidity
-address public immutable ubiquity3PoolLP;
-```
-
-
-### ubiquityDollar
-Dollar address
-
-
-```solidity
-address public immutable ubiquityDollar;
-```
-
-
-### depositZapUbiquityDollar
-Curve Deposit Zap address
-
-
-```solidity
-address public immutable depositZapUbiquityDollar;
-```
-
-
-### manager
-Dollar manager address
-
-
-```solidity
-IUbiquityDollarManager public immutable manager;
-```
-
-
 ## Functions
-### constructor
+### initialize
 
-Contract constructor
+it works as a constructor to set contract values at storage
 
 
 ```solidity
-constructor(IUbiquityDollarManager _manager, address base3Pool, address depositZap);
+function initialize(
+    address _manager,
+    address base3Pool,
+    address ubiquity3PoolLP,
+    address _ubiquityDollar,
+    address zapPool
+) public onlyAdmin;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_manager`|`IUbiquityDollarManager`|Dollar manager address|
-|`base3Pool`|`address`|Curve TriPool address (DAI, USDC, USDT)|
-|`depositZap`|`address`|Curve Deposit Zap address|
-
-
-### onERC1155Received
-
-Handles the receipt of a single ERC1155 token type. This function is
-called at the end of a `safeTransferFrom` after the balance has been updated.
-TODO: create updateConfig method, need to check that `operator` is authorized, `from` is Valid, `id` exists
-
-To accept the transfer, this must return
-`bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
-(i.e. 0xf23a6e61, or its own function selector).
-
-
-```solidity
-function onERC1155Received(address, address, uint256, uint256, bytes calldata) public virtual returns (bytes4);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bytes4`|`bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed|
+|`_manager`|`address`|Ubiquity Manager|
+|`base3Pool`|`address`|Base3Pool Address|
+|`ubiquity3PoolLP`|`address`|Ubiquity3PoolLP Address|
+|`_ubiquityDollar`|`address`|Ubiquity Dollar Address|
+|`zapPool`|`address`|ZapPool Address|
 
 
 ### depositSingle
@@ -144,12 +67,6 @@ function depositSingle(address token, uint256 amount, uint256 durationWeeks)
 |`token`|`address`|Token deposited : DAI, USDC, USDT or Ubiquity Dollar|
 |`amount`|`uint256`|Amount of tokens to deposit (For max: `uint256(-1)`)|
 |`durationWeeks`|`uint256`|Duration in weeks tokens will be locked (1-208)|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`stakingShareId`|`uint256`|Staking share id|
 
 
 ### depositMulti
@@ -183,7 +100,7 @@ function depositMulti(uint256[4] calldata tokenAmounts, uint256 durationWeeks)
 |`stakingShareId`|`uint256`|Staking share id|
 
 
-### withdraw
+### withdrawId
 
 Withdraws from Ubiquity protocol
 
@@ -195,7 +112,7 @@ STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
 
 
 ```solidity
-function withdraw(uint256 stakingShareId) external nonReentrant returns (uint256[4] memory tokenAmounts);
+function withdrawId(uint256 stakingShareId) external nonReentrant returns (uint256[4] memory tokenAmounts);
 ```
 **Parameters**
 
@@ -244,7 +161,7 @@ Checks whether `id` exists in `idList[]`
 
 
 ```solidity
-function isIdIncluded(uint256[] memory idList, uint256 id) internal pure returns (bool);
+function isIdIncluded(uint256[] memory idList, uint256 id) external pure returns (bool);
 ```
 **Parameters**
 
@@ -262,11 +179,11 @@ function isIdIncluded(uint256[] memory idList, uint256 id) internal pure returns
 
 ### isMetaPoolCoin
 
-Checks that `token` is one of the underlying MetaPool tokens or stablecoin from MetaPool
+Helper function that checks that `token` is one of the underlying MetaPool tokens or stablecoin from MetaPool
 
 
 ```solidity
-function isMetaPoolCoin(address token) public view returns (bool);
+function isMetaPoolCoin(address token) external pure returns (bool);
 ```
 **Parameters**
 
@@ -280,39 +197,4 @@ function isMetaPoolCoin(address token) public view returns (bool);
 |----|----|-----------|
 |`<none>`|`bool`|Whether `token` is one of the underlying MetaPool tokens or stablecoin from MetaPool|
 
-
-## Events
-### DepositSingle
-Emitted when user deposits a single token
-
-
-```solidity
-event DepositSingle(
-    address indexed sender, address token, uint256 amount, uint256 durationWeeks, uint256 stakingShareId
-);
-```
-
-### DepositMulti
-Emitted when user deposits multiple tokens
-
-
-```solidity
-event DepositMulti(address indexed sender, uint256[4] amounts, uint256 durationWeeks, uint256 stakingShareId);
-```
-
-### Withdraw
-Emitted when user withdraws a single token
-
-
-```solidity
-event Withdraw(address indexed sender, uint256 stakingShareId, address token, uint256 amount);
-```
-
-### WithdrawAll
-Emitted when user withdraws multiple tokens
-
-
-```solidity
-event WithdrawAll(address indexed sender, uint256 stakingShareId, uint256[4] amounts);
-```
 

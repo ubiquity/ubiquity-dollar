@@ -1,130 +1,52 @@
-# DirectGovernanceFarmer
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ffeaddd1fd1406665ab0a20ce038bfd2170d6f36/src/dollar/DirectGovernanceFarmer.sol)
-
-**Inherits:**
-ReentrancyGuard
-
-Contract for simpler staking
-
-How it works:
-1. User sends stablecoins (DAI / USDC / USDT / Dollar)
-2. Deposited stablecoins are added to Dollar-3CRV Curve MetaPool
-3. User gets Dollar-3CRV LP tokens
-4. Dollar-3CRV LP tokens are transferred to the staking contract
-5. User gets a staking share id
+# LibDirectGovernanceFarmer
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c84a9cbe167218aefb4a9feb40e2abcd74899167/src/dollar/libraries/LibDirectGovernanceFarmer.sol)
 
 
 ## State Variables
-### token2
-USDT address
+### DIRECT_GOVERNANCE_STORAGE_POSITION
+Storage slot used to store data for this library
 
 
 ```solidity
-address public immutable token2;
-```
-
-
-### token1
-USDC address
-
-
-```solidity
-address public immutable token1;
-```
-
-
-### token0
-DAI address
-
-
-```solidity
-address public immutable token0;
-```
-
-
-### ubiquity3PoolLP
-Dollar-3CRV Curve MetaPool address
-
-
-```solidity
-address public immutable ubiquity3PoolLP;
-```
-
-
-### ubiquityDollar
-Dollar address
-
-
-```solidity
-address public immutable ubiquityDollar;
-```
-
-
-### depositZapUbiquityDollar
-Curve Deposit Zap address
-
-
-```solidity
-address public immutable depositZapUbiquityDollar;
-```
-
-
-### manager
-Dollar manager address
-
-
-```solidity
-IUbiquityDollarManager public immutable manager;
+bytes32 constant DIRECT_GOVERNANCE_STORAGE_POSITION =
+    bytes32(uint256(keccak256("ubiquity.contracts.direct.governance.storage")) - 1);
 ```
 
 
 ## Functions
-### constructor
+### directGovernanceStorage
 
-Contract constructor
-
-
-```solidity
-constructor(IUbiquityDollarManager _manager, address base3Pool, address depositZap);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_manager`|`IUbiquityDollarManager`|Dollar manager address|
-|`base3Pool`|`address`|Curve TriPool address (DAI, USDC, USDT)|
-|`depositZap`|`address`|Curve Deposit Zap address|
-
-
-### onERC1155Received
-
-Handles the receipt of a single ERC1155 token type. This function is
-called at the end of a `safeTransferFrom` after the balance has been updated.
-TODO: create updateConfig method, need to check that `operator` is authorized, `from` is Valid, `id` exists
-
-To accept the transfer, this must return
-`bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))`
-(i.e. 0xf23a6e61, or its own function selector).
+Returns struct used as a storage for this library
 
 
 ```solidity
-function onERC1155Received(address, address, uint256, uint256, bytes calldata) public virtual returns (bytes4);
+function directGovernanceStorage() internal pure returns (DirectGovernanceData storage data);
 ```
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`bytes4`|`bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed|
+|`data`|`DirectGovernanceData`|Struct used as a storage|
 
+
+### init
+
+
+```solidity
+function init(address _manager, address base3Pool, address ubiquity3PoolLP, address _ubiquityDollar, address depositZap)
+    internal;
+```
 
 ### depositSingle
+
+Standard Interface Provided by Curve ///
 
 Deposits a single token to staking
 
 Stable coin (DAI / USDC / USDT / Ubiquity Dollar) => Dollar-3CRV LP => Ubiquity Staking
 
 How it works:
-1. User sends stablecoins (DAI / USDC / USDT / Dollar)
+1. User deposit stablecoins (DAI / USDC / USDT / Dollar)
 2. Deposited stablecoins are added to Dollar-3CRV Curve MetaPool
 3. User gets Dollar-3CRV LP tokens
 4. Dollar-3CRV LP tokens are transferred to the staking contract
@@ -133,8 +55,7 @@ How it works:
 
 ```solidity
 function depositSingle(address token, uint256 amount, uint256 durationWeeks)
-    external
-    nonReentrant
+    internal
     returns (uint256 stakingShareId);
 ```
 **Parameters**
@@ -165,8 +86,7 @@ STEP 2 : uAD3CRV-f => Ubiquity StakingShare
 
 ```solidity
 function depositMulti(uint256[4] calldata tokenAmounts, uint256 durationWeeks)
-    external
-    nonReentrant
+    internal
     returns (uint256 stakingShareId);
 ```
 **Parameters**
@@ -183,7 +103,7 @@ function depositMulti(uint256[4] calldata tokenAmounts, uint256 durationWeeks)
 |`stakingShareId`|`uint256`|Staking share id|
 
 
-### withdraw
+### withdrawWithId
 
 Withdraws from Ubiquity protocol
 
@@ -195,7 +115,7 @@ STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
 
 
 ```solidity
-function withdraw(uint256 stakingShareId) external nonReentrant returns (uint256[4] memory tokenAmounts);
+function withdrawWithId(uint256 stakingShareId) internal returns (uint256[4] memory tokenAmounts);
 ```
 **Parameters**
 
@@ -222,7 +142,7 @@ STEP 2 : uAD3CRV-f => stable coin (DAI / USDC / USDT / Ubiquity Dollar)
 
 
 ```solidity
-function withdraw(uint256 stakingShareId, address token) external nonReentrant returns (uint256 tokenAmount);
+function withdraw(uint256 stakingShareId, address token) internal returns (uint256 tokenAmount);
 ```
 **Parameters**
 
@@ -266,7 +186,7 @@ Checks that `token` is one of the underlying MetaPool tokens or stablecoin from 
 
 
 ```solidity
-function isMetaPoolCoin(address token) public view returns (bool);
+function isMetaPoolCoin(address token) internal pure returns (bool);
 ```
 **Parameters**
 
@@ -314,5 +234,20 @@ Emitted when user withdraws multiple tokens
 
 ```solidity
 event WithdrawAll(address indexed sender, uint256 stakingShareId, uint256[4] amounts);
+```
+
+## Structs
+### DirectGovernanceData
+
+```solidity
+struct DirectGovernanceData {
+    address token0;
+    address token1;
+    address token2;
+    address ubiquity3PoolLP;
+    IERC20Ubiquity ubiquityDollar;
+    address depositZapUbiquityDollar;
+    IUbiquityDollarManager manager;
+}
 ```
 
