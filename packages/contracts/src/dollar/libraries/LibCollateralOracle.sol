@@ -42,6 +42,36 @@ library LibCollateralOracle {
     }
 
     /**
+     * Returns the latest price
+     */
+    function getLatestPrice(
+        AggregatorV3Interface priceFeed
+    ) public view returns (int) {
+        (
+            uint80 roundID,
+            int price,
+            ,
+            uint256 updatedAt,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        require(
+            price >= 0 && updatedAt != 0 && answeredInRound >= roundID,
+            "Invalid chainlink price"
+        );
+
+        return price;
+    }
+
+    /**
+     * Returns collateral token price feed decimals
+     */
+    function getDecimals(
+        AggregatorV3Interface priceFeed
+    ) public view returns (uint8) {
+        return priceFeed.decimals();
+    }
+
+    /**
      * @notice Updates all registered collateral prices from ChainLink
      */
     function update() internal {}
