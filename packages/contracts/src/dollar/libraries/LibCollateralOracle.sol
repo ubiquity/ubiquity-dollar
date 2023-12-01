@@ -56,7 +56,7 @@ library LibCollateralOracle {
         ) = priceFeed.latestRoundData();
         require(
             price >= 0 && updatedAt != 0 && answeredInRound >= roundID,
-            "Invalid chainlink price"
+            "Invalid ChainLink price"
         );
 
         return price;
@@ -81,5 +81,8 @@ library LibCollateralOracle {
      * @param token Token address
      * @return amountOut Token price vs 3CRV LP
      */
-    function consult(address token) internal view returns (uint256) {}
+    function consult(address token) internal view returns (uint256) {
+        uint256 price = getLatestPrice(priceFeeds[token]);
+        emit CollateralPriceUpdated(token, price);
+    }
 }
