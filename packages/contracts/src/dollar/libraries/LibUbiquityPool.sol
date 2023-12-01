@@ -10,6 +10,7 @@ import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {UBIQUITY_POOL_PRICE_PRECISION} from "./Constants.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
+import {LibCollateralOracle} from "./LibCollateralOracle.sol";
 
 /**
  * @notice Ubiquity pool library
