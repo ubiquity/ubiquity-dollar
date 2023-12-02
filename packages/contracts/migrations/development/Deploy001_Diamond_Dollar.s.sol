@@ -119,6 +119,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // read env variables
         uint256 adminPrivateKey = vm.envUint("ADMIN_PRIVATE_KEY");
         uint256 ownerPrivateKey = vm.envUint("OWNER_PRIVATE_KEY");
+        address collateralTokenAddress = vm.envAddress(
+            "COLLATERAL_TOKEN_ADDRESS"
+        );
 
         address adminAddress = vm.addr(adminPrivateKey);
         address ownerAddress = vm.addr(ownerPrivateKey);
@@ -270,10 +273,12 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
             address(diamond)
         );
 
-        // add collateral LUSD token
+        // add collateral token (users can mint/redeem Dollars in exchange for collateral)
         uint256 poolCeiling = 10_000e18; // max 10_000 of collateral tokens is allowed
-        address lusdAddress = 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0;
-        ubiquityPoolFacet.addCollateralToken(lusdAddress, poolCeiling);
+        ubiquityPoolFacet.addCollateralToken(
+            collateralTokenAddress,
+            poolCeiling
+        );
         // enable collateral at index 0
         ubiquityPoolFacet.toggleCollateral(0);
         // set mint and redeem fees
