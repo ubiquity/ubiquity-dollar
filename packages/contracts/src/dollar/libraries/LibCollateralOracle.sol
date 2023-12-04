@@ -14,11 +14,8 @@ import {LibAppStorage} from "./LibAppStorage.sol";
 library LibCollateralOracle {
     /// @notice Struct used as a storage for this library
     struct CollateralOracleStorage {
-        mapping(address => AggregatorV3Interface) priceFeeds;
+        mapping(address => AggregatorV3Interface) chainLinkPriceFeed;
     }
-
-    /// @notice Emitted when collateral token price was updated
-    event CollateralPriceUpdated(address token, uint256 price);
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant COLLATERAL_ORACLE_STORAGE_POSITION =
@@ -33,7 +30,7 @@ library LibCollateralOracle {
     function collateralOracleStorage()
         internal
         pure
-        returns (collateralOracleStorage storage ds)
+        returns (CollateralOracleStorage storage ds)
     {
         bytes32 position = COLLATERAL_ORACLE_STORAGE_POSITION;
         assembly {
@@ -72,17 +69,28 @@ library LibCollateralOracle {
     }
 
     /**
-     * @notice Updates all registered collateral prices from ChainLink
+     * @notice Registers ChainLink price feed for a token vs 3CRV
      */
-    function update() internal {}
+    function registerChainLinkPriceFeed(
+        address token,
+        address feedContractAddress
+    ) internal {
+        CollateralOracleStorage storage cs = collateralOracleStorage();
+
+        cs.chainLinkPriceFeed[token] = AggregatorV3Interface(
+            feedContractAddress
+        );
+    }
 
     /**
      * @notice Returns the quote for the provided `token` address
+     * @dev currently uses ChainLink price feed
      * @param token Token address
      * @return amountOut Token price vs 3CRV LP
      */
-    function consult(address token) internal view returns (uint256) {
-        uint256 price = getLatestPrice(priceFeeds[token]);
-        emit CollateralPriceUpdated(token, price);
+    function consult(address token) internal view returns (int) {
+        CollateralOracleStorage storage cs = collateralOracleStorage();
+
+        return getLatestPrice(cs.chainLinkPriceFeed[token]);
     }
 }
