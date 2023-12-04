@@ -60,7 +60,35 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 ## Deploying Contracts (Ubiquity Dollar Core)
 
-In two separate terminals run the following commands:
+You need to create a new `.env` file and set all necessary env variables, example:
+```
+# Admin private key (grants access to restricted contracts methods).
+# By default set to the private key from the 0x70997970c51812dc3a010c7d01b50e0d17dc79c8 address
+# which is the 2nd address derived from test mnemonic "test test test test test test test test test test test junk".
+ADMIN_PRIVATE_KEY="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
+
+# Collateral token address (used in UbiquityPoolFacet, allows users to mint/redeem Dollars in exchange for collateral token).
+# By default set to LUSD address in ethereum mainnet.
+# - mainnet/anvil(forked from mainnet): 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0 (LUSD)
+# - testnet: 0x3e622317f8C93f7328350cF0B56d9eD4C620C5d6 (DAI)
+# NOTICE: LUSD token is not deployed to sepolia testnet so we use DAI instead which is deployed to testnet
+COLLATERAL_TOKEN_ADDRESS="0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"
+
+# Owner private key (grants access to updating Diamond facets and setting TWAP oracle address).
+# By default set to the private key from the 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 address
+# which is the 1st address derived from test mnemonic "test test test test test test test test test test test junk".
+OWNER_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+# RPC URL (used in contract migrations)
+# - anvil: http://127.0.0.1:8545
+# - testnet: https://ethereum-sepolia.publicnode.com
+# - mainnet: https://eth.ubq.fi/v1/mainnet 
+RPC_URL="http://127.0.0.1:8545"
+```
+
+The `.env.example` file is pre-populated with the recommend environment variables.
+
+Then in two separate terminals run the following commands:
 
 ```sh
 yarn workspace @ubiquity/contracts start:anvil # starts the anvil testnet
@@ -70,13 +98,7 @@ yarn workspace @ubiquity/contracts start:anvil # starts the anvil testnet
 yarn workspace @ubiquity/contracts deploy:development # deploys the contracts to the anvil testnet
 ```
 
-You need to create `.env` file inside the contracts folder with `PRIVATE_KEY`, `PUBLIC_KEY`, `MNEMONIC`, and `CURVE_WHALE` all filled. `PRIVATE_KEY` will be used to deploy locally and the matching `PUBLIC_KEY` will be the admin on all the smart contracts. `MNEMONIC` is used when launching Anvil and will ensure your `PUBLIC_KEY` account is funded.
-
-The `.env.example` is pre-populated with the recommend test `MNEMONIC`, test `PRIVATE_KEY`, and test `PUBLIC_KEY`.
-
-If successful it will show a readout of accounts generated from `MNEMONIC` and the port it's listening on.
-
-This will first impersonate the `CURVE_WHALE` and transfer some tokens so we can create a UbiquityDollar/3CRV pool, and then it will deploy the Ubiquity Dollar core protocol via a series of Solidity scripts via Forge.
+If successful it will show a readout of accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
 
 ## MetaMask Development Wallet Setup
 ### Shared Private Keys for Development
