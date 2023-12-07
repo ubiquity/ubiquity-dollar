@@ -46,8 +46,8 @@
   },
   "lint-staged": {
     "*.ts": [
-      "yarn format:prettier --write",
-      "yarn format:lint --fix"
+      "yarn prettier --write",
+      "eslint --fix"
     ]
   },
   "commitlint": {
