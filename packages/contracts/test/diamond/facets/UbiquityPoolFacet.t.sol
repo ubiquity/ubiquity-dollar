@@ -7,6 +7,7 @@ import {IDollarAmoMinter} from "../../../src/dollar/interfaces/IDollarAmoMinter.
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {LibUbiquityPool} from "../../../src/dollar/libraries/LibUbiquityPool.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
+import {MockChainLinkFeed} from "../../../src/dollar/mocks/MockChainLinkFeed.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 
 contract MockDollarAmoMinter is IDollarAmoMinter {
@@ -22,6 +23,7 @@ contract MockDollarAmoMinter is IDollarAmoMinter {
 contract UbiquityPoolFacetTest is DiamondTestSetup {
     MockDollarAmoMinter dollarAmoMinter;
     MockERC20 collateralToken;
+    MockChainLinkFeed collateralTokenPriceFeed;
     MockMetaPool curveDollarMetaPool;
     MockERC20 curveTriPoolLpToken;
     address user = address(1);
@@ -51,6 +53,9 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
 
         // init collateral token
         collateralToken = new MockERC20("COLLATERAL", "CLT", 18);
+
+        // init collateral price feed
+        collateralTokenPriceFeed = new MockChainLinkFeed();
 
         // init Curve 3CRV-LP token
         curveTriPoolLpToken = new MockERC20("3CRV", "3CRV", 18);
@@ -799,6 +804,32 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
 
     function testCollateralPriceFeed() public {
         vm.startPrank(admin);
+
+        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
+            .collateralInformation(address(collateralToken));
+        assertEq(info.price, 1_000_000);
+
+        uint256 newCollateralPrice = 1_100_000;
+        vm.expectEmit(address(ubiquityPoolFacet));
+        emit CollateralPriceSet(1, newCollateralPrice);
+        ubiquityPoolFacet.setCollateralPrice(0, newCollateralPrice);
+
+        info = ubiquityPoolFacet.collateralInformation(
+            address(collateralToken)
+        );
+        assertEq(info.price, newCollateralPrice);
+
+        ubiquityPoolFacet.setCollateralChainLinkPriceFeedAddress(
+            address(collateralToken),
+            address(collateralTokenPriceFeed)
+        );
+        ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
+
+        info = ubiquityPoolFacet.collateralInformation(
+            address(collateralToken)
+        );
+        console.log(info.price);
+        // assertEq(info.price, newCollateralPrice);
 
         vm.stopPrank();
     }
