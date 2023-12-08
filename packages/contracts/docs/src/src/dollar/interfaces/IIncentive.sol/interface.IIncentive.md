@@ -1,5 +1,5 @@
 # IIncentive
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/ffeaddd1fd1406665ab0a20ce038bfd2170d6f36/src/dollar/interfaces/IIncentive.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bc36823136700d0422c14fd5ae111920580c10d7/src/dollar/interfaces/IIncentive.sol)
 
 Incentive contract interface
 
