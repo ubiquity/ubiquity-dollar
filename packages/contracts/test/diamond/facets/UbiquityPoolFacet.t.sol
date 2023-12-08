@@ -796,4 +796,10 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             curve3PriceUSD;
         console.log("dollarsOut:", dollarsOut);
     }
+
+    function testCollateralPriceFeed() public {
+        vm.startPrank(admin);
+
+        vm.stopPrank();
+    }
 }

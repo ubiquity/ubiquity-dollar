@@ -150,6 +150,24 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     }
 
     /// @inheritdoc IUbiquityPool
+    function setCollateralChainLinkPriceFeedAddress(
+        address collateralAddress,
+        address chainLinkPriceFeedAddress
+    ) external onlyAdmin {
+        LibUbiquityPool.setCollateralChainLinkPriceFeedAddress(
+            collateralAddress,
+            chainLinkPriceFeedAddress
+        );
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function updateChainLinkCollateralPrice(
+        uint256 collateralIndex
+    ) external onlyAdmin {
+        LibUbiquityPool.updateChainLinkCollateralPrice(collateralIndex);
+    }
+
+    /// @inheritdoc IUbiquityPool
     function setFees(
         uint256 collateralIndex,
         uint256 newMintFee,

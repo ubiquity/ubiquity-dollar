@@ -11,6 +11,7 @@ import {UBIQUITY_POOL_PRICE_PRECISION} from "./Constants.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibCollateralOracle} from "./LibCollateralOracle.sol";
+import {AggregatorV3Interface} from "../../dollar/interfaces/AggregatorV3Interface.sol";
 
 /**
  * @notice Ubiquity pool library
@@ -43,7 +44,7 @@ library LibUbiquityPool {
         address[] collateralAddresses;
         // collateral address -> collateral index
         mapping(address => uint256) collateralAddressToIndex;
-        // Stores price of the collateral, if price is paused. CONSIDER ORACLES EVENTUALLY!!!
+        // Stores price of the collateral
         uint256[] collateralPrices;
         // array collateral symbols
         string[] collateralSymbols;
@@ -84,6 +85,8 @@ library LibUbiquityPool {
         bool[] mintPaused;
         // whether redeeming is paused for a particular collateral index
         bool[] redeemPaused;
+        // Collateral price feed contract address
+        address[] collateralPriceFeedAddresses;
     }
 
     /// @notice Struct used for detailed collateral information
@@ -127,6 +130,8 @@ library LibUbiquityPool {
     event AmoMinterRemoved(address amoMinterAddress);
     /// @notice Emitted on setting a collateral price
     event CollateralPriceSet(uint256 collateralIndex, uint256 newPrice);
+    /// @notice Emitted on setting a collateral price feed address
+    event CollateralPriceFeedSet(uint256 collateralIndex, uint256 newPrice);
     /// @notice Emitted on enabling/disabling a particular collateral token
     event CollateralToggled(uint256 collateralIndex, bool newState);
     /// @notice Emitted when fees are updated
@@ -614,7 +619,7 @@ library LibUbiquityPool {
     }
 
     /**
-     * @notice Sets collateral token price in USD
+     * @notice Sets exact collateral token price in USD
      * @param collateralIndex Collateral token index
      * @param newPrice New USD price (precision 1e6)
      */
@@ -623,11 +628,56 @@ library LibUbiquityPool {
         uint256 newPrice
     ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-
-        // Notice from Frax: CONSIDER ORACLES EVENTUALLY!!!
         poolStorage.collateralPrices[collateralIndex] = newPrice;
 
         emit CollateralPriceSet(collateralIndex, newPrice);
+    }
+
+    /**
+     * @notice Sets collateral ChainLink price feed address
+     * @param collateralIndex Collateral token index
+     * @param newPrice New USD price (precision 1e6)
+     */
+    function setCollateralChainLinkPriceFeedAddress(
+        address collateralAddress,
+        address chainLinkPriceFeedAddress
+    ) internal {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+
+        uint256 collateralIndex = poolStorage.collateralAddressToIndex[
+            collateralAddress
+        ];
+        poolStorage.collateralPriceFeedAddresses[
+            collateralIndex
+        ] = chainLinkPriceFeedAddress;
+
+        emit CollateralPriceFeedSet(collateralIndex, chainLinkPriceFeedAddress);
+    }
+
+    /**
+     * @notice Updates collateral token price in USD from ChainLink price feed
+     * @param collateralIndex Collateral token index
+     */
+    function updateChainLinkCollateralPrice(uint256 collateralIndex) internal {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(
+            poolStorage.collateralPriceFeedAddresses[collateralIndex]
+        );
+        (
+            uint80 roundID,
+            int256 price,
+            ,
+            uint256 updatedAt,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        require(
+            price >= 0 && updatedAt != 0 && answeredInRound >= roundID,
+            "Invalid ChainLink price"
+        );
+
+        poolStorage.collateralPrices[collateralIndex] = uint256(price);
+        emit CollateralPriceSet(collateralIndex, uint256(price));
     }
 
     /**
