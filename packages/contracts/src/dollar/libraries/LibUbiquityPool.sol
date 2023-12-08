@@ -635,8 +635,8 @@ library LibUbiquityPool {
 
     /**
      * @notice Sets collateral ChainLink price feed address
-     * @param collateralIndex Collateral token index
-     * @param newPrice New USD price (precision 1e6)
+     * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress ChainLink price feed address
      */
     function setCollateralChainLinkPriceFeedAddress(
         address collateralAddress,
