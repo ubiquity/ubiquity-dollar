@@ -79,6 +79,11 @@ If successful it will show a readout of accounts generated from `MNEMONIC` and t
 
 This will first impersonate the `CURVE_WHALE` and transfer some tokens so we can create a UbiquityDollar/3CRV pool, and then it will deploy the Ubiquity Dollar core protocol via a series of Solidity scripts via Forge.
 
+## Commiting, Sending PRs
+
+- We require all PRs meet the issues expectation and/or to follow the discussions accordingly and implement all necessary changes and feedback by reviewers.
+- We run CI jobs all CI jobs must pass before commiting/merging a PR with a few exceptions, this would likely happen when a PR it's getting reviewed 
+
 ## Yarn Workspaces
 
 The repo has been built as a [yarn workspace](https://yarnpkg.com/features/workspaces) monorepo.
