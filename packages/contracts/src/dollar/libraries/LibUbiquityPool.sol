@@ -131,7 +131,10 @@ library LibUbiquityPool {
     /// @notice Emitted on setting a collateral price
     event CollateralPriceSet(uint256 collateralIndex, uint256 newPrice);
     /// @notice Emitted on setting a collateral price feed address
-    event CollateralPriceFeedSet(uint256 collateralIndex, uint256 newPrice);
+    event CollateralPriceFeedSet(
+        uint256 collateralIndex,
+        address priceFeedAddress
+    );
     /// @notice Emitted on enabling/disabling a particular collateral token
     event CollateralToggled(uint256 collateralIndex, bool newState);
     /// @notice Emitted when fees are updated
