@@ -166,6 +166,22 @@ interface IUbiquityPool {
     ) external;
 
     /**
+     * @notice Sets collateral ChainLink price feed address
+     * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress ChainLink price feed address
+     */
+    function setCollateralChainLinkPriceFeedAddress(
+        address collateralAddress,
+        address chainLinkPriceFeedAddress
+    ) external;
+
+    /**
+     * @notice Updates collateral token price in USD from ChainLink price feed
+     * @param collateralIndex Collateral token index
+     */
+    function updateChainLinkCollateralPrice(uint256 collateralIndex) external;
+
+    /**
      * @notice Sets mint and redeem fees, 1_000_000 = 100%
      * @param collateralIndex Collateral token index
      * @param newMintFee New mint fee
