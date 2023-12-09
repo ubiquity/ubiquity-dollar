@@ -606,6 +606,9 @@ library LibUbiquityPool {
 
         // pool ceiling
         poolStorage.poolCeilings.push(poolCeiling);
+
+        // price feed
+        poolStorage.collateralPriceFeedAddresses.push(address(0));
     }
 
     /**
