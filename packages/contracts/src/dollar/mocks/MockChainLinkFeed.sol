@@ -61,4 +61,14 @@ contract MockChainLinkFeed is AggregatorV3Interface {
             answeredInRound
         );
     }
+
+    function updateMockParams(
+        uint80 _roundId,
+        int256 _answer,
+        uint80 _answeredInRound
+    ) public {
+        roundId = _roundId;
+        answer = _answer;
+        answeredInRound = _answeredInRound;
+    }
 }
