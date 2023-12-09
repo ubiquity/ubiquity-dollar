@@ -12,7 +12,7 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 - Please learn how to contribute via the DevPool [here](https://dao.ubq.fi/devpool).
 ## Installation
 Requirements:
-- NodeJS
+- NodeJS >=18
 - Yarn
 - We use [Foundry](https://github.com/foundry-rs/foundry), check their [docs](https://book.getfoundry.sh/). Please follow their installation guide for your OS before proceeding.
 
@@ -35,7 +35,7 @@ yarn test:all # We run all the tests!
 ```
 
 ## Running workspace specific/individual commands
-Utilizing yarn workspaces, you can invoke scripts for each workspace individually.
+Using yarn workspaces, you can invoke scripts for each workspace individually.
 ```sh
 # SCRIPT_NAME=XXX
 
@@ -48,7 +48,7 @@ yarn workspace @ubiquity/contracts build # Build smart contracts
 yarn workspace @ubiquity/contracts test # Run the smart contract unit tests
 
 yarn workspace @ubiquity/dapp build # Build the user interface
-yarn workspace @ubiquity/dapp start # Run the application at http://localhost:3000
+yarn workspace @ubiquity/dapp start # Run the web application at http://localhost:3000
 
 ```
 ## Committing Code/Sending PRs
@@ -67,8 +67,8 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 | Network | Chain ID | RPC Endpoint                  | Comment |
 |---------|----------|-------------------------------|---------|
 | `mainnet` | `1`        | `https://eth.ubq.fi/v1/mainnet` | Our dedicated mainnet gateway     |
-| `sepolia` | `11155111` | use any public available RPC for Sepolia testing 
 | `anvil`   | `31337`    | `http://127.0.0.1:8545`         | Used for local development     |
+| `sepolia` | `11155111` | N/A |use any public available RPC for Sepolia testing 
 
 ## Deploying Contracts (Ubiquity Dollar Core)
 
@@ -84,7 +84,7 @@ ADMIN_PRIVATE_KEY="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b7
 # By default set to LUSD address in ethereum mainnet.
 # - mainnet/anvil(forked from mainnet): 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0 (LUSD)
 # - testnet: 0x3e622317f8C93f7328350cF0B56d9eD4C620C5d6 (DAI)
-# NOTICE: LUSD token is not deployed to sepolia testnet so we use DAI instead which is deployed to testnet
+# NOTICE: LUSD token is not deployed to sepolia testnet so we test DAI token instead which is deployed to testnet
 COLLATERAL_TOKEN_ADDRESS="0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"
 
 # Owner private key (grants access to updating Diamond facets and setting TWAP oracle address).
@@ -104,14 +104,14 @@ We provide an `.env.example` file pre-set with recommend environment variables b
 Then in two separate terminals run the following commands:
 
 ```sh
-yarn workspace @ubiquity/contracts start:anvil # starts the anvil forked mainnet network
+yarn workspace @ubiquity/contracts start:anvil # starts the anvil forked mainnet/testnet network
 ```
 
 ```sh
 yarn workspace @ubiquity/contracts deploy:development # deploys the contracts to the anvil testnet
 ```
 
-If successful it will show a readout of accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
+If successful it will output the accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
 
 ## Yarn Workspaces
 
