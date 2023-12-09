@@ -12,7 +12,7 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 - Learn how to contribute via the DevPool [here](https://dao.ubq.fi/devpool).
 ## Installation
 ### Requirements:
-- NodeJS >=18
+- NodeJS Version >=18
 - Yarn
 - We use [Foundry](https://github.com/foundry-rs/foundry), check their [docs](https://book.getfoundry.sh/). Please follow their installation guide for your OS before proceeding.
 
@@ -106,13 +106,20 @@ We provide an `.env.example` file pre-set with recommend testing environment var
 Then in two separate terminals run the following commands:
 
 ```sh
+# starts the anvil forked mainnet/testnet network (depends on your .env config)
 yarn workspace @ubiquity/contracts start:anvil
-or yarn start:anvil # starts the anvil forked mainnet/testnet network
+
+# Optional
+yarn start:anvil # same as above but shorter
 ```
 
 ```sh
+# deploys the contracts to the anvil testnet or your desired network
+
 yarn workspace @ubiquity/contracts deploy:development
-or yarn deploy:development # deploys the contracts to the anvil testnet or your desired network
+
+# Optional
+yarn deploy:development # same as above
 ```
 
 If successful it will output the accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
