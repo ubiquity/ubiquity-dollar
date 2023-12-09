@@ -809,20 +809,13 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             .collateralInformation(address(collateralToken));
         assertEq(info.price, 1_000_000);
 
-        uint256 newCollateralPrice = 1_100_000;
-        vm.expectEmit(address(ubiquityPoolFacet));
-        emit CollateralPriceSet(1, newCollateralPrice);
-        ubiquityPoolFacet.setCollateralPrice(0, newCollateralPrice);
-
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
-        assertEq(info.price, newCollateralPrice);
-
         ubiquityPoolFacet.setCollateralChainLinkPriceFeedAddress(
             address(collateralToken),
             address(collateralTokenPriceFeed)
         );
+
+        MockChainLinkFeed(collateralTokenPriceFeed).updateMockParams(1, 2, 3);
+
         ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
 
         info = ubiquityPoolFacet.collateralInformation(

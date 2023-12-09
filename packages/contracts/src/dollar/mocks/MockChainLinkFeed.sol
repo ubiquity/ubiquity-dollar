@@ -10,7 +10,7 @@ contract MockChainLinkFeed is AggregatorV3Interface {
     uint256 updatedAt;
     uint80 answeredInRound;
 
-    constructor() public {
+    constructor() {
         roundId = 0;
         answer = 0;
         startedAt = block.timestamp;
@@ -18,15 +18,15 @@ contract MockChainLinkFeed is AggregatorV3Interface {
         answeredInRound = 0;
     }
 
-    function decimals() external view override returns (uint8) {
+    function decimals() external pure override returns (uint8) {
         return 18;
     }
 
-    function description() external view override returns (string memory) {
+    function description() external pure override returns (string memory) {
         return "mock ChainLink data feed";
     }
 
-    function version() external view override returns (uint256) {
+    function version() external pure override returns (uint256) {
         return 1;
     }
 
