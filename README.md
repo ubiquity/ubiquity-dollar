@@ -11,23 +11,30 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 - We offer financial incentives for solved issues.
 - Please learn how to contribute via the DevPool [here](https://dao.ubq.fi/devpool).
 ## Installation
-- We use [Foundry](https://github.com/foundry-rs/foundry).
-- Here are their [docs](https://book.getfoundry.sh/).
-- Please follow their installation guide for your OS before proceeding.
+Requirements:
+- NodeJS
+- Yarn
+- We use [Foundry](https://github.com/foundry-rs/foundry), check their [docs](https://book.getfoundry.sh/). Please follow their installation guide for your OS before proceeding.
 
 ### Development Setup
+
 ```sh
 #!/bin/bash
 
 git clone https://github.com/ubiquity/ubiquity-dollar.git
-cd ubiquity-dollar/
+cd ubiquity-dollar
 yarn # fetch dependencies
 yarn build:all # builds the smart contracts and user interface
+
+# Optional
+yarn build:dapp # to only build the UI useful for debugging
+yarn build:contracts # to only build the Smart Contracts
+
 yarn start # starts the user interface and daemonize'd to continue to run tests in the background
-yarn test:all
+yarn test:all # We run all the tests!
 ```
 
-## Running workspace specific commands
+## Running workspace specific/individual commands
 Utilizing yarn workspaces, you can invoke scripts for each workspace individually.
 ```sh
 # SCRIPT_NAME=XXX
@@ -44,7 +51,7 @@ yarn workspace @ubiquity/dapp build # Build the user interface
 yarn workspace @ubiquity/dapp start # Run the application at http://localhost:3000
 
 ```
-## Committing Code
+## Committing Code/Sending PRs
 
 1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages.
 
@@ -52,17 +59,22 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 2. We use [prettier](https://github.com/prettier/prettier), [eslint](https://github.com/eslint/eslint) and [cspell](https://github.com/streetsidesoftware/cspell) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
 
+3. We require all PRs meet the issues expectation and/or to follow the discussions accordingly and implement all necessary changes and feedback by reviewers.
+
+4. We run [CI jobs](https://github.com/ubiquity/ubiquity-dollar/actions) all CI jobs must pass before commiting/merging a PR with no exceptions (usually a few exceptions while the PR it's getting reviewed and the maintainers highlight may skip a job)
 
 ### Network Settings
 | Network | Chain ID | RPC Endpoint                  | Comment |
 |---------|----------|-------------------------------|---------|
 | `mainnet` | `1`        | `https://eth.ubq.fi/v1/mainnet` | Our dedicated mainnet gateway     |
+| `sepolia` | `11155111` | use any public available RPC for Sepolia testing 
 | `anvil`   | `31337`    | `http://127.0.0.1:8545`         | Used for local development     |
 
 ## Deploying Contracts (Ubiquity Dollar Core)
 
 You need to create a new `.env` file and set all necessary env variables, example:
-```
+
+```sh
 # Admin private key (grants access to restricted contracts methods).
 # By default set to the private key from the 0x70997970c51812dc3a010c7d01b50e0d17dc79c8 address
 # which is the 2nd address derived from test mnemonic "test test test test test test test test test test test junk".
@@ -87,7 +99,7 @@ OWNER_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f
 RPC_URL="http://127.0.0.1:8545"
 ```
 
-The `.env.example` file is pre-populated with the recommend environment variables.
+We provide an `.env.example` file pre-set with recommend environment variables but you are free to modify or experiment with different values.
 
 Then in two separate terminals run the following commands:
 
@@ -100,11 +112,6 @@ yarn workspace @ubiquity/contracts deploy:development # deploys the contracts to
 ```
 
 If successful it will show a readout of accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
-
-## Commiting, Sending PRs
-
-- We require all PRs meet the issues expectation and/or to follow the discussions accordingly and implement all necessary changes and feedback by reviewers.
-- We run CI jobs all CI jobs must pass before commiting/merging a PR with a few exceptions, this would likely happen when a PR it's getting reviewed 
 
 ## Yarn Workspaces
 
