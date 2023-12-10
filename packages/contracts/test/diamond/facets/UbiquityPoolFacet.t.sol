@@ -814,15 +814,20 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             address(collateralTokenPriceFeed)
         );
 
-        MockChainLinkFeed(collateralTokenPriceFeed).updateMockParams(1, 2, 3);
+        int256 mockedPriceFeedPrice = 1_000_123;
+
+        MockChainLinkFeed(collateralTokenPriceFeed).updateMockParams(
+            1,
+            mockedPriceFeedPrice,
+            3
+        );
 
         ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
 
         info = ubiquityPoolFacet.collateralInformation(
             address(collateralToken)
         );
-        console.log(info.price);
-        // assertEq(info.price, newCollateralPrice);
+        assertEq(info.price, uint256(mockedPriceFeedPrice));
 
         vm.stopPrank();
     }
