@@ -226,6 +226,14 @@ library LibUbiquityPool {
         );
     }
 
+    function getCollateralAddressToIndex(
+        address collateralAddress
+    ) internal view returns (uint256 index) {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+
+        return poolStorage.collateralAddressToIndex[collateralAddress];
+    }
+
     /**
      * @notice Returns USD value of all collateral tokens held in the pool, in E18
      * @return balanceTally USD value of all collateral tokens

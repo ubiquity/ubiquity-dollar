@@ -33,6 +33,13 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     }
 
     /// @inheritdoc IUbiquityPool
+    function getCollateralAddressToIndex(
+        address collateralAddress
+    ) external view returns (uint256 index) {
+        return LibUbiquityPool.getCollateralAddressToIndex(collateralAddress);
+    }
+
+    /// @inheritdoc IUbiquityPool
     function collateralUsdBalance()
         external
         view

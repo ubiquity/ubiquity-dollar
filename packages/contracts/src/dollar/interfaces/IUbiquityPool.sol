@@ -33,6 +33,15 @@ interface IUbiquityPool {
         returns (LibUbiquityPool.CollateralInformation memory returnData);
 
     /**
+     * @notice Returns collateral information index
+     * @param collateralAddress Address of the collateral token
+     * @return index Collateral index
+     */
+    function getCollateralAddressToIndex(
+        address collateralAddress
+    ) external view returns (uint256 index);
+
+    /**
      * @notice Returns USD value of all collateral tokens held in the pool, in E18
      * @return balanceTally USD value of all collateral tokens
      */
