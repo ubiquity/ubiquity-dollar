@@ -16,11 +16,17 @@ library LibDollarAmoMinter {
 
     /* ========== EVENTS ========== */
 
-    event AMOAdded(address amo_address);
-    event AMORemoved(address amo_address);
-    event Recovered(address token, uint256 amount);
+    /// @notice Emitted when an AMO is added.
+    event AMOAdded(address indexed amo_address);
+
+    /// @notice Emitted when an AMO is removed.
+    event AMORemoved(address indexed amo_address);
+
+    /// @notice Emitted when ERC20 tokens are recovered.
+    event Recovered(address indexed token, uint256 amount);
 
     /* ========== STATE VARIABLES ========== */
+    /// @notice Struct to hold AMO minter data.
     struct DollarAmoMinterData {
         // Core
         IUbiquityDollarToken UAD;
@@ -75,6 +81,19 @@ library LibDollarAmoMinter {
         }
     }
 
+    /* ========== LIBRARY FUNCTIONS ========== */
+
+    /**
+     * @notice Initializes the Dollar AMO Minter with necessary addresses and settings.
+     * @dev Sets up the AMO minter with the custodian, timelock, collateral, pool, UCR, and UAD addresses.
+     * @param _custodian_address Address of the custodian.
+     * @param _timelock_address Address of the timelock.
+     * @param _collateral_address Address of the collateral token.
+     * @param _collateral_token ERC20 address of the collateral token.
+     * @param _pool_address Address of the Ubiquity Pool.
+     * @param _ucr Address of the Ubiquity Credit Token.
+     * @param _uad Address of the Ubiquity Dollar Token.
+     */
     function init(
         address _custodian_address,
         address _timelock_address,
@@ -117,6 +136,9 @@ library LibDollarAmoMinter {
 
     /* ========== MODIFIERS ========== */
 
+    /// @notice Ensures that the provided address is a valid AMO.
+    /// @param amo_address Address to be validated as an AMO.
+    /// Throws an error if the address is not a registered AMO.
     modifier validAMO(address amo_address) {
         require(dollarAmoMinterStorage().amos[amo_address], "Invalid AMO");
         _;
@@ -124,15 +146,22 @@ library LibDollarAmoMinter {
 
     /* ========== VIEWS ========== */
 
+    /// @notice Gets the dollar balance of the collateral.
+    /// @return The dollar value of the collateral held.
     function collateralDollarBalance() internal view returns (uint256) {
         (, uint256 collat_val_e18) = dollarBalances();
         return collat_val_e18;
     }
 
+    /// @notice Retrieves the index of the collateral token.
+    /// @return index of the collateral token.
     function collateralIndex() internal view returns (uint256 index) {
         return dollarAmoMinterStorage().col_idx;
     }
 
+    /// @notice Provides the current dollar balances of UAD and collateral.
+    /// @return uad_val_e18 The current dollar value of UAD.
+    /// @return collat_val_e18 The current dollar value of the collateral.
     function dollarBalances()
         internal
         view
@@ -142,14 +171,21 @@ library LibDollarAmoMinter {
         collat_val_e18 = dollarAmoMinterStorage().collatDollarBalanceStored;
     }
 
+    /// @notice Lists all AMO addresses registered.
+    /// @return A list of AMO addresses.
     function allAMOAddresses() internal view returns (address[] memory) {
         return dollarAmoMinterStorage().amos_array;
     }
 
+    /// @notice Counts the total number of AMOs registered.
+    /// @return The number of AMOs.
     function allAMOsLength() internal view returns (uint256) {
         return dollarAmoMinterStorage().amos_array.length;
     }
 
+    /// @notice Calculates the global net UAD (Ubiquity Dollar Token) tracked amount.
+    /// @dev Computes the net UAD balance by accounting for minted UAD, borrowed collateral, and missing decimals adjustments.
+    /// @return The net global UAD amount tracked, accounting for mints and borrows.
     function uadTrackedGlobal() internal view returns (int256) {
         return
             int256(dollarAmoMinterStorage().uadDollarBalanceStored) -
@@ -158,6 +194,10 @@ library LibDollarAmoMinter {
                 int256(10 ** dollarAmoMinterStorage().missing_decimals));
     }
 
+    /// @notice Calculates the UAD tracked amount for a specific AMO.
+    /// @dev Retrieves the UAD balance of a given AMO, applies correction offsets, and accounts for mints and borrows.
+    /// @param amo_address The address of the AMO for which the balance is being calculated.
+    /// @return The net UAD amount tracked for the specified AMO.
     function uadTrackedAMO(address amo_address) internal view returns (int256) {
         (uint256 uad_val_e18, ) = IAMO(amo_address).dollarBalances();
         int256 uad_val_e18_corrected = int256(uad_val_e18) +
