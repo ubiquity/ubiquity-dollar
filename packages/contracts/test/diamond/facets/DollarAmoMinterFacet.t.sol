@@ -12,7 +12,6 @@ contract DollarAmoMinterFacetTest is DiamondTestSetup {
         super.setUp();
 
         vm.startPrank(admin);
-
         // init collateral token
         collateralToken = new MockERC20("COLLATERAL", "CLT", 18);
 
@@ -39,5 +38,10 @@ contract DollarAmoMinterFacetTest is DiamondTestSetup {
     function testAllAMOAddresses_ShouldReturnAllAmoAddresses() public {
         address[] memory amos = dollarAmoMinterFacet.allAMOAddresses();
         assertEq(amos.length, 0);
+    }
+
+    function testAllAMOsLength_ShouldReturnAllAmosLength() public {
+        uint256 length = dollarAmoMinterFacet.allAMOsLength();
+        assertEq(length, 0);
     }
 }
