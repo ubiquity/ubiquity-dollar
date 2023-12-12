@@ -23,72 +23,72 @@ contract MockDollarAmoMinter is IDollarAmoMinter {
         address _collateral_address,
         address _collateral_token,
         address _pool_address,
-        address _ucr,
-        address _uad
+        address _credits,
+        address _dollar
     ) external {}
 
     function dollarBalances()
         external
         view
-        returns (uint256 uad_val_e18, uint256 collat_val_e18)
+        returns (uint256 dollar_val_e18, uint256 collat_val_e18)
     {}
 
-    function allAMOAddresses() external view returns (address[] memory) {}
+    function allAmoAddresses() external view returns (address[] memory) {}
 
-    function allAMOsLength() external view returns (uint256) {}
+    function allAmosLength() external view returns (uint256) {}
 
-    function uadTrackedGlobal() external view returns (int256) {}
+    function dollarTrackedGlobal() external view returns (int256) {}
 
-    function uadTrackedAMO(
+    function dollarTrackedAmo(
         address amo_address
     ) external view returns (int256) {}
 
     function syncDollarBalances() external {}
 
-    function mintUadForAMO(
+    function mintDollarForAmo(
         address destination_amo,
-        uint256 uad_amount
+        uint256 dollar_amount
     ) external {}
 
-    function burnUadFromAMO(uint256 uad_amount) external {}
+    function burnDollarFromAmo(uint256 dollar_amount) external {}
 
-    function mintUcrForAMO(
+    function mintCreditsForAmo(
         address destination_amo,
-        uint256 ucr_amount
+        uint256 credits_amount
     ) external {}
 
-    function burnUcrFromAMO(uint256 ucr_amount) external {}
+    function burnCreditsFromAmo(uint256 credits_amount) external {}
 
-    function giveCollatToAMO(
+    function giveCollatToAmo(
         address destination_amo,
         uint256 collat_amount
     ) external {}
 
-    function receiveCollatFromAMO(uint256 usdc_amount) external {}
+    function receiveCollatFromAmo(uint256 usdc_amount) external {}
 
-    function addAMO(address amo_address, bool sync_too) external {}
+    function addAmo(address amo_address, bool sync_too) external {}
 
-    function removeAMO(address amo_address, bool sync_too) external {}
+    function removeAmo(address amo_address, bool sync_too) external {}
 
     function setTimelock(address new_timelock) external {}
 
     function setCustodian(address _custodian_address) external {}
 
-    function setUadMintCap(uint256 _uad_mint_cap) external {}
+    function setDollarMintCap(uint256 _dollar_mint_cap) external {}
 
-    function setUcrMintCap(uint256 _ucr_mint_cap) external {}
+    function setCreditsMintCap(uint256 _credits_mint_cap) external {}
 
     function setCollatBorrowCap(uint256 _collat_borrow_cap) external {}
 
     function setMinimumCollateralRatio(uint256 _min_cr) external {}
 
-    function setAMOCorrectionOffsets(
+    function setAmoCorrectionOffsets(
         address amo_address,
-        int256 uad_e18_correction,
+        int256 dollar_e18_correction,
         int256 collat_e18_correction
     ) external {}
 
-    function setUadPool(
+    function setDollarPool(
         address _pool_address,
         address _collateral_address
     ) external {}

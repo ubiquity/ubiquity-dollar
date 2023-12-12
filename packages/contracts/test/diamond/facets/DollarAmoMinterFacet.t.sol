@@ -29,19 +29,19 @@ contract DollarAmoMinterFacetTest is DiamondTestSetup {
     }
 
     function testDollarBalances_ShouldReturnDollarBalances() public {
-        (uint256 uad_val, uint256 col_bal) = dollarAmoMinterFacet
+        (uint256 dollar_val, uint256 col_bal) = dollarAmoMinterFacet
             .dollarBalances();
-        assertEq(uad_val, 0);
+        assertEq(dollar_val, 0);
         assertEq(col_bal, 0);
     }
 
-    function testAllAMOAddresses_ShouldReturnAllAmoAddresses() public {
-        address[] memory amos = dollarAmoMinterFacet.allAMOAddresses();
+    function testAllAmoAddresses_ShouldReturnAllAmoAddresses() public {
+        address[] memory amos = dollarAmoMinterFacet.allAmoAddresses();
         assertEq(amos.length, 0);
     }
 
-    function testAllAMOsLength_ShouldReturnAllAmosLength() public {
-        uint256 length = dollarAmoMinterFacet.allAMOsLength();
+    function testAllAmosLength_ShouldReturnAllAmosLength() public {
+        uint256 length = dollarAmoMinterFacet.allAmosLength();
         assertEq(length, 0);
     }
 }

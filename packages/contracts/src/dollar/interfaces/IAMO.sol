@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 pragma experimental ABIEncoderV2;
 
-interface IAMO {
+interface IAmo {
     function dollarBalances()
         external
         view

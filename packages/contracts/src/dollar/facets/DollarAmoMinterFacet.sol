@@ -16,16 +16,16 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
     /// @param _collateral_address Address of the collateral token.
     /// @param _collateral_token ERC20 address of the collateral token.
     /// @param _pool_address Address of the pool.
-    /// @param _ucr Address of the UCR contract.
-    /// @param _uad Address of the UAD contract.
+    /// @param _credits Address of the credits contract.
+    /// @param _dollar Address of the dollar contract.
     function init(
         address _custodian_address,
         address _timelock_address,
         address _collateral_address,
         address _collateral_token,
         address _pool_address,
-        address _ucr,
-        address _uad
+        address _credits,
+        address _dollar
     ) external {
         LibDollarAmoMinter.init(
             _custodian_address,
@@ -33,8 +33,8 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
             _collateral_address,
             _collateral_token,
             _pool_address,
-            _ucr,
-            _uad
+            _credits,
+            _dollar
         );
     }
 
@@ -50,40 +50,42 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
         return LibDollarAmoMinter.collateralIndex();
     }
 
-    /// @notice Retrieves the current dollar balances of UAD and collateral.
-    /// @return uad_val_e18 Dollar value of UAD.
+    /// @notice Retrieves the current dollar balances of dollar and collateral.
+    /// @return dollar_val_e18 Dollar value of dollar.
     /// @return collat_val_e18 Dollar value of the collateral.
     function dollarBalances()
         external
         view
-        returns (uint256 uad_val_e18, uint256 collat_val_e18)
+        returns (uint256 dollar_val_e18, uint256 collat_val_e18)
     {
         return LibDollarAmoMinter.dollarBalances();
     }
 
     /// @notice Retrieves all registered AMO addresses.
     /// @return An array of AMO addresses.
-    function allAMOAddresses() external view returns (address[] memory) {
-        return LibDollarAmoMinter.allAMOAddresses();
+    function allAmoAddresses() external view returns (address[] memory) {
+        return LibDollarAmoMinter.allAmoAddresses();
     }
 
     /// @notice Retrieves the number of registered AMOs.
     /// @return The number of AMOs.
-    function allAMOsLength() external view returns (uint256) {
-        return LibDollarAmoMinter.allAMOsLength();
+    function allAmosLength() external view returns (uint256) {
+        return LibDollarAmoMinter.allAmosLength();
     }
 
-    /// @notice Retrieves the global UAD tracked amount.
-    /// @return The global UAD tracked amount.
-    function uadTrackedGlobal() external view returns (int256) {
-        return LibDollarAmoMinter.uadTrackedGlobal();
+    /// @notice Retrieves the global dollar tracked amount.
+    /// @return The global dollar tracked amount.
+    function dollarTrackedGlobal() external view returns (int256) {
+        return LibDollarAmoMinter.dollarTrackedGlobal();
     }
 
-    /// @notice Retrieves the UAD tracked amount for a specific AMO.
+    /// @notice Retrieves the dollar tracked amount for a specific AMO.
     /// @param amo_address Address of the AMO.
-    /// @return The UAD tracked amount for the specified AMO.
-    function uadTrackedAMO(address amo_address) external view returns (int256) {
-        return LibDollarAmoMinter.uadTrackedAMO(amo_address);
+    /// @return The dollar tracked amount for the specified AMO.
+    function dollarTrackedAmo(
+        address amo_address
+    ) external view returns (int256) {
+        return LibDollarAmoMinter.dollarTrackedAmo(amo_address);
     }
 
     /// @notice Synchronizes the dollar balances across all AMOs.
@@ -91,72 +93,72 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
         LibDollarAmoMinter.syncDollarBalances();
     }
 
-    /// @notice Mints UAD for a specific AMO.
+    /// @notice Mints dollar for a specific AMO.
     /// @param destination_amo Address of the destination AMO.
-    /// @param uad_amount Amount of UAD to mint.
-    function mintUadForAMO(
+    /// @param dollar_amount Amount of dollar to mint.
+    function mintDollarForAmo(
         address destination_amo,
-        uint256 uad_amount
+        uint256 dollar_amount
     ) external onlyDollarManager {
-        LibDollarAmoMinter.mintUadForAMO(destination_amo, uad_amount);
+        LibDollarAmoMinter.mintDollarForAmo(destination_amo, dollar_amount);
     }
 
-    /// @notice Burns UAD from an AMO.
-    /// @param uad_amount Amount of UAD to burn.
-    function burnUadFromAMO(uint256 uad_amount) external {
-        LibDollarAmoMinter.burnUadFromAMO(uad_amount);
+    /// @notice Burns dollar from an AMO.
+    /// @param dollar_amount Amount of dollar to burn.
+    function burnDollarFromAmo(uint256 dollar_amount) external {
+        LibDollarAmoMinter.burnDollarFromAmo(dollar_amount);
     }
 
-    /// @notice Mints UCR tokens for a specified AMO.
-    /// @param destination_amo The address of the AMO where UCR tokens will be minted.
-    /// @param ucr_amount The amount of UCR tokens to mint.
-    function mintUcrForAMO(
+    /// @notice Mints credits tokens for a specified AMO.
+    /// @param destination_amo The address of the AMO where credits tokens will be minted.
+    /// @param credits_amount The amount of credits tokens to mint.
+    function mintCreditsForAmo(
         address destination_amo,
-        uint256 ucr_amount
+        uint256 credits_amount
     ) external onlyDollarManager {
-        LibDollarAmoMinter.mintUcrForAMO(destination_amo, ucr_amount);
+        LibDollarAmoMinter.mintCreditsForAmo(destination_amo, credits_amount);
     }
 
-    /// @notice Burns UCR tokens from the caller AMO.
-    /// @param ucr_amount The amount of UCR tokens to burn.
-    function burnUcrFromAMO(uint256 ucr_amount) external {
-        LibDollarAmoMinter.burnUcrFromAMO(ucr_amount);
+    /// @notice Burns credits tokens from the caller AMO.
+    /// @param credits_amount The amount of credits tokens to burn.
+    function burnCreditsFromAmo(uint256 credits_amount) external {
+        LibDollarAmoMinter.burnCreditsFromAmo(credits_amount);
     }
 
     /// @notice Transfers collateral to a specified AMO.
     /// @param destination_amo The address of the AMO to receive the collateral.
     /// @param collat_amount The amount of collateral to transfer.
-    function giveCollatToAMO(
+    function giveCollatToAmo(
         address destination_amo,
         uint256 collat_amount
     ) external onlyDollarManager {
-        LibDollarAmoMinter.giveCollatToAMO(destination_amo, collat_amount);
+        LibDollarAmoMinter.giveCollatToAmo(destination_amo, collat_amount);
     }
 
     /// @notice Receives collateral from the calling AMO.
     /// @param usdc_amount The amount of USDC collateral to receive.
-    function receiveCollatFromAMO(uint256 usdc_amount) external {
-        LibDollarAmoMinter.receiveCollatFromAMO(usdc_amount);
+    function receiveCollatFromAmo(uint256 usdc_amount) external {
+        LibDollarAmoMinter.receiveCollatFromAmo(usdc_amount);
     }
 
     /// @notice Adds a new AMO to the system.
     /// @param amo_address The address of the new AMO to add.
     /// @param sync_too Boolean indicating whether to sync dollar balances immediately after adding the AMO.
-    function addAMO(
+    function addAmo(
         address amo_address,
         bool sync_too
     ) external onlyDollarManager {
-        LibDollarAmoMinter.addAMO(amo_address, sync_too);
+        LibDollarAmoMinter.addAmo(amo_address, sync_too);
     }
 
     /// @notice Removes an AMO from the system.
     /// @param amo_address The address of the AMO to remove.
     /// @param sync_too Boolean indicating whether to sync dollar balances immediately after removing the AMO.
-    function removeAMO(
+    function removeAmo(
         address amo_address,
         bool sync_too
     ) external onlyDollarManager {
-        LibDollarAmoMinter.removeAMO(amo_address, sync_too);
+        LibDollarAmoMinter.removeAmo(amo_address, sync_too);
     }
 
     /// @notice Sets a new timelock address.
@@ -173,16 +175,20 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
         LibDollarAmoMinter.setCustodian(_custodian_address);
     }
 
-    /// @notice Sets the UAD minting cap.
-    /// @param _uad_mint_cap The new UAD minting cap.
-    function setUadMintCap(uint256 _uad_mint_cap) external onlyDollarManager {
-        LibDollarAmoMinter.setUadMintCap(_uad_mint_cap);
+    /// @notice Sets the dollar minting cap.
+    /// @param _dollar_mint_cap The new dollar minting cap.
+    function setDollarMintCap(
+        uint256 _dollar_mint_cap
+    ) external onlyDollarManager {
+        LibDollarAmoMinter.setDollarMintCap(_dollar_mint_cap);
     }
 
-    /// @notice Sets the UCR minting cap.
-    /// @param _ucr_mint_cap The new UCR minting cap.
-    function setUcrMintCap(uint256 _ucr_mint_cap) external onlyDollarManager {
-        LibDollarAmoMinter.setUcrMintCap(_ucr_mint_cap);
+    /// @notice Sets the credits minting cap.
+    /// @param _credits_mint_cap The new credits minting cap.
+    function setCreditsMintCap(
+        uint256 _credits_mint_cap
+    ) external onlyDollarManager {
+        LibDollarAmoMinter.setCreditsMintCap(_credits_mint_cap);
     }
 
     /// @notice Sets the collateral borrowing cap.
@@ -203,29 +209,29 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
 
     /// @notice Sets correction offsets for a specific AMO.
     /// @param amo_address The address of the AMO.
-    /// @param uad_e18_correction The UAD correction amount.
+    /// @param dollar_e18_correction The dollar correction amount.
     /// @param collat_e18_correction The collateral correction amount.
-    function setAMOCorrectionOffsets(
+    function setAmoCorrectionOffsets(
         address amo_address,
-        int256 uad_e18_correction,
+        int256 dollar_e18_correction,
         int256 collat_e18_correction
     ) external onlyDollarManager {
-        LibDollarAmoMinter.setAMOCorrectionOffsets(
+        LibDollarAmoMinter.setAmoCorrectionOffsets(
             amo_address,
-            uad_e18_correction,
+            dollar_e18_correction,
             collat_e18_correction
         );
     }
 
-    /// @notice Sets the UAD pool and collateral address.
-    /// @param _pool_address The address of the UAD pool.
+    /// @notice Sets the dollar pool and collateral address.
+    /// @param _pool_address The address of the dollar pool.
     /// @param _collateral_address The address of the collateral token.
     /// This function updates the pool and collateral addresses in the Dollar AMO Minter system.
-    function setUadPool(
+    function setDollarPool(
         address _pool_address,
         address _collateral_address
     ) external onlyDollarManager {
-        LibDollarAmoMinter.setUadPool(_pool_address, _collateral_address);
+        LibDollarAmoMinter.setDollarPool(_pool_address, _collateral_address);
     }
 
     /// @notice Recovers ERC20 tokens accidentally sent to the contract.
