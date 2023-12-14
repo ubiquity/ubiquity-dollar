@@ -16,7 +16,6 @@ import {LibTWAPOracle} from "./LibTWAPOracle.sol";
  * @notice Allows users to:
  * - deposit collateral in exchange for Ubiquity Dollars
  * - redeem Ubiquity Dollars in exchange for the earlier provided collateral
- * @dev Modified from https://github.com/FraxFinance/frax-solidity/blob/fc9810d72c520d256965b81b6c9cc6aa95d07d9d/src/hardhat/contracts/Frax/Pools/FraxPoolV3.sol
  */
 library LibUbiquityPool {
     using SafeERC20 for IERC20;
@@ -34,21 +33,21 @@ library LibUbiquityPool {
         // Core
         //========
         // minter address -> is it enabled
-        mapping(address => bool) amoMinterAddresses;
+        mapping(address amoMinter => bool isEnabled) isAmoMinterEnabled;
         //======================
         // Collateral related
         //======================
         // available collateral tokens
         address[] collateralAddresses;
         // collateral address -> collateral index
-        mapping(address => uint256) collateralAddressToIndex;
+        mapping(address collateralAddress => uint256 collateralIndex) collateralIndex;
         // Stores price of the collateral, if price is paused. CONSIDER ORACLES EVENTUALLY!!!
         uint256[] collateralPrices;
         // array collateral symbols
         string[] collateralSymbols;
         // collateral address -> is it enabled
-        mapping(address => bool) enabledCollaterals;
-        // Number of decimals needed to get to E18. collateral index -> missing_decimals
+        mapping(address collateralAddress => bool isEnabled) isCollateralEnabled;
+        // Number of decimals needed to get to E18. collateral index -> missing decimals
         uint256[] missingDecimals;
         // Total across all collaterals. Accounts for missing_decimals
         uint256[] poolCeilings;
@@ -56,15 +55,15 @@ library LibUbiquityPool {
         // Redeem related
         //====================
         // user -> block number (collateral independent)
-        mapping(address => uint256) lastRedeemed;
+        mapping(address => uint256) lastRedeemedBlock;
         // 1010000 = $1.01
         uint256 mintPriceThreshold;
         // 990000 = $0.99
         uint256 redeemPriceThreshold;
         // address -> collateral index -> balance
-        mapping(address => mapping(uint256 => uint256)) redeemCollateralBalances;
+        mapping(address user => mapping(uint256 collateralIndex => uint256 amount)) redeemCollateralBalances;
         // number of blocks to wait before being able to collectRedemption()
-        uint256 redemptionDelay;
+        uint256 redemptionDelayBlocks;
         // collateral index -> balance
         uint256[] unclaimedPoolCollateral;
         //================
@@ -78,11 +77,11 @@ library LibUbiquityPool {
         // Pause related
         //=================
         // whether borrowing collateral by AMO minters is paused for a particular collateral index
-        bool[] borrowingPaused;
+        bool[] isBorrowPaused;
         // whether minting is paused for a particular collateral index
-        bool[] mintPaused;
+        bool[] isMintPaused;
         // whether redeeming is paused for a particular collateral index
-        bool[] redeemPaused;
+        bool[] isRedeemPaused;
     }
 
     /// @notice Struct used for detailed collateral information
@@ -94,9 +93,9 @@ library LibUbiquityPool {
         uint256 missingDecimals;
         uint256 price;
         uint256 poolCeiling;
-        bool mintPaused;
-        bool redeemPaused;
-        bool borrowingPaused;
+        bool isMintPaused;
+        bool isRedeemPaused;
+        bool isBorrowPaused;
         uint256 mintingFee;
         uint256 redemptionFee;
     }
@@ -135,7 +134,7 @@ library LibUbiquityPool {
         uint256 newRedeemFee
     );
     /// @notice Emitted on toggling pause for mint/redeem/borrow
-    event MRBToggled(uint256 collateralIndex, uint8 toggleIndex);
+    event MintRedeemBorrowToggled(uint256 collateralIndex, uint8 toggleIndex);
     /// @notice Emitted when new pool ceiling (i.e. max amount of collateral) is set
     event PoolCeilingSet(uint256 collateralIndex, uint256 newCeiling);
     /// @notice Emitted when mint and redeem price thresholds are updated (1_000_000 = $1.00)
@@ -144,7 +143,7 @@ library LibUbiquityPool {
         uint256 newRedeemPriceThreshold
     );
     /// @notice Emitted when a new redemption delay in blocks is set
-    event RedemptionDelaySet(uint256 redemptionDelay);
+    event RedemptionDelayBlocksSet(uint256 redemptionDelayBlocks);
 
     //=====================
     // Modifiers
@@ -157,7 +156,7 @@ library LibUbiquityPool {
     modifier collateralEnabled(uint256 collateralIndex) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
-            poolStorage.enabledCollaterals[
+            poolStorage.isCollateralEnabled[
                 poolStorage.collateralAddresses[collateralIndex]
             ],
             "Collateral disabled"
@@ -168,10 +167,10 @@ library LibUbiquityPool {
     /**
      * @notice Checks whether a caller is the AMO minter address
      */
-    modifier onlyAmoMinters() {
+    modifier onlyAmoMinter() {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
-            poolStorage.amoMinterAddresses[msg.sender],
+            poolStorage.isAmoMinterEnabled[msg.sender],
             "Not an AMO Minter"
         );
         _;
@@ -203,24 +202,24 @@ library LibUbiquityPool {
 
         // validation
         require(
-            poolStorage.enabledCollaterals[collateralAddress],
+            poolStorage.isCollateralEnabled[collateralAddress],
             "Invalid collateral"
         );
 
         // get the index
-        uint256 index = poolStorage.collateralAddressToIndex[collateralAddress];
+        uint256 index = poolStorage.collateralIndex[collateralAddress];
 
         returnData = CollateralInformation(
             index,
             poolStorage.collateralSymbols[index],
             collateralAddress,
-            poolStorage.enabledCollaterals[collateralAddress],
+            poolStorage.isCollateralEnabled[collateralAddress],
             poolStorage.missingDecimals[index],
             poolStorage.collateralPrices[index],
             poolStorage.poolCeilings[index],
-            poolStorage.mintPaused[index],
-            poolStorage.redeemPaused[index],
-            poolStorage.borrowingPaused[index],
+            poolStorage.isMintPaused[index],
+            poolStorage.isRedeemPaused[index],
+            poolStorage.isBorrowPaused[index],
             poolStorage.mintingFee[index],
             poolStorage.redemptionFee[index]
         );
@@ -322,7 +321,7 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
-            poolStorage.mintPaused[collateralIndex] == false,
+            poolStorage.isMintPaused[collateralIndex] == false,
             "Minting is paused"
         );
 
@@ -389,7 +388,7 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
-            poolStorage.redeemPaused[collateralIndex] == false,
+            poolStorage.isRedeemPaused[collateralIndex] == false,
             "Redeeming is paused"
         );
 
@@ -429,7 +428,7 @@ library LibUbiquityPool {
             .unclaimedPoolCollateral[collateralIndex]
             .add(collateralOut);
 
-        poolStorage.lastRedeemed[msg.sender] = block.number;
+        poolStorage.lastRedeemedBlock[msg.sender] = block.number;
 
         // burn Dollars
         IERC20Ubiquity ubiquityDollarToken = IERC20Ubiquity(
@@ -453,13 +452,13 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
-            poolStorage.redeemPaused[collateralIndex] == false,
+            poolStorage.isRedeemPaused[collateralIndex] == false,
             "Redeeming is paused"
         );
         require(
             (
-                poolStorage.lastRedeemed[msg.sender].add(
-                    poolStorage.redemptionDelay
+                poolStorage.lastRedeemedBlock[msg.sender].add(
+                    poolStorage.redemptionDelayBlocks
                 )
             ) <= block.number,
             "Too soon to collect redemption"
@@ -500,7 +499,7 @@ library LibUbiquityPool {
      * @dev Bypasses the gassy mint->redeem cycle for AMOs to borrow collateral
      * @param collateralAmount Amount of collateral to borrow
      */
-    function amoMinterBorrow(uint256 collateralAmount) internal onlyAmoMinters {
+    function amoMinterBorrow(uint256 collateralAmount) internal onlyAmoMinter {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         // checks the collateral index of the minter as an additional safety check
@@ -509,13 +508,13 @@ library LibUbiquityPool {
 
         // checks to see if borrowing is paused
         require(
-            poolStorage.borrowingPaused[minterCollateralIndex] == false,
+            poolStorage.isBorrowPaused[minterCollateralIndex] == false,
             "Borrowing is paused"
         );
 
         // ensure collateral is enabled
         require(
-            poolStorage.enabledCollaterals[
+            poolStorage.isCollateralEnabled[
                 poolStorage.collateralAddresses[minterCollateralIndex]
             ],
             "Collateral disabled"
@@ -544,7 +543,7 @@ library LibUbiquityPool {
 
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        poolStorage.amoMinterAddresses[amoMinterAddress] = true;
+        poolStorage.isAmoMinterEnabled[amoMinterAddress] = true;
 
         emit AmoMinterAdded(amoMinterAddress);
     }
@@ -566,12 +565,10 @@ library LibUbiquityPool {
         poolStorage.collateralAddresses.push(collateralAddress);
 
         // for fast collateral address -> collateral idx lookups later
-        poolStorage.collateralAddressToIndex[
-            collateralAddress
-        ] = collateralIndex;
+        poolStorage.collateralIndex[collateralAddress] = collateralIndex;
 
         // set collateral initially to disabled
-        poolStorage.enabledCollaterals[collateralAddress] = false;
+        poolStorage.isCollateralEnabled[collateralAddress] = false;
 
         // add in the missing decimals
         poolStorage.missingDecimals.push(
@@ -592,9 +589,9 @@ library LibUbiquityPool {
         poolStorage.redemptionFee.push(0);
 
         // handle the pauses
-        poolStorage.mintPaused.push(false);
-        poolStorage.redeemPaused.push(false);
-        poolStorage.borrowingPaused.push(false);
+        poolStorage.isMintPaused.push(false);
+        poolStorage.isRedeemPaused.push(false);
+        poolStorage.isBorrowPaused.push(false);
 
         // pool ceiling
         poolStorage.poolCeilings.push(poolCeiling);
@@ -607,7 +604,7 @@ library LibUbiquityPool {
     function removeAmoMinter(address amoMinterAddress) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        poolStorage.amoMinterAddresses[amoMinterAddress] = false;
+        poolStorage.isAmoMinterEnabled[amoMinterAddress] = false;
 
         emit AmoMinterRemoved(amoMinterAddress);
     }
@@ -623,7 +620,7 @@ library LibUbiquityPool {
     ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        // Notice from Frax: CONSIDER ORACLES EVENTUALLY!!!
+        // Notice: CONSIDER ORACLES EVENTUALLY!!!
         poolStorage.collateralPrices[collateralIndex] = newPrice;
 
         emit CollateralPriceSet(collateralIndex, newPrice);
@@ -686,15 +683,17 @@ library LibUbiquityPool {
      * @dev Redeeming is split in 2 actions:
      * @dev 1. `redeemDollar()`
      * @dev 2. `collectRedemption()`
-     * @dev `newRedemptionDelay` sets number of blocks that should be mined after which user can call `collectRedemption()`
-     * @param newRedemptionDelay Redemption delay in blocks
+     * @dev `newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`
+     * @param newRedemptionDelayBlocks Redemption delay in blocks
      */
-    function setRedemptionDelay(uint256 newRedemptionDelay) internal {
+    function setRedemptionDelayBlocks(
+        uint256 newRedemptionDelayBlocks
+    ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        poolStorage.redemptionDelay = newRedemptionDelay;
+        poolStorage.redemptionDelayBlocks = newRedemptionDelayBlocks;
 
-        emit RedemptionDelaySet(newRedemptionDelay);
+        emit RedemptionDelayBlocksSet(newRedemptionDelayBlocks);
     }
 
     /**
@@ -707,12 +706,12 @@ library LibUbiquityPool {
         address collateralAddress = poolStorage.collateralAddresses[
             collateralIndex
         ];
-        poolStorage.enabledCollaterals[collateralAddress] = !poolStorage
-            .enabledCollaterals[collateralAddress];
+        poolStorage.isCollateralEnabled[collateralAddress] = !poolStorage
+            .isCollateralEnabled[collateralAddress];
 
         emit CollateralToggled(
             collateralIndex,
-            poolStorage.enabledCollaterals[collateralAddress]
+            poolStorage.isCollateralEnabled[collateralAddress]
         );
     }
 
@@ -721,20 +720,22 @@ library LibUbiquityPool {
      * @param collateralIndex Collateral token index
      * @param toggleIndex Method index. 0 - toggle mint pause, 1 - toggle redeem pause, 2 - toggle borrow by AMO pause
      */
-    function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) internal {
+    function toggleMintRedeemBorrow(
+        uint256 collateralIndex,
+        uint8 toggleIndex
+    ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         if (toggleIndex == 0)
-            poolStorage.mintPaused[collateralIndex] = !poolStorage.mintPaused[
-                collateralIndex
-            ];
+            poolStorage.isMintPaused[collateralIndex] = !poolStorage
+                .isMintPaused[collateralIndex];
         else if (toggleIndex == 1)
-            poolStorage.redeemPaused[collateralIndex] = !poolStorage
-                .redeemPaused[collateralIndex];
+            poolStorage.isRedeemPaused[collateralIndex] = !poolStorage
+                .isRedeemPaused[collateralIndex];
         else if (toggleIndex == 2)
-            poolStorage.borrowingPaused[collateralIndex] = !poolStorage
-                .borrowingPaused[collateralIndex];
+            poolStorage.isBorrowPaused[collateralIndex] = !poolStorage
+                .isBorrowPaused[collateralIndex];
 
-        emit MRBToggled(collateralIndex, toggleIndex);
+        emit MintRedeemBorrowToggled(collateralIndex, toggleIndex);
     }
 }
