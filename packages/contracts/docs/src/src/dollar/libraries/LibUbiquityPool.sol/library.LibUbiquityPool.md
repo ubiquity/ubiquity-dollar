@@ -1,13 +1,11 @@
 # LibUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bc36823136700d0422c14fd5ae111920580c10d7/src/dollar/libraries/LibUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/b7267f12c687aa106d733f5496a8a4b4e266c3ec/src/dollar/libraries/LibUbiquityPool.sol)
 
 Ubiquity pool library
 
 Allows users to:
 - deposit collateral in exchange for Ubiquity Dollars
 - redeem Ubiquity Dollars in exchange for the earlier provided collateral
-
-*Modified from https://github.com/FraxFinance/frax-solidity/blob/fc9810d72c520d256965b81b6c9cc6aa95d07d9d/src/hardhat/contracts/Frax/Pools/FraxPoolV3.sol*
 
 
 ## State Variables
@@ -52,13 +50,13 @@ modifier collateralEnabled(uint256 collateralIndex);
 |`collateralIndex`|`uint256`|Collateral token index|
 
 
-### onlyAmoMinters
+### onlyAmoMinter
 
 Checks whether a caller is the AMO minter address
 
 
 ```solidity
-modifier onlyAmoMinters();
+modifier onlyAmoMinter();
 ```
 
 ### allCollaterals
@@ -273,7 +271,7 @@ protocols like Compound, Curve, erc...
 
 
 ```solidity
-function amoMinterBorrow(uint256 collateralAmount) internal onlyAmoMinters;
+function amoMinterBorrow(uint256 collateralAmount) internal onlyAmoMinter;
 ```
 **Parameters**
 
@@ -393,7 +391,7 @@ function setPriceThresholds(uint256 newMintPriceThreshold, uint256 newRedeemPric
 |`newRedeemPriceThreshold`|`uint256`|New redeem price threshold|
 
 
-### setRedemptionDelay
+### setRedemptionDelayBlocks
 
 Sets a redemption delay in blocks
 
@@ -403,17 +401,17 @@ Sets a redemption delay in blocks
 
 *2. `collectRedemption()`*
 
-*`newRedemptionDelay` sets number of blocks that should be mined after which user can call `collectRedemption()`*
+*`newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`*
 
 
 ```solidity
-function setRedemptionDelay(uint256 newRedemptionDelay) internal;
+function setRedemptionDelayBlocks(uint256 newRedemptionDelayBlocks) internal;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`newRedemptionDelay`|`uint256`|Redemption delay in blocks|
+|`newRedemptionDelayBlocks`|`uint256`|Redemption delay in blocks|
 
 
 ### toggleCollateral
@@ -431,13 +429,13 @@ function toggleCollateral(uint256 collateralIndex) internal;
 |`collateralIndex`|`uint256`|Collateral token index|
 
 
-### toggleMRB
+### toggleMintRedeemBorrow
 
 Toggles pause for mint/redeem/borrow methods
 
 
 ```solidity
-function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) internal;
+function toggleMintRedeemBorrow(uint256 collateralIndex, uint8 toggleIndex) internal;
 ```
 **Parameters**
 
@@ -488,12 +486,12 @@ Emitted when fees are updated
 event FeesSet(uint256 collateralIndex, uint256 newMintFee, uint256 newRedeemFee);
 ```
 
-### MRBToggled
+### MintRedeemBorrowToggled
 Emitted on toggling pause for mint/redeem/borrow
 
 
 ```solidity
-event MRBToggled(uint256 collateralIndex, uint8 toggleIndex);
+event MintRedeemBorrowToggled(uint256 collateralIndex, uint8 toggleIndex);
 ```
 
 ### PoolCeilingSet
@@ -512,12 +510,12 @@ Emitted when mint and redeem price thresholds are updated (1_000_000 = $1.00)
 event PriceThresholdsSet(uint256 newMintPriceThreshold, uint256 newRedeemPriceThreshold);
 ```
 
-### RedemptionDelaySet
+### RedemptionDelayBlocksSet
 Emitted when a new redemption delay in blocks is set
 
 
 ```solidity
-event RedemptionDelaySet(uint256 redemptionDelay);
+event RedemptionDelayBlocksSet(uint256 redemptionDelayBlocks);
 ```
 
 ## Structs
@@ -527,25 +525,25 @@ Struct used as a storage for this library
 
 ```solidity
 struct UbiquityPoolStorage {
-    mapping(address => bool) amoMinterAddresses;
+    mapping(address amoMinter => bool isEnabled) isAmoMinterEnabled;
     address[] collateralAddresses;
-    mapping(address => uint256) collateralAddressToIndex;
+    mapping(address collateralAddress => uint256 collateralIndex) collateralIndex;
     uint256[] collateralPrices;
     string[] collateralSymbols;
-    mapping(address => bool) enabledCollaterals;
+    mapping(address collateralAddress => bool isEnabled) isCollateralEnabled;
     uint256[] missingDecimals;
     uint256[] poolCeilings;
-    mapping(address => uint256) lastRedeemed;
+    mapping(address => uint256) lastRedeemedBlock;
     uint256 mintPriceThreshold;
     uint256 redeemPriceThreshold;
-    mapping(address => mapping(uint256 => uint256)) redeemCollateralBalances;
-    uint256 redemptionDelay;
+    mapping(address user => mapping(uint256 collateralIndex => uint256 amount)) redeemCollateralBalances;
+    uint256 redemptionDelayBlocks;
     uint256[] unclaimedPoolCollateral;
     uint256[] mintingFee;
     uint256[] redemptionFee;
-    bool[] borrowingPaused;
-    bool[] mintPaused;
-    bool[] redeemPaused;
+    bool[] isBorrowPaused;
+    bool[] isMintPaused;
+    bool[] isRedeemPaused;
 }
 ```
 
@@ -562,9 +560,9 @@ struct CollateralInformation {
     uint256 missingDecimals;
     uint256 price;
     uint256 poolCeiling;
-    bool mintPaused;
-    bool redeemPaused;
-    bool borrowingPaused;
+    bool isMintPaused;
+    bool isRedeemPaused;
+    bool isBorrowPaused;
     uint256 mintingFee;
     uint256 redemptionFee;
 }
