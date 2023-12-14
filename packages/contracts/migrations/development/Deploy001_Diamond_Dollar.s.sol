@@ -288,7 +288,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
             0 // 0% redeem fee
         );
         // set redemption delay to 2 blocks
-        ubiquityPoolFacet.setRedemptionDelay(2);
+        ubiquityPoolFacet.setRedemptionDelayBlocks(2);
         // set mint price threshold to $1.01 and redeem price to $0.99
         ubiquityPoolFacet.setPriceThresholds(1010000, 990000);
 
