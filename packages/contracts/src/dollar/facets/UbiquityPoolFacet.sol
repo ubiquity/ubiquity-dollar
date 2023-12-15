@@ -110,6 +110,11 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
         return LibUbiquityPool.collectRedemption(collateralIndex);
     }
 
+    /// @inheritdoc IUbiquityPool
+    function updateChainLinkCollateralPrice(uint256 collateralIndex) external {
+        LibUbiquityPool.updateChainLinkCollateralPrice(collateralIndex);
+    }
+
     //=========================
     // AMO minters functions
     //=========================
@@ -158,13 +163,6 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
             collateralAddress,
             chainLinkPriceFeedAddress
         );
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function updateChainLinkCollateralPrice(
-        uint256 collateralIndex
-    ) external onlyAdmin {
-        LibUbiquityPool.updateChainLinkCollateralPrice(collateralIndex);
     }
 
     /// @inheritdoc IUbiquityPool
