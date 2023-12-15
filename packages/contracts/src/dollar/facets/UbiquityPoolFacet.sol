@@ -196,8 +196,10 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     }
 
     /// @inheritdoc IUbiquityPool
-    function setRedemptionDelay(uint256 newRedemptionDelay) external onlyAdmin {
-        LibUbiquityPool.setRedemptionDelay(newRedemptionDelay);
+    function setRedemptionDelayBlocks(
+        uint256 newRedemptionDelayBlocks
+    ) external onlyAdmin {
+        LibUbiquityPool.setRedemptionDelayBlocks(newRedemptionDelayBlocks);
     }
 
     /// @inheritdoc IUbiquityPool
@@ -206,10 +208,10 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     }
 
     /// @inheritdoc IUbiquityPool
-    function toggleMRB(
+    function toggleMintRedeemBorrow(
         uint256 collateralIndex,
         uint8 toggleIndex
     ) external onlyAdmin {
-        LibUbiquityPool.toggleMRB(collateralIndex, toggleIndex);
+        LibUbiquityPool.toggleMintRedeemBorrow(collateralIndex, toggleIndex);
     }
 }

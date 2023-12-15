@@ -1,5 +1,5 @@
 # IUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bc36823136700d0422c14fd5ae111920580c10d7/src/dollar/interfaces/IUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/b7267f12c687aa106d733f5496a8a4b4e266c3ec/src/dollar/interfaces/IUbiquityPool.sol)
 
 Ubiquity pool interface
 
@@ -339,7 +339,7 @@ function setPriceThresholds(uint256 newMintPriceThreshold, uint256 newRedeemPric
 |`newRedeemPriceThreshold`|`uint256`|New redeem price threshold|
 
 
-### setRedemptionDelay
+### setRedemptionDelayBlocks
 
 Sets a redemption delay in blocks
 
@@ -349,17 +349,17 @@ Sets a redemption delay in blocks
 
 *2. `collectRedemption()`*
 
-*`newRedemptionDelay` sets number of blocks that should be mined after which user can call `collectRedemption()`*
+*`newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`*
 
 
 ```solidity
-function setRedemptionDelay(uint256 newRedemptionDelay) external;
+function setRedemptionDelayBlocks(uint256 newRedemptionDelayBlocks) external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`newRedemptionDelay`|`uint256`|Redemption delay in blocks|
+|`newRedemptionDelayBlocks`|`uint256`|Redemption delay in blocks|
 
 
 ### toggleCollateral
@@ -377,13 +377,13 @@ function toggleCollateral(uint256 collateralIndex) external;
 |`collateralIndex`|`uint256`|Collateral token index|
 
 
-### toggleMRB
+### toggleMintRedeemBorrow
 
 Toggles pause for mint/redeem/borrow methods
 
 
 ```solidity
-function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) external;
+function toggleMintRedeemBorrow(uint256 collateralIndex, uint8 toggleIndex) external;
 ```
 **Parameters**
 

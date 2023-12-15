@@ -218,10 +218,12 @@ interface IUbiquityPool {
      * @dev Redeeming is split in 2 actions:
      * @dev 1. `redeemDollar()`
      * @dev 2. `collectRedemption()`
-     * @dev `newRedemptionDelay` sets number of blocks that should be mined after which user can call `collectRedemption()`
-     * @param newRedemptionDelay Redemption delay in blocks
+     * @dev `newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`
+     * @param newRedemptionDelayBlocks Redemption delay in blocks
      */
-    function setRedemptionDelay(uint256 newRedemptionDelay) external;
+    function setRedemptionDelayBlocks(
+        uint256 newRedemptionDelayBlocks
+    ) external;
 
     /**
      * @notice Toggles (i.e. enables/disables) a particular collateral token
@@ -234,5 +236,8 @@ interface IUbiquityPool {
      * @param collateralIndex Collateral token index
      * @param toggleIndex Method index. 0 - toggle mint pause, 1 - toggle redeem pause, 2 - toggle borrow by AMO pause
      */
-    function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) external;
+    function toggleMintRedeemBorrow(
+        uint256 collateralIndex,
+        uint8 toggleIndex
+    ) external;
 }
