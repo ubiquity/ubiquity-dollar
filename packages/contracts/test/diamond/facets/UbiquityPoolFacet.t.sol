@@ -72,6 +72,18 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             address(collateralToken),
             poolCeiling
         );
+
+        ubiquityPoolFacet.setCollateralChainLinkPriceFeedAddress(
+            address(collateralToken),
+            address(collateralTokenPriceFeed)
+        );
+
+        MockChainLinkFeed(collateralTokenPriceFeed).updateMockParams(
+            1,
+            1_000_000,
+            2
+        );
+
         // enable collateral at index 0
         ubiquityPoolFacet.toggleCollateral(0);
         // set mint and redeem fees
@@ -812,11 +824,6 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
             .collateralInformation(address(collateralToken));
         assertEq(info.price, 1_000_000);
-
-        ubiquityPoolFacet.setCollateralChainLinkPriceFeedAddress(
-            address(collateralToken),
-            address(collateralTokenPriceFeed)
-        );
 
         int256 mockedPriceFeedPrice = 1_000_123;
 
