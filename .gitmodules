@@ -34,3 +34,7 @@
 	path = packages/contracts/lib/openzeppelin-contracts-upgradeable
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
 	branch = release-v4.9
+[submodule "packages/contracts/lib/chainlink-brownie-contracts"]
+	path = packages/contracts/lib/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
+	branch= main

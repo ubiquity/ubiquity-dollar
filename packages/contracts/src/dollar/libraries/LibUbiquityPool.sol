@@ -10,7 +10,7 @@ import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {UBIQUITY_POOL_PRICE_PRECISION} from "./Constants.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 import {LibTWAPOracle} from "./LibTWAPOracle.sol";
-import {AggregatorV3Interface} from "../../dollar/interfaces/AggregatorV3Interface.sol";
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 /**
  * @notice Ubiquity pool library
