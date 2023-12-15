@@ -647,7 +647,7 @@ library LibUbiquityPool {
     ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        uint256 collateralIndex = poolStorage.collateralAddressToIndex[
+        uint256 collateralIndex = poolStorage.collateralIndex[
             collateralAddress
         ];
         poolStorage.collateralPriceFeedAddresses[
