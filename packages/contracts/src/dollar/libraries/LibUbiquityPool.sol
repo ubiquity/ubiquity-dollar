@@ -339,6 +339,8 @@ library LibUbiquityPool {
             "Dollar price too low"
         );
 
+        // update collateral price
+        updateChainLinkCollateralPrice(collateralIndex);
         // get amount of collateral for incoming Dollars
         collateralNeeded = getDollarInCollateral(collateralIndex, dollarAmount);
 
@@ -413,6 +415,10 @@ library LibUbiquityPool {
                 )
             )
             .div(UBIQUITY_POOL_PRICE_PRECISION);
+
+        //update collateral price
+        updateChainLinkCollateralPrice(collateralIndex);
+
         collateralOut = getDollarInCollateral(collateralIndex, dollarAfterFee);
 
         // checks
