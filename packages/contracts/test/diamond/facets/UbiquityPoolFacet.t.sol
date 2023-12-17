@@ -869,10 +869,15 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             poolCeiling
         );
 
+        // enable collateral at index 1
+        ubiquityPoolFacet.toggleCollateral(1);
+
         ubiquityPoolFacet.setCollateralChainLinkPriceFeedAddress(
             address(collateralToken2),
             address(collateralTokenPriceFeed2)
         );
+
+        ubiquityPoolFacet.updateChainLinkCollateralPrice(1);
 
         info = ubiquityPoolFacet.collateralInformation(
             address(collateralToken)
