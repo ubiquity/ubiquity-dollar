@@ -818,7 +818,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         console.log("dollarsOut:", dollarsOut);
     }
 
-    function testCollateralPriceFeed() public {
+    function testCollateralPriceFeed_ShouldUpdatePrice() public {
         vm.startPrank(admin);
 
         LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
@@ -839,6 +839,50 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             address(collateralToken)
         );
         assertEq(info.price, uint256(mockedPriceFeedPrice));
+
+        vm.stopPrank();
+    }
+
+    function testCollateralPriceFeed_ShouldWorkWithMultipleCollateralTokens()
+        public
+    {
+        vm.startPrank(admin);
+
+        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
+            .collateralInformation(address(collateralToken));
+        assertEq(info.price, 1_000_000);
+
+        // init collateral token
+        MockERC20 collateralToken2 = new MockERC20("COLLATERAL2", "CLT2", 18);
+
+        // init collateral price feed and set price to 0.999999
+        MockChainLinkFeed collateralTokenPriceFeed2 = new MockChainLinkFeed();
+        MockChainLinkFeed(collateralTokenPriceFeed2).updateMockParams(
+            1,
+            999_999,
+            2
+        );
+        // add second collateral token to the pool
+        uint256 poolCeiling = 5_000e18;
+        ubiquityPoolFacet.addCollateralToken(
+            address(collateralToken2),
+            poolCeiling
+        );
+
+        ubiquityPoolFacet.setCollateralChainLinkPriceFeedAddress(
+            address(collateralToken2),
+            address(collateralTokenPriceFeed2)
+        );
+
+        info = ubiquityPoolFacet.collateralInformation(
+            address(collateralToken)
+        );
+        assertEq(info.price, 1_000_000);
+
+        info = ubiquityPoolFacet.collateralInformation(
+            address(collateralToken2)
+        );
+        assertEq(info.price, 999_999);
 
         vm.stopPrank();
     }
