@@ -807,6 +807,9 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256[2] memory current_twap = collateralCurveMetaPool
             .get_twap_balances(twap_balances, twap_balances, 1);
 
+        console.log(current_twap[0]);
+        console.log(current_twap[1]);
+
         vm.stopPrank();
     }
 
