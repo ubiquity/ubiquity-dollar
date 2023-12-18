@@ -779,43 +779,35 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     }
 
     function testCollateralTwap() public {
-        vm.createSelectFork("https://uk.rpc.blxrbdn.com");
+        vm.startPrank(admin);
 
-        // LUSD Curve MetaPool
-        IMetaPool lusdCurveMetapool = IMetaPool(
-            0xEd279fDD11cA84bEef15AF5D39BB4d4bEE23F0cA
+        // use mocked meta pool for collateral twap
+        MockMetaPool collateralCurveMetaPool;
+
+        collateralCurveMetaPool = new MockMetaPool(
+            address(collateralToken),
+            address(curveTriPoolLpToken)
         );
 
-        console.log("LUSD Curve MetaPool tokens");
-        console.log("0 (LUSD):", lusdCurveMetapool.coins(0)); // index 0 : LUSD Stablecoin (LUSD) token address
-        console.log("1 (3CRV):", lusdCurveMetapool.coins(1)); // index 1 : Curve.fi DAI/USDC/USDT (3Crv) token address
+        uint256[2] memory price_cumulative_last = [
+            uint256(1e18),
+            uint256(1e18)
+        ];
+        uint256 last_block_timestamp = 100000;
+        uint256[2] memory twap_balances = [uint256(1e18), uint256(1e18)];
+        uint256[2] memory dy_values = [uint256(1e18), uint256(1e18)];
 
-        console.log(
-            "get_price_cumulative_last()[0] (LUSD) :",
-            lusdCurveMetapool.get_price_cumulative_last()[0]
-        );
-        console.log(
-            "get_price_cumulative_last()[1] (3CRV) :",
-            lusdCurveMetapool.get_price_cumulative_last()[1]
-        );
-
-        console.log(
-            "block_timestamp_last:",
-            lusdCurveMetapool.block_timestamp_last()
+        collateralCurveMetaPool.updateMockParams(
+            price_cumulative_last,
+            last_block_timestamp,
+            twap_balances,
+            dy_values
         );
 
-        console.log("dy last:", lusdCurveMetapool.get_dy(0, 1, 1e18));
+        uint256[2] memory current_twap = collateralCurveMetaPool
+            .get_twap_balances(twap_balances, twap_balances, 1);
 
-        // `TWAPOracle.price1Average` from https://etherscan.io/address/0x7944d5b8f9668AfB1e648a61e54DEa8DE734c1d1
-        uint collateralPriceCurve3Pool = lusdCurveMetapool.get_dy(0, 1, 1e18);
-
-        uint256 curve3PriceUSD = 1070382318565289624;
-
-        // Simulates `calcMintDollarAmount()`
-        // https://github.com/ubiquity/ubiquity-dollar/blob/7a70182d49a0b9dc947c9925a5d28edc49c28b0d/packages/contracts/src/dollar/libraries/LibUbiquityPool.sol#L382
-        uint256 dollarsOut = (100e18 * collateralPriceCurve3Pool) /
-            curve3PriceUSD;
-        console.log("dollarsOut:", dollarsOut);
+        vm.stopPrank();
     }
 
     function testCollateralPriceFeed_ShouldUpdatePrice() public {
