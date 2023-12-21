@@ -136,9 +136,14 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     /// @inheritdoc IUbiquityPool
     function addCollateralToken(
         address collateralAddress,
+        address chainLinkPriceFeedAddress,
         uint256 poolCeiling
     ) external onlyAdmin {
-        LibUbiquityPool.addCollateralToken(collateralAddress, poolCeiling);
+        LibUbiquityPool.addCollateralToken(
+            collateralAddress,
+            chainLinkPriceFeedAddress,
+            poolCeiling
+        );
     }
 
     /// @inheritdoc IUbiquityPool
@@ -147,21 +152,15 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     }
 
     /// @inheritdoc IUbiquityPool
-    function setCollateralPrice(
-        uint256 collateralIndex,
-        uint256 newPrice
-    ) external onlyAdmin {
-        LibUbiquityPool.setCollateralPrice(collateralIndex, newPrice);
-    }
-
-    /// @inheritdoc IUbiquityPool
-    function setCollateralChainLinkPriceFeedAddress(
+    function setCollateralChainLinkPriceFeed(
         address collateralAddress,
-        address chainLinkPriceFeedAddress
+        address chainLinkPriceFeedAddress,
+        uint256 stalenessThreshold
     ) external onlyAdmin {
-        LibUbiquityPool.setCollateralChainLinkPriceFeedAddress(
+        LibUbiquityPool.setCollateralChainLinkPriceFeed(
             collateralAddress,
-            chainLinkPriceFeedAddress
+            chainLinkPriceFeedAddress,
+            stalenessThreshold
         );
     }
 
