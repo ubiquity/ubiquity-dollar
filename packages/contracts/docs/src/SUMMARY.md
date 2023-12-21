@@ -91,6 +91,7 @@
       - [LibUbiquityPool](src/dollar/libraries/LibUbiquityPool.sol/library.LibUbiquityPool.md)
       - [UintUtils](src/dollar/libraries/UintUtils.sol/library.UintUtils.md)
     - [❱ mocks](src/dollar/mocks/README.md)
+      - [MockChainLinkFeed](src/dollar/mocks/MockChainLinkFeed.sol/contract.MockChainLinkFeed.md)
       - [MockCurveFactory](src/dollar/mocks/MockCurveFactory.sol/contract.MockCurveFactory.md)
       - [MockERC20](src/dollar/mocks/MockERC20.sol/contract.MockERC20.md)
       - [MockMetaPool](src/dollar/mocks/MockMetaPool.sol/contract.MockMetaPool.md)

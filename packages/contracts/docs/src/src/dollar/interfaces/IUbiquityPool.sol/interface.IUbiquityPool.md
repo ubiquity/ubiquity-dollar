@@ -1,5 +1,5 @@
 # IUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/b7267f12c687aa106d733f5496a8a4b4e266c3ec/src/dollar/interfaces/IUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/a1d9ec9e560cfbe04ba7ff62fe1103605f2a8cc7/src/dollar/interfaces/IUbiquityPool.sol)
 
 Ubiquity pool interface
 
@@ -249,13 +249,15 @@ Adds a new collateral token
 
 
 ```solidity
-function addCollateralToken(address collateralAddress, uint256 poolCeiling) external;
+function addCollateralToken(address collateralAddress, address chainLinkPriceFeedAddress, uint256 poolCeiling)
+    external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`collateralAddress`|`address`|Collateral token address|
+|`chainLinkPriceFeedAddress`|`address`|Chainlink's price feed address|
 |`poolCeiling`|`uint256`|Max amount of available tokens for collateral|
 
 
@@ -274,20 +276,40 @@ function removeAmoMinter(address amoMinterAddress) external;
 |`amoMinterAddress`|`address`|AMO minter address to remove|
 
 
-### setCollateralPrice
+### setCollateralChainLinkPriceFeed
 
-Sets collateral token price in USD
+Sets collateral ChainLink price feed params
 
 
 ```solidity
-function setCollateralPrice(uint256 collateralIndex, uint256 newPrice) external;
+function setCollateralChainLinkPriceFeed(
+    address collateralAddress,
+    address chainLinkPriceFeedAddress,
+    uint256 stalenessThreshold
+) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralAddress`|`address`|Collateral token address|
+|`chainLinkPriceFeedAddress`|`address`|ChainLink price feed address|
+|`stalenessThreshold`|`uint256`|Threshold in seconds when chainlink answer should be considered stale|
+
+
+### updateChainLinkCollateralPrice
+
+Updates collateral token price in USD from ChainLink price feed
+
+
+```solidity
+function updateChainLinkCollateralPrice(uint256 collateralIndex) external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`collateralIndex`|`uint256`|Collateral token index|
-|`newPrice`|`uint256`|New USD price (precision 1e6)|
 
 
 ### setFees
