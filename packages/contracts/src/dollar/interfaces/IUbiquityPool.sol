@@ -142,10 +142,12 @@ interface IUbiquityPool {
     /**
      * @notice Adds a new collateral token
      * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress Chainlink's price feed address
      * @param poolCeiling Max amount of available tokens for collateral
      */
     function addCollateralToken(
         address collateralAddress,
+        address chainLinkPriceFeedAddress,
         uint256 poolCeiling
     ) external;
 
@@ -156,23 +158,15 @@ interface IUbiquityPool {
     function removeAmoMinter(address amoMinterAddress) external;
 
     /**
-     * @notice Sets collateral token price in USD
-     * @param collateralIndex Collateral token index
-     * @param newPrice New USD price (precision 1e6)
-     */
-    function setCollateralPrice(
-        uint256 collateralIndex,
-        uint256 newPrice
-    ) external;
-
-    /**
-     * @notice Sets collateral ChainLink price feed address
+     * @notice Sets collateral ChainLink price feed params
      * @param collateralAddress Collateral token address
      * @param chainLinkPriceFeedAddress ChainLink price feed address
+     * @param stalenessThreshold Threshold in seconds when chainlink answer should be considered stale
      */
-    function setCollateralChainLinkPriceFeedAddress(
+    function setCollateralChainLinkPriceFeed(
         address collateralAddress,
-        address chainLinkPriceFeedAddress
+        address chainLinkPriceFeedAddress,
+        uint256 stalenessThreshold
     ) external;
 
     /**
