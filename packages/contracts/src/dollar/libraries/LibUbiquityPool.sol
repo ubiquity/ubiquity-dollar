@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity 0.8.19;
 
+import {AggregatorV3Interface} from "@chainlink/interfaces/AggregatorV3Interface.sol";
 import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -41,7 +42,11 @@ library LibUbiquityPool {
         address[] collateralAddresses;
         // collateral address -> collateral index
         mapping(address collateralAddress => uint256 collateralIndex) collateralIndex;
-        // Stores price of the collateral, if price is paused. CONSIDER ORACLES EVENTUALLY!!!
+        // collateral index -> chainlink price feed addresses
+        address[] collateralPriceFeedAddresses;
+        // collateral index -> threshold in seconds when chainlink answer should be considered stale
+        uint256[] collateralPriceFeedStalenessThresholds;
+        // collateral index -> collateral price
         uint256[] collateralPrices;
         // array collateral symbols
         string[] collateralSymbols;
@@ -89,6 +94,8 @@ library LibUbiquityPool {
         uint256 index;
         string symbol;
         address collateralAddress;
+        address collateralPriceFeedAddress;
+        uint256 collateralPriceFeedStalenessThreshold;
         bool isEnabled;
         uint256 missingDecimals;
         uint256 price;
@@ -123,6 +130,12 @@ library LibUbiquityPool {
     event AmoMinterAdded(address amoMinterAddress);
     /// @notice Emitted when AMO minter is removed
     event AmoMinterRemoved(address amoMinterAddress);
+    /// @notice Emitted on setting a chainlink's collateral price feed params
+    event CollateralPriceFeedSet(
+        uint256 collateralIndex,
+        address priceFeedAddress,
+        uint256 stalenessThreshold
+    );
     /// @notice Emitted on setting a collateral price
     event CollateralPriceSet(uint256 collateralIndex, uint256 newPrice);
     /// @notice Emitted on enabling/disabling a particular collateral token
@@ -213,6 +226,8 @@ library LibUbiquityPool {
             index,
             poolStorage.collateralSymbols[index],
             collateralAddress,
+            poolStorage.collateralPriceFeedAddresses[index],
+            poolStorage.collateralPriceFeedStalenessThresholds[index],
             poolStorage.isCollateralEnabled[collateralAddress],
             poolStorage.missingDecimals[index],
             poolStorage.collateralPrices[index],
@@ -325,13 +340,18 @@ library LibUbiquityPool {
             "Minting is paused"
         );
 
+        // update Dollar price from Curve's Dollar Metapool
+        LibTWAPOracle.update();
         // prevent unnecessary mints
         require(
             getDollarPriceUsd() >= poolStorage.mintPriceThreshold,
             "Dollar price too low"
         );
 
-        // get amount of collateral for incoming Dollars
+        // update collateral price
+        updateChainLinkCollateralPrice(collateralIndex);
+
+        // get amount of collateral for minting Dollars
         collateralNeeded = getDollarInCollateral(collateralIndex, dollarAmount);
 
         // subtract the minting fee
@@ -392,6 +412,8 @@ library LibUbiquityPool {
             "Redeeming is paused"
         );
 
+        // update Dollar price from Curve's Dollar Metapool
+        LibTWAPOracle.update();
         // prevent unnecessary redemptions that could adversely affect the Dollar price
         require(
             getDollarPriceUsd() <= poolStorage.redeemPriceThreshold,
@@ -405,6 +427,11 @@ library LibUbiquityPool {
                 )
             )
             .div(UBIQUITY_POOL_PRICE_PRECISION);
+
+        // update collateral price
+        updateChainLinkCollateralPrice(collateralIndex);
+
+        // get collateral output for incoming Dollars
         collateralOut = getDollarInCollateral(collateralIndex, dollarAfterFee);
 
         // checks
@@ -489,6 +516,51 @@ library LibUbiquityPool {
         }
     }
 
+    /**
+     * @notice Updates collateral token price in USD from ChainLink price feed
+     * @param collateralIndex Collateral token index
+     */
+    function updateChainLinkCollateralPrice(uint256 collateralIndex) internal {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+
+        AggregatorV3Interface priceFeed = AggregatorV3Interface(
+            poolStorage.collateralPriceFeedAddresses[collateralIndex]
+        );
+
+        // fetch latest price
+        (
+            ,
+            // roundId
+            int256 answer, // startedAt
+            ,
+            uint256 updatedAt,
+
+        ) = // answeredInRound
+            priceFeed.latestRoundData();
+
+        // fetch number of decimals in chainlink feed
+        uint256 priceFeedDecimals = priceFeed.decimals();
+
+        // validation
+        require(answer > 0, "Invalid price");
+        require(
+            block.timestamp - updatedAt <
+                poolStorage.collateralPriceFeedStalenessThresholds[
+                    collateralIndex
+                ],
+            "Stale data"
+        );
+
+        // convert chainlink price to 6 decimals
+        uint256 price = uint256(answer).mul(UBIQUITY_POOL_PRICE_PRECISION).div(
+            10 ** priceFeedDecimals
+        );
+
+        poolStorage.collateralPrices[collateralIndex] = price;
+
+        emit CollateralPriceSet(collateralIndex, price);
+    }
+
     //=========================
     // AMO minters functions
     //=========================
@@ -551,10 +623,12 @@ library LibUbiquityPool {
     /**
      * @notice Adds a new collateral token
      * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress Chainlink's price feed address
      * @param poolCeiling Max amount of available tokens for collateral
      */
     function addCollateralToken(
         address collateralAddress,
+        address chainLinkPriceFeedAddress,
         uint256 poolCeiling
     ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
@@ -593,8 +667,16 @@ library LibUbiquityPool {
         poolStorage.isRedeemPaused.push(false);
         poolStorage.isBorrowPaused.push(false);
 
-        // pool ceiling
+        // set pool ceiling
         poolStorage.poolCeilings.push(poolCeiling);
+
+        // set price feed address
+        poolStorage.collateralPriceFeedAddresses.push(
+            chainLinkPriceFeedAddress
+        );
+
+        // set price feed staleness threshold in seconds
+        poolStorage.collateralPriceFeedStalenessThresholds.push(1 days);
     }
 
     /**
@@ -610,20 +692,37 @@ library LibUbiquityPool {
     }
 
     /**
-     * @notice Sets collateral token price in USD
-     * @param collateralIndex Collateral token index
-     * @param newPrice New USD price (precision 1e6)
+     * @notice Sets collateral ChainLink price feed params
+     * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress ChainLink price feed address
+     * @param stalenessThreshold Threshold in seconds when chainlink answer should be considered stale
      */
-    function setCollateralPrice(
-        uint256 collateralIndex,
-        uint256 newPrice
+    function setCollateralChainLinkPriceFeed(
+        address collateralAddress,
+        address chainLinkPriceFeedAddress,
+        uint256 stalenessThreshold
     ) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        // Notice: CONSIDER ORACLES EVENTUALLY!!!
-        poolStorage.collateralPrices[collateralIndex] = newPrice;
+        uint256 collateralIndex = poolStorage.collateralIndex[
+            collateralAddress
+        ];
 
-        emit CollateralPriceSet(collateralIndex, newPrice);
+        // set price feed address
+        poolStorage.collateralPriceFeedAddresses[
+            collateralIndex
+        ] = chainLinkPriceFeedAddress;
+
+        // set staleness threshold in seconds when chainlink answer should be considered stale
+        poolStorage.collateralPriceFeedStalenessThresholds[
+            collateralIndex
+        ] = stalenessThreshold;
+
+        emit CollateralPriceFeedSet(
+            collateralIndex,
+            chainLinkPriceFeedAddress,
+            stalenessThreshold
+        );
     }
 
     /**

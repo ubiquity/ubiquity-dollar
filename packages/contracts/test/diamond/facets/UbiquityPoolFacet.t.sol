@@ -4,7 +4,9 @@ pragma solidity 0.8.19;
 import "forge-std/console.sol";
 import {DiamondTestSetup} from "../DiamondTestSetup.sol";
 import {IDollarAmoMinter} from "../../../src/dollar/interfaces/IDollarAmoMinter.sol";
+import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {LibUbiquityPool} from "../../../src/dollar/libraries/LibUbiquityPool.sol";
+import {MockChainLinkFeed} from "../../../src/dollar/mocks/MockChainLinkFeed.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
 import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 
@@ -21,13 +23,20 @@ contract MockDollarAmoMinter is IDollarAmoMinter {
 contract UbiquityPoolFacetTest is DiamondTestSetup {
     MockDollarAmoMinter dollarAmoMinter;
     MockERC20 collateralToken;
+    MockChainLinkFeed collateralTokenPriceFeed;
     MockMetaPool curveDollarMetaPool;
     MockERC20 curveTriPoolLpToken;
+
     address user = address(1);
 
     // Events
     event AmoMinterAdded(address amoMinterAddress);
     event AmoMinterRemoved(address amoMinterAddress);
+    event CollateralPriceFeedSet(
+        uint256 collateralIndex,
+        address priceFeedAddress,
+        uint256 stalenessThreshold
+    );
     event CollateralPriceSet(uint256 collateralIndex, uint256 newPrice);
     event CollateralToggled(uint256 collateralIndex, bool newState);
     event FeesSet(
@@ -51,6 +60,9 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // init collateral token
         collateralToken = new MockERC20("COLLATERAL", "CLT", 18);
 
+        // init collateral price feed
+        collateralTokenPriceFeed = new MockChainLinkFeed();
+
         // init Curve 3CRV-LP token
         curveTriPoolLpToken = new MockERC20("3CRV", "3CRV", 18);
 
@@ -64,8 +76,26 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
         ubiquityPoolFacet.addCollateralToken(
             address(collateralToken),
+            address(collateralTokenPriceFeed),
             poolCeiling
         );
+
+        // set collateral price feed mock params
+        collateralTokenPriceFeed.updateMockParams(
+            1, // round id
+            100_000_000, // answer, 100_000_000 = $1.00 (chainlink 8 decimals answer is converted to 6 decimals pool price)
+            block.timestamp, // started at
+            block.timestamp, // updated at
+            1 // answered in round
+        );
+
+        // set price feed for collateral token
+        ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
+            address(collateralToken), // collateral token address
+            address(collateralTokenPriceFeed), // price feed address
+            1 days // price feed staleness threshold in seconds
+        );
+
         // enable collateral at index 0
         ubiquityPoolFacet.toggleCollateral(0);
         // set mint and redeem fees
@@ -156,6 +186,11 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(info.index, 0);
         assertEq(info.symbol, "CLT");
         assertEq(info.collateralAddress, address(collateralToken));
+        assertEq(
+            info.collateralPriceFeedAddress,
+            address(collateralTokenPriceFeed)
+        );
+        assertEq(info.collateralPriceFeedStalenessThreshold, 1 days);
         assertEq(info.isEnabled, true);
         assertEq(info.missingDecimals, 0);
         assertEq(info.price, 1_000_000);
@@ -499,6 +534,68 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(collateralToken.balanceOf(user), 97.02e18);
     }
 
+    function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsInvalid()
+        public
+    {
+        // set invalid answer from chainlink
+        collateralTokenPriceFeed.updateMockParams(
+            1, // round id
+            0, // invalid answer
+            block.timestamp, // started at
+            block.timestamp, // updated at
+            1 // answered in round
+        );
+
+        vm.expectRevert("Invalid price");
+        ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
+    }
+
+    function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsStale()
+        public
+    {
+        // set stale answer from chainlink
+        collateralTokenPriceFeed.updateMockParams(
+            1, // round id
+            100_000_000, // answer, 100_000_000 = $1.00
+            block.timestamp, // started at
+            block.timestamp, // updated at
+            1 // answered in round
+        );
+
+        // wait 1 day
+        vm.warp(block.timestamp + 1 days);
+
+        vm.expectRevert("Stale data");
+        ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
+    }
+
+    function testUpdateChainLinkCollateralPrice_ShouldUpdateCollateralPrice()
+        public
+    {
+        // before
+        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
+            .collateralInformation(address(collateralToken));
+        assertEq(info.price, 1_000_000);
+
+        // set answer from chainlink
+        collateralTokenPriceFeed.updateMockParams(
+            1, // round id
+            99_000_000, // answer, 99_000_000 = $0.99
+            block.timestamp, // started at
+            block.timestamp, // updated at
+            1 // answered in round
+        );
+
+        // update collateral price
+        ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
+
+        // after
+        info = ubiquityPoolFacet.collateralInformation(
+            address(collateralToken)
+        );
+        assertEq(info.price, 990_000);
+    }
+
     //=========================
     // AMO minters functions
     //=========================
@@ -579,6 +676,11 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(info.index, 0);
         assertEq(info.symbol, "CLT");
         assertEq(info.collateralAddress, address(collateralToken));
+        assertEq(
+            info.collateralPriceFeedAddress,
+            address(collateralTokenPriceFeed)
+        );
+        assertEq(info.collateralPriceFeedStalenessThreshold, 1 days);
         assertEq(info.isEnabled, true);
         assertEq(info.missingDecimals, 0);
         assertEq(info.price, 1_000_000);
@@ -600,22 +702,39 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetCollateralPrice_ShouldSetCollateralPriceInUsd() public {
+    function testSetCollateralChainLinkPriceFeed_ShouldSetPriceFeed() public {
         vm.startPrank(admin);
 
         LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
             .collateralInformation(address(collateralToken));
-        assertEq(info.price, 1_000_000);
+        assertEq(
+            info.collateralPriceFeedAddress,
+            address(collateralTokenPriceFeed)
+        );
+        assertEq(info.collateralPriceFeedStalenessThreshold, 1 days);
 
-        uint256 newCollateralPrice = 1_100_000;
+        address newPriceFeedAddress = address(1);
+        uint256 newStalenessThreshold = 2 days;
         vm.expectEmit(address(ubiquityPoolFacet));
-        emit CollateralPriceSet(0, newCollateralPrice);
-        ubiquityPoolFacet.setCollateralPrice(0, newCollateralPrice);
+        emit CollateralPriceFeedSet(
+            0,
+            newPriceFeedAddress,
+            newStalenessThreshold
+        );
+        ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
+            address(collateralToken),
+            newPriceFeedAddress,
+            newStalenessThreshold
+        );
 
         info = ubiquityPoolFacet.collateralInformation(
             address(collateralToken)
         );
-        assertEq(info.price, newCollateralPrice);
+        assertEq(info.collateralPriceFeedAddress, newPriceFeedAddress);
+        assertEq(
+            info.collateralPriceFeedStalenessThreshold,
+            newStalenessThreshold
+        );
 
         vm.stopPrank();
     }
