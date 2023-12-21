@@ -65,6 +65,8 @@ yarn workspace @ubiquity/dapp start # Run the web application at http://localhos
 
 4. We run [CI jobs](https://github.com/ubiquity/ubiquity-dollar/actions) all CI jobs must pass before commiting/merging a PR with no exceptions (usually a few exceptions while the PR it's getting reviewed and the maintainers highlight a job run that may skip)
 
+5. We run Solhint to enforce a pre-set selected number of rules for code quality/style on Smart Contracts
+
 ### Network Settings
 | Network | Chain ID | RPC Endpoint                  | Comment |
 |---------|----------|-------------------------------|---------|
