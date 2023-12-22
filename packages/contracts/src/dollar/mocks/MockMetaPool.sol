@@ -88,39 +88,39 @@ contract MockMetaPool is IMetaPool, MockERC20 {
     }
 
     function exchange(
-        int128 i,
-        int128 j,
-        uint256 dx,
-        uint256 min_dy
-    ) external returns (uint256) {
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */,
+        uint256 /* min_dy */
+    ) external pure returns (uint256) {
         return 0;
     }
 
-    function fee() external view returns (uint256) {
+    function fee() external pure returns (uint256) {
         return 0;
     }
 
     function get_dy(
-        int128 i,
-        int128 j,
-        uint256 dx
-    ) external view returns (uint256) {
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */
+    ) external pure returns (uint256) {
         return 0;
     }
 
     function get_dy_underlying(
-        int128 i,
-        int128 j,
-        uint256 dx
-    ) external view returns (uint256) {
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */
+    ) external pure returns (uint256) {
         return 0;
     }
 
     function remove_liquidity_one_coin(
-        uint256 _burn_amount,
-        int128 i,
-        uint256 _min_received
-    ) external returns (uint256) {
+        uint256 /* _burn_amount */,
+        int128 /* i */,
+        uint256 /* _min_received */
+    ) external pure returns (uint256) {
         return 0;
     }
 }
