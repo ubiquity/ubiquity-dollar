@@ -1,5 +1,5 @@
 # ICreditNft
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/40df6b48aeb8f52a1ca16fc758a5459764bee6c2/src/dollar/interfaces/ICreditNft.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/8b2c9690f3164db342fb36c8c2d81e473eac504b/src/dollar/interfaces/ICreditNft.sol)
 
 **Inherits:**
 IERC1155Upgradeable
