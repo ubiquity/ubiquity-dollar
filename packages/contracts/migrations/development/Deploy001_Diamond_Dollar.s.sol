@@ -100,6 +100,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     uint256 ownerPrivateKey;
     address collateralTokenAddress;
 
+    // threshold in seconds when price feed response should be considered stale
+    uint256 CHAINLINK_PRICE_FEED_THRESHOLD;
+
     // Dollar related contracts
     UbiquityDollarToken public dollarToken;
     ERC1967Proxy public proxyDollarToken;
@@ -391,6 +394,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // start sending admin transactions
         vm.startBroadcast(adminPrivateKey);
 
+        // set threshold to 10 years (3650 days) for ease of debugging
+        CHAINLINK_PRICE_FEED_THRESHOLD = 3650 days;
+
         // set params for LUSD/USD chainlink price feed mock
         MockChainLinkFeed(address(chainLinkPriceFeedLusd)).updateMockParams(
             1, // round id
@@ -404,11 +410,11 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
             address(diamond)
         );
 
-        // set price feed address and set threshold to 10 years (3650 days) for ease of debugging
+        // set price feed address and threshold in seconds
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
             collateralTokenAddress, // collateral token address
             address(chainLinkPriceFeedLusd), // price feed address
-            3650 days // price feed staleness threshold in seconds
+            CHAINLINK_PRICE_FEED_THRESHOLD // price feed staleness threshold in seconds
         );
 
         // fetch latest prices from chainlink for collateral with index 0
