@@ -54,7 +54,7 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
         vm.startBroadcast(adminPrivateKey);
 
         // init LUSD/USD chainlink price feed
-        chainLinkPriceFeedLusdUsd = AggregatorV3Interface(
+        chainLinkPriceFeedLusd = AggregatorV3Interface(
             chainlinkPriceFeedAddress
         );
 
@@ -65,7 +65,7 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
         // set price feed
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
             collateralTokenAddress, // collateral token address
-            address(chainLinkPriceFeedLusdUsd), // price feed address
+            address(chainLinkPriceFeedLusd), // price feed address
             1 days // price feed staleness threshold in seconds
         );
 

@@ -118,7 +118,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
 
     // oracle related contracts
-    AggregatorV3Interface chainLinkPriceFeedLusdUsd; // chainlink LUSD/USD price feed
+    AggregatorV3Interface chainLinkPriceFeedLusd; // chainlink LUSD/USD price feed
     IERC20 curveTriPoolLpToken; // Curve's 3CRV-LP token
     IMetaPool curveDollarMetaPool; // Curve's Dollar-3CRVLP metapool
 
@@ -291,7 +291,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         uint256 poolCeiling = 10_000e18; // max 10_000 of collateral tokens is allowed
         ubiquityPoolFacet.addCollateralToken(
             collateralTokenAddress, // collateral token address
-            address(chainLinkPriceFeedLusdUsd), // chainlink LUSD/USD price feed address
+            address(chainLinkPriceFeedLusd), // chainlink LUSD/USD price feed address
             poolCeiling // pool ceiling amount
         );
         // enable collateral at index 0
@@ -379,7 +379,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         vm.startBroadcast(ownerPrivateKey);
 
         // deploy LUSD/USD chainlink mock price feed
-        chainLinkPriceFeedLusdUsd = new MockChainLinkFeed();
+        chainLinkPriceFeedLusd = new MockChainLinkFeed();
 
         // stop sending owner transactions
         vm.stopBroadcast();
@@ -392,7 +392,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         vm.startBroadcast(adminPrivateKey);
 
         // set params for LUSD/USD chainlink price feed mock
-        MockChainLinkFeed(address(chainLinkPriceFeedLusdUsd)).updateMockParams(
+        MockChainLinkFeed(address(chainLinkPriceFeedLusd)).updateMockParams(
             1, // round id
             100_000_000, // answer, 100_000_000 = $1.00 (chainlink 8 decimals answer is converted to 6 decimals used in UbiquityPool)
             block.timestamp, // started at
@@ -407,7 +407,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // set price feed address and set threshold to 10 years (3650 days) for ease of debugging
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
             collateralTokenAddress, // collateral token address
-            address(chainLinkPriceFeedLusdUsd), // price feed address
+            address(chainLinkPriceFeedLusd), // price feed address
             3650 days // price feed staleness threshold in seconds
         );
 
