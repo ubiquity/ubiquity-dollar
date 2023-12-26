@@ -1,8 +1,8 @@
 # MockMetaPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/e160bf5b70e53d2b45eeff4c7e3dc69c842c728f/src/dollar/mocks/MockMetaPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/aed79e7ca6ac6be405e839958f192485d424ce51/src/dollar/mocks/MockMetaPool.sol)
 
 **Inherits:**
-[MockERC20](/src/dollar/mocks/MockERC20.sol/contract.MockERC20.md)
+[IMetaPool](/src/dollar/interfaces/IMetaPool.sol/interface.IMetaPool.md), [MockERC20](/src/dollar/mocks/MockERC20.sol/contract.MockERC20.md)
 
 
 ## State Variables
@@ -117,5 +117,40 @@ function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount, add
 
 ```solidity
 function calc_token_amount(uint256[2] memory _amounts, bool) external pure returns (uint256);
+```
+
+### exchange
+
+
+```solidity
+function exchange(int128, int128, uint256, uint256) external pure returns (uint256);
+```
+
+### fee
+
+
+```solidity
+function fee() external pure returns (uint256);
+```
+
+### get_dy
+
+
+```solidity
+function get_dy(int128, int128, uint256) external pure returns (uint256);
+```
+
+### get_dy_underlying
+
+
+```solidity
+function get_dy_underlying(int128, int128, uint256) external pure returns (uint256);
+```
+
+### remove_liquidity_one_coin
+
+
+```solidity
+function remove_liquidity_one_coin(uint256, int128, uint256) external pure returns (uint256);
 ```
 
