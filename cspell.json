@@ -63,6 +63,7 @@
     "connectkit",
     "Consts",
     "Cpath",
+    "CRVLP",
     "crytic",
     "Csvg",
     "delegatecall",
