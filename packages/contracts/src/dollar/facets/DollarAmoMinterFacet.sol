@@ -167,12 +167,22 @@ contract DollarAmoMinterFacet is Modifiers, IDollarAmoMinter {
         LibDollarAmoMinter.setTimelock(_newTimelock);
     }
 
+    /// @notice Returns the timelock address.
+    function timelockAddress() external view returns (address _timelockAddr) {
+        return LibDollarAmoMinter.timelockAddress();
+    }
+
     /// @notice Sets the custodian address.
     /// @param _custodianAddress The address of the custodian.
     function setCustodian(
         address _custodianAddress
     ) external onlyDollarManager {
         LibDollarAmoMinter.setCustodian(_custodianAddress);
+    }
+
+    /// @notice Returns the custodian address.
+    function custodianAddress() external view returns (address _custodianAddr) {
+        return LibDollarAmoMinter.custodianAddress();
     }
 
     /// @notice Sets the dollar minting cap.

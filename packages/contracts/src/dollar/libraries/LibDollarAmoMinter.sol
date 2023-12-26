@@ -489,6 +489,12 @@ library LibDollarAmoMinter {
         minterStorage.timelockAddress = _newTimelock;
     }
 
+    function timelockAddress() internal view returns (address _timelockAddr) {
+        DollarAmoMinterData storage minterStorage = dollarAmoMinterStorage();
+
+        return minterStorage.timelockAddress;
+    }
+
     /// @notice Sets the custodian address.
     /// @param _custodianAddress The new address to be set as the custodian.
     /// @dev This function updates the custodian address and ensures it is not a zero address.
@@ -500,6 +506,15 @@ library LibDollarAmoMinter {
             "Custodian address cannot be 0"
         );
         minterStorage.custodianAddress = _custodianAddress;
+    }
+
+    /// @notice This function retrieves the custodian address from the DollarAmoMinterData storage.
+    /// @dev Accesses the DollarAmoMinterData storage to get the custodian address.
+    /// @return _custodianAddr The address of the custodian stored in the DollarAmoMinterData.
+    function custodianAddress() internal view returns (address _custodianAddr) {
+        DollarAmoMinterData storage minterStorage = dollarAmoMinterStorage();
+
+        return minterStorage.custodianAddress;
     }
 
     /// @notice Sets the dollar mint cap.

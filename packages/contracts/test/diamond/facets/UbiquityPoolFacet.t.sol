@@ -72,7 +72,15 @@ contract MockDollarAmoMinter is IDollarAmoMinter {
 
     function setTimelock(address new_timelock) external {}
 
+    function timelockAddress() external view returns (address _timelockAddr) {}
+
     function setCustodian(address _custodian_address) external {}
+
+    function custodianAddress()
+        external
+        view
+        returns (address _custodianAddr)
+    {}
 
     function setDollarMintCap(uint256 _dollar_mint_cap) external {}
 

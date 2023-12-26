@@ -111,9 +111,15 @@ interface IDollarAmoMinter {
     /// @param _newTimelock The address of the new timelock.
     function setTimelock(address _newTimelock) external;
 
+    /// @notice Returns the timelock address.
+    function timelockAddress() external view returns (address _timelockAddr);
+
     /// @notice Sets the custodian address.
     /// @param _custodianAddress The address of the custodian.
     function setCustodian(address _custodianAddress) external;
+
+    /// @notice Returns the custodian address.
+    function custodianAddress() external view returns (address _custodianAddr);
 
     /// @notice Sets the dollar mint cap.
     /// @param _dollarMintCap The new dollar mint cap to be set.
