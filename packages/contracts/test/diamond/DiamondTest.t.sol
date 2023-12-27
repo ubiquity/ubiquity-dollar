@@ -254,6 +254,39 @@ contract TestDiamond is DiamondTestSetup {
         assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 1);
     }
 
+    function testCutFacetRemoveFacetFunctions() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithStorageWriteFunctions.functionA.selector;
+        selectors[1] = MockFacetWithStorageWriteFunctions.functionB.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(writeFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 0);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 1);
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(0),
+            action: FacetCutAction.Remove,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        vm.expectRevert("Diamond: Function does not exist");
+        IMockFacet(address(diamondCutFacet)).functionA();
+        vm.expectRevert("Diamond: Function does not exist");
+        IMockFacet(address(diamondCutFacet)).functionB();
+    }
+
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
         for (uint256 i; i < facetAddressList.length; i++) {
             if (compareStrings(facetNames[i], "DiamondCutFacet")) {
