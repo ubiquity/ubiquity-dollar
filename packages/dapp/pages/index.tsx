@@ -5,7 +5,6 @@ import "@uniswap/widgets/fonts.css";
 import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
 import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 import DollarPrice from "@/components/redeem/dollar-price";
-import { fetchData } from "@/components/utils/local-data";
 
 import dynamic from "next/dynamic";
 const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connection-wall"), { ssr: false }); //@note Fix: (Hydration Error)
@@ -13,6 +12,9 @@ const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connec
 const index: FC = (): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
   const protocolContracts = useProtocolContracts();
+
+  /*
+  TODO: uncomment when all contracts are exported without errors
 
   useEffectAsync(async () => {
     if (protocolContracts != null) {
@@ -27,10 +29,7 @@ const index: FC = (): JSX.Element => {
       setTwapPrice(null);
     }
   }, []);
-
-  if (process.env.DEBUG === "true") {
-    fetchData();
-  }
+  */
 
   return (
     <WalletConnectionWall>

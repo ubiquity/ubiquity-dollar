@@ -11,6 +11,8 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
   const [spotPrice, setSpotPrice] = useState<BigNumber | null>(null);
 
   async function refreshPrices() {
+    /*
+    TODO: uncomment when all contracts are exported successfully
     try {
       if (!protocolContracts || !provider) {
         return;
@@ -28,6 +30,7 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
     } catch (error) {
       console.log("Error in refreshPrices: ", error);
     }
+    */
   }
 
   useEffect(() => {

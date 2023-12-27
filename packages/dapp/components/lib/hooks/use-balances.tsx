@@ -23,6 +23,10 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
       return;
     }
 
+    /*
+    TODO: refactor because some of the contracts (creditNft, stakingShare, etc..) are not part
+    of the initial production deployment
+
     const contracts = await protocolContracts;
 
     if (contracts.creditNft && contracts.stakingShare) {
@@ -51,6 +55,7 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         usdt,
       });
     }
+    */
   }
 
   useEffect(() => {
