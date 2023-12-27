@@ -1,5 +1,7 @@
 import { Provider } from "@ethersproject/providers";
 import { Contract, ethers } from "ethers";
+import { mainnet } from "wagmi";
+import { GOVERNANCE_TOKEN_ADDRESS } from "../../utils";
 import useWeb3 from "../use-web-3";
 
 // contract build artifacts
@@ -64,7 +66,7 @@ const useProtocolContracts = () => {
   // for all of the deployment transactions
   deploymentTransactions.map((tx: DeploymentTransaction) => {
     if (tx.transactionType === "CREATE") {
-      // find contracts that deployed separately (i.e. not part of the diamond)
+      // get `UbiquityDollarToken` contract instance (deployed separately, not part of the diamond)
       if (tx.contractName === "UbiquityDollarToken") {
         protocolContracts.dollarToken = new ethers.Contract(
           getContractProxyAddress(tx.contractAddress, deploymentTransactions), 
@@ -72,9 +74,10 @@ const useProtocolContracts = () => {
           <Provider>provider
         );
       }
+      // get `UbiquityGovernance` token contract instance (for mainnet use already deployed contract, for testnet/anvil mock is used)
       if (tx.contractName === "UbiquityGovernance") {
         protocolContracts.governanceToken = new ethers.Contract(
-          tx.contractAddress, 
+          chainId === mainnet.id ? GOVERNANCE_TOKEN_ADDRESS : tx.contractAddress, 
           UbiquityGovernanceArtifact.abi, 
           <Provider>provider
         );
