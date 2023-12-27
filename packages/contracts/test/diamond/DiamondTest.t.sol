@@ -223,6 +223,37 @@ contract TestDiamond is DiamondTestSetup {
         assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 22);
     }
 
+    function testCutFacetReplaceFacet() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithPureFunctions.functionA.selector;
+        selectors[1] = MockFacetWithPureFunctions.functionB.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 1);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 2);
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(writeFacet),
+            action: FacetCutAction.Replace,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 0);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 1);
+    }
+
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
         for (uint256 i; i < facetAddressList.length; i++) {
             if (compareStrings(facetNames[i], "DiamondCutFacet")) {
