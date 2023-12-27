@@ -2,8 +2,13 @@
 pragma solidity 0.8.19;
 
 import "./DiamondTestSetup.sol";
+import {MockFacetInitializer, MockFacetWithPureFunctions, MockFacetWithStorageWriteFunctions, MockFacetWithExtendedStorageWriteFunctions} from "../../src/dollar/mocks/MockFacet.sol";
 
 contract TestDiamond is DiamondTestSetup {
+    address pureFacet = address(new MockFacetWithPureFunctions());
+    address writeFacet = address(new MockFacetWithStorageWriteFunctions());
+    address facetInitializer = address(new MockFacetInitializer());
+
     function test_ShouldSupportInspectingFacetsAndFunctions() public {
         bool isSupported = IERC165(address(diamond)).supportsInterface(
             type(IDiamondLoupe).interfaceId
@@ -46,6 +51,66 @@ contract TestDiamond is DiamondTestSetup {
         for (uint256 i = 0; i < facetAddresses.length; i++) {
             assertEq(facets[i].facetAddress, facetAddresses[i]);
         }
+    }
+
+    function testCutFacetShouldRevertWhenNotOwner() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert("LibDiamond: Must be contract owner");
+
+        vm.prank(user1);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenFunctionAlreadyExists() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(collectableDustFacetImplementation),
+            action: FacetCutAction.Add,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert(
+            "LibDiamondCut: Can't add function that already exists"
+        );
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenNoSelectorsProvidedForFacetForCut()
+        public
+    {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: new bytes4[](0)
+        });
+
+        vm.expectRevert("LibDiamondCut: No selectors in facet to cut");
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenAddToZeroAddress() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(0),
+            action: FacetCutAction.Add,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert("LibDiamondCut: Add facet can't be address(0)");
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
     }
 
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
