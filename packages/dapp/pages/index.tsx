@@ -13,9 +13,6 @@ const index: FC = (): JSX.Element => {
   const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
   const protocolContracts = useProtocolContracts();
 
-  /*
-  TODO: uncomment when all contracts are exported without errors
-
   useEffectAsync(async () => {
     if (protocolContracts != null) {
       try {
@@ -29,7 +26,6 @@ const index: FC = (): JSX.Element => {
       setTwapPrice(null);
     }
   }, []);
-  */
 
   return (
     <WalletConnectionWall>
