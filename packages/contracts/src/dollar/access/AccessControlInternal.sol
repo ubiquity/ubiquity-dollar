@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.19;
 
-import {EnumerableSet} from "../libraries/EnumerableSet.sol";
+import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import {AddressUtils} from "../libraries/AddressUtils.sol";
 import {UintUtils} from "../libraries/UintUtils.sol";
 import {LibAccessControl} from "../libraries/LibAccessControl.sol";
