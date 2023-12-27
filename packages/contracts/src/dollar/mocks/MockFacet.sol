@@ -36,10 +36,8 @@ contract MockFacetInitializer {
         revert();
     }
 
-    error MockCustomError(string);
-
     function initializeRevertWithMessage() external pure returns (uint256) {
-        revert MockCustomError("MockFacetError");
+        revert("MockFacetError");
     }
 }
 

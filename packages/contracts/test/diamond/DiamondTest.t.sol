@@ -113,6 +113,48 @@ contract TestDiamond is DiamondTestSetup {
         diamondCutFacet.diamondCut(facetCut, address(0x0), "");
     }
 
+    function testCutFacetShouldRevertWhenFacetInitializerReverts() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Replace,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert();
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(
+            facetCut,
+            facetInitializer,
+            abi.encodeWithSelector(
+                MockFacetInitializer.initializeRevert.selector
+            )
+        );
+    }
+
+    function testCutFacetShouldRevertWithMessageWhenFacetInitializerWithMessageReverts()
+        public
+    {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Replace,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert("MockFacetError");
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(
+            facetCut,
+            facetInitializer,
+            abi.encodeWithSelector(
+                MockFacetInitializer.initializeRevertWithMessage.selector
+            )
+        );
+    }
+
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
         for (uint256 i; i < facetAddressList.length; i++) {
             if (compareStrings(facetNames[i], "DiamondCutFacet")) {
