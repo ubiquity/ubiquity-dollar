@@ -16,12 +16,9 @@ const usePrices = (): [BigNumber | null, BigNumber | null, () => Promise<void>] 
         return;
       }
 
-      const contracts = await protocolContracts;
-
-      if (contracts.curveMetaPoolDollarTriPoolLp) {
-        const dollarTokenAddress = await contracts.managerFacet?.dollarTokenAddress();
-        const newTwapPrice = await contracts.twapOracleDollar3poolFacet?.consult(dollarTokenAddress);
-        const newSpotPrice = await contracts.curveMetaPoolDollarTriPoolLp["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
+      if (protocolContracts.curveDollar3CrvLpMetapool) {
+        const newTwapPrice = await protocolContracts.twapOracleDollar3poolFacet?.consult(protocolContracts.dollarToken?.address);
+        const newSpotPrice = await protocolContracts.curveDollar3CrvLpMetapool["get_dy(int128,int128,uint256)"](0, 1, utils.parseEther("1"));
         setTwapPrice(newTwapPrice);
         setSpotPrice(newSpotPrice);
       }

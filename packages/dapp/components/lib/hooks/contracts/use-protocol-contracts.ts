@@ -1,7 +1,9 @@
 import { Provider } from "@ethersproject/providers";
 import { Contract, ethers } from "ethers";
-import { mainnet } from "wagmi";
-import { GOVERNANCE_TOKEN_ADDRESS } from "../../utils";
+import { 
+  CURVE_DOLLAR_3CRVLP_METAPOOL_ADDRESS,
+  GOVERNANCE_TOKEN_ADDRESS 
+} from "../../utils";
 import useWeb3 from "../use-web-3";
 
 // contract build artifacts
@@ -14,6 +16,8 @@ import ManagerFacetArtifact from "@ubiquity/contracts/out/ManagerFacet.sol/Manag
 import OwnershipFacetArtifact from "@ubiquity/contracts/out/OwnershipFacet.sol/OwnershipFacet.json";
 import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
+// misc
+import IMetaPoolArtifact from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 
 type DeploymentTransaction = {
   transactionType: string,
@@ -23,7 +27,7 @@ type DeploymentTransaction = {
 };
 
 export type ProtocolContracts = {
-  // separately deployed contracts (i.e. not part of the diamond)
+  // separately deployed core contracts (i.e. not part of the diamond)
   dollarToken: Contract | null;
   governanceToken: Contract | null;
   // diamond facets
@@ -32,6 +36,8 @@ export type ProtocolContracts = {
   ownershipFacet: Contract | null;
   twapOracleDollar3poolFacet: Contract | null;
   ubiquityPoolFacet: Contract | null;
+  // misc
+  curveDollar3CrvLpMetapool: Contract | null;
 };
 
 /**
@@ -56,9 +62,19 @@ const useProtocolContracts = () => {
     ownershipFacet: null,
     twapOracleDollar3poolFacet: null,
     ubiquityPoolFacet: null,
+    // misc
+    curveDollar3CrvLpMetapool: null,
   };
 
   let diamondAddress = "";
+
+  // By default set `UbiquityGovernance` token contract to already deployed on mainnet address.
+  // If there is some mock instance (for testnet/anvil) then it will be overridden later in the code.
+  protocolContracts.governanceToken = new ethers.Contract(GOVERNANCE_TOKEN_ADDRESS, UbiquityGovernanceArtifact.abi, <Provider>provider);
+
+  // By default set Curve's Dollar-3CRVLP metapool to already deployed on mainnet address.
+  // If there is some mock instance (for testnet/anvil) then it will be overridden later in the code.
+  protocolContracts.curveDollar3CrvLpMetapool = new ethers.Contract(CURVE_DOLLAR_3CRVLP_METAPOOL_ADDRESS, IMetaPoolArtifact.abi, <Provider>provider);
 
   // get deployment transactions from all migrations
   const deploymentTransactions = getDeploymentTransactions(chainId);
@@ -76,11 +92,11 @@ const useProtocolContracts = () => {
       }
       // get `UbiquityGovernance` token contract instance (for mainnet use already deployed contract, for testnet/anvil mock is used)
       if (tx.contractName === "UbiquityGovernance") {
-        protocolContracts.governanceToken = new ethers.Contract(
-          chainId === mainnet.id ? GOVERNANCE_TOKEN_ADDRESS : tx.contractAddress, 
-          UbiquityGovernanceArtifact.abi, 
-          <Provider>provider
-        );
+        protocolContracts.governanceToken = new ethers.Contract(tx.contractAddress, UbiquityGovernanceArtifact.abi, <Provider>provider);
+      }
+      // get Curve's Dollar-3CRVLP metapool instance (for mainnet use already deployed contract, for testnet/anvil mock is used)
+      if (tx.contractName === "MockMetaPool") {
+        protocolContracts.curveDollar3CrvLpMetapool = new ethers.Contract(tx.contractAddress, IMetaPoolArtifact.abi, <Provider>provider);
       }
       // find the diamond address
       if (tx.contractName === "Diamond") diamondAddress = tx.contractAddress;

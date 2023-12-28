@@ -10,7 +10,7 @@ contract MockMetaPool is IMetaPool, MockERC20 {
     address token1;
     address[2] public coins;
     uint256[2] public balances = [10e18, 10e18];
-    uint256[2] public dy_values = [100e18, 100e18];
+    uint256[2] public dy_values = [1e18, 1e18];
     uint256[2] price_cumulative_last = [10e18, 10e18];
     uint256 last_block_timestamp = 10000;
 
@@ -101,11 +101,17 @@ contract MockMetaPool is IMetaPool, MockERC20 {
     }
 
     function get_dy(
-        int128 /* i */,
-        int128 /* j */,
+        int128 i,
+        int128 j,
         uint256 /* dx */
-    ) external pure returns (uint256) {
-        return 0;
+    ) external view returns (uint256) {
+        if (i == 0 && j == 1) {
+            return dy_values[1];
+        } else if (i == 1 && j == 0) {
+            return dy_values[0];
+        } else {
+            return 0;
+        }
     }
 
     function get_dy_underlying(
