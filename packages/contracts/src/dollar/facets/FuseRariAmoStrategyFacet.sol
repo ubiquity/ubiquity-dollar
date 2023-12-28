@@ -64,7 +64,7 @@ contract FuseRariAmoStrategyFacet is Modifiers {
     }
 
     // function mintedBalance() public view returns (int256) {
-    //     return amo_minter.frax_mint_balances(address(this));
+    //     return amo_minter.dollar_mint_balances(address(this));
     // }
 
     // // Backwards compatibility

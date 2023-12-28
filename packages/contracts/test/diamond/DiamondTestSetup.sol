@@ -28,6 +28,7 @@ import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {DollarAmoMinterFacet} from "../../src/dollar/facets/DollarAmoMinterFacet.sol";
+import {FuseRariAmoStrategyFacet} from "../../src/dollar/facets/FuseRariAmoStrategyFacet.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
@@ -63,6 +64,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
     DollarAmoMinterFacet dollarAmoMinterFacet;
+    FuseRariAmoStrategyFacet fuseRariAmoStrategyFacet;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
     AccessControlFacet accessControlFacetImplementation;
@@ -86,6 +88,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
     DollarAmoMinterFacet dollarAmoMinterFacetImplementation;
+    FuseRariAmoStrategyFacet fuseRariAmoStrategyFacetImplementation;
 
     // facet names with addresses
     string[] facetNames;
@@ -120,6 +123,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
     bytes4[] selectorsOfDollarAmoMinterFacet;
+    bytes4[] selectorsOfFuseRariAmoStrategyFacet;
 
     /// @notice Deploys diamond and connects facets
     function setUp() public virtual {
@@ -194,6 +198,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfDollarAmoMinterFacet = getSelectorsFromAbi(
             "/out/DollarAmoMinterFacet.sol/DollarAmoMinterFacet.json"
         );
+        selectorsOfDollarAmoMinterFacet = getSelectorsFromAbi(
+            "/out/DollarAmoMinterFacet.sol/FuseRariAmoStrategyFacet.json"
+        );
 
         // deploy facet implementation instances
         accessControlFacetImplementation = new AccessControlFacet();
@@ -217,6 +224,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
         dollarAmoMinterFacetImplementation = new DollarAmoMinterFacet();
+        fuseRariAmoStrategyFacetImplementation = new FuseRariAmoStrategyFacet();
 
         // prepare diamond init args
         diamondInit = new DiamondInit();
@@ -241,7 +249,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "StakingFormulasFacet",
             "TWAPOracleDollar3poolFacet",
             "UbiquityPoolFacet",
-            "DollarAmoMinterFacet"
+            "DollarAmoMinterFacet",
+            "FuseRariAmoStrategyFacet"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: admin,
@@ -261,7 +270,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](21);
+        FacetCut[] memory cuts = new FacetCut[](22);
 
         cuts[0] = (
             FacetCut({
@@ -416,6 +425,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfDollarAmoMinterFacet
             })
         );
+        cuts[21] = (
+            FacetCut({
+                facetAddress: address(fuseRariAmoStrategyFacetImplementation),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfFuseRariAmoStrategyFacet
+            })
+        );
 
         // deploy diamond
         vm.prank(owner);
@@ -451,6 +467,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
         dollarAmoMinterFacet = DollarAmoMinterFacet(address(diamond));
+        fuseRariAmoStrategyFacet = FuseRariAmoStrategyFacet(address(diamond));
 
         // get all addresses
         facetAddressList = diamondLoupeFacet.facetAddresses();

@@ -9,9 +9,13 @@ import "../interfaces/IDollarAmoMinter.sol";
 import "../interfaces/ICErc20Delegator.sol";
 import "./Constants.sol";
 
+/// @title LibFuseRariAmoStrategy
+/// @notice A library for managing and interacting with Fuse Rari AMO strategies.
+/// @dev This library includes functions for initializing the strategy, managing pools, and handling allocations and balances.
 library LibFuseRariAmoStrategy {
     using SafeERC20 for IERC20;
 
+    /// @dev Constant to define the storage slot of the control data.
     bytes32 constant FUSERARIAMO_CONTROL_STORAGE_SLOT =
         bytes32(
             uint256(keccak256("ubiquity.contracts.fuserariamo.storage")) - 1
@@ -19,12 +23,28 @@ library LibFuseRariAmoStrategy {
 
     /* ========== EVENTS ========== */
 
+    /// @notice Emitted when a new Fuse pool is added.
+    /// @param token The address of the token for the added pool.
     event FusePoolAdded(address token);
+
+    /// @notice Emitted when a Fuse pool is removed.
+    /// @param token The address of the token for the removed pool.
     event FusePoolRemoved(address token);
+
+    /// @notice Emitted when a new borrow pool is added in the Fuse strategy.
+    /// @param token The address of the token for the added borrow pool.
     event BorrowFusePoolAdded(address token);
+
+    /// @notice Emitted when a borrow pool is removed from the Fuse strategy.
+    /// @param token The address of the token for the removed borrow pool.
     event BorrowFusePoolRemoved(address token);
+
+    /// @notice Emitted when tokens are recovered.
+    /// @param token The address of the recovered token.
+    /// @param amount The amount of the recovered token.
     event Recovered(address token, uint256 amount);
 
+    /// @dev Struct to store the data related to the Strategy.
     struct FuseRariAmoStrategyData {
         IUbiquityDollarToken DOLLAR;
         IDollarAmoMinter amoMinter;
@@ -37,6 +57,8 @@ library LibFuseRariAmoStrategy {
         mapping(address => bool) fuseBorrowPools;
     }
 
+    /// @dev Returns the storage instance for the AMO Strategy.
+    /// @return l The storage instance of the AMO Strategy.
     function fuseRariAmoStrategyStorage()
         internal
         pure
@@ -48,6 +70,8 @@ library LibFuseRariAmoStrategy {
         }
     }
 
+    /// @notice Modifier to check if the pool address is a valid pool.
+    /// @param _poolAddress The address of the pool to check.
     modifier validPool(address _poolAddress) {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
@@ -56,6 +80,8 @@ library LibFuseRariAmoStrategy {
         _;
     }
 
+    /// @notice Modifier to check if the borrow pool address is valid.
+    /// @param _borrowPoolAddress The address of the borrow pool to check.
     modifier validBorrowPool(address _borrowPoolAddress) {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
@@ -121,7 +147,7 @@ library LibFuseRariAmoStrategy {
         }
         allocations[1] = sumFusePoolTally;
 
-        allocations[2] = allocations[0] + allocations[1]; // Total FRAX value
+        allocations[2] = allocations[0] + allocations[1]; // Total DOLLAR value
     }
 
     function dollarBalances()
@@ -188,7 +214,7 @@ library LibFuseRariAmoStrategy {
     }
 
     // function mintedBalance() public view returns (int256) {
-    //     return amo_minter.frax_mint_balances(address(this));
+    //     return amo_minter.dollar_mint_balances(address(this));
     // }
 
     // // Backwards compatibility
