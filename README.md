@@ -65,6 +65,8 @@ yarn workspace @ubiquity/dapp start # Run the web application at http://localhos
 
 4. We run [CI jobs](https://github.com/ubiquity/ubiquity-dollar/actions) all CI jobs must pass before commiting/merging a PR with no exceptions (usually a few exceptions while the PR it's getting reviewed and the maintainers highlight a job run that may skip)
 
+5. We run Solhint to enforce a pre-set selected number of rules for code quality/style on Smart Contracts
+
 ### Network Settings
 | Network | Chain ID | RPC Endpoint                  | Comment |
 |---------|----------|-------------------------------|---------|
@@ -86,8 +88,21 @@ ADMIN_PRIVATE_KEY="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b7
 # By default set to LUSD address in ethereum mainnet.
 # - mainnet/anvil(forked from mainnet): 0x5f98805A4E8be255a32880FDeC7F6728C6568bA0 (LUSD)
 # - testnet: 0x3e622317f8C93f7328350cF0B56d9eD4C620C5d6 (DAI)
-# NOTICE: LUSD token is not deployed to sepolia testnet so we test DAI token instead which is deployed to testnet
+# NOTICE: LUSD token is not deployed to sepolia testnet so we use DAI instead which is deployed to testnet
 COLLATERAL_TOKEN_ADDRESS="0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"
+
+# Collateral token price feed address from chainlink.
+# By default set to LUSD/USD price feed deployed on ethereum mainnet.
+# - mainnet: uses already deployed LUSD/USD chainlink price feed
+# - testnet/anvil: deploys LUSD/USD chainlink price feed from scratch
+COLLATERAL_TOKEN_CHAINLINK_PRICE_FEED_ADDRESS="0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0"
+
+# Curve metapool address (Dollar-3CRVLP).
+# By default set to the old Dollar-3CRV metapool which is about to be redeployed when
+# new Dollar token is deployed.
+# - mainnet: uses old Dollar-3CRVLP address
+# - testnet/anvil: deploys metapool from scratch
+CURVE_DOLLAR_METAPOOL_ADDRESS="0x20955CB69Ae1515962177D164dfC9522feef567E"
 
 # Owner private key (grants access to updating Diamond facets and setting TWAP oracle address).
 # By default set to the private key from the 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 address
@@ -99,6 +114,12 @@ OWNER_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f
 # - testnet: https://ethereum-sepolia.publicnode.com
 # - mainnet: https://eth.ubq.fi/v1/mainnet 
 RPC_URL="http://127.0.0.1:8545"
+
+# 3CRV LP token address (which you get if you deposit to Curve's TriPool (DAI/USDC/USDT)).
+# By default set to 3CRV LP token address from mainnet.
+# - mainet: uses values set in TOKEN_3CRV_ADDRESS
+# - testnet/anvil: deploys 3CRV LP token from scratch
+TOKEN_3CRV_ADDRESS="0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490"
 ```
 
 We provide an `.env.example` file pre-set with recommend testing environment variables but you are free to modify or experiment with different values on your local branch.

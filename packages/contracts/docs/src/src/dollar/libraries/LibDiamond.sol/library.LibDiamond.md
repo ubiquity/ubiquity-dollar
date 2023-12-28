@@ -1,5 +1,5 @@
 # LibDiamond
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bc36823136700d0422c14fd5ae111920580c10d7/src/dollar/libraries/LibDiamond.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/aed79e7ca6ac6be405e839958f192485d424ce51/src/dollar/libraries/LibDiamond.sol)
 
 Library used for diamond facets and selector modifications
 

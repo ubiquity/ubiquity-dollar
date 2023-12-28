@@ -1,5 +1,8 @@
 # IMetaPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bc36823136700d0422c14fd5ae111920580c10d7/src/dollar/interfaces/IMetaPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/aed79e7ca6ac6be405e839958f192485d424ce51/src/dollar/interfaces/IMetaPool.sol)
+
+**Inherits:**
+IERC20
 
 Curve MetaPool interface
 
@@ -21,50 +24,6 @@ Remove liquidity example:
 
 
 ## Functions
-### transfer
-
-Transfers LP tokens to the `_to` address
-
-
-```solidity
-function transfer(address _to, uint256 _value) external returns (bool);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_to`|`address`|Address where to transfer LP tokens|
-|`_value`|`uint256`|Amount of tokens to transfer|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|Whether transfer is successful|
-
-
-### approve
-
-Approves `_spender` to spend `_value` amount on hehalf of the `msg.sender`
-
-
-```solidity
-function approve(address _spender, uint256 _value) external returns (bool);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_spender`|`address`|Spender address|
-|`_value`|`uint256`|Amount|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`bool`|Whether approve is successful|
-
-
 ### get_twap_balances
 
 Calculates the current effective TWAP balances given two
@@ -350,51 +309,5 @@ function block_timestamp_last() external view returns (uint256);
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`uint256`|Latest update timestamp|
-
-
-### balanceOf
-
-Returns the balance of LP tokens for the `arg0` address
-
-
-```solidity
-function balanceOf(address arg0) external view returns (uint256);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`arg0`|`address`|Address to check the balance for|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|LP balance|
-
-
-### allowance
-
-Returns the remaining number of tokens that `spender` will be allowed
-to spend on behalf of `owner` through `transferFrom()`. This is zero by default.
-
-*This value changes when `approve()` or `transferFrom()` are called.*
-
-
-```solidity
-function allowance(address owner, address spender) external view returns (uint256);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`owner`|`address`|Owner address|
-|`spender`|`address`|Spender address|
-
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|Allowance amount|
 
 

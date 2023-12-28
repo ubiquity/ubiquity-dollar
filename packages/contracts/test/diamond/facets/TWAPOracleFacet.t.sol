@@ -23,6 +23,18 @@ contract TWAPOracleDollar3poolFacetTest is DiamondTestSetup {
         );
     }
 
+    function test_setPoolRevertsWhenFirstAddressIsNotDollarToken() public {
+        metaPoolAddress = address(
+            new MockMetaPool(curve3CRVTokenAddress, address(dollarToken))
+        );
+        vm.prank(owner);
+        vm.expectRevert("TWAPOracle: FIRST_COIN_NOT_DOLLAR");
+        twapOracleDollar3PoolFacet.setPool(
+            metaPoolAddress,
+            curve3CRVTokenAddress
+        );
+    }
+
     function test_overall() public {
         // set the mock data for meta pool
         uint256[2] memory _price_cumulative_last = [

@@ -39,6 +39,15 @@ contract TestDiamond is DiamondTestSetup {
         }
     }
 
+    function testLoupeFacetAddressesEqualsTheListOfAvailableFacets() public {
+        address[] memory facetAddresses = diamondLoupeFacet.facetAddresses();
+        Facet[] memory facets = diamondLoupeFacet.facets();
+
+        for (uint256 i = 0; i < facetAddresses.length; i++) {
+            assertEq(facets[i].facetAddress, facetAddresses[i]);
+        }
+    }
+
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
         for (uint256 i; i < facetAddressList.length; i++) {
             if (compareStrings(facetNames[i], "DiamondCutFacet")) {
