@@ -1,10 +1,32 @@
+import { BigNumber, ethers } from "ethers";
 import dynamic from "next/dynamic";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
+import { useBalance } from "wagmi";
 
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
+import useWeb3 from "@/components/lib/hooks/use-web-3";
+import usePrices from "@/components/redeem/lib/use-prices";
 import Button from "@/components/ui/button";
 import PositiveNumberInput from "@/components/ui/positive-number-input";
 
 const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connection-wall"), { ssr: false }); //@note Fix: (Hydration Error)
+
+type CollateralInfo = {
+  collateralAddress: string;
+  collateralPriceFeedAddress: string;
+  collateralPriceFeedStalenessThreshold: BigNumber;
+  index: BigNumber;
+  isBorrowPaused: boolean;
+  isEnabled: boolean;
+  isMintPaused: boolean;
+  isRedeemPaused: boolean;
+  mintingFee: BigNumber;
+  missingDecimals: BigNumber;
+  poolCeiling: BigNumber;
+  price: BigNumber;
+  redemptionFee: BigNumber;
+  symbol: string;
+};
 
 /**
  * UbiquityPool page
@@ -13,17 +35,36 @@ const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connec
  * 1. Send collateral tokens to the pool in exchange for Dollar tokens (mint)
  * 2. Send Dollar tokens to the pool in exchange for collateral (redeem)
  */
-const Pool: FC = (): JSX.Element => {
-  // fetch pool info
-  const dollarPrice = "1.00";
-  const poolBalance = "2000";
-  const poolCeiling = "50000";
-  const userBalanceCollateral = "100";
-  const userBalanceDollar = "200";
-  const mintFee = "100000"; // 10%, 1_000_000 = 100%
-  const redemptionFee = "200000"; // 20%, 1_000_000 = 100%
-  const receiveAmountDollar = 0;
-  const receiveAmountCollateral = 0;
+const PoolPage: FC = (): JSX.Element => {
+  const protocolContracts = useProtocolContracts();
+  const [dollarPrice] = usePrices();
+  const [collateralInfo, setCollateralInfo] = useState<CollateralInfo | null>(null);
+  const collateralBalancePool = useBalance({
+    address: protocolContracts.ubiquityPoolFacet?.address as `0x${string}`,
+    token: collateralInfo?.collateralAddress as `0x${string}`,
+  });
+  const { walletAddress } = useWeb3(); 
+  const collateralBalanceUser = useBalance({
+    address: walletAddress as `0x${string}`,
+    token: collateralInfo?.collateralAddress as `0x${string}`,
+  });
+  const dollarBalanceUser = useBalance({
+    address: walletAddress as `0x${string}`,
+    token: protocolContracts.dollarToken?.address as `0x${string}`,
+  });
+  const [receiveAmountDollar, setReceiveAmountDollar] = useState<BigNumber>(BigNumber.from(0));
+  const [receiveAmountCollateral, setReceiveAmountCollateral] = useState<BigNumber>(BigNumber.from(0));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const allCollateralAddresses = await protocolContracts.ubiquityPoolFacet?.allCollaterals();
+      const collateralInfo: CollateralInfo = await protocolContracts.ubiquityPoolFacet?.collateralInformation(allCollateralAddresses[0]);
+
+      setCollateralInfo(collateralInfo);
+    };
+    
+    fetchData().catch(err => { console.error(err) });
+  }, []);
 
   return (
     <WalletConnectionWall>
@@ -33,42 +74,42 @@ const Pool: FC = (): JSX.Element => {
           <h2>Pool info</h2>
           <div className="pool-container__row">
             <span>Dollar price</span>
-            <span>${dollarPrice}</span>
+            <span>${(+ethers.utils.formatEther(dollarPrice || 0)).toFixed(2)}</span>
           </div>
           <div className="pool-container__row">
-            <span>Pool balance (LUSD)</span>
-            <span>{poolBalance}</span>
+            <span>Pool balance ({collateralInfo?.symbol})</span>
+            <span>{(+ethers.utils.formatEther(collateralBalancePool.data?.value || 0)).toFixed(2)}</span>
           </div>
           <div className="pool-container__row">
-            <span>Pool ceiling (LUSD)</span>
-            <span>{poolCeiling}</span>
+            <span>Pool ceiling ({collateralInfo?.symbol})</span>
+            <span>{(+ethers.utils.formatEther(collateralInfo?.poolCeiling || 0)).toFixed(2)}</span>
           </div>
           <div className="pool-container__row">
-            <span>User balance (LUSD)</span>
-            <span>{userBalanceCollateral}</span>
+            <span>User balance ({collateralInfo?.symbol})</span>
+            <span>{(+ethers.utils.formatEther(collateralBalanceUser.data?.value || 0)).toFixed(2)}</span>
           </div>
           <div className="pool-container__row">
             <span>User balance (Dollar)</span>
-            <span>{userBalanceDollar}</span>
+            <span>{(+ethers.utils.formatEther(dollarBalanceUser.data?.value || 0)).toFixed(2)}</span>
           </div>
           <div className="pool-container__row">
             <span>Mint fee</span>
-            <span>{(+mintFee / 1e6) * 100}%</span>
+            <span>{((+(collateralInfo?.mintingFee.toString() || 0) / 1e6) * 100).toFixed(2)}%</span>
           </div>
           <div className="pool-container__row">
             <span>Redemption fee</span>
-            <span>{(+redemptionFee / 1e6) * 100}%</span>
+            <span>{((+(collateralInfo?.redemptionFee.toString() || 0) / 1e6) * 100).toFixed(2)}%</span>
           </div>
         </div>
         {/* mint block */}
         <div className="panel">
           <h2>Mint</h2>
           <div>
-            <PositiveNumberInput placeholder={`LUSD amount`} value="" onChange={() => {}} />
+            <PositiveNumberInput placeholder={`${collateralInfo?.symbol} amount`} value="" onChange={() => {}} />
           </div>
           <div className="pool-container__row">
             <span>You receive</span>
-            <span>{receiveAmountDollar} Dollars</span>
+            <span>{receiveAmountDollar.toString()} Dollars</span>
           </div>
           <div>
             <Button disabled={true}>Mint</Button>
@@ -82,7 +123,7 @@ const Pool: FC = (): JSX.Element => {
           </div>
           <div className="pool-container__row">
             <span>You receive</span>
-            <span>{receiveAmountCollateral} LUSD</span>
+            <span>{receiveAmountCollateral.toString()} {collateralInfo?.symbol}</span>
           </div>
           <div>
             <Button>Redeem</Button>
@@ -93,4 +134,4 @@ const Pool: FC = (): JSX.Element => {
   );
 };
 
-export default Pool;
+export default PoolPage;
