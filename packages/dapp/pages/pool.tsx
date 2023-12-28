@@ -11,6 +11,9 @@ import PositiveNumberInput from "@/components/ui/positive-number-input";
 
 const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connection-wall"), { ssr: false }); //@note Fix: (Hydration Error)
 
+const SLIPPAGE_RATE = 50_000; // 5%, 1_000_000 = 100%
+const UBIQUITY_POOL_PRICE_PRECISION = 1_000_000;
+
 type CollateralInfo = {
   collateralAddress: string;
   collateralPriceFeedAddress: string;
@@ -43,7 +46,7 @@ const PoolPage: FC = (): JSX.Element => {
     address: protocolContracts.ubiquityPoolFacet?.address as `0x${string}`,
     token: collateralInfo?.collateralAddress as `0x${string}`,
   });
-  const { walletAddress } = useWeb3(); 
+  const { signer, walletAddress } = useWeb3(); 
   const collateralBalanceUser = useBalance({
     address: walletAddress as `0x${string}`,
     token: collateralInfo?.collateralAddress as `0x${string}`,
@@ -54,7 +57,11 @@ const PoolPage: FC = (): JSX.Element => {
   });
   const [receiveAmountDollar, setReceiveAmountDollar] = useState<BigNumber>(BigNumber.from(0));
   const [receiveAmountCollateral, setReceiveAmountCollateral] = useState<BigNumber>(BigNumber.from(0));
+  const [inputAmountCollateral, setInputAmountCollateral] = useState<string>('');
 
+  /**
+   * On component mount
+   */
   useEffect(() => {
     const fetchData = async () => {
       const allCollateralAddresses = await protocolContracts.ubiquityPoolFacet?.allCollaterals();
@@ -66,6 +73,41 @@ const PoolPage: FC = (): JSX.Element => {
     fetchData().catch(err => { console.error(err) });
   }, []);
 
+  /**
+   * On "mint" input change
+   * @param value New input value
+   */
+  const onInputAmountCollateralChange = async (value: string) => {
+    setInputAmountCollateral(value);
+      const dollarsRequired = ethers.utils.parseEther(value || '0').mul(UBIQUITY_POOL_PRICE_PRECISION).div(collateralInfo?.price || 1);
+      setReceiveAmountDollar(dollarsRequired);
+  };
+
+  /**
+   * On "mint" button click
+   */
+  const onMintClick = async () => {
+    // be default we have only 1 collateral pool hence index is 0
+    const collateralIndex = 0; 
+    // amount of Dollars to mint
+    const dollarAmount = receiveAmountDollar.toString();
+    // min amount of Dollars to mint (slippage protection)
+    const dollarOutMin = BigNumber.from(dollarAmount).mul(BigNumber.from(1_000_000).sub(SLIPPAGE_RATE)).div(1_000_000).toString();
+    // max amount of input collateral (slippage protection)
+    const maxCollateralIn = BigNumber.from(dollarAmount).mul(BigNumber.from(1_000_000).add(SLIPPAGE_RATE)).div(1_000_000).toString();
+
+    // mint Dollars
+    await protocolContracts.ubiquityPoolFacet?.connect(signer || '').mintDollar(
+      collateralIndex,
+      dollarAmount,
+      dollarOutMin,
+      maxCollateralIn,
+    );
+  };
+
+  /**
+   * Returns JSX template
+   */
   return (
     <WalletConnectionWall>
       <div id="Pool" className="pool-container">
@@ -105,14 +147,18 @@ const PoolPage: FC = (): JSX.Element => {
         <div className="panel">
           <h2>Mint</h2>
           <div>
-            <PositiveNumberInput placeholder={`${collateralInfo?.symbol} amount`} value="" onChange={() => {}} />
+            <PositiveNumberInput 
+              placeholder={`${collateralInfo?.symbol} amount`} 
+              value={inputAmountCollateral}
+              onChange={onInputAmountCollateralChange} 
+            />
           </div>
           <div className="pool-container__row">
             <span>You receive</span>
-            <span>{receiveAmountDollar.toString()} Dollars</span>
+            <span>{(+ethers.utils.formatEther(receiveAmountDollar)).toFixed(2)} Dollars</span>
           </div>
           <div>
-            <Button disabled={true}>Mint</Button>
+            <Button onClick={onMintClick}>Mint</Button>
           </div>
         </div>
         {/* redeem block */}
