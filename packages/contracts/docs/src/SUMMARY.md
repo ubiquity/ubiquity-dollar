@@ -67,7 +67,6 @@
     - [❱ libraries](src/dollar/libraries/README.md)
       - [AddressUtils](src/dollar/libraries/AddressUtils.sol/library.AddressUtils.md)
       - [Constants](src/dollar/libraries/Constants.sol/constants.Constants.md)
-      - [EnumerableSet](src/dollar/libraries/EnumerableSet.sol/library.EnumerableSet.md)
       - [LibAccessControl](src/dollar/libraries/LibAccessControl.sol/library.LibAccessControl.md)
       - [AppStorage](src/dollar/libraries/LibAppStorage.sol/struct.AppStorage.md)
       - [LibAppStorage](src/dollar/libraries/LibAppStorage.sol/library.LibAppStorage.md)
