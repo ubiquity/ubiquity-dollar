@@ -2,8 +2,15 @@
 pragma solidity 0.8.19;
 
 import "./DiamondTestSetup.sol";
+import {IMockFacet, MockFacetInitializer, MockFacetWithPureFunctions, MockFacetWithStorageWriteFunctions, MockFacetWithExtendedStorageWriteFunctions} from "../../src/dollar/mocks/MockFacet.sol";
 
 contract TestDiamond is DiamondTestSetup {
+    address pureFacet = address(new MockFacetWithPureFunctions());
+    address writeFacet = address(new MockFacetWithStorageWriteFunctions());
+    address writeFacetWithInitializer =
+        address(new MockFacetWithExtendedStorageWriteFunctions());
+    address facetInitializer = address(new MockFacetInitializer());
+
     function test_ShouldSupportInspectingFacetsAndFunctions() public {
         bool isSupported = IERC165(address(diamond)).supportsInterface(
             type(IDiamondLoupe).interfaceId
@@ -46,6 +53,238 @@ contract TestDiamond is DiamondTestSetup {
         for (uint256 i = 0; i < facetAddresses.length; i++) {
             assertEq(facets[i].facetAddress, facetAddresses[i]);
         }
+    }
+
+    function testCutFacetShouldRevertWhenNotOwner() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert("LibDiamond: Must be contract owner");
+
+        vm.prank(user1);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenFunctionAlreadyExists() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(collectableDustFacetImplementation),
+            action: FacetCutAction.Add,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert(
+            "LibDiamondCut: Can't add function that already exists"
+        );
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenNoSelectorsProvidedForFacetForCut()
+        public
+    {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: new bytes4[](0)
+        });
+
+        vm.expectRevert("LibDiamondCut: No selectors in facet to cut");
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenAddToZeroAddress() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(0),
+            action: FacetCutAction.Add,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert("LibDiamondCut: Add facet can't be address(0)");
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
+    function testCutFacetShouldRevertWhenFacetInitializerReverts() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Replace,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert();
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(
+            facetCut,
+            facetInitializer,
+            abi.encodeWithSelector(
+                MockFacetInitializer.initializeRevert.selector
+            )
+        );
+    }
+
+    function testCutFacetShouldRevertWithMessageWhenFacetInitializerWithMessageReverts()
+        public
+    {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Replace,
+            functionSelectors: selectorsOfCollectableDustFacet
+        });
+
+        vm.expectRevert("MockFacetError");
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(
+            facetCut,
+            facetInitializer,
+            abi.encodeWithSelector(
+                MockFacetInitializer.initializeRevertWithMessage.selector
+            )
+        );
+    }
+
+    function testCutFacetAddSimplePureFacet() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithPureFunctions.functionA.selector;
+        selectors[1] = MockFacetWithPureFunctions.functionB.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 1);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 2);
+    }
+
+    function testCutFacetAddSimpleWriteFacet() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithStorageWriteFunctions.functionA.selector;
+        selectors[1] = MockFacetWithStorageWriteFunctions.functionB.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(writeFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 0);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 1);
+    }
+
+    function testCutFacetAddWriteFacetWithInitializer() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithExtendedStorageWriteFunctions
+            .functionA
+            .selector;
+        selectors[1] = MockFacetWithExtendedStorageWriteFunctions
+            .functionB
+            .selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(writeFacetWithInitializer),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(
+            facetCut,
+            facetInitializer,
+            abi.encodeWithSelector(MockFacetInitializer.initialize.selector)
+        );
+
+        // initializer should set 2 and 22 values
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 2);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 22);
+    }
+
+    function testCutFacetReplaceFacet() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithPureFunctions.functionA.selector;
+        selectors[1] = MockFacetWithPureFunctions.functionB.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(pureFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 1);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 2);
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(writeFacet),
+            action: FacetCutAction.Replace,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 0);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 1);
+    }
+
+    function testCutFacetRemoveFacetFunctions() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](2);
+        selectors[0] = MockFacetWithStorageWriteFunctions.functionA.selector;
+        selectors[1] = MockFacetWithStorageWriteFunctions.functionB.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(writeFacet),
+            action: FacetCutAction.Add,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        assertEq(IMockFacet(address(diamondCutFacet)).functionA(), 0);
+        assertEq(IMockFacet(address(diamondCutFacet)).functionB(), 1);
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(0),
+            action: FacetCutAction.Remove,
+            functionSelectors: selectors
+        });
+
+        vm.prank(owner);
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+
+        vm.expectRevert("Diamond: Function does not exist");
+        IMockFacet(address(diamondCutFacet)).functionA();
+        vm.expectRevert("Diamond: Function does not exist");
+        IMockFacet(address(diamondCutFacet)).functionB();
     }
 
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
