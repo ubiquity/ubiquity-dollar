@@ -1,5 +1,5 @@
 # ICreditRedemptionCalculator
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/aed79e7ca6ac6be405e839958f192485d424ce51/src/dollar/interfaces/ICreditRedemptionCalculator.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/cbd28a4612a3e634eb46789c9d7030bc45955983/src/dollar/interfaces/ICreditRedemptionCalculator.sol)
 
 Contract interface for calculating amount of Credits to mint on Dollars burn
 
