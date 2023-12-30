@@ -7,43 +7,53 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 
 ![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 ## Contributing
-- We welcome everybody to participate in improving the codebase.
+- We welcome everybody to participate in improving the codebase and provide feedback on opened issues.
 - We offer financial incentives for solved issues.
-- Please learn how to contribute via the DevPool [here](https://dao.ubq.fi/devpool).
+- Learn how to contribute via the DevPool [here](https://dao.ubq.fi/devpool).
 ## Installation
-- We use [Foundry](https://github.com/foundry-rs/foundry).
-- Here are their [docs](https://book.getfoundry.sh/).
-- Please follow their installation guide for your OS before proceeding.
+### Requirements:
+- NodeJS Version >=18
+- Yarn
+- We use [Foundry](https://github.com/foundry-rs/foundry), check their [docs](https://book.getfoundry.sh/). Please follow their installation guide for your OS before proceeding.
 
 ### Development Setup
+
 ```sh
 #!/bin/bash
 
 git clone https://github.com/ubiquity/ubiquity-dollar.git
-cd ubiquity-dollar/
-yarn
+cd ubiquity-dollar
+yarn # fetch dependencies
 yarn build:all # builds the smart contracts and user interface
-yarn start & # starts the user interface and daemonize'd to continue to run tests in the background
-yarn test:all
+
+# Optional
+yarn build:dapp # to only build the UI useful for debugging
+yarn build:contracts # to only build the Smart Contracts
+
+yarn start # starts the user interface and daemonize'd to continue to run tests in the background
+yarn test:all # We run all the tests!
 ```
-## Running workspace specific commands
-Utilizing yarn workspaces, you can invoke scripts for each workspace individually.
+
+## Running workspace specific/individual commands
+Using yarn workspaces, you can invoke scripts for each workspace individually.
 ```sh
 # SCRIPT_NAME=XXX
 
 yarn workspace @ubiquity/contracts $SCRIPT_NAME
 yarn workspace @ubiquity/dapp $SCRIPT_NAME
 
-# For example...
+# Some commands...
 
 yarn workspace @ubiquity/contracts build # Build smart contracts
 yarn workspace @ubiquity/contracts test # Run the smart contract unit tests
 
 yarn workspace @ubiquity/dapp build # Build the user interface
-yarn workspace @ubiquity/dapp start # Run the application at http://localhost:3000
+yarn workspace @ubiquity/dapp start # Run the web application at http://localhost:3000
+
+# check https://yarnpkg.com/features/workspaces for more yarn workspaces flexixble use cases
 
 ```
-## Committing Code
+## Committing Code/Sending PRs
 
 1. We [automatically enforce](https://github.com/conventional-changelog/commitlint) the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages.
 
@@ -51,17 +61,24 @@ yarn workspace @ubiquity/dapp start # Run the application at http://localhost:30
 
 2. We use [prettier](https://github.com/prettier/prettier), [eslint](https://github.com/eslint/eslint) and [cspell](https://github.com/streetsidesoftware/cspell) on [staged files](https://github.com/okonet/lint-staged) in order to enforce a uniform code style. Please do not circumvent these rules.
 
+3. We require all PRs to meet the issues expectation and/or to follow the discussions accordingly and implement all necessary changes and feedback by reviewers.
+
+4. We run [CI jobs](https://github.com/ubiquity/ubiquity-dollar/actions) all CI jobs must pass before commiting/merging a PR with no exceptions (usually a few exceptions while the PR it's getting reviewed and the maintainers highlight a job run that may skip)
+
+5. We run Solhint to enforce a pre-set selected number of rules for code quality/style on Smart Contracts
 
 ### Network Settings
 | Network | Chain ID | RPC Endpoint                  | Comment |
 |---------|----------|-------------------------------|---------|
 | `mainnet` | `1`        | `https://eth.ubq.fi/v1/mainnet` | Our dedicated mainnet gateway     |
 | `anvil`   | `31337`    | `http://127.0.0.1:8545`         | Used for local development     |
+| `sepolia` | `11155111` | `https://ethereum-sepolia.publicnode.com` |Use any public available RPC for Sepolia testing |
 
 ## Deploying Contracts (Ubiquity Dollar Core)
 
 You need to create a new `.env` file and set all necessary env variables, example:
-```
+
+```sh
 # Admin private key (grants access to restricted contracts methods).
 # By default set to the private key from the 0x70997970c51812dc3a010c7d01b50e0d17dc79c8 address
 # which is the 2nd address derived from test mnemonic "test test test test test test test test test test test junk".
@@ -74,6 +91,19 @@ ADMIN_PRIVATE_KEY="0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b7
 # NOTICE: LUSD token is not deployed to sepolia testnet so we use DAI instead which is deployed to testnet
 COLLATERAL_TOKEN_ADDRESS="0x5f98805A4E8be255a32880FDeC7F6728C6568bA0"
 
+# Collateral token price feed address from chainlink.
+# By default set to LUSD/USD price feed deployed on ethereum mainnet.
+# - mainnet: uses already deployed LUSD/USD chainlink price feed
+# - testnet/anvil: deploys LUSD/USD chainlink price feed from scratch
+COLLATERAL_TOKEN_CHAINLINK_PRICE_FEED_ADDRESS="0x3D7aE7E594f2f2091Ad8798313450130d0Aba3a0"
+
+# Curve metapool address (Dollar-3CRVLP).
+# By default set to the old Dollar-3CRV metapool which is about to be redeployed when
+# new Dollar token is deployed.
+# - mainnet: uses old Dollar-3CRVLP address
+# - testnet/anvil: deploys metapool from scratch
+CURVE_DOLLAR_METAPOOL_ADDRESS="0x20955CB69Ae1515962177D164dfC9522feef567E"
+
 # Owner private key (grants access to updating Diamond facets and setting TWAP oracle address).
 # By default set to the private key from the 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 address
 # which is the 1st address derived from test mnemonic "test test test test test test test test test test test junk".
@@ -84,44 +114,40 @@ OWNER_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f
 # - testnet: https://ethereum-sepolia.publicnode.com
 # - mainnet: https://eth.ubq.fi/v1/mainnet 
 RPC_URL="http://127.0.0.1:8545"
+
+# 3CRV LP token address (which you get if you deposit to Curve's TriPool (DAI/USDC/USDT)).
+# By default set to 3CRV LP token address from mainnet.
+# - mainet: uses values set in TOKEN_3CRV_ADDRESS
+# - testnet/anvil: deploys 3CRV LP token from scratch
+TOKEN_3CRV_ADDRESS="0x6c3F90f043a72FA612cbac8115EE7e52BDe6E490"
 ```
 
-The `.env.example` file is pre-populated with the recommend environment variables.
+We provide an `.env.example` file pre-set with recommend testing environment variables but you are free to modify or experiment with different values on your local branch.
 
 Then in two separate terminals run the following commands:
 
 ```sh
-yarn workspace @ubiquity/contracts start:anvil # starts the anvil testnet
+# starts the anvil forked mainnet/testnet network (depends on your .env config)
+yarn workspace @ubiquity/contracts start:anvil
+
+# Optional
+yarn start:anvil # same as above but shorter
 ```
 
 ```sh
-yarn workspace @ubiquity/contracts deploy:development # deploys the contracts to the anvil testnet
+# deploys the contracts to the anvil testnet or your desired network
+
+yarn workspace @ubiquity/contracts deploy:development
+
+# Optional
+yarn deploy:development # same as above
 ```
 
-If successful it will show a readout of accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
+If successful it will output the accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
 
-## MetaMask Development Wallet Setup
-### Shared Private Keys for Development
+## Wiki
 
-- These keys are derived from `test test test test test test test test test test test junk`.
-- Do not send assets of value to these wallets.
-
-```
-Private Key; Address; Path
-```
-
-```
-ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80; 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266; m/44'/60'/0'/0/0
-59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d; 0x70997970c51812dc3a010c7d01b50e0d17dc79c8; m/44'/60'/0'/0/1
-5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a; 0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc; m/44'/60'/0'/0/2
-7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6; 0x90f79bf6eb2c4f870365e785982e1f101e93b906; m/44'/60'/0'/0/3
-47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a; 0x15d34aaf54267db7d7c367839aaf71a00a2c6a65; m/44'/60'/0'/0/4
-8b3a350cf5c34c9194ca85829a2df0ec3153be0318b5e2d3348e872092edffba; 0x9965507d1a55bcc2695c58ba16fb37d819b0a4dc; m/44'/60'/0'/0/5
-92db14e403b83dfe3df233f83dfa3a0d7096f21ca9b0d6d6b8d88b2b4ec1564e; 0x976ea74026e726554db657fa54763abd0c3a0aa9; m/44'/60'/0'/0/6
-4bbbf85ce3377467afe5d46f804f221813b2bb87f24d81f60f1fcdbf7cbf4356; 0x14dc79964da2c08b23698b3d3cc7ca32193d9955; m/44'/60'/0'/0/7
-dbda1821b80551c9d65939329250298aa3472ba22feea921c0cf5d620ea67b97; 0x23618e81e3f5cdf7f54c3d65f7fbc0abf5b21e8f; m/44'/60'/0'/0/8
-2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6; 0xa0ee7a142d267c1f36714e4a8f75612f20a79720; m/44'/60'/0'/0/9
-```
+We have a [Wiki!](https://github.com/ubiquity/ubiquity-dollar/wiki) feel free to browse it as there is a lot of useful information about the whole repo
 
 ## Yarn Workspaces
 

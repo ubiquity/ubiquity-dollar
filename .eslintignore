@@ -1,3 +1,4 @@
 dist/
 .next/
 dist/_next/
+!.solhint.json

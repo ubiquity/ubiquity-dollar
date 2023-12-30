@@ -1,2 +1,5 @@
-price-multiplier: 3
-payment-permit-max-price: 1000
+payments:
+  evmNetworkId: 100
+  basePriceMultiplier: 3
+  issueCreatorMultiplier: 3
+  maxPermitPrice: 1000

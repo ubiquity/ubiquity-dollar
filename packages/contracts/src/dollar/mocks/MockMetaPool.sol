@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
+import {IMetaPool} from "../interfaces/IMetaPool.sol";
 import {MockERC20} from "./MockERC20.sol";
 
-contract MockMetaPool is MockERC20 {
+contract MockMetaPool is IMetaPool, MockERC20 {
     address token0;
     address token1;
     address[2] public coins;
@@ -84,5 +85,42 @@ contract MockMetaPool is MockERC20 {
         bool /* _is_deposit */
     ) external pure returns (uint256) {
         return _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1];
+    }
+
+    function exchange(
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */,
+        uint256 /* min_dy */
+    ) external pure returns (uint256) {
+        return 0;
+    }
+
+    function fee() external pure returns (uint256) {
+        return 0;
+    }
+
+    function get_dy(
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */
+    ) external pure returns (uint256) {
+        return 0;
+    }
+
+    function get_dy_underlying(
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */
+    ) external pure returns (uint256) {
+        return 0;
+    }
+
+    function remove_liquidity_one_coin(
+        uint256 /* _burn_amount */,
+        int128 /* i */,
+        uint256 /* _min_received */
+    ) external pure returns (uint256) {
+        return 0;
     }
 }
