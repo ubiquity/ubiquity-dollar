@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.19;
 
+import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
+
 /**
  * @notice Curve MetaPool interface
  *
@@ -17,23 +19,7 @@ pragma solidity 0.8.19;
  * 1. User sends 100 Dollar3CRV LP tokens to the pool
  * 2. User gets 100 Dollar/DAI/USDC/USDT (may choose any) tokens
  */
-interface IMetaPool {
-    /**
-     * @notice Transfers LP tokens to the `_to` address
-     * @param _to Address where to transfer LP tokens
-     * @param _value Amount of tokens to transfer
-     * @return Whether transfer is successful
-     */
-    function transfer(address _to, uint256 _value) external returns (bool);
-
-    /**
-     * @notice Approves `_spender` to spend `_value` amount on hehalf of the `msg.sender`
-     * @param _spender Spender address
-     * @param _value Amount
-     * @return Whether approve is successful
-     */
-    function approve(address _spender, uint256 _value) external returns (bool);
-
+interface IMetaPool is IERC20 {
     /**
      * @notice Calculates the current effective TWAP balances given two
      * snapshots over time, and the time elapsed between the two snapshots
@@ -192,24 +178,4 @@ interface IMetaPool {
      * @return Latest update timestamp
      */
     function block_timestamp_last() external view returns (uint256);
-
-    /**
-     * @notice Returns the balance of LP tokens for the `arg0` address
-     * @param arg0 Address to check the balance for
-     * @return LP balance
-     */
-    function balanceOf(address arg0) external view returns (uint256);
-
-    /**
-     * @notice Returns the remaining number of tokens that `spender` will be allowed
-     * to spend on behalf of `owner` through `transferFrom()`. This is zero by default.
-     * @dev This value changes when `approve()` or `transferFrom()` are called.
-     * @param owner Owner address
-     * @param spender Spender address
-     * @return Allowance amount
-     */
-    function allowance(
-        address owner,
-        address spender
-    ) external view returns (uint256);
 }

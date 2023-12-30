@@ -3,7 +3,6 @@
 # Contents
 - [AddressUtils](AddressUtils.sol/library.AddressUtils.md)
 - [Constants](Constants.sol/constants.Constants.md)
-- [EnumerableSet](EnumerableSet.sol/library.EnumerableSet.md)
 - [LibAccessControl](LibAccessControl.sol/library.LibAccessControl.md)
 - [AppStorage](LibAppStorage.sol/struct.AppStorage.md)
 - [LibAppStorage](LibAppStorage.sol/library.LibAppStorage.md)

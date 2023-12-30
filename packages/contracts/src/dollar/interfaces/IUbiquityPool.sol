@@ -142,10 +142,12 @@ interface IUbiquityPool {
     /**
      * @notice Adds a new collateral token
      * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress Chainlink's price feed address
      * @param poolCeiling Max amount of available tokens for collateral
      */
     function addCollateralToken(
         address collateralAddress,
+        address chainLinkPriceFeedAddress,
         uint256 poolCeiling
     ) external;
 
@@ -156,14 +158,22 @@ interface IUbiquityPool {
     function removeAmoMinter(address amoMinterAddress) external;
 
     /**
-     * @notice Sets collateral token price in USD
-     * @param collateralIndex Collateral token index
-     * @param newPrice New USD price (precision 1e6)
+     * @notice Sets collateral ChainLink price feed params
+     * @param collateralAddress Collateral token address
+     * @param chainLinkPriceFeedAddress ChainLink price feed address
+     * @param stalenessThreshold Threshold in seconds when chainlink answer should be considered stale
      */
-    function setCollateralPrice(
-        uint256 collateralIndex,
-        uint256 newPrice
+    function setCollateralChainLinkPriceFeed(
+        address collateralAddress,
+        address chainLinkPriceFeedAddress,
+        uint256 stalenessThreshold
     ) external;
+
+    /**
+     * @notice Updates collateral token price in USD from ChainLink price feed
+     * @param collateralIndex Collateral token index
+     */
+    function updateChainLinkCollateralPrice(uint256 collateralIndex) external;
 
     /**
      * @notice Sets mint and redeem fees, 1_000_000 = 100%
@@ -202,10 +212,12 @@ interface IUbiquityPool {
      * @dev Redeeming is split in 2 actions:
      * @dev 1. `redeemDollar()`
      * @dev 2. `collectRedemption()`
-     * @dev `newRedemptionDelay` sets number of blocks that should be mined after which user can call `collectRedemption()`
-     * @param newRedemptionDelay Redemption delay in blocks
+     * @dev `newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`
+     * @param newRedemptionDelayBlocks Redemption delay in blocks
      */
-    function setRedemptionDelay(uint256 newRedemptionDelay) external;
+    function setRedemptionDelayBlocks(
+        uint256 newRedemptionDelayBlocks
+    ) external;
 
     /**
      * @notice Toggles (i.e. enables/disables) a particular collateral token
@@ -218,5 +230,8 @@ interface IUbiquityPool {
      * @param collateralIndex Collateral token index
      * @param toggleIndex Method index. 0 - toggle mint pause, 1 - toggle redeem pause, 2 - toggle borrow by AMO pause
      */
-    function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) external;
+    function toggleMintRedeemBorrow(
+        uint256 collateralIndex,
+        uint8 toggleIndex
+    ) external;
 }

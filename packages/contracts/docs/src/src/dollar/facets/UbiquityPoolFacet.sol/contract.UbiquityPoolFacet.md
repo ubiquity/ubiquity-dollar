@@ -1,5 +1,5 @@
 # UbiquityPoolFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/bc36823136700d0422c14fd5ae111920580c10d7/src/dollar/facets/UbiquityPoolFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/cbd28a4612a3e634eb46789c9d7030bc45955983/src/dollar/facets/UbiquityPoolFacet.sol)
 
 **Inherits:**
 [IUbiquityPool](/src/dollar/interfaces/IUbiquityPool.sol/interface.IUbiquityPool.md), [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
@@ -201,6 +201,21 @@ function collectRedemption(uint256 collateralIndex) external returns (uint256 co
 |`collateralAmount`|`uint256`|Amount of collateral tokens redeemed|
 
 
+### updateChainLinkCollateralPrice
+
+Updates collateral token price in USD from ChainLink price feed
+
+
+```solidity
+function updateChainLinkCollateralPrice(uint256 collateralIndex) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralIndex`|`uint256`|Collateral token index|
+
+
 ### amoMinterBorrow
 
 Allows AMO minters to borrow collateral to make yield in external
@@ -240,13 +255,16 @@ Adds a new collateral token
 
 
 ```solidity
-function addCollateralToken(address collateralAddress, uint256 poolCeiling) external onlyAdmin;
+function addCollateralToken(address collateralAddress, address chainLinkPriceFeedAddress, uint256 poolCeiling)
+    external
+    onlyAdmin;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`collateralAddress`|`address`|Collateral token address|
+|`chainLinkPriceFeedAddress`|`address`|Chainlink's price feed address|
 |`poolCeiling`|`uint256`|Max amount of available tokens for collateral|
 
 
@@ -265,20 +283,25 @@ function removeAmoMinter(address amoMinterAddress) external onlyAdmin;
 |`amoMinterAddress`|`address`|AMO minter address to remove|
 
 
-### setCollateralPrice
+### setCollateralChainLinkPriceFeed
 
-Sets collateral token price in USD
+Sets collateral ChainLink price feed params
 
 
 ```solidity
-function setCollateralPrice(uint256 collateralIndex, uint256 newPrice) external onlyAdmin;
+function setCollateralChainLinkPriceFeed(
+    address collateralAddress,
+    address chainLinkPriceFeedAddress,
+    uint256 stalenessThreshold
+) external onlyAdmin;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`collateralIndex`|`uint256`|Collateral token index|
-|`newPrice`|`uint256`|New USD price (precision 1e6)|
+|`collateralAddress`|`address`|Collateral token address|
+|`chainLinkPriceFeedAddress`|`address`|ChainLink price feed address|
+|`stalenessThreshold`|`uint256`|Threshold in seconds when chainlink answer should be considered stale|
 
 
 ### setFees
@@ -330,7 +353,7 @@ function setPriceThresholds(uint256 newMintPriceThreshold, uint256 newRedeemPric
 |`newRedeemPriceThreshold`|`uint256`|New redeem price threshold|
 
 
-### setRedemptionDelay
+### setRedemptionDelayBlocks
 
 Sets a redemption delay in blocks
 
@@ -338,13 +361,13 @@ Sets a redemption delay in blocks
 
 
 ```solidity
-function setRedemptionDelay(uint256 newRedemptionDelay) external onlyAdmin;
+function setRedemptionDelayBlocks(uint256 newRedemptionDelayBlocks) external onlyAdmin;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`newRedemptionDelay`|`uint256`|Redemption delay in blocks|
+|`newRedemptionDelayBlocks`|`uint256`|Redemption delay in blocks|
 
 
 ### toggleCollateral
@@ -362,13 +385,13 @@ function toggleCollateral(uint256 collateralIndex) external onlyAdmin;
 |`collateralIndex`|`uint256`|Collateral token index|
 
 
-### toggleMRB
+### toggleMintRedeemBorrow
 
 Toggles pause for mint/redeem/borrow methods
 
 
 ```solidity
-function toggleMRB(uint256 collateralIndex, uint8 toggleIndex) external onlyAdmin;
+function toggleMintRedeemBorrow(uint256 collateralIndex, uint8 toggleIndex) external onlyAdmin;
 ```
 **Parameters**
 

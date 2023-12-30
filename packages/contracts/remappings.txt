@@ -8,3 +8,4 @@ solidity-linked-list/=lib/solidity-linked-list
 @uniswap/v3-periphery/contracts/=lib/Uniswap/v3-periphery/contracts
 abdk/=lib/abdk-libraries-solidity/
 operator-filter-registry/=lib/operator-filter-registry/src
+@chainlink/=lib/chainlink-brownie-contracts/contracts/src/v0.8/

@@ -114,9 +114,12 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
 
         dollarToken.approve(creditNftManagerAddress, 10000e18);
 
+        uint256 amountCreditNftToMint = creditNftManagerFacet
+            .getCreditNftReturnedForDollars(100);
         uint256 expiryBlockNumber = creditNftManagerFacet
             .exchangeDollarsForCreditNft(100);
         assertEq(expiryBlockNumber, 10000 + creditNftLengthBlocks);
+        assertEq(amountCreditNftToMint, 100);
     }
 
     function test_exchangeDollarsForCreditRevertsIfPriceHigherThan1Ether()
@@ -140,6 +143,11 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
             100
         );
         assertEq(creditAmount, 100);
+
+        vm.roll(10000);
+        uint256 amountCreditToMint = creditNftManagerFacet
+            .getCreditReturnedForDollars(100);
+        assertEq(amountCreditToMint, 100);
     }
 
     function test_burnExpiredCreditNftForGovernanceRevertsIfNotExpired()
