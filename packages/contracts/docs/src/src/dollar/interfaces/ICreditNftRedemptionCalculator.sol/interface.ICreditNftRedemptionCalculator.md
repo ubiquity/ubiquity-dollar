@@ -1,5 +1,5 @@
 # ICreditNftRedemptionCalculator
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/cbd28a4612a3e634eb46789c9d7030bc45955983/src/dollar/interfaces/ICreditNftRedemptionCalculator.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/940040226cc8480b0e7aa65d1592259dfcf013ef/src/dollar/interfaces/ICreditNftRedemptionCalculator.sol)
 
 Contract interface for calculating amount of Credit NFTs to mint on Dollars burn
 
