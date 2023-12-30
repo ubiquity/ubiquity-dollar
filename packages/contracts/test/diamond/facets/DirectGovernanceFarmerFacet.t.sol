@@ -147,10 +147,6 @@ contract DirectGovernanceFarmerFacetTest is DiamondTestSetup {
         assertFalse(directGovernanceFarmerFacet.isMetaPoolCoin(address(0)));
     }
 
-    function test_Address() public view returns (address) {
-        return address(this);
-    }
-
     function test_IsMetaPoolCoin() public view {
         directGovernanceFarmerFacet.isMetaPoolCoin(address(0x2));
     }
