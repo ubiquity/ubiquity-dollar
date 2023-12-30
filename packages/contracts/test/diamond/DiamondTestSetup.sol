@@ -198,8 +198,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfDollarAmoMinterFacet = getSelectorsFromAbi(
             "/out/DollarAmoMinterFacet.sol/DollarAmoMinterFacet.json"
         );
-        selectorsOfDollarAmoMinterFacet = getSelectorsFromAbi(
-            "/out/DollarAmoMinterFacet.sol/FuseRariAmoStrategyFacet.json"
+        selectorsOfFuseRariAmoStrategyFacet = getSelectorsFromAbi(
+            "/out/FuseRariAmoStrategyFacet.sol/FuseRariAmoStrategyFacet.json"
         );
 
         // deploy facet implementation instances

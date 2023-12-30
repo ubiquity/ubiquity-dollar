@@ -93,7 +93,14 @@ library LibFuseRariAmoStrategy {
         _;
     }
 
-    function init(
+    /// @notice Initializes the AMO Strategy with the given parameters.
+    /// @dev Sets up the initial state of the strategy, including pools, AMO minter, and collateral ratio.
+    /// @param _dollar Address of the Ubiquity Dollar Token contract.
+    /// @param _initialUnitrollers Array of addresses for the initial unitrollers.
+    /// @param _initialFusePools Array of addresses for the initial Fuse pools.
+    /// @param _amoMinterAddress Address of the AMO Minter contract.
+    /// @param _globalDollarCollateralRatio Initial global dollar collateral ratio.
+    function initialize(
         address _dollar,
         address[] memory _initialUnitrollers,
         address[] memory _initialFusePools,
@@ -127,6 +134,9 @@ library LibFuseRariAmoStrategy {
         }
     }
 
+    /// @notice Shows the allocations of the strategy in terms of dollar balance and sum of Fuse pool tallies.
+    /// @dev Returns an array containing the dollar balance, sum of Fuse pool tallies, and total DOLLAR value.
+    /// @return allocations An array of three elements: dollar balance, sum of Fuse pool tallies, and total DOLLAR value.
     function showAllocations()
         internal
         view
@@ -147,10 +157,14 @@ library LibFuseRariAmoStrategy {
         }
         allocations[1] = sumFusePoolTally;
 
-        allocations[2] = allocations[0] + allocations[1]; // Total DOLLAR value
+        allocations[2] = allocations[0] + allocations[1]; // Total Dollar value
     }
 
-    function dollarBalances()
+    /// @notice Provides the dollar and collateral values of the strategy.
+    /// @dev Returns the total dollar value and its corresponding collateral value.
+    /// @return dollarVal Total dollar value in the strategy.
+    /// @return collatVal Corresponding collateral value for the total dollar value.
+    function dollarBalancesStrategy()
         internal
         view
         returns (uint256 dollarVal, uint256 collatVal)
@@ -165,6 +179,9 @@ library LibFuseRariAmoStrategy {
                 UBIQUITY_POOL_PRICE_PRECISION);
     }
 
+    /// @notice Retrieves all pool addresses involved in the strategy.
+    /// @dev Returns an array of addresses representing all the Fuse pools.
+    /// @return An array of addresses for each pool in the strategy.
     function allPoolAddresses() internal view returns (address[] memory) {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
@@ -172,6 +189,9 @@ library LibFuseRariAmoStrategy {
         return strategyStorage.fusePoolsArray;
     }
 
+    /// @notice Gets the total number of pools in the strategy.
+    /// @dev Returns the length of the array containing all Fuse pool addresses.
+    /// @return The number of pools in the strategy.
     function allPoolsLength() internal view returns (uint256) {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
@@ -179,6 +199,10 @@ library LibFuseRariAmoStrategy {
         return strategyStorage.fusePoolsArray.length;
     }
 
+    /// @notice Converts a pool address to its corresponding index in the pool array.
+    /// @dev Finds the index of the given pool address in the fusePools Array.
+    /// @param _poolAddress The address of the pool to find.
+    /// @return The index of the given pool address in the fusePools Array.
     function poolAddrToId(
         address _poolAddress
     ) internal view returns (uint256) {
@@ -193,6 +217,10 @@ library LibFuseRariAmoStrategy {
         revert("Pool not found");
     }
 
+    /// @notice Calculates the dollar value in a specific pool by its ID.
+    /// @dev Multiplies the cToken balance by the exchange rate to get the dollar value.
+    /// @param _poolId The ID of the pool to calculate the dollar value for.
+    /// @return The dollar value in the specified pool.
     function dollarInPoolByPoolId(
         uint256 _poolId
     ) internal view returns (uint256) {
@@ -206,6 +234,10 @@ library LibFuseRariAmoStrategy {
         return cTokenBalance * (delegator.exchangeRateStored() / (1e18));
     }
 
+    /// @notice Calculates the dollar value in a specific pool by its address.
+    /// @dev Converts the pool address to its ID and then calculates the dollar value.
+    /// @param _poolAddress The address of the pool to calculate the dollar value for.
+    /// @return The dollar value in the specified pool.
     function dollarInPoolByPoolAddr(
         address _poolAddress
     ) internal view returns (uint256) {
@@ -213,15 +245,9 @@ library LibFuseRariAmoStrategy {
         return dollarInPoolByPoolId(poolId);
     }
 
-    // function mintedBalance() public view returns (int256) {
-    //     return amo_minter.dollar_mint_balances(address(this));
-    // }
-
-    // // Backwards compatibility
-    // function accumulatedProfit() public view returns (int256) {
-    //     return int256(showAllocations()[2]) - mintedBalance();
-    // }
-
+    /// @notice Retrieves all borrow pool addresses involved in the strategy.
+    /// @dev Returns an array of addresses representing all the Fuse borrow pools.
+    /// @return An array of addresses for each borrow pool in the strategy.
     function allBorrowPoolAddresses() internal view returns (address[] memory) {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
@@ -229,6 +255,9 @@ library LibFuseRariAmoStrategy {
         return strategyStorage.fuseBorrowPoolsArray;
     }
 
+    /// @notice Gets the total number of borrow pools in the strategy.
+    /// @dev Returns the length of the array containing all Fuse borrow pool addresses.
+    /// @return The number of borrow pools in the strategy.
     function allBorrowPoolsLength() internal view returns (uint256) {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
@@ -236,6 +265,10 @@ library LibFuseRariAmoStrategy {
         return strategyStorage.fuseBorrowPoolsArray.length;
     }
 
+    /// @notice Converts a borrow pool address to its corresponding index in the borrow pool array.
+    /// @dev Finds the index of the given borrow pool address in the fuseBorrowPoolsArray.
+    /// @param _poolAddress The address of the borrow pool to find.
+    /// @return The index of the given borrow pool address in the fuseBorrowPoolsArray.
     function borrowPoolAddrToId(
         address _poolAddress
     ) internal view returns (uint256) {
@@ -385,7 +418,7 @@ library LibFuseRariAmoStrategy {
     /* ========== Burns and givebacks ========== */
 
     // Burn unneeded or excess DOLLAR. Goes through the minter
-    function burnDollar(uint256 _dollarAmount) internal {
+    function burnDollarStrategy(uint256 _dollarAmount) internal {
         FuseRariAmoStrategyData
             storage strategyStorage = fuseRariAmoStrategyStorage();
 
@@ -504,12 +537,10 @@ library LibFuseRariAmoStrategy {
         );
     }
 
-    function recoverERC20(
-        address _tokenAddress,
-        uint256 _tokenAmount
-    ) internal {
-        IERC20(_tokenAddress).safeTransfer(msg.sender, _tokenAmount);
+    function amoMinterAddress() internal view returns (address) {
+        FuseRariAmoStrategyData
+            storage strategyStorage = fuseRariAmoStrategyStorage();
 
-        emit Recovered(_tokenAddress, _tokenAmount);
+        return address(strategyStorage.amoMinter);
     }
 }

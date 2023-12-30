@@ -5,14 +5,14 @@ import {LibFuseRariAmoStrategy} from "../libraries/LibFuseRariAmoStrategy.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 
 contract FuseRariAmoStrategyFacet is Modifiers {
-    function init(
+    function initialize(
         address _dollar,
         address[] memory _initialUnitrollers,
         address[] memory _initialFusePools,
         address _amoMinterAddress,
         uint256 _globalDollarCollateralRatio
     ) external {
-        LibFuseRariAmoStrategy.init(
+        LibFuseRariAmoStrategy.initialize(
             _dollar,
             _initialUnitrollers,
             _initialFusePools,
@@ -29,12 +29,12 @@ contract FuseRariAmoStrategyFacet is Modifiers {
         return LibFuseRariAmoStrategy.showAllocations();
     }
 
-    function dollarBalances()
+    function dollarBalancesStrategy()
         external
         view
         returns (uint256 dollarVal, uint256 collatVal)
     {
-        return LibFuseRariAmoStrategy.dollarBalances();
+        return LibFuseRariAmoStrategy.dollarBalancesStrategy();
     }
 
     function allPoolAddresses() external view returns (address[] memory) {
@@ -163,8 +163,8 @@ contract FuseRariAmoStrategyFacet is Modifiers {
     /* ========== Burns and givebacks ========== */
 
     // Burn unneeded or excess DOLLAR. Goes through the minter
-    function burnDollar(uint256 _dollarAmount) external {
-        LibFuseRariAmoStrategy.burnDollar(_dollarAmount);
+    function burnDollarStrategy(uint256 _dollarAmount) external {
+        LibFuseRariAmoStrategy.burnDollarStrategy(_dollarAmount);
     }
 
     /* ========== OWNER / GOVERNANCE FUNCTIONS ONLY ========== */
@@ -194,10 +194,7 @@ contract FuseRariAmoStrategyFacet is Modifiers {
         LibFuseRariAmoStrategy.setAmoMinter(_amoMinterAddress);
     }
 
-    function recoverERC20(
-        address _tokenAddress,
-        uint256 _tokenAmount
-    ) external {
-        LibFuseRariAmoStrategy.recoverERC20(_tokenAddress, _tokenAmount);
+    function amoMinterAddress() external view returns (address) {
+        return LibFuseRariAmoStrategy.amoMinterAddress();
     }
 }
