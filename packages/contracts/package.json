@@ -25,7 +25,7 @@
     "test:unit": "forge test",
     "test:slither": "slither . --compile-force-framework foundry",
     "test:echidna": "echidna-test . --config echidna.config.yml",
-    "test:coverage": "sh ./coverage.sh",
+    "test:coverage": "forge coverage",
     "start:anvil": "anvil --fork-url https://eth.ubq.fi/v1/mainnet --chain-id 31337",
     "prebuild": "run-p clean",
     "deploy:development": "migrations/development/deploy.sh",
