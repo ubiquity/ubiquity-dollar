@@ -55,6 +55,7 @@ library LibDirectGovernanceFarmer {
                 1
         );
 
+    /// @notice Struct used as a storage for the current library
     struct DirectGovernanceData {
         address token0; // DAI
         address token1; // USDC
@@ -80,6 +81,7 @@ library LibDirectGovernanceFarmer {
         }
     }
 
+    /// @notice Used to initialize this facet with corresponding values
     function init(
         address _manager,
         address base3Pool,

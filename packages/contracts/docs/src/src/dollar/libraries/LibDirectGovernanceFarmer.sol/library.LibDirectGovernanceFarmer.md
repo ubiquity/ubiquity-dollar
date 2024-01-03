@@ -1,5 +1,5 @@
 # LibDirectGovernanceFarmer
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/cbd28a4612a3e634eb46789c9d7030bc45955983/src/dollar/libraries/LibDirectGovernanceFarmer.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/940040226cc8480b0e7aa65d1592259dfcf013ef/src/dollar/libraries/LibDirectGovernanceFarmer.sol)
 
 
 ## State Variables
@@ -30,6 +30,8 @@ function directGovernanceStorage() internal pure returns (DirectGovernanceData s
 
 
 ### init
+
+Used to initialize this facet with corresponding values
 
 
 ```solidity
@@ -238,6 +240,8 @@ event WithdrawAll(address indexed sender, uint256 stakingShareId, uint256[4] amo
 
 ## Structs
 ### DirectGovernanceData
+Struct used as a storage for the current library
+
 
 ```solidity
 struct DirectGovernanceData {
