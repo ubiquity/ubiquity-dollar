@@ -1,5 +1,8 @@
+import { Provider } from "@ethersproject/providers";
+import IERC20Artifact from "@ubiquity/contracts/out/IERC20.sol/IERC20.json";
 import { BigNumber, ethers, Contract } from "ethers";
 
+import { PossibleProviders } from "./hooks/use-web-3";
 import { performTransaction } from "./utils";
 
 export async function ensureERC20Allowance(
@@ -37,6 +40,34 @@ export async function ensureERC1155Allowance(logName: string, contract: Contract
   }
 
   return true;
+}
+
+/**
+ * Returns ERC20 token allowance
+ * @param provider Provider 
+ * @param contractAddress ERC20 token address
+ * @param ownerAddress Owner address
+ * @param spenderAddress Spender address
+ * @returns Allowance amount
+ */
+export async function getERC20Allowance(
+    provider: PossibleProviders,
+    contractAddress: string, 
+    ownerAddress: string, 
+    spenderAddress: string
+  ): Promise<BigNumber> {
+    const contract = new ethers.Contract(contractAddress, IERC20Artifact.abi, <Provider>provider);
+    return await contract.allowance(ownerAddress, spenderAddress);
+}
+
+/**
+ * Returns ERC20 contract instance
+ * @param contractAddress ERC20 contract address
+ * @param provider Provider
+ * @returns Contract instance
+ */
+export async function getERC20Contract(contractAddress: string, provider: PossibleProviders) {
+  return new ethers.Contract(contractAddress, IERC20Artifact.abi, <Provider>provider);
 }
 
 // const toEtherNum = (n: BigNumber) => +n.toString() / 1e18;
