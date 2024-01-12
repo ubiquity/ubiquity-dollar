@@ -47,7 +47,7 @@ const PoolPage: FC = (): JSX.Element => {
     address: protocolContracts.ubiquityPoolFacet?.address as `0x${string}`,
     token: collateralInfo?.collateralAddress as `0x${string}`,
   });
-  const { provider, signer, walletAddress } = useWeb3(); 
+  const { provider, signer, walletAddress } = useWeb3();
   const collateralBalanceUser = useBalance({
     address: walletAddress as `0x${string}`,
     token: collateralInfo?.collateralAddress as `0x${string}`,
@@ -60,13 +60,16 @@ const PoolPage: FC = (): JSX.Element => {
   const [allowanceAmountDollar, setAllowanceAmountDollar] = useState<BigNumber>(BigNumber.from(0));
   const [receiveAmountCollateral, setReceiveAmountCollateral] = useState<BigNumber>(BigNumber.from(0));
   const [receiveAmountDollar, setReceiveAmountDollar] = useState<BigNumber>(BigNumber.from(0));
-  const [inputAmountCollateral, setInputAmountCollateral] = useState<string>('');
+  const [inputAmountCollateral, setInputAmountCollateral] = useState<string>("");
+  const [inputAmountDollar, setInputAmountDollar] = useState<string>("");
 
   /**
    * On component mount
    */
   useEffect(() => {
-    init().catch(err => { console.error(err) });
+    init().catch((err) => {
+      console.error(err);
+    });
   }, []);
 
   /**
@@ -75,10 +78,22 @@ const PoolPage: FC = (): JSX.Element => {
   const init = async () => {
     const allCollateralAddresses = await protocolContracts.ubiquityPoolFacet?.allCollaterals();
     const collateralInfo: CollateralInfo = await protocolContracts.ubiquityPoolFacet?.collateralInformation(allCollateralAddresses[0]);
-    const allowanceCollateral = await getERC20Allowance(provider, collateralInfo.collateralAddress, walletAddress || '', protocolContracts.ubiquityPoolFacet?.address || '');
+    const allowanceCollateral = await getERC20Allowance(
+      provider,
+      collateralInfo.collateralAddress,
+      walletAddress || "",
+      protocolContracts.ubiquityPoolFacet?.address || ""
+    );
+    const allowanceDollar = await getERC20Allowance(
+      provider,
+      protocolContracts.dollarToken?.address || "",
+      walletAddress || "",
+      protocolContracts.ubiquityPoolFacet?.address || ""
+    );
 
     setCollateralInfo(collateralInfo);
     setAllowanceAmountCollateral(allowanceCollateral);
+    setAllowanceAmountDollar(allowanceDollar);
   };
 
   /**
@@ -87,8 +102,24 @@ const PoolPage: FC = (): JSX.Element => {
    */
   const onInputAmountCollateralChange = async (value: string) => {
     setInputAmountCollateral(value);
-      const dollarsRequired = ethers.utils.parseEther(value || '0').mul(UBIQUITY_POOL_PRICE_PRECISION).div(collateralInfo?.price || 1);
-      setReceiveAmountDollar(dollarsRequired);
+    const receiveAmountDollar = ethers.utils
+      .parseEther(value || "0")
+      .mul(UBIQUITY_POOL_PRICE_PRECISION)
+      .div(collateralInfo?.price || 1);
+    setReceiveAmountDollar(receiveAmountDollar);
+  };
+
+  /**
+   * On "redeem" input change
+   * @param value New input value
+   */
+  const onInputAmountDollarChange = async (value: string) => {
+    setInputAmountDollar(value);
+    const receiveAmountCollateral = ethers.utils
+      .parseEther(value || "0")
+      .mul(UBIQUITY_POOL_PRICE_PRECISION)
+      .div(collateralInfo?.price || 1);
+    setReceiveAmountCollateral(receiveAmountCollateral);
   };
 
   /**
@@ -96,16 +127,27 @@ const PoolPage: FC = (): JSX.Element => {
    */
   const onApproveCollateralClick = async () => {
     // get collateral contract instance
-    const collateralContract = await getERC20Contract(collateralInfo?.collateralAddress || '', provider);
+    const collateralContract = await getERC20Contract(collateralInfo?.collateralAddress || "", provider);
     // get amount in WEI that should be approved
     const amountToApproveWei = ethers.utils.parseEther(inputAmountCollateral);
     // approve
-    await collateralContract.connect(signer || '').approve(
-      protocolContracts.ubiquityPoolFacet?.address, 
-      amountToApproveWei,
-    );
+    await collateralContract.connect(signer || "").approve(protocolContracts.ubiquityPoolFacet?.address, amountToApproveWei);
     // update UI
     setAllowanceAmountCollateral(amountToApproveWei);
+  };
+
+  /**
+   * On "approve" button transfer of Dollar tokens click
+   */
+  const onApproveDollarClick = async () => {
+    // get Dollar contract instance
+    const dollarContract = await getERC20Contract(protocolContracts.dollarToken?.address || "", provider);
+    // get amount in WEI that should be approved
+    const amountToApproveWei = ethers.utils.parseEther(inputAmountDollar);
+    // approve
+    await dollarContract.connect(signer || "").approve(protocolContracts.ubiquityPoolFacet?.address, amountToApproveWei);
+    // update UI
+    setAllowanceAmountDollar(amountToApproveWei);
   };
 
   /**
@@ -113,7 +155,7 @@ const PoolPage: FC = (): JSX.Element => {
    */
   const onMintClick = async () => {
     // be default we have only 1 collateral pool hence index is 0
-    const collateralIndex = 0; 
+    const collateralIndex = 0;
     // amount of Dollars to mint
     const dollarAmount = receiveAmountDollar.toString();
     // min amount of Dollars to mint (slippage protection)
@@ -122,17 +164,32 @@ const PoolPage: FC = (): JSX.Element => {
     const maxCollateralIn = BigNumber.from(dollarAmount).mul(BigNumber.from(1_000_000).add(SLIPPAGE_RATE)).div(1_000_000).toString();
 
     // mint Dollars
-    await protocolContracts.ubiquityPoolFacet?.connect(signer || '').mintDollar(
-      collateralIndex,
-      dollarAmount,
-      dollarOutMin,
-      maxCollateralIn,
-    );
+    await protocolContracts.ubiquityPoolFacet?.connect(signer || "").mintDollar(collateralIndex, dollarAmount, dollarOutMin, maxCollateralIn);
 
     // update UI
     init();
-    setInputAmountCollateral('');
+    setInputAmountCollateral("");
     setReceiveAmountDollar(BigNumber.from(0));
+  };
+
+  /**
+   * On "redeem" button click
+   */
+  const onRedeemClick = async () => {
+    // be default we have only 1 collateral pool hence index is 0
+    const collateralIndex = 0;
+    // amount of Dollars to burn
+    const dollarAmount = BigNumber.from(ethers.utils.parseEther(inputAmountDollar || "0"));
+    // min amount of collateral to get (slippage protection)
+    const collateralOutMin = BigNumber.from(dollarAmount).mul(BigNumber.from(1_000_000).sub(SLIPPAGE_RATE)).div(1_000_000).toString();
+
+    // redeem collateral
+    await protocolContracts.ubiquityPoolFacet?.connect(signer || "").redeemDollar(collateralIndex, dollarAmount, collateralOutMin);
+
+    // update UI
+    init();
+    setInputAmountDollar("");
+    setReceiveAmountCollateral(BigNumber.from(0));
   };
 
   /**
@@ -177,11 +234,7 @@ const PoolPage: FC = (): JSX.Element => {
         <div className="panel">
           <h2>Mint</h2>
           <div>
-            <PositiveNumberInput 
-              placeholder={`${collateralInfo?.symbol} amount`} 
-              value={inputAmountCollateral}
-              onChange={onInputAmountCollateralChange} 
-            />
+            <PositiveNumberInput placeholder={`${collateralInfo?.symbol} amount`} value={inputAmountCollateral} onChange={onInputAmountCollateralChange} />
           </div>
           <div className="pool-container__row">
             <span>You receive</span>
@@ -189,13 +242,10 @@ const PoolPage: FC = (): JSX.Element => {
           </div>
           {/* mint Dollars / approve collateral button */}
           <div>
-            {allowanceAmountCollateral.gte(ethers.utils.parseEther(inputAmountCollateral || '0')) ? (
+            {allowanceAmountCollateral.gte(ethers.utils.parseEther(inputAmountCollateral || "0")) ? (
               <Button onClick={onMintClick}>Mint</Button>
             ) : (
-              <Button 
-                disabled={BigNumber.from(inputAmountCollateral || 0).eq(0)}
-                onClick={onApproveCollateralClick}
-              >
+              <Button disabled={BigNumber.from(inputAmountCollateral || 0).eq(0)} onClick={onApproveCollateralClick}>
                 Approve
               </Button>
             )}
@@ -205,14 +255,23 @@ const PoolPage: FC = (): JSX.Element => {
         <div className="panel">
           <h2>Redeem</h2>
           <div>
-            <PositiveNumberInput placeholder={`Dollar amount`} value="" onChange={() => {}} />
+            <PositiveNumberInput placeholder={`Dollar amount`} value={inputAmountDollar} onChange={onInputAmountDollarChange} />
           </div>
           <div className="pool-container__row">
             <span>You receive</span>
-            <span>{receiveAmountCollateral.toString()} {collateralInfo?.symbol}</span>
+            <span>
+              {(+ethers.utils.formatEther(receiveAmountCollateral)).toFixed(2)} {collateralInfo?.symbol}
+            </span>
           </div>
+          {/* redeem collateral / approve Dollars button */}
           <div>
-            <Button>Redeem</Button>
+            {allowanceAmountDollar.gte(ethers.utils.parseEther(inputAmountDollar || "0")) ? (
+              <Button onClick={onRedeemClick}>Redeem</Button>
+            ) : (
+              <Button disabled={BigNumber.from(inputAmountDollar || 0).eq(0)} onClick={onApproveDollarClick}>
+                Approve
+              </Button>
+            )}
           </div>
         </div>
       </div>
