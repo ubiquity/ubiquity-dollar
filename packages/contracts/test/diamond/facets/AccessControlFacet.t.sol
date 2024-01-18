@@ -135,4 +135,20 @@ contract AccessControlFacetTest is DiamondTestSetup {
         );
         assertEq(adminRole, DEFAULT_ADMIN_ROLE);
     }
+
+    // test setRoleAdmin function should set correct admin role
+    function testSetRoleAdmin_ShouldSetAdminRoleForGivenRole() public {
+        bytes32 adminRole = accessControlFacet.getRoleAdmin(
+            DOLLAR_TOKEN_MINTER_ROLE
+        );
+        assertEq(adminRole, DOLLAR_TOKEN_MINTER_ROLE);
+        accessControlFacet.setRoleAdmin(
+            DOLLAR_TOKEN_MINTER_ROLE,
+            DOLLAR_TOKEN_BURNER_ROLE
+        );
+        bytes32 adminRole = accessControlFacet.getRoleAdmin(
+            DOLLAR_TOKEN_MINTER_ROLE
+        );
+        assertEq(adminRole, DOLLAR_TOKEN_BURNER_ROLE);
+    }
 }
