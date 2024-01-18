@@ -84,6 +84,18 @@ abstract contract AccessControlInternal {
     }
 
     /**
+     * @notice Set admin role for a given role
+     * @param role Role to set
+     * @param adminRole role for the provided role
+     */
+    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
+        LibAccessControl
+            .accessControlStorage()
+            .roles[role]
+            .adminRole = adminRole;
+    }
+
+    /**
      * @notice Assigns role to a given account
      * @param role Role to assign
      * @param account Recipient of role assignment
