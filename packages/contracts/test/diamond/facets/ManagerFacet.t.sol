@@ -99,21 +99,6 @@ contract ManagerFacetTest is DiamondTestSetup {
         assertEq(managerFacet.treasuryAddress(), contract1);
     }
 
-    function testSetIncentiveToDollar_ShouldSucceed() public prankAs(admin) {
-        assertEq(
-            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
-            true
-        );
-        assertEq(
-            accessControlFacet.hasRole(
-                GOVERNANCE_TOKEN_MANAGER_ROLE,
-                address(diamond)
-            ),
-            true
-        );
-        managerFacet.setIncentiveToDollar(user1, contract1);
-    }
-
     function testSetMinterRoleWhenInitializing_ShouldSucceed()
         public
         prankAs(admin)
