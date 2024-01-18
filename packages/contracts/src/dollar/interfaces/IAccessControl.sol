@@ -25,7 +25,7 @@ interface IAccessControl {
     /**
      * @notice Sets admin role for a given role
      * @param role Role to set
-     * @return adminRole Admin role to set for a provided role
+     * @param adminRole Admin role to set for a provided role
      */
     function setRoleAdmin(bytes32 role, bytes32 adminRole) external;
 
