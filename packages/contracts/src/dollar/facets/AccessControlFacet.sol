@@ -26,7 +26,7 @@ contract AccessControlFacet is
 
     /// @inheritdoc IAccessControl
     function setRoleAdmin(bytes32 role, bytes32 adminRole) external onlyAdmin {
-        return setRoleAdmin(role, adminRole);
+        _setRoleAdmin(role, adminRole);
     }
 
     /// @inheritdoc IAccessControl

@@ -142,13 +142,12 @@ contract AccessControlFacetTest is DiamondTestSetup {
             DOLLAR_TOKEN_MINTER_ROLE
         );
         assertEq(adminRole, DOLLAR_TOKEN_MINTER_ROLE);
+        vm.prank(admin);
         accessControlFacet.setRoleAdmin(
             DOLLAR_TOKEN_MINTER_ROLE,
             DOLLAR_TOKEN_BURNER_ROLE
         );
-        bytes32 adminRole = accessControlFacet.getRoleAdmin(
-            DOLLAR_TOKEN_MINTER_ROLE
-        );
+        adminRole = accessControlFacet.getRoleAdmin(DOLLAR_TOKEN_MINTER_ROLE);
         assertEq(adminRole, DOLLAR_TOKEN_BURNER_ROLE);
     }
 }
