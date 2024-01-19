@@ -43,10 +43,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     }
 
     /**
-     * @notice Moves `amount` of tokens from `from` to `to` and applies incentives.
-     *
-     * This internal function is equivalent to `transfer`, and can be used to
-     * e.g. implement automatic token fees, slashing mechanisms, etc.
+     * @notice Moves `amount` of tokens from `from` to `to`
      *
      * Emits a `Transfer` event.
      *
