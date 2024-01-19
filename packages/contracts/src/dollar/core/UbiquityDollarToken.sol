@@ -43,25 +43,6 @@ contract UbiquityDollarToken is ERC20Ubiquity {
     }
 
     /**
-     * @notice Moves `amount` of tokens from `from` to `to`
-     *
-     * Emits a `Transfer` event.
-     *
-     * Requirements:
-     *
-     * - `from` cannot be the zero address.
-     * - `to` cannot be the zero address.
-     * - `from` must have a balance of at least `amount`.
-     */
-    function _transfer(
-        address sender,
-        address recipient,
-        uint256 amount
-    ) internal override {
-        super._transfer(sender, recipient, amount);
-    }
-
-    /**
      * @notice Burns Dollars from the `account` address
      * @param account Address to burn tokens from
      * @param amount Amount of tokens to burn
