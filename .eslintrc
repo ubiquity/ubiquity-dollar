@@ -11,6 +11,7 @@
     "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }], // Disallow arrow functions as expressions
     "func-style": ["warn", "declaration", { "allowArrowFunctions": false }], // Disallow the use of function expressions
     "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
     "@typescript-eslint/naming-convention": [
       "error",
       { "selector": "typeLike", "format": ["PascalCase"] },
