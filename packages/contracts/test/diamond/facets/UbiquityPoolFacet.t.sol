@@ -652,6 +652,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(
             0
         );
+        assertEq(freeCollateralAmount, 2.98e18);
 
         // Dollar AMO minter tries to borrow more collateral than available after users' redemptions
         vm.prank(address(dollarAmoMinter));
