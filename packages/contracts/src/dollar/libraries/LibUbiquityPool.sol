@@ -310,6 +310,21 @@ library LibUbiquityPool {
             .div(1e18);
     }
 
+    /**
+     * @notice Returns user's balance available for redemption
+     * @param userAddress User address
+     * @param collateralIndex Collateral token index
+     * @return User's balance available for redemption
+     */
+    function getRedeemCollateralBalance(
+        address userAddress,
+        uint256 collateralIndex
+    ) internal view returns (uint256) {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+        return
+            poolStorage.redeemCollateralBalances[userAddress][collateralIndex];
+    }
+
     //====================
     // Public functions
     //====================
@@ -533,10 +548,9 @@ library LibUbiquityPool {
             // roundId
             int256 answer, // startedAt
             ,
-            uint256 updatedAt,
+            uint256 updatedAt, // answeredInRound
 
-        ) = // answeredInRound
-            priceFeed.latestRoundData();
+        ) = priceFeed.latestRoundData();
 
         // fetch number of decimals in chainlink feed
         uint256 priceFeedDecimals = priceFeed.decimals();

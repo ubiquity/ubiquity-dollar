@@ -67,6 +67,17 @@ interface IUbiquityPool {
      */
     function getDollarPriceUsd() external view returns (uint256 dollarPriceUsd);
 
+    /**
+     * @notice Returns user's balance available for redemption
+     * @param userAddress User address
+     * @param collateralIndex Collateral token index
+     * @return User's balance available for redemption
+     */
+    function getRedeemCollateralBalance(
+        address userAddress,
+        uint256 collateralIndex
+    ) external view returns (uint256);
+
     //====================
     // Public functions
     //====================

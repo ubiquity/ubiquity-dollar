@@ -268,6 +268,37 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(dollarPriceUsd, 1_000_000);
     }
 
+    function testGetRedeemCollateralBalance_ShouldReturnRedeemCollateralBalance()
+        public
+    {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+
+        // user sends 100 collateral tokens and gets 99 Dollars (-1% mint fee)
+        vm.prank(user);
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18 // max collateral to send
+        );
+
+        // user redeems 99 Dollars for 97.02 (accounts for 2% redemption fee) collateral tokens
+        vm.prank(user);
+        ubiquityPoolFacet.redeemDollar(
+            0, // collateral index
+            99e18, // Dollar amount
+            90e18 // min collateral out
+        );
+
+        uint256 redeemCollateralBalance = ubiquityPoolFacet
+            .getRedeemCollateralBalance(user, 0);
+        assertEq(redeemCollateralBalance, 97.02e18);
+    }
+
     //====================
     // Public functions
     //====================
