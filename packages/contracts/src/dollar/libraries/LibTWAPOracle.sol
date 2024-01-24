@@ -47,8 +47,7 @@ library LibTWAPOracle {
 
         // ensure that there's liquidity in the pair
         require(_reserve0 != 0 && _reserve1 != 0, "TWAPOracle: NO_RESERVES");
-        // ensure that pair balance is perfect
-        require(_reserve0 == _reserve1, "TWAPOracle: PAIR_UNBALANCED");
+
         ts.priceCumulativeLast = IMetaPool(_pool).get_price_cumulative_last();
         ts.pricesBlockTimestampLast = IMetaPool(_pool).block_timestamp_last();
         ts.pool = _pool;
