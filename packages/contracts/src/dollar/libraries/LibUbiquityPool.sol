@@ -533,10 +533,9 @@ library LibUbiquityPool {
             // roundId
             int256 answer, // startedAt
             ,
-            uint256 updatedAt,
+            uint256 updatedAt, // answeredInRound
 
-        ) = // answeredInRound
-            priceFeed.latestRoundData();
+        ) = priceFeed.latestRoundData();
 
         // fetch number of decimals in chainlink feed
         uint256 priceFeedDecimals = priceFeed.decimals();
@@ -590,6 +589,12 @@ library LibUbiquityPool {
                 poolStorage.collateralAddresses[minterCollateralIndex]
             ],
             "Collateral disabled"
+        );
+
+        // ensure the pool is solvent (i.e. AMO minter borrows less than users want to redeem)
+        require(
+            collateralAmount <= freeCollateralBalance(minterCollateralIndex),
+            "Not enough free collateral"
         );
 
         // transfer

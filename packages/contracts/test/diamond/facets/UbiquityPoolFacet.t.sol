@@ -622,6 +622,43 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.amoMinterBorrow(1);
     }
 
+    function testAmoMinterBorrow_ShouldRevert_IfThereIsNotEnoughFreeCollateral()
+        public
+    {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+
+        // user sends 100 collateral tokens and gets 99 Dollars (-1% mint fee)
+        vm.prank(user);
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18 // max collateral to send
+        );
+
+        // user redeems 99 Dollars for 97.02 (accounts for 2% redemption fee) collateral tokens
+        vm.prank(user);
+        ubiquityPoolFacet.redeemDollar(
+            0, // collateral index
+            99e18, // Dollar amount
+            90e18 // min collateral out
+        );
+
+        // get free collateral amount, returns 2.98e18
+        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(
+            0
+        );
+
+        // Dollar AMO minter tries to borrow more collateral than available after users' redemptions
+        vm.prank(address(dollarAmoMinter));
+        vm.expectRevert("Not enough free collateral");
+        ubiquityPoolFacet.amoMinterBorrow(freeCollateralAmount + 1);
+    }
+
     function testAmoMinterBorrow_ShouldBorrowCollateral() public {
         // mint 100 collateral tokens to the pool
         collateralToken.mint(address(ubiquityPoolFacet), 100e18);
