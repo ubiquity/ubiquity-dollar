@@ -606,6 +606,12 @@ library LibUbiquityPool {
             "Collateral disabled"
         );
 
+        // ensure the pool is solvent (i.e. AMO minter borrows less than users want to redeem)
+        require(
+            collateralAmount <= freeCollateralBalance(minterCollateralIndex),
+            "Not enough free collateral"
+        );
+
         // transfer
         IERC20(poolStorage.collateralAddresses[minterCollateralIndex])
             .safeTransfer(msg.sender, collateralAmount);
