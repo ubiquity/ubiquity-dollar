@@ -26,6 +26,6 @@
       "@/types/contracts": ["types/contracts"]
     }
   },
-  "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", "ubq.config.ts"],
+  "include": ["global.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", "ubq-connect-config.ts"],
   "exclude": ["node_modules"]
 }
