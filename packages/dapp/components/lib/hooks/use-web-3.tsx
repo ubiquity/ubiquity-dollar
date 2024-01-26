@@ -9,7 +9,7 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 import { FC } from "react";
 import { ChildrenShim } from "./children-shim-d";
-import ubqConfig from "ubq.config";
+import ubqConfig from "ubq-connect.config";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 export const LOCAL_NODE_ADDRESS = "http://localhost:8545";
