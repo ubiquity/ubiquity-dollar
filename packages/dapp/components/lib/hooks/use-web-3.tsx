@@ -9,6 +9,7 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
 import { FC } from "react";
 import { ChildrenShim } from "./children-shim-d";
+import ubqConfig from "ubq.config";
 
 const IS_DEV = process.env.NODE_ENV == "development";
 export const LOCAL_NODE_ADDRESS = "http://localhost:8545";
@@ -67,7 +68,7 @@ const client = createClient(
         chains: defaultChains,
         options: {
           showQrModal: false,
-          projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || "",
+          projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || ubqConfig.walletConnectProjectId || "",
           metadata: {
             name: "Ubiquity DAO",
             description: "World's first scalable digital dollar",
