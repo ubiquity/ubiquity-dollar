@@ -48,6 +48,9 @@
     "*.ts": [
       "yarn prettier --write",
       "eslint --fix"
+    ],
+    "src/**.{ts,json}": [
+      "cspell"
     ]
   },
   "commitlint": {

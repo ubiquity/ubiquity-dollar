@@ -1,9 +1,7 @@
 name: Conventional Commits
 
 on:
-  pull_request:
   push:
-    branches: [development]
 
 jobs:
   conventional-commits:
