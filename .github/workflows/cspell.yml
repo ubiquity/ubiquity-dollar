@@ -9,16 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20.10.0'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
 
-    - name: Install cspell
-      run: yarn add cspell
+      - name: Install cspell
+        run: yarn add cspell
 
-    - name: Run cspell
-      run: cspell "src/**/*.{ts,json}"
+      - name: Run cspell
+        run: cspell "src/**/*.{ts,json}"

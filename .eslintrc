@@ -4,14 +4,39 @@
   "parserOptions": {
     "project": ["./tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint"],
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["@typescript-eslint", "sonarjs"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:sonarjs/recommended"],
   "ignorePatterns": ["**/*.js"],
   "rules": {
-    "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }], // Disallow arrow functions as expressions
-    "func-style": ["warn", "declaration", { "allowArrowFunctions": false }], // Disallow the use of function expressions
+    "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }],
+    "func-style": ["warn", "declaration", { "allowArrowFunctions": false }],
     "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-non-null-assertion": "error",
+    "constructor-super": "error",
+    "no-invalid-this": "off",
+    "@typescript-eslint/no-invalid-this": ["error"],
+    "no-restricted-syntax": ["error", "ForInStatement"],
+    "use-isnan": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/no-misused-new": "error",
+    "@typescript-eslint/restrict-plus-operands": "error",
+    "@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
+    "sonarjs/no-all-duplicated-branches": "error",
+    "sonarjs/no-collection-size-mischeck": "error",
+    "sonarjs/no-duplicated-branches": "error",
+    "sonarjs/no-element-overwrite": "error",
+    "sonarjs/no-identical-conditions": "error",
+    "sonarjs/no-identical-expressions": "error",
     "@typescript-eslint/naming-convention": [
       "error",
       { "selector": "typeLike", "format": ["PascalCase"] },
