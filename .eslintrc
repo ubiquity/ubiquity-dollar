@@ -30,7 +30,6 @@
     "@typescript-eslint/await-thenable": "error",
     "@typescript-eslint/no-misused-new": "error",
     "@typescript-eslint/restrict-plus-operands": "error",
-    "@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
     "sonarjs/no-all-duplicated-branches": "error",
     "sonarjs/no-collection-size-mischeck": "error",
     "sonarjs/no-duplicated-branches": "error",
@@ -39,17 +38,16 @@
     "sonarjs/no-identical-expressions": "error",
     "@typescript-eslint/naming-convention": [
       "error",
-      { "selector": "typeLike", "format": ["PascalCase"] },
-      { "selector": "variableLike", "format": ["camelCase"] },
-      { "selector": "memberLike", "modifiers": ["private"], "format": ["camelCase"], "leadingUnderscore": "require" },
-      { "selector": "variable", "types": ["boolean"], "format": ["PascalCase"], "prefix": ["is", "should", "has", "can", "did", "will"] },
-      { "selector": "variable", "format": ["camelCase", "UPPER_CASE"], "leadingUnderscore": "allow", "trailingUnderscore": "allow" },
-      { "selector": "typeParameter", "format": ["PascalCase"], "prefix": ["T"] },
       { "selector": "interface", "format": ["PascalCase"], "custom": { "regex": "^I[A-Z]", "match": false } },
-      { "selector": ["function", "variable"], "format": ["camelCase"] },
-      { "selector": "variable", "modifiers": ["destructured"], "format": null },
+      { "selector": "memberLike", "modifiers": ["private"], "format": ["camelCase"], "leadingUnderscore": "require" },
+      { "selector": "typeLike", "format": ["PascalCase"] },
+      { "selector": "typeParameter", "format": ["PascalCase"], "prefix": ["T"] },
+      { "selector": "variable", "format": ["camelCase", "UPPER_CASE"], "leadingUnderscore": "allow", "trailingUnderscore": "allow" },
       { "selector": "variable", "format": ["camelCase"], "leadingUnderscore": "allow", "trailingUnderscore": "allow" },
-      { "selector": "variable", "types": ["boolean"], "format": ["PascalCase"], "prefix": ["is", "has", "should", "can", "did", "will"] }
+      { "selector": "variable", "modifiers": ["destructured"], "format": null },
+      { "selector": "variable", "types": ["boolean"], "format": ["PascalCase"], "prefix": ["is", "should", "has", "can", "did", "will", "does"] },
+      { "selector": "variableLike", "format": ["camelCase"] },
+      { "selector": ["function", "variable"], "format": ["camelCase"] }
     ]
   }
 }
