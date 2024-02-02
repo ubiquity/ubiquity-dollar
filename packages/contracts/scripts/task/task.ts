@@ -11,7 +11,7 @@ const main = async () => {
     throw new Error("You MUST put the task name in command arguments at least");
   }
 
-  const envPath = path.join(__dirname, "../.env");
+  const envPath = path.join(__dirname, "../../.env");
   if (!fs.existsSync(envPath)) {
     throw new Error("Env file not found");
   }
@@ -26,6 +26,7 @@ const main = async () => {
   let args;
   try {
     args = CommandLineArgs(commandLineParseOptions);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error(`Argument parse failed!, error: ${error}`);
     return;
