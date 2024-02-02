@@ -8,7 +8,7 @@ export const optionDefinitions: OptionDefinition[] = [
   { name: "network", alias: "n", type: String },
 ];
 
-const func = async (params: TaskFuncParam) => {
+const funcBlocksInAWeek = async (params: TaskFuncParam) => {
   const { args, env } = params;
   const { network } = args;
 
@@ -48,4 +48,4 @@ const func = async (params: TaskFuncParam) => {
 
   return "succeeded";
 };
-export default func;
+export default funcBlocksInAWeek;
