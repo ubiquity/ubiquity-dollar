@@ -37,7 +37,6 @@
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "cspell": "^8.3.2",
-    "cspell-dict-node": "^1.1.5",
     "esbuild": "^0.19.8",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
