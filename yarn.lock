@@ -561,6 +561,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cspell/dict-node@npm:^1.0.12":
+  version: 1.0.12
+  resolution: "@cspell/dict-node@npm:1.0.12"
+  checksum: 927c1452968db0e845158d92d612aae1637d97f6f287cc6215fc7bb926c4c7237f66f3ef331e8cb7e78d017514756bc61fb8a0a83480fc70bb7dbd968fc961a6
+  languageName: node
+  linkType: hard
+
 "@cspell/dict-node@npm:^4.0.3":
   version: 4.0.3
   resolution: "@cspell/dict-node@npm:4.0.3"
@@ -633,7 +640,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cspell/dict-software-terms@npm:^3.3.15":
+"@cspell/dict-software-terms@npm:^3.3.15, @cspell/dict-software-terms@npm:^3.3.17":
   version: 3.3.17
   resolution: "@cspell/dict-software-terms@npm:3.3.17"
   checksum: 0e8b3cf226f2cd3dd0bccb1f28a8fac24d7223e7ba670b73aec08cb69a1285755743716e53261ae4ef4f6f43d7682a8af11f4a14ef50b1875c1809f955c71f06
@@ -2087,6 +2094,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"configstore@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "configstore@npm:5.0.1"
+  dependencies:
+    dot-prop: ^5.2.0
+    graceful-fs: ^4.1.2
+    make-dir: ^3.0.0
+    unique-string: ^2.0.0
+    write-file-atomic: ^3.0.0
+    xdg-basedir: ^4.0.0
+  checksum: 60ef65d493b63f96e14b11ba7ec072fdbf3d40110a94fb7199d1c287761bdea5c5244e76b2596325f30c1b652213aa75de96ea20afd4a5f82065e61ea090988e
+  languageName: node
+  linkType: hard
+
 "configstore@npm:^6.0.0":
   version: 6.0.0
   resolution: "configstore@npm:6.0.0"
@@ -2217,6 +2238,19 @@ __metadata:
     comment-json: ^4.2.3
     yaml: ^2.3.4
   checksum: 7d5563c2a49f13e9e2b965258f8d5539e282c75234f4375831db3f7ee3c209aa246f07f8bbbc7e7195c248edfdc3a58cb590c5119ad866446ee47df07a593481
+  languageName: node
+  linkType: hard
+
+"cspell-dict-node@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "cspell-dict-node@npm:1.1.5"
+  dependencies:
+    "@cspell/dict-node": ^1.0.12
+    configstore: ^5.0.0
+  bin:
+    cspell-dict-node-link: link.js
+    cspell-dict-node-unlink: unlink.js
+  checksum: 397e7c08971d66bb9d054277ad4f397d142ddf32e1bdc7ec3c09a364d6e2fb1c7762b5860a6bcacf8334df936fad54cde1a0197241fb2245c7328e2a5b1da86e
   languageName: node
   linkType: hard
 
@@ -2479,7 +2513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dot-prop@npm:^5.1.0":
+"dot-prop@npm:^5.1.0, dot-prop@npm:^5.2.0":
   version: 5.3.0
   resolution: "dot-prop@npm:5.3.0"
   dependencies:
@@ -4501,6 +4535,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"make-dir@npm:^3.0.0":
+  version: 3.1.0
+  resolution: "make-dir@npm:3.1.0"
+  dependencies:
+    semver: ^6.0.0
+  checksum: 484200020ab5a1fdf12f393fe5f385fc8e4378824c940fba1729dcd198ae4ff24867bc7a5646331e50cead8abff5d9270c456314386e629acec6dff4b8016b78
+  languageName: node
+  linkType: hard
+
 "make-fetch-happen@npm:^13.0.0":
   version: 13.0.0
   resolution: "make-fetch-happen@npm:13.0.0"
@@ -5663,7 +5706,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^6.1.0":
+"semver@npm:^6.0.0, semver@npm:^6.1.0":
   version: 6.3.1
   resolution: "semver@npm:6.3.1"
   bin:
@@ -6184,10 +6227,14 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^18.4.3
     "@commitlint/config-conventional": ^18.4.3
+    "@cspell/dict-node": ^4.0.3
+    "@cspell/dict-software-terms": ^3.3.17
+    "@cspell/dict-typescript": ^3.1.2
     "@types/node": ^20.10.0
     "@typescript-eslint/eslint-plugin": ^6.13.1
     "@typescript-eslint/parser": ^6.13.1
     cspell: ^8.3.2
+    cspell-dict-node: ^1.1.5
     dotenv: ^16.3.1
     esbuild: ^0.19.8
     eslint: ^8.54.0
@@ -6594,7 +6641,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"write-file-atomic@npm:^3.0.3":
+"write-file-atomic@npm:^3.0.0, write-file-atomic@npm:^3.0.3":
   version: 3.0.3
   resolution: "write-file-atomic@npm:3.0.3"
   dependencies:
@@ -6603,6 +6650,13 @@ __metadata:
     signal-exit: ^3.0.2
     typedarray-to-buffer: ^3.1.5
   checksum: c55b24617cc61c3a4379f425fc62a386cc51916a9b9d993f39734d005a09d5a4bb748bc251f1304e7abd71d0a26d339996c275955f527a131b1dcded67878280
+  languageName: node
+  linkType: hard
+
+"xdg-basedir@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "xdg-basedir@npm:4.0.0"
+  checksum: 0073d5b59a37224ed3a5ac0dd2ec1d36f09c49f0afd769008a6e9cd3cd666bd6317bd1c7ce2eab47e1de285a286bad11a9b038196413cd753b79770361855f3c
   languageName: node
   linkType: hard
 

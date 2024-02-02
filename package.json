@@ -11,9 +11,10 @@
   "scripts": {
     "start": "tsx build/esbuild-server.ts",
     "build": "tsx build/esbuild-build.ts",
-    "format": "run-s format:prettier format:lint",
+    "format": "run-s format:lint format:prettier format:cspell",
     "format:lint": "eslint --fix .",
     "format:prettier": "prettier --write .",
+    "format:cspell": "cspell **/*",
     "prepare": "husky install"
   },
   "keywords": [
@@ -29,10 +30,14 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@cspell/dict-node": "^4.0.3",
+    "@cspell/dict-software-terms": "^3.3.17",
+    "@cspell/dict-typescript": "^3.1.2",
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "cspell": "^8.3.2",
+    "cspell-dict-node": "^1.1.5",
     "esbuild": "^0.19.8",
     "eslint": "^8.54.0",
     "eslint-config-prettier": "^9.0.0",
