@@ -368,6 +368,7 @@ library LibUbiquityPool {
 
         // get amount of collateral for minting Dollars
         collateralNeeded = getDollarInCollateral(collateralIndex, dollarAmount);
+        require(collateralNeeded > 0, "Cannot mint with zero collateral");
 
         // subtract the minting fee
         totalDollarMint = dollarAmount
