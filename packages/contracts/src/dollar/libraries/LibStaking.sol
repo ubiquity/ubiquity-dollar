@@ -267,8 +267,8 @@ library LibStaking {
         // deposit new shares
         LibChef.deposit(msg.sender, _sharesAmount, _id);
         // calculate end locking period block number
-        // 1 week = 45361 blocks = 2371753*7/366
-        // n = (block + duration * 45361)
+        // 1 week = 49930 blocks
+        // n = (block number + duration * 49930)
         stake.endBlock = block.number + _weeks * ss.blockCountInAWeek;
 
         // should be done after masterchef withdraw

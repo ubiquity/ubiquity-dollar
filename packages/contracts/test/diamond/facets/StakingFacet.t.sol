@@ -312,7 +312,7 @@ contract DepositStateTest is DepositStateStaking {
 
         // advance the block number to  staking time so the withdraw is possible
         uint256 currentBlock = block.number;
-        blocks = bound(blocks, 45361, 2 ** 128 - 1);
+        blocks = bound(blocks, 49930, 2 ** 128 - 1);
         assertEq(chefFacet.totalShares(), shares);
 
         uint256 preBal = governanceToken.balanceOf(fourthAccount);
