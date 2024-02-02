@@ -339,7 +339,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.prank(admin);
         ubiquityPoolFacet.setFees(0, 0, 0);
 
-        // user sends 100 collateral tokens and gets 100 Dollars
+        // user tries to mint with zero collateral
         vm.prank(user);
         vm.expectRevert("Cannot mint with zero collateral");
         ubiquityPoolFacet.mintDollar(
