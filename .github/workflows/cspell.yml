@@ -21,4 +21,4 @@ jobs:
         run: yarn add cspell
 
       - name: Run cspell
-        run: yarn format:cspell"
+        run: yarn format:cspell
