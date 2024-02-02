@@ -21,4 +21,4 @@ jobs:
         run: yarn add cspell
 
       - name: Run cspell
-        run: cspell "src/**/*.{ts,json}"
+        run: yarn cspell "src/**/*.{ts,json}"
