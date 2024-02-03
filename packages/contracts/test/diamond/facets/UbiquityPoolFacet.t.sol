@@ -329,6 +329,27 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
     }
 
+    function testMintDollar_ShouldRevert_IfZeroCollateralAvailable() public {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+        // reset collateral fees to 0
+        vm.prank(admin);
+        ubiquityPoolFacet.setFees(0, 0, 0);
+
+        // user tries to mint with zero collateral
+        vm.prank(user);
+        vm.expectRevert("Cannot mint with zero collateral");
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            0, // Dollar amount
+            100e18, // min amount of Dollars to mint
+            0 // max collateral to send
+        );
+    }
+
     function testMintDollar_ShouldRevert_OnDollarAmountSlippage() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
