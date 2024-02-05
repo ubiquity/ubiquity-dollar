@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import {ICurveStableSwapMetaNG} from "../../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
 import {MockCurveStableSwapMetaNG} from "../../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
@@ -185,7 +185,7 @@ contract ManagerFacetTest is DiamondTestSetup {
             50000000
         );
 
-        IMetaPool metapool = IMetaPool(
+        ICurveStableSwapMetaNG metapool = ICurveStableSwapMetaNG(
             managerFacet.stableSwapMetaPoolAddress()
         );
         address stakingV2Address = generateAddress("stakingV2", true, 10 ether);

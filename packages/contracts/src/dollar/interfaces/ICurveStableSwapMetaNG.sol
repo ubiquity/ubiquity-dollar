@@ -62,6 +62,22 @@ interface ICurveStableSwapMetaNG is IERC20 {
     function coins(uint256 arg0) external view returns (address);
 
     /**
+     * @notice Performs an exchange between two tokens. Index values can be found
+     * using the `coins()` public getter method, or `get_coins()` within the factory contract.
+     * @param i Index value of the token to send
+     * @param j Index value of the token to receive
+     * @param dx The amount of `i` being exchanged
+     * @param min_dy The minimum amount of `j` to receive. If the swap would result in less, the transaction will revert.
+     * @return The amount of `j` received in the exchange
+     */
+    function exchange(
+        int128 i,
+        int128 j,
+        uint256 dx,
+        uint256 min_dy
+    ) external returns (uint256);
+
+    /**
      * @notice Function to calculate the exponential moving average (ema) price for the coin at index value `i`
      * @param i Index value of coin
      * @return Price oracle

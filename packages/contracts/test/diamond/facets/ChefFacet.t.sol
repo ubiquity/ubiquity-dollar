@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import {ICurveStableSwapMetaNG} from "../../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {MockCurveStableSwapMetaNG} from "../../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import "../DiamondTestSetup.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
@@ -43,7 +43,7 @@ contract ZeroStateChef is DiamondTestSetup {
         uint256 indexed stakingShareId
     );
 
-    IMetaPool metapool;
+    ICurveStableSwapMetaNG metapool;
     address metaPoolAddress;
 
     event GovernancePerBlockModified(uint256 indexed governancePerBlock);
@@ -109,7 +109,9 @@ contract ZeroStateChef is DiamondTestSetup {
             50000000
         );
         //
-        metapool = IMetaPool(managerFacet.stableSwapMetaPoolAddress());
+        metapool = ICurveStableSwapMetaNG(
+            managerFacet.stableSwapMetaPoolAddress()
+        );
         metapool.transfer(address(stakingFacet), 100e18);
         metapool.transfer(secondAccount, 1000e18);
         vm.stopPrank();

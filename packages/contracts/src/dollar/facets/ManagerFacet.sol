@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "../../dollar/interfaces/IUbiquityDollarToken.sol";
 import "../../dollar/interfaces/ICurveFactory.sol";
-import "../../dollar/interfaces/IMetaPool.sol";
+import "../../dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import "../libraries/LibAccessControl.sol";
 
 /**
@@ -246,8 +246,10 @@ contract ManagerFacet is Modifiers {
 
         // coin at index 0 is Dollar and index 1 is 3CRV
         require(
-            IMetaPool(metaPool).coins(0) == store.dollarTokenAddress &&
-                IMetaPool(metaPool).coins(1) == _crv3PoolTokenAddress,
+            ICurveStableSwapMetaNG(metaPool).coins(0) ==
+                store.dollarTokenAddress &&
+                ICurveStableSwapMetaNG(metaPool).coins(1) ==
+                _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
@@ -257,7 +259,7 @@ contract ManagerFacet is Modifiers {
         ];
         // set curve 3Pool address
         store.curve3PoolTokenAddress = _crv3PoolTokenAddress;
-        IMetaPool(metaPool).add_liquidity(amounts, 0, msg.sender);
+        ICurveStableSwapMetaNG(metaPool).add_liquidity(amounts, 0, msg.sender);
     }
 
     /**

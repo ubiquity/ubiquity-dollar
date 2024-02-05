@@ -4,7 +4,6 @@ pragma solidity 0.8.19;
 import "forge-std/console.sol";
 import {DiamondTestSetup} from "../DiamondTestSetup.sol";
 import {IDollarAmoMinter} from "../../../src/dollar/interfaces/IDollarAmoMinter.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {LibUbiquityPool} from "../../../src/dollar/libraries/LibUbiquityPool.sol";
 import {MockChainLinkFeed} from "../../../src/dollar/mocks/MockChainLinkFeed.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";

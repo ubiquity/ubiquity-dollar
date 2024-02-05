@@ -3,7 +3,7 @@ pragma solidity 0.8.19;
 
 import {IUniswapV2Router01} from "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import {ICurveStableSwapMetaNG} from "../../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
 import "../DiamondTestSetup.sol";
@@ -75,12 +75,14 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         );
         vm.mockCall(
             _metaPoolAddress,
-            abi.encodeWithSelector(IMetaPool.exchange.selector),
+            abi.encodeWithSelector(ICurveStableSwapMetaNG.exchange.selector),
             abi.encode(_expectedExchangeAmt)
         );
         vm.mockCall(
             _metaPoolAddress,
-            abi.encodeWithSelector(IMetaPool.add_liquidity.selector),
+            abi.encodeWithSelector(
+                ICurveStableSwapMetaNG.add_liquidity.selector
+            ),
             abi.encode(_expectedLiqAmt)
         );
     }

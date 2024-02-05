@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {IMetaPool} from "../interfaces/IMetaPool.sol";
+import {IMetaPool} from "../../deprecated/interfaces/IMetaPool.sol";
 import {MockERC20} from "./MockERC20.sol";
 
 contract MockMetaPool is IMetaPool, MockERC20 {

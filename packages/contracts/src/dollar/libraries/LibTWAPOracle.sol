@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity 0.8.19;
 
-import {IMetaPool} from "../../dollar/interfaces/IMetaPool.sol";
+import {IMetaPool} from "../../deprecated/interfaces/IMetaPool.sol";
 import {LibAppStorage} from "./LibAppStorage.sol";
 
 /**

@@ -36,6 +36,15 @@ contract MockCurveStableSwapMetaNG is ICurveStableSwapMetaNG, MockERC20 {
         return _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1];
     }
 
+    function exchange(
+        int128 /* i */,
+        int128 /* j */,
+        uint256 /* dx */,
+        uint256 /* min_dy */
+    ) external pure returns (uint256) {
+        return 0;
+    }
+
     function price_oracle(uint256 /* i */) external view returns (uint256) {
         return priceOracle;
     }
