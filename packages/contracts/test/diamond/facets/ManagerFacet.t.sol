@@ -7,8 +7,8 @@ import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
 import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
+import {MockCurveStableSwapMetaNG} from "../../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
 contract ManagerFacetTest is DiamondTestSetup {
@@ -172,7 +172,10 @@ contract ManagerFacetTest is DiamondTestSetup {
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
         address curve3CrvBasePool = address(
-            new MockMetaPool(address(diamond), address(curve3CrvToken))
+            new MockCurveStableSwapMetaNG(
+                address(diamond),
+                address(curve3CrvToken)
+            )
         );
         managerFacet.deployStableSwapPool(
             address(curvePoolFactory),

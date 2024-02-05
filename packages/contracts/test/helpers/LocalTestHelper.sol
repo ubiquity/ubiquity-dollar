@@ -9,7 +9,7 @@ import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/Credit
 import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
+import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 
 abstract contract LocalTestHelper is DiamondTestSetup {
     address public constant NATIVE_ASSET = address(0);
@@ -43,34 +43,18 @@ abstract contract LocalTestHelper is DiamondTestSetup {
 
         // twapPrice oracle
         metaPoolAddress = address(
-            new MockMetaPool(address(dollarToken), curve3CRVTokenAddress)
+            new MockCurveStableSwapMetaNG(
+                address(dollarToken),
+                curve3CRVTokenAddress
+            )
         );
-        // set the mock data for meta pool
-        uint256[2] memory _price_cumulative_last = [
-            uint256(100e18),
-            uint256(100e18)
-        ];
-        uint256 _last_block_timestamp = 20000;
-        uint256[2] memory _twap_balances = [uint256(100e18), uint256(100e18)];
-        uint256[2] memory _dy_values = [uint256(100e18), uint256(100e18)];
-        MockMetaPool(metaPoolAddress).updateMockParams(
-            _price_cumulative_last,
-            _last_block_timestamp,
-            _twap_balances,
-            _dy_values
-        );
-
-        // deploy credit token
 
         // set treasury address
         managerFacet.setTreasuryAddress(treasuryAddress);
 
+        // set metapool in manager facet
+        managerFacet.setStableSwapMetaPoolAddress(metaPoolAddress);
+
         vm.stopPrank();
-        vm.prank(owner);
-        twapOracleDollar3PoolFacet.setPool(
-            metaPoolAddress,
-            curve3CRVTokenAddress
-        );
-        twapOracleDollar3PoolFacet.update();
     }
 }

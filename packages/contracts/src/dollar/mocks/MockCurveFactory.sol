@@ -2,7 +2,7 @@
 pragma solidity 0.8.19;
 
 import {ICurveFactory} from "../../dollar/interfaces/ICurveFactory.sol";
-import {MockMetaPool} from "../../dollar/mocks/MockMetaPool.sol";
+import {MockCurveStableSwapMetaNG} from "../../dollar/mocks/MockCurveStableSwapMetaNG.sol";
 
 contract MockCurveFactory is ICurveFactory {
     // solhint-disable-next-line no-empty-blocks
@@ -14,10 +14,10 @@ contract MockCurveFactory is ICurveFactory {
         uint256 /* _A */,
         uint256 /* _fee */
     ) external returns (address) {
-        MockMetaPool metaPoolAddress = new MockMetaPool(
-            _coin,
-            MockMetaPool(_base_pool).coins(1)
-        );
+        MockCurveStableSwapMetaNG metaPoolAddress = new MockCurveStableSwapMetaNG(
+                _coin,
+                MockCurveStableSwapMetaNG(_base_pool).coins(1)
+            );
         return address(metaPoolAddress);
     }
 
