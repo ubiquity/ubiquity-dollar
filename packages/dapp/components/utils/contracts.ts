@@ -15,7 +15,7 @@ import _SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json"
 import _Staking from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
 import _StakingToken from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import _SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
-import _TWAPOracle from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
+import _TWAPOracle from "@ubiquity/contracts/out/ICurveStableSwapMetaNG.sol/ICurveStableSwapMetaNG.json";
 import _UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import _UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
 import _MasterChefV2 from "@ubiquity/contracts/out/ChefFacet.sol/ChefFacet.json";
@@ -45,8 +45,8 @@ import {
   ERC1155Ubiquity,
   ERC20,
   ICurveFactory,
+  ICurveStableSwapMetaNG,
   IMetaPool,
-  ITWAPOracleDollar3pool,
   IUniswapV2Pair,
   SimpleBond,
   StakingFacet,
@@ -126,7 +126,7 @@ export const getCreditNftContract = (address: string, provider: Provider) => {
 };
 
 export const getTWAPOracleContract = (address: string, provider: Provider) => {
-  return getContract(_TWAPOracle.abi, address, provider) as ITWAPOracleDollar3pool;
+  return getContract(_TWAPOracle.abi, address, provider) as ICurveStableSwapMetaNG;
 };
 
 export const getDollarMintCalculatorContract = (address: string, provider: Provider) => {

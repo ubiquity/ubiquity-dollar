@@ -26,6 +26,7 @@ import ManagerFacetArtifact from "@ubiquity/contracts/out/ManagerFacet.sol/Manag
 import OwnershipFacetArtifact from "@ubiquity/contracts/out/OwnershipFacet.sol/OwnershipFacet.json";
 import StakingFacetArtifact from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
 import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
+import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/ICurveStableSwapMetaNG.sol/ICurveStableSwapMetaNG.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
 // other related contracts
 // import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
@@ -84,6 +85,7 @@ const useProtocolContracts = async () => {
     ownershipFacet: Contract | null;
     stakingFacet: Contract | null;
     stakingFormulasFacet: Contract | null;
+    twapOracleDollar3poolFacet: Contract | null;
     ubiquityPoolFacet: Contract | null;
     sushiPoolGovernanceDollarLp: Contract | null;
     curveMetaPoolDollarTriPoolLp: Contract | null;
@@ -109,6 +111,7 @@ const useProtocolContracts = async () => {
     ownershipFacet: null,
     stakingFacet: null,
     stakingFormulasFacet: null,
+    twapOracleDollar3poolFacet: null,
     ubiquityPoolFacet: null,
     // related contracts
     sushiPoolGovernanceDollarLp: null,
@@ -155,6 +158,7 @@ const useProtocolContracts = async () => {
   protocolContracts.ownershipFacet = new ethers.Contract(diamondAddress, OwnershipFacetArtifact.abi, <Provider>provider);
   protocolContracts.stakingFacet = new ethers.Contract(diamondAddress, StakingFacetArtifact.abi, <Provider>provider);
   protocolContracts.stakingFormulasFacet = new ethers.Contract(diamondAddress, StakingFormulasFacetArtifact.abi, <Provider>provider);
+  protocolContracts.twapOracleDollar3poolFacet = new ethers.Contract(diamondAddress, TWAPOracleDollar3poolFacetArtifact.abi, <Provider>provider);
   protocolContracts.ubiquityPoolFacet = new ethers.Contract(diamondAddress, UbiquityPoolFacetArtifact.abi, <Provider>provider);
 
   // other related contracts
