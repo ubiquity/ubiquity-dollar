@@ -7,7 +7,6 @@ import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/Credit
 import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 
 abstract contract LocalTestHelper is DiamondTestSetup {
     address public constant NATIVE_ASSET = address(0);
@@ -39,19 +38,8 @@ abstract contract LocalTestHelper is DiamondTestSetup {
             "dollar balance is not 10000e18"
         );
 
-        // twapPrice oracle
-        metaPoolAddress = address(
-            new MockCurveStableSwapMetaNG(
-                address(dollarToken),
-                curve3CRVTokenAddress
-            )
-        );
-
         // set treasury address
         managerFacet.setTreasuryAddress(treasuryAddress);
-
-        // set metapool in manager facet
-        managerFacet.setStableSwapMetaPoolAddress(metaPoolAddress);
 
         vm.stopPrank();
     }

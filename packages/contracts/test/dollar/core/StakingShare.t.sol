@@ -42,7 +42,9 @@ contract DepositStakingShare is LocalTestHelper {
             STAKING_SHARE_MINTER_ROLE,
             address(diamond)
         );
-        metapool = ICurveStableSwapMetaNG(metaPoolAddress);
+        metapool = ICurveStableSwapMetaNG(
+            managerFacet.stableSwapMetaPoolAddress()
+        );
         fourthBal = metapool.balanceOf(fourthAccount);
         minBal = metapool.balanceOf(stakingMinAccount);
         maxBal = metapool.balanceOf(stakingMaxAccount);

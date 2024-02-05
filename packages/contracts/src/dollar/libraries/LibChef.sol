@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../../dollar/interfaces/IERC20Ubiquity.sol";
 import "../../dollar/interfaces/IUbiquityFormulas.sol";
 import "../../dollar/interfaces/IERC1155Ubiquity.sol";
+import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
 import "./LibAppStorage.sol";
-import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibStakingFormulas} from "./LibStakingFormulas.sol";
 
 /**
@@ -318,9 +318,12 @@ library LibChef {
      * @notice Updates Governance token multiplier if Dollar price diff > `minPriceDiffToUpdateMultiplier`
      */
     function _updateGovernanceMultiplier() internal {
+        AppStorage storage store = LibAppStorage.appStorage();
         ChefStorage storage cs = chefStorage();
         // (1.05/(1+abs(1-TWAP_PRICE)))
-        uint256 currentPrice = LibTWAPOracle.getTwapPrice();
+        uint256 currentPrice = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
         bool isPriceDiffEnough = false;
         // a minimum price variation is needed to update the multiplier
         if (currentPrice > cs.lastPrice) {

@@ -343,7 +343,7 @@ contract DepositStateTest is DepositStateStaking {
         vm.roll(currentBlock + blocks);
         vm.prank(fourthAccount);
         uint256 rewardSent = chefFacet.getRewards(1);
-        assertEq(rewardSent, 52499999999902455000);
+        assertEq(rewardSent, 99999999999918018000);
     }
 
     function testCannotGetRewardsOtherAccount() public {

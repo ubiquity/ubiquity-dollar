@@ -3,12 +3,12 @@ pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./LibTWAPOracle.sol";
 import "../core/UbiquityDollarToken.sol";
 import "../interfaces/IUbiquityGovernance.sol";
 import "abdk/ABDKMathQuad.sol";
 import "./Constants.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
+import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
+import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
 
 /**
  * @notice Library adds buy incentive and sell penalty for Curve's Dollar-3CRV MetaPool
@@ -157,7 +157,6 @@ library LibCurveDollarIncentive {
             UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress)
                 .burnFrom(target, penalty); // burn from the recipient
         }
-        LibTWAPOracle.update();
     }
 
     /**
@@ -183,7 +182,6 @@ library LibCurveDollarIncentive {
                 LibAppStorage.appStorage().dollarTokenAddress
             ).mint(target, incentive);
         }
-        LibTWAPOracle.update();
     }
 
     /**
@@ -210,9 +208,9 @@ library LibCurveDollarIncentive {
      * @return Dollar price
      */
     function _getTWAPPrice() internal view returns (uint256) {
+        AppStorage storage store = LibAppStorage.appStorage();
         return
-            LibTWAPOracle.consult(
-                LibAppStorage.appStorage().dollarTokenAddress
-            );
+            ICurveStableSwapMetaNG(store.stableSwapMetaPoolAddress)
+                .price_oracle(0);
     }
 }

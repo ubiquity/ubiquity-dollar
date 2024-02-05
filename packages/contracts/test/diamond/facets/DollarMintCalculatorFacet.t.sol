@@ -19,15 +19,8 @@ contract DollarMintCalculatorFacetTest is DiamondTestSetup {
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {
-        uint256 TWAP_ORACLE_STORAGE_POSITION = uint256(
-            keccak256("diamond.standard.twap.oracle.storage")
-        ) - 1;
-        uint256 dollarPricePosition = TWAP_ORACLE_STORAGE_POSITION + 2;
-        vm.store(
-            address(diamond),
-            bytes32(dollarPricePosition),
-            bytes32(_twapPrice)
-        );
+        MockCurveStableSwapMetaNG(managerFacet.stableSwapMetaPoolAddress())
+            .updateMockParams(_twapPrice);
     }
 
     function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {

@@ -26,6 +26,8 @@ import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
 import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
 import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
+import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
+import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
@@ -418,7 +420,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
 
         // get all addresses
         facetAddressList = diamondLoupeFacet.facetAddresses();
+
         vm.startPrank(admin);
+
         // grant diamond dollar minting and burning rights
         accessControlFacet.grantRole(
             CURVE_DOLLAR_MANAGER_ROLE,
@@ -452,8 +456,18 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             STAKING_SHARE_MINTER_ROLE,
             address(diamond)
         );
+
         // init UUPS core contracts
         __setupUUPS(address(diamond));
+
+        // deploy Curve's Dollar-3CRVLP metapool
+        MockERC20 curveTriPoolLpToken = new MockERC20("3CRV", "3CRV", 18);
+        MockCurveStableSwapMetaNG curveDollarMetaPool = new MockCurveStableSwapMetaNG(
+                address(dollarToken),
+                address(curveTriPoolLpToken)
+            );
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
+
         vm.stopPrank();
     }
 }
