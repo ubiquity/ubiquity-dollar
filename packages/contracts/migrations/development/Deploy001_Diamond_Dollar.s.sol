@@ -15,17 +15,17 @@ import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
 import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
+import {ICurveStableSwapMetaNG} from "../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {IDiamondCut} from "../../src/dollar/interfaces/IDiamondCut.sol";
 import {IDiamondLoupe} from "../../src/dollar/interfaces/IDiamondLoupe.sol";
 import {IERC173} from "../../src/dollar/interfaces/IERC173.sol";
-import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 import {DEFAULT_ADMIN_ROLE, DOLLAR_TOKEN_MINTER_ROLE, DOLLAR_TOKEN_BURNER_ROLE, PAUSER_ROLE} from "../../src/dollar/libraries/Constants.sol";
 import {LibAccessControl} from "../../src/dollar/libraries/LibAccessControl.sol";
 import {AppStorage, LibAppStorage, Modifiers} from "../../src/dollar/libraries/LibAppStorage.sol";
 import {LibDiamond} from "../../src/dollar/libraries/LibDiamond.sol";
 import {MockChainLinkFeed} from "../../src/dollar/mocks/MockChainLinkFeed.sol";
+import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 import {DiamondTestHelper} from "../../test/helpers/DiamondTestHelper.sol";
 
 /**
@@ -123,7 +123,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     // oracle related contracts
     AggregatorV3Interface chainLinkPriceFeedLusd; // chainlink LUSD/USD price feed
     IERC20 curveTriPoolLpToken; // Curve's 3CRV-LP token
-    IMetaPool curveDollarMetaPool; // Curve's Dollar-3CRVLP metapool
+    ICurveStableSwapMetaNG curveDollarMetaPool; // Curve's Dollar-3CRVLP metapool
 
     // selectors for all of the facets
     bytes4[] selectorsOfAccessControlFacet;
@@ -438,7 +438,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         );
 
         // deploy mock Curve's Dollar-3CRVLP metapool
-        curveDollarMetaPool = new MockMetaPool(
+        curveDollarMetaPool = new MockCurveStableSwapMetaNG(
             address(dollarToken),
             address(curveTriPoolLpToken)
         );
@@ -450,23 +450,15 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // Curve's Dollar-3CRVLP metapool setup
         //========================================
 
-        // start sending owner transactions
-        vm.startBroadcast(ownerPrivateKey);
+        // start sending admin transactions
+        vm.startBroadcast(adminPrivateKey);
 
-        TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet = TWAPOracleDollar3poolFacet(
-                address(diamond)
-            );
+        ManagerFacet managerFacet = ManagerFacet(address(diamond));
 
-        // set Curve Dollar-3CRVLP pool in the diamond storage
-        twapOracleDollar3PoolFacet.setPool(
-            address(curveDollarMetaPool),
-            address(curveTriPoolLpToken)
-        );
+        // set curve's metapool in manager facet
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
 
-        // fetch latest Dollar price from Curve's Dollar-3CRVLP metapool
-        twapOracleDollar3PoolFacet.update();
-
-        // stop sending owner transactions
+        // stop sending admin transactions
         vm.stopBroadcast();
     }
 }
