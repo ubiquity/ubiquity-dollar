@@ -3,7 +3,6 @@ pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../../dollar/interfaces/IERC20Ubiquity.sol";
-import "../../dollar/interfaces/ITWAPOracleDollar3pool.sol";
 import "../../dollar/interfaces/IUbiquityFormulas.sol";
 import "../../dollar/interfaces/IERC1155Ubiquity.sol";
 import "./LibAppStorage.sol";

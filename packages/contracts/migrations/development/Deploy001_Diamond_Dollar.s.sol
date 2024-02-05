@@ -13,7 +13,6 @@ import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {ICurveStableSwapMetaNG} from "../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {IDiamondCut} from "../../src/dollar/interfaces/IDiamondCut.sol";
@@ -117,7 +116,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     DiamondLoupeFacet diamondLoupeFacetImplementation;
     ManagerFacet managerFacetImplementation;
     OwnershipFacet ownershipFacetImplementation;
-    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
 
     // oracle related contracts
@@ -131,7 +129,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfOwnershipFacet;
-    bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
 
     function run() public virtual {
@@ -166,9 +163,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         selectorsOfOwnershipFacet = getSelectorsFromAbi(
             "/out/OwnershipFacet.sol/OwnershipFacet.json"
         );
-        selectorsOfTWAPOracleDollar3poolFacet = getSelectorsFromAbi(
-            "/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json"
-        );
         selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
             "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
@@ -179,7 +173,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         diamondLoupeFacetImplementation = new DiamondLoupeFacet();
         managerFacetImplementation = new ManagerFacet();
         ownershipFacetImplementation = new OwnershipFacet();
-        twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
 
         // prepare DiamondInit args
@@ -198,7 +191,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         });
 
         // prepare facet cuts
-        FacetCut[] memory cuts = new FacetCut[](7);
+        FacetCut[] memory cuts = new FacetCut[](6);
         cuts[0] = (
             FacetCut({
                 facetAddress: address(accessControlFacetImplementation),
@@ -235,13 +228,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
             })
         );
         cuts[5] = (
-            FacetCut({
-                facetAddress: address(twapOracleDollar3PoolFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
-            })
-        );
-        cuts[6] = (
             FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,

@@ -6,7 +6,6 @@ import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManager
 import {CreditRedemptionCalculatorFacet} from "../../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";

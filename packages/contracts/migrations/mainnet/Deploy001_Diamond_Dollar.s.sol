@@ -5,7 +5,6 @@ import {AggregatorV3Interface} from "@chainlink/interfaces/AggregatorV3Interface
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {Deploy001_Diamond_Dollar as Deploy001_Diamond_Dollar_Development} from "../development/Deploy001_Diamond_Dollar.s.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {ICurveStableSwapMetaNG} from "../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 
