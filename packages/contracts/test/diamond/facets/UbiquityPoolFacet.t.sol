@@ -581,6 +581,39 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(collateralToken.balanceOf(user), 97.02e18);
     }
 
+    function testCollectRedemption_ShouldRevert_IfCollateralDisabled() public {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+
+        vm.prank(user);
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18 // max collateral to send
+        );
+
+        vm.prank(user);
+        ubiquityPoolFacet.redeemDollar(
+            0, // collateral index
+            99e18, // Dollar amount
+            90e18 // min collateral out
+        );
+
+        // wait 3 blocks for collecting redemption to become active
+        vm.roll(3);
+
+        vm.prank(admin);
+        ubiquityPoolFacet.toggleCollateral(0);
+
+        vm.prank(user);
+        vm.expectRevert("Collateral disabled");
+        ubiquityPoolFacet.collectRedemption(0);
+    }
+
     function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsInvalid()
         public
     {
