@@ -491,7 +491,11 @@ library LibUbiquityPool {
      */
     function collectRedemption(
         uint256 collateralIndex
-    ) internal returns (uint256 collateralAmount) {
+    )
+        internal
+        collateralEnabled(collateralIndex)
+        returns (uint256 collateralAmount)
+    {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
