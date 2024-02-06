@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../../helpers/LocalTestHelper.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
+import {ICurveStableSwapMetaNG} from "../../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {StakingShare} from "../../../src/dollar/core/StakingShare.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 import {BondingShare} from "../../../src/dollar/mocks/MockShareV1.sol";
@@ -22,7 +22,7 @@ contract DepositStakingShare is LocalTestHelper {
     uint256 minBal;
     uint256 maxBal;
     uint256[] creationBlock;
-    IMetaPool metapool;
+    ICurveStableSwapMetaNG metapool;
 
     event Paused(address _caller);
     event Unpaused(address _caller);
@@ -42,7 +42,9 @@ contract DepositStakingShare is LocalTestHelper {
             STAKING_SHARE_MINTER_ROLE,
             address(diamond)
         );
-        metapool = IMetaPool(metaPoolAddress);
+        metapool = ICurveStableSwapMetaNG(
+            managerFacet.stableSwapMetaPoolAddress()
+        );
         fourthBal = metapool.balanceOf(fourthAccount);
         minBal = metapool.balanceOf(stakingMinAccount);
         maxBal = metapool.balanceOf(stakingMaxAccount);

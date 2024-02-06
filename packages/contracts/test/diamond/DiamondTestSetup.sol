@@ -25,8 +25,9 @@ import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
 import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
 import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
+import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
+import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
@@ -59,7 +60,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     OwnershipFacet ownershipFacet;
     StakingFacet stakingFacet;
     StakingFormulasFacet stakingFormulasFacet;
-    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
@@ -81,7 +81,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     OwnershipFacet ownershipFacetImplementation;
     StakingFacet stakingFacetImplementation;
     StakingFormulasFacet stakingFormulasFacetImplementation;
-    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
 
     // facet names with addresses
@@ -114,7 +113,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfOwnershipFacet;
     bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfStakingFormulasFacet;
-    bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
 
     /// @notice Deploys diamond and connects facets
@@ -181,9 +179,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfStakingFormulasFacet = getSelectorsFromAbi(
             "/out/StakingFormulasFacet.sol/StakingFormulasFacet.json"
         );
-        selectorsOfTWAPOracleDollar3poolFacet = getSelectorsFromAbi(
-            "/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json"
-        );
         selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
             "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
@@ -207,7 +202,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         ownershipFacetImplementation = new OwnershipFacet();
         stakingFacetImplementation = new StakingFacet();
         stakingFormulasFacetImplementation = new StakingFormulasFacet();
-        twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
 
         // prepare diamond init args
@@ -231,7 +225,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "OwnershipFacet",
             "StakingFacet",
             "StakingFormulasFacet",
-            "TWAPOracleDollar3poolFacet",
             "UbiquityPoolFacet"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -252,7 +245,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](20);
+        FacetCut[] memory cuts = new FacetCut[](19);
 
         cuts[0] = (
             FacetCut({
@@ -388,13 +381,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         cuts[18] = (
             FacetCut({
-                facetAddress: address(twapOracleDollar3PoolFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
-            })
-        );
-        cuts[19] = (
-            FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfUbiquityPoolFacet
@@ -430,14 +416,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         ownershipFacet = OwnershipFacet(address(diamond));
         stakingFacet = StakingFacet(address(diamond));
         stakingFormulasFacet = StakingFormulasFacet(address(diamond));
-        twapOracleDollar3PoolFacet = TWAPOracleDollar3poolFacet(
-            address(diamond)
-        );
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
 
         // get all addresses
         facetAddressList = diamondLoupeFacet.facetAddresses();
+
         vm.startPrank(admin);
+
         // grant diamond dollar minting and burning rights
         accessControlFacet.grantRole(
             CURVE_DOLLAR_MANAGER_ROLE,
@@ -471,8 +456,18 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             STAKING_SHARE_MINTER_ROLE,
             address(diamond)
         );
+
         // init UUPS core contracts
         __setupUUPS(address(diamond));
+
+        // deploy Curve's Dollar-3CRVLP metapool
+        MockERC20 curveTriPoolLpToken = new MockERC20("3CRV", "3CRV", 18);
+        MockCurveStableSwapMetaNG curveDollarMetaPool = new MockCurveStableSwapMetaNG(
+                address(dollarToken),
+                address(curveTriPoolLpToken)
+            );
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
+
         vm.stopPrank();
     }
 }

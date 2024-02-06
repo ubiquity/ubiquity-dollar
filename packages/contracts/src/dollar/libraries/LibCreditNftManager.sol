@@ -5,11 +5,11 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {CreditNft} from "../../dollar/core/CreditNft.sol";
 import {CREDIT_NFT_MANAGER_ROLE} from "./Constants.sol";
+import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
 import {IDollarMintExcess} from "../../dollar/interfaces/IDollarMintExcess.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 import {LibCreditRedemptionCalculator} from "./LibCreditRedemptionCalculator.sol";
-import {LibTWAPOracle} from "./LibTWAPOracle.sol";
 import {LibCreditNftRedemptionCalculator} from "./LibCreditNftRedemptionCalculator.sol";
 import {UbiquityCreditToken} from "../../dollar/core/UbiquityCreditToken.sol";
 import {LibAccessControl} from "./LibAccessControl.sol";
@@ -124,8 +124,11 @@ library LibCreditNftManager {
     function exchangeDollarsForCreditNft(
         uint256 amount
     ) internal returns (uint256) {
-        uint256 twapPrice = LibTWAPOracle.getTwapPrice();
+        AppStorage storage store = LibAppStorage.appStorage();
 
+        uint256 twapPrice = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
         require(
             twapPrice < 1 ether,
             "Price must be below 1 to mint Credit NFT"
@@ -169,10 +172,13 @@ library LibCreditNftManager {
     function exchangeDollarsForCredit(
         uint256 amount
     ) internal returns (uint256) {
-        uint256 twapPrice = LibTWAPOracle.getTwapPrice();
-
-        require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
         AppStorage storage store = LibAppStorage.appStorage();
+
+        uint256 twapPrice = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
+        require(twapPrice < 1 ether, "Price must be below 1 to mint Credit");
+
         CreditNft creditNft = CreditNft(store.creditNftAddress);
         creditNft.updateTotalDebt();
 
@@ -334,8 +340,13 @@ library LibCreditNftManager {
     function burnCreditTokensForDollars(
         uint256 amount
     ) public returns (uint256) {
-        uint256 twapPrice = LibTWAPOracle.getTwapPrice();
+        AppStorage storage store = LibAppStorage.appStorage();
+
+        uint256 twapPrice = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
         require(twapPrice > 1 ether, "Price must be above 1");
+
         if (creditNftStorage().debtCycle) {
             creditNftStorage().debtCycle = false;
         }
@@ -376,8 +387,11 @@ library LibCreditNftManager {
         uint256 id,
         uint256 amount
     ) public returns (uint256) {
-        uint256 twapPrice = LibTWAPOracle.getTwapPrice();
+        AppStorage storage store = LibAppStorage.appStorage();
 
+        uint256 twapPrice = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
         require(
             twapPrice > 1 ether,
             "Price must be above 1 to redeem Credit NFT"
@@ -385,7 +399,6 @@ library LibCreditNftManager {
         if (creditNftStorage().debtCycle) {
             creditNftStorage().debtCycle = false;
         }
-        AppStorage storage store = LibAppStorage.appStorage();
         CreditNft creditNft = CreditNft(store.creditNftAddress);
 
         require(id > block.number, "Credit NFT has expired");

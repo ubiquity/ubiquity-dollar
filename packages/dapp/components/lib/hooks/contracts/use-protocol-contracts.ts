@@ -26,7 +26,7 @@ import ManagerFacetArtifact from "@ubiquity/contracts/out/ManagerFacet.sol/Manag
 import OwnershipFacetArtifact from "@ubiquity/contracts/out/OwnershipFacet.sol/OwnershipFacet.json";
 import StakingFacetArtifact from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
 import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
-import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json";
+import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/ICurveStableSwapMetaNG.sol/ICurveStableSwapMetaNG.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
 // other related contracts
 // import SushiSwapPoolArtifact from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";

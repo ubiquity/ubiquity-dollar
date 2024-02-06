@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "@uniswap/v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 import {IERC20Ubiquity} from "../../dollar/interfaces/IERC20Ubiquity.sol";
-import "../../dollar/interfaces/IMetaPool.sol";
+import "../../dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import "abdk/ABDKMathQuad.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
@@ -145,8 +145,9 @@ library LibDollarMintExcess {
         dollar.approve(stableSwapMetaPoolAddress, amount);
 
         // swap amount of Ubiquity Dollar => 3CRV
-        uint256 amount3CRVReceived = IMetaPool(stableSwapMetaPoolAddress)
-            .exchange(0, 1, amount, 0);
+        uint256 amount3CRVReceived = ICurveStableSwapMetaNG(
+            stableSwapMetaPoolAddress
+        ).exchange(0, 1, amount, 0);
 
         // approve metapool to transfer our 3CRV
         IERC20(curve3PoolTokenAddress).approve(stableSwapMetaPoolAddress, 0);
@@ -156,11 +157,12 @@ library LibDollarMintExcess {
         );
 
         // deposit liquidity
-        uint256 res = IMetaPool(stableSwapMetaPoolAddress).add_liquidity(
-            [0, amount3CRVReceived],
-            0,
-            address(this) // stacking contract
-        );
+        uint256 res = ICurveStableSwapMetaNG(stableSwapMetaPoolAddress)
+            .add_liquidity(
+                [0, amount3CRVReceived],
+                0,
+                address(this) // stacking contract
+            );
         // update TWAP price
         return res;
     }

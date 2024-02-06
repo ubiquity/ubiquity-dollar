@@ -4,11 +4,10 @@ pragma solidity 0.8.19;
 import "forge-std/console.sol";
 import {DiamondTestSetup} from "../DiamondTestSetup.sol";
 import {IDollarAmoMinter} from "../../../src/dollar/interfaces/IDollarAmoMinter.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {LibUbiquityPool} from "../../../src/dollar/libraries/LibUbiquityPool.sol";
 import {MockChainLinkFeed} from "../../../src/dollar/mocks/MockChainLinkFeed.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
+import {MockCurveStableSwapMetaNG} from "../../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 
 contract MockDollarAmoMinter is IDollarAmoMinter {
     function collateralDollarBalance() external pure returns (uint256) {
@@ -24,7 +23,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     MockDollarAmoMinter dollarAmoMinter;
     MockERC20 collateralToken;
     MockChainLinkFeed collateralTokenPriceFeed;
-    MockMetaPool curveDollarMetaPool;
+    MockCurveStableSwapMetaNG curveDollarMetaPool;
     MockERC20 curveTriPoolLpToken;
 
     address user = address(1);
@@ -67,7 +66,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         curveTriPoolLpToken = new MockERC20("3CRV", "3CRV", 18);
 
         // init Curve Dollar-3CRV LP metapool
-        curveDollarMetaPool = new MockMetaPool(
+        curveDollarMetaPool = new MockCurveStableSwapMetaNG(
             address(dollarToken),
             address(curveTriPoolLpToken)
         );
@@ -114,15 +113,11 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // add AMO minter
         ubiquityPoolFacet.addAmoMinter(address(dollarAmoMinter));
 
+        // set metapool in manager facet
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
+
         // stop being admin
         vm.stopPrank();
-
-        // set metapool for TWAP oracle
-        vm.prank(owner);
-        twapOracleDollar3PoolFacet.setPool(
-            address(curveDollarMetaPool),
-            address(curveTriPoolLpToken)
-        );
 
         // mint 100 collateral tokens to the user
         collateralToken.mint(address(user), 100e18);
