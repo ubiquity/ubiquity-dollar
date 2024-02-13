@@ -99,7 +99,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         // and had enough allowance with enough funds
         uint256 count;
         uint256 price;
-        uint256 paid;
+        uint256 paid = 0;
         (count, price) = allowance(msg.sender);
         require(
             count > 0,
