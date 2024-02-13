@@ -43,20 +43,28 @@ abstract contract ERC20Ubiquity is
 
     /// @notice Modifier checks that the method is called by a user with the "pauser" role
     modifier onlyPauser() {
+        _onlyPauser();
+        _;
+    }
+
+    function _onlyPauser() internal view {
         require(
             accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "ERC20Ubiquity: not pauser"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "admin" role
     modifier onlyAdmin() {
+        _onlyAdmin();
+        _;
+    }
+
+    function _onlyAdmin() internal view {
         require(
             accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "ERC20Ubiquity: not admin"
         );
-        _;
     }
 
     /// @notice Ensures __ERC20Ubiquity_init cannot be called on the implementation contract

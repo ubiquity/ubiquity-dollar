@@ -80,101 +80,149 @@ contract Modifiers {
 
     /// @notice Checks that method is called by a contract owner
     modifier onlyOwner() {
-        LibDiamond.enforceIsContractOwner();
+        _onlyOwner();
         _;
+    }
+
+    function _onlyOwner() internal view {
+        LibDiamond.enforceIsContractOwner();
     }
 
     /// @notice Checks that method is called by address with the `CREDIT_NFT_MANAGER_ROLE` role
     modifier onlyCreditNftManager() {
+        _onlyCreditNftManager();
+        _;
+    }
+
+    function _onlyCreditNftManager() internal view {
         require(
             LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
             "Caller is not a Credit NFT manager"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `DEFAULT_ADMIN_ROLE` role
     modifier onlyAdmin() {
+        _onlyAdmin();
+        _;
+    }
+
+    function _onlyAdmin() internal view {
         require(
             LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
             "Manager: Caller is not admin"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_MINTER_ROLE` role
     modifier onlyMinter() {
+        _onlyMinter();
+        _;
+    }
+
+    function _onlyMinter() internal view {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
             "Governance token: not minter"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_BURNER_ROLE` role
     modifier onlyBurner() {
+        _onlyBurner();
+        _;
+    }
+
+    function _onlyBurner() internal view {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
             "Governance token: not burner"
         );
-        _;
     }
 
     /// @notice Modifier to make a function callable only when the contract is not paused
     modifier whenNotPaused() {
-        require(!LibAccessControl.paused(), "Pausable: paused");
+        _whenNotPaused();
         _;
+    }
+
+    function _whenNotPaused() internal view {
+        require(!LibAccessControl.paused(), "Pausable: paused");
     }
 
     /// @notice Modifier to make a function callable only when the contract is paused
     modifier whenPaused() {
-        require(LibAccessControl.paused(), "Pausable: not paused");
+        _whenPaused();
         _;
+    }
+
+    function _whenPaused() internal view {
+        require(LibAccessControl.paused(), "Pausable: not paused");
     }
 
     /// @notice Checks that method is called by address with the `STAKING_MANAGER_ROLE` role
     modifier onlyStakingManager() {
+        _onlyStakingManager();
+        _;
+    }
+
+    function _onlyStakingManager() internal view {
         require(
             LibAccessControl.hasRole(STAKING_MANAGER_ROLE, msg.sender),
             "not manager"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `PAUSER_ROLE` role
     modifier onlyPauser() {
+        _onlyPauser();
+        _;
+    }
+
+    function _onlyPauser() internal view {
         require(
             LibAccessControl.hasRole(PAUSER_ROLE, msg.sender),
             "not pauser"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_MANAGER_ROLE` role
     modifier onlyTokenManager() {
+        _onlyTokenManager();
+        _;
+    }
+
+    function _onlyTokenManager() internal view {
         require(
             LibAccessControl.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, msg.sender),
             "MasterChef: not Governance Token manager"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `INCENTIVE_MANAGER_ROLE` role
     modifier onlyIncentiveAdmin() {
+        _onlyIncentiveAdmin();
+        _;
+    }
+
+    function _onlyIncentiveAdmin() internal view {
         require(
             LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
             "CreditCalc: not admin"
         );
-        _;
     }
 
     /// @notice Checks that method is called by address with the `CURVE_DOLLAR_MANAGER_ROLE` role
     modifier onlyDollarManager() {
+        _onlyDollarManager();
+        _;
+    }
+
+    function _onlyDollarManager() internal view {
         require(
             LibAccessControl.hasRole(CURVE_DOLLAR_MANAGER_ROLE, msg.sender),
             "CurveIncentive: Caller is not Ubiquity Dollar"
         );
-        _;
     }
 
     /// @notice Initializes reentrancy guard on contract deployment

@@ -77,7 +77,7 @@ library UintUtils {
             return "0x00";
         }
 
-        uint256 length = 0;
+        uint256 length;
 
         for (uint256 temp = value; temp != 0; temp >>= 8) {
             unchecked {

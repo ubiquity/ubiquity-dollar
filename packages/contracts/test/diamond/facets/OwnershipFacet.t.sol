@@ -38,7 +38,7 @@ contract OwnershipFacetTest is DiamondTestSetup {
         vm.prank(owner);
         vm.expectRevert(
             abi.encodePacked(
-                "OwnershipFacet: New owner cannot be the zero address"
+                "OwnershipFacet: Can't address(0)"
             )
         );
         ownershipFacet.transferOwnership(address(0));

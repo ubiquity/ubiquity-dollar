@@ -27,20 +27,28 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
 
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyGovernanceMinter() {
+        _onlyGovernanceMinter();
+        _;
+    }
+
+    function _onlyGovernanceMinter() internal view {
         require(
             accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
             "Governance token: not minter"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyGovernanceBurner() {
+        _onlyGovernanceBurner();
+        _;
+    }
+
+    function _onlyGovernanceBurner() internal view {
         require(
             accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
             "Governance token: not burner"
         );
-        _;
     }
 
     /**

@@ -10,7 +10,7 @@ contract OwnershipFacet is IERC173 {
     function transferOwnership(address _newOwner) external override {
         require(
             (_newOwner != address(0)),
-            "OwnershipFacet: New owner cannot be the zero address"
+            "OwnershipFacet: Can't address(0)"
         );
         LibDiamond.enforceIsContractOwner();
         LibDiamond.setContractOwner(_newOwner);

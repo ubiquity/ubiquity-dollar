@@ -39,38 +39,54 @@ abstract contract ERC1155Ubiquity is
 
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyMinter() virtual {
+        _onlyMinter();
+        _;
+    }
+
+    function _onlyMinter() virtual internal view {
         require(
             accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not minter"
         );
-        _;
-    }
+    }    
 
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyBurner() virtual {
+        _onlyBurner();
+        _;
+    }
+
+    function _onlyBurner() virtual internal view {
         require(
             accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not burner"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() virtual {
+        _onlyPauser();
+        _;
+    }
+
+    function _onlyPauser() virtual internal view {
         require(
             accessControl.hasRole(PAUSER_ROLE, _msgSender()),
             "ERC1155Ubiquity: not pauser"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Admin" role
     modifier onlyAdmin() {
+        _onlyAdmin();
+        _;
+    }
+
+    function _onlyAdmin() internal view {
         require(
             accessControl.hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
             "ERC20Ubiquity: not admin"
         );
-        _;
     }
 
     /// @notice Ensures __ERC1155Ubiquity_init cannot be called on the implementation contract
@@ -140,7 +156,7 @@ abstract contract ERC1155Ubiquity is
         bytes memory data
     ) public virtual onlyMinter {
         _mint(to, id, amount, data);
-        totalSupply += amount;
+        totalSupply = totalSupply + amount;
         holderBalances[to].add(id);
     }
 
@@ -159,8 +175,12 @@ abstract contract ERC1155Ubiquity is
     ) public virtual onlyMinter whenNotPaused {
         _mintBatch(to, ids, amounts, data);
         uint256 localTotalSupply = totalSupply;
-        for (uint256 i = 0; i < ids.length; ++i) {
+        uint256 idsLength = ids.length;
+        for (uint256 i; i < idsLength;) {
             localTotalSupply += amounts[i];
+            unchecked{
+                ++i;
+            }
         }
         totalSupply = localTotalSupply;
         holderBalances[to].add(ids);
@@ -249,7 +269,7 @@ abstract contract ERC1155Ubiquity is
         uint256 amount
     ) internal virtual override whenNotPaused {
         super._burn(account, id, amount);
-        totalSupply -= amount;
+        totalSupply = totalSupply - amount;
     }
 
     /**
@@ -267,8 +287,11 @@ abstract contract ERC1155Ubiquity is
         uint256[] memory amounts
     ) internal virtual override whenNotPaused {
         super._burnBatch(account, ids, amounts);
-        for (uint256 i = 0; i < ids.length; ++i) {
-            totalSupply -= amounts[i];
+        for (uint256 i; i < ids.length;) {
+            totalSupply = totalSupply - amounts[i];
+            unchecked {
+                ++i;
+            }
         }
     }
 

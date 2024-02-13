@@ -454,9 +454,13 @@ library LibDirectGovernanceFarmer {
         uint256[] memory idList,
         uint256 id
     ) internal pure returns (bool) {
-        for (uint256 i = 0; i < idList.length; i++) {
+        uint256 length = idList.length;
+        for (uint256 i; i < length;) {
             if (idList[i] == id) {
                 return true;
+            }
+            unchecked {
+                ++i;
             }
         }
         return false;

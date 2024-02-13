@@ -34,7 +34,7 @@ contract UbiquiStickSaleTest is Test {
 
     function testSetTokenContract_ShouldRevert_IfAddressIsZero() public {
         vm.prank(owner);
-        vm.expectRevert("Invalid Address");
+        vm.expectRevert("Invalid address");
         ubiquiStickSale.setTokenContract(address(0));
     }
 
@@ -55,7 +55,7 @@ contract UbiquiStickSaleTest is Test {
 
     function testSetFundsAddress_ShouldRevert_IfAddressIsZero() public {
         vm.prank(owner);
-        vm.expectRevert("Invalid Address");
+        vm.expectRevert("Invalid address");
         ubiquiStickSale.setFundsAddress(address(0));
     }
 
@@ -73,7 +73,7 @@ contract UbiquiStickSaleTest is Test {
 
     function testSetAllowance_ShouldRevert_IfAddressIsZero() public {
         vm.prank(owner);
-        vm.expectRevert("Invalid Address");
+        vm.expectRevert("Invalid address");
         ubiquiStickSale.setAllowance(address(0), 1, 1);
     }
 

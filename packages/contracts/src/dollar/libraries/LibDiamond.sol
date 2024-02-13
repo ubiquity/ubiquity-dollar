@@ -120,7 +120,6 @@ library LibDiamond {
         for (
             uint256 facetIndex;
             facetIndex < _diamondCut.length;
-            facetIndex++
         ) {
             IDiamondCut.FacetCutAction action = _diamondCut[facetIndex].action;
             if (action == IDiamondCut.FacetCutAction.Add) {
@@ -140,6 +139,9 @@ library LibDiamond {
                 );
             } else {
                 revert("LibDiamondCut: Incorrect FacetCutAction");
+            }
+            unchecked {
+                ++facetIndex;
             }
         }
         emit DiamondCut(_diamondCut, _init, _calldata);
@@ -174,7 +176,6 @@ library LibDiamond {
         for (
             uint256 selectorIndex;
             selectorIndex < _functionSelectors.length;
-            selectorIndex++
         ) {
             bytes4 selector = _functionSelectors[selectorIndex];
             address oldFacetAddress = ds
@@ -186,6 +187,9 @@ library LibDiamond {
             );
             addFunction(ds, selector, selectorPosition, _facetAddress);
             selectorPosition++;
+            unchecked {
+                ++selectorIndex;
+            }
         }
     }
 
@@ -217,7 +221,6 @@ library LibDiamond {
         for (
             uint256 selectorIndex;
             selectorIndex < _functionSelectors.length;
-            selectorIndex++
         ) {
             bytes4 selector = _functionSelectors[selectorIndex];
             address oldFacetAddress = ds
@@ -230,6 +233,9 @@ library LibDiamond {
             removeFunction(ds, oldFacetAddress, selector);
             addFunction(ds, selector, selectorPosition, _facetAddress);
             selectorPosition++;
+            unchecked {
+                ++selectorIndex;
+            }
         }
     }
 
@@ -255,13 +261,15 @@ library LibDiamond {
         for (
             uint256 selectorIndex;
             selectorIndex < _functionSelectors.length;
-            selectorIndex++
         ) {
             bytes4 selector = _functionSelectors[selectorIndex];
             address oldFacetAddress = ds
                 .selectorToFacetAndPosition[selector]
                 .facetAddress;
             removeFunction(ds, oldFacetAddress, selector);
+            unchecked {
+                ++selectorIndex;
+            }
         }
     }
 

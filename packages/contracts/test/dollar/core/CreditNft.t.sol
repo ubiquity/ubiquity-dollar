@@ -45,7 +45,7 @@ contract CreditNftTest is LocalTestHelper {
     }
 
     function testMintCreditNft_ShouldRevert_WhenNotCreditNftManager() public {
-        vm.expectRevert("Caller is not a CreditNft manager");
+        vm.expectRevert("CreditNft: not CreditNft manager");
         creditNft.mintCreditNft(address(0x123), 1, 100);
     }
 
@@ -67,7 +67,7 @@ contract CreditNftTest is LocalTestHelper {
     }
 
     function testBurnCreditNft_ShouldRevert_WhenNotCreditNftManager() public {
-        vm.expectRevert("Caller is not a CreditNft manager");
+        vm.expectRevert("CreditNft: not CreditNft manager");
         creditNft.burnCreditNft(address(0x123), 1, 100);
     }
 

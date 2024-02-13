@@ -123,8 +123,11 @@ library LibChef {
             "_stakingShareIDs array not same length"
         );
 
-        for (uint256 i = 0; i < lgt; ++i) {
+        for (uint256 i; i < lgt;) {
             deposit(_tos[i], _amounts[i], _stakingShareIDs[i]);
+            unchecked {
+                ++i;
+            }
         }
     }
 

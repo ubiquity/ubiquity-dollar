@@ -167,6 +167,11 @@ library LibUbiquityPool {
      * @param collateralIndex Collateral token index
      */
     modifier collateralEnabled(uint256 collateralIndex) {
+        _collateralEnabled(collateralIndex);
+        _;
+    }
+
+    function _collateralEnabled(uint256 collateralIndex) internal view {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
             poolStorage.isCollateralEnabled[
@@ -174,19 +179,22 @@ library LibUbiquityPool {
             ],
             "Collateral disabled"
         );
-        _;
     }
 
     /**
      * @notice Checks whether a caller is the AMO minter address
      */
     modifier onlyAmoMinter() {
+        _onlyAmoMinter();
+        _;
+    }
+
+    function _onlyAmoMinter() internal view {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
             poolStorage.isAmoMinterEnabled[msg.sender],
             "Not an AMO Minter"
         );
-        _;
     }
 
     //=====================
@@ -252,11 +260,14 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         uint256 collateralTokensCount = poolStorage.collateralAddresses.length;
         balanceTally = 0;
-        for (uint256 i = 0; i < collateralTokensCount; i++) {
+        for (uint256 i; i < collateralTokensCount;) {
             balanceTally += freeCollateralBalance(i)
                 .mul(10 ** poolStorage.missingDecimals[i])
                 .mul(poolStorage.collateralPrices[i])
                 .div(UBIQUITY_POOL_PRICE_PRECISION);
+                unchecked {
+                    ++i;
+                }
         }
     }
 
@@ -336,7 +347,7 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
-            poolStorage.isMintPaused[collateralIndex] == false,
+            !poolStorage.isMintPaused[collateralIndex],
             "Minting is paused"
         );
 
@@ -408,7 +419,7 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
-            poolStorage.isRedeemPaused[collateralIndex] == false,
+            !poolStorage.isRedeemPaused[collateralIndex],
             "Redeeming is paused"
         );
 
@@ -479,7 +490,7 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
-            poolStorage.isRedeemPaused[collateralIndex] == false,
+            !poolStorage.isRedeemPaused[collateralIndex],
             "Redeeming is paused"
         );
         require(
@@ -491,7 +502,7 @@ library LibUbiquityPool {
             "Too soon to collect redemption"
         );
 
-        bool sendCollateral = false;
+        bool sendCollateral;
 
         if (
             poolStorage.redeemCollateralBalances[msg.sender][collateralIndex] >
@@ -542,7 +553,7 @@ library LibUbiquityPool {
         uint256 priceFeedDecimals = priceFeed.decimals();
 
         // validation
-        require(answer > 0, "Invalid price");
+        require(answer != 0, "Invalid price");
         require(
             block.timestamp - updatedAt <
                 poolStorage.collateralPriceFeedStalenessThresholds[
@@ -580,7 +591,7 @@ library LibUbiquityPool {
 
         // checks to see if borrowing is paused
         require(
-            poolStorage.isBorrowPaused[minterCollateralIndex] == false,
+            !poolStorage.isBorrowPaused[minterCollateralIndex],
             "Borrowing is paused"
         );
 

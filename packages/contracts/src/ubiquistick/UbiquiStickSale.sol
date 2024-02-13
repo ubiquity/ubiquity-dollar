@@ -38,13 +38,17 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
 
     constructor() {}
 
+    function _NotZeroAddress(address _address) internal pure{
+        require(_address != address(0), "Invalid address");
+    }
+
     function setTokenContract(address _newTokenContract) external onlyOwner {
-        require(_newTokenContract != address(0), "Invalid Address");
+        _NotZeroAddress(_newTokenContract);
         tokenContract = IUbiquiStick(_newTokenContract);
     }
 
     function setFundsAddress(address _address) external onlyOwner {
-        require(_address != address(0), "Invalid Address");
+        _NotZeroAddress(_address);
         fundsAddress = _address;
     }
 
@@ -54,7 +58,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         uint256 _count,
         uint256 _price
     ) public onlyOwner {
-        require(_address != address(0), "Invalid Address");
+        _NotZeroAddress(_address);
         _allowances[_address] = Purchase(_count, _price);
     }
 
@@ -66,8 +70,11 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
     ) external onlyOwner {
         uint256 count = _addresses.length;
 
-        for (uint16 i = 0; i < count; i++) {
+        for (uint16 i; i < count;) {
             setAllowance(_addresses[i], _counts[i], _prices[i]);
+            unchecked {
+                ++i;
+            }
         }
     }
 
@@ -92,7 +99,7 @@ contract UbiquiStickSale is Ownable, ReentrancyGuard {
         // and had enough allowance with enough funds
         uint256 count;
         uint256 price;
-        uint256 paid = 0;
+        uint256 paid;
         (count, price) = allowance(msg.sender);
         require(
             count > 0,

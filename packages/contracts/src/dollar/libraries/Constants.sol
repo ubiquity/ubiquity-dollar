@@ -61,7 +61,7 @@ bytes32 constant CREDIT_NFT_MANAGER_ROLE = keccak256("CREDIT_NFT_MANAGER_ROLE");
 bytes32 constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
 
 /// @dev Role name for inventive manager
-bytes32 constant INCENTIVE_MANAGER_ROLE = keccak256("INCENTIVE_MANAGER");
+bytes32 constant INCENTIVE_MANAGER_ROLE = keccak256("INCENTIVE_MANAGER_ROLE");
 
 /// @dev Role name for Governance token manager
 bytes32 constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256(

@@ -45,11 +45,15 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
 
     /// @notice Modifier checks that the method is called by a user with the "CreditNft manager" role
     modifier onlyCreditNftManager() {
+        _onlyCreditNftManager();
+        _;
+    }
+
+    function _onlyCreditNftManager() internal view {
         require(
             accessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, _msgSender()),
-            "Caller is not a CreditNft manager"
+            "CreditNft: not CreditNft manager"
         );
-        _;
     }
 
     /// @notice Ensures initialize cannot be called on the implementation contract
@@ -61,7 +65,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @param _manager Address of the manager of the contract
     function initialize(address _manager) public initializer {
         __ERC1155Ubiquity_init(_manager, "URI");
-        _totalOutstandingDebt = 0;
+        _totalOutstandingDebt;
     }
 
     /**
@@ -120,7 +124,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
      * @dev Should be called prior to any state changing functions
      */
     function updateTotalDebt() public {
-        bool reachedEndOfExpiredKeys = false;
+        bool reachedEndOfExpiredKeys;
         uint256 currentBlockNumber = _sortedBlockNumbers.popFront();
         uint256 outstandingDebt = _totalOutstandingDebt;
         //if list is empty, currentBlockNumber will be 0
@@ -146,7 +150,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @notice Returns outstanding debt by fetching current tally and removing any expired debt
     function getTotalOutstandingDebt() public view returns (uint256) {
         uint256 outstandingDebt = _totalOutstandingDebt;
-        bool reachedEndOfExpiredKeys = false;
+        bool reachedEndOfExpiredKeys;
         (, uint256 currentBlockNumber) = _sortedBlockNumbers.getNextNode(0);
 
         while (!reachedEndOfExpiredKeys && currentBlockNumber != 0) {

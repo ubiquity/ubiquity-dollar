@@ -39,20 +39,28 @@ contract UbiquityDollarToken is ERC20Ubiquity {
 
     /// @notice Modifier checks that the method is called by a user with the "Dollar minter" role
     modifier onlyDollarMinter() {
+        _onlyDollarMinter();
+        _;
+    }
+
+    function _onlyDollarMinter() internal view {
         require(
             accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, _msgSender()),
             "Dollar token: not minter"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Dollar burner" role
     modifier onlyDollarBurner() {
+        _onlyDollarBurner();
+        _;
+    }
+
+    function _onlyDollarBurner() internal view {
         require(
             accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, _msgSender()),
             "Dollar token: not burner"
         );
-        _;
     }
 
     /**

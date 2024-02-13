@@ -41,29 +41,41 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
 
     /// @notice Modifier checks that the method is called by a user with the "Staking share minter" role
     modifier onlyMinter() override {
+        _onlyMinter();
+        _;
+    }
+
+    function _onlyMinter() internal override view {
         require(
             accessControl.hasRole(STAKING_SHARE_MINTER_ROLE, msg.sender),
             "Staking Share: not minter"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Staking share burner" role
     modifier onlyBurner() override {
+        _onlyBurner();
+        _;
+    }
+
+    function _onlyBurner() internal override view {
         require(
             accessControl.hasRole(STAKING_SHARE_BURNER_ROLE, msg.sender),
             "Staking Share: not burner"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() override {
+        _onlyPauser();
+        _;
+    }
+
+    function _onlyPauser() internal override view {
         require(
             accessControl.hasRole(PAUSER_ROLE, msg.sender),
             "Staking Share: not pauser"
         );
-        _;
     }
 
     /// @notice Ensures initialize cannot be called on the implementation contract
@@ -124,7 +136,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
     ) public virtual onlyMinter whenNotPaused returns (uint256 id) {
         id = totalSupply + 1;
         _mint(to, id, 1, bytes(""));
-        totalSupply += 1;
+        totalSupply = totalSupply + 1;
         holderBalances[to].add(id);
         Stake storage _stake = _stakes[id];
         _stake.minter = to;
@@ -250,7 +262,7 @@ contract StakingShare is ERC1155Ubiquity, ERC1155URIStorageUpgradeable {
         super._burn(account, id, 1);
         Stake storage _stake = _stakes[id];
         require(_stake.lpAmount == 0, "LP <> 0");
-        totalSupply -= 1;
+        totalSupply = totalSupply - 1;
     }
 
     /**

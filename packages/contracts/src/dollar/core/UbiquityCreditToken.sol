@@ -27,20 +27,28 @@ contract UbiquityCreditToken is ERC20Ubiquity {
 
     /// @notice Modifier checks that the method is called by a user with the "Credit minter" role
     modifier onlyCreditMinter() {
+        _onlyCreditMinter();
+        _;
+    }
+
+    function _onlyCreditMinter() internal view {
         require(
             accessControl.hasRole(CREDIT_TOKEN_MINTER_ROLE, _msgSender()),
             "Credit token: not minter"
         );
-        _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Credit burner" role
     modifier onlyCreditBurner() {
+        _onlyCreditBurner();
+        _;
+    }
+
+    function _onlyCreditBurner() internal view {
         require(
             accessControl.hasRole(CREDIT_TOKEN_BURNER_ROLE, _msgSender()),
             "Credit token: not burner"
         );
-        _;
     }
 
     /**

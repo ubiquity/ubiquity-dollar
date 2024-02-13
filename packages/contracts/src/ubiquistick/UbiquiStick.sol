@@ -45,8 +45,12 @@ contract UbiquiStick is
     uint256 private constant _INVISIBLE_TYPE = 2;
 
     modifier onlyMinter() {
-        require(msg.sender == minter, "Not minter");
+        _onlyMinter();
         _;
+    }
+
+    function _onlyMinter() internal view {
+        require(msg.sender == minter, "Not minter");
     }
 
     constructor() ERC721("The UbiquiStick", "KEY") {
@@ -99,8 +103,11 @@ contract UbiquiStick is
     }
 
     function batchSafeMint(address to, uint256 count) public onlyMinter {
-        for (uint256 i = 0; i < count; i++) {
+        for (uint256 i; i < count;) {
             safeMint(to);
+            unchecked {
+                ++i;
+            }
         }
     }
 
