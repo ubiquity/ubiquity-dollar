@@ -65,7 +65,7 @@ contract CreditNft is ERC1155Ubiquity, ICreditNft {
     /// @param _manager Address of the manager of the contract
     function initialize(address _manager) public initializer {
         __ERC1155Ubiquity_init(_manager, "URI");
-        _totalOutstandingDebt;
+        _totalOutstandingDebt = 0;
     }
 
     /**
