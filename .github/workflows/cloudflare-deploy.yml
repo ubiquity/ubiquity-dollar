@@ -1,6 +1,7 @@
 name: Deploy to Cloudflare Pages
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Build"] # Needs to build first before we can deploy.
     types:
