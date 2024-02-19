@@ -37,14 +37,12 @@ jobs:
       #   run: |
       #     mkdir preserved
       #     rsync -av --progress . preserved --exclude-from='.gitignore'
-
       # - name: Upload preserved directory
       #   if: steps.check_token.outputs.skip != 'true'
       #   uses: actions/upload-artifact@v4
       #   with:
       #     name: build-artifacts
       #     path: preserved
-
       - name: Deploy to Cloudflare
         if: steps.check_token.outputs.skip != 'true'
         uses: ubiquity/cloudflare-deploy-action@main
@@ -54,6 +52,8 @@ jobs:
           production_branch: ${{ github.event.repository.default_branch }}
           output_directory: "dist"
           current_branch: ${{ github.ref_name }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+          commit_sha: ${{ github.sha }}
         # env:
         # Add any environment variables you need to pass along here
         #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
