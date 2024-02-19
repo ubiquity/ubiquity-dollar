@@ -20,3 +20,14 @@ jobs:
         run: |
           yarn
           yarn build
+
+      - name: Copy files excluding .gitignore
+        run: |
+          mkdir preserved
+          rsync -av --progress . preserved --exclude-from='.gitignore'
+
+      - name: Upload preserved directory
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: preserved

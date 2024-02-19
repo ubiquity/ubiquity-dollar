@@ -24,6 +24,7 @@ jobs:
             echo "::set-output name=skip::false"
           fi
         shell: bash
+
       - name: Deploy to Cloudflare
         if: steps.check_token.outputs.skip != 'true'
         uses: ubiquity/cloudflare-deploy-action@main
