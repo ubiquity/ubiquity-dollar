@@ -1,6 +1,7 @@
 name: Deploy to Cloudflare Pages
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: ["Build"] # Needs to build first before we can deploy.
     types:
@@ -31,7 +32,7 @@ jobs:
           repository: ${{ github.repository }}
           production_branch: ${{ github.event.repository.default_branch }}
           output_directory: "dist"
-          is_production: ${{ github.event_name == 'push' && github.ref == 'refs/heads/${{ github.event.repository.default_branch }}' }}
+          current_branch: ${{ github.ref_name }}
         # env:
         # Add any environment variables you need to pass along here
         #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
