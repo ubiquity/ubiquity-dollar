@@ -1,4 +1,4 @@
-name: Build
+name: Build & Deploy
 on:
   push:
 
@@ -21,33 +21,6 @@ jobs:
           yarn
           yarn build
 
-      - name: Copy files excluding .gitignore
-        run: |
-          mkdir preserved
-          rsync -av --progress . preserved --exclude-from='.gitignore'
-
-      - name: Upload preserved directory
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: preserved
-
-# name: Deploy to Cloudflare Pages
-
-# on:
-  # workflow_dispatch:
-  # workflow_run:
-    # workflows: ["Build"] # Needs to build first before we can deploy.
-    # types:
-      # - completed
-
-# jobs:
-  # deploy-to-cloudflare:
-  #   name: Deploy to Cloudflare Pages
-  #   runs-on: ubuntu-22.04
-  #   permissions:
-  #     contents: read
-    # steps:
       - name: Check Cloudflare API Token
         id: check_token
         run: |
@@ -58,6 +31,19 @@ jobs:
             echo "::set-output name=skip::false"
           fi
         shell: bash
+
+      # - name: Copy files excluding .gitignore
+      #   if: steps.check_token.outputs.skip != 'true'
+      #   run: |
+      #     mkdir preserved
+      #     rsync -av --progress . preserved --exclude-from='.gitignore'
+
+      # - name: Upload preserved directory
+      #   if: steps.check_token.outputs.skip != 'true'
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: build-artifacts
+      #     path: preserved
 
       - name: Deploy to Cloudflare
         if: steps.check_token.outputs.skip != 'true'
