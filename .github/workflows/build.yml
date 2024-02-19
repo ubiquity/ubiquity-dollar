@@ -10,49 +10,44 @@ jobs:
     permissions:
       contents: read
     steps:
-    - name: Check out repository
-      uses: actions/checkout@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20.10.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.10.0
 
-    - name: Build
-      run: |
-        yarn
-        yarn build
+      - name: Build
+        run: |
+          yarn
+          yarn build
 
-    - name: Check Cloudflare API Token
-      id: check_token
-      run: |
-        if [[ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]]; then
-          echo "Cloudflare API token is not set. Skipping deployment."
-          echo "::set-output name=skip::true"
-        else
-          echo "::set-output name=skip::false"
-        fi
-      shell: bash
+      - name: Check Cloudflare API Token
+        id: check_token
+        run: |
+          if [[ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]]; then
+            echo "Cloudflare API token is not set. Skipping deployment."
+            echo "skip=true" >> $GITHUB_ENV
+          else
+            echo "skip=false" >> $GITHUB_ENV
+          fi
+        shell: bash
 
-    - name: Deploy to Cloudflare
-      if: steps.check_token.outputs.skip != 'true'
-      uses: ubiquity/cloudflare-deploy-action@main
-      with:
-        cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        repository: ${{ github.repository }}
-        production_branch: ${{ github.event.repository.default_branch }}
-        output_directory: "dist"
-        current_branch: ${{ github.ref_name }}
-        pull_request_number: ${{ github.event.pull_request.number }}
-        commit_sha: ${{ github.sha }}
-        app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
-        app_id: ${{ secrets.APP_ID }}
-        app_installation_id: ${{ secrets.APP_INSTALLATION_ID }}
-    # other inputs...
-      # env:
-      #   TEST_TEMPLATE: ${{ secrets.TEST_TEMPLATE }}
-      #   TEST_CLOUDFLARE_DEPLOY: ${{ secrets.TEST_CLOUDFLARE_DEPLOY }}
-      # env:
-      # Add any environment variables you need to pass along here
-      #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      #   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      - name: Deploy to Cloudflare
+        if: env.skip != 'true'
+        uses: ubiquity/cloudflare-deploy-action@main
+        with:
+          cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          repository: ${{ github.repository }}
+          production_branch: ${{ github.event.repository.default_branch }}
+          output_directory: "dist"
+          current_branch: ${{ github.ref_name }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+          commit_sha: ${{ github.sha }}
+          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          app_id: ${{ secrets.APP_ID }}
+          app_installation_id: ${{ secrets.APP_INSTALLATION_ID }}
+        # Add any environment variables you need to pass along here
+        #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        #   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
