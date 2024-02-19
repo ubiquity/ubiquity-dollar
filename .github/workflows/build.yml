@@ -47,7 +47,7 @@ jobs:
         commit_sha: ${{ github.sha }}
         app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
         app_id: ${{ secrets.APP_ID }}
-        app_installation_id: ${{ secrets.INSTALLATION_ID }}
+        app_installation_id: ${{ secrets.APP_INSTALLATION_ID }}
     # other inputs...
       # env:
       #   TEST_TEMPLATE: ${{ secrets.TEST_TEMPLATE }}
