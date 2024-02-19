@@ -45,9 +45,13 @@ jobs:
         current_branch: ${{ github.ref_name }}
         pull_request_number: ${{ github.event.pull_request.number }}
         commit_sha: ${{ github.sha }}
-      env:
-        TEST_TEMPLATE: ${{ secrets.TEST_TEMPLATE }}
-        TEST_CLOUDFLARE_DEPLOY: ${{ secrets.TEST_CLOUDFLARE_DEPLOY }}
+        app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
+        app_id: ${{ secrets.APP_ID }}
+        app_installation_id: ${{ secrets.INSTALLATION_ID }}
+    # other inputs...
+      # env:
+      #   TEST_TEMPLATE: ${{ secrets.TEST_TEMPLATE }}
+      #   TEST_CLOUDFLARE_DEPLOY: ${{ secrets.TEST_CLOUDFLARE_DEPLOY }}
       # env:
       # Add any environment variables you need to pass along here
       #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
