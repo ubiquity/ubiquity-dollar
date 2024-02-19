@@ -11,7 +11,7 @@ import { esBuildContext } from "./esbuild-build";
 export async function server() {
   const _context = await esbuild.context(esBuildContext);
   const { port } = await _context.serve({
-    servedir: "static",
+    servedir: "dist",
     port: 8080,
   });
   console.log(`http://localhost:${port}`);
