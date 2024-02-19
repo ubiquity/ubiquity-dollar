@@ -19,7 +19,7 @@ export const esBuildContext: esbuild.BuildOptions = {
     ".ttf": "dataurl",
     ".svg": "dataurl",
   },
-  outdir: "static/dist",
+  outdir: "dist",
 };
 
 esbuild
