@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          submodules: "recursive" # Ensures submodules are checked out
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -24,31 +26,17 @@ jobs:
           yarn
           yarn build
 
-      - name: Check Cloudflare API Token
-        id: check_token
-        run: |
-          if [[ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]]; then
-            echo "Cloudflare API token is not set. Skipping deployment."
-            echo "skip=true" >> $GITHUB_ENV
-          else
-            echo "skip=false" >> $GITHUB_ENV
-          fi
-        shell: bash
-
       - name: Deploy to Cloudflare
         if: env.skip != 'true'
         uses: ubiquity/cloudflare-deploy-action@main
         with:
-          cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare_api_token: JWo5dPsoyohH5PRu89-RktjCvRN0-ODC6CC9ZBqF # Specifically scoped for public contributors to automatically deploy to our team Cloudflare account
           repository: ${{ github.repository }}
           production_branch: ${{ github.event.repository.default_branch }}
-          output_directory: "dist"
+          output_directory: "static"
           current_branch: ${{ github.ref_name }}
           pull_request_number: ${{ github.event.pull_request.number }}
           commit_sha: ${{ github.sha }}
-          app_private_key: ${{ secrets.APP_PRIVATE_KEY }}
-          app_id: ${{ secrets.APP_ID }}
-          app_installation_id: ${{ secrets.APP_INSTALLATION_ID }}
         # Add any environment variables you need to pass along here
         #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        #   SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        #   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
