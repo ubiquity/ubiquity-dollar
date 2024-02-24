@@ -692,9 +692,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(info.redemptionFee, 20000);
     }
 
-    function testAddCollateralToken_ShouldRevertIfCollateralAlreadyExists()
-        public
-    {
+    function testAddCollateralToken_ShouldRevertIfCollateralExists() public {
         uint256 poolCeiling = 50_000e18;
         vm.startPrank(admin);
         vm.expectRevert("Collateral already added");
