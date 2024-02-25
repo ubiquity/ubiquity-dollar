@@ -487,7 +487,7 @@ library LibUbiquityPool {
                 poolStorage.lastRedeemedBlock[msg.sender].add(
                     poolStorage.redemptionDelayBlocks
                 )
-            ) <= block.number,
+            ) < block.number,
             "Too soon to collect redemption"
         );
 
@@ -533,10 +533,9 @@ library LibUbiquityPool {
             // roundId
             int256 answer, // startedAt
             ,
-            uint256 updatedAt,
+            uint256 updatedAt, // answeredInRound
 
-        ) = // answeredInRound
-            priceFeed.latestRoundData();
+        ) = priceFeed.latestRoundData();
 
         // fetch number of decimals in chainlink feed
         uint256 priceFeedDecimals = priceFeed.decimals();
