@@ -321,6 +321,11 @@ library LibDiamond {
             _facetAddress != address(0),
             "LibDiamondCut: Can't remove function that doesn't exist"
         );
+        // precomputed bytes4(keccak256()) diamondCut function selector 0x1f931c1c to save gas
+        require(
+            _selector != bytes4(0x1f931c1c),
+            "LibDiamondCut: Can't remove diamondCut function"
+        );
         // an immutable function is a function defined directly in a diamond
         require(
             _facetAddress != address(this),
