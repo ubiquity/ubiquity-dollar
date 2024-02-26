@@ -516,7 +516,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
 
         // wait 3 blocks for collecting redemption to become active
-        vm.roll(3);
+        vm.roll(block.number + 3);
 
         // balances before
         assertEq(collateralToken.balanceOf(address(ubiquityPoolFacet)), 100e18);
