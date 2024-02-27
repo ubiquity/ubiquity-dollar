@@ -287,6 +287,23 @@ contract TestDiamond is DiamondTestSetup {
         IMockFacet(address(diamondCutFacet)).functionB();
     }
 
+    function testCutFacetShouldNotRemoveDiamondCutFunction() public {
+        FacetCut[] memory facetCut = new FacetCut[](1);
+        bytes4[] memory selectors = new bytes4[](1);
+        selectors[0] = diamondCutFacet.diamondCut.selector;
+
+        facetCut[0] = FacetCut({
+            facetAddress: address(0),
+            action: FacetCutAction.Remove,
+            functionSelectors: selectors
+        });
+
+        // try to remove diamondCut function
+        vm.prank(owner);
+        vm.expectRevert("LibDiamondCut: Can't remove diamondCut function");
+        diamondCutFacet.diamondCut(facetCut, address(0x0), "");
+    }
+
     function testSelectors_ShouldBeAssociatedWithCorrectFacet() public {
         for (uint256 i; i < facetAddressList.length; i++) {
             if (compareStrings(facetNames[i], "DiamondCutFacet")) {
