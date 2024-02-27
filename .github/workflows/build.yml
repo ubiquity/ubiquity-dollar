@@ -5,16 +5,18 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-22.04
-    permissions:
-      contents: read
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          submodules: "recursive" # Ensures submodules are checked out
+        # with:
+        # submodules: "recursive" # Ensures submodules are checked out
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -25,18 +27,16 @@ jobs:
         run: |
           yarn
           yarn build
+        # env: # Set environment variables for the build
+          # SUPABASE_URL: "https://wfzpewmlyiozupulbuur.supabase.co"
+          # SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmenBld21seWlvenVwdWxidXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU2NzQzMzksImV4cCI6MjAxMTI1MDMzOX0.SKIL3Q0NOBaMehH0ekFspwgcu3afp3Dl9EDzPqs1nKs"
 
       - name: Deploy to Cloudflare
-        if: env.skip != 'true'
         uses: ubiquity/cloudflare-deploy-action@main
         with:
-          cloudflare_api_token: JWo5dPsoyohH5PRu89-RktjCvRN0-ODC6CC9ZBqF # Specifically scoped for public contributors to automatically deploy to our team Cloudflare account
           repository: ${{ github.repository }}
           production_branch: ${{ github.event.repository.default_branch }}
           output_directory: "static"
           current_branch: ${{ github.ref_name }}
           pull_request_number: ${{ github.event.pull_request.number }}
-          commit_sha: ${{ github.sha }}
-        # Add any environment variables you need to pass along here
-        #   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        #   SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          commit_sha: ${{ github.event.pull_request.head.sha }}
