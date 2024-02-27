@@ -321,7 +321,8 @@ library LibDiamond {
             _facetAddress != address(0),
             "LibDiamondCut: Can't remove function that doesn't exist"
         );
-        // precomputed bytes4(keccak256()) diamondCut function selector 0x1f931c1c to save gas
+        // precomputed diamondCut function selector to save gas
+        // bytes4(keccak256(abi.encodeWithSignature("diamondCut((address,uint8,bytes4[])[],address,bytes)"))) == 0x1f931c1c
         require(
             _selector != bytes4(0x1f931c1c),
             "LibDiamondCut: Can't remove diamondCut function"
