@@ -203,6 +203,24 @@ library LibUbiquityPool {
     }
 
     /**
+     * @notice Check if collateral token with given address already exists
+     * @param collateralAddress The collateral token address to check
+     */
+    function collateralExists(
+        address collateralAddress
+    ) internal view returns (bool) {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+        address[] memory collateralAddresses = poolStorage.collateralAddresses;
+
+        for (uint256 i = 0; i < collateralAddresses.length; i++) {
+            if (collateralAddresses[i] == collateralAddress) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @notice Returns collateral information
      * @param collateralAddress Address of the collateral token
      * @return returnData Collateral info
@@ -630,6 +648,11 @@ library LibUbiquityPool {
         address chainLinkPriceFeedAddress,
         uint256 poolCeiling
     ) internal {
+        require(
+            !collateralExists(collateralAddress),
+            "Collateral already added"
+        );
+
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         uint256 collateralIndex = poolStorage.collateralAddresses.length;
