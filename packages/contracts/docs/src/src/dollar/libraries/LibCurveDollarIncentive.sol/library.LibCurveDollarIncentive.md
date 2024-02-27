@@ -1,5 +1,5 @@
 # LibCurveDollarIncentive
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/06f2fdfc8852ea0bb7a36def890d6742ea2373df/src/dollar/libraries/LibCurveDollarIncentive.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/703f5598c859d9fbcfd4651958b57e78ee59538e/src/dollar/libraries/LibCurveDollarIncentive.sol)
 
 Library adds buy incentive and sell penalty for Curve's Dollar-3CRV MetaPool
 
