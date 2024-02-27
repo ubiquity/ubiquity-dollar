@@ -1,5 +1,5 @@
 # LibUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/703f5598c859d9fbcfd4651958b57e78ee59538e/src/dollar/libraries/LibUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4924ab0035521e70625d704791f5b260a4713327/src/dollar/libraries/LibUbiquityPool.sol)
 
 Ubiquity pool library
 
@@ -72,6 +72,21 @@ function allCollaterals() internal view returns (address[] memory);
 |Name|Type|Description|
 |----|----|-----------|
 |`<none>`|`address[]`|All collateral addresses|
+
+
+### collateralExists
+
+Check if collateral token with given address already exists
+
+
+```solidity
+function collateralExists(address collateralAddress) internal view returns (bool);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralAddress`|`address`|The collateral token address to check|
 
 
 ### collateralInformation
