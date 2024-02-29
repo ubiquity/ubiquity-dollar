@@ -174,4 +174,8 @@ The repo has been built as a [yarn workspace](https://yarnpkg.com/features/works
 
 ---
 
+### Audits
+
+2024 - [Sherlock](https://github.com/ubiquity/ubiquity-dollar/packages/contracts/audits/Ubiquity_Audit_Report-Sherlock.pdf)
+
 Sine stabilitate nihil habemus.
