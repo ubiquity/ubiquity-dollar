@@ -4,11 +4,10 @@ pragma solidity 0.8.19;
 import "forge-std/console.sol";
 import {DiamondTestSetup} from "../DiamondTestSetup.sol";
 import {IDollarAmoMinter} from "../../../src/dollar/interfaces/IDollarAmoMinter.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
 import {LibUbiquityPool} from "../../../src/dollar/libraries/LibUbiquityPool.sol";
 import {MockChainLinkFeed} from "../../../src/dollar/mocks/MockChainLinkFeed.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
+import {MockCurveStableSwapMetaNG} from "../../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 
 contract MockDollarAmoMinter is IDollarAmoMinter {
     function collateralDollarBalance() external pure returns (uint256) {
@@ -24,7 +23,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     MockDollarAmoMinter dollarAmoMinter;
     MockERC20 collateralToken;
     MockChainLinkFeed collateralTokenPriceFeed;
-    MockMetaPool curveDollarMetaPool;
+    MockCurveStableSwapMetaNG curveDollarMetaPool;
     MockERC20 curveTriPoolLpToken;
 
     address user = address(1);
@@ -67,7 +66,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         curveTriPoolLpToken = new MockERC20("3CRV", "3CRV", 18);
 
         // init Curve Dollar-3CRV LP metapool
-        curveDollarMetaPool = new MockMetaPool(
+        curveDollarMetaPool = new MockCurveStableSwapMetaNG(
             address(dollarToken),
             address(curveTriPoolLpToken)
         );
@@ -114,15 +113,11 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // add AMO minter
         ubiquityPoolFacet.addAmoMinter(address(dollarAmoMinter));
 
+        // set metapool in manager facet
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
+
         // stop being admin
         vm.stopPrank();
-
-        // set metapool for TWAP oracle
-        vm.prank(owner);
-        twapOracleDollar3PoolFacet.setPool(
-            address(curveDollarMetaPool),
-            address(curveTriPoolLpToken)
-        );
 
         // mint 100 collateral tokens to the user
         collateralToken.mint(address(user), 100e18);
@@ -268,6 +263,37 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(dollarPriceUsd, 1_000_000);
     }
 
+    function testGetRedeemCollateralBalance_ShouldReturnRedeemCollateralBalance()
+        public
+    {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+
+        // user sends 100 collateral tokens and gets 99 Dollars (-1% mint fee)
+        vm.prank(user);
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18 // max collateral to send
+        );
+
+        // user redeems 99 Dollars for 97.02 (accounts for 2% redemption fee) collateral tokens
+        vm.prank(user);
+        ubiquityPoolFacet.redeemDollar(
+            0, // collateral index
+            99e18, // Dollar amount
+            90e18 // min collateral out
+        );
+
+        uint256 redeemCollateralBalance = ubiquityPoolFacet
+            .getRedeemCollateralBalance(user, 0);
+        assertEq(redeemCollateralBalance, 97.02e18);
+    }
+
     //====================
     // Public functions
     //====================
@@ -295,6 +321,27 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             100e18, // Dollar amount
             90e18, // min amount of Dollars to mint
             100e18 // max collateral to send
+        );
+    }
+
+    function testMintDollar_ShouldRevert_IfZeroCollateralAvailable() public {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+        // reset collateral fees to 0
+        vm.prank(admin);
+        ubiquityPoolFacet.setFees(0, 0, 0);
+
+        // user tries to mint with zero collateral
+        vm.prank(user);
+        vm.expectRevert("Cannot mint with zero collateral");
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            0, // Dollar amount
+            100e18, // min amount of Dollars to mint
+            0 // max collateral to send
         );
     }
 
@@ -534,6 +581,39 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(collateralToken.balanceOf(user), 97.02e18);
     }
 
+    function testCollectRedemption_ShouldRevert_IfCollateralDisabled() public {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+
+        vm.prank(user);
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18 // max collateral to send
+        );
+
+        vm.prank(user);
+        ubiquityPoolFacet.redeemDollar(
+            0, // collateral index
+            99e18, // Dollar amount
+            90e18 // min collateral out
+        );
+
+        // wait 3 blocks for collecting redemption to become active
+        vm.roll(3);
+
+        vm.prank(admin);
+        ubiquityPoolFacet.toggleCollateral(0);
+
+        vm.prank(user);
+        vm.expectRevert("Collateral disabled");
+        ubiquityPoolFacet.collectRedemption(0);
+    }
+
     function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsInvalid()
         public
     {
@@ -620,6 +700,44 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.prank(address(dollarAmoMinter));
         vm.expectRevert("Collateral disabled");
         ubiquityPoolFacet.amoMinterBorrow(1);
+    }
+
+    function testAmoMinterBorrow_ShouldRevert_IfThereIsNotEnoughFreeCollateral()
+        public
+    {
+        vm.prank(admin);
+        ubiquityPoolFacet.setPriceThresholds(
+            1000000, // mint threshold
+            1000000 // redeem threshold
+        );
+
+        // user sends 100 collateral tokens and gets 99 Dollars (-1% mint fee)
+        vm.prank(user);
+        ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18 // max collateral to send
+        );
+
+        // user redeems 99 Dollars for 97.02 (accounts for 2% redemption fee) collateral tokens
+        vm.prank(user);
+        ubiquityPoolFacet.redeemDollar(
+            0, // collateral index
+            99e18, // Dollar amount
+            90e18 // min collateral out
+        );
+
+        // get free collateral amount, returns 2.98e18
+        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(
+            0
+        );
+        assertEq(freeCollateralAmount, 2.98e18);
+
+        // Dollar AMO minter tries to borrow more collateral than available after users' redemptions
+        vm.prank(address(dollarAmoMinter));
+        vm.expectRevert("Not enough free collateral");
+        ubiquityPoolFacet.amoMinterBorrow(freeCollateralAmount + 1);
     }
 
     function testAmoMinterBorrow_ShouldBorrowCollateral() public {

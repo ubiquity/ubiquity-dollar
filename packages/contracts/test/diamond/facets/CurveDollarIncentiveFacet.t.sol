@@ -4,10 +4,8 @@ pragma solidity 0.8.19;
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ManagerFacet} from "../../../src/dollar/facets/ManagerFacet.sol";
 import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {CurveDollarIncentiveFacet} from "../../../src/dollar/facets/CurveDollarIncentiveFacet.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
-import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
 import "../DiamondTestSetup.sol";
 import "forge-std/Test.sol";
 

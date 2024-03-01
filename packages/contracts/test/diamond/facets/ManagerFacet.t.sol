@@ -4,11 +4,10 @@ pragma solidity 0.8.19;
 import "../DiamondTestSetup.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ICurveFactory} from "../../../src/dollar/interfaces/ICurveFactory.sol";
-import {IMetaPool} from "../../../src/dollar/interfaces/IMetaPool.sol";
-import {MockTWAPOracleDollar3pool} from "../../../src/dollar/mocks/MockTWAPOracleDollar3pool.sol";
+import {ICurveStableSwapMetaNG} from "../../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {LibAccessControl} from "../../../src/dollar/libraries/LibAccessControl.sol";
+import {MockCurveStableSwapMetaNG} from "../../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import {MockERC20} from "../../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../../src/dollar/mocks/MockMetaPool.sol";
 import {MockCurveFactory} from "../../../src/dollar/mocks/MockCurveFactory.sol";
 
 contract ManagerFacetTest is DiamondTestSetup {
@@ -99,21 +98,6 @@ contract ManagerFacetTest is DiamondTestSetup {
         assertEq(managerFacet.treasuryAddress(), contract1);
     }
 
-    function testSetIncentiveToDollar_ShouldSucceed() public prankAs(admin) {
-        assertEq(
-            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MANAGER_ROLE, admin),
-            true
-        );
-        assertEq(
-            accessControlFacet.hasRole(
-                GOVERNANCE_TOKEN_MANAGER_ROLE,
-                address(diamond)
-            ),
-            true
-        );
-        managerFacet.setIncentiveToDollar(user1, contract1);
-    }
-
     function testSetMinterRoleWhenInitializing_ShouldSucceed()
         public
         prankAs(admin)
@@ -187,7 +171,10 @@ contract ManagerFacetTest is DiamondTestSetup {
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
         address curve3CrvBasePool = address(
-            new MockMetaPool(address(diamond), address(curve3CrvToken))
+            new MockCurveStableSwapMetaNG(
+                address(diamond),
+                address(curve3CrvToken)
+            )
         );
         managerFacet.deployStableSwapPool(
             address(curvePoolFactory),
@@ -197,7 +184,7 @@ contract ManagerFacetTest is DiamondTestSetup {
             50000000
         );
 
-        IMetaPool metapool = IMetaPool(
+        ICurveStableSwapMetaNG metapool = ICurveStableSwapMetaNG(
             managerFacet.stableSwapMetaPoolAddress()
         );
         address stakingV2Address = generateAddress("stakingV2", true, 10 ether);

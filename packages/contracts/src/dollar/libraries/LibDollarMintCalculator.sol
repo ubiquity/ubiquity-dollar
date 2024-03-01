@@ -4,7 +4,7 @@ pragma solidity 0.8.19;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IDollarMintCalculator} from "../../dollar/interfaces/IDollarMintCalculator.sol";
 import "abdk/ABDKMathQuad.sol";
-import "./LibTWAPOracle.sol";
+import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
 import {LibAppStorage, AppStorage} from "./LibAppStorage.sol";
 
 /// @notice Calculates amount of Dollars ready to be minted when TWAP price (i.e. Dollar price) > 1$
@@ -18,7 +18,9 @@ library LibDollarMintCalculator {
      */
     function getDollarsToMint() internal view returns (uint256) {
         AppStorage storage store = LibAppStorage.appStorage();
-        uint256 twapPrice = LibTWAPOracle.consult(store.dollarTokenAddress);
+        uint256 twapPrice = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
         require(twapPrice > 1 ether, "DollarMintCalculator: not > 1");
         bytes16 _one = (uint256(1 ether)).fromUInt();
         return

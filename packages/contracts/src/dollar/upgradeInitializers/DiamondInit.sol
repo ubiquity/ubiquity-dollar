@@ -10,7 +10,6 @@ import "../libraries/LibAccessControl.sol";
 import {UbiquityDollarToken} from "../core/UbiquityDollarToken.sol";
 import {UbiquityGovernanceToken} from "../core/UbiquityGovernanceToken.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
-import {LibTWAPOracle} from "../libraries/LibTWAPOracle.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
 import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
@@ -71,7 +70,7 @@ contract DiamondInit is Modifiers {
         // staking
         LibStaking.StakingData storage ls = LibStaking.stakingStorage();
         ls.stakingDiscountMultiplier = uint256(0.001 ether); // 0.001
-        ls.blockCountInAWeek = 45361;
+        ls.blockCountInAWeek = 49930;
 
         // reentrancy guard
         _initReentrancyGuard();

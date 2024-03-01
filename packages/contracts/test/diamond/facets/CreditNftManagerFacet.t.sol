@@ -6,7 +6,6 @@ import {CreditNftManagerFacet} from "../../../src/dollar/facets/CreditNftManager
 import {CreditRedemptionCalculatorFacet} from "../../../src/dollar/facets/CreditRedemptionCalculatorFacet.sol";
 import {DollarMintCalculatorFacet} from "../../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import "../../../src/dollar/libraries/Constants.sol";
 import {IERC20Ubiquity} from "../../../src/dollar/interfaces/IERC20Ubiquity.sol";
 import {CreditNft} from "../../../src/dollar/core/CreditNft.sol";
@@ -61,15 +60,8 @@ contract CreditNftManagerFacetTest is DiamondTestSetup {
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {
-        uint256 TWAP_ORACLE_STORAGE_POSITION = uint256(
-            keccak256("diamond.standard.twap.oracle.storage")
-        ) - 1;
-        uint256 dollarPricePosition = TWAP_ORACLE_STORAGE_POSITION + 2;
-        vm.store(
-            address(diamond),
-            bytes32(dollarPricePosition),
-            bytes32(_twapPrice)
-        );
+        MockCurveStableSwapMetaNG(managerFacet.stableSwapMetaPoolAddress())
+            .updateMockParams(_twapPrice);
     }
 
     function mockDollarMintCalcFuncs(uint256 _dollarsToMint) public {

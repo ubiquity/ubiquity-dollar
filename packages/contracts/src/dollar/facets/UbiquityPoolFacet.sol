@@ -69,6 +69,18 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
         return LibUbiquityPool.getDollarPriceUsd();
     }
 
+    /// @inheritdoc IUbiquityPool
+    function getRedeemCollateralBalance(
+        address userAddress,
+        uint256 collateralIndex
+    ) external view returns (uint256) {
+        return
+            LibUbiquityPool.getRedeemCollateralBalance(
+                userAddress,
+                collateralIndex
+            );
+    }
+
     //====================
     // Public functions
     //====================

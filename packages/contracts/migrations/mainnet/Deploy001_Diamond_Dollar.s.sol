@@ -4,9 +4,9 @@ pragma solidity 0.8.19;
 import {AggregatorV3Interface} from "@chainlink/interfaces/AggregatorV3Interface.sol";
 import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {Deploy001_Diamond_Dollar as Deploy001_Diamond_Dollar_Development} from "../development/Deploy001_Diamond_Dollar.s.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
+import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
-import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
+import {ICurveStableSwapMetaNG} from "../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 
 /// @notice Migration contract
 contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
@@ -82,31 +82,22 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
         // Curve's Dollar-3CRVLP metapool setup
         //========================================
 
-        // start sending owner transactions
-        vm.startBroadcast(ownerPrivateKey);
+        // start sending admin transactions
+        vm.startBroadcast(adminPrivateKey);
 
         // init 3CRV token
         curveTriPoolLpToken = IERC20(token3CrvAddress);
 
         // init Dollar-3CRVLP Curve metapool
-        curveDollarMetaPool = IMetaPool(curveDollarMetapoolAddress);
-
-        /*
-        TODO: uncomment when we redeploy Curve's Dollar-3CRV metapool with the new Dollar token
-
-        TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet = TWAPOracleDollar3poolFacet(address(diamond));
-
-        // set Curve Dollar-3CRVLP pool in the diamond storage
-        twapOracleDollar3PoolFacet.setPool(
-            address(curveDollarMetaPool),
-            address(curveTriPoolLpToken)
+        curveDollarMetaPool = ICurveStableSwapMetaNG(
+            curveDollarMetapoolAddress
         );
 
-        // fetch latest Dollar price from Curve's Dollar-3CRVLP metapool
-        twapOracleDollar3PoolFacet.update();
-        */
+        // set curve's metapool in manager facet
+        ManagerFacet managerFacet = ManagerFacet(address(diamond));
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
 
-        // stop sending owner transactions
+        // stop sending admin transactions
         vm.stopBroadcast();
     }
 }

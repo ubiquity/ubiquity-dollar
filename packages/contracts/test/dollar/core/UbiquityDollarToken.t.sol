@@ -2,21 +2,10 @@
 pragma solidity ^0.8.19;
 
 import {UbiquityDollarToken} from "../../../src/dollar/core/UbiquityDollarToken.sol";
-import {IIncentive} from "../../../src/dollar/interfaces/IIncentive.sol";
 
 import "../../helpers/LocalTestHelper.sol";
 
-contract Incentive is IIncentive {
-    function incentivize(
-        address sender,
-        address recipient,
-        address operator,
-        uint256 amount
-    ) public {}
-}
-
 contract UbiquityDollarTokenTest is LocalTestHelper {
-    address incentive_addr;
     address dollar_addr;
     address dollar_manager_address;
 
@@ -24,13 +13,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
     address mock_recipient = address(0x222);
     address mock_operator = address(0x333);
 
-    event IncentiveContractUpdate(
-        address indexed _incentivized,
-        address indexed _incentiveContract
-    );
-
     function setUp() public override {
-        incentive_addr = address(new Incentive());
         super.setUp();
         vm.startPrank(admin);
         dollar_addr = address(dollarToken);
@@ -53,59 +36,6 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.prank(admin);
         dollarToken.setManager(newDiamond);
         require(dollarToken.getManager() == newDiamond);
-    }
-
-    function testSetIncentiveContract_ShouldRevert_IfNotAdmin() public {
-        vm.prank(mock_sender);
-        vm.expectRevert("Dollar: must have admin role");
-        dollarToken.setIncentiveContract(mock_sender, incentive_addr);
-
-        vm.prank(admin);
-        vm.expectEmit(true, true, true, true);
-        emit IncentiveContractUpdate(mock_sender, incentive_addr);
-        dollarToken.setIncentiveContract(mock_sender, incentive_addr);
-    }
-
-    function testTransfer_ShouldCallIncentivize_IfValidTransfer() public {
-        address userA = address(0x100001);
-        address userB = address(0x100001);
-        vm.startPrank(admin);
-        dollarToken.mint(userA, 100);
-        dollarToken.mint(userB, 100);
-        dollarToken.mint(mock_sender, 100);
-
-        dollarToken.setIncentiveContract(mock_sender, incentive_addr);
-        dollarToken.setIncentiveContract(mock_recipient, incentive_addr);
-        dollarToken.setIncentiveContract(mock_operator, incentive_addr);
-        dollarToken.setIncentiveContract(address(0), incentive_addr);
-        dollarToken.setIncentiveContract(dollar_addr, incentive_addr);
-        vm.stopPrank();
-
-        vm.prank(mock_sender);
-        vm.expectCall(
-            incentive_addr,
-            abi.encodeWithSelector(
-                Incentive.incentivize.selector,
-                mock_sender,
-                userB,
-                mock_sender,
-                1
-            )
-        );
-        dollarToken.transfer(userB, 1);
-
-        vm.prank(userA);
-        vm.expectCall(
-            incentive_addr,
-            abi.encodeWithSelector(
-                Incentive.incentivize.selector,
-                userA,
-                mock_recipient,
-                userA,
-                1
-            )
-        );
-        dollarToken.transfer(mock_recipient, 1);
     }
 
     function testUUPS_ShouldUpgradeAndCall() external {

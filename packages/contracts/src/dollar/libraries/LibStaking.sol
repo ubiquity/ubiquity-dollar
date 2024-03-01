@@ -3,10 +3,10 @@ pragma solidity 0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./LibTWAPOracle.sol";
 import "./LibChef.sol";
 import "./LibStakingFormulas.sol";
 import {StakingShare} from "../core/StakingShare.sol";
+import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
 
 /// @notice Staking library
 library LibStaking {
@@ -85,14 +85,15 @@ library LibStaking {
      * @param amount Amount of LP token to be removed for Ubiquity Dollar
      */
     function dollarPriceReset(uint256 amount) internal {
-        IMetaPool metaPool = IMetaPool(LibTWAPOracle.twapOracleStorage().pool);
+        ICurveStableSwapMetaNG metaPool = ICurveStableSwapMetaNG(
+            LibAppStorage.appStorage().stableSwapMetaPoolAddress
+        );
         // remove one coin
         uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(
             amount,
             0,
             0
         );
-        LibTWAPOracle.update();
         AppStorage storage store = LibAppStorage.appStorage();
         IERC20 dollar = IERC20(store.dollarTokenAddress);
         uint256 toTransfer = dollar.balanceOf(address(this));
@@ -108,24 +109,22 @@ library LibStaking {
      * @param amount Amount of LP token to be removed for 3CRV tokens
      */
     function crvPriceReset(uint256 amount) internal {
-        LibTWAPOracle.TWAPOracleStorage memory ts = LibTWAPOracle
-            .twapOracleStorage();
-        IMetaPool metaPool = IMetaPool(ts.pool);
+        ICurveStableSwapMetaNG metaPool = ICurveStableSwapMetaNG(
+            LibAppStorage.appStorage().stableSwapMetaPoolAddress
+        );
         // remove one coin
         uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(
             amount,
             1,
             0
         );
-        // update twap
-        LibTWAPOracle.update();
-        uint256 toTransfer = IERC20(ts.token1).balanceOf(address(this));
+        uint256 toTransfer = IERC20(metaPool.coins(1)).balanceOf(address(this));
 
-        IERC20(ts.token1).transfer(
+        IERC20(metaPool.coins(1)).transfer(
             LibAppStorage.appStorage().treasuryAddress,
             toTransfer
         );
-        emit PriceReset(ts.token1, coinWithdrawn, toTransfer);
+        emit PriceReset(metaPool.coins(1), coinWithdrawn, toTransfer);
     }
 
     /**
@@ -179,16 +178,12 @@ library LibStaking {
             1 <= _weeks && _weeks <= 208,
             "Staking: duration must be between 1 and 208 weeks"
         );
-        LibTWAPOracle.update();
 
         // update the accumulated lp rewards per shares
         _updateLpPerShare();
         // transfer lp token to the staking contract
-        IERC20(LibTWAPOracle.twapOracleStorage().pool).safeTransferFrom(
-            msg.sender,
-            address(this),
-            _lpsAmount
-        );
+        IERC20(LibAppStorage.appStorage().stableSwapMetaPoolAddress)
+            .safeTransferFrom(msg.sender, address(this), _lpsAmount);
         StakingData storage ss = stakingStorage();
         // calculate the amount of share based on the amount of lp deposited and the duration
         uint256 _sharesAmount = LibStakingFormulas.durationMultiply(
@@ -247,11 +242,8 @@ library LibStaking {
         stake.lpAmount += pendingLpReward;
         StakingData storage ss = stakingStorage();
         ss.lpRewards -= pendingLpReward;
-        IERC20(LibTWAPOracle.twapOracleStorage().pool).safeTransferFrom(
-            msg.sender,
-            address(this),
-            _amount
-        );
+        IERC20(LibAppStorage.appStorage().stableSwapMetaPoolAddress)
+            .safeTransferFrom(msg.sender, address(this), _amount);
         stake.lpAmount += _amount;
 
         // redeem all shares
@@ -267,8 +259,8 @@ library LibStaking {
         // deposit new shares
         LibChef.deposit(msg.sender, _sharesAmount, _id);
         // calculate end locking period block number
-        // 1 week = 45361 blocks = 2371753*7/366
-        // n = (block + duration * 45361)
+        // 1 week = 49930 blocks
+        // n = (block number + duration * 49930)
         stake.endBlock = block.number + _weeks * ss.blockCountInAWeek;
 
         // should be done after masterchef withdraw
@@ -322,7 +314,9 @@ library LibStaking {
 
         // redeem of the extra LP
         // staking lp balance - StakingShare.totalLP
-        IERC20 metapool = IERC20(LibTWAPOracle.twapOracleStorage().pool);
+        IERC20 metapool = IERC20(
+            LibAppStorage.appStorage().stableSwapMetaPoolAddress
+        );
 
         // add an extra step to be able to decrease rewards if locking end is near
         pendingLpReward = LibStakingFormulas
@@ -380,8 +374,9 @@ library LibStaking {
         StakingShare.Stake memory stake = staking.getStake(_id);
         uint256[2] memory bs = LibChef.getStakingShareInfo(_id);
 
-        uint256 lpBalance = IERC20(LibTWAPOracle.twapOracleStorage().pool)
-            .balanceOf(address(this));
+        uint256 lpBalance = IERC20(
+            LibAppStorage.appStorage().stableSwapMetaPoolAddress
+        ).balanceOf(address(this));
         // the excess LP is the current balance minus the total deposited LP
         if (lpBalance >= (staking.totalLP() + ss.totalLpToMigrate)) {
             uint256 currentLpRewards = lpBalance -
@@ -449,8 +444,9 @@ library LibStaking {
             .stakingShareAddress;
         StakingData storage ss = stakingStorage();
         StakingShare stake = StakingShare(stakingShareAddress);
-        uint256 lpBalance = IERC20(LibTWAPOracle.twapOracleStorage().pool)
-            .balanceOf(address(this));
+        uint256 lpBalance = IERC20(
+            LibAppStorage.appStorage().stableSwapMetaPoolAddress
+        ).balanceOf(address(this));
         // the excess LP is the current balance
         // minus the total deposited LP + LP that needs to be migrated
         uint256 totalShares = LibChef.totalShares();
@@ -513,7 +509,11 @@ library LibStaking {
      */
     function _checkForLiquidity(
         uint256 _id
-    ) internal returns (uint256[2] memory bs, StakingShare.Stake memory stake) {
+    )
+        internal
+        view
+        returns (uint256[2] memory bs, StakingShare.Stake memory stake)
+    {
         address stakingAddress = LibAppStorage.appStorage().stakingShareAddress;
         require(
             IERC1155Ubiquity(stakingAddress).balanceOf(msg.sender, _id) == 1,
@@ -526,7 +526,6 @@ library LibStaking {
             "Staking: Redeem not allowed before staking time"
         );
 
-        LibTWAPOracle.update();
         bs = LibChef.getStakingShareInfo(_id);
     }
 }

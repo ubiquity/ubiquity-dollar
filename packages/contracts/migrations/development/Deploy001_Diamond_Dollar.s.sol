@@ -13,19 +13,18 @@ import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
-import {TWAPOracleDollar3poolFacet} from "../../src/dollar/facets/TWAPOracleDollar3poolFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
+import {ICurveStableSwapMetaNG} from "../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 import {IDiamondCut} from "../../src/dollar/interfaces/IDiamondCut.sol";
 import {IDiamondLoupe} from "../../src/dollar/interfaces/IDiamondLoupe.sol";
 import {IERC173} from "../../src/dollar/interfaces/IERC173.sol";
-import {IMetaPool} from "../../src/dollar/interfaces/IMetaPool.sol";
 import {DEFAULT_ADMIN_ROLE, DOLLAR_TOKEN_MINTER_ROLE, DOLLAR_TOKEN_BURNER_ROLE, PAUSER_ROLE} from "../../src/dollar/libraries/Constants.sol";
 import {LibAccessControl} from "../../src/dollar/libraries/LibAccessControl.sol";
 import {AppStorage, LibAppStorage, Modifiers} from "../../src/dollar/libraries/LibAppStorage.sol";
 import {LibDiamond} from "../../src/dollar/libraries/LibDiamond.sol";
 import {MockChainLinkFeed} from "../../src/dollar/mocks/MockChainLinkFeed.sol";
+import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
-import {MockMetaPool} from "../../src/dollar/mocks/MockMetaPool.sol";
 import {DiamondTestHelper} from "../../test/helpers/DiamondTestHelper.sol";
 
 /**
@@ -117,13 +116,12 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     DiamondLoupeFacet diamondLoupeFacetImplementation;
     ManagerFacet managerFacetImplementation;
     OwnershipFacet ownershipFacetImplementation;
-    TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
 
     // oracle related contracts
     AggregatorV3Interface chainLinkPriceFeedLusd; // chainlink LUSD/USD price feed
     IERC20 curveTriPoolLpToken; // Curve's 3CRV-LP token
-    IMetaPool curveDollarMetaPool; // Curve's Dollar-3CRVLP metapool
+    ICurveStableSwapMetaNG curveDollarMetaPool; // Curve's Dollar-3CRVLP metapool
 
     // selectors for all of the facets
     bytes4[] selectorsOfAccessControlFacet;
@@ -131,7 +129,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfOwnershipFacet;
-    bytes4[] selectorsOfTWAPOracleDollar3poolFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
 
     function run() public virtual {
@@ -166,9 +163,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         selectorsOfOwnershipFacet = getSelectorsFromAbi(
             "/out/OwnershipFacet.sol/OwnershipFacet.json"
         );
-        selectorsOfTWAPOracleDollar3poolFacet = getSelectorsFromAbi(
-            "/out/TWAPOracleDollar3poolFacet.sol/TWAPOracleDollar3poolFacet.json"
-        );
         selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
             "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
@@ -179,7 +173,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         diamondLoupeFacetImplementation = new DiamondLoupeFacet();
         managerFacetImplementation = new ManagerFacet();
         ownershipFacetImplementation = new OwnershipFacet();
-        twapOracleDollar3PoolFacetImplementation = new TWAPOracleDollar3poolFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
 
         // prepare DiamondInit args
@@ -198,7 +191,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         });
 
         // prepare facet cuts
-        FacetCut[] memory cuts = new FacetCut[](7);
+        FacetCut[] memory cuts = new FacetCut[](6);
         cuts[0] = (
             FacetCut({
                 facetAddress: address(accessControlFacetImplementation),
@@ -235,13 +228,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
             })
         );
         cuts[5] = (
-            FacetCut({
-                facetAddress: address(twapOracleDollar3PoolFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfTWAPOracleDollar3poolFacet
-            })
-        );
-        cuts[6] = (
             FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
@@ -438,7 +424,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         );
 
         // deploy mock Curve's Dollar-3CRVLP metapool
-        curveDollarMetaPool = new MockMetaPool(
+        curveDollarMetaPool = new MockCurveStableSwapMetaNG(
             address(dollarToken),
             address(curveTriPoolLpToken)
         );
@@ -450,23 +436,15 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // Curve's Dollar-3CRVLP metapool setup
         //========================================
 
-        // start sending owner transactions
-        vm.startBroadcast(ownerPrivateKey);
+        // start sending admin transactions
+        vm.startBroadcast(adminPrivateKey);
 
-        TWAPOracleDollar3poolFacet twapOracleDollar3PoolFacet = TWAPOracleDollar3poolFacet(
-                address(diamond)
-            );
+        ManagerFacet managerFacet = ManagerFacet(address(diamond));
 
-        // set Curve Dollar-3CRVLP pool in the diamond storage
-        twapOracleDollar3PoolFacet.setPool(
-            address(curveDollarMetaPool),
-            address(curveTriPoolLpToken)
-        );
+        // set curve's metapool in manager facet
+        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
 
-        // fetch latest Dollar price from Curve's Dollar-3CRVLP metapool
-        twapOracleDollar3PoolFacet.update();
-
-        // stop sending owner transactions
+        // stop sending admin transactions
         vm.stopBroadcast();
     }
 }

@@ -6,11 +6,11 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
 import {IDollarAmoMinter} from "../interfaces/IDollarAmoMinter.sol";
 import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {UBIQUITY_POOL_PRICE_PRECISION} from "./Constants.sol";
-import {LibAppStorage} from "./LibAppStorage.sol";
-import {LibTWAPOracle} from "./LibTWAPOracle.sol";
+import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
 
 /**
  * @notice Ubiquity pool library
@@ -320,12 +320,31 @@ library LibUbiquityPool {
         view
         returns (uint256 dollarPriceUsd)
     {
+        // load storage shared across all libraries
+        AppStorage storage store = LibAppStorage.appStorage();
         // get Dollar price from Curve Metapool (18 decimals)
-        uint256 dollarPriceUsdD18 = LibTWAPOracle.getTwapPrice();
+        uint256 dollarPriceUsdD18 = ICurveStableSwapMetaNG(
+            store.stableSwapMetaPoolAddress
+        ).price_oracle(0);
         // convert to 6 decimals
         dollarPriceUsd = dollarPriceUsdD18
             .mul(UBIQUITY_POOL_PRICE_PRECISION)
             .div(1e18);
+    }
+
+    /**
+     * @notice Returns user's balance available for redemption
+     * @param userAddress User address
+     * @param collateralIndex Collateral token index
+     * @return User's balance available for redemption
+     */
+    function getRedeemCollateralBalance(
+        address userAddress,
+        uint256 collateralIndex
+    ) internal view returns (uint256) {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+        return
+            poolStorage.redeemCollateralBalances[userAddress][collateralIndex];
     }
 
     //====================
@@ -358,8 +377,6 @@ library LibUbiquityPool {
             "Minting is paused"
         );
 
-        // update Dollar price from Curve's Dollar Metapool
-        LibTWAPOracle.update();
         // prevent unnecessary mints
         require(
             getDollarPriceUsd() >= poolStorage.mintPriceThreshold,
@@ -371,6 +388,7 @@ library LibUbiquityPool {
 
         // get amount of collateral for minting Dollars
         collateralNeeded = getDollarInCollateral(collateralIndex, dollarAmount);
+        require(collateralNeeded > 0, "Cannot mint with zero collateral");
 
         // subtract the minting fee
         totalDollarMint = dollarAmount
@@ -430,8 +448,6 @@ library LibUbiquityPool {
             "Redeeming is paused"
         );
 
-        // update Dollar price from Curve's Dollar Metapool
-        LibTWAPOracle.update();
         // prevent unnecessary redemptions that could adversely affect the Dollar price
         require(
             getDollarPriceUsd() <= poolStorage.redeemPriceThreshold,
@@ -493,7 +509,11 @@ library LibUbiquityPool {
      */
     function collectRedemption(
         uint256 collateralIndex
-    ) internal returns (uint256 collateralAmount) {
+    )
+        internal
+        collateralEnabled(collateralIndex)
+        returns (uint256 collateralAmount)
+    {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         require(
@@ -607,6 +627,12 @@ library LibUbiquityPool {
                 poolStorage.collateralAddresses[minterCollateralIndex]
             ],
             "Collateral disabled"
+        );
+
+        // ensure the pool is solvent (i.e. AMO minter borrows less than users want to redeem)
+        require(
+            collateralAmount <= freeCollateralBalance(minterCollateralIndex),
+            "Not enough free collateral"
         );
 
         // transfer
