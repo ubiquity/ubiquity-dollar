@@ -1,5 +1,5 @@
 # AccessControlFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4924ab0035521e70625d704791f5b260a4713327/src/dollar/facets/AccessControlFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/acc58000595c3b2a3554b0b50ee47af4357daed7/src/dollar/facets/AccessControlFacet.sol)
 
 **Inherits:**
 [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md), [IAccessControl](/src/dollar/interfaces/IAccessControl.sol/interface.IAccessControl.md), [AccessControlInternal](/src/dollar/access/AccessControlInternal.sol/abstract.AccessControlInternal.md)
@@ -26,6 +26,22 @@ function grantRole(bytes32 role, address account) external onlyRole(_getRoleAdmi
 |----|----|-----------|
 |`role`|`bytes32`|Role to assign|
 |`account`|`address`|Recipient address of role assignment|
+
+
+### setRoleAdmin
+
+Sets admin role for a given role
+
+
+```solidity
+function setRoleAdmin(bytes32 role, bytes32 adminRole) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`role`|`bytes32`|Role to set|
+|`adminRole`|`bytes32`|Admin role to set for a provided role|
 
 
 ### hasRole

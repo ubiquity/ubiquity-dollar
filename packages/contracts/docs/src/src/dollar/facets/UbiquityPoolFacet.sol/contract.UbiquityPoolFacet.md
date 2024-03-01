@@ -1,5 +1,5 @@
 # UbiquityPoolFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4924ab0035521e70625d704791f5b260a4713327/src/dollar/facets/UbiquityPoolFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/acc58000595c3b2a3554b0b50ee47af4357daed7/src/dollar/facets/UbiquityPoolFacet.sol)
 
 **Inherits:**
 [IUbiquityPool](/src/dollar/interfaces/IUbiquityPool.sol/interface.IUbiquityPool.md), [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
@@ -122,6 +122,28 @@ function getDollarPriceUsd() external view returns (uint256 dollarPriceUsd);
 |Name|Type|Description|
 |----|----|-----------|
 |`dollarPriceUsd`|`uint256`|USD price of Ubiquity Dollar|
+
+
+### getRedeemCollateralBalance
+
+Returns user's balance available for redemption
+
+
+```solidity
+function getRedeemCollateralBalance(address userAddress, uint256 collateralIndex) external view returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`userAddress`|`address`|User address|
+|`collateralIndex`|`uint256`|Collateral token index|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|User's balance available for redemption|
 
 
 ### mintDollar

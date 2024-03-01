@@ -1,5 +1,5 @@
 # BondingShare
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4924ab0035521e70625d704791f5b260a4713327/src/dollar/mocks/MockShareV1.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/acc58000595c3b2a3554b0b50ee47af4357daed7/src/dollar/mocks/MockShareV1.sol)
 
 **Inherits:**
 [StakingShare](/src/dollar/core/StakingShare.sol/contract.StakingShare.md)

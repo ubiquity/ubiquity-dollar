@@ -1,22 +1,10 @@
 # UbiquityDollarToken
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4924ab0035521e70625d704791f5b260a4713327/src/dollar/core/UbiquityDollarToken.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/acc58000595c3b2a3554b0b50ee47af4357daed7/src/dollar/core/UbiquityDollarToken.sol)
 
 **Inherits:**
 [ERC20Ubiquity](/src/dollar/core/ERC20Ubiquity.sol/abstract.ERC20Ubiquity.md)
 
 Ubiquity Dollar token contract
-
-
-## State Variables
-### incentiveContract
-Mapping of account and incentive contract address
-
-*Address is 0 if there is no incentive contract for the account*
-
-
-```solidity
-mapping(address => address) public incentiveContract;
-```
 
 
 ## Functions
@@ -60,61 +48,6 @@ Modifier checks that the method is called by a user with the "Dollar burner" rol
 
 ```solidity
 modifier onlyDollarBurner();
-```
-
-### setIncentiveContract
-
-Sets `incentive` contract for `account`
-
-Incentive contracts are applied on Dollar transfers:
-- EOA => contract
-- contract => EOA
-- contract => contract
-- any transfer global incentive
-
-
-```solidity
-function setIncentiveContract(address account, address incentive) external;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`account`|`address`|Account to incentivize|
-|`incentive`|`address`|Incentive contract address|
-
-
-### _checkAndApplyIncentives
-
-Applies incentives on Dollar transfers
-
-
-```solidity
-function _checkAndApplyIncentives(address sender, address recipient, uint256 amount) internal;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`sender`|`address`|Sender address|
-|`recipient`|`address`|Recipient address|
-|`amount`|`uint256`|Dollar token transfer amount|
-
-
-### _transfer
-
-Moves `amount` of tokens from `from` to `to` and applies incentives.
-This internal function is equivalent to `transfer`, and can be used to
-e.g. implement automatic token fees, slashing mechanisms, etc.
-Emits a `Transfer` event.
-Requirements:
-- `from` cannot be the zero address.
-- `to` cannot be the zero address.
-- `from` must have a balance of at least `amount`.
-
-
-```solidity
-function _transfer(address sender, address recipient, uint256 amount) internal override;
 ```
 
 ### burnFrom
@@ -163,13 +96,4 @@ function _authorizeUpgrade(address newImplementation) internal override onlyAdmi
 |----|----|-----------|
 |`newImplementation`|`address`|Address of the new implementation contract|
 
-
-## Events
-### IncentiveContractUpdate
-Emitted on setting an incentive contract for an account
-
-
-```solidity
-event IncentiveContractUpdate(address indexed _incentivized, address indexed _incentiveContract);
-```
 

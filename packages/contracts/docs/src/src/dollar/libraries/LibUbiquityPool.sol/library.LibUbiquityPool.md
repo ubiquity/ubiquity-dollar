@@ -1,5 +1,5 @@
 # LibUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4924ab0035521e70625d704791f5b260a4713327/src/dollar/libraries/LibUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/acc58000595c3b2a3554b0b50ee47af4357daed7/src/dollar/libraries/LibUbiquityPool.sol)
 
 Ubiquity pool library
 
@@ -186,6 +186,28 @@ function getDollarPriceUsd() internal view returns (uint256 dollarPriceUsd);
 |`dollarPriceUsd`|`uint256`|USD price of Ubiquity Dollar|
 
 
+### getRedeemCollateralBalance
+
+Returns user's balance available for redemption
+
+
+```solidity
+function getRedeemCollateralBalance(address userAddress, uint256 collateralIndex) internal view returns (uint256);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`userAddress`|`address`|User address|
+|`collateralIndex`|`uint256`|Collateral token index|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`uint256`|User's balance available for redemption|
+
+
 ### mintDollar
 
 Mints Dollars in exchange for collateral tokens
@@ -262,7 +284,10 @@ Used to collect collateral tokens after redeeming/burning Ubiquity Dollars
 
 
 ```solidity
-function collectRedemption(uint256 collateralIndex) internal returns (uint256 collateralAmount);
+function collectRedemption(uint256 collateralIndex)
+    internal
+    collateralEnabled(collateralIndex)
+    returns (uint256 collateralAmount);
 ```
 **Parameters**
 

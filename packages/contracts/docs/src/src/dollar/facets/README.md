@@ -19,5 +19,4 @@
 - [OwnershipFacet](OwnershipFacet.sol/contract.OwnershipFacet.md)
 - [StakingFacet](StakingFacet.sol/contract.StakingFacet.md)
 - [StakingFormulasFacet](StakingFormulasFacet.sol/contract.StakingFormulasFacet.md)
-- [TWAPOracleDollar3poolFacet](TWAPOracleDollar3poolFacet.sol/contract.TWAPOracleDollar3poolFacet.md)
 - [UbiquityPoolFacet](UbiquityPoolFacet.sol/contract.UbiquityPoolFacet.md)

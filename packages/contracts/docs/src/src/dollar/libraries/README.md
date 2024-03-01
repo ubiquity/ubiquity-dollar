@@ -22,6 +22,5 @@
 - [LibDollarMintExcess](LibDollarMintExcess.sol/library.LibDollarMintExcess.md)
 - [LibStaking](LibStaking.sol/library.LibStaking.md)
 - [LibStakingFormulas](LibStakingFormulas.sol/library.LibStakingFormulas.md)
-- [LibTWAPOracle](LibTWAPOracle.sol/library.LibTWAPOracle.md)
 - [LibUbiquityPool](LibUbiquityPool.sol/library.LibUbiquityPool.md)
 - [UintUtils](UintUtils.sol/library.UintUtils.md)
