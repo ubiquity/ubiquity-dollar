@@ -30,8 +30,11 @@ const Sidebar = () => {
             <li>
               <hr />
             </li>
-            <Item text="Staking" href="/staking" icon="⛏"></Item>
-            <Item text="Credits" href="/credits" icon="💸"></Item>
+            {
+              /* <Item text="Staking" href="/staking" icon="⛏"></Item> */
+              // <Item text="Credits" href="/credits" icon="💸"></Item>
+              // this is commented out because the diamond is not yet deployed
+            }
             <Item text="Markets" href="/markets" icon="🔁"></Item>
           </ul>
 
