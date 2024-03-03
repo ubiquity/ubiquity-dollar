@@ -8,6 +8,9 @@
     "packages/dapp",
     "packages/contracts"
   ],
+  "engines": {
+    "node": ">=20.10.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^17.3.0",
     "@commitlint/config-conventional": "^17.3.0",
@@ -26,7 +29,17 @@
     "prettier": "2.8.8",
     "prettier-plugin-solidity": "1.1.3",
     "rimraf": "3.0.2",
-    "yarn-audit-fix": "^9.3.7"
+    "yarn-audit-fix": "^9.3.7",
+    "@cspell/dict-node": "^4.0.3",
+    "@cspell/dict-software-terms": "^3.3.18",
+    "@cspell/dict-typescript": "^3.1.2",
+    "@types/node": "^20.11.19",
+    "esbuild": "^0.20.1",
+    "eslint-plugin-sonarjs": "^0.24.0",
+    "knip": "^5.0.1",
+    "npm-run-all": "^4.1.5",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "build:all": "yarn workspaces foreach run build",
@@ -34,43 +47,51 @@
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
     "test:all": "yarn workspace @ubiquity/contracts run test:unit",
     "coverage": "yarn workspace @ubiquity/contracts run test:coverage",
-    "format:all": "prettier packages/ --write",
     "clean:all": "yarn workspaces foreach run clean && rimraf node_modules",
     "lint:all": "yarn workspaces foreach run lint",
-    "build:ci:netlify": "yarn build:all",
     "postinstall": "husky install",
-    "lint:cspell:all:watch": "nodemon -e sol,ts,tsx --exec 'yarn lint:cspell:all --fail-fast'",
-    "lint:cspell:all": "cspell $(find . -type f \\( -name '*.sol' -o -name '*.tsx' -o -name '*.ts' \\) ! -path '*/node_modules/*' ! -path '*/lib/*' ! -path '*/types/*')"
+
+    "start": "tsx build/esbuild-server.ts",
+    "build": "tsx build/esbuild-build.ts",
+    "format": "run-s format:lint format:prettier format:cspell",
+    "format:lint": "eslint --fix .",
+    "format:prettier": "prettier --write .",
+    "format:cspell": "cspell **/*",
+    "knip": "knip",
+    "knip-ci": "knip --no-exit-code --reporter json",
+    "prepare": "husky install"
   },
-  "engines": {
-    "node": ">=18"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json}": [
-      "prettier --write",
-      "eslint --fix",
-      "cspell --no-must-find-files"
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
     ],
-    "*.sol": [
-      "prettier --write",
-      "cspell --no-must-find-files"
-    ]
-  },
-  "packageManager": "yarn@3.2.3",
-  "lavamoat": {
-    "allowScripts": {
-      "$root$": true,
-      "bufferutil": true,
-      "utf-8-validate": true,
-      "styled-components": false,
-      "keccak": true,
-      "dtrace-provider": true,
-      "bigint-buffer": true,
-      "secp256k1": true,
-      "classic-level": true,
-      "@ubiquity/monorepo": true,
-      "napi-macros/example": true,
-      "husky": true
+    "lint-staged": {
+      "*.{js,jsx,ts,tsx,json}": [
+        "prettier --write",
+        "eslint --fix",
+        "cspell --no-must-find-files"
+      ],
+      "*.sol": [
+        "prettier --write",
+        "cspell --no-must-find-files"
+      ]
+    },
+    "packageManager": "yarn@3.2.3",
+    "lavamoat": {
+      "allowScripts": {
+        "$root$": true,
+        "bufferutil": true,
+        "utf-8-validate": true,
+        "styled-components": false,
+        "keccak": true,
+        "dtrace-provider": true,
+        "bigint-buffer": true,
+        "secp256k1": true,
+        "classic-level": true,
+        "@ubiquity/monorepo": true,
+        "napi-macros/example": true,
+        "husky": true
+      }
     }
   }
 }

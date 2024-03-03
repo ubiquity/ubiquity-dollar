@@ -1,0 +1,24 @@
+name: Spell Check
+
+on:
+  push:
+
+jobs:
+  spellcheck:
+    name: Check for spelling errors
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.10.0"
+
+      - name: Install cspell
+        run: yarn add cspell
+
+      - name: Run cspell
+        run: yarn format:cspell

@@ -1,0 +1,42 @@
+name: Build & Deploy
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        # with:
+        # submodules: "recursive" # Ensures submodules are checked out
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.10.0
+
+      - name: Build
+        run: |
+          yarn
+          yarn build
+        # env: # Set environment variables for the build
+          # SUPABASE_URL: "https://wfzpewmlyiozupulbuur.supabase.co"
+          # SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmenBld21seWlvenVwdWxidXVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU2NzQzMzksImV4cCI6MjAxMTI1MDMzOX0.SKIL3Q0NOBaMehH0ekFspwgcu3afp3Dl9EDzPqs1nKs"
+
+      - name: Deploy to Cloudflare
+        uses: ubiquity/cloudflare-deploy-action@main
+        with:
+          repository: ${{ github.repository }}
+          production_branch: ${{ github.event.repository.default_branch }}
+          output_directory: "static"
+          current_branch: ${{ github.ref_name }}
+          pull_request_number: ${{ github.event.pull_request.number }}
+          commit_sha: ${{ github.event.pull_request.head.sha }}

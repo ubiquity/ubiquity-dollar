@@ -1,0 +1,53 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "plugins": ["@typescript-eslint", "sonarjs"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:sonarjs/recommended"],
+  "ignorePatterns": ["**/*.js"],
+  "rules": {
+    "prefer-arrow-callback": ["warn", { "allowNamedFunctions": true }],
+    "func-style": ["warn", "declaration", { "allowArrowFunctions": false }],
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-non-null-assertion": "error",
+    "constructor-super": "error",
+    "no-invalid-this": "off",
+    "@typescript-eslint/no-invalid-this": ["error"],
+    "no-restricted-syntax": ["error", "ForInStatement"],
+    "use-isnan": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "args": "after-used",
+        "ignoreRestSiblings": true,
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/no-misused-new": "error",
+    "@typescript-eslint/restrict-plus-operands": "error",
+    "sonarjs/no-all-duplicated-branches": "error",
+    "sonarjs/no-collection-size-mischeck": "error",
+    "sonarjs/no-duplicated-branches": "error",
+    "sonarjs/no-element-overwrite": "error",
+    "sonarjs/no-identical-conditions": "error",
+    "sonarjs/no-identical-expressions": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      { "selector": "interface", "format": ["PascalCase"], "custom": { "regex": "^I[A-Z]", "match": false } },
+      { "selector": "memberLike", "modifiers": ["private"], "format": ["camelCase"], "leadingUnderscore": "require" },
+      { "selector": "typeLike", "format": ["PascalCase"] },
+      { "selector": "typeParameter", "format": ["PascalCase"], "prefix": ["T"] },
+      { "selector": "variable", "format": ["camelCase", "UPPER_CASE"], "leadingUnderscore": "allow", "trailingUnderscore": "allow" },
+      { "selector": "variable", "format": ["camelCase"], "leadingUnderscore": "allow", "trailingUnderscore": "allow" },
+      { "selector": "variable", "modifiers": ["destructured"], "format": null },
+      { "selector": "variable", "types": ["boolean"], "format": ["PascalCase"], "prefix": ["is", "should", "has", "can", "did", "will", "does"] },
+      { "selector": "variableLike", "format": ["camelCase"] },
+      { "selector": ["function", "variable"], "format": ["camelCase"] }
+    ]
+  }
+}
