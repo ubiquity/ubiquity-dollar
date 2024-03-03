@@ -1,17 +1,22 @@
 import { JsonRpcProvider, JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
-import { useAccount, useProvider, useSigner } from "wagmi";
-import { WagmiConfig, createClient } from "wagmi";
-import { mainnet, hardhat, localhost } from "wagmi/chains";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import { config } from "dotenv";
+import getConfig from "next/config";
 import { FC } from "react";
+import { WagmiConfig, createClient, useAccount, useProvider, useSigner } from "wagmi";
+import { hardhat, localhost, mainnet } from "wagmi/chains";
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import { ChildrenShim } from "./children-shim-d";
-
 const IS_DEV = process.env.NODE_ENV == "development";
 const LOCAL_NODE_ADDRESS = "http://localhost:8545";
+config();
+
+const { publicRuntimeConfig } = getConfig();
+
+const { NEXT_PUBLIC_JSON_RPC_URL, NEXT_PUBLIC_WALLET_CONNECT_ID } = publicRuntimeConfig;
 
 export type PossibleProviders = Web3Provider | JsonRpcProvider | null;
 
@@ -42,15 +47,15 @@ const client = createClient(
         chains: defaultChains,
         options: {
           shimDisconnect: true,
-          UNSTABLE_shimOnConnectSelectAccount: true
-        }
+          UNSTABLE_shimOnConnectSelectAccount: true,
+        },
       }),
       new InjectedConnector({
         chains: defaultChains,
         options: {
           name: "Injected Wallet",
-          getProvider: () => typeof window !== 'undefined' ? window.ethereum : undefined,
-          shimDisconnect: true
+          getProvider: () => (typeof window !== "undefined" ? window.ethereum : undefined),
+          shimDisconnect: true,
         },
       }),
       new CoinbaseWalletConnector({
@@ -60,23 +65,23 @@ const client = createClient(
           appLogoUrl: "https://dao.ubq.fi/favicon.ico",
           darkMode: true,
           headlessMode: true,
-          jsonRpcUrl: process.env.NEXT_PUBLIC_JSON_RPC_URL || ""
-        }
+          jsonRpcUrl: NEXT_PUBLIC_JSON_RPC_URL,
+        },
       }),
       new WalletConnectConnector({
         chains: defaultChains,
         options: {
           showQrModal: false,
-          projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID || "",
+          projectId: NEXT_PUBLIC_WALLET_CONNECT_ID,
           metadata: {
             name: "Ubiquity DAO",
             description: "World's first scalable digital dollar",
             url: "https://dao.ubq.fi/",
-            icons: ["https://dao.ubq.fi/favicon.ico"]
+            icons: ["https://dao.ubq.fi/favicon.ico"],
           },
-        }
-      })
-    ]
+        },
+      }),
+    ],
   })
 );
 
