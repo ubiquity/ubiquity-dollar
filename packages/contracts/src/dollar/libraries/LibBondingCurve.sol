@@ -130,7 +130,7 @@ library LibBondingCurve {
         }
 
         IERC20 dollar = IERC20(LibAppStorage.appStorage().dollarTokenAddress);
-        dollar.transferFrom(_recipient, address(this), _collateralDeposited);
+        dollar.transferFrom(msg.sender, address(this), _collateralDeposited);
 
         ss.poolBalance = ss.poolBalance + _collateralDeposited;
         ss.share[_recipient] += tokensReturned;
