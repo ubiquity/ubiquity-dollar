@@ -50,6 +50,7 @@ contract Diamond {
             ds.slot := position
         }
         address facet = ds.selectorToFacetAndPosition[msg.sig].facetAddress;
+        require(msg.data.length >= 4, "Diamond: Selector is too short");
         require(facet != address(0), "Diamond: Function does not exist");
         assembly {
             calldatacopy(0, 0, calldatasize())
