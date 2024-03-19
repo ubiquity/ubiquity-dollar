@@ -41,7 +41,7 @@ function GenerateHead() {
   return (
     <Head>
       <link rel="apple-touch-icon" href="https://dao.ubq.fi/apple-touch-icon.png" />
-      <title>Dashboard | Ubiquity Dollar</title>
+      <title>Dashboard | Ubiquity Dollar pr10</title>
       <link rel="icon" type="image/png" sizes="16x16" href="https://dao.ubq.fi/favicon-16x16.png" />
       <link rel="icon" type="image/png" sizes="32x32" href="https://dao.ubq.fi/favicon-32x32.png" />
       <link rel="icon" type="image/png" sizes="36x36" href="https://dao.ubq.fi/favicon-36x36.png" />
