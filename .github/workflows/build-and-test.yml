@@ -47,5 +47,5 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: packages/dapp/dist
-          path: packages/dapp/dist
+          name: static
+          path: static
