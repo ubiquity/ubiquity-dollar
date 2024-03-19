@@ -3,13 +3,15 @@ name: Build & Test
 on:
   push:
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
     name: Build & Test
     runs-on: ubuntu-22.04
-    permissions:
-      contents: read
 
     steps:
       - name: Checkout repository
@@ -42,23 +44,8 @@ jobs:
       - name: Test All
         run: yarn test:all
 
-      - name: Prepare Deployment Artifact
-        env:
-          EVENT_NAME: ${{github.event_name}}
-          PR_NUMBER: ${{ github.event.number }}
-          SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-        run: |
-          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA"
-          mkdir -p ./pr
-          echo "event_name=$EVENT_NAME,pr_number=$PR_NUMBER,sha=$SHA," > ./pr/pr_number
-          cd ./packages/dapp/dist && zip -r ../../../pr/pull-request.zip ./*
-
-      - uses: actions/upload-artifact@v3
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
         with:
-          name: pr
-          path: pr/
-
-      - name: Run Server
-        run: yarn dev:dapp &
-        env:
-          CI: true
+          name: packages/dapp/dist
+          path: packages/dapp/dist
