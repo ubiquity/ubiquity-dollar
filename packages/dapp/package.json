@@ -8,7 +8,7 @@
     "prebuild": "run-p clean",
     "build": "run-s build:types build:next build:export",
     "build:watch": "run-s build:types build:next",
-    "build:export": "next export --outdir ../../static",
+    "build:export": "next export --outdir dist",
     "start": "next dev",
     "clean": "rimraf next types node_modules",
     "build:next": "next build",
