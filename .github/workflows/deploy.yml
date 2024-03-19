@@ -1,0 +1,25 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  workflow_run:
+    workflows: ["Build & Test"]
+    types:
+      - completed
+
+jobs:
+  deploy-to-cloudflare:
+    name: Automatic Cloudflare Deploy
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Deploy to Cloudflare
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        uses: ubiquity/cloudflare-deploy-action@main
+        with:
+          repository: ${{ github.repository }}
+          production_branch: ${{ github.event.repository.default_branch }}
+          output_directory: "static"
+          current_branch: ${{ github.event.workflow_run.head_branch }}
+          cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          commit_sha: ${{ github.event.workflow_run.head_sha }}
+          workflow_run_id: ${{ github.event.workflow_run.id }}
