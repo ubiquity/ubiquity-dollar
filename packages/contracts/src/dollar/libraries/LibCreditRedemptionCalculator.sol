@@ -39,7 +39,7 @@ library LibCreditRedemptionCalculator {
                     "ubiquity.contracts.credit.redemption.calculator.storage"
                 )
             ) - 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /**
      * @notice Sets the `p` param in the Credit mint calculation formula:

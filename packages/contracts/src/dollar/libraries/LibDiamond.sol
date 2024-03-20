@@ -20,7 +20,8 @@ error InitializationFunctionReverted(
 library LibDiamond {
     /// @notice Storage slot used to store data for this library
     bytes32 constant DIAMOND_STORAGE_POSITION =
-        bytes32(uint256(keccak256("diamond.standard.diamond.storage")) - 1);
+        bytes32(uint256(keccak256("diamond.standard.diamond.storage")) - 1) &
+            ~bytes32(uint256(0xff));
 
     /// @notice Struct used as a mapping of facet to function selector position
     struct FacetAddressAndPosition {

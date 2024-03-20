@@ -17,7 +17,7 @@ library LibAccessControl {
     bytes32 constant ACCESS_CONTROL_STORAGE_SLOT =
         bytes32(
             uint256(keccak256("ubiquity.contracts.access.control.storage")) - 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /// @notice Structure to keep all role members with their admin role
     struct RoleData {

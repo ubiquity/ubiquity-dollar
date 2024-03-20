@@ -53,7 +53,7 @@ library LibDirectGovernanceFarmer {
         bytes32(
             uint256(keccak256("ubiquity.contracts.direct.governance.storage")) -
                 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /// @notice Struct used as a storage for the current library
     struct DirectGovernanceData {

@@ -59,7 +59,7 @@ library LibChef {
     bytes32 constant UBIQUITY_CHEF_STORAGE_POSITION =
         bytes32(
             uint256(keccak256("diamond.standard.ubiquity.chef.storage")) - 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /**
      * @notice Returns struct used as a storage for this library

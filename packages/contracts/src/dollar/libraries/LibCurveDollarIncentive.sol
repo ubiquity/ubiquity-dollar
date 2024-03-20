@@ -20,7 +20,8 @@ library LibCurveDollarIncentive {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant CURVE_DOLLAR_STORAGE_SLOT =
-        bytes32(uint256(keccak256("ubiquity.contracts.curve.storage")) - 1);
+        bytes32(uint256(keccak256("ubiquity.contracts.curve.storage")) - 1) &
+            ~bytes32(uint256(0xff));
 
     /// @notice One point in `bytes16`
     bytes16 constant _one = bytes16(abi.encodePacked(uint256(1 ether)));

@@ -31,7 +31,7 @@ library LibCreditNftManager {
             uint256(
                 keccak256("ubiquity.contracts.credit.nft.manager.storage")
             ) - 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /// @notice Emitted when Credit NFT to Governance conversion rate was updated
     event ExpiredCreditNftConversionRateChanged(

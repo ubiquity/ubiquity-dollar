@@ -22,7 +22,7 @@ library LibCreditClock {
     bytes32 constant CREDIT_CLOCK_STORAGE_POSITION =
         bytes32(
             uint256(keccak256("ubiquity.contracts.credit.clock.storage")) - 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /// @notice Struct used as a storage for the current library
     struct CreditClockData {
