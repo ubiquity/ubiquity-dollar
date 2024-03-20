@@ -1,5 +1,5 @@
 # MockCurveFactory
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/49f9572156af908d8e01f3af3e3983810b447fee/src/dollar/mocks/MockCurveFactory.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c016c6dc0daa0d788a6f4e197f9b9468d8d2c907/src/dollar/mocks/MockCurveFactory.sol)
 
 **Inherits:**
 [ICurveFactory](/src/dollar/interfaces/ICurveFactory.sol/interface.ICurveFactory.md)

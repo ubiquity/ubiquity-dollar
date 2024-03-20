@@ -1,5 +1,5 @@
 # LibCreditClock
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/49f9572156af908d8e01f3af3e3983810b447fee/src/dollar/libraries/LibCreditClock.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c016c6dc0daa0d788a6f4e197f9b9468d8d2c907/src/dollar/libraries/LibCreditClock.sol)
 
 Library for Credit Clock Facet
 
@@ -11,7 +11,7 @@ Storage slot used to store data for this library
 
 ```solidity
 bytes32 constant CREDIT_CLOCK_STORAGE_POSITION =
-    bytes32(uint256(keccak256("ubiquity.contracts.credit.clock.storage")) - 1);
+    bytes32(uint256(keccak256("ubiquity.contracts.credit.clock.storage")) - 1) & ~bytes32(uint256(0xff));
 ```
 
 

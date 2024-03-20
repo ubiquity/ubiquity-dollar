@@ -1,5 +1,5 @@
 # LibCreditRedemptionCalculator
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/49f9572156af908d8e01f3af3e3983810b447fee/src/dollar/libraries/LibCreditRedemptionCalculator.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c016c6dc0daa0d788a6f4e197f9b9468d8d2c907/src/dollar/libraries/LibCreditRedemptionCalculator.sol)
 
 Library for calculating amount of Credits to mint on Dollars burn
 
@@ -11,7 +11,7 @@ Storage slot used to store data for this library
 
 ```solidity
 bytes32 constant CREDIT_REDEMPTION_CALCULATOR_STORAGE_SLOT =
-    bytes32(uint256(keccak256("ubiquity.contracts.credit.redemption.calculator.storage")) - 1);
+    bytes32(uint256(keccak256("ubiquity.contracts.credit.redemption.calculator.storage")) - 1) & ~bytes32(uint256(0xff));
 ```
 
 
