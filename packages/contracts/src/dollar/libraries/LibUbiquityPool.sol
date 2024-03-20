@@ -750,6 +750,11 @@ library LibUbiquityPool {
         address chainLinkPriceFeedAddress,
         uint256 stalenessThreshold
     ) internal {
+        require(
+            collateralExists(collateralAddress),
+            "Collateral does not exist"
+        );
+
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         uint256 collateralIndex = poolStorage.collateralIndex[

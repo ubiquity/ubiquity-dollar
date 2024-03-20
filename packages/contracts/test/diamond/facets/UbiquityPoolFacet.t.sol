@@ -831,6 +831,21 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
+    function testSetCollateralChainLinkPriceFeed_ShouldRevertIfCollateralDoesNotExist()
+        public
+    {
+        vm.prank(admin);
+        vm.expectRevert("Collateral does not exist");
+        address invalidCollateralAddress = address(0);
+        address newPriceFeedAddress = address(1);
+        uint256 newStalenessThreshold = 1 days;
+        ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
+            invalidCollateralAddress,
+            newPriceFeedAddress,
+            newStalenessThreshold
+        );
+    }
+
     function testSetCollateralChainLinkPriceFeed_ShouldSetPriceFeed() public {
         vm.startPrank(admin);
 
