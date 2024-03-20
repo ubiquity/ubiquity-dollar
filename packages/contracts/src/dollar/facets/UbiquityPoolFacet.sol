@@ -91,7 +91,11 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
         uint256 dollarAmount,
         uint256 dollarOutMin,
         uint256 maxCollateralIn
-    ) external returns (uint256 totalDollarMint, uint256 collateralNeeded) {
+    )
+        external
+        nonReentrant
+        returns (uint256 totalDollarMint, uint256 collateralNeeded)
+    {
         return
             LibUbiquityPool.mintDollar(
                 collateralIndex,
@@ -106,7 +110,7 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
         uint256 collateralIndex,
         uint256 dollarAmount,
         uint256 collateralOutMin
-    ) external returns (uint256 collateralOut) {
+    ) external nonReentrant returns (uint256 collateralOut) {
         return
             LibUbiquityPool.redeemDollar(
                 collateralIndex,
@@ -118,7 +122,7 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
     /// @inheritdoc IUbiquityPool
     function collectRedemption(
         uint256 collateralIndex
-    ) external returns (uint256 collateralAmount) {
+    ) external nonReentrant returns (uint256 collateralAmount) {
         return LibUbiquityPool.collectRedemption(collateralIndex);
     }
 
