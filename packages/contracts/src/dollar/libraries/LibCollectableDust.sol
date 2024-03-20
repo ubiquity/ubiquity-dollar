@@ -36,7 +36,7 @@ library LibCollectableDust {
         bytes32(
             uint256(keccak256("ubiquity.contracts.collectable.dust.storage")) -
                 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /**
      * @notice Returns struct used as a storage for this library

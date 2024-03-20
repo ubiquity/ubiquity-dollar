@@ -14,7 +14,8 @@ library LibStaking {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant STAKING_CONTROL_STORAGE_SLOT =
-        bytes32(uint256(keccak256("ubiquity.contracts.staking.storage")) - 1);
+        bytes32(uint256(keccak256("ubiquity.contracts.staking.storage")) - 1) &
+            ~bytes32(uint256(0xff));
 
     /// @notice Emitted when Dollar or 3CRV tokens are removed from Curve MetaPool
     event PriceReset(

@@ -23,7 +23,8 @@ library LibBondingCurve {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant BONDING_CONTROL_STORAGE_SLOT =
-        bytes32(uint256(keccak256("ubiquity.contracts.bonding.storage")) - 1);
+        bytes32(uint256(keccak256("ubiquity.contracts.bonding.storage")) - 1) &
+            ~bytes32(uint256(0xff));
 
     /// @notice Emitted when collateral is deposited
     event Deposit(address indexed user, uint256 amount);

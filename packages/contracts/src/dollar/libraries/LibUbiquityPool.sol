@@ -26,7 +26,7 @@ library LibUbiquityPool {
     bytes32 constant UBIQUITY_POOL_STORAGE_POSITION =
         bytes32(
             uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1
-        );
+        ) & ~bytes32(uint256(0xff));
 
     /// @notice Struct used as a storage for this library
     struct UbiquityPoolStorage {
