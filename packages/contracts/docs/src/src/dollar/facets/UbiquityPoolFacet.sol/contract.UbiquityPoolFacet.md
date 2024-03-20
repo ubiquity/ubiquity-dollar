@@ -1,5 +1,5 @@
 # UbiquityPoolFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/c016c6dc0daa0d788a6f4e197f9b9468d8d2c907/src/dollar/facets/UbiquityPoolFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f1144a89dc33172d74d81f3cd65c216a8359d38b/src/dollar/facets/UbiquityPoolFacet.sol)
 
 **Inherits:**
 [IUbiquityPool](/src/dollar/interfaces/IUbiquityPool.sol/interface.IUbiquityPool.md), [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
@@ -154,6 +154,7 @@ Mints Dollars in exchange for collateral tokens
 ```solidity
 function mintDollar(uint256 collateralIndex, uint256 dollarAmount, uint256 dollarOutMin, uint256 maxCollateralIn)
     external
+    nonReentrant
     returns (uint256 totalDollarMint, uint256 collateralNeeded);
 ```
 **Parameters**
@@ -183,6 +184,7 @@ Burns redeemable Ubiquity Dollars and sends back 1 USD of collateral token for e
 ```solidity
 function redeemDollar(uint256 collateralIndex, uint256 dollarAmount, uint256 collateralOutMin)
     external
+    nonReentrant
     returns (uint256 collateralOut);
 ```
 **Parameters**
@@ -208,7 +210,7 @@ Used to collect collateral tokens after redeeming/burning Ubiquity Dollars
 
 
 ```solidity
-function collectRedemption(uint256 collateralIndex) external returns (uint256 collateralAmount);
+function collectRedemption(uint256 collateralIndex) external nonReentrant returns (uint256 collateralAmount);
 ```
 **Parameters**
 
