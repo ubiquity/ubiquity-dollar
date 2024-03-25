@@ -26,7 +26,7 @@
     "test:slither": "slither . --compile-force-framework foundry",
     "test:echidna": "echidna-test . --config echidna.config.yml",
     "test:coverage": "forge coverage",
-    "start:anvil": "anvil --fork-url https://eth.ubq.fi/v1/mainnet --chain-id 31337",
+    "start:anvil": "anvil --fork-url https://mainnet.gateway.tenderly.co --chain-id 31337",
     "prebuild": "run-p clean",
     "deploy:development": "migrations/development/deploy.sh",
     "deploy:mainnet": "migrations/mainnet/deploy.sh",
