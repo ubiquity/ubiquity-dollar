@@ -270,7 +270,13 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // Collateral token setup
         //==========================
 
+        // start sending owner transactions
+        vm.startBroadcast(ownerPrivateKey);
+
         initCollateral();
+
+        // stop sending owner transactions
+        vm.stopBroadcast();
 
         //=========================
         // UbiquiPoolFacet setup
