@@ -1,5 +1,5 @@
 # IUbiquityDollarToken
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f1144a89dc33172d74d81f3cd65c216a8359d38b/src/dollar/interfaces/IUbiquityDollarToken.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/501e69f1c1c7c1a4291867db587c06a5387026e0/src/dollar/interfaces/IUbiquityDollarToken.sol)
 
 **Inherits:**
 [IERC20Ubiquity](/src/dollar/interfaces/IERC20Ubiquity.sol/interface.IERC20Ubiquity.md)

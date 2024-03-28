@@ -1,8 +1,16 @@
 # MockERC20
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/f1144a89dc33172d74d81f3cd65c216a8359d38b/src/dollar/mocks/MockERC20.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/501e69f1c1c7c1a4291867db587c06a5387026e0/src/dollar/mocks/MockERC20.sol)
 
 **Inherits:**
 ERC20
+
+
+## State Variables
+### __decimals
+
+```solidity
+uint8 internal __decimals;
+```
 
 
 ## Functions
@@ -25,5 +33,12 @@ function mint(address to, uint256 value) public virtual;
 
 ```solidity
 function burn(address from, uint256 value) public virtual;
+```
+
+### decimals
+
+
+```solidity
+function decimals() public view virtual override returns (uint8);
 ```
 
