@@ -103,6 +103,10 @@ COLLATERAL_TOKEN_CHAINLINK_PRICE_FEED_ADDRESS="0x3D7aE7E594f2f2091Ad879831345013
 # - testnet/anvil: deploys metapool from scratch
 CURVE_DOLLAR_METAPOOL_ADDRESS="0x20955CB69Ae1515962177D164dfC9522feef567E"
 
+# Dollar amount in wei minted initially to provide liquidity to the Dollar-3CRV metapool
+# By default set to 25k Dollar tokens
+INITIAL_DOLLAR_MINT_AMOUNT_WEI="25000000000000000000000"
+
 # Owner private key (grants access to updating Diamond facets and setting TWAP oracle address).
 # By default set to the private key from the 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266 address
 # which is the 1st address derived from test mnemonic "test test test test test test test test test test test junk".

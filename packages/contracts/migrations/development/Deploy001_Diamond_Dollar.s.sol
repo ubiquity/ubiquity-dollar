@@ -97,6 +97,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     // env variables
     uint256 adminPrivateKey;
     uint256 ownerPrivateKey;
+    uint256 initialDollarMintAmountWei;
 
     // threshold in seconds when price feed response should be considered stale
     uint256 CHAINLINK_PRICE_FEED_THRESHOLD;
@@ -137,6 +138,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // read env variables
         adminPrivateKey = vm.envUint("ADMIN_PRIVATE_KEY");
         ownerPrivateKey = vm.envUint("OWNER_PRIVATE_KEY");
+        initialDollarMintAmountWei = vm.envUint(
+            "INITIAL_DOLLAR_MINT_AMOUNT_WEI"
+        );
 
         address adminAddress = vm.addr(adminPrivateKey);
         address ownerAddress = vm.addr(ownerPrivateKey);
@@ -340,6 +344,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // set Dollar token address in the Diamond
         ManagerFacet managerFacet = ManagerFacet(address(diamond));
         managerFacet.setDollarTokenAddress(address(dollarToken));
+
+        // mint initial Dollar amount to owner for Curve's Dollar-3CRV metapool
+        dollarToken.mint(ownerAddress, initialDollarMintAmountWei);
 
         // stop sending admin transactions
         vm.stopBroadcast();
