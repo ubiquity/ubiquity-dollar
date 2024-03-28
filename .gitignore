@@ -57,7 +57,6 @@ fixtures/contracts-addresses/*
 # - mainnet logs
 # - sepolia testnet logs
 packages/contracts/broadcast/*/*/*
-!packages/contracts/broadcast/**/run-latest.json
 !packages/contracts/broadcast/**/1/*
 !packages/contracts/broadcast/**/11155111/*
 

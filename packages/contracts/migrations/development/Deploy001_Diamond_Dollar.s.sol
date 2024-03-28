@@ -141,6 +141,12 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         address adminAddress = vm.addr(adminPrivateKey);
         address ownerAddress = vm.addr(ownerPrivateKey);
 
+        //==================
+        // Before scripts
+        //==================
+
+        beforeRun();
+
         //===================
         // Deploy Diamond
         //===================
@@ -266,18 +272,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // stop sending admin transactions
         vm.stopBroadcast();
 
-        //==========================
-        // Collateral token setup
-        //==========================
-
-        // start sending owner transactions
-        vm.startBroadcast(ownerPrivateKey);
-
-        initCollateral();
-
-        // stop sending owner transactions
-        vm.stopBroadcast();
-
         //=========================
         // UbiquiPoolFacet setup
         //=========================
@@ -312,12 +306,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
 
         // stop sending admin transactions
         vm.stopBroadcast();
-
-        //================================================================================
-        // Oracles (Curve Dollar-3CRVLP metapool + LUSD/USD chainlink price feed) setup
-        //================================================================================
-
-        initOracles();
 
         //==================
         // Dollar deploy
@@ -355,19 +343,29 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
 
         // stop sending admin transactions
         vm.stopBroadcast();
+
+        //=================
+        // After scripts
+        //=================
+
+        afterRun();
     }
 
     /**
-     * @notice Initializes collateral token
+     * @notice Runs before the main `run()` method
      *
+     * @dev Initializes collateral token
      * @dev Collateral token is different for mainnet and development:
      * - mainnet: uses LUSD address from `COLLATERAL_TOKEN_ADDRESS` env variables
      * - development: deploys mocked ERC20 token from scratch
      */
-    function initCollateral() public virtual {
+    function beforeRun() public virtual {
         //=================================
         // Collateral ERC20 token deploy
         //=================================
+
+        // start sending owner transactions
+        vm.startBroadcast(ownerPrivateKey);
 
         // deploy ERC20 mock token for ease of debugging
         collateralToken = new MockERC20(
@@ -375,11 +373,15 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
             "CLT_TEST",
             18
         );
+
+        // stop sending owner transactions
+        vm.stopBroadcast();
     }
 
     /**
-     * @notice Initializes oracle related contracts
+     * @notice Runs after the main `run()` method
      *
+     * @dev Initializes oracle related contracts
      * @dev Ubiquity protocol supports 2 oracles:
      * 1. Curve's Dollar-3CRVLP metapool to fetch Dollar prices
      * 2. Chainlink's price feed (used in UbiquityPool) to fetch collateral token prices in USD
@@ -393,7 +395,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
      * - 3CRVLP ERC20 token
      * - Curve's Dollar-3CRVLP metapool contract
      */
-    function initOracles() public virtual {
+    function afterRun() public virtual {
         //========================================
         // Chainlink LUSD/USD price feed deploy
         //========================================

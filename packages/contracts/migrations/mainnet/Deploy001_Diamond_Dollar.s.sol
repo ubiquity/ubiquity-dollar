@@ -17,13 +17,14 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
     }
 
     /**
-     * @notice Initializes collateral token
+     * @notice Runs before the main `run()` method
      *
+     * @dev Initializes collateral token
      * @dev Collateral token is different for mainnet and development:
      * - mainnet: uses LUSD address from `COLLATERAL_TOKEN_ADDRESS` env variables
      * - development: deploys mocked ERC20 token from scratch
      */
-    function initCollateral() public override {
+    function beforeRun() public override {
         // read env variables
         address collateralTokenAddress = vm.envAddress(
             "COLLATERAL_TOKEN_ADDRESS"
@@ -38,9 +39,11 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
     }
 
     /**
-     * @notice Initializes oracle related contracts
+     * @notice Runs after the main `run()` method
      *
-     * @dev We override `initOracles()` from `Deploy001_Diamond_Dollar_Development` because
+     * @dev Initializes oracle related contracts
+     *
+     * @dev We override `afterRun()` from `Deploy001_Diamond_Dollar_Development` because
      * we need to use already deployed contracts while `Deploy001_Diamond_Dollar_Development`
      * deploys all oracle related contracts from scratch for ease of debugging.
      *
@@ -55,9 +58,8 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
      * Mainnet (i.e. production) migration uses already deployed contracts for:
      * - Chainlink price feed contract
      * - 3CRVLP ERC20 token
-     * - Curve's Dollar-3CRVLP metapool contract
      */
-    function initOracles() public override {
+    function afterRun() public override {
         // read env variables
         address chainlinkPriceFeedAddress = vm.envAddress(
             "COLLATERAL_TOKEN_CHAINLINK_PRICE_FEED_ADDRESS"
