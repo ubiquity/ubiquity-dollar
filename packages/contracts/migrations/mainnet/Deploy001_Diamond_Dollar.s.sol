@@ -6,6 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/interfaces/IERC20.sol";
 import {Deploy001_Diamond_Dollar as Deploy001_Diamond_Dollar_Development} from "../development/Deploy001_Diamond_Dollar.s.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
+import {ICurveStableSwapFactoryNG} from "../../src/dollar/interfaces/ICurveStableSwapFactoryNG.sol";
 import {ICurveStableSwapMetaNG} from "../../src/dollar/interfaces/ICurveStableSwapMetaNG.sol";
 
 /// @notice Migration contract
@@ -64,10 +65,6 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
         address chainlinkPriceFeedAddress = vm.envAddress(
             "COLLATERAL_TOKEN_CHAINLINK_PRICE_FEED_ADDRESS"
         );
-        address token3CrvAddress = vm.envAddress("TOKEN_3CRV_ADDRESS");
-        address curveDollarMetapoolAddress = vm.envAddress(
-            "CURVE_DOLLAR_METAPOOL_ADDRESS"
-        );
 
         //=======================================
         // Chainlink LUSD/USD price feed setup
@@ -101,6 +98,34 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
         // stop sending admin transactions
         vm.stopBroadcast();
 
+        //=========================================
+        // Curve's Dollar-3CRVLP metapool deploy
+        //=========================================
+
+        // start sending owner transactions
+        vm.startBroadcast(ownerPrivateKey);
+
+        // deploy Curve Dollar-3CRV metapool
+        address curveDollarMetaPoolAddress = ICurveStableSwapFactoryNG(
+            0x6A8cbed756804B16E05E741eDaBd5cB544AE21bf
+        ).deploy_metapool(
+                0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7, // Curve 3pool (DAI-USDT-USDC) address
+                "Dollar/3CRV", // pool name
+                "Dollar3CRV", // LP token symbol
+                address(dollarToken), // main token
+                100, // amplification coefficient
+                40000000, // trade fee, 0.04%
+                20000000000, // off-peg fee multiplier
+                2597, // moving average time value, 2597 = 1800 seconds
+                0, // metapool implementation index
+                0, // asset type
+                "", // method id for oracle asset type (not applicable for Dollar)
+                address(0) // token oracle address (not applicable for Dollar)
+            );
+
+        // stop sending owner transactions
+        vm.stopBroadcast();
+
         //========================================
         // Curve's Dollar-3CRVLP metapool setup
         //========================================
@@ -108,17 +133,9 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
         // start sending admin transactions
         vm.startBroadcast(adminPrivateKey);
 
-        // init 3CRV token
-        curveTriPoolLpToken = IERC20(token3CrvAddress);
-
-        // init Dollar-3CRVLP Curve metapool
-        curveDollarMetaPool = ICurveStableSwapMetaNG(
-            curveDollarMetapoolAddress
-        );
-
         // set curve's metapool in manager facet
         ManagerFacet managerFacet = ManagerFacet(address(diamond));
-        managerFacet.setStableSwapMetaPoolAddress(address(curveDollarMetaPool));
+        managerFacet.setStableSwapMetaPoolAddress(curveDollarMetaPoolAddress);
 
         // stop sending admin transactions
         vm.stopBroadcast();
