@@ -97,7 +97,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     // env variables
     uint256 adminPrivateKey;
     uint256 ownerPrivateKey;
-    address collateralTokenAddress;
 
     // threshold in seconds when price feed response should be considered stale
     uint256 CHAINLINK_PRICE_FEED_THRESHOLD;
@@ -123,6 +122,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     IERC20 curveTriPoolLpToken; // Curve's 3CRV-LP token
     ICurveStableSwapMetaNG curveDollarMetaPool; // Curve's Dollar-3CRVLP metapool
 
+    // collateral ERC20 token used in UbiquityPoolFacet
+    IERC20 collateralToken;
+
     // selectors for all of the facets
     bytes4[] selectorsOfAccessControlFacet;
     bytes4[] selectorsOfDiamondCutFacet;
@@ -135,7 +137,6 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // read env variables
         adminPrivateKey = vm.envUint("ADMIN_PRIVATE_KEY");
         ownerPrivateKey = vm.envUint("OWNER_PRIVATE_KEY");
-        collateralTokenAddress = vm.envAddress("COLLATERAL_TOKEN_ADDRESS");
 
         address adminAddress = vm.addr(adminPrivateKey);
         address ownerAddress = vm.addr(ownerPrivateKey);
@@ -265,6 +266,18 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
         // stop sending admin transactions
         vm.stopBroadcast();
 
+        //==========================
+        // Collateral token setup
+        //==========================
+
+        // start sending owner transactions
+        vm.startBroadcast(ownerPrivateKey);
+
+        initCollateral();
+
+        // stop sending owner transactions
+        vm.stopBroadcast();
+
         //=========================
         // UbiquiPoolFacet setup
         //=========================
@@ -278,8 +291,9 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
 
         // add collateral token (users can mint/redeem Dollars in exchange for collateral)
         uint256 poolCeiling = 10_000e18; // max 10_000 of collateral tokens is allowed
+
         ubiquityPoolFacet.addCollateralToken(
-            collateralTokenAddress, // collateral token address
+            address(collateralToken), // collateral token address
             address(chainLinkPriceFeedLusd), // chainlink LUSD/USD price feed address
             poolCeiling // pool ceiling amount
         );
@@ -344,6 +358,26 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
     }
 
     /**
+     * @notice Initializes collateral token
+     *
+     * @dev Collateral token is different for mainnet and development:
+     * - mainnet: uses LUSD address from `COLLATERAL_TOKEN_ADDRESS` env variables
+     * - development: deploys mocked ERC20 token from scratch
+     */
+    function initCollateral() public virtual {
+        //=================================
+        // Collateral ERC20 token deploy
+        //=================================
+
+        // deploy ERC20 mock token for ease of debugging
+        collateralToken = new MockERC20(
+            "Collateral test token",
+            "CLT_TEST",
+            18
+        );
+    }
+
+    /**
      * @notice Initializes oracle related contracts
      *
      * @dev Ubiquity protocol supports 2 oracles:
@@ -398,7 +432,7 @@ contract Deploy001_Diamond_Dollar is Script, DiamondTestHelper {
 
         // set price feed address and threshold in seconds
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
-            collateralTokenAddress, // collateral token address
+            address(collateralToken), // collateral token address
             address(chainLinkPriceFeedLusd), // price feed address
             CHAINLINK_PRICE_FEED_THRESHOLD // price feed staleness threshold in seconds
         );

@@ -17,6 +17,27 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
     }
 
     /**
+     * @notice Initializes collateral token
+     *
+     * @dev Collateral token is different for mainnet and development:
+     * - mainnet: uses LUSD address from `COLLATERAL_TOKEN_ADDRESS` env variables
+     * - development: deploys mocked ERC20 token from scratch
+     */
+    function initCollateral() public override {
+        // read env variables
+        address collateralTokenAddress = vm.envAddress(
+            "COLLATERAL_TOKEN_ADDRESS"
+        );
+
+        //=================================
+        // Collateral ERC20 token setup
+        //=================================
+
+        // use existing LUSD contract for mainnet
+        collateralToken = IERC20(collateralTokenAddress);
+    }
+
+    /**
      * @notice Initializes oracle related contracts
      *
      * @dev We override `initOracles()` from `Deploy001_Diamond_Dollar_Development` because
@@ -67,7 +88,7 @@ contract Deploy001_Diamond_Dollar is Deploy001_Diamond_Dollar_Development {
 
         // set price feed
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
-            collateralTokenAddress, // collateral token address
+            address(collateralToken), // collateral token address
             address(chainLinkPriceFeedLusd), // price feed address
             CHAINLINK_PRICE_FEED_THRESHOLD // price feed staleness threshold in seconds
         );
