@@ -1,7 +1,6 @@
 import { Provider } from "@ethersproject/providers";
 import { Contract, ethers } from "ethers";
 
-import latestDeployment from "@ubiquity/contracts/broadcast/05_StakingShare.s.sol/31337/run-latest.json";
 import useWeb3 from "../use-web-3";
 import { sushiSwapPoolAddress, dollar3poolMarketAddress, _3crvTokenAddress } from "@/lib/utils";
 
@@ -120,6 +119,16 @@ const useProtocolContracts = async () => {
   };
   let diamondAddress = "";
 
+  // NOTICE: temporary fix until https://github.com/ubiquity/ubiquity-dollar/issues/833 is ready
+  const latestDeployment = {
+    transactions: [
+      {
+        contractAddress: 'test',
+        contractName: 'test',
+        transactionType: 'test',
+      }
+    ],
+  };
   // for all of the deployment transactions
   latestDeployment.transactions.map((tx) => {
     if (tx.transactionType === "CREATE") {
