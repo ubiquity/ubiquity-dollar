@@ -4,7 +4,7 @@
 Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (UUSD) is a collateralized stablecoin.
 - The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts-detailed).
 - The v1 archived source code is available [here](https://github.com/ubiquity/uad-contracts).
-- [Dune Analytics Dashboard](https://dune.com/ubiquity_dao/ubiquity-protocol)
+- Community created [Dune Analytics Dashboard](https://dune.com/ubiquity_dao/ubiquity-protocol)
 
 ## Contributing
 - We welcome everybody to participate in improving the codebase and provide feedback on opened issues.
