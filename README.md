@@ -1,12 +1,11 @@
 [![Build & Test](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/ubiquity/ubiquity-dollar/actions/workflows/build-and-test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ubiquity/ubiquity-dollar/badge.svg?branch=development&service=github)](https://coveralls.io/github/ubiquity/ubiquity-dollar?branch=development)
 # Ubiquity Dollar
-Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (uAD) is a collateralized stablecoin.
+Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquity Dollar (UUSD) is a collateralized stablecoin.
 - The deployed smart contracts can be found in the [docs](https://dao.ubq.fi/smart-contracts).
 - The source code for those are archived [here](https://github.com/ubiquity/uad-contracts).
 - [Dune Analytics Dashboard](https://dune.com/ubiquity_dao/ubiquity-protocol)
 
-![Ubiquity Dollar Logo](https://user-images.githubusercontent.com/4975670/153777249-527395c0-0c52-4731-8b0a-77b7885fafda.png)
 ## Contributing
 - We welcome everybody to participate in improving the codebase and provide feedback on opened issues.
 - We offer financial incentives for solved issues.
