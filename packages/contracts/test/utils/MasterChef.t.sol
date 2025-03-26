@@ -38,7 +38,7 @@ contract MasterChefTest is Test {
 
         // owner creates a new pool
         vm.prank(owner);
-        masterChef.add(
+        masterChef.createStakingPool(
             100, // allocation points
             stakeToken,
             true
@@ -60,7 +60,7 @@ contract MasterChefTest is Test {
         console2.log("Balance MasterChef (STK):", stakeToken.balanceOf(address(masterChef)));
 
         vm.prank(user);
-        masterChef.deposit(
+        masterChef.stake(
             0, // pool id
             100 ether // STK tokens staked
         );
@@ -77,7 +77,7 @@ contract MasterChefTest is Test {
         stakeToken.approve(address(masterChef), type(uint256).max);
 
         vm.prank(user);
-        masterChef.deposit(
+        masterChef.stake(
             0, // pool id
             100 ether // STK tokens staked
         );
@@ -91,7 +91,7 @@ contract MasterChefTest is Test {
         console2.log("Balance MasterChef (UBQ):", governanceToken.balanceOf(address(masterChef)));
 
         vm.prank(user);
-        masterChef.withdraw(0, 100 ether);
+        masterChef.unstake(0, 100 ether);
 
         console2.log("===after===");
         console2.log("Balance user (STK):", uint256(stakeToken.balanceOf(user)));

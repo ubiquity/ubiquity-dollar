@@ -7,144 +7,142 @@ import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20Ubiquity} from "../../deprecated/interfaces/IERC20Ubiquity.sol";
-import {IMigratorChef} from "../interfaces/IMigratorChef.sol";
 
-// MasterChef is the master of Sushi. He can make Sushi and he is a fair guy.
-//
-// Note that it's ownable and the owner wields tremendous power. The ownership
-// will be transferred to a governance smart contract once SUSHI is sufficiently
-// distributed and the community can show to govern itself.
-//
-// Have fun reading it. Hopefully it's bug-free. God bless.
+// TODO: check for missing methods in the LibStaking and LibChef
+
+/**
+ * @notice Ubiquity staking contract
+ * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol 
+ */
 contract MasterChef is Ownable {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
-    // Info of each user.
+    using SafeERC20 for IERC20Ubiquity;
+    
+    /**
+     * @notice Info of each user
+     * @dev Reward debt explanation:
+     *
+     * We do some fancy math here. Basically, any point in time, the amount of Governance tokens
+     * entitled to a user but is pending to be distributed is:
+     *
+     * pending reward = (user.amount * pool.accumulatedGovernancePerShare) - user.rewardDebt
+     *
+     * Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
+     *    1. The pool's `accumulatedGovernancePerShare` (and `lastRewardBlock`) gets updated.
+     *    2. User receives the pending reward sent to his/her address.
+     *    3. User's `amount` gets updated.
+     *    4. User's `rewardDebt` gets updated.
+     */
     struct UserInfo {
         uint256 amount; // How many LP tokens the user has provided.
         uint256 rewardDebt; // Reward debt. See explanation below.
-        //
-        // We do some fancy math here. Basically, any point in time, the amount of SUSHIs
-        // entitled to a user but is pending to be distributed is:
-        //
-        //   pending reward = (user.amount * pool.accSushiPerShare) - user.rewardDebt
-        //
-        // Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
-        //   1. The pool's `accSushiPerShare` (and `lastRewardBlock`) gets updated.
-        //   2. User receives the pending reward sent to his/her address.
-        //   3. User's `amount` gets updated.
-        //   4. User's `rewardDebt` gets updated.
     }
-    // Info of each pool.
+
+    /// @notice Info of each pool
     struct PoolInfo {
         IERC20 lpToken; // Address of LP token contract.
-        uint256 allocPoint; // How many allocation points assigned to this pool. SUSHIs to distribute per block.
-        uint256 lastRewardBlock; // Last block number that SUSHIs distribution occurs.
-        uint256 accSushiPerShare; // Accumulated SUSHIs per share, times 1e12. See below.
+        uint256 allocationPoints; // How many allocation points assigned to this pool. Governance tokens to distribute per block.
+        uint256 lastRewardBlock; // Last block number that Governance tokens distribution occurs.
+        uint256 accumulatedGovernancePerShare; // Accumulated Governance tokens per share, times 1e12. See below.
     }
-    // The SUSHI TOKEN!
-    IERC20Ubiquity public sushi;
-    // Dev address.
-    address public devaddr;
-    // Block number when bonus SUSHI period ends.
+
+    /// @notice Reward token
+    IERC20Ubiquity public rewardToken;
+    /// @notice Treasury address
+    address public treasury;
+    /// @notice Block number when bonus Governance token period ends
     uint256 public bonusEndBlock;
-    // SUSHI tokens created per block.
-    uint256 public sushiPerBlock;
-    // Bonus muliplier for early sushi makers.
+    /// @notice Governance tokens created per block
+    uint256 public governancePerBlock;
+    /// @notice Bonus muliplier for early Governance token makers
     uint256 public constant BONUS_MULTIPLIER = 10;
-    // The migrator contract. It has a lot of power. Can only be set through governance (owner).
-    IMigratorChef public migrator;
-    // Info of each pool.
+    /// @notice Info of each pool
     PoolInfo[] public poolInfo;
-    // Info of each user that stakes LP tokens.
-    mapping(uint256 => mapping(address => UserInfo)) public userInfo;
-    // Total allocation poitns. Must be the sum of all allocation points in all pools.
-    uint256 public totalAllocPoint = 0;
-    // The block number when SUSHI mining starts.
+    /// @notice Info of each user that stakes LP tokens
+    mapping(uint256 poolId => mapping(address user => UserInfo)) public userInfo;
+    /// @notice Total allocation poitns. Must be the sum of all allocation points in all pools.
+    uint256 public totalAllocationPoints = 0;
+    /// @notice The block number when Governance token mining starts
     uint256 public startBlock;
-    event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
-    event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
-    event EmergencyWithdraw(
+
+    //===============
+    // Events
+    //===============
+
+    /// @notice Emitted on emergency unstake
+    event EmergencyUnstake(
         address indexed user,
-        uint256 indexed pid,
+        uint256 indexed poolId,
         uint256 amount
     );
+    /// @notice Emitted on staking LP tokens
+    event Stake(address indexed user, uint256 indexed poolId, uint256 amount);
+    /// @notice Emitted on unstaking LP tokens
+    event Unstake(address indexed user, uint256 indexed poolId, uint256 amount);
 
+    /**
+     * @notice Contract constructor
+     * @param _rewardToken Reward token 
+     * @param _treasury Treasury address
+     * @param _governancePerBlock Governance tokens created per block
+     * @param _startBlock Block number when Governance token mining starts
+     * @param _bonusEndBlock Block number when bonus Governance token period ends
+     */
     constructor(
-        IERC20Ubiquity _sushi,
-        address _devaddr,
-        uint256 _sushiPerBlock,
+        IERC20Ubiquity _rewardToken,
+        address _treasury,
+        uint256 _governancePerBlock,
         uint256 _startBlock,
         uint256 _bonusEndBlock
     ) {
-        sushi = _sushi;
-        devaddr = _devaddr;
-        sushiPerBlock = _sushiPerBlock;
+        rewardToken = _rewardToken;
+        treasury = _treasury;
+        governancePerBlock = _governancePerBlock;
         bonusEndBlock = _bonusEndBlock;
         startBlock = _startBlock;
     }
 
-    function poolLength() external view returns (uint256) {
-        return poolInfo.length;
-    }
+    //==============
+    // Views
+    //==============
 
-    // Add a new lp to the pool. Can only be called by the owner.
-    // XXX DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(
-        uint256 _allocPoint,
-        IERC20 _lpToken,
-        bool _withUpdate
-    ) public onlyOwner {
-        if (_withUpdate) {
-            massUpdatePools();
+    /**
+     * @notice View function to see pending Governance tokens on frontend
+     * @param _poolId Pool id
+     * @param _user User address
+     * @return Staking rewards amount
+     */
+    function getPendingStakingRewards(uint256 _poolId, address _user)
+        external
+        view
+        returns (uint256)
+    {
+        PoolInfo storage pool = poolInfo[_poolId];
+        UserInfo storage user = userInfo[_poolId][_user];
+        uint256 accSushiPerShare = pool.accumulatedGovernancePerShare;
+        uint256 lpSupply = pool.lpToken.balanceOf(address(this));
+        if (block.number > pool.lastRewardBlock && lpSupply != 0) {
+            uint256 multiplier =
+                getStakingMultiplier(pool.lastRewardBlock, block.number);
+            uint256 sushiReward =
+                multiplier.mul(governancePerBlock).mul(pool.allocationPoints).div(
+                    totalAllocationPoints
+                );
+            accSushiPerShare = accSushiPerShare.add(
+                sushiReward.mul(1e12).div(lpSupply)
+            );
         }
-        uint256 lastRewardBlock =
-            block.number > startBlock ? block.number : startBlock;
-        totalAllocPoint = totalAllocPoint.add(_allocPoint);
-        poolInfo.push(
-            PoolInfo({
-                lpToken: _lpToken,
-                allocPoint: _allocPoint,
-                lastRewardBlock: lastRewardBlock,
-                accSushiPerShare: 0
-            })
-        );
+        return user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
     }
 
-    // Update the given pool's SUSHI allocation point. Can only be called by the owner.
-    function set(
-        uint256 _pid,
-        uint256 _allocPoint,
-        bool _withUpdate
-    ) public onlyOwner {
-        if (_withUpdate) {
-            massUpdatePools();
-        }
-        totalAllocPoint = totalAllocPoint.sub(poolInfo[_pid].allocPoint).add(
-            _allocPoint
-        );
-        poolInfo[_pid].allocPoint = _allocPoint;
-    }
-
-    // Set the migrator contract. Can only be called by the owner.
-    function setMigrator(IMigratorChef _migrator) public onlyOwner {
-        migrator = _migrator;
-    }
-
-    // Migrate lp token to another lp contract. Can be called by anyone. We trust that migrator contract is good.
-    function migrate(uint256 _pid) public {
-        require(address(migrator) != address(0), "migrate: no migrator");
-        PoolInfo storage pool = poolInfo[_pid];
-        IERC20 lpToken = pool.lpToken;
-        uint256 bal = lpToken.balanceOf(address(this));
-        lpToken.safeApprove(address(migrator), bal);
-        IERC20 newLpToken = migrator.migrate(lpToken);
-        require(bal == newLpToken.balanceOf(address(this)), "migrate: bad");
-        pool.lpToken = newLpToken;
-    }
-
-    // Return reward multiplier over the given _from to _to block.
-    function getMultiplier(uint256 _from, uint256 _to)
+    /**
+     * @notice Returns reward multiplier over the given `_from` to `_to` blocks
+     * @param _from From block number
+     * @param _to To block number
+     * @return Reward multiplier
+     */
+    function getStakingMultiplier(uint256 _from, uint256 _to)
         public
         view
         returns (uint256)
@@ -161,41 +159,94 @@ contract MasterChef is Ownable {
         }
     }
 
-    // View function to see pending SUSHIs on frontend.
-    function pendingSushi(uint256 _pid, address _user)
-        external
-        view
-        returns (uint256)
-    {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][_user];
-        uint256 accSushiPerShare = pool.accSushiPerShare;
-        uint256 lpSupply = pool.lpToken.balanceOf(address(this));
-        if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-            uint256 multiplier =
-                getMultiplier(pool.lastRewardBlock, block.number);
-            uint256 sushiReward =
-                multiplier.mul(sushiPerBlock).mul(pool.allocPoint).div(
-                    totalAllocPoint
-                );
-            accSushiPerShare = accSushiPerShare.add(
-                sushiReward.mul(1e12).div(lpSupply)
-            );
-        }
-        return user.amount.mul(accSushiPerShare).div(1e12).sub(user.rewardDebt);
+    /**
+     * @notice Returns total staking pools length
+     * @return Pools length
+     */
+    function getStakingPoolsLength() external view returns (uint256) {
+        return poolInfo.length;
     }
 
-    // Update reward vairables for all pools. Be careful of gas spending!
-    function massUpdatePools() public {
+    //==================
+    // Public methods
+    //==================
+
+    /**
+     * @notice Unstakes without caring about rewards, EMERGENCY ONLY
+     * @param _poolId Pool id
+     */
+    function emergencyUnstake(uint256 _poolId) public {
+        PoolInfo storage pool = poolInfo[_poolId];
+        UserInfo storage user = userInfo[_poolId][msg.sender];
+        pool.lpToken.safeTransfer(address(msg.sender), user.amount);
+        emit EmergencyUnstake(msg.sender, _poolId, user.amount);
+        user.amount = 0;
+        user.rewardDebt = 0;
+    }
+
+    /**
+     * @notice Updates reward variables for all pools
+     */
+    function massUpdateStakingPools() public {
         uint256 length = poolInfo.length;
         for (uint256 pid = 0; pid < length; ++pid) {
-            updatePool(pid);
+            updateStakingPool(pid);
         }
     }
 
-    // Update reward variables of the given pool to be up-to-date.
-    function updatePool(uint256 _pid) public {
-        PoolInfo storage pool = poolInfo[_pid];
+    /**
+     * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
+     * @param _poolId Pool id 
+     * @param _amount Amount of LP tokens to stake
+     */
+    function stake(uint256 _poolId, uint256 _amount) public {
+        PoolInfo storage pool = poolInfo[_poolId];
+        UserInfo storage user = userInfo[_poolId][msg.sender];
+        updateStakingPool(_poolId);
+        if (user.amount > 0) {
+            uint256 pending =
+                user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12).sub(
+                    user.rewardDebt
+                );
+            safeGovernanceTransfer(msg.sender, pending);
+        }
+        pool.lpToken.safeTransferFrom(
+            address(msg.sender),
+            address(this),
+            _amount
+        );
+        user.amount = user.amount.add(_amount);
+        user.rewardDebt = user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12);
+        emit Stake(msg.sender, _poolId, _amount);
+    }
+
+    /**
+     * @notice Unstakes LP tokens from the staking contract
+     * @param _poolId Pool id
+     * @param _amount Amount of LP tokens to unstake
+     */
+    function unstake(uint256 _poolId, uint256 _amount) public {
+        PoolInfo storage pool = poolInfo[_poolId];
+        UserInfo storage user = userInfo[_poolId][msg.sender];
+        require(user.amount >= _amount, "withdraw: not good");
+        updateStakingPool(_poolId);
+        uint256 pending =
+            user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12).sub(
+                user.rewardDebt
+            );
+        safeGovernanceTransfer(msg.sender, pending);
+        user.amount = user.amount.sub(_amount);
+        user.rewardDebt = user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12);
+        pool.lpToken.safeTransfer(address(msg.sender), _amount);
+        emit Unstake(msg.sender, _poolId, _amount);
+    }
+
+    /**
+     * @notice Updates reward variables of the given pool to be up-to-date
+     * @param _poolId Pool id
+     */
+    function updateStakingPool(uint256 _poolId) public {
+        PoolInfo storage pool = poolInfo[_poolId];
         if (block.number <= pool.lastRewardBlock) {
             return;
         }
@@ -204,81 +255,93 @@ contract MasterChef is Ownable {
             pool.lastRewardBlock = block.number;
             return;
         }
-        uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
+        uint256 multiplier = getStakingMultiplier(pool.lastRewardBlock, block.number);
         uint256 sushiReward =
-            multiplier.mul(sushiPerBlock).mul(pool.allocPoint).div(
-                totalAllocPoint
+            multiplier.mul(governancePerBlock).mul(pool.allocationPoints).div(
+                totalAllocationPoints
             );
-        sushi.mint(devaddr, sushiReward.div(10));
-        sushi.mint(address(this), sushiReward);
-        pool.accSushiPerShare = pool.accSushiPerShare.add(
+        rewardToken.mint(treasury, sushiReward.div(10));
+        rewardToken.mint(address(this), sushiReward);
+        pool.accumulatedGovernancePerShare = pool.accumulatedGovernancePerShare.add(
             sushiReward.mul(1e12).div(lpSupply)
         );
         pool.lastRewardBlock = block.number;
     }
 
-    // Deposit LP tokens to MasterChef for SUSHI allocation.
-    function deposit(uint256 _pid, uint256 _amount) public {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][msg.sender];
-        updatePool(_pid);
-        if (user.amount > 0) {
-            uint256 pending =
-                user.amount.mul(pool.accSushiPerShare).div(1e12).sub(
-                    user.rewardDebt
-                );
-            safeSushiTransfer(msg.sender, pending);
+    //======================
+    // Restricted methods
+    //======================
+
+    /**
+     * @notice Adds a new staking pool
+     * @dev DO NOT add the same LP token more than once. Rewards will be messed up if you do.
+     * @param _allocationPoints Allocation points
+     * @param _lpToken LP token
+     * @param _withUpdate Whether to trigger update on all staking pools
+     */
+    function createStakingPool(
+        uint256 _allocationPoints,
+        IERC20 _lpToken,
+        bool _withUpdate
+    ) public onlyOwner {
+        if (_withUpdate) {
+            massUpdateStakingPools();
         }
-        pool.lpToken.safeTransferFrom(
-            address(msg.sender),
-            address(this),
-            _amount
+        uint256 lastRewardBlock =
+            block.number > startBlock ? block.number : startBlock;
+        totalAllocationPoints = totalAllocationPoints.add(_allocationPoints);
+        poolInfo.push(
+            PoolInfo({
+                lpToken: _lpToken,
+                allocationPoints: _allocationPoints,
+                lastRewardBlock: lastRewardBlock,
+                accumulatedGovernancePerShare: 0
+            })
         );
-        user.amount = user.amount.add(_amount);
-        user.rewardDebt = user.amount.mul(pool.accSushiPerShare).div(1e12);
-        emit Deposit(msg.sender, _pid, _amount);
     }
 
-    // Withdraw LP tokens from MasterChef.
-    function withdraw(uint256 _pid, uint256 _amount) public {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][msg.sender];
-        require(user.amount >= _amount, "withdraw: not good");
-        updatePool(_pid);
-        uint256 pending =
-            user.amount.mul(pool.accSushiPerShare).div(1e12).sub(
-                user.rewardDebt
-            );
-        safeSushiTransfer(msg.sender, pending);
-        user.amount = user.amount.sub(_amount);
-        user.rewardDebt = user.amount.mul(pool.accSushiPerShare).div(1e12);
-        pool.lpToken.safeTransfer(address(msg.sender), _amount);
-        emit Withdraw(msg.sender, _pid, _amount);
+    /**
+     * @notice Updates the given pool's Governance token allocation points
+     * @param _poolId Pool id
+     * @param _allocationPoints New allocation points
+     * @param _withUpdate Whether to trigger update on all staking pools
+     */
+    function updateStakingPool(
+        uint256 _poolId,
+        uint256 _allocationPoints,
+        bool _withUpdate
+    ) public onlyOwner {
+        if (_withUpdate) {
+            massUpdateStakingPools();
+        }
+        totalAllocationPoints = totalAllocationPoints.sub(poolInfo[_poolId].allocationPoints).add(
+            _allocationPoints
+        );
+        poolInfo[_poolId].allocationPoints = _allocationPoints;
     }
 
-    // Withdraw without caring about rewards. EMERGENCY ONLY.
-    function emergencyWithdraw(uint256 _pid) public {
-        PoolInfo storage pool = poolInfo[_pid];
-        UserInfo storage user = userInfo[_pid][msg.sender];
-        pool.lpToken.safeTransfer(address(msg.sender), user.amount);
-        emit EmergencyWithdraw(msg.sender, _pid, user.amount);
-        user.amount = 0;
-        user.rewardDebt = 0;
-    }
+    //====================
+    // Internal helpers
+    //====================
 
-    // Safe sushi transfer function, just in case if rounding error causes pool to not have enough SUSHIs.
-    function safeSushiTransfer(address _to, uint256 _amount) internal {
-        uint256 sushiBal = sushi.balanceOf(address(this));
+    /**
+     * @notice Safe Governance token transfer function
+     * @param _to Receiver address
+     * @param _amount Amount to transfer
+     */
+    function safeGovernanceTransfer(address _to, uint256 _amount) internal {
+        uint256 sushiBal = rewardToken.balanceOf(address(this));
         if (_amount > sushiBal) {
-            sushi.transfer(_to, sushiBal);
+            rewardToken.safeTransfer(_to, sushiBal);
         } else {
-            sushi.transfer(_to, _amount);
+            rewardToken.safeTransfer(_to, _amount);
         }
     }
 
+    // TODO: remove, read from `Diamond.AppStorage`
     // Update dev address by the previous dev.
     function dev(address _devaddr) public {
-        require(msg.sender == devaddr, "dev: wut?");
-        devaddr = _devaddr;
+        require(msg.sender == treasury, "dev: wut?");
+        treasury = _devaddr;
     }
 }
