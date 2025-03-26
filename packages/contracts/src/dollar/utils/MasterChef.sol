@@ -6,7 +6,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
+import {IERC20Ubiquity} from "../../deprecated/interfaces/IERC20Ubiquity.sol";
 import {IMigratorChef} from "../interfaces/IMigratorChef.sol";
 
 // MasterChef is the master of Sushi. He can make Sushi and he is a fair guy.
