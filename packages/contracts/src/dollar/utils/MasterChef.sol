@@ -40,6 +40,7 @@ contract MasterChef is Ownable {
     /// @notice Info of each pool
     struct PoolInfo {
         IERC20 lpToken; // Address of LP token contract.
+        uint256 amount; // Total amount of LP tokens staked in a pool.
         uint256 allocationPoints; // How many allocation points assigned to this pool. Governance tokens to distribute per block.
         uint256 lastRewardBlock; // Last block number that Governance tokens distribution occurs.
         uint256 accumulatedGovernancePerShare; // Accumulated Governance tokens per share, times 1e12. See below.
@@ -57,11 +58,13 @@ contract MasterChef is Ownable {
     uint256 public governancePerBlock;
     /// @notice Sets Governance token divider param for treasury. Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury.
     uint256 public governanceTreasuryDivider;
+    /// @notice Total available reward amount
+    uint256 public rewardAmount;
     /// @notice Info of each pool
     PoolInfo[] public poolInfo;
     /// @notice Info of each user that stakes LP tokens
     mapping(uint256 poolId => mapping(address user => UserInfo)) public userInfo;
-    /// @notice Total allocation poitns. Must be the sum of all allocation points in all pools.
+    /// @notice Total allocation points. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocationPoints = 0;
     /// @notice The block number when Governance token mining starts
     uint256 public startBlock;
@@ -70,12 +73,6 @@ contract MasterChef is Ownable {
     // Events
     //===============
 
-    /// @notice Emitted on emergency unstake
-    event EmergencyUnstake(
-        address indexed user,
-        uint256 indexed poolId,
-        uint256 amount
-    );
     /// @notice Emitted on staking LP tokens
     event Stake(address indexed user, uint256 indexed poolId, uint256 amount);
     /// @notice Emitted on unstaking LP tokens
@@ -127,7 +124,7 @@ contract MasterChef is Ownable {
         PoolInfo storage pool = poolInfo[_poolId];
         UserInfo storage user = userInfo[_poolId][_user];
         uint256 accSushiPerShare = pool.accumulatedGovernancePerShare;
-        uint256 lpSupply = pool.lpToken.balanceOf(address(this));
+        uint256 lpSupply = pool.amount;
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
             uint256 multiplier =
                 getStakingMultiplier(pool.lastRewardBlock, block.number);
@@ -178,19 +175,6 @@ contract MasterChef is Ownable {
     //==================
 
     /**
-     * @notice Unstakes without caring about rewards, EMERGENCY ONLY
-     * @param _poolId Pool id
-     */
-    function emergencyUnstake(uint256 _poolId) public {
-        PoolInfo storage pool = poolInfo[_poolId];
-        UserInfo storage user = userInfo[_poolId][msg.sender];
-        pool.lpToken.safeTransfer(address(msg.sender), user.amount);
-        emit EmergencyUnstake(msg.sender, _poolId, user.amount);
-        user.amount = 0;
-        user.rewardDebt = 0;
-    }
-
-    /**
      * @notice Updates reward variables for all pools
      */
     function massUpdateStakingPools() public {
@@ -223,6 +207,7 @@ contract MasterChef is Ownable {
         );
         user.amount = user.amount.add(_amount);
         user.rewardDebt = user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12);
+        pool.amount = pool.amount.add(_amount);
         emit Stake(msg.sender, _poolId, _amount);
     }
 
@@ -243,6 +228,7 @@ contract MasterChef is Ownable {
         safeGovernanceTransfer(msg.sender, pending);
         user.amount = user.amount.sub(_amount);
         user.rewardDebt = user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12);
+        pool.amount = pool.amount.sub(_amount);
         pool.lpToken.safeTransfer(address(msg.sender), _amount);
         emit Unstake(msg.sender, _poolId, _amount);
     }
@@ -256,7 +242,7 @@ contract MasterChef is Ownable {
         if (block.number <= pool.lastRewardBlock) {
             return;
         }
-        uint256 lpSupply = pool.lpToken.balanceOf(address(this));
+        uint256 lpSupply = pool.amount;
         if (lpSupply == 0) {
             pool.lastRewardBlock = block.number;
             return;
@@ -272,6 +258,7 @@ contract MasterChef is Ownable {
             sushiReward.mul(1e12).div(lpSupply)
         );
         pool.lastRewardBlock = block.number;
+        rewardAmount = rewardAmount.add(sushiReward);
     }
 
     //======================
@@ -280,7 +267,6 @@ contract MasterChef is Ownable {
 
     /**
      * @notice Adds a new staking pool
-     * @dev DO NOT add the same LP token more than once. Rewards will be messed up if you do.
      * @param _allocationPoints Allocation points
      * @param _lpToken LP token
      * @param _withUpdate Whether to trigger update on all staking pools
@@ -299,6 +285,7 @@ contract MasterChef is Ownable {
         poolInfo.push(
             PoolInfo({
                 lpToken: _lpToken,
+                amount: 0,
                 allocationPoints: _allocationPoints,
                 lastRewardBlock: lastRewardBlock,
                 accumulatedGovernancePerShare: 0
@@ -364,12 +351,9 @@ contract MasterChef is Ownable {
      * @param _amount Amount to transfer
      */
     function safeGovernanceTransfer(address _to, uint256 _amount) internal {
-        uint256 sushiBal = rewardToken.balanceOf(address(this));
-        if (_amount > sushiBal) {
-            rewardToken.safeTransfer(_to, sushiBal);
-        } else {
-            rewardToken.safeTransfer(_to, _amount);
-        }
+        uint256 actualAmount = _amount > rewardAmount ? rewardAmount : _amount;
+        rewardAmount = rewardAmount.sub(actualAmount);
+        rewardToken.safeTransfer(_to, actualAmount);
     }
 
     // TODO: remove, read from `Diamond.AppStorage`
