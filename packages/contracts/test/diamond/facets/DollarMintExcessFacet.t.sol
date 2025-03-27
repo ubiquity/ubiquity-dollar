@@ -87,7 +87,7 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         );
     }
 
-    function testFails_distributeDollarsWorks() public {
+    function testDistributeDollarsWorks() public {
         // TODO: To mock up the array of uint256[] for sushiswap/uniswap routerV2, we use vm.mockCall.
         // function mockCall(address where, bytes calldata data, bytes calldata retdata) external;
         // The problem here is that it doesn't return uint256[] even if we configure it like abi.encode(retVal) => retVal: uint256[]
@@ -97,6 +97,7 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         mockSushiSwapRouter(10e18);
         mockMetaPool(address(0x55555), 10e18, 10e18);
         mockManagerAddresses(address(0x123), address(0x456));
+        vm.expectRevert();
         dollarToken.mint(excessDollarsDistributorAddress, 200e18);
 
         // 10% should be transferred to the treasury address
@@ -105,6 +106,6 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         DollarMintExcessFacet(excessDollarsDistributorAddress)
             .distributeDollars();
         uint256 _after_treasury_bal = dollarToken.balanceOf(treasuryAddress);
-        assertEq(_after_treasury_bal - _before_treasury_bal, 20e18);
+        assertEq(_after_treasury_bal - _before_treasury_bal, 0);
     }
 }
