@@ -8,8 +8,6 @@ import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20Ubiquity} from "../../deprecated/interfaces/IERC20Ubiquity.sol";
 
-// TODO: check for missing methods in the LibStaking and LibChef
-
 /**
  * @notice Ubiquity staking contract
  * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol 
@@ -53,10 +51,12 @@ contract MasterChef is Ownable {
     address public treasury;
     /// @notice Block number when bonus Governance token period ends
     uint256 public bonusEndBlock;
+    /// @notice Bonus multiplier for early Governance token makers
+    uint256 public governanceBonusMultiplier;
     /// @notice Governance tokens created per block
     uint256 public governancePerBlock;
-    /// @notice Bonus muliplier for early Governance token makers
-    uint256 public constant BONUS_MULTIPLIER = 10;
+    /// @notice Sets Governance token divider param for treasury. Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury.
+    uint256 public governanceTreasuryDivider;
     /// @notice Info of each pool
     PoolInfo[] public poolInfo;
     /// @notice Info of each user that stakes LP tokens
@@ -86,6 +86,8 @@ contract MasterChef is Ownable {
      * @param _rewardToken Reward token 
      * @param _treasury Treasury address
      * @param _governancePerBlock Governance tokens created per block
+     * @param _governanceTreasuryDivider Governance token divider param for treasury. Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury.
+     * @param _governanceBonusMultiplier Bonus multiplier for early Governance token makers
      * @param _startBlock Block number when Governance token mining starts
      * @param _bonusEndBlock Block number when bonus Governance token period ends
      */
@@ -93,12 +95,16 @@ contract MasterChef is Ownable {
         IERC20Ubiquity _rewardToken,
         address _treasury,
         uint256 _governancePerBlock,
+        uint256 _governanceTreasuryDivider,
+        uint256 _governanceBonusMultiplier,
         uint256 _startBlock,
         uint256 _bonusEndBlock
     ) {
         rewardToken = _rewardToken;
         treasury = _treasury;
         governancePerBlock = _governancePerBlock;
+        governanceTreasuryDivider = _governanceTreasuryDivider;
+        governanceBonusMultiplier = _governanceBonusMultiplier;
         bonusEndBlock = _bonusEndBlock;
         startBlock = _startBlock;
     }
@@ -148,12 +154,12 @@ contract MasterChef is Ownable {
         returns (uint256)
     {
         if (_to <= bonusEndBlock) {
-            return _to.sub(_from).mul(BONUS_MULTIPLIER);
+            return _to.sub(_from).mul(governanceBonusMultiplier);
         } else if (_from >= bonusEndBlock) {
             return _to.sub(_from);
         } else {
             return
-                bonusEndBlock.sub(_from).mul(BONUS_MULTIPLIER).add(
+                bonusEndBlock.sub(_from).mul(governanceBonusMultiplier).add(
                     _to.sub(bonusEndBlock)
                 );
         }
@@ -260,7 +266,7 @@ contract MasterChef is Ownable {
             multiplier.mul(governancePerBlock).mul(pool.allocationPoints).div(
                 totalAllocationPoints
             );
-        rewardToken.mint(treasury, sushiReward.div(10));
+        rewardToken.mint(treasury, sushiReward.div(governanceTreasuryDivider));
         rewardToken.mint(address(this), sushiReward);
         pool.accumulatedGovernancePerShare = pool.accumulatedGovernancePerShare.add(
             sushiReward.mul(1e12).div(lpSupply)
@@ -298,6 +304,34 @@ contract MasterChef is Ownable {
                 accumulatedGovernancePerShare: 0
             })
         );
+    }
+
+    /**
+     * @notice Sets bonus multiplier for early Governance token makers
+     * @param _governanceBonusMultiplier Governance bonus multiplier
+     */
+    function setGovernanceBonusMultiplier(uint256 _governanceBonusMultiplier) public onlyOwner {
+        governanceBonusMultiplier = _governanceBonusMultiplier;
+    }
+
+    /**
+     * @notice Sets Governance tokens reward per block
+     * @param _governancePerBlock Amount of Governance tokens minted each block
+     */
+    function setGovernancePerBlock(uint256 _governancePerBlock) public onlyOwner {
+        governancePerBlock = _governancePerBlock;
+    }
+
+    /**
+     * @notice Sets Governance token divider param for treasury. The bigger `_governanceTreasuryDivider` the less extra
+     * Governance tokens will be minted for the treasury.
+     * @notice Example: if `_governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @param _governanceTreasuryDivider Governance divider param value
+     */
+    function setGovernanceTreasuryDivider(
+        uint256 _governanceTreasuryDivider
+    ) public onlyOwner {
+        governanceTreasuryDivider = _governanceTreasuryDivider;
     }
 
     /**

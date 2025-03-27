@@ -30,6 +30,8 @@ contract MasterChefTest is Test {
             IERC20Ubiquity(governanceToken),
             treasury,
             100 ether, // tokens per block
+            10, // reward token treasury divider
+            10, // reward token bonus multiplier
             block.timestamp, // start from block
             0 // bonus end block
         );
