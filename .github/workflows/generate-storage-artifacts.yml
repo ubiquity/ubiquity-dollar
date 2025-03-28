@@ -13,9 +13,7 @@ jobs:
           submodules: recursive
 
       - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
+        uses: foundry-rs/foundry-toolchain@v1
 
       - name: Set contracts matrix for all matching contracts
         id: set-matrix
@@ -53,9 +51,7 @@ jobs:
           submodules: recursive
 
       - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
+        uses: foundry-rs/foundry-toolchain@v1
 
       - name: Check For Core Contracts Storage Changes
         uses: Rubilmax/foundry-storage-check@main
