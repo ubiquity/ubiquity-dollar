@@ -10,8 +10,6 @@ import "../libraries/LibAccessControl.sol";
 import {UbiquityDollarToken} from "../core/UbiquityDollarToken.sol";
 import {UbiquityGovernanceToken} from "../core/UbiquityGovernanceToken.sol";
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
-import {LibStaking} from "../libraries/LibStaking.sol";
-import {LibChef} from "../libraries/LibChef.sol";
 import {LibCreditNftManager} from "../libraries/LibCreditNftManager.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
@@ -30,10 +28,6 @@ contract DiamondInit is Modifiers {
     /// @notice Struct used for diamond initialization
     struct Args {
         address admin;
-        address[] tos;
-        uint256[] amounts;
-        uint256[] stakingShareIDs;
-        uint256 governancePerBlock;
         uint256 creditNftLengthBlocks;
     }
 
@@ -67,21 +61,10 @@ contract DiamondInit is Modifiers {
 
         appStore.paused = false;
         appStore.treasuryAddress = _args.admin;
-        // staking
-        LibStaking.StakingData storage ls = LibStaking.stakingStorage();
-        ls.stakingDiscountMultiplier = uint256(0.001 ether); // 0.001
-        ls.blockCountInAWeek = 49930;
 
         // reentrancy guard
         _initReentrancyGuard();
 
-        // ubiquity chef before doing that we should have a metapool address
-        LibChef.initialize(
-            _args.tos,
-            _args.amounts,
-            _args.stakingShareIDs,
-            _args.governancePerBlock
-        );
         // creditNftManager
         /// @param _creditNftLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)

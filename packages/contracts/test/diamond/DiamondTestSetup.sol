@@ -9,7 +9,6 @@ import {IDiamondLoupe} from "../../src/dollar/interfaces/IDiamondLoupe.sol";
 import {IERC173} from "../../src/dollar/interfaces/IERC173.sol";
 import {AccessControlFacet} from "../../src/dollar/facets/AccessControlFacet.sol";
 import {BondingCurveFacet} from "../../src/dollar/facets/BondingCurveFacet.sol";
-import {ChefFacet} from "../../src/dollar/facets/ChefFacet.sol";
 import {CollectableDustFacet} from "../../src/dollar/facets/CollectableDustFacet.sol";
 import {CreditNftManagerFacet} from "../../src/dollar/facets/CreditNftManagerFacet.sol";
 import {CreditNftRedemptionCalculatorFacet} from "../../src/dollar/facets/CreditNftRedemptionCalculatorFacet.sol";
@@ -20,18 +19,15 @@ import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../../src/dollar/facets/DiamondLoupeFacet.sol";
 import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalculatorFacet.sol";
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
-import {DirectGovernanceFarmerFacet} from "../../src/dollar/facets/DirectGovernanceFarmerFacet.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
-import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
-import {StakingFormulasFacet} from "../../src/dollar/facets/StakingFormulasFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
 import {DiamondInit} from "../../src/dollar/upgradeInitializers/DiamondInit.sol";
 import {DiamondTestHelper} from "../helpers/DiamondTestHelper.sol";
 import {UUPSTestHelper} from "../helpers/UUPSTestHelper.sol";
-import {CREDIT_NFT_MANAGER_ROLE, CREDIT_TOKEN_BURNER_ROLE, CREDIT_TOKEN_MINTER_ROLE, CURVE_DOLLAR_MANAGER_ROLE, DOLLAR_TOKEN_BURNER_ROLE, DOLLAR_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE, GOVERNANCE_TOKEN_MANAGER_ROLE, GOVERNANCE_TOKEN_MINTER_ROLE, STAKING_SHARE_MINTER_ROLE} from "../../src/dollar/libraries/Constants.sol";
+import {CREDIT_NFT_MANAGER_ROLE, CREDIT_TOKEN_BURNER_ROLE, CREDIT_TOKEN_MINTER_ROLE, CURVE_DOLLAR_MANAGER_ROLE, DOLLAR_TOKEN_BURNER_ROLE, DOLLAR_TOKEN_MINTER_ROLE, GOVERNANCE_TOKEN_BURNER_ROLE, GOVERNANCE_TOKEN_MANAGER_ROLE, GOVERNANCE_TOKEN_MINTER_ROLE} from "../../src/dollar/libraries/Constants.sol";
 
 /**
  * @notice Deploys diamond contract with all of the facets
@@ -44,7 +40,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     // diamond facets (which point to the core diamond and should be used across the tests)
     AccessControlFacet accessControlFacet;
     BondingCurveFacet bondingCurveFacet;
-    ChefFacet chefFacet;
     CollectableDustFacet collectableDustFacet;
     CreditClockFacet creditClockFacet;
     CreditNftManagerFacet creditNftManagerFacet;
@@ -55,17 +50,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     DiamondLoupeFacet diamondLoupeFacet;
     DollarMintCalculatorFacet dollarMintCalculatorFacet;
     DollarMintExcessFacet dollarMintExcessFacet;
-    DirectGovernanceFarmerFacet directGovernanceFarmerFacet;
     ManagerFacet managerFacet;
     OwnershipFacet ownershipFacet;
-    StakingFacet stakingFacet;
-    StakingFormulasFacet stakingFormulasFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
     AccessControlFacet accessControlFacetImplementation;
     BondingCurveFacet bondingCurveFacetImplementation;
-    ChefFacet chefFacetImplementation;
     CollectableDustFacet collectableDustFacetImplementation;
     CreditClockFacet creditClockFacetImplementation;
     CreditNftManagerFacet creditNftManagerFacetImplementation;
@@ -76,11 +67,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     DiamondLoupeFacet diamondLoupeFacetImplementation;
     DollarMintCalculatorFacet dollarMintCalculatorFacetImplementation;
     DollarMintExcessFacet dollarMintExcessFacetImplementation;
-    DirectGovernanceFarmerFacet directGovernanceFarmerFacetImplementation;
     ManagerFacet managerFacetImplementation;
     OwnershipFacet ownershipFacetImplementation;
-    StakingFacet stakingFacetImplementation;
-    StakingFormulasFacet stakingFormulasFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
 
     // facet names with addresses
@@ -97,7 +85,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     // selectors for all of the facets
     bytes4[] selectorsOfAccessControlFacet;
     bytes4[] selectorsOfBondingCurveFacet;
-    bytes4[] selectorsOfChefFacet;
     bytes4[] selectorsOfCollectableDustFacet;
     bytes4[] selectorsOfCreditClockFacet;
     bytes4[] selectorsOfCreditNftManagerFacet;
@@ -108,11 +95,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfDiamondLoupeFacet;
     bytes4[] selectorsOfDollarMintCalculatorFacet;
     bytes4[] selectorsOfDollarMintExcessFacet;
-    bytes4[] selectorsOfDirectGovernanceFarmerFacet;
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfOwnershipFacet;
-    bytes4[] selectorsOfStakingFacet;
-    bytes4[] selectorsOfStakingFormulasFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
 
     /// @notice Deploys diamond and connects facets
@@ -130,9 +114,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         selectorsOfBondingCurveFacet = getSelectorsFromAbi(
             "/out/BondingCurveFacet.sol/BondingCurveFacet.json"
-        );
-        selectorsOfChefFacet = getSelectorsFromAbi(
-            "/out/ChefFacet.sol/ChefFacet.json"
         );
         selectorsOfCollectableDustFacet = getSelectorsFromAbi(
             "/out/CollectableDustFacet.sol/CollectableDustFacet.json"
@@ -164,20 +145,11 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfDollarMintExcessFacet = getSelectorsFromAbi(
             "/out/DollarMintExcessFacet.sol/DollarMintExcessFacet.json"
         );
-        selectorsOfDirectGovernanceFarmerFacet = getSelectorsFromAbi(
-            "/out/DirectGovernanceFarmerFacet.sol/DirectGovernanceFarmerFacet.json"
-        );
         selectorsOfManagerFacet = getSelectorsFromAbi(
             "/out/ManagerFacet.sol/ManagerFacet.json"
         );
         selectorsOfOwnershipFacet = getSelectorsFromAbi(
             "/out/OwnershipFacet.sol/OwnershipFacet.json"
-        );
-        selectorsOfStakingFacet = getSelectorsFromAbi(
-            "/out/StakingFacet.sol/StakingFacet.json"
-        );
-        selectorsOfStakingFormulasFacet = getSelectorsFromAbi(
-            "/out/StakingFormulasFacet.sol/StakingFormulasFacet.json"
         );
         selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
             "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
@@ -186,7 +158,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         // deploy facet implementation instances
         accessControlFacetImplementation = new AccessControlFacet();
         bondingCurveFacetImplementation = new BondingCurveFacet();
-        chefFacetImplementation = new ChefFacet();
         collectableDustFacetImplementation = new CollectableDustFacet();
         creditClockFacetImplementation = new CreditClockFacet();
         creditNftManagerFacetImplementation = new CreditNftManagerFacet();
@@ -197,11 +168,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         diamondLoupeFacetImplementation = new DiamondLoupeFacet();
         dollarMintCalculatorFacetImplementation = new DollarMintCalculatorFacet();
         dollarMintExcessFacetImplementation = new DollarMintExcessFacet();
-        directGovernanceFarmerFacetImplementation = new DirectGovernanceFarmerFacet();
         managerFacetImplementation = new ManagerFacet();
         ownershipFacetImplementation = new OwnershipFacet();
-        stakingFacetImplementation = new StakingFacet();
-        stakingFormulasFacetImplementation = new StakingFormulasFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
 
         // prepare diamond init args
@@ -209,7 +177,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         facetNames = [
             "AccessControlFacet",
             "BondingCurveFacet",
-            "ChefFacet",
             "CollectableDustFacet",
             "CreditClockFacet",
             "CreditNftManagerFacet",
@@ -220,19 +187,12 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "DiamondLoupeFacet",
             "DollarMintCalculatorFacet",
             "DollarMintExcessFacet",
-            "DirectGovernanceFarmerFacet",
             "ManagerFacet",
             "OwnershipFacet",
-            "StakingFacet",
-            "StakingFormulasFacet",
             "UbiquityPoolFacet"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: admin,
-            tos: new address[](0),
-            amounts: new uint256[](0),
-            stakingShareIDs: new uint256[](0),
-            governancePerBlock: 10e18,
             creditNftLengthBlocks: 100
         });
         // diamond arguments
@@ -245,7 +205,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](19);
+        FacetCut[] memory cuts = new FacetCut[](15);
 
         cuts[0] = (
             FacetCut({
@@ -263,33 +223,26 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         cuts[2] = (
             FacetCut({
-                facetAddress: address(chefFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfChefFacet
-            })
-        );
-        cuts[3] = (
-            FacetCut({
                 facetAddress: address(collectableDustFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCollectableDustFacet
             })
         );
-        cuts[4] = (
+        cuts[3] = (
             FacetCut({
                 facetAddress: address(creditClockFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCreditClockFacet
             })
         );
-        cuts[5] = (
+        cuts[4] = (
             FacetCut({
                 facetAddress: address(creditNftManagerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCreditNftManagerFacet
             })
         );
-        cuts[6] = (
+        cuts[5] = (
             FacetCut({
                 facetAddress: address(
                     creditNftRedemptionCalculatorFacetImplementation
@@ -298,7 +251,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfCreditNftRedemptionCalculatorFacet
             })
         );
-        cuts[7] = (
+        cuts[6] = (
             FacetCut({
                 facetAddress: address(
                     creditRedemptionCalculatorFacetImplementation
@@ -307,79 +260,56 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
                 functionSelectors: selectorsOfCreditRedemptionCalculatorFacet
             })
         );
-        cuts[8] = (
+        cuts[7] = (
             FacetCut({
                 facetAddress: address(curveDollarIncentiveFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfCurveDollarIncentiveFacet
             })
         );
-        cuts[9] = (
+        cuts[8] = (
             FacetCut({
                 facetAddress: address(diamondCutFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondCutFacet
             })
         );
-        cuts[10] = (
+        cuts[9] = (
             FacetCut({
                 facetAddress: address(diamondLoupeFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDiamondLoupeFacet
             })
         );
-        cuts[11] = (
+        cuts[10] = (
             FacetCut({
                 facetAddress: address(dollarMintCalculatorFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintCalculatorFacet
             })
         );
-        cuts[12] = (
+        cuts[11] = (
             FacetCut({
                 facetAddress: address(dollarMintExcessFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfDollarMintExcessFacet
             })
         );
-        cuts[13] = (
-            FacetCut({
-                facetAddress: address(
-                    directGovernanceFarmerFacetImplementation
-                ),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfDirectGovernanceFarmerFacet
-            })
-        );
-        cuts[14] = (
+        cuts[12] = (
             FacetCut({
                 facetAddress: address(managerFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfManagerFacet
             })
         );
-        cuts[15] = (
+        cuts[13] = (
             FacetCut({
                 facetAddress: address(ownershipFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfOwnershipFacet
             })
         );
-        cuts[16] = (
-            FacetCut({
-                facetAddress: address(stakingFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfStakingFacet
-            })
-        );
-        cuts[17] = (
-            FacetCut({
-                facetAddress: address(stakingFormulasFacetImplementation),
-                action: FacetCutAction.Add,
-                functionSelectors: selectorsOfStakingFormulasFacet
-            })
-        );
-        cuts[18] = (
+        cuts[14] = (
             FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
@@ -394,7 +324,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         // initialize diamond facets which point to the core diamond contract
         accessControlFacet = AccessControlFacet(address(diamond));
         bondingCurveFacet = BondingCurveFacet(address(diamond));
-        chefFacet = ChefFacet(address(diamond));
         collectableDustFacet = CollectableDustFacet(address(diamond));
         creditClockFacet = CreditClockFacet(address(diamond));
         creditNftManagerFacet = CreditNftManagerFacet(address(diamond));
@@ -409,13 +338,8 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         diamondLoupeFacet = DiamondLoupeFacet(address(diamond));
         dollarMintCalculatorFacet = DollarMintCalculatorFacet(address(diamond));
         dollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
-        directGovernanceFarmerFacet = DirectGovernanceFarmerFacet(
-            address(diamond)
-        );
         managerFacet = ManagerFacet(address(diamond));
         ownershipFacet = OwnershipFacet(address(diamond));
-        stakingFacet = StakingFacet(address(diamond));
-        stakingFormulasFacet = StakingFormulasFacet(address(diamond));
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
 
         // get all addresses
@@ -457,11 +381,6 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         accessControlFacet.grantRole(
             GOVERNANCE_TOKEN_BURNER_ROLE,
-            address(diamond)
-        );
-        // grant diamond token minter rights
-        accessControlFacet.grantRole(
-            STAKING_SHARE_MINTER_ROLE,
             address(diamond)
         );
 

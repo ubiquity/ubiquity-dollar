@@ -25,15 +25,14 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
 
     const contracts = await protocolContracts;
 
-    if (contracts.creditNft && contracts.stakingShare) {
-      const [dollar, _3crv, dollar3crv, credit, governance, creditNft, stakingShares, usdc, dai, usdt] = await Promise.all([
+    if (contracts.creditNft) {
+      const [dollar, _3crv, dollar3crv, credit, governance, creditNft, usdc, dai, usdt] = await Promise.all([
         contracts.dollarToken?.balanceOf(walletAddress),
         contracts._3crvToken?.balanceOf(walletAddress),
         contracts.curveMetaPoolDollarTriPoolLp?.balanceOf(walletAddress),
         contracts.creditToken?.balanceOf(walletAddress),
         contracts.governanceToken?.balanceOf(walletAddress),
         erc1155BalanceOf(walletAddress, contracts.creditNft),
-        erc1155BalanceOf(walletAddress, contracts.stakingShare),
         namedContracts.usdc.balanceOf(walletAddress),
         namedContracts.dai.balanceOf(walletAddress),
         namedContracts.usdt.balanceOf(walletAddress),
@@ -45,7 +44,6 @@ export const BalancesContextProvider: React.FC<ChildrenShim> = ({ children }) =>
         credit,
         creditNft,
         governance,
-        stakingShares,
         usdc,
         dai,
         usdt,

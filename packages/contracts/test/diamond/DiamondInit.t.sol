@@ -23,10 +23,6 @@ contract DiamondInitTest is Test {
     function test_Init() public {
         DiamondInit.Args memory initArgs = DiamondInit.Args({
             admin: address(0x123),
-            tos: new address[](0),
-            amounts: new uint256[](0),
-            stakingShareIDs: new uint256[](0),
-            governancePerBlock: 10e18,
             creditNftLengthBlocks: 100
         });
         dInit.init(initArgs);

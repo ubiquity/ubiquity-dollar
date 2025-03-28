@@ -16,16 +16,6 @@ bytes32 constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256(
     "GOVERNANCE_TOKEN_BURNER_ROLE"
 );
 
-/// @dev Role name for staking share minter
-bytes32 constant STAKING_SHARE_MINTER_ROLE = keccak256(
-    "STAKING_SHARE_MINTER_ROLE"
-);
-
-/// @dev Role name for staking share burner
-bytes32 constant STAKING_SHARE_BURNER_ROLE = keccak256(
-    "STAKING_SHARE_BURNER_ROLE"
-);
-
 /// @dev Role name for Credit tokens minter
 bytes32 constant CREDIT_TOKEN_MINTER_ROLE = keccak256(
     "CREDIT_TOKEN_MINTER_ROLE"
