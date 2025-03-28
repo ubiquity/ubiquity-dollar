@@ -20,9 +20,7 @@ jobs:
           submodules: recursive
 
       - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
+        uses: foundry-rs/foundry-toolchain@v1
 
       - name: Narrow down test matrix scope to changed Dollar libraries to limit API requests
         id: changed-libraries
@@ -62,9 +60,7 @@ jobs:
           submodules: recursive
 
       - name: Install Foundry
-        uses: onbjerg/foundry-toolchain@v1
-        with:
-          version: nightly
+        uses: foundry-rs/foundry-toolchain@v1
         
       - name: Check For Diamond Storage Changes
         uses: ubiquity/foundry-storage-check@main
