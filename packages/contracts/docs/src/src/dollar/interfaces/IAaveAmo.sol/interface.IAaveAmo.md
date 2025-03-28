@@ -1,5 +1,5 @@
 # IAaveAmo
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/386de2abb8d1171ab47c0b149dede7c48631259f/src/dollar/interfaces/IAaveAmo.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/109cec7a9dabc6e0b7a4678e6dc13e4441471a22/src/dollar/interfaces/IAaveAmo.sol)
 
 
 ## Functions
@@ -163,6 +163,13 @@ Emitted when collateral is deposited into the Aave pool
 event CollateralDeposited(address indexed collateralAddress, uint256 amount);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralAddress`|`address`|Address of the collateral token|
+|`amount`|`uint256`|Amount of collateral deposited|
+
 ### CollateralWithdrawn
 Emitted when collateral is withdrawn from the Aave pool
 
@@ -170,6 +177,13 @@ Emitted when collateral is withdrawn from the Aave pool
 ```solidity
 event CollateralWithdrawn(address indexed collateralAddress, uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`collateralAddress`|`address`|Address of the collateral token|
+|`amount`|`uint256`|Amount of collateral withdrawn|
 
 ### Borrowed
 Emitted when an asset is borrowed from the Aave pool
@@ -179,6 +193,14 @@ Emitted when an asset is borrowed from the Aave pool
 event Borrowed(address indexed asset, uint256 amount, uint256 interestRateMode);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Address of the asset borrowed|
+|`amount`|`uint256`|Amount of asset borrowed|
+|`interestRateMode`|`uint256`|Interest rate mode used for the borrow (1 for stable, 2 for variable)|
+
 ### Repaid
 Emitted when a borrowed asset is repaid to the Aave pool
 
@@ -187,6 +209,14 @@ Emitted when a borrowed asset is repaid to the Aave pool
 event Repaid(address indexed asset, uint256 amount, uint256 interestRateMode);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`asset`|`address`|Address of the asset repaid|
+|`amount`|`uint256`|Amount of asset repaid|
+|`interestRateMode`|`uint256`|Interest rate mode used for the repay (1 for stable, 2 for variable)|
+
 ### CollateralReturnedToMinter
 Emitted when collateral is returned to the AMO minter
 
@@ -194,6 +224,12 @@ Emitted when collateral is returned to the AMO minter
 ```solidity
 event CollateralReturnedToMinter(uint256 amount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`amount`|`uint256`|Amount of collateral returned|
 
 ### RewardsClaimed
 Emitted when rewards are claimed
@@ -211,6 +247,12 @@ Emitted when the AMO minter address is set
 event AmoMinterSet(address indexed newMinter);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newMinter`|`address`|Address of the new AMO minter|
+
 ### ERC20Recovered
 Emitted when ERC20 tokens are recovered from the contract
 
@@ -219,6 +261,13 @@ Emitted when ERC20 tokens are recovered from the contract
 event ERC20Recovered(address tokenAddress, uint256 tokenAmount);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`tokenAddress`|`address`|Address of the recovered token|
+|`tokenAmount`|`uint256`|Amount of tokens recovered|
+
 ### ExecuteCalled
 Emitted when an arbitrary call is executed from the contract
 
@@ -226,4 +275,12 @@ Emitted when an arbitrary call is executed from the contract
 ```solidity
 event ExecuteCalled(address indexed to, uint256 value, bytes data);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`to`|`address`|Address of the call target|
+|`value`|`uint256`|Value sent with the call|
+|`data`|`bytes`|Data sent with the call|
 

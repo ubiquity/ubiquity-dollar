@@ -1,5 +1,5 @@
 # IUbiquityAmoMinter
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/386de2abb8d1171ab47c0b149dede7c48631259f/src/dollar/interfaces/IUbiquityAmoMinter.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/109cec7a9dabc6e0b7a4678e6dc13e4441471a22/src/dollar/interfaces/IUbiquityAmoMinter.sol)
 
 
 ## Functions
@@ -118,6 +118,13 @@ Emitted when collateral is given to an AMO
 event CollateralGivenToAmo(address destinationAmo, uint256 collateralAmount);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`destinationAmo`|`address`|Address of the AMO receiving the collateral|
+|`collateralAmount`|`uint256`|Amount of collateral transferred|
+
 ### CollateralReceivedFromAmo
 Emitted when collateral is returned from an AMO
 
@@ -125,6 +132,13 @@ Emitted when collateral is returned from an AMO
 ```solidity
 event CollateralReceivedFromAmo(address sourceAmo, uint256 collateralAmount);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`sourceAmo`|`address`|Address of the AMO returning the collateral|
+|`collateralAmount`|`uint256`|Amount of collateral returned|
 
 ### CollateralBorrowCapSet
 Emitted when the collateral borrow cap is updated
@@ -134,6 +148,12 @@ Emitted when the collateral borrow cap is updated
 event CollateralBorrowCapSet(uint256 newCollateralBorrowCap);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newCollateralBorrowCap`|`uint256`|The updated collateral borrow cap|
+
 ### PoolSet
 Emitted when the Ubiquity pool address is updated
 
@@ -142,6 +162,12 @@ Emitted when the Ubiquity pool address is updated
 event PoolSet(address newPoolAddress);
 ```
 
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newPoolAddress`|`address`|The updated pool address|
+
 ### OwnershipTransferred
 Emitted when ownership of the contract is transferred
 
@@ -149,4 +175,10 @@ Emitted when ownership of the contract is transferred
 ```solidity
 event OwnershipTransferred(address newOwner);
 ```
+
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newOwner`|`address`|Address of the new contract owner|
 
