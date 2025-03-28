@@ -31,6 +31,9 @@ jobs:
       - name: Yarn Install
         run: yarn install --mode=skip-build && yarn allow-scripts
 
+      - name: Setup Forge
+        run: yarn workspace @ubiquity/contracts forge:install
+
       - name: Generate Docs
         run: yarn workspace @ubiquity/contracts docs
 
