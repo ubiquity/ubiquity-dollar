@@ -21,6 +21,7 @@ import {DollarMintCalculatorFacet} from "../../src/dollar/facets/DollarMintCalcu
 import {DollarMintExcessFacet} from "../../src/dollar/facets/DollarMintExcessFacet.sol";
 import {ManagerFacet} from "../../src/dollar/facets/ManagerFacet.sol";
 import {OwnershipFacet} from "../../src/dollar/facets/OwnershipFacet.sol";
+import {StakingFacet} from "../../src/dollar/facets/StakingFacet.sol";
 import {UbiquityPoolFacet} from "../../src/dollar/facets/UbiquityPoolFacet.sol";
 import {MockCurveStableSwapMetaNG} from "../../src/dollar/mocks/MockCurveStableSwapMetaNG.sol";
 import {MockERC20} from "../../src/dollar/mocks/MockERC20.sol";
@@ -52,6 +53,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     DollarMintExcessFacet dollarMintExcessFacet;
     ManagerFacet managerFacet;
     OwnershipFacet ownershipFacet;
+    StakingFacet stakingFacet;
     UbiquityPoolFacet ubiquityPoolFacet;
 
     // diamond facet implementation instances (should not be used in tests, use only on upgrades)
@@ -69,6 +71,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     DollarMintExcessFacet dollarMintExcessFacetImplementation;
     ManagerFacet managerFacetImplementation;
     OwnershipFacet ownershipFacetImplementation;
+    StakingFacet stakingFacetImplementation;
     UbiquityPoolFacet ubiquityPoolFacetImplementation;
 
     // facet names with addresses
@@ -97,6 +100,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
     bytes4[] selectorsOfDollarMintExcessFacet;
     bytes4[] selectorsOfManagerFacet;
     bytes4[] selectorsOfOwnershipFacet;
+    bytes4[] selectorsOfStakingFacet;
     bytes4[] selectorsOfUbiquityPoolFacet;
 
     /// @notice Deploys diamond and connects facets
@@ -151,6 +155,9 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         selectorsOfOwnershipFacet = getSelectorsFromAbi(
             "/out/OwnershipFacet.sol/OwnershipFacet.json"
         );
+        selectorsOfStakingFacet = getSelectorsFromAbi(
+            "/out/StakingFacet.sol/StakingFacet.json"
+        );
         selectorsOfUbiquityPoolFacet = getSelectorsFromAbi(
             "/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json"
         );
@@ -170,6 +177,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         dollarMintExcessFacetImplementation = new DollarMintExcessFacet();
         managerFacetImplementation = new ManagerFacet();
         ownershipFacetImplementation = new OwnershipFacet();
+        stakingFacetImplementation = new StakingFacet();
         ubiquityPoolFacetImplementation = new UbiquityPoolFacet();
 
         // prepare diamond init args
@@ -189,6 +197,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             "DollarMintExcessFacet",
             "ManagerFacet",
             "OwnershipFacet",
+            "StakingFacet",
             "UbiquityPoolFacet"
         ];
         DiamondInit.Args memory initArgs = DiamondInit.Args({
@@ -205,7 +214,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
             )
         });
 
-        FacetCut[] memory cuts = new FacetCut[](15);
+        FacetCut[] memory cuts = new FacetCut[](16);
 
         cuts[0] = (
             FacetCut({
@@ -311,6 +320,13 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         );
         cuts[14] = (
             FacetCut({
+                facetAddress: address(stakingFacetImplementation),
+                action: FacetCutAction.Add,
+                functionSelectors: selectorsOfStakingFacet
+            })
+        );
+        cuts[15] = (
+            FacetCut({
                 facetAddress: address(ubiquityPoolFacetImplementation),
                 action: FacetCutAction.Add,
                 functionSelectors: selectorsOfUbiquityPoolFacet
@@ -340,6 +356,7 @@ abstract contract DiamondTestSetup is DiamondTestHelper, UUPSTestHelper {
         dollarMintExcessFacet = DollarMintExcessFacet(address(diamond));
         managerFacet = ManagerFacet(address(diamond));
         ownershipFacet = OwnershipFacet(address(diamond));
+        stakingFacet = StakingFacet(address(diamond));
         ubiquityPoolFacet = UbiquityPoolFacet(address(diamond));
 
         // get all addresses
