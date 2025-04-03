@@ -62,6 +62,124 @@ contract StakingFacetTest is DiamondTestSetup {
     // Views
     //=====================
 
+    function testGetPendingStakingRewards_ShouldReturnZero_IfPoolIsEmpty() public {
+        uint256 pendingRewards = stakingFacet.getPendingStakingRewards(0, user);
+        assertEq(pendingRewards, 0);        
+    }
+
+    function testGetPendingStakingRewards_ShouldReturnPendingRewards() public {
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        uint256 pendingRewards = stakingFacet.getPendingStakingRewards(0, user);
+        assertEq(pendingRewards, 10 ether);        
+    }
+
+    function testGetStakingMultiplier_ShouldReturnMultiplierWithBonus() public {
+        vm.startPrank(admin);
+        stakingFacet.setGovernanceBonusMultiplier(10);
+        stakingFacet.setGovernanceBonusEndBlock(11);
+        vm.stopPrank();
+
+        uint256 multiplier = stakingFacet.getStakingMultiplier(1, 11);
+        assertEq(multiplier, 100);
+    }
+
+    function testGetStakingMultiplier_ShouldReturnMultiplierWithoutBonus() public {
+        uint256 multiplier = stakingFacet.getStakingMultiplier(1, 11);
+        assertEq(multiplier, 10);
+    }
+
+    function testGetStakingMultiplier_ShouldReturnMultiplierWithBonusInTheMiddleOfBonusPeriod() public {
+        vm.startPrank(admin);
+        stakingFacet.setGovernanceBonusMultiplier(10);
+        stakingFacet.setGovernanceBonusEndBlock(11);
+        vm.stopPrank();
+
+        uint256 multiplier = stakingFacet.getStakingMultiplier(1, 21);
+        assertEq(multiplier, 110);
+    }
+
+    function testGetStakingSettings_ShouldReturnStakingSettings() public {
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // refresh pool
+        stakingFacet.updateStakingPool(0);
+
+        vm.startPrank(admin);
+        stakingFacet.setGovernanceBonusEndBlock(1);
+        stakingFacet.setGovernanceBonusMultiplier(2);
+        stakingFacet.setGovernancePerBlock(3);
+        stakingFacet.setGovernanceTreasuryDivider(4);
+        stakingFacet.setStakingStartBlock(5);
+        vm.stopPrank();
+
+        (
+            address rewardTokenAddress,
+            uint256 bonusEndBlock,
+            uint256 governanceBonusMultiplier,
+            uint256 governancePerBlock,
+            uint256 governanceTreasuryDivider,
+            uint256 rewardAmount,
+            uint256 totalAllocationPoints,
+            uint256 startBlock
+        ) = stakingFacet.getStakingSettings();
+
+        assertEq(rewardTokenAddress, address(rewardToken));
+        assertEq(bonusEndBlock, 1);
+        assertEq(governanceBonusMultiplier, 2);
+        assertEq(governancePerBlock, 3);
+        assertEq(governanceTreasuryDivider, 4);
+        assertEq(rewardAmount, 10 ether);
+        assertEq(totalAllocationPoints, 100);
+        assertEq(startBlock, 5);
+    }
+
+    function testGetStakingUserInfo_ShouldReturnStakingUserInfo() public {
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        assertEq(userInfo.amount, 100 ether);
+        assertEq(userInfo.rewardDebt, 20 ether);
+    }
+
+    function testGetStakingPoolInfo_ShouldReturnStakingPoolInfo() public {
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // refresh pool
+        stakingFacet.updateStakingPool(0);
+
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        assertEq(address(poolInfo.lpToken), address(stakeToken));
+        assertEq(poolInfo.amount, 50 ether);
+        assertEq(poolInfo.allocationPoints, 100);
+        assertEq(poolInfo.lastRewardBlock, 11);
+        assertEq(poolInfo.accumulatedGovernancePerShare, 0.0000002 ether);
+    }
+
     function testGetStakingPoolsLength_ShouldReturnNumberOfStakingPools() public {
         uint256 poolsLength = stakingFacet.getStakingPoolsLength();
         assertEq(poolsLength, 1);
