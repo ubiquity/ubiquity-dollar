@@ -173,10 +173,10 @@ library LibStaking {
      * - Total allocation points across all staking pools
      * - Start block when staking starts 
      */
-    function getStakingSettings() internal view returns (IERC20Ubiquity, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+    function getStakingSettings() internal view returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
         StakingStorage storage stakingStore = stakingStorage();
         return (
-            stakingStore.rewardToken,
+            address(stakingStore.rewardToken),
             stakingStore.bonusEndBlock,
             stakingStore.governanceBonusMultiplier,
             stakingStore.governancePerBlock,

@@ -32,7 +32,7 @@ contract StakingFacet is IStaking, Modifiers {
         }
 
     /// @inheritdoc IStaking
-    function getStakingSettings() external view returns (IERC20Ubiquity, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+    function getStakingSettings() external view returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
         return LibStaking.getStakingSettings();
     }
 

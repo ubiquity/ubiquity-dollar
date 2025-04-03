@@ -48,7 +48,7 @@ interface IStaking {
      * - Total allocation points across all staking pools
      * - Start block when staking starts 
      */
-    function getStakingSettings() external view returns (IERC20Ubiquity, uint256, uint256, uint256, uint256, uint256, uint256, uint256);
+    function getStakingSettings() external view returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256);
 
     /**
      * @notice View function to see user's staking info

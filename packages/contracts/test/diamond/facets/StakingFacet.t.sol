@@ -227,6 +227,45 @@ contract StakingFacetTest is DiamondTestSetup {
     // Restricted methods
     //======================
 
+    function testCreateStakingPool_ShouldCreateStakingPoolWithoutMassUpdate() public {
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        (,,,,,,uint256 totalAllocationPoints,) = stakingFacet.getStakingSettings();
+
+        assertEq(totalAllocationPoints, 100);
+        assertEq(address(poolInfo.lpToken), address(stakeToken));
+        assertEq(poolInfo.amount, 0);
+        assertEq(poolInfo.allocationPoints, 100);
+        assertEq(poolInfo.lastRewardBlock, block.number);
+        assertEq(poolInfo.accumulatedGovernancePerShare, 0);
+    }
+
+    function testCreateStakingPool_ShouldCreateStakingPoolWithMassUpdate() public {
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // admin increases `startBlock` number
+        vm.prank(admin);
+        stakingFacet.setStakingStartBlock(block.number + 100);
+
+        // before
+        LibStaking.PoolInfo memory poolInfo1 = stakingFacet.getStakingPoolInfo(0);
+        assertEq(poolInfo1.lastRewardBlock, 1);
+
+        // admin creates 2nd pool
+        vm.prank(admin);
+        stakingFacet.createStakingPool(
+            100, // allocation points
+            stakeToken, 
+            true // whether to update all pools
+        );
+
+        // after
+        poolInfo1 = stakingFacet.getStakingPoolInfo(0);
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(1);
+        assertEq(poolInfo1.lastRewardBlock, 11);
+        assertEq(poolInfo2.lastRewardBlock, 111);
+    }
+
     function testSetGovernanceBonusEndBlock_ShouldUpdateBonusEndBlock() public {
         (, uint256 oldBonusEndBlock,,,,,,) = stakingFacet.getStakingSettings();
         assertEq(oldBonusEndBlock, 0);
@@ -236,5 +275,110 @@ contract StakingFacetTest is DiamondTestSetup {
 
         (, uint256 newBonusEndBlock,,,,,,) = stakingFacet.getStakingSettings();
         assertEq(newBonusEndBlock, 1);
+    }
+
+    function testSetGovernanceBonusMultiplier_ShouldUpdateGovernanceBonusMultiplier() public {
+        (,,uint256 oldGovernanceBonusMultiplier,,,,,) = stakingFacet.getStakingSettings();
+        assertEq(oldGovernanceBonusMultiplier, 0);
+
+        vm.prank(admin);
+        stakingFacet.setGovernanceBonusMultiplier(10);
+
+        (,,uint256 newGovernanceBonusMultiplier,,,,,) = stakingFacet.getStakingSettings();
+        assertEq(newGovernanceBonusMultiplier, 10);
+    }
+
+    function testSetGovernancePerBlock_ShouldUpdateGovernancePerBlock() public {
+        (,,,uint256 oldGovernancePerBlock,,,,) = stakingFacet.getStakingSettings();
+        assertEq(oldGovernancePerBlock, 1 ether);
+
+        vm.prank(admin);
+        stakingFacet.setGovernancePerBlock(2 ether);
+
+        (,,,uint256 newGovernancePerBlock,,,,) = stakingFacet.getStakingSettings();
+        assertEq(newGovernancePerBlock, 2 ether);
+    }
+
+    function testSetGovernanceTreasuryDivider_ShouldUpdateGovernanceTreasuryDivider() public {
+        (,,,,uint256 oldGovernanceTreasuryDivider,,,) = stakingFacet.getStakingSettings();
+        assertEq(oldGovernanceTreasuryDivider, 5);
+
+        vm.prank(admin);
+        stakingFacet.setGovernanceTreasuryDivider(10);
+
+        (,,,,uint256 newGovernanceTreasuryDivider,,,) = stakingFacet.getStakingSettings();
+        assertEq(newGovernanceTreasuryDivider, 10);
+    }
+
+    function testSetStakingRewardToken_ShouldUpdateStakingRewardToken() public {
+        (address oldRewardToken,,,,,,,) = stakingFacet.getStakingSettings();
+        assertEq(oldRewardToken, address(rewardToken));
+
+        vm.prank(admin);
+        stakingFacet.setStakingRewardToken(address(1));
+
+        (address newRewardToken,,,,,,,) = stakingFacet.getStakingSettings();
+        assertEq(newRewardToken, address(1));
+    }
+
+    function testSetStakingStartBlock_ShouldUpdateStakingStartBlock() public {
+        (,,,,,,,uint256 oldStartBlock) = stakingFacet.getStakingSettings();
+        assertEq(oldStartBlock, block.number);
+
+        vm.prank(admin);
+        stakingFacet.setStakingStartBlock(block.number + 1);
+
+        (,,,,,,,uint256 newStartBlock) = stakingFacet.getStakingSettings();
+        assertEq(newStartBlock, block.number + 1);
+    }
+
+    function testUpdateStakingPool_ShouldUpdateStakingPoolSettings() public {
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        (,,,,,,uint256 oldTotalAllocationPoints,) = stakingFacet.getStakingSettings();
+        assertEq(poolInfo.lastRewardBlock, 1);
+        assertEq(oldTotalAllocationPoints, 100);
+        assertEq(poolInfo.allocationPoints, 100);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        vm.prank(admin);
+        stakingFacet.updateStakingPool(0, 50, true);
+
+        poolInfo = stakingFacet.getStakingPoolInfo(0);
+        (,,,,,,uint256 newTotalAllocationPoints,) = stakingFacet.getStakingSettings();
+        assertEq(poolInfo.lastRewardBlock, 11);
+        assertEq(newTotalAllocationPoints, 50);
+        assertEq(poolInfo.allocationPoints, 50);
+    }
+
+    //======================
+    // Internal helpers
+    //======================
+
+    function testSafeGovernanceTransfer_ShouldTransferRewards() public {
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // refresh staking pool
+        stakingFacet.updateStakingPool(0);
+
+        // before
+        (,,,,,uint256 rewardAmount,,) = stakingFacet.getStakingSettings();
+        assertEq(rewardAmount, 10 ether);
+        assertEq(rewardToken.balanceOf(user), 0);
+
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // after
+        (,,,,,rewardAmount,,) = stakingFacet.getStakingSettings();
+        assertEq(rewardAmount, 0);
+        assertEq(rewardToken.balanceOf(user), 10 ether);
     }
 }
