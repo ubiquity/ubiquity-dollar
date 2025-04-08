@@ -10,9 +10,12 @@
     "**/dist/*",
     "**/cspell.json",
     "**/node_modules/**",
+    "packages/contracts/test/*",
     "packages/contracts/src/deprecated/*",
     "packages/contracts/migrations/development/Deploy001_Diamond_Dollar_Governance.s.sol",
-    "packages/contracts/migrations/mainnet/Deploy001_Diamond_Dollar_Governance.s.sol"
+    "packages/contracts/migrations/development/Deploy002_Staking.s.sol",
+    "packages/contracts/migrations/mainnet/Deploy001_Diamond_Dollar_Governance.s.sol",
+    "packages/contracts/migrations/mainnet/Deploy002_Staking.s.sol"
   ],
   "readonly": true,
   "useGitignore": true,
@@ -168,7 +171,11 @@
     "AAve",
     "AAveV3",
     "IAAve",
-    "Cust"
+    "Cust",
+    "unstake",
+    "unstaking",
+    "Unstake",
+    "Unstakes"
   ],
   "flagWords": ["creditNFT", "CreditNFT"],
   "language": "en-US"
