@@ -3,6 +3,7 @@ pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {Script} from "forge-std/Script.sol";
+import "forge-std/console2.sol";
 import {UbiquityAlgorithmicDollarManager} from "../../src/deprecated/UbiquityAlgorithmicDollarManager.sol";
 import {UbiquityGovernance} from "../../src/deprecated/UbiquityGovernance.sol";
 import {DiamondCutFacet} from "../../src/dollar/facets/DiamondCutFacet.sol";
@@ -22,16 +23,15 @@ contract Deploy002_Staking is Script, DiamondTestHelper {
     // env variables
     uint256 adminPrivateKey;
     uint256 ownerPrivateKey;
+    address diamond;
 
     // owner and admin addresses derived from private keys store in `.env` file
     address adminAddress;
     address ownerAddress;
 
     function run() public {
-        // TODO: read from broadcast logs
-        address diamond = 0x7E6C94173C264aaE66Bf36ce047b0Aef585C2181;
-
         // read env variables
+        diamond = vm.envAddress("DIAMOND_ADDRESS"); // env variable set in `deploy.sh`
         adminPrivateKey = vm.envUint("ADMIN_PRIVATE_KEY");
         ownerPrivateKey = vm.envUint("OWNER_PRIVATE_KEY");
 
