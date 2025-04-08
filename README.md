@@ -156,6 +156,20 @@ yarn deploy:development # same as above
 
 If successful it will output the accounts generated from the test mnemonic (`test test test test test test test test test test test junk`) and the port it's listening on.
 
+### Deployment helper scripts
+Deploy all contracts with mocked instances:
+```
+yarn deploy:development
+```
+Deploy all contracts and use already deployed contracts (NOTICE: can be run only from the Ubiquity deployer address `ubq.eth`):
+```
+yarn deploy:mainnet
+```
+Deploy all contracts and use already deployed contracts in a forked from `mainnet` anvil instance:
+```
+yarn deploy:mainnet:qa
+```
+
 ## Our Official Deployments
 
 ### Ethereum Mainnet

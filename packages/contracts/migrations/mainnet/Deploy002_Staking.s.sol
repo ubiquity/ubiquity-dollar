@@ -10,24 +10,6 @@ import {DiamondTestHelper} from "../../test/helpers/DiamondTestHelper.sol";
 /**
  * @notice Migration contract
  * @dev Deploys `StakingFacet`
- * NOTICE: in order to QA this migration locally use this shell script:
- * ```
- * #!/bin/bash
- *
- * # load env variables
- * source .env
- *
- * UBQ_ETH_ADDRESS=0xefC0e701A824943b469a694aC564Aa1efF7Ab7dd;
- *
- * # pretend we're `ubq.eth` address
- * cast rpc anvil_impersonateAccount $UBQ_ETH_ADDRESS;
- *
- * # Deploy002_Staking (deploys `StakingFacet`)
- * forge script migrations/mainnet/Deploy002_Staking.s.sol:Deploy002_Staking --rpc-url $RPC_URL --broadcast -vvvv --unlocked
- * 
- * # stop pretending we're `ubq.eth` address
- * cast rpc anvil_stopImpersonatingAccount $UBQ_ETH_ADDRESS;
- * ```
  */
 contract Deploy002_Staking is Script, DiamondTestHelper {
     // env variables
