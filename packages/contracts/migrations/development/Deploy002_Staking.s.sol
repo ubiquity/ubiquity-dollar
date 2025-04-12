@@ -48,7 +48,7 @@ contract Deploy002_Staking is Script, DiamondTestHelper {
         rewardToken = new UbiquityGovernance(address(dollarManager));
         stakeToken = new MockERC20("STK", "STK", 18);
 
-        // owner grants diamond the "UBQ_MINTER_ROLE" 
+        // owner grants diamond the "UBQ_MINTER_ROLE"
         // NOTICE: in production environment the diamond contract already has the "UBQ_MINTER_ROLE" role
         dollarManager.grantRole(keccak256("UBQ_MINTER_ROLE"), address(diamond));
 
@@ -63,12 +63,14 @@ contract Deploy002_Staking is Script, DiamondTestHelper {
         vm.startBroadcast(ownerPrivateKey);
 
         // prepare staking facet selectors
-        bytes4[] memory selectorsOfStakingFacet = getSelectorsFromAbi("/out/StakingFacet.sol/StakingFacet.json");
+        bytes4[] memory selectorsOfStakingFacet = getSelectorsFromAbi(
+            "/out/StakingFacet.sol/StakingFacet.json"
+        );
 
         // deploy `StakingFacet` implementation
         StakingFacet stakingFacetImplementation = new StakingFacet();
 
-        // prepare staking diamond cut 
+        // prepare staking diamond cut
         FacetCut[] memory cuts = new FacetCut[](1);
         cuts[0] = (
             FacetCut({
@@ -93,7 +95,7 @@ contract Deploy002_Staking is Script, DiamondTestHelper {
         vm.startBroadcast(adminPrivateKey);
 
         StakingFacet stakingFacet = StakingFacet(diamond);
-        stakingFacet.setGovernancePerBlock(1 ether); // 1 reward token minted per block
+        stakingFacet.setGovernancePerBlock(0.2 ether); // 0.2 reward token minted per block
         stakingFacet.setGovernanceTreasuryDivider(5); // `100 / 5 = 20%` extra reward tokens minted for treasury
         stakingFacet.setStakingRewardToken(address(rewardToken)); // reward token address
         stakingFacet.setStakingStartBlock(block.number); // activate staking from current block
