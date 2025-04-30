@@ -11,7 +11,7 @@ import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
 
 /**
  * @notice Ubiquity staking contract
- * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol 
+ * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol
  */
 library LibStaking {
     using SafeMath for uint256;
@@ -20,9 +20,8 @@ library LibStaking {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant STAKING_STORAGE_POSITION =
-        bytes32(
-            uint256(keccak256("ubiquity.contracts.staking.storage")) - 1
-        ) & ~bytes32(uint256(0xff));
+        bytes32(uint256(keccak256("ubiquity.contracts.staking.storage")) - 1) &
+            ~bytes32(uint256(0xff));
 
     /**
      * @notice Info of each user
@@ -111,29 +110,34 @@ library LibStaking {
      * @param user User address
      * @return Staking rewards amount
      */
-    function getPendingStakingRewards(uint256 poolId, address user)
-        internal
-        view
-        returns (uint256)
-    {
+    function getPendingStakingRewards(
+        uint256 poolId,
+        address user
+    ) internal view returns (uint256) {
         StakingStorage storage stakingStore = stakingStorage();
 
         PoolInfo storage pool = stakingStore.poolInfo[poolId];
         UserInfo storage userInfo = stakingStore.userInfo[poolId][user];
-        uint256 accumulatedGovernancePerShare = pool.accumulatedGovernancePerShare;
+        uint256 accumulatedGovernancePerShare = pool
+            .accumulatedGovernancePerShare;
         uint256 lpSupply = pool.amount;
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-            uint256 multiplier =
-                getStakingMultiplier(pool.lastRewardBlock, block.number);
-            uint256 governanceReward =
-                multiplier.mul(stakingStore.governancePerBlock).mul(pool.allocationPoints).div(
-                    stakingStore.totalAllocationPoints
-                );
+            uint256 multiplier = getStakingMultiplier(
+                pool.lastRewardBlock,
+                block.number
+            );
+            uint256 governanceReward = multiplier
+                .mul(stakingStore.governancePerBlock)
+                .mul(pool.allocationPoints)
+                .div(stakingStore.totalAllocationPoints);
             accumulatedGovernancePerShare = accumulatedGovernancePerShare.add(
                 governanceReward.mul(1e12).div(lpSupply)
             );
         }
-        return userInfo.amount.mul(accumulatedGovernancePerShare).div(1e12).sub(userInfo.rewardDebt);
+        return
+            userInfo.amount.mul(accumulatedGovernancePerShare).div(1e12).sub(
+                userInfo.rewardDebt
+            );
     }
 
     /**
@@ -142,11 +146,10 @@ library LibStaking {
      * @param to To block number
      * @return Reward multiplier
      */
-    function getStakingMultiplier(uint256 from, uint256 to)
-        internal
-        view
-        returns (uint256)
-    {
+    function getStakingMultiplier(
+        uint256 from,
+        uint256 to
+    ) internal view returns (uint256) {
         StakingStorage storage stakingStore = stakingStorage();
 
         if (to <= stakingStore.bonusEndBlock) {
@@ -155,9 +158,11 @@ library LibStaking {
             return to.sub(from);
         } else {
             return
-                stakingStore.bonusEndBlock.sub(from).mul(stakingStore.governanceBonusMultiplier).add(
-                    to.sub(stakingStore.bonusEndBlock)
-                );
+                stakingStore
+                    .bonusEndBlock
+                    .sub(from)
+                    .mul(stakingStore.governanceBonusMultiplier)
+                    .add(to.sub(stakingStore.bonusEndBlock));
         }
     }
 
@@ -171,9 +176,22 @@ library LibStaking {
      * - Governance token divider for treasury
      * - Total available reward amount
      * - Total allocation points across all staking pools
-     * - Start block when staking starts 
+     * - Start block when staking starts
      */
-    function getStakingSettings() internal view returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+    function getStakingSettings()
+        internal
+        view
+        returns (
+            address,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        )
+    {
         StakingStorage storage stakingStore = stakingStorage();
         return (
             address(stakingStore.rewardToken),
@@ -193,7 +211,10 @@ library LibStaking {
      * @param user User address
      * @return User's staking info
      */
-    function getStakingUserInfo(uint256 poolId, address user) internal view returns (UserInfo memory) {
+    function getStakingUserInfo(
+        uint256 poolId,
+        address user
+    ) internal view returns (UserInfo memory) {
         StakingStorage storage stakingStore = stakingStorage();
         return stakingStore.userInfo[poolId][user];
     }
@@ -203,7 +224,9 @@ library LibStaking {
      * @param poolId Pool id
      * @return Pool's staking info
      */
-    function getStakingPoolInfo(uint256 poolId) internal view returns (PoolInfo memory) {
+    function getStakingPoolInfo(
+        uint256 poolId
+    ) internal view returns (PoolInfo memory) {
         StakingStorage storage stakingStore = stakingStorage();
         return stakingStore.poolInfo[poolId];
     }
@@ -235,7 +258,7 @@ library LibStaking {
 
     /**
      * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
-     * @param poolId Pool id 
+     * @param poolId Pool id
      * @param amount Amount of LP tokens to stake
      */
     function stake(uint256 poolId, uint256 amount) internal {
@@ -245,10 +268,11 @@ library LibStaking {
         UserInfo storage user = stakingStore.userInfo[poolId][msg.sender];
         updateStakingPool(poolId);
         if (user.amount > 0) {
-            uint256 pending =
-                user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12).sub(
-                    user.rewardDebt
-                );
+            uint256 pending = user
+                .amount
+                .mul(pool.accumulatedGovernancePerShare)
+                .div(1e12)
+                .sub(user.rewardDebt);
             safeGovernanceTransfer(msg.sender, pending);
         }
         pool.lpToken.safeTransferFrom(
@@ -257,7 +281,10 @@ library LibStaking {
             amount
         );
         user.amount = user.amount.add(amount);
-        user.rewardDebt = user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12);
+        user.rewardDebt = user
+            .amount
+            .mul(pool.accumulatedGovernancePerShare)
+            .div(1e12);
         pool.amount = pool.amount.add(amount);
         emit Stake(msg.sender, poolId, amount);
     }
@@ -274,13 +301,17 @@ library LibStaking {
         UserInfo storage user = stakingStore.userInfo[poolId][msg.sender];
         require(user.amount >= amount, "withdraw: not good");
         updateStakingPool(poolId);
-        uint256 pending =
-            user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12).sub(
-                user.rewardDebt
-            );
+        uint256 pending = user
+            .amount
+            .mul(pool.accumulatedGovernancePerShare)
+            .div(1e12)
+            .sub(user.rewardDebt);
         safeGovernanceTransfer(msg.sender, pending);
         user.amount = user.amount.sub(amount);
-        user.rewardDebt = user.amount.mul(pool.accumulatedGovernancePerShare).div(1e12);
+        user.rewardDebt = user
+            .amount
+            .mul(pool.accumulatedGovernancePerShare)
+            .div(1e12);
         pool.amount = pool.amount.sub(amount);
         pool.lpToken.safeTransfer(address(msg.sender), amount);
         emit Unstake(msg.sender, poolId, amount);
@@ -303,18 +334,26 @@ library LibStaking {
             pool.lastRewardBlock = block.number;
             return;
         }
-        uint256 multiplier = getStakingMultiplier(pool.lastRewardBlock, block.number);
-        uint256 governanceReward =
-            multiplier.mul(stakingStore.governancePerBlock).mul(pool.allocationPoints).div(
-                stakingStore.totalAllocationPoints
-            );
-        stakingStore.rewardToken.mint(store.treasuryAddress, governanceReward.div(stakingStore.governanceTreasuryDivider));
-        stakingStore.rewardToken.mint(address(this), governanceReward);
-        pool.accumulatedGovernancePerShare = pool.accumulatedGovernancePerShare.add(
-            governanceReward.mul(1e12).div(lpSupply)
+        uint256 multiplier = getStakingMultiplier(
+            pool.lastRewardBlock,
+            block.number
         );
+        uint256 governanceReward = multiplier
+            .mul(stakingStore.governancePerBlock)
+            .mul(pool.allocationPoints)
+            .div(stakingStore.totalAllocationPoints);
+        stakingStore.rewardToken.mint(
+            store.treasuryAddress,
+            governanceReward.div(stakingStore.governanceTreasuryDivider)
+        );
+        stakingStore.rewardToken.mint(address(this), governanceReward);
+        pool.accumulatedGovernancePerShare = pool
+            .accumulatedGovernancePerShare
+            .add(governanceReward.mul(1e12).div(lpSupply));
         pool.lastRewardBlock = block.number;
-        stakingStore.rewardAmount = stakingStore.rewardAmount.add(governanceReward);
+        stakingStore.rewardAmount = stakingStore.rewardAmount.add(
+            governanceReward
+        );
     }
 
     //======================
@@ -332,14 +371,19 @@ library LibStaking {
         IERC20 lpToken,
         bool withUpdate
     ) internal {
+        require(address(lpToken) != address(0), "Zero address detected");
+
         StakingStorage storage stakingStore = stakingStorage();
 
         if (withUpdate) {
             massUpdateStakingPools();
         }
-        uint256 lastRewardBlock =
-            block.number > stakingStore.startBlock ? block.number : stakingStore.startBlock;
-        stakingStore.totalAllocationPoints = stakingStore.totalAllocationPoints.add(allocationPoints);
+        uint256 lastRewardBlock = block.number > stakingStore.startBlock
+            ? block.number
+            : stakingStore.startBlock;
+        stakingStore.totalAllocationPoints = stakingStore
+            .totalAllocationPoints
+            .add(allocationPoints);
         stakingStore.poolInfo.push(
             PoolInfo({
                 lpToken: lpToken,
@@ -355,7 +399,13 @@ library LibStaking {
      * @notice Sets last block number when Governance bonus emissions end
      * @param newGovernanceBonusEndBlock Block number when Governance bonus emissions end
      */
-    function setGovernanceBonusEndBlock(uint256 newGovernanceBonusEndBlock) internal {
+    function setGovernanceBonusEndBlock(
+        uint256 newGovernanceBonusEndBlock
+    ) internal {
+        require(
+            newGovernanceBonusEndBlock >= block.number,
+            "Bonus end block can't be in the past"
+        );
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.bonusEndBlock = newGovernanceBonusEndBlock;
     }
@@ -364,7 +414,9 @@ library LibStaking {
      * @notice Sets bonus multiplier for early Governance token makers
      * @param newGovernanceBonusMultiplier New governance bonus multiplier
      */
-    function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) internal {
+    function setGovernanceBonusMultiplier(
+        uint256 newGovernanceBonusMultiplier
+    ) internal {
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceBonusMultiplier = newGovernanceBonusMultiplier;
     }
@@ -374,6 +426,7 @@ library LibStaking {
      * @param newGovernancePerBlock New amount of Governance tokens minted each block
      */
     function setGovernancePerBlock(uint256 newGovernancePerBlock) internal {
+        require(newGovernancePerBlock > 0, "Empty rewards");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governancePerBlock = newGovernancePerBlock;
     }
@@ -387,6 +440,10 @@ library LibStaking {
     function setGovernanceTreasuryDivider(
         uint256 newGovernanceTreasuryDivider
     ) internal {
+        require(
+            newGovernanceTreasuryDivider > 0,
+            "Treasury divider can't be zero"
+        );
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
     }
@@ -396,6 +453,7 @@ library LibStaking {
      * @param newRewardToken New reward token address
      */
     function setStakingRewardToken(address newRewardToken) internal {
+        require(newRewardToken != address(0), "Zero address detected");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.rewardToken = IERC20Ubiquity(newRewardToken);
     }
@@ -405,6 +463,7 @@ library LibStaking {
      * @param newStartBlock Block number when staking should be active
      */
     function setStakingStartBlock(uint256 newStartBlock) internal {
+        require(newStartBlock >= block.number, "Can't start in the past");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.startBlock = newStartBlock;
     }
@@ -422,12 +481,15 @@ library LibStaking {
     ) internal {
         StakingStorage storage stakingStore = stakingStorage();
 
+        require(poolId < stakingStore.poolInfo.length, "Pool does not exist");
+
         if (withUpdate) {
             massUpdateStakingPools();
         }
-        stakingStore.totalAllocationPoints = stakingStore.totalAllocationPoints.sub(stakingStore.poolInfo[poolId].allocationPoints).add(
-            allocationPoints
-        );
+        stakingStore.totalAllocationPoints = stakingStore
+            .totalAllocationPoints
+            .sub(stakingStore.poolInfo[poolId].allocationPoints)
+            .add(allocationPoints);
         stakingStore.poolInfo[poolId].allocationPoints = allocationPoints;
     }
 
@@ -443,9 +505,10 @@ library LibStaking {
     function safeGovernanceTransfer(address to, uint256 amount) internal {
         StakingStorage storage stakingStore = stakingStorage();
 
-        uint256 actualAmount = amount > stakingStore.rewardAmount ? stakingStore.rewardAmount : amount;
+        uint256 actualAmount = amount > stakingStore.rewardAmount
+            ? stakingStore.rewardAmount
+            : amount;
         stakingStore.rewardAmount = stakingStore.rewardAmount.sub(actualAmount);
         stakingStore.rewardToken.safeTransfer(to, actualAmount);
     }
 }
-
