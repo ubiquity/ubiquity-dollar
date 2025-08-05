@@ -309,6 +309,154 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(user), 75 ether);
     }
 
+    /**
+     * Scenario:
+     *
+     * Step 1, admin creates 3 staking pools
+     * - Pool 1: 100 allocation points
+     * - Pool 2: 300 allocation points
+     * - Pool 3: 0 allocation points
+     *
+     * Step 2
+     * - user stakes 50 STK in `Pool 1`
+     * - user2 stakes 50 STK in `Pool 2`
+     * - user3 stakes 50 STK in `Pool 3`
+     *
+     * Step 3, 10 blocks pass
+     *
+     * Step 4, users unstake half of the tokens
+     *
+     * Step 5, assert that:
+     * - user gets 2.5 reward tokens (25% pool allocation)
+     * - user2 gets 7.5 reward tokens (75% pool allocation)
+     * - user3 gets 0 reward tokens (0% pool allocation)
+     */
+    function testUnstake_ShouldUnstakeTokens_WhenMultipleUsersUnstakeFromMultiplePools()
+        public
+    {
+        address user2 = makeAddr("user2");
+        address user3 = makeAddr("user3");
+
+        // admin creates 2 more staking pool
+        vm.prank(admin);
+        stakingFacet.createStakingPool(
+            300, // allocation points
+            stakeToken,
+            true // whether to update all pools
+        );
+
+        vm.prank(admin);
+        stakingFacet.createStakingPool(
+            0, // allocation points
+            stakeToken,
+            true // whether to update all pools
+        );
+
+        // mint STK tokens to users
+        stakeToken.mint(user2, 100 ether);
+        stakeToken.mint(user3, 100 ether);
+
+        // users approve diamond to spend STK tokens
+        vm.prank(user2);
+        stakeToken.approve(address(diamond), type(uint256).max);
+        vm.prank(user3);
+        stakeToken.approve(address(diamond), type(uint256).max);
+
+        // users stake tokens in different pools
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+        vm.prank(user2);
+        stakingFacet.stake(1, 50 ether);
+        vm.prank(user3);
+        stakingFacet.stake(2, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // before (user)
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
+            0,
+            user
+        );
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
+            0
+        );
+        assertEq(poolInfo.lastRewardBlock, 1);
+        assertEq(rewardToken.balanceOf(user), 0);
+        assertEq(userInfo.amount, 50 ether);
+        assertEq(userInfo.rewardDebt, 0);
+        assertEq(poolInfo.amount, 50 ether);
+        assertEq(stakeToken.balanceOf(user), 50 ether);
+
+        // before (user2)
+        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(
+            1,
+            user2
+        );
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(
+            1
+        );
+        assertEq(poolInfo2.lastRewardBlock, 1);
+        assertEq(rewardToken.balanceOf(user2), 0);
+        assertEq(userInfo2.amount, 50 ether);
+        assertEq(userInfo2.rewardDebt, 0);
+        assertEq(poolInfo2.amount, 50 ether);
+        assertEq(stakeToken.balanceOf(user2), 50 ether);
+
+        // before (user3)
+        LibStaking.UserInfo memory userInfo3 = stakingFacet.getStakingUserInfo(
+            2,
+            user3
+        );
+        LibStaking.PoolInfo memory poolInfo3 = stakingFacet.getStakingPoolInfo(
+            2
+        );
+        assertEq(poolInfo3.lastRewardBlock, 1);
+        assertEq(rewardToken.balanceOf(user3), 0);
+        assertEq(userInfo3.amount, 50 ether);
+        assertEq(userInfo3.rewardDebt, 0);
+        assertEq(poolInfo3.amount, 50 ether);
+        assertEq(stakeToken.balanceOf(user3), 50 ether);
+
+        // users unstake 25 STK each
+        vm.prank(user);
+        stakingFacet.unstake(0, 25 ether);
+        vm.prank(user2);
+        stakingFacet.unstake(1, 25 ether);
+        vm.prank(user3);
+        stakingFacet.unstake(2, 25 ether);
+
+        // after (user)
+        userInfo = stakingFacet.getStakingUserInfo(0, user);
+        poolInfo = stakingFacet.getStakingPoolInfo(0);
+        assertEq(poolInfo.lastRewardBlock, 11);
+        assertEq(rewardToken.balanceOf(user), 2.5 ether);
+        assertEq(userInfo.amount, 25 ether);
+        assertEq(userInfo.rewardDebt, 1.25 ether);
+        assertEq(poolInfo.amount, 25 ether);
+        assertEq(stakeToken.balanceOf(user), 75 ether);
+
+        // after (user2)
+        userInfo2 = stakingFacet.getStakingUserInfo(1, user2);
+        poolInfo2 = stakingFacet.getStakingPoolInfo(1);
+        assertEq(poolInfo2.lastRewardBlock, 11);
+        assertEq(rewardToken.balanceOf(user2), 7.5 ether);
+        assertEq(userInfo2.amount, 25 ether);
+        assertEq(userInfo2.rewardDebt, 3.75 ether);
+        assertEq(poolInfo2.amount, 25 ether);
+        assertEq(stakeToken.balanceOf(user2), 75 ether);
+
+        // after (user3)
+        userInfo3 = stakingFacet.getStakingUserInfo(2, user3);
+        poolInfo3 = stakingFacet.getStakingPoolInfo(2);
+        assertEq(poolInfo3.lastRewardBlock, 11);
+        assertEq(rewardToken.balanceOf(user3), 0);
+        assertEq(userInfo3.amount, 25 ether);
+        assertEq(userInfo3.rewardDebt, 0);
+        assertEq(poolInfo3.amount, 25 ether);
+        assertEq(stakeToken.balanceOf(user3), 75 ether);
+    }
+
     function testUpdateStakingPool_ShouldDoNothing_IfPoolHasAlreadyBeenUpdatedInTheCurrentBlock()
         public
     {
