@@ -95,8 +95,38 @@ library LibStaking {
     // Events
     //===========
 
+    /// @notice Emitted when new governance bonus end block parameter set
+    event GovernanceBonusEndBlockSet(
+        uint256 indexed newGovernanceBonusEndBlock
+    );
+    /// @notice Emitted when new governance bonus multiplier parameter set
+    event GovernanceBonusMultiplierSet(
+        uint256 indexed newGovernanceBonusMultiplier
+    );
+    /// @notice Emitted when new governance per block parameter set
+    event GovernancePerBlockSet(uint256 indexed newGovernancePerBlock);
+    /// @notice Emitted when new governance treasury divider parameter set
+    event GovernanceTreasuryDividerSet(
+        uint256 indexed newGovernanceTreasuryDivider
+    );
     /// @notice Emitted on staking LP tokens
     event Stake(address indexed user, uint256 indexed poolId, uint256 amount);
+    /// @notice Emitted when new staking pool created
+    event StakingPoolCreated(
+        uint256 indexed allocationPoints,
+        address indexed lpToken
+    );
+    /// @notice Emitted on updating staking pool rewards
+    event StakingPoolUpdated(uint256 indexed poolId);
+    /// @notice Emitted when staking pool allocation updated
+    event StakingPoolAllocationUpdated(
+        uint256 indexed poolId,
+        uint256 indexed allocationPoints
+    );
+    /// @notice Emitted when new reward token address set
+    event StakingRewardTokenSet(address indexed newRewardToken);
+    /// @notice Emitted when new staking start block set
+    event StakingStartBlockSet(uint256 indexed newStartBlock);
     /// @notice Emitted on unstaking LP tokens
     event Unstake(address indexed user, uint256 indexed poolId, uint256 amount);
 
@@ -354,6 +384,7 @@ library LibStaking {
         stakingStore.rewardAmount = stakingStore.rewardAmount.add(
             governanceReward
         );
+        emit StakingPoolUpdated(poolId);
     }
 
     //======================
@@ -393,6 +424,7 @@ library LibStaking {
                 accumulatedGovernancePerShare: 0
             })
         );
+        emit StakingPoolCreated(allocationPoints, address(lpToken));
     }
 
     /**
@@ -408,6 +440,7 @@ library LibStaking {
         );
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.bonusEndBlock = newGovernanceBonusEndBlock;
+        emit GovernanceBonusEndBlockSet(newGovernanceBonusEndBlock);
     }
 
     /**
@@ -419,6 +452,7 @@ library LibStaking {
     ) internal {
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceBonusMultiplier = newGovernanceBonusMultiplier;
+        emit GovernanceBonusMultiplierSet(newGovernanceBonusMultiplier);
     }
 
     /**
@@ -429,6 +463,7 @@ library LibStaking {
         require(newGovernancePerBlock > 0, "Empty rewards");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governancePerBlock = newGovernancePerBlock;
+        emit GovernancePerBlockSet(newGovernancePerBlock);
     }
 
     /**
@@ -446,6 +481,7 @@ library LibStaking {
         );
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
+        emit GovernanceTreasuryDividerSet(newGovernanceTreasuryDivider);
     }
 
     /**
@@ -456,6 +492,7 @@ library LibStaking {
         require(newRewardToken != address(0), "Zero address detected");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.rewardToken = IERC20Ubiquity(newRewardToken);
+        emit StakingRewardTokenSet(newRewardToken);
     }
 
     /**
@@ -466,6 +503,7 @@ library LibStaking {
         require(newStartBlock >= block.number, "Can't start in the past");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.startBlock = newStartBlock;
+        emit StakingStartBlockSet(newStartBlock);
     }
 
     /**
@@ -491,6 +529,8 @@ library LibStaking {
             .sub(stakingStore.poolInfo[poolId].allocationPoints)
             .add(allocationPoints);
         stakingStore.poolInfo[poolId].allocationPoints = allocationPoints;
+
+        emit StakingPoolAllocationUpdated(poolId, allocationPoints);
     }
 
     //====================

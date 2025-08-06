@@ -15,7 +15,28 @@ contract StakingFacetTest is DiamondTestSetup {
 
     address user = makeAddr("user");
 
+    event GovernanceBonusEndBlockSet(
+        uint256 indexed newGovernanceBonusEndBlock
+    );
+    event GovernanceBonusMultiplierSet(
+        uint256 indexed newGovernanceBonusMultiplier
+    );
+    event GovernancePerBlockSet(uint256 indexed newGovernancePerBlock);
+    event GovernanceTreasuryDividerSet(
+        uint256 indexed newGovernanceTreasuryDivider
+    );
     event Stake(address indexed user, uint256 indexed poolId, uint256 amount);
+    event StakingPoolCreated(
+        uint256 indexed allocationPoints,
+        address indexed lpToken
+    );
+    event StakingPoolUpdated(uint256 indexed poolId);
+    event StakingPoolAllocationUpdated(
+        uint256 indexed poolId,
+        uint256 indexed allocationPoints
+    );
+    event StakingRewardTokenSet(address indexed newRewardToken);
+    event StakingStartBlockSet(uint256 indexed newStartBlock);
     event Unstake(address indexed user, uint256 indexed poolId, uint256 amount);
 
     function setUp() public override {
@@ -517,6 +538,9 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(rewardAmount, 0);
 
+        vm.expectEmit(address(stakingFacet));
+        emit StakingPoolUpdated(0);
+
         stakingFacet.updateStakingPool(0);
 
         // after
@@ -578,6 +602,9 @@ contract StakingFacetTest is DiamondTestSetup {
         );
         assertEq(poolInfo1.lastRewardBlock, 1);
 
+        vm.expectEmit(address(stakingFacet));
+        emit StakingPoolCreated(100, address(stakeToken));
+
         // admin creates 2nd pool
         vm.prank(admin);
         stakingFacet.createStakingPool(
@@ -608,6 +635,9 @@ contract StakingFacetTest is DiamondTestSetup {
             .getStakingSettings();
         assertEq(oldBonusEndBlock, 0);
 
+        vm.expectEmit(address(stakingFacet));
+        emit GovernanceBonusEndBlockSet(1);
+
         vm.prank(admin);
         stakingFacet.setGovernanceBonusEndBlock(1);
 
@@ -622,6 +652,9 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , uint256 oldGovernanceBonusMultiplier, , , , , ) = stakingFacet
             .getStakingSettings();
         assertEq(oldGovernanceBonusMultiplier, 0);
+
+        vm.expectEmit(address(stakingFacet));
+        emit GovernanceBonusMultiplierSet(10);
 
         vm.prank(admin);
         stakingFacet.setGovernanceBonusMultiplier(10);
@@ -641,6 +674,9 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , uint256 oldGovernancePerBlock, , , , ) = stakingFacet
             .getStakingSettings();
         assertEq(oldGovernancePerBlock, 1 ether);
+
+        vm.expectEmit(address(stakingFacet));
+        emit GovernancePerBlockSet(2 ether);
 
         vm.prank(admin);
         stakingFacet.setGovernancePerBlock(2 ether);
@@ -665,6 +701,9 @@ contract StakingFacetTest is DiamondTestSetup {
             .getStakingSettings();
         assertEq(oldGovernanceTreasuryDivider, 5);
 
+        vm.expectEmit(address(stakingFacet));
+        emit GovernanceTreasuryDividerSet(10);
+
         vm.prank(admin);
         stakingFacet.setGovernanceTreasuryDivider(10);
 
@@ -686,6 +725,9 @@ contract StakingFacetTest is DiamondTestSetup {
             .getStakingSettings();
         assertEq(oldRewardToken, address(rewardToken));
 
+        vm.expectEmit(address(stakingFacet));
+        emit StakingRewardTokenSet(address(1));
+
         vm.prank(admin);
         stakingFacet.setStakingRewardToken(address(1));
 
@@ -706,6 +748,9 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , , , , , uint256 oldStartBlock) = stakingFacet
             .getStakingSettings();
         assertEq(oldStartBlock, block.number);
+
+        vm.expectEmit(address(stakingFacet));
+        emit StakingStartBlockSet(block.number + 1);
 
         vm.prank(admin);
         stakingFacet.setStakingStartBlock(block.number + 1);
@@ -733,6 +778,9 @@ contract StakingFacetTest is DiamondTestSetup {
 
         // 10 blocks pass
         vm.roll(block.number + 10);
+
+        vm.expectEmit(address(stakingFacet));
+        emit StakingPoolAllocationUpdated(0, 50);
 
         vm.prank(admin);
         stakingFacet.updateStakingPool(0, 50, true);
