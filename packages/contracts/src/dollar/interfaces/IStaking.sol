@@ -7,7 +7,7 @@ import {IERC20Ubiquity} from "./IERC20Ubiquity.sol";
 
 /**
  * @notice Ubiquity staking interface
- * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol 
+ * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol
  */
 interface IStaking {
     //=====================
@@ -20,10 +20,10 @@ interface IStaking {
      * @param user User address
      * @return Staking rewards amount
      */
-    function getPendingStakingRewards(uint256 poolId, address user)
-        external
-        view
-        returns (uint256);
+    function getPendingStakingRewards(
+        uint256 poolId,
+        address user
+    ) external view returns (uint256);
 
     /**
      * @notice Returns reward multiplier over the given `from` to `to` blocks
@@ -31,10 +31,10 @@ interface IStaking {
      * @param to To block number
      * @return Reward multiplier
      */
-    function getStakingMultiplier(uint256 from, uint256 to)
-        external
-        view
-        returns (uint256);
+    function getStakingMultiplier(
+        uint256 from,
+        uint256 to
+    ) external view returns (uint256);
 
     /**
      * @notice Returns staking settings
@@ -46,9 +46,21 @@ interface IStaking {
      * - Governance token divider for treasury
      * - Total available reward amount
      * - Total allocation points across all staking pools
-     * - Start block when staking starts 
+     * - Start block when staking starts
      */
-    function getStakingSettings() external view returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256);
+    function getStakingSettings()
+        external
+        view
+        returns (
+            address,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
 
     /**
      * @notice View function to see user's staking info
@@ -56,14 +68,19 @@ interface IStaking {
      * @param user User address
      * @return User's staking info
      */
-    function getStakingUserInfo(uint256 poolId, address user) external view returns (LibStaking.UserInfo memory);
+    function getStakingUserInfo(
+        uint256 poolId,
+        address user
+    ) external view returns (LibStaking.UserInfo memory);
 
     /**
      * @notice View function to see pool's staking info
      * @param poolId Pool id
      * @return Pool's staking info
      */
-    function getStakingPoolInfo(uint256 poolId) external view returns (LibStaking.PoolInfo memory);
+    function getStakingPoolInfo(
+        uint256 poolId
+    ) external view returns (LibStaking.PoolInfo memory);
 
     /**
      * @notice Returns total staking pools length
@@ -77,12 +94,13 @@ interface IStaking {
 
     /**
      * @notice Updates reward variables for all pools
+     * @param poolIdsToUpdate Array of pool ids to update
      */
-    function massUpdateStakingPools() external;
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
 
     /**
      * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
-     * @param poolId Pool id 
+     * @param poolId Pool id
      * @param amount Amount of LP tokens to stake
      */
     function stake(uint256 poolId, uint256 amount) external;
@@ -108,25 +126,29 @@ interface IStaking {
      * @notice Adds a new staking pool
      * @param allocationPoints Allocation points
      * @param lpToken LP token
-     * @param withUpdate Whether to trigger update on all staking pools
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function createStakingPool(
         uint256 allocationPoints,
         IERC20 lpToken,
-        bool withUpdate
+        uint256[] memory poolIdsToUpdate
     ) external;
 
     /**
      * @notice Sets last block number when Governance bonus emissions end
      * @param newGovernanceBonusEndBlock Block number when Governance bonus emissions end
      */
-    function setGovernanceBonusEndBlock(uint256 newGovernanceBonusEndBlock) external;
+    function setGovernanceBonusEndBlock(
+        uint256 newGovernanceBonusEndBlock
+    ) external;
 
     /**
      * @notice Sets bonus multiplier for early Governance token makers
      * @param newGovernanceBonusMultiplier New governance bonus multiplier
      */
-    function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) external;
+    function setGovernanceBonusMultiplier(
+        uint256 newGovernanceBonusMultiplier
+    ) external;
 
     /**
      * @notice Sets Governance tokens reward per block
@@ -160,11 +182,11 @@ interface IStaking {
      * @notice Updates the given pool's Governance token allocation points
      * @param poolId Pool id
      * @param allocationPoints New allocation points
-     * @param withUpdate Whether to trigger update on all staking pools
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function updateStakingPool(
         uint256 poolId,
         uint256 allocationPoints,
-        bool withUpdate
+        uint256[] memory poolIdsToUpdate
     ) external;
 }

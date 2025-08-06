@@ -64,12 +64,13 @@ contract StakingFacetTest is DiamondTestSetup {
         dollarManager.grantRole(keccak256("UBQ_MINTER_ROLE"), address(diamond));
 
         // admin creates a new staking pool
-        vm.prank(admin);
+        vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
             stakeToken,
-            true // whether to update all pools
+            getAvailablePoolIds() // array of pool ids to update
         );
+        vm.stopPrank();
 
         // mint 100 STK tokens to user
         stakeToken.mint(user, 100 ether);
@@ -224,20 +225,35 @@ contract StakingFacetTest is DiamondTestSetup {
     //==================
 
     function testMassUpdateStakingPools_ShouldUpdateAllStakingPools() public {
+        // admin creates 2nd pool
+        vm.startPrank(admin);
+        stakingFacet.createStakingPool(
+            100, // allocation points
+            stakeToken,
+            getAvailablePoolIds() // array of pool ids to update
+        );
+        vm.stopPrank();
+
         // before
         LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
             0
         );
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(
+            1
+        );
         assertEq(poolInfo.lastRewardBlock, 1);
+        assertEq(poolInfo2.lastRewardBlock, 1);
 
         // 10 blocks pass
         vm.roll(block.number + 10);
 
-        stakingFacet.massUpdateStakingPools();
+        stakingFacet.massUpdateStakingPools(getAvailablePoolIds());
 
         // after
         poolInfo = stakingFacet.getStakingPoolInfo(0);
+        poolInfo2 = stakingFacet.getStakingPoolInfo(1);
         assertEq(poolInfo.lastRewardBlock, 11);
+        assertEq(poolInfo2.lastRewardBlock, 11);
     }
 
     function testStake_ShouldStakeTokens() public {
@@ -359,19 +375,18 @@ contract StakingFacetTest is DiamondTestSetup {
         address user3 = makeAddr("user3");
 
         // admin creates 2 more staking pool
-        vm.prank(admin);
+        vm.startPrank(admin);
         stakingFacet.createStakingPool(
             300, // allocation points
             stakeToken,
-            true // whether to update all pools
+            getAvailablePoolIds() // array of pool ids to update
         );
-
-        vm.prank(admin);
         stakingFacet.createStakingPool(
             0, // allocation points
             stakeToken,
-            true // whether to update all pools
+            getAvailablePoolIds() // array of pool ids to update
         );
+        vm.stopPrank();
 
         // mint STK tokens to users
         stakeToken.mint(user2, 100 ether);
@@ -560,12 +575,13 @@ contract StakingFacetTest is DiamondTestSetup {
     function testCreateStakingPool_ShouldRevert_IfLpTokenAddressIsZero()
         public
     {
+        uint256[] memory poolIdsToUpdate = getAvailablePoolIds();
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.createStakingPool(
             100, // allocation points
             MockERC20(address(0)),
-            true // whether to update all pools
+            poolIdsToUpdate // array of pool ids to update
         );
     }
 
@@ -606,12 +622,13 @@ contract StakingFacetTest is DiamondTestSetup {
         emit StakingPoolCreated(100, address(stakeToken));
 
         // admin creates 2nd pool
-        vm.prank(admin);
+        vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
             stakeToken,
-            true // whether to update all pools
+            getAvailablePoolIds() // array of pool ids to update
         );
+        vm.stopPrank();
 
         // after
         poolInfo1 = stakingFacet.getStakingPoolInfo(0);
@@ -761,9 +778,10 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     function testUpdateStakingPool_ShouldRevert_IfPoolDoesNotExist() public {
+        uint256[] memory poolIdsToUpdate = getAvailablePoolIds();
         vm.prank(admin);
         vm.expectRevert("Pool does not exist");
-        stakingFacet.updateStakingPool(1, 0, true);
+        stakingFacet.updateStakingPool(1, 0, poolIdsToUpdate);
     }
 
     function testUpdateStakingPool_ShouldUpdateStakingPoolSettings() public {
@@ -782,8 +800,9 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.expectEmit(address(stakingFacet));
         emit StakingPoolAllocationUpdated(0, 50);
 
-        vm.prank(admin);
-        stakingFacet.updateStakingPool(0, 50, true);
+        vm.startPrank(admin);
+        stakingFacet.updateStakingPool(0, 50, getAvailablePoolIds());
+        vm.stopPrank();
 
         poolInfo = stakingFacet.getStakingPoolInfo(0);
         (, , , , , , uint256 newTotalAllocationPoints, ) = stakingFacet
@@ -822,5 +841,21 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , , , rewardAmount, , ) = stakingFacet.getStakingSettings();
         assertEq(rewardAmount, 0);
         assertEq(rewardToken.balanceOf(user), 10 ether);
+    }
+
+    //================
+    // Test helpers
+    //================
+
+    /**
+     * Returns array of available pool ids
+     */
+    function getAvailablePoolIds() public view returns (uint256[] memory) {
+        uint256 poolsLength = stakingFacet.getStakingPoolsLength();
+        uint256[] memory availablePoolIds = new uint256[](poolsLength);
+        for (uint256 i = 0; i < poolsLength; ++i) {
+            availablePoolIds[i] = i;
+        }
+        return availablePoolIds;
     }
 }

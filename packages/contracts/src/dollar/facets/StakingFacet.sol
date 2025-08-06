@@ -16,33 +16,51 @@ contract StakingFacet is IStaking, Modifiers {
     //=====================
 
     /// @inheritdoc IStaking
-    function getPendingStakingRewards(uint256 poolId, address user)
-        external
-        view
-        returns (uint256) {
-            return LibStaking.getPendingStakingRewards(poolId, user);
-        }
+    function getPendingStakingRewards(
+        uint256 poolId,
+        address user
+    ) external view returns (uint256) {
+        return LibStaking.getPendingStakingRewards(poolId, user);
+    }
 
     /// @inheritdoc IStaking
-    function getStakingMultiplier(uint256 from, uint256 to)
-        external
-        view
-        returns (uint256) {
-            return LibStaking.getStakingMultiplier(from, to);
-        }
+    function getStakingMultiplier(
+        uint256 from,
+        uint256 to
+    ) external view returns (uint256) {
+        return LibStaking.getStakingMultiplier(from, to);
+    }
 
     /// @inheritdoc IStaking
-    function getStakingSettings() external view returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256) {
+    function getStakingSettings()
+        external
+        view
+        returns (
+            address,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        )
+    {
         return LibStaking.getStakingSettings();
     }
 
     /// @inheritdoc IStaking
-    function getStakingUserInfo(uint256 poolId, address user) external view returns (LibStaking.UserInfo memory) {
+    function getStakingUserInfo(
+        uint256 poolId,
+        address user
+    ) external view returns (LibStaking.UserInfo memory) {
         return LibStaking.getStakingUserInfo(poolId, user);
     }
 
     /// @inheritdoc IStaking
-    function getStakingPoolInfo(uint256 poolId) external view returns (LibStaking.PoolInfo memory) {
+    function getStakingPoolInfo(
+        uint256 poolId
+    ) external view returns (LibStaking.PoolInfo memory) {
         return LibStaking.getStakingPoolInfo(poolId);
     }
 
@@ -56,8 +74,8 @@ contract StakingFacet is IStaking, Modifiers {
     //==================
 
     /// @inheritdoc IStaking
-    function massUpdateStakingPools() external {
-        LibStaking.massUpdateStakingPools();
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external {
+        LibStaking.massUpdateStakingPools(poolIdsToUpdate);
     }
 
     /// @inheritdoc IStaking
@@ -83,23 +101,33 @@ contract StakingFacet is IStaking, Modifiers {
     function createStakingPool(
         uint256 allocationPoints,
         IERC20 lpToken,
-        bool withUpdate
+        uint256[] memory poolIdsToUpdate
     ) external onlyAdmin {
-        LibStaking.createStakingPool(allocationPoints, lpToken, withUpdate);
+        LibStaking.createStakingPool(
+            allocationPoints,
+            lpToken,
+            poolIdsToUpdate
+        );
     }
 
     /// @inheritdoc IStaking
-    function setGovernanceBonusEndBlock(uint256 newGovernanceBonusEndBlock) external onlyAdmin {
+    function setGovernanceBonusEndBlock(
+        uint256 newGovernanceBonusEndBlock
+    ) external onlyAdmin {
         LibStaking.setGovernanceBonusEndBlock(newGovernanceBonusEndBlock);
     }
 
     /// @inheritdoc IStaking
-    function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) external onlyAdmin {
+    function setGovernanceBonusMultiplier(
+        uint256 newGovernanceBonusMultiplier
+    ) external onlyAdmin {
         LibStaking.setGovernanceBonusMultiplier(newGovernanceBonusMultiplier);
     }
 
     /// @inheritdoc IStaking
-    function setGovernancePerBlock(uint256 newGovernancePerBlock) external onlyAdmin {
+    function setGovernancePerBlock(
+        uint256 newGovernancePerBlock
+    ) external onlyAdmin {
         LibStaking.setGovernancePerBlock(newGovernancePerBlock);
     }
 
@@ -124,8 +152,8 @@ contract StakingFacet is IStaking, Modifiers {
     function updateStakingPool(
         uint256 poolId,
         uint256 allocationPoints,
-        bool withUpdate
+        uint256[] memory poolIdsToUpdate
     ) external onlyAdmin {
-        LibStaking.updateStakingPool(poolId, allocationPoints, withUpdate);
+        LibStaking.updateStakingPool(poolId, allocationPoints, poolIdsToUpdate);
     }
 }

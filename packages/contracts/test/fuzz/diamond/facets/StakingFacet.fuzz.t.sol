@@ -41,12 +41,13 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         dollarManager.grantRole(keccak256("UBQ_MINTER_ROLE"), address(diamond));
 
         // admin creates a new staking pool
-        vm.prank(admin);
+        vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
             stakeToken,
-            true // whether to update all pools
+            getAvailablePoolIds() // array of pool ids to update
         );
+        vm.stopPrank();
 
         // user approves diamond to spend STK tokens
         vm.prank(user);
@@ -146,5 +147,21 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(user), stakeAmount);
         assertEq(stakeToken.balanceOf(user2), stakeAmount);
         assertEq(stakeToken.balanceOf(address(stakingFacet)), 0);
+    }
+
+    //================
+    // Test helpers
+    //================
+
+    /**
+     * Returns array of available pool ids
+     */
+    function getAvailablePoolIds() public view returns (uint256[] memory) {
+        uint256 poolsLength = stakingFacet.getStakingPoolsLength();
+        uint256[] memory availablePoolIds = new uint256[](poolsLength);
+        for (uint256 i = 0; i < poolsLength; ++i) {
+            availablePoolIds[i] = i;
+        }
+        return availablePoolIds;
     }
 }

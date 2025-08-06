@@ -276,13 +276,12 @@ library LibStaking {
 
     /**
      * @notice Updates reward variables for all pools
+     * @param poolIdsToUpdate Array of pool ids to update
      */
-    function massUpdateStakingPools() internal {
-        StakingStorage storage stakingStore = stakingStorage();
-
-        uint256 length = stakingStore.poolInfo.length;
-        for (uint256 pid = 0; pid < length; ++pid) {
-            updateStakingPool(pid);
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) internal {
+        uint256 length = poolIdsToUpdate.length;
+        for (uint256 i = 0; i < length; ++i) {
+            updateStakingPool(poolIdsToUpdate[i]);
         }
     }
 
@@ -395,20 +394,21 @@ library LibStaking {
      * @notice Adds a new staking pool
      * @param allocationPoints Allocation points
      * @param lpToken LP token
-     * @param withUpdate Whether to trigger update on all staking pools
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function createStakingPool(
         uint256 allocationPoints,
         IERC20 lpToken,
-        bool withUpdate
+        uint256[] memory poolIdsToUpdate
     ) internal {
         require(address(lpToken) != address(0), "Zero address detected");
 
         StakingStorage storage stakingStore = stakingStorage();
 
-        if (withUpdate) {
-            massUpdateStakingPools();
+        if (poolIdsToUpdate.length > 0) {
+            massUpdateStakingPools(poolIdsToUpdate);
         }
+
         uint256 lastRewardBlock = block.number > stakingStore.startBlock
             ? block.number
             : stakingStore.startBlock;
@@ -510,20 +510,21 @@ library LibStaking {
      * @notice Updates the given pool's Governance token allocation points
      * @param poolId Pool id
      * @param allocationPoints New allocation points
-     * @param withUpdate Whether to trigger update on all staking pools
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function updateStakingPool(
         uint256 poolId,
         uint256 allocationPoints,
-        bool withUpdate
+        uint256[] memory poolIdsToUpdate
     ) internal {
         StakingStorage storage stakingStore = stakingStorage();
 
         require(poolId < stakingStore.poolInfo.length, "Pool does not exist");
 
-        if (withUpdate) {
-            massUpdateStakingPools();
+        if (poolIdsToUpdate.length > 0) {
+            massUpdateStakingPools(poolIdsToUpdate);
         }
+
         stakingStore.totalAllocationPoints = stakingStore
             .totalAllocationPoints
             .sub(stakingStore.poolInfo[poolId].allocationPoints)
