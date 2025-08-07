@@ -30,6 +30,7 @@
     "prebuild": "run-p clean",
     "deploy:development": "migrations/development/deploy.sh",
     "deploy:mainnet": "migrations/mainnet/deploy.sh",
+    "deploy:mainnet:qa": "migrations/mainnet/deploy-qa.sh",
     "clean": "run-p clean:*",
     "clean:yarn": "yarn clean",
     "clean:forge": "forge clean",

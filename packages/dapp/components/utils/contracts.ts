@@ -12,17 +12,13 @@ import _ICreditRedemptionCalculator from "@ubiquity/contracts/out/ICreditRedempt
 import _ICurveFactory from "@ubiquity/contracts/out/ICurveFactory.sol/ICurveFactory.json";
 import _IMetaPool from "@ubiquity/contracts/out/IMetaPool.sol/IMetaPool.json";
 import _SimpleBond from "@ubiquity/contracts/out/SimpleBond.sol/SimpleBond.json";
-import _Staking from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
-import _StakingToken from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import _SushiSwapPool from "@ubiquity/contracts/out/SushiSwapPool.sol/SushiSwapPool.json";
 import _TWAPOracle from "@ubiquity/contracts/out/ICurveStableSwapMetaNG.sol/ICurveStableSwapMetaNG.json";
 import _UbiquiStick from "@ubiquity/contracts/out/UbiquiStick.sol/UbiquiStick.json";
 import _UbiquiStickSale from "@ubiquity/contracts/out/UbiquiStickSale.sol/UbiquiStickSale.json";
-import _MasterChefV2 from "@ubiquity/contracts/out/ChefFacet.sol/ChefFacet.json";
 import _Credit from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
 import _UbiquityManager from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
 import _Dollar from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
-import _UbiquityFormulas from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import _Governance from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 
 // ABIs
@@ -49,16 +45,12 @@ import {
   IMetaPool,
   IUniswapV2Pair,
   SimpleBond,
-  StakingFacet,
-  StakingShare,
   SushiSwapPool,
   UbiquiStick,
   UbiquiStickSale,
-  ChefFacet,
   UbiquityCreditToken,
   ManagerFacet,
   UbiquityDollarToken,
-  StakingFormulasFacet,
   UbiquityGovernanceToken,
 } from "types";
 
@@ -113,14 +105,6 @@ export const getYieldProxyContract = (address: string, provider: Provider) => {
   return getContract(YieldProxyABI, address, provider); // as YieldProxy;
 };
 
-export const getStakingShareContract = (address: string, provider: Provider) => {
-  return getContract(_StakingToken.abi, address, provider) as StakingShare;
-};
-
-export const getStakingV2Contract = (address: string, provider: Provider) => {
-  return getContract(_Staking.abi, address, provider) as StakingFacet;
-};
-
 export const getCreditNftContract = (address: string, provider: Provider) => {
   return getContract(_CreditNft.abi, address, provider) as CreditNft;
 };
@@ -145,10 +129,6 @@ export const getIMetaPoolContract = (address: string, provider: Provider) => {
   return getContract(_IMetaPool.abi, address, provider) as IMetaPool;
 };
 
-export const getMasterChefV2Contract = (address: string, provider: Provider) => {
-  return getContract(_MasterChefV2.abi, address, provider) as ChefFacet;
-};
-
 export const getSushiSwapPoolContract = (address: string, provider: Provider) => {
   return getContract(_SushiSwapPool.abi, address, provider) as SushiSwapPool;
 };
@@ -163,10 +143,6 @@ export const getDollarContract = (address: string, provider: Provider) => {
 
 export const getCreditContract = (address: string, provider: Provider) => {
   return getContract(_Credit.abi, address, provider) as UbiquityCreditToken;
-};
-
-export const getUbiquityFormulasContract = (address: string, provider: Provider) => {
-  return getContract(_UbiquityFormulas.abi, address, provider) as StakingFormulasFacet;
 };
 
 export const getGovernanceContract = (address: string, provider: Provider) => {

@@ -7,13 +7,11 @@ import { sushiSwapPoolAddress, dollar3poolMarketAddress, _3crvTokenAddress } fro
 // contract build artifacts
 // separately deployed contracts
 import CreditNftArtifact from "@ubiquity/contracts/out/CreditNft.sol/CreditNft.json";
-import StakingShareArtifact from "@ubiquity/contracts/out/StakingShare.sol/StakingShare.json";
 import UbiquityCreditTokenArtifact from "@ubiquity/contracts/out/UbiquityCreditToken.sol/UbiquityCreditToken.json";
 import UbiquityDollarTokenArtifact from "@ubiquity/contracts/out/UbiquityDollarToken.sol/UbiquityDollarToken.json";
 import UbiquityGovernanceTokenArtifact from "@ubiquity/contracts/out/UbiquityGovernanceToken.sol/UbiquityGovernanceToken.json";
 // diamond facets
 import AccessControlFacetArtifact from "@ubiquity/contracts/out/AccessControlFacet.sol/AccessControlFacet.json";
-import ChefFacetArtifact from "@ubiquity/contracts/out/ChefFacet.sol/ChefFacet.json";
 import CollectableDustFacetArtifact from "@ubiquity/contracts/out/CollectableDustFacet.sol/CollectableDustFacet.json";
 import CreditNftManagerFacetArtifact from "@ubiquity/contracts/out/CreditNftManagerFacet.sol/CreditNftManagerFacet.json";
 import CreditNftRedemptionCalculatorFacetArtifact from "@ubiquity/contracts/out/CreditNftRedemptionCalculatorFacet.sol/CreditNftRedemptionCalculatorFacet.json";
@@ -23,8 +21,6 @@ import DollarMintCalculatorFacetArtifact from "@ubiquity/contracts/out/DollarMin
 import DollarMintExcessFacetArtifact from "@ubiquity/contracts/out/DollarMintExcessFacet.sol/DollarMintExcessFacet.json";
 import ManagerFacetArtifact from "@ubiquity/contracts/out/ManagerFacet.sol/ManagerFacet.json";
 import OwnershipFacetArtifact from "@ubiquity/contracts/out/OwnershipFacet.sol/OwnershipFacet.json";
-import StakingFacetArtifact from "@ubiquity/contracts/out/StakingFacet.sol/StakingFacet.json";
-import StakingFormulasFacetArtifact from "@ubiquity/contracts/out/StakingFormulasFacet.sol/StakingFormulasFacet.json";
 import TWAPOracleDollar3poolFacetArtifact from "@ubiquity/contracts/out/ICurveStableSwapMetaNG.sol/ICurveStableSwapMetaNG.json";
 import UbiquityPoolFacetArtifact from "@ubiquity/contracts/out/UbiquityPoolFacet.sol/UbiquityPoolFacet.json";
 // other related contracts
@@ -49,7 +45,6 @@ import ERC20ABI from "@/components/config/abis/erc-20.json";
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/facets/DiamondCutFacet.sol
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/facets/DiamondLoupeFacet.sol
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/Diamond.sol
- * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/DirectGovernanceFarmer.sol
  *
  * Contracts not yet integrated (i.e. not used in other solidity contracts):
  * - https://github.com/ubiquity/ubiquity-dollar/blob/development/packages/contracts/src/dollar/core/CreditClock.sol
@@ -69,10 +64,8 @@ const useProtocolContracts = async () => {
     creditToken: Contract | null;
     dollarToken: Contract | null;
     governanceToken: Contract | null;
-    stakingShare: Contract | null;
     // diamond facets
     accessControlFacet: Contract | null;
-    chefFacet: Contract | null;
     collectableDustFacet: Contract | null;
     creditNftManagerFacet: Contract | null;
     creditNftRedemptionCalculatorFacet: Contract | null;
@@ -82,8 +75,6 @@ const useProtocolContracts = async () => {
     dollarMintExcessFacet: Contract | null;
     managerFacet: Contract | null;
     ownershipFacet: Contract | null;
-    stakingFacet: Contract | null;
-    stakingFormulasFacet: Contract | null;
     twapOracleDollar3poolFacet: Contract | null;
     ubiquityPoolFacet: Contract | null;
     sushiPoolGovernanceDollarLp: Contract | null;
@@ -95,10 +86,8 @@ const useProtocolContracts = async () => {
     creditToken: null,
     dollarToken: null,
     governanceToken: null,
-    stakingShare: null,
     // diamond facets
     accessControlFacet: null,
-    chefFacet: null,
     collectableDustFacet: null,
     creditNftManagerFacet: null,
     creditNftRedemptionCalculatorFacet: null,
@@ -108,8 +97,6 @@ const useProtocolContracts = async () => {
     dollarMintExcessFacet: null,
     managerFacet: null,
     ownershipFacet: null,
-    stakingFacet: null,
-    stakingFormulasFacet: null,
     twapOracleDollar3poolFacet: null,
     ubiquityPoolFacet: null,
     // related contracts
@@ -145,9 +132,6 @@ const useProtocolContracts = async () => {
       if (tx.contractName === "UbiquityGovernanceToken") {
         protocolContracts.governanceToken = new ethers.Contract(tx.contractAddress, UbiquityGovernanceTokenArtifact.abi, <Provider>provider);
       }
-      if (tx.contractName === "StakingShare") {
-        protocolContracts.stakingShare = new ethers.Contract(tx.contractAddress, StakingShareArtifact.abi, <Provider>provider);
-      }
       // find the diamond address
       if (tx.contractName === "Diamond") diamondAddress = tx.contractAddress;
     }
@@ -155,7 +139,6 @@ const useProtocolContracts = async () => {
 
   // assign diamond facets
   protocolContracts.accessControlFacet = new ethers.Contract(diamondAddress, AccessControlFacetArtifact.abi, <Provider>provider);
-  protocolContracts.chefFacet = new ethers.Contract(diamondAddress, ChefFacetArtifact.abi, <Provider>provider);
   protocolContracts.collectableDustFacet = new ethers.Contract(diamondAddress, CollectableDustFacetArtifact.abi, <Provider>provider);
   protocolContracts.creditNftManagerFacet = new ethers.Contract(diamondAddress, CreditNftManagerFacetArtifact.abi, <Provider>provider);
   protocolContracts.creditNftRedemptionCalculatorFacet = new ethers.Contract(diamondAddress, CreditNftRedemptionCalculatorFacetArtifact.abi, <Provider>provider);
@@ -165,8 +148,6 @@ const useProtocolContracts = async () => {
   protocolContracts.dollarMintExcessFacet = new ethers.Contract(diamondAddress, DollarMintExcessFacetArtifact.abi, <Provider>provider);
   protocolContracts.managerFacet = new ethers.Contract(diamondAddress, ManagerFacetArtifact.abi, <Provider>provider);
   protocolContracts.ownershipFacet = new ethers.Contract(diamondAddress, OwnershipFacetArtifact.abi, <Provider>provider);
-  protocolContracts.stakingFacet = new ethers.Contract(diamondAddress, StakingFacetArtifact.abi, <Provider>provider);
-  protocolContracts.stakingFormulasFacet = new ethers.Contract(diamondAddress, StakingFormulasFacetArtifact.abi, <Provider>provider);
   protocolContracts.twapOracleDollar3poolFacet = new ethers.Contract(diamondAddress, TWAPOracleDollar3poolFacetArtifact.abi, <Provider>provider);
   protocolContracts.ubiquityPoolFacet = new ethers.Contract(diamondAddress, UbiquityPoolFacetArtifact.abi, <Provider>provider);
 

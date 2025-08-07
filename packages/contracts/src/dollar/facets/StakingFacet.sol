@@ -1,140 +1,159 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import {LibStaking} from "../libraries/LibStaking.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
+import {IStaking} from "../interfaces/IStaking.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
+import {LibStaking} from "../libraries/LibStaking.sol";
 
-import {IStaking} from "../../dollar/interfaces/IStaking.sol";
+/**
+ * @notice Ubiquity staking facet
+ */
+contract StakingFacet is IStaking, Modifiers {
+    //=====================
+    // Views
+    //=====================
 
-/// @notice Staking facet
-contract StakingFacet is Modifiers, IStaking {
-    /**
-     * @notice Removes Ubiquity Dollar unilaterally from the curve LP share sitting inside
-     * the staking contract and sends the Ubiquity Dollar received to the treasury. This will
-     * have the immediate effect of pushing the Ubiquity Dollar price HIGHER
-     * @notice It will remove one coin only from the curve LP share sitting in the staking contract
-     * @param amount Amount of LP token to be removed for Ubiquity Dollar
-     */
-    function dollarPriceReset(uint256 amount) external onlyStakingManager {
-        LibStaking.dollarPriceReset(amount);
+    /// @inheritdoc IStaking
+    function getPendingStakingRewards(
+        uint256 poolId,
+        address user
+    ) external view returns (uint256) {
+        return LibStaking.getPendingStakingRewards(poolId, user);
     }
 
-    /**
-     * @notice Remove 3CRV unilaterally from the curve LP share sitting inside
-     * the staking contract and send the 3CRV received to the treasury. This will
-     * have the immediate effect of pushing the Ubiquity Dollar price LOWER.
-     * @notice It will remove one coin only from the curve LP share sitting in the staking contract
-     * @param amount Amount of LP token to be removed for 3CRV tokens
-     */
-    function crvPriceReset(uint256 amount) external onlyStakingManager {
-        LibStaking.crvPriceReset(amount);
+    /// @inheritdoc IStaking
+    function getStakingMultiplier(
+        uint256 from,
+        uint256 to
+    ) external view returns (uint256) {
+        return LibStaking.getStakingMultiplier(from, to);
     }
 
-    /**
-     * @notice Sets staking discount multiplier
-     * @param _stakingDiscountMultiplier New staking discount multiplier
-     */
-    function setStakingDiscountMultiplier(
-        uint256 _stakingDiscountMultiplier
-    ) external onlyStakingManager {
-        LibStaking.setStakingDiscountMultiplier(_stakingDiscountMultiplier);
+    /// @inheritdoc IStaking
+    function getStakingSettings()
+        external
+        view
+        returns (
+            address,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        )
+    {
+        return LibStaking.getStakingSettings();
     }
 
-    /**
-     * @notice Returns staking discount multiplier
-     * @return Staking discount multiplier
-     */
-    function stakingDiscountMultiplier() external view returns (uint256) {
-        return LibStaking.stakingDiscountMultiplier();
+    /// @inheritdoc IStaking
+    function getStakingUserInfo(
+        uint256 poolId,
+        address user
+    ) external view returns (LibStaking.UserInfo memory) {
+        return LibStaking.getStakingUserInfo(poolId, user);
     }
 
-    /**
-     * @notice Returns number of blocks in a week
-     * @return Number of blocks in a week
-     */
-    function blockCountInAWeek() external view returns (uint256) {
-        return LibStaking.blockCountInAWeek();
+    /// @inheritdoc IStaking
+    function getStakingPoolInfo(
+        uint256 poolId
+    ) external view returns (LibStaking.PoolInfo memory) {
+        return LibStaking.getStakingPoolInfo(poolId);
     }
 
-    /**
-     * @notice Sets number of blocks in a week
-     * @param _blockCountInAWeek Number of blocks in a week
-     */
-    function setBlockCountInAWeek(
-        uint256 _blockCountInAWeek
-    ) external onlyStakingManager {
-        LibStaking.setBlockCountInAWeek(_blockCountInAWeek);
+    /// @inheritdoc IStaking
+    function getStakingPoolsLength() external view returns (uint256) {
+        return LibStaking.getStakingPoolsLength();
     }
 
-    /**
-     * @notice Deposits UbiquityDollar-3CRV LP tokens for a duration to receive staking shares
-     * @notice Weeks act as a multiplier for the amount of staking shares to be received
-     * @param _lpsAmount Amount of LP tokens to send
-     * @param _weeks Number of weeks during which LP tokens will be held
-     * @return _id Staking share id
-     */
-    function deposit(
-        uint256 _lpsAmount,
-        uint256 _weeks
-    ) external whenNotPaused returns (uint256 _id) {
-        return LibStaking.deposit(_lpsAmount, _weeks);
+    //==================
+    // Public methods
+    //==================
+
+    /// @inheritdoc IStaking
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external {
+        LibStaking.massUpdateStakingPools(poolIdsToUpdate);
     }
 
-    /**
-     * @notice Adds an amount of UbiquityDollar-3CRV LP tokens
-     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
-     * @param _amount Amount of LP token to deposit
-     * @param _id Staking share id
-     * @param _weeks Number of weeks during which LP tokens will be held
-     */
-    function addLiquidity(
-        uint256 _amount,
-        uint256 _id,
-        uint256 _weeks
-    ) external whenNotPaused {
-        LibStaking.addLiquidity(_amount, _id, _weeks);
+    /// @inheritdoc IStaking
+    function stake(uint256 poolId, uint256 amount) external {
+        LibStaking.stake(poolId, amount);
     }
 
-    /**
-     * @notice Removes an amount of UbiquityDollar-3CRV LP tokens
-     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
-     * @param _amount Amount of LP token deposited when `_id` was created to be withdrawn
-     * @param _id Staking share id
-     */
-    function removeLiquidity(
-        uint256 _amount,
-        uint256 _id
-    ) external whenNotPaused {
-        LibStaking.removeLiquidity(_amount, _id);
+    /// @inheritdoc IStaking
+    function unstake(uint256 poolId, uint256 amount) external {
+        LibStaking.unstake(poolId, amount);
     }
 
-    /**
-     * @notice View function to see pending LP rewards on frontend
-     * @param _id Staking share id
-     * @return Amount of LP rewards
-     */
-    function pendingLpRewards(uint256 _id) external view returns (uint256) {
-        return LibStaking.pendingLpRewards(_id);
+    /// @inheritdoc IStaking
+    function updateStakingPool(uint256 poolId) external {
+        LibStaking.updateStakingPool(poolId);
     }
 
-    /**
-     * @notice Returns the amount of LP token rewards an amount of shares entitled
-     * @param amount Amount of staking shares
-     * @param lpRewardDebt Amount of LP rewards that have already been distributed
-     * @return pendingLpReward Amount of pending LP rewards
-     */
-    function lpRewardForShares(
-        uint256 amount,
-        uint256 lpRewardDebt
-    ) external view returns (uint256 pendingLpReward) {
-        return LibStaking.lpRewardForShares(amount, lpRewardDebt);
+    //======================
+    // Restricted methods
+    //======================
+
+    /// @inheritdoc IStaking
+    function createStakingPool(
+        uint256 allocationPoints,
+        IERC20 lpToken,
+        uint256[] memory poolIdsToUpdate
+    ) external onlyAdmin {
+        LibStaking.createStakingPool(
+            allocationPoints,
+            lpToken,
+            poolIdsToUpdate
+        );
     }
 
-    /**
-     * @notice Returns current share price
-     * @return priceShare Share price
-     */
-    function currentShareValue() external view returns (uint256 priceShare) {
-        priceShare = LibStaking.currentShareValue();
+    /// @inheritdoc IStaking
+    function setGovernanceBonusEndBlock(
+        uint256 newGovernanceBonusEndBlock
+    ) external onlyAdmin {
+        LibStaking.setGovernanceBonusEndBlock(newGovernanceBonusEndBlock);
+    }
+
+    /// @inheritdoc IStaking
+    function setGovernanceBonusMultiplier(
+        uint256 newGovernanceBonusMultiplier
+    ) external onlyAdmin {
+        LibStaking.setGovernanceBonusMultiplier(newGovernanceBonusMultiplier);
+    }
+
+    /// @inheritdoc IStaking
+    function setGovernancePerBlock(
+        uint256 newGovernancePerBlock
+    ) external onlyAdmin {
+        LibStaking.setGovernancePerBlock(newGovernancePerBlock);
+    }
+
+    /// @inheritdoc IStaking
+    function setGovernanceTreasuryDivider(
+        uint256 newGovernanceTreasuryDivider
+    ) external onlyAdmin {
+        LibStaking.setGovernanceTreasuryDivider(newGovernanceTreasuryDivider);
+    }
+
+    /// @inheritdoc IStaking
+    function setStakingRewardToken(address newRewardToken) external onlyAdmin {
+        LibStaking.setStakingRewardToken(newRewardToken);
+    }
+
+    /// @inheritdoc IStaking
+    function setStakingStartBlock(uint256 newStartBlock) external onlyAdmin {
+        LibStaking.setStakingStartBlock(newStartBlock);
+    }
+
+    /// @inheritdoc IStaking
+    function updateStakingPool(
+        uint256 poolId,
+        uint256 allocationPoints,
+        uint256[] memory poolIdsToUpdate
+    ) external onlyAdmin {
+        LibStaking.updateStakingPool(poolId, allocationPoints, poolIdsToUpdate);
     }
 }

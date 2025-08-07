@@ -38,7 +38,6 @@ export interface Balances {
   credit: BigNumber;
   creditNft: BigNumber;
   governance: BigNumber;
-  stakingShares: BigNumber;
   usdc: BigNumber;
   dai: BigNumber;
   usdt: BigNumber;

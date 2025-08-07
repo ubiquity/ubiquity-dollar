@@ -1,532 +1,555 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./LibChef.sol";
-import "./LibStakingFormulas.sol";
-import {StakingShare} from "../core/StakingShare.sol";
-import {ICurveStableSwapMetaNG} from "../interfaces/ICurveStableSwapMetaNG.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
+import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
 
-/// @notice Staking library
+/**
+ * @notice Ubiquity staking contract
+ * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol
+ */
 library LibStaking {
+    using SafeMath for uint256;
     using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20Ubiquity;
 
     /// @notice Storage slot used to store data for this library
-    bytes32 constant STAKING_CONTROL_STORAGE_SLOT =
+    bytes32 constant STAKING_STORAGE_POSITION =
         bytes32(uint256(keccak256("ubiquity.contracts.staking.storage")) - 1) &
             ~bytes32(uint256(0xff));
 
-    /// @notice Emitted when Dollar or 3CRV tokens are removed from Curve MetaPool
-    event PriceReset(
-        address _tokenWithdrawn,
-        uint256 _amountWithdrawn,
-        uint256 _amountTransferred
-    );
+    /**
+     * @notice Info of each user
+     * @dev Reward debt explanation:
+     *
+     * We do some fancy math here. Basically, any point in time, the amount of Governance tokens
+     * entitled to a user but is pending to be distributed is:
+     *
+     * pending reward = (user.amount * pool.accumulatedGovernancePerShare) - user.rewardDebt
+     *
+     * Whenever a user deposits or withdraws LP tokens to a pool. Here's what happens:
+     *    1. The pool's `accumulatedGovernancePerShare` (and `lastRewardBlock`) gets updated.
+     *    2. User receives the pending reward sent to his/her address.
+     *    3. User's `amount` gets updated.
+     *    4. User's `rewardDebt` gets updated.
+     */
+    struct UserInfo {
+        uint256 amount; // How many LP tokens the user has provided.
+        uint256 rewardDebt; // Reward debt. See explanation below.
+    }
 
-    /// @notice Emitted when user deposits Dollar-3CRV LP tokens to the staking contract
-    event Deposit(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpAmount,
-        uint256 _stakingShareAmount,
-        uint256 _weeks,
-        uint256 _endBlock
-    );
+    /// @notice Info of each pool
+    struct PoolInfo {
+        IERC20 lpToken; // Address of LP token contract.
+        uint256 amount; // Total amount of LP tokens staked in a pool.
+        uint256 allocationPoints; // How many allocation points assigned to this pool. Governance tokens to distribute per block.
+        uint256 lastRewardBlock; // Last block number that Governance tokens distribution occurs.
+        uint256 accumulatedGovernancePerShare; // Accumulated Governance tokens per share, times 1e12. See below.
+    }
 
-    /// @notice Emitted when user removes liquidity from stake
-    event RemoveLiquidityFromStake(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpAmount,
-        uint256 _lpAmountTransferred,
-        uint256 _lpRewards,
-        uint256 _stakingShareAmount
-    );
-
-    /// @notice Emitted when user adds liquidity to stake
-    event AddLiquidityFromStake(
-        address indexed _user,
-        uint256 indexed _id,
-        uint256 _lpAmount,
-        uint256 _stakingShareAmount
-    );
-
-    /// @notice Emitted when staking discount multiplier is updated
-    event StakingDiscountMultiplierUpdated(uint256 _stakingDiscountMultiplier);
-
-    /// @notice Emitted when number of blocks in week is updated
-    event BlockCountInAWeekUpdated(uint256 _blockCountInAWeek);
-
-    /// @notice Struct used as a storage for the current library
-    struct StakingData {
-        uint256 stakingDiscountMultiplier;
-        uint256 blockCountInAWeek;
-        uint256 accLpRewardPerShare;
-        uint256 lpRewards;
-        uint256 totalLpToMigrate;
+    /// @notice Struct used as a storage for this library
+    struct StakingStorage {
+        /// @notice Reward token
+        IERC20Ubiquity rewardToken;
+        /// @notice Block number when bonus Governance token period ends
+        uint256 bonusEndBlock;
+        /// @notice Bonus multiplier for early Governance token makers
+        uint256 governanceBonusMultiplier;
+        /// @notice Governance tokens created per block
+        uint256 governancePerBlock;
+        /// @notice Sets Governance token divider param for treasury. Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury.
+        uint256 governanceTreasuryDivider;
+        /// @notice Total available reward amount
+        uint256 rewardAmount;
+        /// @notice Info of each pool
+        PoolInfo[] poolInfo;
+        /// @notice Info of each user that stakes LP tokens
+        mapping(uint256 poolId => mapping(address user => UserInfo)) userInfo;
+        /// @notice Total allocation points. Must be the sum of all allocation points in all pools.
+        uint256 totalAllocationPoints;
+        /// @notice The block number when Governance token mining starts
+        uint256 startBlock;
     }
 
     /**
      * @notice Returns struct used as a storage for this library
-     * @return l Struct used as a storage
+     * @return stakingStore Struct used as a storage
      */
-    function stakingStorage() internal pure returns (StakingData storage l) {
-        bytes32 slot = STAKING_CONTROL_STORAGE_SLOT;
+    function stakingStorage()
+        internal
+        pure
+        returns (StakingStorage storage stakingStore)
+    {
+        bytes32 position = STAKING_STORAGE_POSITION;
         assembly {
-            l.slot := slot
+            stakingStore.slot := position
         }
     }
 
-    /**
-     * @notice Removes Ubiquity Dollar unilaterally from the curve LP share sitting inside
-     * the staking contract and sends the Ubiquity Dollar received to the treasury. This will
-     * have the immediate effect of pushing the Ubiquity Dollar price HIGHER
-     * @notice It will remove one coin only from the curve LP share sitting in the staking contract
-     * @param amount Amount of LP token to be removed for Ubiquity Dollar
-     */
-    function dollarPriceReset(uint256 amount) internal {
-        ICurveStableSwapMetaNG metaPool = ICurveStableSwapMetaNG(
-            LibAppStorage.appStorage().stableSwapMetaPoolAddress
-        );
-        // remove one coin
-        uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(
-            amount,
-            0,
-            0
-        );
-        AppStorage storage store = LibAppStorage.appStorage();
-        IERC20 dollar = IERC20(store.dollarTokenAddress);
-        uint256 toTransfer = dollar.balanceOf(address(this));
-        dollar.safeTransfer(store.treasuryAddress, toTransfer);
-        emit PriceReset(store.dollarTokenAddress, coinWithdrawn, toTransfer);
-    }
+    //===========
+    // Events
+    //===========
+
+    /// @notice Emitted when new governance bonus end block parameter set
+    event GovernanceBonusEndBlockSet(
+        uint256 indexed newGovernanceBonusEndBlock
+    );
+    /// @notice Emitted when new governance bonus multiplier parameter set
+    event GovernanceBonusMultiplierSet(
+        uint256 indexed newGovernanceBonusMultiplier
+    );
+    /// @notice Emitted when new governance per block parameter set
+    event GovernancePerBlockSet(uint256 indexed newGovernancePerBlock);
+    /// @notice Emitted when new governance treasury divider parameter set
+    event GovernanceTreasuryDividerSet(
+        uint256 indexed newGovernanceTreasuryDivider
+    );
+    /// @notice Emitted on staking LP tokens
+    event Stake(address indexed user, uint256 indexed poolId, uint256 amount);
+    /// @notice Emitted when new staking pool created
+    event StakingPoolCreated(
+        uint256 indexed allocationPoints,
+        address indexed lpToken
+    );
+    /// @notice Emitted on updating staking pool rewards
+    event StakingPoolUpdated(uint256 indexed poolId);
+    /// @notice Emitted when staking pool allocation updated
+    event StakingPoolAllocationUpdated(
+        uint256 indexed poolId,
+        uint256 indexed allocationPoints
+    );
+    /// @notice Emitted when new reward token address set
+    event StakingRewardTokenSet(address indexed newRewardToken);
+    /// @notice Emitted when new staking start block set
+    event StakingStartBlockSet(uint256 indexed newStartBlock);
+    /// @notice Emitted on unstaking LP tokens
+    event Unstake(address indexed user, uint256 indexed poolId, uint256 amount);
+
+    //=====================
+    // Views
+    //=====================
 
     /**
-     * @notice Remove 3CRV unilaterally from the curve LP share sitting inside
-     * the staking contract and send the 3CRV received to the treasury. This will
-     * have the immediate effect of pushing the Ubiquity Dollar price LOWER.
-     * @notice It will remove one coin only from the curve LP share sitting in the staking contract
-     * @param amount Amount of LP token to be removed for 3CRV tokens
+     * @notice View function to see pending Governance tokens on frontend
+     * @param poolId Pool id
+     * @param user User address
+     * @return Staking rewards amount
      */
-    function crvPriceReset(uint256 amount) internal {
-        ICurveStableSwapMetaNG metaPool = ICurveStableSwapMetaNG(
-            LibAppStorage.appStorage().stableSwapMetaPoolAddress
-        );
-        // remove one coin
-        uint256 coinWithdrawn = metaPool.remove_liquidity_one_coin(
-            amount,
-            1,
-            0
-        );
-        uint256 toTransfer = IERC20(metaPool.coins(1)).balanceOf(address(this));
+    function getPendingStakingRewards(
+        uint256 poolId,
+        address user
+    ) internal view returns (uint256) {
+        StakingStorage storage stakingStore = stakingStorage();
 
-        IERC20(metaPool.coins(1)).transfer(
-            LibAppStorage.appStorage().treasuryAddress,
-            toTransfer
-        );
-        emit PriceReset(metaPool.coins(1), coinWithdrawn, toTransfer);
-    }
-
-    /**
-     * @notice Sets staking discount multiplier
-     * @param _stakingDiscountMultiplier New staking discount multiplier
-     */
-    function setStakingDiscountMultiplier(
-        uint256 _stakingDiscountMultiplier
-    ) internal {
-        stakingStorage().stakingDiscountMultiplier = _stakingDiscountMultiplier;
-        emit StakingDiscountMultiplierUpdated(_stakingDiscountMultiplier);
-    }
-
-    /**
-     * @notice Returns staking discount multiplier
-     * @return Staking discount multiplier
-     */
-    function stakingDiscountMultiplier() internal view returns (uint256) {
-        return stakingStorage().stakingDiscountMultiplier;
-    }
-
-    /**
-     * @notice Returns number of blocks in a week
-     * @return Number of blocks in a week
-     */
-    function blockCountInAWeek() internal view returns (uint256) {
-        return stakingStorage().blockCountInAWeek;
-    }
-
-    /**
-     * @notice Sets number of blocks in a week
-     * @param _blockCountInAWeek Number of blocks in a week
-     */
-    function setBlockCountInAWeek(uint256 _blockCountInAWeek) internal {
-        stakingStorage().blockCountInAWeek = _blockCountInAWeek;
-        emit BlockCountInAWeekUpdated(_blockCountInAWeek);
-    }
-
-    /**
-     * @notice Deposits UbiquityDollar-3CRV LP tokens for a duration to receive staking shares
-     * @notice Weeks act as a multiplier for the amount of staking shares to be received
-     * @param _lpsAmount Amount of LP tokens to send
-     * @param _weeks Number of weeks during which LP tokens will be held
-     * @return _id Staking share id
-     */
-    function deposit(
-        uint256 _lpsAmount,
-        uint256 _weeks
-    ) internal returns (uint256 _id) {
-        require(
-            1 <= _weeks && _weeks <= 208,
-            "Staking: duration must be between 1 and 208 weeks"
-        );
-
-        // update the accumulated lp rewards per shares
-        _updateLpPerShare();
-        // transfer lp token to the staking contract
-        IERC20(LibAppStorage.appStorage().stableSwapMetaPoolAddress)
-            .safeTransferFrom(msg.sender, address(this), _lpsAmount);
-        StakingData storage ss = stakingStorage();
-        // calculate the amount of share based on the amount of lp deposited and the duration
-        uint256 _sharesAmount = LibStakingFormulas.durationMultiply(
-            _lpsAmount,
-            _weeks,
-            ss.stakingDiscountMultiplier
-        );
-        // calculate end locking period block number
-        uint256 _endBlock = block.number + _weeks * ss.blockCountInAWeek;
-        _id = _mint(msg.sender, _lpsAmount, _sharesAmount, _endBlock);
-        // set masterchef for Governance rewards
-        LibChef.deposit(msg.sender, _sharesAmount, _id);
-
-        emit Deposit(
-            msg.sender,
-            _id,
-            _lpsAmount,
-            _sharesAmount,
-            _weeks,
-            _endBlock
-        );
-    }
-
-    /**
-     * @notice Adds an amount of UbiquityDollar-3CRV LP tokens
-     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
-     * @param _amount Amount of LP token to deposit
-     * @param _id Staking share id
-     * @param _weeks Number of weeks during which LP tokens will be held
-     */
-    function addLiquidity(
-        uint256 _amount,
-        uint256 _id,
-        uint256 _weeks
-    ) internal {
-        (
-            uint256[2] memory bs,
-            StakingShare.Stake memory stake
-        ) = _checkForLiquidity(_id);
-
-        // calculate pending LP rewards
-        uint256 sharesToRemove = bs[0];
-        _updateLpPerShare();
-        uint256 pendingLpReward = lpRewardForShares(
-            sharesToRemove,
-            stake.lpRewardDebt
-        );
-
-        // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = LibStakingFormulas.lpRewardsAddLiquidityNormalization(
-            stake,
-            bs,
-            pendingLpReward
-        );
-        // add these LP Rewards to the deposited amount of LP token
-        stake.lpAmount += pendingLpReward;
-        StakingData storage ss = stakingStorage();
-        ss.lpRewards -= pendingLpReward;
-        IERC20(LibAppStorage.appStorage().stableSwapMetaPoolAddress)
-            .safeTransferFrom(msg.sender, address(this), _amount);
-        stake.lpAmount += _amount;
-
-        // redeem all shares
-        LibChef.withdraw(msg.sender, sharesToRemove, _id);
-
-        // calculate the amount of share based on the new amount of lp deposited and the duration
-        uint256 _sharesAmount = LibStakingFormulas.durationMultiply(
-            stake.lpAmount,
-            _weeks,
-            ss.stakingDiscountMultiplier
-        );
-
-        // deposit new shares
-        LibChef.deposit(msg.sender, _sharesAmount, _id);
-        // calculate end locking period block number
-        // 1 week = 49930 blocks
-        // n = (block number + duration * 49930)
-        stake.endBlock = block.number + _weeks * ss.blockCountInAWeek;
-
-        // should be done after masterchef withdraw
-        _updateLpPerShare();
-        stake.lpRewardDebt =
-            (LibChef.getStakingShareInfo(_id)[0] * ss.accLpRewardPerShare) /
-            1e12;
-        StakingShare(LibAppStorage.appStorage().stakingShareAddress)
-            .updateStake(
-                _id,
-                stake.lpAmount,
-                stake.lpRewardDebt,
-                stake.endBlock
+        PoolInfo storage pool = stakingStore.poolInfo[poolId];
+        UserInfo storage userInfo = stakingStore.userInfo[poolId][user];
+        uint256 accumulatedGovernancePerShare = pool
+            .accumulatedGovernancePerShare;
+        uint256 lpSupply = pool.amount;
+        if (block.number > pool.lastRewardBlock && lpSupply != 0) {
+            uint256 multiplier = getStakingMultiplier(
+                pool.lastRewardBlock,
+                block.number
             );
-        emit AddLiquidityFromStake(
-            msg.sender,
-            _id,
-            stake.lpAmount,
-            _sharesAmount
-        );
-    }
-
-    /**
-     * @notice Removes an amount of UbiquityDollar-3CRV LP tokens
-     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
-     * @param _amount Amount of LP token deposited when `_id` was created to be withdrawn
-     * @param _id Staking share id
-     */
-    function removeLiquidity(uint256 _amount, uint256 _id) internal {
-        (
-            uint256[2] memory bs,
-            StakingShare.Stake memory stake
-        ) = _checkForLiquidity(_id);
-        require(stake.lpAmount >= _amount, "Staking: amount too big");
-        // we should decrease the Governance token rewards proportionally to the LP removed
-        // sharesToRemove = (staking shares * _amount )  / stake.lpAmount ;
-        uint256 sharesToRemove = LibStakingFormulas.sharesForLP(
-            stake,
-            bs,
-            _amount
-        );
-
-        //get all its pending LP Rewards
-        _updateLpPerShare();
-        uint256 pendingLpReward = lpRewardForShares(bs[0], stake.lpRewardDebt);
-        // update staking shares
-        // stake.shares = stake.shares - sharesToRemove;
-        // get masterchef for Governance token rewards To ensure correct computation
-        // it needs to be done BEFORE updating the staking share
-        LibChef.withdraw(msg.sender, sharesToRemove, _id);
-
-        // redeem of the extra LP
-        // staking lp balance - StakingShare.totalLP
-        IERC20 metapool = IERC20(
-            LibAppStorage.appStorage().stableSwapMetaPoolAddress
-        );
-
-        // add an extra step to be able to decrease rewards if locking end is near
-        pendingLpReward = LibStakingFormulas
-            .lpRewardsRemoveLiquidityNormalization(stake, bs, pendingLpReward);
-        StakingData storage ss = stakingStorage();
-        address stakingShareAddress = LibAppStorage
-            .appStorage()
-            .stakingShareAddress;
-        uint256 correctedAmount = LibStakingFormulas.correctedAmountToWithdraw(
-            StakingShare(stakingShareAddress).totalLP(),
-            metapool.balanceOf(address(this)) - ss.lpRewards,
-            _amount
-        );
-
-        ss.lpRewards -= pendingLpReward;
-        stake.lpAmount -= _amount;
-
-        // stake.lpRewardDebt = (staking shares * accLpRewardPerShare) /  1e18;
-        // user.amount.mul(pool.accSushiPerShare).div(1e12);
-        // should be done after masterchef withdraw
-        stake.lpRewardDebt =
-            (LibChef.getStakingShareInfo(_id)[0] * ss.accLpRewardPerShare) /
-            1e12;
-
-        StakingShare(stakingShareAddress).updateStake(
-            _id,
-            stake.lpAmount,
-            stake.lpRewardDebt,
-            stake.endBlock
-        );
-
-        // lastly redeem lp tokens
-        metapool.safeTransfer(msg.sender, correctedAmount + pendingLpReward);
-        emit RemoveLiquidityFromStake(
-            msg.sender,
-            _id,
-            _amount,
-            correctedAmount,
-            pendingLpReward,
-            sharesToRemove
-        );
-    }
-
-    /**
-     * @notice View function to see pending LP rewards on frontend
-     * @param _id Staking share id
-     * @return Amount of LP rewards
-     */
-    function pendingLpRewards(uint256 _id) internal view returns (uint256) {
-        StakingData storage ss = stakingStorage();
-        address stakingShareAddress = LibAppStorage
-            .appStorage()
-            .stakingShareAddress;
-        StakingShare staking = StakingShare(stakingShareAddress);
-        StakingShare.Stake memory stake = staking.getStake(_id);
-        uint256[2] memory bs = LibChef.getStakingShareInfo(_id);
-
-        uint256 lpBalance = IERC20(
-            LibAppStorage.appStorage().stableSwapMetaPoolAddress
-        ).balanceOf(address(this));
-        // the excess LP is the current balance minus the total deposited LP
-        if (lpBalance >= (staking.totalLP() + ss.totalLpToMigrate)) {
-            uint256 currentLpRewards = lpBalance -
-                (staking.totalLP() + ss.totalLpToMigrate);
-            uint256 curAccLpRewardPerShare = ss.accLpRewardPerShare;
-            // if new rewards we should calculate the new curAccLpRewardPerShare
-            if (currentLpRewards > ss.lpRewards) {
-                uint256 newLpRewards = currentLpRewards - ss.lpRewards;
-                curAccLpRewardPerShare =
-                    ss.accLpRewardPerShare +
-                    ((newLpRewards * 1e12) / LibChef.totalShares());
-            }
-            // we multiply the shares amount by the accumulated lpRewards per share
-            // and remove the lp Reward Debt
-            return
-                (bs[0] * (curAccLpRewardPerShare)) /
-                (1e12) -
-                (stake.lpRewardDebt);
+            uint256 governanceReward = multiplier
+                .mul(stakingStore.governancePerBlock)
+                .mul(pool.allocationPoints)
+                .div(stakingStore.totalAllocationPoints);
+            accumulatedGovernancePerShare = accumulatedGovernancePerShare.add(
+                governanceReward.mul(1e12).div(lpSupply)
+            );
         }
-        return 0;
-    }
-
-    /**
-     * @notice Returns the amount of LP token rewards an amount of shares entitled
-     * @param amount Amount of staking shares
-     * @param lpRewardDebt Amount of LP rewards that have already been distributed
-     * @return pendingLpReward Amount of pending LP rewards
-     */
-    function lpRewardForShares(
-        uint256 amount,
-        uint256 lpRewardDebt
-    ) internal view returns (uint256 pendingLpReward) {
-        StakingData storage ss = stakingStorage();
-        if (ss.accLpRewardPerShare > 0) {
-            pendingLpReward =
-                (amount * ss.accLpRewardPerShare) /
-                1e12 -
-                (lpRewardDebt);
-        }
-    }
-
-    /**
-     * @notice Returns current share price
-     * @return priceShare Share price
-     */
-    function currentShareValue() internal view returns (uint256 priceShare) {
-        uint256 totalShares = LibChef.totalShares();
-        address stakingShareAddress = LibAppStorage
-            .appStorage()
-            .stakingShareAddress;
-        // priceShare = totalLP / totalShares
-        priceShare = LibStakingFormulas.bondPrice(
-            StakingShare(stakingShareAddress).totalLP(),
-            totalShares,
-            ONE
-        );
-    }
-
-    /**
-     * @notice Updates the accumulated excess LP per share
-     */
-    function _updateLpPerShare() internal {
-        address stakingShareAddress = LibAppStorage
-            .appStorage()
-            .stakingShareAddress;
-        StakingData storage ss = stakingStorage();
-        StakingShare stake = StakingShare(stakingShareAddress);
-        uint256 lpBalance = IERC20(
-            LibAppStorage.appStorage().stableSwapMetaPoolAddress
-        ).balanceOf(address(this));
-        // the excess LP is the current balance
-        // minus the total deposited LP + LP that needs to be migrated
-        uint256 totalShares = LibChef.totalShares();
-        if (
-            lpBalance >= (stake.totalLP() + ss.totalLpToMigrate) &&
-            totalShares > 0
-        ) {
-            uint256 currentLpRewards = lpBalance -
-                (stake.totalLP() + ss.totalLpToMigrate);
-
-            // is there new LP rewards to be distributed ?
-            if (currentLpRewards > ss.lpRewards) {
-                // we calculate the new accumulated LP rewards per share
-                ss.accLpRewardPerShare =
-                    ss.accLpRewardPerShare +
-                    (((currentLpRewards - ss.lpRewards) * 1e12) / totalShares);
-
-                // update the staking contract lpRewards
-                ss.lpRewards = currentLpRewards;
-            }
-        }
-    }
-
-    /**
-     * @notice Mints a staking share on deposit
-     * @param to Address where to mint a staking share
-     * @param lpAmount Amount of LP tokens
-     * @param shares Amount of shares
-     * @param endBlock Staking share end block
-     * @return Staking share id
-     */
-    function _mint(
-        address to,
-        uint256 lpAmount,
-        uint256 shares,
-        uint256 endBlock
-    ) internal returns (uint256) {
-        uint256 _currentShareValue = currentShareValue();
-        require(
-            _currentShareValue != 0,
-            "Staking: share value should not be null"
-        );
-        // set the lp rewards debts so that this staking share only get lp rewards from this day
-        uint256 lpRewardDebt = (shares * stakingStorage().accLpRewardPerShare) /
-            1e12;
         return
-            StakingShare(LibAppStorage.appStorage().stakingShareAddress).mint(
-                to,
-                lpAmount,
-                lpRewardDebt,
-                endBlock
+            userInfo.amount.mul(accumulatedGovernancePerShare).div(1e12).sub(
+                userInfo.rewardDebt
             );
     }
 
     /**
-     * @notice Returns staking share info
-     * @param _id Staking share id
-     * @return bs Array of amount of shares and reward debt
-     * @return stake Stake info
+     * @notice Returns reward multiplier over the given `from` to `to` blocks
+     * @param from From block number
+     * @param to To block number
+     * @return Reward multiplier
      */
-    function _checkForLiquidity(
-        uint256 _id
-    )
+    function getStakingMultiplier(
+        uint256 from,
+        uint256 to
+    ) internal view returns (uint256) {
+        StakingStorage storage stakingStore = stakingStorage();
+
+        if (to <= stakingStore.bonusEndBlock) {
+            return to.sub(from).mul(stakingStore.governanceBonusMultiplier);
+        } else if (from >= stakingStore.bonusEndBlock) {
+            return to.sub(from);
+        } else {
+            return
+                stakingStore
+                    .bonusEndBlock
+                    .sub(from)
+                    .mul(stakingStore.governanceBonusMultiplier)
+                    .add(to.sub(stakingStore.bonusEndBlock));
+        }
+    }
+
+    /**
+     * @notice Returns staking settings
+     * @return Returns:
+     * - Reward token address
+     * - Bonus end block
+     * - Governance token bonus multiplier
+     * - Governance tokens minted per block
+     * - Governance token divider for treasury
+     * - Total available reward amount
+     * - Total allocation points across all staking pools
+     * - Start block when staking starts
+     */
+    function getStakingSettings()
         internal
         view
-        returns (uint256[2] memory bs, StakingShare.Stake memory stake)
+        returns (
+            address,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        )
     {
-        address stakingAddress = LibAppStorage.appStorage().stakingShareAddress;
-        require(
-            IERC1155Ubiquity(stakingAddress).balanceOf(msg.sender, _id) == 1,
-            "Staking: caller is not owner"
+        StakingStorage storage stakingStore = stakingStorage();
+        return (
+            address(stakingStore.rewardToken),
+            stakingStore.bonusEndBlock,
+            stakingStore.governanceBonusMultiplier,
+            stakingStore.governancePerBlock,
+            stakingStore.governanceTreasuryDivider,
+            stakingStore.rewardAmount,
+            stakingStore.totalAllocationPoints,
+            stakingStore.startBlock
         );
-        StakingShare staking = StakingShare(stakingAddress);
-        stake = staking.getStake(_id);
-        require(
-            block.number > stake.endBlock,
-            "Staking: Redeem not allowed before staking time"
-        );
+    }
 
-        bs = LibChef.getStakingShareInfo(_id);
+    /**
+     * @notice View function to see user's staking info
+     * @param poolId Pool id
+     * @param user User address
+     * @return User's staking info
+     */
+    function getStakingUserInfo(
+        uint256 poolId,
+        address user
+    ) internal view returns (UserInfo memory) {
+        StakingStorage storage stakingStore = stakingStorage();
+        return stakingStore.userInfo[poolId][user];
+    }
+
+    /**
+     * @notice View function to see pool's staking info
+     * @param poolId Pool id
+     * @return Pool's staking info
+     */
+    function getStakingPoolInfo(
+        uint256 poolId
+    ) internal view returns (PoolInfo memory) {
+        StakingStorage storage stakingStore = stakingStorage();
+        return stakingStore.poolInfo[poolId];
+    }
+
+    /**
+     * @notice Returns total staking pools length
+     * @return Pools length
+     */
+    function getStakingPoolsLength() internal view returns (uint256) {
+        StakingStorage storage stakingStore = stakingStorage();
+        return stakingStore.poolInfo.length;
+    }
+
+    //==================
+    // Public methods
+    //==================
+
+    /**
+     * @notice Updates reward variables for all pools
+     * @param poolIdsToUpdate Array of pool ids to update
+     */
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) internal {
+        uint256 length = poolIdsToUpdate.length;
+        for (uint256 i = 0; i < length; ++i) {
+            updateStakingPool(poolIdsToUpdate[i]);
+        }
+    }
+
+    /**
+     * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
+     * @param poolId Pool id
+     * @param amount Amount of LP tokens to stake
+     */
+    function stake(uint256 poolId, uint256 amount) internal {
+        StakingStorage storage stakingStore = stakingStorage();
+
+        PoolInfo storage pool = stakingStore.poolInfo[poolId];
+        UserInfo storage user = stakingStore.userInfo[poolId][msg.sender];
+        updateStakingPool(poolId);
+        if (user.amount > 0) {
+            uint256 pending = user
+                .amount
+                .mul(pool.accumulatedGovernancePerShare)
+                .div(1e12)
+                .sub(user.rewardDebt);
+            safeGovernanceTransfer(msg.sender, pending);
+        }
+        pool.lpToken.safeTransferFrom(
+            address(msg.sender),
+            address(this),
+            amount
+        );
+        user.amount = user.amount.add(amount);
+        user.rewardDebt = user
+            .amount
+            .mul(pool.accumulatedGovernancePerShare)
+            .div(1e12);
+        pool.amount = pool.amount.add(amount);
+        emit Stake(msg.sender, poolId, amount);
+    }
+
+    /**
+     * @notice Unstakes LP tokens from the staking contract
+     * @param poolId Pool id
+     * @param amount Amount of LP tokens to unstake
+     */
+    function unstake(uint256 poolId, uint256 amount) internal {
+        StakingStorage storage stakingStore = stakingStorage();
+
+        PoolInfo storage pool = stakingStore.poolInfo[poolId];
+        UserInfo storage user = stakingStore.userInfo[poolId][msg.sender];
+        require(user.amount >= amount, "withdraw: not good");
+        updateStakingPool(poolId);
+        uint256 pending = user
+            .amount
+            .mul(pool.accumulatedGovernancePerShare)
+            .div(1e12)
+            .sub(user.rewardDebt);
+        safeGovernanceTransfer(msg.sender, pending);
+        user.amount = user.amount.sub(amount);
+        user.rewardDebt = user
+            .amount
+            .mul(pool.accumulatedGovernancePerShare)
+            .div(1e12);
+        pool.amount = pool.amount.sub(amount);
+        pool.lpToken.safeTransfer(address(msg.sender), amount);
+        emit Unstake(msg.sender, poolId, amount);
+    }
+
+    /**
+     * @notice Updates reward variables of the given pool to be up-to-date
+     * @param poolId Pool id
+     */
+    function updateStakingPool(uint256 poolId) internal {
+        AppStorage storage store = LibAppStorage.appStorage();
+        StakingStorage storage stakingStore = stakingStorage();
+
+        PoolInfo storage pool = stakingStore.poolInfo[poolId];
+        if (block.number <= pool.lastRewardBlock) {
+            return;
+        }
+        uint256 lpSupply = pool.amount;
+        if (lpSupply == 0) {
+            pool.lastRewardBlock = block.number;
+            return;
+        }
+        uint256 multiplier = getStakingMultiplier(
+            pool.lastRewardBlock,
+            block.number
+        );
+        uint256 governanceReward = multiplier
+            .mul(stakingStore.governancePerBlock)
+            .mul(pool.allocationPoints)
+            .div(stakingStore.totalAllocationPoints);
+        stakingStore.rewardToken.mint(
+            store.treasuryAddress,
+            governanceReward.div(stakingStore.governanceTreasuryDivider)
+        );
+        stakingStore.rewardToken.mint(address(this), governanceReward);
+        pool.accumulatedGovernancePerShare = pool
+            .accumulatedGovernancePerShare
+            .add(governanceReward.mul(1e12).div(lpSupply));
+        pool.lastRewardBlock = block.number;
+        stakingStore.rewardAmount = stakingStore.rewardAmount.add(
+            governanceReward
+        );
+        emit StakingPoolUpdated(poolId);
+    }
+
+    //======================
+    // Restricted methods
+    //======================
+
+    /**
+     * @notice Adds a new staking pool
+     * @param allocationPoints Allocation points
+     * @param lpToken LP token
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
+     */
+    function createStakingPool(
+        uint256 allocationPoints,
+        IERC20 lpToken,
+        uint256[] memory poolIdsToUpdate
+    ) internal {
+        require(address(lpToken) != address(0), "Zero address detected");
+
+        StakingStorage storage stakingStore = stakingStorage();
+
+        if (poolIdsToUpdate.length > 0) {
+            massUpdateStakingPools(poolIdsToUpdate);
+        }
+
+        uint256 lastRewardBlock = block.number > stakingStore.startBlock
+            ? block.number
+            : stakingStore.startBlock;
+        stakingStore.totalAllocationPoints = stakingStore
+            .totalAllocationPoints
+            .add(allocationPoints);
+        stakingStore.poolInfo.push(
+            PoolInfo({
+                lpToken: lpToken,
+                amount: 0,
+                allocationPoints: allocationPoints,
+                lastRewardBlock: lastRewardBlock,
+                accumulatedGovernancePerShare: 0
+            })
+        );
+        emit StakingPoolCreated(allocationPoints, address(lpToken));
+    }
+
+    /**
+     * @notice Sets last block number when Governance bonus emissions end
+     * @param newGovernanceBonusEndBlock Block number when Governance bonus emissions end
+     */
+    function setGovernanceBonusEndBlock(
+        uint256 newGovernanceBonusEndBlock
+    ) internal {
+        require(
+            newGovernanceBonusEndBlock >= block.number,
+            "Bonus end block can't be in the past"
+        );
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.bonusEndBlock = newGovernanceBonusEndBlock;
+        emit GovernanceBonusEndBlockSet(newGovernanceBonusEndBlock);
+    }
+
+    /**
+     * @notice Sets bonus multiplier for early Governance token makers
+     * @param newGovernanceBonusMultiplier New governance bonus multiplier
+     */
+    function setGovernanceBonusMultiplier(
+        uint256 newGovernanceBonusMultiplier
+    ) internal {
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.governanceBonusMultiplier = newGovernanceBonusMultiplier;
+        emit GovernanceBonusMultiplierSet(newGovernanceBonusMultiplier);
+    }
+
+    /**
+     * @notice Sets Governance tokens reward per block
+     * @param newGovernancePerBlock New amount of Governance tokens minted each block
+     */
+    function setGovernancePerBlock(uint256 newGovernancePerBlock) internal {
+        require(newGovernancePerBlock > 0, "Empty rewards");
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.governancePerBlock = newGovernancePerBlock;
+        emit GovernancePerBlockSet(newGovernancePerBlock);
+    }
+
+    /**
+     * @notice Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
+     * Governance tokens will be minted for the treasury.
+     * @notice Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @param newGovernanceTreasuryDivider New governance divider param value
+     */
+    function setGovernanceTreasuryDivider(
+        uint256 newGovernanceTreasuryDivider
+    ) internal {
+        require(
+            newGovernanceTreasuryDivider > 0,
+            "Treasury divider can't be zero"
+        );
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
+        emit GovernanceTreasuryDividerSet(newGovernanceTreasuryDivider);
+    }
+
+    /**
+     * @notice Sets staking reward token
+     * @param newRewardToken New reward token address
+     */
+    function setStakingRewardToken(address newRewardToken) internal {
+        require(newRewardToken != address(0), "Zero address detected");
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.rewardToken = IERC20Ubiquity(newRewardToken);
+        emit StakingRewardTokenSet(newRewardToken);
+    }
+
+    /**
+     * @notice Sets start block when staking should be active
+     * @param newStartBlock Block number when staking should be active
+     */
+    function setStakingStartBlock(uint256 newStartBlock) internal {
+        require(newStartBlock >= block.number, "Can't start in the past");
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.startBlock = newStartBlock;
+        emit StakingStartBlockSet(newStartBlock);
+    }
+
+    /**
+     * @notice Updates the given pool's Governance token allocation points
+     * @param poolId Pool id
+     * @param allocationPoints New allocation points
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
+     */
+    function updateStakingPool(
+        uint256 poolId,
+        uint256 allocationPoints,
+        uint256[] memory poolIdsToUpdate
+    ) internal {
+        StakingStorage storage stakingStore = stakingStorage();
+
+        require(poolId < stakingStore.poolInfo.length, "Pool does not exist");
+
+        if (poolIdsToUpdate.length > 0) {
+            massUpdateStakingPools(poolIdsToUpdate);
+        }
+
+        stakingStore.totalAllocationPoints = stakingStore
+            .totalAllocationPoints
+            .sub(stakingStore.poolInfo[poolId].allocationPoints)
+            .add(allocationPoints);
+        stakingStore.poolInfo[poolId].allocationPoints = allocationPoints;
+
+        emit StakingPoolAllocationUpdated(poolId, allocationPoints);
+    }
+
+    //====================
+    // Internal helpers
+    //====================
+
+    /**
+     * @notice Safe Governance token transfer function
+     * @param to Receiver address
+     * @param amount Amount to transfer
+     */
+    function safeGovernanceTransfer(address to, uint256 amount) internal {
+        StakingStorage storage stakingStore = stakingStorage();
+
+        uint256 actualAmount = amount > stakingStore.rewardAmount
+            ? stakingStore.rewardAmount
+            : amount;
+        stakingStore.rewardAmount = stakingStore.rewardAmount.sub(actualAmount);
+        stakingStore.rewardToken.safeTransfer(to, actualAmount);
     }
 }

@@ -1,38 +1,192 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-/// @notice Staking interface
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {LibStaking} from "../libraries/LibStaking.sol";
+import {IERC20Ubiquity} from "./IERC20Ubiquity.sol";
+
+/**
+ * @notice Ubiquity staking interface
+ * @dev Derived from https://github.com/sushi-labs/sushiswap/blob/271458b558afa6fdfd3e46b8eef5ee6618b60f9d/contracts/MasterChef.sol
+ */
 interface IStaking {
-    /**
-     * @notice Deposits UbiquityDollar-3CRV LP tokens for a duration to receive staking shares
-     * @notice Weeks act as a multiplier for the amount of staking shares to be received
-     * @param _lpsAmount Amount of LP tokens to send
-     * @param _weeks Number of weeks during which LP tokens will be held
-     * @return _id Staking share id
-     */
-    function deposit(
-        uint256 _lpsAmount,
-        uint256 _weeks
-    ) external returns (uint256 _id);
+    //=====================
+    // Views
+    //=====================
 
     /**
-     * @notice Adds an amount of UbiquityDollar-3CRV LP tokens
-     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
-     * @param _amount Amount of LP token to deposit
-     * @param _id Staking share id
-     * @param _weeks Number of weeks during which LP tokens will be held
+     * @notice View function to see pending Governance tokens on frontend
+     * @param poolId Pool id
+     * @param user User address
+     * @return Staking rewards amount
      */
-    function addLiquidity(
-        uint256 _amount,
-        uint256 _id,
-        uint256 _weeks
+    function getPendingStakingRewards(
+        uint256 poolId,
+        address user
+    ) external view returns (uint256);
+
+    /**
+     * @notice Returns reward multiplier over the given `from` to `to` blocks
+     * @param from From block number
+     * @param to To block number
+     * @return Reward multiplier
+     */
+    function getStakingMultiplier(
+        uint256 from,
+        uint256 to
+    ) external view returns (uint256);
+
+    /**
+     * @notice Returns staking settings
+     * @return Returns:
+     * - Reward token address
+     * - Bonus end block
+     * - Governance token bonus multiplier
+     * - Governance tokens minted per block
+     * - Governance token divider for treasury
+     * - Total available reward amount
+     * - Total allocation points across all staking pools
+     * - Start block when staking starts
+     */
+    function getStakingSettings()
+        external
+        view
+        returns (
+            address,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
+
+    /**
+     * @notice View function to see user's staking info
+     * @param poolId Pool id
+     * @param user User address
+     * @return User's staking info
+     */
+    function getStakingUserInfo(
+        uint256 poolId,
+        address user
+    ) external view returns (LibStaking.UserInfo memory);
+
+    /**
+     * @notice View function to see pool's staking info
+     * @param poolId Pool id
+     * @return Pool's staking info
+     */
+    function getStakingPoolInfo(
+        uint256 poolId
+    ) external view returns (LibStaking.PoolInfo memory);
+
+    /**
+     * @notice Returns total staking pools length
+     * @return Pools length
+     */
+    function getStakingPoolsLength() external view returns (uint256);
+
+    //==================
+    // Public methods
+    //==================
+
+    /**
+     * @notice Updates reward variables for all pools
+     * @param poolIdsToUpdate Array of pool ids to update
+     */
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
+
+    /**
+     * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
+     * @param poolId Pool id
+     * @param amount Amount of LP tokens to stake
+     */
+    function stake(uint256 poolId, uint256 amount) external;
+
+    /**
+     * @notice Unstakes LP tokens from the staking contract
+     * @param poolId Pool id
+     * @param amount Amount of LP tokens to unstake
+     */
+    function unstake(uint256 poolId, uint256 amount) external;
+
+    /**
+     * @notice Updates reward variables of the given pool to be up-to-date
+     * @param poolId Pool id
+     */
+    function updateStakingPool(uint256 poolId) external;
+
+    //======================
+    // Restricted methods
+    //======================
+
+    /**
+     * @notice Adds a new staking pool
+     * @param allocationPoints Allocation points
+     * @param lpToken LP token
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
+     */
+    function createStakingPool(
+        uint256 allocationPoints,
+        IERC20 lpToken,
+        uint256[] memory poolIdsToUpdate
     ) external;
 
     /**
-     * @notice Removes an amount of UbiquityDollar-3CRV LP tokens
-     * @notice Staking shares are ERC1155 (aka NFT) because they have an expiration date
-     * @param _amount Amount of LP token deposited when `_id` was created to be withdrawn
-     * @param _id Staking share id
+     * @notice Sets last block number when Governance bonus emissions end
+     * @param newGovernanceBonusEndBlock Block number when Governance bonus emissions end
      */
-    function removeLiquidity(uint256 _amount, uint256 _id) external;
+    function setGovernanceBonusEndBlock(
+        uint256 newGovernanceBonusEndBlock
+    ) external;
+
+    /**
+     * @notice Sets bonus multiplier for early Governance token makers
+     * @param newGovernanceBonusMultiplier New governance bonus multiplier
+     */
+    function setGovernanceBonusMultiplier(
+        uint256 newGovernanceBonusMultiplier
+    ) external;
+
+    /**
+     * @notice Sets Governance tokens reward per block
+     * @param newGovernancePerBlock New amount of Governance tokens minted each block
+     */
+    function setGovernancePerBlock(uint256 newGovernancePerBlock) external;
+
+    /**
+     * @notice Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
+     * Governance tokens will be minted for the treasury.
+     * @notice Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @param newGovernanceTreasuryDivider New governance divider param value
+     */
+    function setGovernanceTreasuryDivider(
+        uint256 newGovernanceTreasuryDivider
+    ) external;
+
+    /**
+     * @notice Sets staking reward token
+     * @param newRewardToken New reward token address
+     */
+    function setStakingRewardToken(address newRewardToken) external;
+
+    /**
+     * @notice Sets start block when staking should be active
+     * @param newStartBlock Block number when staking should be active
+     */
+    function setStakingStartBlock(uint256 newStartBlock) external;
+
+    /**
+     * @notice Updates the given pool's Governance token allocation points
+     * @param poolId Pool id
+     * @param allocationPoints New allocation points
+     * @param poolIdsToUpdate Array of pool ids where to trigger update
+     */
+    function updateStakingPool(
+        uint256 poolId,
+        uint256 allocationPoints,
+        uint256[] memory poolIdsToUpdate
+    ) external;
 }

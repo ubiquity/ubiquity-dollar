@@ -35,6 +35,8 @@ contract AaveAmoTest is DiamondTestSetup {
     // Mocking the Aave Pool
     IPool private constant aavePool =
         IPool(0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951); // Aave V3 Sepolia Pool
+    address aavePoolConfiguration = 0x7Ee60D184C24Ef7AfC1Ec7Be59A0f448A0abd138;
+    address aavePoolAdmin = 0xfA0e305E0f46AB04f00ae6b5f4560d61a2183E00;
 
     function setUp() public override {
         vm.createSelectFork(vm.rpcUrl("sepolia"));
@@ -75,6 +77,17 @@ contract AaveAmoTest is DiamondTestSetup {
         ubiquityPoolFacet.addAmoMinter(address(amoMinter));
 
         vm.stopPrank();
+
+        // disable aave pool supply cap
+        vm.prank(aavePoolAdmin);
+        (bool success, ) = aavePoolConfiguration.call(
+            abi.encodeWithSignature(
+                "setSupplyCap(address,uint256)",
+                address(collateralToken),
+                0
+            )
+        );
+        require(success, "Failed to set supply cap");
     }
 
     /* ========== Aave Amo SETUP TESTS ========== */
