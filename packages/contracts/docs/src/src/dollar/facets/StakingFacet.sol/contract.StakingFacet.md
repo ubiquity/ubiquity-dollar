@@ -1,227 +1,328 @@
 # StakingFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/109cec7a9dabc6e0b7a4678e6dc13e4441471a22/src/dollar/facets/StakingFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/facets/StakingFacet.sol)
 
 **Inherits:**
-[Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md), [IStaking](/src/dollar/interfaces/IStaking.sol/interface.IStaking.md)
+[IStaking](/src/dollar/interfaces/IStaking.sol/interface.IStaking.md), [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
 
-Staking facet
+Ubiquity staking facet
 
 
 ## Functions
-### dollarPriceReset
+### getPendingStakingRewards
 
-Removes Ubiquity Dollar unilaterally from the curve LP share sitting inside
-the staking contract and sends the Ubiquity Dollar received to the treasury. This will
-have the immediate effect of pushing the Ubiquity Dollar price HIGHER
-
-It will remove one coin only from the curve LP share sitting in the staking contract
+View function to see pending Governance tokens on frontend
 
 
 ```solidity
-function dollarPriceReset(uint256 amount) external onlyStakingManager;
+function getPendingStakingRewards(uint256 poolId, address user) external view returns (uint256);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`amount`|`uint256`|Amount of LP token to be removed for Ubiquity Dollar|
-
-
-### crvPriceReset
-
-Remove 3CRV unilaterally from the curve LP share sitting inside
-the staking contract and send the 3CRV received to the treasury. This will
-have the immediate effect of pushing the Ubiquity Dollar price LOWER.
-
-It will remove one coin only from the curve LP share sitting in the staking contract
-
-
-```solidity
-function crvPriceReset(uint256 amount) external onlyStakingManager;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`amount`|`uint256`|Amount of LP token to be removed for 3CRV tokens|
-
-
-### setStakingDiscountMultiplier
-
-Sets staking discount multiplier
-
-
-```solidity
-function setStakingDiscountMultiplier(uint256 _stakingDiscountMultiplier) external onlyStakingManager;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_stakingDiscountMultiplier`|`uint256`|New staking discount multiplier|
-
-
-### stakingDiscountMultiplier
-
-Returns staking discount multiplier
-
-
-```solidity
-function stakingDiscountMultiplier() external view returns (uint256);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|Staking discount multiplier|
-
-
-### blockCountInAWeek
-
-Returns number of blocks in a week
-
-
-```solidity
-function blockCountInAWeek() external view returns (uint256);
-```
-**Returns**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`<none>`|`uint256`|Number of blocks in a week|
-
-
-### setBlockCountInAWeek
-
-Sets number of blocks in a week
-
-
-```solidity
-function setBlockCountInAWeek(uint256 _blockCountInAWeek) external onlyStakingManager;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_blockCountInAWeek`|`uint256`|Number of blocks in a week|
-
-
-### deposit
-
-Deposits UbiquityDollar-3CRV LP tokens for a duration to receive staking shares
-
-Weeks act as a multiplier for the amount of staking shares to be received
-
-
-```solidity
-function deposit(uint256 _lpsAmount, uint256 _weeks) external whenNotPaused returns (uint256 _id);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_lpsAmount`|`uint256`|Amount of LP tokens to send|
-|`_weeks`|`uint256`|Number of weeks during which LP tokens will be held|
+|`poolId`|`uint256`|Pool id|
+|`user`|`address`|User address|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_id`|`uint256`|Staking share id|
+|`<none>`|`uint256`|Staking rewards amount|
 
 
-### addLiquidity
+### getStakingMultiplier
 
-Adds an amount of UbiquityDollar-3CRV LP tokens
-
-Staking shares are ERC1155 (aka NFT) because they have an expiration date
+Returns reward multiplier over the given `from` to `to` blocks
 
 
 ```solidity
-function addLiquidity(uint256 _amount, uint256 _id, uint256 _weeks) external whenNotPaused;
+function getStakingMultiplier(uint256 from, uint256 to) external view returns (uint256);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`_amount`|`uint256`|Amount of LP token to deposit|
-|`_id`|`uint256`|Staking share id|
-|`_weeks`|`uint256`|Number of weeks during which LP tokens will be held|
-
-
-### removeLiquidity
-
-Removes an amount of UbiquityDollar-3CRV LP tokens
-
-Staking shares are ERC1155 (aka NFT) because they have an expiration date
-
-
-```solidity
-function removeLiquidity(uint256 _amount, uint256 _id) external whenNotPaused;
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_amount`|`uint256`|Amount of LP token deposited when `_id` was created to be withdrawn|
-|`_id`|`uint256`|Staking share id|
-
-
-### pendingLpRewards
-
-View function to see pending LP rewards on frontend
-
-
-```solidity
-function pendingLpRewards(uint256 _id) external view returns (uint256);
-```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`_id`|`uint256`|Staking share id|
+|`from`|`uint256`|From block number|
+|`to`|`uint256`|To block number|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`<none>`|`uint256`|Amount of LP rewards|
+|`<none>`|`uint256`|Reward multiplier|
 
 
-### lpRewardForShares
+### getStakingSettings
 
-Returns the amount of LP token rewards an amount of shares entitled
+Returns staking settings
 
 
 ```solidity
-function lpRewardForShares(uint256 amount, uint256 lpRewardDebt) external view returns (uint256 pendingLpReward);
+function getStakingSettings()
+    external
+    view
+    returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256);
+```
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`address`|Returns: - Reward token address - Bonus end block - Governance token bonus multiplier - Governance tokens minted per block - Governance token divider for treasury - Total available reward amount - Total allocation points across all staking pools - Start block when staking starts|
+|`<none>`|`uint256`||
+|`<none>`|`uint256`||
+|`<none>`|`uint256`||
+|`<none>`|`uint256`||
+|`<none>`|`uint256`||
+|`<none>`|`uint256`||
+|`<none>`|`uint256`||
+
+
+### getStakingUserInfo
+
+View function to see user's staking info
+
+
+```solidity
+function getStakingUserInfo(uint256 poolId, address user) external view returns (LibStaking.UserInfo memory);
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`amount`|`uint256`|Amount of staking shares|
-|`lpRewardDebt`|`uint256`|Amount of LP rewards that have already been distributed|
+|`poolId`|`uint256`|Pool id|
+|`user`|`address`|User address|
 
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`pendingLpReward`|`uint256`|Amount of pending LP rewards|
+|`<none>`|`LibStaking.UserInfo`|User's staking info|
 
 
-### currentShareValue
+### getStakingPoolInfo
 
-Returns current share price
+View function to see pool's staking info
 
 
 ```solidity
-function currentShareValue() external view returns (uint256 priceShare);
+function getStakingPoolInfo(uint256 poolId) external view returns (LibStaking.PoolInfo memory);
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`poolId`|`uint256`|Pool id|
+
+**Returns**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`<none>`|`LibStaking.PoolInfo`|Pool's staking info|
+
+
+### getStakingPoolsLength
+
+Returns total staking pools length
+
+
+```solidity
+function getStakingPoolsLength() external view returns (uint256);
 ```
 **Returns**
 
 |Name|Type|Description|
 |----|----|-----------|
-|`priceShare`|`uint256`|Share price|
+|`<none>`|`uint256`|Pools length|
+
+
+### massUpdateStakingPools
+
+Updates reward variables for all pools
+
+
+```solidity
+function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`poolIdsToUpdate`|`uint256[]`|Array of pool ids to update|
+
+
+### stake
+
+Stakes LP tokens to the staking contract for Governance tokens allocation
+
+
+```solidity
+function stake(uint256 poolId, uint256 amount) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`poolId`|`uint256`|Pool id|
+|`amount`|`uint256`|Amount of LP tokens to stake|
+
+
+### unstake
+
+Unstakes LP tokens from the staking contract
+
+
+```solidity
+function unstake(uint256 poolId, uint256 amount) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`poolId`|`uint256`|Pool id|
+|`amount`|`uint256`|Amount of LP tokens to unstake|
+
+
+### updateStakingPool
+
+Updates reward variables of the given pool to be up-to-date
+
+
+```solidity
+function updateStakingPool(uint256 poolId) external;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`poolId`|`uint256`|Pool id|
+
+
+### createStakingPool
+
+Adds a new staking pool
+
+
+```solidity
+function createStakingPool(uint256 allocationPoints, IERC20 lpToken, uint256[] memory poolIdsToUpdate)
+    external
+    onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`allocationPoints`|`uint256`|Allocation points|
+|`lpToken`|`IERC20`|LP token|
+|`poolIdsToUpdate`|`uint256[]`|Array of pool ids where to trigger update|
+
+
+### setGovernanceBonusEndBlock
+
+Sets last block number when Governance bonus emissions end
+
+
+```solidity
+function setGovernanceBonusEndBlock(uint256 newGovernanceBonusEndBlock) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newGovernanceBonusEndBlock`|`uint256`|Block number when Governance bonus emissions end|
+
+
+### setGovernanceBonusMultiplier
+
+Sets bonus multiplier for early Governance token makers
+
+
+```solidity
+function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newGovernanceBonusMultiplier`|`uint256`|New governance bonus multiplier|
+
+
+### setGovernancePerBlock
+
+Sets Governance tokens reward per block
+
+
+```solidity
+function setGovernancePerBlock(uint256 newGovernancePerBlock) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newGovernancePerBlock`|`uint256`|New amount of Governance tokens minted each block|
+
+
+### setGovernanceTreasuryDivider
+
+Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
+Governance tokens will be minted for the treasury.
+
+
+```solidity
+function setGovernanceTreasuryDivider(uint256 newGovernanceTreasuryDivider) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newGovernanceTreasuryDivider`|`uint256`|New governance divider param value|
+
+
+### setStakingRewardToken
+
+Sets staking reward token
+
+
+```solidity
+function setStakingRewardToken(address newRewardToken) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newRewardToken`|`address`|New reward token address|
+
+
+### setStakingStartBlock
+
+Sets start block when staking should be active
+
+
+```solidity
+function setStakingStartBlock(uint256 newStartBlock) external onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`newStartBlock`|`uint256`|Block number when staking should be active|
+
+
+### updateStakingPool
+
+Updates reward variables of the given pool to be up-to-date
+
+
+```solidity
+function updateStakingPool(uint256 poolId, uint256 allocationPoints, uint256[] memory poolIdsToUpdate)
+    external
+    onlyAdmin;
+```
+**Parameters**
+
+|Name|Type|Description|
+|----|----|-----------|
+|`poolId`|`uint256`|Pool id|
+|`allocationPoints`|`uint256`||
+|`poolIdsToUpdate`|`uint256[]`||
 
 

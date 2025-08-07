@@ -1,5 +1,5 @@
 # DiamondInit
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/109cec7a9dabc6e0b7a4678e6dc13e4441471a22/src/dollar/upgradeInitializers/DiamondInit.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/upgradeInitializers/DiamondInit.sol)
 
 **Inherits:**
 [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
@@ -40,10 +40,6 @@ Struct used for diamond initialization
 ```solidity
 struct Args {
     address admin;
-    address[] tos;
-    uint256[] amounts;
-    uint256[] stakingShareIDs;
-    uint256 governancePerBlock;
     uint256 creditNftLengthBlocks;
 }
 ```

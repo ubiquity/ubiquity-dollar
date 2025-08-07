@@ -1,5 +1,5 @@
 # Constants
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/109cec7a9dabc6e0b7a4678e6dc13e4441471a22/src/dollar/libraries/Constants.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/libraries/Constants.sol)
 
 ### DEFAULT_ADMIN_ROLE
 *Default admin role name*
@@ -23,22 +23,6 @@ bytes32 constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256("GOVERNANCE_TOKEN_MINT
 
 ```solidity
 bytes32 constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
-```
-
-### STAKING_SHARE_MINTER_ROLE
-*Role name for staking share minter*
-
-
-```solidity
-bytes32 constant STAKING_SHARE_MINTER_ROLE = keccak256("STAKING_SHARE_MINTER_ROLE");
-```
-
-### STAKING_SHARE_BURNER_ROLE
-*Role name for staking share burner*
-
-
-```solidity
-bytes32 constant STAKING_SHARE_BURNER_ROLE = keccak256("STAKING_SHARE_BURNER_ROLE");
 ```
 
 ### CREDIT_TOKEN_MINTER_ROLE

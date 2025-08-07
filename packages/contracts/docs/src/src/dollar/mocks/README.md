@@ -15,4 +15,3 @@
 - [MockFacetWithStorageWriteFunctions](MockFacet.sol/contract.MockFacetWithStorageWriteFunctions.md)
 - [MockFacetWithExtendedStorageWriteFunctions](MockFacet.sol/contract.MockFacetWithExtendedStorageWriteFunctions.md)
 - [MockFacet constants](MockFacet.sol/constants.MockFacet.md)
-- [BondingShare](MockShareV1.sol/contract.BondingShare.md)
