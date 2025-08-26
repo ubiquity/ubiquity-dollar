@@ -123,6 +123,11 @@ interface IStaking {
 
     /**
      * @notice Adds a new staking pool
+     * @notice The following LP tokens with "weird" ERC20 behavior are not supported:
+     * - Fee on Transfer: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#fee-on-transfer
+     * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+     * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+     * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param allocationPoints Allocation points
      * @param lpToken LP token
      * @param poolIdsToUpdate Array of pool ids where to trigger update
@@ -170,6 +175,10 @@ interface IStaking {
 
     /**
      * @notice Sets staking reward token
+     * @notice The following reward tokens with "weird" ERC20 behavior are not supported:
+     * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+     * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+     * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param newRewardToken New reward token address
      */
     function setStakingRewardToken(address newRewardToken) external;
