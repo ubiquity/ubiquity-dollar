@@ -73,22 +73,22 @@ contract StakingFacet is IStaking, Modifiers {
     //==================
 
     /// @inheritdoc IStaking
-    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external {
+    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external whenNotPaused {
         LibStaking.massUpdateStakingPools(poolIdsToUpdate);
     }
 
     /// @inheritdoc IStaking
-    function stake(uint256 poolId, uint256 amount) external {
+    function stake(uint256 poolId, uint256 amount) external whenNotPaused {
         LibStaking.stake(poolId, amount);
     }
 
     /// @inheritdoc IStaking
-    function unstake(uint256 poolId, uint256 amount) external {
+    function unstake(uint256 poolId, uint256 amount) external whenNotPaused {
         LibStaking.unstake(poolId, amount);
     }
 
     /// @inheritdoc IStaking
-    function updateStakingPool(uint256 poolId) external {
+    function updateStakingPool(uint256 poolId) external whenNotPaused {
         LibStaking.updateStakingPool(poolId);
     }
 
