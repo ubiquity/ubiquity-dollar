@@ -335,8 +335,13 @@ contract AaveAmoTest is DiamondTestSetup {
 
     function testExecute_ShouldExecuteCallSuccessfully() public {
         // Example of executing a simple call
+        address[] memory assets = new address[](0);
         vm.prank(owner);
-        (bool success, ) = aaveAmo.execute(owner, 0, "");
+        (bool success, ) = aaveAmo.execute(
+            address(aaveAmo), 
+            0, 
+            abi.encodeWithSignature("claimAllRewards(address[])", assets)
+        );
 
         // Verify the call executed successfully
         assertTrue(success);
