@@ -146,7 +146,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.setGovernanceBonusEndBlock(100);
         stakingFacet.setGovernanceBonusMultiplier(2);
-        stakingFacet.setGovernancePerBlock(3);
+        stakingFacet.setGovernancePerBlock(0.0001 ether);
         stakingFacet.setGovernanceTreasuryDivider(4);
         stakingFacet.setStakingStartBlock(20);
         vm.stopPrank();
@@ -165,7 +165,7 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(rewardTokenAddress, address(rewardToken));
         assertEq(bonusEndBlock, 100);
         assertEq(governanceBonusMultiplier, 2);
-        assertEq(governancePerBlock, 3);
+        assertEq(governancePerBlock, 0.0001 ether);
         assertEq(governanceTreasuryDivider, 4);
         assertEq(rewardAmount, 10 ether);
         assertEq(totalAllocationPoints, 100);
@@ -683,7 +683,7 @@ contract StakingFacetTest is DiamondTestSetup {
 
     function testSetGovernancePerBlock_ShouldRevert_IfRewardsAreEmpty() public {
         vm.prank(admin);
-        vm.expectRevert("Empty rewards");
+        vm.expectRevert("Rewards are too small");
         stakingFacet.setGovernancePerBlock(0);
     }
 

@@ -349,7 +349,7 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
     ) public {
         stakeAmount = bound(stakeAmount, 1, 100_000_000 ether);
         blocksPassed = bound(blocksPassed, 1, 2628000 * 10); // max 10 years
-        governancePerBlock = bound(governancePerBlock, 1, 100_000_000 ether);
+        governancePerBlock = bound(governancePerBlock, 0.0001 ether, 100_000_000 ether);
 
         // admin sets governance per block
         vm.prank(admin);

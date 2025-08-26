@@ -455,10 +455,12 @@ library LibStaking {
 
     /**
      * @notice Sets Governance tokens reward per block
+     * @dev If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards 
+     * if staked amount > 1_000_000_000e18
      * @param newGovernancePerBlock New amount of Governance tokens minted each block
      */
     function setGovernancePerBlock(uint256 newGovernancePerBlock) internal {
-        require(newGovernancePerBlock > 0, "Empty rewards");
+        require(newGovernancePerBlock >= 0.0001 ether, "Rewards are too small");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governancePerBlock = newGovernancePerBlock;
         emit GovernancePerBlockSet(newGovernancePerBlock);
