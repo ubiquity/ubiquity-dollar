@@ -2,7 +2,6 @@
 pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {IStaking} from "../interfaces/IStaking.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
