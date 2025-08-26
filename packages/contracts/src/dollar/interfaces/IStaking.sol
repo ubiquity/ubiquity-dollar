@@ -161,6 +161,7 @@ interface IStaking {
      * @notice Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
      * Governance tokens will be minted for the treasury.
      * @notice Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @notice Set `governanceTreasuryDivider` to 0 if you want to disable minting rewards to the treasury
      * @param newGovernanceTreasuryDivider New governance divider param value
      */
     function setGovernanceTreasuryDivider(

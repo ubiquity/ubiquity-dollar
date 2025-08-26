@@ -568,6 +568,30 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(rewardAmount, 10 ether);
     }
 
+    // NOTICE: `admin` EOA is set to be a treasury address
+    function testUpdateStakingPool_ShouldNotMintRewardsToTreasury_IfGovernanceTreasuryDividerIsZero()
+        public
+    {
+        // admin disables treasury rewards
+        vm.prank(admin);
+        stakingFacet.setGovernanceTreasuryDivider(0);
+
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // before
+        assertEq(rewardToken.balanceOf(admin), 0);
+
+        stakingFacet.updateStakingPool(0);
+
+        // after
+        assertEq(rewardToken.balanceOf(admin), 0);
+    }
+
     //======================
     // Restricted methods
     //======================
@@ -701,14 +725,6 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , uint256 newGovernancePerBlock, , , , ) = stakingFacet
             .getStakingSettings();
         assertEq(newGovernancePerBlock, 2 ether);
-    }
-
-    function testSetGovernanceTreasuryDivider_ShouldRevert_IfNewGovernanceTreasuryDividerIsZero()
-        public
-    {
-        vm.prank(admin);
-        vm.expectRevert("Treasury divider can't be zero");
-        stakingFacet.setGovernanceTreasuryDivider(0);
     }
 
     function testSetGovernanceTreasuryDivider_ShouldUpdateGovernanceTreasuryDivider()

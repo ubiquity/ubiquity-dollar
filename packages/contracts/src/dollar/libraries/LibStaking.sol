@@ -369,10 +369,12 @@ library LibStaking {
             .mul(stakingStore.governancePerBlock)
             .mul(pool.allocationPoints)
             .div(stakingStore.totalAllocationPoints);
-        stakingStore.rewardToken.mint(
-            store.treasuryAddress,
-            governanceReward.div(stakingStore.governanceTreasuryDivider)
-        );
+        if (stakingStore.governanceTreasuryDivider > 0) {
+            stakingStore.rewardToken.mint(
+                store.treasuryAddress,
+                governanceReward.div(stakingStore.governanceTreasuryDivider)
+            );
+        }
         stakingStore.rewardToken.mint(address(this), governanceReward);
         pool.accumulatedGovernancePerShare = pool
             .accumulatedGovernancePerShare
@@ -470,15 +472,12 @@ library LibStaking {
      * @notice Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
      * Governance tokens will be minted for the treasury.
      * @notice Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @notice Set `governanceTreasuryDivider` to 0 if you want to disable minting rewards to the treasury
      * @param newGovernanceTreasuryDivider New governance divider param value
      */
     function setGovernanceTreasuryDivider(
         uint256 newGovernanceTreasuryDivider
     ) internal {
-        require(
-            newGovernanceTreasuryDivider > 0,
-            "Treasury divider can't be zero"
-        );
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
         emit GovernanceTreasuryDividerSet(newGovernanceTreasuryDivider);
