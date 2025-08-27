@@ -93,9 +93,8 @@ interface IStaking {
 
     /**
      * @notice Updates reward variables for all pools
-     * @param poolIdsToUpdate Array of pool ids to update
      */
-    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
+    function massUpdateStakingPools() external;
 
     /**
      * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
@@ -130,12 +129,10 @@ interface IStaking {
      * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param allocationPoints Allocation points
      * @param lpToken LP token
-     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function createStakingPool(
         uint256 allocationPoints,
-        IERC20 lpToken,
-        uint256[] memory poolIdsToUpdate
+        IERC20 lpToken
     ) external;
 
     /**
@@ -193,11 +190,9 @@ interface IStaking {
      * @notice Updates the given pool's Governance token allocation points
      * @param poolId Pool id
      * @param allocationPoints New allocation points
-     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function updateStakingPool(
         uint256 poolId,
-        uint256 allocationPoints,
-        uint256[] memory poolIdsToUpdate
+        uint256 allocationPoints
     ) external;
 }

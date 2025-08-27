@@ -44,8 +44,7 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -86,8 +85,7 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             allocationPoints, // allocation points
-            stakeTokenLowDecimals,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeTokenLowDecimals
         );
         vm.stopPrank();
 
@@ -424,21 +422,5 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
             expectedRewardsUser2,
             1e15
         );
-    }
-
-    //================
-    // Test helpers
-    //================
-
-    /**
-     * Returns array of available pool ids
-     */
-    function getAvailablePoolIds() public view returns (uint256[] memory) {
-        uint256 poolsLength = stakingFacet.getStakingPoolsLength();
-        uint256[] memory availablePoolIds = new uint256[](poolsLength);
-        for (uint256 i = 0; i < poolsLength; ++i) {
-            availablePoolIds[i] = i;
-        }
-        return availablePoolIds;
     }
 }

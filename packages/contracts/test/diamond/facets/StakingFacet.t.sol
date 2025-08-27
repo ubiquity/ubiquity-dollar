@@ -67,8 +67,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -229,8 +228,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -247,7 +245,7 @@ contract StakingFacetTest is DiamondTestSetup {
         // 10 blocks pass
         vm.roll(block.number + 10);
 
-        stakingFacet.massUpdateStakingPools(getAvailablePoolIds());
+        stakingFacet.massUpdateStakingPools();
 
         // after
         poolInfo = stakingFacet.getStakingPoolInfo(0);
@@ -378,13 +376,11 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             300, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         stakingFacet.createStakingPool(
             0, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -599,13 +595,11 @@ contract StakingFacetTest is DiamondTestSetup {
     function testCreateStakingPool_ShouldRevert_IfLpTokenAddressIsZero()
         public
     {
-        uint256[] memory poolIdsToUpdate = getAvailablePoolIds();
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.createStakingPool(
             100, // allocation points
-            MockERC20(address(0)),
-            poolIdsToUpdate // array of pool ids to update
+            MockERC20(address(0))
         );
     }
 
@@ -649,8 +643,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -794,10 +787,9 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     function testUpdateStakingPool_ShouldRevert_IfPoolDoesNotExist() public {
-        uint256[] memory poolIdsToUpdate = getAvailablePoolIds();
         vm.prank(admin);
         vm.expectRevert("Pool does not exist");
-        stakingFacet.updateStakingPool(1, 0, poolIdsToUpdate);
+        stakingFacet.updateStakingPool(1, 0);
     }
 
     function testUpdateStakingPool_ShouldUpdateStakingPoolSettings() public {
@@ -817,7 +809,7 @@ contract StakingFacetTest is DiamondTestSetup {
         emit StakingPoolAllocationUpdated(0, 50);
 
         vm.startPrank(admin);
-        stakingFacet.updateStakingPool(0, 50, getAvailablePoolIds());
+        stakingFacet.updateStakingPool(0, 50);
         vm.stopPrank();
 
         poolInfo = stakingFacet.getStakingPoolInfo(0);
@@ -857,21 +849,5 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , , , rewardAmount, , ) = stakingFacet.getStakingSettings();
         assertEq(rewardAmount, 0);
         assertEq(rewardToken.balanceOf(user), 10 ether);
-    }
-
-    //================
-    // Test helpers
-    //================
-
-    /**
-     * Returns array of available pool ids
-     */
-    function getAvailablePoolIds() public view returns (uint256[] memory) {
-        uint256 poolsLength = stakingFacet.getStakingPoolsLength();
-        uint256[] memory availablePoolIds = new uint256[](poolsLength);
-        for (uint256 i = 0; i < poolsLength; ++i) {
-            availablePoolIds[i] = i;
-        }
-        return availablePoolIds;
     }
 }

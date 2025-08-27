@@ -73,8 +73,8 @@ contract StakingFacet is IStaking, Modifiers {
     //==================
 
     /// @inheritdoc IStaking
-    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external whenNotPaused nonReentrant {
-        LibStaking.massUpdateStakingPools(poolIdsToUpdate);
+    function massUpdateStakingPools() external whenNotPaused nonReentrant {
+        LibStaking.massUpdateStakingPools();
     }
 
     /// @inheritdoc IStaking
@@ -99,13 +99,11 @@ contract StakingFacet is IStaking, Modifiers {
     /// @inheritdoc IStaking
     function createStakingPool(
         uint256 allocationPoints,
-        IERC20 lpToken,
-        uint256[] memory poolIdsToUpdate
+        IERC20 lpToken
     ) external onlyAdmin {
         LibStaking.createStakingPool(
             allocationPoints,
-            lpToken,
-            poolIdsToUpdate
+            lpToken
         );
     }
 
@@ -150,9 +148,8 @@ contract StakingFacet is IStaking, Modifiers {
     /// @inheritdoc IStaking
     function updateStakingPool(
         uint256 poolId,
-        uint256 allocationPoints,
-        uint256[] memory poolIdsToUpdate
+        uint256 allocationPoints
     ) external onlyAdmin {
-        LibStaking.updateStakingPool(poolId, allocationPoints, poolIdsToUpdate);
+        LibStaking.updateStakingPool(poolId, allocationPoints);
     }
 }
