@@ -128,7 +128,7 @@ interface IStaking {
      * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
      * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param allocationPoints Allocation points
-     * @param lpToken LP token
+     * @param lpToken LP token, can't overlap with collateral tokens from `UbiquityPool`
      */
     function createStakingPool(
         uint256 allocationPoints,
@@ -176,7 +176,7 @@ interface IStaking {
      * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
      * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
      * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
-     * @param newRewardToken New reward token address
+     * @param newRewardToken New reward token address, can't overlap with collateral tokens from `UbiquityPool`
      */
     function setStakingRewardToken(address newRewardToken) external;
 

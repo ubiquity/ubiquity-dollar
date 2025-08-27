@@ -6,6 +6,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
+import {LibUbiquityPool} from "./LibUbiquityPool.sol";
 
 /**
  * @notice Ubiquity staking contract
@@ -399,13 +400,14 @@ library LibStaking {
      * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
      * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param allocationPoints Allocation points
-     * @param lpToken LP token
+     * @param lpToken LP token, can't overlap with collateral tokens from `UbiquityPool`
      */
     function createStakingPool(
         uint256 allocationPoints,
         IERC20 lpToken
     ) internal {
         require(address(lpToken) != address(0), "Zero address detected");
+        require(!LibUbiquityPool.collateralExists(address(lpToken)), "Already used as collateral");
 
         StakingStorage storage stakingStore = stakingStorage();
 
@@ -491,10 +493,11 @@ library LibStaking {
      * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
      * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
      * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
-     * @param newRewardToken New reward token address
+     * @param newRewardToken New reward token address, can't overlap with collateral tokens from `UbiquityPool`
      */
     function setStakingRewardToken(address newRewardToken) internal {
         require(newRewardToken != address(0), "Zero address detected");
+        require(!LibUbiquityPool.collateralExists(newRewardToken), "Already used as collateral");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.rewardToken = IERC20Ubiquity(newRewardToken);
         emit StakingRewardTokenSet(newRewardToken);

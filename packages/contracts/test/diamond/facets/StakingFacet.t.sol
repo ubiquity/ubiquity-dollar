@@ -603,6 +603,29 @@ contract StakingFacetTest is DiamondTestSetup {
         );
     }
 
+    function testCreateStakingPool_ShouldRevert_IfLpTokenIsUsedAsCollateralInUbiquityPool()
+        public
+    {
+        // create a new staking token
+        MockERC20 newStakeToken = new MockERC20("STK_NEW", "STK_NEW", 18);
+
+        // admin adds collateral token to the pool
+        vm.prank(admin);
+        ubiquityPoolFacet.addCollateralToken(
+            address(newStakeToken),
+            address(0), // collateral token price feed
+            50_000e18 // max 50_000 of collateral tokens is allowed
+        );
+
+        // admin tries to add new staking token which is already used as collateral in `UbiquityPool`
+        vm.prank(admin);
+        vm.expectRevert("Already used as collateral");
+        stakingFacet.createStakingPool(
+            100, // allocation points
+            newStakeToken
+        );
+    }
+
     function testCreateStakingPool_ShouldCreateStakingPoolWithoutMassUpdate()
         public
     {
@@ -744,6 +767,26 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.setStakingRewardToken(address(0));
+    }
+
+    function testSetStakingRewardToken_ShouldRevert__IfRewardTokenIsUsedAsCollateralInUbiquityPool()
+        public
+    {
+        // create a new reward token
+        MockERC20 newRewardToken = new MockERC20("RWD_NEW", "RWD_NEW", 18);
+
+        // admin adds collateral token to the pool
+        vm.prank(admin);
+        ubiquityPoolFacet.addCollateralToken(
+            address(newRewardToken),
+            address(0), // collateral token price feed
+            50_000e18 // max 50_000 of collateral tokens is allowed
+        );
+
+        // admin tries to set a new reward token which is already used as collateral in `UbiquityPool`
+        vm.prank(admin);
+        vm.expectRevert("Already used as collateral");
+        stakingFacet.setStakingRewardToken(address(newRewardToken));
     }
 
     function testSetStakingRewardToken_ShouldUpdateStakingRewardToken() public {
