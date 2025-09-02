@@ -70,3 +70,4 @@ out
 packages/dapp/types/
 .vscode/
 /packages/contracts/*.info
+foundry.lock
