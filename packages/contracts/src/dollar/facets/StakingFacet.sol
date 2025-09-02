@@ -2,7 +2,6 @@
 pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {IStaking} from "../interfaces/IStaking.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
@@ -74,22 +73,22 @@ contract StakingFacet is IStaking, Modifiers {
     //==================
 
     /// @inheritdoc IStaking
-    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external {
-        LibStaking.massUpdateStakingPools(poolIdsToUpdate);
+    function massUpdateStakingPools() external whenNotPaused nonReentrant {
+        LibStaking.massUpdateStakingPools();
     }
 
     /// @inheritdoc IStaking
-    function stake(uint256 poolId, uint256 amount) external {
+    function stake(uint256 poolId, uint256 amount) external whenNotPaused nonReentrant {
         LibStaking.stake(poolId, amount);
     }
 
     /// @inheritdoc IStaking
-    function unstake(uint256 poolId, uint256 amount) external {
+    function unstake(uint256 poolId, uint256 amount) external whenNotPaused nonReentrant {
         LibStaking.unstake(poolId, amount);
     }
 
     /// @inheritdoc IStaking
-    function updateStakingPool(uint256 poolId) external {
+    function updateStakingPool(uint256 poolId) external whenNotPaused nonReentrant {
         LibStaking.updateStakingPool(poolId);
     }
 
@@ -100,13 +99,11 @@ contract StakingFacet is IStaking, Modifiers {
     /// @inheritdoc IStaking
     function createStakingPool(
         uint256 allocationPoints,
-        IERC20 lpToken,
-        uint256[] memory poolIdsToUpdate
+        IERC20 lpToken
     ) external onlyAdmin {
         LibStaking.createStakingPool(
             allocationPoints,
-            lpToken,
-            poolIdsToUpdate
+            lpToken
         );
     }
 
@@ -151,9 +148,8 @@ contract StakingFacet is IStaking, Modifiers {
     /// @inheritdoc IStaking
     function updateStakingPool(
         uint256 poolId,
-        uint256 allocationPoints,
-        uint256[] memory poolIdsToUpdate
+        uint256 allocationPoints
     ) external onlyAdmin {
-        LibStaking.updateStakingPool(poolId, allocationPoints, poolIdsToUpdate);
+        LibStaking.updateStakingPool(poolId, allocationPoints);
     }
 }

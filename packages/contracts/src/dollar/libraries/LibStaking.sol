@@ -3,11 +3,10 @@ pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import {EnumerableSet} from "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
 import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
+import {LibUbiquityPool} from "./LibUbiquityPool.sol";
 
 /**
  * @notice Ubiquity staking contract
@@ -276,12 +275,13 @@ library LibStaking {
 
     /**
      * @notice Updates reward variables for all pools
-     * @param poolIdsToUpdate Array of pool ids to update
      */
-    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) internal {
-        uint256 length = poolIdsToUpdate.length;
-        for (uint256 i = 0; i < length; ++i) {
-            updateStakingPool(poolIdsToUpdate[i]);
+    function massUpdateStakingPools() internal {
+        StakingStorage storage stakingStore = stakingStorage();
+
+        uint256 length = stakingStore.poolInfo.length;
+        for (uint256 pid = 0; pid < length; ++pid) {
+            updateStakingPool(pid);
         }
     }
 
@@ -371,10 +371,12 @@ library LibStaking {
             .mul(stakingStore.governancePerBlock)
             .mul(pool.allocationPoints)
             .div(stakingStore.totalAllocationPoints);
-        stakingStore.rewardToken.mint(
-            store.treasuryAddress,
-            governanceReward.div(stakingStore.governanceTreasuryDivider)
-        );
+        if (stakingStore.governanceTreasuryDivider > 0) {
+            stakingStore.rewardToken.mint(
+                store.treasuryAddress,
+                governanceReward.div(stakingStore.governanceTreasuryDivider)
+            );
+        }
         stakingStore.rewardToken.mint(address(this), governanceReward);
         pool.accumulatedGovernancePerShare = pool
             .accumulatedGovernancePerShare
@@ -392,22 +394,24 @@ library LibStaking {
 
     /**
      * @notice Adds a new staking pool
+     * @notice The following LP tokens with "weird" ERC20 behavior are not supported:
+     * - Fee on Transfer: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#fee-on-transfer
+     * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+     * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+     * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param allocationPoints Allocation points
-     * @param lpToken LP token
-     * @param poolIdsToUpdate Array of pool ids where to trigger update
+     * @param lpToken LP token, can't overlap with collateral tokens from `UbiquityPool`
      */
     function createStakingPool(
         uint256 allocationPoints,
-        IERC20 lpToken,
-        uint256[] memory poolIdsToUpdate
+        IERC20 lpToken
     ) internal {
         require(address(lpToken) != address(0), "Zero address detected");
+        require(!LibUbiquityPool.collateralExists(address(lpToken)), "Already used as collateral");
 
         StakingStorage storage stakingStore = stakingStorage();
 
-        if (poolIdsToUpdate.length > 0) {
-            massUpdateStakingPools(poolIdsToUpdate);
-        }
+        massUpdateStakingPools();
 
         uint256 lastRewardBlock = block.number > stakingStore.startBlock
             ? block.number
@@ -457,10 +461,12 @@ library LibStaking {
 
     /**
      * @notice Sets Governance tokens reward per block
+     * @dev If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards 
+     * if staked amount > 1_000_000_000e18
      * @param newGovernancePerBlock New amount of Governance tokens minted each block
      */
     function setGovernancePerBlock(uint256 newGovernancePerBlock) internal {
-        require(newGovernancePerBlock > 0, "Empty rewards");
+        require(newGovernancePerBlock >= 0.0001 ether, "Rewards are too small");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governancePerBlock = newGovernancePerBlock;
         emit GovernancePerBlockSet(newGovernancePerBlock);
@@ -470,15 +476,12 @@ library LibStaking {
      * @notice Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
      * Governance tokens will be minted for the treasury.
      * @notice Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @notice Set `governanceTreasuryDivider` to 0 if you want to disable minting rewards to the treasury
      * @param newGovernanceTreasuryDivider New governance divider param value
      */
     function setGovernanceTreasuryDivider(
         uint256 newGovernanceTreasuryDivider
     ) internal {
-        require(
-            newGovernanceTreasuryDivider > 0,
-            "Treasury divider can't be zero"
-        );
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
         emit GovernanceTreasuryDividerSet(newGovernanceTreasuryDivider);
@@ -486,10 +489,15 @@ library LibStaking {
 
     /**
      * @notice Sets staking reward token
-     * @param newRewardToken New reward token address
+     * @notice The following reward tokens with "weird" ERC20 behavior are not supported:
+     * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+     * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+     * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
+     * @param newRewardToken New reward token address, can't overlap with collateral tokens from `UbiquityPool`
      */
     function setStakingRewardToken(address newRewardToken) internal {
         require(newRewardToken != address(0), "Zero address detected");
+        require(!LibUbiquityPool.collateralExists(newRewardToken), "Already used as collateral");
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.rewardToken = IERC20Ubiquity(newRewardToken);
         emit StakingRewardTokenSet(newRewardToken);
@@ -510,20 +518,16 @@ library LibStaking {
      * @notice Updates the given pool's Governance token allocation points
      * @param poolId Pool id
      * @param allocationPoints New allocation points
-     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function updateStakingPool(
         uint256 poolId,
-        uint256 allocationPoints,
-        uint256[] memory poolIdsToUpdate
+        uint256 allocationPoints
     ) internal {
         StakingStorage storage stakingStore = stakingStorage();
 
         require(poolId < stakingStore.poolInfo.length, "Pool does not exist");
 
-        if (poolIdsToUpdate.length > 0) {
-            massUpdateStakingPools(poolIdsToUpdate);
-        }
+        massUpdateStakingPools();
 
         stakingStore.totalAllocationPoints = stakingStore
             .totalAllocationPoints

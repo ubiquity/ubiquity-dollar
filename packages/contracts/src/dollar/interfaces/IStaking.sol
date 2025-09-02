@@ -3,7 +3,6 @@ pragma solidity 0.8.19;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {LibStaking} from "../libraries/LibStaking.sol";
-import {IERC20Ubiquity} from "./IERC20Ubiquity.sol";
 
 /**
  * @notice Ubiquity staking interface
@@ -94,9 +93,8 @@ interface IStaking {
 
     /**
      * @notice Updates reward variables for all pools
-     * @param poolIdsToUpdate Array of pool ids to update
      */
-    function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
+    function massUpdateStakingPools() external;
 
     /**
      * @notice Stakes LP tokens to the staking contract for Governance tokens allocation
@@ -124,14 +122,17 @@ interface IStaking {
 
     /**
      * @notice Adds a new staking pool
+     * @notice The following LP tokens with "weird" ERC20 behavior are not supported:
+     * - Fee on Transfer: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#fee-on-transfer
+     * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+     * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+     * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
      * @param allocationPoints Allocation points
-     * @param lpToken LP token
-     * @param poolIdsToUpdate Array of pool ids where to trigger update
+     * @param lpToken LP token, can't overlap with collateral tokens from `UbiquityPool`
      */
     function createStakingPool(
         uint256 allocationPoints,
-        IERC20 lpToken,
-        uint256[] memory poolIdsToUpdate
+        IERC20 lpToken
     ) external;
 
     /**
@@ -152,6 +153,8 @@ interface IStaking {
 
     /**
      * @notice Sets Governance tokens reward per block
+     * @dev If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards 
+     * if staked amount > 1_000_000_000e18
      * @param newGovernancePerBlock New amount of Governance tokens minted each block
      */
     function setGovernancePerBlock(uint256 newGovernancePerBlock) external;
@@ -160,6 +163,7 @@ interface IStaking {
      * @notice Sets Governance token divider param for treasury. The bigger `governanceTreasuryDivider` the less extra
      * Governance tokens will be minted for the treasury.
      * @notice Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
+     * @notice Set `governanceTreasuryDivider` to 0 if you want to disable minting rewards to the treasury
      * @param newGovernanceTreasuryDivider New governance divider param value
      */
     function setGovernanceTreasuryDivider(
@@ -168,7 +172,11 @@ interface IStaking {
 
     /**
      * @notice Sets staking reward token
-     * @param newRewardToken New reward token address
+     * @notice The following reward tokens with "weird" ERC20 behavior are not supported:
+     * - Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+     * - Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+     * - Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
+     * @param newRewardToken New reward token address, can't overlap with collateral tokens from `UbiquityPool`
      */
     function setStakingRewardToken(address newRewardToken) external;
 
@@ -182,11 +190,9 @@ interface IStaking {
      * @notice Updates the given pool's Governance token allocation points
      * @param poolId Pool id
      * @param allocationPoints New allocation points
-     * @param poolIdsToUpdate Array of pool ids where to trigger update
      */
     function updateStakingPool(
         uint256 poolId,
-        uint256 allocationPoints,
-        uint256[] memory poolIdsToUpdate
+        uint256 allocationPoints
     ) external;
 }

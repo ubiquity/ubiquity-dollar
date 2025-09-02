@@ -67,8 +67,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -146,7 +145,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.setGovernanceBonusEndBlock(100);
         stakingFacet.setGovernanceBonusMultiplier(2);
-        stakingFacet.setGovernancePerBlock(3);
+        stakingFacet.setGovernancePerBlock(0.0001 ether);
         stakingFacet.setGovernanceTreasuryDivider(4);
         stakingFacet.setStakingStartBlock(20);
         vm.stopPrank();
@@ -165,7 +164,7 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(rewardTokenAddress, address(rewardToken));
         assertEq(bonusEndBlock, 100);
         assertEq(governanceBonusMultiplier, 2);
-        assertEq(governancePerBlock, 3);
+        assertEq(governancePerBlock, 0.0001 ether);
         assertEq(governanceTreasuryDivider, 4);
         assertEq(rewardAmount, 10 ether);
         assertEq(totalAllocationPoints, 100);
@@ -229,8 +228,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -247,7 +245,7 @@ contract StakingFacetTest is DiamondTestSetup {
         // 10 blocks pass
         vm.roll(block.number + 10);
 
-        stakingFacet.massUpdateStakingPools(getAvailablePoolIds());
+        stakingFacet.massUpdateStakingPools();
 
         // after
         poolInfo = stakingFacet.getStakingPoolInfo(0);
@@ -378,13 +376,11 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             300, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         stakingFacet.createStakingPool(
             0, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -568,6 +564,30 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(rewardAmount, 10 ether);
     }
 
+    // NOTICE: `admin` EOA is set to be a treasury address
+    function testUpdateStakingPool_ShouldNotMintRewardsToTreasury_IfGovernanceTreasuryDividerIsZero()
+        public
+    {
+        // admin disables treasury rewards
+        vm.prank(admin);
+        stakingFacet.setGovernanceTreasuryDivider(0);
+
+        // user stakes 50 STK
+        vm.prank(user);
+        stakingFacet.stake(0, 50 ether);
+
+        // 10 blocks pass
+        vm.roll(block.number + 10);
+
+        // before
+        assertEq(rewardToken.balanceOf(admin), 0);
+
+        stakingFacet.updateStakingPool(0);
+
+        // after
+        assertEq(rewardToken.balanceOf(admin), 0);
+    }
+
     //======================
     // Restricted methods
     //======================
@@ -575,13 +595,34 @@ contract StakingFacetTest is DiamondTestSetup {
     function testCreateStakingPool_ShouldRevert_IfLpTokenAddressIsZero()
         public
     {
-        uint256[] memory poolIdsToUpdate = getAvailablePoolIds();
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.createStakingPool(
             100, // allocation points
-            MockERC20(address(0)),
-            poolIdsToUpdate // array of pool ids to update
+            MockERC20(address(0))
+        );
+    }
+
+    function testCreateStakingPool_ShouldRevert_IfLpTokenIsUsedAsCollateralInUbiquityPool()
+        public
+    {
+        // create a new staking token
+        MockERC20 newStakeToken = new MockERC20("STK_NEW", "STK_NEW", 18);
+
+        // admin adds collateral token to the pool
+        vm.prank(admin);
+        ubiquityPoolFacet.addCollateralToken(
+            address(newStakeToken),
+            address(0), // collateral token price feed
+            50_000e18 // max 50_000 of collateral tokens is allowed
+        );
+
+        // admin tries to add new staking token which is already used as collateral in `UbiquityPool`
+        vm.prank(admin);
+        vm.expectRevert("Already used as collateral");
+        stakingFacet.createStakingPool(
+            100, // allocation points
+            newStakeToken
         );
     }
 
@@ -625,8 +666,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         stakingFacet.createStakingPool(
             100, // allocation points
-            stakeToken,
-            getAvailablePoolIds() // array of pool ids to update
+            stakeToken
         );
         vm.stopPrank();
 
@@ -683,7 +723,7 @@ contract StakingFacetTest is DiamondTestSetup {
 
     function testSetGovernancePerBlock_ShouldRevert_IfRewardsAreEmpty() public {
         vm.prank(admin);
-        vm.expectRevert("Empty rewards");
+        vm.expectRevert("Rewards are too small");
         stakingFacet.setGovernancePerBlock(0);
     }
 
@@ -701,14 +741,6 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , uint256 newGovernancePerBlock, , , , ) = stakingFacet
             .getStakingSettings();
         assertEq(newGovernancePerBlock, 2 ether);
-    }
-
-    function testSetGovernanceTreasuryDivider_ShouldRevert_IfNewGovernanceTreasuryDividerIsZero()
-        public
-    {
-        vm.prank(admin);
-        vm.expectRevert("Treasury divider can't be zero");
-        stakingFacet.setGovernanceTreasuryDivider(0);
     }
 
     function testSetGovernanceTreasuryDivider_ShouldUpdateGovernanceTreasuryDivider()
@@ -735,6 +767,26 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.setStakingRewardToken(address(0));
+    }
+
+    function testSetStakingRewardToken_ShouldRevert__IfRewardTokenIsUsedAsCollateralInUbiquityPool()
+        public
+    {
+        // create a new reward token
+        MockERC20 newRewardToken = new MockERC20("RWD_NEW", "RWD_NEW", 18);
+
+        // admin adds collateral token to the pool
+        vm.prank(admin);
+        ubiquityPoolFacet.addCollateralToken(
+            address(newRewardToken),
+            address(0), // collateral token price feed
+            50_000e18 // max 50_000 of collateral tokens is allowed
+        );
+
+        // admin tries to set a new reward token which is already used as collateral in `UbiquityPool`
+        vm.prank(admin);
+        vm.expectRevert("Already used as collateral");
+        stakingFacet.setStakingRewardToken(address(newRewardToken));
     }
 
     function testSetStakingRewardToken_ShouldUpdateStakingRewardToken() public {
@@ -778,10 +830,9 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     function testUpdateStakingPool_ShouldRevert_IfPoolDoesNotExist() public {
-        uint256[] memory poolIdsToUpdate = getAvailablePoolIds();
         vm.prank(admin);
         vm.expectRevert("Pool does not exist");
-        stakingFacet.updateStakingPool(1, 0, poolIdsToUpdate);
+        stakingFacet.updateStakingPool(1, 0);
     }
 
     function testUpdateStakingPool_ShouldUpdateStakingPoolSettings() public {
@@ -801,7 +852,7 @@ contract StakingFacetTest is DiamondTestSetup {
         emit StakingPoolAllocationUpdated(0, 50);
 
         vm.startPrank(admin);
-        stakingFacet.updateStakingPool(0, 50, getAvailablePoolIds());
+        stakingFacet.updateStakingPool(0, 50);
         vm.stopPrank();
 
         poolInfo = stakingFacet.getStakingPoolInfo(0);
@@ -841,21 +892,5 @@ contract StakingFacetTest is DiamondTestSetup {
         (, , , , , rewardAmount, , ) = stakingFacet.getStakingSettings();
         assertEq(rewardAmount, 0);
         assertEq(rewardToken.balanceOf(user), 10 ether);
-    }
-
-    //================
-    // Test helpers
-    //================
-
-    /**
-     * Returns array of available pool ids
-     */
-    function getAvailablePoolIds() public view returns (uint256[] memory) {
-        uint256 poolsLength = stakingFacet.getStakingPoolsLength();
-        uint256[] memory availablePoolIds = new uint256[](poolsLength);
-        for (uint256 i = 0; i < poolsLength; ++i) {
-            availablePoolIds[i] = i;
-        }
-        return availablePoolIds;
     }
 }
