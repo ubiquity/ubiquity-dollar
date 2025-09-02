@@ -1,5 +1,5 @@
 # IStaking
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/interfaces/IStaking.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7eb880f4fba21494d313924cfb57f6e8dfbc5078/src/dollar/interfaces/IStaking.sol)
 
 Ubiquity staking interface
 
@@ -140,14 +140,8 @@ Updates reward variables for all pools
 
 
 ```solidity
-function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
+function massUpdateStakingPools() external;
 ```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`poolIdsToUpdate`|`uint256[]`|Array of pool ids to update|
-
 
 ### stake
 
@@ -200,17 +194,22 @@ function updateStakingPool(uint256 poolId) external;
 
 Adds a new staking pool
 
+The following LP tokens with "weird" ERC20 behavior are not supported:
+- Fee on Transfer: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#fee-on-transfer
+- Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+- Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+- Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
+
 
 ```solidity
-function createStakingPool(uint256 allocationPoints, IERC20 lpToken, uint256[] memory poolIdsToUpdate) external;
+function createStakingPool(uint256 allocationPoints, IERC20 lpToken) external;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`allocationPoints`|`uint256`|Allocation points|
-|`lpToken`|`IERC20`|LP token|
-|`poolIdsToUpdate`|`uint256[]`|Array of pool ids where to trigger update|
+|`lpToken`|`IERC20`|LP token, can't overlap with collateral tokens from `UbiquityPool`|
 
 
 ### setGovernanceBonusEndBlock
@@ -247,6 +246,9 @@ function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) exte
 
 Sets Governance tokens reward per block
 
+*If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards
+if staked amount > 1_000_000_000e18*
+
 
 ```solidity
 function setGovernancePerBlock(uint256 newGovernancePerBlock) external;
@@ -265,6 +267,8 @@ Governance tokens will be minted for the treasury.
 
 Example: if `governanceTreasuryDivider = 5` then `100 / 5 = 20%` extra minted Governance tokens for treasury
 
+Set `governanceTreasuryDivider` to 0 if you want to disable minting rewards to the treasury
+
 
 ```solidity
 function setGovernanceTreasuryDivider(uint256 newGovernanceTreasuryDivider) external;
@@ -280,6 +284,11 @@ function setGovernanceTreasuryDivider(uint256 newGovernanceTreasuryDivider) exte
 
 Sets staking reward token
 
+The following reward tokens with "weird" ERC20 behavior are not supported:
+- Rebasing: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#balance-modifications-outside-of-transfers-rebasingairdrops
+- Pausable Tokens: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#pausable-tokens
+- Transfer of less than amount: https://github.com/d-xo/weird-erc20?tab=readme-ov-file#transfer-of-less-than-amount
+
 
 ```solidity
 function setStakingRewardToken(address newRewardToken) external;
@@ -288,7 +297,7 @@ function setStakingRewardToken(address newRewardToken) external;
 
 |Name|Type|Description|
 |----|----|-----------|
-|`newRewardToken`|`address`|New reward token address|
+|`newRewardToken`|`address`|New reward token address, can't overlap with collateral tokens from `UbiquityPool`|
 
 
 ### setStakingStartBlock
@@ -312,7 +321,7 @@ Updates the given pool's Governance token allocation points
 
 
 ```solidity
-function updateStakingPool(uint256 poolId, uint256 allocationPoints, uint256[] memory poolIdsToUpdate) external;
+function updateStakingPool(uint256 poolId, uint256 allocationPoints) external;
 ```
 **Parameters**
 
@@ -320,6 +329,5 @@ function updateStakingPool(uint256 poolId, uint256 allocationPoints, uint256[] m
 |----|----|-----------|
 |`poolId`|`uint256`|Pool id|
 |`allocationPoints`|`uint256`|New allocation points|
-|`poolIdsToUpdate`|`uint256[]`|Array of pool ids where to trigger update|
 
 

@@ -1,5 +1,5 @@
 # Constants
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/libraries/Constants.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7eb880f4fba21494d313924cfb57f6e8dfbc5078/src/dollar/libraries/Constants.sol)
 
 ### DEFAULT_ADMIN_ROLE
 *Default admin role name*

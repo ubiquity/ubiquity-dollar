@@ -1,5 +1,5 @@
 # CreditRedemptionCalculatorFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/facets/CreditRedemptionCalculatorFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7eb880f4fba21494d313924cfb57f6e8dfbc5078/src/dollar/facets/CreditRedemptionCalculatorFacet.sol)
 
 **Inherits:**
 [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md), [ICreditRedemptionCalculator](/src/dollar/interfaces/ICreditRedemptionCalculator.sol/interface.ICreditRedemptionCalculator.md)

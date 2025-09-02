@@ -1,5 +1,5 @@
 # StakingFacet
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/75d334c0eabdba25cfdb04581522d50754cc02a8/src/dollar/facets/StakingFacet.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7eb880f4fba21494d313924cfb57f6e8dfbc5078/src/dollar/facets/StakingFacet.sol)
 
 **Inherits:**
 [IStaking](/src/dollar/interfaces/IStaking.sol/interface.IStaking.md), [Modifiers](/src/dollar/libraries/LibAppStorage.sol/contract.Modifiers.md)
@@ -141,14 +141,8 @@ Updates reward variables for all pools
 
 
 ```solidity
-function massUpdateStakingPools(uint256[] memory poolIdsToUpdate) external;
+function massUpdateStakingPools() external whenNotPaused nonReentrant;
 ```
-**Parameters**
-
-|Name|Type|Description|
-|----|----|-----------|
-|`poolIdsToUpdate`|`uint256[]`|Array of pool ids to update|
-
 
 ### stake
 
@@ -156,7 +150,7 @@ Stakes LP tokens to the staking contract for Governance tokens allocation
 
 
 ```solidity
-function stake(uint256 poolId, uint256 amount) external;
+function stake(uint256 poolId, uint256 amount) external whenNotPaused nonReentrant;
 ```
 **Parameters**
 
@@ -172,7 +166,7 @@ Unstakes LP tokens from the staking contract
 
 
 ```solidity
-function unstake(uint256 poolId, uint256 amount) external;
+function unstake(uint256 poolId, uint256 amount) external whenNotPaused nonReentrant;
 ```
 **Parameters**
 
@@ -188,7 +182,7 @@ Updates reward variables of the given pool to be up-to-date
 
 
 ```solidity
-function updateStakingPool(uint256 poolId) external;
+function updateStakingPool(uint256 poolId) external whenNotPaused nonReentrant;
 ```
 **Parameters**
 
@@ -203,17 +197,14 @@ Adds a new staking pool
 
 
 ```solidity
-function createStakingPool(uint256 allocationPoints, IERC20 lpToken, uint256[] memory poolIdsToUpdate)
-    external
-    onlyAdmin;
+function createStakingPool(uint256 allocationPoints, IERC20 lpToken) external onlyAdmin;
 ```
 **Parameters**
 
 |Name|Type|Description|
 |----|----|-----------|
 |`allocationPoints`|`uint256`|Allocation points|
-|`lpToken`|`IERC20`|LP token|
-|`poolIdsToUpdate`|`uint256[]`|Array of pool ids where to trigger update|
+|`lpToken`|`IERC20`|LP token, can't overlap with collateral tokens from `UbiquityPool`|
 
 
 ### setGovernanceBonusEndBlock
@@ -249,6 +240,9 @@ function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) exte
 ### setGovernancePerBlock
 
 Sets Governance tokens reward per block
+
+*If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards
+if staked amount > 1_000_000_000e18*
 
 
 ```solidity
@@ -289,7 +283,7 @@ function setStakingRewardToken(address newRewardToken) external onlyAdmin;
 
 |Name|Type|Description|
 |----|----|-----------|
-|`newRewardToken`|`address`|New reward token address|
+|`newRewardToken`|`address`|New reward token address, can't overlap with collateral tokens from `UbiquityPool`|
 
 
 ### setStakingStartBlock
@@ -313,9 +307,7 @@ Updates reward variables of the given pool to be up-to-date
 
 
 ```solidity
-function updateStakingPool(uint256 poolId, uint256 allocationPoints, uint256[] memory poolIdsToUpdate)
-    external
-    onlyAdmin;
+function updateStakingPool(uint256 poolId, uint256 allocationPoints) external onlyAdmin;
 ```
 **Parameters**
 
@@ -323,6 +315,5 @@ function updateStakingPool(uint256 poolId, uint256 allocationPoints, uint256[] m
 |----|----|-----------|
 |`poolId`|`uint256`|Pool id|
 |`allocationPoints`|`uint256`||
-|`poolIdsToUpdate`|`uint256[]`||
 
 
