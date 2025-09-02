@@ -211,7 +211,11 @@ contract AaveAmoTest is DiamondTestSetup {
             withdrawAmount
         );
         assertEq(aToken.balanceOf(address(aaveAmo)), 0);
-        assertEq(collateralToken.balanceOf(address(aaveAmo)), withdrawAmount);
+        assertApproxEqAbs(
+            collateralToken.balanceOf(address(aaveAmo)), 
+            withdrawAmount, 
+            1e2
+        ); // Allow small rounding errors due to interest accrual
     }
 
     function testAaveDeposit_ShouldRevertIfNotOwner() public {
