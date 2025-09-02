@@ -63,7 +63,7 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         
       - name: Check For Diamond Storage Changes
-        uses: ubiquity/foundry-storage-check@main
+        uses: Rubilmax/foundry-storage-check@main
         with:
           workingDirectory: packages/contracts
           contract: ${{ matrix.contract }}
