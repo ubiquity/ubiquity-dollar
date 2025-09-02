@@ -205,10 +205,11 @@ contract AaveAmoTest is DiamondTestSetup {
         uint256 withdrawAmount = aToken.balanceOf(address(aaveAmo));
 
         // Owner withdraws collateral from Aave Pool
+        // Use type(uint256).max to withdraw all available balance to avoid rounding issues
         vm.prank(owner);
         aaveAmo.aaveWithdrawCollateral(
             address(collateralToken),
-            withdrawAmount
+            type(uint256).max
         );
         assertEq(aToken.balanceOf(address(aaveAmo)), 0);
         assertApproxEqAbs(
