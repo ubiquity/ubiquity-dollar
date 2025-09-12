@@ -295,6 +295,9 @@ library LibStaking {
 
         PoolInfo storage pool = stakingStore.poolInfo[poolId];
         UserInfo storage user = stakingStore.userInfo[poolId][msg.sender];
+
+        require(pool.allocationPoints > 0, "Pool disabled");
+
         updateStakingPool(poolId);
         if (user.amount > 0) {
             uint256 pending = user

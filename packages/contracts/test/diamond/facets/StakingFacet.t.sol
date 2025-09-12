@@ -254,6 +254,20 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(poolInfo2.lastRewardBlock, 11);
     }
 
+    function testStake_ShouldRevert_IfPoolHasZeroAllocationPoints() public {
+        // admin pool allocation points to 0
+        vm.startPrank(admin);
+        stakingFacet.updateStakingPool(
+            0, // pool id
+            0 // allocation points
+        );
+        vm.stopPrank();
+
+        vm.prank(user);
+        vm.expectRevert("Pool disabled");
+        stakingFacet.stake(0, 50 ether);
+    }
+
     function testStake_ShouldStakeTokens() public {
         // user stakes 50 STK
         vm.prank(user);
@@ -350,7 +364,7 @@ contract StakingFacetTest is DiamondTestSetup {
      * Step 1, admin creates 3 staking pools
      * - Pool 1: 100 allocation points
      * - Pool 2: 300 allocation points
-     * - Pool 3: 0 allocation points
+     * - Pool 3: 600 allocation points
      *
      * Step 2
      * - user stakes 50 STK in `Pool 1`
@@ -362,9 +376,9 @@ contract StakingFacetTest is DiamondTestSetup {
      * Step 4, users unstake half of the tokens
      *
      * Step 5, assert that:
-     * - user gets 2.5 reward tokens (25% pool allocation)
-     * - user2 gets 7.5 reward tokens (75% pool allocation)
-     * - user3 gets 0 reward tokens (0% pool allocation)
+     * - user gets 1 reward token (10% pool allocation)
+     * - user2 gets 3 reward tokens (30% pool allocation)
+     * - user3 gets 6 reward tokens (60% pool allocation)
      */
     function testUnstake_ShouldUnstakeTokens_WhenMultipleUsersUnstakeFromMultiplePools()
         public
@@ -379,7 +393,7 @@ contract StakingFacetTest is DiamondTestSetup {
             stakeToken
         );
         stakingFacet.createStakingPool(
-            0, // allocation points
+            600, // allocation points
             stakeToken
         );
         vm.stopPrank();
@@ -462,9 +476,9 @@ contract StakingFacetTest is DiamondTestSetup {
         userInfo = stakingFacet.getStakingUserInfo(0, user);
         poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo.lastRewardBlock, 11);
-        assertEq(rewardToken.balanceOf(user), 2.5 ether);
+        assertEq(rewardToken.balanceOf(user), 1 ether);
         assertEq(userInfo.amount, 25 ether);
-        assertEq(userInfo.rewardDebt, 1.25 ether);
+        assertEq(userInfo.rewardDebt, 0.5 ether);
         assertEq(poolInfo.amount, 25 ether);
         assertEq(stakeToken.balanceOf(user), 75 ether);
 
@@ -472,9 +486,9 @@ contract StakingFacetTest is DiamondTestSetup {
         userInfo2 = stakingFacet.getStakingUserInfo(1, user2);
         poolInfo2 = stakingFacet.getStakingPoolInfo(1);
         assertEq(poolInfo2.lastRewardBlock, 11);
-        assertEq(rewardToken.balanceOf(user2), 7.5 ether);
+        assertEq(rewardToken.balanceOf(user2), 3 ether);
         assertEq(userInfo2.amount, 25 ether);
-        assertEq(userInfo2.rewardDebt, 3.75 ether);
+        assertEq(userInfo2.rewardDebt, 1.5 ether);
         assertEq(poolInfo2.amount, 25 ether);
         assertEq(stakeToken.balanceOf(user2), 75 ether);
 
@@ -482,9 +496,9 @@ contract StakingFacetTest is DiamondTestSetup {
         userInfo3 = stakingFacet.getStakingUserInfo(2, user3);
         poolInfo3 = stakingFacet.getStakingPoolInfo(2);
         assertEq(poolInfo3.lastRewardBlock, 11);
-        assertEq(rewardToken.balanceOf(user3), 0);
+        assertEq(rewardToken.balanceOf(user3), 6 ether);
         assertEq(userInfo3.amount, 25 ether);
-        assertEq(userInfo3.rewardDebt, 0);
+        assertEq(userInfo3.rewardDebt, 3 ether);
         assertEq(poolInfo3.amount, 25 ether);
         assertEq(stakeToken.balanceOf(user3), 75 ether);
     }
