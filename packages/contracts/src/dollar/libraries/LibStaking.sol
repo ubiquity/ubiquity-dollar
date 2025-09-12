@@ -445,6 +445,7 @@ library LibStaking {
             newGovernanceBonusEndBlock >= block.number,
             "Bonus end block can't be in the past"
         );
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.bonusEndBlock = newGovernanceBonusEndBlock;
         emit GovernanceBonusEndBlockSet(newGovernanceBonusEndBlock);
@@ -457,6 +458,7 @@ library LibStaking {
     function setGovernanceBonusMultiplier(
         uint256 newGovernanceBonusMultiplier
     ) internal {
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceBonusMultiplier = newGovernanceBonusMultiplier;
         emit GovernanceBonusMultiplierSet(newGovernanceBonusMultiplier);
@@ -470,6 +472,7 @@ library LibStaking {
      */
     function setGovernancePerBlock(uint256 newGovernancePerBlock) internal {
         require(newGovernancePerBlock >= 0.0001 ether, "Rewards are too small");
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governancePerBlock = newGovernancePerBlock;
         emit GovernancePerBlockSet(newGovernancePerBlock);
@@ -485,6 +488,7 @@ library LibStaking {
     function setGovernanceTreasuryDivider(
         uint256 newGovernanceTreasuryDivider
     ) internal {
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
         emit GovernanceTreasuryDividerSet(newGovernanceTreasuryDivider);
