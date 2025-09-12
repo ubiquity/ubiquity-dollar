@@ -827,6 +827,14 @@ contract StakingFacetTest is DiamondTestSetup {
         stakingFacet.setStakingStartBlock(0);
     }
 
+    function testSetStakingStartBlock_ShouldRevert_IfStartBlockIsLessOrEqualToCurrentStartBlock()
+        public
+    {
+        vm.prank(admin);
+        vm.expectRevert("Must be greater than the previous start block");
+        stakingFacet.setStakingStartBlock(1);
+    }
+
     function testSetStakingStartBlock_ShouldUpdateStakingStartBlock() public {
         (, , , , , , , uint256 oldStartBlock) = stakingFacet
             .getStakingSettings();
