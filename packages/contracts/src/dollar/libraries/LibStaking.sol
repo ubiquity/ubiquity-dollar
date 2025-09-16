@@ -515,9 +515,9 @@ library LibStaking {
      * @param newStartBlock Block number when staking should be active
      */
     function setStakingStartBlock(uint256 newStartBlock) internal {
-        StakingStorage storage stakingStore = stakingStorage();
-
         require(newStartBlock >= block.number, "Can't start in the past");
+
+        StakingStorage storage stakingStore = stakingStorage();
         require(newStartBlock > stakingStore.startBlock, "Must be greater than the previous start block");
 
         stakingStore.startBlock = newStartBlock;
