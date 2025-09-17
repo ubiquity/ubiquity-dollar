@@ -295,6 +295,9 @@ library LibStaking {
 
         PoolInfo storage pool = stakingStore.poolInfo[poolId];
         UserInfo storage user = stakingStore.userInfo[poolId][msg.sender];
+
+        require(pool.allocationPoints > 0, "Pool disabled");
+
         updateStakingPool(poolId);
         if (user.amount > 0) {
             uint256 pending = user
@@ -442,6 +445,7 @@ library LibStaking {
             newGovernanceBonusEndBlock >= block.number,
             "Bonus end block can't be in the past"
         );
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.bonusEndBlock = newGovernanceBonusEndBlock;
         emit GovernanceBonusEndBlockSet(newGovernanceBonusEndBlock);
@@ -454,6 +458,7 @@ library LibStaking {
     function setGovernanceBonusMultiplier(
         uint256 newGovernanceBonusMultiplier
     ) internal {
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceBonusMultiplier = newGovernanceBonusMultiplier;
         emit GovernanceBonusMultiplierSet(newGovernanceBonusMultiplier);
@@ -467,6 +472,7 @@ library LibStaking {
      */
     function setGovernancePerBlock(uint256 newGovernancePerBlock) internal {
         require(newGovernancePerBlock >= 0.0001 ether, "Rewards are too small");
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governancePerBlock = newGovernancePerBlock;
         emit GovernancePerBlockSet(newGovernancePerBlock);
@@ -482,6 +488,7 @@ library LibStaking {
     function setGovernanceTreasuryDivider(
         uint256 newGovernanceTreasuryDivider
     ) internal {
+        massUpdateStakingPools();
         StakingStorage storage stakingStore = stakingStorage();
         stakingStore.governanceTreasuryDivider = newGovernanceTreasuryDivider;
         emit GovernanceTreasuryDividerSet(newGovernanceTreasuryDivider);
@@ -508,8 +515,11 @@ library LibStaking {
      * @param newStartBlock Block number when staking should be active
      */
     function setStakingStartBlock(uint256 newStartBlock) internal {
-        require(newStartBlock >= block.number, "Can't start in the past");
         StakingStorage storage stakingStore = stakingStorage();
+
+        require(newStartBlock >= block.number, "Can't start in the past");
+        require(newStartBlock > stakingStore.startBlock, "Must be greater than the previous start block");
+
         stakingStore.startBlock = newStartBlock;
         emit StakingStartBlockSet(newStartBlock);
     }

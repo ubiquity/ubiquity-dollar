@@ -98,11 +98,10 @@ contract Deploy002_Staking is Script, DiamondTestHelper {
         stakingFacet.setGovernancePerBlock(0.2 ether); // 0.2 reward token minted per block
         stakingFacet.setGovernanceTreasuryDivider(5); // `100 / 5 = 20%` extra reward tokens minted for treasury
         stakingFacet.setStakingRewardToken(address(rewardToken)); // reward token address
-        stakingFacet.setStakingStartBlock(block.number); // activate staking from current block
+        stakingFacet.setStakingStartBlock(block.number + 10); // activate staking 10 blocks later
         stakingFacet.createStakingPool( // add a new staking pool
             100, // allocation points
-            IERC20(stakeToken), // staking token
-            true // whether to update all pools
+            IERC20(stakeToken) // staking token
         );
 
         // stop sending admin transactions
