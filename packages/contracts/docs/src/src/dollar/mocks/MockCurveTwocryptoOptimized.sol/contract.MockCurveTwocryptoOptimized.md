@@ -1,5 +1,5 @@
 # MockCurveTwocryptoOptimized
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7eb880f4fba21494d313924cfb57f6e8dfbc5078/src/dollar/mocks/MockCurveTwocryptoOptimized.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4c13028f071ee182255e5194c6edfe61ae2c69b2/src/dollar/mocks/MockCurveTwocryptoOptimized.sol)
 
 **Inherits:**
 [ICurveTwocryptoOptimized](/src/dollar/interfaces/ICurveTwocryptoOptimized.sol/interface.ICurveTwocryptoOptimized.md), [MockCurveStableSwapMetaNG](/src/dollar/mocks/MockCurveStableSwapMetaNG.sol/contract.MockCurveStableSwapMetaNG.md)

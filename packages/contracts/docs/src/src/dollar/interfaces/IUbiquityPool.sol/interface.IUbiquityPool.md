@@ -1,5 +1,5 @@
 # IUbiquityPool
-[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/7eb880f4fba21494d313924cfb57f6e8dfbc5078/src/dollar/interfaces/IUbiquityPool.sol)
+[Git Source](https://github.com/ubiquity/ubiquity-dollar/blob/4c13028f071ee182255e5194c6edfe61ae2c69b2/src/dollar/interfaces/IUbiquityPool.sol)
 
 Ubiquity pool interface
 
