@@ -2,6 +2,7 @@ _.log
 _.pid
 _.seed
 .cache
+.certora_internal
 .DS_Store
 .dynamodb
 .env
