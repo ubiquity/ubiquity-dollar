@@ -19,7 +19,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "20.10.0"
+          # cspell (and its subpackages) requires >=20.18
+          node-version: "20.18.1"
 
       - name: Spell Check
         run: |
