@@ -1,0 +1,11 @@
+{
+  "exclude_informational": true,
+  "exclude_low": true,
+  "detectors_to_exclude": "naming-conventions,different-pragma-directives-are-used,external-function,assembly,incorrect-equality,solc-version,unused-return,cache-array-length",
+  "exclude_medium": false,
+  "exclude_high": false,
+  "disable_color": false,
+  "filter_paths": "lib|test|src/dollar/mocks|src/deprecated",
+  "legacy_ast": false,
+  "solc_remaps": ["ds-test/=libs/ds-test/src/", "forge-std/=lib/forge-std/src/"]
+}

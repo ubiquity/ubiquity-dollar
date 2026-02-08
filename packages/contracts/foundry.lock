@@ -1,0 +1,47 @@
+{
+  "lib/Uniswap/v2-core": {
+    "rev": "ee547b17853e71ed4e0101ccfd52e70d5acded58"
+  },
+  "lib/Uniswap/v2-periphery": {
+    "rev": "0335e8f7e1bd1e8d8329fd300aea2ef2f36dd19f"
+  },
+  "lib/Uniswap/v3-periphery": {
+    "rev": "6cce88e63e176af1ddb6cc56e029110289622317"
+  },
+  "lib/aave-v3-core": {
+    "rev": "b74526a7bc67a3a117a1963fc871b3eb8cea8435"
+  },
+  "lib/aave-v3-periphery": {
+    "rev": "72fdcca18838c2f4e05ecd25bbfb44f0db5383f7"
+  },
+  "lib/abdk-libraries-solidity": {
+    "rev": "5e1e7c11b35f8313d3f7ce11c1b86320d7c0b554"
+  },
+  "lib/chainlink-brownie-contracts": {
+    "rev": "f06ed4c7e43de0359e0e337ce56e55cab90b0178"
+  },
+  "lib/forge-std": {
+    "branch": {
+      "name": "chore/reorder-vm",
+      "rev": "805aa1f4385905aa25ff9221bd23b67b5da9af0b"
+    }
+  },
+  "lib/openzeppelin-contracts": {
+    "branch": {
+      "name": "release-v4.9",
+      "rev": "17c1a3a4584e2cbbca4131f2f1d16168c92f2310"
+    }
+  },
+  "lib/openzeppelin-contracts-upgradeable": {
+    "branch": {
+      "name": "release-v4.9",
+      "rev": "152b82019370360578ee273630567bf67b977a40"
+    }
+  },
+  "lib/operator-filter-registry": {
+    "rev": "21f557c744c5d93d3dbb8fe7bebd964d5dc76c89"
+  },
+  "lib/solidity-linked-list": {
+    "rev": "a34f10a58e89287317bdb8b485e30a9de146f481"
+  }
+}

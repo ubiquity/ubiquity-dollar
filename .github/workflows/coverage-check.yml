@@ -1,0 +1,117 @@
+name: Compare Test Coverage
+# This compares test coverage and throws an error if test coverage is lower than the previous run.
+
+on:
+  push:
+    branches: [development]
+  pull_request:
+    branches: [development]
+
+jobs:
+  test-coverage:
+    name: Compare Test Coverage
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout development branch
+        uses: actions/checkout@v3
+        with:
+          ref: development
+          path: development
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install dependencies
+        run: sudo apt-get install lcov
+
+      - name: Get development branch coverage
+        id: coverage-development
+        working-directory: development/packages/contracts
+        run: |
+          # generates lcov.info
+          forge build && forge coverage --report lcov
+
+          # Merge lcov files
+          lcov \
+              --rc lcov_branch_coverage=1 \
+              --add-tracefile lcov.info \
+              --output-file merged-lcov.info
+
+          # Filter out node_modules, test, and mock files
+          lcov \
+              --rc lcov_branch_coverage=1 \
+              --remove merged-lcov.info \
+              --output-file filtered-lcov.info \
+                  "*node_modules*" \
+                  "*test*" \
+                  "*mock*" \
+                  "*scripts*" \
+                  "src/dollar/mocks/*" \
+                  "src/dollar/utils/*" \
+                  "src/deprecated/*" \
+                  "test/*" \
+
+          # Generate summary
+          COVERAGE_DEVELOPMENT_OUTPUT=$(lcov \
+              --rc lcov_branch_coverage=1 \
+              --list filtered-lcov.info)
+
+          echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | cut -d % -f 1 | cut -d \| -f 2) >> $GITHUB_OUTPUT
+
+      - name: Delete development branch folder
+        run: rm -rf development
+
+      - name: Checkout code in PR branch
+        uses: actions/checkout@v3
+
+      - name: Get PR branch coverage
+        id: coverage-pr
+        working-directory: packages/contracts
+        run: |
+          # generates lcov.info
+          forge build && forge coverage --report lcov
+
+          # Merge lcov files
+          lcov \
+              --rc lcov_branch_coverage=1 \
+              --add-tracefile lcov.info \
+              --output-file merged-lcov.info
+
+          # Filter out node_modules, test, and mock files
+          lcov \
+              --rc lcov_branch_coverage=1 \
+              --remove merged-lcov.info \
+              --output-file filtered-lcov.info \
+                  "*node_modules*" \
+                  "*test*" \
+                  "*mock*" \
+                  "*scripts*" \
+                  "src/dollar/mocks/*" \
+                  "src/dollar/utils/*" \
+                  "src/deprecated/*" \
+                  "test/*" \
+
+          # Generate summary
+          COVERAGE_DEVELOPMENT_OUTPUT=$(lcov \
+              --rc lcov_branch_coverage=1 \
+              --list filtered-lcov.info)
+          echo COVERAGE=$(echo "${COVERAGE_DEVELOPMENT_OUTPUT}" | tail -n 1 | cut -d % -f 1 | cut -d \| -f 2) >> $GITHUB_OUTPUT
+
+      - name: Print coverages
+        run: |
+          echo Development branch coverage: ${{ steps.coverage-development.outputs.COVERAGE }}
+          echo PR branch coverage: ${{ steps.coverage-pr.outputs.COVERAGE }}
+
+      - name: Compare coverages
+        if: ${{ steps.coverage-development.outputs.COVERAGE > steps.coverage-pr.outputs.COVERAGE }}
+        run: |
+          echo "Error: test coverage decreased"
+          exit 1
+
+      - name: Upload test coverage report to coveralls.io
+        uses: coverallsapp/github-action@v2
+        with:
+          file: packages/contracts/filtered-lcov.info

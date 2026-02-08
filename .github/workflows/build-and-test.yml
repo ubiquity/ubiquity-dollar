@@ -1,0 +1,49 @@
+name: Build & Test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20.10.0"
+
+      - name: Install dependencies
+        run: sudo apt -y update && sudo apt -y install libusb-1.0-0-dev libudev-dev
+
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Yarn Install
+        run: yarn install --mode=skip-build && yarn allow-scripts
+        
+      - name: Setup Forge
+        run: yarn workspace @ubiquity/contracts forge:install
+
+      - name: Build All
+        env:
+          FOUNDRY_DENY_WARNINGS: true
+        run: yarn build
+
+      - name: Test All
+        run: yarn test:all
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: static
+          path: packages/dapp/dist

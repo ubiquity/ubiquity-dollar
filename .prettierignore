@@ -1,0 +1,5 @@
+dist/
+.next/
+fixtures/
+lib/
+out/
