@@ -2,8 +2,9 @@ import { OptionDefinition } from "command-line-args";
 
 import { TaskFuncCallBack } from "../shared";
 
-import PriceResetHandler, { optionDefinitions, optionDefinitions as priceResetOptions } from "./dollar/price-reset";
-import BlocksInWeekHandler from "./dollar/blocks-in-week";
+import PriceResetHandler, { optionDefinitions as priceResetOptions } from "./dollar/price-reset";
+import BlocksInWeekHandler, { optionDefinitions as blocksInWeekOptions } from "./dollar/blocks-in-week";
+import SecurityMonitorHandler, { optionDefinitions as securityMonitorOptions } from "./dollar/security-monitor";
 
 export const TASK_FUNCS: Record<string, { handler: TaskFuncCallBack; options: OptionDefinition[] }> = {
   PriceReset: {
@@ -12,6 +13,10 @@ export const TASK_FUNCS: Record<string, { handler: TaskFuncCallBack; options: Op
   },
   BlocksInWeek: {
     handler: BlocksInWeekHandler,
-    options: optionDefinitions,
+    options: blocksInWeekOptions,
+  },
+  SecurityMonitor: {
+    handler: SecurityMonitorHandler,
+    options: securityMonitorOptions,
   },
 };
