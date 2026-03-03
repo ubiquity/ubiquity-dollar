@@ -11,8 +11,31 @@ jobs:
     name: Automatic Cloudflare Deploy
     runs-on: ubuntu-22.04
     steps:
-      - name: Deploy to Cloudflare
+      - name: Check static artifact exists
+        id: artifact
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const runId = context.payload.workflow_run.id;
+            const artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts, {
+              owner,
+              repo,
+              run_id: runId,
+              per_page: 100,
+            });
+            const found = artifacts.some(a => a && a.name === 'static' && !a.expired);
+            core.info(`Artifacts on run ${runId}: ${artifacts.map(a => a.name).join(', ') || '(none)'}`);
+            core.setOutput('has_static', found ? 'true' : 'false');
+
+      - name: Skip deploy (missing static artifact)
+        if: ${{ github.event.workflow_run.conclusion == 'success' && steps.artifact.outputs.has_static != 'true' }}
+        run: |
+          echo "No 'static' artifact on workflow_run ${{ github.event.workflow_run.id }}; skipping Cloudflare deploy."
+
+      - name: Deploy to Cloudflare
+        if: ${{ github.event.workflow_run.conclusion == 'success' && steps.artifact.outputs.has_static == 'true' }}
         uses: ubiquity/cloudflare-deploy-action@main
         with:
           repository: ${{ github.repository }}
