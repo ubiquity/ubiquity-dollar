@@ -39,7 +39,7 @@ jobs:
           : > contracts.txt
 
           if [[ "$EVENT_NAME" == "pull_request" ]]; then
-            git fetch --no-tags --depth=1 origin "$BASE_REF"
+            git fetch --no-tags --depth=1 origin "refs/heads/$BASE_REF:refs/remotes/origin/$BASE_REF"
           fi
 
           for CONTRACT in $CHANGED_CONTRACTS; do
