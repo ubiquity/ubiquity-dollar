@@ -150,11 +150,16 @@ library LibStabilityPool {
         // Withdraw from Liquity Stability Pool (also collects gains)
         ILiquityStabilityPool(ss.stabilityPool).withdrawFromSP(amount);
 
-        // Update principal tracking (cap at actual withdrawal to handle liquidation losses)
-        if (amount >= ss.totalPrincipalInPool) {
+        // Update principal tracking using pro-rata calculation to handle liquidation losses.
+        // When the compounded deposit is less than principal (due to losses), subtracting
+        // the raw withdrawal amount would leave a stale residual. Instead, subtract the
+        // proportion of principal corresponding to the fraction of compounded deposit withdrawn.
+        if (amount >= compoundedDeposit) {
             ss.totalPrincipalInPool = 0;
         } else {
-            ss.totalPrincipalInPool -= amount;
+            uint256 principalToRemove = (amount * ss.totalPrincipalInPool) /
+                compoundedDeposit;
+            ss.totalPrincipalInPool -= principalToRemove;
         }
 
         // Forward harvested gains to treasury

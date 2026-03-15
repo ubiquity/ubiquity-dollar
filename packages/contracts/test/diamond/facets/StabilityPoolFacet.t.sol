@@ -358,20 +358,21 @@ contract StabilityPoolFacetTest is DiamondTestSetup {
     }
 
     function testHarvestRevertsWithNoTreasury() public {
-        uint256 depositAmount = 1_000e18;
-        lusdToken.mint(address(diamond), depositAmount);
+        // Use vm.store to zero out the treasury in diamond storage.
+        // The setter rejects address(0), so direct storage manipulation is needed.
+        bytes32 baseSlot = bytes32(
+            uint256(keccak256("ubiquity.contracts.stability.pool.storage")) - 1
+        ) & ~bytes32(uint256(0xff));
+        bytes32 treasurySlot = bytes32(uint256(baseSlot) + 3);
 
-        vm.startPrank(admin);
-        stabilityPoolFacet.depositToStabilityPool(depositAmount);
+        vm.store(address(diamond), treasurySlot, bytes32(0));
 
-        // Clear treasury
-        stabilityPoolFacet.setProtocolTreasury(address(0x1)); // set to non-zero first
-        vm.stopPrank();
-
-        // We need a fresh setup without treasury for this test
-        // Instead, test that harvest works when there are no gains (no-op)
         vm.prank(admin);
-        stabilityPoolFacet.harvestGains(); // should succeed with no gains
+        vm.expectRevert("StabilityPool: treasury not set");
+        stabilityPoolFacet.harvestGains();
+
+        // Restore treasury for subsequent tests
+        vm.store(address(diamond), treasurySlot, bytes32(uint256(uint160(treasury))));
     }
 
     function testWithdrawAlsoHarvestsGains() public {
@@ -463,11 +464,88 @@ contract StabilityPoolFacetTest is DiamondTestSetup {
     }
 
     function testReentrancyProtection() public {
-        // The nonReentrant modifier is inherited from Modifiers
-        // Verify that the facet functions use it by checking they revert on reentrant calls
-        // This is implicitly tested by the modifier being applied in StabilityPoolFacet
-        // A direct reentrancy test would require a malicious contract,
-        // but the modifier application is verified at the Solidity level
-        assertTrue(true, "Reentrancy guard applied via Modifiers.nonReentrant");
+        // Deploy a malicious contract that tries to re-enter harvestGains
+        // when it receives ETH gains
+        ReentrancyAttacker attacker = new ReentrancyAttacker(
+            address(stabilityPoolFacet)
+        );
+
+        // Set attacker as treasury so it receives ETH during harvest
+        vm.prank(admin);
+        stabilityPoolFacet.setProtocolTreasury(address(attacker));
+
+        // Grant attacker the admin role so its reentrant call passes onlyAdmin
+        vm.prank(admin);
+        accessControlFacet.grantRole(bytes32(0), address(attacker));
+
+        // Deposit LUSD
+        uint256 depositAmount = 10_000e18;
+        lusdToken.mint(address(diamond), depositAmount);
+        vm.prank(admin);
+        stabilityPoolFacet.depositToStabilityPool(depositAmount);
+
+        // Simulate ETH gains so treasury (attacker) receives ETH
+        uint256 ethGain = 1 ether;
+        vm.deal(address(mockStabilityPool), ethGain);
+        mockStabilityPool.setETHGain(address(diamond), ethGain);
+
+        // Harvest should revert: attacker's receive() tries to re-enter,
+        // which triggers ReentrancyGuard. The inner revert causes the ETH
+        // transfer to fail, surfacing as "StabilityPool: ETH transfer failed".
+        vm.prank(admin);
+        vm.expectRevert("StabilityPool: ETH transfer failed");
+        stabilityPoolFacet.harvestGains();
+
+        // Restore treasury
+        vm.prank(admin);
+        stabilityPoolFacet.setProtocolTreasury(treasury);
+    }
+
+    function testWithdrawAfterLiquidationLoss() public {
+        uint256 depositAmount = 10_000e18;
+
+        // Deposit LUSD
+        lusdToken.mint(address(diamond), depositAmount);
+        vm.prank(admin);
+        stabilityPoolFacet.depositToStabilityPool(depositAmount);
+
+        // Simulate 20% liquidation loss
+        mockStabilityPool.setLossRatio(2000); // 20% loss in bps
+
+        // Compounded deposit should be 8000e18
+        assertEq(stabilityPoolFacet.getPoolBalance(), 8_000e18);
+        assertEq(stabilityPoolFacet.getTotalPrincipal(), 10_000e18);
+
+        // Withdraw half of compounded (4000e18)
+        vm.prank(admin);
+        stabilityPoolFacet.withdrawFromStabilityPool(4_000e18);
+
+        // Principal should be reduced pro-rata: 10000 * (4000/8000) = 5000 removed
+        assertEq(stabilityPoolFacet.getTotalPrincipal(), 5_000e18);
+
+        // Full withdrawal of remaining compounded deposit
+        uint256 remaining = stabilityPoolFacet.getPoolBalance();
+        vm.prank(admin);
+        stabilityPoolFacet.withdrawFromStabilityPool(remaining);
+
+        // After full withdrawal, principal must be zero
+        assertEq(stabilityPoolFacet.getTotalPrincipal(), 0);
+    }
+}
+
+/**
+ * @notice Malicious contract that attempts to re-enter StabilityPoolFacet
+ *         when receiving ETH via the harvest gains flow.
+ */
+contract ReentrancyAttacker {
+    address public target;
+
+    constructor(address _target) {
+        target = _target;
+    }
+
+    receive() external payable {
+        // Attempt reentrant call to harvestGains
+        StabilityPoolFacet(payable(target)).harvestGains();
     }
 }

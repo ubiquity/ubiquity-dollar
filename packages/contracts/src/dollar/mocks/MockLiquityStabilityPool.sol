@@ -34,11 +34,15 @@ contract MockLiquityStabilityPool is ILiquityStabilityPool {
         uint256 compounded = getCompoundedLUSDDeposit(msg.sender);
         uint256 toWithdraw = _amount > compounded ? compounded : _amount;
 
-        // Reduce deposit
-        if (toWithdraw >= deposits[msg.sender]) {
+        // Reduce raw deposit proportionally to match how the real pool works.
+        // This ensures getCompoundedLUSDDeposit returns the correct value
+        // after partial withdrawals when a loss ratio is active.
+        if (toWithdraw >= compounded) {
             deposits[msg.sender] = 0;
         } else {
-            deposits[msg.sender] -= toWithdraw;
+            uint256 rawToRemove = (toWithdraw * deposits[msg.sender]) /
+                compounded;
+            deposits[msg.sender] -= rawToRemove;
         }
 
         // Transfer LUSD back
