@@ -26,3 +26,9 @@ test("triggers at or above threshold", () => {
   assert.equal(result.dropBps, 3010);
   assert.equal(result.triggered, true);
 });
+
+test("triggers exactly at threshold", () => {
+  const result = evaluateLiquidityIncident(1000n, 700n, 3000);
+  assert.equal(result.dropBps, 3000);
+  assert.equal(result.triggered, true);
+});
