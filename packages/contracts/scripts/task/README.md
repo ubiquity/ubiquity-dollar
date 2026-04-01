@@ -48,8 +48,10 @@ npx tsx scripts/task/task.ts SecurityMonitor --network=mainnet --dryrun
 
 Config via environment variables (in `packages/contracts/.env`):
 
+<!-- cspell:disable -->
 - `UBQ_DIAMOND_ADDRESS` (required)
 - `UBQ_DOLLAR_TOKEN_ADDRESS` (required)
+<!-- cspell:enable -->
 - `SECURITY_MONITOR_THRESHOLD_BPS` (optional, default `3000`)
 - `SECURITY_MONITOR_STATE_FILE` (optional)
 - `SECURITY_MONITOR_WEBHOOK_URL` (optional)
