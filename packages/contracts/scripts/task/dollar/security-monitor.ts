@@ -98,16 +98,25 @@ const writeState = (stateFilePath: string, currentTotal: bigint) => {
   fs.writeFileSync(stateFilePath, JSON.stringify(state, null, 2));
 };
 
-const postJson = async (url: string, payload: Record<string, unknown>) => {
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+const DEFAULT_TIMEOUT_MS = 10_000;
 
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Webhook request failed with ${response.status}: ${text}`);
+const postJson = async (url: string, payload: Record<string, unknown>) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Webhook request failed with ${response.status}: ${text}`);
+    }
+  } finally {
+    clearTimeout(timeout);
   }
 };
 
@@ -142,12 +151,24 @@ const sendNotifications = async (config: MonitorConfig, message: string, details
     return;
   }
 
-  await Promise.allSettled(tasks);
+  const results = await Promise.allSettled(tasks);
+  const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
+  if (failures.length > 0) {
+    console.error(`[security-monitor] ${failures.length}/${tasks.length} notification(s) failed:`, failures.map((f) => f.reason?.message ?? f.reason));
+  }
+};
+
+const parseThresholdBps = (raw: unknown): number => {
+  const value = Number(raw);
+  if (!Number.isInteger(value) || value < 0 || value > 10_000) {
+    throw new Error(`SECURITY_MONITOR_THRESHOLD_BPS must be an integer in [0, 10000], got: ${raw}`);
+  }
+  return value;
 };
 
 const getConfig = (params: TaskFuncParam): MonitorConfig => {
   const { args } = params;
-  const thresholdBps = Number(args.thresholdBps ?? process.env.SECURITY_MONITOR_THRESHOLD_BPS ?? 3000);
+  const thresholdBps = parseThresholdBps(args.thresholdBps ?? process.env.SECURITY_MONITOR_THRESHOLD_BPS ?? 3000);
   const stateFilePath = args.stateFile ?? process.env.SECURITY_MONITOR_STATE_FILE ?? path.join(process.cwd(), "monitoring", "security-monitor-state.json");
 
   // cspell: disable-next-line
@@ -255,7 +276,11 @@ const func = async (params: TaskFuncParam) => {
   const config = getConfig(params);
 
   const provider = new ethers.JsonRpcProvider(params.env.rpcUrl);
-  const signer = new ethers.Wallet(params.env.privateKey, provider);
+  const adminKey = process.env.ADMIN_PRIVATE_KEY ?? params.env.privateKey;
+  if (!adminKey) {
+    throw new Error("Missing ADMIN_PRIVATE_KEY (or PRIVATE_KEY) environment variable");
+  }
+  const signer = new ethers.Wallet(adminKey, provider);
 
   const poolContract = new ethers.Contract(config.diamondAddress, POOL_ABI, signer) as unknown as PoolContract & {
     collateralUsdBalance: () => Promise<bigint>;
