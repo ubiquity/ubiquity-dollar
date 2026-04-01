@@ -50,10 +50,10 @@ npx tsx scripts/task/task.ts SecurityMonitor --network=mainnet --dryrun
 
 ## Suggested automation
 
-Example cron every 5 minutes:
+Example cron every 5 minutes (with lock to prevent overlapping runs):
 
 ```bash
-*/5 * * * * cd /path/to/ubiquity-dollar/packages/contracts && npx tsx scripts/task/task.ts SecurityMonitor --network=mainnet >> /var/log/ubq-security-monitor.log 2>&1
+*/5 * * * * flock -n /tmp/ubq-security-monitor.lock -c "cd /path/to/ubiquity-dollar/packages/contracts && npx tsx scripts/task/task.ts SecurityMonitor --network=mainnet" >> /var/log/ubq-security-monitor.log 2>&1
 ```
 
 ## Operational notes
