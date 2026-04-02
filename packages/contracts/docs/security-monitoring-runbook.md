@@ -5,7 +5,7 @@ This runbook describes the incident monitor for `LibUbiquityPool` and the automa
 ## What is monitored
 
 - `IUbiquityPool.collateralUsdBalance()` at each monitor interval.
-- Incident heuristic: a sudden drop of collateral USD value above the configured threshold (default **30%**).
+- Incident heuristic: a sudden drop in collateral USD value exceeding the configured threshold (default **30%**).
 
 ## What happens on incident
 
