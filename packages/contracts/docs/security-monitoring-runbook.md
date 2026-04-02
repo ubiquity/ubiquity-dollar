@@ -52,6 +52,8 @@ npx tsx scripts/task/task.ts SecurityMonitor --network=mainnet --dryrun
 
 Example cron every 5 minutes (with lock to prevent overlapping runs):
 
+> **Note:** Replace `/path/to/ubiquity-dollar/` with your actual repository path.
+
 ```bash
 */5 * * * * flock -n /tmp/ubq-security-monitor.lock -c "cd /path/to/ubiquity-dollar/packages/contracts && npx tsx scripts/task/task.ts SecurityMonitor --network=mainnet" >> /var/log/ubq-security-monitor.log 2>&1
 ```
