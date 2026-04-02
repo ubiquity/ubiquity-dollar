@@ -22,7 +22,8 @@ When `dropBps >= SECURITY_MONITOR_THRESHOLD_BPS`:
 Set these in `packages/contracts/.env`:
 
 - `RPC_URL`
-- `ADMIN_PRIVATE_KEY` (must have permissions to pause token and manage pool)
+- `ADMIN_PRIVATE_KEY` (preferred; must have permissions to pause token and manage pool)
+- `PRIVATE_KEY` (fallback if `ADMIN_PRIVATE_KEY` is unset; same required permissions)
 - `UBQ_DIAMOND_ADDRESS`
 - `UBQ_DOLLAR_TOKEN_ADDRESS`
 - `SECURITY_MONITOR_THRESHOLD_BPS` (default `3000`)
