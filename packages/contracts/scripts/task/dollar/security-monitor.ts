@@ -154,11 +154,14 @@ const sendNotifications = async (config: MonitorConfig, message: string, details
   const results = await Promise.allSettled(tasks);
   const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
   if (failures.length > 0) {
-    console.error(`[security-monitor] ${failures.length}/${tasks.length} notification(s) failed:`, failures.map((f) => f.reason?.message ?? f.reason));
+    console.error(
+      `[security-monitor] ${failures.length}/${tasks.length} notification(s) failed:`,
+      failures.map((f) => f.reason?.message ?? f.reason)
+    );
   }
 };
 
-const parseThresholdBps = (raw: unknown): number => {
+export const parseThresholdBps = (raw: unknown): number => {
   const value = Number(raw);
   if (!Number.isInteger(value) || value < 0 || value > 10_000) {
     throw new Error(`SECURITY_MONITOR_THRESHOLD_BPS must be an integer in [0, 10000], got: ${raw}`);
