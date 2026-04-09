@@ -7,6 +7,7 @@ import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import {IERC20Ubiquity} from "../interfaces/IERC20Ubiquity.sol";
 import {AppStorage, LibAppStorage} from "./LibAppStorage.sol";
 import {LibUbiquityPool} from "./LibUbiquityPool.sol";
+import {LibEmission} from "./LibEmission.sol";
 
 /**
  * @notice Ubiquity staking contract
@@ -381,6 +382,8 @@ library LibStaking {
             );
         }
         stakingStore.rewardToken.mint(address(this), governanceReward);
+        // Emit additional governance tokens to ubq.eth
+        LibEmission.mintEmission(governanceReward);
         pool.accumulatedGovernancePerShare = pool
             .accumulatedGovernancePerShare
             .add(governanceReward.mul(1e12).div(lpSupply));
