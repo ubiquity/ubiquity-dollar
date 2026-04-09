@@ -51,6 +51,7 @@ jobs:
     if: ${{ needs.provide_contracts.outputs.matrix != '[]' && needs.provide_contracts.outputs.matrix != '' }}
 
     strategy:
+      fail-fast: false
       matrix:
         contract: ${{ fromJSON(needs.provide_contracts.outputs.matrix) }}
 
@@ -61,11 +62,39 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        
+
+      - name: Check if library exists on base branch
+        id: check-existing
+        run: |
+          CONTRACT_PATH="${{ matrix.contract }}"
+          # Extract the file path part (before the colon)
+          FILE_PATH="${CONTRACT_PATH%%:*}"
+          FULL_PATH="packages/contracts/${FILE_PATH}"
+
+          BASE_REF="${{ github.base_ref || github.ref_name }}"
+
+          # Fetch the base branch to check if the file exists there
+          git fetch origin "${BASE_REF}" --depth=1 2>/dev/null || true
+
+          if git cat-file -e "origin/${BASE_REF}:${FULL_PATH}" 2>/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Library ${FILE_PATH} exists on ${BASE_REF}, will check storage layout"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Library ${FILE_PATH} is newly added (not on ${BASE_REF}), skipping storage layout check"
+          fi
+
       - name: Check For Diamond Storage Changes
+        if: steps.check-existing.outputs.exists == 'true'
         uses: ubiquity/foundry-storage-check@main
         with:
           workingDirectory: packages/contracts
           contract: ${{ matrix.contract }}
           failOnRemoval: true
           failOnLabelDiff: true
+
+      - name: Skip storage check for new library
+        if: steps.check-existing.outputs.exists == 'false'
+        run: |
+          echo "::notice::Skipping storage layout check for newly added library ${{ matrix.contract }}"
+          echo "New libraries have no prior storage layout to compare against."
