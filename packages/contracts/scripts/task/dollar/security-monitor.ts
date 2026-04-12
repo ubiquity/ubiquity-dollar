@@ -57,6 +57,14 @@ type CollateralInfo = {
   isBorrowPaused: boolean;
 };
 
+/**
+ * Evaluate whether a collateral liquidity drop constitutes an incident.
+ *
+ * @param previousTotal - The collateral USD balance from the prior observation.
+ * @param currentTotal  - The current collateral USD balance.
+ * @param thresholdBps  - Drop size in basis points required to trigger an incident.
+ * @returns Incident evaluation with trigger flag, drop size, and raw totals.
+ */
 export const evaluateLiquidityIncident = (previousTotal: bigint, currentTotal: bigint, thresholdBps: number): IncidentEvaluation => {
   if (previousTotal <= 0n) {
     return { triggered: false, dropBps: 0, previousTotal, currentTotal };
@@ -100,7 +108,14 @@ const writeState = (stateFilePath: string, currentTotal: bigint) => {
 
 const DEFAULT_TIMEOUT_MS = 10_000;
 
-const postJson = async (url: string, payload: Record<string, unknown>) => {
+/**
+ * POST JSON payload to a URL with a fixed timeout.
+ *
+ * @param url - The destination URL.
+ * @param payload - The JSON-serializable body.
+ * @throws Error - When the response is non-OK or the request times out.
+ */
+const postJson = async (url: string, payload: Record<string, unknown>): Promise<void> => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
   try {
@@ -120,7 +135,17 @@ const postJson = async (url: string, payload: Record<string, unknown>) => {
   }
 };
 
-const sendNotifications = async (config: MonitorConfig, message: string, details: Record<string, unknown>) => {
+/**
+ * Send incident notifications via all configured channels (webhook, Telegram).
+ * Throws if any notification delivery fails, so the caller does not silently
+ * report success when alerts were not actually delivered.
+ *
+ * @param config - Monitor configuration containing channel credentials.
+ * @param message - Summary text for the alert.
+ * @param details - Structured data to include in the alert payload.
+ * @throws Error - When any notification request fails or times out.
+ */
+const sendNotifications = async (config: MonitorConfig, message: string, details: Record<string, unknown>): Promise<void> => {
   const tasks: Promise<void>[] = [];
 
   if (config.webhookUrl) {
@@ -154,13 +179,19 @@ const sendNotifications = async (config: MonitorConfig, message: string, details
   const results = await Promise.allSettled(tasks);
   const failures = results.filter((r): r is PromiseRejectedResult => r.status === "rejected");
   if (failures.length > 0) {
-    console.error(
-      `[security-monitor] ${failures.length}/${tasks.length} notification(s) failed:`,
-      failures.map((f) => f.reason?.message ?? f.reason)
-    );
+    const messages = failures.map((f) => f.reason?.message ?? f.reason);
+    throw new Error(`[security-monitor] ${failures.length}/${tasks.length} notification(s) failed: ${messages.join("; ")}`);
   }
 };
 
+/**
+ * Parse and validate the threshold basis-points setting.
+ * Accepts a raw value from CLI args or environment variable.
+ *
+ * @param raw - The unparsed numeric value.
+ * @returns The validated threshold as an integer in basis points.
+ * @throws Error - When the value is not an integer between 0 and 10_000.
+ */
 export const parseThresholdBps = (raw: unknown): number => {
   const value = Number(raw);
   if (!Number.isInteger(value) || value < 0 || value > 10_000) {
@@ -169,6 +200,13 @@ export const parseThresholdBps = (raw: unknown): number => {
   return value;
 };
 
+/**
+ * Build a validated MonitorConfig from CLI arguments and environment variables.
+ *
+ * @param params - The task function parameters containing CLI args and environment.
+ * @returns A fully-populated MonitorConfig ready for use by the monitor loop.
+ * @throws Error - When required environment variables (diamond / token address) are missing.
+ */
 const getConfig = (params: TaskFuncParam): MonitorConfig => {
   const { args } = params;
   const thresholdBps = parseThresholdBps(args.thresholdBps ?? process.env.SECURITY_MONITOR_THRESHOLD_BPS ?? 3000);
@@ -275,6 +313,19 @@ const executeProtection = async (
   return txHashes;
 };
 
+/**
+ * Top-level monitor task function.
+ *
+ * Reads the last known total collateral USD from the state file, compares it to the
+ * current on-chain value, evaluates whether a liquidity-drop incident has occurred, and
+ * — if so — executes on-chain protections (pause dollar, toggle collateral) and sends
+ * notifications to all configured channels.  Throws if any notification delivery fails
+ * so that the caller does not silently report success when alerts were not delivered.
+ *
+ * @param params - Task function parameters ({ env, args }).
+ * @returns "initialized_baseline" on first run; "ok_drop_bps=N" when no incident; or a
+ *          JSON string describing the executed transactions on incident trigger.
+ */
 const func = async (params: TaskFuncParam) => {
   const config = getConfig(params);
 
