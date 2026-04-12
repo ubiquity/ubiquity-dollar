@@ -22,8 +22,8 @@ When `dropBps >= SECURITY_MONITOR_THRESHOLD_BPS`:
 Set these in `packages/contracts/.env`:
 
 - `RPC_URL`
-- `ADMIN_PRIVATE_KEY` (preferred; must have permissions to pause token and manage pool)
-- `PRIVATE_KEY` (fallback if `ADMIN_PRIVATE_KEY` is unset; same required permissions)
+- `ADMIN_PRIVATE_KEY` (primary; must have permissions to pause token and manage pool; preferred over `PRIVATE_KEY`)
+- `PRIVATE_KEY` (fallback if `ADMIN_PRIVATE_KEY` is unset; same required permissions; also used by `params.env.privateKey`)
 - `UBQ_DIAMOND_ADDRESS`
 - `UBQ_DOLLAR_TOKEN_ADDRESS`
 - `SECURITY_MONITOR_THRESHOLD_BPS` (default `3000`)
@@ -63,5 +63,5 @@ Example cron every 5 minutes (with lock to prevent overlapping runs):
 
 - First run only stores baseline and does not trigger actions.
 - If monitor connectivity fails, no on-chain action is sent.
-- If notification transport fails, incident handling still executes; check monitor logs for transport errors.
+- If notification transport fails, the monitor throws and **does not** silently swallow the error — inspect monitor logs for transport errors.
 - Keep admin key isolated (prefer dedicated guardian account with least required permissions).
