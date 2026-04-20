@@ -26,17 +26,47 @@ jobs:
             contracts:
               - packages/contracts/src/dollar/core/*.sol
 
+      - name: Identify newly added contracts (skip storage check — no prior artifact exists)
+        id: new-contracts
+        if: steps.changed-contracts.outputs.contracts_any_changed == 'true'
+        run: |
+          NEW_CONTRACTS="${{ steps.changed-contracts.outputs.contracts_all_added_files }}"
+          if [ -n "$NEW_CONTRACTS" ]; then
+            for FILE in $NEW_CONTRACTS; do
+              # Only consider .sol files in the core contracts directory
+              if echo "$FILE" | grep -q '\.sol$'; then
+                echo "$(echo $FILE | xargs basename -a | cut -d'.' -f1)" >> new_contracts.txt
+              fi
+            done
+          fi
+          # Output the new contracts (one per line, empty if none)
+          echo "new=$(cat new_contracts.txt 2>/dev/null || echo '')" >> $GITHUB_OUTPUT
+
       - name: Set contracts matrix
         id: set-matrix
         working-directory: packages/contracts
         if: steps.changed-contracts.outputs.contracts_any_changed == 'true'
         env:
           CHANGED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_all_changed_files }}
+          NEW_CONTRACTS: ${{ steps.new-contracts.outputs.new }}
         run: |
-          for CONTRACT in "$CHANGED_CONTRACTS"; do
-            echo ${CONTRACT} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
+          # Build set of new contract names for fast lookup
+          NEW_SET=""
+          if [ -n "$NEW_CONTRACTS" ]; then
+            for NC in $NEW_CONTRACTS; do
+              NEW_SET="$NEW_SET $NC"
+            done
+          fi
+          for CONTRACT in $CHANGED_CONTRACTS; do
+            CONTRACT_NAME=$(echo $CONTRACT | xargs basename -a | cut -d'.' -f1)
+            # Skip new contracts — they have no prior storage artifact
+            if echo "$NEW_SET" | grep -qw "$CONTRACT_NAME"; then
+              echo "Skipping new contract: $CONTRACT_NAME"
+              continue
+            fi
+            echo "src/dollar/core/${CONTRACT##*/}:${CONTRACT_NAME}" >> contracts.txt
           done
-          echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "matrix=$(cat contracts.txt 2>/dev/null | jq -R -s -c 'split("\n")[:-1]' || echo '[]')" >> $GITHUB_OUTPUT
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
