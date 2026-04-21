@@ -65,6 +65,18 @@ type CollateralInfo = {
  * @param thresholdBps  - Drop size in basis points required to trigger an incident.
  * @returns Incident evaluation with trigger flag, drop size, and raw totals.
  */
+/**
+ * Evaluates whether a liquidity incident has occurred based on collateral USD changes.
+ *
+ * Compares the previous and current total collateral USD values. An incident is
+ * triggered when the drop, expressed in basis points (bps), meets or exceeds
+ * the provided threshold. 100 bps = 1%.
+ *
+ * @param previousTotal - The previously observed total collateral USD (as a BigInt with 18 decimals).
+ * @param currentTotal  - The currently observed total collateral USD (as a BigInt with 18 decimals).
+ * @param thresholdBps  - The incident trigger threshold in basis points (e.g. 3000 = 30%).
+ * @returns An IncidentEvaluation object with the triggered flag, computed dropBps, and copies of the inputs.
+ */
 export const evaluateLiquidityIncident = (previousTotal: bigint, currentTotal: bigint, thresholdBps: number): IncidentEvaluation => {
   if (previousTotal <= 0n) {
     return { triggered: false, dropBps: 0, previousTotal, currentTotal };
@@ -185,12 +197,12 @@ const sendNotifications = async (config: MonitorConfig, message: string, details
 };
 
 /**
- * Parse and validate the threshold basis-points setting.
- * Accepts a raw value from CLI args or environment variable.
+ * Parses and validates a threshold value expressed in basis points (bps).
  *
- * @param raw - The unparsed numeric value.
- * @returns The validated threshold as an integer in basis points.
- * @throws Error - When the value is not an integer between 0 and 10_000.
+ * @param raw - A value of any type to be parsed as a basis-point integer.
+ *              Typically a string or number from CLI args or environment variables.
+ * @returns The validated threshold as an integer in the range [0, 10000].
+ * @throws Error - If the value is not an integer in [0, 10000].
  */
 export const parseThresholdBps = (raw: unknown): number => {
   const value = Number(raw);
