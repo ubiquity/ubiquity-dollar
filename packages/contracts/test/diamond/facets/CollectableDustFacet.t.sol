@@ -72,11 +72,7 @@ contract CollectableDustFacetTest is DiamondTestSetup {
         assertEq(dollarToken.balanceOf(address(diamond)), 100);
         vm.prank(stakingManager);
 
-        collectableDustFacet.sendDust(
-            mock_recipient,
-            address(dollarToken),
-            100
-        );
+        collectableDustFacet.sendDust(mock_recipient, address(dollarToken), 100);
         assertEq(dollarToken.balanceOf(address(diamond)), 0);
         assertEq(dollarToken.balanceOf(address(mock_recipient)), 100);
     }

@@ -19,10 +19,7 @@ interface IStaking {
      * @param user User address
      * @return Staking rewards amount
      */
-    function getPendingStakingRewards(
-        uint256 poolId,
-        address user
-    ) external view returns (uint256);
+    function getPendingStakingRewards(uint256 poolId, address user) external view returns (uint256);
 
     /**
      * @notice Returns reward multiplier over the given `from` to `to` blocks
@@ -30,10 +27,7 @@ interface IStaking {
      * @param to To block number
      * @return Reward multiplier
      */
-    function getStakingMultiplier(
-        uint256 from,
-        uint256 to
-    ) external view returns (uint256);
+    function getStakingMultiplier(uint256 from, uint256 to) external view returns (uint256);
 
     /**
      * @notice Returns staking settings
@@ -50,16 +44,7 @@ interface IStaking {
     function getStakingSettings()
         external
         view
-        returns (
-            address,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        );
+        returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256);
 
     /**
      * @notice View function to see user's staking info
@@ -67,19 +52,14 @@ interface IStaking {
      * @param user User address
      * @return User's staking info
      */
-    function getStakingUserInfo(
-        uint256 poolId,
-        address user
-    ) external view returns (LibStaking.UserInfo memory);
+    function getStakingUserInfo(uint256 poolId, address user) external view returns (LibStaking.UserInfo memory);
 
     /**
      * @notice View function to see pool's staking info
      * @param poolId Pool id
      * @return Pool's staking info
      */
-    function getStakingPoolInfo(
-        uint256 poolId
-    ) external view returns (LibStaking.PoolInfo memory);
+    function getStakingPoolInfo(uint256 poolId) external view returns (LibStaking.PoolInfo memory);
 
     /**
      * @notice Returns total staking pools length
@@ -130,30 +110,23 @@ interface IStaking {
      * @param allocationPoints Allocation points
      * @param lpToken LP token, can't overlap with collateral tokens from `UbiquityPool`
      */
-    function createStakingPool(
-        uint256 allocationPoints,
-        IERC20 lpToken
-    ) external;
+    function createStakingPool(uint256 allocationPoints, IERC20 lpToken) external;
 
     /**
      * @notice Sets last block number when Governance bonus emissions end
      * @param newGovernanceBonusEndBlock Block number when Governance bonus emissions end
      */
-    function setGovernanceBonusEndBlock(
-        uint256 newGovernanceBonusEndBlock
-    ) external;
+    function setGovernanceBonusEndBlock(uint256 newGovernanceBonusEndBlock) external;
 
     /**
      * @notice Sets bonus multiplier for early Governance token makers
      * @param newGovernanceBonusMultiplier New governance bonus multiplier
      */
-    function setGovernanceBonusMultiplier(
-        uint256 newGovernanceBonusMultiplier
-    ) external;
+    function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) external;
 
     /**
      * @notice Sets Governance tokens reward per block
-     * @dev If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards 
+     * @dev If `newGovernancePerBlock < 0.0001 ether` users may end up getting 0 rewards
      * if staked amount > 1_000_000_000e18
      * @param newGovernancePerBlock New amount of Governance tokens minted each block
      */
@@ -166,9 +139,7 @@ interface IStaking {
      * @notice Set `governanceTreasuryDivider` to 0 if you want to disable minting rewards to the treasury
      * @param newGovernanceTreasuryDivider New governance divider param value
      */
-    function setGovernanceTreasuryDivider(
-        uint256 newGovernanceTreasuryDivider
-    ) external;
+    function setGovernanceTreasuryDivider(uint256 newGovernanceTreasuryDivider) external;
 
     /**
      * @notice Sets staking reward token
@@ -191,8 +162,5 @@ interface IStaking {
      * @param poolId Pool id
      * @param allocationPoints New allocation points
      */
-    function updateStakingPool(
-        uint256 poolId,
-        uint256 allocationPoints
-    ) external;
+    function updateStakingPool(uint256 poolId, uint256 allocationPoints) external;
 }

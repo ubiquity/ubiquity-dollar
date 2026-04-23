@@ -33,10 +33,7 @@ contract ManagerFacetTest is DiamondTestSetup {
         assertEq(managerFacet.creditNftAddress(), contract1);
     }
 
-    function testSetGovernanceTokenAddress_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testSetGovernanceTokenAddress_ShouldSucceed() public prankAs(admin) {
         managerFacet.setGovernanceTokenAddress(contract1);
         assertEq(managerFacet.governanceTokenAddress(), contract1);
     }
@@ -46,18 +43,12 @@ contract ManagerFacetTest is DiamondTestSetup {
         assertEq(managerFacet.sushiSwapPoolAddress(), contract1);
     }
 
-    function testSetDollarMintCalculatorAddress_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testSetDollarMintCalculatorAddress_ShouldSucceed() public prankAs(admin) {
         managerFacet.setDollarMintCalculatorAddress(contract1);
         assertEq(managerFacet.dollarMintCalculatorAddress(), contract1);
     }
 
-    function testSetExcessDollarsDistributor_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testSetExcessDollarsDistributor_ShouldSucceed() public prankAs(admin) {
         managerFacet.setExcessDollarsDistributor(contract1, contract2);
         assertEq(managerFacet.excessDollarsDistributor(contract1), contract2);
     }
@@ -77,26 +68,17 @@ contract ManagerFacetTest is DiamondTestSetup {
         assertEq(managerFacet.stakingShareAddress(), contract1);
     }
 
-    function testSetStableSwapMetaPoolAddress_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testSetStableSwapMetaPoolAddress_ShouldSucceed() public prankAs(admin) {
         managerFacet.setStableSwapMetaPoolAddress(contract1);
         assertEq(managerFacet.stableSwapMetaPoolAddress(), contract1);
     }
 
-    function testSetStableSwapPlainPoolAddress_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testSetStableSwapPlainPoolAddress_ShouldSucceed() public prankAs(admin) {
         managerFacet.setStableSwapPlainPoolAddress(contract1);
         assertEq(managerFacet.stableSwapPlainPoolAddress(), contract1);
     }
 
-    function testSetStakingContractAddress_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testSetStakingContractAddress_ShouldSucceed() public prankAs(admin) {
         managerFacet.setStakingContractAddress(contract1);
         assertEq(managerFacet.stakingContractAddress(), contract1);
     }
@@ -106,20 +88,11 @@ contract ManagerFacetTest is DiamondTestSetup {
         assertEq(managerFacet.treasuryAddress(), contract1);
     }
 
-    function testSetMinterRoleWhenInitializing_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
-        assertEq(
-            accessControlFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin),
-            true
-        );
+    function testSetMinterRoleWhenInitializing_ShouldSucceed() public prankAs(admin) {
+        assertEq(accessControlFacet.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, admin), true);
     }
 
-    function testInitializeDollarTokenAddress_ShouldSucceed()
-        public
-        prankAs(admin)
-    {
+    function testInitializeDollarTokenAddress_ShouldSucceed() public prankAs(admin) {
         assertEq(managerFacet.dollarTokenAddress(), address(dollarToken));
     }
 
@@ -135,37 +108,20 @@ contract ManagerFacetTest is DiamondTestSetup {
         address stakingMinAccount = address(0x5);
         address stakingMaxAccount = address(0x6);
 
-        address[6] memory mintings = [
-            admin,
-            address(diamond),
-            secondAccount,
-            stakingZeroAccount,
-            stakingMinAccount,
-            stakingMaxAccount
-        ];
+        address[6] memory mintings =
+            [admin, address(diamond), secondAccount, stakingZeroAccount, stakingMinAccount, stakingMaxAccount];
 
         for (uint256 i = 0; i < mintings.length; ++i) {
             deal(address(dollarToken), mintings[i], 10000e18);
         }
 
         address stakingV1Address = generateAddress("stakingV1", true, 10 ether);
-        accessControlFacet.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            stakingV1Address
-        );
-        accessControlFacet.grantRole(
-            GOVERNANCE_TOKEN_BURNER_ROLE,
-            stakingV1Address
-        );
+        accessControlFacet.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, stakingV1Address);
+        accessControlFacet.grantRole(GOVERNANCE_TOKEN_BURNER_ROLE, stakingV1Address);
 
         vm.stopPrank();
 
-        address[4] memory crvDeal = [
-            address(diamond),
-            stakingMaxAccount,
-            stakingMinAccount,
-            secondAccount
-        ];
+        address[4] memory crvDeal = [address(diamond), stakingMaxAccount, stakingMinAccount, secondAccount];
 
         // curve3CrvBasePool Curve.fi: DAI/USDC/USDT Pool
         // curve3CrvToken  TokenTracker that represents  Curve.fi DAI/USDC/USDT part in the pool  (3Crv)
@@ -178,23 +134,12 @@ contract ManagerFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
 
         ICurveFactory curvePoolFactory = ICurveFactory(new MockCurveFactory());
-        address curve3CrvBasePool = address(
-            new MockCurveStableSwapMetaNG(
-                address(diamond),
-                address(curve3CrvToken)
-            )
-        );
+        address curve3CrvBasePool = address(new MockCurveStableSwapMetaNG(address(diamond), address(curve3CrvToken)));
         managerFacet.deployStableSwapPool(
-            address(curvePoolFactory),
-            curve3CrvBasePool,
-            address(curve3CrvToken),
-            10,
-            50000000
+            address(curvePoolFactory), curve3CrvBasePool, address(curve3CrvToken), 10, 50000000
         );
 
-        ICurveStableSwapMetaNG metapool = ICurveStableSwapMetaNG(
-            managerFacet.stableSwapMetaPoolAddress()
-        );
+        ICurveStableSwapMetaNG metapool = ICurveStableSwapMetaNG(managerFacet.stableSwapMetaPoolAddress());
         address stakingV2Address = generateAddress("stakingV2", true, 10 ether);
         metapool.transfer(address(stakingV2Address), 100e18);
         vm.stopPrank();

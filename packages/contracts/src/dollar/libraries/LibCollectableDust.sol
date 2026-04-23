@@ -33,10 +33,7 @@ library LibCollectableDust {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant COLLECTABLE_DUST_CONTROL_STORAGE_SLOT =
-        bytes32(
-            uint256(keccak256("ubiquity.contracts.collectable.dust.storage")) -
-                1
-        ) & ~bytes32(uint256(0xff));
+        bytes32(uint256(keccak256("ubiquity.contracts.collectable.dust.storage")) - 1) & ~bytes32(uint256(0xff));
 
     /**
      * @notice Returns struct used as a storage for this library
@@ -55,8 +52,7 @@ library LibCollectableDust {
      */
     function addProtocolToken(address _token) internal {
         require(
-            !collectableDustStorage().protocolTokens.contains(_token),
-            "collectable-dust::token-is-part-of-the-protocol"
+            !collectableDustStorage().protocolTokens.contains(_token), "collectable-dust::token-is-part-of-the-protocol"
         );
         collectableDustStorage().protocolTokens.add(_token);
         emit ProtocolTokenAdded(_token);
@@ -68,8 +64,7 @@ library LibCollectableDust {
      */
     function removeProtocolToken(address _token) internal {
         require(
-            collectableDustStorage().protocolTokens.contains(_token),
-            "collectable-dust::token-not-part-of-the-protocol"
+            collectableDustStorage().protocolTokens.contains(_token), "collectable-dust::token-not-part-of-the-protocol"
         );
         collectableDustStorage().protocolTokens.remove(_token);
         emit ProtocolTokenRemoved(_token);
@@ -82,16 +77,12 @@ library LibCollectableDust {
      * @param _amount Amount of tokens to send
      */
     function sendDust(address _to, address _token, uint256 _amount) internal {
+        require(_to != address(0), "collectable-dust::cant-send-dust-to-zero-address");
         require(
-            _to != address(0),
-            "collectable-dust::cant-send-dust-to-zero-address"
-        );
-        require(
-            !collectableDustStorage().protocolTokens.contains(_token),
-            "collectable-dust::token-is-part-of-the-protocol"
+            !collectableDustStorage().protocolTokens.contains(_token), "collectable-dust::token-is-part-of-the-protocol"
         );
         if (_token == ETH_ADDRESS) {
-            (bool result, ) = _to.call{value: _amount}("");
+            (bool result,) = _to.call{value: _amount}("");
             require(result, "Failed to send Ether");
         } else {
             IERC20(_token).safeTransfer(_to, _amount);

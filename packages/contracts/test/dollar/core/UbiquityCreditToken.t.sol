@@ -38,14 +38,14 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
         vm.startPrank(admin);
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
         // trying to directly call will fail and exit early so call it like this
-        (bool success, ) = address(ubiquityCreditToken).call(hasUpgradedCall);
+        (bool success,) = address(ubiquityCreditToken).call(hasUpgradedCall);
         assertEq(success, false, "should not have upgraded yet");
         require(success == false, "should not have upgraded yet");
 
         ubiquityCreditToken.upgradeTo(address(newImpl));
 
         // It will also fail unless cast so we'll use the same pattern as above
-        (success, ) = address(ubiquityCreditToken).call(hasUpgradedCall);
+        (success,) = address(ubiquityCreditToken).call(hasUpgradedCall);
         assertEq(success, true, "should have upgraded");
         require(success == true, "should have upgraded");
 
@@ -64,22 +64,13 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
 
         bytes memory getImplCall = abi.encodeWithSignature("getImpl()");
 
-        (bool success, bytes memory data) = address(ubiquityCreditToken).call(
-            getImplCall
-        );
+        (bool success, bytes memory data) = address(ubiquityCreditToken).call(getImplCall);
         assertEq(success, true, "should have upgraded");
 
         address newAddrViaNewFunc = abi.decode(data, (address));
 
-        assertEq(
-            newAddrViaNewFunc,
-            newImplAddr,
-            "should be the new implementation"
-        );
-        assertTrue(
-            newAddrViaNewFunc != oldImpl,
-            "should not be the old implementation"
-        );
+        assertEq(newAddrViaNewFunc, newImplAddr, "should be the new implementation");
+        assertTrue(newAddrViaNewFunc != oldImpl, "should not be the old implementation");
     }
 
     function testUUPS_InitializedVersion() external {
@@ -94,17 +85,11 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
 
         bytes memory getVersionCall = abi.encodeWithSignature("getVersion()");
 
-        (bool success, bytes memory data) = address(ubiquityCreditToken).call(
-            getVersionCall
-        );
+        (bool success, bytes memory data) = address(ubiquityCreditToken).call(getVersionCall);
         assertEq(success, true, "should have upgraded");
         uint8 version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            expectedVersion,
-            "should be the same version as only initialized once"
-        );
+        assertEq(version, expectedVersion, "should be the same version as only initialized once");
 
         ubiquityCreditToken.upgradeTo(address(newImplT));
 
@@ -112,21 +97,13 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
         assertEq(success, true, "should have upgraded");
         version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            expectedVersion,
-            "should be the same version as only initialized once"
-        );
+        assertEq(version, expectedVersion, "should be the same version as only initialized once");
 
         (success, data) = address(newImpl).call(getVersionCall);
         assertEq(success, true, "should succeed");
         version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            baseExpectedVersion,
-            "should be maxed as initializers are disabled."
-        );
+        assertEq(version, baseExpectedVersion, "should be maxed as initializers are disabled.");
     }
 
     function testUUPS_initialization() external {
@@ -159,9 +136,7 @@ contract UbiquityCreditTokenTest is LocalTestHelper {
 
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
 
-        (bool success, bytes memory data) = address(ubiquityCreditToken).call(
-            hasUpgradedCall
-        );
+        (bool success, bytes memory data) = address(ubiquityCreditToken).call(hasUpgradedCall);
         assertEq(success, true, "should have upgraded");
 
         bool hasUpgraded = abi.decode(data, (bool));

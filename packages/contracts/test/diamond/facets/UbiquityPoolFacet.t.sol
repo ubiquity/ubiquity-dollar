@@ -36,35 +36,18 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     // Events
     event AmoMinterAdded(address amoMinterAddress);
     event AmoMinterRemoved(address amoMinterAddress);
-    event CollateralPriceFeedSet(
-        uint256 collateralIndex,
-        address priceFeedAddress,
-        uint256 stalenessThreshold
-    );
+    event CollateralPriceFeedSet(uint256 collateralIndex, address priceFeedAddress, uint256 stalenessThreshold);
     event CollateralPriceSet(uint256 collateralIndex, uint256 newPrice);
     event CollateralRatioSet(uint256 newCollateralRatio);
     event CollateralToggled(uint256 collateralIndex, bool newState);
-    event EthUsdPriceFeedSet(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    );
-    event FeesSet(
-        uint256 collateralIndex,
-        uint256 newMintFee,
-        uint256 newRedeemFee
-    );
+    event EthUsdPriceFeedSet(address newPriceFeedAddress, uint256 newStalenessThreshold);
+    event FeesSet(uint256 collateralIndex, uint256 newMintFee, uint256 newRedeemFee);
     event GovernanceEthPoolSet(address newGovernanceEthPoolAddress);
     event MintRedeemBorrowToggled(uint256 collateralIndex, uint8 toggleIndex);
     event PoolCeilingSet(uint256 collateralIndex, uint256 newCeiling);
-    event PriceThresholdsSet(
-        uint256 newMintPriceThreshold,
-        uint256 newRedeemPriceThreshold
-    );
+    event PriceThresholdsSet(uint256 newMintPriceThreshold, uint256 newRedeemPriceThreshold);
     event RedemptionDelayBlocksSet(uint256 redemptionDelayBlocks);
-    event StableUsdPriceFeedSet(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    );
+    event StableUsdPriceFeedSet(address newPriceFeedAddress, uint256 newStalenessThreshold);
 
     function setUp() public override {
         super.setUp();
@@ -90,24 +73,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         stableToken = new MockERC20("STABLE", "STABLE", 18);
 
         // init Curve Stable-Dollar plain pool
-        curveDollarPlainPool = new MockCurveStableSwapNG(
-            address(stableToken),
-            address(dollarToken)
-        );
+        curveDollarPlainPool = new MockCurveStableSwapNG(address(stableToken), address(dollarToken));
 
         // init Curve Governance-WETH crypto pool
-        curveGovernanceEthPool = new MockCurveTwocryptoOptimized(
-            address(governanceToken),
-            address(wethToken)
-        );
+        curveGovernanceEthPool = new MockCurveTwocryptoOptimized(address(governanceToken), address(wethToken));
 
         // add collateral token to the pool
         uint256 poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
-        ubiquityPoolFacet.addCollateralToken(
-            address(collateralToken),
-            address(collateralTokenPriceFeed),
-            poolCeiling
-        );
+        ubiquityPoolFacet.addCollateralToken(address(collateralToken), address(collateralTokenPriceFeed), poolCeiling);
 
         // set collateral price feed mock params
         collateralTokenPriceFeed.updateMockParams(
@@ -173,9 +146,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // set collateral ratio to 100%
         ubiquityPoolFacet.setCollateralRatio(1_000_000);
         // set Governance-ETH pool
-        ubiquityPoolFacet.setGovernanceEthPoolAddress(
-            address(curveGovernanceEthPool)
-        );
+        ubiquityPoolFacet.setGovernanceEthPoolAddress(address(curveGovernanceEthPool));
 
         // init AMO minter
         dollarAmoMinter = new MockDollarAmoMinter();
@@ -183,9 +154,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.addAmoMinter(address(dollarAmoMinter));
 
         // set Curve plain pool in manager facet
-        managerFacet.setStableSwapPlainPoolAddress(
-            address(curveDollarPlainPool)
-        );
+        managerFacet.setStableSwapPlainPoolAddress(address(curveDollarPlainPool));
 
         // stop being admin
         vm.stopPrank();
@@ -203,9 +172,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     // Modifiers
     //=====================
 
-    function testCollateralEnabled_ShouldRevert_IfCollateralIsDisabled()
-        public
-    {
+    function testCollateralEnabled_ShouldRevert_IfCollateralIsDisabled() public {
         // admin disables collateral
         vm.prank(admin);
         ubiquityPoolFacet.toggleCollateral(0);
@@ -226,18 +193,13 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     // Views
     //=====================
 
-    function testAllCollaterals_ShouldReturnAllCollateralTokenAddresses()
-        public
-    {
-        address[] memory collateralAddresses = ubiquityPoolFacet
-            .allCollaterals();
+    function testAllCollaterals_ShouldReturnAllCollateralTokenAddresses() public {
+        address[] memory collateralAddresses = ubiquityPoolFacet.allCollaterals();
         assertEq(collateralAddresses.length, 1);
         assertEq(collateralAddresses[0], address(collateralToken));
     }
 
-    function testCollateralInformation_ShouldRevert_IfCollateralIsDisabled()
-        public
-    {
+    function testCollateralInformation_ShouldRevert_IfCollateralIsDisabled() public {
         // admin disables collateral
         vm.prank(admin);
         ubiquityPoolFacet.toggleCollateral(0);
@@ -246,18 +208,13 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.collateralInformation(address(collateralToken));
     }
 
-    function testCollateralInformation_ShouldReturnCollateralInformation()
-        public
-    {
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+    function testCollateralInformation_ShouldReturnCollateralInformation() public {
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.index, 0);
         assertEq(info.symbol, "CLT");
         assertEq(info.collateralAddress, address(collateralToken));
-        assertEq(
-            info.collateralPriceFeedAddress,
-            address(collateralTokenPriceFeed)
-        );
+        assertEq(info.collateralPriceFeedAddress, address(collateralTokenPriceFeed));
         assertEq(info.collateralPriceFeedStalenessThreshold, 1 days);
         assertEq(info.isEnabled, true);
         assertEq(info.missingDecimals, 0);
@@ -275,9 +232,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(collateralRatio, 1_000_000);
     }
 
-    function testCollateralUsdBalance_ShouldReturnTotalAmountOfCollateralInUsd()
-        public
-    {
+    function testCollateralUsdBalance_ShouldReturnTotalAmountOfCollateralInUsd() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -299,18 +254,13 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(balanceTally, 100e18);
     }
 
-    function testEthUsdPriceFeedInformation_ShouldReturnEthUsdPriceFeedInformation()
-        public
-    {
-        (address priceFeed, uint256 stalenessThreshold) = ubiquityPoolFacet
-            .ethUsdPriceFeedInformation();
+    function testEthUsdPriceFeedInformation_ShouldReturnEthUsdPriceFeedInformation() public {
+        (address priceFeed, uint256 stalenessThreshold) = ubiquityPoolFacet.ethUsdPriceFeedInformation();
         assertEq(priceFeed, address(ethUsdPriceFeed));
         assertEq(stalenessThreshold, 1 days);
     }
 
-    function testFreeCollateralBalance_ShouldReturnCollateralAmountAvailableForBorrowingByAmoMinters()
-        public
-    {
+    function testFreeCollateralBalance_ShouldReturnCollateralAmountAvailableForBorrowingByAmoMinters() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -337,22 +287,16 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             90e18 // min collateral out
         );
 
-        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(
-            0
-        );
+        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(0);
         assertEq(freeCollateralAmount, 2.98e18);
     }
 
-    function testGetDollarInCollateral_ShouldReturnAmountOfDollarsWhichShouldBeMintedForInputCollateral()
-        public
-    {
+    function testGetDollarInCollateral_ShouldReturnAmountOfDollarsWhichShouldBeMintedForInputCollateral() public {
         uint256 amount = ubiquityPoolFacet.getDollarInCollateral(0, 100e18);
         assertEq(amount, 100e18);
     }
 
-    function testGetDollarPriceUsd_ShouldRevertOnInvalidStableUsdChainlinkAnswer()
-        public
-    {
+    function testGetDollarPriceUsd_ShouldRevertOnInvalidStableUsdChainlinkAnswer() public {
         // set invalid answer from chainlink
         stableUsdPriceFeed.updateMockParams(
             1, // round id
@@ -366,9 +310,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.getDollarPriceUsd();
     }
 
-    function testGetDollarPriceUsd_ShouldRevertIfStableUsdChainlinkAnswerIsStale()
-        public
-    {
+    function testGetDollarPriceUsd_ShouldRevertIfStableUsdChainlinkAnswerIsStale() public {
         // set stale answer from chainlink
         stableUsdPriceFeed.updateMockParams(
             1, // round id
@@ -390,9 +332,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(dollarPriceUsd, 1_000_000);
     }
 
-    function testGetGovernancePriceUsd_ShouldRevertOnInvalidChainlinkAnswer()
-        public
-    {
+    function testGetGovernancePriceUsd_ShouldRevertOnInvalidChainlinkAnswer() public {
         // set invalid answer from chainlink
         ethUsdPriceFeed.updateMockParams(
             1, // round id
@@ -406,9 +346,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.getGovernancePriceUsd();
     }
 
-    function testGetGovernancePriceUsd_ShouldRevertIfChainlinkAnswerIsStale()
-        public
-    {
+    function testGetGovernancePriceUsd_ShouldRevertIfChainlinkAnswerIsStale() public {
         // set stale answer from chainlink
         collateralTokenPriceFeed.updateMockParams(
             1, // round id
@@ -425,18 +363,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.getGovernancePriceUsd();
     }
 
-    function testGetGovernancePriceUsd_ShouldReturnGovernanceTokenPriceInUsd()
-        public
-    {
+    function testGetGovernancePriceUsd_ShouldReturnGovernanceTokenPriceInUsd() public {
         uint256 governancePriceUsd = ubiquityPoolFacet.getGovernancePriceUsd();
         // 1 ETH = $2000, 1 ETH = 20_000 Governance tokens
         // Governance token USD price = (1 / 20000) * 2000 = 0.1
         assertEq(governancePriceUsd, 100000); // $0.1
     }
 
-    function testGetRedeemCollateralBalance_ShouldReturnRedeemCollateralBalance()
-        public
-    {
+    function testGetRedeemCollateralBalance_ShouldReturnRedeemCollateralBalance() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -463,14 +397,11 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             90e18 // min collateral out
         );
 
-        uint256 redeemCollateralBalance = ubiquityPoolFacet
-            .getRedeemCollateralBalance(user, 0);
+        uint256 redeemCollateralBalance = ubiquityPoolFacet.getRedeemCollateralBalance(user, 0);
         assertEq(redeemCollateralBalance, 97.02e18);
     }
 
-    function testGetRedeemGovernanceBalance_ShouldReturnRedeemGovernanceBalance()
-        public
-    {
+    function testGetRedeemGovernanceBalance_ShouldReturnRedeemGovernanceBalance() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -501,25 +432,16 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
             0 // min collateral out
         );
 
-        assertEq(
-            ubiquityPoolFacet.getRedeemGovernanceBalance(user),
-            970200000000000000000
-        );
+        assertEq(ubiquityPoolFacet.getRedeemGovernanceBalance(user), 970200000000000000000);
     }
 
-    function testGovernanceEthPoolAddress_ShouldReturnGovernanceEthPoolAddress()
-        public
-    {
-        address governanceEthPoolAddress = ubiquityPoolFacet
-            .governanceEthPoolAddress();
+    function testGovernanceEthPoolAddress_ShouldReturnGovernanceEthPoolAddress() public {
+        address governanceEthPoolAddress = ubiquityPoolFacet.governanceEthPoolAddress();
         assertEq(governanceEthPoolAddress, address(curveGovernanceEthPool));
     }
 
-    function testStableUsdPriceFeedInformation_ShouldReturnStableUsdPriceFeedInformation()
-        public
-    {
-        (address priceFeed, uint256 stalenessThreshold) = ubiquityPoolFacet
-            .stableUsdPriceFeedInformation();
+    function testStableUsdPriceFeedInformation_ShouldReturnStableUsdPriceFeedInformation() public {
+        (address priceFeed, uint256 stalenessThreshold) = ubiquityPoolFacet.stableUsdPriceFeedInformation();
         assertEq(priceFeed, address(stableUsdPriceFeed));
         assertEq(stalenessThreshold, 1 days);
     }
@@ -638,9 +560,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
     }
 
-    function testMintDollar_ShouldMintDollars_IfUserForcesOneToOneOverride()
-        public
-    {
+    function testMintDollar_ShouldMintDollars_IfUserForcesOneToOneOverride() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -657,18 +577,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(governanceToken.balanceOf(user), 2000e18);
 
         vm.prank(user);
-        (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        ) = ubiquityPoolFacet.mintDollar(
-                0, // collateral index
-                100e18, // Dollar amount
-                99e18, // min amount of Dollars to mint
-                100e18, // max collateral to send
-                1100e18, // max Governance tokens to send
-                true // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
-            );
+        (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded) = ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18, // max collateral to send
+            1100e18, // max Governance tokens to send
+            true // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
+        );
 
         assertEq(totalDollarMint, 99e18);
         assertEq(collateralNeeded, 100e18);
@@ -693,18 +609,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(governanceToken.balanceOf(user), 2000e18);
 
         vm.prank(user);
-        (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        ) = ubiquityPoolFacet.mintDollar(
-                0, // collateral index
-                100e18, // Dollar amount
-                99e18, // min amount of Dollars to mint
-                100e18, // max collateral to send
-                0, // max Governance tokens to send
-                false // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
-            );
+        (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded) = ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18, // max collateral to send
+            0, // max Governance tokens to send
+            false // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
+        );
         assertEq(totalDollarMint, 99e18);
         assertEq(collateralNeeded, 100e18);
         assertEq(governanceNeeded, 0);
@@ -732,18 +644,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(governanceToken.balanceOf(user), 2000e18);
 
         vm.prank(user);
-        (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        ) = ubiquityPoolFacet.mintDollar(
-                0, // collateral index
-                100e18, // Dollar amount
-                99e18, // min amount of Dollars to mint
-                100e18, // max collateral to send
-                1100e18, // max Governance tokens to send
-                false // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
-            );
+        (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded) = ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18, // max collateral to send
+            1100e18, // max Governance tokens to send
+            false // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
+        );
 
         assertEq(totalDollarMint, 99e18);
         assertEq(collateralNeeded, 0);
@@ -772,18 +680,14 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(governanceToken.balanceOf(user), 2000e18);
 
         vm.prank(user);
-        (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        ) = ubiquityPoolFacet.mintDollar(
-                0, // collateral index
-                100e18, // Dollar amount
-                99e18, // min amount of Dollars to mint
-                100e18, // max collateral to send
-                1100e18, // max Governance tokens to send
-                false // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
-            );
+        (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded) = ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            100e18, // max collateral to send
+            1100e18, // max Governance tokens to send
+            false // force 1-to-1 mint (i.e. provide only collateral without Governance tokens)
+        );
 
         assertEq(totalDollarMint, 99e18);
         assertEq(collateralNeeded, 95e18);
@@ -821,9 +725,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
     }
 
-    function testRedeemDollar_ShouldRevert_OnInsufficientPoolCollateral()
-        public
-    {
+    function testRedeemDollar_ShouldRevert_OnInsufficientPoolCollateral() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -900,9 +802,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
     }
 
-    function testRedeemDollar_ShouldRedeemCollateral_IfCollateralRatioIs100()
-        public
-    {
+    function testRedeemDollar_ShouldRedeemCollateral_IfCollateralRatioIs100() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -939,16 +839,11 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         assertEq(dollarToken.balanceOf(user), 0);
         assertEq(governanceToken.balanceOf(user), 2000e18);
         assertEq(governanceToken.balanceOf(address(ubiquityPoolFacet)), 0);
-        assertEq(
-            ubiquityPoolFacet.getRedeemCollateralBalance(user, 0),
-            97.02 ether
-        );
+        assertEq(ubiquityPoolFacet.getRedeemCollateralBalance(user, 0), 97.02 ether);
         assertEq(ubiquityPoolFacet.getRedeemGovernanceBalance(user), 0);
     }
 
-    function testRedeemDollar_ShouldRedeemCollateral_IfCollateralRatioIs0()
-        public
-    {
+    function testRedeemDollar_ShouldRedeemCollateral_IfCollateralRatioIs0() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -988,20 +883,12 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // balances after
         assertEq(dollarToken.balanceOf(user), 0);
         assertEq(governanceToken.balanceOf(user), 1000000000000000000000);
-        assertEq(
-            governanceToken.balanceOf(address(ubiquityPoolFacet)),
-            970200000000000000000
-        );
+        assertEq(governanceToken.balanceOf(address(ubiquityPoolFacet)), 970200000000000000000);
         assertEq(ubiquityPoolFacet.getRedeemCollateralBalance(user, 0), 0);
-        assertEq(
-            ubiquityPoolFacet.getRedeemGovernanceBalance(user),
-            970200000000000000000
-        );
+        assertEq(ubiquityPoolFacet.getRedeemGovernanceBalance(user), 970200000000000000000);
     }
 
-    function testRedeemDollar_ShouldRedeemCollateral_IfCollateralRatioIs95()
-        public
-    {
+    function testRedeemDollar_ShouldRedeemCollateral_IfCollateralRatioIs95() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -1041,18 +928,9 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // balances after
         assertEq(dollarToken.balanceOf(user), 0);
         assertEq(governanceToken.balanceOf(user), 1950000000000000000000); // 1950
-        assertEq(
-            governanceToken.balanceOf(address(ubiquityPoolFacet)),
-            48510000000000000000
-        ); // ~48.5
-        assertEq(
-            ubiquityPoolFacet.getRedeemCollateralBalance(user, 0),
-            92169000000000000000
-        ); // ~92
-        assertEq(
-            ubiquityPoolFacet.getRedeemGovernanceBalance(user),
-            48510000000000000000
-        ); // ~48.5
+        assertEq(governanceToken.balanceOf(address(ubiquityPoolFacet)), 48510000000000000000); // ~48.5
+        assertEq(ubiquityPoolFacet.getRedeemCollateralBalance(user, 0), 92169000000000000000); // ~92
+        assertEq(ubiquityPoolFacet.getRedeemGovernanceBalance(user), 48510000000000000000); // ~48.5
     }
 
     function testCollectRedemption_ShouldRevert_IfRedeemingIsPaused() public {
@@ -1065,9 +943,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.collectRedemption(0);
     }
 
-    function testCollectRedemption_ShouldRevert_IfNotEnoughBlocksHaveBeenMined()
-        public
-    {
+    function testCollectRedemption_ShouldRevert_IfNotEnoughBlocksHaveBeenMined() public {
         vm.prank(user);
         vm.expectRevert("Too soon to collect redemption");
         ubiquityPoolFacet.collectRedemption(0);
@@ -1110,23 +986,16 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         // balances before
         assertEq(collateralToken.balanceOf(address(ubiquityPoolFacet)), 95e18);
         assertEq(collateralToken.balanceOf(user), 5e18);
-        assertEq(
-            governanceToken.balanceOf(address(ubiquityPoolFacet)),
-            48510000000000000000
-        ); // ~48
+        assertEq(governanceToken.balanceOf(address(ubiquityPoolFacet)), 48510000000000000000); // ~48
         assertEq(governanceToken.balanceOf(user), 1950000000000000000000); // ~1950
 
         vm.prank(user);
-        (uint256 governanceAmount, uint256 collateralAmount) = ubiquityPoolFacet
-            .collectRedemption(0);
+        (uint256 governanceAmount, uint256 collateralAmount) = ubiquityPoolFacet.collectRedemption(0);
         assertEq(governanceAmount, 48510000000000000000); // ~48
         assertEq(collateralAmount, 92169000000000000000); // ~92 = $95 - 2% redemption fee
 
         // balances after
-        assertEq(
-            collateralToken.balanceOf(address(ubiquityPoolFacet)),
-            2.831 ether
-        ); // redemption fee left in the pool
+        assertEq(collateralToken.balanceOf(address(ubiquityPoolFacet)), 2.831 ether); // redemption fee left in the pool
         assertEq(collateralToken.balanceOf(user), 97.169 ether);
         assertEq(governanceToken.balanceOf(address(ubiquityPoolFacet)), 0);
         assertEq(governanceToken.balanceOf(user), 1998510000000000000000); // ~1998
@@ -1168,9 +1037,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.collectRedemption(0);
     }
 
-    function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsInvalid()
-        public
-    {
+    function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsInvalid() public {
         // set invalid answer from chainlink
         collateralTokenPriceFeed.updateMockParams(
             1, // round id
@@ -1184,9 +1051,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
     }
 
-    function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsStale()
-        public
-    {
+    function testUpdateChainLinkCollateralPrice_ShouldRevert_IfChainlinkAnswerIsStale() public {
         // set stale answer from chainlink
         collateralTokenPriceFeed.updateMockParams(
             1, // round id
@@ -1203,12 +1068,10 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
     }
 
-    function testUpdateChainLinkCollateralPrice_ShouldUpdateCollateralPrice()
-        public
-    {
+    function testUpdateChainLinkCollateralPrice_ShouldUpdateCollateralPrice() public {
         // before
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.price, 1_000_000);
 
         // set answer from chainlink
@@ -1224,9 +1087,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.updateChainLinkCollateralPrice(0);
 
         // after
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.price, 990_000);
     }
 
@@ -1256,9 +1117,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.amoMinterBorrow(1);
     }
 
-    function testAmoMinterBorrow_ShouldRevert_IfThereIsNotEnoughFreeCollateral()
-        public
-    {
+    function testAmoMinterBorrow_ShouldRevert_IfThereIsNotEnoughFreeCollateral() public {
         vm.prank(admin);
         ubiquityPoolFacet.setPriceThresholds(
             1000000, // mint threshold
@@ -1286,9 +1145,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         );
 
         // get free collateral amount, returns 2.98e18
-        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(
-            0
-        );
+        uint256 freeCollateralAmount = ubiquityPoolFacet.freeCollateralBalance(0);
         assertEq(freeCollateralAmount, 2.98e18);
 
         // Dollar AMO minter tries to borrow more collateral than available after users' redemptions
@@ -1324,9 +1181,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testAddAmoMinter_ShouldRevert_IfAmoMinterHasInvalidInterface()
-        public
-    {
+    function testAddAmoMinter_ShouldRevert_IfAmoMinterHasInvalidInterface() public {
         vm.startPrank(admin);
 
         vm.expectRevert();
@@ -1346,15 +1201,12 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     }
 
     function testAddCollateralToken_ShouldAddNewTokenAsCollateral() public {
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.index, 0);
         assertEq(info.symbol, "CLT");
         assertEq(info.collateralAddress, address(collateralToken));
-        assertEq(
-            info.collateralPriceFeedAddress,
-            address(collateralTokenPriceFeed)
-        );
+        assertEq(info.collateralPriceFeedAddress, address(collateralTokenPriceFeed));
         assertEq(info.collateralPriceFeedStalenessThreshold, 1 days);
         assertEq(info.isEnabled, true);
         assertEq(info.missingDecimals, 0);
@@ -1371,11 +1223,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 poolCeiling = 50_000e18;
         vm.startPrank(admin);
         vm.expectRevert("Collateral already added");
-        ubiquityPoolFacet.addCollateralToken(
-            address(collateralToken),
-            address(collateralTokenPriceFeed),
-            poolCeiling
-        );
+        ubiquityPoolFacet.addCollateralToken(address(collateralToken), address(collateralTokenPriceFeed), poolCeiling);
     }
 
     function testRemoveAmoMinter_ShouldRemoveAmoMinter() public {
@@ -1388,54 +1236,36 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetCollateralChainLinkPriceFeed_ShouldRevertIfCollateralDoesNotExist()
-        public
-    {
+    function testSetCollateralChainLinkPriceFeed_ShouldRevertIfCollateralDoesNotExist() public {
         vm.prank(admin);
         vm.expectRevert("Collateral does not exist");
         address invalidCollateralAddress = address(0);
         address newPriceFeedAddress = address(1);
         uint256 newStalenessThreshold = 1 days;
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
-            invalidCollateralAddress,
-            newPriceFeedAddress,
-            newStalenessThreshold
+            invalidCollateralAddress, newPriceFeedAddress, newStalenessThreshold
         );
     }
 
     function testSetCollateralChainLinkPriceFeed_ShouldSetPriceFeed() public {
         vm.startPrank(admin);
 
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
-        assertEq(
-            info.collateralPriceFeedAddress,
-            address(collateralTokenPriceFeed)
-        );
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
+        assertEq(info.collateralPriceFeedAddress, address(collateralTokenPriceFeed));
         assertEq(info.collateralPriceFeedStalenessThreshold, 1 days);
 
         address newPriceFeedAddress = address(1);
         uint256 newStalenessThreshold = 2 days;
         vm.expectEmit(address(ubiquityPoolFacet));
-        emit CollateralPriceFeedSet(
-            0,
-            newPriceFeedAddress,
-            newStalenessThreshold
-        );
+        emit CollateralPriceFeedSet(0, newPriceFeedAddress, newStalenessThreshold);
         ubiquityPoolFacet.setCollateralChainLinkPriceFeed(
-            address(collateralToken),
-            newPriceFeedAddress,
-            newStalenessThreshold
+            address(collateralToken), newPriceFeedAddress, newStalenessThreshold
         );
 
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.collateralPriceFeedAddress, newPriceFeedAddress);
-        assertEq(
-            info.collateralPriceFeedStalenessThreshold,
-            newStalenessThreshold
-        );
+        assertEq(info.collateralPriceFeedStalenessThreshold, newStalenessThreshold);
 
         vm.stopPrank();
     }
@@ -1456,9 +1286,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetCollateralRatio_ShouldRevertIfRatioLargerThanOneHundredPercent()
-        public
-    {
+    function testSetCollateralRatio_ShouldRevertIfRatioLargerThanOneHundredPercent() public {
         vm.startPrank(admin);
         uint256 oldCollateralRatio = ubiquityPoolFacet.collateralRatio();
         assertEq(oldCollateralRatio, 1_000_000);
@@ -1470,15 +1298,10 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetEthUsdChainLinkPriceFeed_ShouldSetEthUsdChainLinkPriceFeed()
-        public
-    {
+    function testSetEthUsdChainLinkPriceFeed_ShouldSetEthUsdChainLinkPriceFeed() public {
         vm.startPrank(admin);
 
-        (
-            address oldPriceFeedAddress,
-            uint256 oldStalenessThreshold
-        ) = ubiquityPoolFacet.ethUsdPriceFeedInformation();
+        (address oldPriceFeedAddress, uint256 oldStalenessThreshold) = ubiquityPoolFacet.ethUsdPriceFeedInformation();
         assertEq(oldPriceFeedAddress, address(ethUsdPriceFeed));
         assertEq(oldStalenessThreshold, 1 days);
 
@@ -1486,15 +1309,10 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 newStalenessThreshold = 2 days;
         vm.expectEmit(address(ubiquityPoolFacet));
         emit EthUsdPriceFeedSet(newPriceFeedAddress, newStalenessThreshold);
-        ubiquityPoolFacet.setEthUsdChainLinkPriceFeed(
-            newPriceFeedAddress,
-            newStalenessThreshold
-        );
+        ubiquityPoolFacet.setEthUsdChainLinkPriceFeed(newPriceFeedAddress, newStalenessThreshold);
 
-        (
-            address updatedPriceFeedAddress,
-            uint256 updatedStalenessThreshold
-        ) = ubiquityPoolFacet.ethUsdPriceFeedInformation();
+        (address updatedPriceFeedAddress, uint256 updatedStalenessThreshold) =
+            ubiquityPoolFacet.ethUsdPriceFeedInformation();
         assertEq(updatedPriceFeedAddress, newPriceFeedAddress);
         assertEq(updatedStalenessThreshold, newStalenessThreshold);
 
@@ -1511,46 +1329,34 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetGovernanceEthPoolAddress_ShouldSetGovernanceEthPoolAddress()
-        public
-    {
+    function testSetGovernanceEthPoolAddress_ShouldSetGovernanceEthPoolAddress() public {
         vm.startPrank(admin);
 
-        address oldGovernanceEthPoolAddress = ubiquityPoolFacet
-            .governanceEthPoolAddress();
+        address oldGovernanceEthPoolAddress = ubiquityPoolFacet.governanceEthPoolAddress();
         assertEq(oldGovernanceEthPoolAddress, address(curveGovernanceEthPool));
 
         address newGovernanceEthPoolAddress = address(1);
         vm.expectEmit(address(ubiquityPoolFacet));
         emit GovernanceEthPoolSet(newGovernanceEthPoolAddress);
-        ubiquityPoolFacet.setGovernanceEthPoolAddress(
-            newGovernanceEthPoolAddress
-        );
+        ubiquityPoolFacet.setGovernanceEthPoolAddress(newGovernanceEthPoolAddress);
 
-        assertEq(
-            ubiquityPoolFacet.governanceEthPoolAddress(),
-            newGovernanceEthPoolAddress
-        );
+        assertEq(ubiquityPoolFacet.governanceEthPoolAddress(), newGovernanceEthPoolAddress);
 
         vm.stopPrank();
     }
 
-    function testSetPoolCeiling_ShouldSetMaxAmountOfTokensAllowedForCollateral()
-        public
-    {
+    function testSetPoolCeiling_ShouldSetMaxAmountOfTokensAllowedForCollateral() public {
         vm.startPrank(admin);
 
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.poolCeiling, 50_000e18);
 
         vm.expectEmit(address(ubiquityPoolFacet));
         emit PoolCeilingSet(0, 10_000e18);
         ubiquityPoolFacet.setPoolCeiling(0, 10_000e18);
 
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.poolCeiling, 10_000e18);
 
         vm.stopPrank();
@@ -1566,9 +1372,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetRedemptionDelayBlocks_ShouldSetRedemptionDelayInBlocks()
-        public
-    {
+    function testSetRedemptionDelayBlocks_ShouldSetRedemptionDelayInBlocks() public {
         vm.startPrank(admin);
 
         vm.expectEmit(address(ubiquityPoolFacet));
@@ -1578,15 +1382,10 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         vm.stopPrank();
     }
 
-    function testSetStableUsdChainLinkPriceFeed_ShouldSetStableUsdChainLinkPriceFeed()
-        public
-    {
+    function testSetStableUsdChainLinkPriceFeed_ShouldSetStableUsdChainLinkPriceFeed() public {
         vm.startPrank(admin);
 
-        (
-            address oldPriceFeedAddress,
-            uint256 oldStalenessThreshold
-        ) = ubiquityPoolFacet.stableUsdPriceFeedInformation();
+        (address oldPriceFeedAddress, uint256 oldStalenessThreshold) = ubiquityPoolFacet.stableUsdPriceFeedInformation();
         assertEq(oldPriceFeedAddress, address(stableUsdPriceFeed));
         assertEq(oldStalenessThreshold, 1 days);
 
@@ -1594,15 +1393,10 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 newStalenessThreshold = 2 days;
         vm.expectEmit(address(ubiquityPoolFacet));
         emit StableUsdPriceFeedSet(newPriceFeedAddress, newStalenessThreshold);
-        ubiquityPoolFacet.setStableUsdChainLinkPriceFeed(
-            newPriceFeedAddress,
-            newStalenessThreshold
-        );
+        ubiquityPoolFacet.setStableUsdChainLinkPriceFeed(newPriceFeedAddress, newStalenessThreshold);
 
-        (
-            address updatedPriceFeedAddress,
-            uint256 updatedStalenessThreshold
-        ) = ubiquityPoolFacet.stableUsdPriceFeedInformation();
+        (address updatedPriceFeedAddress, uint256 updatedStalenessThreshold) =
+            ubiquityPoolFacet.stableUsdPriceFeedInformation();
         assertEq(updatedPriceFeedAddress, newPriceFeedAddress);
         assertEq(updatedStalenessThreshold, newStalenessThreshold);
 
@@ -1612,8 +1406,8 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     function testToggleCollateral_ShouldToggleCollateral() public {
         vm.startPrank(admin);
 
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isEnabled, true);
 
         vm.expectEmit(address(ubiquityPoolFacet));
@@ -1621,9 +1415,7 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         ubiquityPoolFacet.toggleCollateral(0);
 
         vm.expectRevert("Invalid collateral");
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
 
         vm.stopPrank();
     }
@@ -1634,17 +1426,15 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 collateralIndex = 0;
         uint8 toggleIndex = 0;
 
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isMintPaused, false);
 
         vm.expectEmit(address(ubiquityPoolFacet));
         emit MintRedeemBorrowToggled(collateralIndex, toggleIndex);
         ubiquityPoolFacet.toggleMintRedeemBorrow(collateralIndex, toggleIndex);
 
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isMintPaused, true);
 
         vm.stopPrank();
@@ -1656,41 +1446,35 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
         uint256 collateralIndex = 0;
         uint8 toggleIndex = 1;
 
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isRedeemPaused, false);
 
         vm.expectEmit(address(ubiquityPoolFacet));
         emit MintRedeemBorrowToggled(collateralIndex, toggleIndex);
         ubiquityPoolFacet.toggleMintRedeemBorrow(collateralIndex, toggleIndex);
 
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isRedeemPaused, true);
 
         vm.stopPrank();
     }
 
-    function testToggleMintRedeemBorrow_ShouldToggleBorrowingByAmoMinter()
-        public
-    {
+    function testToggleMintRedeemBorrow_ShouldToggleBorrowingByAmoMinter() public {
         vm.startPrank(admin);
 
         uint256 collateralIndex = 0;
         uint8 toggleIndex = 2;
 
-        LibUbiquityPool.CollateralInformation memory info = ubiquityPoolFacet
-            .collateralInformation(address(collateralToken));
+        LibUbiquityPool.CollateralInformation memory info =
+            ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isBorrowPaused, false);
 
         vm.expectEmit(address(ubiquityPoolFacet));
         emit MintRedeemBorrowToggled(collateralIndex, toggleIndex);
         ubiquityPoolFacet.toggleMintRedeemBorrow(collateralIndex, toggleIndex);
 
-        info = ubiquityPoolFacet.collateralInformation(
-            address(collateralToken)
-        );
+        info = ubiquityPoolFacet.collateralInformation(address(collateralToken));
         assertEq(info.isBorrowPaused, true);
 
         vm.stopPrank();

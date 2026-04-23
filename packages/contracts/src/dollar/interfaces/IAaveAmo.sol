@@ -7,20 +7,14 @@ interface IAaveAmo {
      * @param collateralAddress Address of the collateral ERC20 token
      * @param amount Amount of collateral to deposit
      */
-    function aaveDepositCollateral(
-        address collateralAddress,
-        uint256 amount
-    ) external;
+    function aaveDepositCollateral(address collateralAddress, uint256 amount) external;
 
     /**
      * @notice Withdraws collateral from the Aave pool
      * @param collateralAddress Address of the collateral ERC20 token
      * @param aTokenAmount Amount of aTokens (collateral) to withdraw
      */
-    function aaveWithdrawCollateral(
-        address collateralAddress,
-        uint256 aTokenAmount
-    ) external;
+    function aaveWithdrawCollateral(address collateralAddress, uint256 aTokenAmount) external;
 
     /**
      * @notice Borrows an asset from the Aave pool
@@ -28,11 +22,7 @@ interface IAaveAmo {
      * @param borrowAmount Amount of the asset to borrow
      * @param interestRateMode Interest rate mode: 1 for stable, 2 for variable
      */
-    function aaveBorrow(
-        address asset,
-        uint256 borrowAmount,
-        uint256 interestRateMode
-    ) external;
+    function aaveBorrow(address asset, uint256 borrowAmount, uint256 interestRateMode) external;
 
     /**
      * @notice Repays a borrowed asset to the Aave pool
@@ -40,11 +30,7 @@ interface IAaveAmo {
      * @param repayAmount Amount of the asset to repay
      * @param interestRateMode Interest rate mode: 1 for stable, 2 for variable
      */
-    function aaveRepay(
-        address asset,
-        uint256 repayAmount,
-        uint256 interestRateMode
-    ) external;
+    function aaveRepay(address asset, uint256 repayAmount, uint256 interestRateMode) external;
 
     /**
      * @notice Claims all rewards from the provided assets
@@ -79,31 +65,21 @@ interface IAaveAmo {
      * @return success Boolean indicating whether the call succeeded
      * @return result Bytes data returned from the call
      */
-    function execute(
-        address _to,
-        uint256 _value,
-        bytes calldata _data
-    ) external returns (bool, bytes memory);
+    function execute(address _to, uint256 _value, bytes calldata _data) external returns (bool, bytes memory);
 
     /**
      * @notice Emitted when collateral is deposited into the Aave pool
      * @param collateralAddress Address of the collateral token
      * @param amount Amount of collateral deposited
      */
-    event CollateralDeposited(
-        address indexed collateralAddress,
-        uint256 amount
-    );
+    event CollateralDeposited(address indexed collateralAddress, uint256 amount);
 
     /**
      * @notice Emitted when collateral is withdrawn from the Aave pool
      * @param collateralAddress Address of the collateral token
      * @param amount Amount of collateral withdrawn
      */
-    event CollateralWithdrawn(
-        address indexed collateralAddress,
-        uint256 amount
-    );
+    event CollateralWithdrawn(address indexed collateralAddress, uint256 amount);
 
     /**
      * @notice Emitted when an asset is borrowed from the Aave pool
@@ -111,11 +87,7 @@ interface IAaveAmo {
      * @param amount Amount of asset borrowed
      * @param interestRateMode Interest rate mode used for the borrow (1 for stable, 2 for variable)
      */
-    event Borrowed(
-        address indexed asset,
-        uint256 amount,
-        uint256 interestRateMode
-    );
+    event Borrowed(address indexed asset, uint256 amount, uint256 interestRateMode);
 
     /**
      * @notice Emitted when a borrowed asset is repaid to the Aave pool
@@ -123,11 +95,7 @@ interface IAaveAmo {
      * @param amount Amount of asset repaid
      * @param interestRateMode Interest rate mode used for the repay (1 for stable, 2 for variable)
      */
-    event Repaid(
-        address indexed asset,
-        uint256 amount,
-        uint256 interestRateMode
-    );
+    event Repaid(address indexed asset, uint256 amount, uint256 interestRateMode);
 
     /**
      * @notice Emitted when collateral is returned to the AMO minter

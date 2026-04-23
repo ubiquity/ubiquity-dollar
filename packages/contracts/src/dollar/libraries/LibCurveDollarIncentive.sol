@@ -20,8 +20,7 @@ library LibCurveDollarIncentive {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant CURVE_DOLLAR_STORAGE_SLOT =
-        bytes32(uint256(keccak256("ubiquity.contracts.curve.storage")) - 1) &
-            ~bytes32(uint256(0xff));
+        bytes32(uint256(keccak256("ubiquity.contracts.curve.storage")) - 1) & ~bytes32(uint256(0xff));
 
     /// @notice One point in `bytes16`
     bytes16 constant _one = bytes16(abi.encodePacked(uint256(1 ether)));
@@ -40,11 +39,7 @@ library LibCurveDollarIncentive {
      * @notice Returns struct used as a storage for this library
      * @return l Struct used as a storage
      */
-    function curveDollarStorage()
-        internal
-        pure
-        returns (CurveDollarData storage l)
-    {
+    function curveDollarStorage() internal pure returns (CurveDollarData storage l) {
         bytes32 slot = CURVE_DOLLAR_STORAGE_SLOT;
         assembly {
             l.slot := slot
@@ -75,11 +70,7 @@ library LibCurveDollarIncentive {
      * @param receiver Receiver address
      * @param amountIn Trade amount
      */
-    function incentivize(
-        address sender,
-        address receiver,
-        uint256 amountIn
-    ) internal {
+    function incentivize(address sender, address receiver, uint256 amountIn) internal {
         require(sender != receiver, "CurveIncentive: cannot send self");
 
         if (sender == LibAppStorage.appStorage().stableSwapMetaPoolAddress) {
@@ -150,13 +141,11 @@ library LibCurveDollarIncentive {
             require(penalty < amount, "Dollar: burn exceeds trade size");
 
             require(
-                UbiquityDollarToken(
-                    LibAppStorage.appStorage().dollarTokenAddress
-                ).balanceOf(target) >= penalty + amount,
+                UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress).balanceOf(target)
+                    >= penalty + amount,
                 "Dollar: balance too low to get penalized"
             );
-            UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress)
-                .burnFrom(target, penalty); // burn from the recipient
+            UbiquityDollarToken(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(target, penalty); // burn from the recipient
         }
     }
 
@@ -179,9 +168,7 @@ library LibCurveDollarIncentive {
 
         if (incentive != 0) {
             // this means CurveIncentive should be a minter of Governance Token
-            IUbiquityGovernanceToken(
-                LibAppStorage.appStorage().dollarTokenAddress
-            ).mint(target, incentive);
+            IUbiquityGovernanceToken(LibAppStorage.appStorage().dollarTokenAddress).mint(target, incentive);
         }
     }
 
@@ -190,9 +177,7 @@ library LibCurveDollarIncentive {
      * @param amount Trade amount
      * @return Percentage of deviation
      */
-    function _getPercentDeviationFromUnderPeg(
-        uint256 amount
-    ) internal view returns (uint256) {
+    function _getPercentDeviationFromUnderPeg(uint256 amount) internal view returns (uint256) {
         uint256 curPrice = _getTWAPPrice();
         if (curPrice >= 1 ether) {
             return 0;
@@ -210,8 +195,6 @@ library LibCurveDollarIncentive {
      */
     function _getTWAPPrice() internal view returns (uint256) {
         AppStorage storage store = LibAppStorage.appStorage();
-        return
-            ICurveStableSwapMetaNG(store.stableSwapMetaPoolAddress)
-                .price_oracle(0);
+        return ICurveStableSwapMetaNG(store.stableSwapMetaPoolAddress).price_oracle(0);
     }
 }

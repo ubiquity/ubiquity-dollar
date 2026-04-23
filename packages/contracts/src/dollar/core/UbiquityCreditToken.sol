@@ -27,19 +27,13 @@ contract UbiquityCreditToken is ERC20Ubiquity {
 
     /// @notice Modifier checks that the method is called by a user with the "Credit minter" role
     modifier onlyCreditMinter() {
-        require(
-            accessControl.hasRole(CREDIT_TOKEN_MINTER_ROLE, _msgSender()),
-            "Credit token: not minter"
-        );
+        require(accessControl.hasRole(CREDIT_TOKEN_MINTER_ROLE, _msgSender()), "Credit token: not minter");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Credit burner" role
     modifier onlyCreditBurner() {
-        require(
-            accessControl.hasRole(CREDIT_TOKEN_BURNER_ROLE, _msgSender()),
-            "Credit token: not burner"
-        );
+        require(accessControl.hasRole(CREDIT_TOKEN_BURNER_ROLE, _msgSender()), "Credit token: not burner");
         _;
     }
 
@@ -49,8 +43,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
      * @dev CREDIT_TOKEN_MINTER_ROLE access control role is required to call this function
      */
     function raiseCapital(uint256 amount) external {
-        address treasuryAddress = ManagerFacet(address(accessControl))
-            .treasuryAddress();
+        address treasuryAddress = ManagerFacet(address(accessControl)).treasuryAddress();
         mint(treasuryAddress, amount);
     }
 
@@ -59,10 +52,7 @@ contract UbiquityCreditToken is ERC20Ubiquity {
      * @param account Account to burn from
      * @param amount Amount to burn
      */
-    function burnFrom(
-        address account,
-        uint256 amount
-    ) public override onlyCreditBurner whenNotPaused {
+    function burnFrom(address account, uint256 amount) public override onlyCreditBurner whenNotPaused {
         _burn(account, amount);
         emit Burning(account, amount);
     }
@@ -72,17 +62,12 @@ contract UbiquityCreditToken is ERC20Ubiquity {
      * @param to Account to mint Credit tokens to
      * @param amount Amount of Credit tokens to mint
      */
-    function mint(
-        address to,
-        uint256 amount
-    ) public onlyCreditMinter whenNotPaused {
+    function mint(address to, uint256 amount) public onlyCreditMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, _msgSender(), amount);
     }
 
     /// @notice Allows an admin to upgrade to another implementation contract
     /// @param newImplementation Address of the new implementation contract
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyAdmin {}
+    function _authorizeUpgrade(address newImplementation) internal override onlyAdmin {}
 }

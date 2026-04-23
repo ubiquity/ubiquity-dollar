@@ -6,10 +6,16 @@ import {DEFAULT_ADMIN_ROLE, PAUSER_ROLE} from "../libraries/Constants.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {ERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import {ERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
-import {ERC20PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
+import {
+    ERC20PermitUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PermitUpgradeable.sol";
+import {
+    ERC20PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20PausableUpgradeable.sol";
 import {IERC20Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
-import {IERC20PermitUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
+import {
+    IERC20PermitUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20PermitUpgradeable.sol";
 
 /**
  * @notice Base contract for Ubiquity ERC20 tokens (Dollar, Credit, Governance)
@@ -35,27 +41,17 @@ abstract contract ERC20Ubiquity is
     event Burning(address indexed _burned, uint256 _amount);
 
     /// @notice Emitted when tokens are minted
-    event Minting(
-        address indexed _to,
-        address indexed _minter,
-        uint256 _amount
-    );
+    event Minting(address indexed _to, address indexed _minter, uint256 _amount);
 
     /// @notice Modifier checks that the method is called by a user with the "pauser" role
     modifier onlyPauser() {
-        require(
-            accessControl.hasRole(PAUSER_ROLE, msg.sender),
-            "ERC20Ubiquity: not pauser"
-        );
+        require(accessControl.hasRole(PAUSER_ROLE, msg.sender), "ERC20Ubiquity: not pauser");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "admin" role
     modifier onlyAdmin() {
-        require(
-            accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "ERC20Ubiquity: not admin"
-        );
+        require(accessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "ERC20Ubiquity: not admin");
         _;
     }
 
@@ -68,11 +64,10 @@ abstract contract ERC20Ubiquity is
     /// @param _manager Address of the manager of the contract
     /// @param name_ Token name
     /// @param symbol_ Token symbol
-    function __ERC20Ubiquity_init(
-        address _manager,
-        string memory name_,
-        string memory symbol_
-    ) internal onlyInitializing {
+    function __ERC20Ubiquity_init(address _manager, string memory name_, string memory symbol_)
+        internal
+        onlyInitializing
+    {
         // init base contracts
         __ERC20_init(name_, symbol_);
         __ERC20Permit_init(name_);
@@ -85,10 +80,7 @@ abstract contract ERC20Ubiquity is
     /// @notice Initializes the current contract
     /// @param _manager Address of the manager of the contract
     /// @param symbol_ Token symbol
-    function __ERC20Ubiquity_init_unchained(
-        address _manager,
-        string memory symbol_
-    ) internal onlyInitializing {
+    function __ERC20Ubiquity_init_unchained(address _manager, string memory symbol_) internal onlyInitializing {
         _symbol = symbol_;
         accessControl = IAccessControl(_manager);
     }
@@ -166,11 +158,11 @@ abstract contract ERC20Ubiquity is
      * - when `to` is zero, `amount` of ``from``'s tokens will be burned.
      * - `from` and `to` are never both zero.
      */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual override(ERC20Upgradeable, ERC20PausableUpgradeable) {
+    function _beforeTokenTransfer(address from, address to, uint256 amount)
+        internal
+        virtual
+        override(ERC20Upgradeable, ERC20PausableUpgradeable)
+    {
         super._beforeTokenTransfer(from, to, amount);
     }
 
@@ -188,19 +180,13 @@ abstract contract ERC20Ubiquity is
      * - `to` cannot be the zero address.
      * - `from` must have a balance of at least `amount`.
      */
-    function _transfer(
-        address sender,
-        address recipient,
-        uint256 amount
-    ) internal virtual override whenNotPaused {
+    function _transfer(address sender, address recipient, uint256 amount) internal virtual override whenNotPaused {
         super._transfer(sender, recipient, amount);
     }
 
     /// @notice Allows an admin to upgrade to another implementation contract
     /// @param newImplementation Address of the new implementation contract
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal virtual override onlyAdmin {}
+    function _authorizeUpgrade(address newImplementation) internal virtual override onlyAdmin {}
 
     /// @notice Allows for future upgrades on the base contract without affecting the storage of the derived contract
     uint256[50] private __gap;

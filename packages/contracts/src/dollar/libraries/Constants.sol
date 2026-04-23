@@ -7,39 +7,25 @@ import "abdk/ABDKMathQuad.sol";
 bytes32 constant DEFAULT_ADMIN_ROLE = 0x00;
 
 /// @dev Role name for Governance tokens minter
-bytes32 constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256(
-    "GOVERNANCE_TOKEN_MINTER_ROLE"
-);
+bytes32 constant GOVERNANCE_TOKEN_MINTER_ROLE = keccak256("GOVERNANCE_TOKEN_MINTER_ROLE");
 
 /// @dev Role name for Governance tokens burner
-bytes32 constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256(
-    "GOVERNANCE_TOKEN_BURNER_ROLE"
-);
+bytes32 constant GOVERNANCE_TOKEN_BURNER_ROLE = keccak256("GOVERNANCE_TOKEN_BURNER_ROLE");
 
 /// @dev Role name for Credit tokens minter
-bytes32 constant CREDIT_TOKEN_MINTER_ROLE = keccak256(
-    "CREDIT_TOKEN_MINTER_ROLE"
-);
+bytes32 constant CREDIT_TOKEN_MINTER_ROLE = keccak256("CREDIT_TOKEN_MINTER_ROLE");
 
 /// @dev Role name for Credit tokens burner
-bytes32 constant CREDIT_TOKEN_BURNER_ROLE = keccak256(
-    "CREDIT_TOKEN_BURNER_ROLE"
-);
+bytes32 constant CREDIT_TOKEN_BURNER_ROLE = keccak256("CREDIT_TOKEN_BURNER_ROLE");
 
 /// @dev Role name for Dollar tokens minter
-bytes32 constant DOLLAR_TOKEN_MINTER_ROLE = keccak256(
-    "DOLLAR_TOKEN_MINTER_ROLE"
-);
+bytes32 constant DOLLAR_TOKEN_MINTER_ROLE = keccak256("DOLLAR_TOKEN_MINTER_ROLE");
 
 /// @dev Role name for Dollar tokens burner
-bytes32 constant DOLLAR_TOKEN_BURNER_ROLE = keccak256(
-    "DOLLAR_TOKEN_BURNER_ROLE"
-);
+bytes32 constant DOLLAR_TOKEN_BURNER_ROLE = keccak256("DOLLAR_TOKEN_BURNER_ROLE");
 
 /// @dev Role name for Dollar manager
-bytes32 constant CURVE_DOLLAR_MANAGER_ROLE = keccak256(
-    "CURVE_DOLLAR_MANAGER_ROLE"
-);
+bytes32 constant CURVE_DOLLAR_MANAGER_ROLE = keccak256("CURVE_DOLLAR_MANAGER_ROLE");
 
 /// @dev Role name for pauser
 bytes32 constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -54,9 +40,7 @@ bytes32 constant STAKING_MANAGER_ROLE = keccak256("STAKING_MANAGER_ROLE");
 bytes32 constant INCENTIVE_MANAGER_ROLE = keccak256("INCENTIVE_MANAGER");
 
 /// @dev Role name for Governance token manager
-bytes32 constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256(
-    "GOVERNANCE_TOKEN_MANAGER_ROLE"
-);
+bytes32 constant GOVERNANCE_TOKEN_MANAGER_ROLE = keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE");
 
 /// @dev ETH pseudo address used to distinguish ERC20 tokens and ETH in `LibCollectableDust.sendDust()`
 address constant ETH_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;

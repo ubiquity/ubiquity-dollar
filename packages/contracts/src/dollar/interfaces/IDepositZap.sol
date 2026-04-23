@@ -18,7 +18,9 @@ interface IDepositZap {
         address _pool,
         uint256[4] calldata _amounts, //Ubiquity Dollar, DAI, USDC, USDT
         uint256 _min_mint_amount
-    ) external returns (uint256 lpAmount);
+    )
+        external
+        returns (uint256 lpAmount);
 
     /**
      * @notice Withdraw and unwrap a single coin from the pool
@@ -28,12 +30,9 @@ interface IDepositZap {
      * @param min_amount Minimum amount of underlying coin to receive
      * @return coinAmount Amount of underlying coin received
      */
-    function remove_liquidity_one_coin(
-        address _pool,
-        uint256 lpAmount,
-        int128 i,
-        uint256 min_amount
-    ) external returns (uint256 coinAmount);
+    function remove_liquidity_one_coin(address _pool, uint256 lpAmount, int128 i, uint256 min_amount)
+        external
+        returns (uint256 coinAmount);
 
     /**
      * @notice Withdraw and unwrap coins from the pool
@@ -43,9 +42,7 @@ interface IDepositZap {
      * @param min_amounts Minimum amounts of underlying coins to receive
      * @return List of amounts of underlying coins that were withdrawn
      */
-    function remove_liquidity(
-        address _pool,
-        uint256 _amount,
-        uint256[4] calldata min_amounts
-    ) external returns (uint256[4] calldata);
+    function remove_liquidity(address _pool, uint256 _amount, uint256[4] calldata min_amounts)
+        external
+        returns (uint256[4] calldata);
 }

@@ -54,10 +54,7 @@ interface IUbiquityDollarManager is IAccessControl {
      * @param _account Address for which to set an incentive contract
      * @param _incentiveAddress Incentive contract address
      */
-    function setIncentiveToDollar(
-        address _account,
-        address _incentiveAddress
-    ) external;
+    function setIncentiveToDollar(address _account, address _incentiveAddress) external;
 
     /**
      * @notice Sets Dollar token address
@@ -69,9 +66,7 @@ interface IUbiquityDollarManager is IAccessControl {
      * @notice Sets Governance token address
      * @param _governanceTokenAddress Governance token address
      */
-    function setGovernanceTokenAddress(
-        address _governanceTokenAddress
-    ) external;
+    function setGovernanceTokenAddress(address _governanceTokenAddress) external;
 
     /**
      * @notice Sets Sushi swap pool address (Dollar-Governance)
@@ -83,35 +78,26 @@ interface IUbiquityDollarManager is IAccessControl {
      * @notice Sets Credit calculator address
      * @param _creditCalculatorAddress Credit calculator address
      */
-    function setCreditCalculatorAddress(
-        address _creditCalculatorAddress
-    ) external;
+    function setCreditCalculatorAddress(address _creditCalculatorAddress) external;
 
     /**
      * @notice Sets Credit NFT calculator address
      * @param _creditNftCalculatorAddress Credit NFT calculator address
      */
-    function setCreditNftCalculatorAddress(
-        address _creditNftCalculatorAddress
-    ) external;
+    function setCreditNftCalculatorAddress(address _creditNftCalculatorAddress) external;
 
     /**
      * @notice Sets Dollar mint calculator address
      * @param _dollarMintCalculatorAddress Dollar mint calculator address
      */
-    function setDollarMintCalculatorAddress(
-        address _dollarMintCalculatorAddress
-    ) external;
+    function setDollarMintCalculatorAddress(address _dollarMintCalculatorAddress) external;
 
     /**
      * @notice Sets excess Dollars distributor address
      * @param creditNftManagerAddress Credit NFT manager address
      * @param dollarMintExcess Dollar distributor address
      */
-    function setExcessDollarsDistributor(
-        address creditNftManagerAddress,
-        address dollarMintExcess
-    ) external;
+    function setExcessDollarsDistributor(address creditNftManagerAddress, address dollarMintExcess) external;
 
     /**
      * @notice Sets MasterChef address
@@ -135,9 +121,7 @@ interface IUbiquityDollarManager is IAccessControl {
      * @notice Sets Curve Dollar-3CRV MetaPool address
      * @param _stableSwapMetaPoolAddress Curve Dollar-3CRV MetaPool address
      */
-    function setStableSwapMetaPoolAddress(
-        address _stableSwapMetaPoolAddress
-    ) external;
+    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress) external;
 
     /**
      * @notice Sets staking contract address
@@ -145,9 +129,7 @@ interface IUbiquityDollarManager is IAccessControl {
      * for a certain duration to earn Governance tokens and more Curve LP tokens
      * @param _stakingContractAddress Staking contract address
      */
-    function setStakingContractAddress(
-        address _stakingContractAddress
-    ) external;
+    function setStakingContractAddress(address _stakingContractAddress) external;
 
     /**
      * @notice Sets treasury address
@@ -180,9 +162,7 @@ interface IUbiquityDollarManager is IAccessControl {
      * @param _creditNftManagerAddress Credit NFT manager address
      * @return Excess dollars distributor address
      */
-    function getExcessDollarsDistributor(
-        address _creditNftManagerAddress
-    ) external view returns (address);
+    function getExcessDollarsDistributor(address _creditNftManagerAddress) external view returns (address);
 
     /**
      * @notice Returns staking address

@@ -45,12 +45,7 @@ contract UbiquityAmoMinter is Ownable {
      * @param _collateralIndex Index of the collateral in the pool
      * @param _poolAddress Address of the Ubiquity pool
      */
-    constructor(
-        address _ownerAddress,
-        address _collateralAddress,
-        uint256 _collateralIndex,
-        address _poolAddress
-    ) {
+    constructor(address _ownerAddress, address _collateralAddress, uint256 _collateralIndex, address _poolAddress) {
         require(_ownerAddress != address(0), "Owner address cannot be zero");
         require(_poolAddress != address(0), "Pool address cannot be zero");
 
@@ -106,22 +101,16 @@ contract UbiquityAmoMinter is Ownable {
      * @param destinationAmo Address of the AMO to receive collateral
      * @param collateralAmount Amount of collateral to transfer
      */
-    function giveCollateralToAmo(
-        address destinationAmo,
-        uint256 collateralAmount
-    ) external onlyOwner validAmo(destinationAmo) {
-        require(
-            collateralToken.balanceOf(address(pool)) >= collateralAmount,
-            "Insufficient balance"
-        );
+    function giveCollateralToAmo(address destinationAmo, uint256 collateralAmount)
+        external
+        onlyOwner
+        validAmo(destinationAmo)
+    {
+        require(collateralToken.balanceOf(address(pool)) >= collateralAmount, "Insufficient balance");
 
         int256 collateralAmount_i256 = int256(collateralAmount);
 
-        require(
-            (collateralTotalBorrowedBalance + collateralAmount_i256) <=
-                collateralBorrowCap,
-            "Borrow cap exceeded"
-        );
+        require((collateralTotalBorrowedBalance + collateralAmount_i256) <= collateralBorrowCap, "Borrow cap exceeded");
 
         collateralBorrowedBalances[destinationAmo] += collateralAmount_i256;
         collateralTotalBorrowedBalance += collateralAmount_i256;
@@ -139,9 +128,7 @@ contract UbiquityAmoMinter is Ownable {
      * @notice Receives collateral back from an AMO
      * @param collateralAmount Amount of collateral being returned
      */
-    function receiveCollateralFromAmo(
-        uint256 collateralAmount
-    ) external validAmo(msg.sender) {
+    function receiveCollateralFromAmo(uint256 collateralAmount) external validAmo(msg.sender) {
         int256 collateralAmount_i256 = int256(collateralAmount);
 
         // Update the collateral balances
@@ -149,11 +136,7 @@ contract UbiquityAmoMinter is Ownable {
         collateralTotalBorrowedBalance -= collateralAmount_i256;
 
         // Transfer collateral back to the pool
-        collateralToken.safeTransferFrom(
-            msg.sender,
-            address(pool),
-            collateralAmount
-        );
+        collateralToken.safeTransferFrom(msg.sender, address(pool), collateralAmount);
 
         emit CollateralReceivedFromAmo(msg.sender, collateralAmount);
     }
@@ -164,9 +147,7 @@ contract UbiquityAmoMinter is Ownable {
      * @notice Updates the collateral borrow cap
      * @param _collateralBorrowCap New collateral borrow cap
      */
-    function setCollateralBorrowCap(
-        uint256 _collateralBorrowCap
-    ) external onlyOwner {
+    function setCollateralBorrowCap(uint256 _collateralBorrowCap) external onlyOwner {
         collateralBorrowCap = int256(_collateralBorrowCap);
         emit CollateralBorrowCapSet(_collateralBorrowCap);
     }
@@ -192,14 +173,8 @@ contract UbiquityAmoMinter is Ownable {
 
     /* ========== EVENTS ========== */
 
-    event CollateralGivenToAmo(
-        address destinationAmo,
-        uint256 collateralAmount
-    );
-    event CollateralReceivedFromAmo(
-        address sourceAmo,
-        uint256 collateralAmount
-    );
+    event CollateralGivenToAmo(address destinationAmo, uint256 collateralAmount);
+    event CollateralReceivedFromAmo(address sourceAmo, uint256 collateralAmount);
     event CollateralBorrowCapSet(uint256 newCollateralBorrowCap);
     event PoolSet(address newPoolAddress);
     event OwnershipTransferred(address newOwner);

@@ -67,11 +67,7 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         allocationPoints = bound(allocationPoints, 1, 1000);
 
         // deploy stake token for 2nd pool
-        MockERC20 stakeTokenLowDecimals = new MockERC20(
-            "STL_LOW",
-            "STK_LOW",
-            6
-        );
+        MockERC20 stakeTokenLowDecimals = new MockERC20("STL_LOW", "STK_LOW", 6);
 
         // user approves diamond to spend STK_LOW tokens
         vm.prank(user);
@@ -117,20 +113,10 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         stakingFacet.unstake(1, stakeAmount);
 
         // assert calculations
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
-        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(
-            1,
-            user2
-        );
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
-        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(
-            1
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(1, user2);
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(1);
         assertEq(userInfo.amount, 0);
         assertEq(userInfo2.amount, 0);
         assertEq(poolInfo.amount, 0);
@@ -140,34 +126,15 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(address(stakingFacet)), 0);
         assertEq(stakeTokenLowDecimals.balanceOf(address(stakingFacet)), 0);
         // rewards
-        (
-            ,
-            ,
-            ,
-            uint256 governancePerBlock,
-            ,
-            ,
-            uint256 totalAllocationPoints,
-
-        ) = stakingFacet.getStakingSettings();
-        uint256 expectedRewardsUser = ((unstakeBlockNumberUser -
-            stakeBlockNumberUser) *
-            governancePerBlock *
-            poolInfo.allocationPoints) / totalAllocationPoints;
-        uint256 expectedRewardsUser2 = ((unstakeBlockNumberUser2 -
-            stakeBlockNumberUser2) *
-            governancePerBlock *
-            poolInfo2.allocationPoints) / totalAllocationPoints;
-        assertApproxEqAbs(
-            rewardToken.balanceOf(user),
-            expectedRewardsUser,
-            1e15
-        );
-        assertApproxEqAbs(
-            rewardToken.balanceOf(user2),
-            expectedRewardsUser2,
-            1e15
-        );
+        (,,, uint256 governancePerBlock,,, uint256 totalAllocationPoints,) = stakingFacet.getStakingSettings();
+        uint256 expectedRewardsUser =
+            ((unstakeBlockNumberUser - stakeBlockNumberUser) * governancePerBlock * poolInfo.allocationPoints)
+                / totalAllocationPoints;
+        uint256 expectedRewardsUser2 =
+            ((unstakeBlockNumberUser2 - stakeBlockNumberUser2) * governancePerBlock * poolInfo2.allocationPoints)
+                / totalAllocationPoints;
+        assertApproxEqAbs(rewardToken.balanceOf(user), expectedRewardsUser, 1e15);
+        assertApproxEqAbs(rewardToken.balanceOf(user2), expectedRewardsUser2, 1e15);
     }
 
     function testSetGovernanceBonusMultiplier_ShouldNotAffectRewardsCalculation(
@@ -178,11 +145,7 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
     ) public {
         stakeAmount = bound(stakeAmount, 1, 100_000_000 ether);
         blocksPassed = bound(blocksPassed, 1, 2628000 * 10); // max 10 years
-        governanceBonusEndBlock = bound(
-            governanceBonusEndBlock,
-            1,
-            2628000 * 10
-        ); // max 10 years
+        governanceBonusEndBlock = bound(governanceBonusEndBlock, 1, 2628000 * 10); // max 10 years
         governanceBonusMultiplier = bound(governanceBonusMultiplier, 1, 1000);
 
         // admin sets governance bonus end block
@@ -221,17 +184,9 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         stakingFacet.unstake(0, stakeAmount);
 
         // assert calculations
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
-        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(
-            0,
-            user2
-        );
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(0, user2);
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(userInfo.amount, 0);
         assertEq(userInfo2.amount, 0);
         assertEq(poolInfo.amount, 0);
@@ -239,39 +194,19 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(user2), stakeAmount);
         assertEq(stakeToken.balanceOf(address(stakingFacet)), 0);
         // rewards
-        (, , , uint256 governancePerBlock, , , , ) = stakingFacet
-            .getStakingSettings();
+        (,,, uint256 governancePerBlock,,,,) = stakingFacet.getStakingSettings();
         uint256 usersCount = 2;
-        uint256 expectedRewardsUser = stakingFacet.getStakingMultiplier(
-            stakeBlockNumberUser,
-            stakeBlockNumberUser2
-        ) *
-            governancePerBlock +
-            (stakingFacet.getStakingMultiplier(
-                stakeBlockNumberUser2,
-                unstakeBlockNumberUser
-            ) * governancePerBlock) /
-            usersCount;
+        uint256 expectedRewardsUser = stakingFacet.getStakingMultiplier(stakeBlockNumberUser, stakeBlockNumberUser2)
+            * governancePerBlock
+            + (stakingFacet.getStakingMultiplier(stakeBlockNumberUser2, unstakeBlockNumberUser) * governancePerBlock)
+            / usersCount;
         uint256 expectedRewardsUser2 = stakingFacet.getStakingMultiplier(
-            unstakeBlockNumberUser,
-            unstakeBlockNumberUser2
-        ) *
-            governancePerBlock +
-            (stakingFacet.getStakingMultiplier(
-                stakeBlockNumberUser2,
-                unstakeBlockNumberUser
-            ) * governancePerBlock) /
-            usersCount;
-        assertApproxEqAbs(
-            rewardToken.balanceOf(user),
-            expectedRewardsUser,
-            1e15
-        );
-        assertApproxEqAbs(
-            rewardToken.balanceOf(user2),
-            expectedRewardsUser2,
-            1e15
-        );
+                unstakeBlockNumberUser, unstakeBlockNumberUser2
+            ) * governancePerBlock
+            + (stakingFacet.getStakingMultiplier(stakeBlockNumberUser2, unstakeBlockNumberUser) * governancePerBlock)
+            / usersCount;
+        assertApproxEqAbs(rewardToken.balanceOf(user), expectedRewardsUser, 1e15);
+        assertApproxEqAbs(rewardToken.balanceOf(user2), expectedRewardsUser2, 1e15);
     }
 
     // NOTICE: `admin` EOA is set to be a treasury address
@@ -316,28 +251,14 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         stakingFacet.unstake(0, stakeAmount);
 
         // assert calculations
-        (, , , uint256 governancePerBlock, , , , ) = stakingFacet
-            .getStakingSettings();
+        (,,, uint256 governancePerBlock,,,,) = stakingFacet.getStakingSettings();
         uint256 usersCount = 2;
-        uint256 expectedRewardsUser = (stakeBlockNumberUser2 -
-            stakeBlockNumberUser) *
-            governancePerBlock +
-            ((unstakeBlockNumberUser - stakeBlockNumberUser2) *
-                governancePerBlock) /
-            usersCount;
-        uint256 expectedRewardsUser2 = (unstakeBlockNumberUser -
-            stakeBlockNumberUser2) *
-            governancePerBlock +
-            ((unstakeBlockNumberUser2 - unstakeBlockNumberUser) *
-                governancePerBlock) /
-            usersCount;
-        uint256 expectedRewardsTreasury = (expectedRewardsUser +
-            expectedRewardsUser2) / treasuryDivider;
-        assertApproxEqAbs(
-            rewardToken.balanceOf(admin),
-            expectedRewardsTreasury,
-            1e15
-        );
+        uint256 expectedRewardsUser = (stakeBlockNumberUser2 - stakeBlockNumberUser) * governancePerBlock
+            + ((unstakeBlockNumberUser - stakeBlockNumberUser2) * governancePerBlock) / usersCount;
+        uint256 expectedRewardsUser2 = (unstakeBlockNumberUser - stakeBlockNumberUser2) * governancePerBlock
+            + ((unstakeBlockNumberUser2 - unstakeBlockNumberUser) * governancePerBlock) / usersCount;
+        uint256 expectedRewardsTreasury = (expectedRewardsUser + expectedRewardsUser2) / treasuryDivider;
+        assertApproxEqAbs(rewardToken.balanceOf(admin), expectedRewardsTreasury, 1e15);
     }
 
     function testSetGovernancePerBlock_ShouldNotAffectRewardsCalculation(
@@ -381,17 +302,9 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         stakingFacet.unstake(0, stakeAmount);
 
         // assert calculations
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
-        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(
-            0,
-            user2
-        );
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(0, user2);
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(userInfo.amount, 0);
         assertEq(userInfo2.amount, 0);
         assertEq(poolInfo.amount, 0);
@@ -400,27 +313,11 @@ contract StakingFacetFuzzTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(address(stakingFacet)), 0);
         // rewards
         uint256 usersCount = 2;
-        uint256 expectedRewardsUser = (stakeBlockNumberUser2 -
-            stakeBlockNumberUser) *
-            governancePerBlock +
-            ((unstakeBlockNumberUser - stakeBlockNumberUser2) *
-                governancePerBlock) /
-            usersCount;
-        uint256 expectedRewardsUser2 = (unstakeBlockNumberUser -
-            stakeBlockNumberUser2) *
-            governancePerBlock +
-            ((unstakeBlockNumberUser2 - unstakeBlockNumberUser) *
-                governancePerBlock) /
-            usersCount;
-        assertApproxEqAbs(
-            rewardToken.balanceOf(user),
-            expectedRewardsUser,
-            1e15
-        );
-        assertApproxEqAbs(
-            rewardToken.balanceOf(user2),
-            expectedRewardsUser2,
-            1e15
-        );
+        uint256 expectedRewardsUser = (stakeBlockNumberUser2 - stakeBlockNumberUser) * governancePerBlock
+            + ((unstakeBlockNumberUser - stakeBlockNumberUser2) * governancePerBlock) / usersCount;
+        uint256 expectedRewardsUser2 = (unstakeBlockNumberUser - stakeBlockNumberUser2) * governancePerBlock
+            + ((unstakeBlockNumberUser2 - unstakeBlockNumberUser) * governancePerBlock) / usersCount;
+        assertApproxEqAbs(rewardToken.balanceOf(user), expectedRewardsUser, 1e15);
+        assertApproxEqAbs(rewardToken.balanceOf(user2), expectedRewardsUser2, 1e15);
     }
 }

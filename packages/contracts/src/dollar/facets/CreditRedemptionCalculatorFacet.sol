@@ -7,10 +7,7 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {LibCreditRedemptionCalculator} from "../libraries/LibCreditRedemptionCalculator.sol";
 
 /// @notice Contract facet for calculating amount of Credits to mint on Dollars burn
-contract CreditRedemptionCalculatorFacet is
-    Modifiers,
-    ICreditRedemptionCalculator
-{
+contract CreditRedemptionCalculatorFacet is Modifiers, ICreditRedemptionCalculator {
     /**
      * @notice Sets the `p` param in the Credit mint calculation formula:
      * `y = x * ((BlockDebtStart / BlockBurn) ^ p)`
@@ -29,14 +26,7 @@ contract CreditRedemptionCalculatorFacet is
     }
 
     /// @inheritdoc ICreditRedemptionCalculator
-    function getCreditAmount(
-        uint256 dollarsToBurn,
-        uint256 blockHeightDebt
-    ) external view override returns (uint256) {
-        return
-            LibCreditRedemptionCalculator.getCreditAmount(
-                dollarsToBurn,
-                blockHeightDebt
-            );
+    function getCreditAmount(uint256 dollarsToBurn, uint256 blockHeightDebt) external view override returns (uint256) {
+        return LibCreditRedemptionCalculator.getCreditAmount(dollarsToBurn, blockHeightDebt);
     }
 }

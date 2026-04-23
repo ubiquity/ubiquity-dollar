@@ -33,19 +33,14 @@ contract CreditRedemptionCalculatorFacetTest is DiamondTestSetup {
 
     function testGetCreditAmount_ShouldRevert_IfDebtIsTooHigh() public {
         vm.mockCall(
-            managerFacet.dollarTokenAddress(),
-            abi.encodeWithSelector(IERC20.totalSupply.selector),
-            abi.encode(1)
+            managerFacet.dollarTokenAddress(), abi.encodeWithSelector(IERC20.totalSupply.selector), abi.encode(1)
         );
         vm.expectRevert("Credit to Dollar: DEBT_TOO_HIGH");
         creditRedemptionCalculationFacet.getCreditAmount(1 ether, 10);
     }
 
     function testGetCreditAmount_ShouldReturnAmount() public {
-        uint256 amount = creditRedemptionCalculationFacet.getCreditAmount(
-            1 ether,
-            10
-        );
+        uint256 amount = creditRedemptionCalculationFacet.getCreditAmount(1 ether, 10);
         assertEq(amount, 9999999999999999999);
     }
 }

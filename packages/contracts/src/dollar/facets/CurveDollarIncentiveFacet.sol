@@ -14,11 +14,7 @@ contract CurveDollarIncentiveFacet is Modifiers {
      * @param receiver Receiver address
      * @param amountIn Trade amount
      */
-    function incentivize(
-        address sender,
-        address receiver,
-        uint256 amountIn
-    ) external onlyDollarManager {
+    function incentivize(address sender, address receiver, uint256 amountIn) external onlyDollarManager {
         LibCurveDollarIncentive.incentivize(sender, receiver, amountIn);
     }
 
@@ -27,10 +23,7 @@ contract CurveDollarIncentiveFacet is Modifiers {
      * @param account Address to update
      * @param isExempt Flag for whether to flag as exempt or not
      */
-    function setExemptAddress(
-        address account,
-        bool isExempt
-    ) external onlyAdmin {
+    function setExemptAddress(address account, bool isExempt) external onlyAdmin {
         LibCurveDollarIncentive.setExemptAddress(account, isExempt);
     }
 

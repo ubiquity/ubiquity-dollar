@@ -17,9 +17,7 @@ struct NewStorageExtended {
     uint256 slot2;
 }
 
-bytes32 constant NEW_STORAGE_POSITION = keccak256(
-    "ubiquity.contracts.mock.storage"
-);
+bytes32 constant NEW_STORAGE_POSITION = keccak256("ubiquity.contracts.mock.storage");
 
 contract MockFacetInitializer {
     function initialize() external {

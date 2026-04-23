@@ -11,11 +11,7 @@ interface IERC20Ubiquity is IERC20, IERC20Permit {
     // ----------- Events -----------
 
     /// @notice Emitted on tokens minting
-    event Minting(
-        address indexed _to,
-        address indexed _minter,
-        uint256 _amount
-    );
+    event Minting(address indexed _to, address indexed _minter, uint256 _amount);
 
     /// @notice Emitted on tokens burning
     event Burning(address indexed _burned, uint256 _amount);

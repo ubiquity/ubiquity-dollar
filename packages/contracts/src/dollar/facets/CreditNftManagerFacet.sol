@@ -20,9 +20,7 @@ contract CreditNftManagerFacet is Modifiers {
      * Governance tokens using `rate` conversion rate
      * @param rate Credit NFT to Governance tokens conversion rate
      */
-    function setExpiredCreditNftConversionRate(
-        uint256 rate
-    ) external onlyCreditNftManager {
+    function setExpiredCreditNftConversionRate(uint256 rate) external onlyCreditNftManager {
         LibCreditNftManager.setExpiredCreditNftConversionRate(rate);
     }
 
@@ -39,9 +37,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param _creditNftLengthBlocks The number of blocks during which Credit NFTs can be
      * redeemed for Dollars
      */
-    function setCreditNftLength(
-        uint256 _creditNftLengthBlocks
-    ) external onlyCreditNftManager {
+    function setCreditNftLength(uint256 _creditNftLengthBlocks) external onlyCreditNftManager {
         LibCreditNftManager.setCreditNftLength(_creditNftLengthBlocks);
     }
 
@@ -60,9 +56,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Dollars to exchange for Credit NFTs
      * @return Expiry block number when Credit NFTs can no longer be redeemed for Dollars
      */
-    function exchangeDollarsForCreditNft(
-        uint256 amount
-    ) external returns (uint256) {
+    function exchangeDollarsForCreditNft(uint256 amount) external returns (uint256) {
         return LibCreditNftManager.exchangeDollarsForCreditNft(amount);
     }
 
@@ -72,9 +66,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Dollars to burn
      * @return Amount of Credits minted
      */
-    function exchangeDollarsForCredit(
-        uint256 amount
-    ) external returns (uint256) {
+    function exchangeDollarsForCredit(uint256 amount) external returns (uint256) {
         return LibCreditNftManager.exchangeDollarsForCredit(amount);
     }
 
@@ -83,9 +75,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Dollars to burn
      * @return Amount of Credit NFTs to be minted
      */
-    function getCreditNftReturnedForDollars(
-        uint256 amount
-    ) external view returns (uint256) {
+    function getCreditNftReturnedForDollars(uint256 amount) external view returns (uint256) {
         return LibCreditNftManager.getCreditNftReturnedForDollars(amount);
     }
 
@@ -94,9 +84,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Dollars to burn
      * @return Amount of Credits to be minted
      */
-    function getCreditReturnedForDollars(
-        uint256 amount
-    ) external view returns (uint256) {
+    function getCreditReturnedForDollars(uint256 amount) external view returns (uint256) {
         return LibCreditNftManager.getCreditReturnedForDollars(amount);
     }
 
@@ -115,21 +103,12 @@ contract CreditNftManagerFacet is Modifiers {
      * @param data Additional data with no specified format
      * @return `bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"))` if transfer is allowed
      */
-    function onERC1155Received(
-        address operator,
-        address from,
-        uint256 id,
-        uint256 value,
-        bytes calldata data
-    ) external view returns (bytes4) {
-        return
-            LibCreditNftManager.onERC1155Received(
-                operator,
-                from,
-                id,
-                value,
-                data
-            );
+    function onERC1155Received(address operator, address from, uint256 id, uint256 value, bytes calldata data)
+        external
+        view
+        returns (bytes4)
+    {
+        return LibCreditNftManager.onERC1155Received(operator, from, id, value, data);
     }
 
     /**
@@ -143,13 +122,11 @@ contract CreditNftManagerFacet is Modifiers {
      *
      * @return `bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"))` if transfer is allowed
      */
-    function onERC1155BatchReceived(
-        address,
-        address,
-        uint256[] calldata,
-        uint256[] calldata,
-        bytes calldata
-    ) external pure returns (bytes4) {
+    function onERC1155BatchReceived(address, address, uint256[] calldata, uint256[] calldata, bytes calldata)
+        external
+        pure
+        returns (bytes4)
+    {
         //reject the transfer
         return "";
     }
@@ -160,12 +137,8 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Credit NFTs to burn
      * @return governanceAmount Amount of Governance tokens minted to Credit NFT holder
      */
-    function burnExpiredCreditNftForGovernance(
-        uint256 id,
-        uint256 amount
-    ) public returns (uint256 governanceAmount) {
-        return
-            LibCreditNftManager.burnExpiredCreditNftForGovernance(id, amount);
+    function burnExpiredCreditNftForGovernance(uint256 id, uint256 amount) public returns (uint256 governanceAmount) {
+        return LibCreditNftManager.burnExpiredCreditNftForGovernance(id, amount);
     }
 
     /**
@@ -175,10 +148,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Credit NFTs to burn
      * @return Credit tokens balance of `msg.sender`
      */
-    function burnCreditNftForCredit(
-        uint256 id,
-        uint256 amount
-    ) public returns (uint256) {
+    function burnCreditNftForCredit(uint256 id, uint256 amount) public returns (uint256) {
         return LibCreditNftManager.burnCreditNftForCredit(id, amount);
     }
 
@@ -187,9 +157,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Credits to burn
      * @return Amount of unredeemed Credits
      */
-    function burnCreditTokensForDollars(
-        uint256 amount
-    ) public returns (uint256) {
+    function burnCreditTokensForDollars(uint256 amount) public returns (uint256) {
         return LibCreditNftManager.burnCreditTokensForDollars(amount);
     }
 
@@ -199,10 +167,7 @@ contract CreditNftManagerFacet is Modifiers {
      * @param amount Amount of Credit NFTs to burn
      * @return Amount of unredeemed Credit NFTs
      */
-    function redeemCreditNft(
-        uint256 id,
-        uint256 amount
-    ) public returns (uint256) {
+    function redeemCreditNft(uint256 id, uint256 amount) public returns (uint256) {
         return LibCreditNftManager.redeemCreditNft(id, amount);
     }
 

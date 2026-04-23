@@ -21,10 +21,7 @@ contract DiamondInitTest is Test {
     }
 
     function test_Init() public {
-        DiamondInit.Args memory initArgs = DiamondInit.Args({
-            admin: address(0x123),
-            creditNftLengthBlocks: 100
-        });
+        DiamondInit.Args memory initArgs = DiamondInit.Args({admin: address(0x123), creditNftLengthBlocks: 100});
         dInit.init(initArgs);
 
         uint256 reentrancyStatus = uint256(vm.load(address(dInit), 0));

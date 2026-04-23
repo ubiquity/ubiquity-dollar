@@ -10,17 +10,9 @@ contract CreditNftTest is LocalTestHelper {
     address dollarManagerAddress;
     address creditNftAddress;
 
-    event MintedCreditNft(
-        address recipient,
-        uint256 expiryBlock,
-        uint256 amount
-    );
+    event MintedCreditNft(address recipient, uint256 expiryBlock, uint256 amount);
 
-    event BurnedCreditNft(
-        address creditNftHolder,
-        uint256 expiryBlock,
-        uint256 amount
-    );
+    event BurnedCreditNft(address creditNftHolder, uint256 expiryBlock, uint256 amount);
 
     function setUp() public override {
         super.setUp();
@@ -78,20 +70,14 @@ contract CreditNftTest is LocalTestHelper {
 
         vm.prank(admin);
         creditNft.mintCreditNft(creditNftOwner, 10, expiryBlockNumber);
-        uint256 init_balance = creditNft.balanceOf(
-            creditNftOwner,
-            expiryBlockNumber
-        );
+        uint256 init_balance = creditNft.balanceOf(creditNftOwner, expiryBlockNumber);
         vm.prank(creditNftOwner);
         creditNft.setApprovalForAll(admin, true);
         vm.prank(admin);
         vm.expectEmit(true, false, false, true);
         emit BurnedCreditNft(creditNftOwner, expiryBlockNumber, 1);
         creditNft.burnCreditNft(creditNftOwner, burnAmount, expiryBlockNumber);
-        uint256 last_balance = creditNft.balanceOf(
-            creditNftOwner,
-            expiryBlockNumber
-        );
+        uint256 last_balance = creditNft.balanceOf(creditNftOwner, expiryBlockNumber);
         assertEq(init_balance - last_balance, burnAmount);
     }
 
@@ -130,14 +116,14 @@ contract CreditNftTest is LocalTestHelper {
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
 
         // trying to directly call will fail and exit early so call it like this
-        (bool success, ) = address(creditNft).call(hasUpgradedCall);
+        (bool success,) = address(creditNft).call(hasUpgradedCall);
         assertEq(success, false, "should not have upgraded yet");
         require(success == false, "should not have upgraded yet");
 
         creditNft.upgradeTo(address(creditNftUpgraded));
 
         // It will also fail unless cast so we'll use the same pattern as above
-        (success, ) = address(creditNft).call(hasUpgradedCall);
+        (success,) = address(creditNft).call(hasUpgradedCall);
         assertEq(success, true, "should have upgraded");
         require(success == true, "should have upgraded");
 
@@ -158,27 +144,18 @@ contract CreditNftTest is LocalTestHelper {
 
         bytes memory getImplCall = abi.encodeWithSignature("getImpl()");
 
-        (bool success, bytes memory data) = address(creditNft).call(
-            getImplCall
-        );
+        (bool success, bytes memory data) = address(creditNft).call(getImplCall);
         assertEq(success, true, "should have upgraded");
 
         address newAddrViaNewFunc = abi.decode(data, (address));
 
-        assertEq(
-            newAddrViaNewFunc,
-            newImpl,
-            "should be the new implementation"
-        );
-        assertTrue(
-            newAddrViaNewFunc != oldImpl,
-            "should not be the old implementation"
-        );
+        assertEq(newAddrViaNewFunc, newImpl, "should be the new implementation");
+        assertTrue(newAddrViaNewFunc != oldImpl, "should not be the old implementation");
     }
 
     function testUUPS_InitializedVersion() external {
-        uint expectedVersion = 1;
-        uint baseExpectedVersion = 255;
+        uint256 expectedVersion = 1;
+        uint256 baseExpectedVersion = 255;
 
         CreditNftUpgraded creditNftUpgraded = new CreditNftUpgraded();
         CreditNftUpgraded creditNftT = new CreditNftUpgraded();
@@ -188,17 +165,11 @@ contract CreditNftTest is LocalTestHelper {
 
         bytes memory getVersionCall = abi.encodeWithSignature("getVersion()");
 
-        (bool success, bytes memory data) = address(creditNft).call(
-            getVersionCall
-        );
+        (bool success, bytes memory data) = address(creditNft).call(getVersionCall);
         assertEq(success, true, "should have upgraded");
         uint8 version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            expectedVersion,
-            "should be the same version as only initialized once"
-        );
+        assertEq(version, expectedVersion, "should be the same version as only initialized once");
 
         creditNft.upgradeTo(address(creditNftT));
 
@@ -206,21 +177,13 @@ contract CreditNftTest is LocalTestHelper {
         assertEq(success, true, "should have upgraded");
         version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            expectedVersion,
-            "should be the same version as only initialized once"
-        );
+        assertEq(version, expectedVersion, "should be the same version as only initialized once");
 
         (success, data) = address(creditNftT).call(getVersionCall);
         assertEq(success, true, "should succeed");
         version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            baseExpectedVersion,
-            "should be maxed as initializers are disabled."
-        );
+        assertEq(version, baseExpectedVersion, "should be maxed as initializers are disabled.");
     }
 
     function testUUPS_initialization() external {
@@ -252,9 +215,7 @@ contract CreditNftTest is LocalTestHelper {
         creditNft.upgradeTo(address(creditNftUpgraded));
 
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
-        (bool success, bytes memory data) = address(creditNft).call(
-            hasUpgradedCall
-        );
+        (bool success, bytes memory data) = address(creditNft).call(hasUpgradedCall);
         bool hasUpgraded = abi.decode(data, (bool));
 
         assertEq(hasUpgraded, true, "should have upgraded");

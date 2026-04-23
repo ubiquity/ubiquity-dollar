@@ -18,10 +18,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         vm.startPrank(admin);
         dollar_addr = address(dollarToken);
 
-        accessControlFacet.grantRole(
-            keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"),
-            admin
-        );
+        accessControlFacet.grantRole(keccak256("GOVERNANCE_TOKEN_MANAGER_ROLE"), admin);
         vm.stopPrank();
     }
 
@@ -45,14 +42,14 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
 
         // trying to directly call will fail and exit early so call it like this
-        (bool success, ) = address(dollarToken).call(hasUpgradedCall);
+        (bool success,) = address(dollarToken).call(hasUpgradedCall);
         assertEq(success, false, "should not have upgraded yet");
         require(success == false, "should not have upgraded yet");
 
         dollarToken.upgradeTo(address(newImpl));
 
         // It will also fail unless cast so we'll use the same pattern as above
-        (success, ) = address(dollarToken).call(hasUpgradedCall);
+        (success,) = address(dollarToken).call(hasUpgradedCall);
         assertEq(success, true, "should have upgraded");
         require(success == true, "should have upgraded");
 
@@ -71,22 +68,13 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
 
         bytes memory getImplCall = abi.encodeWithSignature("getImpl()");
 
-        (bool success, bytes memory data) = address(dollarToken).call(
-            getImplCall
-        );
+        (bool success, bytes memory data) = address(dollarToken).call(getImplCall);
         assertEq(success, true, "should have upgraded");
 
         address newAddrViaNewFunc = abi.decode(data, (address));
 
-        assertEq(
-            newAddrViaNewFunc,
-            newImplAddr,
-            "should be the new implementation"
-        );
-        assertTrue(
-            newAddrViaNewFunc != oldImpl,
-            "should not be the old implementation"
-        );
+        assertEq(newAddrViaNewFunc, newImplAddr, "should be the new implementation");
+        assertTrue(newAddrViaNewFunc != oldImpl, "should not be the old implementation");
     }
 
     function testUUPS_InitializedVersion() external {
@@ -100,17 +88,11 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         dollarToken.upgradeTo(address(newImpl));
         bytes memory getVersionCall = abi.encodeWithSignature("getVersion()");
 
-        (bool success, bytes memory data) = address(dollarToken).call(
-            getVersionCall
-        );
+        (bool success, bytes memory data) = address(dollarToken).call(getVersionCall);
         assertEq(success, true, "should have upgraded");
         uint8 version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            expectedVersion,
-            "should be the same version as only initialized once"
-        );
+        assertEq(version, expectedVersion, "should be the same version as only initialized once");
 
         dollarToken.upgradeTo(address(newImplT));
 
@@ -118,21 +100,13 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         assertEq(success, true, "should have upgraded");
         version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            expectedVersion,
-            "should be the same version as only initialized once"
-        );
+        assertEq(version, expectedVersion, "should be the same version as only initialized once");
 
         (success, data) = address(newImpl).call(getVersionCall);
         assertEq(success, true, "should succeed");
         version = abi.decode(data, (uint8));
 
-        assertEq(
-            version,
-            baseExpectedVersion,
-            "should be maxed as initializers are disabled."
-        );
+        assertEq(version, baseExpectedVersion, "should be maxed as initializers are disabled.");
     }
 
     function testUUPS_initialization() external {
@@ -161,9 +135,7 @@ contract UbiquityDollarTokenTest is LocalTestHelper {
         dollarToken.upgradeTo(address(newImpl));
 
         bytes memory hasUpgradedCall = abi.encodeWithSignature("hasUpgraded()");
-        (bool success, bytes memory data) = address(dollarToken).call(
-            hasUpgradedCall
-        );
+        (bool success, bytes memory data) = address(dollarToken).call(hasUpgradedCall);
         bool hasUpgraded = abi.decode(data, (bool));
 
         assertEq(hasUpgraded, true, "should have upgraded");

@@ -26,19 +26,13 @@ contract UbiquityDollarToken is ERC20Ubiquity {
 
     /// @notice Modifier checks that the method is called by a user with the "Dollar minter" role
     modifier onlyDollarMinter() {
-        require(
-            accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, _msgSender()),
-            "Dollar token: not minter"
-        );
+        require(accessControl.hasRole(DOLLAR_TOKEN_MINTER_ROLE, _msgSender()), "Dollar token: not minter");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Dollar burner" role
     modifier onlyDollarBurner() {
-        require(
-            accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, _msgSender()),
-            "Dollar token: not burner"
-        );
+        require(accessControl.hasRole(DOLLAR_TOKEN_BURNER_ROLE, _msgSender()), "Dollar token: not burner");
         _;
     }
 
@@ -47,10 +41,7 @@ contract UbiquityDollarToken is ERC20Ubiquity {
      * @param account Address to burn tokens from
      * @param amount Amount of tokens to burn
      */
-    function burnFrom(
-        address account,
-        uint256 amount
-    ) public override onlyDollarBurner whenNotPaused {
+    function burnFrom(address account, uint256 amount) public override onlyDollarBurner whenNotPaused {
         _burn(account, amount);
         emit Burning(account, amount);
     }
@@ -60,17 +51,12 @@ contract UbiquityDollarToken is ERC20Ubiquity {
      * @param to Address to mint tokens to
      * @param amount Amount of tokens to mint
      */
-    function mint(
-        address to,
-        uint256 amount
-    ) public onlyDollarMinter whenNotPaused {
+    function mint(address to, uint256 amount) public onlyDollarMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, _msgSender(), amount);
     }
 
     /// @notice Allows an admin to upgrade to another implementation contract
     /// @param newImplementation Address of the new implementation contract
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyAdmin {}
+    function _authorizeUpgrade(address newImplementation) internal override onlyAdmin {}
 }

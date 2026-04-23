@@ -17,10 +17,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
      * @param _connectorWeight Connector weight
      * @param _baseY Base Y
      */
-    function setParams(
-        uint32 _connectorWeight,
-        uint256 _baseY
-    ) external onlyAdmin {
+    function setParams(uint32 _connectorWeight, uint256 _baseY) external onlyAdmin {
         LibBondingCurve.setParams(_connectorWeight, _baseY);
     }
 
@@ -53,10 +50,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
      * @param _collateralDeposited Amount of collateral
      * @param _recipient Address to receive the NFT
      */
-    function deposit(
-        uint256 _collateralDeposited,
-        address _recipient
-    ) external {
+    function deposit(uint256 _collateralDeposited, address _recipient) external {
         LibBondingCurve.deposit(_collateralDeposited, _recipient);
     }
 
@@ -95,13 +89,7 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         uint256 _supply,
         uint256 _connectorBalance
     ) external pure returns (uint256) {
-        return
-            LibBondingCurve.purchaseTargetAmount(
-                _tokensDeposited,
-                _connectorWeight,
-                _supply,
-                _connectorBalance
-            );
+        return LibBondingCurve.purchaseTargetAmount(_tokensDeposited, _connectorWeight, _supply, _connectorBalance);
     }
 
     /**
@@ -122,12 +110,6 @@ contract BondingCurveFacet is Modifiers, IBondingCurve {
         uint256 _baseX,
         uint256 _baseY
     ) external pure returns (uint256) {
-        return
-            LibBondingCurve.purchaseTargetAmountFromZero(
-                _tokensDeposited,
-                _connectorWeight,
-                _baseX,
-                _baseY
-            );
+        return LibBondingCurve.purchaseTargetAmountFromZero(_tokensDeposited, _connectorWeight, _baseX, _baseY);
     }
 }

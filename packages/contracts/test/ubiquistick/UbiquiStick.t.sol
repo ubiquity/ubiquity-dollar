@@ -8,25 +8,13 @@ import "../../src/ubiquistick/UbiquiStick.sol";
 
 contract UbiquiStickHarness is UbiquiStick {
     function exposed_random() public view returns (uint256) {
-        return
-            uint256(
-                keccak256(
-                    abi.encodePacked(
-                        block.prevrandao,
-                        block.timestamp,
-                        msg.sender,
-                        tokenIdNext
-                    )
-                )
-            );
+        return uint256(keccak256(abi.encodePacked(block.prevrandao, block.timestamp, msg.sender, tokenIdNext)));
     }
 
-    function exposed_beforeConsecutiveTokenTransfer(
-        address address1,
-        address address2,
-        uint256 value1,
-        uint96 value2
-    ) public pure {
+    function exposed_beforeConsecutiveTokenTransfer(address address1, address address2, uint256 value1, uint96 value2)
+        public
+        pure
+    {
         _beforeConsecutiveTokenTransfer(address1, address2, value1, value2);
     }
 }
@@ -69,7 +57,7 @@ contract UbiquiStickTest is Test {
         ubiquiStick.setTokenURI(GOLD_TYPE, "TOKEN_URI_GOLD");
         // mint gold token
         // mint 57 tokens to user (needed for random() to return a gold type)
-        for (uint i = 1; i <= 57; i++) {
+        for (uint256 i = 1; i <= 57; i++) {
             ubiquiStick.safeMint(user);
         }
         // with the default "block.prevrandao = 0" the 58th token is gold
@@ -139,7 +127,7 @@ contract UbiquiStickTest is Test {
     function testSafeMint_ShouldMintGoldToken() public {
         vm.startPrank(minter);
         // mint 57 tokens to user (needed for random() to return a gold type)
-        for (uint i = 1; i <= 57; i++) {
+        for (uint256 i = 1; i <= 57; i++) {
             ubiquiStick.safeMint(user);
         }
         // with the default "block.prevrandao = 0" the 58th token is gold
@@ -166,47 +154,28 @@ contract UbiquiStickTest is Test {
     function testRandom_ShouldReturnRandomValue() public {
         // by default "block.prevrandao = 0"
         assertEq(
-            ubiquiStick.exposed_random(),
-            59314673252666873280629439252894990696031209845167399747113266702537979136323
+            ubiquiStick.exposed_random(), 59314673252666873280629439252894990696031209845167399747113266702537979136323
         );
     }
 
     function testBeforeConsecutiveTokenTransfer_ShouldRevert() public {
-        vm.expectRevert(
-            "ERC721Enumerable: consecutive transfers not supported"
-        );
-        ubiquiStick.exposed_beforeConsecutiveTokenTransfer(
-            address(0),
-            address(0),
-            0,
-            0
-        );
+        vm.expectRevert("ERC721Enumerable: consecutive transfers not supported");
+        ubiquiStick.exposed_beforeConsecutiveTokenTransfer(address(0), address(0), 0, 0);
     }
 
-    function testSupportsInterface_ShouldReturnTrue_IfInterfaceIsSupported()
-        public
-    {
-        assertEq(
-            ubiquiStick.supportsInterface(type(IERC721).interfaceId),
-            true
-        );
+    function testSupportsInterface_ShouldReturnTrue_IfInterfaceIsSupported() public {
+        assertEq(ubiquiStick.supportsInterface(type(IERC721).interfaceId), true);
     }
 
-    function testSupportsInterface_ShouldReturnFalse_IfInterfaceIsNotSupported()
-        public
-    {
+    function testSupportsInterface_ShouldReturnFalse_IfInterfaceIsNotSupported() public {
         assertEq(ubiquiStick.supportsInterface(bytes4(0x00000000)), false);
     }
 
-    function testSetApprovalForAll_ShouldRevert_IfOperatorIsNotAllowed()
-        public
-    {
+    function testSetApprovalForAll_ShouldRevert_IfOperatorIsNotAllowed() public {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(IOperatorFilterRegistry.isOperatorAllowed.selector),
             abi.encode(false)
         );
         // mint 1 token to minter
@@ -214,18 +183,11 @@ contract UbiquiStickTest is Test {
         ubiquiStick.safeMint(minter);
         // minter approves user to spend his tokens
         vm.prank(minter);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                OperatorFilterer.OperatorNotAllowed.selector,
-                user
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterer.OperatorNotAllowed.selector, user));
         ubiquiStick.setApprovalForAll(user, true);
     }
 
-    function testSetApprovalForAll_ShouldApproveOperatorToSpendAllTokens()
-        public
-    {
+    function testSetApprovalForAll_ShouldApproveOperatorToSpendAllTokens() public {
         // mint 1 token to minter
         vm.prank(minter);
         ubiquiStick.safeMint(minter);
@@ -240,19 +202,12 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(IOperatorFilterRegistry.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
         vm.prank(minter);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                OperatorFilterer.OperatorNotAllowed.selector,
-                user
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterer.OperatorNotAllowed.selector, user));
         ubiquiStick.approve(user, 1);
     }
 
@@ -276,19 +231,12 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(IOperatorFilterRegistry.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                OperatorFilterer.OperatorNotAllowed.selector,
-                user
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterer.OperatorNotAllowed.selector, user));
         ubiquiStick.transferFrom(minter, user, 1);
     }
 
@@ -315,19 +263,12 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(IOperatorFilterRegistry.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                OperatorFilterer.OperatorNotAllowed.selector,
-                user
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterer.OperatorNotAllowed.selector, user));
         ubiquiStick.safeTransferFrom(minter, user, 1);
     }
 
@@ -344,9 +285,7 @@ contract UbiquiStickTest is Test {
         assertEq(ubiquiStick.ownerOf(1), user);
     }
 
-    function testSafeTransferFromWith4Params_ShouldRevert_IfOperatorIsNotAllowed()
-        public
-    {
+    function testSafeTransferFromWith4Params_ShouldRevert_IfOperatorIsNotAllowed() public {
         // mint 1 token to minter
         vm.prank(minter);
         ubiquiStick.safeMint(minter);
@@ -356,19 +295,12 @@ contract UbiquiStickTest is Test {
         // mock OperatorFilterer
         vm.mockCall(
             address(ubiquiStick.OPERATOR_FILTER_REGISTRY()),
-            abi.encodeWithSelector(
-                IOperatorFilterRegistry.isOperatorAllowed.selector
-            ),
+            abi.encodeWithSelector(IOperatorFilterRegistry.isOperatorAllowed.selector),
             abi.encode(false)
         );
 
         vm.prank(user);
-        vm.expectRevert(
-            abi.encodeWithSelector(
-                OperatorFilterer.OperatorNotAllowed.selector,
-                user
-            )
-        );
+        vm.expectRevert(abi.encodeWithSelector(OperatorFilterer.OperatorNotAllowed.selector, user));
         ubiquiStick.safeTransferFrom(minter, user, 1, "");
     }
 

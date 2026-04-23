@@ -25,9 +25,7 @@ interface IUbiquityPool {
      * @param collateralAddress Address of the collateral token
      * @return returnData Collateral info
      */
-    function collateralInformation(
-        address collateralAddress
-    )
+    function collateralInformation(address collateralAddress)
         external
         view
         returns (LibUbiquityPool.CollateralInformation memory returnData);
@@ -42,28 +40,20 @@ interface IUbiquityPool {
      * @notice Returns USD value of all collateral tokens held in the pool, in E18
      * @return balanceTally USD value of all collateral tokens
      */
-    function collateralUsdBalance()
-        external
-        view
-        returns (uint256 balanceTally);
+    function collateralUsdBalance() external view returns (uint256 balanceTally);
 
     /**
      * @notice Returns chainlink price feed information for ETH/USD pair
      * @return Price feed address and staleness threshold in seconds
      */
-    function ethUsdPriceFeedInformation()
-        external
-        view
-        returns (address, uint256);
+    function ethUsdPriceFeedInformation() external view returns (address, uint256);
 
     /**
      * @notice Returns free collateral balance (i.e. that can be borrowed by AMO minters)
      * @param collateralIndex collateral token index
      * @return Amount of free collateral
      */
-    function freeCollateralBalance(
-        uint256 collateralIndex
-    ) external view returns (uint256);
+    function freeCollateralBalance(uint256 collateralIndex) external view returns (uint256);
 
     /**
      * @notice Returns Dollar value in collateral tokens
@@ -71,10 +61,7 @@ interface IUbiquityPool {
      * @param dollarAmount Amount of Dollars
      * @return Value in collateral tokens
      */
-    function getDollarInCollateral(
-        uint256 collateralIndex,
-        uint256 dollarAmount
-    ) external view returns (uint256);
+    function getDollarInCollateral(uint256 collateralIndex, uint256 dollarAmount) external view returns (uint256);
 
     /**
      * @notice Returns Ubiquity Dollar token USD price (1e6 precision) from Curve Metapool (Ubiquity Dollar, Curve Tri-Pool LP)
@@ -90,10 +77,7 @@ interface IUbiquityPool {
      * 3. Calculate Governance token price in USD
      * @return governancePriceUsd Governance token price in USD
      */
-    function getGovernancePriceUsd()
-        external
-        view
-        returns (uint256 governancePriceUsd);
+    function getGovernancePriceUsd() external view returns (uint256 governancePriceUsd);
 
     /**
      * @notice Returns user's balance available for redemption
@@ -101,19 +85,14 @@ interface IUbiquityPool {
      * @param collateralIndex Collateral token index
      * @return User's balance available for redemption
      */
-    function getRedeemCollateralBalance(
-        address userAddress,
-        uint256 collateralIndex
-    ) external view returns (uint256);
+    function getRedeemCollateralBalance(address userAddress, uint256 collateralIndex) external view returns (uint256);
 
     /**
      * @notice Returns user's Governance tokens balance available for redemption
      * @param userAddress User address
      * @return User's Governance tokens balance available for redemption
      */
-    function getRedeemGovernanceBalance(
-        address userAddress
-    ) external view returns (uint256);
+    function getRedeemGovernanceBalance(address userAddress) external view returns (uint256);
 
     /**
      * @notice Returns pool address for Governance/ETH pair
@@ -126,10 +105,7 @@ interface IUbiquityPool {
      * @dev Here stable coin refers to the 1st coin in the Curve's stable/Dollar plain pool
      * @return Price feed address and staleness threshold in seconds
      */
-    function stableUsdPriceFeedInformation()
-        external
-        view
-        returns (address, uint256);
+    function stableUsdPriceFeedInformation() external view returns (address, uint256);
 
     //====================
     // Public functions
@@ -154,13 +130,7 @@ interface IUbiquityPool {
         uint256 maxCollateralIn,
         uint256 maxGovernanceIn,
         bool isOneToOne
-    )
-        external
-        returns (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        );
+    ) external returns (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded);
 
     /**
      * @notice Burns redeemable Ubiquity Dollars and sends back 1 USD of collateral token for every 1 Ubiquity Dollar burned
@@ -191,9 +161,9 @@ interface IUbiquityPool {
      * @return governanceAmount Amount of Governance tokens redeemed
      * @return collateralAmount Amount of collateral tokens redeemed
      */
-    function collectRedemption(
-        uint256 collateralIndex
-    ) external returns (uint256 governanceAmount, uint256 collateralAmount);
+    function collectRedemption(uint256 collateralIndex)
+        external
+        returns (uint256 governanceAmount, uint256 collateralAmount);
 
     /**
      * @notice Updates collateral token price in USD from ChainLink price feed
@@ -229,11 +199,8 @@ interface IUbiquityPool {
      * @param chainLinkPriceFeedAddress Chainlink's price feed address
      * @param poolCeiling Max amount of available tokens for collateral
      */
-    function addCollateralToken(
-        address collateralAddress,
-        address chainLinkPriceFeedAddress,
-        uint256 poolCeiling
-    ) external;
+    function addCollateralToken(address collateralAddress, address chainLinkPriceFeedAddress, uint256 poolCeiling)
+        external;
 
     /**
      * @notice Removes AMO minter
@@ -274,10 +241,7 @@ interface IUbiquityPool {
      * @param newPriceFeedAddress New chainlink price feed address for ETH/USD pair
      * @param newStalenessThreshold New threshold in seconds when chainlink's ETH/USD price feed answer should be considered stale
      */
-    function setEthUsdChainLinkPriceFeed(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    ) external;
+    function setEthUsdChainLinkPriceFeed(address newPriceFeedAddress, uint256 newStalenessThreshold) external;
 
     /**
      * @notice Sets mint and redeem fees, 1_000_000 = 100%
@@ -285,11 +249,7 @@ interface IUbiquityPool {
      * @param newMintFee New mint fee
      * @param newRedeemFee New redeem fee
      */
-    function setFees(
-        uint256 collateralIndex,
-        uint256 newMintFee,
-        uint256 newRedeemFee
-    ) external;
+    function setFees(uint256 collateralIndex, uint256 newMintFee, uint256 newRedeemFee) external;
 
     /**
      * @notice Sets a new pool address for Governance/ETH pair
@@ -302,29 +262,21 @@ interface IUbiquityPool {
      *
      * @param newGovernanceEthPoolAddress New pool address for Governance/ETH pair
      */
-    function setGovernanceEthPoolAddress(
-        address newGovernanceEthPoolAddress
-    ) external;
+    function setGovernanceEthPoolAddress(address newGovernanceEthPoolAddress) external;
 
     /**
      * @notice Sets max amount of collateral for a particular collateral token
      * @param collateralIndex Collateral token index
      * @param newCeiling Max amount of collateral
      */
-    function setPoolCeiling(
-        uint256 collateralIndex,
-        uint256 newCeiling
-    ) external;
+    function setPoolCeiling(uint256 collateralIndex, uint256 newCeiling) external;
 
     /**
      * @notice Sets mint and redeem price thresholds, 1_000_000 = $1.00
      * @param newMintPriceThreshold New mint price threshold
      * @param newRedeemPriceThreshold New redeem price threshold
      */
-    function setPriceThresholds(
-        uint256 newMintPriceThreshold,
-        uint256 newRedeemPriceThreshold
-    ) external;
+    function setPriceThresholds(uint256 newMintPriceThreshold, uint256 newRedeemPriceThreshold) external;
 
     /**
      * @notice Sets a redemption delay in blocks
@@ -334,9 +286,7 @@ interface IUbiquityPool {
      * @dev `newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`
      * @param newRedemptionDelayBlocks Redemption delay in blocks
      */
-    function setRedemptionDelayBlocks(
-        uint256 newRedemptionDelayBlocks
-    ) external;
+    function setRedemptionDelayBlocks(uint256 newRedemptionDelayBlocks) external;
 
     /**
      * @notice Sets chainlink params for stable/USD price feed
@@ -344,10 +294,7 @@ interface IUbiquityPool {
      * @param newPriceFeedAddress New chainlink price feed address for stable/USD pair
      * @param newStalenessThreshold New threshold in seconds when chainlink's stable/USD price feed answer should be considered stale
      */
-    function setStableUsdChainLinkPriceFeed(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    ) external;
+    function setStableUsdChainLinkPriceFeed(address newPriceFeedAddress, uint256 newStalenessThreshold) external;
 
     /**
      * @notice Toggles (i.e. enables/disables) a particular collateral token
@@ -360,8 +307,5 @@ interface IUbiquityPool {
      * @param collateralIndex Collateral token index
      * @param toggleIndex Method index. 0 - toggle mint pause, 1 - toggle redeem pause, 2 - toggle borrow by AMO pause
      */
-    function toggleMintRedeemBorrow(
-        uint256 collateralIndex,
-        uint8 toggleIndex
-    ) external;
+    function toggleMintRedeemBorrow(uint256 collateralIndex, uint8 toggleIndex) external;
 }

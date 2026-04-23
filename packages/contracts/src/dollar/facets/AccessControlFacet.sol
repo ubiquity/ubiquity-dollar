@@ -11,16 +11,9 @@ import {Modifiers} from "../libraries/LibAppStorage.sol";
  * @dev Derived from https://github.com/OpenZeppelin/openzeppelin-contracts (MIT license)
  * @dev https://github.com/solidstate-network/solidstate-solidity/blob/master/contracts/access/access_control/AccessControl.sol
  */
-contract AccessControlFacet is
-    Modifiers,
-    IAccessControl,
-    AccessControlInternal
-{
+contract AccessControlFacet is Modifiers, IAccessControl, AccessControlInternal {
     /// @inheritdoc IAccessControl
-    function grantRole(
-        bytes32 role,
-        address account
-    ) external onlyRole(_getRoleAdmin(role)) {
+    function grantRole(bytes32 role, address account) external onlyRole(_getRoleAdmin(role)) {
         return _grantRole(role, account);
     }
 
@@ -30,10 +23,7 @@ contract AccessControlFacet is
     }
 
     /// @inheritdoc IAccessControl
-    function hasRole(
-        bytes32 role,
-        address account
-    ) external view returns (bool) {
+    function hasRole(bytes32 role, address account) external view returns (bool) {
         return _hasRole(role, account);
     }
 
@@ -43,10 +33,7 @@ contract AccessControlFacet is
     }
 
     /// @inheritdoc IAccessControl
-    function revokeRole(
-        bytes32 role,
-        address account
-    ) external onlyRole(_getRoleAdmin(role)) {
+    function revokeRole(bytes32 role, address account) external onlyRole(_getRoleAdmin(role)) {
         return _revokeRole(role, account);
     }
 

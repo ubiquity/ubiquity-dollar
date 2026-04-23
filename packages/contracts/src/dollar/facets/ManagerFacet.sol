@@ -18,9 +18,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Credit token address
      * @param _creditTokenAddress Credit token address
      */
-    function setCreditTokenAddress(
-        address _creditTokenAddress
-    ) external onlyAdmin {
+    function setCreditTokenAddress(address _creditTokenAddress) external onlyAdmin {
         store.creditTokenAddress = _creditTokenAddress;
     }
 
@@ -28,9 +26,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Dollar token address
      * @param _dollarTokenAddress Dollar token address
      */
-    function setDollarTokenAddress(
-        address _dollarTokenAddress
-    ) external onlyAdmin {
+    function setDollarTokenAddress(address _dollarTokenAddress) external onlyAdmin {
         store.dollarTokenAddress = _dollarTokenAddress;
     }
 
@@ -38,9 +34,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets UbiquiStick address
      * @param _ubiquistickAddress UbiquiStick address
      */
-    function setUbiquistickAddress(
-        address _ubiquistickAddress
-    ) external onlyAdmin {
+    function setUbiquistickAddress(address _ubiquistickAddress) external onlyAdmin {
         store.ubiquiStickAddress = _ubiquistickAddress;
     }
 
@@ -56,9 +50,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Governance token address
      * @param _governanceTokenAddress Governance token address
      */
-    function setGovernanceTokenAddress(
-        address _governanceTokenAddress
-    ) external onlyAdmin {
+    function setGovernanceTokenAddress(address _governanceTokenAddress) external onlyAdmin {
         store.governanceTokenAddress = _governanceTokenAddress;
     }
 
@@ -66,9 +58,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Sushi swap pool address (Dollar-Governance)
      * @param _sushiSwapPoolAddress Pool address
      */
-    function setSushiSwapPoolAddress(
-        address _sushiSwapPoolAddress
-    ) external onlyAdmin {
+    function setSushiSwapPoolAddress(address _sushiSwapPoolAddress) external onlyAdmin {
         store.sushiSwapPoolAddress = _sushiSwapPoolAddress;
     }
 
@@ -76,9 +66,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Dollar mint calculator address
      * @param _dollarMintCalculatorAddress Dollar mint calculator address
      */
-    function setDollarMintCalculatorAddress(
-        address _dollarMintCalculatorAddress
-    ) external onlyAdmin {
+    function setDollarMintCalculatorAddress(address _dollarMintCalculatorAddress) external onlyAdmin {
         store.dollarMintCalculatorAddress = _dollarMintCalculatorAddress;
     }
 
@@ -87,22 +75,15 @@ contract ManagerFacet is Modifiers {
      * @param creditNftManagerAddress Credit NFT manager address
      * @param dollarMintExcess Dollar distributor address
      */
-    function setExcessDollarsDistributor(
-        address creditNftManagerAddress,
-        address dollarMintExcess
-    ) external onlyAdmin {
-        store._excessDollarDistributors[
-            creditNftManagerAddress
-        ] = dollarMintExcess;
+    function setExcessDollarsDistributor(address creditNftManagerAddress, address dollarMintExcess) external onlyAdmin {
+        store._excessDollarDistributors[creditNftManagerAddress] = dollarMintExcess;
     }
 
     /**
      * @notice Sets MasterChef address
      * @param _masterChefAddress MasterChef address
      */
-    function setMasterChefAddress(
-        address _masterChefAddress
-    ) external onlyAdmin {
+    function setMasterChefAddress(address _masterChefAddress) external onlyAdmin {
         store.masterChefAddress = _masterChefAddress;
     }
 
@@ -118,9 +99,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets staking share address
      * @param _stakingShareAddress Staking share address
      */
-    function setStakingShareAddress(
-        address _stakingShareAddress
-    ) external onlyAdmin {
+    function setStakingShareAddress(address _stakingShareAddress) external onlyAdmin {
         store.stakingShareAddress = _stakingShareAddress;
     }
 
@@ -128,9 +107,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Curve Dollar incentive address
      * @param _curveDollarIncentiveAddress Curve Dollar incentive address
      */
-    function setCurveDollarIncentiveAddress(
-        address _curveDollarIncentiveAddress
-    ) external onlyAdmin {
+    function setCurveDollarIncentiveAddress(address _curveDollarIncentiveAddress) external onlyAdmin {
         store.curveDollarIncentiveAddress = _curveDollarIncentiveAddress;
     }
 
@@ -138,9 +115,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets Curve Dollar-3CRV MetaPool address
      * @param _stableSwapMetaPoolAddress Curve Dollar-3CRV MetaPool address
      */
-    function setStableSwapMetaPoolAddress(
-        address _stableSwapMetaPoolAddress
-    ) external onlyAdmin {
+    function setStableSwapMetaPoolAddress(address _stableSwapMetaPoolAddress) external onlyAdmin {
         store.stableSwapMetaPoolAddress = _stableSwapMetaPoolAddress;
     }
 
@@ -149,9 +124,7 @@ contract ManagerFacet is Modifiers {
      * @dev `_stableSwapPlainPoolAddress` is used to fetch Dollar price in USD
      * @param _stableSwapPlainPoolAddress Curve's Dollar-Stablecoin plain pool address
      */
-    function setStableSwapPlainPoolAddress(
-        address _stableSwapPlainPoolAddress
-    ) external onlyAdmin {
+    function setStableSwapPlainPoolAddress(address _stableSwapPlainPoolAddress) external onlyAdmin {
         store.stableSwapPlainPoolAddress = _stableSwapPlainPoolAddress;
     }
 
@@ -161,9 +134,7 @@ contract ManagerFacet is Modifiers {
      * for a certain duration to earn Governance tokens and more Curve LP tokens
      * @param _stakingContractAddress Staking contract address
      */
-    function setStakingContractAddress(
-        address _stakingContractAddress
-    ) external onlyAdmin {
+    function setStakingContractAddress(address _stakingContractAddress) external onlyAdmin {
         store.stakingContractAddress = _stakingContractAddress;
     }
 
@@ -171,9 +142,7 @@ contract ManagerFacet is Modifiers {
      * @notice Sets bonding curve address used for UbiquiStick minting
      * @param _bondingCurveAddress Bonding curve address
      */
-    function setBondingCurveAddress(
-        address _bondingCurveAddress
-    ) external onlyAdmin {
+    function setBondingCurveAddress(address _bondingCurveAddress) external onlyAdmin {
         store.bondingCurveAddress = _bondingCurveAddress;
     }
 
@@ -182,9 +151,7 @@ contract ManagerFacet is Modifiers {
      * @dev Implied to be used for UbiquiStick minting
      * @param _bancorFormulaAddress Bancor formula address
      */
-    function setBancorFormulaAddress(
-        address _bancorFormulaAddress
-    ) external onlyAdmin {
+    function setBancorFormulaAddress(address _bancorFormulaAddress) external onlyAdmin {
         store.bancorFormulaAddress = _bancorFormulaAddress;
     }
 
@@ -202,13 +169,8 @@ contract ManagerFacet is Modifiers {
      * @param _account Address for which to set an incentive contract
      * @param _incentiveAddress Incentive contract address
      */
-    function setIncentiveToDollar(
-        address _account,
-        address _incentiveAddress
-    ) external onlyAdmin {
-        IUbiquityDollarToken dollar = IUbiquityDollarToken(
-            store.dollarTokenAddress
-        );
+    function setIncentiveToDollar(address _account, address _incentiveAddress) external onlyAdmin {
+        IUbiquityDollarToken dollar = IUbiquityDollarToken(store.dollarTokenAddress);
         dollar.setIncentiveContract(_account, _incentiveAddress);
     }
 
@@ -232,22 +194,19 @@ contract ManagerFacet is Modifiers {
     ) external onlyAdmin {
         // Create new StableSwap meta pool (Dollar <-> 3Crv)
         // slither-disable-next-line reentrancy-no-eth
-        address metaPool = ICurveFactory(_curveFactory).deploy_metapool(
-            _crvBasePool,
-            ERC20(store.dollarTokenAddress).name(),
-            ERC20(store.dollarTokenAddress).symbol(),
-            store.dollarTokenAddress,
-            _amplificationCoefficient,
-            _fee
-        );
+        address metaPool = ICurveFactory(_curveFactory)
+            .deploy_metapool(
+                _crvBasePool,
+                ERC20(store.dollarTokenAddress).name(),
+                ERC20(store.dollarTokenAddress).symbol(),
+                store.dollarTokenAddress,
+                _amplificationCoefficient,
+                _fee
+            );
         store.stableSwapMetaPoolAddress = metaPool;
         // Approve the newly-deployed meta pool to transfer this contract's funds
-        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(
-            address(this)
-        );
-        uint256 dollarTokenAmount = IERC20(store.dollarTokenAddress).balanceOf(
-            address(this)
-        );
+        uint256 crv3PoolTokenAmount = IERC20(_crv3PoolTokenAddress).balanceOf(address(this));
+        uint256 dollarTokenAmount = IERC20(store.dollarTokenAddress).balanceOf(address(this));
         // safe approve revert if approve from non-zero to non-zero allowance
         IERC20(_crv3PoolTokenAddress).approve(metaPool, 0);
         IERC20(_crv3PoolTokenAddress).approve(metaPool, crv3PoolTokenAmount);
@@ -257,10 +216,8 @@ contract ManagerFacet is Modifiers {
 
         // coin at index 0 is Dollar and index 1 is 3CRV
         require(
-            ICurveStableSwapMetaNG(metaPool).coins(0) ==
-                store.dollarTokenAddress &&
-                ICurveStableSwapMetaNG(metaPool).coins(1) ==
-                _crv3PoolTokenAddress,
+            ICurveStableSwapMetaNG(metaPool).coins(0) == store.dollarTokenAddress
+                && ICurveStableSwapMetaNG(metaPool).coins(1) == _crv3PoolTokenAddress,
             "MGR: COIN_ORDER_MISMATCH"
         );
         // Add the initial liquidity to the StableSwap meta pool
@@ -358,9 +315,7 @@ contract ManagerFacet is Modifiers {
      * @param _creditNftManagerAddress Credit NFT manager address
      * @return Dollar distributor address
      */
-    function excessDollarsDistributor(
-        address _creditNftManagerAddress
-    ) external view returns (address) {
+    function excessDollarsDistributor(address _creditNftManagerAddress) external view returns (address) {
         return store._excessDollarDistributors[_creditNftManagerAddress];
     }
 

@@ -49,7 +49,7 @@ library AddressUtils {
      * @param amount Amount of ETH to send
      */
     function sendValue(address payable account, uint256 amount) internal {
-        (bool success, ) = account.call{value: amount}("");
+        (bool success,) = account.call{value: amount}("");
         if (!success) revert AddressUtils__SendValueFailed();
     }
 
@@ -59,12 +59,8 @@ library AddressUtils {
      * @param data Data to pass
      * @return Response bytes
      */
-    function functionCall(
-        address target,
-        bytes memory data
-    ) internal returns (bytes memory) {
-        return
-            functionCall(target, data, "AddressUtils: failed low-level call");
+    function functionCall(address target, bytes memory data) internal returns (bytes memory) {
+        return functionCall(target, data, "AddressUtils: failed low-level call");
     }
 
     /**
@@ -74,11 +70,7 @@ library AddressUtils {
      * @param error Text error
      * @return Response bytes
      */
-    function functionCall(
-        address target,
-        bytes memory data,
-        string memory error
-    ) internal returns (bytes memory) {
+    function functionCall(address target, bytes memory data, string memory error) internal returns (bytes memory) {
         return _functionCallWithValue(target, data, 0, error);
     }
 
@@ -89,18 +81,8 @@ library AddressUtils {
      * @param value Amount of ETH to send
      * @return Response bytes
      */
-    function functionCallWithValue(
-        address target,
-        bytes memory data,
-        uint256 value
-    ) internal returns (bytes memory) {
-        return
-            functionCallWithValue(
-                target,
-                data,
-                value,
-                "AddressUtils: failed low-level call with value"
-            );
+    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
+        return functionCallWithValue(target, data, value, "AddressUtils: failed low-level call with value");
     }
 
     /**
@@ -111,12 +93,10 @@ library AddressUtils {
      * @param error Text error
      * @return Response bytes
      */
-    function functionCallWithValue(
-        address target,
-        bytes memory data,
-        uint256 value,
-        string memory error
-    ) internal returns (bytes memory) {
+    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory error)
+        internal
+        returns (bytes memory)
+    {
         if (value > address(this).balance) {
             revert AddressUtils__InsufficientBalance();
         }
@@ -131,17 +111,13 @@ library AddressUtils {
      * @param error Text error
      * @return Response bytes
      */
-    function _functionCallWithValue(
-        address target,
-        bytes memory data,
-        uint256 value,
-        string memory error
-    ) private returns (bytes memory) {
+    function _functionCallWithValue(address target, bytes memory data, uint256 value, string memory error)
+        private
+        returns (bytes memory)
+    {
         if (!isContract(target)) revert AddressUtils__NotContract();
 
-        (bool success, bytes memory returnData) = target.call{value: value}(
-            data
-        );
+        (bool success, bytes memory returnData) = target.call{value: value}(data);
 
         if (success) {
             return returnData;

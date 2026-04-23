@@ -12,17 +12,11 @@ library LibCreditClock {
     using ABDKMathQuad for bytes16;
 
     /// @notice Emitted when depreciation rate per block is updated
-    event SetRatePerBlock(
-        uint256 rateStartBlock,
-        bytes16 rateStartValue,
-        bytes16 ratePerBlock
-    );
+    event SetRatePerBlock(uint256 rateStartBlock, bytes16 rateStartValue, bytes16 ratePerBlock);
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant CREDIT_CLOCK_STORAGE_POSITION =
-        bytes32(
-            uint256(keccak256("ubiquity.contracts.credit.clock.storage")) - 1
-        ) & ~bytes32(uint256(0xff));
+        bytes32(uint256(keccak256("ubiquity.contracts.credit.clock.storage")) - 1) & ~bytes32(uint256(0xff));
 
     /// @notice Struct used as a storage for the current library
     struct CreditClockData {
@@ -37,11 +31,7 @@ library LibCreditClock {
      * @notice Returns struct used as a storage for this library
      * @return data Struct used as a storage
      */
-    function creditClockStorage()
-        internal
-        pure
-        returns (CreditClockData storage data)
-    {
+    function creditClockStorage() internal pure returns (CreditClockData storage data) {
         bytes32 position = CREDIT_CLOCK_STORAGE_POSITION;
         assembly {
             data.slot := position
@@ -74,11 +64,7 @@ library LibCreditClock {
         data.rateStartBlock = block.number;
         data.ratePerBlock = _ratePerBlock;
 
-        emit SetRatePerBlock(
-            data.rateStartBlock,
-            data.rateStartValue,
-            data.ratePerBlock
-        );
+        emit SetRatePerBlock(data.rateStartBlock, data.rateStartValue, data.ratePerBlock);
     }
 
     /**
@@ -96,14 +82,14 @@ library LibCreditClock {
             }
         }
         // slither-disable-next-line divide-before-multiply
-        rate = data.rateStartValue.mul(
-            data.one.div(
-                // b ^ n == 2^(n*log²(b))
-                (blockNumber - data.rateStartBlock)
-                    .fromUInt()
-                    .mul(data.one.add(data.ratePerBlock).log_2())
-                    .pow_2()
-            )
-        );
+        rate = data.rateStartValue
+            .mul(
+                data.one
+                    .div(
+                        // b ^ n == 2^(n*log²(b))
+                        (blockNumber - data.rateStartBlock).fromUInt().mul(data.one.add(data.ratePerBlock).log_2())
+                            .pow_2()
+                    )
+            );
     }
 }

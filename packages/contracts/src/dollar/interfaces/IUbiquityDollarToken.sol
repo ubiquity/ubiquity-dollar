@@ -8,10 +8,7 @@ import "./IERC20Ubiquity.sol";
  */
 interface IUbiquityDollarToken is IERC20Ubiquity {
     /// @notice Emitted on setting an incentive contract for an account
-    event IncentiveContractUpdate(
-        address indexed _incentivized,
-        address indexed _incentiveContract
-    );
+    event IncentiveContractUpdate(address indexed _incentivized, address indexed _incentiveContract);
 
     /**
      * @notice Sets `incentive` contract for `account`

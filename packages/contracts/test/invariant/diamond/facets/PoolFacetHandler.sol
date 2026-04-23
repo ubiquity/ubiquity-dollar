@@ -221,20 +221,11 @@ contract PoolFacetHandler is Test {
 
         vm.assume(_dollarAmount > 0 && _dollarAmount < maxUint);
         vm.assume(_dollarOutMin <= _dollarAmount);
-        vm.assume(
-            _maxCollateralIn > 0 && _maxCollateralIn < collateralTotalSupply
-        );
+        vm.assume(_maxCollateralIn > 0 && _maxCollateralIn < collateralTotalSupply);
         vm.assume(_maxGovernanceIn >= 0 && _maxGovernanceIn <= maxUint);
 
         vm.prank(user);
-        ubiquityPoolFacet.mintDollar(
-            0,
-            _dollarAmount,
-            _dollarOutMin,
-            _maxCollateralIn,
-            _maxGovernanceIn,
-            _isOneToOne
-        );
+        ubiquityPoolFacet.mintDollar(0, _dollarAmount, _dollarOutMin, _maxCollateralIn, _maxGovernanceIn, _isOneToOne);
     }
 
     /**
@@ -245,27 +236,16 @@ contract PoolFacetHandler is Test {
      * @param _governanceOutMin The minimum amount of governance tokens expected to be received from the redemption process.
      * @param _collateralOutMin The minimum amount of collateral tokens expected to be received from the redemption process.
      */
-    function redeemDollar(
-        uint256 _dollarAmount,
-        uint256 _governanceOutMin,
-        uint256 _collateralOutMin
-    ) public {
+    function redeemDollar(uint256 _dollarAmount, uint256 _governanceOutMin, uint256 _collateralOutMin) public {
         uint256 maxUint = type(uint128).max;
         uint256 dollarTotalSupply = dollar.totalSupply();
         uint256 collateralTotalSupply = collateralToken.totalSupply();
 
         vm.assume(_dollarAmount > 0 && _dollarAmount < dollarTotalSupply);
-        vm.assume(
-            _collateralOutMin >= 0 && _collateralOutMin <= collateralTotalSupply
-        );
+        vm.assume(_collateralOutMin >= 0 && _collateralOutMin <= collateralTotalSupply);
         vm.assume(_governanceOutMin >= 0 && _governanceOutMin <= maxUint);
 
         vm.prank(user);
-        ubiquityPoolFacet.redeemDollar(
-            0,
-            _dollarAmount,
-            _governanceOutMin,
-            _collateralOutMin
-        );
+        ubiquityPoolFacet.redeemDollar(0, _dollarAmount, _governanceOutMin, _collateralOutMin);
     }
 }

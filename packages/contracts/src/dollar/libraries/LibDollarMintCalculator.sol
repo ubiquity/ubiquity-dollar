@@ -18,23 +18,10 @@ library LibDollarMintCalculator {
      */
     function getDollarsToMint() internal view returns (uint256) {
         AppStorage storage store = LibAppStorage.appStorage();
-        uint256 twapPrice = ICurveStableSwapMetaNG(
-            store.stableSwapMetaPoolAddress
-        ).price_oracle(0);
+        uint256 twapPrice = ICurveStableSwapMetaNG(store.stableSwapMetaPoolAddress).price_oracle(0);
         require(twapPrice > 1 ether, "DollarMintCalculator: not > 1");
         bytes16 _one = (uint256(1 ether)).fromUInt();
-        return
-            twapPrice
-                .fromUInt()
-                .sub(_one)
-                .mul(
-                    (
-                        IERC20(store.dollarTokenAddress)
-                            .totalSupply()
-                            .fromUInt()
-                            .div(_one)
-                    )
-                )
-                .toUInt();
+        return twapPrice.fromUInt().sub(_one).mul((IERC20(store.dollarTokenAddress).totalSupply().fromUInt().div(_one)))
+            .toUInt();
     }
 }

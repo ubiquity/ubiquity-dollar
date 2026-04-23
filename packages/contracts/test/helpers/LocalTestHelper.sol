@@ -33,10 +33,7 @@ abstract contract LocalTestHelper is DiamondTestSetup {
 
         //mint some dollar token
         dollarToken.mint(address(0x1045256), 10000e18);
-        require(
-            dollarToken.balanceOf(address(0x1045256)) == 10000e18,
-            "dollar balance is not 10000e18"
-        );
+        require(dollarToken.balanceOf(address(0x1045256)) == 10000e18, "dollar balance is not 10000e18");
 
         // set treasury address
         managerFacet.setTreasuryAddress(treasuryAddress);

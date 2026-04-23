@@ -32,10 +32,7 @@ contract BondingCurveFacetTest is DiamondTestSetup {
 
         vm.startPrank(admin);
 
-        accessControlFacet.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(diamond)
-        );
+        accessControlFacet.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(diamond));
 
         // deploy UbiquiStick
         UbiquiStick ubiquiStick = new UbiquiStick();
@@ -93,19 +90,13 @@ contract ZeroStateBonding is BondingCurveFacetTest {
 
         uint256 finBal = dollarToken.balanceOf(secondAccount);
 
-        uint256 tokReturned = bondingCurveFacet.purchaseTargetAmountFromZero(
-            collateralDeposited,
-            connectorWeight,
-            ACCURACY,
-            baseY
-        );
+        uint256 tokReturned =
+            bondingCurveFacet.purchaseTargetAmountFromZero(collateralDeposited, connectorWeight, ACCURACY, baseY);
 
         // Logic Test
         uint256 baseN = collateralDeposited.add(baseY);
         uint256 power = (baseN.mul(10 ** 18)).div(baseY);
-        uint256 result = ACCURACY
-            .mul(SafeMath.sub((power ** (connectorWeight)), 10 ** 18))
-            .div(10 ** 18);
+        uint256 result = ACCURACY.mul(SafeMath.sub((power ** (connectorWeight)), 10 ** 18)).div(10 ** 18);
 
         assertEq(collateralDeposited, bondingCurveFacet.poolBalance());
         assertEq(collateralDeposited, finBal - initBal);
@@ -137,10 +128,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 balance = poolBalance - _amount;
 
         assertEq(bondingCurveFacet.poolBalance(), balance);
-        assertEq(
-            dollarToken.balanceOf(managerFacet.treasuryAddress()),
-            _amount
-        );
+        assertEq(dollarToken.balanceOf(managerFacet.treasuryAddress()), _amount);
     }
 
     function testPurchaseTargetAmountShouldRevertIfSupplyZero() public {
@@ -149,12 +137,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint32 connectorWeight = uint32(bound(connWeight, 1, MAX_WEIGHT));
 
         vm.expectRevert("ERR_INVALID_SUPPLY");
-        bondingCurveFacet.purchaseTargetAmount(
-            collateralDeposited,
-            connectorWeight,
-            1,
-            0
-        );
+        bondingCurveFacet.purchaseTargetAmount(collateralDeposited, connectorWeight, 1, 0);
     }
 
     function testPurchaseTargetAmountShouldRevertIfParamsNotSet() public {
@@ -163,12 +146,7 @@ contract ZeroStateBonding is BondingCurveFacetTest {
         uint256 poolBalance = bound(bal, 1, 1000000);
 
         vm.expectRevert("ERR_INVALID_WEIGHT");
-        bondingCurveFacet.purchaseTargetAmount(
-            collateralDeposited,
-            0,
-            1,
-            poolBalance
-        );
+        bondingCurveFacet.purchaseTargetAmount(collateralDeposited, 0, 1, poolBalance);
     }
 
     function testPurchaseTargetAmount(uint32 connWeight, uint256 bal) public {
@@ -182,21 +160,11 @@ contract ZeroStateBonding is BondingCurveFacetTest {
 
         // 1. Should do nothing if tokens deposited is zero
         vm.prank(secondAccount);
-        bondingCurveFacet.purchaseTargetAmount(
-            0,
-            connectorWeight,
-            1,
-            poolBalance
-        );
+        bondingCurveFacet.purchaseTargetAmount(0, connectorWeight, 1, poolBalance);
 
         // 2. Special case if max weight is 100%
         vm.prank(thirdAccount);
-        uint256 result = bondingCurveFacet.purchaseTargetAmount(
-            tokensDeposited,
-            MAX_WEIGHT,
-            tokenIds,
-            poolBalance
-        );
+        uint256 result = bondingCurveFacet.purchaseTargetAmount(tokensDeposited, MAX_WEIGHT, tokenIds, poolBalance);
         assertEq(result, expected);
     }
 }

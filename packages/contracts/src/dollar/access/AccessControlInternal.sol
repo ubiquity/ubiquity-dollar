@@ -32,16 +32,8 @@ abstract contract AccessControlInternal {
      * @param account Account address to check
      * @return Whether role is assigned to account
      */
-    function _hasRole(
-        bytes32 role,
-        address account
-    ) internal view virtual returns (bool) {
-        return
-            LibAccessControl
-                .accessControlStorage()
-                .roles[role]
-                .members
-                .contains(account);
+    function _hasRole(bytes32 role, address account) internal view virtual returns (bool) {
+        return LibAccessControl.accessControlStorage().roles[role].members.contains(account);
     }
 
     /**
@@ -77,9 +69,7 @@ abstract contract AccessControlInternal {
      * @param role Role to query
      * @return Admin role for the provided role
      */
-    function _getRoleAdmin(
-        bytes32 role
-    ) internal view virtual returns (bytes32) {
+    function _getRoleAdmin(bytes32 role) internal view virtual returns (bytes32) {
         return LibAccessControl.accessControlStorage().roles[role].adminRole;
     }
 
@@ -89,10 +79,7 @@ abstract contract AccessControlInternal {
      * @param adminRole role for the provided role
      */
     function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
-        LibAccessControl
-            .accessControlStorage()
-            .roles[role]
-            .adminRole = adminRole;
+        LibAccessControl.accessControlStorage().roles[role].adminRole = adminRole;
     }
 
     /**
@@ -101,9 +88,7 @@ abstract contract AccessControlInternal {
      * @param account Recipient of role assignment
      */
     function _grantRole(bytes32 role, address account) internal virtual {
-        LibAccessControl.accessControlStorage().roles[role].members.add(
-            account
-        );
+        LibAccessControl.accessControlStorage().roles[role].members.add(account);
         emit LibAccessControl.RoleGranted(role, account, msg.sender);
     }
 
@@ -113,9 +98,7 @@ abstract contract AccessControlInternal {
      * @param account Account to revoke a role from
      */
     function _revokeRole(bytes32 role, address account) internal virtual {
-        LibAccessControl.accessControlStorage().roles[role].members.remove(
-            account
-        );
+        LibAccessControl.accessControlStorage().roles[role].members.remove(account);
         emit LibAccessControl.RoleRevoked(role, account, msg.sender);
     }
 

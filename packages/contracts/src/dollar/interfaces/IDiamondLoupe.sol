@@ -24,18 +24,13 @@ interface IDiamondLoupe {
      * @param _facet Facet address
      * @return facetFunctionSelectors_ Function selectors for a particular facet
      */
-    function facetFunctionSelectors(
-        address _facet
-    ) external view returns (bytes4[] memory facetFunctionSelectors_);
+    function facetFunctionSelectors(address _facet) external view returns (bytes4[] memory facetFunctionSelectors_);
 
     /**
      * @notice Returns all facet addresses used by a diamond
      * @return facetAddresses_ Facet addresses in a diamond
      */
-    function facetAddresses()
-        external
-        view
-        returns (address[] memory facetAddresses_);
+    function facetAddresses() external view returns (address[] memory facetAddresses_);
 
     /**
      * @notice Returns the facet that supports the given selector
@@ -43,7 +38,5 @@ interface IDiamondLoupe {
      * @param _functionSelector Function selector
      * @return facetAddress_ Facet address
      */
-    function facetAddress(
-        bytes4 _functionSelector
-    ) external view returns (address facetAddress_);
+    function facetAddress(bytes4 _functionSelector) external view returns (address facetAddress_);
 }

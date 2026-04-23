@@ -19,10 +19,7 @@ interface IUbiquityAmoMinter {
      * @param destinationAmo Address of the AMO to receive collateral
      * @param collateralAmount Amount of collateral to transfer
      */
-    function giveCollateralToAmo(
-        address destinationAmo,
-        uint256 collateralAmount
-    ) external;
+    function giveCollateralToAmo(address destinationAmo, uint256 collateralAmount) external;
 
     /**
      * @notice Receives collateral back from an AMO
@@ -53,20 +50,14 @@ interface IUbiquityAmoMinter {
      * @param destinationAmo Address of the AMO receiving the collateral
      * @param collateralAmount Amount of collateral transferred
      */
-    event CollateralGivenToAmo(
-        address destinationAmo,
-        uint256 collateralAmount
-    );
+    event CollateralGivenToAmo(address destinationAmo, uint256 collateralAmount);
 
     /**
      * @notice Emitted when collateral is returned from an AMO
      * @param sourceAmo Address of the AMO returning the collateral
      * @param collateralAmount Amount of collateral returned
      */
-    event CollateralReceivedFromAmo(
-        address sourceAmo,
-        uint256 collateralAmount
-    );
+    event CollateralReceivedFromAmo(address sourceAmo, uint256 collateralAmount);
 
     /**
      * @notice Emitted when the collateral borrow cap is updated

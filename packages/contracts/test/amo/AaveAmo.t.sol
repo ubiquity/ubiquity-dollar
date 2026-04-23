@@ -15,17 +15,12 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract AaveAmoTest is DiamondTestSetup {
     UbiquityAmoMinter amoMinter;
     AaveAmo aaveAmo;
-    address rewardsController =
-        address(0x4DA5c4da71C5a167171cC839487536d86e083483); // Aave Rewards Controller
-    address collateralOwner =
-        address(0xC959483DBa39aa9E78757139af0e9a2EDEb3f42D); // Aave Sepolia Faucet
-    MockERC20 collateralToken =
-        MockERC20(0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357); // DAI-TestnetMintableERC20-Aave Sepolia
-    MockChainLinkFeed collateralTokenPriceFeed =
-        MockChainLinkFeed(0x9aF11c35c5d3Ae182C0050438972aac4376f9516); // DAI-TestnetPriceAggregator-Aave Sepolia
+    address rewardsController = address(0x4DA5c4da71C5a167171cC839487536d86e083483); // Aave Rewards Controller
+    address collateralOwner = address(0xC959483DBa39aa9E78757139af0e9a2EDEb3f42D); // Aave Sepolia Faucet
+    MockERC20 collateralToken = MockERC20(0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357); // DAI-TestnetMintableERC20-Aave Sepolia
+    MockChainLinkFeed collateralTokenPriceFeed = MockChainLinkFeed(0x9aF11c35c5d3Ae182C0050438972aac4376f9516); // DAI-TestnetPriceAggregator-Aave Sepolia
     IAToken aToken = IAToken(0x29598b72eb5CeBd806C5dCD549490FdA35B13cD8); // DAI-AToken-Aave Sepolia
-    IVariableDebtToken vToken =
-        IVariableDebtToken(0x22675C506A8FC26447aFFfa33640f6af5d4D4cF0); // DAI-VariableDebtToken-Aave Sepolia
+    IVariableDebtToken vToken = IVariableDebtToken(0x22675C506A8FC26447aFFfa33640f6af5d4D4cF0); // DAI-VariableDebtToken-Aave Sepolia
 
     // Constants for the test
     address constant newAmoMinterAddress = address(5); // mock new Amo minter address
@@ -33,8 +28,7 @@ contract AaveAmoTest is DiamondTestSetup {
     uint256 constant interestRateMode = 2; // Variable interest rate mode in Aave
 
     // Mocking the Aave Pool
-    IPool private constant aavePool =
-        IPool(0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951); // Aave V3 Sepolia Pool
+    IPool private constant aavePool = IPool(0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951); // Aave V3 Sepolia Pool
     address aavePoolConfiguration = 0x7Ee60D184C24Ef7AfC1Ec7Be59A0f448A0abd138;
     address aavePoolAdmin = 0xfA0e305E0f46AB04f00ae6b5f4560d61a2183E00;
 
@@ -43,20 +37,10 @@ contract AaveAmoTest is DiamondTestSetup {
         super.setUp();
 
         // Deploy UbiquityAmoMinter contract
-        amoMinter = new UbiquityAmoMinter(
-            owner,
-            address(collateralToken),
-            0,
-            address(ubiquityPoolFacet)
-        );
+        amoMinter = new UbiquityAmoMinter(owner, address(collateralToken), 0, address(ubiquityPoolFacet));
 
         // Deploy AaveAmo contract
-        aaveAmo = new AaveAmo(
-            owner,
-            address(amoMinter),
-            address(aavePool),
-            address(rewardsController)
-        );
+        aaveAmo = new AaveAmo(owner, address(amoMinter), address(aavePool), address(rewardsController));
 
         // Enable AaveAmo as a valid Amo
         vm.prank(owner);
@@ -66,11 +50,7 @@ contract AaveAmoTest is DiamondTestSetup {
 
         // Add collateral token to the pool
         uint256 poolCeiling = 500_000e18;
-        ubiquityPoolFacet.addCollateralToken(
-            address(collateralToken),
-            address(collateralTokenPriceFeed),
-            poolCeiling
-        );
+        ubiquityPoolFacet.addCollateralToken(address(collateralToken), address(collateralTokenPriceFeed), poolCeiling);
 
         // Enable collateral and register Amo Minter
         ubiquityPoolFacet.toggleCollateral(0);
@@ -80,12 +60,8 @@ contract AaveAmoTest is DiamondTestSetup {
 
         // disable aave pool supply cap
         vm.prank(aavePoolAdmin);
-        (bool success, ) = aavePoolConfiguration.call(
-            abi.encodeWithSignature(
-                "setSupplyCap(address,uint256)",
-                address(collateralToken),
-                0
-            )
+        (bool success,) = aavePoolConfiguration.call(
+            abi.encodeWithSignature("setSupplyCap(address,uint256)", address(collateralToken), 0)
         );
         require(success, "Failed to set supply cap");
     }
@@ -109,10 +85,7 @@ contract AaveAmoTest is DiamondTestSetup {
 
     function testAaveAmoSetup_ShouldSet_aaveRewardsController() public {
         // Verify the Aave rewards controller was set correctly
-        assertEq(
-            address(aaveAmo.aaveRewardsController()),
-            address(rewardsController)
-        );
+        assertEq(address(aaveAmo.aaveRewardsController()), address(rewardsController));
     }
 
     function testConstructor_ShouldRevertWhenOwnerIsZeroAddress() public {
@@ -148,9 +121,7 @@ contract AaveAmoTest is DiamondTestSetup {
         );
     }
 
-    function testConstructor_ShouldRevertWhenAaveRewardsControllerIsZeroAddress()
-        public
-    {
+    function testConstructor_ShouldRevertWhenAaveRewardsControllerIsZeroAddress() public {
         // Test with zero address for Aave
         vm.expectRevert("Aave rewards controller address cannot be zero");
         new AaveAmo(
@@ -175,11 +146,7 @@ contract AaveAmoTest is DiamondTestSetup {
         aaveAmo.aaveDepositCollateral(address(collateralToken), depositAmount);
 
         // Check if the deposit was successful
-        assertApproxEqAbs(
-            aToken.balanceOf(address(aaveAmo)),
-            depositAmount,
-            1e2
-        ); // little error this is due to interest rate
+        assertApproxEqAbs(aToken.balanceOf(address(aaveAmo)), depositAmount, 1e2); // little error this is due to interest rate
         assertEq(collateralToken.balanceOf(address(aaveAmo)), 0);
     }
 
@@ -195,21 +162,14 @@ contract AaveAmoTest is DiamondTestSetup {
         aaveAmo.aaveDepositCollateral(address(collateralToken), depositAmount);
 
         // Check balances before withdrawal
-        assertApproxEqAbs(
-            aToken.balanceOf(address(aaveAmo)),
-            depositAmount,
-            1e2
-        ); // little error this is due to interest rate
+        assertApproxEqAbs(aToken.balanceOf(address(aaveAmo)), depositAmount, 1e2); // little error this is due to interest rate
         assertEq(collateralToken.balanceOf(address(aaveAmo)), 0);
 
         uint256 withdrawAmount = aToken.balanceOf(address(aaveAmo));
 
         // Owner withdraws collateral from Aave Pool
         vm.prank(owner);
-        aaveAmo.aaveWithdrawCollateral(
-            address(collateralToken),
-            withdrawAmount
-        );
+        aaveAmo.aaveWithdrawCollateral(address(collateralToken), withdrawAmount);
         assertEq(aToken.balanceOf(address(aaveAmo)), 0);
         assertEq(collateralToken.balanceOf(address(aaveAmo)), withdrawAmount);
     }
@@ -229,10 +189,7 @@ contract AaveAmoTest is DiamondTestSetup {
         // Attempting to withdraw as a non-owner should revert
         vm.prank(nonAmo);
         vm.expectRevert("Ownable: caller is not the owner");
-        aaveAmo.aaveWithdrawCollateral(
-            address(collateralToken),
-            withdrawAmount
-        );
+        aaveAmo.aaveWithdrawCollateral(address(collateralToken), withdrawAmount);
     }
 
     /* ========== Aave Amo MINTER TESTS ========== */
@@ -249,10 +206,7 @@ contract AaveAmoTest is DiamondTestSetup {
         aaveAmo.returnCollateralToMinter(returnAmount);
 
         // Verify pool received collateral
-        assertEq(
-            collateralToken.balanceOf(address(ubiquityPoolFacet)),
-            returnAmount
-        );
+        assertEq(collateralToken.balanceOf(address(ubiquityPoolFacet)), returnAmount);
     }
 
     function testReturnCollateralToMinter_ShouldRevertIfNotOwner() public {
@@ -295,9 +249,7 @@ contract AaveAmoTest is DiamondTestSetup {
 
         // Specify assets to claim rewards for
         address[] memory assets = new address[](1);
-        assets[0] = aavePool
-            .getReserveData(address(collateralToken))
-            .aTokenAddress;
+        assets[0] = aavePool.getReserveData(address(collateralToken)).aTokenAddress;
 
         // Claim rewards from Aave
         vm.prank(owner);
@@ -337,11 +289,8 @@ contract AaveAmoTest is DiamondTestSetup {
         // Example of executing a simple call
         address[] memory assets = new address[](0);
         vm.prank(owner);
-        (bool success, ) = aaveAmo.execute(
-            address(aaveAmo), 
-            0, 
-            abi.encodeWithSignature("claimAllRewards(address[])", assets)
-        );
+        (bool success,) =
+            aaveAmo.execute(address(aaveAmo), 0, abi.encodeWithSignature("claimAllRewards(address[])", assets));
 
         // Verify the call executed successfully
         assertTrue(success);

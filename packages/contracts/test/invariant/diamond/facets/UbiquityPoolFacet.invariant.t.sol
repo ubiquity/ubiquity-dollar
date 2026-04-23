@@ -47,23 +47,13 @@ contract UbiquityPoolFacetInvariantTest is DiamondTestSetup {
         ethUsdPriceFeed = new MockChainLinkFeed();
         stableUsdPriceFeed = new MockChainLinkFeed();
 
-        curveDollarPlainPool = new MockCurveStableSwapNG(
-            address(stableToken),
-            address(dollarToken)
-        );
+        curveDollarPlainPool = new MockCurveStableSwapNG(address(stableToken), address(dollarToken));
 
-        curveGovernanceEthPool = new MockCurveTwocryptoOptimized(
-            address(governanceToken),
-            address(wethToken)
-        );
+        curveGovernanceEthPool = new MockCurveTwocryptoOptimized(address(governanceToken), address(wethToken));
 
         // add collateral token to the pool
         uint256 poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
-        ubiquityPoolFacet.addCollateralToken(
-            address(collateralToken),
-            address(collateralTokenPriceFeed),
-            poolCeiling
-        );
+        ubiquityPoolFacet.addCollateralToken(address(collateralToken), address(collateralTokenPriceFeed), poolCeiling);
 
         // set collateral price initial feed mock params
         collateralTokenPriceFeed.updateMockParams(
@@ -131,14 +121,10 @@ contract UbiquityPoolFacetInvariantTest is DiamondTestSetup {
         // set collateral ratio to 100%
         ubiquityPoolFacet.setCollateralRatio(1_000_000);
         // set Governance-ETH pool
-        ubiquityPoolFacet.setGovernanceEthPoolAddress(
-            address(curveGovernanceEthPool)
-        );
+        ubiquityPoolFacet.setGovernanceEthPoolAddress(address(curveGovernanceEthPool));
 
         // set Curve plain pool in manager facet
-        managerFacet.setStableSwapPlainPoolAddress(
-            address(curveDollarPlainPool)
-        );
+        managerFacet.setStableSwapPlainPoolAddress(address(curveDollarPlainPool));
 
         // stop being admin
         vm.stopPrank();
@@ -175,15 +161,9 @@ contract UbiquityPoolFacetInvariantTest is DiamondTestSetup {
      * If the invariant is violated, it indicates that more Ubiquity Dollars have been minted than the available collateral can support.
      */
     function invariant_CannotMintMoreDollarsThanCollateral() public {
-        (
-            uint256 totalDollarSupplyInUsd,
-            uint256 collateralUsdBalance
-        ) = getDollarSupplyAndCollateralBalance();
+        (uint256 totalDollarSupplyInUsd, uint256 collateralUsdBalance) = getDollarSupplyAndCollateralBalance();
 
-        assertTrue(
-            totalDollarSupplyInUsd <= collateralUsdBalance,
-            "Minted dollars exceed collateral value"
-        );
+        assertTrue(totalDollarSupplyInUsd <= collateralUsdBalance, "Minted dollars exceed collateral value");
     }
 
     /**
@@ -193,15 +173,9 @@ contract UbiquityPoolFacetInvariantTest is DiamondTestSetup {
      * If the invariant is violated, it indicates that more collateral has been redeemed than the Ubiquity Dollars can support.
      */
     function invariant_CannotRedeemMoreCollateralThanDollarValue() public {
-        (
-            uint256 totalDollarSupplyInUsd,
-            uint256 collateralUsdBalance
-        ) = getDollarSupplyAndCollateralBalance();
+        (uint256 totalDollarSupplyInUsd, uint256 collateralUsdBalance) = getDollarSupplyAndCollateralBalance();
 
-        assertTrue(
-            collateralUsdBalance >= totalDollarSupplyInUsd,
-            "Redeemed collateral exceeds provided Dollar tokens"
-        );
+        assertTrue(collateralUsdBalance >= totalDollarSupplyInUsd, "Redeemed collateral exceeds provided Dollar tokens");
     }
 
     /**
@@ -215,9 +189,7 @@ contract UbiquityPoolFacetInvariantTest is DiamondTestSetup {
         view
         returns (uint256 totalDollarSupplyInUsd, uint256 collateralUsdBalance)
     {
-        uint256 totalDollarSupply = IERC20Ubiquity(
-            managerFacet.dollarTokenAddress()
-        ).totalSupply();
+        uint256 totalDollarSupply = IERC20Ubiquity(managerFacet.dollarTokenAddress()).totalSupply();
 
         collateralUsdBalance = ubiquityPoolFacet.collateralUsdBalance();
 

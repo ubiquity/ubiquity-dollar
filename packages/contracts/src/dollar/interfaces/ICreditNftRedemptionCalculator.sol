@@ -29,7 +29,5 @@ interface ICreditNftRedemptionCalculator {
      * @param dollarsToBurn Amount of Dollars to burn
      * @return Amount of Credit NFTs to mint
      */
-    function getCreditNftAmount(
-        uint256 dollarsToBurn
-    ) external view returns (uint256);
+    function getCreditNftAmount(uint256 dollarsToBurn) external view returns (uint256);
 }

@@ -31,11 +31,7 @@ interface IStableSwap3Pool {
      * @param dx The amount of `i` being sent to the pool
      * @return dy Returns the quote / price as `dy` given `dx`
      */
-    function get_dy(
-        int128 i,
-        int128 j,
-        uint256 dx
-    ) external view returns (uint256 dy);
+    function get_dy(int128 i, int128 j, uint256 dx) external view returns (uint256 dy);
 
     /**
      * @notice Performs an exchange between two tokens. Index values can be found
@@ -53,10 +49,7 @@ interface IStableSwap3Pool {
      * Amounts correspond to the tokens at the same index locations within `coins`.
      * @param min_mint_amount Minimum amount of LP tokens to mint from the deposit
      */
-    function add_liquidity(
-        uint256[3] calldata amounts,
-        uint256 min_mint_amount
-    ) external payable;
+    function add_liquidity(uint256[3] calldata amounts, uint256 min_mint_amount) external payable;
 
     /**
      * @notice Withdraw coins from the pool
@@ -64,10 +57,7 @@ interface IStableSwap3Pool {
      * @param _amount Quantity of LP tokens to burn in the withdrawal
      * @param amounts Minimum amounts of underlying coins to receive
      */
-    function remove_liquidity(
-        uint256 _amount,
-        uint256[3] calldata amounts
-    ) external;
+    function remove_liquidity(uint256 _amount, uint256[3] calldata amounts) external;
 
     /**
      * @notice Withdraw a single coin from the pool
@@ -75,11 +65,7 @@ interface IStableSwap3Pool {
      * @param i Index value of the coin to withdraw
      * @param min_amount Minimum amount of coin to receive
      */
-    function remove_liquidity_one_coin(
-        uint256 _token_amount,
-        int128 i,
-        uint256 min_amount
-    ) external;
+    function remove_liquidity_one_coin(uint256 _token_amount, int128 i, uint256 min_amount) external;
 
     /**
      * @notice Calculate addition or reduction in token supply from a deposit or withdrawal
@@ -88,18 +74,12 @@ interface IStableSwap3Pool {
      * @param amounts Amount of each coin being deposited
      * @param deposit set True for deposits, False for withdrawals
      */
-    function calc_token_amount(
-        uint256[3] calldata amounts,
-        bool deposit
-    ) external view returns (uint256);
+    function calc_token_amount(uint256[3] calldata amounts, bool deposit) external view returns (uint256);
 
     /**
      * @notice Calculate the amount received when withdrawing a single coin
      * @param _token_amount Amount of LP tokens to burn in the withdrawal
      * @param i Index value of the coin to withdraw
      */
-    function calc_withdraw_one_coin(
-        uint256 _token_amount,
-        int128 i
-    ) external view returns (uint256);
+    function calc_withdraw_one_coin(uint256 _token_amount, int128 i) external view returns (uint256);
 }

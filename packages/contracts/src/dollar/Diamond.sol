@@ -27,16 +27,9 @@ contract Diamond {
      * @param _args Init args
      * @param _diamondCutFacets Facets with selectors to add
      */
-    constructor(
-        DiamondArgs memory _args,
-        IDiamondCut.FacetCut[] memory _diamondCutFacets
-    ) {
+    constructor(DiamondArgs memory _args, IDiamondCut.FacetCut[] memory _diamondCutFacets) {
         LibDiamond.setContractOwner(_args.owner);
-        LibDiamond.diamondCut(
-            _diamondCutFacets,
-            _args.init,
-            _args.initCalldata
-        );
+        LibDiamond.diamondCut(_diamondCutFacets, _args.init, _args.initCalldata);
     }
 
     /**

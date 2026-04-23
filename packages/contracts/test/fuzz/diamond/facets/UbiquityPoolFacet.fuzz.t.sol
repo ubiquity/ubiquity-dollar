@@ -44,23 +44,13 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         ethUsdPriceFeed = new MockChainLinkFeed();
         stableUsdPriceFeed = new MockChainLinkFeed();
 
-        curveDollarPlainPool = new MockCurveStableSwapNG(
-            address(stableToken),
-            address(dollarToken)
-        );
+        curveDollarPlainPool = new MockCurveStableSwapNG(address(stableToken), address(dollarToken));
 
-        curveGovernanceEthPool = new MockCurveTwocryptoOptimized(
-            address(governanceToken),
-            address(wethToken)
-        );
+        curveGovernanceEthPool = new MockCurveTwocryptoOptimized(address(governanceToken), address(wethToken));
 
         // add collateral token to the pool
         uint256 poolCeiling = 50_000e18; // max 50_000 of collateral tokens is allowed
-        ubiquityPoolFacet.addCollateralToken(
-            address(collateralToken),
-            address(collateralTokenPriceFeed),
-            poolCeiling
-        );
+        ubiquityPoolFacet.addCollateralToken(address(collateralToken), address(collateralTokenPriceFeed), poolCeiling);
 
         // set collateral price initial feed mock params
         collateralTokenPriceFeed.updateMockParams(
@@ -126,14 +116,10 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         // set collateral ratio to 100%
         ubiquityPoolFacet.setCollateralRatio(1_000_000);
         // set Governance-ETH pool
-        ubiquityPoolFacet.setGovernanceEthPoolAddress(
-            address(curveGovernanceEthPool)
-        );
+        ubiquityPoolFacet.setGovernanceEthPoolAddress(address(curveGovernanceEthPool));
 
         // set Curve plain pool in manager facet
-        managerFacet.setStableSwapPlainPoolAddress(
-            address(curveDollarPlainPool)
-        );
+        managerFacet.setStableSwapPlainPoolAddress(address(curveDollarPlainPool));
 
         // stop being admin
         vm.stopPrank();
@@ -151,9 +137,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
     // Dollar Mint fuzz tests
     //========================
 
-    function testMintDollar_FuzzCollateralRatio(
-        uint256 newCollateralRatio
-    ) public {
+    function testMintDollar_FuzzCollateralRatio(uint256 newCollateralRatio) public {
         uint256 maxCollateralRatio = 1_000_000; // 100%
         vm.assume(newCollateralRatio <= maxCollateralRatio);
         // fuzz collateral ratio
@@ -172,37 +156,29 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         // dollars and governance tokens should be provided to meet ratio requirements
         uint256 maxCollateralIn;
         uint256 totalCollateralMaxAmount = 100e18; // total collateral from both should be enough to mint Dollar tokens
-        if (newCollateralRatio == 0) maxCollateralIn = 0;
-        else
-            maxCollateralIn = totalCollateralMaxAmount
-                .fromUInt()
-                .mul(newCollateralRatio.fromUInt())
-                .div(maxCollateralRatio.fromUInt())
-                .toUInt();
+        if (newCollateralRatio == 0) {
+            maxCollateralIn = 0;
+        } else {
+            maxCollateralIn = totalCollateralMaxAmount.fromUInt().mul(newCollateralRatio.fromUInt())
+                .div(maxCollateralRatio.fromUInt()).toUInt();
+        }
         uint256 maxGovernanceIn = totalCollateralMaxAmount - maxCollateralIn;
 
         vm.prank(user);
-        (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        ) = ubiquityPoolFacet.mintDollar(
-                0, // collateral index
-                100e18, // Dollar amount
-                99e18, // min amount of Dollars to mint
-                maxCollateralIn, // max collateral to send
-                maxGovernanceIn, // max Governance tokens to send
-                false // fractional mint allowed
-            );
+        (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded) = ubiquityPoolFacet.mintDollar(
+            0, // collateral index
+            100e18, // Dollar amount
+            99e18, // min amount of Dollars to mint
+            maxCollateralIn, // max collateral to send
+            maxGovernanceIn, // max Governance tokens to send
+            false // fractional mint allowed
+        );
 
         assertEq(totalDollarMint, 99e18);
 
         // balances after
         assertEq(dollarToken.balanceOf(user), 99e18);
-        assertEq(
-            collateralToken.balanceOf(address(ubiquityPoolFacet)),
-            collateralNeeded
-        );
+        assertEq(collateralToken.balanceOf(address(ubiquityPoolFacet)), collateralNeeded);
         assertEq(governanceToken.balanceOf(user), 2000e18 - governanceNeeded);
         assertEq(collateralToken.balanceOf(user), 2000e18 - collateralNeeded);
     }
@@ -211,9 +187,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
      * @notice Fuzz Dollar minting scenario for Dollar price below threshold
      * @param dollarPriceUsd Ubiquity Dollar token price from Curve pool (Stable coin/Ubiquity Dollar)
      */
-    function testMintDollar_FuzzDollarPriceUsdTooLow(
-        uint256 dollarPriceUsd
-    ) public {
+    function testMintDollar_FuzzDollarPriceUsdTooLow(uint256 dollarPriceUsd) public {
         // Stable coin/USD ChainLink feed is mocked to $1.00
         // Mint price threshold set up to $1.01 == 1010000
         // Fuzz Dollar price in Curve plain pool (1 Stable coin / x Dollar)
@@ -238,9 +212,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
      *         the mint with `Dollar slippage` error.
      * @param dollarOutMin Minimal Ubiquity Dollar amount to mint, including the minting fee.
      */
-    function testMintDollar_FuzzDollarAmountSlippage(
-        uint256 dollarOutMin
-    ) public {
+    function testMintDollar_FuzzDollarAmountSlippage(uint256 dollarOutMin) public {
         vm.assume(dollarOutMin > 99e18);
         vm.prank(admin);
         curveDollarPlainPool.updateMockParams(1.01e18);
@@ -256,9 +228,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         );
     }
 
-    function testMintDollar_FuzzCollateralAmountSlippage(
-        uint256 maxCollateralIn
-    ) public {
+    function testMintDollar_FuzzCollateralAmountSlippage(uint256 maxCollateralIn) public {
         vm.assume(maxCollateralIn < 100e18);
         vm.prank(admin);
         curveDollarPlainPool.updateMockParams(1.01e18);
@@ -274,9 +244,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         );
     }
 
-    function testMintDollar_FuzzGovernanceAmountSlippage(
-        uint256 maxGovernanceIn
-    ) public {
+    function testMintDollar_FuzzGovernanceAmountSlippage(uint256 maxGovernanceIn) public {
         vm.assume(maxGovernanceIn < 1e18);
         vm.prank(admin);
         curveDollarPlainPool.updateMockParams(1.01e18);
@@ -297,9 +265,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         );
     }
 
-    function testMintDollar_FuzzCorrectDollarAmountMinted(
-        uint256 tokenAmountToMint
-    ) public {
+    function testMintDollar_FuzzCorrectDollarAmountMinted(uint256 tokenAmountToMint) public {
         vm.assume(tokenAmountToMint < 50_000e18); // collateral pool ceiling also set to 50k tokens
         vm.startPrank(admin);
         curveDollarPlainPool.updateMockParams(1.01e18);
@@ -309,13 +275,10 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         ubiquityPoolFacet.setCollateralRatio(0);
         deal(address(governanceToken), user, 50000e18);
         vm.stopPrank();
-        uint256 minDollarsToMint = tokenAmountToMint
-            .fromUInt()
-            .mul(uint(99).fromUInt())
-            .div(uint(100).fromUInt())
-            .toUInt(); // dollars to mint (1% fee included)
+        uint256 minDollarsToMint =
+            tokenAmountToMint.fromUInt().mul(uint256(99).fromUInt()).div(uint256(100).fromUInt()).toUInt(); // dollars to mint (1% fee included)
         vm.prank(user);
-        (uint256 dollarsMinted, , ) = ubiquityPoolFacet.mintDollar(
+        (uint256 dollarsMinted,,) = ubiquityPoolFacet.mintDollar(
             0, // collateral index
             tokenAmountToMint, // Dollar amount to mint
             minDollarsToMint,
@@ -330,9 +293,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
     // Dollar Redeem fuzz tests
     //========================
 
-    function testRedeemDollar_FuzzRedemptionDelayBlocks(
-        uint8 delayBlocks
-    ) public {
+    function testRedeemDollar_FuzzRedemptionDelayBlocks(uint8 delayBlocks) public {
         vm.assume(delayBlocks > 0);
         vm.startPrank(admin);
         curveDollarPlainPool.updateMockParams(0.99e18);
@@ -357,9 +318,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
      * @notice Fuzz Dollar redeeming scenario for Dollar price above threshold
      * @param dollarPriceUsd Ubiquity Dollar token price from Curve pool (Stable coin/Ubiquity Dollar)
      */
-    function testRedeemDollar_FuzzDollarPriceUsdTooHigh(
-        uint256 dollarPriceUsd
-    ) public {
+    function testRedeemDollar_FuzzDollarPriceUsdTooHigh(uint256 dollarPriceUsd) public {
         // Stable coin/USD ChainLink feed is mocked to $1.00
         // Redeem price threshold set up to $0.99 == 990_000
         // Fuzz Dollar price in Curve plain pool (1 Stable coin / x Dollar)
@@ -381,9 +340,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
      * @notice Fuzz Dollar redeeming scenario for insufficient collateral available in pool.
      * @param collateralOut Minimal collateral amount to redeem.
      */
-    function testRedeemDollar_FuzzInsufficientCollateralAvailable(
-        uint256 collateralOut
-    ) public {
+    function testRedeemDollar_FuzzInsufficientCollateralAvailable(uint256 collateralOut) public {
         vm.assume(collateralOut > 1e18);
         vm.startPrank(admin);
         curveDollarPlainPool.updateMockParams(0.99e18);
@@ -404,9 +361,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
      * @notice Fuzz Dollar redeeming scenario for collateral slippage.
      * @param collateralOut Minimal collateral amount to redeem.
      */
-    function testRedeemDollar_FuzzCollateralSlippage(
-        uint256 collateralOut
-    ) public {
+    function testRedeemDollar_FuzzCollateralSlippage(uint256 collateralOut) public {
         vm.assume(collateralOut >= 1e18);
         vm.startPrank(admin);
         curveDollarPlainPool.updateMockParams(0.99e18);
@@ -427,9 +382,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
      * @notice Fuzz Dollar redeeming scenario for governance token slippage.
      * @param governanceOut Minimal governance token amount to redeem.
      */
-    function testRedeemDollar_FuzzGovernanceAmountSlippage(
-        uint256 governanceOut
-    ) public {
+    function testRedeemDollar_FuzzGovernanceAmountSlippage(uint256 governanceOut) public {
         vm.assume(governanceOut >= 1e18);
         vm.startPrank(admin);
         curveDollarPlainPool.updateMockParams(0.99e18);
@@ -446,9 +399,7 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         );
     }
 
-    function testMintDollar_FuzzCorrectDollarAmountRedeemed(
-        uint256 tokenAmountToRedeem
-    ) public {
+    function testMintDollar_FuzzCorrectDollarAmountRedeemed(uint256 tokenAmountToRedeem) public {
         vm.assume(tokenAmountToRedeem < 50_000e18);
         vm.startPrank(admin);
         curveDollarPlainPool.updateMockParams(0.99e18);
@@ -466,9 +417,6 @@ contract UbiquityPoolFacetFuzzTest is DiamondTestSetup {
         vm.roll(3); // redemption delay set to 2 blocks
         ubiquityPoolFacet.collectRedemption(0);
         // balances after
-        assertEq(
-            dollarToken.balanceOf(user),
-            dollarTokenBalanceBeforeRedeem - tokenAmountToRedeem
-        );
+        assertEq(dollarToken.balanceOf(user), dollarTokenBalanceBeforeRedeem - tokenAmountToRedeem);
     }
 }

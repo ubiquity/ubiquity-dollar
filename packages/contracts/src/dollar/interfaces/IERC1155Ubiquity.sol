@@ -18,12 +18,7 @@ interface IERC1155Ubiquity is IERC1155 {
      * @param amount Tokens amount to mint
      * @param data Arbitrary data
      */
-    function mint(
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) external;
+    function mint(address to, uint256 id, uint256 amount, bytes memory data) external;
 
     /**
      * @notice Mints multiple token types for `to` address
@@ -32,12 +27,7 @@ interface IERC1155Ubiquity is IERC1155 {
      * @param amounts Array of token amounts
      * @param data Arbitrary data
      */
-    function mintBatch(
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) external;
+    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) external;
 
     /**
      * @notice Destroys `amount` tokens of token type `id` from `account`
@@ -60,11 +50,7 @@ interface IERC1155Ubiquity is IERC1155 {
      *
      * - `ids` and `amounts` must have the same length.
      */
-    function burnBatch(
-        address account,
-        uint256[] memory ids,
-        uint256[] memory values
-    ) external;
+    function burnBatch(address account, uint256[] memory ids, uint256[] memory values) external;
 
     /// @notice Pauses all token transfers
     function pause() external;
@@ -89,7 +75,5 @@ interface IERC1155Ubiquity is IERC1155 {
      * @param holder Account to check tokens for
      * @return Array of tokens which `holder` has
      */
-    function holderTokens(
-        address holder
-    ) external view returns (uint256[] memory);
+    function holderTokens(address holder) external view returns (uint256[] memory);
 }

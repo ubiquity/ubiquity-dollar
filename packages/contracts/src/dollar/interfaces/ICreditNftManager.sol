@@ -18,10 +18,7 @@ interface ICreditNftManager is IERC1155Receiver {
      * @param amount Amount of Credit NFTs to burn
      * @return Amount of unredeemed Credit NFTs
      */
-    function redeemCreditNft(
-        uint256 id,
-        uint256 amount
-    ) external returns (uint);
+    function redeemCreditNft(uint256 id, uint256 amount) external returns (uint256);
 
     /**
      * @notice Burns Dollars in exchange for Credit NFTs
@@ -29,7 +26,5 @@ interface ICreditNftManager is IERC1155Receiver {
      * @param amount Amount of Dollars to exchange for Credit NFTs
      * @return Expiry block number when Credit NFTs can no longer be redeemed for Dollars
      */
-    function exchangeDollarsForCreditNft(
-        uint256 amount
-    ) external returns (uint);
+    function exchangeDollarsForCreditNft(uint256 amount) external returns (uint256);
 }

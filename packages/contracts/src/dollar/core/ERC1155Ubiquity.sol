@@ -2,8 +2,12 @@
 pragma solidity ^0.8.19;
 
 import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
-import {ERC1155BurnableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
-import {ERC1155PausableUpgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
+import {
+    ERC1155BurnableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155BurnableUpgradeable.sol";
+import {
+    ERC1155PausableUpgradeable
+} from "@openzeppelin/contracts-upgradeable/token/ERC1155/extensions/ERC1155PausableUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import {Initializable} from "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "../interfaces/IAccessControl.sol";
@@ -39,37 +43,25 @@ abstract contract ERC1155Ubiquity is
 
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyMinter() virtual {
-        require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
-            "ERC1155Ubiquity: not minter"
-        );
+        require(accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()), "ERC1155Ubiquity: not minter");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyBurner() virtual {
-        require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
-            "ERC1155Ubiquity: not burner"
-        );
+        require(accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()), "ERC1155Ubiquity: not burner");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Pauser" role
     modifier onlyPauser() virtual {
-        require(
-            accessControl.hasRole(PAUSER_ROLE, _msgSender()),
-            "ERC1155Ubiquity: not pauser"
-        );
+        require(accessControl.hasRole(PAUSER_ROLE, _msgSender()), "ERC1155Ubiquity: not pauser");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Admin" role
     modifier onlyAdmin() {
-        require(
-            accessControl.hasRole(DEFAULT_ADMIN_ROLE, _msgSender()),
-            "ERC20Ubiquity: not admin"
-        );
+        require(accessControl.hasRole(DEFAULT_ADMIN_ROLE, _msgSender()), "ERC20Ubiquity: not admin");
         _;
     }
 
@@ -81,10 +73,7 @@ abstract contract ERC1155Ubiquity is
     /// @notice Initializes this contract with all base(parent) contracts
     /// @param _manager Address of the manager of the contract
     /// @param _uri Base URI
-    function __ERC1155Ubiquity_init(
-        address _manager,
-        string memory _uri
-    ) internal onlyInitializing {
+    function __ERC1155Ubiquity_init(address _manager, string memory _uri) internal onlyInitializing {
         // init base contracts
         __ERC1155_init(_uri);
         __ERC1155Burnable_init();
@@ -96,9 +85,7 @@ abstract contract ERC1155Ubiquity is
 
     /// @notice Initializes the current contract
     /// @param _manager Address of the manager of the contract
-    function __ERC1155Ubiquity_init_unchained(
-        address _manager
-    ) internal onlyInitializing {
+    function __ERC1155Ubiquity_init_unchained(address _manager) internal onlyInitializing {
         accessControl = IAccessControl(_manager);
     }
 
@@ -133,12 +120,7 @@ abstract contract ERC1155Ubiquity is
      * @param amount Tokens amount to mint
      * @param data Arbitrary data
      */
-    function mint(
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public virtual onlyMinter {
+    function mint(address to, uint256 id, uint256 amount, bytes memory data) public virtual onlyMinter {
         _mint(to, id, amount, data);
         totalSupply += amount;
         holderBalances[to].add(id);
@@ -151,12 +133,12 @@ abstract contract ERC1155Ubiquity is
      * @param amounts Array of token amounts
      * @param data Arbitrary data
      */
-    function mintBatch(
-        address to,
-        uint256[] memory ids,
-        uint256[] memory amounts,
-        bytes memory data
-    ) public virtual onlyMinter whenNotPaused {
+    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+        public
+        virtual
+        onlyMinter
+        whenNotPaused
+    {
         _mintBatch(to, ids, amounts, data);
         uint256 localTotalSupply = totalSupply;
         for (uint256 i = 0; i < ids.length; ++i) {
@@ -189,13 +171,11 @@ abstract contract ERC1155Ubiquity is
      * - If `to` refers to a smart contract, it must implement `IERC1155Receiver-onERC1155Received` and return the
      * acceptance magic value.
      */
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) public virtual override {
+    function safeTransferFrom(address from, address to, uint256 id, uint256 amount, bytes memory data)
+        public
+        virtual
+        override
+    {
         super.safeTransferFrom(from, to, id, amount, data);
         holderBalances[to].add(id);
     }
@@ -227,9 +207,7 @@ abstract contract ERC1155Ubiquity is
      * @param holder Account to check tokens for
      * @return Array of tokens which `holder` has
      */
-    function holderTokens(
-        address holder
-    ) public view returns (uint256[] memory) {
+    function holderTokens(address holder) public view returns (uint256[] memory) {
         return holderBalances[holder];
     }
 
@@ -243,11 +221,7 @@ abstract contract ERC1155Ubiquity is
      * - `account` cannot be the zero address.
      * - `account` must have at least `amount` tokens of token type `id`.
      */
-    function _burn(
-        address account,
-        uint256 id,
-        uint256 amount
-    ) internal virtual override whenNotPaused {
+    function _burn(address account, uint256 id, uint256 amount) internal virtual override whenNotPaused {
         super._burn(account, id, amount);
         totalSupply -= amount;
     }
@@ -261,11 +235,12 @@ abstract contract ERC1155Ubiquity is
      *
      * - `ids` and `amounts` must have the same length.
      */
-    function _burnBatch(
-        address account,
-        uint256[] memory ids,
-        uint256[] memory amounts
-    ) internal virtual override whenNotPaused {
+    function _burnBatch(address account, uint256[] memory ids, uint256[] memory amounts)
+        internal
+        virtual
+        override
+        whenNotPaused
+    {
         super._burnBatch(account, ids, amounts);
         for (uint256 i = 0; i < ids.length; ++i) {
             totalSupply -= amounts[i];
@@ -297,19 +272,13 @@ abstract contract ERC1155Ubiquity is
         uint256[] memory ids,
         uint256[] memory amounts,
         bytes memory data
-    )
-        internal
-        virtual
-        override(ERC1155PausableUpgradeable, ERC1155Upgradeable)
-    {
+    ) internal virtual override(ERC1155PausableUpgradeable, ERC1155Upgradeable) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
     /// @notice Allows an admin to upgrade to another implementation contract
     /// @param newImplementation Address of the new implementation contract
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal virtual override onlyAdmin {}
+    function _authorizeUpgrade(address newImplementation) internal virtual override onlyAdmin {}
 
     /// @notice Allows for future upgrades on the base contract without affecting the storage of the derived contract
     uint256[50] private __gap;

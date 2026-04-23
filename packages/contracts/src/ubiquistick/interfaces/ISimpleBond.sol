@@ -4,14 +4,7 @@ pragma solidity 0.8.19;
 interface ISimpleBond {
     event LogSetRewards(address token, uint256 rewardsRatio);
 
-    event LogBond(
-        address addr,
-        address token,
-        uint256 amount,
-        uint256 rewards,
-        uint256 block,
-        uint256 bondId
-    );
+    event LogBond(address addr, address token, uint256 amount, uint256 rewards, uint256 block, uint256 bondId);
 
     event LogClaim(address addr, uint256 index, uint256 rewards);
 
@@ -27,10 +20,7 @@ interface ISimpleBond {
 
     function unpause() external;
 
-    function bond(
-        address token,
-        uint256 amount
-    ) external returns (uint256 bondId);
+    function bond(address token, uint256 amount) external returns (uint256 bondId);
 
     function bondsCount(address token) external returns (uint256 bondNb);
 
@@ -40,26 +30,13 @@ interface ISimpleBond {
 
     function withdraw(address token, uint256 amount) external;
 
-    function rewardsOf(
-        address addr
-    )
+    function rewardsOf(address addr)
         external
         view
-        returns (
-            uint256 rewards,
-            uint256 rewardsClaimed,
-            uint256 rewardsClaimable
-        );
+        returns (uint256 rewards, uint256 rewardsClaimed, uint256 rewardsClaimable);
 
-    function rewardsBondOf(
-        address addr,
-        uint256 index
-    )
+    function rewardsBondOf(address addr, uint256 index)
         external
         view
-        returns (
-            uint256 rewards,
-            uint256 rewardsClaimed,
-            uint256 rewardsClaimable
-        );
+        returns (uint256 rewards, uint256 rewardsClaimed, uint256 rewardsClaimable);
 }

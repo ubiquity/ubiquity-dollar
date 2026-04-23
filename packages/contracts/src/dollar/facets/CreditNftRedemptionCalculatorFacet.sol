@@ -8,10 +8,7 @@ import {LibCreditNftRedemptionCalculator} from "../libraries/LibCreditNftRedempt
 /// @notice Contract facet for calculating amount of Credit NFTs to mint on Dollars burn
 contract CreditNftRedemptionCalculatorFacet is ICreditNftRedemptionCalculator {
     /// @inheritdoc ICreditNftRedemptionCalculator
-    function getCreditNftAmount(
-        uint256 dollarsToBurn
-    ) external view override returns (uint256) {
-        return
-            LibCreditNftRedemptionCalculator.getCreditNftAmount(dollarsToBurn);
+    function getCreditNftAmount(uint256 dollarsToBurn) external view override returns (uint256) {
+        return LibCreditNftRedemptionCalculator.getCreditNftAmount(dollarsToBurn);
     }
 }

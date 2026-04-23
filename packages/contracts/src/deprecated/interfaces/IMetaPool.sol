@@ -47,10 +47,7 @@ interface IMetaPool is IERC20 {
      *
      * @return Latest cumulative prices
      */
-    function get_price_cumulative_last()
-        external
-        view
-        returns (uint256[2] memory);
+    function get_price_cumulative_last() external view returns (uint256[2] memory);
 
     /**
      * @notice Estimates the amount of LP tokens minted or burned based on a deposit or withdrawal
@@ -64,10 +61,7 @@ interface IMetaPool is IERC20 {
      * @param _is_deposit Set `True` for deposits, `False` for withdrawals
      * @return The expected amount of LP tokens minted or burned
      */
-    function calc_token_amount(
-        uint256[2] memory _amounts,
-        bool _is_deposit
-    ) external view returns (uint256);
+    function calc_token_amount(uint256[2] memory _amounts, bool _is_deposit) external view returns (uint256);
 
     /**
      * @notice Deposits coins into to the pool and mints new LP tokens
@@ -77,11 +71,9 @@ interface IMetaPool is IERC20 {
      * @param _receiver Optional address that receives the LP tokens. If not specified, they are sent to the caller.
      * @return The amount of LP tokens that were minted in the deposit
      */
-    function add_liquidity(
-        uint256[2] memory _amounts,
-        uint256 _min_mint_amount,
-        address _receiver
-    ) external returns (uint256);
+    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount, address _receiver)
+        external
+        returns (uint256);
 
     /**
      * @notice Calculates the price for exchanging a token with index `i` to token
@@ -91,11 +83,7 @@ interface IMetaPool is IERC20 {
      * @param dx The amount of `i` being sent to the pool
      * @return Returns the quote / price as `dy` given `dx`
      */
-    function get_dy(
-        int128 i,
-        int128 j,
-        uint256 dx
-    ) external view returns (uint256);
+    function get_dy(int128 i, int128 j, uint256 dx) external view returns (uint256);
 
     /**
      * @notice Calculates the price for exchanging a token with index `i` to token
@@ -107,12 +95,7 @@ interface IMetaPool is IERC20 {
      * amount / exchange rate, this is the value returned in `get_twap_balances()`
      * @return Returns the quote / price as `dy` given `dx`
      */
-    function get_dy(
-        int128 i,
-        int128 j,
-        uint256 dx,
-        uint256[2] memory _balances
-    ) external view returns (uint256);
+    function get_dy(int128 i, int128 j, uint256 dx, uint256[2] memory _balances) external view returns (uint256);
 
     /**
      * @notice Gets the amount received (“dy”) when swapping between two underlying assets within the pool
@@ -122,11 +105,7 @@ interface IMetaPool is IERC20 {
      * @param dx The amount of `i` being exchanged
      * @return Returns the amount of `j` received
      */
-    function get_dy_underlying(
-        int128 i,
-        int128 j,
-        uint256 dx
-    ) external view returns (uint256);
+    function get_dy_underlying(int128 i, int128 j, uint256 dx) external view returns (uint256);
 
     /**
      * @notice Performs an exchange between two tokens. Index values can be found
@@ -137,12 +116,7 @@ interface IMetaPool is IERC20 {
      * @param min_dy The minimum amount of `j` to receive. If the swap would result in less, the transaction will revert.
      * @return The amount of `j` received in the exchange
      */
-    function exchange(
-        int128 i,
-        int128 j,
-        uint256 dx,
-        uint256 min_dy
-    ) external returns (uint256);
+    function exchange(int128 i, int128 j, uint256 dx, uint256 min_dy) external returns (uint256);
 
     /**
      * @notice Withdraws a single asset from the pool
@@ -151,11 +125,7 @@ interface IMetaPool is IERC20 {
      * @param _min_received Minimum amount of the coin to receive
      * @return The amount of the coin received in the withdrawal
      */
-    function remove_liquidity_one_coin(
-        uint256 _burn_amount,
-        int128 i,
-        uint256 _min_received
-    ) external returns (uint256);
+    function remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received) external returns (uint256);
 
     /**
      * @notice Returns token address by the provided `arg0` index

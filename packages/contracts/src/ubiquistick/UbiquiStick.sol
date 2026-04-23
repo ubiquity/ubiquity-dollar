@@ -21,13 +21,7 @@ import "operator-filter-registry/DefaultOperatorFilterer.sol";
 // - allow one owner (deployer at start) to change tokenURIs (setTokenURI), and change minter (setMinter) and transfer it's owner role to someone else
 // - allow one minter to mint NFT (safeMint)
 
-contract UbiquiStick is
-    ERC721,
-    ERC721Burnable,
-    ERC721Enumerable,
-    Ownable,
-    DefaultOperatorFilterer
-{
+contract UbiquiStick is ERC721, ERC721Burnable, ERC721Enumerable, Ownable, DefaultOperatorFilterer {
     uint256 public tokenIdNext = 1;
 
     address public minter;
@@ -53,24 +47,12 @@ contract UbiquiStick is
         setMinter(msg.sender);
     }
 
-    function tokenURI(
-        uint256 tokenId
-    ) public view override(ERC721) returns (string memory uri) {
+    function tokenURI(uint256 tokenId) public view override(ERC721) returns (string memory uri) {
         require(_exists(tokenId), "Nonexistent token");
-        return
-            gold[tokenId]
-                ? _goldTokenURI
-                : (
-                    tokenId == _INVISIBLE_TOKEN_ID
-                        ? _invisibleTokenURI
-                        : _tokenURI
-                );
+        return gold[tokenId] ? _goldTokenURI : (tokenId == _INVISIBLE_TOKEN_ID ? _invisibleTokenURI : _tokenURI);
     }
 
-    function setTokenURI(
-        uint256 ntype,
-        string memory tokenURI_
-    ) public onlyMinter {
+    function setTokenURI(uint256 ntype, string memory tokenURI_) public onlyMinter {
         if (ntype == _STANDARD_TYPE) {
             _tokenURI = tokenURI_;
         } else if (ntype == _GOLD_TYPE) {
@@ -105,79 +87,61 @@ contract UbiquiStick is
     }
 
     function _random() private view returns (uint256) {
-        return
-            uint256(
-                keccak256(
-                    abi.encodePacked(
-                        block.prevrandao,
-                        block.timestamp,
-                        msg.sender,
-                        tokenIdNext
-                    )
-                )
-            );
+        return uint256(keccak256(abi.encodePacked(block.prevrandao, block.timestamp, msg.sender, tokenIdNext)));
     }
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId,
-        uint256 batchSize
-    ) internal override(ERC721, ERC721Enumerable) {
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
-    function _beforeConsecutiveTokenTransfer(
-        address,
-        address,
-        uint256,
-        uint96
-    ) internal pure {
+    function _beforeConsecutiveTokenTransfer(address, address, uint256, uint96) internal pure {
         revert("ERC721Enumerable: consecutive transfers not supported");
     }
 
-    function supportsInterface(
-        bytes4 interfaceId
-    ) public view override(ERC721, ERC721Enumerable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
-    function setApprovalForAll(
-        address operator,
-        bool approved
-    ) public override(ERC721, IERC721) onlyAllowedOperatorApproval(operator) {
+    function setApprovalForAll(address operator, bool approved)
+        public
+        override(ERC721, IERC721)
+        onlyAllowedOperatorApproval(operator)
+    {
         super.setApprovalForAll(operator, approved);
     }
 
-    function approve(
-        address operator,
-        uint256 tokenId
-    ) public override(ERC721, IERC721) onlyAllowedOperatorApproval(operator) {
+    function approve(address operator, uint256 tokenId)
+        public
+        override(ERC721, IERC721)
+        onlyAllowedOperatorApproval(operator)
+    {
         super.approve(operator, tokenId);
     }
 
-    function transferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public override(ERC721, IERC721) onlyAllowedOperator(from) {
+    function transferFrom(address from, address to, uint256 tokenId)
+        public
+        override(ERC721, IERC721)
+        onlyAllowedOperator(from)
+    {
         super.transferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId
-    ) public override(ERC721, IERC721) onlyAllowedOperator(from) {
+    function safeTransferFrom(address from, address to, uint256 tokenId)
+        public
+        override(ERC721, IERC721)
+        onlyAllowedOperator(from)
+    {
         super.safeTransferFrom(from, to, tokenId);
     }
 
-    function safeTransferFrom(
-        address from,
-        address to,
-        uint256 tokenId,
-        bytes memory data
-    ) public override(ERC721, IERC721) onlyAllowedOperator(from) {
+    function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data)
+        public
+        override(ERC721, IERC721)
+        onlyAllowedOperator(from)
+    {
         super.safeTransferFrom(from, to, tokenId, data);
     }
 }

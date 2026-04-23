@@ -68,20 +68,22 @@ contract DiamondInit is Modifiers {
         // creditNftManager
         /// @param _creditNftLengthBlocks how many blocks Credit NFT last. can't be changed
         /// once set (unless migrated)
-        LibCreditNftManager.creditNftStorage().creditNftLengthBlocks = _args
-            .creditNftLengthBlocks;
-        LibCreditNftManager
-            .creditNftStorage()
-            .expiredCreditNftConversionRate = 2;
+        LibCreditNftManager.creditNftStorage().creditNftLengthBlocks = _args.creditNftLengthBlocks;
+        LibCreditNftManager.creditNftStorage().expiredCreditNftConversionRate = 2;
 
-        LibCreditRedemptionCalculator
-            .creditRedemptionCalculatorStorage()
-            .coef = 1 ether;
+        LibCreditRedemptionCalculator.creditRedemptionCalculatorStorage().coef = 1 ether;
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
         // arguments: address _init and bytes calldata _calldata
         // These arguments are used to execute an arbitrary function using delegatecall
         // in order to set state variables in the diamond during deployment or an upgrade
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface
+
+        // Liquity V1 Stability Pool integration (#997)
+        appStore.liquidityStabilityPool = address(0);
+        appStore.liquidityTreasury = address(0);
+        appStore.liquidityHarvestThreshold = 0;
+        appStore.liquidityPaused = false;
+        appStore.totalPrincipalInPool = 0;
     }
 }

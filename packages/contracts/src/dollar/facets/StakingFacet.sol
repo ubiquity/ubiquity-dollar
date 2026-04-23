@@ -15,18 +15,12 @@ contract StakingFacet is IStaking, Modifiers {
     //=====================
 
     /// @inheritdoc IStaking
-    function getPendingStakingRewards(
-        uint256 poolId,
-        address user
-    ) external view returns (uint256) {
+    function getPendingStakingRewards(uint256 poolId, address user) external view returns (uint256) {
         return LibStaking.getPendingStakingRewards(poolId, user);
     }
 
     /// @inheritdoc IStaking
-    function getStakingMultiplier(
-        uint256 from,
-        uint256 to
-    ) external view returns (uint256) {
+    function getStakingMultiplier(uint256 from, uint256 to) external view returns (uint256) {
         return LibStaking.getStakingMultiplier(from, to);
     }
 
@@ -34,32 +28,18 @@ contract StakingFacet is IStaking, Modifiers {
     function getStakingSettings()
         external
         view
-        returns (
-            address,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256,
-            uint256
-        )
+        returns (address, uint256, uint256, uint256, uint256, uint256, uint256, uint256)
     {
         return LibStaking.getStakingSettings();
     }
 
     /// @inheritdoc IStaking
-    function getStakingUserInfo(
-        uint256 poolId,
-        address user
-    ) external view returns (LibStaking.UserInfo memory) {
+    function getStakingUserInfo(uint256 poolId, address user) external view returns (LibStaking.UserInfo memory) {
         return LibStaking.getStakingUserInfo(poolId, user);
     }
 
     /// @inheritdoc IStaking
-    function getStakingPoolInfo(
-        uint256 poolId
-    ) external view returns (LibStaking.PoolInfo memory) {
+    function getStakingPoolInfo(uint256 poolId) external view returns (LibStaking.PoolInfo memory) {
         return LibStaking.getStakingPoolInfo(poolId);
     }
 
@@ -97,41 +77,27 @@ contract StakingFacet is IStaking, Modifiers {
     //======================
 
     /// @inheritdoc IStaking
-    function createStakingPool(
-        uint256 allocationPoints,
-        IERC20 lpToken
-    ) external onlyAdmin {
-        LibStaking.createStakingPool(
-            allocationPoints,
-            lpToken
-        );
+    function createStakingPool(uint256 allocationPoints, IERC20 lpToken) external onlyAdmin {
+        LibStaking.createStakingPool(allocationPoints, lpToken);
     }
 
     /// @inheritdoc IStaking
-    function setGovernanceBonusEndBlock(
-        uint256 newGovernanceBonusEndBlock
-    ) external onlyAdmin {
+    function setGovernanceBonusEndBlock(uint256 newGovernanceBonusEndBlock) external onlyAdmin {
         LibStaking.setGovernanceBonusEndBlock(newGovernanceBonusEndBlock);
     }
 
     /// @inheritdoc IStaking
-    function setGovernanceBonusMultiplier(
-        uint256 newGovernanceBonusMultiplier
-    ) external onlyAdmin {
+    function setGovernanceBonusMultiplier(uint256 newGovernanceBonusMultiplier) external onlyAdmin {
         LibStaking.setGovernanceBonusMultiplier(newGovernanceBonusMultiplier);
     }
 
     /// @inheritdoc IStaking
-    function setGovernancePerBlock(
-        uint256 newGovernancePerBlock
-    ) external onlyAdmin {
+    function setGovernancePerBlock(uint256 newGovernancePerBlock) external onlyAdmin {
         LibStaking.setGovernancePerBlock(newGovernancePerBlock);
     }
 
     /// @inheritdoc IStaking
-    function setGovernanceTreasuryDivider(
-        uint256 newGovernanceTreasuryDivider
-    ) external onlyAdmin {
+    function setGovernanceTreasuryDivider(uint256 newGovernanceTreasuryDivider) external onlyAdmin {
         LibStaking.setGovernanceTreasuryDivider(newGovernanceTreasuryDivider);
     }
 
@@ -146,10 +112,7 @@ contract StakingFacet is IStaking, Modifiers {
     }
 
     /// @inheritdoc IStaking
-    function updateStakingPool(
-        uint256 poolId,
-        uint256 allocationPoints
-    ) external onlyAdmin {
+    function updateStakingPool(uint256 poolId, uint256 allocationPoints) external onlyAdmin {
         LibStaking.updateStakingPool(poolId, allocationPoints);
     }
 }

@@ -41,10 +41,7 @@ contract UbiquiStickSaleTest is Test {
     function testSetTokenContract_ShouldSetTokenContract() public {
         vm.prank(owner);
         ubiquiStickSale.setTokenContract(address(ubiquiStick));
-        assertEq(
-            address(ubiquiStickSale.tokenContract()),
-            address(ubiquiStick)
-        );
+        assertEq(address(ubiquiStickSale.tokenContract()), address(ubiquiStick));
     }
 
     function testSetFundsAddress_ShouldRevert_IfCalledNotByOwner() public {
@@ -91,11 +88,7 @@ contract UbiquiStickSaleTest is Test {
         address[] memory targetAddresses;
         uint256[] memory targetCounts;
         uint256[] memory targetPrices;
-        ubiquiStickSale.batchSetAllowances(
-            targetAddresses,
-            targetCounts,
-            targetPrices
-        );
+        ubiquiStickSale.batchSetAllowances(targetAddresses, targetCounts, targetPrices);
     }
 
     function testBatchSetAllowance_ShouldBatchSetAllowance() public {
@@ -103,20 +96,16 @@ contract UbiquiStickSaleTest is Test {
         targetAddresses[0] = user1;
         targetAddresses[1] = user2;
 
-        uint256[] memory targetCounts = new uint[](2);
+        uint256[] memory targetCounts = new uint256[](2);
         targetCounts[0] = 1;
         targetCounts[1] = 2;
 
-        uint256[] memory targetPrices = new uint[](2);
+        uint256[] memory targetPrices = new uint256[](2);
         targetPrices[0] = 3;
         targetPrices[1] = 4;
 
         vm.prank(owner);
-        ubiquiStickSale.batchSetAllowances(
-            targetAddresses,
-            targetCounts,
-            targetPrices
-        );
+        ubiquiStickSale.batchSetAllowances(targetAddresses, targetCounts, targetPrices);
 
         (uint256 count, uint256 price) = ubiquiStickSale.allowance(user1);
         assertEq(count, 1);
@@ -145,8 +134,9 @@ contract UbiquiStickSaleTest is Test {
         // user1 tries to buy token
         vm.deal(user1, 1 ether);
         vm.prank(user1);
-        (bool isSuccess /* bytes memory data */, ) = address(ubiquiStickSale)
-            .call{value: 1 ether}("");
+        (
+            bool isSuccess, /* bytes memory data */
+        ) = address(ubiquiStickSale).call{value: 1 ether}("");
         assertEq(isSuccess, false);
     }
 
@@ -154,10 +144,11 @@ contract UbiquiStickSaleTest is Test {
         // user1 tries to buy token
         vm.deal(user1, 1 ether);
         vm.prank(user1);
-        (bool success, ) = address(ubiquiStickSale).call{value: 1 ether}("");
+        (bool success,) = address(ubiquiStickSale).call{value: 1 ether}("");
         require(!success, "should have reverted due to insufficient allowance");
-        (bool isSuccess /* bytes memory data */, ) = address(ubiquiStickSale)
-            .call{value: 1 ether}("");
+        (
+            bool isSuccess, /* bytes memory data */
+        ) = address(ubiquiStickSale).call{value: 1 ether}("");
         assertEq(isSuccess, false);
     }
 

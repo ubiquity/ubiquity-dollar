@@ -44,29 +44,18 @@ contract UUPSTestHelper {
 
         // deploy UbiquityCreditToken
         initData = abi.encodeWithSignature("initialize(address)", diamond);
-        proxyCreditToken = new ERC1967Proxy(
-            address(new UbiquityCreditToken()),
-            initData
-        );
+        proxyCreditToken = new ERC1967Proxy(address(new UbiquityCreditToken()), initData);
         creditToken = UbiquityCreditToken(address(proxyCreditToken));
 
         // deploy UbiquityDollarToken
         initData = abi.encodeWithSignature("initialize(address)", diamond);
-        proxyDollarToken = new ERC1967Proxy(
-            address(new UbiquityDollarToken()),
-            initData
-        );
+        proxyDollarToken = new ERC1967Proxy(address(new UbiquityDollarToken()), initData);
         dollarToken = UbiquityDollarToken(address(proxyDollarToken));
 
         // deploy UbiquityGovernanceToken
         initData = abi.encodeWithSignature("initialize(address)", diamond);
-        proxyGovernanceToken = new ERC1967Proxy(
-            address(new UbiquityGovernanceToken()),
-            initData
-        );
-        governanceToken = UbiquityGovernanceToken(
-            address(proxyGovernanceToken)
-        );
+        proxyGovernanceToken = new ERC1967Proxy(address(new UbiquityGovernanceToken()), initData);
+        governanceToken = UbiquityGovernanceToken(address(proxyGovernanceToken));
 
         // set addresses of the newly deployed contracts in the Diamond
         ManagerFacet managerFacet = ManagerFacet(diamond);

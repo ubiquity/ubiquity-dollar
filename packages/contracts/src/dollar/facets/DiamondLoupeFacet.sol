@@ -18,12 +18,10 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         uint256 numFacets = ds.facetAddresses.length;
         facets_ = new Facet[](numFacets);
-        for (uint256 i = 0; i < numFacets; ) {
+        for (uint256 i = 0; i < numFacets;) {
             address facetAddress_ = ds.facetAddresses[i];
             facets_[i].facetAddress = facetAddress_;
-            facets_[i].functionSelectors = ds
-                .facetFunctionSelectors[facetAddress_]
-                .functionSelectors;
+            facets_[i].functionSelectors = ds.facetFunctionSelectors[facetAddress_].functionSelectors;
             unchecked {
                 i++;
             }
@@ -31,34 +29,26 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
     }
 
     /// @inheritdoc IDiamondLoupe
-    function facetFunctionSelectors(
-        address _facet
-    ) external view override returns (bytes4[] memory facetFunctionSelectors_) {
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        facetFunctionSelectors_ = ds
-            .facetFunctionSelectors[_facet]
-            .functionSelectors;
-    }
-
-    /// @inheritdoc IDiamondLoupe
-    function facetAddresses()
+    function facetFunctionSelectors(address _facet)
         external
         view
         override
-        returns (address[] memory facetAddresses_)
+        returns (bytes4[] memory facetFunctionSelectors_)
     {
+        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        facetFunctionSelectors_ = ds.facetFunctionSelectors[_facet].functionSelectors;
+    }
+
+    /// @inheritdoc IDiamondLoupe
+    function facetAddresses() external view override returns (address[] memory facetAddresses_) {
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         facetAddresses_ = ds.facetAddresses;
     }
 
     /// @inheritdoc IDiamondLoupe
-    function facetAddress(
-        bytes4 _functionSelector
-    ) external view override returns (address facetAddress_) {
+    function facetAddress(bytes4 _functionSelector) external view override returns (address facetAddress_) {
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        facetAddress_ = ds
-            .selectorToFacetAndPosition[_functionSelector]
-            .facetAddress;
+        facetAddress_ = ds.selectorToFacetAndPosition[_functionSelector].facetAddress;
     }
 
     /**
@@ -70,9 +60,7 @@ contract DiamondLoupeFacet is IDiamondLoupe, IERC165 {
      * This function call must use less than 30 000 gas.
      * @return Whether contract supports a provided interface
      */
-    function supportsInterface(
-        bytes4 _interfaceId
-    ) external view override returns (bool) {
+    function supportsInterface(bytes4 _interfaceId) external view override returns (bool) {
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         return ds.supportedInterfaces[_interfaceId];
     }

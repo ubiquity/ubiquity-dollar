@@ -37,8 +37,5 @@ interface ICreditRedemptionCalculator {
      * @param blockHeightDebt Block number when the latest debt cycle started (i.e. when Dollar price became < 1$)
      * @return Amount of Credits to mint
      */
-    function getCreditAmount(
-        uint256 dollarsToBurn,
-        uint256 blockHeightDebt
-    ) external view returns (uint256);
+    function getCreditAmount(uint256 dollarsToBurn, uint256 blockHeightDebt) external view returns (uint256);
 }

@@ -15,26 +15,14 @@ contract StakingFacetTest is DiamondTestSetup {
 
     address user = makeAddr("user");
 
-    event GovernanceBonusEndBlockSet(
-        uint256 indexed newGovernanceBonusEndBlock
-    );
-    event GovernanceBonusMultiplierSet(
-        uint256 indexed newGovernanceBonusMultiplier
-    );
+    event GovernanceBonusEndBlockSet(uint256 indexed newGovernanceBonusEndBlock);
+    event GovernanceBonusMultiplierSet(uint256 indexed newGovernanceBonusMultiplier);
     event GovernancePerBlockSet(uint256 indexed newGovernancePerBlock);
-    event GovernanceTreasuryDividerSet(
-        uint256 indexed newGovernanceTreasuryDivider
-    );
+    event GovernanceTreasuryDividerSet(uint256 indexed newGovernanceTreasuryDivider);
     event Stake(address indexed user, uint256 indexed poolId, uint256 amount);
-    event StakingPoolCreated(
-        uint256 indexed allocationPoints,
-        address indexed lpToken
-    );
+    event StakingPoolCreated(uint256 indexed allocationPoints, address indexed lpToken);
     event StakingPoolUpdated(uint256 indexed poolId);
-    event StakingPoolAllocationUpdated(
-        uint256 indexed poolId,
-        uint256 indexed allocationPoints
-    );
+    event StakingPoolAllocationUpdated(uint256 indexed poolId, uint256 indexed allocationPoints);
     event StakingRewardTokenSet(address indexed newRewardToken);
     event StakingStartBlockSet(uint256 indexed newStartBlock);
     event Unstake(address indexed user, uint256 indexed poolId, uint256 amount);
@@ -83,9 +71,7 @@ contract StakingFacetTest is DiamondTestSetup {
     // Views
     //=====================
 
-    function testGetPendingStakingRewards_ShouldReturnZero_IfPoolIsEmpty()
-        public
-    {
+    function testGetPendingStakingRewards_ShouldReturnZero_IfPoolIsEmpty() public {
         uint256 pendingRewards = stakingFacet.getPendingStakingRewards(0, user);
         assertEq(pendingRewards, 0);
     }
@@ -112,16 +98,12 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(multiplier, 100);
     }
 
-    function testGetStakingMultiplier_ShouldReturnMultiplierWithoutBonus()
-        public
-    {
+    function testGetStakingMultiplier_ShouldReturnMultiplierWithoutBonus() public {
         uint256 multiplier = stakingFacet.getStakingMultiplier(1, 11);
         assertEq(multiplier, 10);
     }
 
-    function testGetStakingMultiplier_ShouldReturnMultiplierWithBonusInTheMiddleOfBonusPeriod()
-        public
-    {
+    function testGetStakingMultiplier_ShouldReturnMultiplierWithBonusInTheMiddleOfBonusPeriod() public {
         vm.startPrank(admin);
         stakingFacet.setGovernanceBonusMultiplier(10);
         stakingFacet.setGovernanceBonusEndBlock(11);
@@ -183,10 +165,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(user);
         stakingFacet.stake(0, 50 ether);
 
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
         assertEq(userInfo.amount, 100 ether);
         assertEq(userInfo.rewardDebt, 20 ether);
     }
@@ -202,9 +181,7 @@ contract StakingFacetTest is DiamondTestSetup {
         // refresh pool
         stakingFacet.updateStakingPool(0);
 
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(address(poolInfo.lpToken), address(stakeToken));
         assertEq(poolInfo.amount, 50 ether);
         assertEq(poolInfo.allocationPoints, 100);
@@ -212,9 +189,7 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(poolInfo.accumulatedGovernancePerShare, 0.0000002 ether);
     }
 
-    function testGetStakingPoolsLength_ShouldReturnNumberOfStakingPools()
-        public
-    {
+    function testGetStakingPoolsLength_ShouldReturnNumberOfStakingPools() public {
         uint256 poolsLength = stakingFacet.getStakingPoolsLength();
         assertEq(poolsLength, 1);
     }
@@ -233,12 +208,8 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.stopPrank();
 
         // before
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
-        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(
-            1
-        );
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(1);
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(poolInfo2.lastRewardBlock, 1);
 
@@ -277,13 +248,8 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.roll(block.number + 10);
 
         // before
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(rewardToken.balanceOf(user), 0);
         assertEq(stakeToken.balanceOf(address(stakingFacet)), 50 ether);
@@ -309,9 +275,7 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(poolInfo.amount, 100 ether);
     }
 
-    function testUnstake_ShouldRevert_IfUnstakeAmountIsGreaterThanUserBalance()
-        public
-    {
+    function testUnstake_ShouldRevert_IfUnstakeAmountIsGreaterThanUserBalance() public {
         vm.prank(user);
         vm.expectRevert("withdraw: not good");
         stakingFacet.unstake(0, 1 ether);
@@ -326,13 +290,8 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.roll(block.number + 10);
 
         // before
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(rewardToken.balanceOf(user), 0);
         assertEq(userInfo.amount, 50 ether);
@@ -380,9 +339,7 @@ contract StakingFacetTest is DiamondTestSetup {
      * - user2 gets 3 reward tokens (30% pool allocation)
      * - user3 gets 6 reward tokens (60% pool allocation)
      */
-    function testUnstake_ShouldUnstakeTokens_WhenMultipleUsersUnstakeFromMultiplePools()
-        public
-    {
+    function testUnstake_ShouldUnstakeTokens_WhenMultipleUsersUnstakeFromMultiplePools() public {
         address user2 = makeAddr("user2");
         address user3 = makeAddr("user3");
 
@@ -420,13 +377,8 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.roll(block.number + 10);
 
         // before (user)
-        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(
-            0,
-            user
-        );
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.UserInfo memory userInfo = stakingFacet.getStakingUserInfo(0, user);
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(rewardToken.balanceOf(user), 0);
         assertEq(userInfo.amount, 50 ether);
@@ -435,13 +387,8 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(user), 50 ether);
 
         // before (user2)
-        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(
-            1,
-            user2
-        );
-        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(
-            1
-        );
+        LibStaking.UserInfo memory userInfo2 = stakingFacet.getStakingUserInfo(1, user2);
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(1);
         assertEq(poolInfo2.lastRewardBlock, 1);
         assertEq(rewardToken.balanceOf(user2), 0);
         assertEq(userInfo2.amount, 50 ether);
@@ -450,13 +397,8 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(user2), 50 ether);
 
         // before (user3)
-        LibStaking.UserInfo memory userInfo3 = stakingFacet.getStakingUserInfo(
-            2,
-            user3
-        );
-        LibStaking.PoolInfo memory poolInfo3 = stakingFacet.getStakingPoolInfo(
-            2
-        );
+        LibStaking.UserInfo memory userInfo3 = stakingFacet.getStakingUserInfo(2, user3);
+        LibStaking.PoolInfo memory poolInfo3 = stakingFacet.getStakingPoolInfo(2);
         assertEq(poolInfo3.lastRewardBlock, 1);
         assertEq(rewardToken.balanceOf(user3), 0);
         assertEq(userInfo3.amount, 50 ether);
@@ -503,13 +445,9 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(stakeToken.balanceOf(user3), 75 ether);
     }
 
-    function testUpdateStakingPool_ShouldDoNothing_IfPoolHasAlreadyBeenUpdatedInTheCurrentBlock()
-        public
-    {
+    function testUpdateStakingPool_ShouldDoNothing_IfPoolHasAlreadyBeenUpdatedInTheCurrentBlock() public {
         // before
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo.lastRewardBlock, 1);
 
         stakingFacet.updateStakingPool(0);
@@ -519,13 +457,9 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(poolInfo.lastRewardBlock, 1);
     }
 
-    function testUpdateStakingPool_ShouldUpdateLastRewardBlockNumber_IfTotalStakingTokenSupplyIsZero()
-        public
-    {
+    function testUpdateStakingPool_ShouldUpdateLastRewardBlockNumber_IfTotalStakingTokenSupplyIsZero() public {
         // before
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(poolInfo.accumulatedGovernancePerShare, 0);
 
@@ -541,9 +475,7 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     // NOTICE: `admin` EOA is set to be a treasury address
-    function testUpdateStakingPool_ShouldUpdateStakingPoolWithFreshValues()
-        public
-    {
+    function testUpdateStakingPool_ShouldUpdateStakingPoolWithFreshValues() public {
         // user stakes 50 STK
         vm.prank(user);
         stakingFacet.stake(0, 50 ether);
@@ -552,11 +484,8 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.roll(block.number + 10);
 
         // before
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
-        (, , , , , uint256 rewardAmount, , ) = stakingFacet
-            .getStakingSettings();
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        (,,,,, uint256 rewardAmount,,) = stakingFacet.getStakingSettings();
         assertEq(rewardToken.balanceOf(admin), 0);
         assertEq(rewardToken.balanceOf(address(stakingFacet)), 0);
         assertEq(poolInfo.accumulatedGovernancePerShare, 0);
@@ -570,7 +499,7 @@ contract StakingFacetTest is DiamondTestSetup {
 
         // after
         poolInfo = stakingFacet.getStakingPoolInfo(0);
-        (, , , , , rewardAmount, , ) = stakingFacet.getStakingSettings();
+        (,,,,, rewardAmount,,) = stakingFacet.getStakingSettings();
         assertEq(rewardToken.balanceOf(admin), 2 ether);
         assertEq(rewardToken.balanceOf(address(stakingFacet)), 10 ether);
         assertEq(poolInfo.accumulatedGovernancePerShare, 0.0000002 ether);
@@ -579,9 +508,7 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     // NOTICE: `admin` EOA is set to be a treasury address
-    function testUpdateStakingPool_ShouldNotMintRewardsToTreasury_IfGovernanceTreasuryDividerIsZero()
-        public
-    {
+    function testUpdateStakingPool_ShouldNotMintRewardsToTreasury_IfGovernanceTreasuryDividerIsZero() public {
         // admin disables treasury rewards
         vm.prank(admin);
         stakingFacet.setGovernanceTreasuryDivider(0);
@@ -606,9 +533,7 @@ contract StakingFacetTest is DiamondTestSetup {
     // Restricted methods
     //======================
 
-    function testCreateStakingPool_ShouldRevert_IfLpTokenAddressIsZero()
-        public
-    {
+    function testCreateStakingPool_ShouldRevert_IfLpTokenAddressIsZero() public {
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.createStakingPool(
@@ -617,9 +542,7 @@ contract StakingFacetTest is DiamondTestSetup {
         );
     }
 
-    function testCreateStakingPool_ShouldRevert_IfLpTokenIsUsedAsCollateralInUbiquityPool()
-        public
-    {
+    function testCreateStakingPool_ShouldRevert_IfLpTokenIsUsedAsCollateralInUbiquityPool() public {
         // create a new staking token
         MockERC20 newStakeToken = new MockERC20("STK_NEW", "STK_NEW", 18);
 
@@ -640,14 +563,9 @@ contract StakingFacetTest is DiamondTestSetup {
         );
     }
 
-    function testCreateStakingPool_ShouldCreateStakingPoolWithoutMassUpdate()
-        public
-    {
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
-        (, , , , , , uint256 totalAllocationPoints, ) = stakingFacet
-            .getStakingSettings();
+    function testCreateStakingPool_ShouldCreateStakingPoolWithoutMassUpdate() public {
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        (,,,,,, uint256 totalAllocationPoints,) = stakingFacet.getStakingSettings();
 
         assertEq(totalAllocationPoints, 100);
         assertEq(address(poolInfo.lpToken), address(stakeToken));
@@ -657,9 +575,7 @@ contract StakingFacetTest is DiamondTestSetup {
         assertEq(poolInfo.accumulatedGovernancePerShare, 0);
     }
 
-    function testCreateStakingPool_ShouldCreateStakingPoolWithMassUpdate()
-        public
-    {
+    function testCreateStakingPool_ShouldCreateStakingPoolWithMassUpdate() public {
         // 10 blocks pass
         vm.roll(block.number + 10);
 
@@ -668,9 +584,7 @@ contract StakingFacetTest is DiamondTestSetup {
         stakingFacet.setStakingStartBlock(block.number + 100);
 
         // before
-        LibStaking.PoolInfo memory poolInfo1 = stakingFacet.getStakingPoolInfo(
-            0
-        );
+        LibStaking.PoolInfo memory poolInfo1 = stakingFacet.getStakingPoolInfo(0);
         assertEq(poolInfo1.lastRewardBlock, 1);
 
         vm.expectEmit(address(stakingFacet));
@@ -686,24 +600,19 @@ contract StakingFacetTest is DiamondTestSetup {
 
         // after
         poolInfo1 = stakingFacet.getStakingPoolInfo(0);
-        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(
-            1
-        );
+        LibStaking.PoolInfo memory poolInfo2 = stakingFacet.getStakingPoolInfo(1);
         assertEq(poolInfo1.lastRewardBlock, 11);
         assertEq(poolInfo2.lastRewardBlock, 111);
     }
 
-    function testSetGovernanceBonusEndBlock_ShouldRevert_IfBonusEndBlockIsInThePast()
-        public
-    {
+    function testSetGovernanceBonusEndBlock_ShouldRevert_IfBonusEndBlockIsInThePast() public {
         vm.prank(admin);
         vm.expectRevert("Bonus end block can't be in the past");
         stakingFacet.setGovernanceBonusEndBlock(0);
     }
 
     function testSetGovernanceBonusEndBlock_ShouldUpdateBonusEndBlock() public {
-        (, uint256 oldBonusEndBlock, , , , , , ) = stakingFacet
-            .getStakingSettings();
+        (, uint256 oldBonusEndBlock,,,,,,) = stakingFacet.getStakingSettings();
         assertEq(oldBonusEndBlock, 0);
 
         vm.expectEmit(address(stakingFacet));
@@ -712,16 +621,12 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         stakingFacet.setGovernanceBonusEndBlock(1);
 
-        (, uint256 newBonusEndBlock, , , , , , ) = stakingFacet
-            .getStakingSettings();
+        (, uint256 newBonusEndBlock,,,,,,) = stakingFacet.getStakingSettings();
         assertEq(newBonusEndBlock, 1);
     }
 
-    function testSetGovernanceBonusMultiplier_ShouldUpdateGovernanceBonusMultiplier()
-        public
-    {
-        (, , uint256 oldGovernanceBonusMultiplier, , , , , ) = stakingFacet
-            .getStakingSettings();
+    function testSetGovernanceBonusMultiplier_ShouldUpdateGovernanceBonusMultiplier() public {
+        (,, uint256 oldGovernanceBonusMultiplier,,,,,) = stakingFacet.getStakingSettings();
         assertEq(oldGovernanceBonusMultiplier, 0);
 
         vm.expectEmit(address(stakingFacet));
@@ -730,8 +635,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         stakingFacet.setGovernanceBonusMultiplier(10);
 
-        (, , uint256 newGovernanceBonusMultiplier, , , , , ) = stakingFacet
-            .getStakingSettings();
+        (,, uint256 newGovernanceBonusMultiplier,,,,,) = stakingFacet.getStakingSettings();
         assertEq(newGovernanceBonusMultiplier, 10);
     }
 
@@ -742,8 +646,7 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     function testSetGovernancePerBlock_ShouldUpdateGovernancePerBlock() public {
-        (, , , uint256 oldGovernancePerBlock, , , , ) = stakingFacet
-            .getStakingSettings();
+        (,,, uint256 oldGovernancePerBlock,,,,) = stakingFacet.getStakingSettings();
         assertEq(oldGovernancePerBlock, 1 ether);
 
         vm.expectEmit(address(stakingFacet));
@@ -752,16 +655,12 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         stakingFacet.setGovernancePerBlock(2 ether);
 
-        (, , , uint256 newGovernancePerBlock, , , , ) = stakingFacet
-            .getStakingSettings();
+        (,,, uint256 newGovernancePerBlock,,,,) = stakingFacet.getStakingSettings();
         assertEq(newGovernancePerBlock, 2 ether);
     }
 
-    function testSetGovernanceTreasuryDivider_ShouldUpdateGovernanceTreasuryDivider()
-        public
-    {
-        (, , , , uint256 oldGovernanceTreasuryDivider, , , ) = stakingFacet
-            .getStakingSettings();
+    function testSetGovernanceTreasuryDivider_ShouldUpdateGovernanceTreasuryDivider() public {
+        (,,,, uint256 oldGovernanceTreasuryDivider,,,) = stakingFacet.getStakingSettings();
         assertEq(oldGovernanceTreasuryDivider, 5);
 
         vm.expectEmit(address(stakingFacet));
@@ -770,22 +669,17 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         stakingFacet.setGovernanceTreasuryDivider(10);
 
-        (, , , , uint256 newGovernanceTreasuryDivider, , , ) = stakingFacet
-            .getStakingSettings();
+        (,,,, uint256 newGovernanceTreasuryDivider,,,) = stakingFacet.getStakingSettings();
         assertEq(newGovernanceTreasuryDivider, 10);
     }
 
-    function testSetStakingRewardToken_ShouldRevert_IfStakingRewardTokenIsZeroAddress()
-        public
-    {
+    function testSetStakingRewardToken_ShouldRevert_IfStakingRewardTokenIsZeroAddress() public {
         vm.prank(admin);
         vm.expectRevert("Zero address detected");
         stakingFacet.setStakingRewardToken(address(0));
     }
 
-    function testSetStakingRewardToken_ShouldRevert__IfRewardTokenIsUsedAsCollateralInUbiquityPool()
-        public
-    {
+    function testSetStakingRewardToken_ShouldRevert__IfRewardTokenIsUsedAsCollateralInUbiquityPool() public {
         // create a new reward token
         MockERC20 newRewardToken = new MockERC20("RWD_NEW", "RWD_NEW", 18);
 
@@ -804,8 +698,7 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     function testSetStakingRewardToken_ShouldUpdateStakingRewardToken() public {
-        (address oldRewardToken, , , , , , , ) = stakingFacet
-            .getStakingSettings();
+        (address oldRewardToken,,,,,,,) = stakingFacet.getStakingSettings();
         assertEq(oldRewardToken, address(rewardToken));
 
         vm.expectEmit(address(stakingFacet));
@@ -814,30 +707,24 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         stakingFacet.setStakingRewardToken(address(1));
 
-        (address newRewardToken, , , , , , , ) = stakingFacet
-            .getStakingSettings();
+        (address newRewardToken,,,,,,,) = stakingFacet.getStakingSettings();
         assertEq(newRewardToken, address(1));
     }
 
-    function testSetStakingStartBlock_ShouldRevert_IfStartBlockIsInThePast()
-        public
-    {
+    function testSetStakingStartBlock_ShouldRevert_IfStartBlockIsInThePast() public {
         vm.prank(admin);
         vm.expectRevert("Can't start in the past");
         stakingFacet.setStakingStartBlock(0);
     }
 
-    function testSetStakingStartBlock_ShouldRevert_IfStartBlockIsLessOrEqualToCurrentStartBlock()
-        public
-    {
+    function testSetStakingStartBlock_ShouldRevert_IfStartBlockIsLessOrEqualToCurrentStartBlock() public {
         vm.prank(admin);
         vm.expectRevert("Must be greater than the previous start block");
         stakingFacet.setStakingStartBlock(1);
     }
 
     function testSetStakingStartBlock_ShouldUpdateStakingStartBlock() public {
-        (, , , , , , , uint256 oldStartBlock) = stakingFacet
-            .getStakingSettings();
+        (,,,,,,, uint256 oldStartBlock) = stakingFacet.getStakingSettings();
         assertEq(oldStartBlock, block.number);
 
         vm.expectEmit(address(stakingFacet));
@@ -846,8 +733,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.prank(admin);
         stakingFacet.setStakingStartBlock(block.number + 1);
 
-        (, , , , , , , uint256 newStartBlock) = stakingFacet
-            .getStakingSettings();
+        (,,,,,,, uint256 newStartBlock) = stakingFacet.getStakingSettings();
         assertEq(newStartBlock, block.number + 1);
     }
 
@@ -858,11 +744,8 @@ contract StakingFacetTest is DiamondTestSetup {
     }
 
     function testUpdateStakingPool_ShouldUpdateStakingPoolSettings() public {
-        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(
-            0
-        );
-        (, , , , , , uint256 oldTotalAllocationPoints, ) = stakingFacet
-            .getStakingSettings();
+        LibStaking.PoolInfo memory poolInfo = stakingFacet.getStakingPoolInfo(0);
+        (,,,,,, uint256 oldTotalAllocationPoints,) = stakingFacet.getStakingSettings();
         assertEq(poolInfo.lastRewardBlock, 1);
         assertEq(oldTotalAllocationPoints, 100);
         assertEq(poolInfo.allocationPoints, 100);
@@ -878,8 +761,7 @@ contract StakingFacetTest is DiamondTestSetup {
         vm.stopPrank();
 
         poolInfo = stakingFacet.getStakingPoolInfo(0);
-        (, , , , , , uint256 newTotalAllocationPoints, ) = stakingFacet
-            .getStakingSettings();
+        (,,,,,, uint256 newTotalAllocationPoints,) = stakingFacet.getStakingSettings();
         assertEq(poolInfo.lastRewardBlock, 11);
         assertEq(newTotalAllocationPoints, 50);
         assertEq(poolInfo.allocationPoints, 50);
@@ -901,8 +783,7 @@ contract StakingFacetTest is DiamondTestSetup {
         stakingFacet.updateStakingPool(0);
 
         // before
-        (, , , , , uint256 rewardAmount, , ) = stakingFacet
-            .getStakingSettings();
+        (,,,,, uint256 rewardAmount,,) = stakingFacet.getStakingSettings();
         assertEq(rewardAmount, 10 ether);
         assertEq(rewardToken.balanceOf(user), 0);
 
@@ -911,7 +792,7 @@ contract StakingFacetTest is DiamondTestSetup {
         stakingFacet.stake(0, 50 ether);
 
         // after
-        (, , , , , rewardAmount, , ) = stakingFacet.getStakingSettings();
+        (,,,,, rewardAmount,,) = stakingFacet.getStakingSettings();
         assertEq(rewardAmount, 0);
         assertEq(rewardToken.balanceOf(user), 10 ether);
     }

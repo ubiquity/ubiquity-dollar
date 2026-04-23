@@ -25,9 +25,7 @@ library LibUbiquityPool {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant UBIQUITY_POOL_STORAGE_POSITION =
-        bytes32(
-            uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1
-        ) & ~bytes32(uint256(0xff));
+        bytes32(uint256(keccak256("ubiquity.contracts.ubiquity.pool.storage")) - 1) & ~bytes32(uint256(0xff));
 
     /// @notice Struct used as a storage for this library
     struct UbiquityPoolStorage {
@@ -134,11 +132,7 @@ library LibUbiquityPool {
      * @notice Returns struct used as a storage for this library
      * @return uPoolStorage Struct used as a storage
      */
-    function ubiquityPoolStorage()
-        internal
-        pure
-        returns (UbiquityPoolStorage storage uPoolStorage)
-    {
+    function ubiquityPoolStorage() internal pure returns (UbiquityPoolStorage storage uPoolStorage) {
         bytes32 position = UBIQUITY_POOL_STORAGE_POSITION;
         assembly {
             uPoolStorage.slot := position
@@ -154,11 +148,7 @@ library LibUbiquityPool {
     /// @notice Emitted when AMO minter is removed
     event AmoMinterRemoved(address amoMinterAddress);
     /// @notice Emitted on setting a chainlink's collateral price feed params
-    event CollateralPriceFeedSet(
-        uint256 collateralIndex,
-        address priceFeedAddress,
-        uint256 stalenessThreshold
-    );
+    event CollateralPriceFeedSet(uint256 collateralIndex, address priceFeedAddress, uint256 stalenessThreshold);
     /// @notice Emitted on setting a collateral price
     event CollateralPriceSet(uint256 collateralIndex, uint256 newPrice);
     /// @notice Emitted on setting a collateral ratio
@@ -166,16 +156,9 @@ library LibUbiquityPool {
     /// @notice Emitted on enabling/disabling a particular collateral token
     event CollateralToggled(uint256 collateralIndex, bool newState);
     /// @notice Emitted on setting chainlink's price feed for ETH/USD pair
-    event EthUsdPriceFeedSet(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    );
+    event EthUsdPriceFeedSet(address newPriceFeedAddress, uint256 newStalenessThreshold);
     /// @notice Emitted when fees are updated
-    event FeesSet(
-        uint256 collateralIndex,
-        uint256 newMintFee,
-        uint256 newRedeemFee
-    );
+    event FeesSet(uint256 collateralIndex, uint256 newMintFee, uint256 newRedeemFee);
     /// @notice Emitted on setting a pool for Governance/ETH pair
     event GovernanceEthPoolSet(address newGovernanceEthPoolAddress);
     /// @notice Emitted on toggling pause for mint/redeem/borrow
@@ -183,17 +166,11 @@ library LibUbiquityPool {
     /// @notice Emitted when new pool ceiling (i.e. max amount of collateral) is set
     event PoolCeilingSet(uint256 collateralIndex, uint256 newCeiling);
     /// @notice Emitted when mint and redeem price thresholds are updated (1_000_000 = $1.00)
-    event PriceThresholdsSet(
-        uint256 newMintPriceThreshold,
-        uint256 newRedeemPriceThreshold
-    );
+    event PriceThresholdsSet(uint256 newMintPriceThreshold, uint256 newRedeemPriceThreshold);
     /// @notice Emitted when a new redemption delay in blocks is set
     event RedemptionDelayBlocksSet(uint256 redemptionDelayBlocks);
     /// @notice Emitted on setting chainlink's price feed for stable/USD pair
-    event StableUsdPriceFeedSet(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    );
+    event StableUsdPriceFeedSet(address newPriceFeedAddress, uint256 newStalenessThreshold);
 
     //=====================
     // Modifiers
@@ -206,10 +183,7 @@ library LibUbiquityPool {
     modifier collateralEnabled(uint256 collateralIndex) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         require(
-            poolStorage.isCollateralEnabled[
-                poolStorage.collateralAddresses[collateralIndex]
-            ],
-            "Collateral disabled"
+            poolStorage.isCollateralEnabled[poolStorage.collateralAddresses[collateralIndex]], "Collateral disabled"
         );
         _;
     }
@@ -219,10 +193,7 @@ library LibUbiquityPool {
      */
     modifier onlyAmoMinter() {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        require(
-            poolStorage.isAmoMinterEnabled[msg.sender],
-            "Not an AMO Minter"
-        );
+        require(poolStorage.isAmoMinterEnabled[msg.sender], "Not an AMO Minter");
         _;
     }
 
@@ -243,9 +214,7 @@ library LibUbiquityPool {
      * @notice Check if collateral token with given address already exists
      * @param collateralAddress The collateral token address to check
      */
-    function collateralExists(
-        address collateralAddress
-    ) internal view returns (bool) {
+    function collateralExists(address collateralAddress) internal view returns (bool) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         address[] memory collateralAddresses = poolStorage.collateralAddresses;
 
@@ -262,17 +231,16 @@ library LibUbiquityPool {
      * @param collateralAddress Address of the collateral token
      * @return returnData Collateral info
      */
-    function collateralInformation(
-        address collateralAddress
-    ) internal view returns (CollateralInformation memory returnData) {
+    function collateralInformation(address collateralAddress)
+        internal
+        view
+        returns (CollateralInformation memory returnData)
+    {
         // load the storage
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         // validation
-        require(
-            poolStorage.isCollateralEnabled[collateralAddress],
-            "Invalid collateral"
-        );
+        require(poolStorage.isCollateralEnabled[collateralAddress], "Invalid collateral");
 
         // get the index
         uint256 index = poolStorage.collateralIndex[collateralAddress];
@@ -308,19 +276,13 @@ library LibUbiquityPool {
      * @notice Returns USD value of all collateral tokens held in the pool, in E18
      * @return balanceTally USD value of all collateral tokens
      */
-    function collateralUsdBalance()
-        internal
-        view
-        returns (uint256 balanceTally)
-    {
+    function collateralUsdBalance() internal view returns (uint256 balanceTally) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         uint256 collateralTokensCount = poolStorage.collateralAddresses.length;
         balanceTally = 0;
         for (uint256 i = 0; i < collateralTokensCount; i++) {
-            balanceTally += freeCollateralBalance(i)
-                .mul(10 ** poolStorage.missingDecimals[i])
-                .mul(poolStorage.collateralPrices[i])
-                .div(UBIQUITY_POOL_PRICE_PRECISION);
+            balanceTally += freeCollateralBalance(i).mul(10 ** poolStorage.missingDecimals[i])
+                .mul(poolStorage.collateralPrices[i]).div(UBIQUITY_POOL_PRICE_PRECISION);
         }
     }
 
@@ -328,16 +290,9 @@ library LibUbiquityPool {
      * @notice Returns chainlink price feed information for ETH/USD pair
      * @return Price feed address and staleness threshold in seconds
      */
-    function ethUsdPriceFeedInformation()
-        internal
-        view
-        returns (address, uint256)
-    {
+    function ethUsdPriceFeedInformation() internal view returns (address, uint256) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        return (
-            poolStorage.ethUsdPriceFeedAddress,
-            poolStorage.ethUsdPriceFeedStalenessThreshold
-        );
+        return (poolStorage.ethUsdPriceFeedAddress, poolStorage.ethUsdPriceFeedStalenessThreshold);
     }
 
     /**
@@ -345,14 +300,10 @@ library LibUbiquityPool {
      * @param collateralIndex collateral token index
      * @return Amount of free collateral
      */
-    function freeCollateralBalance(
-        uint256 collateralIndex
-    ) internal view returns (uint256) {
+    function freeCollateralBalance(uint256 collateralIndex) internal view returns (uint256) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        return
-            IERC20(poolStorage.collateralAddresses[collateralIndex])
-                .balanceOf(address(this))
-                .sub(poolStorage.unclaimedPoolCollateral[collateralIndex]);
+        return IERC20(poolStorage.collateralAddresses[collateralIndex]).balanceOf(address(this))
+            .sub(poolStorage.unclaimedPoolCollateral[collateralIndex]);
     }
 
     /**
@@ -361,16 +312,10 @@ library LibUbiquityPool {
      * @param dollarAmount Amount of Dollars
      * @return Value in collateral tokens
      */
-    function getDollarInCollateral(
-        uint256 collateralIndex,
-        uint256 dollarAmount
-    ) internal view returns (uint256) {
+    function getDollarInCollateral(uint256 collateralIndex, uint256 dollarAmount) internal view returns (uint256) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        return
-            dollarAmount
-                .mul(UBIQUITY_POOL_PRICE_PRECISION)
-                .div(10 ** poolStorage.missingDecimals[collateralIndex])
-                .div(poolStorage.collateralPrices[collateralIndex]);
+        return dollarAmount.mul(UBIQUITY_POOL_PRICE_PRECISION).div(10 ** poolStorage.missingDecimals[collateralIndex])
+            .div(poolStorage.collateralPrices[collateralIndex]);
     }
 
     /**
@@ -381,45 +326,27 @@ library LibUbiquityPool {
      * 3. Calculate Dollar token price in USD
      * @return dollarPriceUsd USD price of Ubiquity Dollar
      */
-    function getDollarPriceUsd()
-        internal
-        view
-        returns (uint256 dollarPriceUsd)
-    {
+    function getDollarPriceUsd() internal view returns (uint256 dollarPriceUsd) {
         AppStorage storage store = LibAppStorage.appStorage();
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         // fetch Stable/USD quote from chainlink (8 decimals)
-        AggregatorV3Interface stableUsdPriceFeed = AggregatorV3Interface(
-            poolStorage.stableUsdPriceFeedAddress
-        );
-        (
-            ,
-            int256 stableUsdAnswer,
-            ,
-            uint256 stableUsdUpdatedAt,
-
-        ) = stableUsdPriceFeed.latestRoundData();
+        AggregatorV3Interface stableUsdPriceFeed = AggregatorV3Interface(poolStorage.stableUsdPriceFeedAddress);
+        (, int256 stableUsdAnswer,, uint256 stableUsdUpdatedAt,) = stableUsdPriceFeed.latestRoundData();
         uint256 stableUsdPriceFeedDecimals = stableUsdPriceFeed.decimals();
         // validate Stable/USD chainlink response
         require(stableUsdAnswer > 0, "Invalid Stable/USD price");
         require(
-            block.timestamp - stableUsdUpdatedAt <
-                poolStorage.stableUsdPriceFeedStalenessThreshold,
+            block.timestamp - stableUsdUpdatedAt < poolStorage.stableUsdPriceFeedStalenessThreshold,
             "Stale Stable/USD data"
         );
 
         // fetch Dollar/Stable quote from Curve's plain pool (18 decimals)
-        uint256 dollarPriceUsdD18 = ICurveStableSwapNG(
-            store.stableSwapPlainPoolAddress
-        ).price_oracle(0);
+        uint256 dollarPriceUsdD18 = ICurveStableSwapNG(store.stableSwapPlainPoolAddress).price_oracle(0);
 
         // convert to 6 decimals
-        dollarPriceUsd = dollarPriceUsdD18
-            .mul(UBIQUITY_POOL_PRICE_PRECISION)
-            .mul(uint256(stableUsdAnswer))
-            .div(10 ** stableUsdPriceFeedDecimals)
-            .div(1e18);
+        dollarPriceUsd = dollarPriceUsdD18.mul(UBIQUITY_POOL_PRICE_PRECISION).mul(uint256(stableUsdAnswer))
+            .div(10 ** stableUsdPriceFeedDecimals).div(1e18);
     }
 
     /**
@@ -430,42 +357,25 @@ library LibUbiquityPool {
      * 3. Calculate Governance token price in USD
      * @return governancePriceUsd Governance token price in USD
      */
-    function getGovernancePriceUsd()
-        internal
-        view
-        returns (uint256 governancePriceUsd)
-    {
+    function getGovernancePriceUsd() internal view returns (uint256 governancePriceUsd) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         // fetch latest ETH/USD price
-        AggregatorV3Interface ethUsdPriceFeed = AggregatorV3Interface(
-            poolStorage.ethUsdPriceFeedAddress
-        );
-        (, int256 answer, , uint256 updatedAt, ) = ethUsdPriceFeed
-            .latestRoundData();
+        AggregatorV3Interface ethUsdPriceFeed = AggregatorV3Interface(poolStorage.ethUsdPriceFeedAddress);
+        (, int256 answer,, uint256 updatedAt,) = ethUsdPriceFeed.latestRoundData();
         uint256 ethUsdPriceFeedDecimals = ethUsdPriceFeed.decimals();
 
         // validate ETH/USD chainlink response
         require(answer > 0, "Invalid price");
-        require(
-            block.timestamp - updatedAt <
-                poolStorage.ethUsdPriceFeedStalenessThreshold,
-            "Stale data"
-        );
+        require(block.timestamp - updatedAt < poolStorage.ethUsdPriceFeedStalenessThreshold, "Stale data");
 
         // convert ETH/USD chainlink price to 6 decimals
-        uint256 ethUsdPrice = uint256(answer)
-            .mul(UBIQUITY_POOL_PRICE_PRECISION)
-            .div(10 ** ethUsdPriceFeedDecimals);
+        uint256 ethUsdPrice = uint256(answer).mul(UBIQUITY_POOL_PRICE_PRECISION).div(10 ** ethUsdPriceFeedDecimals);
 
         // fetch ETH/Governance price (18 decimals)
-        uint256 ethGovernancePriceD18 = ICurveTwocryptoOptimized(
-            poolStorage.governanceEthPoolAddress
-        ).price_oracle();
+        uint256 ethGovernancePriceD18 = ICurveTwocryptoOptimized(poolStorage.governanceEthPoolAddress).price_oracle();
         // calculate Governance/ETH price (18 decimals)
-        uint256 governanceEthPriceD18 = uint256(1e18).mul(1e18).div(
-            ethGovernancePriceD18
-        );
+        uint256 governanceEthPriceD18 = uint256(1e18).mul(1e18).div(ethGovernancePriceD18);
 
         // calculate Governance token price in USD (6 decimals)
         governancePriceUsd = governanceEthPriceD18.mul(ethUsdPrice).div(1e18);
@@ -477,13 +387,9 @@ library LibUbiquityPool {
      * @param collateralIndex Collateral token index
      * @return User's balance available for redemption
      */
-    function getRedeemCollateralBalance(
-        address userAddress,
-        uint256 collateralIndex
-    ) internal view returns (uint256) {
+    function getRedeemCollateralBalance(address userAddress, uint256 collateralIndex) internal view returns (uint256) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        return
-            poolStorage.redeemCollateralBalances[userAddress][collateralIndex];
+        return poolStorage.redeemCollateralBalances[userAddress][collateralIndex];
     }
 
     /**
@@ -491,9 +397,7 @@ library LibUbiquityPool {
      * @param userAddress User address
      * @return User's Governance tokens balance available for redemption
      */
-    function getRedeemGovernanceBalance(
-        address userAddress
-    ) internal view returns (uint256) {
+    function getRedeemGovernanceBalance(address userAddress) internal view returns (uint256) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
         return poolStorage.redeemGovernanceBalances[userAddress];
     }
@@ -512,16 +416,9 @@ library LibUbiquityPool {
      * @dev Here stable coin refers to the 1st coin in the Curve's stable/Dollar plain pool
      * @return Price feed address and staleness threshold in seconds
      */
-    function stableUsdPriceFeedInformation()
-        internal
-        view
-        returns (address, uint256)
-    {
+    function stableUsdPriceFeedInformation() internal view returns (address, uint256) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
-        return (
-            poolStorage.stableUsdPriceFeedAddress,
-            poolStorage.stableUsdPriceFeedStalenessThreshold
-        );
+        return (poolStorage.stableUsdPriceFeedAddress, poolStorage.stableUsdPriceFeedStalenessThreshold);
     }
 
     //====================
@@ -550,66 +447,37 @@ library LibUbiquityPool {
     )
         internal
         collateralEnabled(collateralIndex)
-        returns (
-            uint256 totalDollarMint,
-            uint256 collateralNeeded,
-            uint256 governanceNeeded
-        )
+        returns (uint256 totalDollarMint, uint256 collateralNeeded, uint256 governanceNeeded)
     {
-        require(
-            ubiquityPoolStorage().isMintPaused[collateralIndex] == false,
-            "Minting is paused"
-        );
+        require(ubiquityPoolStorage().isMintPaused[collateralIndex] == false, "Minting is paused");
         // prevent unnecessary mints
-        require(
-            getDollarPriceUsd() >= ubiquityPoolStorage().mintPriceThreshold,
-            "Dollar price too low"
-        );
+        require(getDollarPriceUsd() >= ubiquityPoolStorage().mintPriceThreshold, "Dollar price too low");
 
         // update collateral price
         updateChainLinkCollateralPrice(collateralIndex);
 
         // user forces 1-to-1 override or collateral ratio >= 100%
-        if (
-            isOneToOne ||
-            ubiquityPoolStorage().collateralRatio >=
-            UBIQUITY_POOL_PRICE_PRECISION
-        ) {
+        if (isOneToOne || ubiquityPoolStorage().collateralRatio >= UBIQUITY_POOL_PRICE_PRECISION) {
             // get amount of collateral for minting Dollars
-            collateralNeeded = getDollarInCollateral(
-                collateralIndex,
-                dollarAmount
-            );
+            collateralNeeded = getDollarInCollateral(collateralIndex, dollarAmount);
             governanceNeeded = 0;
         } else if (ubiquityPoolStorage().collateralRatio == 0) {
             // collateral ratio is 0%, Dollar tokens can be minted by providing only Governance tokens (i.e. fully algorithmic stablecoin)
             collateralNeeded = 0;
-            governanceNeeded = dollarAmount
-                .mul(UBIQUITY_POOL_PRICE_PRECISION)
-                .div(getGovernancePriceUsd());
+            governanceNeeded = dollarAmount.mul(UBIQUITY_POOL_PRICE_PRECISION).div(getGovernancePriceUsd());
         } else {
             // fractional, user has to provide both collateral and Governance tokens
-            uint256 dollarForCollateral = dollarAmount
-                .mul(ubiquityPoolStorage().collateralRatio)
-                .div(UBIQUITY_POOL_PRICE_PRECISION);
+            uint256 dollarForCollateral =
+                dollarAmount.mul(ubiquityPoolStorage().collateralRatio).div(UBIQUITY_POOL_PRICE_PRECISION);
             uint256 dollarForGovernance = dollarAmount.sub(dollarForCollateral);
-            collateralNeeded = getDollarInCollateral(
-                collateralIndex,
-                dollarForCollateral
-            );
-            governanceNeeded = dollarForGovernance
-                .mul(UBIQUITY_POOL_PRICE_PRECISION)
-                .div(getGovernancePriceUsd());
+            collateralNeeded = getDollarInCollateral(collateralIndex, dollarForCollateral);
+            governanceNeeded = dollarForGovernance.mul(UBIQUITY_POOL_PRICE_PRECISION).div(getGovernancePriceUsd());
         }
 
         // subtract the minting fee
-        totalDollarMint = dollarAmount
-            .mul(
-                UBIQUITY_POOL_PRICE_PRECISION.sub(
-                    ubiquityPoolStorage().mintingFee[collateralIndex]
-                )
-            )
-            .div(UBIQUITY_POOL_PRICE_PRECISION);
+        totalDollarMint = dollarAmount.mul(
+                UBIQUITY_POOL_PRICE_PRECISION.sub(ubiquityPoolStorage().mintingFee[collateralIndex])
+            ).div(UBIQUITY_POOL_PRICE_PRECISION);
 
         // check slippages
         require((totalDollarMint >= dollarOutMin), "Dollar slippage");
@@ -618,22 +486,18 @@ library LibUbiquityPool {
 
         // check the pool ceiling
         require(
-            freeCollateralBalance(collateralIndex).add(collateralNeeded) <=
-                ubiquityPoolStorage().poolCeilings[collateralIndex],
+            freeCollateralBalance(collateralIndex).add(collateralNeeded)
+                <= ubiquityPoolStorage().poolCeilings[collateralIndex],
             "Pool ceiling"
         );
 
         // burn Governance tokens from sender and send collateral to the pool
-        IERC20Ubiquity(LibAppStorage.appStorage().governanceTokenAddress)
-            .burnFrom(msg.sender, governanceNeeded);
+        IERC20Ubiquity(LibAppStorage.appStorage().governanceTokenAddress).burnFrom(msg.sender, governanceNeeded);
         IERC20(ubiquityPoolStorage().collateralAddresses[collateralIndex])
             .safeTransferFrom(msg.sender, address(this), collateralNeeded);
 
         // mint Dollars
-        IERC20Ubiquity(LibAppStorage.appStorage().dollarTokenAddress).mint(
-            msg.sender,
-            totalDollarMint
-        );
+        IERC20Ubiquity(LibAppStorage.appStorage().dollarTokenAddress).mint(msg.sender, totalDollarMint);
     }
 
     /**
@@ -653,31 +517,17 @@ library LibUbiquityPool {
         uint256 dollarAmount,
         uint256 governanceOutMin,
         uint256 collateralOutMin
-    )
-        internal
-        collateralEnabled(collateralIndex)
-        returns (uint256 collateralOut, uint256 governanceOut)
-    {
+    ) internal collateralEnabled(collateralIndex) returns (uint256 collateralOut, uint256 governanceOut) {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        require(
-            poolStorage.isRedeemPaused[collateralIndex] == false,
-            "Redeeming is paused"
-        );
+        require(poolStorage.isRedeemPaused[collateralIndex] == false, "Redeeming is paused");
 
         // prevent unnecessary redemptions that could adversely affect the Dollar price
-        require(
-            getDollarPriceUsd() <= poolStorage.redeemPriceThreshold,
-            "Dollar price too high"
-        );
+        require(getDollarPriceUsd() <= poolStorage.redeemPriceThreshold, "Dollar price too high");
 
-        uint256 dollarAfterFee = dollarAmount
-            .mul(
-                UBIQUITY_POOL_PRICE_PRECISION.sub(
-                    poolStorage.redemptionFee[collateralIndex]
-                )
-            )
-            .div(UBIQUITY_POOL_PRICE_PRECISION);
+        uint256 dollarAfterFee = dollarAmount.mul(
+                UBIQUITY_POOL_PRICE_PRECISION.sub(poolStorage.redemptionFee[collateralIndex])
+            ).div(UBIQUITY_POOL_PRICE_PRECISION);
 
         // update collateral price
         updateChainLinkCollateralPrice(collateralIndex);
@@ -688,33 +538,24 @@ library LibUbiquityPool {
         // fully collateralized
         if (currentCollateralRatio >= UBIQUITY_POOL_PRICE_PRECISION) {
             // get collateral output for incoming Dollars
-            collateralOut = getDollarInCollateral(
-                collateralIndex,
-                dollarAfterFee
-            );
+            collateralOut = getDollarInCollateral(collateralIndex, dollarAfterFee);
             governanceOut = 0;
         } else if (currentCollateralRatio == 0) {
             // algorithmic, fully covered by Governance tokens
             collateralOut = 0;
-            governanceOut = dollarAfterFee
-                .mul(UBIQUITY_POOL_PRICE_PRECISION)
-                .div(getGovernancePriceUsd());
+            governanceOut = dollarAfterFee.mul(UBIQUITY_POOL_PRICE_PRECISION).div(getGovernancePriceUsd());
         } else {
             // fractional, partially covered by collateral and Governance tokens
-            collateralOut = getDollarInCollateral(
-                collateralIndex,
-                dollarAfterFee
-            ).mul(currentCollateralRatio).div(UBIQUITY_POOL_PRICE_PRECISION);
-            governanceOut = dollarAfterFee
-                .mul(UBIQUITY_POOL_PRICE_PRECISION.sub(currentCollateralRatio))
+            collateralOut = getDollarInCollateral(collateralIndex, dollarAfterFee).mul(currentCollateralRatio)
+                .div(UBIQUITY_POOL_PRICE_PRECISION);
+            governanceOut = dollarAfterFee.mul(UBIQUITY_POOL_PRICE_PRECISION.sub(currentCollateralRatio))
                 .div(getGovernancePriceUsd());
         }
 
         // checks
         require(
-            collateralOut <=
-                (IERC20(poolStorage.collateralAddresses[collateralIndex]))
-                    .balanceOf(address(this))
+            collateralOut
+                <= (IERC20(poolStorage.collateralAddresses[collateralIndex])).balanceOf(address(this))
                     .sub(poolStorage.unclaimedPoolCollateral[collateralIndex]),
             "Insufficient pool collateral"
         );
@@ -722,36 +563,22 @@ library LibUbiquityPool {
         require(governanceOut >= governanceOutMin, "Governance slippage");
 
         // increase collateral redemption balances
-        poolStorage.redeemCollateralBalances[msg.sender][
-            collateralIndex
-        ] = poolStorage
-        .redeemCollateralBalances[msg.sender][collateralIndex].add(
-                collateralOut
-            );
-        poolStorage.unclaimedPoolCollateral[collateralIndex] = poolStorage
-            .unclaimedPoolCollateral[collateralIndex]
-            .add(collateralOut);
+        poolStorage.redeemCollateralBalances[msg.sender][collateralIndex] =
+            poolStorage.redeemCollateralBalances[msg.sender][collateralIndex].add(collateralOut);
+        poolStorage.unclaimedPoolCollateral[collateralIndex] =
+            poolStorage.unclaimedPoolCollateral[collateralIndex].add(collateralOut);
 
         // increase Governance redemption balances
-        poolStorage.redeemGovernanceBalances[msg.sender] = poolStorage
-            .redeemGovernanceBalances[msg.sender]
-            .add(governanceOut);
-        poolStorage.unclaimedPoolGovernance = poolStorage
-            .unclaimedPoolGovernance
-            .add(governanceOut);
+        poolStorage.redeemGovernanceBalances[msg.sender] =
+            poolStorage.redeemGovernanceBalances[msg.sender].add(governanceOut);
+        poolStorage.unclaimedPoolGovernance = poolStorage.unclaimedPoolGovernance.add(governanceOut);
 
         poolStorage.lastRedeemedBlock[msg.sender] = block.number;
 
         // burn Dollars
-        IERC20Ubiquity(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(
-            msg.sender,
-            dollarAmount
-        );
+        IERC20Ubiquity(LibAppStorage.appStorage().dollarTokenAddress).burnFrom(msg.sender, dollarAmount);
         // mint Governance tokens to this address
-        IERC20Ubiquity(LibAppStorage.appStorage().governanceTokenAddress).mint(
-            address(this),
-            governanceOut
-        );
+        IERC20Ubiquity(LibAppStorage.appStorage().governanceTokenAddress).mint(address(this), governanceOut);
     }
 
     /**
@@ -764,25 +591,16 @@ library LibUbiquityPool {
      * @return governanceAmount Amount of Governance tokens redeemed
      * @return collateralAmount Amount of collateral tokens redeemed
      */
-    function collectRedemption(
-        uint256 collateralIndex
-    )
+    function collectRedemption(uint256 collateralIndex)
         internal
         collateralEnabled(collateralIndex)
         returns (uint256 governanceAmount, uint256 collateralAmount)
     {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
+        require(poolStorage.isRedeemPaused[collateralIndex] == false, "Redeeming is paused");
         require(
-            poolStorage.isRedeemPaused[collateralIndex] == false,
-            "Redeeming is paused"
-        );
-        require(
-            (
-                poolStorage.lastRedeemedBlock[msg.sender].add(
-                    poolStorage.redemptionDelayBlocks
-                )
-            ) < block.number,
+            (poolStorage.lastRedeemedBlock[msg.sender].add(poolStorage.redemptionDelayBlocks)) < block.number,
             "Too soon to collect redemption"
         );
 
@@ -792,36 +610,24 @@ library LibUbiquityPool {
         if (poolStorage.redeemGovernanceBalances[msg.sender] > 0) {
             governanceAmount = poolStorage.redeemGovernanceBalances[msg.sender];
             poolStorage.redeemGovernanceBalances[msg.sender] = 0;
-            poolStorage.unclaimedPoolGovernance = poolStorage
-                .unclaimedPoolGovernance
-                .sub(governanceAmount);
+            poolStorage.unclaimedPoolGovernance = poolStorage.unclaimedPoolGovernance.sub(governanceAmount);
             sendGovernance = true;
         }
 
-        if (
-            poolStorage.redeemCollateralBalances[msg.sender][collateralIndex] >
-            0
-        ) {
-            collateralAmount = poolStorage.redeemCollateralBalances[msg.sender][
-                collateralIndex
-            ];
-            poolStorage.redeemCollateralBalances[msg.sender][
-                collateralIndex
-            ] = 0;
-            poolStorage.unclaimedPoolCollateral[collateralIndex] = poolStorage
-                .unclaimedPoolCollateral[collateralIndex]
-                .sub(collateralAmount);
+        if (poolStorage.redeemCollateralBalances[msg.sender][collateralIndex] > 0) {
+            collateralAmount = poolStorage.redeemCollateralBalances[msg.sender][collateralIndex];
+            poolStorage.redeemCollateralBalances[msg.sender][collateralIndex] = 0;
+            poolStorage.unclaimedPoolCollateral[collateralIndex] =
+                poolStorage.unclaimedPoolCollateral[collateralIndex].sub(collateralAmount);
             sendCollateral = true;
         }
 
         // send out tokens
         if (sendGovernance) {
-            IERC20(LibAppStorage.appStorage().governanceTokenAddress)
-                .safeTransfer(msg.sender, governanceAmount);
+            IERC20(LibAppStorage.appStorage().governanceTokenAddress).safeTransfer(msg.sender, governanceAmount);
         }
         if (sendCollateral) {
-            IERC20(poolStorage.collateralAddresses[collateralIndex])
-                .safeTransfer(msg.sender, collateralAmount);
+            IERC20(poolStorage.collateralAddresses[collateralIndex]).safeTransfer(msg.sender, collateralAmount);
         }
     }
 
@@ -832,18 +638,15 @@ library LibUbiquityPool {
     function updateChainLinkCollateralPrice(uint256 collateralIndex) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(
-            poolStorage.collateralPriceFeedAddresses[collateralIndex]
-        );
+        AggregatorV3Interface priceFeed =
+            AggregatorV3Interface(poolStorage.collateralPriceFeedAddresses[collateralIndex]);
 
         // fetch latest price
-        (
-            ,
+        (,
             // roundId
             int256 answer, // startedAt
             ,
             uint256 updatedAt, // answeredInRound
-
         ) = priceFeed.latestRoundData();
 
         // fetch number of decimals in chainlink feed
@@ -852,17 +655,12 @@ library LibUbiquityPool {
         // validation
         require(answer > 0, "Invalid price");
         require(
-            block.timestamp - updatedAt <
-                poolStorage.collateralPriceFeedStalenessThresholds[
-                    collateralIndex
-                ],
+            block.timestamp - updatedAt < poolStorage.collateralPriceFeedStalenessThresholds[collateralIndex],
             "Stale data"
         );
 
         // convert chainlink price to 6 decimals
-        uint256 price = uint256(answer).mul(UBIQUITY_POOL_PRICE_PRECISION).div(
-            10 ** priceFeedDecimals
-        );
+        uint256 price = uint256(answer).mul(UBIQUITY_POOL_PRICE_PRECISION).div(10 ** priceFeedDecimals);
 
         poolStorage.collateralPrices[collateralIndex] = price;
 
@@ -883,32 +681,22 @@ library LibUbiquityPool {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         // checks the collateral index of the minter as an additional safety check
-        uint256 minterCollateralIndex = IDollarAmoMinter(msg.sender)
-            .collateralIndex();
+        uint256 minterCollateralIndex = IDollarAmoMinter(msg.sender).collateralIndex();
 
         // checks to see if borrowing is paused
-        require(
-            poolStorage.isBorrowPaused[minterCollateralIndex] == false,
-            "Borrowing is paused"
-        );
+        require(poolStorage.isBorrowPaused[minterCollateralIndex] == false, "Borrowing is paused");
 
         // ensure collateral is enabled
         require(
-            poolStorage.isCollateralEnabled[
-                poolStorage.collateralAddresses[minterCollateralIndex]
-            ],
+            poolStorage.isCollateralEnabled[poolStorage.collateralAddresses[minterCollateralIndex]],
             "Collateral disabled"
         );
 
         // ensure the pool is solvent (i.e. AMO minter borrows less than users want to redeem)
-        require(
-            collateralAmount <= freeCollateralBalance(minterCollateralIndex),
-            "Not enough free collateral"
-        );
+        require(collateralAmount <= freeCollateralBalance(minterCollateralIndex), "Not enough free collateral");
 
         // transfer
-        IERC20(poolStorage.collateralAddresses[minterCollateralIndex])
-            .safeTransfer(msg.sender, collateralAmount);
+        IERC20(poolStorage.collateralAddresses[minterCollateralIndex]).safeTransfer(msg.sender, collateralAmount);
     }
 
     //========================
@@ -923,8 +711,7 @@ library LibUbiquityPool {
         require(amoMinterAddress != address(0), "Zero address detected");
 
         // make sure the AMO Minter has collateralDollarBalance()
-        uint256 collatValE18 = IDollarAmoMinter(amoMinterAddress)
-            .collateralDollarBalance();
+        uint256 collatValE18 = IDollarAmoMinter(amoMinterAddress).collateralDollarBalance();
         require(collatValE18 >= 0, "Invalid AMO");
 
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
@@ -940,15 +727,10 @@ library LibUbiquityPool {
      * @param chainLinkPriceFeedAddress Chainlink's price feed address
      * @param poolCeiling Max amount of available tokens for collateral
      */
-    function addCollateralToken(
-        address collateralAddress,
-        address chainLinkPriceFeedAddress,
-        uint256 poolCeiling
-    ) internal {
-        require(
-            !collateralExists(collateralAddress),
-            "Collateral already added"
-        );
+    function addCollateralToken(address collateralAddress, address chainLinkPriceFeedAddress, uint256 poolCeiling)
+        internal
+    {
+        require(!collateralExists(collateralAddress), "Collateral already added");
 
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
@@ -964,9 +746,7 @@ library LibUbiquityPool {
         poolStorage.isCollateralEnabled[collateralAddress] = false;
 
         // add in the missing decimals
-        poolStorage.missingDecimals.push(
-            uint256(18).sub(ERC20(collateralAddress).decimals())
-        );
+        poolStorage.missingDecimals.push(uint256(18).sub(ERC20(collateralAddress).decimals()));
 
         // add in the collateral symbols
         poolStorage.collateralSymbols.push(ERC20(collateralAddress).symbol());
@@ -990,9 +770,7 @@ library LibUbiquityPool {
         poolStorage.poolCeilings.push(poolCeiling);
 
         // set price feed address
-        poolStorage.collateralPriceFeedAddresses.push(
-            chainLinkPriceFeedAddress
-        );
+        poolStorage.collateralPriceFeedAddresses.push(chainLinkPriceFeedAddress);
 
         // set price feed staleness threshold in seconds
         poolStorage.collateralPriceFeedStalenessThresholds.push(1 days);
@@ -1021,32 +799,19 @@ library LibUbiquityPool {
         address chainLinkPriceFeedAddress,
         uint256 stalenessThreshold
     ) internal {
-        require(
-            collateralExists(collateralAddress),
-            "Collateral does not exist"
-        );
+        require(collateralExists(collateralAddress), "Collateral does not exist");
 
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        uint256 collateralIndex = poolStorage.collateralIndex[
-            collateralAddress
-        ];
+        uint256 collateralIndex = poolStorage.collateralIndex[collateralAddress];
 
         // set price feed address
-        poolStorage.collateralPriceFeedAddresses[
-            collateralIndex
-        ] = chainLinkPriceFeedAddress;
+        poolStorage.collateralPriceFeedAddresses[collateralIndex] = chainLinkPriceFeedAddress;
 
         // set staleness threshold in seconds when chainlink answer should be considered stale
-        poolStorage.collateralPriceFeedStalenessThresholds[
-            collateralIndex
-        ] = stalenessThreshold;
+        poolStorage.collateralPriceFeedStalenessThresholds[collateralIndex] = stalenessThreshold;
 
-        emit CollateralPriceFeedSet(
-            collateralIndex,
-            chainLinkPriceFeedAddress,
-            stalenessThreshold
-        );
+        emit CollateralPriceFeedSet(collateralIndex, chainLinkPriceFeedAddress, stalenessThreshold);
     }
 
     /**
@@ -1078,10 +843,7 @@ library LibUbiquityPool {
      * @param newPriceFeedAddress New chainlink price feed address for ETH/USD pair
      * @param newStalenessThreshold New threshold in seconds when chainlink's ETH/USD price feed answer should be considered stale
      */
-    function setEthUsdChainLinkPriceFeed(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    ) internal {
+    function setEthUsdChainLinkPriceFeed(address newPriceFeedAddress, uint256 newStalenessThreshold) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.ethUsdPriceFeedAddress = newPriceFeedAddress;
@@ -1096,11 +858,7 @@ library LibUbiquityPool {
      * @param newMintFee New mint fee
      * @param newRedeemFee New redeem fee
      */
-    function setFees(
-        uint256 collateralIndex,
-        uint256 newMintFee,
-        uint256 newRedeemFee
-    ) internal {
+    function setFees(uint256 collateralIndex, uint256 newMintFee, uint256 newRedeemFee) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.mintingFee[collateralIndex] = newMintFee;
@@ -1120,9 +878,7 @@ library LibUbiquityPool {
      *
      * @param newGovernanceEthPoolAddress New pool address for Governance/ETH pair
      */
-    function setGovernanceEthPoolAddress(
-        address newGovernanceEthPoolAddress
-    ) internal {
+    function setGovernanceEthPoolAddress(address newGovernanceEthPoolAddress) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.governanceEthPoolAddress = newGovernanceEthPoolAddress;
@@ -1135,10 +891,7 @@ library LibUbiquityPool {
      * @param collateralIndex Collateral token index
      * @param newCeiling Max amount of collateral
      */
-    function setPoolCeiling(
-        uint256 collateralIndex,
-        uint256 newCeiling
-    ) internal {
+    function setPoolCeiling(uint256 collateralIndex, uint256 newCeiling) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.poolCeilings[collateralIndex] = newCeiling;
@@ -1151,10 +904,7 @@ library LibUbiquityPool {
      * @param newMintPriceThreshold New mint price threshold
      * @param newRedeemPriceThreshold New redeem price threshold
      */
-    function setPriceThresholds(
-        uint256 newMintPriceThreshold,
-        uint256 newRedeemPriceThreshold
-    ) internal {
+    function setPriceThresholds(uint256 newMintPriceThreshold, uint256 newRedeemPriceThreshold) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.mintPriceThreshold = newMintPriceThreshold;
@@ -1171,9 +921,7 @@ library LibUbiquityPool {
      * @dev `newRedemptionDelayBlocks` sets number of blocks that should be mined after which user can call `collectRedemption()`
      * @param newRedemptionDelayBlocks Redemption delay in blocks
      */
-    function setRedemptionDelayBlocks(
-        uint256 newRedemptionDelayBlocks
-    ) internal {
+    function setRedemptionDelayBlocks(uint256 newRedemptionDelayBlocks) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.redemptionDelayBlocks = newRedemptionDelayBlocks;
@@ -1187,15 +935,11 @@ library LibUbiquityPool {
      * @param newPriceFeedAddress New chainlink price feed address for stable/USD pair
      * @param newStalenessThreshold New threshold in seconds when chainlink's stable/USD price feed answer should be considered stale
      */
-    function setStableUsdChainLinkPriceFeed(
-        address newPriceFeedAddress,
-        uint256 newStalenessThreshold
-    ) internal {
+    function setStableUsdChainLinkPriceFeed(address newPriceFeedAddress, uint256 newStalenessThreshold) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
         poolStorage.stableUsdPriceFeedAddress = newPriceFeedAddress;
-        poolStorage
-            .stableUsdPriceFeedStalenessThreshold = newStalenessThreshold;
+        poolStorage.stableUsdPriceFeedStalenessThreshold = newStalenessThreshold;
 
         emit StableUsdPriceFeedSet(newPriceFeedAddress, newStalenessThreshold);
     }
@@ -1207,16 +951,10 @@ library LibUbiquityPool {
     function toggleCollateral(uint256 collateralIndex) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        address collateralAddress = poolStorage.collateralAddresses[
-            collateralIndex
-        ];
-        poolStorage.isCollateralEnabled[collateralAddress] = !poolStorage
-            .isCollateralEnabled[collateralAddress];
+        address collateralAddress = poolStorage.collateralAddresses[collateralIndex];
+        poolStorage.isCollateralEnabled[collateralAddress] = !poolStorage.isCollateralEnabled[collateralAddress];
 
-        emit CollateralToggled(
-            collateralIndex,
-            poolStorage.isCollateralEnabled[collateralAddress]
-        );
+        emit CollateralToggled(collateralIndex, poolStorage.isCollateralEnabled[collateralAddress]);
     }
 
     /**
@@ -1224,21 +962,16 @@ library LibUbiquityPool {
      * @param collateralIndex Collateral token index
      * @param toggleIndex Method index. 0 - toggle mint pause, 1 - toggle redeem pause, 2 - toggle borrow by AMO pause
      */
-    function toggleMintRedeemBorrow(
-        uint256 collateralIndex,
-        uint8 toggleIndex
-    ) internal {
+    function toggleMintRedeemBorrow(uint256 collateralIndex, uint8 toggleIndex) internal {
         UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
 
-        if (toggleIndex == 0)
-            poolStorage.isMintPaused[collateralIndex] = !poolStorage
-                .isMintPaused[collateralIndex];
-        else if (toggleIndex == 1)
-            poolStorage.isRedeemPaused[collateralIndex] = !poolStorage
-                .isRedeemPaused[collateralIndex];
-        else if (toggleIndex == 2)
-            poolStorage.isBorrowPaused[collateralIndex] = !poolStorage
-                .isBorrowPaused[collateralIndex];
+        if (toggleIndex == 0) {
+            poolStorage.isMintPaused[collateralIndex] = !poolStorage.isMintPaused[collateralIndex];
+        } else if (toggleIndex == 1) {
+            poolStorage.isRedeemPaused[collateralIndex] = !poolStorage.isRedeemPaused[collateralIndex];
+        } else if (toggleIndex == 2) {
+            poolStorage.isBorrowPaused[collateralIndex] = !poolStorage.isBorrowPaused[collateralIndex];
+        }
 
         emit MintRedeemBorrowToggled(collateralIndex, toggleIndex);
     }

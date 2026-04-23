@@ -11,13 +11,7 @@ interface ICurveFactory {
     event BasePoolAdded(address base_pool, address implementat);
 
     /// @notice Emitted when a new MetaPool is deployed
-    event MetaPoolDeployed(
-        address coin,
-        address base_pool,
-        uint256 A,
-        uint256 fee,
-        address deployer
-    );
+    event MetaPoolDeployed(address coin, address base_pool, uint256 A, uint256 fee, address deployer);
 
     /**
      * @notice Finds an available pool for exchanging two coins
@@ -25,10 +19,7 @@ interface ICurveFactory {
      * @param _to Address of coin to be received
      * @return Pool address
      */
-    function find_pool_for_coins(
-        address _from,
-        address _to
-    ) external view returns (address);
+    function find_pool_for_coins(address _from, address _to) external view returns (address);
 
     /**
      * @notice Finds an available pool for exchanging two coins
@@ -37,20 +28,14 @@ interface ICurveFactory {
      * @param i Index value. When multiple pools are available this value is used to return the n'th address.
      * @return Pool address
      */
-    function find_pool_for_coins(
-        address _from,
-        address _to,
-        uint256 i
-    ) external view returns (address);
+    function find_pool_for_coins(address _from, address _to, uint256 i) external view returns (address);
 
     /**
      * @notice Get the number of coins in a pool
      * @param _pool Pool address
      * @return Number of coins
      */
-    function get_n_coins(
-        address _pool
-    ) external view returns (uint256, uint256);
+    function get_n_coins(address _pool) external view returns (uint256, uint256);
 
     /**
      * @notice Get the coins within a pool
@@ -65,27 +50,21 @@ interface ICurveFactory {
      * @param _pool Pool address
      * @return List of coin addresses
      */
-    function get_underlying_coins(
-        address _pool
-    ) external view returns (address[8] memory);
+    function get_underlying_coins(address _pool) external view returns (address[8] memory);
 
     /**
      * @notice Get decimal places for each coin within a pool
      * @param _pool Pool address
      * @return uint256 list of decimals
      */
-    function get_decimals(
-        address _pool
-    ) external view returns (uint256[2] memory);
+    function get_decimals(address _pool) external view returns (uint256[2] memory);
 
     /**
      * @notice Get decimal places for each underlying coin within a pool
      * @param _pool Pool address
      * @return uint256 list of decimals
      */
-    function get_underlying_decimals(
-        address _pool
-    ) external view returns (uint256[8] memory);
+    function get_underlying_decimals(address _pool) external view returns (uint256[8] memory);
 
     /**
      * @notice Get rates for coins within a pool
@@ -100,18 +79,14 @@ interface ICurveFactory {
      * @param _pool Pool address
      * @return uint256 list of balances
      */
-    function get_balances(
-        address _pool
-    ) external view returns (uint256[2] memory);
+    function get_balances(address _pool) external view returns (uint256[2] memory);
 
     /**
      * @notice Get balances for each underlying coin within a metapool
      * @param _pool Metapool address
      * @return uint256 list of underlying balances
      */
-    function get_underlying_balances(
-        address _pool
-    ) external view returns (uint256[8] memory);
+    function get_underlying_balances(address _pool) external view returns (uint256[8] memory);
 
     /**
      * @notice Get the amplfication co-efficient for a pool
@@ -132,9 +107,7 @@ interface ICurveFactory {
      * @param _pool Pool address
      * @return List of uint256 admin balances
      */
-    function get_admin_balances(
-        address _pool
-    ) external view returns (uint256[2] memory);
+    function get_admin_balances(address _pool) external view returns (uint256[2] memory);
 
     /**
      * @notice Convert coin addresses to indices for use with pool methods
@@ -143,11 +116,7 @@ interface ICurveFactory {
      * @param _to Coin address to be used as `j` within a pool
      * @return int128 `i`, int128 `j`, boolean indicating if `i` and `j` are underlying coins
      */
-    function get_coin_indices(
-        address _pool,
-        address _from,
-        address _to
-    ) external view returns (int128, int128, bool);
+    function get_coin_indices(address _pool, address _from, address _to) external view returns (int128, int128, bool);
 
     /**
      * @notice Add a base pool to the registry, which may be used in factory metapools
@@ -156,11 +125,7 @@ interface ICurveFactory {
      * @param _metapool_implementation Implementation address that can be used with this base pool
      * @param _fee_receiver Admin fee receiver address for metapools using this base pool
      */
-    function add_base_pool(
-        address _base_pool,
-        address _metapool_implementation,
-        address _fee_receiver
-    ) external;
+    function add_base_pool(address _base_pool, address _metapool_implementation, address _fee_receiver) external;
 
     /**
      * @notice Deploy a new metapool
@@ -205,10 +170,7 @@ interface ICurveFactory {
      * @param _base_pool Address of base pool to set fee receiver for. For plain pools, leave as `ZERO_ADDRESS`.
      * @param _fee_receiver Address that fees are sent to
      */
-    function set_fee_receiver(
-        address _base_pool,
-        address _fee_receiver
-    ) external;
+    function set_fee_receiver(address _base_pool, address _fee_receiver) external;
 
     /**
      * @notice Convert the fees of a pool and transfer to the pool's fee receiver

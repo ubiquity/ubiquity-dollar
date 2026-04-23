@@ -14,10 +14,7 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondTestSetup {
         vm.startPrank(admin);
         managerFacet.setCreditNftAddress(address(creditNft));
         accessControlFacet.grantRole(CREDIT_NFT_MANAGER_ROLE, address(this));
-        accessControlFacet.grantRole(
-            GOVERNANCE_TOKEN_MINTER_ROLE,
-            address(this)
-        );
+        accessControlFacet.grantRole(GOVERNANCE_TOKEN_MINTER_ROLE, address(this));
         vm.stopPrank();
     }
 
@@ -29,9 +26,6 @@ contract CreditNftRedemptionCalculatorFacetTest is DiamondTestSetup {
 
     function test_getCreditNftAmount() public {
         creditNft.mintCreditNft(user1, 5000 ether, 10);
-        assertEq(
-            creditNftRedemptionCalculationFacet.getCreditNftAmount(10000),
-            40000
-        );
+        assertEq(creditNftRedemptionCalculationFacet.getCreditNftAmount(10000), 40000);
     }
 }

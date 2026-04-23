@@ -31,11 +31,9 @@ interface ICurveStableSwapMetaNG is IERC20 {
      * @param _receiver Optional address that receives the LP tokens. If not specified, they are sent to the caller.
      * @return The amount of LP tokens that were minted in the deposit
      */
-    function add_liquidity(
-        uint256[2] memory _amounts,
-        uint256 _min_mint_amount,
-        address _receiver
-    ) external returns (uint256);
+    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount, address _receiver)
+        external
+        returns (uint256);
 
     /**
      * @notice Getter for the current balance of coin `i` within the pool
@@ -56,10 +54,7 @@ interface ICurveStableSwapMetaNG is IERC20 {
      * @param _is_deposit Set `True` for deposits, `False` for withdrawals
      * @return The expected amount of LP tokens minted or burned
      */
-    function calc_token_amount(
-        uint256[2] memory _amounts,
-        bool _is_deposit
-    ) external view returns (uint256);
+    function calc_token_amount(uint256[2] memory _amounts, bool _is_deposit) external view returns (uint256);
 
     /**
      * @notice Returns token address by the provided `arg0` index
@@ -77,12 +72,7 @@ interface ICurveStableSwapMetaNG is IERC20 {
      * @param min_dy The minimum amount of `j` to receive. If the swap would result in less, the transaction will revert.
      * @return The amount of `j` received in the exchange
      */
-    function exchange(
-        int128 i,
-        int128 j,
-        uint256 dx,
-        uint256 min_dy
-    ) external returns (uint256);
+    function exchange(int128 i, int128 j, uint256 dx, uint256 min_dy) external returns (uint256);
 
     /**
      * @notice Function to calculate the exponential moving average (ema) price for the coin at index value `i`
@@ -98,9 +88,5 @@ interface ICurveStableSwapMetaNG is IERC20 {
      * @param _min_received Minimum amount of the coin to receive
      * @return The amount of the coin received in the withdrawal
      */
-    function remove_liquidity_one_coin(
-        uint256 _burn_amount,
-        int128 i,
-        uint256 _min_received
-    ) external returns (uint256);
+    function remove_liquidity_one_coin(uint256 _burn_amount, int128 i, uint256 _min_received) external returns (uint256);
 }

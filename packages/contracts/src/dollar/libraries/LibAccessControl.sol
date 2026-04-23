@@ -15,9 +15,7 @@ library LibAccessControl {
 
     /// @notice Storage slot used to store data for this library
     bytes32 constant ACCESS_CONTROL_STORAGE_SLOT =
-        bytes32(
-            uint256(keccak256("ubiquity.contracts.access.control.storage")) - 1
-        ) & ~bytes32(uint256(0xff));
+        bytes32(uint256(keccak256("ubiquity.contracts.access.control.storage")) - 1) & ~bytes32(uint256(0xff));
 
     /// @notice Structure to keep all role members with their admin role
     struct RoleData {
@@ -31,25 +29,13 @@ library LibAccessControl {
     }
 
     /// @notice Emitted when admin role of a role is updated
-    event RoleAdminChanged(
-        bytes32 indexed role,
-        bytes32 indexed previousAdminRole,
-        bytes32 indexed newAdminRole
-    );
+    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);
 
     /// @notice Emitted when role is granted to account
-    event RoleGranted(
-        bytes32 indexed role,
-        address indexed account,
-        address indexed sender
-    );
+    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);
 
     /// @notice Emitted when role is revoked from account
-    event RoleRevoked(
-        bytes32 indexed role,
-        address indexed account,
-        address indexed sender
-    );
+    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);
 
     /// @notice Emitted when the pause is triggered by `account`
     event Paused(address account);
@@ -88,10 +74,7 @@ library LibAccessControl {
      * @param account Address to check
      * @return Whether role is assigned to account
      */
-    function hasRole(
-        bytes32 role,
-        address account
-    ) internal view returns (bool) {
+    function hasRole(bytes32 role, address account) internal view returns (bool) {
         return accessControlStorage().roles[role].members.contains(account);
     }
 

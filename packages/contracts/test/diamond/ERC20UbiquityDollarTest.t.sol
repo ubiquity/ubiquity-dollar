@@ -5,11 +5,7 @@ import "./DiamondTestSetup.sol";
 import "../../src/dollar/libraries/Constants.sol";
 
 contract ERC20UbiquityDollarTest is DiamondTestSetup {
-    event Minting(
-        address indexed mockAddr1,
-        address indexed minter,
-        uint256 amount
-    );
+    event Minting(address indexed mockAddr1, address indexed minter, uint256 amount);
 
     event Burning(address indexed burned, uint256 amount);
 
@@ -44,14 +40,7 @@ contract ERC20UbiquityDollarTest is DiamondTestSetup {
                 "\x19\x01",
                 dollarToken.DOMAIN_SEPARATOR(),
                 keccak256(
-                    abi.encode(
-                        PERMIT_TYPEHASH,
-                        erc20Owner,
-                        erc20Spender,
-                        1 ether,
-                        dollarToken.nonces(erc20Owner),
-                        0
-                    )
+                    abi.encode(PERMIT_TYPEHASH, erc20Owner, erc20Spender, 1 ether, dollarToken.nonces(erc20Owner), 0)
                 )
             )
         );
@@ -80,22 +69,11 @@ contract ERC20UbiquityDollarTest is DiamondTestSetup {
                 )
             )
         );
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(
-            erc20SpenderPrivateKey,
-            digest
-        );
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(erc20SpenderPrivateKey, digest);
         // run permit
         vm.prank(erc20Spender);
         vm.expectRevert("ERC20Permit: invalid signature");
-        dollarToken.permit(
-            erc20Owner,
-            erc20Spender,
-            1 ether,
-            block.timestamp + 1 days,
-            v,
-            r,
-            s
-        );
+        dollarToken.permit(erc20Owner, erc20Spender, 1 ether, block.timestamp + 1 days, v, r, s);
     }
 
     function testPermit_ShouldIncreaseSpenderAllowance() public {
@@ -120,15 +98,7 @@ contract ERC20UbiquityDollarTest is DiamondTestSetup {
         // run permit
         uint256 noncesBefore = dollarToken.nonces(erc20Owner);
         vm.prank(erc20Spender);
-        dollarToken.permit(
-            erc20Owner,
-            erc20Spender,
-            1 ether,
-            block.timestamp + 1 days,
-            v,
-            r,
-            s
-        );
+        dollarToken.permit(erc20Owner, erc20Spender, 1 ether, block.timestamp + 1 days, v, r, s);
         assertEq(dollarToken.allowance(erc20Owner, erc20Spender), 1 ether);
         assertEq(dollarToken.nonces(erc20Owner), noncesBefore + 1);
     }
@@ -169,10 +139,7 @@ contract ERC20UbiquityDollarTest is DiamondTestSetup {
         // create burner role
         address burner = makeAddr("burner");
         vm.prank(admin);
-        accessControlFacet.grantRole(
-            keccak256("DOLLAR_TOKEN_BURNER_ROLE"),
-            burner
-        );
+        accessControlFacet.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // admin pauses contract
         vm.prank(admin);
         dollarToken.pause();
@@ -191,10 +158,7 @@ contract ERC20UbiquityDollarTest is DiamondTestSetup {
         // create burner role
         address burner = makeAddr("burner");
         vm.prank(admin);
-        accessControlFacet.grantRole(
-            keccak256("DOLLAR_TOKEN_BURNER_ROLE"),
-            burner
-        );
+        accessControlFacet.grantRole(keccak256("DOLLAR_TOKEN_BURNER_ROLE"), burner);
         // burn 50 tokens for user
         vm.prank(burner);
         vm.expectEmit(true, true, true, true);

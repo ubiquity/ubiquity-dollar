@@ -31,48 +31,21 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         amountsOut[1] = _expected_swap_amount;
         vm.mockCall(
             _sushiSwapRouter,
-            abi.encodeWithSelector(
-                IUniswapV2Router01.swapExactTokensForTokens.selector
-            ),
+            abi.encodeWithSelector(IUniswapV2Router01.swapExactTokensForTokens.selector),
             abi.encode(amountsOut)
         );
-        vm.mockCall(
-            _sushiSwapRouter,
-            abi.encodeWithSelector(IUniswapV2Router01.addLiquidity.selector),
-            abi.encode()
-        );
+        vm.mockCall(_sushiSwapRouter, abi.encodeWithSelector(IUniswapV2Router01.addLiquidity.selector), abi.encode());
     }
 
-    function mockManagerAddresses(
-        address _curve3PoolAddress,
-        address _stakingContractAddress
-    ) public {
-        vm.store(
-            dollarManagerAddress,
-            bytes32(uint256(13)),
-            bytes32(abi.encodePacked(_stakingContractAddress))
-        );
-        vm.store(
-            dollarManagerAddress,
-            bytes32(uint256(15)),
-            bytes32(abi.encodePacked(_curve3PoolAddress))
-        );
-        vm.mockCall(
-            _curve3PoolAddress,
-            abi.encodeWithSelector(IERC20.approve.selector),
-            abi.encode()
-        );
+    function mockManagerAddresses(address _curve3PoolAddress, address _stakingContractAddress) public {
+        vm.store(dollarManagerAddress, bytes32(uint256(13)), bytes32(abi.encodePacked(_stakingContractAddress)));
+        vm.store(dollarManagerAddress, bytes32(uint256(15)), bytes32(abi.encodePacked(_curve3PoolAddress)));
+        vm.mockCall(_curve3PoolAddress, abi.encodeWithSelector(IERC20.approve.selector), abi.encode());
     }
 
-    function mockMetaPool(
-        address _metaPoolAddress,
-        uint256 _expectedLiqAmt,
-        uint256 _expectedExchangeAmt
-    ) public {
+    function mockMetaPool(address _metaPoolAddress, uint256 _expectedLiqAmt, uint256 _expectedExchangeAmt) public {
         vm.prank(admin);
-        ManagerFacet(dollarManagerAddress).setStableSwapMetaPoolAddress(
-            _metaPoolAddress
-        );
+        ManagerFacet(dollarManagerAddress).setStableSwapMetaPoolAddress(_metaPoolAddress);
         vm.mockCall(
             _metaPoolAddress,
             abi.encodeWithSelector(ICurveStableSwapMetaNG.exchange.selector),
@@ -80,9 +53,7 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         );
         vm.mockCall(
             _metaPoolAddress,
-            abi.encodeWithSelector(
-                ICurveStableSwapMetaNG.add_liquidity.selector
-            ),
+            abi.encodeWithSelector(ICurveStableSwapMetaNG.add_liquidity.selector),
             abi.encode(_expectedLiqAmt)
         );
     }
@@ -103,8 +74,7 @@ contract DollarMintExcessFacetTest is DiamondTestSetup {
         // 10% should be transferred to the treasury address
         uint256 _before_treasury_bal = dollarToken.balanceOf(treasuryAddress);
 
-        DollarMintExcessFacet(excessDollarsDistributorAddress)
-            .distributeDollars();
+        DollarMintExcessFacet(excessDollarsDistributorAddress).distributeDollars();
         uint256 _after_treasury_bal = dollarToken.balanceOf(treasuryAddress);
         assertEq(_after_treasury_bal - _before_treasury_bal, 0);
     }

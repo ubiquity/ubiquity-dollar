@@ -34,12 +34,7 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
         );
 
         // Deploy AaveAmo contract
-        aaveAmo = new AaveAmo(
-            owner,
-            address(amoMinter),
-            address(1),
-            address(2)
-        );
+        aaveAmo = new AaveAmo(owner, address(amoMinter), address(1), address(2));
 
         // Enable AaveAmo as a valid Amo
         vm.prank(owner);
@@ -49,11 +44,7 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
 
         // Add collateral token to the pool with a ceiling
         uint256 poolCeiling = 500_000e18;
-        ubiquityPoolFacet.addCollateralToken(
-            address(collateralToken),
-            address(collateralTokenPriceFeed),
-            poolCeiling
-        );
+        ubiquityPoolFacet.addCollateralToken(address(collateralToken), address(collateralTokenPriceFeed), poolCeiling);
 
         // Enable collateral and register Amo Minter
         ubiquityPoolFacet.toggleCollateral(0);
@@ -78,10 +69,7 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
         assertEq(newAmoMinter.owner(), owner);
 
         // Verify the collateral token is set correctly
-        assertEq(
-            address(newAmoMinter.collateralToken()),
-            address(collateralToken)
-        );
+        assertEq(address(newAmoMinter.collateralToken()), address(collateralToken));
 
         // Verify the collateral index is set correctly
         assertEq(newAmoMinter.collateralIndex(), 0);
@@ -90,10 +78,7 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
         assertEq(address(newAmoMinter.pool()), address(ubiquityPoolFacet));
 
         // Verify the missing decimals calculation
-        assertEq(
-            newAmoMinter.missingDecimals(),
-            uint256(18) - collateralToken.decimals()
-        );
+        assertEq(newAmoMinter.missingDecimals(), uint256(18) - collateralToken.decimals());
     }
 
     function testConstructor_ShouldRevertIfOwnerIsZero() public {
@@ -164,14 +149,8 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
         amoMinter.giveCollateralToAmo(address(aaveAmo), collatAmount);
 
         // Verify the balances
-        assertEq(
-            amoMinter.collateralBorrowedBalances(address(aaveAmo)),
-            int256(collatAmount)
-        );
-        assertEq(
-            amoMinter.collateralTotalBorrowedBalance(),
-            int256(collatAmount)
-        );
+        assertEq(amoMinter.collateralBorrowedBalances(address(aaveAmo)), int256(collatAmount));
+        assertEq(amoMinter.collateralTotalBorrowedBalance(), int256(collatAmount));
     }
 
     function testGiveCollatToAmo_ShouldRevertWhenNotValidAmo() public {
@@ -198,9 +177,7 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
     function testReceiveCollatFromAmo_ShouldWorkWhenCalledByValidAmo() public {
         uint256 collatAmount = 1000e18;
 
-        uint256 poolBalance = collateralToken.balanceOf(
-            address(ubiquityPoolFacet)
-        );
+        uint256 poolBalance = collateralToken.balanceOf(address(ubiquityPoolFacet));
 
         // First, give collateral to the Amo
         vm.prank(owner);
@@ -217,10 +194,7 @@ contract UbiquityAmoMinterTest is DiamondTestSetup {
         assertEq(amoMinter.collateralTotalBorrowedBalance(), 0);
         assertEq(collateralToken.balanceOf(address(aaveAmo)), 0);
         assertEq(collateralToken.balanceOf(address(amoMinter)), 0);
-        assertEq(
-            poolBalance,
-            collateralToken.balanceOf(address(ubiquityPoolFacet))
-        );
+        assertEq(poolBalance, collateralToken.balanceOf(address(ubiquityPoolFacet)));
     }
 
     function testReceiveCollatFromAmo_ShouldRevertWhenNotValidAmo() public {

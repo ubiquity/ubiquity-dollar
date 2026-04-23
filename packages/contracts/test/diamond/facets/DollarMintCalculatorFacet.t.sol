@@ -19,8 +19,7 @@ contract DollarMintCalculatorFacetTest is DiamondTestSetup {
     }
 
     function mockTwapFuncs(uint256 _twapPrice) public {
-        MockCurveStableSwapMetaNG(managerFacet.stableSwapMetaPoolAddress())
-            .updateMockParams(_twapPrice);
+        MockCurveStableSwapMetaNG(managerFacet.stableSwapMetaPoolAddress()).updateMockParams(_twapPrice);
     }
 
     function test_getDollarsToMintRevertsIfPriceLowerThan1USD() public {

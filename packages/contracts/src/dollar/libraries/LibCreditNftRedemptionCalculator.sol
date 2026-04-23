@@ -17,22 +17,17 @@ library LibCreditNftRedemptionCalculator {
      * @param dollarsToBurn Amount of Dollars to burn
      * @return Amount of Credit NFTs to mint
      */
-    function getCreditNftAmount(
-        uint256 dollarsToBurn
-    ) internal view returns (uint256) {
+    function getCreditNftAmount(uint256 dollarsToBurn) internal view returns (uint256) {
         AppStorage storage store = LibAppStorage.appStorage();
         address creditNftAddress = store.creditNftAddress;
         CreditNft cNFT = CreditNft(creditNftAddress);
         require(
-            cNFT.getTotalOutstandingDebt() <
-                IERC20(store.dollarTokenAddress).totalSupply(),
+            cNFT.getTotalOutstandingDebt() < IERC20(store.dollarTokenAddress).totalSupply(),
             "CreditNft to Dollar: DEBT_TOO_HIGH"
         );
         bytes16 one = uint256(1).fromUInt();
         bytes16 totalDebt = cNFT.getTotalOutstandingDebt().fromUInt();
-        bytes16 r = totalDebt.div(
-            IERC20(store.dollarTokenAddress).totalSupply().fromUInt()
-        );
+        bytes16 r = totalDebt.div(IERC20(store.dollarTokenAddress).totalSupply().fromUInt());
 
         bytes16 oneMinusRAllSquared = (one.sub(r)).mul(one.sub(r));
         bytes16 res = one.div(oneMinusRAllSquared);

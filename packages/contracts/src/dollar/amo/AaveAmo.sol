@@ -35,22 +35,11 @@ contract AaveAmo is IAmo, Ownable {
      * @param _aavePool Address of the Aave pool
      * @param _aaveRewardsController Address of the Aave rewards controller
      */
-    constructor(
-        address _ownerAddress,
-        address _amoMinterAddress,
-        address _aavePool,
-        address _aaveRewardsController
-    ) {
+    constructor(address _ownerAddress, address _amoMinterAddress, address _aavePool, address _aaveRewardsController) {
         require(_ownerAddress != address(0), "Owner address cannot be zero");
-        require(
-            _amoMinterAddress != address(0),
-            "Amo minter address cannot be zero"
-        );
+        require(_amoMinterAddress != address(0), "Amo minter address cannot be zero");
         require(_aavePool != address(0), "Aave pool address cannot be zero");
-        require(
-            _aaveRewardsController != address(0),
-            "Aave rewards controller address cannot be zero"
-        );
+        require(_aaveRewardsController != address(0), "Aave rewards controller address cannot be zero");
 
         // Set contract owner
         transferOwnership(_ownerAddress);
@@ -72,10 +61,7 @@ contract AaveAmo is IAmo, Ownable {
      * @param collateralAddress Address of the collateral ERC20
      * @param amount Amount of collateral to deposit
      */
-    function aaveDepositCollateral(
-        address collateralAddress,
-        uint256 amount
-    ) public onlyOwner {
+    function aaveDepositCollateral(address collateralAddress, uint256 amount) public onlyOwner {
         ERC20 token = ERC20(collateralAddress);
         token.safeApprove(address(aavePool), amount);
         aavePool.deposit(collateralAddress, amount, address(this), 0);
@@ -88,10 +74,7 @@ contract AaveAmo is IAmo, Ownable {
      * @param collateralAddress Address of the collateral ERC20
      * @param aTokenAmount Amount of collateral to withdraw
      */
-    function aaveWithdrawCollateral(
-        address collateralAddress,
-        uint256 aTokenAmount
-    ) public onlyOwner {
+    function aaveWithdrawCollateral(address collateralAddress, uint256 aTokenAmount) public onlyOwner {
         aavePool.withdraw(collateralAddress, aTokenAmount, address(this));
 
         emit CollateralWithdrawn(collateralAddress, aTokenAmount);
@@ -114,9 +97,7 @@ contract AaveAmo is IAmo, Ownable {
      * @notice Returns collateral back to the AMO minter
      * @param collateralAmount Amount of collateral to return, pass 0 to return all collateral
      */
-    function returnCollateralToMinter(
-        uint256 collateralAmount
-    ) public override onlyOwner {
+    function returnCollateralToMinter(uint256 collateralAmount) public override onlyOwner {
         ERC20 collateralToken = amoMinter.collateralToken();
 
         if (collateralAmount == 0) {
@@ -134,9 +115,7 @@ contract AaveAmo is IAmo, Ownable {
      * @notice Sets the AMO minter address
      * @param _amoMinterAddress New address of the AMO minter
      */
-    function setAmoMinter(
-        address _amoMinterAddress
-    ) external override onlyOwner {
+    function setAmoMinter(address _amoMinterAddress) external override onlyOwner {
         amoMinter = UbiquityAmoMinter(_amoMinterAddress);
 
         emit AmoMinterSet(_amoMinterAddress);
@@ -147,10 +126,7 @@ contract AaveAmo is IAmo, Ownable {
      * @param tokenAddress Address of the token to recover
      * @param tokenAmount Amount of tokens to recover
      */
-    function recoverERC20(
-        address tokenAddress,
-        uint256 tokenAmount
-    ) external onlyOwner {
+    function recoverERC20(address tokenAddress, uint256 tokenAmount) external onlyOwner {
         ERC20(tokenAddress).safeTransfer(msg.sender, tokenAmount);
 
         emit ERC20Recovered(tokenAddress, tokenAmount);
@@ -163,11 +139,11 @@ contract AaveAmo is IAmo, Ownable {
      * @param _data Data to execute
      * @return success, result Returns whether the call succeeded and the returned data
      */
-    function execute(
-        address _to,
-        uint256 _value,
-        bytes calldata _data
-    ) external onlyOwner returns (bool, bytes memory) {
+    function execute(address _to, uint256 _value, bytes calldata _data)
+        external
+        onlyOwner
+        returns (bool, bytes memory)
+    {
         (bool success, bytes memory result) = _to.call{value: _value}(_data);
 
         emit ExecuteCalled(_to, _value, _data);
@@ -176,14 +152,8 @@ contract AaveAmo is IAmo, Ownable {
 
     /* ========== EVENTS ========== */
 
-    event CollateralDeposited(
-        address indexed collateralAddress,
-        uint256 amount
-    );
-    event CollateralWithdrawn(
-        address indexed collateralAddress,
-        uint256 amount
-    );
+    event CollateralDeposited(address indexed collateralAddress, uint256 amount);
+    event CollateralWithdrawn(address indexed collateralAddress, uint256 amount);
     event CollateralReturnedToMinter(uint256 amount);
     event RewardsClaimed();
     event AmoMinterSet(address indexed newMinter);

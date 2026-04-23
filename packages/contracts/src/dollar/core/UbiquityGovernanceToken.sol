@@ -27,19 +27,13 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
 
     /// @notice Modifier checks that the method is called by a user with the "Governance minter" role
     modifier onlyGovernanceMinter() {
-        require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()),
-            "Governance token: not minter"
-        );
+        require(accessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, _msgSender()), "Governance token: not minter");
         _;
     }
 
     /// @notice Modifier checks that the method is called by a user with the "Governance burner" role
     modifier onlyGovernanceBurner() {
-        require(
-            accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()),
-            "Governance token: not burner"
-        );
+        require(accessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, _msgSender()), "Governance token: not burner");
         _;
     }
 
@@ -48,10 +42,7 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
      * @param account Address to burn tokens from
      * @param amount Amount of tokens to burn
      */
-    function burnFrom(
-        address account,
-        uint256 amount
-    ) public override onlyGovernanceBurner whenNotPaused {
+    function burnFrom(address account, uint256 amount) public override onlyGovernanceBurner whenNotPaused {
         _burn(account, amount);
         emit Burning(account, amount);
     }
@@ -61,17 +52,12 @@ contract UbiquityGovernanceToken is ERC20Ubiquity {
      * @param to Address to mint tokens to
      * @param amount Amount of tokens to mint
      */
-    function mint(
-        address to,
-        uint256 amount
-    ) public onlyGovernanceMinter whenNotPaused {
+    function mint(address to, uint256 amount) public onlyGovernanceMinter whenNotPaused {
         _mint(to, amount);
         emit Minting(to, _msgSender(), amount);
     }
 
     /// @notice Allows an admin to upgrade to another implementation contract
     /// @param newImplementation Address of the new implementation contract
-    function _authorizeUpgrade(
-        address newImplementation
-    ) internal override onlyAdmin {}
+    function _authorizeUpgrade(address newImplementation) internal override onlyAdmin {}
 }

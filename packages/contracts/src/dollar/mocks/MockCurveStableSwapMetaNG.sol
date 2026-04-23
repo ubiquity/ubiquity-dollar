@@ -15,49 +15,74 @@ contract MockCurveStableSwapMetaNG is ICurveStableSwapMetaNG, MockERC20 {
         coins[1] = _token1;
     }
 
-    function add_liquidity(
-        uint256[2] memory _amounts,
-        uint256 _min_mint_amount,
-        address _receiver
-    ) public returns (uint256 result) {
+    function add_liquidity(uint256[2] memory _amounts, uint256 _min_mint_amount, address _receiver)
+        public
+        returns (uint256 result)
+    {
         mint(
-            _receiver,
-            _min_mint_amount == 0
-                ? _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1]
-                : _min_mint_amount
+            _receiver, _min_mint_amount == 0 ? _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1] : _min_mint_amount
         );
         return result;
     }
 
-    function balances(uint256 /* i */) external pure returns (uint256) {
+    function balances(
+        uint256 /* i */
+    )
+        external
+        pure
+        returns (uint256)
+    {
         return 0;
     }
 
     function calc_token_amount(
         uint256[2] memory _amounts,
         bool /* _is_deposit */
-    ) external pure returns (uint256) {
+    )
+        external
+        pure
+        returns (uint256)
+    {
         return _amounts[0] > _amounts[1] ? _amounts[0] : _amounts[1];
     }
 
     function exchange(
-        int128 /* i */,
-        int128 /* j */,
-        uint256 /* dx */,
+        int128,
+        /* i */
+        int128,
+        /* j */
+        uint256,
+        /* dx */
         uint256 /* min_dy */
-    ) external pure returns (uint256) {
+    )
+        external
+        pure
+        returns (uint256)
+    {
         return 0;
     }
 
-    function price_oracle(uint256 /* i */) external view returns (uint256) {
+    function price_oracle(
+        uint256 /* i */
+    )
+        external
+        view
+        returns (uint256)
+    {
         return priceOracle;
     }
 
     function remove_liquidity_one_coin(
-        uint256 /* _burn_amount */,
-        int128 /* i */,
+        uint256,
+        /* _burn_amount */
+        int128,
+        /* i */
         uint256 /* _min_received */
-    ) external pure returns (uint256) {
+    )
+        external
+        pure
+        returns (uint256)
+    {
         return 0;
     }
 

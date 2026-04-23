@@ -16,10 +16,7 @@ contract OwnershipFacetTest is DiamondTestSetup {
     address mock_recipient = address(0x222);
     address mock_operator = address(0x333);
 
-    event OwnershipTransferred(
-        address indexed previousOwner,
-        address indexed newOwner
-    );
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 
     // test OwnershipFacet transferOwnership should revert if sender is not owner
     function testTransferOwnership_ShouldRevertWhenNotOwner() public {
@@ -31,24 +28,16 @@ contract OwnershipFacetTest is DiamondTestSetup {
     }
 
     // test OwnershipFacet transferOwnership should revert if new owner is zero address
-    function testTransferOwnership_ShouldRevertWhenNewOwnerIsZeroAddress()
-        public
-    {
+    function testTransferOwnership_ShouldRevertWhenNewOwnerIsZeroAddress() public {
         assertEq(ownershipFacet.owner(), owner);
         vm.prank(owner);
-        vm.expectRevert(
-            abi.encodePacked(
-                "OwnershipFacet: New owner cannot be the zero address"
-            )
-        );
+        vm.expectRevert(abi.encodePacked("OwnershipFacet: New owner cannot be the zero address"));
         ownershipFacet.transferOwnership(address(0));
         assertEq(ownershipFacet.owner(), owner);
     }
 
     // test OwnershipFacet transferOwnership should work if new owner is not contract
-    function testTransferOwnership_ShouldWorkWhenNewOwnerIsNotContract()
-        public
-    {
+    function testTransferOwnership_ShouldWorkWhenNewOwnerIsNotContract() public {
         vm.prank(owner);
         vm.expectEmit(true, true, true, true);
         emit OwnershipTransferred(owner, mock_recipient);
