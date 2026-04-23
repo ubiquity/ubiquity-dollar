@@ -33,6 +33,12 @@ struct AppStorage {
     mapping(address => address) _excessDollarDistributors;
     // pausable
     bool paused;
+    // Liquity V1 Stability Pool integration (#997)
+    uint256 totalPrincipalInPool;
+    address liquidityStabilityPool;
+    address liquidityTreasury;
+    uint256 liquidityHarvestThreshold;
+    bool liquidityPaused;
 }
 
 /// @notice Library used as a shared storage among all protocol libraries
@@ -65,10 +71,7 @@ contract Modifiers {
      */
     modifier nonReentrant() {
         // On the first call to nonReentrant, _notEntered will be true
-        require(
-            store.reentrancyStatus != _ENTERED,
-            "ReentrancyGuard: reentrant call"
-        );
+        require(store.reentrancyStatus != _ENTERED, "ReentrancyGuard: reentrant call");
 
         // Any calls to nonReentrant after this point will fail
         store.reentrancyStatus = _ENTERED;
@@ -87,37 +90,25 @@ contract Modifiers {
 
     /// @notice Checks that method is called by address with the `CREDIT_NFT_MANAGER_ROLE` role
     modifier onlyCreditNftManager() {
-        require(
-            LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender),
-            "Caller is not a Credit NFT manager"
-        );
+        require(LibAccessControl.hasRole(CREDIT_NFT_MANAGER_ROLE, msg.sender), "Caller is not a Credit NFT manager");
         _;
     }
 
     /// @notice Checks that method is called by address with the `DEFAULT_ADMIN_ROLE` role
     modifier onlyAdmin() {
-        require(
-            LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender),
-            "Manager: Caller is not admin"
-        );
+        require(LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender), "Manager: Caller is not admin");
         _;
     }
 
     /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_MINTER_ROLE` role
     modifier onlyMinter() {
-        require(
-            LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender),
-            "Governance token: not minter"
-        );
+        require(LibAccessControl.hasRole(GOVERNANCE_TOKEN_MINTER_ROLE, msg.sender), "Governance token: not minter");
         _;
     }
 
     /// @notice Checks that method is called by address with the `GOVERNANCE_TOKEN_BURNER_ROLE` role
     modifier onlyBurner() {
-        require(
-            LibAccessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender),
-            "Governance token: not burner"
-        );
+        require(LibAccessControl.hasRole(GOVERNANCE_TOKEN_BURNER_ROLE, msg.sender), "Governance token: not burner");
         _;
     }
 
@@ -135,19 +126,13 @@ contract Modifiers {
 
     /// @notice Checks that method is called by address with the `STAKING_MANAGER_ROLE` role
     modifier onlyStakingManager() {
-        require(
-            LibAccessControl.hasRole(STAKING_MANAGER_ROLE, msg.sender),
-            "not manager"
-        );
+        require(LibAccessControl.hasRole(STAKING_MANAGER_ROLE, msg.sender), "not manager");
         _;
     }
 
     /// @notice Checks that method is called by address with the `PAUSER_ROLE` role
     modifier onlyPauser() {
-        require(
-            LibAccessControl.hasRole(PAUSER_ROLE, msg.sender),
-            "not pauser"
-        );
+        require(LibAccessControl.hasRole(PAUSER_ROLE, msg.sender), "not pauser");
         _;
     }
 
@@ -162,10 +147,7 @@ contract Modifiers {
 
     /// @notice Checks that method is called by address with the `INCENTIVE_MANAGER_ROLE` role
     modifier onlyIncentiveAdmin() {
-        require(
-            LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender),
-            "CreditCalc: not admin"
-        );
+        require(LibAccessControl.hasRole(INCENTIVE_MANAGER_ROLE, msg.sender), "CreditCalc: not admin");
         _;
     }
 
