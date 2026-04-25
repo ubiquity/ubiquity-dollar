@@ -72,6 +72,11 @@ contract DiamondInit is Modifiers {
         LibCreditNftManager.creditNftStorage().expiredCreditNftConversionRate = 2;
 
         LibCreditRedemptionCalculator.creditRedemptionCalculatorStorage().coef = 1 ether;
+        // Liquity V1 Stability Pool integration (#997)
+        appStore.liquidityStabilityPool = address(0);
+        appStore.liquidityHarvestThreshold = 0;
+        appStore.liquidityPaused = false;
+        appStore.totalPrincipalInPool = 0;
         // add your own state variables
         // EIP-2535 specifies that the `diamondCut` function takes two optional
         // arguments: address _init and bytes calldata _calldata
@@ -79,11 +84,20 @@ contract DiamondInit is Modifiers {
         // in order to set state variables in the diamond during deployment or an upgrade
         // More info here: https://eips.ethereum.org/EIPS/eip-2535#diamond-interface
 
-        // Liquity V1 Stability Pool integration (#997)
+        // === Liquity V1 Stability Pool integration (#997) ===
         appStore.liquidityStabilityPool = address(0);
         appStore.liquidityTreasury = address(0);
         appStore.liquidityHarvestThreshold = 0;
         appStore.liquidityPaused = false;
         appStore.totalPrincipalInPool = 0;
-    }
+
+        // Liquity V1 Stability Pool defaults
+        appStore.liquidityStabilityPool = address(0);
+        appStore.liquidityTreasury = address(0);
+        appStore.liquidityHarvestThreshold = 0;
+        appStore.liquidityPaused = false;
+        appStore.totalPrincipalInPool = 0;
+        appStore.lusdToken = address(0);
+        appStore.lqtyToken = address(0);
+   }
 }
