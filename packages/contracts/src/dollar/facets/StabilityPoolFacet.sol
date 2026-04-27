@@ -16,6 +16,16 @@ contract StabilityPoolFacet {
     error BelowThreshold();
     error AlreadyInitialized();
     error InsufficientBalance();
+    error EthTransferFailed();
+
+    event Initialized(address treasury, address stabilityPool, address lusd, address lqty, uint256 threshold);
+    event Deposited(uint256 amount);
+    event Withdrawn(uint256 amountRequested, uint256 amountReceived);
+    event RewardsHarvested(uint256 lqtyAmount, uint256 ethAmount);
+    event TreasuryUpdated(address newTreasury);
+    event ThresholdUpdated(uint256 newThreshold);
+    event PauseToggled(bool paused);
+    event EmergencyWithdraw(address token, uint256 amount);
 
     modifier onlyAdmin() {
         if (!LibAccessControl.hasRole(DEFAULT_ADMIN_ROLE, msg.sender)) revert NotAdmin();
@@ -23,10 +33,11 @@ contract StabilityPoolFacet {
     }
 
     modifier notPaused() {
-        AppStorage storage s = LibAppStorage.appStorage();
-        if (s.liquidityPaused) revert Paused();
+        if (LibAppStorage.appStorage().liquidityPaused) revert Paused();
         _;
     }
+
+    receive() external payable {}
 
     function initialize(
         address _treasury,
@@ -45,41 +56,52 @@ contract StabilityPoolFacet {
         s.liquidityHarvestThreshold = _threshold;
         s.liquidityPaused = false;
         s.totalPrincipalInPool = 0;
+
+        emit Initialized(_treasury, _stabilityPool, _lusdToken, _lqtyToken, _threshold);
     }
 
-    function depositToPool(uint256 amount) external notPaused {
+    function depositToPool(uint256 amount) external onlyAdmin notPaused {
         if (amount == 0) revert ZeroAmount();
         AppStorage storage s = LibAppStorage.appStorage();
 
         IERC20 lusd = IERC20(s.lusdToken);
         lusd.safeTransferFrom(msg.sender, address(this), amount);
+        lusd.safeApprove(s.liquidityStabilityPool, 0);
         lusd.safeApprove(s.liquidityStabilityPool, amount);
 
         ILiquityStabilityPool(s.liquidityStabilityPool).provideToSP(amount, address(0));
         s.totalPrincipalInPool += amount;
+
+        emit Deposited(amount);
     }
 
-    function withdrawFromPool(uint256 amount) external notPaused {
+    function withdrawFromPool(uint256 amount) external onlyAdmin notPaused {
         if (amount == 0) revert ZeroAmount();
         AppStorage storage s = LibAppStorage.appStorage();
-        if (s.totalPrincipalInPool < amount) revert InsufficientBalance();
+
+        ILiquityStabilityPool sp = ILiquityStabilityPool(s.liquidityStabilityPool);
+        uint256 poolBalanceBefore = sp.getCompoundedLUSDDeposit(address(this));
+        if (poolBalanceBefore < amount) revert InsufficientBalance();
 
         IERC20 lusd = IERC20(s.lusdToken);
         uint256 balanceBefore = lusd.balanceOf(address(this));
 
-        ILiquityStabilityPool(s.liquidityStabilityPool).withdrawFromSP(amount);
+        sp.withdrawFromSP(amount);
 
         uint256 balanceAfter = lusd.balanceOf(address(this));
         uint256 received = balanceAfter - balanceBefore;
 
         if (received > 0) {
-            lusd.safeTransfer(msg.sender, received);
+            lusd.safeTransfer(s.liquidityTreasury, received);
         }
 
-        s.totalPrincipalInPool -= amount;
+        uint256 poolBalanceAfter = sp.getCompoundedLUSDDeposit(address(this));
+        s.totalPrincipalInPool -= (poolBalanceBefore - poolBalanceAfter);
+
+        emit Withdrawn(amount, received);
     }
 
-    function harvestRewards() external notPaused {
+    function harvestRewards() external onlyAdmin notPaused {
         AppStorage storage s = LibAppStorage.appStorage();
         ILiquityStabilityPool sp = ILiquityStabilityPool(s.liquidityStabilityPool);
 
@@ -88,32 +110,47 @@ contract StabilityPoolFacet {
 
         if (lqtyGain < s.liquidityHarvestThreshold && ethGain == 0) revert BelowThreshold();
 
+        uint256 ethBalanceBefore = address(this).balance;
         sp.withdrawFromSP(0);
+        uint256 ethHarvested = address(this).balance - ethBalanceBefore;
 
+        uint256 lqtyHarvested = 0;
         if (lqtyGain > 0) {
             IERC20 lqty = IERC20(s.lqtyToken);
-            uint256 actualLqty = lqtyGain;
+            uint256 actualLqty = lqty.balanceOf(address(this));
             if (actualLqty > 0) {
                 lqty.safeTransfer(s.liquidityTreasury, actualLqty);
+                lqtyHarvested = actualLqty;
             }
         }
+
+        if (ethHarvested > 0) {
+            (bool success, ) = s.liquidityTreasury.call{value: ethHarvested}("");
+            if (!success) revert EthTransferFailed();
+        }
+
+        emit RewardsHarvested(lqtyHarvested, ethHarvested);
     }
 
     function setTreasury(address _treasury) external onlyAdmin {
         LibAppStorage.appStorage().liquidityTreasury = _treasury;
+        emit TreasuryUpdated(_treasury);
     }
 
     function setThreshold(uint256 _threshold) external {
         LibAppStorage.appStorage().liquidityHarvestThreshold = _threshold;
+        emit ThresholdUpdated(_threshold);
     }
 
     function togglePause() external {
         AppStorage storage s = LibAppStorage.appStorage();
         s.liquidityPaused = !s.liquidityPaused;
+        emit PauseToggled(s.liquidityPaused);
     }
 
     function emergencyWithdraw(address token, uint256 amount) external onlyAdmin {
         IERC20(token).safeTransfer(msg.sender, amount);
+        emit EmergencyWithdraw(token, amount);
     }
 
     function totalPrincipalInPool() external view returns (uint256) {
