@@ -15,9 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -36,11 +37,21 @@ jobs:
         if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
         env:
           CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          for DIAMOND_LIB in "$CHANGED_LIBS"; do
-            echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+          touch contracts.txt
+
+          for DIAMOND_LIB in $CHANGED_LIBS; do
+            if [ "$EVENT_NAME" = "pull_request" ] && ! git cat-file -e "${BASE_SHA}:${DIAMOND_LIB}" 2>/dev/null; then
+              echo "Skipping newly added library without baseline storage artifact: ${DIAMOND_LIB}"
+              continue
+            fi
+
+            LIB_NAME="$(basename "$DIAMOND_LIB" .sol)"
+            echo "src/dollar/libraries/${LIB_NAME}.sol:${LIB_NAME}" >> contracts.txt
           done
-          echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "matrix=$(jq -R -s -c 'split("\n")[:-1]' contracts.txt)" >> $GITHUB_OUTPUT
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -55,7 +66,7 @@ jobs:
         contract: ${{ fromJSON(needs.provide_contracts.outputs.matrix) }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
