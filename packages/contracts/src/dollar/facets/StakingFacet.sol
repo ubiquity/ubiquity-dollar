@@ -152,4 +152,25 @@ contract StakingFacet is IStaking, Modifiers {
     ) external onlyAdmin {
         LibStaking.updateStakingPool(poolId, allocationPoints);
     }
+
+    /// @inheritdoc IStaking
+    function setAdditionalEmissionDestinations(
+        IStaking.EmissionDestination[] calldata destinations
+    ) external onlyAdmin {
+        LibStaking.setAdditionalEmissionDestinations(destinations);
+    }
+
+    /// @inheritdoc IStaking
+    function setAdditionalEmissionsEnabled(bool enabled) external onlyAdmin {
+        LibStaking.setAdditionalEmissionsEnabled(enabled);
+    }
+
+    /// @inheritdoc IStaking
+    function getAdditionalEmissionDestinations()
+        external
+        view
+        returns (bool enabled, IStaking.EmissionDestination[] memory destinations)
+    {
+        return LibStaking.getAdditionalEmissionDestinations();
+    }
 }
