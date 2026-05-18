@@ -73,6 +73,16 @@ library LibStaking {
         uint256 totalAllocationPoints;
         /// @notice The block number when Governance token mining starts
         uint256 startBlock;
+        /// @notice Whether additional emission destinations are enabled
+        bool additionalEmissionsEnabled;
+        /// @notice Additional emission destinations with their ratios (basis points, e.g. 500 = 5%)
+        EmissionDestination[] additionalEmissionDestinations;
+    }
+
+    /// @notice Struct representing an emission destination with its ratio
+    struct EmissionDestination {
+        address destination;
+        uint256 ratioBps; // basis points, e.g. 500 = 5%
     }
 
     /**
@@ -126,6 +136,10 @@ library LibStaking {
     event StakingRewardTokenSet(address indexed newRewardToken);
     /// @notice Emitted when new staking start block set
     event StakingStartBlockSet(uint256 indexed newStartBlock);
+    /// @notice Emitted when additional emission destinations are updated
+    event AdditionalEmissionDestinationsUpdated(EmissionDestination[] destinations);
+    /// @notice Emitted when additional emissions are enabled or disabled
+    event AdditionalEmissionsToggled(bool enabled);
     /// @notice Emitted on unstaking LP tokens
     event Unstake(address indexed user, uint256 indexed poolId, uint256 amount);
 
@@ -380,6 +394,18 @@ library LibStaking {
                 governanceReward.div(stakingStore.governanceTreasuryDivider)
             );
         }
+        // Mint additional emissions to configured destinations
+        if (stakingStore.additionalEmissionsEnabled && stakingStore.additionalEmissionDestinations.length > 0) {
+            for (uint256 i = 0; i < stakingStore.additionalEmissionDestinations.length; i++) {
+                EmissionDestination memory dest = stakingStore.additionalEmissionDestinations[i];
+                if (dest.ratioBps > 0) {
+                    stakingStore.rewardToken.mint(
+                        dest.destination,
+                        governanceReward.mul(dest.ratioBps).div(10000)
+                    );
+                }
+            }
+        }
         stakingStore.rewardToken.mint(address(this), governanceReward);
         pool.accumulatedGovernancePerShare = pool
             .accumulatedGovernancePerShare
@@ -546,6 +572,62 @@ library LibStaking {
         stakingStore.poolInfo[poolId].allocationPoints = allocationPoints;
 
         emit StakingPoolAllocationUpdated(poolId, allocationPoints);
+    }
+
+    /**
+     * @notice Sets additional emission destinations for governance tokens
+     * @dev Each destination has a ratio in basis points (e.g. 500 = 5%)
+     * @param destinations Array of emission destinations with their ratios
+     */
+    function setAdditionalEmissionDestinations(
+        EmissionDestination[] memory destinations
+    ) internal {
+        StakingStorage storage stakingStore = stakingStorage();
+        massUpdateStakingPools();
+        
+        // Validate total ratio doesn't exceed 10000 bps (100%)
+        uint256 totalRatio;
+        for (uint256 i = 0; i < destinations.length; i++) {
+            require(destinations[i].destination != address(0), "Zero address detected");
+            require(destinations[i].ratioBps <= 10000, "Ratio exceeds 100%");
+            totalRatio += destinations[i].ratioBps;
+        }
+        require(totalRatio <= 10000, "Total ratio exceeds 100%");
+        
+        // Clear and repopulate the array
+        delete stakingStore.additionalEmissionDestinations;
+        for (uint256 i = 0; i < destinations.length; i++) {
+            stakingStore.additionalEmissionDestinations.push(destinations[i]);
+        }
+        emit AdditionalEmissionDestinationsUpdated(destinations);
+    }
+
+    /**
+     * @notice Toggles additional emissions on/off
+     * @param enabled Whether additional emissions should be enabled
+     */
+    function setAdditionalEmissionsEnabled(bool enabled) internal {
+        massUpdateStakingPools();
+        StakingStorage storage stakingStore = stakingStorage();
+        stakingStore.additionalEmissionsEnabled = enabled;
+        emit AdditionalEmissionsToggled(enabled);
+    }
+
+    /**
+     * @notice Returns additional emission destinations and their status
+     * @return enabled Whether additional emissions are enabled
+     * @return destinations Array of emission destinations
+     */
+    function getAdditionalEmissionDestinations()
+        internal
+        view
+        returns (bool enabled, EmissionDestination[] memory destinations)
+    {
+        StakingStorage storage stakingStore = stakingStorage();
+        return (
+            stakingStore.additionalEmissionsEnabled,
+            stakingStore.additionalEmissionDestinations
+        );
     }
 
     //====================
