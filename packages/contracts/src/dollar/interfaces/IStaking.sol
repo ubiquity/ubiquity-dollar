@@ -10,6 +10,17 @@ import {LibStaking} from "../libraries/LibStaking.sol";
  */
 interface IStaking {
     //=====================
+    // Structs
+    //=====================
+
+    using LibStaking for LibStaking.StakingStorage;
+
+    /// @notice Struct representing an emission destination with its ratio
+    struct EmissionDestination {
+        address destination;
+        uint256 ratioBps; // basis points, e.g. 500 = 5%
+    }
+    //=====================
     // Views
     //=====================
 
@@ -195,4 +206,29 @@ interface IStaking {
         uint256 poolId,
         uint256 allocationPoints
     ) external;
+
+    /**
+     * @notice Sets additional emission destinations for governance tokens
+     * @dev Each destination has a ratio in basis points (e.g. 500 = 5%)
+     * @param destinations Array of emission destinations with their ratios
+     */
+    function setAdditionalEmissionDestinations(
+        EmissionDestination[] calldata destinations
+    ) external;
+
+    /**
+     * @notice Toggles additional emissions on/off
+     * @param enabled Whether additional emissions should be enabled
+     */
+    function setAdditionalEmissionsEnabled(bool enabled) external;
+
+    /**
+     * @notice Returns additional emission destinations and their status
+     * @return enabled Whether additional emissions are enabled
+     * @return destinations Array of emission destinations
+     */
+    function getAdditionalEmissionDestinations()
+        external
+        view
+        returns (bool enabled, EmissionDestination[] memory destinations);
 }
