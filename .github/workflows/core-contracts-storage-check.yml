@@ -38,13 +38,46 @@ jobs:
           done
           echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
+      - name: Check if contracts are new (no storage baseline)
+        id: check-new-contracts
+        working-directory: packages/contracts
+        run: |
+          if [ ! -f contracts.txt ] || [ -z "$(cat contracts.txt)" ]; then
+            echo "is_new_only=true" >> $GITHUB_OUTPUT
+            echo "new_contracts=[]" >> $GITHUB_OUTPUT
+          else
+            NEW_CONTRACTS="[]"
+            for CONTRACT in $(cat contracts.txt); do
+              # Extract contract name (second part after :)
+              CONTRACT_NAME=$(echo $CONTRACT | cut -d':' -f2 | xargs basename -a .sol)
+              # Check if storage baseline exists for this contract
+              BASELINE_FILE="storage-layouts/${CONTRACT_NAME}.json"
+              if [ -f "$BASELINE_FILE" ]; then
+                echo "$CONTRACT is not new, has baseline"
+              else
+                echo "$CONTRACT is NEW (no baseline), skipping storage check"
+                # Remove from contracts.txt (filter out)
+                grep -v "^$CONTRACT$" contracts.txt > contracts_filtered.txt || true
+                mv contracts_filtered.txt contracts.txt
+              fi
+            done
+            if [ -z "$(cat contracts.txt)" ]; then
+              echo "is_new_only=true" >> $GITHUB_OUTPUT
+              echo "new_contracts=[]" >> $GITHUB_OUTPUT
+            else
+              echo "is_new_only=false" >> $GITHUB_OUTPUT
+              echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+            fi
+          fi
+
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: ${{ steps.set-matrix.outputs.matrix || steps.check-new-contracts.outputs.matrix || '[]' }}
+      is_new_only: ${{ steps.check-new-contracts.outputs.is_new_only || 'false' }}
 
   check_storage_layout:
     needs: provide_contracts
     runs-on: ubuntu-latest
-    if: ${{ needs.provide_contracts.outputs.matrix != '[]' && needs.provide_contracts.outputs.matrix != '' }}
+    if: ${{ needs.provide_contracts.outputs.matrix != '[]' && needs.provide_contracts.outputs.matrix != '' && needs.provide_contracts.outputs.is_new_only != 'true' }}
 
     strategy:
       matrix:
