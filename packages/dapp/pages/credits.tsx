@@ -1,66 +1,49 @@
 import { FC, useState } from "react";
-import { ethers } from "ethers";
-
-import MigrateButton from "@/components/redeem/MigrateButton";
-import DollarPrice from "@/components/redeem/DollarPrice";
-import UcrRedeem from "@/components/redeem/UcrRedeem";
-import UcrNftGenerator from "@/components/redeem/DebtCouponDeposit";
-import UcrNftRedeem from "@/components/redeem/UcrNftRedeem";
-import useManagerManaged from "@/components/lib/hooks/contracts/useManagerManaged";
-import useEffectAsync from "@/components/lib/hooks/useEffectAsync";
-import useWalletAddress from "@/components/lib/hooks/useWalletAddress";
+import DollarPrice from "@/components/redeem/dollar-price";
+import CreditRedeem from "@/components/redeem/credit-redeem";
+import CreditNftGenerator from "@/components/redeem/credit-nft-deposit";
+import CreditNftRedeem from "@/components/redeem/credit-nft-redeem";
+import useProtocolContracts from "@/components/lib/hooks/contracts/use-protocol-contracts";
+import useEffectAsync from "@/components/lib/hooks/use-effect-async";
 // import DisabledBlurredMessage from "@/components/ui/DisabledBlurredMessage";
-import WalletNotConnected from "@/components/ui/WalletNotConnected";
+import dynamic from "next/dynamic";
+const WalletConnectionWall = dynamic(() => import("@/components/ui/wallet-connection-wall"), { ssr: false }); //@note Fix: (Hydration Error)
 
 const PriceStabilization: FC = (): JSX.Element => {
-  const [twapPrice, setTwapPrice] = useState<ethers.BigNumber | null>(null);
-  const [walletAddress] = useWalletAddress();
-  const managedContracts = useManagerManaged();
+  const [twapInteger, setTwapInteger] = useState<number>(0);
+  const protocolContracts = useProtocolContracts();
 
   useEffectAsync(async () => {
-    if (managedContracts) {
-      setTwapPrice(await managedContracts.dollarTwapOracle.consult(managedContracts.dollarToken.address));
+    const contracts = await protocolContracts;
+    if (contracts) {
+      const dollarTokenAddress = await contracts.managerFacet?.dollarTokenAddress();
+      const twapPrice = await contracts.twapOracleDollar3poolFacet?.consult(dollarTokenAddress);
+      if (twapPrice) {
+        const twapPriceInteger = (twapPrice as unknown as number) / 1e18;
+        setTwapInteger(twapPriceInteger);
+      }
     }
-  }, [managedContracts]);
+  }, []);
 
-  // const currentlyAbovePeg = twapPrice?.gte(ethers.utils.parseEther("1")) ?? false;
-  let twapInteger = 0;
-  if (twapPrice) {
-    twapInteger = (twapPrice as unknown as number) / 1e18;
-  }
-
-  return walletAddress ? (
-    <div id="CreditOperations" data-twap={twapInteger}>
-      <DollarPrice />
-      <MigrateButton />
-      {MintUcr()}
-      {RedeemUcr()}
-    </div>
-  ) : (
-    WalletNotConnected
+  return (
+    <WalletConnectionWall>
+      <div id="CreditOperations" data-twap={twapInteger}>
+        <DollarPrice />
+        <div id="MintCredit" className="panel">
+          <h2>Generate Ubiquity Credit NFTs</h2>
+          <aside>When TWAP is below peg</aside>
+          <CreditNftGenerator />
+        </div>
+        <div id="RedeemCredit" className="panel">
+          <h2>Redeem Ubiquity Credits</h2>
+          <div>
+            <CreditRedeem twapInteger={twapInteger} />
+            <CreditNftRedeem />
+          </div>
+        </div>
+      </div>
+    </WalletConnectionWall>
   );
 };
 
 export default PriceStabilization;
-
-function MintUcr() {
-  return (
-    <div id="MintUcr" className="panel">
-      <h2>Generate Ubiquity Credit NFTs</h2>
-      <aside>When TWAP is below peg</aside>
-      <UcrNftGenerator />
-    </div>
-  );
-}
-function RedeemUcr() {
-  return (
-    <div id="RedeemUcr" className="panel">
-      <h2>Redeem Ubiquity Credits</h2>
-      <aside>When TWAP is above peg</aside>
-      <div>
-        <UcrRedeem />
-        <UcrNftRedeem />
-      </div>
-    </div>
-  );
-}

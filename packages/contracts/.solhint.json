@@ -1,0 +1,15 @@
+{
+  "extends": "solhint:recommended",
+  "rules": {
+    "func-param-name-mixedcase": "error",
+    "func-visibility": ["warn", { "ignoreConstructors": true }],
+    "custom-errors": "off",
+    "no-inline-assembly": "off",
+    "reentrancy": "warn",
+    "foundry-test-functions": ["warn", ["setUp"]],
+    "event-name-camelcase": "warn",
+    "func-name-mixedcase": "warn",
+    "use-forbidden-name": "error",
+    "func-named-parameters": ["warn", 4]
+  }
+}

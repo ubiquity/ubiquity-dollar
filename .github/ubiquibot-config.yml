@@ -1,0 +1,5 @@
+payments:
+  evmNetworkId: 100
+  basePriceMultiplier: 3
+  issueCreatorMultiplier: 3
+  maxPermitPrice: 1000

@@ -1,0 +1,124 @@
+:root {
+  --black: hsl(0deg 0% 0%);
+  --light-5: hsl(0deg 0% 88%);
+  --light-4: hsl(0deg 0% 91%);
+  --light-3: hsl(0deg 0% 94%);
+  --light-2: hsl(0deg 0% 97%);
+  --light-1: hsl(0deg 0% 100%);
+}
+
+.svg-background {
+  height: 32px;
+}
+
+.svg-background::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  fill: currentColor;
+}
+#LightDarkMode .svg-background::before {
+background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960"><path fill="%23fff" d="M480 696q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm-.226 72Q400 768 344 711.774t-56-136Q288 496 344.226 440t136-56Q560 384 616 440.226t56 136Q672 656 615.774 712t-136 56ZM84 612q-15.3 0-25.65-10.289Q48 591.421 48 576.211 48 561 58.35 550.5 68.7 540 84 540h96q15.3 0 25.65 10.289 10.35 10.29 10.35 25.5Q216 591 205.65 601.5 195.3 612 180 612H84Zm696 0q-15.3 0-25.65-10.289-10.35-10.29-10.35-25.5Q744 561 754.35 550.5 764.7 540 780 540h96q15.3 0 25.65 10.289 10.35 10.29 10.35 25.5Q912 591 901.65 601.5 891.3 612 876 612h-96ZM480.211 312Q465 312 454.5 301.65 444 291.3 444 276v-96q0-15.3 10.289-25.65 10.29-10.35 25.5-10.35Q495 144 505.5 154.35 516 164.7 516 180v96q0 15.3-10.289 25.65-10.29 10.35-25.5 10.35Zm0 696Q465 1008 454.5 997.65 444 987.3 444 972v-96q0-15.3 10.289-25.65 10.29-10.35 25.5-10.35Q495 840 505.5 850.35 516 860.7 516 876v96q0 15.3-10.289 25.65-10.29 10.35-25.5 10.35ZM242 389l-50-51q-11-10-11-24.5t11-25.5q10.435-11 25.217-11Q232 277 242 288l51 50q11 10.941 11 25.529 0 14.589-11 25.53Q283 400 268 400t-26-11Zm476 475-51-50q-11-10.667-11-25.333Q656 774 667 763q10-11 25-11t26 11l50 51q11 10 11 24.5T768.478 864Q757 875 743 875q-14 0-25-11Zm-51.059-475Q656 379 656 364t11-26l51-50q11-11 25-10.5t25 10.543Q779 299 779 313t-11 25l-50 51q-10.941 11-25.529 11-14.589 0-25.53-11ZM192 864q-11-10.435-11-25.217Q181 824 192 814l50-51q10.667-10 25.333-10Q282 753 293 763q11 11 10.542 25.667Q303.083 803.333 293 814l-51 50q-10 11-24.5 11T192 864Zm288-288Z"/></svg>');
+}
+#__next.light-mode #LightDarkMode .svg-background::before {
+  background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960"><path d="M479.961 912Q340 912 242 814t-98-238q0-140 97.93-238t237.831-98q13.057 0 25.648 1T531 244q-39 29-62 72t-23 92q0 85 58.5 143.5T648 610q49 0 92-23t72-62q2 13 3 25.591 1 12.591 1 25.648 0 139.901-98.039 237.831-98.04 97.93-238 97.93Zm.039-72q82 0 148.776-47.074Q695.553 745.853 727 670q-20 5-39.667 8.5Q667.667 682 648 682q-113.858 0-193.929-80.071T374 408q0-19.667 3.5-39.333Q381 349 386 329q-75.853 31.447-122.926 98.224Q216 494 216 576q0 110 77 187t187 77Zm-14-250Z"/></svg>');
+}
+
+#__next.light-mode {
+  background-color: var(--light-4);
+}
+#__next.light-mode #Background {
+  background-color: var(--light-4);
+  -webkit-mask-image: none;
+}
+
+#__next.light-mode #Background #color {
+  background: var(--light-4);
+}
+
+#__next.light-mode .panel {
+  background: var(--light-3);
+}
+
+#__next.light-mode,
+#__next.light-mode a,
+#__next.light-mode button {
+  color: var(--black);
+}
+
+#__next.light-mode h1,
+#__next.light-mode h2,
+#__next.light-mode h3,
+#__next.light-mode h4,
+#__next.light-mode h5,
+#__next.light-mode h6,
+#__next.light-mode th {
+  color: var(--black);
+}
+
+#__next.light-mode button,
+#__next.light-mode input {
+  background-color: var(--light-2);
+}
+#__next.light-mode button#WalletNotConnected {
+  background-color: initial;
+}
+#__next.light-mode button:hover,
+#__next.light-mode input:hover {
+  background-color: var(--light-1);
+}
+
+#__next.light-mode #DollarPrice span:last-child {
+  color: var(--black);
+}
+
+#__next.light-mode aside {
+  color: #404040;
+}
+
+#__next.light-mode .WalletNotConnected__svg {
+  fill: var(--black);
+}
+#__next.light-mode .WalletNotConnected__text {
+  color: var(--black);
+}
+
+#__next.light-mode .iPGSoB:before {
+  background-color: var(--light-5);
+}
+#__next.light-mode .dbvzkF,
+#__next.light-mode .dzmsHP:hover {
+  color: #000;
+}
+
+#__next.light-mode a.sc-cjibBx.hBfxKN {
+  background-color: #fff;
+}
+
+#__next.light-mode #__CONNECTKIT__ button:hover {
+  background: #fff;
+  color: #000;
+}
+@media (max-width: 460px) {
+  #__next.light-mode #Foreground input[type="checkbox"] + #Sidebar {
+    background: white;
+  }
+}
+
+#__next.light-mode #Foreground input[type="checkbox"] {
+  background: var(--light-5);
+  box-shadow: 0 0 48px 36px var(--light-5);
+}
+
+#__next.light-mode #Foreground input[type="checkbox"]:hover,
+#__next.light-mode #Foreground input[type="checkbox"]:hover::before,
+#__next.light-mode #Foreground input[type="checkbox"]:hover::after {
+  border-top: 2px solid #000;
+}
+
+#__next.light-mode #Foreground input[type="checkbox"]:checked {
+  border-top: 2px solid #ffffff00;
+}

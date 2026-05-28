@@ -14,6 +14,9 @@
     min-height: 100vh;
     width: 100vw;
   }
+  #Sidebar * {
+    text-align: right;
+  }
   #Foreground > #Sidebar {
     right: 0;
     position: absolute;
@@ -123,5 +126,8 @@
   #Staking > thead > tr > th:nth-child(4),
   #Staking > tbody > tr > td:nth-child(4) {
     display: none;
+  }
+  #Inventory {
+    bottom: 0;
   }
 }

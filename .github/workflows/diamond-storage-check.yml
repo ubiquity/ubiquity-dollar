@@ -1,0 +1,82 @@
+name: Check For Diamond Storage Changes
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - '**.sol'
+  pull_request:
+    paths:
+      - '**.sol'
+
+jobs:
+  provide_contracts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Narrow down test matrix scope to changed Dollar libraries to limit API requests
+        id: changed-libraries
+        uses: tj-actions/changed-files@v42
+        with:
+          files_yaml: |
+            libraries:
+              - packages/contracts/src/dollar/libraries/Lib*.sol
+
+      - name: Set contracts matrix
+        id: set-matrix
+        working-directory: packages/contracts
+        if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
+        env:
+          CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+        run: |
+          BASE_REF="${{ github.base_ref }}"
+          [ -z "$BASE_REF" ] && BASE_REF="${{ github.event.repository.default_branch }}"
+          for DIAMOND_LIB in $CHANGED_LIBS; do
+            LIB_NAME=$(echo "$DIAMOND_LIB" | xargs basename -a | cut -d'.' -f1)
+            LIB_PATH="src/dollar/libraries/${LIB_NAME}.sol"
+            # Skip newly added libraries that don't exist on the base branch
+            if [ -n "$BASE_REF" ]; then
+              if ! git show "origin/${BASE_REF}:${DIAMOND_LIB}" > /dev/null 2>&1; then
+            echo "Skipping newly added library: ${LIB_NAME}"
+            continue
+              fi
+            fi
+            echo "${LIB_PATH}:${LIB_NAME}" >> contracts.txt
+          done
+          echo "matrix=$(cat contracts.txt 2>/dev/null | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+  check_storage_layout:
+    needs: provide_contracts
+    runs-on: ubuntu-latest
+    if: ${{ needs.provide_contracts.outputs.matrix != '[]' && needs.provide_contracts.outputs.matrix != '' }}
+
+    strategy:
+      matrix:
+        contract: ${{ fromJSON(needs.provide_contracts.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        
+      - name: Check For Diamond Storage Changes
+        uses: ubiquity/foundry-storage-check@main
+        with:
+          workingDirectory: packages/contracts
+          contract: ${{ matrix.contract }}
+          failOnRemoval: true
+          failOnLabelDiff: true

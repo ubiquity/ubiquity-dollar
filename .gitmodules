@@ -1,0 +1,48 @@
+[submodule "packages/contracts/lib/Uniswap/v2-periphery"]
+	path = packages/contracts/lib/Uniswap/v2-periphery
+	url = https://github.com/Uniswap/v2-periphery.git
+	branch= master
+[submodule "packages/contracts/lib/Uniswap/v2-core"]
+	path = packages/contracts/lib/Uniswap/v2-core
+	url = https://github.com/Uniswap/v2-core.git
+	branch= master
+[submodule "packages/contracts/lib/solidity-linked-list"]
+	path = packages/contracts/lib/solidity-linked-list
+	url = https://github.com/vittominacori/solidity-linked-list
+	branch= master
+[submodule "packages/contracts/lib/openzeppelin-contracts"]
+	path = packages/contracts/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+	branch = release-v4.9
+[submodule "packages/contracts/lib/forge-std"]
+	path = packages/contracts/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+	branch = chore/reorder-vm # v1.6.1
+[submodule "packages/contracts/lib/abdk-libraries-solidity"]
+	path = packages/contracts/lib/abdk-libraries-solidity
+	url = https://github.com/abdk-consulting/abdk-libraries-solidity
+	branch= master
+[submodule "packages/contracts/lib/operator-filter-registry"]
+	path = packages/contracts/lib/operator-filter-registry
+	url = https://github.com/ProjectOpenSea/operator-filter-registry
+	branch= v1.4.0
+[submodule "packages/contracts/lib/Uniswap/v3-periphery"]
+	path = packages/contracts/lib/Uniswap/v3-periphery
+	url = https://github.com/Uniswap/v3-periphery.git
+	branch= main
+[submodule "packages/contracts/lib/openzeppelin-contracts-upgradeable"]
+	path = packages/contracts/lib/openzeppelin-contracts-upgradeable
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+	branch = release-v4.9
+[submodule "packages/contracts/lib/chainlink-brownie-contracts"]
+	path = packages/contracts/lib/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
+	branch= main
+[submodule "packages/contracts/lib/aave-v3-core"]
+	path = packages/contracts/lib/aave-v3-core
+	url = https://github.com/aave/aave-v3-core
+	branch= master
+[submodule "packages/contracts/lib/aave-v3-periphery"]
+	path = packages/contracts/lib/aave-v3-periphery
+	url = https://github.com/aave/aave-v3-periphery
+	branch= master

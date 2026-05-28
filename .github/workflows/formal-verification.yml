@@ -1,0 +1,64 @@
+name: Formal Verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - '**.sol'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      # ====================
+      # Project Dependencies
+      # ====================
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install Project Dependencies
+        run: |
+          yarn install
+          yarn workspace @ubiquity/contracts forge:install
+
+      # ====================
+      # Certora Dependencies
+      # ====================
+
+      - name: Install python
+        uses: actions/setup-python@v6
+        with: { 
+          python-version: 3.13 
+        }
+
+      - name: Install java
+        uses: actions/setup-java@v5
+        with: { 
+          java-version: "11", 
+          java-package: jre,
+          distribution: temurin
+        }
+
+      # It's recommended to pin the latest certora-cli version available in https://pypi.org/project/certora-cli/
+      - name: Install certora cli
+        run: pip install certora-cli==8.1.1
+
+      - name: Install solc
+        run: |
+          pip install solc-select
+          solc-select install 0.8.19
+          solc-select use 0.8.19
+      - name: Verify
+        env:
+          CERTORAKEY: ${{ secrets.CERTORAKEY }}
+        working-directory: ./packages/contracts
+        run: certoraRun test/certora/staking.conf
