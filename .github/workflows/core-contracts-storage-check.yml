@@ -26,17 +26,24 @@ jobs:
             contracts:
               - packages/contracts/src/dollar/core/*.sol
 
-      - name: Set contracts matrix
+      - name: Set contracts matrix (skip newly added contracts - no prior artifact to compare)
         id: set-matrix
         working-directory: packages/contracts
         if: steps.changed-contracts.outputs.contracts_any_changed == 'true'
         env:
           CHANGED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_all_changed_files }}
+          MODIFIED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_modified_files }}
         run: |
-          for CONTRACT in "$CHANGED_CONTRACTS"; do
-            echo ${CONTRACT} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
-          done
-          echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          # Only check modified contracts (not newly added ones)
+          # New contracts have no prior storage artifact to compare against
+          if [ -n "$MODIFIED_CONTRACTS" ]; then
+            for CONTRACT in $MODIFIED_CONTRACTS; do
+              echo ${CONTRACT} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
+            done
+            echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          else
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+          fi
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -64,4 +71,3 @@ jobs:
           workingDirectory: packages/contracts
           contract: ${{ matrix.contract }}
           failOnRemoval: true
-          

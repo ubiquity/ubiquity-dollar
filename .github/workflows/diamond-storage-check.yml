@@ -30,17 +30,24 @@ jobs:
             libraries:
               - packages/contracts/src/dollar/libraries/Lib*.sol
 
-      - name: Set contracts matrix
+      - name: Set contracts matrix (skip newly added libraries - no prior artifact to compare)
         id: set-matrix
         working-directory: packages/contracts
         if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
         env:
           CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+          MODIFIED_LIBS: ${{ steps.changed-libraries.outputs.libraries_modified_files }}
         run: |
-          for DIAMOND_LIB in "$CHANGED_LIBS"; do
-            echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
-          done
-          echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          # Only check modified libraries (not newly added ones)
+          # New libraries have no prior storage artifact to compare against
+          if [ -n "$MODIFIED_LIBS" ]; then
+            for DIAMOND_LIB in $MODIFIED_LIBS; do
+              echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+            done
+            echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          else
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+          fi
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
