@@ -18,7 +18,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
-      - name: Narrow down test matrix scope to changed contracts to limit API requests
+      - name: Narrow down test matrix scope to modified contracts to limit API requests
         id: changed-contracts
         uses: tj-actions/changed-files@v42
         with:
@@ -29,12 +29,15 @@ jobs:
       - name: Set contracts matrix
         id: set-matrix
         working-directory: packages/contracts
-        if: steps.changed-contracts.outputs.contracts_any_changed == 'true'
+        if: steps.changed-contracts.outputs.contracts_any_modified == 'true'
         env:
-          CHANGED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_all_changed_files }}
+          CHANGED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_modified_files }}
         run: |
-          for CONTRACT in "$CHANGED_CONTRACTS"; do
-            echo ${CONTRACT} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
+          touch contracts.txt
+          for CONTRACT in $CHANGED_CONTRACTS; do
+            if [ -n "$CONTRACT" ]; then
+              echo "$CONTRACT" | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
+            fi
           done
           echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
@@ -64,4 +67,3 @@ jobs:
           workingDirectory: packages/contracts
           contract: ${{ matrix.contract }}
           failOnRemoval: true
-          
