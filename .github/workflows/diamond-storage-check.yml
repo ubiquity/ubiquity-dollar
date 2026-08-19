@@ -22,7 +22,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
-      - name: Narrow down test matrix scope to changed Dollar libraries to limit API requests
+      - name: Narrow down test matrix scope to modified Dollar libraries to limit API requests
         id: changed-libraries
         uses: tj-actions/changed-files@v42
         with:
@@ -33,12 +33,15 @@ jobs:
       - name: Set contracts matrix
         id: set-matrix
         working-directory: packages/contracts
-        if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
+        if: steps.changed-libraries.outputs.libraries_any_modified == 'true'
         env:
-          CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+          CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_modified_files }}
         run: |
-          for DIAMOND_LIB in "$CHANGED_LIBS"; do
-            echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+          touch contracts.txt
+          for DIAMOND_LIB in $CHANGED_LIBS; do
+            if [ -n "$DIAMOND_LIB" ]; then
+              echo "$DIAMOND_LIB" | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+            fi
           done
           echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
