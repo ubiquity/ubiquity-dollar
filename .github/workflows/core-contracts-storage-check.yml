@@ -29,11 +29,12 @@ jobs:
       - name: Set contracts matrix
         id: set-matrix
         working-directory: packages/contracts
-        if: steps.changed-contracts.outputs.contracts_any_changed == 'true'
+        # Skip newly added contracts (#972): only modified files have a baseline artifact.
+        if: steps.changed-contracts.outputs.contracts_any_modified == 'true'
         env:
-          CHANGED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_all_changed_files }}
+          CHANGED_CONTRACTS: ${{ steps.changed-contracts.outputs.contracts_all_modified_files }}
         run: |
-          for CONTRACT in "$CHANGED_CONTRACTS"; do
+          for CONTRACT in $CHANGED_CONTRACTS; do
             echo ${CONTRACT} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/core/{}.sol:{} >> contracts.txt
           done
           echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
