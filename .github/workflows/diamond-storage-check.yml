@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
+          fetch-depth: 0
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -32,15 +33,29 @@ jobs:
 
       - name: Set contracts matrix
         id: set-matrix
-        working-directory: packages/contracts
         if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
         env:
           CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
-          for DIAMOND_LIB in "$CHANGED_LIBS"; do
-            echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+          : > contracts.txt
+          if [ -n "$BASE_SHA" ] && [ "$BASE_SHA" != "0000000000000000000000000000000000000000" ]; then
+            git cat-file -e "$BASE_SHA" 2>/dev/null || git fetch --no-tags origin "$BASE_SHA"
+          fi
+          for DIAMOND_LIB in $CHANGED_LIBS; do
+            [ -n "$DIAMOND_LIB" ] || continue
+            if [ -n "$BASE_SHA" ] && git cat-file -e "${BASE_SHA}:${DIAMOND_LIB}" 2>/dev/null; then
+              name=$(basename "$DIAMOND_LIB" .sol)
+              echo "src/dollar/libraries/${name}.sol:${name}" >> contracts.txt
+            else
+              echo "skip new library (no base layout): $DIAMOND_LIB"
+            fi
           done
-          echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          if [ -s contracts.txt ]; then
+            echo "matrix=$(jq -R -s -c 'split("\n")[:-1]' contracts.txt)" >> "$GITHUB_OUTPUT"
+          else
+            echo 'matrix=[]' >> "$GITHUB_OUTPUT"
+          fi
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -61,7 +76,7 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        
+
       - name: Check For Diamond Storage Changes
         uses: ubiquity/foundry-storage-check@main
         with:
