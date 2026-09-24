@@ -30,17 +30,38 @@ jobs:
             libraries:
               - packages/contracts/src/dollar/libraries/Lib*.sol
 
-      - name: Set contracts matrix
+      - name: Set contracts matrix (excluding newly added libraries)
         id: set-matrix
         working-directory: packages/contracts
         if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
         env:
           CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+          ADDED_LIBS: ${{ steps.changed-libraries.outputs.libraries_added_files }}
         run: |
-          for DIAMOND_LIB in "$CHANGED_LIBS"; do
-            echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+          # Build lookup of newly-added libraries (files that didn't exist on the base branch).
+          # For newly-added libraries there is no prior storage-layout artifact to compare
+          # against, so including them would cause the action to fail with:
+          #   "No workflow run found with an artifact named ..."
+          # We intentionally skip them — a new library has no upgrade history, so
+          # storage-collision checks are not applicable yet.
+          declare -A ADDED_SET
+          for ADDED in $ADDED_LIBS; do
+            ADDED_SET["$ADDED"]=1
           done
-          echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
+          for DIAMOND_LIB in $CHANGED_LIBS; do
+            if [ -z "${ADDED_SET[$DIAMOND_LIB]+_}" ]; then
+              echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
+            else
+              echo "Skipping newly-added library (no prior storage artifact): $DIAMOND_LIB"
+            fi
+          done
+
+          if [ -f contracts.txt ]; then
+            echo "matrix=$(cat contracts.txt | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          else
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+          fi
 
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
