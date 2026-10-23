@@ -35,8 +35,12 @@ jobs:
         working-directory: packages/contracts
         if: steps.changed-libraries.outputs.libraries_any_changed == 'true'
         env:
-          CHANGED_LIBS: ${{ steps.changed-libraries.outputs.libraries_all_changed_files }}
+          CHANGED_LIBS: ${{ github.event_name == 'pull_request' && steps.changed-libraries.outputs.libraries_modified_files || steps.changed-libraries.outputs.libraries_all_changed_files }}
         run: |
+          if [ -z "$CHANGED_LIBS" ]; then
+            echo "matrix=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
           for DIAMOND_LIB in "$CHANGED_LIBS"; do
             echo ${DIAMOND_LIB} | xargs basename -a | cut -d'.' -f1 | xargs -I{} echo src/dollar/libraries/{}.sol:{} >> contracts.txt
           done
@@ -61,7 +65,7 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        
+
       - name: Check For Diamond Storage Changes
         uses: ubiquity/foundry-storage-check@main
         with:
