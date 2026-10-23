@@ -20,6 +20,12 @@ Once installed, you can verify that Z3 is correctly installed by checking the ve
 
 ## Step 3: Use Forge to Test Contracts Using SMT
 
+To run the non-interactive formal checks for `LibUbiquityPool` accounting invariants:
+
+```sh
+yarn workspace @ubiquity/contracts test:formal
+```
+
 Check that you do not have a profile ready at foundry.toml you might skip this step, else run
 ```
 npx tsx smt-checker/smt/update.ts

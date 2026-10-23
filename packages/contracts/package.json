@@ -23,6 +23,7 @@
   },
   "scripts": {
     "test:unit": "forge test",
+    "test:formal": "FOUNDRY_PROFILE=SMT forge build",
     "test:slither": "slither . --compile-force-framework foundry",
     "test:echidna": "echidna-test . --config echidna.config.yml",
     "test:coverage": "forge coverage",

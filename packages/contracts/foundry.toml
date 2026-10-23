@@ -22,7 +22,7 @@ mainnet = "https://rpc.ankr.com/eth"
 sepolia = "https://ethereum-sepolia-rpc.publicnode.com"
 
 [profile.SMT.model_checker]
-contracts = { }
+contracts = { "test/formal/diamond/facets/UbiquityPoolFacet.formal.t.sol" = ["UbiquityPoolFacetFormalTest"] }
 engine = 'chc'
 solvers = ['z3']
 show_unproved = true
