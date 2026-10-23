@@ -23,6 +23,11 @@ struct DiamondArgs {
  */
 contract Diamond {
     /**
+     * @notice Accept plain ETH transfers
+     */
+    receive() external payable {}
+
+    /**
      * @notice Diamond constructor
      * @param _args Init args
      * @param _diamondCutFacets Facets with selectors to add
