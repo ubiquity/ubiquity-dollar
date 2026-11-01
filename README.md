@@ -6,6 +6,42 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 - The v1 archived source code is available [here](https://github.com/ubiquity/uad-contracts).
 - Community created [Dune Analytics Dashboard](https://dune.com/ubiquity_dao/ubiquity-protocol)
 
+## Token listings
+
+The mainnet UUSD and UBQ metadata is published in [our token list](packages/dapp/public/token-list.json),
+which is also used by the dapp's swap widget. The static dapp serves it at `/token-list.json`.
+Services supporting custom token lists can import this URL after the changes are merged:
+
+```text
+https://raw.githubusercontent.com/ubiquity/ubiquity-dollar/development/packages/dapp/public/token-list.json
+```
+
+The list includes chain IDs, contract addresses, names, symbols, decimals, and repository-hosted logos.
+It follows the [Token Lists format](https://github.com/Uniswap/token-lists). Validate it offline with:
+
+```sh
+node --test utils/test-token-list.cjs
+```
+
+Publishing or importing this list does **not** add the tokens to third-party default lists.
+Those listings require separate upstream submissions or approval. Track them in
+[issue #984](https://github.com/ubiquity/ubiquity-dollar/issues/984):
+
+- **DEXes:** CoW Swap requests [UUSD](https://github.com/cowprotocol/token-lists/issues/797) and
+  [UBQ](https://github.com/cowprotocol/token-lists/issues/798); Uniswap, Curve, Balancer, SushiSwap,
+  Bancor, PancakeSwap, and 1inch.
+- **Wallets:** MetaMask requests [UUSD](https://github.com/MetaMask/contract-metadata/pull/1413) and
+  [UBQ](https://github.com/MetaMask/contract-metadata/pull/1414); Coinbase Wallet and
+  [Trust Wallet assets](https://github.com/trustwallet/assets).
+- **Bridges:** Gnosis Bridge, deBridge, Jumper, ShapeShift, Bungee, and LI.FI.
+- **Price charts:** CoinGecko, CoinMarketCap, and DEX Screener.
+
+Use the token entries and logo files as the source for upstream submissions; adapt them to the
+service's required format. Verify its current requirements, fees, and listing status before submitting.
+This list contains Ethereum mainnet deployments only: do not reuse these addresses for Gnosis Chain
+or infer token addresses from liquidity pool addresses. Update the list's timestamp and version when
+changing metadata (patch), adding tokens (minor), or removing tokens (major).
+
 ## Contributing
 - We welcome everybody to participate in improving the codebase and provide feedback on opened issues.
 - We offer financial incentives for solved issues.
