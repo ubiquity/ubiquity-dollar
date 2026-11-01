@@ -33,7 +33,7 @@
     "build:all": "yarn workspaces foreach run build",
     "build:dapp": "yarn workspace @ubiquity/dapp run build",
     "dev:dapp": "yarn workspace @ubiquity/dapp run start",
-    "test:all": "yarn workspace @ubiquity/contracts run test:unit",
+    "test:all": "node --test utils/test-token-list.cjs && yarn workspace @ubiquity/contracts run test:unit",
     "coverage": "yarn workspace @ubiquity/contracts run test:coverage",
     "format:all": "yarn workspaces foreach run format",
     "clean:all": "yarn workspaces foreach run clean && rimraf node_modules",
