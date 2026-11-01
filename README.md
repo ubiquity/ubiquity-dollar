@@ -6,6 +6,18 @@ Introducing the flagship product of [Ubiquity DAO](https://ubq.fi/). The Ubiquit
 - The v1 archived source code is available [here](https://github.com/ubiquity/uad-contracts).
 - Community created [Dune Analytics Dashboard](https://dune.com/ubiquity_dao/ubiquity-protocol)
 
+## UUSD and UBQ token list
+The dapp publishes [token-list.json](packages/dapp/public/token-list.json) at `/token-list.json` and uses the same metadata in its swap widget.
+Static deployments include a CORS header rule so other sites can fetch the list.
+Import `<dapp-origin>/token-list.json` in services that accept custom token lists, or use its entries when submitting UUSD and UBQ to external token registries.
+
+The list targets Ethereum mainnet (chain ID 1). UUSD uses the token **proxy** from the checked-in [deployment record](packages/contracts/broadcast/Deploy001_Diamond_Dollar_Governance.s.sol/1/run-latest.json), not the implementation contract or the legacy uAD token.
+UBQ uses the existing governance token referenced by the [mainnet migration](packages/contracts/migrations/mainnet/Deploy001_Diamond_Dollar_Governance.s.sol).
+Verify the live deployment before submitting listings; publishing this file does not automatically list tokens on external services or create liquidity.
+Update the list's version and timestamp when changing its entries.
+
+Run the metadata regression tests with `yarn workspace @ubiquity/dapp test:token-list`, or without dependencies using `node --test packages/dapp/tests/token-list.test.mjs`.
+
 ## Contributing
 - We welcome everybody to participate in improving the codebase and provide feedback on opened issues.
 - We offer financial incentives for solved issues.

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { parseUnits } from "@ethersproject/units";
 import { Token, Currency, CurrencyAmount as CurrencyAmountRaw } from "@uniswap/sdk-core";
 import JSBI from "jsbi";
+import ubiquityTokenList from "../../public/token-list.json";
 
 export function logGas(txDone: ethers.ContractReceipt) {
   console.log(`Gas used with 100 gwei / gas:${ethers.utils.formatEther(txDone.gasUsed.mul(ethers.utils.parseUnits("100", "gwei")))}`);
@@ -151,6 +152,7 @@ export function parseAmount(value: string, currency: Currency): CurrencyAmount {
 }
 
 export const SWAP_WIDGET_TOKEN_LIST = [
+  ...ubiquityTokenList.tokens,
   {
     name: "Tether USD",
     address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
