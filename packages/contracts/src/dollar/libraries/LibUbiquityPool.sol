@@ -1200,6 +1200,19 @@ library LibUbiquityPool {
         emit StableUsdPriceFeedSet(newPriceFeedAddress, newStalenessThreshold);
     }
 
+    /// @notice Disables every collateral token without re-enabling disabled tokens
+    function pausePool() internal {
+        UbiquityPoolStorage storage poolStorage = ubiquityPoolStorage();
+        uint256 collateralTokensCount = poolStorage.collateralAddresses.length;
+        for (uint256 i = 0; i < collateralTokensCount; i++) {
+            address collateralAddress = poolStorage.collateralAddresses[i];
+            if (poolStorage.isCollateralEnabled[collateralAddress]) {
+                poolStorage.isCollateralEnabled[collateralAddress] = false;
+                emit CollateralToggled(i, false);
+            }
+        }
+    }
+
     /**
      * @notice Toggles (i.e. enables/disables) a particular collateral token
      * @param collateralIndex Collateral token index

@@ -350,6 +350,12 @@ interface IUbiquityPool {
     ) external;
 
     /**
+     * @notice Disables all collateral tokens during an emergency
+     * @dev Restricted to PAUSER_ROLE. Repeated calls never enable collateral.
+     */
+    function pausePool() external;
+
+    /**
      * @notice Toggles (i.e. enables/disables) a particular collateral token
      * @param collateralIndex Collateral token index
      */

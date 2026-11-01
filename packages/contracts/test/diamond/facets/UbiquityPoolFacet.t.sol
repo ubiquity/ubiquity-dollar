@@ -203,6 +203,85 @@ contract UbiquityPoolFacetTest is DiamondTestSetup {
     // Modifiers
     //=====================
 
+    function testPausePool_ShouldRevert_IfCallerIsNotPauser() public {
+        vm.prank(user);
+        vm.expectRevert("Manager: Caller is not pauser");
+        ubiquityPoolFacet.pausePool();
+        require(
+            ubiquityPoolFacet
+                .collateralInformation(address(collateralToken))
+                .isEnabled
+        );
+    }
+
+    function testPausePool_ShouldDisableAllCollateralIdempotently() public {
+        MockERC20 secondCollateral = new MockERC20("SECOND", "SND", 6);
+        MockERC20 disabledCollateral = new MockERC20("DISABLED", "DSB", 18);
+        vm.startPrank(admin);
+        ubiquityPoolFacet.addCollateralToken(
+            address(secondCollateral),
+            address(collateralTokenPriceFeed),
+            1000e6
+        );
+        ubiquityPoolFacet.addCollateralToken(
+            address(disabledCollateral),
+            address(collateralTokenPriceFeed),
+            1000e18
+        );
+        ubiquityPoolFacet.toggleCollateral(1);
+        accessControlFacet.grantRole(keccak256("PAUSER_ROLE"), user);
+        vm.stopPrank();
+
+        vm.startPrank(user);
+        vm.expectEmit(address(ubiquityPoolFacet));
+        emit CollateralToggled(0, false);
+        vm.expectEmit(address(ubiquityPoolFacet));
+        emit CollateralToggled(1, false);
+        ubiquityPoolFacet.pausePool();
+        ubiquityPoolFacet.pausePool();
+        // The same limited role can independently pause the Dollar token.
+        dollarToken.pause();
+        require(dollarToken.paused());
+        // Emergency authority cannot re-enable collateral.
+        vm.expectRevert("Manager: Caller is not admin");
+        ubiquityPoolFacet.toggleCollateral(0);
+        vm.stopPrank();
+
+        address[] memory collaterals = ubiquityPoolFacet.allCollaterals();
+        for (uint256 i = 0; i < collaterals.length; i++) {
+            vm.expectRevert("Invalid collateral");
+            ubiquityPoolFacet.collateralInformation(collaterals[i]);
+        }
+        // Recovery remains an explicit admin action.
+        vm.prank(admin);
+        ubiquityPoolFacet.toggleCollateral(0);
+        require(
+            ubiquityPoolFacet
+                .collateralInformation(address(collateralToken))
+                .isEnabled
+        );
+    }
+
+    function testPausePool_ShouldBlockMintRedeemCollectAndBorrow() public {
+        vm.prank(admin);
+        accessControlFacet.grantRole(keccak256("PAUSER_ROLE"), user);
+        vm.prank(user);
+        ubiquityPoolFacet.pausePool();
+
+        vm.startPrank(user);
+        vm.expectRevert("Collateral disabled");
+        ubiquityPoolFacet.mintDollar(0, 1, 1, 1, 1, false);
+        vm.expectRevert("Collateral disabled");
+        ubiquityPoolFacet.redeemDollar(0, 1, 1, 1);
+        vm.expectRevert("Collateral disabled");
+        ubiquityPoolFacet.collectRedemption(0);
+        vm.stopPrank();
+
+        vm.prank(address(dollarAmoMinter));
+        vm.expectRevert("Collateral disabled");
+        ubiquityPoolFacet.amoMinterBorrow(1);
+    }
+
     function testCollateralEnabled_ShouldRevert_IfCollateralIsDisabled()
         public
     {

@@ -22,7 +22,9 @@
     "tsx": "^3.12.2"
   },
   "scripts": {
-    "test:unit": "forge test",
+    "test:unit": "yarn test:monitoring && forge test",
+    "test:monitoring": "node --test scripts/monitoring/liquidity-monitor-test.mjs",
+    "monitor:security": "node scripts/monitoring/run-monitor.mjs",
     "test:slither": "slither . --compile-force-framework foundry",
     "test:echidna": "echidna-test . --config echidna.config.yml",
     "test:coverage": "forge coverage",
