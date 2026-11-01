@@ -4,6 +4,8 @@ pragma solidity 0.8.19;
 import {IUbiquityPool} from "../interfaces/IUbiquityPool.sol";
 import {Modifiers} from "../libraries/LibAppStorage.sol";
 import {LibUbiquityPool} from "../libraries/LibUbiquityPool.sol";
+import {LibAccessControl} from "../libraries/LibAccessControl.sol";
+import {PAUSER_ROLE} from "../libraries/Constants.sol";
 
 /**
  * @notice Ubiquity pool facet
@@ -311,6 +313,15 @@ contract UbiquityPoolFacet is IUbiquityPool, Modifiers {
             newPriceFeedAddress,
             newStalenessThreshold
         );
+    }
+
+    /// @inheritdoc IUbiquityPool
+    function pausePool() external {
+        require(
+            LibAccessControl.hasRole(PAUSER_ROLE, msg.sender),
+            "Manager: Caller is not pauser"
+        );
+        LibUbiquityPool.pausePool();
     }
 
     /// @inheritdoc IUbiquityPool
